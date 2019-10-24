@@ -12,7 +12,7 @@ export class ReplaceExistingResultsComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
   numCols: number = 2;

@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FieldDataWarnings } from '../../../psat-warning.service';
 import { Settings } from '../../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { pumpTypesConstant, driveConstants } from '../../../psatConstants';
 
 @Component({
@@ -34,12 +33,9 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
   @Output('openHeadToolModal')
   openHeadToolModal = new EventEmitter<boolean>();
 
-
-
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
-
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor() { }
 
   ngOnInit() {
     this.pumpTypes = pumpTypesConstant;
@@ -52,13 +48,6 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
-  }
-
-  getDisplayUnit(unit: string) {
-    let tmpUnit = this.convertUnitsService.getUnit(unit);
-    let dsp = tmpUnit.unit.name.display.replace('(', '');
-    dsp = dsp.replace(')', '');
-    return dsp;
   }
 
   showHeadToolModal() {

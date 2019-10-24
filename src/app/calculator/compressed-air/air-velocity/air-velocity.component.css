@@ -10,3 +10,10 @@
 .btn-margin-10 {
     margin: 10px 0px;
 }
+
+/*
+    add btn-form class to retain border-radius
+*/
+.btn-form {
+    border-radius: 4px !important;
+}

@@ -8,6 +8,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { FSAT } from '../../../shared/models/fans';
 
 @Component({
   selector: 'app-motor-performance',
@@ -18,13 +19,15 @@ export class MotorPerformanceComponent implements OnInit {
   @Input()
   psat: PSAT;
   @Input()
+  fsat: FSAT;
+  @Input()
   settings: Settings;
   @Input()
   assessment: Assessment;
   @Input()
   inAssessment: boolean;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -40,7 +43,9 @@ export class MotorPerformanceComponent implements OnInit {
   tabSelect: string = 'results';
   calcExists: boolean;
   saving: boolean;
-  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+
+  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) {
+  }
 
   ngOnInit() {
     if (this.inAssessment) {
@@ -51,7 +56,7 @@ export class MotorPerformanceComponent implements OnInit {
     //use system settings for standalone calculator
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
-      if (this.settings.powerMeasurement !== 'hp') {
+      if (this.settings.powerMeasurement !== 'hp' && !this.inAssessment) {
         this.performanceForm.patchValue({
           horsePower: '150'
         });
@@ -67,11 +72,6 @@ export class MotorPerformanceComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
-  }
-
-  btnResetData() {
-    this.performanceForm = this.motorPerformanceService.initForm();
-    this.calculate();
   }
 
   resizeTabs() {
@@ -107,6 +107,8 @@ export class MotorPerformanceComponent implements OnInit {
       } else {
         if (this.psat) {
           this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
+        } else if (this.fsat) {
+          this.performanceForm = this.motorPerformanceService.initFormFromFsat(this.fsat);
         } else {
           this.performanceForm = this.motorPerformanceService.initForm();
         }
@@ -123,6 +125,8 @@ export class MotorPerformanceComponent implements OnInit {
   initCalculator(): Calculator {
     if (this.psat) {
       this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
+    } else if (this.fsat) {
+      this.performanceForm = this.motorPerformanceService.initFormFromFsat(this.fsat);
     } else {
       this.performanceForm = this.motorPerformanceService.initForm();
     }
@@ -138,7 +142,7 @@ export class MotorPerformanceComponent implements OnInit {
     if (this.motorPerformanceService.motorPerformanceInputs) {
       this.performanceForm = this.motorPerformanceService.initFormFromObj(this.motorPerformanceService.motorPerformanceInputs);
     } else {
-      this.performanceForm = this.motorPerformanceService.initForm();
+      this.performanceForm = this.motorPerformanceService.resetForm();
     }
   }
 
@@ -160,5 +164,15 @@ export class MotorPerformanceComponent implements OnInit {
         });
       }
     }
+  }
+
+  btnResetData() {
+    this.performanceForm = this.motorPerformanceService.resetForm();
+    this.calculate();
+  }
+
+  btnGenerateExample() {
+    this.performanceForm = this.motorPerformanceService.initForm();
+    this.calculate();
   }
 }

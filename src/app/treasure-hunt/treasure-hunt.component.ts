@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
-import { Location } from '@angular/common';
 import { AssessmentService } from '../assessment/assessment.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
@@ -13,6 +12,7 @@ import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
+import { CalculatorsService } from './calculators/calculators.service';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -20,9 +20,9 @@ import { TreasureHunt } from '../shared/models/treasure-hunt';
   styleUrls: ['./treasure-hunt.component.css']
 })
 export class TreasureHuntComponent implements OnInit {
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
 
   @HostListener('window:resize', ['$event'])
@@ -39,8 +39,13 @@ export class TreasureHuntComponent implements OnInit {
   subTabSub: Subscription;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  modalOpenSub: Subscription;
+  isModalOpen: boolean = false;
+  treasureHuntSub: Subscription;
+  nextDisabled: boolean;
+  selectedCalcSub: Subscription;
+  selectedCalc: string;
   constructor(
-    private location: Location,
     private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
@@ -49,7 +54,8 @@ export class TreasureHuntComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private treasureHuntService: TreasureHuntService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private calculatorsService: CalculatorsService
   ) { }
 
   ngOnInit() {
@@ -58,11 +64,28 @@ export class TreasureHuntComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
-
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
-            setupDone: false
+            setupDone: false,
+            operatingHours: {
+              weeksPerYear: 52.14,
+              daysPerWeek: 7,
+              hoursPerDay: 24,
+              minutesPerHour: 60,
+              secondsPerMinute: 60,
+              hoursPerYear: 8760
+            }
+          }
+        }
+        if (!this.assessment.treasureHunt.operatingHours) {
+          this.assessment.treasureHunt.operatingHours = {
+            weeksPerYear: 52.14,
+            daysPerWeek: 7,
+            hoursPerDay: 24,
+            minutesPerHour: 60,
+            secondsPerMinute: 60,
+            hoursPerYear: 8760
           }
         }
 
@@ -71,15 +94,33 @@ export class TreasureHuntComponent implements OnInit {
         if (tmpTab) {
           this.treasureHuntService.mainTab.next(tmpTab);
         }
+
+        this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
       })
     })
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.getContainerHeight();
+      this.getCanContinue();
     });
 
     this.subTabSub = this.treasureHuntService.subTab.subscribe(val => {
       this.subTab = val;
+      this.getCanContinue();
+    });
+    this.modalOpenSub = this.treasureHuntService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    });
+    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
+      if (val) {
+        this.saveTreasureHunt(val);
+      }
+      this.getCanContinue();
+    });
+    this.selectedCalcSub = this.calculatorsService.selectedCalc.subscribe(val => {
+      this.selectedCalc = val;
+      this.getContainerHeight();
     })
   }
 
@@ -88,6 +129,10 @@ export class TreasureHuntComponent implements OnInit {
     this.subTabSub.unsubscribe();
     this.treasureHuntService.mainTab.next('system-setup');
     this.treasureHuntService.subTab.next('settings');
+    this.modalOpenSub.unsubscribe();
+    this.treasureHuntService.treasureHunt.next(undefined);
+    this.treasureHuntSub.unsubscribe();
+    this.selectedCalcSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -166,34 +211,24 @@ export class TreasureHuntComponent implements OnInit {
 
   getCanContinue() {
     if (this.subTab == 'settings') {
-      return true;
-    } else if (this.subTab == 'operating-hours') {
-      if (this.assessment.treasureHunt.operatingHours) {
-        return true;
-      } else {
-        return false
-      }
+      this.nextDisabled = false;
     } else if (this.subTab == 'operation-costs') {
       if (this.assessment.treasureHunt.setupDone) {
-        return true;
+        this.nextDisabled = false;
       } else {
-        return false;
+        this.nextDisabled = true;
       }
     }
   }
 
   back() {
-    if (this.subTab == 'operating-hours') {
+    if (this.subTab == 'operation-costs') {
       this.treasureHuntService.subTab.next('settings');
-    } else if (this.subTab == 'operation-costs') {
-      this.treasureHuntService.subTab.next('operating-hours');
     }
   }
 
   continue() {
     if (this.subTab == 'settings') {
-      this.treasureHuntService.subTab.next('operating-hours');
-    } else if (this.subTab == 'operating-hours') {
       this.treasureHuntService.subTab.next('operation-costs');
     } else if (this.subTab == 'operation-costs') {
       this.treasureHuntService.mainTab.next('find-treasure');

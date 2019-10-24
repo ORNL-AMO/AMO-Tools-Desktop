@@ -16,7 +16,7 @@ export class SaturatedPropertiesComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('lineChartContainer') lineChartContainer: ElementRef;
+  @ViewChild('lineChartContainer', { static: false }) lineChartContainer: ElementRef;
   chartContainerHeight: number;
   chartContainerWidth: number;
 
@@ -27,7 +27,7 @@ export class SaturatedPropertiesComponent implements OnInit {
     this.resizeTabs();
   }
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   headerHeight: number;
 
@@ -44,7 +44,10 @@ export class SaturatedPropertiesComponent implements OnInit {
   graphToggleForm: FormGroup;
   plotReady: boolean = false;
   toggleResetData: boolean = true;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
+  toggleExampleData: boolean = true;
+
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) {
+  }
 
   ngOnInit() {
 
@@ -73,32 +76,25 @@ export class SaturatedPropertiesComponent implements OnInit {
     }, 100);
   }
 
-  btnResetData() {
-    this.saturatedPropertiesOutput = this.getEmptyResults();
-    this.steamService.saturatedPropertiesInputs = null;
-    this.initForm();
-    this.calculate(this.saturatedPropertiesForm);
-    this.toggleResetData = !this.toggleResetData;
-  }
-
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
+
   initForm() {
     let pressureMin: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
     let pressureMax: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
     if (this.steamService.saturatedPropertiesInputs) {
-      this.saturatedPropertiesForm = this.formBuilder.group( {
+      this.saturatedPropertiesForm = this.formBuilder.group({
         'pressureOrTemperature': [this.steamService.saturatedPropertiesInputs.pressureOrTemperature, Validators.required],
         'saturatedPressure': [this.steamService.saturatedPropertiesInputs.inputs.saturatedPressure, [Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]],
         'saturatedTemperature': [this.steamService.saturatedPropertiesInputs.inputs.saturatedTemperature]
       });
-    }else {
-      this.saturatedPropertiesForm = this.formBuilder.group( {
+    } else {
+      this.saturatedPropertiesForm = this.formBuilder.group({
         'pressureOrTemperature': [0, Validators.required],
-        'saturatedPressure': ['',  [Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]],
+        'saturatedPressure': ['', [Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]],
         'saturatedTemperature': ['']
       });
     }
@@ -121,8 +117,7 @@ export class SaturatedPropertiesComponent implements OnInit {
   getChartWidth() {
     if (this.lineChartContainer) {
       this.chartContainerWidth = this.lineChartContainer.nativeElement.clientWidth * .9;
-    }
-    else {
+    } else {
       this.chartContainerWidth = 600;
     }
   }
@@ -130,11 +125,11 @@ export class SaturatedPropertiesComponent implements OnInit {
   getChartHeight() {
     if (this.lineChartContainer) {
       this.chartContainerHeight = this.lineChartContainer.nativeElement.clientHeight * .7;
-    }
-    else {
+    } else {
       this.chartContainerHeight = 800;
     }
   }
+
   calculate(form: FormGroup) {
     let input: SaturatedPropertiesInput = {
       saturatedTemperature: form.controls.saturatedTemperature.value,
@@ -203,4 +198,42 @@ export class SaturatedPropertiesComponent implements OnInit {
     let maxPressure: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
     return { minTemp: minTemp, maxTemp: maxTemp, minPressure: minPressure, maxPressure: maxPressure };
   }
+
+  btnResetData() {
+    this.saturatedPropertiesOutput = this.getEmptyResults();
+    this.steamService.saturatedPropertiesInputs = null;
+    this.initForm();
+    this.calculate(this.saturatedPropertiesForm);
+    this.toggleResetData = !this.toggleResetData;
+  }
+
+  btnGenerateExample() {
+    let tmpPressureOrTemperature = 0;
+    if (this.saturatedPropertiesForm.status === 'INVALID') {
+      tmpPressureOrTemperature = 0;
+    }
+    else {
+      tmpPressureOrTemperature = this.saturatedPropertiesForm.value.pressureOrTemperature;
+    }
+    let tmpSaturatedPressure = 2700;
+    let tmpSaturatedTemperature = 580;
+    if (this.settings.steamPressureMeasurement !== 'psig') {
+      tmpSaturatedPressure = Math.round(this.convertUnitsService.value(2700).from('psig').to(this.settings.steamPressureMeasurement) * 100) / 100;
+    }
+    if (this.settings.steamTemperatureMeasurement !== 'F') {
+      tmpSaturatedTemperature = Math.round(this.convertUnitsService.value(tmpSaturatedTemperature).from('F').to(this.settings.steamTemperatureMeasurement) * 100) / 100;
+    }
+    this.saturatedPropertiesOutput = this.getEmptyResults();
+    this.steamService.saturatedPropertiesInputs = {
+      inputs: {
+        saturatedPressure: tmpSaturatedPressure,
+        saturatedTemperature: tmpSaturatedTemperature
+      },
+      pressureOrTemperature: tmpPressureOrTemperature
+    };
+    this.initForm();
+    this.calculate(this.saturatedPropertiesForm);
+    this.toggleExampleData = !this.toggleExampleData;
+  }
+
 }

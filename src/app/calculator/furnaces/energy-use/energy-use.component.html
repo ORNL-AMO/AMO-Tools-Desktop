@@ -5,15 +5,20 @@
         <img src="assets/images/calculator-icons/furnace-icons/flow.png" class="ico-size2">
       </div>
       <div class="pl-2">
-        <h3>Flow and Energy Used Calculator</h3>
+        <h3>Flow and Energy Used</h3>
       </div>
     </div>
     <div class="d-flex flex-column m-4">
       <app-energy-use-form [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
-        (changeField)="setCurrentField($event)" (emitCalculate)="calculate()" [settings]="settings"></app-energy-use-form>
+        (changeField)="setCurrentField($event)" (emitCalculate)="calculate()" [settings]="settings">
+      </app-energy-use-form>
       <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
           Reset Data
+        </button>
+        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+          Generate Example
         </button>
       </div>
     </div>
@@ -43,11 +48,10 @@
                 <td class="bold w-50">Flow</td>
                 <td class="text-center w-50"> {{flowCalculationResults.flow | number:'2.0-0'}}
                   <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                    Scfh
+                    SCFH
                   </span>
                   <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                    Nm
-                    <sup>3</sup>/hr
+                    Nm<sup>3</sup>/hr
                   </span>
                 </td>
               </tr>
@@ -56,11 +60,10 @@
                 <td class="text-center w-50">
                   {{flowCalculationResults.totalFlow | number:'2.0-0'}}
                   <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                    Scf
+                    SCF
                   </span>
                   <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                    Nm
-                    <sup>3</sup>
+                    Nm<sup>3</sup>
                   </span>
                 </td>
               </tr>
@@ -79,7 +82,8 @@
             </tbody>
           </table>
 
-          <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()"></app-exportable-results-table>
+          <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+          </app-exportable-results-table>
         </div>
       </div>
     </div>

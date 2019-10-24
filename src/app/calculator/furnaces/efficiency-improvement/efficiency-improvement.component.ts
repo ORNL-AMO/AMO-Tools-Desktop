@@ -8,6 +8,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-efficiency-improvement',
@@ -22,7 +23,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   @Input()
   inAssessment: boolean;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', {static: false}) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -40,7 +41,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   saving: boolean;
   originalCalculator: Calculator;
   calculator: Calculator;
-
+  efficiencyImprovementForm: FormGroup;
   constructor(private phastService: PhastService, private efficiencyImprovementService: EfficiencyImprovementService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
@@ -50,7 +51,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
 
-    if(this.settings.unitsOfMeasure == 'Custom'){
+    if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
     }
     if (this.inAssessment) {
@@ -59,7 +60,6 @@ export class EfficiencyImprovementComponent implements OnInit {
     } else {
       this.initForm();
     }
-
 
     this.calculate(this.efficiencyImprovementInputs);
   }
@@ -76,8 +76,15 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.efficiencyImprovementInputs = this.calculator.efficiencyImprovementInputs;
     }
     else {
-      this.efficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+      this.efficiencyImprovementInputs = this.efficiencyImprovementService.getResetData();
     }
+    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
+    this.calculate(this.efficiencyImprovementInputs);
+  }
+
+  btnGenerateExample() {
+    this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
+    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
     this.calculate(this.efficiencyImprovementInputs);
   }
 
@@ -109,7 +116,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       if (this.calculator.efficiencyImprovementInputs) {
         this.efficiencyImprovementInputs = this.calculator.efficiencyImprovementInputs;
       } else {
-        this.efficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+        this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
         this.calculator.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
         this.saveCalculator();
       }
@@ -117,10 +124,11 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.calculator = this.initCalculator();
       this.saveCalculator();
     }
+    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
   }
 
   initCalculator(): Calculator {
-    let tmpEfficiencyImprovementInputs: EfficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+    let tmpEfficiencyImprovementInputs: EfficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       efficiencyImprovementInputs: tmpEfficiencyImprovementInputs
@@ -132,8 +140,10 @@ export class EfficiencyImprovementComponent implements OnInit {
     if (this.efficiencyImprovementService.efficiencyImprovementInputs) {
       this.efficiencyImprovementInputs = this.efficiencyImprovementService.efficiencyImprovementInputs;
     } else {
-      this.efficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+      this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
     }
+    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
+    this.calculate(this.efficiencyImprovementInputs);
   }
 
   saveCalculator() {

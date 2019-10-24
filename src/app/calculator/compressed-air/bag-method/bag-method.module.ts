@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
+import { FormsModule } from '@angular/forms';
 import { BagMethodComponent } from './bag-method.component';
 import { BagMethodFormComponent } from './bag-method-form/bag-method-form.component';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { BagMethodService } from './bag-method.service';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    SharedModule
+    OperatingHoursModalModule
   ],
   declarations: [
     BagMethodComponent,
@@ -17,6 +17,9 @@ import { BagMethodFormComponent } from './bag-method-form/bag-method-form.compon
   ],
   exports: [
     BagMethodComponent
+  ],
+  providers: [
+    BagMethodService
   ]
 })
 export class BagMethodModule { }

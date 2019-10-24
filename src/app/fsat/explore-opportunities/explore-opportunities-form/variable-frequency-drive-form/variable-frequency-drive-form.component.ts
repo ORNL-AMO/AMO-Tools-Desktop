@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FanFieldDataWarnings } from '../../../fsat-warning.service';
 import { FSAT } from '../../../../shared/models/fans';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -42,7 +41,7 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
   @Output('showPressureModal')
   showPressureModal = new EventEmitter<string>();
 
-  constructor(private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService) { }
+  constructor(private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService) { }
 
   ngOnInit() {
   }
@@ -55,18 +54,11 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
     this.modifyConditionsService.modifyConditionsTab.next('fan-field-data');
   }
 
-  getDisplayUnit(unit: string) {
-    let tmpUnit = this.convertUnitsService.getUnit(unit);
-    let dsp = tmpUnit.unit.name.display.replace('(', '');
-    dsp = dsp.replace(')', '');
-    return dsp;
-  }
-
   showInletPressureModal() {
     this.showPressureModal.emit('inlet');
-}
+  }
 
-showOutletPressureModal() {
+  showOutletPressureModal() {
     this.showPressureModal.emit('outlet');
-}
+  }
 }

@@ -27,7 +27,8 @@
     <app-system-data-form [isVFD]="psat.modifications[exploreModIndex].psat.inputs.isVFD" (changeField)="focusField($event)"
       (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselineFieldDataForm"
       [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFieldDataWarnings"
-      [modificationWarnings]="modificationFieldDataWarnings" (openHeadToolModal)="showHeadToolModal()"></app-system-data-form>
+      [modificationWarnings]="modificationFieldDataWarnings" (openHeadToolModal)="showHeadToolModal()"
+      [modificationPsat]="psat.modifications[exploreModIndex].psat"></app-system-data-form>
 
     <app-rated-motor-form (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
       [exploreModIndex]="exploreModIndex" [baselineForm]="baselineMotorForm" [modificationForm]="modificationMotorForm"

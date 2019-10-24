@@ -23,7 +23,7 @@ export class O2EnrichmentComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -94,8 +94,7 @@ export class O2EnrichmentComponent implements OnInit {
     if (this.inAssessment) {
       this.calculator = this.originalCalculator;
     } else {
-      this.o2Form = this.o2EnrichmentService.initForm(this.settings);
-
+      this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, this.o2EnrichmentService.getResetData());
     }
     this.lines = [];
     if (this.o2EnrichmentService.lines) {
@@ -104,6 +103,18 @@ export class O2EnrichmentComponent implements OnInit {
     this.calculate();
     this.toggleResetData = !this.toggleResetData;
   }
+
+  generateExample() {
+    this.o2Enrichment = this.o2EnrichmentService.generateExample(this.settings);
+    this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, this.o2Enrichment);
+    this.calculate();
+  }
+
+  btnGenerateExample() {
+    this.generateExample();
+    this.calculate();
+  }
+
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {

@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SteamPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
-import { SteamService } from "../../steam.service";
 
 @Component({
   selector: 'app-steam-properties-form',
@@ -24,18 +23,10 @@ export class SteamPropertiesFormComponent implements OnInit {
   emitQuantityChange = new EventEmitter<number>();
 
 
-  constructor(private steamService: SteamService) {
+  constructor() {
   }
 
   ngOnInit() {
-  }
-
-  getDisplayUnit(unit: string) {
-    if (unit) {
-      return this.steamService.getDisplayUnit(unit);
-    } else {
-      return unit;
-    }
   }
 
   focusField(str: string) {
@@ -71,13 +62,13 @@ export class SteamPropertiesFormComponent implements OnInit {
   getOptionDisplayUnit(quantity: number) {
     let displayUnit: string;
     if (quantity === 0) {
-      displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      displayUnit = this.settings.steamTemperatureMeasurement;
       return displayUnit;
     } else if (quantity === 1) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
+      displayUnit = this.settings.steamSpecificEnthalpyMeasurement;
       return displayUnit;
     } else if (quantity === 2) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
+      displayUnit = this.settings.steamSpecificEntropyMeasurement;
       return displayUnit;
     } else if (quantity === 3) {
       return displayUnit;

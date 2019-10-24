@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, HostLis
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import * as d3 from 'd3';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SaturatedPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 
@@ -27,9 +27,9 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   @Input()
   plotReady: boolean;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild('ngChart') ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
+  @ViewChild('btnDownload', { static: false }) btnDownload: ElementRef;
 
   defaultEntropyUnit: string = 'kJkgK';
   defaultTempUnit: string = 'C';
@@ -132,11 +132,15 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
 
   ngOnInit() {
     this.initData();
+  }
+
+  ngAfterViewInit() {
     this.initCanvas();
     if (this.chartContainerHeight && this.chartContainerWidth) {
       this.buildChart();
     }
   }
+
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
@@ -415,7 +419,6 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
 
   buildChart() {
     this.host.html('');
-
     let containerWidth: number, containerHeight: number;
 
     if (!this.expanded) {
@@ -618,8 +621,11 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   }
 
   addYAxisLabel() {
-    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement !== this.defaultTempUnit) {
+    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement == 'F') {
       this.yAxisLabel = "Temperature &#8457;"; // F
+    }
+    else if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement == 'K') {
+      this.yAxisLabel = "Temperature K"; // K
     }
     else {
       this.yAxisLabel = "Temperature &#8451;"; // C

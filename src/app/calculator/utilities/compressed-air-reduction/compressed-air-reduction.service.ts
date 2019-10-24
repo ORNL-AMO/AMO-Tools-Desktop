@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirReductionData, CompressedAirFlowMeterMethodData, BagMethodData, PressureMethodData, CompressedAirOtherMethodData, CompressorElectricityData, CompressedAirReductionResults, CompressedAirReductionInput, CompressedAirReductionResult } from '../../../shared/models/standalone';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { OperatingHours } from '../../../shared/models/operations';
+import { ConvertCompressedAirReductionService } from './convert-compressed-air-reduction.service';
 
 @Injectable()
 export class CompressedAirReductionService {
 
   baselineData: Array<CompressedAirReductionData>;
   modificationData: Array<CompressedAirReductionData>;
-
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
+  operatingHours: OperatingHours;
+  constructor(private formBuilder: FormBuilder, private convertCompressedAirReductionService: ConvertCompressedAirReductionService, private standaloneService: StandaloneService) { }
 
 
   initObject(index: number, settings: Settings, operatingHours: OperatingHours): CompressedAirReductionData {
@@ -39,7 +39,7 @@ export class CompressedAirReductionService {
       compressorSpecificPowerControl: 0,
       compressorSpecificPower: 0.16
     };
-    let hoursPerYear: number = 8736;
+    let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
@@ -48,6 +48,8 @@ export class CompressedAirReductionService {
       hoursPerYear: hoursPerYear,
       utilityType: 0,
       utilityCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
+      compressedAirCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
+      electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.066,
       measurementMethod: 0,
       flowMeterMethodData: defaultFlowMeterObj,
       bagMethodData: defaultBagMethodObj,
@@ -56,7 +58,53 @@ export class CompressedAirReductionService {
       compressorElectricityData: defaultCompressorElectricityObj,
       units: 1
     };
+    if (settings.unitsOfMeasure != 'Imperial') {
+      obj = this.convertCompressedAirReductionService.convertDefaultData(obj);
+    }
     return obj;
+  }
+
+  generateExample(settings: Settings, isBaseline: boolean): CompressedAirReductionData {
+    let meterReading: number = .2;
+    if (!isBaseline) {
+      meterReading = .1
+    }
+    let defaultData: CompressedAirReductionData = {
+      name: 'Equipment #1',
+      hoursPerYear: 8760,
+      utilityType: 0,
+      utilityCost: 0.12,
+      compressedAirCost: 0.12,
+      electricityCost: settings.electricityCost,
+      measurementMethod: 0,
+      flowMeterMethodData: {
+        meterReading: meterReading
+      },
+      bagMethodData: {
+        height: 0,
+        diameter: 0,
+        fillTime: 0
+      },
+      pressureMethodData: {
+        nozzleType: 0,
+        numberOfNozzles: 0,
+        supplyPressure: 0
+      },
+      otherMethodData: {
+        consumption: 0
+      },
+      compressorElectricityData: {
+        compressorControl: 0,
+        compressorControlAdjustment: 0,
+        compressorSpecificPowerControl: 0,
+        compressorSpecificPower: 0
+      },
+      units: 1
+    };
+    if (settings.unitsOfMeasure != 'Imperial') {
+      defaultData = this.convertCompressedAirReductionService.convertDefaultData(defaultData);
+    }
+    return defaultData;
   }
 
   getFormFromObj(inputObj: CompressedAirReductionData, index: number, isBaseline): FormGroup {
@@ -83,7 +131,8 @@ export class CompressedAirReductionService {
       consumption: [inputObj.otherMethodData.consumption],
 
       // compressor electricity data
-      utilityCost: [inputObj.utilityCost],
+      compressedAirCost: [inputObj.compressedAirCost],
+      electricityCost: [inputObj.electricityCost],
       compressorControl: [inputObj.compressorElectricityData.compressorControl],
       compressorControlAdjustment: [inputObj.compressorElectricityData.compressorControlAdjustment],
       compressorSpecificPowerControl: [inputObj.compressorElectricityData.compressorSpecificPowerControl],
@@ -116,8 +165,11 @@ export class CompressedAirReductionService {
         form.controls.units.clearValidators();
         break;
     }
-    if (form.controls.utilityType.value == 1) {
-      form.controls.utilityCost.setValidators([Validators.required, Validators.min(0)]);
+    if (form.controls.utilityType.value == 0) {
+      form.controls.compressedAirCost.setValidators([Validators.required, Validators.min(0)]);
+    }
+    else if (form.controls.utilityType.value == 1) {
+      form.controls.electricityCost.setValidators([Validators.required, Validators.min(0)]);
       form.controls.compressorControl.setValidators([Validators.required]);
       if (form.controls.compressorControl.value == 8) {
         form.controls.compressorControlAdjustment.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
@@ -156,7 +208,9 @@ export class CompressedAirReductionService {
       name: form.controls.name.value,
       hoursPerYear: form.controls.hoursPerYear.value,
       utilityType: form.controls.utilityType.value,
-      utilityCost: form.controls.utilityCost.value,
+      utilityCost: form.controls.utilityType.value === 0 ? form.controls.compressedAirCost.value : form.controls.electricityCost.value,
+      compressedAirCost: form.controls.compressedAirCost.value,
+      electricityCost: form.controls.electricityCost.value,
       measurementMethod: form.controls.measurementMethod.value,
       flowMeterMethodData: flowMeterObj,
       bagMethodData: bagMethodObj,
@@ -200,63 +254,27 @@ export class CompressedAirReductionService {
       compressedAirReductionResults.annualFlowRateReduction = baselineResults.flowRate - modificationResults.flowRate;
       compressedAirReductionResults.annualConsumptionReduction = baselineResults.consumption - modificationResults.consumption;
     }
-
-
     return compressedAirReductionResults;
   }
 
   calculate(input: Array<CompressedAirReductionData>, settings: Settings): CompressedAirReductionResult {
-    let inputArray: Array<CompressedAirReductionData> = this.convertInputs(input, settings);
+    let inputArray: Array<CompressedAirReductionData> = this.convertCompressedAirReductionService.convertInputs(input, settings);
     let inputObj: CompressedAirReductionInput = {
       compressedAirReductionInputVec: inputArray
     };
     let results: CompressedAirReductionResult = this.standaloneService.compressedAirReduction(inputObj);
-    results = this.convertResults(results, settings);
+    results = this.convertCompressedAirReductionService.convertResults(results, settings);
     return results;
   }
 
   calculateIndividualEquipment(input: CompressedAirReductionData, settings: Settings) {
     let inputArray: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify([input]));
-    inputArray = this.convertInputs(inputArray, settings);
+    inputArray = this.convertCompressedAirReductionService.convertInputs(inputArray, settings);
     let inputObj: CompressedAirReductionInput = {
       compressedAirReductionInputVec: inputArray
     };
     let results: CompressedAirReductionResult = this.standaloneService.compressedAirReduction(inputObj);
-    results = this.convertResults(results, settings);
-    return results;
-  }
-
-  convertInputs(inputArray: Array<CompressedAirReductionData>, settings: Settings): Array<CompressedAirReductionData> {
-    // need to loop through for conversions prior to calculation
-    if (settings.unitsOfMeasure == 'Metric') {
-      for (let i = 0; i < inputArray.length; i++) {
-        inputArray[i].flowMeterMethodData.meterReading = this.convertUnitsService.value(inputArray[i].flowMeterMethodData.meterReading).from('m3').to('ft3');
-        inputArray[i].bagMethodData.height = this.convertUnitsService.value(inputArray[i].bagMethodData.height).from('cm').to('in');
-        inputArray[i].bagMethodData.diameter = this.convertUnitsService.value(inputArray[i].bagMethodData.diameter).from('cm').to('in');
-        inputArray[i].pressureMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].pressureMethodData.supplyPressure).from('barg').to('psig');
-        inputArray[i].otherMethodData.consumption = this.convertUnitsService.value(inputArray[i].otherMethodData.consumption).from('m3').to('ft3');
-        let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
-        inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / conversionHelper;
-        if (inputArray[i].utilityType == 0) {
-          inputArray[i].utilityCost = inputArray[i].utilityCost / conversionHelper;
-        }
-      }
-    } else {
-      for (let i = 0; i < inputArray.length; i++) {
-        inputArray[i].otherMethodData.consumption = inputArray[i].otherMethodData.consumption * 1000;
-      }
-    }
-    return inputArray;
-  }
-
-  convertResults(results: CompressedAirReductionResult, settings: Settings) {
-    if (settings.unitsOfMeasure == 'Metric') {
-      results.flowRate = this.convertUnitsService.value(results.flowRate).from('ft3').to('m3');
-      results.singleNozzeFlowRate = this.convertUnitsService.value(results.singleNozzeFlowRate).from('ft3').to('m3');
-      results.consumption = this.convertUnitsService.value(results.consumption).from('ft3').to('m3');
-    } else if (settings.unitsOfMeasure == 'Imperial') {
-      results.consumption = results.consumption / 1000;
-    }
+    results = this.convertCompressedAirReductionService.convertResults(results, settings);
     return results;
   }
 }

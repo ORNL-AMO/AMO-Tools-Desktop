@@ -3,8 +3,8 @@
     <div class="form-group">
       <label for="{{'energyType'+modId+index}}">Energy Type</label>
       <div class="input-group">
-        <select name="{{'energyType'+modId+index}}" class="form-control" id="{{'energyType'+modId+index}}" [(ngModel)]="data.energyType"
-          (change)="changeEnergyType()" [required]="true">
+        <select name="{{'energyType'+modId+index}}" class="form-control" id="{{'energyType'+modId+index}}"
+          [(ngModel)]="data.energyType" (change)="changeEnergyType()" [required]="true">
           <option [ngValue]="'fuel'">Fuel</option>
           <option [ngValue]="'electricity'">Electricity</option>
         </select>
@@ -28,8 +28,8 @@
     <div class="form-group">
       <label for="{{'fuelType'+modId+index}}">Fuel Type</label>
       <div class="input-group">
-        <select name="{{'fuelType'+modId+index}}" class="form-control" id="{{'fuelType'+modId+index}}" [(ngModel)]="data.fuelType"
-          (change)="setFuel()" [required]="true">
+        <select name="{{'fuelType'+modId+index}}" class="form-control" id="{{'fuelType'+modId+index}}"
+          [(ngModel)]="data.fuelType" (change)="setFuel()" [required]="true">
           <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
         </select>
       </div>
@@ -63,10 +63,12 @@
   <div class="form-group">
     <label for="{{'totalEmissionOutputRate'+modId+index}}">Total Emission Output Rate</label>
     <div class="input-group">
-      <input name="{{'totalEmissionOutputRate'+modId+index}}" type="number" step="any" class="form-control" id="{{'totalEmissionOutputRate'+modId+index}}"
-        (input)="calculate()" [(ngModel)]="data.totalEmissionOutputRate" onfocus="this.select();" [required]="true">
-      <span class="input-group-addon units">kg CO<sub>2</sub>/
-        <span *ngIf="data.energyType == 'fuel'">MMBtu</span>
+      <input name="{{'totalEmissionOutputRate'+modId+index}}" type="number" step="any" class="form-control"
+        id="{{'totalEmissionOutputRate'+modId+index}}" (input)="calculate()" [(ngModel)]="data.totalEmissionOutputRate"
+        onfocus="this.select();" [required]="true">
+      <span class="input-group-addon units small">kg CO<sub>2</sub>/
+        <span *ngIf="data.energyType == 'fuel' && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+        <span *ngIf="data.energyType == 'fuel' && settings.unitsOfMeasure != 'Imperial'">GJ</span>
         <span *ngIf="data.energyType == 'electricity'">MWh</span>
       </span>
     </div>
@@ -78,9 +80,11 @@
       <span *ngIf="data.energyType == 'electricity'">Electricity</span>
       Use</label>
     <div class="input-group">
-      <input name="{{'electricityUse'+modId+index}}" type="number" step="any" class="form-control" id="{{'electricityUse'+modId+index}}"
-        (input)="calculate()" [(ngModel)]="data.electricityUse" onfocus="this.select();" [required]="true">
-      <span class="input-group-addon units" *ngIf="data.energyType == 'fuel'">MMBtu</span>
+      <input name="{{'electricityUse'+modId+index}}" type="number" step="any" class="form-control"
+        id="{{'electricityUse'+modId+index}}" (input)="calculate()" [(ngModel)]="data.electricityUse"
+        onfocus="this.select();" [required]="true">
+      <span class="input-group-addon units" *ngIf="data.energyType == 'fuel' && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+      <span class="input-group-addon units" *ngIf="data.energyType == 'fuel' && settings.unitsOfMeasure != 'Imperial'">GJ</span>
       <span class="input-group-addon units" *ngIf="data.energyType == 'electricity'">MWh</span>
     </div>
   </div>

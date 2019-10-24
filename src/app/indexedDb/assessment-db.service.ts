@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
-import { BehaviorSubject } from 'rxjs';
-
 
 @Injectable()
 export class AssessmentDbService {
@@ -88,6 +86,21 @@ export class AssessmentDbService {
     if (examples) {
       examples.forEach(example => {
         if (example.type === 'SSMT') {
+          tmpExample = example;
+        }
+      });
+    }
+    return tmpExample;
+  }
+
+  getTreasureHuntExample(): Assessment {
+    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment: Assessment) => {
+      return (assessment.isExample === true);
+    });
+    let tmpExample: Assessment;
+    if (examples) {
+      examples.forEach(example => {
+        if (example.type === 'TreasureHunt') {
           tmpExample = example;
         }
       });

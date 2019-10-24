@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { FieldData, InletPressureData, OutletPressureData, FSAT, PlaneData, FanRatedInfo, CompressibilityFactor, FsatOutput } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
@@ -10,6 +9,7 @@ import { FsatService } from '../fsat.service';
 import { CompareService } from '../compare.service';
 import { Subscription } from 'rxjs';
 import { FanFieldDataWarnings, FsatWarningService } from '../fsat-warning.service';
+import { OperatingHours } from '../../shared/models/operations';
 
 @Component({
   selector: 'app-fan-field-data',
@@ -36,15 +36,20 @@ export class FanFieldDataComponent implements OnInit {
   @Input()
   fsat: FSAT;
 
-  @ViewChild('modalBody') public modalBody: ElementRef;
-  @ViewChild('amcaModal') public amcaModal: ModalDirective;
-  @ViewChild('pressureModal') public pressureModal: ModalDirective;
+  @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
+  @ViewChild('amcaModal', { static: false }) public amcaModal: ModalDirective;
+  @ViewChild('pressureModal', { static: false }) public pressureModal: ModalDirective;
 
   @HostListener('window:resize', ['$event'])
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
   onResize(event) {
+    this.setOpHoursModalWidth();
     this.getBodyHeight();
   }
 
+  formWidth: number;
+  showOperatingHoursModal: boolean = false;
 
   bodyHeight: number;
   loadEstimateMethods: Array<{ value: number, display: string }> = [
@@ -60,7 +65,8 @@ export class FanFieldDataComponent implements OnInit {
   inletPressureCopy: InletPressureData;
   outletPressureCopy: OutletPressureData;
   idString: string;
-  constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
+  disableApplyData: boolean = false;
+  constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -74,9 +80,6 @@ export class FanFieldDataComponent implements OnInit {
       this.disableForm();
     }
 
-    this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
-      this.getBodyHeight();
-    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -94,6 +97,16 @@ export class FanFieldDataComponent implements OnInit {
 
   ngOnDestroy() {
     this.pressureModalSub.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100);
+
+    this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
+      this.getBodyHeight();
+    });
   }
 
   disableForm() {
@@ -120,16 +133,6 @@ export class FanFieldDataComponent implements OnInit {
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
   }
-
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
-  }
-
 
   showAmcaModal() {
     this.fsatCopy = JSON.parse(JSON.stringify(this.fsat));
@@ -193,9 +196,9 @@ export class FanFieldDataComponent implements OnInit {
     this.pressureModal.show();
   }
 
-
   hidePressureModal() {
     this.pressureCalcType = undefined;
+    this.disableApplyData = false;
     this.fsatService.modalOpen.next(false);
     this.pressureModal.hide();
   }
@@ -238,7 +241,12 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   saveFsatCopy(fsat: FSAT) {
+    this.disableApplyData = false;
     this.fsatCopy = fsat;
+  }
+
+  setCalcInvalid() {
+    this.disableApplyData = true;
   }
 
   saveAndClose() {
@@ -251,6 +259,30 @@ export class FanFieldDataComponent implements OnInit {
     }
     this.hidePressureModal();
   }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+    this.fsatService.modalOpen.next(false);
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+    this.fsatService.modalOpen.next(true);
+  }
+
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.fsat.operatingHours = oppHours;
+    this.fieldDataForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
+    this.save();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
+  }
+
 
   getBodyHeight() {
     if (this.modalBody) {

@@ -9,6 +9,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { PsatService } from '../../../psat/psat.service';
+import { FSAT } from '../../../shared/models/fans';
 
 @Component({
   selector: 'app-nema-energy-efficiency',
@@ -19,13 +20,15 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   @Input()
   psat: PSAT;
   @Input()
+  fsat: FSAT;
+  @Input()
   settings: Settings;
   @Input()
   assessment: Assessment;
   @Input()
   inAssessment: boolean;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -74,6 +77,8 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       } else {
         if (this.psat) {
           this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromPsat(this.psat);
+        } else if (this.fsat) {
+          this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromFsat(this.fsat);
         } else {
           this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
         }
@@ -87,21 +92,11 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     }
   }
 
-  btnResetData() {
-    this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
-    if (this.settings.powerMeasurement !== 'hp') {
-      if (this.nemaForm.controls.horsePower.value === '200') {
-        this.nemaForm.patchValue({
-          horsePower: '150'
-        });
-      }
-    }
-    this.calculate();
-  }
-
   initCalculator(): Calculator {
     if (this.psat) {
       this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromPsat(this.psat);
+    } else if (this.fsat) {
+      this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromFsat(this.fsat);
     } else {
       this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
     }
@@ -117,7 +112,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     if (this.nemaEnergyEfficiencyService.nemaInputs) {
       this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromObj(this.nemaEnergyEfficiencyService.nemaInputs);
     } else {
-      this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
+      this.nemaForm = this.nemaEnergyEfficiencyService.resetForm();
       if (this.settings.powerMeasurement !== 'hp') {
         if (this.nemaForm.controls.horsePower.value === 200) {
           this.nemaForm.patchValue({
@@ -184,5 +179,33 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       this.calculator.nemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
       this.saveCalculator();
     }
+  }
+
+  btnResetData() {
+    this.nemaForm = this.nemaEnergyEfficiencyService.resetForm();
+    if (this.settings.powerMeasurement === 'hp') {
+      this.nemaForm.patchValue({
+        horsePower: '200'
+      });
+    } else if (this.settings.unitsOfMeasure === 'Metric' && this.settings.powerMeasurement !== 'hp') {
+      this.nemaForm.patchValue({
+        horsePower: '150'
+      });
+    }
+    this.calculate();
+  }
+
+  btnGenerateExample() {
+    this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
+    if (this.settings.powerMeasurement === 'hp') {
+      this.nemaForm.patchValue({
+        horsePower: '200'
+      });
+    } else if (this.settings.unitsOfMeasure === 'Metric' && this.settings.powerMeasurement !== 'hp') {
+      this.nemaForm.patchValue({
+        horsePower: '150'
+      });
+    }
+    this.calculate();
   }
 }

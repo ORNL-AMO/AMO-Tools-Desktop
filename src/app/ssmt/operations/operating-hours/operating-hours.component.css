@@ -1,8 +1,0 @@
-.form-section{
-  border-bottom: #bbb dashed 1px;
-}
-
-
-.ng-invalid:not(form)  {
-  border: red solid 2px; /* red */
-}

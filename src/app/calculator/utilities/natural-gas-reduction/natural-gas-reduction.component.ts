@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { NaturalGasReductionService } from './natural-gas-reduction.service';
 import { NaturalGasReductionResults, NaturalGasReductionData } from '../../../shared/models/standalone';
@@ -27,8 +26,8 @@ export class NaturalGasReductionComponent implements OnInit {
   operatingHours: OperatingHours;
 
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -168,6 +167,25 @@ export class NaturalGasReductionComponent implements OnInit {
     this.baselineData = [tmpObj];
     this.modificationData = new Array<NaturalGasReductionData>();
     this.modificationExists = false;
+    this.getResults();
+  }
+
+  generateExample() {
+    let tmpBaselineObj: NaturalGasReductionData = this.naturalGasReductionService.generateExample(this.settings, true);
+    this.baselineData = [tmpBaselineObj];
+    this.naturalGasReductionService.baselineData = this.baselineData;
+    let tmpModificationData: NaturalGasReductionData = this.naturalGasReductionService.generateExample(this.settings, false);
+    this.modificationData = [tmpModificationData];
+    this.naturalGasReductionService.modificationData = this.modificationData;
+    this.modificationExists = true;
+    this.baselineSelected = true;
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
     this.getResults();
   }
 

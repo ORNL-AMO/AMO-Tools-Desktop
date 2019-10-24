@@ -1,0 +1,93 @@
+<div class="card" [@modal]="showModal" [ngStyle]="{'width.px': width}">
+  <div class="card-header header">
+    <h3> Operating Hours</h3>
+  </div>
+  <div class="card-body tab-content">
+    <form [formGroup]="operatingHoursForm">
+      <div class="form-group" *ngIf="showMinutesSeconds">
+        <label for="secondsPerMinute">Seconds / Minute</label>
+        <div class="incrementor form-control input-group">
+          <button class="btn input-group-btn" (click)="subtractOne(operatingHoursForm.controls.secondsPerMinute)"
+            [disabled]="operatingHours.secondsPerMinute == 0">
+            <i class="fa fa-minus"></i>
+          </button>
+          <button class="btn input-group-btn" (click)="addOne(operatingHoursForm.controls.secondsPerMinute)"
+            [disabled]="operatingHours.secondsPerMinute == 60">
+            <i class="fa fa-plus"></i>
+          </button>
+          <input name="secondsPerMinute" type="number" step="1" min="0" max="60" class="form-control"
+            id="secondsPerMinute" (input)="calculatHrsPerYear()" formControlName="secondsPerMinute">
+        </div>
+      </div>
+      <div class="form-group" *ngIf="showMinutesSeconds">
+        <label for="minutesPerHour">Minutes / Hour</label>
+        <div class="incrementor form-control input-group">
+          <button class="btn input-group-btn" (click)="subtractOne(operatingHoursForm.controls.minutesPerHour)"
+            [disabled]="operatingHours.minutesPerHour == 0">
+            <i class="fa fa-minus"></i>
+          </button>
+          <button class="btn input-group-btn" (click)="addOne(operatingHoursForm.controls.minutesPerHour)"
+            [disabled]="operatingHours.minutesPerHour == 60">
+            <i class="fa fa-plus"></i>
+          </button>
+          <input name="minutesPerHour" type="number" step="1" min="0" max="60" class="form-control" id="minutesPerHour"
+            (input)="calculatHrsPerYear()" formControlName="minutesPerHour">
+        </div>
+      </div>
+      <div class="form-group">
+
+        <label for="hoursPerDay">Hours / Day</label>
+        <div class="incrementor form-control input-group">
+          <button class="btn input-group-btn" (click)="subtractOne(operatingHoursForm.controls.hoursPerDay)"
+            [disabled]="operatingHours.hoursPerDay == 0">
+            <i class="fa fa-minus"></i>
+          </button>
+          <button class="btn input-group-btn" (click)="addOne(operatingHoursForm.controls.hoursPerDay)"
+            [disabled]="operatingHours.hoursPerDay == 24">
+            <i class="fa fa-plus"></i>
+          </button>
+          <input name="hoursPerDay" type="number" step="1" min="0" max="24" class="form-control" id="hoursPerDay"
+            (input)="calculatHrsPerYear()" formControlName="hoursPerDay">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="daysPerWeek">Days / Week</label>
+        <div class="incrementor form-control input-group">
+          <button class="btn input-group-btn" (click)="subtractOne(operatingHoursForm.controls.daysPerWeek)"
+            [disabled]="operatingHoursForm.controls.daysPerWeek.value == 0">
+            <i class="fa fa-minus"></i>
+          </button>
+          <button class="btn input-group-btn" (click)="addOne(operatingHoursForm.controls.daysPerWeek)"
+            [disabled]="operatingHoursForm.controls.daysPerWeek.value == 7">
+            <i class="fa fa-plus"></i>
+          </button>
+          <input name="daysPerWeek" type="number" step="1" min="0" max="7" class="form-control" id="daysPerWeek"
+            (input)="calculatHrsPerYear()" formControlName="daysPerWeek">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="weeksPerYear">Weeks / Year</label>
+        <div class="incrementor form-control input-group">
+          <button class="btn input-group-btn" (click)="subtractOne(operatingHoursForm.controls.weeksPerYear)"
+            [disabled]="operatingHoursForm.controls.weeksPerYear.value == 0">
+            <i class="fa fa-minus"></i>
+          </button>
+          <button class="btn input-group-btn" (click)="addOne(operatingHoursForm.controls.weeksPerYear)"
+            [disabled]="operatingHoursForm.controls.weeksPerYear.value == 53">
+            <i class="fa fa-plus"></i>
+          </button>
+          <input name="weeksPerYear" type="number" step="1" min="0" max="53" class="form-control" id="weeksPerYear"
+            (input)="calculatHrsPerYear()" formControlName="weeksPerYear">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="hoursPerYear">Hours / Year</label>
+        <div class="small text-center">{{operatingHours.hoursPerYear | number:'1.0-0'}}</div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer d-flex justify-content-between">
+    <button class="btn btn-danger" (click)="close()">Cancel</button>
+    <button class="btn btn-success" (click)="save()">Save</button>
+  </div>
+</div>

@@ -5,10 +5,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PreAssessmentService } from '../../../calculator/utilities/pre-assessment/pre-assessment.service';
 import { Settings } from '../../../shared/models/settings';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-pre-assessment-list-item',
   templateUrl: './pre-assessment-list-item.component.html',
@@ -30,9 +28,9 @@ export class PreAssessmentListItemComponent implements OnInit {
   @Input()
   index: number;
 
-  @ViewChild('editModal') public editModal: ModalDirective;
-  @ViewChild('deleteModal') public deleteModal: ModalDirective;
-  @ViewChild('copyModal') public copyModal: ModalDirective;
+  @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
+  @ViewChild('deleteModal', { static: false }) public deleteModal: ModalDirective;
+  @ViewChild('copyModal', { static: false }) public copyModal: ModalDirective;
 
 
   directories: Array<Directory>;
@@ -43,7 +41,7 @@ export class PreAssessmentListItemComponent implements OnInit {
   dropdownOpen: boolean = false;
 
   calculatorCopy: Calculator;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService) { }
+  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
     this.checkPreAssessment();

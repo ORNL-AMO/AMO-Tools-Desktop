@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { SteamPropertiesOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -15,6 +15,11 @@ export class HoverMakeupWaterComponent implements OnInit {
   settings: Settings;
   @Input()
   outputData: SSMTOutput;
+  @Input()
+  inResultsPanel: boolean;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
 
   makeupWater: SteamPropertiesOutput;
   makeupWaterLabel: string;
@@ -36,5 +41,9 @@ export class HoverMakeupWaterComponent implements OnInit {
     this.volumeFlow = specificVolume * massFlow;
     //convert from m3/h to settings volume flow measurement (gpm | m3/h | L/min)
     this.volumeFlow = this.convertUnitsService.value(this.volumeFlow).from('m3/h').to(this.settings.steamVolumeFlowMeasurement);
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 }

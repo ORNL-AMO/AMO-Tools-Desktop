@@ -1,11 +1,8 @@
 import { Component, OnInit, Input, ViewChild, TemplateRef, ElementRef, SimpleChanges } from '@angular/core';
-import { PhastService } from '../phast.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Directory } from '../../shared/models/directory';
-import { ReportRollupService } from '../../report-rollup/report-rollup.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SettingsService } from '../../settings/settings.service';
 import { PhastReportService } from './phast-report.service';
@@ -50,12 +47,12 @@ export class PhastReportComponent implements OnInit {
   @Input()
   printExecutiveSummary: boolean;
 
-  @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
+  @ViewChild('reportTemplate', { static: false }) reportTemplate: TemplateRef<any>;
 
-  @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
+  @ViewChild('printMenuModal', { static: false }) public printMenuModal: ModalDirective;
 
-  @ViewChild('reportBtns') reportBtns: ElementRef;
-  @ViewChild('reportHeader') reportHeader: ElementRef;
+  @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
+  @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
@@ -66,7 +63,7 @@ export class PhastReportComponent implements OnInit {
 
   selectAll: boolean = false;
   reportContainerHeight: number;
-  constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
+  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private phastReportService: PhastReportService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.initPrintLogic();
@@ -91,7 +88,7 @@ export class PhastReportComponent implements OnInit {
     }
 
     if (!this.phast.operatingHours.hoursPerYear) {
-      this.phast.operatingHours.hoursPerYear = 8736;
+      this.phast.operatingHours.hoursPerYear = 8760;
     }
 
     if (this.inRollup) {
@@ -270,7 +267,6 @@ export class PhastReportComponent implements OnInit {
     this.phastReportService.showPrint.next(true);
     setTimeout(() => {
       let win = this.windowRefService.nativeWindow;
-      let doc = this.windowRefService.getDoc();
       win.print();
       //after printing hide content again
       this.phastReportService.showPrint.next(false);

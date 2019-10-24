@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { OperatingCostInput, OperatingCostOutput } from "../../../shared/models/standalone";
-import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
+import { OperatingCostService } from './operating-cost.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-operating-cost',
@@ -12,8 +13,8 @@ import { Settings } from '../../../shared/models/settings';
 export class OperatingCostComponent implements OnInit {
   @Input()
   settings: Settings;
-  
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -25,10 +26,13 @@ export class OperatingCostComponent implements OnInit {
   inputs: OperatingCostInput;
   outputs: OperatingCostOutput;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
+  constructor(private standaloneService: StandaloneService, private operatingCostService: OperatingCostService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.inputs = this.compressedAirService.operatingCostInput;
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.inputs = this.operatingCostService.input;
     this.calculateOperationCost(this.inputs);
   }
 
@@ -38,32 +42,33 @@ export class OperatingCostComponent implements OnInit {
     }, 100);
   }
 
+  ngOnDestroy() {
+    this.operatingCostService.input = this.inputs;
+  }
+
   btnResetData() {
-    this.inputs = {
-      motorBhp: 0,
-      bhpUnloaded: 0,
-      annualOperatingHours: 0,
-      runTimeLoaded: 0,
-      runTimeUnloaded: 0,
-      efficiencyLoaded: 0,
-      efficiencyUnloaded: 0,
-      costOfElectricity: 0,
-    };
-    this.compressedAirService.operatingCostInput = this.inputs;
+    this.inputs = this.operatingCostService.getDefaultData();
+    this.operatingCostService.operatingHours = undefined;
     this.calculateOperationCost(this.inputs);
   }
-  
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
-  
+
   calculateOperationCost(inputs: OperatingCostInput) {
     this.outputs = this.standaloneService.operatingCost(inputs, this.settings);
   }
 
   setField(str: string) {
     this.currentField = str;
+  }
+
+  btnGenerateExample() {
+    let tempInputs: OperatingCostInput = this.operatingCostService.getExampleData();
+    this.inputs = this.operatingCostService.convertOperatingCostExample(tempInputs, this.settings);
+    this.calculateOperationCost(this.inputs)
   }
 }

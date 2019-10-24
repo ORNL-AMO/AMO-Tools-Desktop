@@ -4,11 +4,13 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PhastService } from '../../../phast/phast.service';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class O2EnrichmentService {
   o2Enrichment: O2Enrichment;
   lines: Array<any> = [];
+  operatingHours: OperatingHours;
   constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
 
   initForm(settings: Settings): FormGroup {
@@ -88,6 +90,53 @@ export class O2EnrichmentService {
       fuelConsumption: form.controls.fuelConsumption.value,
       fuelCost: form.controls.fuelCost.value,
       fuelCostEnriched: form.controls.fuelCostEnriched.value
+    };
+  }
+
+  generateExample(settings: Settings): O2Enrichment {
+    let tmpFlueGasTemp: number = 1800;
+    let tmpFlueGasTempEnriched: number = 1800;
+    let tmpCombAirTemp: number = 80;
+    let tmpCombAirTempEnriched: number = 300;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpFlueGasTemp = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpFlueGasTemp).from('F').to('C'), 2);
+      tmpFlueGasTempEnriched = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpFlueGasTempEnriched).from('F').to('C'), 2);
+      tmpCombAirTemp = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpCombAirTemp).from('F').to('C'), 2);
+      tmpCombAirTempEnriched = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpCombAirTempEnriched).from('F').to('C'), 2);
+    }
+    let tmpFuelConsumption: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to(settings.energyResultUnit), 100);
+    return {
+      operatingHours: 8640,
+      operatingHoursEnriched: 8640,
+      fuelCost: settings.fuelCost,
+      fuelCostEnriched: settings.fuelCost,
+      o2CombAir: 21,
+      o2CombAirEnriched: 100,
+      combAirTemp: tmpCombAirTemp,
+      combAirTempEnriched: tmpCombAirTempEnriched,
+      flueGasTemp: tmpFlueGasTemp,
+      flueGasTempEnriched: tmpFlueGasTempEnriched,
+      o2FlueGas: 5,
+      o2FlueGasEnriched: 1,
+      fuelConsumption: tmpFuelConsumption
+    };
+  }
+
+  getResetData(): O2Enrichment {
+    return {
+      operatingHours: 0,
+      operatingHoursEnriched: 0,
+      fuelCost: 0,
+      fuelCostEnriched: 0,
+      o2CombAir: 21,
+      o2CombAirEnriched: 0,
+      combAirTemp: 0,
+      combAirTempEnriched: 0,
+      flueGasTemp: 0,
+      flueGasTempEnriched: 0,
+      o2FlueGas: 0,
+      o2FlueGasEnriched: 0,
+      fuelConsumption: 0
     };
   }
 

@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FieldMeasurementInputs, SlipMethod, FieldMeasurementOutputs, PercentLoadEstimationService } from './percent-load-estimation.service';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -13,7 +12,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -23,6 +22,8 @@ export class PercentLoadEstimationComponent implements OnInit {
   headerHeight: number;
   tabSelect: string = 'results';
   toggleCalculate = false;
+  toggleResetData = false;
+  toggleExampleData = false;
   loadEstimationMethod: number;
   percentLoadEstimation: number;
 
@@ -30,7 +31,9 @@ export class PercentLoadEstimationComponent implements OnInit {
 
   fieldMeasurementData: FieldMeasurementInputs;
   fieldMeasurementResults: FieldMeasurementOutputs;
-  constructor(private percentLoadEstimationService: PercentLoadEstimationService, private settingsDbService: SettingsDbService) { }
+
+  constructor(private percentLoadEstimationService: PercentLoadEstimationService, private settingsDbService: SettingsDbService) {
+  }
 
   ngOnInit() {
     if (!this.settings) {
@@ -54,14 +57,6 @@ export class PercentLoadEstimationComponent implements OnInit {
 
   ngOnDestroy() {
     this.percentLoadEstimationService.loadEstimationMethod = this.loadEstimationMethod;
-  }
-
-
-  btnResetData() {
-    this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
-    this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
-    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
-    this.calculateSlipMethod(this.slipMethodData);
   }
 
   resizeTabs() {
@@ -92,5 +87,20 @@ export class PercentLoadEstimationComponent implements OnInit {
     }
   }
 
+  btnResetData() {
+    this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
+    this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
+    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
+    this.calculateSlipMethod(this.slipMethodData);
+    this.toggleResetData = !this.toggleResetData;
+  }
+
+  btnGenerateExample() {
+    this.fieldMeasurementData = this.percentLoadEstimationService.generateFieldMeasurementInputs();
+    this.slipMethodData = this.percentLoadEstimationService.generateSlipMethodInputsExample();
+    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
+    this.calculateSlipMethod(this.slipMethodData);
+    this.toggleExampleData = !this.toggleExampleData;
+  }
 }
 

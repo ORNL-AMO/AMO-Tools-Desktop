@@ -3,23 +3,15 @@
   <!--header-->
   <div #header class="w-100 hide-print sticky-top" id="treasureHuntBanner">
     <app-treasure-hunt-banner [assessment]="assessment"></app-treasure-hunt-banner>
-    <!-- <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators' || mainTab == 'system-setup'">
-      <app-psat-tabs [settings]="settings" [psat]="_psat"></app-psat-tabs>
-    </div> -->
   </div>
   <!--end header-->
-  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item"
-    [ngStyle]="{'height.px': containerHeight}">
-    <div class="w-50 panel-column modification">
+  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
+    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}"
+      [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="subTab == 'settings'" [(settings)]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()">
       </app-system-basics>
-      <app-operating-hours *ngIf="subTab == 'operating-hours'" [treasureHunt]="assessment.treasureHunt"
-        (emitSave)="saveTreasureHunt($event)">
-      </app-operating-hours>
-
-      <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings"
-        [treasureHunt]="assessment.treasureHunt" (emitSave)="saveTreasureHunt($event)">
+      <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings" (updateSettings)="getSettings()">
       </app-operation-costs>
 
     </div>
@@ -30,13 +22,11 @@
 
   <div *ngIf="mainTab == 'find-treasure'" class="w-100 d-flex tab-content justify-content-center scroll-item"
     [ngStyle]="{'height.px': containerHeight}">
-    <app-find-treasure class="w-100" [treasureHunt]="assessment.treasureHunt" (emitSave)="saveTreasureHunt($event)"
-      [settings]="settings"></app-find-treasure>
+    <app-find-treasure class="w-100" [settings]="settings"></app-find-treasure>
   </div>
 
   <div *ngIf="mainTab == 'treasure-chest'" class="d-flex tab-content h-100">
-    <app-treasure-chest class="w-100" [treasureHunt]="assessment.treasureHunt" [settings]="settings"
-      (emitUpdateTreasureHunt)="saveTreasureHunt($event)" [containerHeight]="containerHeight"></app-treasure-chest>
+    <app-treasure-chest class="w-100" [settings]="settings" [containerHeight]="containerHeight"></app-treasure-chest>
   </div>
 
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
@@ -49,12 +39,13 @@
 
 
   <!--footer-->
-  <div #footer id="thuntFooter" class="footer hide-print" *ngIf="mainTab == 'system-basics'">
+  <div #footer id="thuntFooter" class="footer hide-print"
+    *ngIf="mainTab == 'system-setup' && selectedCalc == 'none'">
     <div class="pull-left" *ngIf="subTab != 'settings'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Next</button>
+      <button class="btn btn-primary" [disabled]="nextDisabled" (click)="continue()">Next</button>
     </div>
   </div>
   <!--end footer-->
@@ -62,4 +53,4 @@
 
 
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-	[setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'"></app-toast>
+  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'"></app-toast>

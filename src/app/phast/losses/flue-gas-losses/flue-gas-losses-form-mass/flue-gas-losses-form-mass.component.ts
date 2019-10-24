@@ -36,7 +36,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   @Input()
   isBaseline: boolean;
   
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   warnings: FlueGasWarnings;
   options: any;

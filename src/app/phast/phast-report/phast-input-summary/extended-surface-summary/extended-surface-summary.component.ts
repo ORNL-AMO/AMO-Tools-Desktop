@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-extended-surface-summary',
@@ -24,7 +23,7 @@ export class ExtendedSurfaceSummaryComponent implements OnInit {
   ambientTemperatureDiff: Array<boolean>;
   surfaceEmissivityDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
+  constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.surfaceAreaDiff = new Array();

@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { Assessment } from '../../../shared/models/assessment';
 import { PHAST, Modification } from '../../../shared/models/phast/phast';
 import { LossTab } from '../../tabs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -34,7 +33,7 @@ export class LossesResultPanelComponent implements OnInit {
   modificationIndex: number;
 
 
-  @ViewChild('resultTabs') resultTabs: ElementRef;
+  @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
 
   tabSelect: string = 'results';
   helpHeight: number;

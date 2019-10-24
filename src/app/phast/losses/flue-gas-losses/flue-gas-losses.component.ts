@@ -2,11 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import * as _ from 'lodash';
 import { FlueGasLossesService } from './flue-gas-losses.service';
 import { PhastService } from '../../phast.service';
-import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas } from '../../../shared/models/phast/losses/flueGas';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FlueGasCompareService } from './flue-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms/src/model';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-flue-gas-losses',
   templateUrl: './flue-gas-losses.component.html',

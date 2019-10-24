@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { SsmtService } from '../../../ssmt.service';
 import { SSMT, BoilerInput } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
@@ -6,6 +6,7 @@ import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { BoilerService } from '../../../boiler/boiler.service';
 import { FormGroup } from '@angular/forms';
+import { StackLossInput } from '../../../../shared/models/steam/steam-inputs';
 
 @Component({
   selector: 'app-boiler-form',
@@ -21,6 +22,15 @@ export class BoilerFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('emitSave')
   emitSave = new EventEmitter<SSMT>();
+
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setBlowdownRateModalWidth();
+  }
+  formWidth: number;
+  showBlowdownRateModal: boolean = false;
+
 
   baselineFuelOptions: any;
   modificationFuelOptions: any;
@@ -58,6 +68,12 @@ export class BoilerFormComponent implements OnInit {
         this.init();
       }
     }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setBlowdownRateModalWidth();
+    }, 100)
   }
 
   setFuelTypes(save?: boolean) {
@@ -212,7 +228,9 @@ export class BoilerFormComponent implements OnInit {
     // not needed unless we enable baseline fields
     // let tmpBaselineBoilerInput: BoilerInput = this.boilerService.initObjFromForm(this.baselineForm);
     // this.ssmt.boilerInput = tmpBaselineBoilerInput;
+    let stackLossInput: StackLossInput = this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.stackLossInput;
     let tmpModificationBoilerInput: BoilerInput = this.boilerService.initObjFromForm(this.modificationForm);
+    tmpModificationBoilerInput.stackLossInput = stackLossInput;
     this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput = tmpModificationBoilerInput;
     this.emitSave.emit(this.ssmt);
   }
@@ -225,5 +243,26 @@ export class BoilerFormComponent implements OnInit {
   focusOut() {
     // this.exploreOpportunitiesService.currentTab.next('boiler');
     // this.exploreOpportunitiesService.currentField.next('default');
+  }
+
+  closeBlowdownRateModal() {
+    this.showBlowdownRateModal = false;
+    // this.ssmtService.modalOpen.next(false);
+  }
+
+  openBlowdownRateModal() {
+    this.showBlowdownRateModal = true;
+    // this.ssmtService.modalOpen.next(true);
+  }
+
+  saveAndCloseBlowdownRateModal() {
+    this.save();
+    this.closeBlowdownRateModal();
+  }
+
+  setBlowdownRateModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 }

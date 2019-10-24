@@ -20,7 +20,7 @@ export class HeatLossComponent implements OnInit {
   onResize(event) {
     this.resizeTabs();
   }
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   headerHeight: number;
 
   tabSelect: string = 'results';
@@ -48,11 +48,6 @@ export class HeatLossComponent implements OnInit {
     }, 50);
   }
 
-  btnResetData() {
-    this.heatLossForm = this.heatLossService.initForm(this.settings);
-    this.calculate(this.heatLossForm);
-  }
-
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -64,7 +59,7 @@ export class HeatLossComponent implements OnInit {
     if (this.heatLossService.heatLossInput) {
       this.heatLossForm = this.heatLossService.getFormFromObj(this.heatLossService.heatLossInput, this.settings);
     }else {
-      this.heatLossForm = this.heatLossService.initForm(this.settings);
+      this.heatLossForm = this.heatLossService.resetForm(this.settings);
     }
   }
 
@@ -104,5 +99,14 @@ export class HeatLossComponent implements OnInit {
     };
 
     return emptyResults;
+  }
+
+  btnResetData() {
+    this.heatLossForm = this.heatLossService.resetForm(this.settings);
+    this.calculate(this.heatLossForm);
+  }
+  btnGenerateExample() {
+    this.heatLossForm = this.heatLossService.initForm(this.settings);
+    this.calculate(this.heatLossForm);
   }
 }

@@ -8,7 +8,6 @@ import { ReportDiagramComponent } from './report-diagram/report-diagram.componen
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { InputSummaryComponent } from './input-summary/input-summary.component';
 import { SsmtDiagramModule } from '../ssmt-diagram/ssmt-diagram.module';
-import { SharedModule } from '../../shared/shared.module';
 import { OperationsSummaryComponent } from './input-summary/operations-summary/operations-summary.component';
 import { TurbineSummaryComponent } from './input-summary/turbine-summary/turbine-summary.component';
 import { HeaderSummaryComponent } from './input-summary/header-summary/header-summary.component';
@@ -20,13 +19,24 @@ import { SsmtReportService } from './ssmt-report.service';
 import { ModalModule } from 'ngx-bootstrap';
 import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
 import { ReportGraphsService } from './report-graphs/report-graphs.service';
+import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
+import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
+import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
+import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
+import { WaterfallGraphModule } from '../../shared/waterfall-graph/waterfall-graph.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
     SsmtDiagramModule,
-    SharedModule,
     FormsModule,
-    ModalModule
+    ModalModule,
+    PrintOptionsMenuModule,
+    FacilityInfoSummaryModule,
+    PercentGraphModule,
+    PieChartModule,
+    WaterfallGraphModule,
+    SharedPipesModule
   ],
   declarations: [
     SsmtReportComponent,

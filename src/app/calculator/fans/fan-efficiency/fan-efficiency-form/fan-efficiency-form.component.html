@@ -2,8 +2,8 @@
     <div class="form-group">
         <label for="fanType">Fan Type</label>
         <div class="input-group">
-            <select class="form-control" name="fanType" id="fanType" formControlName="fanType" (change)="emitCalculate()"
-                (focus)="focusField('fanType')">
+            <select class="form-control" name="fanType" id="fanType" formControlName="fanType"
+                (change)="emitCalculate()" (focus)="focusField('fanType')">
                 <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
             </select>
         </div>
@@ -11,11 +11,12 @@
     <div class="form-group">
         <label for="fanSpeed">Fan Speed</label>
         <div class="input-group">
-            <input type="number" name="fanSpeed" min="0" step="10" class="form-control" formControlName="fanSpeed" id="fanSpeed"
-                (input)="emitCalculate()" (focus)="focusField('fanSpeed')" onfocus="this.select();">
+            <input type="number" name="fanSpeed" min="0" step="10" class="form-control" formControlName="fanSpeed"
+                id="fanSpeed" (input)="emitCalculate()" (focus)="focusField('fanSpeed')" onfocus="this.select();">
             <span class="input-group-addon units">rpm</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="fanEfficiencyForm.controls.fanSpeed.invalid && !fanEfficiencyForm.controls.fanSpeed.pristine">
+        <span class="alert-danger pull-right small"
+            *ngIf="fanEfficiencyForm.controls.fanSpeed.invalid && !fanEfficiencyForm.controls.fanSpeed.pristine">
             <span *ngIf="fanEfficiencyForm.controls.fanSpeed.errors.required">Value required.</span>
             <span *ngIf="fanEfficiencyForm.controls.fanSpeed.errors.min">Value can't be less than 0 rpm.</span>
         </span>
@@ -28,11 +29,16 @@
         </label>
         <div class="input-group">
             <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure"
-                id="inletPressure" (input)="emitCalculate()" (focus)="focusField('inletPressure')" onfocus="this.select();">
-            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+                id="inletPressure" (input)="emitCalculate()" (focus)="focusField('inletPressure')"
+                onfocus="this.select();">
+            <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="fanEfficiencyForm.controls.inletPressure.invalid && !fanEfficiencyForm.controls.inletPressure.pristine">
+        <span class="alert-danger pull-right small"
+            *ngIf="fanEfficiencyForm.controls.inletPressure.invalid && !fanEfficiencyForm.controls.inletPressure.pristine">
             <span *ngIf="fanEfficiencyForm.controls.inletPressure.errors.required">Value required.</span>
+            <span *ngIf="fanEfficiencyForm.controls.inletPressure.errors.max">Value can't be greater than
+                {{fanEfficiencyForm.controls.inletPressure.errors.max.max}} <span
+                    [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></span>
         </span>
     </div>
 
@@ -42,13 +48,17 @@
             <!-- <a class="form-text small click-link" (click)="showOutletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate Outlet Pressure</a> -->
         </label>
         <div class="input-group">
-            <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure"
-                id="outletPressure" (input)="emitCalculate()" (focus)="focusField('outletPressure')" onfocus="this.select();">
-            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+            <input name="outletPressure" type="number" min="0.1" step="any" class="form-control"
+                formControlName="outletPressure" id="outletPressure" (input)="emitCalculate()"
+                (focus)="focusField('outletPressure')" onfocus="this.select();">
+            <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="fanEfficiencyForm.controls.outletPressure.invalid && !fanEfficiencyForm.controls.outletPressure.pristine">
+        <span class="alert-danger pull-right small"
+            *ngIf="fanEfficiencyForm.controls.outletPressure.invalid && !fanEfficiencyForm.controls.outletPressure.pristine">
             <span *ngIf="fanEfficiencyForm.controls.outletPressure.errors.required">Value required.</span>
-            <!-- <span class="alert-warning pull-right small" *ngIf="outletPressureError !== null">{{outletPressureError}}</span> -->
+            <span *ngIf="fanEfficiencyForm.controls.outletPressure.errors.min">Value can't be less than
+                {{fanEfficiencyForm.controls.outletPressure.errors.min.min}} <span
+                    [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></span>
         </span>
     </div>
 
@@ -57,11 +67,12 @@
             <!-- <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled-link':!selected}">Calculate Flow Rate and Pressures</a> -->
         </label>
         <div class="input-group">
-            <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate"
-                (input)="emitCalculate()" (focus)="focusField('flowRate')" onfocus="this.select();">
-            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+            <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate"
+                id="flowRate" (input)="emitCalculate()" (focus)="focusField('flowRate')" onfocus="this.select();">
+            <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="fanEfficiencyForm.controls.flowRate.invalid && !fanEfficiencyForm.controls.flowRate.pristine">
+        <span class="alert-danger pull-right small"
+            *ngIf="fanEfficiencyForm.controls.flowRate.invalid && !fanEfficiencyForm.controls.flowRate.pristine">
             <span *ngIf="fanEfficiencyForm.controls.flowRate.errors.required">Value required.</span>
         </span>
         <!-- <span class="alert-warning pull-right small" *ngIf="flowRateError !== null">{{flowRateError}}</span> -->
@@ -72,11 +83,12 @@
             <!-- <a class="form-text small click-link" *ngIf="baseline" (click)="calculatCompressibility()" [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a> -->
         </label>
         <div class="input-group">
-            <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibility"
-                id="compressibilityFactor" (input)="emitCalculate()" (focus)="focusField('compressibilityFactor')"
-                onfocus="this.select();">
+            <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control"
+                formControlName="compressibility" id="compressibilityFactor" (input)="emitCalculate()"
+                (focus)="focusField('compressibilityFactor')" onfocus="this.select();">
         </div>
-        <span class="alert-danger pull-right small" *ngIf="fanEfficiencyForm.controls.compressibility.invalid && !fanEfficiencyForm.controls.compressibility.pristine">
+        <span class="alert-danger pull-right small"
+            *ngIf="fanEfficiencyForm.controls.compressibility.invalid && !fanEfficiencyForm.controls.compressibility.pristine">
             <span *ngIf="fanEfficiencyForm.controls.compressibility.errors.required">Value required.</span>
         </span>
         <!-- <span class="alert-warning pull-right small" *ngIf="compressibilityFactorError !== null">{{compressibilityFactorError}}</span> -->

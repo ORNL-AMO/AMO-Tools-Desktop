@@ -29,8 +29,8 @@ export class ReportGraphsComponent implements OnInit {
   @Input()
   printGraphs: boolean;
 
-  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
-  @ViewChild('waterfallChartContainer') waterfallChartContainer: ElementRef;
+  @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
+  @ViewChild('waterfallChartContainer', { static: false }) waterfallChartContainer: ElementRef;
 
   ssmt: SSMT;
 

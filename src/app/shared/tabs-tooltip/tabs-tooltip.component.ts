@@ -18,6 +18,7 @@ export class TabsTooltipComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.setMessage();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -30,16 +31,16 @@ export class TabsTooltipComponent implements OnInit {
 
 
   setMessage() {
-    if (this.badgeClass === 'loss-different') {
-      this.message = "different from baseline";
-    }else if (this.badgeClass === 'input-error') {
-      this.message = "input error";
+    if (this.badgeClass == 'loss-different') {
+      this.message = 'Different from Baseline';
+    } else if (this.badgeClass == 'input-error') {
+      this.message = 'Input Warning';
     }
-    else if (this.badgeClass === 'missing-data') {
-      this.message = "missing data";
+    else if (this.badgeClass == 'missing-data') {
+      this.message = 'Invalid Input';
     }
-    else if (this.badgeClass === 'success') {
-      this.message = "all good";
+    else if (this.badgeClass == 'success') {
+      this.message = 'No Changes';
     }
   }
 }

@@ -39,7 +39,6 @@ export class PumpFluidComponent implements OnInit {
   fluidTypes: Array<string>;
 
   psatForm: FormGroup;
-  tempUnit: string;
   idString: string;
   pumpFluidWarnings: { rpmError: string, temperatureError: string };
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private pumpFluidService: PumpFluidService) { }
@@ -59,7 +58,6 @@ export class PumpFluidComponent implements OnInit {
     this.fluidTypes = JSON.parse(JSON.stringify(fluidTypes));
 
     this.initForm();
-    this.getTemperatureUnit();
     if (!this.selected) {
       this.disableForm();
     }
@@ -93,18 +91,6 @@ export class PumpFluidComponent implements OnInit {
     this.psatForm.controls.pumpType.enable();
     this.psatForm.controls.drive.enable();
     this.psatForm.controls.fluidType.enable();
-  }
-
-  getTemperatureUnit() {
-    if (this.settings.temperatureMeasurement == 'C') {
-      this.tempUnit = '&#8451;';
-    } else if (this.settings.temperatureMeasurement == 'F') {
-      this.tempUnit = '&#8457;';
-    } else if (this.settings.temperatureMeasurement == 'K') {
-      this.tempUnit = '&#8490;';
-    } else if (this.settings.temperatureMeasurement == 'R') {
-      this.tempUnit = '&#176;R';
-    }
   }
 
   addNum(str: string) {
@@ -225,13 +211,6 @@ export class PumpFluidComponent implements OnInit {
   isPumpSpecifiedDifferent() {
     if (this.canCompare()) {
       return this.compareService.isPumpSpecifiedDifferent();
-    } else {
-      return false;
-    }
-  }
-  isPumpStyleDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isPumpStyleDifferent();
     } else {
       return false;
     }

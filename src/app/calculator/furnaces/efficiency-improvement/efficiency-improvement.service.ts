@@ -4,7 +4,6 @@ import { Settings } from '../../../shared/models/settings';
 import { EfficiencyImprovementInputs } from '../../../shared/models/phast/efficiencyImprovement';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LessThanValidator } from '../../../shared/validators/less-than';
-import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class EfficiencyImprovementService {
@@ -36,19 +35,19 @@ export class EfficiencyImprovementService {
     };
     return this.efficiencyImprovementInputs;
   }
-  
+
   updateFormValidators(form: FormGroup, inputObj: EfficiencyImprovementInputs): void {
     form.controls.currentCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.currentFlueGasTemp)]);
     form.controls.newCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.newFlueGasTemp)]);
   }
 
-  initDefaultValues(settings: Settings): EfficiencyImprovementInputs {
+  generateExample(settings: Settings): EfficiencyImprovementInputs {
     if (settings.unitsOfMeasure === 'Metric') {
       return {
         currentFlueGasOxygen: 6,
         newFlueGasOxygen: 2,
         currentFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to('C'), 2),
-        currentCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to('C'), 2),
+        currentCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(79).from('F').to('C'), 2),
         newCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(750).from('F').to('C'), 2),
         currentEnergyInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to('GJ'), 2),
         newFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(1600).from('F').to('C'), 2)
@@ -64,6 +63,18 @@ export class EfficiencyImprovementService {
         currentEnergyInput: 10,
         newFlueGasTemp: 1600
       };
+    }
+  }
+
+  getResetData(): EfficiencyImprovementInputs {
+    return {
+      currentFlueGasOxygen: 0,
+      newFlueGasOxygen: 0,
+      currentFlueGasTemp: 0,
+      currentCombustionAirTemp: 0,
+      newCombustionAirTemp: 0,
+      currentEnergyInput: 0,
+      newFlueGasTemp: 0
     }
   }
 

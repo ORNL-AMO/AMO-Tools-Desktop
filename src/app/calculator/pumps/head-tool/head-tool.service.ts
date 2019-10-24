@@ -12,21 +12,6 @@ export class HeadToolService {
   headToolType: string;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  // initForm(settings: Settings) {
-  //   this.headToolForm = this.initHeadToolForm(settings);
-  //   this.headToolSuctionForm = this.initHeadToolSuctionForm(settings);
-  //   if (this.psat) {
-  //     this.headToolForm.patchValue({
-  //       specificGravity: this.psat.inputs.specific_gravity,
-  //       flowRate: this.psat.inputs.flow_rate,
-  //     });
-  //     this.headToolSuctionForm.patchValue({
-  //       specificGravity: this.psat.inputs.specific_gravity,
-  //       flowRate: this.psat.inputs.flow_rate,
-  //     })
-  //   }
-  // }
-
   initHeadToolSuctionForm(settings: Settings) {
     let smallUnit, pressureUnit;
     if (settings.distanceMeasurement === 'ft') {
@@ -46,18 +31,27 @@ export class HeadToolService {
       specificGravity: [1, [Validators.required, Validators.min(0)]],
       flowRate: [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), [Validators.required, Validators.min(0)]],
     });
-    // return this.formBuilder.group({
-    //   'suctionPipeDiameter': [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), Validators.required],
-    //   'suctionTankGasOverPressure': [0, Validators.required],
-    //   'suctionTankFluidSurfaceElevation': [this.roundVal(this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
-    //   'suctionLineLossCoefficients': [.5, Validators.required],
-    //   'dischargePipeDiameter': [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), Validators.required],
-    //   'dischargeGaugePressure': [this.roundVal(this.convertUnitsService.value(124).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
-    //   'dischargeGaugeElevation': [this.roundVal(this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
-    //   'dischargeLineLossCoefficients': [1, Validators.required],
-    //   'specificGravity': [1, Validators.required],
-    //   'flowRate': [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), Validators.required],
-    // })
+  }
+
+  resetHeadToolSuctionForm(settings: Settings) {
+    let smallUnit, pressureUnit;
+    if (settings.distanceMeasurement === 'ft') {
+      smallUnit = 'in';
+    } else {
+      smallUnit = 'mm';
+    }
+    return this.formBuilder.group({
+      suctionPipeDiameter: [this.roundVal(this.convertUnitsService.value(0).from('in').to(smallUnit), 2), [Validators.required, Validators.min(0)]],
+      suctionTankGasOverPressure: [0, Validators.required],
+      suctionTankFluidSurfaceElevation: [this.roundVal(this.convertUnitsService.value(0).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
+      suctionLineLossCoefficients: [0, Validators.required],
+      dischargePipeDiameter: [this.roundVal(this.convertUnitsService.value(0).from('in').to(smallUnit), 2), [Validators.required, Validators.min(0)]],
+      dischargeGaugePressure: [this.roundVal(this.convertUnitsService.value(0).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
+      dischargeGaugeElevation: [this.roundVal(this.convertUnitsService.value(0).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
+      dischargeLineLossCoefficients: [0, Validators.required],
+      specificGravity: [0, [Validators.required, Validators.min(0)]],
+      flowRate: [this.roundVal(this.convertUnitsService.value(0).from('gpm').to(settings.flowMeasurement), 2), [Validators.required, Validators.min(0)]],
+    });
   }
 
   initHeadToolForm(settings: Settings) {
@@ -77,16 +71,28 @@ export class HeadToolService {
       dischargeGaugeElevation: [this.roundVal(this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
       dischargeLineLossCoefficients: [1, Validators.required],
       specificGravity: [1, [Validators.required, Validators.min(0)]],
-      flowRate: [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), [Validators.required, Validators.min(0)]],      // 'suctionPipeDiameter': [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), Validators.required],
-      // 'suctionGuagePressure': [this.roundVal(this.convertUnitsService.value(5).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
-      // 'suctionGuageElevation': [this.roundVal(this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
-      // 'suctionLineLossCoefficients': [.5, Validators.required],
-      // 'dischargePipeDiameter': [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), Validators.required],
-      // 'dischargeGaugePressure': [this.roundVal(this.convertUnitsService.value(124).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
-      // 'dischargeGaugeElevation': [this.roundVal(this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
-      // 'dischargeLineLossCoefficients': [1, Validators.required],
-      // 'specificGravity': [1, Validators.required],
-      // 'flowRate': [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), Validators.required],
+      flowRate: [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), [Validators.required, Validators.min(0)]],
+    });
+  }
+
+  resetHeadToolForm(settings: Settings) {
+    let smallUnit;
+    if (settings.distanceMeasurement === 'ft') {
+      smallUnit = 'in';
+    } else {
+      smallUnit = 'mm';
+    }
+    return this.formBuilder.group({
+      suctionPipeDiameter: [this.roundVal(this.convertUnitsService.value(0).from('in').to(smallUnit), 2), [Validators.required, Validators.min(0)]],
+      suctionGuagePressure: [this.roundVal(this.convertUnitsService.value(0).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
+      suctionGuageElevation: [this.roundVal(this.convertUnitsService.value(0).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
+      suctionLineLossCoefficients: [0, Validators.required],
+      dischargePipeDiameter: [this.roundVal(this.convertUnitsService.value(0).from('in').to(smallUnit), 2), [Validators.required, Validators.min(0)]],
+      dischargeGaugePressure: [this.roundVal(this.convertUnitsService.value(0).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
+      dischargeGaugeElevation: [this.roundVal(this.convertUnitsService.value(0).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
+      dischargeLineLossCoefficients: [0, Validators.required],
+      specificGravity: [0, [Validators.required, Validators.min(0)]],
+      flowRate: [this.roundVal(this.convertUnitsService.value(0).from('gpm').to(settings.flowMeasurement), 2), [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -102,16 +108,7 @@ export class HeadToolService {
       dischargeGaugeElevation: [headTool.dischargeGaugeElevation, Validators.required],
       dischargeLineLossCoefficients: [headTool.dischargeLineLossCoefficients, Validators.required],
       specificGravity: [headTool.specificGravity, [Validators.required, Validators.min(0)]],
-      flowRate: [headTool.flowRate, [Validators.required, Validators.min(0)]],     // 'suctionPipeDiameter': [headTool.suctionPipeDiameter, Validators.required],
-      // 'suctionGuagePressure': [headTool.suctionGaugePressure, Validators.required],
-      // 'suctionGuageElevation': [headTool.suctionGaugeElevation, Validators.required],
-      // 'suctionLineLossCoefficients': [headTool.suctionLineLossCoefficients, Validators.required],
-      // 'dischargePipeDiameter': [headTool.dischargePipeDiameter, Validators.required],
-      // 'dischargeGaugePressure': [headTool.dischargeGaugePressure, Validators.required],
-      // 'dischargeGaugeElevation': [headTool.dischargeGaugeElevation, Validators.required],
-      // 'dischargeLineLossCoefficients': [headTool.dischargeLineLossCoefficients, Validators.required],
-      // 'specificGravity': [headTool.specificGravity, Validators.required],
-      // 'flowRate': [headTool.flowRate, Validators.required],
+      flowRate: [headTool.flowRate, [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -126,16 +123,7 @@ export class HeadToolService {
       dischargeGaugeElevation: [headToolSuction.dischargeGaugeElevation, Validators.required],
       dischargeLineLossCoefficients: [headToolSuction.dischargeLineLossCoefficients, Validators.required],
       specificGravity: [headToolSuction.specificGravity, [Validators.required, Validators.min(0)]],
-      flowRate: [headToolSuction.flowRate, [Validators.required, Validators.min(0)]],      // 'suctionPipeDiameter': [headToolSuction.suctionPipeDiameter, Validators.required],
-      // 'suctionTankGasOverPressure': [headToolSuction.suctionTankGasOverPressure, Validators.required],
-      // 'suctionTankFluidSurfaceElevation': [headToolSuction.suctionTankFluidSurfaceElevation, Validators.required],
-      // 'suctionLineLossCoefficients': [headToolSuction.suctionLineLossCoefficients, Validators.required],
-      // 'dischargePipeDiameter': [headToolSuction.dischargePipeDiameter, Validators.required],
-      // 'dischargeGaugePressure': [headToolSuction.dischargeGaugePressure, Validators.required],
-      // 'dischargeGaugeElevation': [headToolSuction.dischargeGaugeElevation, Validators.required],
-      // 'dischargeLineLossCoefficients': [headToolSuction.dischargeLineLossCoefficients, Validators.required],
-      // 'specificGravity': [headToolSuction.specificGravity, Validators.required],
-      // 'flowRate': [headToolSuction.flowRate, Validators.required],
+      flowRate: [headToolSuction.flowRate, [Validators.required, Validators.min(0)]],
     });
   }
 

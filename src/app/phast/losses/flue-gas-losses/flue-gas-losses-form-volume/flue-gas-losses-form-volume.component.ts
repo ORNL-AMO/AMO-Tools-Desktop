@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
@@ -35,7 +34,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
   isBaseline: boolean;
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
 

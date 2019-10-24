@@ -18,7 +18,6 @@ import { PHAST, Losses } from '../shared/models/phast/phast';
 import { EnergyInputCompareService } from './losses/energy-input/energy-input-compare.service';
 import { OperationsCompareService } from './losses/operations/operations-compare.service';
 import { BehaviorSubject } from 'rxjs';
-import { Modification } from '../shared/models/psat';
 
 @Injectable()
 export class PhastCompareService {

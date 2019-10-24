@@ -1,0 +1,118 @@
+<div class="row no-gutters">
+  <div class="col-12 data-card" *ngFor="let cardData of opportunityCardsData | sortCardsBy:sortByVal;">
+    <div class="card treasure-hunt-card" [ngClass]="{'not-selected': !cardData.selected}">
+      <div class="card-body d-flex w-100 p-0">
+        <div class="col-2 col-item-br pl-0 pr-0">
+          <div class="input-group h-100">
+            <div class="input-group-prepend col-item-br h-100">
+              <input type="checkbox" [(ngModel)]="cardData.selected" (change)="toggleSelected(cardData)">
+            </div>
+            <div class="col pl-1 pr-1">
+              <div class="d-flex flex-column w-100 h-100 justify-content-center align-items-center">
+                <img src={{cardData.iconString}} class="calc-icon">
+                <div class="text-center">
+                  <a (click)="editOpportunity(cardData)">
+                    {{cardData.name}}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-item-br opportunity-name pl-1 pr-1">
+          <div class="d-flex h-100 align-items-center w-100">
+            <table class="mb-0">
+              <tbody>
+                <tr class="no-border-top" [ngClass]="{'active': sortByVal.sortBy == 'teamName'}">
+                  <td class="w-75">
+                    Owner/Lead/Team
+                  </td>
+                  <td class="w-25">
+                    <span *ngIf="cardData.teamName">{{cardData.teamName}}</span>
+                    <span *ngIf="!cardData.teamName">&mdash;</span>
+                  </td>
+                </tr>
+                <tr [ngClass]="{'active': sortByVal.sortBy == 'annualCostSavings'}">
+                  <td class="w-75">Annual Savings</td>
+                  <td class="w-25">{{cardData.annualCostSavings | currency:'USD'}}</td>
+                </tr>
+                <tr [ngClass]="{'active': sortByVal.sortBy == 'implementationCost'}">
+                  <td class="w-75">
+                    Implementation Cost
+                  </td>
+                  <td class="w-25">
+                    {{cardData.implementationCost | currency:'USD'}}
+                  </td>
+                </tr>
+                <tr [ngClass]="{'active': sortByVal.sortBy == 'paybackPeriod'}">
+                  <td class="w-75">
+                    Payback Period
+                  </td>
+                  <td class="w-25">
+                    {{cardData.paybackPeriod | number:'1.2-2'}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        <div class="col-3 col-item-br">
+          <div class="d-flex w-100 flex-wrap justify-content-center">
+            <div class="text-center graph-col treasure-hunt-item w-100"
+              *ngFor="let percentSaving of cardData.percentSavings">
+              <div class="large">{{percentSaving.label}} Cost Savings</div>
+              <app-treasure-hunt-gauge [value]="percentSaving.percent" [chartHeight]="75"></app-treasure-hunt-gauge>
+            </div>
+          </div>
+        </div>
+        <div class="col-3 pr-0">
+          <div class="d-flex flex-column h-100 align-items-center w-100 justify-content-center">
+            <div class="d-flex flex-column w-100 align-items-center"
+              *ngIf="cardData.opportunityType != 'opportunity-sheet'"
+              [ngClass]="{'no-opp-sheet': !cardData.opportunitySheet, 'opp-sheet-exists': cardData.opportunitySheet}"
+              (click)="editOpportunitySheet(cardData)">
+              <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon">
+              <a class="text-center" *ngIf="!cardData.opportunitySheet">Add Opportunity Sheet</a>
+              <a class="text-center" *ngIf="cardData.opportunitySheet">Edit Opportunity Sheet</a>
+            </div>
+
+            <a class="click-link text-center" (click)="editOpportunity(cardData)">Edit Calculations</a>
+            <a class="click-link text-center" (click)="createCopy(cardData)">Create Copy</a>
+            <a class="click-link danger" (click)="setDeleteItem(cardData)">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #deletedItemModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="deletedItemModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body p-2 text-center" *ngIf="deletedItemModal.isShown">
+        Are you sure you want to delete "{{deleteOpportunity.name}}"?<br>
+        <span class="small danger">This cannot be undone.</span>
+      </div>
+      <div class="modal-footer p-2 justify-content-end delete-modal">
+        <button class="btn btn-danger btn-sm" (click)="deleteItem()">Delete</button>
+        <button class="btn btn-primary btn-sm" (click)="hideDeleteItemModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #opportunitySheetModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="opportunitySheetModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body pl-0 pr-0" *ngIf="opportunitySheetModal.isShown">
+        <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveItemOpportunitySheet($event)"
+          [(opportunitySheet)]="editOpportunitySheetCardData.opportunitySheet">
+        </app-opportunity-sheet>
+      </div>
+    </div>
+  </div>
+</div>

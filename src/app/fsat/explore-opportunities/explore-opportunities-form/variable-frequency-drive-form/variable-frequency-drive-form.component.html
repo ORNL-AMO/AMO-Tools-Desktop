@@ -5,13 +5,13 @@
       <div class="input-group">
         <input name="baselineFlowRate" type="number" step="any" id="baselineFlowRate" class="form-control" (focus)="focusField('flowRate')"
           (input)="calculate()" formControlName="flowRate" />
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
         <!--<span class="input-group-addon units">{{settings.fanFlowRate}}</span>-->
       </div>
       <span class="alert-danger pull-right small" *ngIf="baselineFieldDataForm.controls.flowRate.invalid && !baselineFieldDataForm.controls.flowRate.pristine">
         <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.required">Value Required</span>
         <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.min">Value can't be less than
-          {{baselineFieldDataForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
+          {{baselineFieldDataForm.controls.flowRate.errors.min.min}} <span [innerHTML]="settings.fanFlowRate | settingsLabel"></span></span>
       </span>
     </div>
   </form>
@@ -21,13 +21,13 @@
       <div class="input-group">
         <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control"
           (focus)="focusField('flowRate')" formControlName="flowRate" (input)="calculate()" />
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
         <!--<span class="input-group-addon units">{{settings.fanFlowRate}}</span>-->
       </div>
       <span class="alert-danger pull-right small" *ngIf="modificationFieldDataForm.controls.flowRate.invalid && !modificationFieldDataForm.controls.flowRate.pristine">
         <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.required">Value Required</span>
         <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.min">Value can't be less than
-          {{modificationFieldDataForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
+          {{modificationFieldDataForm.controls.flowRate.errors.min.min}} <span [innerHTML]="settings.fanFlowRate | settingsLabel"></span></span>
       </span>
     </div>
   </form>
@@ -40,7 +40,7 @@
       <div class="input-group">
         <input name="baselinePressure" type="number" step="any" id="baselinePressure" class="form-control" (focus)="focusField('inletPressure')"
           (input)="calculate()" formControlName="inletPressure" />
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="baselineFieldDataForm.controls.inletPressure.invalid && !baselineFieldDataForm.controls.inletPressure.pristine">
         <span *ngIf="baselineFieldDataForm.controls.inletPressure.errors.required">Value Required</span>
@@ -51,13 +51,13 @@
       <div class="input-group">
         <input name="baselineOutletPressure" type="number" step="any" id="baselineOutletPressure" class="form-control"
           (focus)="focusField('outletPressure')" (input)="calculate()" formControlName="outletPressure" />
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="baselineFieldDataForm.controls.outletPressure.invalid && !baselineFieldDataForm.controls.outletPressure.pristine">
         <span *ngIf="baselineFieldDataForm.controls.outletPressure.errors.required">Value Required</span>
       </span>
       <span class="alert-warning pull-right small" *ngIf="baselineWarnings.outletPressureError !== null && !baselineFieldDataForm.controls.outletPressure.pristine && !baselineFieldDataForm.controls.outletPressure.invalid">
-        {{baselineWarnings.outletPressureError}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        {{baselineWarnings.outletPressureError}} <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </span>
     </div>
   </form>
@@ -70,7 +70,7 @@
       <div class="input-group">
         <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure" class="form-control"
           (focus)="focusField('inletPressure')" (input)="calculate()" formControlName="inletPressure" />
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="modificationFieldDataForm.controls.inletPressure.invalid && !modificationFieldDataForm.controls.inletPressure.pristine">
         <span *ngIf="modificationFieldDataForm.controls.inletPressure.errors.required">Value Required</span>
@@ -84,13 +84,13 @@
       <div class="input-group">
         <input name="modificationOutletPressure" type="number" step="any" id="modificationOutletPressure" class="form-control"
           (focus)="focusField('outletPressure')" (input)="calculate()" formControlName="outletPressure" />
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="modificationFieldDataForm.controls.outletPressure.invalid && !modificationFieldDataForm.controls.outletPressure.pristine">
         <span *ngIf="modificationFieldDataForm.controls.outletPressure.errors.required">Value Required</span>
       </span>
       <span class="alert-warning pull-right small" *ngIf="modificationWarnings.outletPressureError !== null && !modificationFieldDataForm.controls.outletPressure.pristine && !modificationFieldDataForm.controls.outletPressure.invalid">
-        {{modificationWarnings.outletPressureError}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        {{modificationWarnings.outletPressureError}} <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </span>
     </div>
   </form>

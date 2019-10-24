@@ -2,18 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
-import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
-
-import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
 import { HeadToolModule } from '../calculator/pumps//head-tool/head-tool.module';
 import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
 import { MotorPerformanceModule } from '../calculator/motors/motor-performance/motor-performance.module';
 import { AchievableEfficiencyModule } from '../calculator/pumps/achievable-efficiency/achievable-efficiency.module';
 import { SpecificSpeedModule } from '../calculator/pumps/specific-speed/specific-speed.module';
-import { PumpCurveModule } from '../calculator/pumps/pump-curve/pump-curve.module';
 
 
 
@@ -50,6 +45,17 @@ import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
 import { UtilitiesModule } from '../calculator/utilities/utilities.module';
+import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
+import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
+import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
+import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
+import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
+import { SimpleTooltipModule } from '../shared/simple-tooltip/simple-tooltip.module';
+import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { ToastModule } from '../shared/toast/toast.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
+import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 
 @NgModule({
   declarations: [
@@ -82,20 +88,27 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ModalModule.forRoot(),
     SettingsModule,
-    JsonToCsvModule,
     HelpPanelModule,
-    SystemCurveModule,
     SpecificSpeedModule,
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
     HeadToolModule,
     AchievableEfficiencyModule, 
-    PumpCurveModule,
     ExploreOpportunitiesModule,
-    UtilitiesModule
+    UtilitiesModule,
+    PrintOptionsMenuModule,
+    FacilityInfoSummaryModule,
+    OperatingHoursModalModule,
+    PercentGraphModule,
+    PieChartModule,
+    SimpleTooltipModule,
+    TabsTooltipModule,
+    ToastModule,
+    SharedPipesModule,
+    UnitConverterModule,
+    SystemAndEquipmentCurveModule
   ],
   providers: [
     PsatService,

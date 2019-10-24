@@ -3,7 +3,6 @@ import { ThermodynamicQuantityOptions, Quantity } from '../../../../shared/model
 import { FormGroup, Validators } from '../../../../../../node_modules/@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
-import { FlashTankService } from '../flash-tank.service';
 
 @Component({
   selector: 'app-flash-tank-form',
@@ -21,7 +20,7 @@ export class FlashTankFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   thermoOptions: Array<Quantity>;
-  constructor(private steamService: SteamService, private flashTankService: FlashTankService) { }
+  constructor(private steamService: SteamService) { }
 
   ngOnInit() {
     this.thermoOptions = ThermodynamicQuantityOptions;
@@ -43,24 +42,16 @@ export class FlashTankFormComponent implements OnInit {
     return selectedQuantity.display;
   }
 
-  getDisplayUnit(unit: string) {
-    if (unit) {
-      return this.steamService.getDisplayUnit(unit);
-    } else {
-      return unit;
-    }
-  }
-
   getOptionDisplayUnit() {
     let displayUnit: string;
     if (this.flashTankForm.controls.thermodynamicQuantity.value === 0) {
-      displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      displayUnit = this.settings.steamTemperatureMeasurement;
       return displayUnit;
     } else if (this.flashTankForm.controls.thermodynamicQuantity.value === 1) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
+      displayUnit = this.settings.steamSpecificEnthalpyMeasurement;
       return displayUnit;
     } else if (this.flashTankForm.controls.thermodynamicQuantity.value === 2) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
+      displayUnit = this.settings.steamSpecificEntropyMeasurement;
       return displayUnit;
     } else if (this.flashTankForm.controls.thermodynamicQuantity.value === 3) {
       return displayUnit;
@@ -69,8 +60,8 @@ export class FlashTankFormComponent implements OnInit {
 
   setQuantityRanges() {
     let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, this.flashTankForm.controls.thermodynamicQuantity.value);
-    this.flashTankForm.controls.quantityValue.setValue(0);
     this.flashTankForm.controls.quantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
+    this.flashTankForm.controls.quantityValue.updateValueAndValidity();
     this.calculate();
   }
 

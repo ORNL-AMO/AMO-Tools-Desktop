@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ValueNotInListValidator } from '../../../shared/validators/value-not-in-list';
 import { LessThanValidator } from '../../../shared/validators/less-than';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class PercentLoadEstimationService {
@@ -22,7 +23,7 @@ export class PercentLoadEstimationService {
     ratedCurrent: 0,
     powerFactor: 0
   };
-  loadEstimationMethod: number = 0;
+  loadEstimationMethod: number = 1;
   constructor(private formBuilder: FormBuilder) { }
 
   initSlipMethodInputs(): SlipMethod {
@@ -30,6 +31,30 @@ export class PercentLoadEstimationService {
       synchronousSpeed: 0,
       measuredSpeed: 0,
       nameplateFullLoadSpeed: 0
+    };
+    return this.slipMethodInputs;
+  }
+
+  generateFieldMeasurementInputs(): FieldMeasurementInputs {
+    this.fieldMeasurementInputs = {
+      phase1Voltage: 467,
+      phase1Amps: 36,
+      phase2Voltage: 473,
+      phase2Amps: 38,
+      phase3Voltage: 469,
+      phase3Amps: 37,
+      ratedVoltage: 460,
+      ratedCurrent: 72.1,
+      powerFactor: 0.77
+    }
+    return this.fieldMeasurementInputs;
+  }
+
+  generateSlipMethodInputsExample(): SlipMethod {
+    this.slipMethodInputs = {
+      synchronousSpeed: 0,
+      measuredSpeed: 1780,
+      nameplateFullLoadSpeed: 1770
     };
     return this.slipMethodInputs;
   }
@@ -110,9 +135,9 @@ export class PercentLoadEstimationService {
       phase3Amps: [inputObj.phase3Amps, [Validators.required]],
       ratedCurrent: [inputObj.ratedCurrent, [Validators.required, Validators.min(0)]],
       ratedVoltage: [inputObj.ratedVoltage, [Validators.required]],
-      powerFactor: [inputObj.powerFactor, [Validators.required]],
-      amps: ['Amps', {disabled: true}],
-      volts: ['Volts', {disabled: true}]
+      powerFactor: [inputObj.powerFactor, [Validators.required, Validators.min(0), Validators.max(100)]],
+      amps: ['Amps', { disabled: true }],
+      volts: ['Volts', { disabled: true }]
     });
 
     return tmpForm;
@@ -156,7 +181,9 @@ export class PercentLoadEstimationService {
   }
 
   inputPower(data: FieldMeasurementInputs): number {
-    let val: number = data.ratedVoltage * data.ratedCurrent * data.powerFactor * Math.sqrt(3);
+    let averageVoltage: number = this.averageVoltage(data);
+    let averageCurrent: number = this.averageCurrent(data);
+    let val: number = averageVoltage * averageCurrent * (data.powerFactor / 100) * Math.sqrt(3);
     return val / 1000;
   }
 

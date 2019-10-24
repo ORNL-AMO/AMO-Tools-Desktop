@@ -12,9 +12,11 @@ export class CostPieChartComponent implements OnInit {
   treasureHuntResults: TreasureHuntResults;
   @Input()
   isBaseline: boolean;
+  @Input()
+  showPrint: boolean;
 
   chart: any;
-  @ViewChild('pieChartElement') pieChartElement: ElementRef;
+  @ViewChild('pieChartElement', { static: false }) pieChartElement: ElementRef;
 
   columnData: Array<any>;
 
@@ -60,25 +62,58 @@ export class CostPieChartComponent implements OnInit {
   }
 
   initChart() {
-    this.chart = c3.generate({
-      bindto: this.pieChartElement.nativeElement,
-      data: {
-        type: 'pie',
-        columns: this.columnData
-      },
-      // legend: {
-      //   show: false
-      // },
-      // color: {
-      //   pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
-      //   threshold: {
-      //     values: [25, 50]
-      //   }
-      // },
-      // tooltip: {
-      //   show: false
-      // },
-    });
+
+    if (this.showPrint) {
+      this.chart = c3.generate({
+        bindto: this.pieChartElement.nativeElement,
+        data: {
+          type: 'pie',
+          columns: this.columnData
+        },
+        legend: {
+          position: 'right'
+        },
+        size: {
+          height: 300,
+          width: 450
+        }
+        // legend: {
+        //   show: false
+        // },
+        // color: {
+        //   pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
+        //   threshold: {
+        //     values: [25, 50]
+        //   }
+        // },
+        // tooltip: {
+        //   show: false
+        // },
+      });
+    } else {
+      this.chart = c3.generate({
+        bindto: this.pieChartElement.nativeElement,
+        data: {
+          type: 'pie',
+          columns: this.columnData
+        },
+        legend: {
+          position: 'right'
+        }
+        // legend: {
+        //   show: false
+        // },
+        // color: {
+        //   pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
+        //   threshold: {
+        //     values: [25, 50]
+        //   }
+        // },
+        // tooltip: {
+        //   show: false
+        // },
+      });
+    }
   }
 
 

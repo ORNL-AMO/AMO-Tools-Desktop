@@ -24,6 +24,10 @@
     margin: 10px 0px;
 }
 
+.btn-form {
+    border-radius: 4px !important;
+}
+
 .form-card {
     border-radius: 10px;
     box-shadow: 0 4px 20px 0 grey;
@@ -57,14 +61,14 @@
     margin-bottom: 0px;
 }
 
-.add-fixture{
+.add-fixture {
     margin-top: 10px;
 }
 
-.compressed-air-icon{
+.compressed-air-icon {
     height: 55px;
 }
 
-.opp-sheet-icon{
+.opp-sheet-icon {
     width: 35px;
 }

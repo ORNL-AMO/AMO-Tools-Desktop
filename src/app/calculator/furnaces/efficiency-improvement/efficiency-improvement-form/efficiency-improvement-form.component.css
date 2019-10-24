@@ -7,3 +7,7 @@
 .eff-width{
     width: 33%;
 }
+
+.form-group label{
+    width: 100% !important;
+}

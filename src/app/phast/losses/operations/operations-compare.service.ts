@@ -18,8 +18,8 @@ export class OperationsCompareService {
     return (
       this.compareWeeksPerYear() ||
       this.compareDaysPerWeek() ||
-      this.compareShiftsPerDay() ||
-      this.compareHoursPerShift() ||
+      // this.compareShiftsPerDay() ||
+      // this.compareHoursPerShift() ||
       this.compareHoursPerYear() ||
       this.compareFuelCost() ||
       this.compareSteamCost() ||
@@ -33,12 +33,12 @@ export class OperationsCompareService {
   compareDaysPerWeek(): boolean {
     return this.compare(this.baseline.operatingHours.daysPerWeek, this.modification.operatingHours.daysPerWeek);
   }
-  compareShiftsPerDay(): boolean {
-    return this.compare(this.baseline.operatingHours.shiftsPerDay, this.modification.operatingHours.shiftsPerDay);
-  }
-  compareHoursPerShift(): boolean {
-    return this.compare(this.baseline.operatingHours.hoursPerShift, this.modification.operatingHours.hoursPerShift);
-  }
+  // compareShiftsPerDay(): boolean {
+  //   return this.compare(this.baseline.operatingHours.shiftsPerDay, this.modification.operatingHours.shiftsPerDay);
+  // }
+  // compareHoursPerShift(): boolean {
+  //   return this.compare(this.baseline.operatingHours.hoursPerShift, this.modification.operatingHours.hoursPerShift);
+  // }
   compareHoursPerYear(): boolean {
     return this.compare(this.baseline.operatingHours.hoursPerYear, this.modification.operatingHours.hoursPerYear);
   }
@@ -57,8 +57,8 @@ export class OperationsCompareService {
     return (
       this.compare(baseline.operatingHours.weeksPerYear, modification.operatingHours.weeksPerYear) ||
       this.compare(baseline.operatingHours.daysPerWeek, modification.operatingHours.daysPerWeek) ||
-      this.compare(baseline.operatingHours.shiftsPerDay, modification.operatingHours.shiftsPerDay) ||
-      this.compare(baseline.operatingHours.hoursPerShift, modification.operatingHours.hoursPerShift) ||
+      // this.compare(baseline.operatingHours.shiftsPerDay, modification.operatingHours.shiftsPerDay) ||
+      // this.compare(baseline.operatingHours.hoursPerShift, modification.operatingHours.hoursPerShift) ||
       this.compare(baseline.operatingHours.hoursPerYear, modification.operatingHours.hoursPerYear) ||
       this.compare(baseline.operatingCosts.fuelCost, modification.operatingCosts.fuelCost) ||
       this.compare(baseline.operatingCosts.steamCost, modification.operatingCosts.steamCost) ||

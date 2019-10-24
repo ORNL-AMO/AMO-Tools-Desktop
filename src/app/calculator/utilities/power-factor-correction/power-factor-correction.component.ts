@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { PowerFactorCorrectionService } from './power-factor-correction.service';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-power-factor-correction',
@@ -16,7 +15,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
   };
   results: PowerFactorCorrectionOutputs;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -27,7 +26,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
   currentField: string;
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';
-  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService, private settingsDbService: SettingsDbService) { }
+  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService) { }
 
   ngOnInit() {
     this.calculate(this.inputData);
@@ -47,12 +46,18 @@ export class PowerFactorCorrectionComponent implements OnInit {
   }
 
   btnResetData() {
-    this.inputData = {
-      existingDemand: 100,
-      currentPowerFactor: 0.5,
-      proposedPowerFactor: 0.95
-    };
+    this.inputData = this.powerFactorCorrectionService.getResetData();
     this.powerFactorCorrectionService.inputData = this.inputData;
+    this.calculate(this.inputData);
+  }
+
+  generateExample() {
+    this.inputData = this.powerFactorCorrectionService.generateExample();
+    this.powerFactorCorrectionService.inputData = this.inputData;
+  }
+
+  btnGenerateExample() {
+    this.generateExample();
     this.calculate(this.inputData);
   }
 

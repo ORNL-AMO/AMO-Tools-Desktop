@@ -1,9 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { AssessmentService } from '../assessment/assessment.service';
 declare const packageJson;
 import { Subscription } from 'rxjs';
-import { CalculatorService } from '../calculator/calculator.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -34,7 +33,7 @@ export class SidebarComponent implements OnInit {
   updateSub: Subscription;
   dashboardViewSub: Subscription;
   currentDashboardView: string;
-  constructor(private assessmentService: AssessmentService, private calculatorService: CalculatorService) { }
+  constructor(private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     this.versionNum = packageJson.version;
@@ -102,14 +101,8 @@ export class SidebarComponent implements OnInit {
     this.assessmentService.createAssessment.next(true);
   }
 
-  closeUpdateModal() {
-    this.openModal.emit(false);
-    this.showModal = false;
-  }
-
   openUpdateModal() {
-    this.openModal.emit(true);
-    this.showModal = true;
+    this.assessmentService.updateAvailable.next(true);
   }
 
   openVersionModal() {

@@ -4,23 +4,55 @@ import { BoilerInput } from '../../../shared/models/steam/steam-inputs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { SteamService } from '../steam.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class BoilerService {
-  
+
   boilerInput: BoilerInput;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
+  modalOpen: BehaviorSubject<boolean>;
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { 
+    this.modalOpen = new BehaviorSubject<boolean>(false);
+  }
 
   initForm(settings: Settings): FormGroup {
+    let tmpDeaeratorPressure = 2;
+    let tmpSteamPressure = 462.1;
+    let tmpQuantityValue = 740.6;
+    let tmpSteamMassFlow = 95.8;
+    if (settings.steamPressureMeasurement !== 'psig') {
+      tmpDeaeratorPressure = Math.round(this.convertUnitsService.value(tmpDeaeratorPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
+      tmpSteamPressure = Math.round(this.convertUnitsService.value(tmpSteamPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
+    }
+    if (settings.steamTemperatureMeasurement !== 'F') {
+      tmpQuantityValue = Math.round(this.convertUnitsService.value(tmpQuantityValue).from('F').to(settings.steamTemperatureMeasurement) * 100) / 100;
+    }
+    if (settings.steamMassFlowMeasurement !== 'klb') {
+      tmpSteamMassFlow = Math.round(this.convertUnitsService.value(tmpSteamMassFlow).from('klb').to(settings.steamMassFlowMeasurement) * 100) / 100;
+    }
     let ranges: BoilerRanges = this.getRangeValues(settings, 1);
     let form: FormGroup = this.formBuilder.group({
-      deaeratorPressure: ['', [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
-      combustionEfficiency: ['', [Validators.required, Validators.min(ranges.combustionEfficiencyMin), Validators.max(ranges.combustionEfficiencyMax)]],
-      blowdownRate: ['', [Validators.required, Validators.min(ranges.blowdownRateMin), Validators.max(ranges.blowdownRateMax)]],
-      steamPressure: ['', [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
-      thermodynamicQuantity: [1, [Validators.required]],
-      quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      steamMassFlow: ['', [Validators.required, Validators.min(ranges.steamMassFlowMin)]],
+      deaeratorPressure: [tmpDeaeratorPressure, [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
+      combustionEfficiency: [70.6, [Validators.required, Validators.min(ranges.combustionEfficiencyMin), Validators.max(ranges.combustionEfficiencyMax)]],
+      blowdownRate: [1.7, [Validators.required, Validators.min(ranges.blowdownRateMin), Validators.max(ranges.blowdownRateMax)]],
+      steamPressure: [tmpSteamPressure, [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
+      thermodynamicQuantity: [0, [Validators.required]],
+      quantityValue: [tmpQuantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      steamMassFlow: [tmpSteamMassFlow, [Validators.required, Validators.min(ranges.steamMassFlowMin)]],
+    });
+    return form;
+  }
+
+  resetForm(settings: Settings): FormGroup {
+    let ranges: BoilerRanges = this.getRangeValues(settings, 1);
+    let form: FormGroup = this.formBuilder.group({
+      deaeratorPressure: [0, [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
+      combustionEfficiency: [0, [Validators.required, Validators.min(ranges.combustionEfficiencyMin), Validators.max(ranges.combustionEfficiencyMax)]],
+      blowdownRate: [0, [Validators.required, Validators.min(ranges.blowdownRateMin), Validators.max(ranges.blowdownRateMax)]],
+      steamPressure: [0, [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
+      thermodynamicQuantity: [0, [Validators.required]],
+      quantityValue: [0, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      steamMassFlow: [0, [Validators.required, Validators.min(ranges.steamMassFlowMin)]],
     });
     return form;
   }

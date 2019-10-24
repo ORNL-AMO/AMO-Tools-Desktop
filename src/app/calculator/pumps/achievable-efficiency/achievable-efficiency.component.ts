@@ -19,7 +19,7 @@ export class AchievableEfficiencyComponent implements OnInit {
   @Input()
   inPsat: boolean;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -31,6 +31,7 @@ export class AchievableEfficiencyComponent implements OnInit {
   efficiencyForm: FormGroup;
   toggleCalculate: boolean = true;
   toggleResetData: boolean = true;
+  toggleExampleData: boolean = true;
   tabSelect: string = 'results';
 
   constructor(private achievableEfficiencyService: AchievableEfficiencyService, private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
@@ -78,10 +79,23 @@ export class AchievableEfficiencyComponent implements OnInit {
     }
   }
 
-  btnResetData() {
-    this.initForm();
-    this.toggleResetData = !this.toggleResetData;
-    this.calculate();
+  resetForm() {
+    if (!this.psat) {
+      //patch default/starter values for stand alone calculator
+      if (this.achievableEfficiencyService.flowRate && this.achievableEfficiencyService.pumpType) {
+        this.efficiencyForm = this.achievableEfficiencyService.getForm(this.achievableEfficiencyService.pumpType, this.achievableEfficiencyService.flowRate);
+      }
+      else {
+        let tmpFlowRate: number = 0;
+        if (this.settings.flowMeasurement !== 'gpm') {
+          tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement);
+          tmpFlowRate = this.psatService.roundVal(tmpFlowRate, 2);
+        }
+        this.efficiencyForm = this.achievableEfficiencyService.getForm(0, tmpFlowRate);
+      }
+    } else {
+      this.efficiencyForm = this.achievableEfficiencyService.getForm(this.psat.inputs.pump_style, this.psat.inputs.flow_rate);
+    }
   }
 
   resizeTabs() {
@@ -96,5 +110,28 @@ export class AchievableEfficiencyComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  btnResetData() {
+    this.resetForm();
+    this.toggleResetData = !this.toggleResetData;
+    this.calculate();
+  }
+
+  generateExample() {
+    let tmpFlowRate = 2000;
+    if (this.settings.flowMeasurement !== 'gpm') {
+      tmpFlowRate = Math.round(this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement) * 100) / 100;
+    }
+    this.efficiencyForm = this.achievableEfficiencyService.getForm(0, tmpFlowRate);
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
+    this.toggleExampleData = !this.toggleExampleData;
+    this.calculate();
   }
 }

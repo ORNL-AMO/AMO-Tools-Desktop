@@ -10,8 +10,8 @@ import * as _ from 'lodash';
   styleUrls: ['./co2-savings.component.css']
 })
 export class Co2SavingsComponent implements OnInit {
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
@@ -42,12 +42,12 @@ export class Co2SavingsComponent implements OnInit {
   constructor(private settingsDbService: SettingsDbService, private co2SavingsService: Co2SavingsService) { }
 
   ngOnInit() {
+    this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
     if (this.co2SavingsService.baselineData) {
       this.baselineData = this.co2SavingsService.baselineData;
-      console.log(this.baselineData);
     }
     if (this.co2SavingsService.modificationData && this.co2SavingsService.modificationData.length !== 0) {
       this.modificationData = this.co2SavingsService.modificationData;
@@ -86,6 +86,23 @@ export class Co2SavingsComponent implements OnInit {
     this.calculate();
   }
 
+  generateExample() {
+    let tmpBaselineObj: Co2SavingsData = this.co2SavingsService.generateExample(true, this.settings);
+    this.baselineData = [tmpBaselineObj];
+    this.co2SavingsService.baselineData = this.baselineData;
+    let tmpModificationObj: Co2SavingsData = this.co2SavingsService.generateExample(false, this.settings);
+    this.modificationData = [tmpModificationObj];
+    this.co2SavingsService.modificationData = this.modificationData;
+    this.modificationExists = true;
+    this.baselineSelected = true;
+    this.modifiedSelected = false;
+  }
+
+  btnGenerateExample() {
+    this.generateExample();
+    this.calculate();
+  }
+
   togglePanel(bool: boolean) {
     if (bool === this.baselineSelected) {
       this.baselineSelected = true;
@@ -113,12 +130,12 @@ export class Co2SavingsComponent implements OnInit {
 
   calculate() {
     this.baselineData.forEach(data => {
-      data = this.co2SavingsService.calculate(data);
+      data = this.co2SavingsService.calculate(data, this.settings);
     });
     this.baselineTotal = _.sumBy(this.baselineData, 'totalEmissionOutput');
     if (this.modificationData) {
       this.modificationData.forEach(data => {
-        data = this.co2SavingsService.calculate(data);
+        data = this.co2SavingsService.calculate(data, this.settings);
       });
       this.modificationTotal = _.sumBy(this.modificationData, 'totalEmissionOutput');
     }

@@ -25,7 +25,7 @@ export class HelpPanelComponent implements OnInit {
   containerHeight: number;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
-  @ViewChild('resultTabs') resultTabs: ElementRef;
+  @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
 
   currentField: string;
   tabSelect: string = 'help';

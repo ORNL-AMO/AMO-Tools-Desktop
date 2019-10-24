@@ -1,6 +1,6 @@
 <div class="mb-4 p-2 form-card">
 
-  <form [formGroup]="form">
+  <form [formGroup]="form" #formElement>
     <label *ngIf="!isEditingName" class="group-label w-100 bold">
       <span (click)="editEquipmentName()" class="fa fa-pencil pr-2 btn-edit-name"></span>
       <span>{{form.controls.name.value}}</span>
@@ -19,6 +19,9 @@
       <div class="form-group">
         <label class="small" for="{{'operatingHours_'+idString}}">Annual Operating Hours</label>
         <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
           <input class="form-control" name="operatingHours" id="{{'operatingHours_'+idString}}"
             formControlName="operatingHours" type="number" (input)="calculate()" (focus)="focusField('operatingHours')"
             (blur)="focusOut()" onfocus="this.select();">
@@ -40,7 +43,9 @@
           <input class="form-control" name="fuelCost" id="{{'fuelCost_'+idString}}" formControlName="fuelCost"
             type="number" (input)="calculate()" (focus)="focusField('fuelCost')" (blur)="focusOut()"
             onfocus="this.select();">
-          <span class="units input-group-addon">$/<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
+          <span class="units input-group-addon">$/
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
           </span>
         </div> <span class="alert-danger pull-right small"
           *ngIf="form.controls.fuelCost.invalid && !form.controls.fuelCost.pristine">
@@ -155,7 +160,8 @@
           <input class="form-control" name="airInletTemperature" id="{{'airInletTemperature_'+idString}}"
             formControlName="airInletTemperature" type="number" (input)="calculate()"
             (focus)="focusField('airInletTemperature')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" [innerHTML]="settings.temperatureMeasurement | settingsLabel"></span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.airInletTemperature.invalid && !form.controls.airInletTemperature.pristine">
@@ -169,7 +175,8 @@
           <input class="form-control" name="airOutletTemperature" id="{{'airOutletTemperature_'+idString}}"
             formControlName="airOutletTemperature" type="number" (input)="calculate()"
             (focus)="focusField('airOutletTemperature')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" [innerHTML]="settings.temperatureMeasurement | settingsLabel"></span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.airOutletTemperature.invalid && !form.controls.airOutletTemperature.pristine">
@@ -233,7 +240,8 @@
           <input class="form-control" name="waterInletTemperature" id="{{'waterInletTemperature_'+idString}}"
             formControlName="waterInletTemperature" type="number" (input)="calculate()"
             (focus)="focusField('waterInletTemperature')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" [innerHTML]="settings.temperatureMeasurement | settingsLabel"></span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.waterInletTemperature.invalid && !form.controls.waterInletTemperature.pristine">
@@ -249,7 +257,8 @@
           <input class="form-control" name="waterOutletTemperature" id="{{'waterOutletTemperature_'+idString}}"
             formControlName="waterOutletTemperature" type="number" (input)="calculate()"
             (focus)="focusField('waterOutletTemperature')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" [innerHTML]="settings.temperatureMeasurement | settingsLabel"></span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.waterOutletTemperature.invalid && !form.controls.waterOutletTemperature.pristine">
@@ -296,8 +305,8 @@
           <input class="form-control" name="consumption" id="{{'consumption_'+idString}}" formControlName="consumption"
             type="number" (input)="calculate()" (focus)="focusField('consumption')" (blur)="focusOut()"
             onfocus="this.select();">
-          <span class="units input-group-addon"><span
-              [innerHTML]="settings.energyResultUnit | settingsLabel:'/yr'"></span></span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.consumption.invalid && !form.controls.consumption.pristine">
@@ -333,10 +342,10 @@
         </div>
       </div>
     </div>
-
-
-
-
-
   </form>
 </div>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="naturalGasReductionService.operatingHours">
+</app-operating-hours-modal>

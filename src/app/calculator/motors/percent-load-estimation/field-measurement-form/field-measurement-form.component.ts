@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { FieldMeasurementInputs, PercentLoadEstimationService } from '../percent-load-estimation.service';
 import { FormGroup } from '@angular/forms';
 
@@ -21,6 +21,12 @@ export class FieldMeasurementFormComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.percentLoadEstimationService.getFieldMeasurementFormFromObj(this.data);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.data && !changes.data.firstChange) {
+      this.form = this.percentLoadEstimationService.getFieldMeasurementFormFromObj(this.data);
+    }
   }
 
 

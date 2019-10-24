@@ -3,7 +3,6 @@ import { ImportExportAssessment, ImportExportDirectory, ImportExportData } from 
 import { Directory } from '../models/directory';
 import { Assessment } from '../models/assessment';
 import * as _ from 'lodash';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Calculator } from '../models/calculators';
 import { Settings } from '../models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -21,6 +20,7 @@ export class ExportService {
   exportDirectories: Array<ImportExportDirectory>;
   exportAssessments: Array<ImportExportAssessment>;
   workingDirId: number;
+  selectAllFolder: boolean;
   constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService) {
     this.exportAllClick = new BehaviorSubject<boolean>(false);
   }
@@ -30,9 +30,16 @@ export class ExportService {
     this.workingDirId = workingDirId;
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDirectories = new Array<ImportExportDirectory>();
-    let assessments: Array<Assessment> = _.filter(dir.assessments, (assessment) => { return assessment.selected === true; });
-    let subDirs: Array<Directory> = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
-    let calculators: Array<Calculator> = _.filter(dir.calculators, (calc) => { return calc.selected === true; });
+    let assessments: Array<Assessment>;
+    let subDirs: Array<Directory>;
+    let calculators: Array<Calculator>;
+    if (!this.selectAllFolder) {
+      assessments = _.filter(dir.assessments, (assessment) => { return assessment.selected === true; });
+      subDirs = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
+      calculators = _.filter(dir.calculators, (calc) => { return calc.selected === true; });
+    } else {
+      subDirs = [dir];
+    }
     //ToDo: make sure these calcs are exported
     //  need to add multiple calcs functionality
     if (assessments) {
@@ -75,7 +82,7 @@ export class ExportService {
     if (assessment.ssmt.modifications) {
       assessment.ssmt.modifications.forEach(mod => {
         mod.ssmt = this.deleteSsmtResults(mod.ssmt);
-        if(mod.ssmt.modifications){
+        if (mod.ssmt.modifications) {
           delete mod.ssmt.modifications;
         }
       })

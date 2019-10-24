@@ -8,14 +8,9 @@ import { SettingsModule } from '../settings/settings.module';
 import { FsatBannerComponent } from './fsat-banner/fsat-banner.component';
 import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
-
-import { RatedOperatingPointsComponent } from './rated-operating-points/rated-operating-points.component';
-import { RatedOperatingPointsFormComponent } from './rated-operating-points/rated-operating-points-form/rated-operating-points-form.component';
-import { Fsat203Module } from '../calculator/fans/fsat-203/fsat-203.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { FsatFluidComponent } from './fsat-fluid/fsat-fluid.component';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
-import { SharedModule } from '../shared/shared.module';
 import { FanSetupComponent } from './fan-setup/fan-setup.component';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorComponent } from './fan-motor/fan-motor.component';
@@ -36,14 +31,18 @@ import { FsatReportModule } from './fsat-report/fsat-report.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 import { ConvertFsatService } from './convert-fsat.service';
 import { FsatSankeyModule } from './fsat-sankey/fsat-sankey.module';
-import { PumpCurveModule } from '../calculator/pumps/pump-curve/pump-curve.module';
 import { MotorPerformanceModule } from '../calculator/motors/motor-performance/motor-performance.module';
 import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
-import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
 import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-efficiency.module';
 import { FsatDiagramComponent } from './fsat-diagram/fsat-diagram.component';
 import { FsatWarningService } from './fsat-warning.service';
 import { CalculatePressuresModule } from './calculate-pressures/calculate-pressures.module';
+import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.module';
+import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
+import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { ToastModule } from '../shared/toast/toast.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -52,28 +51,28 @@ import { CalculatePressuresModule } from './calculate-pressures/calculate-pressu
     ReactiveFormsModule,
     SettingsModule,
     SettingsModule,
-    Fsat203Module,
     ModalModule,
-    SharedModule,
     ExploreOpportunitiesModule,
     FsatResultsModule,
     FsatReportModule,
     HelpPanelModule,
     FsatSankeyModule,
-    SystemCurveModule,
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
-    PumpCurveModule,
     FanEfficiencyModule,
-    CalculatePressuresModule
+    CalculatePressuresModule,
+    FanAnalysisModule,
+    OperatingHoursModalModule,
+    TabsTooltipModule,
+    ToastModule,
+    SharedPipesModule,
+    SystemAndEquipmentCurveModule
   ],
   declarations: [
     FsatComponent,
     FsatBannerComponent,
     FsatTabsComponent,
     SystemBasicsComponent,
-    RatedOperatingPointsComponent,
-    RatedOperatingPointsFormComponent,
     FsatFluidComponent,
     FanSetupComponent,
     FanMotorComponent,
@@ -83,8 +82,7 @@ import { CalculatePressuresModule } from './calculate-pressures/calculate-pressu
     AddModificationComponent,
     ModificationListComponent,
     ModifyFieldDataFormComponent,
-    FsatDiagramComponent,
-    // FsatReportSankeyComponent  
+    FsatDiagramComponent
   ],
   providers: [
     FsatService,
@@ -97,9 +95,6 @@ import { CalculatePressuresModule } from './calculate-pressures/calculate-pressu
     CompareService,
     ConvertFsatService,
     FsatWarningService
-  ],
-  exports: [
-    FsatComponent
   ]
 })
 export class FsatModule { }

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { FlashTankOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
-import { SteamService } from '../../steam.service';
 
 @Component({
   selector: 'app-flash-tank-results',
@@ -14,7 +13,7 @@ export class FlashTankResultsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('copyTable0') copyTable0: ElementRef;
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
 
   constructor() { }

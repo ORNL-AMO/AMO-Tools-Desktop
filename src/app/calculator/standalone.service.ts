@@ -6,8 +6,8 @@ import {
   CombinedHeatPower, CombinedHeatPowerOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput,
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
-  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, 
-  ElectricityReductionInput, ElectricityReductionResults, NaturalGasReductionResults, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult
+  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity,
+  ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -282,8 +282,16 @@ export class StandaloneService {
     }
   }
 
-  CHPcalculator(inputs: CombinedHeatPower): CombinedHeatPowerOutput {
-    return standaloneAddon.CHPcalculator(inputs);
+  CHPcalculator(inputs: CombinedHeatPower, settings: Settings): CombinedHeatPowerOutput {
+    let inputCpy: CombinedHeatPower = JSON.parse(JSON.stringify(inputs));
+    if (settings.unitsOfMeasure != 'Imperial') {
+      let fuelCostHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
+      inputCpy.boilerThermalFuelCosts = inputCpy.boilerThermalFuelCosts / fuelCostHelper;
+      inputCpy.boilerThermalFuelCostsCHPcase = inputCpy.boilerThermalFuelCostsCHPcase / fuelCostHelper;
+      inputCpy.CHPfuelCosts = inputCpy.CHPfuelCosts / fuelCostHelper;
+      inputCpy.annualThermalDemand = this.convertUnitsService.value(inputCpy.annualThermalDemand).from('GJ').to('MMBtu');
+    }
+    return standaloneAddon.CHPcalculator(inputCpy);
   }
 
   usableAirCapacity(input: CalculateUsableCapacity, settings: Settings): number {
@@ -312,6 +320,20 @@ export class StandaloneService {
   }
 
   compressedAirReduction(inputObj: CompressedAirReductionInput): CompressedAirReductionResult {
-    return calculatorAddon.compressedAirReduction(inputObj);
+    let results: CompressedAirReductionResult = calculatorAddon.compressedAirReduction(inputObj);
+    return results;
+  }
+
+  compressedAirPressureReduction(inputObj: CompressedAirPressureReductionInput): CompressedAirPressureReductionResult {
+    return calculatorAddon.compressedAirPressureReduction(inputObj);
+  }
+
+  waterReduction(inputObj: WaterReductionInput): WaterReductionResult {
+    return calculatorAddon.waterReduction(inputObj);
+  }
+
+  steamReduction(inputObj: SteamReductionInput): any {
+    let result = calculatorAddon.steamReduction(inputObj);
+    return result;
   }
 }

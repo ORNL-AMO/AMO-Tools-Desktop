@@ -25,8 +25,8 @@ export class CompressedAirReductionComponent implements OnInit {
   @Input()
   operatingHours: OperatingHours;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -152,7 +152,9 @@ export class CompressedAirReductionComponent implements OnInit {
     dataArray[index].name = data.name;
     dataArray[index].hoursPerYear = data.hoursPerYear;
     dataArray[index].utilityType = data.utilityType;
-    dataArray[index].utilityCost = data.utilityCost;
+    dataArray[index].utilityCost = data.utilityType == 0 ? data.compressedAirCost : data.electricityCost;
+    dataArray[index].compressedAirCost = data.compressedAirCost;
+    dataArray[index].electricityCost = data.electricityCost;
     dataArray[index].measurementMethod = data.measurementMethod;
     dataArray[index].flowMeterMethodData = data.flowMeterMethodData;
     dataArray[index].bagMethodData = data.bagMethodData;
@@ -171,6 +173,23 @@ export class CompressedAirReductionComponent implements OnInit {
     this.baselineData = [tmpObj];
     this.modificationData = new Array<CompressedAirReductionData>();
     this.modificationExists = false;
+    this.getResults();
+  }
+
+  generateExample() {
+    let tmpBaselineObj: CompressedAirReductionData = this.compressedAirReductionService.generateExample(this.settings, true);
+    this.baselineData = [tmpBaselineObj];
+    this.compressedAirReductionService.baselineData = this.baselineData;
+    let tmpModificationData: CompressedAirReductionData = this.compressedAirReductionService.generateExample(this.settings, false);
+    this.modificationData = [tmpModificationData];
+    this.compressedAirReductionService.modificationData = this.modificationData;
+    this.modificationExists = true;
+    this.baselineSelected = true;
+    this.modifiedSelected = false;
+  }
+
+  btnGenerateExample() {
+    this.generateExample();
     this.getResults();
   }
 

@@ -25,7 +25,7 @@ export class SsmtSummaryCardComponent implements OnInit {
   maxEnergySavings: number = 0;
   showReport: boolean = false;
 
-  @ViewChild('reportModal') public reportModal: ModalDirective;
+  @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
   assessmentCpy: Assessment;
   constructor(private calculateModelService: CalculateModelService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }

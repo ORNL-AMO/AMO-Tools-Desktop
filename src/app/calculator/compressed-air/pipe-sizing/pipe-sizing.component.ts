@@ -1,8 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standalone";
-import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
+import { PipeSizingService } from './pipe-sizing.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-pipe-sizing',
@@ -12,8 +13,8 @@ import { Settings } from '../../../shared/models/settings';
 export class PipeSizingComponent implements OnInit {
   @Input()
   settings: Settings;
-  
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -25,11 +26,14 @@ export class PipeSizingComponent implements OnInit {
   inputs: PipeSizingInput;
   outputs: PipeSizingOutput;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
+  constructor(private standaloneService: StandaloneService, private pipeSizingService: PipeSizingService, private settingsDbService: SettingsDbService) {
   }
 
   ngOnInit() {
-    this.inputs = this.compressedAirService.pipeSizingInput;
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.inputs = this.pipeSizingService.inputs;
     this.calculatePipeSize(this.inputs);
   }
   ngAfterViewInit() {
@@ -38,14 +42,12 @@ export class PipeSizingComponent implements OnInit {
     }, 100);
   }
 
+  ngOnDestroy(){
+    this.pipeSizingService.inputs = this.inputs;
+  }
+
   btnResetData() {
-    this.inputs = {
-      airFlow: 0,
-      airlinePressure: 0,
-      designVelocity: 20,
-      atmosphericPressure: 14.7
-    };
-    this.compressedAirService.pipeSizingInput = this.inputs;
+    this.inputs = this.pipeSizingService.getDefaultData();
     this.calculatePipeSize(this.inputs);
   }
 
@@ -61,5 +63,11 @@ export class PipeSizingComponent implements OnInit {
 
   setField(str: string) {
     this.currentField = str;
+  }
+
+  btnGenerateExample() {
+    let tempInputs: PipeSizingInput = this.pipeSizingService.getExampleData();
+    this.inputs = this.pipeSizingService.convertPipeSizingExample(tempInputs, this.settings);
+    this.calculatePipeSize(this.inputs);
   }
 }

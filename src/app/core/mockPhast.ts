@@ -10,10 +10,10 @@ export const MockPhast: Assessment = {
         operatingHours: {
             weeksPerYear: 48,
             daysPerWeek: 6,
-            shiftsPerDay: 2,
-            hoursPerShift: 12,
+            // shiftsPerDay: 2,
+            // hoursPerShift: 12,
             hoursPerYear: 6912,
-            isCalculated: true,
+            //isCalculated: true,
             operatingConditions: "The furnace was running at the full load capacity during the PH assessment."
         },
         operatingCosts: {
@@ -160,10 +160,10 @@ export const MockPhast: Assessment = {
                     operatingHours: {
                         weeksPerYear: 48,
                         daysPerWeek: 6,
-                        shiftsPerDay: 2,
-                        hoursPerShift: 12,
+                        // shiftsPerDay: 2,
+                        // hoursPerShift: 12,
                         hoursPerYear: 6912,
-                        isCalculated: true,
+                        // isCalculated: true,
                         operatingConditions: "The furnace was running at the full load capacity during the PH assessment."
                     },
                     systemEfficiency: 90
@@ -324,10 +324,10 @@ export const MockPhast: Assessment = {
                     operatingHours: {
                         weeksPerYear: 48,
                         daysPerWeek: 6,
-                        shiftsPerDay: 2,
-                        hoursPerShift: 12,
+                        // shiftsPerDay: 2,
+                        // hoursPerShift: 12,
                         hoursPerYear: 6912,
-                        isCalculated: true,
+                        // isCalculated: true,
                         operatingConditions: "The furnace was running at the full load capacity during the PH assessment."
                     },
                     systemEfficiency: 90
@@ -488,10 +488,10 @@ export const MockPhast: Assessment = {
                     operatingHours: {
                         weeksPerYear: 48,
                         daysPerWeek: 6,
-                        shiftsPerDay: 2,
-                        hoursPerShift: 12,
+                        // shiftsPerDay: 2,
+                        // hoursPerShift: 12,
                         hoursPerYear: 6912,
-                        isCalculated: true,
+                        // isCalculated: true,
                         operatingConditions: "The furnace was running at the full load capacity during the PH assessment."
                     },
                     systemEfficiency: 90
@@ -652,10 +652,10 @@ export const MockPhast: Assessment = {
                     operatingHours: {
                         weeksPerYear: 48,
                         daysPerWeek: 6,
-                        shiftsPerDay: 2,
-                        hoursPerShift: 12,
+                        // shiftsPerDay: 2,
+                        // hoursPerShift: 12,
                         hoursPerYear: 6912,
-                        isCalculated: true,
+                        // isCalculated: true,
                         operatingConditions: "The furnace was running at the full load capacity during the PH assessment. "
                     },
                     systemEfficiency: 90
@@ -816,10 +816,10 @@ export const MockPhast: Assessment = {
                     operatingHours: {
                         weeksPerYear: 48,
                         daysPerWeek: 6,
-                        shiftsPerDay: 2,
-                        hoursPerShift: 12,
+                        // shiftsPerDay: 2,
+                        // hoursPerShift: 12,
                         hoursPerYear: 6912,
-                        isCalculated: true,
+                        // isCalculated: true,
                         operatingConditions: "The furnace was running at the full load capacity during the PH assessment."
                     },
                     systemEfficiency: 90
@@ -1166,7 +1166,7 @@ export const MockPhastSettings: Settings = {
     fuelCost: 3.99,
     steamCost: 4.69,
     electricityCost: 0.066,
-    defaultPanelTab: 'help',
+    defaultPanelTab: 'results',
     phastRollupFuelUnit: 'MMBtu',
     phastRollupElectricityUnit: 'kWh',
     phastRollupSteamUnit: 'MMBtu',

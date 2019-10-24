@@ -11,77 +11,66 @@
       <div class="modal-body scroll-item">
         <label>Application</label>
         <ul>
-          <li>Updated - Acknowledgments page</li>
-          <li>Updated - Electron version</li>
-          <li>Updated - Bootstrap version</li>
-          <li>Updated - Removed ng-toasty dependency</li>
-          <li>Enhanced - Formatting cleanup for the results displays</li>
-
+          <li>Added: Google translate functionality in settings to translate application</li>
+          <li>Fixed: Bug for exporting facility info when "selecting all" folder contents</li>
         </ul>
         <label>Pumps</label>
         <ul>
-          <li>Added: Beta Disclaimer
+          <li>Updated: Assessment help text for VFD
           </li>
-          <li>Added: Warning popup when a scenario was created in Expert view but viewed in Novice view</li>
+          <li>Added: System curve equation</li>
         </ul>
         <label>Process Heating</label>
         <ul>
-          <li>Fixed: Help text for Explore Opportunities was missing
+          <li>Fixed: Inconsistencies between Efficiency Improvement Calculator and O2 Enrichment calculator
           </li>
-          <li>Fixed: Notes in Explore Opportunities was missing</li>
-          <li>Enhanced: Various HTML CSS enhancements to match PSAT and FSAT</li>
-          <li>Enhanced: Added help text diagram to several fields in flue gas calculator to better explain how to obtain
-            data</li>
+        </ul>
+        <label>Fans</label>
+        <ul>
+          <li>Added: New fan analysis calculator to modal for calculating pressures and flow rate</li>
+          <li>Fixed: Compressibility factor calculation in metric</li>
         </ul>
         <label>Steam</label>
         <ul>
-          <li>Fixed: Import Power and Makeup Water Costs were missing from Results "Input Summary"
+          <li>Updated: Unit conversions to match suite, using units for energy in kJ
           </li>
-          <li>Fixed: Name of "High to Medium Pressure Turbine" in Results "Input Summary"</li>
-          <li>Fixed: Issue with steam unit conversions</li>
-          <li>Fixed: Steam results were not updating properly in Assessment</li>
-          <li>Fixed: Issue where scenarios where changes were made to turbines were not displaying properly in Explore
-            Opportunities</li>
-          <li>Fixed: Bug regarding copying modifications not carrying over changes to baseline</li>
-          <li>Fixed: Issue where marginal steam cost button was not calculating marginal steam costs</li>
-          <li>Fixed: Inclusion of $ before "Electricity Imported" result in steam diagram results</li>
-          <li>Fixed: Issue where HP header warning icon was not sticking to HP header in diagram</li>
-          <li>Fixed: Issue regarding extra data generation when making new scenarios resulting in not being able to
-            export assessments with several scenarios</li>
-          <li>Added: Steam to rollup report functionality</li>
-          <li>Added: Indicators for zero flow to diagram</li>
-          <li>Added: Clicking on a pipe or arrow within pipe will put the summary data in the results tab on the right
-          </li>
-          <li>Added: Beta Disclaimer</li>
-          <li>Added: Warning popup when a scenario was created in Expert view but viewed in Novice view</li>
-          <li>Added: Message in report graphs if there are no turbines to generate a turbine pie chart</li>
-          <li>Enhanced: Minor adjustments to system diagram to improve visibility of displayed values</li>
-          <li>Enhanced: Changed wording of two fields names "Desuperheat into ... pressure header" to "Desuperheat out
-            of ... pressure header"</li>
-          <li>Enhanced: Additional warnings to diagram if steam in header/equipment is saturated, cannot flash water,
-            etc.</li>
-          <li>Enhanced: User input validation warnings for various potential input errors</li>
-          <li>Enhanced: Ability to zoom in and out on the diagram</li>
+          <li>Added: Modal for calculating blowdown rate given conductivity</li>
+          <li>Fixed: Inlet water value display in diagram</li>
+          <li>Fixed: Wrong table displaying from clicking Low Pressure PRV outlet arrow</li>
         </ul>
         <label>Treasure Hunt</label>
         <ul>
-          <li>New Feature - Treasure Hunt Calculators - allows users to estimate the energy savings for various
-            opportunities and compare current energy use throughout facility to that after opportunity implementation
+          <li>New Calculator: "Waste Water Reduction" calculator added
           </li>
+          <li>New Calculator: "Compressed Air Pressure Reduction" calculator added</li>
+          <li>Fixed: Treasure Hunt example being reset when all examples are reset</li>
+          <li>Updated: Descriptions of calculators</li>
+          <li>Enhanced: Selecting utility types used in assessment in setup</li>
         </ul>
-
-
 
         <label>Calculators</label>
         <ul>
-          <li>Fixed: Several bugs relating Pump/Fan and System curves</li>
-          <li>Fixed: Bug where the decimal point was not recognized in replace/rewind motor calculator</li>
-          <li>Added: Cost of electricity/fuel and cost savings to various calculator (lighting, replace motors, etc.)</li>
-          <li>Added: Electricity, natural gas, and compressed air reduction calculators</li>
-          <li>Enhanced: Combined replace/rewind motor calculator and replace motor calculators</li>
-          <li>Enhanced: Several calculators to fit into the Treasure Hunt (lighting, replace motors, etc.)</li>
-          <li>Enhanced: Description of Combined Heat and Power Calculator</li>
+          <li>Fixed: Many spelling and grammar errors in calcluators</li>
+          <li>Fixed: Space between letters and exponents</li>
+          <li>Updated: More meaningful calculator descriptions</li>
+          <li>Fixed: Floating semicolon in some options for unit converters</li>
+          <li>Added: New pump curve icon</li>
+          <li>Fixed: Validation for steam properties calculator</li>
+          <li>Fixed: Percent load estimation calculation</li>
+          <li>Fixed: Flash tank validation be method selection</li>
+          <li>Enhanced: Replaced "Quantity Value" with "Known Variable" label for steam calculators</li>
+          <li>Fixed: Ordering of header results table</li>
+          <li>Fixed: Pre Assessment Screening result units for Energy Cost</li>
         </ul>
+
+        <label>Fan Analysis Calculator</label>
+        <ul>
+          <li>Fixed: Unit conversions</li>
+          <li>Enhanced: Navigation</li>
+          <li>Added: Plane diagram for different plane types</li>
+          <li>Added: Highlighting of table and diagram depending on plane input tab</li>
+        </ul>
+
         <label>Known Issues</label>
         <ul>
           <li>The calculations for the Steam application will take longer than the others due to its iterative

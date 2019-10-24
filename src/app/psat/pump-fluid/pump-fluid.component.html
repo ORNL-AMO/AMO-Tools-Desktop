@@ -6,29 +6,33 @@
   </div>
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
-    <div *ngIf="psatForm.controls.pumpType.value != 11" class="form-group" [ngClass]="{'indicate-different': isPumpStyleDifferent()}">
+    <div *ngIf="psatForm.controls.pumpType.value != 11" class="form-group">
       <label for="{{'pumpType_'+idString}}">Pump Type</label>
-      <select class="form-control" name="pumpType" formControlName="pumpType" id="{{'pumpType_'+idString}}" (change)="changePumpType()"
-        (focus)="focusField('pumpType')">
+      <select class="form-control" name="pumpType" formControlName="pumpType" id="{{'pumpType_'+idString}}"
+        (change)="changePumpType()" (focus)="focusField('pumpType')">
         <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType.value">{{pumpType.display}}</option>
       </select>
     </div>
 
-    <div class="form-group" *ngIf="!baseline" [ngClass]="{'indicate-different': isSpecifiedEfficiencyDifferent(), 'invalid':psatForm.controls.specifiedPumpEfficiency.invalid}">
+    <div class="form-group" *ngIf="!baseline"
+      [ngClass]="{'indicate-different': isSpecifiedEfficiencyDifferent(), 'invalid':psatForm.controls.specifiedPumpEfficiency.invalid}">
       <label for="{{'specifiedPumpEfficiency_'+idString}}">Pump Efficiency
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enablePumpType()" *ngIf="psatForm.controls.pumpType.value == 11">Optimize Pump</a>
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disablePumpType()" *ngIf="psatForm.controls.pumpType.value != 11">Known Efficiency</a>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enablePumpType()"
+          *ngIf="psatForm.controls.pumpType.value == 11">Optimize Pump</a>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disablePumpType()"
+          *ngIf="psatForm.controls.pumpType.value != 11">Known Efficiency</a>
       </label>
       <div class="input-group" *ngIf="psatForm.controls.pumpType.value == 11">
-        <input [readonly]="!selected" name="specifiedPumpEfficiency" type="number" min="0" step="any" max="100" class="form-control"
-          formControlName="specifiedPumpEfficiency" id="{{'specifiedPumpEfficiency_'+idString}}" onfocus="this.select();"
-          (input)="save()" (focus)="focusField('specifiedPumpEfficiency')">
+        <input [readonly]="!selected" name="specifiedPumpEfficiency" type="number" min="0" step="any" max="100"
+          class="form-control" formControlName="specifiedPumpEfficiency" id="{{'specifiedPumpEfficiency_'+idString}}"
+          onfocus="this.select();" (input)="save()" (focus)="focusField('specifiedPumpEfficiency')">
         <span class="input-group-addon units">%</span>
       </div>
       <div class="small text-center" *ngIf="psatForm.controls.pumpType.value != 11">
         {{psatForm.controls.specifiedPumpEfficiency.value | number:'1.0-2'}} %
       </div>
-      <span class="alert-danger pull-right small" *ngIf="psatForm.controls.specifiedPumpEfficiency.invalid && !psatForm.controls.specifiedPumpEfficiency.pristine">
+      <span class="alert-danger pull-right small"
+        *ngIf="psatForm.controls.specifiedPumpEfficiency.invalid && !psatForm.controls.specifiedPumpEfficiency.pristine">
         <span *ngIf="psatForm.controls.specifiedPumpEfficiency.errors.required">Value Required</span>
         <span *ngIf="psatForm.controls.specifiedPumpEfficiency.errors.max">Value can't be greater than
           {{psatForm.controls.specifiedPumpEfficiency.errors.max.max}} %.</span>
@@ -39,7 +43,8 @@
 
     <div class="text-center small help-text" *ngIf="psatForm.controls.pumpType.value == 11 && !baseline">
       The efficiency of your pump has been calculated based on your system setup. Either directly modify your
-      efficiency or click <strong>"Optimize Pump"</strong> to estimate your pump efficiency based on a different pump type.
+      efficiency or click <strong>"Optimize Pump"</strong> to estimate your pump efficiency based on a different pump
+      type.
     </div>
     <div class="text-center small help-text" *ngIf="psatForm.controls.pumpType.value != 11 && !baseline">
       The efficiency of your pump has been calculated based on your <strong>flow rate</strong> and selected <strong>pump
@@ -47,7 +52,8 @@
       to use the efficiency calculated by your system setup.
     </div>
 
-    <div class="form-group" [ngClass]="{'indicate-different': isPumpRpmDifferent(),'error': pumpFluidWarnings.rpmError !== null, 'invalid':psatForm.controls.pumpRPM.invalid}">
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isPumpRpmDifferent(),'error': pumpFluidWarnings.rpmError !== null, 'invalid':psatForm.controls.pumpRPM.invalid}">
       <label for="{{'pumpRPM_'+idString}}">Pump Speed</label>
       <div class="input-group">
         <input [readonly]="!selected" type="number" name="pumpRPM" min="0" step="10" class="form-control"
@@ -55,21 +61,24 @@
           onfocus="this.select();">
         <span class="input-group-addon units">rpm</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="psatForm.controls.pumpRPM.invalid && !psatForm.controls.pumpRPM.pristine">
+      <span class="alert-danger pull-right small"
+        *ngIf="psatForm.controls.pumpRPM.invalid && !psatForm.controls.pumpRPM.pristine">
         <span *ngIf="psatForm.controls.pumpRPM.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="pumpFluidWarnings.rpmError !== null && !psatForm.controls.pumpRPM.invalid && !psatForm.controls.pumpRPM.pristine">{{pumpFluidWarnings.rpmError}}</span>
+      <span class="alert-warning pull-right small"
+        *ngIf="pumpFluidWarnings.rpmError !== null && !psatForm.controls.pumpRPM.invalid && !psatForm.controls.pumpRPM.pristine">{{pumpFluidWarnings.rpmError}}</span>
     </div>
 
     <div class="form-group" [ngClass]="{'indicate-different': isDriveDifferent()}">
       <label for="{{'drive_'+idString}}">Drive</label>
-      <select class="form-control" name="drive" formControlName="drive" id="{{'drive_'+idString}}" (change)="changeDriveType()"
-        (focus)="focusField('drive')">
+      <select class="form-control" name="drive" formControlName="drive" id="{{'drive_'+idString}}"
+        (change)="changeDriveType()" (focus)="focusField('drive')">
         <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
       </select>
     </div>
 
-    <div class="form-group" *ngIf="psatForm.controls.drive.value == 4" [ngClass]="{'indicate-different': isSpecifiedDriveEfficiencyDifferent(), 'invalid':psatForm.controls.specifiedDriveEfficiency.invalid}">
+    <div class="form-group" *ngIf="psatForm.controls.drive.value == 4"
+      [ngClass]="{'indicate-different': isSpecifiedDriveEfficiencyDifferent(), 'invalid':psatForm.controls.specifiedDriveEfficiency.invalid}">
       <label for="{{'specifiedDriveEfficiency_'+idString}}">Drive Efficiency</label>
       <div class="input-group">
         <input [readonly]="!selected" type="number" name="specifiedDriveEfficiency" step="any" class="form-control"
@@ -77,7 +86,8 @@
           (focus)="focusField('specifiedDriveEfficiency')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="psatForm.controls.specifiedDriveEfficiency.invalid && !psatForm.controls.specifiedDriveEfficiency.pristine">
+      <span class="alert-danger pull-right small"
+        *ngIf="psatForm.controls.specifiedDriveEfficiency.invalid && !psatForm.controls.specifiedDriveEfficiency.pristine">
         <span *ngIf="psatForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
         <span *ngIf="psatForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
           {{psatForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
@@ -88,40 +98,46 @@
 
     <div class="form-group" [ngClass]="{'indicate-different': isFluidTypeDifferent()}">
       <label for="{{'fluidType_'+idString}}">Fluid Type</label>
-      <select class="form-control" name="fluidType" formControlName="fluidType" id="{{'fluidType_'+idString}}" (change)="calculateSpecificGravity()"
-        (focus)="focusField('fluidType')">
+      <select class="form-control" name="fluidType" formControlName="fluidType" id="{{'fluidType_'+idString}}"
+        (change)="calculateSpecificGravity()" (focus)="focusField('fluidType')">
         <option *ngFor="let fluidType of fluidTypes" [ngValue]="fluidType">{{fluidType}}</option>
       </select>
     </div>
 
-    <div class="form-group" [ngClass]="{'indicate-different': isFluidTempDifferent(),'error': pumpFluidWarnings.temperatureError !== null, 'invalid':psatForm.controls.fluidTemperature.invalid}">
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isFluidTempDifferent(),'error': pumpFluidWarnings.temperatureError !== null, 'invalid':psatForm.controls.fluidTemperature.invalid}">
       <label for="{{'fluidTemperature_'+idString}}">Fluid Temperature</label>
       <div class="input-group">
         <input [readonly]="!selected" type="number" name="fluidTemperature" step="any" class="form-control"
           formControlName="fluidTemperature" id="{{'fluidTemperature_'+idString}}" (input)="calculateSpecificGravity()"
           (focus)="focusField('fluidTemperature')" onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="tempUnit"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.temperatureMeasurement | settingsLabel"></span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="psatForm.controls.fluidTemperature.invalid && !psatForm.controls.fluidTemperature.pristine">
+      <span class="alert-danger pull-right small"
+        *ngIf="psatForm.controls.fluidTemperature.invalid && !psatForm.controls.fluidTemperature.pristine">
         <span *ngIf="psatForm.controls.fluidTemperature.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="pumpFluidWarnings.temperatureError !== null && !psatForm.controls.fluidTemperature.invalid && !psatForm.controls.fluidTemperature.pristine"
+      <span class="alert-warning pull-right small"
+        *ngIf="pumpFluidWarnings.temperatureError !== null && !psatForm.controls.fluidTemperature.invalid && !psatForm.controls.fluidTemperature.pristine"
         [innerHtml]="pumpFluidWarnings.temperatureError"></span>
     </div>
 
-    <div class="form-group" [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':psatForm.controls.gravity.invalid}">
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':psatForm.controls.gravity.invalid}">
       <label for="{{'gravity_'+idString}}">Specific Gravity</label>
       <input [readonly]="!selected" type="number" min="0" name="gravity" step="any" class="form-control"
         formControlName="gravity" id="{{'gravity_'+idString}}" (input)="save()" (focus)="focusField('specificGravity')"
         onfocus="this.select();">
-      <span class="alert-danger pull-right small" *ngIf="psatForm.controls.gravity.invalid && !psatForm.controls.gravity.pristine">
+      <span class="alert-danger pull-right small"
+        *ngIf="psatForm.controls.gravity.invalid && !psatForm.controls.gravity.pristine">
         <span *ngIf="psatForm.controls.gravity.errors.required">Value Required</span>
         <span *ngIf="psatForm.controls.gravity.errors.min">Value can't be less than
           {{psatForm.controls.gravity.errors.min.min}}.</span>
       </span>
     </div>
 
-    <div class="form-group" [ngClass]="{'indicate-different': isKinematicViscosityDifferent(), 'invalid':psatForm.controls.viscosity.invalid}">
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isKinematicViscosityDifferent(), 'invalid':psatForm.controls.viscosity.invalid}">
       <label for="{{'viscosity_'+idString}}">Kinematic Viscosity</label>
       <div class="input-group">
         <input [readonly]="!selected" type="number" min="0" name="viscosity" step="any" class="form-control"
@@ -129,14 +145,16 @@
           onfocus="this.select();">
         <span class="input-group-addon units">cSt</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="psatForm.controls.viscosity.invalid && !psatForm.controls.viscosity.pristine">
+      <span class="alert-danger pull-right small"
+        *ngIf="psatForm.controls.viscosity.invalid && !psatForm.controls.viscosity.pristine">
         <span *ngIf="psatForm.controls.viscosity.errors.required">Value Required</span>
         <span *ngIf="psatForm.controls.viscosity.errors.min">Value can't be less than
           {{psatForm.controls.viscosity.errors.min.min}} cSt.</span>
       </span>
     </div>
 
-    <div class="form-group" [ngClass]="{'indicate-different': isStagesDifferent(), 'invalid': psatForm.controls.stages.invalid}">
+    <div class="form-group"
+      [ngClass]="{'indicate-different': isStagesDifferent(), 'invalid': psatForm.controls.stages.invalid}">
       <label for="{{'stages_'+idString}}">Stages</label>
       <div name="stages" class="incrementor form-control input-group">
         <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('stages')">
@@ -145,10 +163,11 @@
         <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')">
           <i class="fa fa-plus"></i>
         </button>
-        <input [readonly]="!selected" type="number" min="1" step="any" class="form-control" formControlName="stages" id="{{'stages_'+idString}}"
-          (input)="save()" (focus)="focusField('stages')" onfocus="this.select();">
+        <input [readonly]="!selected" type="number" min="1" step="any" class="form-control" formControlName="stages"
+          id="{{'stages_'+idString}}" (input)="save()" (focus)="focusField('stages')" onfocus="this.select();">
       </div>
-      <span class="alert-danger pull-right small" *ngIf="psatForm.controls.stages.invalid && !psatForm.controls.stages.pristine">
+      <span class="alert-danger pull-right small"
+        *ngIf="psatForm.controls.stages.invalid && !psatForm.controls.stages.pristine">
         <span *ngIf="psatForm.controls.stages.errors.required">Value Required</span>
         <span *ngIf="psatForm.controls.stages.errors.min">Value can't be less than
           {{psatForm.controls.stages.errors.min.min}}.</span>

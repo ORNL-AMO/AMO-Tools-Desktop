@@ -3,11 +3,11 @@ import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import * as d3 from 'd3';
 import { FormGroup } from '../../../../../../node_modules/@angular/forms';
-import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
+import { LineChartHelperService } from '../../../../shared/helper-services/line-chart-helper.service';
 
 var tableFlowRate: number;
 var tableAverageEfficiency: number;
@@ -26,10 +26,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   @Input()
   toggleResetData: boolean;
   @Input()
+  toggleExampleData: boolean;
+  @Input()
   settings: Settings;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeGraph();
@@ -134,6 +136,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.toggleResetData) {
         this.resetTableData();
+      }
+      if (changes.toggleExampleData) {
+        if (this.checkForm()) {
+          this.makeGraph();
+        }
       }
       if (changes.toggleCalculate) {
         if (this.checkForm()) {

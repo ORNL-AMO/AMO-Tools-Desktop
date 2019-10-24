@@ -3,7 +3,6 @@ import { Settings } from '../shared/models/settings';
 import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
 import { Assessment } from '../shared/models/assessment';
-import { UpdateDataService } from '../shared/update-data.service';
 import { SettingsService } from '../settings/settings.service';
 @Injectable()
 export class SettingsDbService {
@@ -85,6 +84,10 @@ export class SettingsDbService {
       settings.steamEnergyMeasurement = 'MMBtu';
     }
 
+    if (!settings.steamVolumeMeasurement) {
+      settings.steamVolumeMeasurement = 'gal';
+    }
+
     if (!settings.densityMeasurement ||
       !settings.fanFlowRate ||
       !settings.fanPressureMeasurement ||
@@ -94,13 +97,13 @@ export class SettingsDbService {
       settings = this.settingService.setFanUnits(settings);
     }
 
-    if (!settings.fuelCost) {
+    if (settings.fuelCost == undefined) {
       settings.fuelCost = 3.99;
     }
-    if (!settings.steamCost) {
+    if (settings.steamCost == undefined) {
       settings.steamCost = 4.69;
     }
-    if (!settings.electricityCost) {
+    if (settings.electricityCost == undefined) {
       settings.electricityCost = .066;
     }
     return settings;

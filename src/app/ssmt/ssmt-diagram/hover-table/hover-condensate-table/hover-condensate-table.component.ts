@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { SteamPropertiesOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -13,6 +13,11 @@ export class HoverCondensateTableComponent implements OnInit {
   settings: Settings;
   @Input()
   outputData: SSMTOutput;
+  @Input()
+  inResultsPanel: boolean;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
 
   returnCondensate: SteamPropertiesOutput;
   volumeFlow: number = 0;
@@ -28,5 +33,9 @@ export class HoverCondensateTableComponent implements OnInit {
     this.volumeFlow = specificVolume * massFlow;
     //convert from m3/h to settings volume flow measurement (gpm | m3/h | L/min)
     this.volumeFlow = this.convertUnitsService.value(this.volumeFlow).from('m3/h').to(this.settings.steamVolumeFlowMeasurement);
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 }

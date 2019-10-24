@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PSAT, PsatInputs } from '../../../shared/models/psat';
+import { PsatInputs } from '../../../shared/models/psat';
 import { SpecificSpeedInputs } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
-import { PsatService } from '../../../psat/psat.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class SpecificSpeedService {
   specificSpeedInputs: SpecificSpeedInputs;
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
 
   initForm(settings: Settings): FormGroup {
@@ -26,6 +25,25 @@ export class SpecificSpeedService {
     return this.formBuilder.group({
       pumpType: [0, Validators.required],
       pumpRPM: [1780, [Validators.required, Validators.min(0)]],
+      flowRate: [tmpFlowRate, [Validators.required, Validators.min(0)]],
+      head: [tmpHead, [Validators.required, Validators.min(0)]],
+    });
+  }
+
+  resetForm(settings: Settings): FormGroup {
+    let tmpFlowRate: number = 0;
+    let tmpHead: number = 0;
+    if (settings.flowMeasurement !== 'gpm') {
+      tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(settings.flowMeasurement);
+      tmpFlowRate = this.convertUnitsService.roundVal(tmpFlowRate, 2);
+    }
+    if (settings.distanceMeasurement !== 'ft') {
+      tmpHead = this.convertUnitsService.value(tmpHead).from('ft').to(settings.distanceMeasurement);
+      tmpHead = this.convertUnitsService.roundVal(tmpHead, 2);
+    }
+    return this.formBuilder.group({
+      pumpType: [0, Validators.required],
+      pumpRPM: [0, [Validators.required, Validators.min(0)]],
       flowRate: [tmpFlowRate, [Validators.required, Validators.min(0)]],
       head: [tmpHead, [Validators.required, Validators.min(0)]],
     });

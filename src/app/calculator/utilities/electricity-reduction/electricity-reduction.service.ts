@@ -12,7 +12,7 @@ export class ElectricityReductionService {
 
   baselineData: Array<ElectricityReductionData>;
   modificationData: Array<ElectricityReductionData>;
-
+  operatingHours: OperatingHours;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   initObject(index: number, settings: Settings, operatingHours: OperatingHours): ElectricityReductionData {
@@ -22,9 +22,14 @@ export class ElectricityReductionService {
       averageCurrent: 0,
       powerFactor: 0.85
     };
+    let ratedMotorPower: number = 200;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      ratedMotorPower = this.convertUnitsService.value(ratedMotorPower).from('hp').to(settings.powerMeasurement);
+      ratedMotorPower = Number(ratedMotorPower.toFixed(2));
+    }
 
     let defaultNameplateObj: NameplateData = {
-      ratedMotorPower: settings.powerMeasurement === undefined ? 200 : this.convertUnitsService.value(200).from('hp').to(settings.powerMeasurement),
+      ratedMotorPower: ratedMotorPower,
       variableSpeedMotor: true,
       operationalFrequency: 50,
       lineFrequency: 60,
@@ -40,7 +45,7 @@ export class ElectricityReductionService {
       energy: 400000
     };
 
-    let hoursPerYear: number = 8736;
+    let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
@@ -165,9 +170,78 @@ export class ElectricityReductionService {
     return obj;
   }
 
+  generateExample(settings: Settings, isBaseline: boolean): ElectricityReductionData {
+    let defaultData: ElectricityReductionData
+    let ratedMotorPower: number = 200;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      ratedMotorPower = this.convertUnitsService.value(ratedMotorPower).from('hp').to(settings.powerMeasurement);
+      ratedMotorPower = Number(ratedMotorPower.toFixed(2));
+    }
+
+    if (isBaseline) {
+      defaultData = {
+        name: 'Equipment #1',
+        operatingHours: 8760,
+        electricityCost: settings.electricityCost,
+        measurementMethod: 1,
+        multimeterData: {
+          numberOfPhases: 3,
+          supplyVoltage: 0,
+          averageCurrent: 0,
+          powerFactor: 0.0
+        },
+        nameplateData: {
+          ratedMotorPower: ratedMotorPower,
+          variableSpeedMotor: true,
+          operationalFrequency: 50,
+          lineFrequency: 60,
+          motorAndDriveEfficiency: 100,
+          loadFactor: 10
+        },
+        powerMeterData: {
+          power: 0
+        },
+        otherMethodData: {
+          energy: 0
+        },
+        units: 1
+      };
+    }
+    else {
+      defaultData = {
+        name: 'Equipment #1',
+        operatingHours: 8760,
+        electricityCost: settings.electricityCost,
+        measurementMethod: 1,
+        multimeterData: {
+          numberOfPhases: 3,
+          supplyVoltage: 0,
+          averageCurrent: 0,
+          powerFactor: 0.0
+        },
+        nameplateData: {
+          ratedMotorPower: 150,
+          variableSpeedMotor: true,
+          operationalFrequency: 50,
+          lineFrequency: 60,
+          motorAndDriveEfficiency: 100,
+          loadFactor: 10
+        },
+        powerMeterData: {
+          power: 0
+        },
+        otherMethodData: {
+          energy: 0
+        },
+        units: 1
+      };
+    }
+
+    return defaultData;
+  }
+
   getResults(settings: Settings, baseline: Array<ElectricityReductionData>, modification?: Array<ElectricityReductionData>): ElectricityReductionResults {
     let baselineInpCpy: Array<ElectricityReductionData> = JSON.parse(JSON.stringify(baseline));
-
     let baselineResults: ElectricityReductionResult = this.calculate(baselineInpCpy, settings);
     let modificationResults: ElectricityReductionResult;
     let annualEnergySavings: number = 0;
@@ -188,7 +262,7 @@ export class ElectricityReductionService {
     }
     return naturalGasReductionResults;
   }
-  
+
   calculate(input: Array<ElectricityReductionData>, settings: Settings): ElectricityReductionResult {
     let inputArray: Array<ElectricityReductionData> = this.convertInputs(input, settings);
     let inputObj: ElectricityReductionInput = {
@@ -210,8 +284,10 @@ export class ElectricityReductionService {
 
   convertInputs(inputArray: Array<ElectricityReductionData>, settings: Settings): Array<ElectricityReductionData> {
     //need to loop through for conversions prior to calculation
-    for (let i = 0; i < inputArray.length; i++) {
-      inputArray[i].nameplateData.ratedMotorPower = this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from(settings.powerMeasurement).to('kW');
+    if (settings.unitsOfMeasure == 'Imperial') {
+      for (let i = 0; i < inputArray.length; i++) {
+        inputArray[i].nameplateData.ratedMotorPower = this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from('hp').to('kW');
+      }
     }
     return inputArray;
   }

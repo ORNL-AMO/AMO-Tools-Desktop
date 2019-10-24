@@ -5,6 +5,7 @@ import { DesignedEnergyService } from '../../../phast/designed-energy/designed-e
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
+import { DesignedZone } from '../../../shared/models/phast/designedEnergy';
 
 @Injectable()
 export class PreAssessmentService {
@@ -147,5 +148,145 @@ export class PreAssessmentService {
   getResultPercent(value: number, sum: number): number {
     let percent = (value / sum) * 100;
     return percent;
+  }
+
+  generateExample(settings: Settings, graphColors: Array<string>): Array<PreAssessment> {
+    let examples: Array<PreAssessment>;
+    let example1: PreAssessment = {
+      designedEnergy: {
+        zones: [
+          {
+            name: 'Top Preheat',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 60,
+              totalBurnerCapacity: 169,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          },
+          {
+            name: 'Bottom Preheat',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 60,
+              totalBurnerCapacity: 169,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          },
+          {
+            name: 'Top Heat',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 80,
+              totalBurnerCapacity: 81.6,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          },
+          {
+            name: 'Bottom Heat',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 80,
+              totalBurnerCapacity: 102,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          },
+          {
+            name: 'Screen',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 40,
+              totalBurnerCapacity: 41.4,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          },
+          {
+            name: 'Soak',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 40,
+              totalBurnerCapacity: 34.8,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          }
+        ],
+        steam: false,
+        fuel: true,
+        electricity: false
+      },
+      meteredEnergy: null,
+      energyUsed: 334.541,
+      name: 'Reheat Furnace',
+      type: 'Designed',
+      settings: settings,
+      collapsed: false,
+      collapsedState: 'open',
+      borderColor: graphColors[0],
+      fuelCost: 3.99,
+      steamCost: 4.69,
+      electricityCost: 0.066,
+      fuel: true,
+      electric: false,
+      steam: false
+    }
+    let example2: PreAssessment = {
+      designedEnergy: null,
+      meteredEnergy: {
+        meteredEnergyFuel: {
+          fuelDescription: '',
+          fuelType: 0,
+          heatingValue: 0,
+          collectionTime: 0,
+          fuelFlowRateInput: 0,
+          electricityUsed: 0,
+          electricityCollectionTime: 0,
+          fuelEnergy: 0,
+          userDefinedMeteredEnergy: false
+        },
+        meteredEnergyElectricity: {
+          electricityCollectionTime: 1,
+          electricityUsed: 80000,
+          auxElectricityUsed: 0,
+          auxElectricityCollectionTime: 0
+        },
+        meteredEnergySteam: {
+          totalHeatSteam: 0,
+          flowRate: 0,
+          collectionTime: 0,
+          electricityUsed: 0,
+          electricityCollectionTime: 0
+        },
+        fuel: false,
+        steam: false,
+        electricity: true
+      },
+      energyUsed: 272.970,
+      name: 'EAF',
+      type: 'Metered',
+      settings: settings,
+      collapsed: false,
+      collapsedState: 'open',
+      borderColor: graphColors[1],
+      fuelCost: 3.99,
+      steamCost: 4.69,
+      electricityCost: 0.066,
+      fuel: false,
+      electric: true,
+      steam: false
+    }
+    examples = [example2, example1];
+    return examples;
   }
 }

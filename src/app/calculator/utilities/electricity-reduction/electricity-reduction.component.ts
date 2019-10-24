@@ -25,8 +25,8 @@ export class ElectricityReductionComponent implements OnInit {
   @Input()
   operatingHours: OperatingHours;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -169,6 +169,26 @@ export class ElectricityReductionComponent implements OnInit {
     this.baselineData = [tmpObj];
     this.modificationData = new Array<ElectricityReductionData>();
     this.modificationExists = false;
+    this.getResults();
+  }
+
+  generateExample() {
+    let tmpBaselineObj: ElectricityReductionData = this.electricityReductionService.generateExample(this.settings, true);
+    this.baselineData = [tmpBaselineObj];
+    this.electricityReductionService.baselineData = this.baselineData;
+    let tmpModificationData: ElectricityReductionData = this.electricityReductionService.generateExample(this.settings, false);
+    this.modificationData = [tmpModificationData];
+    this.electricityReductionService.modificationData = this.modificationData;
+    this.modificationExists = true;
+    this.baselineSelected = true;
+    this.modifiedSelected = false;
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
     this.getResults();
   }
 

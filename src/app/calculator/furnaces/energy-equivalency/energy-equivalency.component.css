@@ -1,10 +1,8 @@
-
-.results-box{
+.results-box {
     border: solid;
     border-radius: 10px;
     border-color: #BF3D00
 }
-
 
 .btn-group {
     display: block;
@@ -17,4 +15,8 @@
 
 .btn-margin-10 {
     margin: 10px 0px;
+}
+
+.btn-form {
+    border-radius: 4px !important;
 }

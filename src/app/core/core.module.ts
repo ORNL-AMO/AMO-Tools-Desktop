@@ -17,7 +17,6 @@ import { AssessmentItemComponent } from '../sidebar/assessment-item/assessment-i
 import { DirectoryItemComponent } from '../sidebar/directory-item/directory-item.component';
 import { SettingsModule } from '../settings/settings.module';
 
-import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SuiteDbModule } from '../suiteDb/suiteDb.module';
 
@@ -28,7 +27,6 @@ import { ContactPageComponent } from '../contact-page/contact-page.component';
 import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 
 import { VersionModalComponent } from '../version-modal/version-modal.component';
-import { UpdateModalComponent } from '../update-modal/update-modal.component';
 import { FsatModule } from '../fsat/fsat.module';
 import { AcknowledgmentsPageComponent } from "../acknowledgments-page/acknowledgments-page.component";
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
@@ -58,7 +56,9 @@ import { FsatReportTutorialComponent } from '../tutorials/fsat-report-tutorial/f
 import { FsatAssessmentTutorialComponent } from '../tutorials/fsat-assessment-tutorial/fsat-assessment-tutorial.component';
 import { SsmtModule } from '../ssmt/ssmt.module';
 import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
-import { SharedModule } from '../shared/shared.module';
+import { UpdateToastComponent } from '../update-toast/update-toast.component';
+import { HelperServicesModule } from '../shared/helper-services/helper-services.module';
+import { ToastModule } from '../shared/toast/toast.module';
 
 @NgModule({
   declarations: [
@@ -72,7 +72,6 @@ import { SharedModule } from '../shared/shared.module';
     TutorialsComponent,
     ContactPageComponent,
     AcknowledgmentsPageComponent,
-    UpdateModalComponent,
     VersionModalComponent,
     MeasurComponent,
     OpeningTutorialComponent,
@@ -89,7 +88,8 @@ import { SharedModule } from '../shared/shared.module';
     FsatTutorialComponent,
     FsatSystemSetupComponent,
     FsatReportTutorialComponent,
-    FsatAssessmentTutorialComponent
+    FsatAssessmentTutorialComponent,
+    UpdateToastComponent
   ],
   imports: [
     CommonModule,
@@ -103,7 +103,6 @@ import { SharedModule } from '../shared/shared.module';
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
-    JsonToCsvModule,
     SuiteDbModule,
     ImportExportModule,
     ReportRollupModule,
@@ -111,7 +110,8 @@ import { SharedModule } from '../shared/shared.module';
     PreAssessmentModule,
     SsmtModule,
     TreasureHuntModule,
-    SharedModule
+    HelperServicesModule,
+    ToastModule
   ],
   providers: [
     AssessmentService,

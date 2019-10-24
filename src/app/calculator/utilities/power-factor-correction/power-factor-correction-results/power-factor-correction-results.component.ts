@@ -10,7 +10,7 @@ export class PowerFactorCorrectionResultsComponent implements OnInit {
   @Input()
   results: PowerFactorCorrectionOutputs;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
   constructor() { }

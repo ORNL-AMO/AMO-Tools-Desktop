@@ -1,9 +1,12 @@
-<form [formGroup]="replaceExistingForm">
+<form [formGroup]="replaceExistingForm" #formElement>
   <div class="row">
     <div class="col-12">
       <div class="form-group">
         <label for="efficiency">Operating Hours</label>
         <div class="input-group calc-addon-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
           <input name="operatingHours" type="number" min="0" step="1" class="form-control" id="operatingHours"
             formControlName="operatingHours" (input)="calculate()" onfocus="this.select();"
             (focus)="focusField('operatingHours')">
@@ -23,13 +26,16 @@
           <input name="motorSize" type="number" min="0" step="1" class="form-control" id="motorSize"
             formControlName="motorSize" (input)="calculate()" onfocus="this.select();"
             (focus)="focusField('motorSize')">
-          <span class="units">hp</span>
+          <span class="units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+          <span class="units" *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="replaceExistingForm.controls.motorSize.invalid && !replaceExistingForm.controls.motorSize.pristine">
           <span *ngIf="replaceExistingForm.controls.motorSize.errors.required">Value required.</span>
           <span *ngIf="replaceExistingForm.controls.motorSize.errors.min">Value cannot not be lower than
-            {{replaceExistingForm.controls.motorSize.errors.min.min}} hp.
+            {{replaceExistingForm.controls.motorSize.errors.min.min}} <span
+              *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>.
           </span>
         </span>
       </div>
@@ -168,3 +174,9 @@
     </div>
   </div>
 </form>
+
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="replaceExistingService.operatingHours">
+</app-operating-hours-modal>

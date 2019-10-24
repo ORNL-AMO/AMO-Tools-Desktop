@@ -4,6 +4,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
 import { FormGroup } from '@angular/forms';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
   selector: 'app-replace-existing',
@@ -22,10 +23,10 @@ export class ReplaceExistingComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  opperatingHours: number
+  opperatingHours: OperatingHours;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -76,11 +77,18 @@ export class ReplaceExistingComponent implements OnInit {
   }
 
   initMotorInputs() {
-    let oppHours: number = 5200;
+    let oppHours: number = 8760;
     if (this.opperatingHours) {
-      oppHours = this.opperatingHours;
+      oppHours = this.opperatingHours.hoursPerYear;
     }
     this.inputs = this.replaceExistingService.initReplaceExistingData(this.settings, oppHours);
+  }
+  resetMotorInputs() {
+    let oppHours: number = 0;
+    if (this.opperatingHours) {
+      oppHours = this.opperatingHours.hoursPerYear;
+    }
+    this.inputs = this.replaceExistingService.resetReplaceExistingData(this.settings, oppHours);
   }
 
   initForm() {
@@ -88,6 +96,11 @@ export class ReplaceExistingComponent implements OnInit {
   }
 
   resetData() {
+    this.resetMotorInputs();
+    this.initForm();
+    this.calculate();
+  }
+  btnGenerateExample() {
     this.initMotorInputs();
     this.initForm();
     this.calculate();
@@ -110,7 +123,7 @@ export class ReplaceExistingComponent implements OnInit {
 
   calculate() {
     this.inputs = this.replaceExistingService.getObjFromForm(this.replaceExistingForm);
-    this.results = this.replaceExistingService.getResults(this.inputs);
+    this.results = this.replaceExistingService.getResults(this.inputs, this.settings);
   }
 
   save() {

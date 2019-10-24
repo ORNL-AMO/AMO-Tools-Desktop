@@ -24,7 +24,6 @@ export class SystemCapacityFormComponent implements OnInit {
   }
 
   emitChange() {
-
     this.calculate.emit(this.inputs);
   }
 
@@ -55,18 +54,7 @@ export class SystemCapacityFormComponent implements OnInit {
   }
 
   deleteCustomPipe(i: number) {
-    if (i == this.inputs.customPipes.length - 1) {
-      this.inputs.customPipes.pop();
-    }
-    else {
-      let tempCustomPipes = this.inputs.customPipes;
-      this.inputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
-      for (let j = 0; j < tempCustomPipes.length; j++) {
-        if (j != i) {
-          this.inputs.customPipes.push(tempCustomPipes[j]);
-        }
-      }
-    }
+    this.inputs.customPipes.splice(i, 1);
     this.emitChange();
   }
   changeField(str: string) {

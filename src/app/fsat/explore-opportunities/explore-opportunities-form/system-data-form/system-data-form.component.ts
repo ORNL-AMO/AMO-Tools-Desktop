@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 import { FanFieldDataWarnings } from '../../../fsat-warning.service';
 import { FormGroup } from '@angular/forms';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
     selector: 'app-system-data-form',
@@ -34,6 +34,15 @@ export class SystemDataFormComponent implements OnInit {
     @Input()
     isVFD: boolean;
 
+    @ViewChild('formElement', { static: false }) formElement: ElementRef;
+    @HostListener('window:resize', ['$event'])
+    onResize(event) {
+        this.setOpHoursModalWidth();
+    }
+
+    formWidth: number;
+    showOperatingHoursModal: boolean = false;
+
     showSystemData: boolean = false;
     showCost: boolean = false;
     showFlowRate: boolean = false;
@@ -41,7 +50,6 @@ export class SystemDataFormComponent implements OnInit {
     showPressure: boolean = false;
 
     constructor(
-        private convertUnitsService: ConvertUnitsService,
         private helpPanelService: HelpPanelService,
         private modifyConditionsService: ModifyConditionsService) {
     }
@@ -61,6 +69,12 @@ export class SystemDataFormComponent implements OnInit {
                 this.init();
             }
         }
+    }
+
+    ngAfterViewInit() {
+        setTimeout(() => {
+            this.setOpHoursModalWidth();
+        }, 100)
     }
 
     init() {
@@ -158,19 +172,33 @@ export class SystemDataFormComponent implements OnInit {
         this.helpPanelService.currentField.next(str);
         this.modifyConditionsService.modifyConditionsTab.next('fan-field-data');
     }
-
-    getDisplayUnit(unit: string) {
-        let tmpUnit = this.convertUnitsService.getUnit(unit);
-        let dsp = tmpUnit.unit.name.display.replace('(', '');
-        dsp = dsp.replace(')', '');
-        return dsp;
-    }
-
+    
     showInletPressureModal() {
         this.showPressureModal.emit('inlet');
     }
 
     showOutletPressureModal() {
         this.showPressureModal.emit('outlet');
+    }
+
+    closeOperatingHoursModal() {
+        this.showOperatingHoursModal = false;
+    }
+
+    openOperatingHoursModal() {
+        this.showOperatingHoursModal = true;
+    }
+
+    updateOperatingHours(oppHours: OperatingHours) {
+        this.fsat.modifications[this.exploreModIndex].fsat.operatingHours = oppHours;
+        this.modificationForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
+        this.calculate();
+        this.closeOperatingHoursModal();
+    }
+
+    setOpHoursModalWidth() {
+        if (this.formElement.nativeElement.clientWidth) {
+            this.formWidth = this.formElement.nativeElement.clientWidth;
+        }
     }
 }

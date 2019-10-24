@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SuiteDbService } from './suite-db.service';
 import { FlueGasMaterialComponent } from './flue-gas-material/flue-gas-material.component';
@@ -16,7 +16,6 @@ import { LiquidLoadChargeMaterialHelpComponent } from './liquid-load-charge-mate
 import { SolidLoadChargeMaterialHelpComponent } from './solid-load-charge-material/solid-load-charge-material-help/solid-load-charge-material-help.component';
 import { WallLossesSurfaceHelpComponent } from './wall-losses-surface/wall-losses-surface-help/wall-losses-surface-help.component';
 import { AtmosphereSpecificHeatMaterialHelpComponent } from './atmosphere-specific-heat-material/atmosphere-specific-heat-material-help/atmosphere-specific-heat-material-help.component';
-import { SharedModule } from "../shared/shared.module";
 import { CustomMaterialsComponent } from './custom-materials/custom-materials.component';
 import { CustomFlueGasMaterialsComponent } from './custom-materials/custom-flue-gas-materials/custom-flue-gas-materials.component';
 import { CustomGasLoadChargeMaterialsComponent } from './custom-materials/custom-gas-load-charge-materials/custom-gas-load-charge-materials.component';
@@ -27,13 +26,13 @@ import { CustomAtmosphereSpecificHeatMaterialsComponent } from './custom-materia
 import { CustomWallLossesSurfacesComponent } from './custom-materials/custom-wall-losses-sufaces/custom-wall-losses-surfaces.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { CustomMaterialsService } from './custom-materials/custom-materials.service';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 @NgModule({
     imports: [
         FormsModule,
-        ReactiveFormsModule,
         CommonModule,
-        SharedModule,
-        ModalModule
+        ModalModule,
+        SharedPipesModule
     ],
     providers: [
         SuiteDbService,

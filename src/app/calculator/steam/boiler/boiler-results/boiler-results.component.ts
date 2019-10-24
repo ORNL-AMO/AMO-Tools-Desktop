@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { BoilerInput } from '../../../../shared/models/steam/steam-inputs';
-import { SteamService } from '../../steam.service';
 import { BoilerOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
@@ -17,7 +16,7 @@ export class BoilerResultsComponent implements OnInit {
   @Input()
   inputData: BoilerInput;
 
-  @ViewChild('copyTable0') copyTable0: ElementRef;
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
 
   constructor() { }

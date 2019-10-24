@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { SSMT } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SsmtService } from '../../../ssmt.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-operations-form',
@@ -19,6 +20,15 @@ export class OperationsFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<SSMT>();
 
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+  showOperatingHoursModal: boolean = false;
+
   showHoursPerYear: boolean = false;
   showOperationsData: boolean = false;
   showMakeupWaterTemp: boolean = false;
@@ -27,7 +37,7 @@ export class OperationsFormComponent implements OnInit {
   showFuelCost: boolean = false;
   showMakeupWaterCost: boolean = false;
 
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.initGeneralOperations();
@@ -49,6 +59,12 @@ export class OperationsFormComponent implements OnInit {
 
       }
     }
+  }
+
+  ngAfterViewInit(){
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
   }
 
   //General Operations Functions
@@ -102,12 +118,12 @@ export class OperationsFormComponent implements OnInit {
   }
 
   setBaselineOperatingHours() {
-    this.ssmt.operatingHours.isCalculated = false;
+    // this.ssmt.operatingHours.isCalculated = false;
     this.save();
   }
 
   setModificationOperatingHours() {
-    this.ssmt.modifications[this.exploreModIndex].ssmt.operatingHours.isCalculated = false;
+    // this.ssmt.modifications[this.exploreModIndex].ssmt.operatingHours.isCalculated = false;
     this.save();
   }
 
@@ -188,5 +204,27 @@ export class OperationsFormComponent implements OnInit {
   focusOut() {
     // this.exploreOpportunitiesService.currentTab.next('operations');
     // this.exploreOpportunitiesService.currentField.next('default');
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+    // this.stea.modalOpen.next(false);
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+    // this.lossesService.modalOpen.next(true);
+  }
+
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.ssmt.modifications[this.exploreModIndex].ssmt.operatingHours = oppHours;
+    this.save();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 }

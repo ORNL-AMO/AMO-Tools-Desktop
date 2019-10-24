@@ -28,7 +28,7 @@
   </div>
   <div class="d-flex flex-column outlet-column">
     <div class="high-pressure text-center pl-2" (mouseenter)="hoverEquipment('highPressureHovered')"
-      (mouseleave)="hoverEquipment('default')" [ngClass]="steamClasses">
+      (mouseleave)="hoverEquipment('default')" [ngClass]="steamClasses" (click)="selectEquipment('highPressureHovered')">
       <div class="boiler-steam-holder">
         <span class="boiler-mass-flow">{{boiler.steamMassFlow | number:'1.0-2'}}
           <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="blowdown blowdown-one text-center mr-1 pl-2" (mouseenter)="hoverEquipment('blowdownHovered')"
-      (mouseleave)="hoverEquipment('default')" [ngClass]="blowdownClasses">
+      (mouseleave)="hoverEquipment('default')" [ngClass]="blowdownClasses" (click)="selectEquipment('blowdownHovered')">
       <span class="fa fa-chevron-right hidden-chevron"></span>
     </div>
   </div>
@@ -57,7 +57,7 @@
     <div class="d-flex ml-1 blowdown-two">
       <div class="d-flex flex-fill blowdown justify-content-center pl-2"
         (mouseenter)="hoverEquipment('blowdownHovered')" (mouseleave)="hoverEquipment('default')"
-        [ngClass]="blowdownClasses">
+        [ngClass]="blowdownClasses" (click)="selectEquipment('blowdownHovered')">
         <div class="blowdown-holder">
           <span class="blowdown-mass-flow" *ngIf="boiler.blowdownMassFlow != 0">
             {{boiler.blowdownMassFlow | number:'1.0-2'}}

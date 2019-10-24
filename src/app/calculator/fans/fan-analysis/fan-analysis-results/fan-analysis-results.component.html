@@ -1,0 +1,125 @@
+<div class="d-flex w-100 justify-content-center pt-2 pl-2">
+  <div class="card card-body col-3 p-2">
+    <app-percent-graph [value]="results.fanEfficiencyTotalPressure" [valueDescription]="'Fan Total Efficiency'"
+      [fontSize]="32" [unit]="'%'" [title]="'total-efficiency'"></app-percent-graph>
+    <label>Total Pressure Efficiency</label>
+  </div>
+  <div class="card card-body col-3 p-2">
+    <app-percent-graph [value]="results.fanEfficiencyStaticPressure" [valueDescription]="'Fan Static Efficiency'"
+      [fontSize]="32" [unit]="'%'" [title]="'static-pressure-efficiency'"></app-percent-graph>
+    <label>Static Pressure Efficiency</label>
+  </div>
+  <div class="card card-body col-3 p-2">
+    <app-percent-graph [value]="results.fanEfficiencyStaticPressureRise"
+      [valueDescription]="'Fan Efficiency based on Static Pressure Rise'" [fontSize]="32" [unit]="'%'"
+      [title]="'static-pressure-rise-efficiency'"></app-percent-graph>
+    <label>Efficiency based on Static Pressure Rise</label>
+  </div>
+</div>
+
+<table class="table table-hover table-striped mx-auto">
+  <tbody>
+    <tr>
+      <td class="w-25"></td>
+      <td class="text-center bold">As Tested</td>
+      <td class="text-center bold">Converted</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Flow</td>
+      <td class="text-center">{{results.flow |sigFigs: '6'}}</td>
+      <td class="text-center">{{results.flowCorrected |sigFigs: '6'}}
+        <!-- <br> <span class="small">(Q<sub>c</sub>)</span> -->
+      </td>
+      <td class="text-center">
+        <span [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+      </td>
+    </tr>
+    <tr>
+      <td>Total Pressure </td>
+      <td class="text-center">{{results.pressureTotal |sigFigs: '6'}}</td>
+      <td class="text-center">{{results.pressureTotalCorrected |sigFigs: '6'}}
+        <!-- <br><span class="small"><sub>TC</sub>)</span> -->
+      <td class="text-center">
+        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+      </td>
+    </tr>
+    <tr>
+      <td>Static Pressure </td>
+      <td class="text-center">{{results.pressureStatic |sigFigs: '6'}}
+        <!-- <br><span class="small"><sub>SC</sub>)</span> -->
+      </td>
+      <td class="text-center">{{results.pressureStaticCorrected |sigFigs: '6'}}
+        <!-- <br><span class="small">(<sub>SC</sub>)</span> -->
+      </td>
+      <td class="text-center"><span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></td>
+    </tr>
+    <tr>
+      <td>Static Pressure Rise </td>
+      <td class="text-center">{{results.staticPressureRise |sigFigs: '6'}}</td>
+      <td class="text-center">{{results.staticPressureRiseCorrected |sigFigs: '6'}}
+        <!-- <br><span class="small">(SPR<sub>c</sub>)</span> -->
+      </td>
+      <td class="text-center">
+        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+      </td>
+    </tr>
+    <tr>
+      <td>Power </td>
+
+      <td class="text-center">{{results.power |sigFigs: '6'}}
+        <!-- <br><span class="small">(H<sub>C</sub>)</span> -->
+      </td>
+      <td class="text-center">{{results.powerCorrected |sigFigs: '6'}}
+        <!-- <br><span class="small">(H<sub>C</sub>)</span> -->
+      </td>
+      <td class="text-center">
+        <span [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>
+      </td>
+    </tr>
+    <tr>
+      <td>Compressibility Factor</td>
+      <td class="text-center">{{results.kpc |sigFigs: '6'}}</td>
+      <td class="text-center">{{results.kpcCorrected |sigFigs: '6'}}
+        <!-- <br><span class="small">(K<sub>pc</sub>)</span> -->
+      </td>
+      <td>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- <label class="group-label">Converted Results</label>
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td>Converted Flow (Q<sub>c</sub>)</td>
+      <td>{{results.flowCorrected |sigFigs: '6'}} <span [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+      </td>
+    </tr>
+    <tr>
+      <td>Converted Total Pressure (P<sub>TC</sub>)</td>
+      <td>{{results.pressureTotalCorrected |sigFigs: '6'}} <span
+          [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></td>
+    </tr>
+    <tr>
+      <td>Converted Static Pressure (P<sub>SC</sub>)</td>
+      <td>{{results.pressureStaticCorrected |sigFigs: '6'}} <span
+          [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></td>
+    </tr>
+    <tr>
+      <td>Converted Static Pressure Rise (SPR<sub>c</sub>)</td>
+      <td>{{results.staticPressureRiseCorrected |sigFigs: '6'}} <span
+          [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></td>
+    </tr>
+    <tr>
+      <td>Converted Power (H<sub>C</sub>)</td>
+      <td>{{results.powerCorrected |sigFigs: '6'}} <span
+          [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span></td>
+    </tr>
+    <tr>
+      <td>Converted Compressibility Factor (K<sub>pc</sub>)</td>
+      <td>{{results.kpc |sigFigs: '6'}}</td>
+    </tr>
+  </tbody>
+</table> -->

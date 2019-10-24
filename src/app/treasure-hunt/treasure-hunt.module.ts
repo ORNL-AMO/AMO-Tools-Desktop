@@ -4,7 +4,6 @@ import { TreasureHuntComponent } from './treasure-hunt.component';
 import { TreasureHuntBannerComponent } from './treasure-hunt-banner/treasure-hunt-banner.component';
 import { FindTreasureComponent } from './find-treasure/find-treasure.component';
 import { TreasureHuntService } from './treasure-hunt.service';
-import { LightingReplacementModule } from '../calculator/lighting/lighting-replacement/lighting-replacement.module';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { SettingsModule } from '../settings/settings.module';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
@@ -12,48 +11,36 @@ import { ModalModule } from 'ngx-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { TreasureChestComponent } from './treasure-chest/treasure-chest.component';
 import { SummaryCardComponent } from './treasure-chest/summary-card/summary-card.component';
-import { LightingReplacementCardComponent } from './treasure-chest/lighting-replacement-card/lighting-replacement-card.component';
-import { OpportunitySheetComponent } from './opportunity-sheet/opportunity-sheet.component';
-import { StandaloneOpportunitySheetComponent } from './standalone-opportunity-sheet/standalone-opportunity-sheet.component';
-import { EnergyUseFormComponent } from './standalone-opportunity-sheet/energy-use-form/energy-use-form.component';
-import { CostsFormComponent } from './opportunity-sheet/costs-form/costs-form.component';
-import { GeneralDetailsFormComponent } from './opportunity-sheet/general-details-form/general-details-form.component';
-import { OpportunitySheetHelpComponent } from './standalone-opportunity-sheet/opportunity-sheet-help/opportunity-sheet-help.component';
-import { OpportunitySheetResultsComponent } from './standalone-opportunity-sheet/opportunity-sheet-results/opportunity-sheet-results.component';
-import { OpportunitySheetCardComponent } from './treasure-chest/opportunity-sheet-card/opportunity-sheet-card.component';
-import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
-import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
-import { SharedModule } from '../shared/shared.module';
-import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
-import { ReplaceExistingModule } from '../calculator/motors/replace-existing/replace-existing.module';
-import { ReplaceExistingMotorCardComponent } from './treasure-chest/replace-existing-motor-card/replace-existing-motor-card.component';
-import { MotorDriveModule } from '../calculator/motors/motor-drive/motor-drive.module';
-import { MotorDriveCardComponent } from './treasure-chest/motor-drive-card/motor-drive-card.component';
 import { TreasureChestMenuComponent } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.component';
-import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-report.module';
 import { TreasureHuntReportService } from './treasure-hunt-report/treasure-hunt-report.service';
-import { NaturalGasReductionModule } from '../calculator/utilities/natural-gas-reduction/natural-gas-reduction.module';
-import { NaturalGasReductionCardComponent } from './treasure-chest/natural-gas-reduction-card/natural-gas-reduction-card.component';
-import { ElectricityReductionModule } from '../calculator/utilities/electricity-reduction/electricity-reduction.module';
-import { ElectricityReductionCardComponent } from './treasure-chest/electricity-reduction-card/electricity-reduction-card.component';
-import { CompressedAirReductionModule } from '../calculator/utilities/compressed-air-reduction/compressed-air-reduction.module';
-import { CompressedAirReductionCardComponent } from './treasure-chest/compressed-air-reduction-card/compressed-air-reduction-card.component';
+import { ImportExportOpportunitiesComponent } from './treasure-chest/import-export-opportunities/import-export-opportunities.component';
+import { ImportOpportunitiesService } from './treasure-chest/import-opportunities.service';
+import { OpportunityCardsComponent } from './treasure-chest/opportunity-cards/opportunity-cards.component';
+import { OpportunityCardsService } from './treasure-chest/opportunity-cards/opportunity-cards.service';
+import { CalculatorsModule } from './calculators/calculators.module';
+import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-report.module';
+import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
+import { SortCardsByPipe } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
+import { UtilitySummaryComponent } from './treasure-chest/summary-card/utility-summary/utility-summary.component';
+import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.service';
+import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
+import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
+import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
+import { ToastModule } from '../shared/toast/toast.module';
+import { ConvertInputDataService } from './convert-input-data.service';
 
 @NgModule({
   imports: [
     CommonModule,
-    LightingReplacementModule,
     SettingsModule,
     ModalModule,
     FormsModule,
-    SharedModule,
-    ReplaceExistingModule,
-    MotorDriveModule,
+    CalculatorsModule,
     TreasureHuntReportModule,
-    NaturalGasReductionModule,
-    ElectricityReductionModule,
-    CompressedAirReductionModule
+    AnimatedCheckmarkModule,
+    OperatingHoursModalModule,
+    ToastModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -63,18 +50,22 @@ import { CompressedAirReductionCardComponent } from './treasure-chest/compressed
     HelpPanelComponent, 
     TreasureChestComponent, 
     SummaryCardComponent, 
-    LightingReplacementCardComponent, 
-    OpportunitySheetComponent, 
-    StandaloneOpportunitySheetComponent, 
-    EnergyUseFormComponent, 
-    CostsFormComponent, 
-    GeneralDetailsFormComponent, 
-    OpportunitySheetHelpComponent, 
-    OpportunitySheetResultsComponent, 
-    OpportunitySheetCardComponent, 
-    OperatingHoursComponent, 
-    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent, MotorDriveCardComponent, TreasureChestMenuComponent, NaturalGasReductionCardComponent, ElectricityReductionCardComponent, CompressedAirReductionCardComponent
+    OperationCostsComponent, 
+    TreasureChestMenuComponent,
+    ImportExportOpportunitiesComponent,
+    OpportunityCardsComponent,
+    SortCardsByPipe,
+    UtilitySummaryComponent,
+    TreasureHuntGaugeComponent
   ],
-  providers: [ TreasureHuntService, OpportunitySheetService, TreasureHuntReportService ]
+  providers: [ 
+    TreasureHuntService, 
+    TreasureHuntReportService, 
+    ImportOpportunitiesService, 
+    OpportunityCardsService, 
+    TreasureChestMenuService,
+    SortCardsService,
+    ConvertInputDataService
+  ]
 })
 export class TreasureHuntModule { }

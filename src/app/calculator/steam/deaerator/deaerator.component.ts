@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Settings } from '../../../shared/models/settings';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { SteamService } from '../steam.service';
-import { DeaeratorInput } from '../../../shared/models/steam/steam-inputs';
-import { DeaeratorService } from './deaerator.service';
-import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
+import {Component, OnInit, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {Settings} from '../../../shared/models/settings';
+import {SettingsDbService} from '../../../indexedDb/settings-db.service';
+import {SteamService} from '../steam.service';
+import {DeaeratorInput} from '../../../shared/models/steam/steam-inputs';
+import {DeaeratorService} from './deaerator.service';
+import {DeaeratorOutput} from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-deaerator-calculator',
@@ -15,18 +15,21 @@ import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
 export class DeaeratorComponent implements OnInit {
   @Input()
   settings: Settings;
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
   deaeratorForm: FormGroup;
   input: DeaeratorInput;
   results: DeaeratorOutput;
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private deaeratorService: DeaeratorService) { }
+
+  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private deaeratorService: DeaeratorService) {
+  }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -39,25 +42,24 @@ export class DeaeratorComponent implements OnInit {
     this.input = this.deaeratorService.getObjFromForm(this.deaeratorForm);
     this.calculate(this.deaeratorForm);
   }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 50);
   }
 
-  btnResetData() {
-    this.deaeratorForm = this.deaeratorService.initForm(this.settings);
-    this.calculate(this.deaeratorForm);
-  }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
+
   setTab(str: string) {
     this.tabSelect = str;
   }
+
   changeField(str: string) {
     this.currentField = str;
   }
@@ -66,7 +68,7 @@ export class DeaeratorComponent implements OnInit {
     if (this.deaeratorService.deaeratorInput) {
       this.deaeratorForm = this.deaeratorService.getFormFromObj(this.deaeratorService.deaeratorInput, this.settings);
     } else {
-      this.deaeratorForm = this.deaeratorService.initForm(this.settings);
+      this.deaeratorForm = this.deaeratorService.resetForm(this.settings);
     }
   }
 
@@ -116,5 +118,15 @@ export class DeaeratorComponent implements OnInit {
       inletWaterVolume: 0
     };
     return emptyResults;
+  }
+
+  btnResetData() {
+    this.deaeratorForm = this.deaeratorService.resetForm(this.settings);
+    this.calculate(this.deaeratorForm);
+  }
+
+  btnGenerateExample() {
+    this.deaeratorForm = this.deaeratorService.initForm(this.settings);
+    this.calculate(this.deaeratorForm);
   }
 }

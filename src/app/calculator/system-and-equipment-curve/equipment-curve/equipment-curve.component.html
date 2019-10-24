@@ -1,0 +1,23 @@
+<div class="d-block pt-3">
+    <h5 class="group-label" (click)="toggleCollapse()">{{title}} Curve Data
+        <span *ngIf="equipmentCurveCollapsed == 'open' && !isPrimaryCalculator"
+            class="remove-curve fa fa-minus pull-right"></span>
+        <span *ngIf="equipmentCurveCollapsed == 'closed' && !isPrimaryCalculator"
+            class="add-curve fa fa-plus pull-right"></span>
+    </h5>
+    <div class="mb-3 d-block" *ngIf="equipmentCurveCollapsed == 'open'">
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Equation')"
+                [ngClass]="{'active': selectedFormView == 'Equation'}">By
+                Equation</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Data')"
+                [ngClass]="{'active': selectedFormView == 'Data'}">By
+                Data</button>
+        </div>
+        <app-by-data-form *ngIf="selectedFormView == 'Data'" [equipmentType]="equipmentType" [settings]="settings">
+        </app-by-data-form>
+        <app-by-equation-form *ngIf="selectedFormView == 'Equation'" [equipmentType]="equipmentType"
+            [settings]="settings"></app-by-equation-form>
+        <app-equipment-curve-form [equipmentType]="equipmentType" [settings]="settings"></app-equipment-curve-form>
+    </div>
+</div>

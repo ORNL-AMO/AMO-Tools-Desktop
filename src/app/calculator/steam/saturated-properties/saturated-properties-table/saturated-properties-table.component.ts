@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 
@@ -11,12 +11,16 @@ export class SaturatedPropertiesTableComponent implements OnInit {
   @Input()
   toggleResetData: boolean;
   @Input()
+  toggleExampleData: boolean;
+  @Input()
   settings: Settings;
   @Input()
   data: { pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number };
 
   rowData: Array<{ pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number }>;
 
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
@@ -30,6 +34,8 @@ export class SaturatedPropertiesTableComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
       this.resetTable();
+    } if (changes.toggleExampleData && !changes.toggleExampleData.firstChange) {
+      //this.addRow();
     }
     if (changes.data && !changes.data.firstChange) {
       this.addRow();
@@ -55,7 +61,7 @@ export class SaturatedPropertiesTableComponent implements OnInit {
     this.rowData.splice(index, 1);
   }
 
-  getDisplayUnit(unit: string) {
-    return this.steamService.getDisplayUnit(unit);
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText.replace(/Delete/g, '');
   }
 }

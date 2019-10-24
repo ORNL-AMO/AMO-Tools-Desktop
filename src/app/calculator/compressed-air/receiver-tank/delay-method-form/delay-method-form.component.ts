@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ReceiverTankBridgingCompressor } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
-import { CompressedAirService } from '../../compressed-air.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ReceiverTankService } from '../receiver-tank.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-delay-method-form',
@@ -11,38 +12,31 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class DelayMethodFormComponent implements OnInit {
   @Input()
-  toggleResetData: boolean;
-  @Input()
   settings: Settings;
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
+
   inputs: ReceiverTankBridgingCompressor;
   totalReceiverVolume: number;
 
-  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
+  setFormSub: Subscription;
+  constructor(private receiverTankService: ReceiverTankService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
-    this.inputs = this.compressedAirService.bridgeCompressorInputs;
-    this.getTotalReceiverVolume();
+    this.setFormSub = this.receiverTankService.setForm.subscribe(val => {
+      this.inputs = this.receiverTankService.bridgeCompressorInputs;
+      this.getTotalReceiverVolume();
+    });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
-      this.resetData();
-    }
+  ngOnDestroy() {
+    this.setFormSub.unsubscribe();
+    this.receiverTankService.bridgeCompressorInputs = this.inputs;
   }
-
-  resetData() {
-    this.compressedAirService.initReceiverTankInputs();
-    this.inputs = this.compressedAirService.bridgeCompressorInputs;
-    this.getTotalReceiverVolume();
-  }
-
+  
   getTotalReceiverVolume() {
     this.totalReceiverVolume = this.standaloneService.receiverTankSizeBridgingCompressor(this.inputs, this.settings);
   }
   changeField(str: string) {
-    this.emitChangeField.emit(str);
+    this.receiverTankService.currentField.next(str);
   }
 }

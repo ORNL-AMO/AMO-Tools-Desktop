@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { HeaderOutputObj, HeatLossOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMTInputs } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
@@ -17,6 +17,11 @@ export class HoverHeaderTableComponent implements OnInit {
   outputData: SSMTOutput;
   @Input()
   inputData: SSMTInputs;
+  @Input()
+  inResultsPanel: boolean;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
 
   header: HeaderOutputObj;
   heatLoss: HeatLossOutput;
@@ -46,4 +51,7 @@ export class HoverHeaderTableComponent implements OnInit {
     }
   }
 
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
 }

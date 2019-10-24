@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-head-tool-results',
@@ -12,17 +11,20 @@ export class HeadToolResultsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor() { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
     this.updateTableString();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.results) {
+    if (changes.results && changes.results.isFirstChange() == false) {
       this.updateTableString();
     }
   }
@@ -30,9 +32,4 @@ export class HeadToolResultsComponent implements OnInit {
   updateTableString() {
     this.tableString = this.copyTable.nativeElement.innerText;
   }
-
-  getUnit(val: number) {
-    return this.convertUnitsService.value(val).from('ft').to(this.settings.distanceMeasurement);
-  }
-
 }

@@ -1,21 +1,133 @@
-<div class="row">
-  <div class="col-6">
-    <div class="form-group">
-      <label for="energyType" class="large">Utility Type</label>
-      <select class="form-control" id="energyType" [(ngModel)]="displayEnergyType" (change)="setEnergyType()">
-        <option *ngFor="let option of energyTypeOptions" [ngValue]="option.value">{{option.value}} ({{option.numCalcs}})
-        </option>
-      </select>
+<nav class="navbar" #navbar>
+  <div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleSortBy()">
+      Sort By ({{sortByLabel}})
+    </a>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': sortByDropdown == true}">
+      <div class="list-group">
+        <a class="list-group-item list-group-item-action"
+          [ngClass]="{'active': sortCardsData.sortBy == 'annualCostSavings'}"
+          (click)="setSortBy('annualCostSavings')">Annual Savings</a>
+        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortCardsData.sortBy == 'teamName'}"
+          (click)="setSortBy('teamName')">Team (A-Z)</a>
+        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortCardsData.sortBy == 'name'}"
+          (click)="setSortBy('name')">Equipment (A-Z)</a>
+        <a class="list-group-item list-group-item-action"
+          [ngClass]="{'active': sortCardsData.sortBy == 'implementationCost'}"
+          (click)="setSortBy('implementationCost')">Implementation Cost</a>
+        <a class="list-group-item list-group-item-action"
+          [ngClass]="{'active': sortCardsData.sortBy == 'paybackPeriod'}" (click)="setSortBy('paybackPeriod')">Payback
+          Period</a>
+      </div>
     </div>
   </div>
-  <div class="col-6">
-    <div class="form-group">
-      <label for="calculatorType" class="large">Calculator Type</label>
-      <select class="form-control" id="calculatorType" (change)="setCalculatorType()"
-        [(ngModel)]="displayCalculatorType">
-        <option *ngFor="let option of calculatorTypeOptions" [ngValue]="option.value">{{option.value}}
-          ({{option.numCalcs}})</option>
-      </select>
+
+  <div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleUtilityType()">
+      Utility Type ({{sortCardsData.utilityType}})
+    </a>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': displayUtilityTypeDropdown == true}">
+      <div class="list-group">
+        <a class="list-group-item list-group-item-action" *ngFor="let option of energyTypeOptions"
+          [ngClass]="{'active': option.value == sortCardsData.utilityType}"
+          (click)="setEnergyType(option.value)">{{option.value}}
+          <span class="badge badge-pill pull-right">
+            {{option.numCalcs}}
+          </span>
+        </a>
+      </div>
     </div>
+  </div>
+  <div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleCalculatorType()">
+      Calculator Type ({{displayCalculatorType}})
+    </a>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': displayCalculatorTypeDropdown == true}">
+      <div class="list-group calc-width">
+        <a class="list-group-item list-group-item-action" *ngFor="let option of calculatorTypeOptions"
+          [ngClass]="{'active': option.value == sortCardsData.calculatorType}"
+          (click)="setCalculatorType(option)">{{option.display}}
+          <span class="badge badge-pill pull-right">
+            {{option.numCalcs}}
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-item">
+    <div class="btn-group">
+      <button type="button" class="nav-btn" (click)="openImportModal()">Import</button>
+      <button type="button" class="nav-btn middle" (click)="openExportModal()">Export</button>
+      <button type="button" class="nav-btn middle" (click)="selectAll()">Select All</button>
+      <button type="button" class="nav-btn" (click)="deselectAll()">Deselect All</button>
+    </div>
+  </div>
+
+  <div class="nav-item dropdown">
+    <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
+  </div>
+</nav>
+<nav class="navbar second-nav" *ngIf="sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0">
+  <div class="nav-item" *ngFor="let team of sortCardsData.teams; let index = index;">
+    <button type="button" class="nav-btn" (click)="removeTeam(team, index)"><span aria-hidden="true"
+        class="pr-1">&times;</span>{{team}}</button>
+  </div>
+  <div class="nav-item" *ngFor="let equipment of sortCardsData.equipments; let index = index;">
+    <button type="button" class="nav-btn" (click)="removeEquipment(equipment, index)"><span aria-hidden="true"
+        class="pr-1">&times;</span>{{equipment}}</button>
+  </div>
+  <div class="nav-item pull-right">
+    <button class="nav-btn pull-right" (click)="clearAllFilters()">Clear All</button>
+  </div>
+</nav>
+
+
+<!--additional features modal-->
+<div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}">
+  <div class="card-header p-2">
+    <span class="modal-card-header">Additional Filters</span>
+  </div>
+  <div class="card-body p-2">
+    <div class="row">
+      <div class="col-6">
+        <h5>Select Teams</h5>
+        <div class="list-group list-group-flush">
+          <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
+            [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">{{team.name}}</a>
+        </div>
+      </div>
+      <div class="col-6">
+        <h5>Select Process / Equipment</h5>
+        <div class="list-group list-group-flush">
+          <a class="list-group-item list-group-item-action" *ngFor="let equipment of equipments"
+            [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.name}}</a>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row">
+      <div class="col-12">
+        <input type="range" step="25" min="0" max="100" class="form-fontrol">
+      </div>
+    </div> -->
+  </div>
+  <div class="card-footer p-2">
+    <button class="nav-btn pull-right" (click)="toggleAdditionalFilters()">Close</button>
+  </div>
+</div>
+
+
+
+
+<!--import modal-->
+<div class="card menu-modal" [@menuModal]="displayImportExportModal" [ngStyle]="{'width.px': navbarWidth}">
+  <div class="card-header p-2">
+    <span class="modal-card-header" *ngIf="importExportOption == 'import'">Import Opportunities From File</span>
+    <span class="modal-card-header" *ngIf="importExportOption == 'export'">Export Selected Opportunities</span>
+    <button class="nav-btn pull-right" (click)="hideImportExportModal()">Close</button>
+  </div>
+  <div class="card-body p-2">
+    <app-import-export-opportunities [tabSelect]="importExportOption" (emitClose)="hideImportExportModal();">
+    </app-import-export-opportunities>
   </div>
 </div>

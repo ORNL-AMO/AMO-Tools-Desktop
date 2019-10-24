@@ -151,7 +151,8 @@ export class SteamSettingsComponent implements OnInit {
     tmpList = [
       'kW',
       'MJh',
-      'GJh'
+      'GJh',
+      'kJh'
     ];
 
     tmpList.forEach(unit => {

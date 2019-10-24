@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Losses } from '../../../shared/models/phast/phast';
 import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 @Injectable()
 export class GasLeakageLossesService {

@@ -3,7 +3,7 @@
   <!-- Baseline -->
   <div class="scroll-item col-8 p-0 d-flex" [ngStyle]="{'height.px': containerHeight}">
     <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
-      [ngClass]="{'disabled': baselineSelected == false}">
+      [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen}">
       <div class="header mr-2 ml-2">
         <h3>Baseline</h3>
       </div>
@@ -22,7 +22,7 @@
 
     <!-- Modifications Start -->
     <div class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)" *ngIf="modificationExists"
-      [ngClass]="{'disabled': modifiedSelected == false}">
+      [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen}">
 
       <!-- Modification Header -->
       <div class="header mr-2 ml-2">

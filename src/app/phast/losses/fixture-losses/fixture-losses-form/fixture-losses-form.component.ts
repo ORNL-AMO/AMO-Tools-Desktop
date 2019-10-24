@@ -37,7 +37,7 @@ export class FixtureLossesFormComponent implements OnInit {
   @Input()
   isBaseline: boolean;
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   specificHeatWarning: string = null;
   feedRateWarning: string = null;

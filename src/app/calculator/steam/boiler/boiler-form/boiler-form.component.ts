@@ -21,6 +21,7 @@ export class BoilerFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   thermoOptions: Array<Quantity>;
+  showBoilerEfficiencyModal: boolean = false;
   constructor(private steamService: SteamService, private boilerService: BoilerService) { }
 
   ngOnInit() {
@@ -43,24 +44,16 @@ export class BoilerFormComponent implements OnInit {
     return selectedQuantity.display;
   }
 
-  getDisplayUnit(unit: string) {
-    if (unit) {
-      return this.steamService.getDisplayUnit(unit);
-    } else {
-      return unit;
-    }
-  }
-
   getOptionDisplayUnit() {
     let displayUnit: string;
     if (this.boilerForm.controls.thermodynamicQuantity.value === 0) {
-      displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      displayUnit = this.settings.steamTemperatureMeasurement;
       return displayUnit;
     } else if (this.boilerForm.controls.thermodynamicQuantity.value === 1) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
+      displayUnit = this.settings.steamSpecificEnthalpyMeasurement;
       return displayUnit;
     } else if (this.boilerForm.controls.thermodynamicQuantity.value === 2) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
+      displayUnit = this.settings.steamSpecificEntropyMeasurement;
       return displayUnit;
     } else if (this.boilerForm.controls.thermodynamicQuantity.value === 3) {
       return displayUnit;
@@ -72,5 +65,42 @@ export class BoilerFormComponent implements OnInit {
     this.boilerForm.controls.quantityValue.setValue(0);
     this.boilerForm.controls.quantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
     this.calculate();
+  }
+
+  openBoilerEfficiencyModal() {
+    // if (this.boilerForm.controls.fuelType.value == 0) {
+    //   this.stackLossService.stackLossInput = {
+    //     flueGasType: this.boilerForm.controls.fuelType.value,
+    //     flueGasByVolume: undefined,
+    //     flueGasByMass: {
+    //       gasTypeId: this.boilerForm.controls.fuel.value,
+    //       oxygenCalculationMethod: "Excess Air"
+    //     },
+    //     name: undefined
+    //   }
+
+    // } else {
+    //   this.stackLossService.stackLossInput = {
+    //     flueGasType: this.boilerForm.controls.fuelType.value,
+    //     flueGasByMass: undefined,
+    //     flueGasByVolume: {
+    //       gasTypeId: this.boilerForm.controls.fuel.value,
+    //       oxygenCalculationMethod: "Excess Air"
+    //     },
+    //     name: undefined
+    //   }
+    // }
+    this.showBoilerEfficiencyModal = true;
+    this.boilerService.modalOpen.next(this.showBoilerEfficiencyModal);
+  }
+
+  closeBoilerEfficiencyModal() {
+    this.showBoilerEfficiencyModal = false;
+    this.boilerService.modalOpen.next(this.showBoilerEfficiencyModal)
+  }
+
+  setBoilerEfficiencyAndClose(efficiency: number) {
+    this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
+    this.closeBoilerEfficiencyModal();
   }
 }

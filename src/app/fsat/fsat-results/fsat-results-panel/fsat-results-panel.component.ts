@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, HostListener } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { FSAT, FsatOutput } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { FsatService } from '../../fsat.service';

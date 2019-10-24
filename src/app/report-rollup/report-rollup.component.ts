@@ -1,15 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { ReportRollupService } from './report-rollup.service';
-import { PhastReportService } from '../phast/phast-report/phast-report.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
-import { AssessmentService } from '../assessment/assessment.service';
 import { Calculator } from '../shared/models/calculators';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { ActivatedRoute } from '../../../node_modules/@angular/router';
 import { ReportItem } from './report-rollup-models';
 
 @Component({
@@ -21,7 +18,7 @@ export class ReportRollupComponent implements OnInit {
 
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
-  @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
+  @ViewChild('reportTemplate', { static: false }) reportTemplate: TemplateRef<any>;
   _reportAssessments: Array<ReportItem>;
   _phastAssessments: Array<ReportItem>;
   _psatAssessments: Array<ReportItem>;
@@ -39,13 +36,13 @@ export class ReportRollupComponent implements OnInit {
   isSummaryVisible: boolean = true;
   createdDate: Date;
   settings: Settings;
-  @ViewChild('psatRollupModal') public psatRollupModal: ModalDirective;
-  @ViewChild('unitModal') public unitModal: ModalDirective;
-  @ViewChild('phastRollupModal') public phastRollupModal: ModalDirective;
-  @ViewChild('fsatRollupModal') public fsatRollupModal: ModalDirective;
-  @ViewChild('ssmtRollupModal') public ssmtRollupModal: ModalDirective;
+  @ViewChild('psatRollupModal', { static: false }) public psatRollupModal: ModalDirective;
+  @ViewChild('unitModal', { static: false }) public unitModal: ModalDirective;
+  @ViewChild('phastRollupModal', { static: false }) public phastRollupModal: ModalDirective;
+  @ViewChild('fsatRollupModal', { static: false }) public fsatRollupModal: ModalDirective;
+  @ViewChild('ssmtRollupModal', { static: false }) public ssmtRollupModal: ModalDirective;
 
-  @ViewChild('reportHeader') reportHeader: ElementRef;
+  @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
   // @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
 
   numPhasts: number = 0;
@@ -72,6 +69,7 @@ export class ReportRollupComponent implements OnInit {
   showFsatReportOptions: boolean = false;
   showPhastReportOptions: boolean = false;
   showSsmtReportOptions: boolean = false;
+  showTreasureHuntReportOptions: boolean = false;
   showRollupReportOptions: boolean;
   selectAll: boolean = false;
   printReportGraphs: boolean = false;
@@ -81,14 +79,17 @@ export class ReportRollupComponent implements OnInit {
   printPsatRollup: boolean = false;
   printPhastRollup: boolean = false;
   printFsatRollup: boolean = false;
+  printTreasureHuntRollup: boolean = false;
   printEnergyUsed: boolean = false;
   printExecutiveSummary: boolean = false;
   printEnergySummary: boolean = false;
   printLossesSummary: boolean = false;
+  printReportOpportunityPayback: boolean = false;
+  printReportOpportunitySummary: boolean = false;
 
   gatheringAssessments: boolean = true;
   sidebarCollapsed: boolean = false;
-  constructor(private activatedRoute: ActivatedRoute, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private phastReportService: PhastReportService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
+  constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();
@@ -303,6 +304,7 @@ export class ReportRollupComponent implements OnInit {
     this.printPsatRollup = false;
     this.printFsatRollup = false;
     this.printPhastRollup = false;
+    // this.printTreasureHuntRollup = false;
     // this.printSsmtRollup = false;
     this.printReportGraphs = false;
     this.printReportSankey = false;
@@ -312,6 +314,8 @@ export class ReportRollupComponent implements OnInit {
     this.printExecutiveSummary = false;
     this.printEnergySummary = false;
     this.printLossesSummary = false;
+    this.printReportOpportunityPayback = false;
+    this.printReportOpportunitySummary = false;
   }
 
   togglePrint(section: string): void {
@@ -322,6 +326,7 @@ export class ReportRollupComponent implements OnInit {
           this.printPsatRollup = true;
           this.printPhastRollup = true;
           this.printFsatRollup = true;
+          // this.printTreasureHuntRollup = true;
           // this.printSsmtRollup = true;
           this.printReportGraphs = true;
           this.printReportSankey = true;
@@ -331,11 +336,14 @@ export class ReportRollupComponent implements OnInit {
           this.printEnergyUsed = true;
           this.printEnergySummary = true;
           this.printLossesSummary = true;
+          this.printReportOpportunityPayback = true;
+          this.printReportOpportunitySummary = true;
         }
         else {
           this.printPsatRollup = false;
           this.printPhastRollup = false;
           this.printFsatRollup = false;
+          // this.printTreasureHuntRollup = false;
           // this.printSsmtRollup = false;
           this.printResults = false;
           this.printReportGraphs = false;
@@ -345,6 +353,8 @@ export class ReportRollupComponent implements OnInit {
           this.printEnergyUsed = false;
           this.printEnergySummary = false;
           this.printLossesSummary = false;
+          this.printReportOpportunityPayback = false;
+          this.printReportOpportunitySummary = false;
         }
         break;
       }
@@ -360,6 +370,10 @@ export class ReportRollupComponent implements OnInit {
         this.printFsatRollup = !this.printFsatRollup;
         break;
       }
+      // case "treasureHuntRollup": {
+      //   this.printTreasureHuntRollup = !this.printTreasureHuntRollup;
+      //   break;
+      // }
       // case "ssmtRollup": {
       //   this.printSsmtRollup = !this.printSsmtRollup;
       //   break;
@@ -396,6 +410,12 @@ export class ReportRollupComponent implements OnInit {
         this.printLossesSummary = !this.printLossesSummary;
         break;
       }
+      case "opportunityPayback": {
+        this.printReportOpportunityPayback = !this.printReportOpportunityPayback;
+      }
+      case "opportunitySummary": {
+        this.printReportOpportunitySummary = !this.printReportOpportunitySummary;
+      }
       default: {
         break;
       }
@@ -429,7 +449,6 @@ export class ReportRollupComponent implements OnInit {
     //10000000 is excessive, put it at whatever you want
     setTimeout(() => {
       let win = this.windowRefService.nativeWindow;
-      let doc = this.windowRefService.getDoc();
       win.print();
       //after printing hide content again
       // this.phastReportService.showPrint.next(false);
@@ -453,10 +472,10 @@ export class ReportRollupComponent implements OnInit {
   }
 
   checkActiveAssessment($event) {
-    let doc = this.windowRefService.getDoc();
     let scrollAmount = $event.target.scrollTop;
     if (this.reportHeader && scrollAmount) {
       this._reportAssessments.forEach(item => {
+        let doc = this.windowRefService.getDoc();
         let element = doc.getElementById('assessment_' + item.assessment.id);
         let diff = Math.abs(Math.abs(this.reportHeader.nativeElement.clientHeight - element.offsetTop) - scrollAmount);
         if (diff > 0 && diff < 50) {

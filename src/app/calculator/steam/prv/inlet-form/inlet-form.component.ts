@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ThermodynamicQuantityOptions, Quantity } from '../../../../shared/models/steam/steam-inputs';
-import { PrvService } from '../prv.service';
 import { SteamService } from '../../steam.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
@@ -21,7 +20,7 @@ export class InletFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   thermoOptions: Array<Quantity>;
-  constructor(private steamService: SteamService, private prvService: PrvService) { }
+  constructor(private steamService: SteamService) { }
 
   ngOnInit() {
     this.thermoOptions = ThermodynamicQuantityOptions;
@@ -43,24 +42,16 @@ export class InletFormComponent implements OnInit {
     return selectedQuantity.display;
   }
 
-  getDisplayUnit(unit: string) {
-    if (unit) {
-      return this.steamService.getDisplayUnit(unit);
-    } else {
-      return unit;
-    }
-  }
-
   getOptionDisplayUnit() {
     let displayUnit: string;
     if (this.inletForm.controls.thermodynamicQuantity.value === 0) {
-      displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      displayUnit = this.settings.steamTemperatureMeasurement;
       return displayUnit;
     } else if (this.inletForm.controls.thermodynamicQuantity.value === 1) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
+      displayUnit = this.settings.steamSpecificEnthalpyMeasurement;
       return displayUnit;
     } else if (this.inletForm.controls.thermodynamicQuantity.value === 2) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
+      displayUnit = this.settings.steamSpecificEntropyMeasurement;
       return displayUnit;
     } else if (this.inletForm.controls.thermodynamicQuantity.value === 3) {
       return displayUnit;

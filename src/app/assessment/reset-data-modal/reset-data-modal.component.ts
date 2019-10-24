@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
@@ -15,6 +14,7 @@ import { CoreService } from '../../core/core.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { AssessmentService } from '../assessment.service';
 import { MockSsmt, MockSsmtSettings } from '../../core/mockSsmt';
+import { MockTreasureHunt, MockTreasureHuntSettings } from '../../core/mockTreasureHunt';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -24,7 +24,7 @@ import { MockSsmt, MockSsmtSettings } from '../../core/mockSsmt';
 export class ResetDataModalComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<boolean>();
-  @ViewChild('resetSystemSettingsModal') public resetSystemSettingsModal: ModalDirective;
+  @ViewChild('resetSystemSettingsModal', { static: false }) public resetSystemSettingsModal: ModalDirective;
 
   resetAll: boolean = false;
   resetAppSettings: boolean = false;
@@ -32,7 +32,7 @@ export class ResetDataModalComponent implements OnInit {
   resetUserAssessments: boolean = false;
   resetCustomMaterials: boolean = false;
   deleting: boolean = false;
-  constructor(private suiteDbService: SuiteDbService, private assessmentService: AssessmentService, private calculatorDbService: CalculatorDbService, private coreService: CoreService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService) { }
+  constructor(private assessmentService: AssessmentService, private calculatorDbService: CalculatorDbService, private coreService: CoreService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService) { }
 
   ngOnInit() {
   }
@@ -217,6 +217,20 @@ export class ResetDataModalComponent implements OnInit {
       this.createSsmtExample(id);
     }
 
+    //ssmt
+    let treasureHuntExample: Assessment = this.assessmentDbService.getTreasureHuntExample();
+    if (treasureHuntExample) {
+      //exists
+      //delete
+      this.indexedDbService.deleteAssessment(treasureHuntExample.id).then(() => {
+        //create
+        this.createTreasureHuntExample(id);
+      });
+    } else {
+      //create
+      this.createTreasureHuntExample(id);
+    }
+
   }
 
   createPhastExample(dirId: number): Promise<any> {
@@ -282,6 +296,19 @@ export class ResetDataModalComponent implements OnInit {
     });
   }
 
+  createTreasureHuntExample(dirId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      MockTreasureHunt.directoryId = dirId;
+      //add example
+      this.indexedDbService.addAssessment(MockTreasureHunt).then(assessmentId => {
+        MockTreasureHuntSettings.assessmentId = assessmentId;
+        //add settings
+        this.indexedDbService.addSettings(MockTreasureHuntSettings).then(() => {
+          resolve(true);
+        });
+      });
+    });
+  }
 
   resetFactoryUserAssessments() {
     //reset entire Db

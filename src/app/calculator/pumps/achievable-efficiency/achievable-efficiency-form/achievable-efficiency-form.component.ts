@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { PsatWarningService } from '../../../../psat/psat-warning.service';
@@ -17,16 +17,24 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   calculate = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
+  @Input()
+  toggleExampleData: boolean;
 
   pumpTypes: Array<{ display: string, value: number }>;
   flowRateWarning: string = null;
   constructor(private psatWarningsService: PsatWarningService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.pumpTypes = pumpTypesConstant;
+    this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
     //remove specified efficiency
     this.pumpTypes.pop();
     this.checkWarnings();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleExampleData && !changes.toggleExampleData.firstChange) {
+      this.emitChange();
+    }
   }
 
   emitChange() {

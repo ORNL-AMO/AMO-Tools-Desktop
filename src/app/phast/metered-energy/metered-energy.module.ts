@@ -12,7 +12,6 @@ import { MeteredEnergyResultsComponent } from './metered-energy-results/metered-
 @NgModule({
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     FormsModule
   ],
   declarations: [

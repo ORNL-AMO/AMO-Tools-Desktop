@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
-import { TreasureHunt } from '../shared/models/treasure-hunt';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -124,9 +123,9 @@ export class AssessmentService {
       operatingHours: {
         weeksPerYear: 52,
         daysPerWeek: 7,
-        shiftsPerDay: 3,
-        hoursPerShift: 8,
-        hoursPerYear: 8736
+        // shiftsPerDay: 3,
+        // hoursPerShift: 8,
+        hoursPerYear: 8760
       },
       operatingCosts: {
         fuelCost: 8.00,
@@ -221,11 +220,12 @@ export class AssessmentService {
       name: '',
       setupDone: false,
       operatingHours: {
-        weeksPerYear: 52,
+        weeksPerYear: 52.14,
         daysPerWeek: 7,
-        shiftsPerDay: 3,
-        hoursPerShift: 8,
-        hoursPerYear: 8736
+        hoursPerDay: 24,
+        minutesPerHour: 60,
+        secondsPerMinute: 60,
+        hoursPerYear: 8760
       },
       operatingCosts: {
         fuelCost: 5.78,

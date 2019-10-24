@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
@@ -29,7 +29,7 @@ export class FolderSummaryComponent implements OnInit {
   @Input()
   assessments: Array<Assessment>;
 
-  @ViewChild('settingsModal') public settingsModal: ModalDirective;
+  @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
 
   numAssessments: number = 0;
   numPhasts: number = 0;
@@ -124,7 +124,6 @@ export class FolderSummaryComponent implements OnInit {
               }
             }
             else {
-              console.log('calculate');
               results = this.calculateModelService.initDataAndRun(assessment.ssmt, settings, true, false);
             }
             results.outputData.boilerFuelUsage = this.convertUnitsService.value(results.outputData.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)

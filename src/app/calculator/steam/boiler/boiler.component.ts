@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
-import { BoilerInput } from '../../../shared/models/steam/steam-inputs';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { SteamService } from '../steam.service';
-import { BoilerService } from './boiler.service';
-import { BoilerOutput } from '../../../shared/models/steam/steam-outputs';
+import {Component, OnInit, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {Settings} from '../../../shared/models/settings';
+import {FormGroup} from '@angular/forms';
+import {BoilerInput} from '../../../shared/models/steam/steam-inputs';
+import {SettingsDbService} from '../../../indexedDb/settings-db.service';
+import {SteamService} from '../steam.service';
+import {BoilerService} from './boiler.service';
+import {BoilerOutput} from '../../../shared/models/steam/steam-outputs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-boiler-calculator',
@@ -15,19 +16,22 @@ import { BoilerOutput } from '../../../shared/models/steam/steam-outputs';
 export class BoilerComponent implements OnInit {
   @Input()
   settings: Settings;
-  
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
   boilerForm: FormGroup;
   input: BoilerInput;
   results: BoilerOutput;
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private boilerService: BoilerService) { }
+  isModalOpen: boolean;
+  modalOpenSub: Subscription;
+  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private boilerService: BoilerService) {
+  }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -38,7 +42,11 @@ export class BoilerComponent implements OnInit {
     }
     this.initForm();
     this.calculate(this.boilerForm);
+    this.modalOpenSub = this.boilerService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    })
   }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
@@ -46,21 +54,21 @@ export class BoilerComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.modalOpenSub.unsubscribe();
+    this.boilerService.modalOpen.next(false);
   }
 
-  btnResetData() {
-    this.boilerForm = this.boilerService.initForm(this.settings);
-    this.calculate(this.boilerForm);
-  }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
+
   setTab(str: string) {
     this.tabSelect = str;
   }
+
   changeField(str: string) {
     this.currentField = str;
   }
@@ -69,7 +77,7 @@ export class BoilerComponent implements OnInit {
     if (this.boilerService.boilerInput) {
       this.boilerForm = this.boilerService.getFormFromObj(this.boilerService.boilerInput, this.settings);
     } else {
-      this.boilerForm = this.boilerService.initForm(this.settings);
+      this.boilerForm = this.boilerService.resetForm(this.settings);
     }
   }
 
@@ -115,5 +123,15 @@ export class BoilerComponent implements OnInit {
       combustionEff: 0
     };
     return results;
+  }
+
+  btnResetData() {
+    this.boilerForm = this.boilerService.resetForm(this.settings);
+    this.calculate(this.boilerForm);
+  }
+
+  btnGenerateExample() {
+    this.boilerForm = this.boilerService.initForm(this.settings);
+    this.calculate(this.boilerForm);
   }
 }

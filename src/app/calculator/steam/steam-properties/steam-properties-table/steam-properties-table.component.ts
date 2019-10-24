@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 
@@ -11,24 +11,30 @@ export class SteamPropertiesTableComponent implements OnInit {
   @Input()
   toggleResetData: boolean;
   @Input()
+  toggleExampleData: boolean;
+  @Input()
   settings: Settings;
   @Input()
-  data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number };
+  data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number };
 
-  rowData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>;
+  rowData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>;
 
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
     if (this.steamService.steamPropertiesData) {
       this.rowData = this.steamService.steamPropertiesData;
     } else {
-      this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>();
+      this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>();
     }
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
       this.resetTable();
+    } if (changes.toggleExampleData && !changes.toggleExampleData.firstChange) {
+      //this.addRow();
     }
     if (changes.data && !changes.data.firstChange) {
       this.addRow();
@@ -44,7 +50,7 @@ export class SteamPropertiesTableComponent implements OnInit {
   }
 
   resetTable() {
-    this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>();
+    this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>();
     this.steamService.steamPropertiesData = this.rowData;
   }
 
@@ -52,8 +58,7 @@ export class SteamPropertiesTableComponent implements OnInit {
     this.rowData.splice(index, 1);
   }
 
-  getDisplayUnit(unit: string) {
-    return this.steamService.getDisplayUnit(unit);
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText.replace(/Delete/g, '');
   }
-
 }

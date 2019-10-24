@@ -3,8 +3,7 @@ import { CashFlowResults } from '../cash-flow';
 import { CashFlowForm } from '../cash-flow';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
-import { CashFlowService } from '../cash-flow.service';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import { Subscription } from '../../../../../../node_modules/rxjs';
 
 
@@ -21,11 +20,11 @@ export class CashFlowDiagramComponent implements OnInit {
   @Input()
   cashFlowForm: CashFlowForm;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeGraph();
@@ -92,7 +91,7 @@ export class CashFlowDiagramComponent implements OnInit {
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
   calcSub: Subscription;
-  constructor(private cashFlowService: CashFlowService, private svgToPngService: SvgToPngService) {
+  constructor(private svgToPngService: SvgToPngService) {
 
   }
 

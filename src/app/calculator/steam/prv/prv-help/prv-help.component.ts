@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PrvRanges, PrvService, FeedwaterRanges } from '../prv.service';
-import { SteamService } from '../../steam.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -17,10 +16,12 @@ export class PrvHelpComponent implements OnInit {
   thermodynamicQuantity: number;
   @Input()
   feedwaterThermodynamicQuantity: number;
-
+  @Input()
+  isSuperHeating: boolean;
+  
   rangeValues: PrvRanges;
   feedwaterRangesValues: FeedwaterRanges;
-  constructor(private prvService: PrvService, private steamService: SteamService) { }
+  constructor(private prvService: PrvService) { }
 
   ngOnInit() {
     this.getRanges();
@@ -35,30 +36,21 @@ export class PrvHelpComponent implements OnInit {
     }
   }
 
-
   getRanges() {
     this.rangeValues = this.prvService.getRangeValues(this.settings, this.thermodynamicQuantity);
     this.feedwaterRangesValues = this.prvService.getFeedwaterRangeValues(this.settings, this.feedwaterThermodynamicQuantity);
   }
 
-  getDisplayUnit(unit: string) {
-    if (unit) {
-      return this.steamService.getDisplayUnit(unit);
-    } else {
-      return unit;
-    }
-  }
-
   getOptionDisplayUnit(quantity: number) {
     let displayUnit: string;
     if (quantity === 0) {
-      displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      displayUnit = this.settings.steamTemperatureMeasurement;
       return displayUnit;
     } else if (quantity === 1) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
+      displayUnit = this.settings.steamSpecificEnthalpyMeasurement;
       return displayUnit;
     } else if (quantity === 2) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
+      displayUnit = this.settings.steamSpecificEntropyMeasurement;
       return displayUnit;
     } else if (quantity === 3) {
       return displayUnit;

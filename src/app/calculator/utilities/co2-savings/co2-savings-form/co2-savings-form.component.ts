@@ -3,6 +3,7 @@ import { OtherFuel, otherFuels } from './co2FuelSavingsFuels';
 import { eGridRegion, electricityGridRegions } from './electricityGridRegions';
 import * as _ from 'lodash';
 import { Co2SavingsData } from '../co2-savings.service';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-co2-savings-form',
   templateUrl: './co2-savings-form.component.html',
@@ -17,6 +18,8 @@ export class Co2SavingsFormComponent implements OnInit {
   modId: string;
   @Input()
   index: number;
+  @Input()
+  settings: Settings;
 
   otherFuels: Array<OtherFuel>;
   eGridRegions: Array<eGridRegion>;

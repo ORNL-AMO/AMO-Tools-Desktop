@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CompareService } from '../../compare.service';
 import { PsatService } from '../../psat.service';
 import { FormGroup } from '@angular/forms';
@@ -26,9 +26,9 @@ export class ModifyConditionsTabsComponent implements OnInit {
   displayFieldDataTooltip: boolean;
   fieldDataBadgeHover: boolean;
 
-  pumpFluidBadgeClass: Array<string> = [];
-  motorBadgeClass: Array<string> = [];
-  fieldDataBadgeClass: Array<string> = [];
+  pumpFluidBadgeClass: string;
+  motorBadgeClass: string;
+  fieldDataBadgeClass: string;
   resultsSub: Subscription;
   modTabSub: Subscription;
   modifyTab: string;
@@ -64,7 +64,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   }
 
   setFieldDataBadgeClass() {
-    let badgeStr: Array<string> = ['success'];
+    let badgeStr: string = 'success';
     let tmpBaselineFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this.compareService.baselinePSAT.inputs, true);
     let validBaselineTest = tmpBaselineFieldDataForm.valid;
     let validModTest = true;
@@ -76,11 +76,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     let inputError = this.checkFieldDataInputError();
     if (!validBaselineTest || !validModTest) {
-      badgeStr = ['missing-data'];
+      badgeStr = 'missing-data';
     } else if (inputError) {
-      badgeStr = ['input-error'];
+      badgeStr = 'input-error';
     } else if (isDifferent) {
-      badgeStr = ['loss-different'];
+      badgeStr = 'loss-different';
     }
     return badgeStr;
   }
@@ -105,7 +105,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   }
 
   setPumpFluidBadgeClass() {
-    let badgeStr: Array<string> = ['success'];
+    let badgeStr: string = 'success';
     let tmpBaselinePumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this.compareService.baselinePSAT.inputs);
     let validBaselineTest = tmpBaselinePumpFluidForm.valid;
     let validModTest = true;
@@ -117,11 +117,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     let inputError = this.checkPumpFluidWarnings();
     if (!validBaselineTest || !validModTest) {
-      badgeStr = ['missing-data'];
+      badgeStr = 'missing-data';
     } else if (inputError) {
-      badgeStr = ['input-error'];
+      badgeStr = 'input-error';
     } else if (isDifferent) {
-      badgeStr = ['loss-different'];
+      badgeStr = 'loss-different';
     }
     return badgeStr;
   }
@@ -146,7 +146,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   }
 
   setMotorBadgeClass() {
-    let badgeStr: Array<string> = ['success'];
+    let badgeStr: string = 'success';
     let tmpBaselineMotorForm: FormGroup = this.motorService.getFormFromObj(this.compareService.baselinePSAT.inputs);
     let validBaselineTest = tmpBaselineMotorForm.valid;
     let inputError = this.checkMotorInputError();
@@ -158,11 +158,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
       isDifferent = this.compareService.checkMotorDifferent();
     }
     if (!validBaselineTest || !validModTest) {
-      badgeStr = ['missing-data'];
+      badgeStr = 'missing-data';
     } else if (inputError) {
-      badgeStr = ['input-error'];
+      badgeStr = 'input-error';
     } else if (isDifferent) {
-      badgeStr = ['loss-different'];
+      badgeStr = 'loss-different';
     }
     return badgeStr;
   }

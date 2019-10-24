@@ -3,10 +3,11 @@ import { PhastService } from '../../../../phast/phast.service';
 import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import * as d3 from 'd3';
 import { Settings } from '../../../../shared/models/settings';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
-import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
+import { LineChartHelperService } from '../../../../shared/helper-services/line-chart-helper.service';
 import { O2EnrichmentService } from '../o2-enrichment.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-o2-enrichment-graph',
@@ -25,8 +26,8 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   @Input()
   settings: Settings;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeGraph();
@@ -96,7 +97,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   toggleCalculate: boolean;
   @Input()
   toggleResetData: boolean;
-  constructor(private o2EnrichmentService: O2EnrichmentService, private lineChartHelperService: LineChartHelperService, private phastService: PhastService, private differs: KeyValueDiffers, private svgToPngService: SvgToPngService) {
+  constructor(private o2EnrichmentService: O2EnrichmentService, private lineChartHelperService: LineChartHelperService, private phastService: PhastService, private differs: KeyValueDiffers, private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) {
     this.differ = differs.find({}).create();
   }
 
@@ -139,7 +140,6 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
-      console.log('o2enrichmentgraph resetTableData()');
       this.resetTableData();
     }
     if (!this.isFirstChange && changes) {
@@ -150,8 +150,14 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   }
 
   initColumnTitles() {
-    let fuelTempUnit = this.settings.temperatureMeasurement;
-    this.columnTitles = ['O<sub>2</sub> in Air (%)', 'Fuel Savings (%)', 'Combustion Temp', 'Flue O<sub>2</sub>', 'Fuel Temp (' + fuelTempUnit + ')'];
+    let fuelTempUnit: string = 'F';
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      fuelTempUnit = 'C';
+    }
+    let displayUnit: string = this.convertUnitsService.getUnit(fuelTempUnit).unit.name.display;
+    displayUnit = displayUnit.replace('(', '');
+    displayUnit = displayUnit.replace(')', '');
+    this.columnTitles = ['O<sub>2</sub> in Air (%)', 'Fuel Savings (%)', 'Combustion Temp', 'Flue O<sub>2</sub>', 'Fuel Temp (' + displayUnit + ')'];
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -304,7 +310,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     this.svg.append("path")
       .attr("id", "areaUnderCurve");
 
-    this.lineChartHelperService.setXAxisLabel(this.svg, this.width, this.height, 0, 70, "O2 in Air (%)");
+    this.lineChartHelperService.setXAxisLabel(this.svg, this.width, this.height, 0, 70, "O&#x2082; in Air (%)");
     this.lineChartHelperService.setYAxisLabel(this.svg, this.width, this.height, -60, 0, "Fuel Savings (%)");
 
     this.svg.style("display", null);
@@ -622,7 +628,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       let fuelTempData: string;
       const o2EnrichmentPoint = {
         operatingHours: this.o2Enrichment.operatingHours,
-        operatingHoursEnriched: this.o2Enrichment.operatingHoursEnriched,  
+        operatingHoursEnriched: this.o2Enrichment.operatingHoursEnriched,
         o2CombAir: this.o2Enrichment.o2CombAir,
         o2CombAirEnriched: this.xPosition,
         flueGasTemp: this.o2Enrichment.flueGasTemp,
@@ -633,7 +639,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
         combAirTempEnriched: this.lines[i].combAirTempEnriched,
         fuelConsumption: this.o2Enrichment.fuelConsumption,
         fuelCost: this.o2Enrichment.fuelCost,
-        fuelCostEnriched: this.o2Enrichment.fuelCostEnriched  
+        fuelCostEnriched: this.o2Enrichment.fuelCostEnriched
       };
       if (this.xPosition == null) {
         o2EnrichmentPoint.o2CombAirEnriched = this.lines[i].o2CombAirEnriched;

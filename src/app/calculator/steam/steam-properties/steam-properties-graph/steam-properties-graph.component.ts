@@ -3,7 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import * as d3 from 'd3';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 @Component({
   selector: 'app-steam-properties-graph',
@@ -26,9 +26,9 @@ export class SteamPropertiesGraphComponent implements OnInit {
   @Input()
   plotReady: boolean;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild('ngChart') ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
+  @ViewChild('btnDownload', { static: false }) btnDownload: ElementRef;
   // @HostListener('window:resize', ['$event'])
   // onResize(event) {
   //   this.resizeGraph();
@@ -120,13 +120,39 @@ export class SteamPropertiesGraphComponent implements OnInit {
 
   ngOnInit() {
     this.initData();
+
+  }
+
+  ngAfterViewInit() {
     this.initCanvas();
     if (this.chartContainerHeight && this.chartContainerWidth) {
       this.buildChart();
     }
   }
 
-  ngAfterViewInit() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.chartContainerWidth || changes.chartContainerHeight) {
+      if (this.dataPopulated && this.canvasReady) {
+        this.buildChart();
+      }
+    }
+
+    if (changes.steamPropertiesOutput) {
+      if (changes.steamPropertiesOutput.firstChange) {
+        if (this.steamPropertiesOutput !== undefined) {
+          setTimeout(() => {
+            if (this.dataPopulated && this.canvasReady && this.plotReady) {
+              this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+            }
+          }, 500);
+        }
+      }
+      else {
+        if (this.dataPopulated && this.canvasReady && this.plotReady && this.steamPropertiesOutput !== undefined) {
+          this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+        }
+      }
+    }
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -207,30 +233,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.chartContainerWidth || changes.chartContainerHeight) {
-      if (this.dataPopulated && this.canvasReady) {
-        this.buildChart();
-      }
-    }
-
-    if (changes.steamPropertiesOutput) {
-      if (changes.steamPropertiesOutput.firstChange) {
-        if (this.steamPropertiesOutput !== undefined) {
-          setTimeout(() => {
-            if (this.dataPopulated && this.canvasReady && this.plotReady) {
-              this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
-            }
-          }, 500);
-        }
-      }
-      else {
-        if (this.dataPopulated && this.canvasReady && this.plotReady && this.steamPropertiesOutput !== undefined) {
-          this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
-        }
-      }
-    }
-  }
 
 
   initData() {
@@ -574,8 +576,11 @@ export class SteamPropertiesGraphComponent implements OnInit {
   }
 
   addYAxisLabel() {
-    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement !== this.defaultTempUnit) {
+    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement == 'F') {
       this.yAxisLabel = "Temperature &#8457;"; // F
+    }
+    else if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement == 'K') {
+      this.yAxisLabel = "Temperature K"; // K
     }
     else {
       this.yAxisLabel = "Temperature &#8451;"; // C
@@ -680,7 +685,13 @@ export class SteamPropertiesGraphComponent implements OnInit {
         rescale = true;
       }
     }
-
+    let yBound = 800; // F
+    if (this.settings.steamTemperatureMeasurement == 'C') {
+      yBound = this.convertUnitsService.value(yBound).from('F').to(this.settings.steamTemperatureMeasurement);
+    } else if (this.settings.steamTemperatureMeasurement == 'K') {
+      yBound = this.convertUnitsService.value(yBound).from('F').to('C') + 273.15;
+    }
+    this.yMax = Math.max(this.yMax, yBound);
     return rescale;
   }
 

@@ -1,8 +1,9 @@
 import { Component, OnInit, ElementRef, HostListener, ViewChild, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { AirVelocityInput, PipeSizes } from "../../../shared/models/standalone";
-import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
+import { AirVelocityService } from './air-velocity.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-air-velocity',
@@ -12,8 +13,8 @@ import { Settings } from '../../../shared/models/settings';
 export class AirVelocityComponent implements OnInit {
   @Input()
   settings: Settings;
-  
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -26,10 +27,13 @@ export class AirVelocityComponent implements OnInit {
   inputs: AirVelocityInput;
   outputs: PipeSizes;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
+  constructor(private airVelocityService: AirVelocityService, private standaloneService: StandaloneService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.inputs = this.compressedAirService.airVelocityInputs;    
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.inputs = this.airVelocityService.airVelocityInputs;
     this.getAirVelocity(this.inputs);
   }
   ngAfterViewInit() {
@@ -39,12 +43,20 @@ export class AirVelocityComponent implements OnInit {
   }
 
   btnResetData() {
-    this.inputs = {
-      airFlow: 0,
-      pipePressure: 0,
-      atmosphericPressure: 0,
-    };
-    this.compressedAirService.airVelocityInputs = this.inputs;
+    this.inputs = this.airVelocityService.getDefault();
+    this.airVelocityService.airVelocityInputs = this.inputs;
+    this.getAirVelocity(this.inputs);
+  }
+
+  //provide functionality to "Generate Example" button,
+  //reset data function should have most of the structure already
+  btnGenerateExample() {
+    //each calculator will have some form of an input object, assign default values from pdf
+    this.inputs = this.airVelocityService.getExample();
+    //need to handle conversion if unit of measurement is set to Metric
+    this.inputs = this.airVelocityService.convertAirVelocityExample(this.inputs, this.settings);
+    this.airVelocityService.airVelocityInputs = this.inputs;
+    //execute calculation procedure to update calculator with example values
     this.getAirVelocity(this.inputs);
   }
 
@@ -53,7 +65,7 @@ export class AirVelocityComponent implements OnInit {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
-  getAirVelocity (inputs: AirVelocityInput) {
+  getAirVelocity(inputs: AirVelocityInput) {
     this.outputs = this.standaloneService.airVelocity(inputs, this.settings);
   }
 

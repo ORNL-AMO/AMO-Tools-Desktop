@@ -1,3 +1,5 @@
+import { OperatingHours } from "./operations";
+
 export interface PSAT {
   inputs?: PsatInputs;
   outputs?: PsatOutputs;
@@ -7,6 +9,7 @@ export interface PSAT {
   savings?: number;
   optimizationRating?: number;
   setupDone?: boolean;
+  operatingHours?: OperatingHours;
 }
 
 export interface PsatInputs {

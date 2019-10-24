@@ -17,7 +17,7 @@ export class FsatRollupGraphsComponent implements OnInit {
   @Input()
   printView: boolean;
 
-  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
+  @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
 
   chartContainerWidth: number;
   isUpdate: boolean = false;

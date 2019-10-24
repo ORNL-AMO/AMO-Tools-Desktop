@@ -9,6 +9,8 @@ import { OpportunitiesPaybackDetails } from '../../../shared/models/treasure-hun
 export class OpportunityPaybackComponent implements OnInit {
   @Input()
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
+  @Input()
+  showPrint: boolean;
 
   constructor() { }
 

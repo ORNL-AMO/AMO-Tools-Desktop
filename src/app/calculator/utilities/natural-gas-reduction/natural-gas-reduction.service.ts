@@ -15,7 +15,7 @@ export class NaturalGasReductionService {
 
   baselineData: Array<NaturalGasReductionData>;
   modificationData: Array<NaturalGasReductionData>;
-
+  operatingHours: OperatingHours;
   constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   // resetData(settings: Settings) {
@@ -52,7 +52,7 @@ export class NaturalGasReductionService {
       outletTemperature: 40,
       systemEfficiency: 80
     };
-    let hoursPerYear: number = 8736;
+    let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
@@ -69,6 +69,52 @@ export class NaturalGasReductionService {
       otherMethodData: defaultOtherData,
       airMassFlowData: defaultAirMassFlowData,
       waterMassFlowData: defaultWaterMassFlowData,
+      units: 1
+    }
+    return obj;
+  }
+
+  generateExample(settings: Settings, isBaseline: boolean): NaturalGasReductionData {
+    let flowRate: number = isBaseline ? 5 : 4
+    if (settings.unitsOfMeasure !== 'Imperial') {
+      flowRate = this.convertUnitsService.roundVal(this.convertUnitsService.value(flowRate).from('ft3').to('m3'), 2);
+    }
+    let exampleFlowMeterData: FlowMeterMethodData = {
+      flowRate: flowRate
+    };
+    let exampleOtherData: NaturalGasOtherMethodData = {
+      consumption: 89900.00
+    };
+    let exampleAirMassFlowMeasuredData: AirMassFlowMeasuredData = {
+      areaOfDuct: 5,
+      airVelocity: 10
+    };
+    let exampleAirMassFlowNameplateData: AirMassFlowNameplateData = {
+      airFlow: 50
+    };
+    let exampleAirMassFlowData: AirMassFlowData = {
+      isNameplate: true,
+      airMassFlowMeasuredData: exampleAirMassFlowMeasuredData,
+      airMassFlowNameplateData: exampleAirMassFlowNameplateData,
+      inletTemperature: 25,
+      outletTemperature: 40,
+      systemEfficiency: 80
+    };
+    let exampleWaterMassFlowData: WaterMassFlowData = {
+      waterFlow: 25,
+      inletTemperature: 25,
+      outletTemperature: 40,
+      systemEfficiency: 80
+    };
+    let obj: NaturalGasReductionData = {
+      name: 'Equipment #1',
+      operatingHours: 6000,
+      fuelCost: 4.99,
+      measurementMethod: 0,
+      flowMeterMethodData: exampleFlowMeterData,
+      otherMethodData: exampleOtherData,
+      airMassFlowData: exampleAirMassFlowData,
+      waterMassFlowData: exampleWaterMassFlowData,
       units: 1
     }
     return obj;
@@ -231,7 +277,9 @@ export class NaturalGasReductionService {
       naturalGasReductionInputVec: inputArray
     };
     let results: NaturalGasReductionResult = this.standaloneService.naturalGasReduction(inputObj);
-    results = this.convertNaturalGasReductionResult(results, settings);
+    if (settings.unitsOfMeasure != 'Imperial') {
+      results = this.convertNaturalGasReductionResult(results);
+    }
     return results;
   }
 
@@ -271,8 +319,10 @@ export class NaturalGasReductionService {
           systemEfficiency: tmpWaterMassFlowData.systemEfficiency
         };
         tmpOtherMethodData = {
-          consumption: this.convertUnitsService.value(tmp.otherMethodData.consumption).from(settings.energyResultUnit).to('MMBtu')
+          consumption: this.convertUnitsService.value(tmp.otherMethodData.consumption).from('GJ').to('MMBtu')
         };
+        let fuelCostConversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu')
+        tmp.fuelCost = tmp.fuelCost / fuelCostConversionHelper;
       }
 
       inputArray[i] = {
@@ -292,19 +342,19 @@ export class NaturalGasReductionService {
 
   convertResults(results: NaturalGasReductionResults, settings: Settings): NaturalGasReductionResults {
     if (settings.unitsOfMeasure == 'Metric') {
-      results.baselineResults = this.convertNaturalGasReductionResult(results.baselineResults, settings);
+      results.baselineResults = this.convertNaturalGasReductionResult(results.baselineResults);
       if (results.modificationResults) {
-        results.modificationResults = this.convertNaturalGasReductionResult(results.modificationResults, settings);
+        results.modificationResults = this.convertNaturalGasReductionResult(results.modificationResults);
       }
     }
     return results;
   }
 
-  convertNaturalGasReductionResult(results: NaturalGasReductionResult, settings: Settings) {
+  convertNaturalGasReductionResult(results: NaturalGasReductionResult) {
     return {
-      energyUse: this.convertUnitsService.value(results.energyUse).from('MMBtu').to(settings.energyResultUnit),
+      energyUse: this.convertUnitsService.value(results.energyUse).from('MMBtu').to('GJ'),
       energyCost: results.energyCost,
-      heatFlow: this.convertUnitsService.value(results.heatFlow).from('MMBtu').to(settings.energyResultUnit),
+      heatFlow: this.convertUnitsService.value(results.heatFlow).from('MMBtu').to('GJ'),
       totalFlow: this.convertUnitsService.value(results.totalFlow).from('ft3/h').to('m3/h')
     }
   }

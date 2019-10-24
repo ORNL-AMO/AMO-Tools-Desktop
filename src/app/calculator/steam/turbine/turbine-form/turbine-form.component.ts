@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import { FormGroup, Validators } from '../../../../../../node_modules/@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../../steam.service';
+import {TurbineService} from "../turbine.service";
 
 @Component({
   selector: 'app-turbine-form',
@@ -14,6 +15,8 @@ export class TurbineFormComponent implements OnInit {
   turbineForm: FormGroup;
   @Input()
   settings: Settings;
+  @Input()
+  toggleGenerateExample: boolean;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
   @Output('emitCalculate')
@@ -39,10 +42,9 @@ export class TurbineFormComponent implements OnInit {
   ];
 
 
-  constructor(private steamService: SteamService) { }
+  constructor(private steamService: SteamService, private turbineService: TurbineService) { }
 
   ngOnInit() {
-    console.log(this.settings.steamPressureMeasurement);
     this.thermoOptions = ThermodynamicQuantityOptions;
     this.setValidators();
   }
@@ -63,24 +65,16 @@ export class TurbineFormComponent implements OnInit {
     return selectedQuantity.display;
   }
 
-  getDisplayUnit(unit: string) {
-    if (unit) {
-      return this.steamService.getDisplayUnit(unit);
-    } else {
-      return unit;
-    }
-  }
-
   getOptionDisplayUnit(quantity: number) {
     let displayUnit: string;
     if (quantity === 0) {
-      displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      displayUnit = this.settings.steamTemperatureMeasurement;
       return displayUnit;
     } else if (quantity === 1) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
+      displayUnit = this.settings.steamSpecificEnthalpyMeasurement;
       return displayUnit;
     } else if (quantity === 2) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
+      displayUnit = this.settings.steamSpecificEntropyMeasurement;
       return displayUnit;
     } else if (quantity === 3) {
       return displayUnit;

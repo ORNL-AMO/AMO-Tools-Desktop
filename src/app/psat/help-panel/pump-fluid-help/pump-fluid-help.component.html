@@ -122,6 +122,18 @@
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'specifiedDriveEfficiency'">
+    <h6>
+      Drive Efficiency
+      <br>
+      <small class="text-muted">
+        Drive efficiency is the approximate efficiency of the drive connecting the pump to the motor.
+        <hr>
+        The combined efficiency of the motor drive and VFD efficiency at the scenario’s load (if modifying system using
+        a VFD). VFD efficiency can be approximated as 95% if unknown.
+      </small>
+    </h6>
+  </div>
 
   <div class="my-2" *ngIf="currentField == 'fluidType'">
     <h6>

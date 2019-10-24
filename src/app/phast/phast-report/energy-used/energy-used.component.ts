@@ -7,7 +7,6 @@ import { MeteredEnergyService } from '../../metered-energy/metered-energy.servic
 import { DesignedEnergyService } from '../../designed-energy/designed-energy.service';
 import { PhastResultsService } from '../../phast-results.service';
 import { SuiteDbService } from '../../../suiteDb/suite-db.service';
-import { PhastService } from '../../phast.service';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
@@ -56,7 +55,7 @@ export class EnergyUsedComponent implements OnInit {
   fuelUsedUnit: string;
   baseEnergyUnit: string;
   electricityHeatingValue: number;
-  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     let tmpResults = this.phastResultsService.getResults(this.phast, this.settings);

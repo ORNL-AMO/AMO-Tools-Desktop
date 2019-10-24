@@ -19,7 +19,7 @@ export class HeaderHelpComponent implements OnInit {
 
   inletRanges: InletRanges;
   pressureRanges: {min: number, max: number};
-  constructor(private headerService: HeaderService, private steamService: SteamService) { }
+  constructor(private headerService: HeaderService) { }
 
   ngOnInit() {
     this.pressureRanges = this.headerService.getPressureRangeValues(this.settings);
@@ -34,29 +34,20 @@ export class HeaderHelpComponent implements OnInit {
     }
   }
 
-
   getRanges() {
     this.inletRanges = this.headerService.getInletRangeValues(this.settings, this.thermodynamicQuantity);
-  }
-
-  getDisplayUnit(unit: string) {
-    if (unit) {
-      return this.steamService.getDisplayUnit(unit);
-    } else {
-      return unit;
-    }
   }
 
   getOptionDisplayUnit() {
     let displayUnit: string;
     if (this.thermodynamicQuantity === 0) {
-      displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      displayUnit = this.settings.steamTemperatureMeasurement;
       return displayUnit;
     } else if (this.thermodynamicQuantity === 1) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
+      displayUnit = this.settings.steamSpecificEnthalpyMeasurement;
       return displayUnit;
     } else if (this.thermodynamicQuantity === 2) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
+      displayUnit = this.settings.steamSpecificEntropyMeasurement;
       return displayUnit;
     } else if (this.thermodynamicQuantity === 3) {
       return displayUnit;
