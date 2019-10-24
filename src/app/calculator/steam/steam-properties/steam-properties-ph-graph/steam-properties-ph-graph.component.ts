@@ -744,7 +744,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     let y = d3.scaleLog().range([this.height, 0]);
     x.domain([this.xMin, this.xMax]);
     y.domain([this.yMin, this.yMax]);
-    return d3.axisLeft(y).ticks(5);
+    return d3.axisLeft(y).ticks(5).tickFormat(d3.format(".2f"));
   }
 
   addXAxisLabel() {
@@ -806,7 +806,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     this.yAxisGridLines.transition()
       .duration(600)
       .ease(d3.easePoly)
-      .call(this.addYGridLines().tickSize(-this.width).tickFormat(""));
+      .call(this.addYGridLines().tickSize(-this.width).tickFormat(".2f"));
 
     //rescale value line for default pressure lines
     let valueLine = d3.line()
