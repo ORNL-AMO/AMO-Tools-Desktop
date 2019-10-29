@@ -37,7 +37,7 @@ export class CompareService {
   checkPumpDifferent(settings: Settings, baseline?: PSAT, modification?: PSAT, ) {
     if (!baseline) {
       baseline = this.baselinePSAT;
-      if(baseline.setupDone){
+      if (baseline.setupDone) {
         baseline.outputs = this.psatService.resultsExisting(baseline.inputs, settings);
       }
     }
@@ -134,7 +134,13 @@ export class CompareService {
       if (baseline.inputs.pump_style == 11 || modification.inputs.pump_style == 11) {
         if (baseline.outputs !== undefined) {
           if (baseline.outputs.pump_efficiency !== null && baseline.outputs.pump_efficiency !== undefined && baseline.outputs.pump_efficiency != modification.inputs.pump_specified) {
-            return true;
+            let baselineCompValue = Math.round(baseline.outputs.pump_efficiency * 10) / 10;
+            let modificationCompValue = Math.round(modification.inputs.pump_specified * 10) / 10;
+            if (baselineCompValue == modificationCompValue) {
+              return false;
+            } else {
+              return true;
+            }
           } else {
             return false;
           }
