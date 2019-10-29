@@ -505,43 +505,43 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   addLegend() {
     this.svg.append("line")
-      .attr("x1", this.width - 25)
+      .attr("x1", this.width - 30)
       .attr("y1", this.height + 47)
       .attr("x2", this.width - 5)
       .attr("y2", this.height + 47)
       .attr("stroke", "#145A32")
       .attr("stroke-width", 2);
     this.svg.append("text")
-      .attr("x", this.width - 30)
+      .attr("x", this.width - 35)
       .attr("y", this.height + 49)
       .attr("text-anchor", "end")
-      .attr("font-size", 8)
+      .attr("font-size", 10)
       .text("Current");
     this.svg.append("line")
-      .attr("x1", this.width - 25)
+      .attr("x1", this.width - 30)
       .attr("y1", this.height + 57)
       .attr("x2", this.width - 5)
       .attr("y2", this.height + 57)
       .attr("stroke", "#3498DB")
       .attr("stroke-width", 2);
     this.svg.append("text")
-      .attr("x", this.width - 30)
+      .attr("x", this.width - 35)
       .attr("y", this.height + 59)
       .attr("text-anchor", "end")
-      .attr("font-size", 8)
+      .attr("font-size", 10)
       .text("Power");
     this.svg.append("line")
-      .attr("x1", this.width - 25)
+      .attr("x1", this.width - 30)
       .attr("y1", this.height + 67)
       .attr("x2", this.width - 5)
       .attr("y2", this.height + 67)
       .attr("stroke", "#A569BD")
       .attr("stroke-width", 2);
     this.svg.append("text")
-      .attr("x", this.width - 30)
+      .attr("x", this.width - 35)
       .attr("y", this.height + 69)
       .attr("text-anchor", "end")
-      .attr("font-size", 8)
+      .attr("font-size", 10)
       .text("Efficiency");
   }
 
