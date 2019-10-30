@@ -106,6 +106,9 @@ export class SettingsDbService {
     if (settings.electricityCost == undefined) {
       settings.electricityCost = .066;
     }
+    if (settings.compressedAirCost == undefined) {
+      settings.compressedAirCost = 0.022;
+    }
     return settings;
   }
 

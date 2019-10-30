@@ -74,7 +74,7 @@ export class CompressedAirReductionService {
       hoursPerYear: 8760,
       utilityType: 0,
       utilityCost: 0.12,
-      compressedAirCost: 0.12,
+      compressedAirCost: 0.022,
       electricityCost: settings.electricityCost,
       measurementMethod: 0,
       flowMeterMethodData: {
