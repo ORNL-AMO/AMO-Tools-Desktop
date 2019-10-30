@@ -1,12 +1,19 @@
+.img-fluid{
+    max-height: 100vh;
+}
 .tutorial-bg{
     background-color: #232323;
 }
 
-
-.img-fluid{
-    max-height: 100vh;
+.close{
+    position: absolute;
+    color: white;
+    top: 30px;
+    z-index: 1;
+    right: 30px;
+    opacity: 1;
+    font-size: 45px;
 }
-
 
 .carousel-item.active.first-item{
     visibility: visible;
@@ -19,7 +26,7 @@
     height: 0px;
     width: 0px;
     opacity: 0;
-    transition: visibility 1s, opacity 1s linear;
+    transition: visibility 1s, opacity 1.5s linear;
   }
   
   .carousel-item.show-img{
@@ -64,4 +71,10 @@ input.dont-show{
 .dont-show{
     font-size: large;
     font-weight: bold;
+}
+
+.caption-control:hover{
+    cursor: pointer;
+    text-decoration: underline;
+
 }
