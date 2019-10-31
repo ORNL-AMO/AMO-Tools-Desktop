@@ -101,6 +101,7 @@ export class TreasureHuntComponent implements OnInit {
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.checkTutorials();
       this.getContainerHeight();
       this.getCanContinue();
     });
@@ -250,5 +251,29 @@ export class TreasureHuntComponent implements OnInit {
       setTimeoutVal: undefined
     };
     this.cd.detectChanges();
+  }
+
+  checkTutorials() {
+    if (this.mainTab == 'system-setup') {
+      if (!this.settingsDbService.globalSettings.disableTreasureHuntSetupTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('treasure-hunt-setup-tutorial');
+      }
+    } else if (this.mainTab == 'find-treasure') {
+      if (!this.settingsDbService.globalSettings.disableTreasureHuntFindTreasureTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('treasure-hunt-find-treasure-tutorial');
+      }
+    } else if (this.mainTab == 'treasure-chest') {
+      if (!this.settingsDbService.globalSettings.disableTreasureHuntTreasureChestTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('treasure-hunt-treasure-chest-tutorial');
+      }
+    } else if (this.mainTab == 'report') {
+      if (!this.settingsDbService.globalSettings.disableTreasureHuntReportTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('treasure-hunt-report-tutorial');
+      }
+    }
   }
 }
