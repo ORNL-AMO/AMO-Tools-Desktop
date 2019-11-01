@@ -54,7 +54,7 @@ export interface Settings {
     disablePsatReportTutorial?: boolean,
     disablePhastSetupTutorial?: boolean,
     disablePhastAssessmentTutorial?: boolean,
-    disablePhastReportTutorial?: boolean
+    disablePhastReportTutorial?: boolean,
     disableFsatSetupTutorial?: boolean,
     disableFsatAssessmentTutorial?: boolean,
     disableFsatReportTutorial?: boolean,
