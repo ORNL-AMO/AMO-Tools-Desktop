@@ -11,10 +11,9 @@ export class OpeningTutorialComponent implements OnInit {
   @Output('closeTutorial')
   closeTutorial = new EventEmitter<boolean>();
 
-  showItem: Array<boolean> = [true, false, false, false, false, false];
+  showItem: Array<boolean> = [true, false, false, false, false, false, false];
 
   index: number = 0;
-  showWelcomeText: Array<boolean> = [false, false, false, false];
   dontShow: boolean = true;
   show: boolean = true;
   constructor(private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
