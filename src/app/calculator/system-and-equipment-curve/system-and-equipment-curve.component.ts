@@ -9,6 +9,7 @@ import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curv
 import { Calculator } from '../../shared/models/calculators';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { CurveDataService } from './curve-data.service';
 
 @Component({
   selector: 'app-system-and-equipment-curve',
@@ -35,7 +36,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   maxFlowRateSubscription: Subscription;
   constructor(private settingsDbService: SettingsDbService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private regressionEquationsService: RegressionEquationsService, private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private curveDataService: CurveDataService) { }
 
   ngOnInit() {
     this.setCalculatorTitle();
@@ -219,51 +220,21 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.systemAndEquipmentCurveService.setExample(this.settings, this.equipmentType);
-    this.systemAndEquipmentCurveService.resetForms.next(true);
-    this.systemAndEquipmentCurveService.resetForms.next(false);
+    this.curveDataService.setExample(this.settings, this.equipmentType);
+    this.curveDataService.resetForms.next(true);
+    this.curveDataService.resetForms.next(false);
   }
 
   btnResetDefaults() {
-    this.systemAndEquipmentCurveService.resetData(this.equipmentType);
+    this.curveDataService.resetData(this.equipmentType);
     this.setCalculatorTitle();
-    this.systemAndEquipmentCurveService.resetForms.next(true);
-    this.systemAndEquipmentCurveService.resetForms.next(false);
+    this.curveDataService.resetForms.next(true);
+    this.curveDataService.resetForms.next(false);
   }
 
 
   setAssessmentCalculatorData() {
-    let calculator: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-    if (calculator.systemAndEquipmentCurveData != undefined) {
-      this.systemAndEquipmentCurveService.byDataInputs.next(calculator.systemAndEquipmentCurveData.byDataInputs);
-      this.systemAndEquipmentCurveService.byEquationInputs.next(calculator.systemAndEquipmentCurveData.byEquationInputs);
-      this.systemAndEquipmentCurveService.equipmentInputs.next(calculator.systemAndEquipmentCurveData.equipmentInputs);
-      if (this.equipmentType == 'fan') {
-        this.systemAndEquipmentCurveService.fanSystemCurveData.next(calculator.systemAndEquipmentCurveData.fanSystemCurveData);
-        if (calculator.systemAndEquipmentCurveData.systemCurveDataPoints) {
-          this.systemAndEquipmentCurveService.systemCurveDataPoints = calculator.systemAndEquipmentCurveData.systemCurveDataPoints;
-        } else {
-          this.systemAndEquipmentCurveService.systemCurveDataPoints = this.systemAndEquipmentCurveService.getFanSystemCurveDataPoints(this.assessment.fsat);
-        }
-      } else if (this.equipmentType == 'pump') {
-        if (calculator.systemAndEquipmentCurveData.systemCurveDataPoints) {
-          this.systemAndEquipmentCurveService.systemCurveDataPoints = calculator.systemAndEquipmentCurveData.systemCurveDataPoints;
-        } else {
-          this.systemAndEquipmentCurveService.systemCurveDataPoints = this.systemAndEquipmentCurveService.getPumpSystemCurveDataPoints(this.assessment.psat);
-        }
-        this.systemAndEquipmentCurveService.pumpSystemCurveData.next(calculator.systemAndEquipmentCurveData.pumpSystemCurveData);
-      }
-      this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.next(calculator.systemAndEquipmentCurveData.equipmentCurveFormView);
-
-    } else {
-      if (this.equipmentType == 'fan') {
-        this.systemAndEquipmentCurveService.initializeDataFromFSAT(this.assessment.fsat);
-      } else if (this.equipmentType == 'pump') {
-        this.systemAndEquipmentCurveService.initializeDataFromPSAT(this.assessment.psat);
-      }
-    }
-    this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next("open");
-    this.systemAndEquipmentCurveService.systemCurveCollapsed.next("open");
+    this.curveDataService.setAssessmentCalculatorData(this.equipmentType, this.assessment);
   }
 
   saveCalculator() {

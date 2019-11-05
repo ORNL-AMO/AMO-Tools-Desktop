@@ -4,6 +4,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { EquipmentCurveService } from '../equipment-curve.service';
 import { SystemAndEquipmentCurveService, ByDataInputs } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
+import { CurveDataService } from '../../curve-data.service';
 
 @Component({
   selector: 'app-by-data-form',
@@ -25,7 +26,8 @@ export class ByDataFormComponent implements OnInit {
     2, 3, 4, 5, 6
   ];
   resetFormsSub: Subscription;
-  constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private formBuilder: FormBuilder) { }
+  constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private formBuilder: FormBuilder,
+    private curveDataService: CurveDataService) { }
 
   ngOnInit() {
     if (this.equipmentType == 'fan') {
@@ -40,7 +42,7 @@ export class ByDataFormComponent implements OnInit {
       this.yValueUnit = this.settings.distanceMeasurement;
     }
     this.initForm();
-    this.resetFormsSub = this.systemAndEquipmentCurveService.resetForms.subscribe(val => {
+    this.resetFormsSub = this.curveDataService.resetForms.subscribe(val => {
       if (val == true) {
         this.resetForm();
       }

@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { EquipmentCurveService } from '../equipment-curve.service';
 import { SystemAndEquipmentCurveService, ByEquationInputs } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
+import { CurveDataService } from '../../curve-data.service';
 
 @Component({
   selector: 'app-by-equation-form',
@@ -23,12 +24,13 @@ export class ByEquationFormComponent implements OnInit {
     2, 3, 4, 5, 6
   ]
   resetFormsSub: Subscription;
-  constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
+  constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
+    private curveDataService: CurveDataService) { }
 
   ngOnInit() {
     this.setFormLabelAndUnit();
     this.initForm();
-    this.resetFormsSub = this.systemAndEquipmentCurveService.resetForms.subscribe(val => {
+    this.resetFormsSub = this.curveDataService.resetForms.subscribe(val => {
       if (val == true) {
         this.resetForm();
       }
