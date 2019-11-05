@@ -3,10 +3,11 @@ import * as d3 from 'd3';
 import { LineChartHelperService } from '../../../shared/helper-services/line-chart-helper.service';
 import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph.service';
 import { Settings } from '../../../shared/models/settings';
-import { SystemAndEquipmentCurveService, PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { RegressionEquationsService } from '../regression-equations/regression-equations.service';
+import { EquipmentInputs, FanSystemCurveData, PumpSystemCurveData } from '../../../shared/models/system-and-equipment-curve';
 
 @Component({
   selector: 'app-system-and-equipment-curve-graph',

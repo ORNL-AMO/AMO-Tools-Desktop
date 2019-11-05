@@ -1,11 +1,12 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
-import { SystemAndEquipmentCurveService, PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import * as _ from 'lodash';
 import { RegressionEquationsService } from '../regression-equations/regression-equations.service';
 import { BehaviorSubject } from 'rxjs';
 import { SvgToPngService } from '../../../shared/helper-services/svg-to-png.service';
+import { PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../../../shared/models/system-and-equipment-curve';
 @Injectable()
 export class SystemAndEquipmentCurveGraphService {
 

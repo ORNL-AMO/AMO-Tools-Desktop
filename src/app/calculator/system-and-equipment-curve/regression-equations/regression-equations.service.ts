@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as regression from 'regression';
 import * as _ from 'lodash';
-import { FanSystemCurveData, PumpSystemCurveData, ByDataInputs, EquipmentInputs, ByEquationInputs } from '../system-and-equipment-curve.service';
+import { FanSystemCurveData, PumpSystemCurveData, ByDataInputs, EquipmentInputs, ByEquationInputs } from '../../../shared/models/system-and-equipment-curve';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';

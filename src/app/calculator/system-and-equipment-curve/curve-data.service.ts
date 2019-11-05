@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { EquipmentCurveService } from './equipment-curve/equipment-curve.service';
 import { FanSystemCurveFormService } from './system-curve/fan-system-curve-form.service';
 import { PumpSystemCurveFormService } from './system-curve/pump-system-curve-form.service';
-import { SystemAndEquipmentCurveService, ByEquationInputs, EquipmentInputs, ByDataInputs, FanSystemCurveData, PumpSystemCurveData } from './system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService } from './system-and-equipment-curve.service';
 import { PSAT } from '../../shared/models/psat';
 import { FSAT } from '../../shared/models/fans';
 import { Settings } from '../../shared/models/settings';
@@ -10,6 +10,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { Calculator } from '../../shared/models/calculators';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { BehaviorSubject } from 'rxjs';
+import { ByEquationInputs, EquipmentInputs, ByDataInputs, FanSystemCurveData, PumpSystemCurveData } from '../../shared/models/system-and-equipment-curve';
 
 @Injectable()
 export class CurveDataService {

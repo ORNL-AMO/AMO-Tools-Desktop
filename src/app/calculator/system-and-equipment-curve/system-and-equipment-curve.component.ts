@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { SystemAndEquipmentCurveService, ByDataInputs, ByEquationInputs, EquipmentInputs } from './system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService } from './system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { RegressionEquationsService } from './regression-equations/regression-equations.service';
 import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
@@ -10,6 +10,7 @@ import { Calculator } from '../../shared/models/calculators';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { CurveDataService } from './curve-data.service';
+import { EquipmentInputs, ByDataInputs, ByEquationInputs } from '../../shared/models/system-and-equipment-curve';
 
 @Component({
   selector: 'app-system-and-equipment-curve',

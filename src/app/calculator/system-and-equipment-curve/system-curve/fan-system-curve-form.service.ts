@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FanSystemCurveData } from '../system-and-equipment-curve.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
+import { FanSystemCurveData } from '../../../shared/models/system-and-equipment-curve';
 
 @Injectable()
 export class FanSystemCurveFormService {

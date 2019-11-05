@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
-import { ByDataInputs, ByEquationInputs, EquipmentInputs } from '../system-and-equipment-curve.service';
+import { ByDataInputs, ByEquationInputs, EquipmentInputs } from '../../../shared/models/system-and-equipment-curve';
 
 @Injectable()
 export class EquipmentCurveService {

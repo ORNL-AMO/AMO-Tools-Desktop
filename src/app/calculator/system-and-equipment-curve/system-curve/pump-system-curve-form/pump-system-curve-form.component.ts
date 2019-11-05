@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { PumpSystemCurveFormService } from '../pump-system-curve-form.service';
 import { Settings } from '../../../../shared/models/settings';
-import { SystemAndEquipmentCurveService, PumpSystemCurveData } from '../../system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { CurveDataService } from '../../curve-data.service';
+import { PumpSystemCurveData } from '../../../../shared/models/system-and-equipment-curve';
 
 @Component({
   selector: 'app-pump-system-curve-form',

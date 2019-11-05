@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { EquipmentCurveService } from '../equipment-curve.service';
-import { SystemAndEquipmentCurveService, ByEquationInputs } from '../../system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { CurveDataService } from '../../curve-data.service';
+import { ByEquationInputs } from '../../../../shared/models/system-and-equipment-curve';
 
 @Component({
   selector: 'app-by-equation-form',
