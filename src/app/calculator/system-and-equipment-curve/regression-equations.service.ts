@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as regression from 'regression';
 import * as _ from 'lodash';
-import { FanSystemCurveData, PumpSystemCurveData, ByDataInputs, EquipmentInputs, ByEquationInputs } from '../../../shared/models/system-and-equipment-curve';
+import { FanSystemCurveData, PumpSystemCurveData, ByDataInputs, EquipmentInputs, ByEquationInputs } from '../../shared/models/system-and-equipment-curve';
 import { BehaviorSubject } from 'rxjs';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { Settings } from '../../shared/models/settings';
 @Injectable()
 export class RegressionEquationsService {
 
@@ -48,12 +48,6 @@ export class RegressionEquationsService {
     this.setSigFigs(baselineResults);
     let baselineRegressionEquation: string = baselineResults.string;
 
-    let maxDataFlow: number = _.maxBy(byData.dataRows, (val) => { return val.flow }).flow;
-
-    if (maxDataFlow > maxFlowRate || byData.dataOrder > 3) {
-      maxFlowRate = maxDataFlow;
-    }
-
     baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, yValue);
     let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
 
@@ -61,18 +55,20 @@ export class RegressionEquationsService {
     let modifiedDataPairs: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     let modificationData: Array<Array<number>> = new Array();
     baselineData = new Array();
-    for (let i = 0; i <= maxDataFlow; i += 10) {
+    for (let i = 0; i <= maxFlowRate; i += 10) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
         let xBaseline: number = i;
         let yBaseline: number = yVal[1];
         let xModified: number = i * ratio;
         let yModified: number = yVal[1] * Math.pow(ratio, 2);
-        modifiedDataPairs.push({
-          x: xModified,
-          y: yModified
-        });
-        modificationData.push([xModified, yModified]);
+        if (xModified <= maxFlowRate) {
+          modifiedDataPairs.push({
+            x: xModified,
+            y: yModified
+          });
+          modificationData.push([xModified, yModified]);
+        }
         baselineDataPairs.push({
           x: xBaseline,
           y: yBaseline
@@ -168,8 +164,10 @@ export class RegressionEquationsService {
       if (yVal > 0) {
         let x: number = i * ratio;
         let y: number = yVal * Math.pow(ratio, 2);
-        calculationData.push([x, y]);
-        dataPairs.push({ x: x, y: y });
+        if (x <= maxFlowRate) {
+          calculationData.push([x, y]);
+          dataPairs.push({ x: x, y: y });
+        }
       }
     }
     return { calculationData: calculationData, dataPairs: dataPairs };
@@ -228,8 +226,7 @@ export class RegressionEquationsService {
     return tmpStaticHead;
   }
 
-
-  calculateFanSystemCurveData(fanSystemCurveData: FanSystemCurveData, maxXValue: number, settings: Settings): Array<{ x: number, y: number, fluidPower: number }> {
+  calculateFanSystemCurveData(fanSystemCurveData: FanSystemCurveData, maxFlowRate: number, settings: Settings): Array<{ x: number, y: number, fluidPower: number }> {
     let data: Array<{ x: number, y: number, fluidPower: number }> = new Array<{ x: number, y: number, fluidPower: number }>();
     let lossCoefficient: number = this.calculateLossCoefficient(
       fanSystemCurveData.pointOneFlowRate,
@@ -245,7 +242,7 @@ export class RegressionEquationsService {
       fanSystemCurveData.pointTwoPressure,
       fanSystemCurveData.systemLossExponent
     );
-    for (var i = 0; i <= maxXValue; i += 10) {
+    for (var i = 0; i <= maxFlowRate; i += 10) {
       let pressureAndFluidPower: { pressure: number, fluidPower: number } = this.calculateFanPressureAndFluidPower(staticPressure, lossCoefficient, i, fanSystemCurveData.systemLossExponent, fanSystemCurveData.compressibilityFactor, settings);
       if (pressureAndFluidPower.pressure >= 0) {
         data.push({ x: i, y: pressureAndFluidPower.pressure, fluidPower: pressureAndFluidPower.fluidPower })
@@ -257,7 +254,7 @@ export class RegressionEquationsService {
   }
 
 
-  calculatePumpSystemCurveData(pumpSystemCurveData: PumpSystemCurveData, maxXValue: number, settings: Settings): Array<{ x: number, y: number, fluidPower: number }> {
+  calculatePumpSystemCurveData(pumpSystemCurveData: PumpSystemCurveData, maxFlowRate: number, settings: Settings): Array<{ x: number, y: number, fluidPower: number }> {
     let data: Array<{ x: number, y: number, fluidPower: number }> = new Array<{ x: number, y: number, fluidPower: number }>();
     let lossCoefficient: number = this.calculateLossCoefficient(
       pumpSystemCurveData.pointOneFlowRate,
@@ -274,7 +271,7 @@ export class RegressionEquationsService {
       pumpSystemCurveData.systemLossExponent
     );
 
-    for (var i = 0; i <= maxXValue; i += 10) {
+    for (var i = 0; i <= maxFlowRate; i += 10) {
       let headAndFluidPower: { head: number, fluidPower: number } = this.calculatePumpHeadAndFluidPower(staticHead, lossCoefficient, i, pumpSystemCurveData.systemLossExponent, pumpSystemCurveData.specificGravity, settings);
       if (headAndFluidPower.head >= 0) {
         data.push({ x: i, y: headAndFluidPower.head, fluidPower: headAndFluidPower.fluidPower });

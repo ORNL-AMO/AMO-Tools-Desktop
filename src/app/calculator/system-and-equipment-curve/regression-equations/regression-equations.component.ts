@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
-import { RegressionEquationsService } from './regression-equations.service';
+import { RegressionEquationsService } from '../regression-equations.service';
 
 @Component({
   selector: 'app-regression-equations',

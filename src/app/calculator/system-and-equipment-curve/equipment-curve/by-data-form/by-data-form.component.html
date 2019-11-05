@@ -17,7 +17,7 @@
                     <label class="section-label" *ngIf="index == 0" for="flow">Flow</label>
                     <div class="input-group">
                         <input name="flow" formControlName="flow" type="number" step="any" class="form-control"
-                            id="flow" onfocus="this.select();" (focus)="focusField('flow')" *ngIf="!isFan">
+                            id="flow" onfocus="this.select();" (focus)="focusField('flow')" (input)="save()">
                         <span class="input-group-addon units" [innerHTML]="flowUnit | settingsLabel"></span>
                     </div>
                     <span class="alert-danger pull-right small"
@@ -31,9 +31,8 @@
                 <div class="form-group col-5">
                     <label class="section-label" *ngIf="index == 0" for="yValue">{{yValueLabel}}</label>
                     <div class="input-group">
-                        <input name="yValue" formControlName="yValue" type="number" step="any"
-                            class="form-control" id="yValue" onfocus="this.select();"
-                            (focus)="focusField('yValue')" (input)="save()">
+                        <input name="yValue" formControlName="yValue" type="number" step="any" class="form-control"
+                            id="yValue" onfocus="this.select();" (focus)="focusField('yValue')" (input)="save()">
                         <span class="input-group-addon units" [innerHTML]="yValueUnit | settingsLabel"></span>
                     </div>
                     <span class="alert-danger pull-right small"
@@ -41,7 +40,7 @@
                         <span *ngIf="control.controls.yValue.errors.required">Value required.</span>
                         <span *ngIf="control.controls.yValue.errors.min">Value must be greater than
                             {{control.controls.yValue.errors.min.min}}
-                            <span *ngIf="!isFan" [innerHTML]="yValueUnit | settingsLabel"></span>.
+                            <span [innerHTML]="yValueUnit | settingsLabel"></span>.
                         </span>
                     </span>
                 </div>

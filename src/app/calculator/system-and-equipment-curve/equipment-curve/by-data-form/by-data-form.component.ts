@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { EquipmentCurveService } from '../equipment-curve.service';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
@@ -87,12 +87,18 @@ export class ByDataFormComponent implements OnInit {
       flow: [0, [Validators.required, Validators.max(1000000)]],
       yValue: [0, [Validators.required, Validators.min(0)]]
     });
-    this.byDataForm.controls.dataRows.value.controls.push(tmpDataRowForm);
+    let tmpFormArray: FormArray = this.byDataForm.controls.dataRows.value;
+    tmpFormArray.push(tmpDataRowForm);
+    this.byDataForm.controls.dataRows.patchValue(tmpFormArray);
+    this.byDataForm.controls.dataRows.updateValueAndValidity();
     this.save();
   }
 
   removeRow(index: number) {
-    this.byDataForm.controls.dataRows.value.controls.splice(index, 1);
+    let tmpFormArray: FormArray = this.byDataForm.controls.dataRows.value;
+    tmpFormArray.value.splice(index, 1)
+    this.byDataForm.controls.dataRows.patchValue(tmpFormArray);
+    this.byDataForm.controls.dataRows.updateValueAndValidity();
     this.save();
   }
 }
