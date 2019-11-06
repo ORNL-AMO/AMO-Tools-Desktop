@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { EquipmentCurveService } from '../equipment-curve.service';
@@ -28,7 +28,7 @@ export class ByDataFormComponent implements OnInit {
   ];
   resetFormsSub: Subscription;
   constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private formBuilder: FormBuilder,
-    private curveDataService: CurveDataService) { }
+    private curveDataService: CurveDataService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     if (this.equipmentType == 'fan') {
@@ -96,8 +96,9 @@ export class ByDataFormComponent implements OnInit {
 
   removeRow(index: number) {
     let tmpFormArray: FormArray = this.byDataForm.controls.dataRows.value;
-    tmpFormArray.value.splice(index, 1)
-    this.byDataForm.controls.dataRows.patchValue(tmpFormArray);
+    tmpFormArray.value.splice(index, 1);
+    tmpFormArray.controls.splice(index, 1);
+    this.byDataForm.controls.dataRows.setValue(tmpFormArray);
     this.byDataForm.controls.dataRows.updateValueAndValidity();
     this.save();
   }
