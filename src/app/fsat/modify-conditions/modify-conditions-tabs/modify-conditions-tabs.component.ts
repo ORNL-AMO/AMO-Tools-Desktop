@@ -168,7 +168,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     let isDifferent = false;
     if (modification) {
       validModTest = this.fanSetupService.isFanSetupValid(modification.fanSetup, true);
-      isDifferent = this.compareService.checkFanSetupDifferent();
+      isDifferent = this.compareService.checkFanSetupDifferent(this.settings);
     }
     let inputError = this.checkFanSetupWarnings();
     if (!validBaselineTest || !validModTest) {

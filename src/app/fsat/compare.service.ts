@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FSAT } from '../shared/models/fans';
 import { BehaviorSubject } from 'rxjs';
+import { FsatService } from './fsat.service';
+import { Settings } from '../shared/models/settings';
 
 @Injectable()
 export class CompareService {
   baselineFSAT: FSAT;
   modifiedFSAT: FSAT;
   selectedModification: BehaviorSubject<FSAT>;
-  constructor() {
+  constructor(private fsatService: FsatService) {
     this.selectedModification = new BehaviorSubject<FSAT>(undefined);
   }
 
@@ -250,7 +252,7 @@ export class CompareService {
 
   //fan-setup (FanSetup)
   //TODO: Add Specified Fan Type logic
-  checkFanSetupDifferent(baseline?: FSAT, modification?: FSAT) {
+  checkFanSetupDifferent(settings: Settings, baseline?: FSAT, modification?: FSAT) {
     if (!baseline) {
       baseline = this.baselineFSAT;
     }
@@ -262,7 +264,7 @@ export class CompareService {
         this.isFanTypeDifferent(baseline, modification) ||
         this.isFanSpeedDifferent(baseline, modification) ||
         this.isDriveDifferent(baseline, modification) ||
-        this.isSpecifiedFanEfficiencyDifferent(baseline, modification)
+        this.isSpecifiedFanEfficiencyDifferent(settings, baseline, modification)
       );
     } else {
       return false;
@@ -276,7 +278,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanSetup.fanType !== modification.fanSetup.fanType) {
+      if (baseline.fanSetup.fanType !== modification.fanSetup.fanType && modification.fanSetup.fanType != 12) {
         return true;
       } else {
         return false;
@@ -338,22 +340,24 @@ export class CompareService {
     }
   }
 
-  isSpecifiedFanEfficiencyDifferent(baseline?: FSAT, modification?: FSAT) {
+  isSpecifiedFanEfficiencyDifferent(settings: Settings, baseline?: FSAT, modification?: FSAT) {
+    let baselineEfficiency: number;
     if (!baseline) {
       baseline = this.baselineFSAT;
+    }
+    if (baseline && baseline.setupDone) {
+      baselineEfficiency = this.fsatService.getResults(baseline, true, settings).fanEfficiency;
     }
     if (!modification) {
       modification = this.modifiedFSAT;
     }
-    if (baseline && modification) {
-      if (baseline.fanSetup.drive == 4 || modification.fanSetup.drive == 4) {
-        if (baseline.fanSetup.specifiedDriveEfficiency !== modification.fanSetup.specifiedDriveEfficiency) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
+    if (baselineEfficiency && modification) {
+      let baselineCompValue = Math.round(baselineEfficiency * 10) / 10;
+      let modificationCompValue = Math.round(modification.fanSetup.fanEfficiency * 10) / 10;
+      if (baselineCompValue == modificationCompValue) {
         return false;
+      } else {
+        return true;
       }
     } else {
       return false;
@@ -704,13 +708,13 @@ export class CompareService {
     }
   }
 
-  getBadges(baseline: FSAT, modification: FSAT): Array<{ badge: string, componentStr: string }> {
+  getBadges(baseline: FSAT, modification: FSAT, settings: Settings): Array<{ badge: string, componentStr: string }> {
     let badges: Array<{ badge: string, componentStr: string }> = [];
     if (baseline && modification) {
       if (this.checkFluidDifferent(baseline, modification)) {
         badges.push({ badge: 'Fluid', componentStr: 'fsat-fluid' });
       }
-      if (this.checkFanSetupDifferent(baseline, modification)) {
+      if (this.checkFanSetupDifferent(settings, baseline, modification)) {
         badges.push({ badge: 'Fan', componentStr: 'fan-setup' });
       }
       if (this.checkFanMotorDifferent(baseline, modification)) {
