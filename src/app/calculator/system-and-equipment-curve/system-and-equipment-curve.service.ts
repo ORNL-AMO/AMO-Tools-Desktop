@@ -6,38 +6,44 @@ import { FanSystemCurveFormService } from './system-curve/fan-system-curve-form.
 import { PumpSystemCurveFormService } from './system-curve/pump-system-curve-form.service';
 import { PSAT } from '../../shared/models/psat';
 import { FSAT } from '../../shared/models/fans';
+import { ByDataInputs, ByEquationInputs, EquipmentInputs, PumpSystemCurveData, FanSystemCurveData } from '../../shared/models/system-and-equipment-curve';
+import { RegressionEquationsService } from './regression-equations.service';
+import * as _ from 'lodash';
 
 @Injectable()
 export class SystemAndEquipmentCurveService {
-  //persistent equipment curve data
+  //persistent data objects for calculator
   pumpByDataInputs: ByDataInputs;
   pumpByEquationInputs: ByEquationInputs;
   pumpEquipmentInputs: EquipmentInputs;
-
   fanByDataInputs: ByDataInputs;
   fanByEquationInputs: ByEquationInputs;
   fanEquipmentInputs: EquipmentInputs;
 
-  //behavior subjects
+  //behavior subjects for calculator state
   currentField: BehaviorSubject<string>;
-  pumpSystemCurveData: BehaviorSubject<PumpSystemCurveData>;
-  fanSystemCurveData: BehaviorSubject<FanSystemCurveData>;
   focusedCalculator: BehaviorSubject<string>;
-  byDataInputs: BehaviorSubject<ByDataInputs>;
-  equipmentInputs: BehaviorSubject<EquipmentInputs>;
-  byEquationInputs: BehaviorSubject<ByEquationInputs>;
   selectedEquipmentCurveFormView: BehaviorSubject<string>;
   equipmentCurveCollapsed: BehaviorSubject<string>;
   systemCurveCollapsed: BehaviorSubject<string>;
-  resetForms: BehaviorSubject<boolean>;
+  updateGraph: BehaviorSubject<boolean>;
 
-  baselineEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
-  modifiedEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
-  systemCurveRegressionData: BehaviorSubject<Array<{ x: number, y: number, fluidPower: number }>>;
+  //form data behavior subjects
+  pumpSystemCurveData: BehaviorSubject<PumpSystemCurveData>;
+  fanSystemCurveData: BehaviorSubject<FanSystemCurveData>;
+  byDataInputs: BehaviorSubject<ByDataInputs>;
+  equipmentInputs: BehaviorSubject<EquipmentInputs>;
+  byEquationInputs: BehaviorSubject<ByEquationInputs>;
+
+  //calcuated data points
+  baselineEquipmentCurveDataPairs: Array<{ x: number, y: number }>;
+  modifiedEquipmentCurveDataPairs: Array<{ x: number, y: number }>;
+  systemCurveRegressionData: Array<{ x: number, y: number, fluidPower: number }>;
+
   //data points for system curve dropdown in assessment
   systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }>;
-  constructor(private equipmentCurveService: EquipmentCurveService,
-    private fanSystemCurveFormService: FanSystemCurveFormService, private pumpSystemCurveFormService: PumpSystemCurveFormService) {
+
+  constructor(private regressionEquationsService: RegressionEquationsService) {
     this.currentField = new BehaviorSubject<string>('default');
     this.pumpSystemCurveData = new BehaviorSubject<PumpSystemCurveData>(undefined);
     this.fanSystemCurveData = new BehaviorSubject<FanSystemCurveData>(undefined);
@@ -48,187 +54,85 @@ export class SystemAndEquipmentCurveService {
     this.selectedEquipmentCurveFormView = new BehaviorSubject<string>('Equation');
     this.equipmentCurveCollapsed = new BehaviorSubject<string>('closed');
     this.systemCurveCollapsed = new BehaviorSubject<string>('closed');
-    this.baselineEquipmentCurveDataPairs = new BehaviorSubject(undefined);
-    this.modifiedEquipmentCurveDataPairs = new BehaviorSubject(undefined);
-    this.resetForms = new BehaviorSubject(false);
+    this.updateGraph = new BehaviorSubject<boolean>(false);
   }
 
-  setExample(settings: Settings, equipmentType: string) {
-    if (equipmentType == 'pump') {
-      let byDataInputs: ByDataInputs = this.equipmentCurveService.getPumpByDataExample(settings);
-      this.byDataInputs.next(byDataInputs);
-      let pumpSystemCurveData: PumpSystemCurveData = this.pumpSystemCurveFormService.getPumpSystemCurveDefaults(settings);
-      this.pumpSystemCurveData.next(pumpSystemCurveData);
-    } else if (equipmentType == 'fan') {
-      let byDataInputs: ByDataInputs = this.equipmentCurveService.getFanByDataExample(settings);
-      this.byDataInputs.next(byDataInputs);
-      let fanSystemCurveData: FanSystemCurveData = this.fanSystemCurveFormService.getFanSystemCurveDefaults(settings);
-      this.fanSystemCurveData.next(fanSystemCurveData);
+  //calculation functions
+  getMaxFlowRate(equipmentType: string): number {
+    //50, system curve point (1,2) flow rate, byData max flow rate from data rows, byEquation max flow
+    let maxFlowRate: number = 50;
+    let maxEquipmentCurve: number = 0;
+    let maxSystemCurve: number = 0;
+    let ratio: number = 1;
+    //max system curve
+    if (this.systemCurveCollapsed.getValue() == 'open') {
+      if (equipmentType == 'pump' && this.pumpSystemCurveData.getValue() != undefined) {
+        maxSystemCurve = _.max([this.pumpSystemCurveData.getValue().pointOneFlowRate, this.pumpSystemCurveData.getValue().pointTwoFlowRate]);
+      } else if (equipmentType == 'fan' && this.fanSystemCurveData.getValue() != undefined) {
+        maxSystemCurve = _.max([this.fanSystemCurveData.getValue().pointOneFlowRate, this.fanSystemCurveData.getValue().pointTwoFlowRate]);
+      }
     }
-    let flowUnit: string;
-    let yValueUnit: string;
-    let yImperialUnit: string;
-    if (equipmentType == 'fan') {
-      flowUnit = settings.fanFlowRate;
-      yValueUnit = settings.fanPressureMeasurement;
-      yImperialUnit = 'inH2o';
-    } else {
-      flowUnit = settings.flowMeasurement;
-      yValueUnit = settings.distanceMeasurement;
-      yImperialUnit = 'ft';
+    //max equipment curve;
+    if (this.equipmentCurveCollapsed.getValue() == 'open') {
+      if (this.selectedEquipmentCurveFormView.getValue() == 'Equation' && this.byEquationInputs.getValue() != undefined) {
+        maxEquipmentCurve = this.byEquationInputs.getValue().maxFlow;
+      } else if (this.selectedEquipmentCurveFormView.getValue() == 'Data' && this.byDataInputs.getValue() != undefined) {
+        maxEquipmentCurve = _.maxBy(this.byDataInputs.getValue().dataRows, (val) => { return val.flow }).flow;
+      }
+      //adjust for modificatication > baseline
+      if (this.equipmentInputs.getValue() != undefined && (this.equipmentInputs.getValue().baselineMeasurement < this.equipmentInputs.getValue().modifiedMeasurement)) {
+        ratio = this.equipmentInputs.getValue().modifiedMeasurement / this.equipmentInputs.getValue().baselineMeasurement;
+      }
     }
-
-    let exampleByEquationInputs: ByEquationInputs = this.equipmentCurveService.getByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
-    this.byEquationInputs.next(exampleByEquationInputs);
-    let exampleEquipment: EquipmentInputs = this.equipmentCurveService.getEquipmentCurveDefault();
-    this.equipmentInputs.next(exampleEquipment);
-
-    this.selectedEquipmentCurveFormView.next('Data');
-    this.systemCurveCollapsed.next('open');
-    this.equipmentCurveCollapsed.next('open');
+    maxFlowRate = _.max([maxFlowRate, maxEquipmentCurve, maxSystemCurve]) * ratio;
+    return maxFlowRate;
   }
 
-  resetData(equipmentType: string) {
-    let exampleByEquationInputs: ByEquationInputs = this.equipmentCurveService.getResetByEquationInputs();
-    this.byEquationInputs.next(exampleByEquationInputs);
-    let exampleEquipment: EquipmentInputs = this.equipmentCurveService.getResetEquipmentInputs();
-    this.equipmentInputs.next(exampleEquipment);
-    let byDataInputs: ByDataInputs = this.equipmentCurveService.getResetByDataInputs();
-    this.byDataInputs.next(byDataInputs);
 
-    if (equipmentType == 'fan') {
-      let fanSystemCurveData: FanSystemCurveData = this.fanSystemCurveFormService.getResetFanSystemCurveInputs();
-      this.fanSystemCurveData.next(fanSystemCurveData);
-    } else if (equipmentType == 'pump') {
-      let pumpSystemCurveData: PumpSystemCurveData = this.pumpSystemCurveFormService.getResetPumpSystemCurveInputs();
-      this.pumpSystemCurveData.next(pumpSystemCurveData);
+  calculateByDataRegression(equipmentType: string, maxFlowRate: number) {
+    if (this.byDataInputs.getValue() != undefined && this.equipmentInputs.getValue() != undefined) {
+      let secondValueLabel: string = 'Head';
+      if (equipmentType == 'fan') {
+        secondValueLabel = 'Pressure';
+      }
+      let results = this.regressionEquationsService.getEquipmentCurveRegressionByData(this.byDataInputs.getValue(), this.equipmentInputs.getValue(), secondValueLabel, maxFlowRate);
+      this.regressionEquationsService.baselineEquipmentCurveByDataRegressionEquation.next(results.baselineRegressionEquation);
+      this.regressionEquationsService.baselineEquipmentCurveByDataRSquared.next(results.baselineRSquared);
+      this.regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation.next(results.modificationRegressionEquation);
+      this.regressionEquationsService.modificationEquipmentCurveRSquared.next(results.modificationRSquared);
+      if (this.selectedEquipmentCurveFormView.getValue() == 'Data') {
+        this.baselineEquipmentCurveDataPairs = results.baselineDataPairs;
+        this.modifiedEquipmentCurveDataPairs = results.modifiedDataPairs;
+      }
     }
   }
 
-  initializeDataFromPSAT(psat: PSAT) {
-    let systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = this.getPumpSystemCurveDataPoints(psat);
-    this.systemCurveDataPoints = systemCurveDataPoints;
-    let pumpSystemCurveData: PumpSystemCurveData = {
-      specificGravity: psat.inputs.specific_gravity,
-      systemLossExponent: 1.9,
-      pointOneFlowRate: 0,
-      pointOneHead: 0,
-      pointTwo: 'Baseline',
-      pointTwoFlowRate: psat.inputs.flow_rate,
-      pointTwoHead: psat.inputs.head,
-    };
-    this.pumpSystemCurveData.next(pumpSystemCurveData);
-  }
-
-  getPumpSystemCurveDataPoints(psat: PSAT): Array<{ pointName: string, flowRate: number, yValue: number }> {
-    let dataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = new Array();
-    dataPoints.push({
-      pointName: 'Baseline',
-      flowRate: psat.inputs.flow_rate,
-      yValue: psat.inputs.head
-    });
-    if (psat.modifications) {
-      psat.modifications.forEach(modification => {
-        dataPoints.push({
-          pointName: modification.psat.name,
-          flowRate: modification.psat.inputs.flow_rate,
-          yValue: modification.psat.inputs.head
-        });
-      })
+  calculateByEquationRegressions(equipmentType: string, maxFlowRate: number) {
+    if (this.byEquationInputs.getValue() != undefined && this.equipmentInputs.getValue() != undefined) {
+      let secondValueLabel: string = 'Head';
+      if (equipmentType == 'fan') {
+        secondValueLabel = 'Pressure';
+      }
+      let results = this.regressionEquationsService.getEquipmentCurveRegressionByEquation(this.byEquationInputs.getValue(), this.equipmentInputs.getValue(), secondValueLabel, maxFlowRate);
+      this.regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation.next(results.baselineRegressionEquation);
+      this.regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation.next(results.modificationRegressionEquation);
+      if (this.selectedEquipmentCurveFormView.getValue() == 'Equation') {
+        this.baselineEquipmentCurveDataPairs = results.baselineDataPairs;
+        this.modifiedEquipmentCurveDataPairs = results.modifiedDataPairs;
+      }
     }
-    return dataPoints;
   }
 
-  initializeDataFromFSAT(fsat: FSAT) {
-    let systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = this.getFanSystemCurveDataPoints(fsat);
-    this.systemCurveDataPoints = systemCurveDataPoints;
-    let fanSystemCurveData: FanSystemCurveData = {
-      compressibilityFactor: fsat.fieldData.compressibilityFactor,
-      systemLossExponent: .98,
-      pointOneFlowRate: 0,
-      pointOnePressure: 0,
-      pointTwo: 'Baseline',
-      pointTwoFlowRate: fsat.fieldData.flowRate,
-      pointTwoPressure: fsat.fieldData.inletPressure - fsat.fieldData.outletPressure
+  calculateSystemCurveRegressionData(equipmentType: string, settings: Settings, maxFlowRate: number) {
+    if (equipmentType == 'pump' && this.pumpSystemCurveData.getValue() != undefined) {
+      let systemCurveRegressionEquation: string = this.regressionEquationsService.getPumpSystemCurveRegressionEquation(this.pumpSystemCurveData.getValue());
+      this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
+      this.systemCurveRegressionData = this.regressionEquationsService.calculatePumpSystemCurveData(this.pumpSystemCurveData.getValue(), maxFlowRate, settings);
+    } else if (equipmentType == 'fan' && this.fanSystemCurveData.getValue() != undefined) {
+      let systemCurveRegressionEquation: string = this.regressionEquationsService.getFanSystemCurveRegressionEquation(this.fanSystemCurveData.getValue());
+      this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
+      this.systemCurveRegressionData = this.regressionEquationsService.calculateFanSystemCurveData(this.fanSystemCurveData.getValue(), maxFlowRate, settings);
     }
-    this.fanSystemCurveData.next(fanSystemCurveData);
   }
 
-  getFanSystemCurveDataPoints(fsat: FSAT): Array<{ pointName: string, flowRate: number, yValue: number }> {
-    let dataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = new Array();
-    dataPoints.push({
-      pointName: 'Baseline',
-      flowRate: fsat.fieldData.flowRate,
-      yValue: fsat.fieldData.outletPressure - fsat.fieldData.inletPressure
-    });
-    if (fsat.modifications) {
-      fsat.modifications.forEach(modification => {
-        dataPoints.push({
-          pointName: modification.fsat.name,
-          flowRate: modification.fsat.fieldData.flowRate,
-          yValue: modification.fsat.fieldData.outletPressure - modification.fsat.fieldData.inletPressure
-        })
-      })
-    }
-    return dataPoints;
-  }
-
-
-}
-
-export interface SystemAndEquipmentCurveData {
-  pumpSystemCurveData?: PumpSystemCurveData,
-  fanSystemCurveData?: FanSystemCurveData,
-  byEquationInputs?: ByEquationInputs,
-  byDataInputs?: ByDataInputs,
-  equipmentInputs?: EquipmentInputs,
-  equipmentCurveFormView?: string,
-  systemCurveDataPoints?: Array<{ pointName: string, flowRate: number, yValue: number }>
-
-}
-
-
-export interface PumpSystemCurveData {
-  specificGravity: number,
-  systemLossExponent: number,
-  pointOneFlowRate: number,
-  pointOneHead: number,
-  pointTwo: string,
-  pointTwoFlowRate: number,
-  pointTwoHead: number,
-}
-
-export interface FanSystemCurveData {
-  compressibilityFactor: number,
-  systemLossExponent: number,
-  pointOneFlowRate: number,
-  pointOnePressure: number,
-  pointTwo: string,
-  pointTwoFlowRate: number,
-  pointTwoPressure: number
-}
-
-
-export interface ByEquationInputs {
-  maxFlow: number,
-  equationOrder: number,
-  constant: number,
-  flow: number,
-  flowTwo: number,
-  flowThree: number,
-  flowFour: number,
-  flowFive: number,
-  flowSix: number
-}
-
-export interface EquipmentInputs {
-  measurementOption: number,
-  baselineMeasurement: number,
-  modificationMeasurementOption: number,
-  modifiedMeasurement: number
-}
-
-export interface ByDataInputs {
-  dataRows: Array<{ flow: number, yValue: number }>,
-  dataOrder: number
 }

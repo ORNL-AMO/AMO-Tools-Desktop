@@ -1,9 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { EquipmentCurveService } from '../equipment-curve.service';
-import { SystemAndEquipmentCurveService, ByDataInputs } from '../../system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
+import { CurveDataService } from '../../curve-data.service';
+import { ByDataInputs } from '../../../../shared/models/system-and-equipment-curve';
 
 @Component({
   selector: 'app-by-data-form',
@@ -25,7 +27,8 @@ export class ByDataFormComponent implements OnInit {
     2, 3, 4, 5, 6
   ];
   resetFormsSub: Subscription;
-  constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private formBuilder: FormBuilder) { }
+  constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private formBuilder: FormBuilder,
+    private curveDataService: CurveDataService) { }
 
   ngOnInit() {
     if (this.equipmentType == 'fan') {
@@ -40,7 +43,7 @@ export class ByDataFormComponent implements OnInit {
       this.yValueUnit = this.settings.distanceMeasurement;
     }
     this.initForm();
-    this.resetFormsSub = this.systemAndEquipmentCurveService.resetForms.subscribe(val => {
+    this.resetFormsSub = this.curveDataService.resetForms.subscribe(val => {
       if (val == true) {
         this.resetForm();
       }
@@ -84,12 +87,18 @@ export class ByDataFormComponent implements OnInit {
       flow: [0, [Validators.required, Validators.max(1000000)]],
       yValue: [0, [Validators.required, Validators.min(0)]]
     });
-    this.byDataForm.controls.dataRows.value.controls.push(tmpDataRowForm);
+    let tmpFormArray: FormArray = this.byDataForm.controls.dataRows.value;
+    tmpFormArray.push(tmpDataRowForm);
+    this.byDataForm.controls.dataRows.patchValue(tmpFormArray);
+    this.byDataForm.controls.dataRows.updateValueAndValidity();
     this.save();
   }
 
   removeRow(index: number) {
-    this.byDataForm.controls.dataRows.value.controls.splice(index, 1);
+    let tmpFormArray: FormArray = this.byDataForm.controls.dataRows.value;
+    tmpFormArray.value.splice(index, 1)
+    this.byDataForm.controls.dataRows.patchValue(tmpFormArray);
+    this.byDataForm.controls.dataRows.updateValueAndValidity();
     this.save();
   }
 }

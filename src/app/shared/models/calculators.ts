@@ -7,7 +7,7 @@ import { EnergyEquivalencyFuel, EnergyEquivalencyElectric } from "./phast/energy
 import { FlowCalculations } from "./phast/flowCalculations";
 import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-efficiency.service";
 import { Fan203Inputs } from "./fans";
-import { SystemAndEquipmentCurveData } from "../../calculator/system-and-equipment-curve/system-and-equipment-curve.service";
+import { SystemAndEquipmentCurveData } from "./system-and-equipment-curve";
 
 export interface Calculator {
     directoryId?: number;
