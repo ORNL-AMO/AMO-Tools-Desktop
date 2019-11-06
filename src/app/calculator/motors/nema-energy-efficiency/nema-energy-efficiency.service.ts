@@ -69,9 +69,9 @@ export class NemaEnergyEfficiencyService {
 }
 
 export interface NemaInputs {
-  frequency: string;
-  horsePower: string;
-  efficiencyClass: string;
+  frequency: number;
+  horsePower: number;
+  efficiencyClass: number;
   motorRPM: number;
   efficiency: number;
 }

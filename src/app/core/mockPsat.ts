@@ -3,487 +3,341 @@ import { Calculator } from "../shared/models/calculators";
 import { Settings } from "../shared/models/settings";
 
 export const MockPsat: Assessment = {
-    name: "Basic Pump Example",
-    type: "PSAT",
-    appVersion: "0.3.2-beta",
-    isExample: true,
-    psat: {
-        inputs: {
-            pump_style: 6,
-            pump_specified: null,
-            pump_rated_speed: 1785,
-            drive: 1,
-            kinematic_viscosity: 1.107,
-            specific_gravity: 1.002,
-            stages: 1,
-            fixed_speed: 0,
-            line_frequency: 60,
-            motor_rated_power: 150.01,
-            motor_rated_speed: 1785,
-            efficiency_class: 0,
-            efficiency: 95,
-            motor_rated_voltage: 460,
-            load_estimation_method: 1,
-            motor_rated_fla: 172.64,
-            margin: 0,
-            operating_hours: 8760,
-            flow_rate: 2500,
-            head: 137,
-            motor_field_power: 88.2,
-            motor_field_current: 130.3,
-            motor_field_voltage: 460,
-            cost_kw_hour: 0.066,
-            fluidType: "Water",
-            fluidTemperature: 68,
-            specifiedDriveEfficiency: null,
-            implementationCosts: null
+    "name": "Basic Pump Example",
+    "type": "PSAT",
+    "isExample": true,
+    "psat": {
+        "inputs": {
+            "pump_style": 6,
+            "pump_specified": null,
+            "pump_rated_speed": 2000,
+            "drive": 1,
+            "kinematic_viscosity": 1.107,
+            "specific_gravity": 1.002,
+            "stages": 1,
+            "fixed_speed": 0,
+            "line_frequency": 60,
+            "motor_rated_power": 350.01,
+            "motor_rated_speed": 2000,
+            "efficiency_class": 0,
+            "efficiency": 95,
+            "motor_rated_voltage": 460,
+            "load_estimation_method": 1,
+            "motor_rated_fla": 172.63,
+            "margin": 0,
+            "operating_hours": 8760,
+            "flow_rate": 2500,
+            "head": 410,
+            "motor_field_power": 88.2,
+            "motor_field_current": 187,
+            "motor_field_voltage": 460,
+            "cost_kw_hour": 0.066,
+            "fluidType": "Water",
+            "fluidTemperature": 68,
+            "specifiedDriveEfficiency": null,
+            "implementationCosts": null
         },
-        modifications: [
-            {
-                psat: {
-                    name: "Optimize Pump & Motor Combo",
-                    inputs: {
-                        pump_style: 6,
-                        pump_specified: 87.52,
-                        pump_rated_speed: 1785,
-                        drive: 1,
-                        kinematic_viscosity: 1.107,
-                        specific_gravity: 1.002,
-                        stages: 1,
-                        fixed_speed: 0,
-                        line_frequency: 60,
-                        motor_rated_power: 150.01,
-                        motor_rated_speed: 1785,
-                        efficiency_class: 2,
-                        efficiency: 95,
-                        motor_rated_voltage: 460,
-                        load_estimation_method: 1,
-                        motor_rated_fla: 168.61,
-                        margin: 0,
-                        operating_hours: 8760,
-                        flow_rate: 2499.99,
-                        head: 137.01,
-                        motor_field_power: 88.2,
-                        motor_field_current: 130.3,
-                        motor_field_voltage: 460,
-                        cost_kw_hour: 0.066,
-                        fluidType: "Water",
-                        fluidTemperature: 68,
-                        specifiedDriveEfficiency: null,
-                        implementationCosts: null
-                    },
-                    outputs: {
-                        pump_efficiency: 87.52,
-                        motor_rated_power: 150.01,
-                        motor_shaft_power: 103.21,
-                        pump_shaft_power: 98.99,
-                        motor_efficiency: 96.35,
-                        motor_power_factor: 83.43,
-                        motor_current: 120.23,
-                        motor_power: 79.91,
-                        annual_energy: 700.05,
-                        annual_cost: 46203.14,
-                        annual_savings_potential: 0,
-                        optimization_rating: 0
-                    }
+        "modifications": [{
+            "psat": {
+                "name": "New Pump and Motor",
+                "inputs": {
+                    "pump_style": 6,
+                    "pump_specified": 87.52,
+                    "pump_rated_speed": 2000,
+                    "drive": 1,
+                    "kinematic_viscosity": 1.107,
+                    "specific_gravity": 1.002,
+                    "stages": 1,
+                    "fixed_speed": 0,
+                    "line_frequency": 60,
+                    "motor_rated_power": 350.01,
+                    "motor_rated_speed": 2000,
+                    "efficiency_class": 2,
+                    "efficiency": 95,
+                    "motor_rated_voltage": 460,
+                    "load_estimation_method": 1,
+                    "motor_rated_fla": 389.1,
+                    "margin": 0,
+                    "operating_hours": 8760,
+                    "flow_rate": 2499.99,
+                    "head": 409.99,
+                    "motor_field_power": 88.2,
+                    "motor_field_current": 187,
+                    "motor_field_voltage": 460,
+                    "cost_kw_hour": 0.066,
+                    "fluidType": "Water",
+                    "fluidTemperature": 68,
+                    "specifiedDriveEfficiency": null,
+                    "implementationCosts": null
                 },
-                notes: {
-                    fieldDataNotes: "",
-                    motorNotes: "",
-                    pumpFluidNotes: "",
-                    systemBasicsNotes: ""
+                "outputs": {
+                    "pump_efficiency": 87.52,
+                    "motor_rated_power": 350.01,
+                    "motor_shaft_power": 308.56,
+                    "pump_shaft_power": 296.23,
+                    "motor_efficiency": 96.08,
+                    "motor_power_factor": 90.16,
+                    "motor_current": 333.55,
+                    "motor_power": 239.59,
+                    "load_factor": 0.88,
+                    "drive_efficiency": 96,
+                    "annual_energy": 2098.82,
+                    "annual_cost": 138521.99,
+                    "annual_savings_potential": 0,
+                    "optimization_rating": 0
                 }
             },
-            {
-                psat: {
-                    name: "Reduce speed to 60% with Static head",
-                    inputs: {
-                        pump_style: 11,
-                        pump_specified: 64.4,
-                        pump_rated_speed: 1785,
-                        drive: 1,
-                        kinematic_viscosity: 1.107,
-                        specific_gravity: 1.002,
-                        stages: 1,
-                        fixed_speed: 0,
-                        line_frequency: 60,
-                        motor_rated_power: 150.01,
-                        motor_rated_speed: 1785,
-                        efficiency_class: 0,
-                        efficiency: 95,
-                        motor_rated_voltage: 460,
-                        load_estimation_method: 1,
-                        motor_rated_fla: 172.63,
-                        margin: 0,
-                        operating_hours: 8760,
-                        flow_rate: 842,
-                        head: 63,
-                        motor_field_power: 88.2,
-                        motor_field_current: 130.3,
-                        motor_field_voltage: 460,
-                        cost_kw_hour: 0.066,
-                        fluidType: "Water",
-                        fluidTemperature: 68,
-                        specifiedDriveEfficiency: null,
-                        implementationCosts: null
-                    },
-                    outputs: {
-                        pump_efficiency: 64.4,
-                        motor_rated_power: 150.01,
-                        motor_shaft_power: 21.81,
-                        pump_shaft_power: 20.83,
-                        motor_efficiency: 83.24,
-                        motor_power_factor: 44.67,
-                        motor_current: 54.92,
-                        motor_power: 19.54,
-                        annual_energy: 171.21,
-                        annual_cost: 11299.56,
-                        annual_savings_potential: 0,
-                        optimization_rating: 0
-                    }
-                },
-                notes: {
-                    fieldDataNotes: "",
-                    motorNotes: "",
-                    pumpFluidNotes: "",
-                    systemBasicsNotes: ""
-                }
-            },
-            {
-                psat: {
-                    name: "Reduce speed to 60%",
-                    inputs: {
-                        pump_style: 11,
-                        pump_specified: 81.81,
-                        pump_rated_speed: 1785,
-                        drive: 1,
-                        kinematic_viscosity: 1.107,
-                        specific_gravity: 1.002,
-                        stages: 1,
-                        fixed_speed: 0,
-                        line_frequency: 60,
-                        motor_rated_power: 150.01,
-                        motor_rated_speed: 1785,
-                        efficiency_class: 0,
-                        efficiency: 95,
-                        motor_rated_voltage: 460,
-                        load_estimation_method: 1,
-                        motor_rated_fla: 172.63,
-                        margin: 0,
-                        operating_hours: 8760,
-                        flow_rate: 1475,
-                        head: 50,
-                        motor_field_power: 88.2,
-                        motor_field_current: 130.3,
-                        motor_field_voltage: 460,
-                        cost_kw_hour: 0.066,
-                        fluidType: "Water",
-                        fluidTemperature: 68,
-                        specifiedDriveEfficiency: null,
-                        implementationCosts: null
-                    },
-                    outputs: {
-                        pump_efficiency: 81.81,
-                        motor_rated_power: 150.01,
-                        motor_shaft_power: 23.86,
-                        pump_shaft_power: 22.8,
-                        motor_efficiency: 84.31,
-                        motor_power_factor: 47.47,
-                        motor_current: 55.82,
-                        motor_power: 21.11,
-                        annual_energy: 184.96,
-                        annual_cost: 12207.29,
-                        annual_savings_potential: 0,
-                        optimization_rating: 0
-                    }
-                },
-                notes: {
-                    fieldDataNotes: "",
-                    motorNotes: "",
-                    pumpFluidNotes: "",
-                    systemBasicsNotes: ""
-                }
-            },
-            {
-                psat: {
-                    name: "New",
-                    inputs: {
-                        pump_style: 6,
-                        pump_specified: 87.52,
-                        pump_rated_speed: 1785,
-                        drive: 1,
-                        kinematic_viscosity: 1.107,
-                        specific_gravity: 1.002,
-                        stages: 1,
-                        fixed_speed: 0,
-                        line_frequency: 60,
-                        motor_rated_power: 150.01,
-                        motor_rated_speed: 1785,
-                        efficiency_class: 2,
-                        efficiency: 95,
-                        motor_rated_voltage: 460,
-                        load_estimation_method: 1,
-                        motor_rated_fla: 168.62,
-                        margin: 0,
-                        operating_hours: 8760,
-                        flow_rate: 2500,
-                        head: 137,
-                        motor_field_power: 88.2,
-                        motor_field_current: 130.3,
-                        motor_field_voltage: 460,
-                        cost_kw_hour: 0.066,
-                        fluidType: "Water",
-                        fluidTemperature: 68,
-                        specifiedDriveEfficiency: null,
-                        implementationCosts: null
-                    },
-                    outputs: {
-                        pump_efficiency: 87.52,
-                        motor_rated_power: 150.01,
-                        motor_shaft_power: 103.2,
-                        pump_shaft_power: 98.99,
-                        motor_efficiency: 96.35,
-                        motor_power_factor: 83.42,
-                        motor_current: 120.22,
-                        motor_power: 79.91,
-                        annual_energy: 700,
-                        annual_cost: 46199.95,
-                        annual_savings_potential: 0,
-                        optimization_rating: 0
-                    }
-                },
-                notes: {
-                    fieldDataNotes: "",
-                    motorNotes: "",
-                    pumpFluidNotes: "",
-                    systemBasicsNotes: ""
-                },
-                exploreOpportunities: true
+            "notes": {
+                "fieldDataNotes": "",
+                "motorNotes": "",
+                "pumpFluidNotes": "",
+                "systemBasicsNotes": ""
             }
-        ],
-        name: "Baseline",
-        setupDone: true,
-        outputs: {
-            pump_efficiency: 81.81,
-            motor_rated_power: 150,
-            motor_shaft_power: 110.39,
-            pump_shaft_power: 105.9,
-            motor_efficiency: 93.36,
-            motor_power_factor: 84.97,
-            motor_current: 130.3,
-            motor_power: 88.21,
-            annual_energy: 772.7,
-            annual_cost: 50998.15,
-            annual_savings_potential: 0,
-            optimization_rating: 0,
-            percent_annual_savings: 0
+        }, {
+            "psat": {
+                "name": "VFD reduce speed to 90%",
+                "inputs": {
+                    "pump_style": 11,
+                    "pump_specified": 67,
+                    "pump_rated_speed": 1600,
+                    "drive": 4,
+                    "kinematic_viscosity": 1.107,
+                    "specific_gravity": 1.002,
+                    "stages": 1,
+                    "fixed_speed": 0,
+                    "line_frequency": 60,
+                    "motor_rated_power": 350.01,
+                    "motor_rated_speed": 2000,
+                    "efficiency_class": 0,
+                    "efficiency": 95,
+                    "motor_rated_voltage": 460,
+                    "load_estimation_method": 1,
+                    "motor_rated_fla": 172.63,
+                    "margin": 0,
+                    "operating_hours": 8760,
+                    "flow_rate": 2236.5,
+                    "head": 327.7,
+                    "motor_field_power": 88.2,
+                    "motor_field_current": 187,
+                    "motor_field_voltage": 460,
+                    "cost_kw_hour": 0.066,
+                    "fluidType": "Water",
+                    "fluidTemperature": 68,
+                    "specifiedDriveEfficiency": 95,
+                    "implementationCosts": null,
+                    "isVFD": true
+                },
+                "outputs": {
+                    "pump_efficiency": 67,
+                    "motor_rated_power": 350.01,
+                    "motor_shaft_power": 291.25,
+                    "pump_shaft_power": 276.69,
+                    "motor_efficiency": 94.3,
+                    "motor_power_factor": 88.67,
+                    "motor_current": 326.13,
+                    "motor_power": 230.4,
+                    "load_factor": 0.83,
+                    "drive_efficiency": 95,
+                    "annual_energy": 2018.27,
+                    "annual_cost": 133205.89,
+                    "annual_savings_potential": 0,
+                    "optimization_rating": 0
+                }
+            },
+            "notes": {
+                "fieldDataNotes": "Using system curve calculator, new pump curve meets system curve at 2236.5 gpm and 327.7 ft.",
+                "motorNotes": "",
+                "pumpFluidNotes": "Using Manuf.'s pump curve - Efficiency at 1800 rpm, 2237 gpm, 330 ft is ~ 67%",
+                "systemBasicsNotes": ""
+            },
+            "exploreOpportunities": true
+        }],
+        "name": "Baseline",
+        "setupDone": true,
+        "outputs": {
+            "pump_efficiency": 71.21,
+            "motor_rated_power": 350.01,
+            "motor_shaft_power": 379.26,
+            "pump_shaft_power": 364.1,
+            "motor_efficiency": 94.04,
+            "motor_power_factor": 201.93,
+            "motor_current": 187,
+            "motor_power": 300.86,
+            "load_factor": 1.08,
+            "drive_efficiency": 96,
+            "annual_energy": 2635.5,
+            "annual_cost": 173942.85,
+            "annual_savings_potential": 0,
+            "optimization_rating": 0
         }
-    }
-};
+    },
+    "modifiedDate": new Date(),
+    "appVersion": "0.5.3-beta"
+}
 
 export const MockPsatSettings: Settings = {
-    language: "English",
-    currency: "$ - US Dollar",
-    unitsOfMeasure: "Imperial",
-    distanceMeasurement: "ft",
-    flowMeasurement: "gpm",
-    powerMeasurement: "hp",
-    pressureMeasurement: "psi",
-    energySourceType: "Fuel",
-    energyResultUnit: "MMBtu",
-    temperatureMeasurement: "F",
-    steamTemperatureMeasurement: "F",
-    steamPressureMeasurement: "psig",
-    steamSpecificEnthalpyMeasurement: "btuLb",
-    steamSpecificEntropyMeasurement: "btulbF",
-    steamSpecificVolumeMeasurement: "ft3lb",
-    steamMassFlowMeasurement: "klb",
-    steamPowerMeasurement: "kW",
-    currentMeasurement: null,
-    viscosityMeasurement: null,
-    voltageMeasurement: null,
-    furnaceType: null,
-    customFurnaceName: null,
-    appVersion: "0.3.1-beta",
-    fanCurveType: null,
-    fanConvertedConditions: null,
-    phastRollupUnit: "MMBtu",
-    phastRollupFuelUnit: "MMBtu",
-    phastRollupElectricityUnit: "MMBtu",
-    phastRollupSteamUnit: "MMBtu",
-    defaultPanelTab: "results",
-    fuelCost: 3.99,
-    steamCost: 4.69,
-    electricityCost: 0.066,
-    densityMeasurement: "lbscf",
-    fanFlowRate: "ft3/min",
-    fanPressureMeasurement: "inH2o",
-    fanBarometricPressure: "inHg",
-    fanSpecificHeatGas: "btulbF",
-    fanPowerMeasurement: "hp",
-    fanTemperatureMeasurement: "F",
-    steamEnergyMeasurement: "MMBtu",
-    disableTutorial: false,
-    disableDashboardTutorial: false,
-    disablePsatSetupTutorial: false,
-    disablePsatAssessmentTutorial: false,
-    disablePsatReportTutorial: false,
-    disablePhastSetupTutorial: false,
-    disablePhastAssessmentTutorial: false,
-    disablePhastReportTutorial: false,
-    disableFsatSetupTutorial: false,
-    disableFsatAssessmentTutorial: false,
-    disableFsatReportTutorial: false,
-    facilityInfo: {
-        companyName: 'ORNL',
-        facilityName: 'ORNL Test Facility',
-        address: {
-            street: '1 Bethel Valley Rd.',
-            city: 'Oak Ridge',
-            state: 'TN',
-            country: 'U.S.',
-            zip: '37831'
+    "language": "English",
+    "currency": "$ - US Dollar",
+    "unitsOfMeasure": "Imperial",
+    "distanceMeasurement": "ft",
+    "flowMeasurement": "gpm",
+    "powerMeasurement": "hp",
+    "pressureMeasurement": "psi",
+    "steamPressureMeasurement": "psig",
+    "steamTemperatureMeasurement": "F",
+    "steamSpecificEnthalpyMeasurement": "btuLb",
+    "steamSpecificEntropyMeasurement": "btulbF",
+    "steamSpecificVolumeMeasurement": "ft3lb",
+    "steamMassFlowMeasurement": "klb",
+    "steamPowerMeasurement": "kW",
+    "steamVolumeMeasurement": "gal",
+    "steamVolumeFlowMeasurement": "gpm",
+    "steamVacuumPressure": "psia",
+    "currentMeasurement": null,
+    "viscosityMeasurement": null,
+    "voltageMeasurement": null,
+    "energySourceType": "Fuel",
+    "furnaceType": null,
+    "energyResultUnit": "MMBtu",
+    "customFurnaceName": null,
+    "temperatureMeasurement": "F",
+    "appVersion": "0.5.3-beta",
+    "fanCurveType": null,
+    "fanConvertedConditions": null,
+    "phastRollupUnit": "MMBtu",
+    "phastRollupFuelUnit": "MMBtu",
+    "phastRollupElectricityUnit": "MMBtu",
+    "phastRollupSteamUnit": "MMBtu",
+    "defaultPanelTab": "results",
+    "fuelCost": 3.99,
+    "steamCost": 4.69,
+    "electricityCost": 0.066,
+    "densityMeasurement": "lbscf",
+    "fanFlowRate": "ft3/min",
+    "fanPressureMeasurement": "inH2o",
+    "fanBarometricPressure": "inHg",
+    "fanSpecificHeatGas": "btulbF",
+    "fanPowerMeasurement": "hp",
+    "fanTemperatureMeasurement": "F",
+    "steamEnergyMeasurement": "MMBtu",
+    "disableTutorial": false,
+    "disableDashboardTutorial": false,
+    "disablePsatSetupTutorial": false,
+    "disablePsatAssessmentTutorial": false,
+    "disablePsatReportTutorial": false,
+    "disablePhastSetupTutorial": false,
+    "disablePhastAssessmentTutorial": false,
+    "disablePhastReportTutorial": false,
+    "disableFsatSetupTutorial": false,
+    "disableFsatAssessmentTutorial": false,
+    "disableFsatReportTutorial": false,
+    "compressedAirCost": 0.022,
+    "otherFuelCost": 0,
+    "waterCost": 0,
+    "waterWasteCost": 0,
+    "modifiedDate": new Date(),
+    "facilityInfo": {
+        "companyName": "ORNL",
+        "facilityName": "ORNL Test Facility",
+        "address": {
+            "street": "1 Bethel Valley Rd.",
+            "city": "Oak Ridge",
+            "state": "TN",
+            "country": "U.S.",
+            "zip": "37831"
         },
-        facilityContact: {
-            contactName: 'T. Owner',
-            phoneNumber: 8655767658,
-            email: 't.owner@ornl.com'
+        "facilityContact": {
+            "contactName": "T. Owner",
+            "phoneNumber": 8655767658,
+            "email": "t.owner@ornl.com"
         },
-        assessmentContact: {
-            contactName: 'D.O. Energy',
-            phoneNumber: 1234567890,
-            email: 'AMO_ToolHelpDesk@ee.doe.gov'
-        }
-    }
-};
+        "assessmentContact": {
+            "contactName": "D.O. Energy",
+            "phoneNumber": 1234567890,
+            "email": "AMO_ToolHelpDesk@ee.doe.gov"
+        },
+        "date": "Tue Dec 04 2018"
+    },
+}
+
+
 
 export const MockPsatCalculator: Calculator = {
-    systemAndEquipmentCurveData: {
-        pumpSystemCurveData: {
-            specificGravity: 1.002,
-            systemLossExponent: 1.9,
-            pointOneFlowRate: 0,
-            pointOneHead: 50,
-            pointTwo: "Baseline",
-            pointTwoFlowRate: 3250,
-            pointTwoHead: 225,
-        },
-        equipmentCurveFormView: 'Data',
-        byEquationInputs: {
-            maxFlow: 3250,
-            equationOrder: 3,
-            constant: 245.03015298,
-            flow: -0.0767853775,
-            flowTwo: 0.0000277329,
-            flowThree: -5.7e-9,
-            flowFour: 0,
-            flowFive: 0,
-            flowSix: 0
-        },
-        equipmentInputs: {
-            measurementOption: 1,
-            baselineMeasurement: 1785,
-            modificationMeasurementOption: 1,
-            modifiedMeasurement: 1071
-        },
-        byDataInputs: {
-            dataRows: [
-                {
-                    flow: 0,
-                    yValue: 245
-                },
-                {
-                    yValue: 213,
-                    flow: 500
-                },
-                {
-                    yValue: 190,
-                    flow: 1000
-                },
-                {
-                    yValue: 173.1,
-                    flow: 1500
-                },
-                {
-                    yValue: 156.6,
-                    flow: 2000
-                },
-                {
-                    yValue: 136.9,
-                    flow: 2500
-                },
-                {
-                    yValue: 109.7,
-                    flow: 3000
-                },
-                {
-                    yValue: 91.9,
-                    flow: 3250
-                }
-            ],
-            dataOrder: 3
-        },
-        systemCurveDataPoints: [
-            {
-                pointName: "Baseline1",
-                flowRate: 0,
-                yValue: 50
-            },
-            {
-                pointName: "Baseline",
-                flowRate: 3250,
-                yValue: 225
-            },
-            {
-                pointName: "Optimize Pump & Motor Combo1",
-                flowRate: 0,
-                yValue: 0
-            },
-            {
-                pointName: "Optimize Pump & Motor Combo",
-                flowRate: 2499.99,
-                yValue: 137.01
-            },
-            {
-                pointName: "Reduce speed to 60% with Static head1",
-                flowRate: 0,
-                yValue: 0
-            },
-            {
-                pointName: "Reduce speed to 60% with Static head",
-                flowRate: 842,
-                yValue: 63
-            },
-            {
-                pointName: "Reduce speed to 60%1",
-                flowRate: 0,
-                yValue: 0
-            },
-            {
-                pointName: "Reduce speed to 60%",
-                flowRate: 1475,
-                yValue: 50
-            },
-            {
-                pointName: "New1",
-                flowRate: 0,
-                yValue: 0
-            },
-            {
-                pointName: "New",
-                flowRate: 2500,
-                yValue: 137
-            }
-        ]
+    "motorPerformanceInputs": {
+        "frequency": 50,
+        "horsePower": 300,
+        "motorRPM": 2000,
+        "efficiencyClass": 2,
+        "motorVoltage": 460,
+        "fullLoadAmps": 323.9,
+        "sizeMargin": 1,
+        "efficiency": 95
     },
-    motorPerformanceInputs: {
-        frequency: 50,
-        horsePower: 150.01,
-        motorRPM: 1785,
-        efficiencyClass: 0,
-        motorVoltage: 460,
-        fullLoadAmps: 172.64,
-        sizeMargin: 0,
-        efficiency: 95
+    "systemAndEquipmentCurveData": {
+        "pumpSystemCurveData": {
+            "specificGravity": 1.002,
+            "systemLossExponent": 1.9,
+            "pointOneFlowRate": 0,
+            "pointOneHead": 0,
+            "pointTwo": "Baseline",
+            "pointTwoFlowRate": 2500,
+            "pointTwoHead": 410
+        },
+        "byEquationInputs": {
+            "maxFlow": 3000,
+            "equationOrder": 3,
+            "constant": 560,
+            "flow": -0.0447,
+            "flowTwo": -0.0000019,
+            "flowThree": -2.22e-9,
+            "flowFour": 0,
+            "flowFive": 0,
+            "flowSix": 0
+        },
+        "byDataInputs": {
+            "dataRows": [{
+                "flow": 0,
+                "yValue": 560
+            }, {
+                "flow": 500,
+                "yValue": 540
+            }, {
+                "flow": 1000,
+                "yValue": 510
+            }, {
+                "flow": 1500,
+                "yValue": 480
+            }, {
+                "flow": 2000,
+                "yValue": 450
+            }, {
+                "flow": 2500,
+                "yValue": 400
+            }, {
+                "flow": 3000,
+                "yValue": 350
+            }],
+            "dataOrder": 3
+        },
+        "equipmentInputs": {
+            "measurementOption": 1,
+            "baselineMeasurement": 2000,
+            "modificationMeasurementOption": 1,
+            "modifiedMeasurement": 1800
+        },
+        "equipmentCurveFormView": "Equation"
+    },
+    "nemaInputs": {
+        "frequency": 60,
+        "horsePower": 350,
+        "efficiencyClass": 0,
+        "motorRPM": 2000,
+        "efficiency": null
+    },
+    "specificSpeedInputs": {
+        "pumpType": 6,
+        "pumpRPM": 2000,
+        "flowRate": 2500,
+        "head": 410
     }
-};
+}
