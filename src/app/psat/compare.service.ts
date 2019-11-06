@@ -131,18 +131,14 @@ export class CompareService {
       modification = this.modifiedPSAT;
     }
     if (baseline && modification) {
-      if (baseline.inputs.pump_style == 11 || modification.inputs.pump_style == 11) {
-        if (baseline.outputs !== undefined) {
-          if (baseline.outputs.pump_efficiency !== null && baseline.outputs.pump_efficiency !== undefined && baseline.outputs.pump_efficiency != modification.inputs.pump_specified) {
-            let baselineCompValue = Math.round(baseline.outputs.pump_efficiency * 10) / 10;
-            let modificationCompValue = Math.round(modification.inputs.pump_specified * 10) / 10;
-            if (baselineCompValue == modificationCompValue) {
-              return false;
-            } else {
-              return true;
-            }
-          } else {
+      if (baseline.outputs !== undefined) {
+        if (baseline.outputs.pump_efficiency !== null && baseline.outputs.pump_efficiency !== undefined && baseline.outputs.pump_efficiency != modification.inputs.pump_specified) {
+          let baselineCompValue = Math.round(baseline.outputs.pump_efficiency * 10) / 10;
+          let modificationCompValue = Math.round(modification.inputs.pump_specified * 10) / 10;
+          if (baselineCompValue == modificationCompValue) {
             return false;
+          } else {
+            return true;
           }
         } else {
           return false;
