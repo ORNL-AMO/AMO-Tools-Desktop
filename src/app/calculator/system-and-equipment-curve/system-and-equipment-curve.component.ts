@@ -81,6 +81,17 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
         this.updateEquipmentCurveResultData();
       }
     });
+
+    this.systemCurveCollapsedSub = this.systemAndEquipmentCurveService.systemCurveCollapsed.subscribe(val => {
+      if(val != 'open'){
+        this.updateEquipmentCurveResultData();
+      }
+    })
+    this.equipmentCurveCollapsedSub = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.subscribe(val => {
+      if (val != 'open') {
+        this.updateSystemCurveResultData();
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -88,6 +99,8 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     this.byDataSubscription.unsubscribe();
     this.byEquationSubscription.unsubscribe();
     this.curveDataSubscription.unsubscribe();
+    this.systemCurveCollapsedSub.unsubscribe();
+    this.equipmentCurveCollapsedSub.unsubscribe();
     if (this.assessment != undefined) {
       this.saveCalculator();
     }

@@ -40,8 +40,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   isEquipmentModificationShown: boolean;
 
   //subs
-  equipmentCurveCollapsedSub: Subscription;
-  systemCurveCollapsedSub: Subscription;
   updateGraphSub: Subscription;
 
   baselineEquipmentLine: d3.Selection<any>;
