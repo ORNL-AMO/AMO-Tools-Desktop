@@ -55,7 +55,6 @@ export class HeaderFormComponent implements OnInit {
     if (changes.numberOfHeaders && !changes.numberOfHeaders.isFirstChange()) {
       this.setErrorMsgs();
     }
-    console.log(this.headerForm);
   }
 
   setErrorMsgs() {
@@ -139,28 +138,28 @@ export class HeaderFormComponent implements OnInit {
   }
   isPressureDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isPressureDifferent(this.pressureLevel);
+      return this.compareService.isPressureDifferent(this.pressureLevel+'Header');
     } else {
       return false;
     }
   }
   isProcessSteamUsageDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isProcessSteamUsageDifferent(this.pressureLevel);
+      return this.compareService.isProcessSteamUsageDifferent(this.pressureLevel+'Header');
     } else {
       return false;
     }
   }
   isCondensationRecoveryRateDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isCondensationRecoveryRateDifferent(this.pressureLevel);
+      return this.compareService.isCondensationRecoveryRateDifferent(this.pressureLevel+'Header');
     } else {
       return false;
     }
   }
   isHeatLossDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isHeatLossDifferent(this.pressureLevel);
+      return this.compareService.isHeatLossDifferent(this.pressureLevel+'Header');
     } else {
       return false;
     }
@@ -181,21 +180,21 @@ export class HeaderFormComponent implements OnInit {
   }
   isFlashCondensateIntoHeaderDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isFlashCondensateIntoHeaderDifferent(this.pressureLevel);
+      return this.compareService.isFlashCondensateIntoHeaderDifferent(this.pressureLevel+'Header');
     } else {
       return false;
     }
   }
   isDesuperheatSteamIntoNextHighestDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isDesuperheatSteamIntoNextHighestDifferent(this.pressureLevel);
+      return this.compareService.isDesuperheatSteamIntoNextHighestDifferent(this.pressureLevel+'Header');
     } else {
       return false;
     }
   }
   isDesuperheatSteamTemperatureDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isDesuperheatSteamTemperatureDifferent(this.pressureLevel);
+      return this.compareService.isDesuperheatSteamTemperatureDifferent(this.pressureLevel+'Header');
     } else {
       return false;
     }

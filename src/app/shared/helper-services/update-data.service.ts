@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
+import { SSMT } from '../models/steam/ssmt';
 import { LightingReplacementTreasureHunt } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 declare const packageJson;
@@ -19,6 +20,8 @@ export class UpdateDataService {
                 return this.updatePsat(assessment);
             } else if (assessment.type === 'PHAST') {
                 return this.updatePhast(assessment);
+            } else if (assessment.type == 'SSMT') {
+                return this.updateSSMT(assessment);
             } else if (assessment.type === 'TreasureHunt') {
                 return this.updateTreasureHunt(assessment);
             }
@@ -98,6 +101,28 @@ export class UpdateDataService {
         return settings;
     }
 
+    updateSSMT(assessment: Assessment): Assessment {
+        assessment.ssmt = this.updateHeaders(assessment.ssmt);
+        if (assessment.ssmt.modifications) {
+            assessment.ssmt.modifications.forEach(mod => {
+                mod.ssmt = this.updateHeaders(mod.ssmt);
+            })
+        };
+        return assessment;
+    }
+
+    updateHeaders(ssmt: SSMT) {
+        if (ssmt.headerInput.highPressureHeader == undefined && ssmt.headerInput.highPressure != undefined) {
+            ssmt.headerInput.highPressureHeader = ssmt.headerInput.highPressure;
+        }
+        if (ssmt.headerInput.mediumPressureHeader == undefined && ssmt.headerInput.mediumPressure != undefined) {
+            ssmt.headerInput.mediumPressureHeader = ssmt.headerInput.mediumPressure;
+        }
+        if (ssmt.headerInput.lowPressureHeader == undefined && ssmt.headerInput.lowPressure != undefined) {
+            ssmt.headerInput.lowPressureHeader = ssmt.headerInput.lowPressure;
+        }
+        return ssmt;
+    }
     updateTreasureHunt(assessment: Assessment): Assessment {
         if (assessment.treasureHunt) {
             if (assessment.treasureHunt.lightingReplacements) {

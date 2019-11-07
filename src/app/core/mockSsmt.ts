@@ -116,7 +116,7 @@ export const MockSsmt: Assessment = {
                     },
                     "headerInput": {
                         "numberOfHeaders": 3,
-                        "highPressure": {
+                        "highPressureHeader": {
                             "pressure": 600,
                             "processSteamUsage": 50,
                             "condensationRecoveryRate": 50,
@@ -124,7 +124,7 @@ export const MockSsmt: Assessment = {
                             "condensateReturnTemperature": 150,
                             "flashCondensateReturn": false
                         },
-                        "mediumPressure": {
+                        "mediumPressureHeader": {
                             "pressure": 150,
                             "processSteamUsage": 100,
                             "condensationRecoveryRate": 50,
@@ -133,7 +133,7 @@ export const MockSsmt: Assessment = {
                             "desuperheatSteamIntoNextHighest": false,
                             "desuperheatSteamTemperature": null
                         },
-                        "lowPressure": {
+                        "lowPressureHeader": {
                             "pressure": 20,
                             "processSteamUsage": 200,
                             "condensationRecoveryRate": 50,
@@ -258,7 +258,7 @@ export const MockSsmt: Assessment = {
                                 },
                                 "headerInput": {
                                     "numberOfHeaders": 3,
-                                    "highPressure": {
+                                    "highPressureHeader": {
                                         "pressure": 600,
                                         "processSteamUsage": 50,
                                         "condensationRecoveryRate": 50,
@@ -266,7 +266,7 @@ export const MockSsmt: Assessment = {
                                         "condensateReturnTemperature": 150,
                                         "flashCondensateReturn": false
                                     },
-                                    "mediumPressure": {
+                                    "mediumPressureHeader": {
                                         "pressure": 150,
                                         "processSteamUsage": 100,
                                         "condensationRecoveryRate": 50,
@@ -275,7 +275,7 @@ export const MockSsmt: Assessment = {
                                         "desuperheatSteamIntoNextHighest": false,
                                         "desuperheatSteamTemperature": null
                                     },
-                                    "lowPressure": {
+                                    "lowPressureHeader": {
                                         "pressure": 20,
                                         "processSteamUsage": 200,
                                         "condensationRecoveryRate": 50,
@@ -303,7 +303,7 @@ export const MockSsmt: Assessment = {
                     },
                     "headerInput": {
                         "numberOfHeaders": 3,
-                        "highPressure": {
+                        "highPressureHeader": {
                             "pressure": 600,
                             "processSteamUsage": 50,
                             "condensationRecoveryRate": 50,
@@ -311,7 +311,7 @@ export const MockSsmt: Assessment = {
                             "condensateReturnTemperature": 150,
                             "flashCondensateReturn": false
                         },
-                        "mediumPressure": {
+                        "mediumPressureHeader": {
                             "pressure": 150,
                             "processSteamUsage": 100,
                             "condensationRecoveryRate": 50,
@@ -320,7 +320,7 @@ export const MockSsmt: Assessment = {
                             "desuperheatSteamIntoNextHighest": false,
                             "desuperheatSteamTemperature": null
                         },
-                        "lowPressure": {
+                        "lowPressureHeader": {
                             "pressure": 20,
                             "processSteamUsage": 200,
                             "condensationRecoveryRate": 50,
@@ -445,7 +445,7 @@ export const MockSsmt: Assessment = {
                                 },
                                 "headerInput": {
                                     "numberOfHeaders": 3,
-                                    "highPressure": {
+                                    "highPressureHeader": {
                                         "pressure": 600,
                                         "processSteamUsage": 50,
                                         "condensationRecoveryRate": 50,
@@ -453,7 +453,7 @@ export const MockSsmt: Assessment = {
                                         "condensateReturnTemperature": 150,
                                         "flashCondensateReturn": false
                                     },
-                                    "mediumPressure": {
+                                    "mediumPressureHeader": {
                                         "pressure": 150,
                                         "processSteamUsage": 100,
                                         "condensationRecoveryRate": 50,
@@ -462,7 +462,7 @@ export const MockSsmt: Assessment = {
                                         "desuperheatSteamIntoNextHighest": false,
                                         "desuperheatSteamTemperature": null
                                     },
-                                    "lowPressure": {
+                                    "lowPressureHeader": {
                                         "pressure": 20,
                                         "processSteamUsage": 200,
                                         "condensationRecoveryRate": 50,
@@ -587,7 +587,7 @@ export const MockSsmt: Assessment = {
                                             },
                                             "headerInput": {
                                                 "numberOfHeaders": 3,
-                                                "highPressure": {
+                                                "highPressureHeader": {
                                                     "pressure": 600,
                                                     "processSteamUsage": 50,
                                                     "condensationRecoveryRate": 50,
@@ -595,7 +595,7 @@ export const MockSsmt: Assessment = {
                                                     "condensateReturnTemperature": 150,
                                                     "flashCondensateReturn": false
                                                 },
-                                                "mediumPressure": {
+                                                "mediumPressureHeader": {
                                                     "pressure": 150,
                                                     "processSteamUsage": 100,
                                                     "condensationRecoveryRate": 50,
@@ -604,7 +604,7 @@ export const MockSsmt: Assessment = {
                                                     "desuperheatSteamIntoNextHighest": false,
                                                     "desuperheatSteamTemperature": null
                                                 },
-                                                "lowPressure": {
+                                                "lowPressureHeader": {
                                                     "pressure": 20,
                                                     "processSteamUsage": 200,
                                                     "condensationRecoveryRate": 50,
@@ -632,7 +632,7 @@ export const MockSsmt: Assessment = {
                                 },
                                 "headerInput": {
                                     "numberOfHeaders": 3,
-                                    "highPressure": {
+                                    "highPressureHeader": {
                                         "pressure": 600,
                                         "processSteamUsage": 50,
                                         "condensationRecoveryRate": 50,
@@ -640,7 +640,7 @@ export const MockSsmt: Assessment = {
                                         "condensateReturnTemperature": 150,
                                         "flashCondensateReturn": false
                                     },
-                                    "mediumPressure": {
+                                    "mediumPressureHeader": {
                                         "pressure": 150,
                                         "processSteamUsage": 100,
                                         "condensationRecoveryRate": 50,
@@ -649,7 +649,7 @@ export const MockSsmt: Assessment = {
                                         "desuperheatSteamIntoNextHighest": false,
                                         "desuperheatSteamTemperature": null
                                     },
-                                    "lowPressure": {
+                                    "lowPressureHeader": {
                                         "pressure": 20,
                                         "processSteamUsage": 200,
                                         "condensationRecoveryRate": 50,
@@ -677,7 +677,7 @@ export const MockSsmt: Assessment = {
                     },
                     "headerInput": {
                         "numberOfHeaders": 3,
-                        "highPressure": {
+                        "highPressureHeader": {
                             "pressure": 600,
                             "processSteamUsage": 50,
                             "condensationRecoveryRate": 75,
@@ -685,7 +685,7 @@ export const MockSsmt: Assessment = {
                             "condensateReturnTemperature": 150,
                             "flashCondensateReturn": false
                         },
-                        "mediumPressure": {
+                        "mediumPressureHeader": {
                             "pressure": 150,
                             "processSteamUsage": 100,
                             "condensationRecoveryRate": 75,
@@ -694,7 +694,7 @@ export const MockSsmt: Assessment = {
                             "desuperheatSteamIntoNextHighest": false,
                             "desuperheatSteamTemperature": null
                         },
-                        "lowPressure": {
+                        "lowPressureHeader": {
                             "pressure": 20,
                             "processSteamUsage": 200,
                             "condensationRecoveryRate": 75,
@@ -722,7 +722,7 @@ export const MockSsmt: Assessment = {
         },
         "headerInput": {
             "numberOfHeaders": 3,
-            "highPressure": {
+            "highPressureHeader": {
                 "pressure": 600,
                 "processSteamUsage": 50,
                 "condensationRecoveryRate": 50,
@@ -730,7 +730,7 @@ export const MockSsmt: Assessment = {
                 "condensateReturnTemperature": 150,
                 "flashCondensateReturn": false
             },
-            "mediumPressure": {
+            "mediumPressureHeader": {
                 "pressure": 150,
                 "processSteamUsage": 100,
                 "condensationRecoveryRate": 50,
@@ -739,7 +739,7 @@ export const MockSsmt: Assessment = {
                 "desuperheatSteamIntoNextHighest": false,
                 "desuperheatSteamTemperature": null
             },
-            "lowPressure": {
+            "lowPressureHeader": {
                 "pressure": 20,
                 "processSteamUsage": 200,
                 "condensationRecoveryRate": 50,

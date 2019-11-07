@@ -25,12 +25,12 @@ export class HoverProcessUsageComponent implements OnInit {
 
   ngOnInit() {
     if (this.pressureLevel === 'Low') {
-      this.processSteamUsage = this.outputData.lowPressureProcessUsage;
+      this.processSteamUsage = this.outputData.lowPressureProcessSteamUsage;
     } else if (this.pressureLevel === 'Medium') {
-      this.processSteamUsage = this.outputData.mediumPressureProcessUsage;
+      this.processSteamUsage = this.outputData.mediumPressureProcessSteamUsage;
 
     } else if (this.pressureLevel === 'High') {
-      this.processSteamUsage = this.outputData.highPressureProcessUsage;
+      this.processSteamUsage = this.outputData.highPressureProcessSteamUsage;
 
     }
   }

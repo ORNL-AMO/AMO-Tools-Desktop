@@ -274,9 +274,9 @@ export class AssessmentService {
       },
       headerInput: {
         numberOfHeaders: 1,
-        highPressure: undefined,
-        mediumPressure: undefined,
-        lowPressure: undefined
+        highPressureHeader: undefined,
+        mediumPressureHeader: undefined,
+        lowPressureHeader: undefined
       }
     };
   }

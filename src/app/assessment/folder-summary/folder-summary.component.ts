@@ -13,8 +13,8 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { FsatService } from '../../fsat/fsat.service';
 import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
-import { CalculateModelService } from '../../ssmt/ssmt-calculations/calculate-model.service';
 import { SSMTInputs } from '../../shared/models/steam/ssmt';
+import { SsmtService } from '../../ssmt/ssmt.service';
 
 @Component({
   selector: 'app-folder-summary',
@@ -50,7 +50,7 @@ export class FolderSummaryComponent implements OnInit {
   counter: any;
   constructor(private settingsService: SettingsService, private psatService: PsatService, private fsatService: FsatService,
     private convertUnitsService: ConvertUnitsService, private executiveSummaryService: ExecutiveSummaryService,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private calculateModelService: CalculateModelService) { }
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
   }
@@ -115,20 +115,12 @@ export class FolderSummaryComponent implements OnInit {
         } else if (assessment.type === 'SSMT') {
           if (assessment.ssmt.setupDone) {
             let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-            let results: { inputData: SSMTInputs, outputData: SSMTOutput }
-            if (assessment.ssmt.resultsCalculated) {
-              let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(JSON.parse(JSON.stringify(assessment.ssmt)));
-              results = {
-                inputData: inputData,
-                outputData: JSON.parse(JSON.stringify(assessment.ssmt.outputData))
-              }
+            let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModel(assessment.ssmt, settings, true, 0);
+            if (results.outputData.boilerOutput != undefined) {
+              results.outputData.operationsOutput.boilerFuelUsage = this.convertUnitsService.value(results.outputData.operationsOutput.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
+              this.ssmtEnergyUsed = results.outputData.operationsOutput.boilerFuelUsage + this.ssmtEnergyUsed;
+              this.ssmtEnergyCost = results.outputData.operationsOutput.totalOperatingCost + this.ssmtEnergyCost;
             }
-            else {
-              results = this.calculateModelService.initDataAndRun(assessment.ssmt, settings, true, false);
-            }
-            results.outputData.boilerFuelUsage = this.convertUnitsService.value(results.outputData.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
-            this.ssmtEnergyUsed = results.outputData.boilerFuelUsage + this.ssmtEnergyUsed;
-            this.ssmtEnergyCost = results.outputData.totalOperatingCost + this.ssmtEnergyCost;
           }
         }
       });

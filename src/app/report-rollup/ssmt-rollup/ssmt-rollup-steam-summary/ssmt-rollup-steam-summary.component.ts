@@ -105,17 +105,17 @@ export class SsmtRollupSteamSummaryComponent implements OnInit {
         if (i === 1) {
           this.unit = this.settings.steamEnergyMeasurement + '/yr';
         }
-        num1 = data.baselineResults.boilerFuelUsage;
+        num1 = data.baselineResults.operationsOutput.boilerFuelUsage;
         if (data.modName) {
-          num2 = data.modificationResults.boilerFuelUsage;
+          num2 = data.modificationResults.operationsOutput.boilerFuelUsage;
         }
       } else if (graphOption === 'Cost') {
         if (i === 1) {
           this.unit = "$/yr";
         }
-        num1 = data.baselineResults.totalOperatingCost;
+        num1 = data.baselineResults.operationsOutput.totalOperatingCost;
         if (data.modName) {
-          num2 = data.modificationResults.totalOperatingCost;
+          num2 = data.modificationResults.operationsOutput.totalOperatingCost;
         }
       }
       i++;

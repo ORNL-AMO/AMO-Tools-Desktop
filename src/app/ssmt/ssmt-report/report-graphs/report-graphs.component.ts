@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-import { WaterfallItem, WaterfallInput } from '../../../shared/waterfall-graph/waterfall-graph.service';
+import { WaterfallInput } from '../../../shared/waterfall-graph/waterfall-graph.service';
 import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
-import * as d3 from 'd3';
 import { ReportGraphsService } from './report-graphs.service';
 
 @Component({
@@ -31,7 +30,14 @@ export class ReportGraphsComponent implements OnInit {
 
   @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
   @ViewChild('waterfallChartContainer', { static: false }) waterfallChartContainer: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getPieWidth();
+    this.getWaterfallWidth();
+  }
 
+  waterFallWidth: number;
+  pieWidth: number;
   ssmt: SSMT;
 
   ssmtOptions: Array<{ name: string, ssmt: SSMT, index: number }>;
@@ -72,9 +78,6 @@ export class ReportGraphsComponent implements OnInit {
   waterfallModificationNetColor: string = "#A193AD";
   waterfallModificationLossColor: string = "#FFC466";
 
-
-  steamPowerUnit: string = 'kW';
-
   ssmt1GenerationNoData: boolean = false;
   ssmt2GenerationNoData: boolean = false;
   ssmt1WaterfallNoData: boolean = false;
@@ -97,6 +100,11 @@ export class ReportGraphsComponent implements OnInit {
     this.handleNoDataMessage();
   }
 
+  ngAfterViewInit() {
+    this.getWaterfallWidth();
+    this.getPieWidth();
+  }
+
   handleNoDataMessage() {
     if (this.ssmt1GenerationPieValues === undefined || this.ssmt1GenerationPieValues === null || this.ssmt1GenerationPieValues.length <= 0) {
       this.ssmt1GenerationNoData = true;
@@ -105,15 +113,19 @@ export class ReportGraphsComponent implements OnInit {
       this.ssmt2GenerationNoData = true;
     }
     this.ssmt1WaterfallNoData = true;
-    for (let i = 0; i < this.ssmt1WaterfallData.inputObjects.length; i++) {
-      if (this.ssmt1WaterfallData.inputObjects[i].value > 0) {
-        this.ssmt1WaterfallNoData = false;
+    if (this.ssmt1WaterfallData != undefined) {
+      for (let i = 0; i < this.ssmt1WaterfallData.inputObjects.length; i++) {
+        if (this.ssmt1WaterfallData.inputObjects[i].value > 0) {
+          this.ssmt1WaterfallNoData = false;
+        }
       }
     }
     this.ssmt2WaterfallNoData = true;
-    for (let i = 0; i < this.ssmt2WaterfallData.inputObjects.length; i++) {
-      if (this.ssmt2WaterfallData.inputObjects[i].value > 0) {
-        this.ssmt2WaterfallNoData = false;
+    if (this.ssmt2WaterfallData != undefined) {
+      for (let i = 0; i < this.ssmt2WaterfallData.inputObjects.length; i++) {
+        if (this.ssmt2WaterfallData.inputObjects[i].value > 0) {
+          this.ssmt2WaterfallNoData = false;
+        }
       }
     }
   }
@@ -144,6 +156,7 @@ export class ReportGraphsComponent implements OnInit {
     this.selectedSsmt1 = this.ssmtOptions[0];
     if (this.ssmt.modifications !== undefined && this.ssmt.modifications !== null && this.ssmt.modifications.length > 0) {
       this.modExists = true;
+      console.log('MOD EXISTS!');
       let i = 1;
       this.ssmt.modifications.forEach(mod => {
         this.ssmtOptions.push({ name: mod.ssmt.name, ssmt: mod.ssmt, index: i });
@@ -180,14 +193,12 @@ export class ReportGraphsComponent implements OnInit {
   }
 
 
-  getPieWidth(): number {
-    if (this.pieChartContainer) {
-      let containerPadding = 50;
-      return this.pieChartContainer.nativeElement.clientWidth - containerPadding;
-    }
-    else {
-      return 0;
-    }
+  getPieWidth() {
+    setTimeout(() => {
+      if (this.waterfallChartContainer) {
+        this.pieWidth = this.pieChartContainer.nativeElement.clientWidth - 50;
+      }
+    }, 100);
   }
 
   // waterfall functions
@@ -198,16 +209,15 @@ export class ReportGraphsComponent implements OnInit {
     }
   }
 
-  getWaterfallWidth(): number {
-    if (this.waterfallChartContainer) {
-      return this.waterfallChartContainer.nativeElement.clientWidth;
-    }
-    else {
-      return 0;
-    }
+  getWaterfallWidth() {
+    setTimeout(() => {
+      if (this.waterfallChartContainer) {
+        this.waterFallWidth = this.waterfallChartContainer.nativeElement.clientWidth;
+      }
+    }, 100)
   }
 
-  getWaterfallHeight(): number {
-    return 500;
-  }
+  // getWaterfallHeight(): number {
+  //   return 500;
+  // }
 }

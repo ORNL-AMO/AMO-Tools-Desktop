@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, SSMTOutput, HeatExchangerOutput } from '../../../../shared/models/steam/steam-outputs';
+import { BoilerOutput, PrvOutput, TurbineOutput, SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, SSMTOutput, HeatExchangerOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 
@@ -123,7 +123,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   hoverVentedLowPressureSteam() {
     this.label = 'Low Pressure Vented Steam';
-    let ventedSteam: SteamPropertiesOutput = this.outputData.ventedLowPressureSteam;
+    let ventedSteam: SteamPropertiesOutput = this.outputData.lowPressureVentedSteam;
     this.setSteamProperties(ventedSteam);
   }
 
@@ -165,7 +165,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
   }
   makeupWaterCondensatePropertiesHovered() {
     this.label = 'Condensate and Make-Up Water';
-    let headerObj: HeaderOutputObj = this.outputData.makeupWaterAndCondensateHeader;
+    let headerObj: SteamPropertiesOutput = this.outputData.makeupWaterAndCondensate;
     this.setSteamProperties(headerObj);
   }
   returnCondensateHovered() {
@@ -280,7 +280,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
     this.setSteamProperties(condensate);
   }
 
-  setSteamProperties(steamData: SteamPropertiesOutput | HeaderOutputObj) {
+  setSteamProperties(steamData: SteamPropertiesOutput | SteamPropertiesOutput) {
     this.steam = {
       pressure: steamData.pressure,
       temperature: steamData.temperature,
@@ -294,16 +294,16 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   lowPressureProcessSteamInletHovered() {
     this.label = 'Low Pressure Process Steam';
-    let header: HeaderOutputObj = this.outputData.lowPressureHeader;
-    let processUsage: ProcessSteamUsage = this.outputData.lowPressureProcessUsage;
+    let header: SteamPropertiesOutput = this.outputData.lowPressureHeaderSteam;
+    let processUsage: ProcessSteamUsage = this.outputData.lowPressureProcessSteamUsage;
     this.setSteamProperties(header);
     this.steam.massFlow = processUsage.massFlow;
   }
 
   mediumPressureProcessSteamInletHovered() {
     this.label = 'Medium Pressure Process Steam';
-    let header: HeaderOutputObj = this.outputData.mediumPressureHeader;
-    let processUsage: ProcessSteamUsage = this.outputData.mediumPressureProcessUsage;
+    let header: SteamPropertiesOutput = this.outputData.mediumPressureHeaderSteam;
+    let processUsage: ProcessSteamUsage = this.outputData.mediumPressureProcessSteamUsage;
     this.setSteamProperties(header);
     this.steam.massFlow = processUsage.massFlow;
 
@@ -311,8 +311,8 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   highPressureProcessSteamInletHovered() {
     this.label = 'High Pressure Process Steam';
-    let header: HeaderOutputObj = this.outputData.highPressureHeader;
-    let processUsage: ProcessSteamUsage = this.outputData.highPressureProcessUsage;
+    let header: SteamPropertiesOutput = this.outputData.highPressureHeaderSteam;
+    let processUsage: ProcessSteamUsage = this.outputData.highPressureProcessSteamUsage;
     this.setSteamProperties(header);
     this.steam.massFlow = processUsage.massFlow;
   }
@@ -331,25 +331,25 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   mediumToLowTurbineOutletHovered() {
     this.label = 'Medium to Low Pressure Turbine Outlet';
-    let turbine: TurbineOutput = this.outputData.mediumToLowPressureTurbine;
+    let turbine: TurbineOutput = this.outputData.mediumPressureToLowPressureTurbine;
     this.setOutletSteam(turbine, turbine.massFlow);
   }
 
   mediumToLowTurbineInletHovered() {
     this.label = 'Medium to Low Pressure Turbine Inlet';
-    let turbine: TurbineOutput = this.outputData.mediumToLowPressureTurbine;
+    let turbine: TurbineOutput = this.outputData.mediumPressureToLowPressureTurbine;
     this.setInletSteam(turbine, turbine.massFlow);
   }
 
   highToLowTurbineOutletHovered() {
     this.label = 'High to Low Pressure Turbine Outlet';
-    let turbine: TurbineOutput = this.outputData.highToLowPressureTurbine;
+    let turbine: TurbineOutput = this.outputData.highPressureToLowPressureTurbine;
     this.setOutletSteam(turbine, turbine.massFlow);
   }
 
   highToLowTurbineInletHovered() {
     this.label = 'High to Low Pressure Turbine Inlet';
-    let turbine: TurbineOutput = this.outputData.highToLowPressureTurbine;
+    let turbine: TurbineOutput = this.outputData.highPressureToLowPressureTurbine;
     this.setInletSteam(turbine, turbine.massFlow);
   }
 
@@ -389,7 +389,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   mediumPressurePRVFeedwaterHovered() {
     this.label = 'High to Medium PRV Feedwater';
-    let prv: PrvOutput = this.outputData.highToMediumPressurePRV;
+    let prv: PrvOutput = this.outputData.highPressureToMediumPressurePrv;
     this.setFeedwaterProperties(prv);
   }
 
@@ -399,7 +399,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
     } else {
       this.label = 'High to Low PRV Inlet';
     }
-    let prv: PrvOutput = this.outputData.lowPressurePRV;
+    let prv: PrvOutput = this.outputData.mediumPressureToLowPressurePrv;
     this.setFeedwaterProperties(prv);
   }
 
@@ -416,7 +416,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   mediumPressurePRVInletHovered() {
     this.label = 'Medium to Low PRV Inlet';
-    let prv: PrvOutput = this.outputData.lowPressurePRV;
+    let prv: PrvOutput = this.outputData.mediumPressureToLowPressurePrv;
     this.setInletSteam(prv, prv.inletMassFlow);
   }
 
@@ -424,10 +424,10 @@ export class HoverSteamPropertiesComponent implements OnInit {
     let prv: PrvOutput;
     if (this.numberOfHeaders === 3) {
       this.label = 'High to Medium PRV Inlet';
-      prv = this.outputData.highToMediumPressurePRV;
+      prv = this.outputData.highPressureToMediumPressurePrv;
     } else {
       this.label = 'High to Low PRV Inlet';
-      prv = this.outputData.lowPressurePRV;
+      prv = this.outputData.mediumPressureToLowPressurePrv;
     }
     this.setInletSteam(prv, prv.inletMassFlow);
   }
@@ -438,13 +438,13 @@ export class HoverSteamPropertiesComponent implements OnInit {
     } else {
       this.label = 'High to Low PRV Outlet';
     }
-    let prv: PrvOutput = this.outputData.lowPressurePRV;
+    let prv: PrvOutput = this.outputData.mediumPressureToLowPressurePrv;
     this.setOutletSteam(prv, prv.outletMassFlow);
   }
 
   mediumPressurePRVOutletHovered() {
     this.label = 'High to Medium PRV Outlet';
-    let prv: PrvOutput = this.outputData.highToMediumPressurePRV;
+    let prv: PrvOutput = this.outputData.highPressureToMediumPressurePrv;
     this.setOutletSteam(prv, prv.outletMassFlow);
   }
 
@@ -487,7 +487,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   hoverHeatExchangerHotOutlet() {
     this.label = 'Boiler Blowdown Drain';
-    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchangerOutput;
+    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchanger;
     this.steam = {
       pressure: heatExchangerOutput.hotOutletPressure,
       temperature: heatExchangerOutput.hotOutletTemperature,
@@ -500,7 +500,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   hoverHeatExchangerColdOutlet() {
     this.label = 'Make-up Water';
-    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchangerOutput;
+    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchanger;
     this.steam = {
       pressure: heatExchangerOutput.coldOutletPressure,
       temperature: heatExchangerOutput.coldOutletTemperature,

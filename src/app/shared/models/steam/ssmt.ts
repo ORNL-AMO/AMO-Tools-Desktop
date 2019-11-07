@@ -25,6 +25,8 @@ export interface SSMTInputs {
     boilerInput: BoilerInput;
     headerInput: HeaderInput;
     turbineInput: TurbineInput;
+    isBaselineCalc: boolean;
+    baselinePowerDemand: number;
 }
 
 export interface TurbineInput {
@@ -134,9 +136,16 @@ export interface BoilerInput {
 
 export interface HeaderInput {
     numberOfHeaders: number;
-    highPressure: HeaderWithHighestPressure;
+
+    //old model
+    highPressure?: HeaderWithHighestPressure;
     mediumPressure?: HeaderNotHighestPressure;
     lowPressure?: HeaderNotHighestPressure;
+
+    //new suite model
+    highPressureHeader?: HeaderWithHighestPressure;
+    mediumPressureHeader?: HeaderNotHighestPressure;
+    lowPressureHeader?: HeaderNotHighestPressure;
 }
 
 export interface HeaderWithHighestPressure {

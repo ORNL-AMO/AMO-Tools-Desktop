@@ -8,19 +8,19 @@
         </tr>
         <tr>
           <td class="text-center w-50">Generation</td>
-          <td class="text-center w-50">{{outputData.powerGenerated | number:'1.0-1'}}
+          <td class="text-center w-50">{{outputData.operationsOutput.powerGenerated | number:'1.0-1'}}
             <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
           </td>
         </tr>
         <tr>
           <td class="text-center w-50">Demand</td>
-          <td class="text-center w-50">{{outputData.sitePowerDemand | number:'1.0-1'}}
+          <td class="text-center w-50">{{outputData.operationsOutput.sitePowerDemand | number:'1.0-1'}}
             <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
           </td>
         </tr>
         <tr>
           <td class="text-center w-50">Import</td>
-          <td class="text-center w-50">{{outputData.sitePowerImport | number:'1.0-1'}}
+          <td class="text-center w-50">{{outputData.operationsOutput.sitePowerImport | number:'1.0-1'}}
             <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
           </td>
         </tr>
@@ -30,7 +30,7 @@
         </tr>
         <tr>
           <td class="bold text-center w-50">Total $/yr</td>
-          <td class="text-center w-50">{{outputData.powerGenerationCost | currency:'USD'}}</td>
+          <td class="text-center w-50">{{outputData.operationsOutput.powerGenerationCost | currency:'USD'}}</td>
         </tr>
       </tbody>
     </table>
@@ -55,7 +55,7 @@
         </tr>
         <tr>
           <td class="bold text-center w-50">Total $/yr</td>
-          <td class="text-center w-50">{{outputData.boilerFuelCost | currency:'USD'}}</td>
+          <td class="text-center w-50">{{outputData.operationsOutput.boilerFuelCost | currency:'USD'}}</td>
         </tr>
       </tbody>
     </table>
@@ -69,10 +69,10 @@
         <tr>
           <td class="text-center w-50">Flow</td>
           <td class="text-center w-50">
-            {{outputData.makeupWaterVolumeFlow | number:'1.0-2'}} <span
+            {{outputData.operationsOutput.makeupWaterVolumeFlow | number:'1.0-2'}} <span
               [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>
             <br>
-            {{outputData.annualMakeupWaterFlow | number:'1.0-2'}} <span
+            {{outputData.operationsOutput.makeupWaterVolumeFlowAnnual | number:'1.0-2'}} <span
               [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
 
           </td>
@@ -85,7 +85,7 @@
         </tr>
         <tr>
           <td class="bold text-center w-50">Total $/yr</td>
-          <td class="text-center w-50">{{outputData.makeupWaterCost | currency:'USD'}}</td>
+          <td class="text-center w-50">{{outputData.operationsOutput.makeupWaterCost | currency:'USD'}}</td>
         </tr>
       </tbody>
     </table>
@@ -98,7 +98,7 @@
           <td class="bold text-center" colspan="2">Total Operating Cost</td>
         </tr>
         <tr>
-          <td class="text-center">{{outputData.totalOperatingCost | currency:'USD'}}</td>
+          <td class="text-center">{{outputData.operationsOutput.totalOperatingCost | currency:'USD'}}</td>
         </tr>
       </tbody>
     </table>

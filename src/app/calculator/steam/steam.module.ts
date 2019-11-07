@@ -12,6 +12,7 @@ import { PrvModule } from './prv/prv.module';
 import { DeaeratorModule } from './deaerator/deaerator.module';
 import { HeaderModule } from './header/header.module';
 import { TurbineModule } from './turbine/turbine.module';
+import { ConvertSteamService } from './convert-steam.service';
 import { BoilerBlowdownRateModule } from './boiler-blowdown-rate/boiler-blowdown-rate.module';
 
 
@@ -37,7 +38,8 @@ import { BoilerBlowdownRateModule } from './boiler-blowdown-rate/boiler-blowdown
     SteamComponent
   ],
   providers: [
-    SteamService
+    SteamService,
+    ConvertSteamService
   ]
 })
 export class SteamModule { }

@@ -411,10 +411,10 @@ export class CompareService {
 
     if (baseline && modification) {
       return (
-        this.isPressureDifferent('highPressure', baseline, modification) ||
-        this.isProcessSteamUsageDifferent('highPressure', baseline, modification) ||
-        this.isCondensationRecoveryRateDifferent('highPressure', baseline, modification) ||
-        this.isHeatLossDifferent('highPressure', baseline, modification) ||
+        this.isPressureDifferent('highPressureHeader', baseline, modification) ||
+        this.isProcessSteamUsageDifferent('highPressureHeader', baseline, modification) ||
+        this.isCondensationRecoveryRateDifferent('highPressureHeader', baseline, modification) ||
+        this.isHeatLossDifferent('highPressureHeader', baseline, modification) ||
         this.isCondensateReturnTemperatureDifferent(baseline, modification) ||
         this.isFlashCondensateReturnDifferent(baseline, modification)
       );
@@ -432,13 +432,13 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isPressureDifferent('mediumPressure', baseline, modification) ||
-        this.isProcessSteamUsageDifferent('mediumPressure', baseline, modification) ||
-        this.isCondensationRecoveryRateDifferent('mediumPressure', baseline, modification) ||
-        this.isHeatLossDifferent('mediumPressure', baseline, modification) ||
-        this.isFlashCondensateIntoHeaderDifferent('mediumPressure', baseline, modification) ||
-        this.isDesuperheatSteamIntoNextHighestDifferent('mediumPressure', baseline, modification) ||
-        this.isDesuperheatSteamTemperatureDifferent('mediumPressure', baseline, modification)
+        this.isPressureDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isProcessSteamUsageDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isCondensationRecoveryRateDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isHeatLossDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isFlashCondensateIntoHeaderDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isDesuperheatSteamIntoNextHighestDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isDesuperheatSteamTemperatureDifferent('mediumPressureHeader', baseline, modification)
       );
     } else {
       return false;
@@ -453,13 +453,13 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isPressureDifferent('lowPressure', baseline, modification) ||
-        this.isProcessSteamUsageDifferent('lowPressure', baseline, modification) ||
-        this.isCondensationRecoveryRateDifferent('lowPressure', baseline, modification) ||
-        this.isHeatLossDifferent('lowPressure', baseline, modification) ||
-        this.isFlashCondensateIntoHeaderDifferent('lowPressure', baseline, modification) ||
-        this.isDesuperheatSteamIntoNextHighestDifferent('lowPressure', baseline, modification) ||
-        this.isDesuperheatSteamTemperatureDifferent('lowPressure', baseline, modification)
+        this.isPressureDifferent('lowPressureHeader', baseline, modification) ||
+        this.isProcessSteamUsageDifferent('lowPressureHeader', baseline, modification) ||
+        this.isCondensationRecoveryRateDifferent('lowPressureHeader', baseline, modification) ||
+        this.isHeatLossDifferent('lowPressureHeader', baseline, modification) ||
+        this.isFlashCondensateIntoHeaderDifferent('lowPressureHeader', baseline, modification) ||
+        this.isDesuperheatSteamIntoNextHighestDifferent('lowPressureHeader', baseline, modification) ||
+        this.isDesuperheatSteamTemperatureDifferent('lowPressureHeader', baseline, modification)
       );
     } else {
       return false;
@@ -544,7 +544,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput.highPressure.condensateReturnTemperature !== modification.headerInput.highPressure.condensateReturnTemperature) {
+      if (baseline.headerInput.highPressureHeader.condensateReturnTemperature !== modification.headerInput.highPressureHeader.condensateReturnTemperature) {
         return true;
       } else {
         return false;
@@ -561,7 +561,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput.highPressure.flashCondensateReturn !== modification.headerInput.highPressure.flashCondensateReturn) {
+      if (baseline.headerInput.highPressureHeader.flashCondensateReturn !== modification.headerInput.highPressureHeader.flashCondensateReturn) {
         return true;
       } else {
         return false;

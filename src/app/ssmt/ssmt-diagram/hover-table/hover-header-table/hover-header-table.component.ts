@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { HeaderOutputObj, HeatLossOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, HeatLossOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMTInputs } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -23,7 +23,7 @@ export class HoverHeaderTableComponent implements OnInit {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
-  header: HeaderOutputObj;
+  header: SteamPropertiesOutput;
   heatLoss: HeatLossOutput;
   headerInput: HeaderNotHighestPressure | HeaderWithHighestPressure;
   condensingWarning: boolean;
@@ -31,17 +31,17 @@ export class HoverHeaderTableComponent implements OnInit {
 
   ngOnInit() {
     if (this.headerPressure === 'highPressure') {
-      this.header = this.outputData.highPressureHeader;
+      this.header = this.outputData.highPressureHeaderSteam;
       this.heatLoss = this.outputData.highPressureSteamHeatLoss;
-      this.headerInput = this.inputData.headerInput.highPressure;
+      this.headerInput = this.inputData.headerInput.highPressureHeader;
     } else if (this.headerPressure === 'mediumPressure') {
-      this.header = this.outputData.mediumPressureHeader;
+      this.header = this.outputData.mediumPressureHeaderSteam;
       this.heatLoss = this.outputData.mediumPressureSteamHeatLoss;
-      this.headerInput = this.inputData.headerInput.mediumPressure;
+      this.headerInput = this.inputData.headerInput.mediumPressureHeader;
     } else if (this.headerPressure === 'lowPressure') {
-      this.header = this.outputData.lowPressureHeader;
+      this.header = this.outputData.lowPressureHeaderSteam;
       this.heatLoss = this.outputData.lowPressureSteamHeatLoss;
-      this.headerInput = this.inputData.headerInput.lowPressure;
+      this.headerInput = this.inputData.headerInput.lowPressureHeader;
     }
 
     if(this.header.quality < 1){

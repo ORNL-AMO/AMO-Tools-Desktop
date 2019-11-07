@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../../shared/models/assessment';
-import { CalculateModelService } from '../../../../ssmt/ssmt-calculations/calculate-model.service';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { AssessmentService } from '../../../assessment.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../../../shared/models/settings';
 import { SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { SSMTInputs, SSMT } from '../../../../shared/models/steam/ssmt';
+import { SsmtService } from '../../../../ssmt/ssmt.service';
 
 @Component({
   selector: 'app-ssmt-summary-card',
@@ -28,7 +28,7 @@ export class SsmtSummaryCardComponent implements OnInit {
   @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
   assessmentCpy: Assessment;
-  constructor(private calculateModelService: CalculateModelService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
+  constructor(private ssmtService: SsmtService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     this.assessmentCpy = JSON.parse(JSON.stringify(this.assessment));
@@ -36,7 +36,10 @@ export class SsmtSummaryCardComponent implements OnInit {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessmentCpy);
     if (this.setupDone) {
       this.getBaselineData();
-      if (this.assessmentCpy.ssmt.modifications) {
+      if (this.baselineData.outputData.boilerOutput == undefined) {
+        this.setupDone = false;
+      }
+      if (this.assessmentCpy.ssmt.modifications && this.setupDone) {
         this.getModificationData();
       }
     }
@@ -51,8 +54,8 @@ export class SsmtSummaryCardComponent implements OnInit {
     this.assessmentCpy.ssmt.modifications.forEach(mod => {
       let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.getData(mod.ssmt, false);
       if (results.outputData.boilerOutput) {
-        let tmpSavingCalc = this.baselineData.outputData.totalOperatingCost - results.outputData.totalOperatingCost;
-        let tmpSavingEnergy = this.baselineData.outputData.boilerFuelUsage - results.outputData.boilerFuelUsage;
+        let tmpSavingCalc = this.baselineData.outputData.operationsOutput.totalOperatingCost - results.outputData.operationsOutput.totalOperatingCost;
+        let tmpSavingEnergy = this.baselineData.outputData.operationsOutput.boilerFuelUsage - results.outputData.operationsOutput.boilerFuelUsage;
         if (tmpSavingCalc > this.maxCostSavings) {
           this.maxCostSavings = tmpSavingCalc;
           this.maxEnergySavings = tmpSavingEnergy;
@@ -62,16 +65,10 @@ export class SsmtSummaryCardComponent implements OnInit {
   }
 
   getData(ssmt: SSMT, isBaseline: boolean): { inputData: SSMTInputs, outputData: SSMTOutput } {
-    if (ssmt.resultsCalculated) {
-      let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(JSON.parse(JSON.stringify(ssmt)));
-      return {
-        inputData: inputData,
-        outputData: ssmt.outputData
-      }
-    } else if (isBaseline) {
-      return this.calculateModelService.initDataAndRun(ssmt, this.settings, true, false);
+    if (isBaseline) {
+      return this.ssmtService.calculateModel(ssmt, this.settings, true, 0);
     } else {
-      return this.calculateModelService.initDataAndRun(ssmt, this.settings, false, false, this.baselineData.outputData.sitePowerDemand);
+      return this.ssmtService.calculateModel(ssmt, this.settings, false, this.baselineData.outputData.operationsOutput.sitePowerDemand);
     }
   }
 

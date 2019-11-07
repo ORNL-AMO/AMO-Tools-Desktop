@@ -15,11 +15,11 @@
   <div class="d-flex align-items-center flex-fill w-100">
     <div class="d-flex justify-content-center" (mouseenter)="hoverPRV()" (mouseleave)="hoverEquipment('default')">
       <div class="prv-img-holder">
-        <div class="feedwater" [ngClass]="feedwaterClasses" *ngIf="prv.feedwaterMassFlow != undefined">
+        <div class="feedwater" [ngClass]="feedwaterClasses" *ngIf="showFeedwater == true">
           <span class="fa fa-chevron-right" (mouseenter)="hoverFeedwater()" (mouseleave)="hoverPRV()"
             (click)="selectFeedwater()"></span>
         </div>
-        <span class="feedwater-mass-flow" *ngIf="prv.feedwaterMassFlow != undefined && prv.feedwaterMassFlow != 0">
+        <span class="feedwater-mass-flow" *ngIf="showFeedwater == true">
           {{prv.feedwaterMassFlow | number:'1.0-2'}}
           <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
         </span>
