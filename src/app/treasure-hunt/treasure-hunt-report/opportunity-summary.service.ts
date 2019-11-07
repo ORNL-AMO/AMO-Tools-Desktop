@@ -29,7 +29,7 @@ export class OpportunitySummaryService {
     //lighting
     opportunitySummaries = this.getLightingSummaries(treasureHunt.lightingReplacements, opportunitySummaries);
     //replace existing
-    opportunitySummaries = this.getReplaceExistingSummaries(treasureHunt.replaceExistingMotors, opportunitySummaries);
+    opportunitySummaries = this.getReplaceExistingSummaries(treasureHunt.replaceExistingMotors, opportunitySummaries, settings);
     //motor drive
     opportunitySummaries = this.getMotorDriveSummaries(treasureHunt.motorDrives, opportunitySummaries);
     //electricity reduction
@@ -98,12 +98,12 @@ export class OpportunitySummaryService {
   }
 
   //Replace Existing Motor
-  getReplaceExistingSummaries(replaceExistingMotors: Array<ReplaceExistingMotorTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>): Array<OpportunitySummary> {
+  getReplaceExistingSummaries(replaceExistingMotors: Array<ReplaceExistingMotorTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
     if (replaceExistingMotors) {
       let index: number = 1;
       replaceExistingMotors.forEach(replacement => {
         if (replacement.selected) {
-          let oppSummary: OpportunitySummary = this.getReplaceExistingSummary(replacement, index);
+          let oppSummary: OpportunitySummary = this.getReplaceExistingSummary(replacement, index, settings);
           opportunitySummaries.push(oppSummary);
         }
         index++;
@@ -112,9 +112,9 @@ export class OpportunitySummaryService {
     return opportunitySummaries;
   }
 
-  getReplaceExistingSummary(replacement: ReplaceExistingMotorTreasureHunt, index: number): OpportunitySummary {
+  getReplaceExistingSummary(replacement: ReplaceExistingMotorTreasureHunt, index: number, settings: Settings): OpportunitySummary {
     let name: string = 'Replace Existing Motor #' + index;
-    let results: ReplaceExistingResults = this.replaceExistingService.getResults(replacement.replaceExistingData);
+    let results: ReplaceExistingResults = this.replaceExistingService.getResults(replacement.replaceExistingData, settings);
     let opportunityCost: OpportunityCost;
     if (replacement.opportunitySheet) {
       if (replacement.opportunitySheet.name) {
@@ -328,7 +328,7 @@ export class OpportunitySummaryService {
   }
 
   getSteamReductionSummary(steamReduction: SteamReductionTreasureHunt, index: number, settings: Settings): OpportunitySummary {
-    let name: string = 'Stea, Reduction #' + index;
+    let name: string = 'Steam Reduction #' + index;
     let results: SteamReductionResults = this.steamReductionService.getResults(settings, steamReduction.baseline, steamReduction.modification);
     let opportunityCost: OpportunityCost;
     if (steamReduction.opportunitySheet) {
@@ -337,7 +337,17 @@ export class OpportunitySummaryService {
       }
       opportunityCost = steamReduction.opportunitySheet.opportunityCost;
     }
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Steam', results.annualCostSavings, results.annualSteamSavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+    let energySavings: number = results.annualSteamSavings;
+    let utilityTypeStr: string = 'Steam';
+    if (steamReduction.baseline[0].utilityType == 1) {
+      utilityTypeStr = 'Natural Gas';
+      energySavings = results.annualEnergySavings;
+    } else if (steamReduction.baseline[0].utilityType == 2) {
+      utilityTypeStr = 'Other Fuel';
+      energySavings = results.annualEnergySavings;
+    }
+
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
     return oppSummary;
   }
 

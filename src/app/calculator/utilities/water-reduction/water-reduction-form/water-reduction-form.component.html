@@ -167,7 +167,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="{{'bucketFillTime_'+idString}}">Bucket Volume</label>
+        <label class="small" for="{{'bucketFillTime_'+idString}}">Bucket Fill Time</label>
         <div class="input-group">
           <input class="form-control" type="number" name="bucketFillTime" id="{{'bucketFillTime_'+idString}}"
             formControlName="bucketFillTime" (input)="calculate()" (focus)="focusField('bucketFillTime')"
@@ -191,7 +191,7 @@
         <div class="input-group">
           <input class="form-control" type="number" name="consumption" id="{{'consumption_'+idString}}"
             formControlName="consumption" (input)="calculate()" (focus)="focusField('consumption')" (blur)="focusOut()">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal/yr</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
         </div>
         <span class="alert-danger pull-right small"

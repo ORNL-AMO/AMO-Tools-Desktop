@@ -1,5 +1,5 @@
 <div #content class="ssmt-container d-flex flex-column ssmt" *ngIf="assessment && settings">
-  <div #header class="w-100 hide-print sticky-top">
+  <div #header class="w-100 hide-print sticky-top" [ngClass]="{'modal-open': isModalOpen == true}">
     <app-ssmt-banner [assessment]="assessment"></app-ssmt-banner>
     <app-ssmt-tabs [settings]="settings" [ssmt]="_ssmt"></app-ssmt-tabs>
   </div>

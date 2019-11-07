@@ -21,7 +21,7 @@ export class OpportunityCardsService {
   getOpportunityCardsData(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     let lightingReplacementsCardData: Array<OpportunityCardData> = this.getLightingReplacements(treasureHunt.lightingReplacements, treasureHunt.currentEnergyUsage);
-    let replaceExistingData: Array<OpportunityCardData> = this.getReplaceExistingMotors(treasureHunt.replaceExistingMotors, treasureHunt.currentEnergyUsage);
+    let replaceExistingData: Array<OpportunityCardData> = this.getReplaceExistingMotors(treasureHunt.replaceExistingMotors, treasureHunt.currentEnergyUsage, settings);
     let naturalGasReductionData: Array<OpportunityCardData> = this.getNaturalGasReductions(treasureHunt.naturalGasReductions, treasureHunt.currentEnergyUsage, settings);
     let electricityReductionData: Array<OpportunityCardData> = this.getElectricityReductions(treasureHunt.electricityReductions, treasureHunt.currentEnergyUsage, settings);
     let compressedAirReductionData: Array<OpportunityCardData> = this.getCompressedAirReductions(treasureHunt.compressedAirReductions, treasureHunt.currentEnergyUsage, settings);
@@ -275,12 +275,12 @@ export class OpportunityCardsService {
   }
 
   //replaceExistingMotors
-  getReplaceExistingMotors(replaceExistingMotors: Array<ReplaceExistingMotorTreasureHunt>, currentEnergyUsage: EnergyUsage): Array<OpportunityCardData> {
+  getReplaceExistingMotors(replaceExistingMotors: Array<ReplaceExistingMotorTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
     if (replaceExistingMotors) {
       let index: number = 0;
       replaceExistingMotors.forEach(replaceExistingMotor => {
-        let cardData: OpportunityCardData = this.getReplaceExistingCardData(replaceExistingMotor, index, currentEnergyUsage);
+        let cardData: OpportunityCardData = this.getReplaceExistingCardData(replaceExistingMotor, index, currentEnergyUsage, settings);
         opportunityCardsData.push(cardData);
         index++;
       })
@@ -288,9 +288,9 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getReplaceExistingCardData(replaceExistingMotor: ReplaceExistingMotorTreasureHunt, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+  getReplaceExistingCardData(replaceExistingMotor: ReplaceExistingMotorTreasureHunt, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
     // let results: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingMotor.replaceExistingData);
-    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getReplaceExistingSummary(replaceExistingMotor, index);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getReplaceExistingSummary(replaceExistingMotor, index, settings);
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -630,6 +630,21 @@ export class OpportunityCardsService {
     if (settings.unitsOfMeasure == 'Imperial') {
       unitStr = 'tonnes';
     }
+    let currentCosts: number = currentEnergyUsage.steamCosts;
+    if (reduction.baseline[0].utilityType == 1) {
+      currentCosts = currentEnergyUsage.naturalGasCosts;
+      unitStr = 'MMBtu';
+      if (settings.unitsOfMeasure == 'Imperial') {
+        unitStr = 'GJ';
+      }
+    } else if (reduction.baseline[0].utilityType == 2) {
+      currentCosts = currentEnergyUsage.otherFuelCosts;
+      unitStr = 'MMBtu';
+      if (settings.unitsOfMeasure == 'Imperial') {
+        unitStr = 'GJ';
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -644,7 +659,7 @@ export class OpportunityCardsService {
       }],
       utilityType: [opportunitySummary.utilityType],
       percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.steamCosts),
+        percent: this.getPercentSavings(opportunitySummary.costSavings, currentCosts),
         label: opportunitySummary.utilityType,
         baselineCost: opportunitySummary.baselineCost,
         modificationCost: opportunitySummary.modificationCost,

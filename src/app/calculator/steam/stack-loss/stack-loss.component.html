@@ -10,9 +10,9 @@
       <div class="form-group">
         <label class="small" for="method">Type of fuel</label>
         <select class="form-control" id="method" [(ngModel)]="method" (focus)="changeField('measurementType')" (blur)="changeField('default')"
-          (change)="getForm()">
-          <option [ngValue]="'volume'">Gas</option>
-          <option [ngValue]="'mass'">Solid/Liquid</option>
+          (change)="changeFuelType()">
+          <option [ngValue]="1">Gas</option>
+          <option [ngValue]="0">Solid/Liquid</option>
         </select>
       </div>
       <app-stack-loss-form *ngIf="stackLossForm" [method]="method" [stackLossForm]="stackLossForm" [settings]="settings"
@@ -25,7 +25,7 @@
         <label class="small bold">Boiler Combustion Efficiency</label>
         <div class="small bold text-center">{{boilerEfficiency | sigFigs:'3'}} %</div>
       </div>
-      <div class="w-100 justify-content-center btn-group btn-group-sm">
+      <div class="w-100 justify-content-center btn-group btn-group-sm" *ngIf="!inModal">
         <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
           Reset Data
         </button>

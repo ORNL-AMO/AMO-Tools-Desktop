@@ -1,7 +1,7 @@
 <div class="assessment-report treasure-hunt report-in-treasure-hunt" *ngIf="assessment && settings"
   [ngClass]="{'report-in-rollup': inRollup}">
 
-  <div class="report-cover">
+  <div *ngIf="!inRollup" class="report-cover">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
     <div class="report-title">
@@ -88,8 +88,15 @@
         </app-executive-summary>
       </div>
       <div class="d-flex justify-content-center">
-        <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"
-          [showFullSummary]="true" [title]="'Detailed Summary'" [showPrint]="showPrint && printExecutiveSummary">
+        <app-executive-summary [treasureHuntResults]="treasureHuntResults" [opportunityCardsData]="opportunityCardsData"
+          [settings]="settings" [showFullSummary]="true" [title]="'Detailed Summary'"
+          [showPrint]="showPrint && printExecutiveSummary">
+        </app-executive-summary>
+      </div>
+      <div class="d-flex justify-content-center">
+        <app-executive-summary [treasureHuntResults]="treasureHuntResults" [opportunityCardsData]="opportunityCardsData"
+          [settings]="settings" [showFullSummary]="false" [title]="'Team Summary'"
+          [showPrint]="showPrint && printExecutiveSummary">
         </app-executive-summary>
       </div>
     </div>
@@ -112,8 +119,9 @@
     <div class="results scroll-item print-height print-break-before"
       *ngIf="((currentTab == 'opportunityPayback' && !showPrint) || (showPrint && printReportOpportunityPayback)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <h4 class="show-print">Identified Opportunity</h4>
-      <app-opportunity-payback [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
+      <h4 class="show-print">Payback Details</h4>
+      <app-opportunity-payback [showPrint]="showPrint && printReportOpportunityPayback"
+        [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
       </app-opportunity-payback>
     </div>
   </div>

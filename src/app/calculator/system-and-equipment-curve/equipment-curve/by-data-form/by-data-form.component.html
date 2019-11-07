@@ -1,0 +1,58 @@
+<label class="group-label">{{formLabel}}</label>
+
+<form [formGroup]="byDataForm">
+    <div class="form-group">
+        <label for="dataOrder">Order</label>
+        <select id="dataOrder" name="dataOrder" class="form-control" formControlName="dataOrder"
+            (focus)="focusField('dataOrder')" (change)="save()">
+            <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
+        </select>
+    </div>
+
+
+    <div *ngFor="let control of byDataForm.controls.dataRows.value.controls; let index = index;">
+        <form [formGroup]="control">
+            <div class="row align-items-end">
+                <div class="form-group col-5">
+                    <label class="section-label" *ngIf="index == 0" for="flow">Flow</label>
+                    <div class="input-group">
+                        <input name="flow" formControlName="flow" type="number" step="any" class="form-control"
+                            id="flow" onfocus="this.select();" (focus)="focusField('flow')" (input)="save()">
+                        <span class="input-group-addon units" [innerHTML]="flowUnit | settingsLabel"></span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="control.controls.flow.invalid && !control.controls.flow.pristine">
+                        <span *ngIf="control.controls.flow.errors.required">Value required.</span>
+                        <span *ngIf="control.controls.flow.errors.max">Value cannot be greater than 1,000,000
+                            <span [innerHTML]="flowUnit | settingsLabel"></span>.
+                        </span>
+                    </span>
+                </div>
+                <div class="form-group col-5">
+                    <label class="section-label" *ngIf="index == 0" for="yValue">{{yValueLabel}}</label>
+                    <div class="input-group">
+                        <input name="yValue" formControlName="yValue" type="number" step="any" class="form-control"
+                            id="yValue" onfocus="this.select();" (focus)="focusField('yValue')" (input)="save()">
+                        <span class="input-group-addon units" [innerHTML]="yValueUnit | settingsLabel"></span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="control.controls.yValue.invalid && !control.controls.yValue.pristine">
+                        <span *ngIf="control.controls.yValue.errors.required">Value required.</span>
+                        <span *ngIf="control.controls.yValue.errors.min">Value must be greater than
+                            {{control.controls.yValue.errors.min.min}}
+                            <span [innerHTML]="yValueUnit | settingsLabel"></span>.
+                        </span>
+                    </span>
+                </div>
+                <div class="col-2">
+                    <span class="float-right" *ngIf="byDataForm.controls.dataRows.value.controls.length > 1">
+                        <i class="fa fa-times-circle" (click)="removeRow(index)"></i>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="form-group">
+        <span class="add-link small pull-right" (click)="addRow()">+Add Row</span>
+    </div>
+</form>

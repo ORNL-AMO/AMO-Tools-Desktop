@@ -1,0 +1,199 @@
+<!--conductivity form-->
+<label class="group-label w-100">Conductivity Readings</label>
+<form [formGroup]="conductivityForm" #formElement>
+    <!--feedwater conductivity-->
+    <div class="form-group">
+        <label class="small" for="{{idString+'feedwaterConductivity'}}">Feedwater Conductivity</label>
+        <div class="input-group">
+            <input class="form-control" name="feedwaterConductivity" id="{{idString+'feedwaterConductivity'}}"
+                formControlName="feedwaterConductivity" type="number" (input)="saveConductivity()"
+                (focus)="focusField('feedwaterConductivity')" (blur)="focusOut()" onfocus="this.select();">
+            <span class="input-group-addon units">&#x3bc;S/cm</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="conductivityForm.controls.feedwaterConductivity.invalid && !conductivityForm.controls.feedwaterConductivity.pristine">
+            <span *ngIf="conductivityForm.controls.feedwaterConductivity.errors.required">Value Required</span>
+            <span *ngIf="conductivityForm.controls.feedwaterConductivity.errors.max">Value can't be greater than
+                {{conductivityForm.controls.feedwaterConductivity.errors.max.max}} &#x3bc;S/cm.</span>
+            <span *ngIf="conductivityForm.controls.feedwaterConductivity.errors.min">Value can't be less than
+                {{conductivityForm.controls.feedwaterConductivity.errors.min.min}} &#x3bc;S/cm.</span>
+        </span>
+    </div>
+    <!--blowdown conductivity-->
+    <div class="form-group">
+        <label class="small" for="{{idString+'blowdownConductivity'}}">Blowdown Conductivity</label>
+        <div class="input-group">
+            <input class="form-control" name="blowdownConductivity" id="{{idString+'blowdownConductivity'}}"
+                formControlName="blowdownConductivity" type="number" (input)="saveConductivity()"
+                (focus)="focusField('blowdownConductivity')" (blur)="focusOut()" onfocus="this.select();">
+            <span class="input-group-addon units">&#x3bc;S/cm</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="conductivityForm.controls.blowdownConductivity.invalid && !conductivityForm.controls.blowdownConductivity.pristine">
+            <span *ngIf="conductivityForm.controls.blowdownConductivity.errors.required">Value Required</span>
+            <span *ngIf="conductivityForm.controls.blowdownConductivity.errors.max">Value can't be greater than
+                {{conductivityForm.controls.blowdownConductivity.errors.max.max}} &#x3bc;S/cm.</span>
+            <span *ngIf="form.controls.feedwaterConductivity.errors.min">Value can't be less than
+                {{conductivityForm.controls.blowdownConductivity.errors.min.min}} &#x3bc;S/cm.</span>
+        </span>
+    </div>
+</form>
+<!--boiler form-->
+<label class="group-label w-100" (click)="toggleBoiler()">Boiler
+    <span *ngIf="showBoiler == true && isBaseline" class="remove-curve fa fa-minus pull-right"></span>
+    <span *ngIf="showBoiler == false && isBaseline" class="add-curve fa fa-plus pull-right"></span>
+</label>
+<form [formGroup]="boilerForm" *ngIf="showBoiler">
+    <!--steam flow-->
+    <div class="form-group">
+        <label class="small" for="{{idString+'steamFlow'}}">Steam Flow</label>
+        <div class="input-group">
+            <input class="form-control" name="steamFlow" id="{{idString+'steamFlow'}}" formControlName="steamFlow"
+                type="number" (input)="saveBoiler()" (focus)="focusField('steamFlow')" (blur)="focusOut()"
+                onfocus="this.select();">
+            <span class="input-group-addon units"
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="boilerForm.controls.steamFlow.invalid && !boilerForm.controls.steamFlow.pristine">
+            <span *ngIf="boilerForm.controls.steamFlow.errors.required">Value Required</span>
+            <span *ngIf="boilerForm.controls.steamFlow.errors.max">Value can't be greater than
+                {{boilerForm.controls.steamFlow.errors.max.max}} <span
+                    [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>.</span>
+            <span *ngIf="boilerForm.controls.steamFlow.errors.min">Value can't be less than
+                {{boilerForm.controls.steamFlow.errors.min.min}} <span
+                    [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>.</span>
+        </span>
+    </div>
+    <!--steam temperature-->
+    <div class="form-group">
+        <label class="small" for="{{idString+'steamTemperature'}}">Steam Temperature</label>
+        <div class="input-group">
+            <input class="form-control" name="steamTemperature" id="{{idString+'steamTemperature'}}"
+                formControlName="steamTemperature" type="number" (input)="saveBoiler()"
+                (focus)="focusField('steamTemperature')" (blur)="focusOut()" onfocus="this.select();">
+            <span class="input-group-addon units"
+                [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="boilerForm.controls.steamTemperature.invalid && !boilerForm.controls.steamTemperature.pristine">
+            <span *ngIf="boilerForm.controls.steamTemperature.errors.required">Value Required</span>
+            <span *ngIf="boilerForm.controls.steamTemperature.errors.max">Value can't be greater than
+                {{boilerForm.controls.steamTemperature.errors.max.max}} <span
+                    [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+            <span *ngIf="boilerForm.controls.steamTemperature.errors.min">Value can't be less than
+                {{boilerForm.controls.steamTemperature.errors.min.min}} <span
+                    [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+        </span>
+    </div>
+    <!--boiler efficiency-->
+    <div class="form-group">
+        <label class="small" for="{{idString+'boilerEfficiency'}}">Boiler Efficiency
+        </label>
+        <div class="input-group">
+            <input class="form-control" name="boilerEfficiency" id="{{idString+'boilerEfficiency'}}"
+                formControlName="boilerEfficiency" type="number" (input)="saveBoiler()"
+                (focus)="focusField('boilerEfficiency')" (blur)="focusOut()" onfocus="this.select();">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="boilerForm.controls.boilerEfficiency.invalid && !boilerForm.controls.boilerEfficiency.pristine">
+            <span *ngIf="boilerForm.controls.boilerEfficiency.errors.required">Value Required</span>
+            <span *ngIf="boilerForm.controls.boilerEfficiency.errors.max">Value can't be greater than
+                {{boilerForm.controls.boilerEfficiency.errors.max.max}} %.</span>
+            <span *ngIf="boilerForm.controls.boilerEfficiency.errors.min">Value can't be less than
+                {{boilerForm.controls.boilerEfficiency.errors.min.min}} %.</span>
+        </span>
+    </div>
+</form>
+<!--operations form-->
+<label class="group-label w-100" (click)="toggleOperations()">Operations
+    <span *ngIf="showOperations == true && isBaseline" class="remove-curve fa fa-minus pull-right"></span>
+    <span *ngIf="showOperations == false && isBaseline" class="add-curve fa fa-plus pull-right"></span>
+</label>
+<form [formGroup]="operationsForm" *ngIf="showOperations">
+    <!--operating hours-->
+    <div class="form-group">
+        <label class="small" for="{{idString+'operatingHours'}}">Operating Hours</label>
+        <div class="input-group">
+            <span class="input-group-addon op-hour-addon units">
+                <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+            </span>
+            <input class="form-control" name="operatingHours" id="{{idString+'operatingHours'}}"
+                formControlName="operatingHours" type="number" (input)="saveOperations()"
+                (focus)="focusField('operatingHours')" (blur)="focusOut()" onfocus="this.select();">
+            <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="operationsForm.controls.operatingHours.invalid && !operationsForm.controls.operatingHours.pristine">
+            <span *ngIf="operationsForm.controls.operatingHours.errors.max">Value can't be greater than
+                {{operationsForm.controls.operatingHours.errors.max.max}}.</span>
+            <span *ngIf="form.controls.hoursPerYear.errors.min">Value can't be less than
+                {{operationsForm.controls.operatingHours.errors.min.min}}.</span>
+        </span>
+    </div>
+    <!--fuel cost-->
+    <div class="form-group">
+        <label class="small" for="{{idString+'fuelCost'}}">Fuel Cost</label>
+        <div class="input-group">
+            <input class="form-control" name="fuelCost" id="{{idString+'fuelCost'}}" formControlName="fuelCost"
+                type="number" (input)="saveOperations()" (focus)="focusField('fuelCost')" (blur)="focusOut()"
+                onfocus="this.select();">
+            <span class="input-group-addon units">$/<span
+                    [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>
+            </span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="operationsForm.controls.fuelCost.invalid && !operationsForm.controls.fuelCost.pristine">
+            <span *ngIf="operationsForm.controls.fuelCost.errors.required">Value Required</span>
+            <span *ngIf="operationsForm.controls.fuelCost.errors.min">Value can't be less than
+                {{operationsForm.controls.fuelCost.errors.min.min}} $/<span
+                    [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span></span>
+        </span>
+    </div>
+    <!--water cost-->
+    <div class="form-group">
+        <label class="small" for="{{idString+'waterCost'}}">Water Cost</label>
+        <div class="input-group">
+            <input class="form-control" name="waterCost" id="{{idString+'waterCost'}}" formControlName="waterCost"
+                type="number" (input)="saveOperations()" (focus)="focusField('waterCost')" (blur)="focusOut()"
+                onfocus="this.select();">
+            <span class="input-group-addon units">$/<span
+                    [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
+            </span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="operationsForm.controls.waterCost.invalid && !operationsForm.controls.waterCost.pristine">
+            <span *ngIf="operationsForm.controls.waterCost.errors.required">Value Required</span>
+            <span *ngIf="operationsForm.controls.waterCost.errors.min">Value can't be less than
+                {{operationsForm.controls.waterCost.errors.min.min}} $/<span
+                    [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span></span>
+        </span>
+    </div>
+    <!--makeup water temperature-->
+    <div class="form-group">
+        <label class="small" for="{{idString+'makeupWaterTemperature'}}">Makeup Water Temperature</label>
+        <div class="input-group">
+            <input class="form-control" name="makeupWaterTemperature" id="{{idString+'makeupWaterTemperature'}}"
+                formControlName="makeupWaterTemperature" type="number" (input)="saveOperations()"
+                (focus)="focusField('makeupWaterTemperature')" (blur)="focusOut()" onfocus="this.select();">
+            <span class="input-group-addon units"
+                [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="operationsForm.controls.makeupWaterTemperature.invalid && !operationsForm.controls.makeupWaterTemperature.pristine">
+            <span *ngIf="operationsForm.controls.makeupWaterTemperature.errors.required">Value Required</span>
+            <span *ngIf="operationsForm.controls.makeupWaterTemperature.errors.max">Value can't be greater than
+                {{operationsForm.controls.makeupWaterTemperature.errors.max.max}} <span
+                    [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+            <span *ngIf="operationsForm.controls.makeupWaterTemperature.errors.min">Value can't be less than
+                {{operationsForm.controls.makeupWaterTemperature.errors.min.min}} <span
+                    [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+        </span>
+    </div>
+</form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+    [operatingHours]="operatingHours">
+</app-operating-hours-modal>

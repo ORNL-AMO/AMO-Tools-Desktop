@@ -1,19 +1,19 @@
-<table class="steam-table calculator-table">
+<table #copyTable class="steam-table calculator-table">
   <thead>
     <tr>
-      <th class="table-col-0">Pressure <br>(<span
-          [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</th>
-      <th class="table-col-1">Temperature <br>
+      <th class="table-col-0">Pressure
+        (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</th>
+      <th class="table-col-1">Temperature
         (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)
       </th>
-      <th class="table-col-2">Specific Enthalpy <br>(<span
+      <th class="table-col-2">Specific Enthalpy(<span
           [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>)</th>
-      <th class="table-col-3">Specific Entropy <br>
+      <th class="table-col-3">Specific Entropy
         (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)
       </th>
       <th class="table-col-4">Quality</th>
       <th class="table-col-4">Known Variable</th>
-      <th class="table-col-5">Specific Volume <br>
+      <th class="table-col-5">Specific Volume
         (<span [innerHTML]="settings.steamSpecificVolumeMeasurement | settingsLabel"></span>)
       </th>
       <th></th>
@@ -26,9 +26,9 @@
       <td>{{row.enthalpy | number:'1.0-4'}}</td>
       <td>{{row.entropy | number:'1.0-4'}}</td>
       <td>
-          <span *ngIf="row.quality == 0">Liquid</span>
-          <span *ngIf="row.quality == 1">Gas</span>
-          <span *ngIf="row.quality != 1 && row.quality != 0">{{row.quality | number:'1.0-2'}}</span>
+        <span *ngIf="row.quality == 0">Liquid</span>
+        <span *ngIf="row.quality == 1">Gas</span>
+        <span *ngIf="row.quality != 1 && row.quality != 0">{{row.quality | number:'1.0-2'}}</span>
       </td>
       <td *ngIf="row.thermodynamicQuantity == 0">Temperature</td>
       <td *ngIf="row.thermodynamicQuantity == 1">Specific Enthalpy</td>
@@ -39,3 +39,6 @@
     </tr>
   </tbody>
 </table>
+
+<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>

@@ -32,6 +32,7 @@ export class OpportunityCardsComponent implements OnInit {
   sortBySub: Subscription;
   sortByVal: SortCardsData;
   updateOpportunityCardsSub: Subscription;
+  deselectAllSub: Subscription;
   constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService,
     private treasureChestMenuService: TreasureChestMenuService) { }
 
@@ -58,13 +59,19 @@ export class OpportunityCardsComponent implements OnInit {
     });
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortByVal = val;
-    })
+    });
+    this.deselectAllSub = this.treasureChestMenuService.deselectAll.subscribe(val => {
+      if (val == true) {
+        this.deselectAll();
+      }
+    });
 
   }
 
   ngOnDestroy() {
     this.updatedOpportunityCardSub.unsubscribe();
     this.selectAllSub.unsubscribe();
+    this.deselectAllSub.unsubscribe();
     this.sortBySub.unsubscribe();
     this.updateOpportunityCardsSub.unsubscribe();
     this.opportunityCardsService.updateOpportunityCards.next(true);
@@ -182,7 +189,7 @@ export class OpportunityCardsComponent implements OnInit {
 
     } else if (this.editOpportunitySheetCardData.opportunityType == 'replace-existing') {
       this.editOpportunitySheetCardData.replaceExistingMotor.opportunitySheet = updatedOpportunitySheet;
-      this.treasureHuntService.editReplaceExistingMotorsItem(this.editOpportunitySheetCardData.replaceExistingMotor, this.editOpportunitySheetCardData.opportunityIndex);
+      this.treasureHuntService.editReplaceExistingMotorsItem(this.editOpportunitySheetCardData.replaceExistingMotor, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
 
     } else if (this.editOpportunitySheetCardData.opportunityType == 'motor-drive') {
       this.editOpportunitySheetCardData.motorDrive.opportunitySheet = updatedOpportunitySheet;
@@ -221,7 +228,7 @@ export class OpportunityCardsComponent implements OnInit {
 
     } else if (cardData.opportunityType == 'replace-existing') {
       cardData.replaceExistingMotor.selected = cardData.selected;
-      this.treasureHuntService.editReplaceExistingMotorsItem(cardData.replaceExistingMotor, cardData.opportunityIndex);
+      this.treasureHuntService.editReplaceExistingMotorsItem(cardData.replaceExistingMotor, cardData.opportunityIndex, this.settings);
 
     } else if (cardData.opportunityType == 'motor-drive') {
       cardData.motorDrive.selected = cardData.selected;
@@ -246,11 +253,11 @@ export class OpportunityCardsComponent implements OnInit {
     } else if (cardData.opportunityType == 'water-reduction') {
       cardData.waterReduction.selected = cardData.selected;
       this.treasureHuntService.editWaterReductionsItem(cardData.waterReduction, cardData.opportunityIndex, this.settings);
-    
+
     } else if (cardData.opportunityType == 'opportunity-sheet') {
       cardData.opportunitySheet.selected = cardData.selected;
       this.treasureHuntService.editOpportunitySheetItem(cardData.opportunitySheet, cardData.opportunityIndex, this.settings);
-    
+
     } else if (cardData.opportunityType == 'steam-reduction') {
       cardData.steamReduction.selected = cardData.selected;
       this.treasureHuntService.editSteamReductionItem(cardData.steamReduction, cardData.opportunityIndex, this.settings);
@@ -266,6 +273,14 @@ export class OpportunityCardsComponent implements OnInit {
     })
   }
 
+  deselectAll() {
+    this.opportunityCardsData.forEach(card => {
+      if (card.selected == true) {
+        card.selected = false;
+        this.toggleSelected(card);
+      }
+    });
+  }
   createCopy(cardData: OpportunityCardData) {
     let newOpportunityCard: OpportunityCardData = JSON.parse(JSON.stringify(cardData));
     if (newOpportunityCard.opportunityType == 'lighting-replacement') {
@@ -278,7 +293,7 @@ export class OpportunityCardsComponent implements OnInit {
       newOpportunityCard.replaceExistingMotor.opportunitySheet = this.updateCopyName(newOpportunityCard.replaceExistingMotor.opportunitySheet);
       this.treasureHuntService.addNewReplaceExistingMotorsItem(newOpportunityCard.replaceExistingMotor);
       let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-      newOpportunityCard = this.opportunityCardsService.getReplaceExistingCardData(newOpportunityCard.replaceExistingMotor, treasureHunt.replaceExistingMotors.length - 1, treasureHunt.currentEnergyUsage);
+      newOpportunityCard = this.opportunityCardsService.getReplaceExistingCardData(newOpportunityCard.replaceExistingMotor, treasureHunt.replaceExistingMotors.length - 1, treasureHunt.currentEnergyUsage, this.settings);
 
 
     } else if (newOpportunityCard.opportunityType == 'motor-drive') {

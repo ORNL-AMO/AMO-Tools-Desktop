@@ -6,20 +6,15 @@
       opportunities such as:
     </small>
   </h5>
-  <div class="my-2">
-    <h6>
-      <ul small class="text-muted">
-        <li>Reducing the operation time of lighting equipment.</li>
-        <br>
-        <li>Converting to a lower power usage fixture.</li>
-        <br>
-        <li>Reducing the number of lighting fixtures.</li>
-        <br>
-        <li>Turning off the lights when people are not present.</li>
-        <br>
-      </ul>
-    </h6>
-  </div>
+  <h6>
+    <ul small class="text-muted mb-0">
+      <li>Reducing the operation time of lighting equipment.</li>
+      <li>Converting to a lower power usage fixture.</li>
+      <li>Reducing the number of lighting fixtures.</li>
+      <li>Turning off the lights when people are not present.</li>
+      <br>
+    </ul>
+  </h6>
   <div class="my-2" *ngIf="currentField == 'hoursPerYear'">
     <h6>
       Hours per Year
@@ -36,7 +31,7 @@
       Watts per Lamp
       <small class="text-muted">
         <br>
-        Power used by each lamp or bulb in the fixture. Be sure to include the ballast’s power use, if applicable.
+        Power used by each lamp or bulb in the fixture.
         <hr>
       </small>
     </h6>
@@ -76,10 +71,82 @@
       Electricity Cost
       <small class="text-muted">
         <br>
-        Per unit cost of electricity in $/kWh
+        Per unit cost of electricity in $/kWh.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'category'">
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Type of Fixture</th>
+          </tr>
+          <tr *ngFor="let fixtureCategory of lightingFixtureCategories">
+            <td>{{fixtureCategory.label}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'type'">
+    <h6>
+      Lighting Fixture Type
+      <small class="text-muted">
+        <br>
+        Subtype of light fixture, based on Wattage, Number of Lamps or tube diameter.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr *ngFor="let fixtureType of fixtureTypes">
+            <td>{{fixtureType.type}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'ballastFactor'">
+    <h6>
+      Ballast Factor
+      <small class="text-muted">
+        <br>
+        A light ballast regulates the amount of electric current passing through the lamp by distributing the current
+        equally among the various components of the lighting device. The Ballast Factor is the fraction of the light
+        that will be emitted from a lamp when using that particular ballast. Note: LEDs do not require ballasts, if
+        planning a lighting upgrade to LEDs, without bypassing or removing your ballasts, you will not see as much
+        energy savings or LED life.
         <hr>
       </small>
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'coefficientOfUtilization'">
+    <h6>
+      Coefficient of Utilization
+      <small class="text-muted">
+        <br>
+        A coefficient of utilization (CU) is a measure of the efficiency of a light in transferring luminous energy to
+        the working plane in a particular area. The CU is the ratio of luminous flux from a luminaire incident upon a
+        work plane to that emitted by the lamps within the luminaire. (Optional)
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'lumenDegradationFactor'">
+    <h6>
+      Lumen Degradation Factor
+      <small class="text-muted">
+        <br>
+        The ratio of lumen output at lamp half-life to the initial lumen output. (Optional)
+        <hr>
+      </small>
+    </h6>
+  </div>
 </div>

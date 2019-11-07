@@ -24,3 +24,7 @@ label {
     border-left: solid 1px;
     border-right: none;
   }
+
+.indicate-different{
+  border: #33CC33 solid 2px;
+}

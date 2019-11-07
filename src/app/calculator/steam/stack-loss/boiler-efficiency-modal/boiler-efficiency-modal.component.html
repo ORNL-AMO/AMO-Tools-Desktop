@@ -1,0 +1,22 @@
+<div bsModal #boilerEfficiencyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="boilerEfficiencyModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="h-100 d-flex flex-column">
+                <div class="row no-gutters flex-grow-1">
+                    <div class="col-12">
+                        <app-stack-loss-calculator [settings]="settings" [inModal]="true"
+                            (emitEfficiency)="setEfficiency($event)">
+                        </app-stack-loss-calculator>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-12 btn-col">
+                        <button class="btn btn-danger pull-right btn-margin" (click)="hideModal()">Cancel</button>
+                        <button class="btn btn-success pull-right" (click)="save()">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

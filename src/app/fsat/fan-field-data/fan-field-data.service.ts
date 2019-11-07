@@ -15,8 +15,8 @@ export class FanFieldDataService {
     let form: FormGroup = this.formBuilder.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       flowRate: [obj.flowRate, [Validators.required, Validators.min(0)]],
-      inletPressure: [obj.inletPressure, Validators.required],
-      outletPressure: [obj.outletPressure, Validators.required],
+      inletPressure: [obj.inletPressure, [Validators.required, Validators.max(0)]],
+      outletPressure: [obj.outletPressure, [Validators.required, Validators.min(0)]],
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],
       motorPower: [obj.motorPower, Validators.required],
       cost: [obj.cost, [Validators.required, Validators.min(0)]],
@@ -50,10 +50,6 @@ export class FanFieldDataService {
 
   isFanFieldDataValid(obj: FieldData): boolean {
     let form: FormGroup = this.getFormFromObj(obj);
-    if (form.status === 'VALID') {
-      return true;
-    } else {
-      return false;
-    }
+    return form.valid;
   }
 }

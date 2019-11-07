@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { FormGroup } from '@angular/forms';
+import { BoilerBlowdownRateService } from '../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.service';
 
 @Component({
   selector: 'app-blowdown-rate-modal',
@@ -28,7 +29,7 @@ export class BlowdownRateModalComponent implements OnInit {
 
   showModal: string = 'hide';
   blowdownRate: number = 0;
-  constructor() { }
+  constructor(private boilerBlowdownRateService: BoilerBlowdownRateService) { }
 
   ngOnInit() {
     setTimeout(() => {
@@ -39,7 +40,9 @@ export class BlowdownRateModalComponent implements OnInit {
 
   calculate() {
     if (this.form.controls.feedwaterConductivity.value != undefined && this.form.controls.blowdownConductivity.value != undefined) {
-      this.blowdownRate = (this.form.controls.feedwaterConductivity.value / this.form.controls.blowdownConductivity.value) * 100;
+      this.blowdownRate = this.boilerBlowdownRateService.calculateBlowdownRate(this.form.controls.feedwaterConductivity.value, this.form.controls.blowdownConductivity.value) * 100;
+    } else {
+      this.blowdownRate = 0;
     }
   }
 

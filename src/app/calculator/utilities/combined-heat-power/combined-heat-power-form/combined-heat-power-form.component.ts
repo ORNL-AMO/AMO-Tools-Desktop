@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, 
 import { CombinedHeatPower } from '../../../../shared/models/standalone';
 import { CombinedHeatPowerService } from '../combined-heat-power.service';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-combined-heat-power-form',
   templateUrl: './combined-heat-power-form.component.html',
@@ -14,6 +15,8 @@ export class CombinedHeatPowerFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])

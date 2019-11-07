@@ -71,7 +71,7 @@ export class ModificationListComponent implements OnInit {
   }
   getBadges(modification: PSAT) {
     if (modification) {
-      return this.compareService.getBadges(this.psat, modification);
+      return this.compareService.getBadges(this.psat, modification, this.settings);
     } else {
       return []
     }

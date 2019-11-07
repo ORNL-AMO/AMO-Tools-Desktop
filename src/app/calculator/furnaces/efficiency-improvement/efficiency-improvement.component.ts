@@ -8,6 +8,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-efficiency-improvement',
@@ -40,7 +41,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   saving: boolean;
   originalCalculator: Calculator;
   calculator: Calculator;
-
+  efficiencyImprovementForm: FormGroup;
   constructor(private phastService: PhastService, private efficiencyImprovementService: EfficiencyImprovementService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
@@ -77,15 +78,13 @@ export class EfficiencyImprovementComponent implements OnInit {
     else {
       this.efficiencyImprovementInputs = this.efficiencyImprovementService.getResetData();
     }
+    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
     this.calculate(this.efficiencyImprovementInputs);
   }
 
   btnGenerateExample() {
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
     this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
-    // this.toggleExampleData = !this.toggleExampleData;
+    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
     this.calculate(this.efficiencyImprovementInputs);
   }
 
@@ -125,6 +124,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.calculator = this.initCalculator();
       this.saveCalculator();
     }
+    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
   }
 
   initCalculator(): Calculator {
@@ -142,6 +142,8 @@ export class EfficiencyImprovementComponent implements OnInit {
     } else {
       this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
     }
+    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
+    this.calculate(this.efficiencyImprovementInputs);
   }
 
   saveCalculator() {

@@ -12,6 +12,7 @@ import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
+import { CalculatorsService } from './calculators/calculators.service';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -41,6 +42,9 @@ export class TreasureHuntComponent implements OnInit {
   modalOpenSub: Subscription;
   isModalOpen: boolean = false;
   treasureHuntSub: Subscription;
+  nextDisabled: boolean;
+  selectedCalcSub: Subscription;
+  selectedCalc: string;
   constructor(
     private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService,
@@ -50,7 +54,8 @@ export class TreasureHuntComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private treasureHuntService: TreasureHuntService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private calculatorsService: CalculatorsService
   ) { }
 
   ngOnInit() {
@@ -59,23 +64,28 @@ export class TreasureHuntComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
-
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
             setupDone: false,
             operatingHours: {
-              weeksPerYear: 52,
+              weeksPerYear: 52.14,
               daysPerWeek: 7,
-              hoursPerYear: 8736
+              hoursPerDay: 24,
+              minutesPerHour: 60,
+              secondsPerMinute: 60,
+              hoursPerYear: 8760
             }
           }
         }
         if (!this.assessment.treasureHunt.operatingHours) {
           this.assessment.treasureHunt.operatingHours = {
-            weeksPerYear: 52,
+            weeksPerYear: 52.14,
             daysPerWeek: 7,
-            hoursPerYear: 8736
+            hoursPerDay: 24,
+            minutesPerHour: 60,
+            secondsPerMinute: 60,
+            hoursPerYear: 8760
           }
         }
 
@@ -91,11 +101,14 @@ export class TreasureHuntComponent implements OnInit {
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.checkTutorials();
       this.getContainerHeight();
+      this.getCanContinue();
     });
 
     this.subTabSub = this.treasureHuntService.subTab.subscribe(val => {
       this.subTab = val;
+      this.getCanContinue();
     });
     this.modalOpenSub = this.treasureHuntService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
@@ -104,6 +117,11 @@ export class TreasureHuntComponent implements OnInit {
       if (val) {
         this.saveTreasureHunt(val);
       }
+      this.getCanContinue();
+    });
+    this.selectedCalcSub = this.calculatorsService.selectedCalc.subscribe(val => {
+      this.selectedCalc = val;
+      this.getContainerHeight();
     })
   }
 
@@ -115,6 +133,7 @@ export class TreasureHuntComponent implements OnInit {
     this.modalOpenSub.unsubscribe();
     this.treasureHuntService.treasureHunt.next(undefined);
     this.treasureHuntSub.unsubscribe();
+    this.selectedCalcSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -193,34 +212,24 @@ export class TreasureHuntComponent implements OnInit {
 
   getCanContinue() {
     if (this.subTab == 'settings') {
-      return true;
-    } else if (this.subTab == 'operating-hours') {
-      if (this.assessment.treasureHunt.operatingHours) {
-        return true;
-      } else {
-        return false
-      }
+      this.nextDisabled = false;
     } else if (this.subTab == 'operation-costs') {
       if (this.assessment.treasureHunt.setupDone) {
-        return true;
+        this.nextDisabled = false;
       } else {
-        return false;
+        this.nextDisabled = true;
       }
     }
   }
 
   back() {
-    if (this.subTab == 'operating-hours') {
+    if (this.subTab == 'operation-costs') {
       this.treasureHuntService.subTab.next('settings');
-    } else if (this.subTab == 'operation-costs') {
-      this.treasureHuntService.subTab.next('operating-hours');
     }
   }
 
   continue() {
     if (this.subTab == 'settings') {
-      this.treasureHuntService.subTab.next('operating-hours');
-    } else if (this.subTab == 'operating-hours') {
       this.treasureHuntService.subTab.next('operation-costs');
     } else if (this.subTab == 'operation-costs') {
       this.treasureHuntService.mainTab.next('find-treasure');
@@ -242,5 +251,29 @@ export class TreasureHuntComponent implements OnInit {
       setTimeoutVal: undefined
     };
     this.cd.detectChanges();
+  }
+
+  checkTutorials() {
+    if (this.mainTab == 'system-setup') {
+      if (!this.settingsDbService.globalSettings.disableTreasureHuntSetupTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('treasure-hunt-setup-tutorial');
+      }
+    } else if (this.mainTab == 'find-treasure') {
+      if (!this.settingsDbService.globalSettings.disableTreasureHuntFindTreasureTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('treasure-hunt-find-treasure-tutorial');
+      }
+    } else if (this.mainTab == 'treasure-chest') {
+      if (!this.settingsDbService.globalSettings.disableTreasureHuntTreasureChestTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('treasure-hunt-treasure-chest-tutorial');
+      }
+    } else if (this.mainTab == 'report') {
+      if (!this.settingsDbService.globalSettings.disableTreasureHuntReportTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('treasure-hunt-report-tutorial');
+      }
+    }
   }
 }

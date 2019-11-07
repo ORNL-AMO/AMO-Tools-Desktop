@@ -1,3 +1,5 @@
+import { FlueGasByVolume, FlueGasByMass } from "../phast/losses/flueGas";
+
 //USED FOR STANDALONE STEAM CALCS
 //ssmt.ts has models for SSMT assessments
 export interface SteamPropertiesInput {
@@ -133,4 +135,13 @@ export interface HeatExchangerInput {
   coldInletSpecificEnthalpy: number,
   coldInletSpecificEntropy: number,
   approachTemp: number
+}
+
+
+export interface StackLossInput {
+  flueGasType: number,
+  flueGasByVolume: FlueGasByVolume,
+  flueGasByMass: FlueGasByMass,
+  name: string
+
 }

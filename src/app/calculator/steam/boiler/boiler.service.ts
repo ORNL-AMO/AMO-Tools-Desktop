@@ -4,12 +4,16 @@ import { BoilerInput } from '../../../shared/models/steam/steam-inputs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { SteamService } from '../steam.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class BoilerService {
 
   boilerInput: BoilerInput;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
+  modalOpen: BehaviorSubject<boolean>;
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { 
+    this.modalOpen = new BehaviorSubject<boolean>(false);
+  }
 
   initForm(settings: Settings): FormGroup {
     let tmpDeaeratorPressure = 2;

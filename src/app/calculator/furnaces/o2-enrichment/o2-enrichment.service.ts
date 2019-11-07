@@ -94,10 +94,16 @@ export class O2EnrichmentService {
   }
 
   generateExample(settings: Settings): O2Enrichment {
-    let tmpFlueGasTemp: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(1800).from('F').to(settings.temperatureMeasurement), 2);
-    let tmpFlueGasTempEnriched: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(1800).from('F').to(settings.temperatureMeasurement), 2);
-    let tmpCombAirTemp: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(900).from('F').to(settings.temperatureMeasurement), 2);
-    let tmpCombAirTempEnriched: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to(settings.temperatureMeasurement), 2);
+    let tmpFlueGasTemp: number = 1800;
+    let tmpFlueGasTempEnriched: number = 1800;
+    let tmpCombAirTemp: number = 80;
+    let tmpCombAirTempEnriched: number = 300;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpFlueGasTemp = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpFlueGasTemp).from('F').to('C'), 2);
+      tmpFlueGasTempEnriched = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpFlueGasTempEnriched).from('F').to('C'), 2);
+      tmpCombAirTemp = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpCombAirTemp).from('F').to('C'), 2);
+      tmpCombAirTempEnriched = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpCombAirTempEnriched).from('F').to('C'), 2);
+    }
     let tmpFuelConsumption: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to(settings.energyResultUnit), 100);
     return {
       operatingHours: 8640,
@@ -122,7 +128,7 @@ export class O2EnrichmentService {
       operatingHoursEnriched: 0,
       fuelCost: 0,
       fuelCostEnriched: 0,
-      o2CombAir: 0,
+      o2CombAir: 21,
       o2CombAirEnriched: 0,
       combAirTemp: 0,
       combAirTempEnriched: 0,

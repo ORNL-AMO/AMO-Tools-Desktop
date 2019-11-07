@@ -43,6 +43,11 @@ export class SteamReductionComponent implements OnInit {
   steamReductionResults: SteamReductionResults;
   baselineData: Array<SteamReductionData>;
   modificationData: Array<SteamReductionData>;
+
+  steamUtilityCost: number;
+  naturalGasUtilityCost: number;
+  otherUtilityCost: number;
+
   constructor(private settingsDbService: SettingsDbService, private steamReductionService: SteamReductionService) { }
 
   ngOnInit() {
@@ -52,6 +57,7 @@ export class SteamReductionComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    this.initCosts();
     this.initData();
     this.getResults();
   }
@@ -86,11 +92,17 @@ export class SteamReductionComponent implements OnInit {
     this.currentField = str;
   }
 
+  initCosts() {
+    this.steamUtilityCost = this.settings.steamCost ? this.settings.steamCost : 0.12;
+    this.naturalGasUtilityCost = this.settings.fuelCost ? this.settings.fuelCost : 0.006;
+    this.otherUtilityCost = 0.05;
+  }
+
   initData() {
     if (this.steamReductionService.baselineData) {
       this.baselineData = this.steamReductionService.baselineData;
     } else {
-      let tmpObj: SteamReductionData = this.steamReductionService.initObject(0, this.settings, this.operatingHours);
+      let tmpObj: SteamReductionData = this.steamReductionService.initObject(0, this.settings, this.operatingHours, 1, this.steamUtilityCost, this.naturalGasUtilityCost, this.otherUtilityCost);
       this.baselineData = [tmpObj];
     }
     if (this.steamReductionService.modificationData) {
@@ -102,7 +114,7 @@ export class SteamReductionComponent implements OnInit {
   }
 
   addBaselineEquipment() {
-    let tmpObj: SteamReductionData = this.steamReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours);
+    let tmpObj: SteamReductionData = this.steamReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours, this.baselineData[0].utilityType, this.baselineData[0].steamUtilityCost, this.baselineData[0].naturalGasUtilityCost, this.baselineData[0].otherUtilityCost);
     this.baselineData.push(tmpObj);
     this.getResults();
   }
@@ -120,7 +132,7 @@ export class SteamReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    let tmpObj: SteamReductionData = this.steamReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours);
+    let tmpObj: SteamReductionData = this.steamReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours, this.baselineData[0].utilityType, this.baselineData[0].steamUtilityCost, this.baselineData[0].naturalGasUtilityCost, this.baselineData[0].otherUtilityCost);
     this.modificationData.push(tmpObj);
     this.getResults();
   }
@@ -166,7 +178,7 @@ export class SteamReductionComponent implements OnInit {
   }
 
   btnResetData() {
-    let tmpObj: SteamReductionData = this.steamReductionService.initObject(0, this.settings, this.operatingHours)
+    let tmpObj: SteamReductionData = this.steamReductionService.initObject(0, this.settings, this.operatingHours, 1, this.steamUtilityCost, this.naturalGasUtilityCost, this.otherUtilityCost);
     this.baselineData = [tmpObj];
     this.modificationData = new Array<SteamReductionData>();
     this.modificationExists = false;
@@ -195,5 +207,18 @@ export class SteamReductionComponent implements OnInit {
     if (this.baselineSelected == true) {
       this.baselineSelected = false;
     }
+  }
+
+  btnGenerateExample() {
+    let tmpObj: SteamReductionData = this.steamReductionService.initObject(0, this.settings, this.operatingHours, 1, this.steamUtilityCost, this.naturalGasUtilityCost, this.otherUtilityCost);
+    this.baselineData = [tmpObj];
+    this.getResults();
+    let modificationObj: SteamReductionData = JSON.parse(JSON.stringify(tmpObj));
+    modificationObj.measurementMethod = 3;
+    modificationObj.otherMethodData.consumption = this.steamReductionResults.baselineResults.energyUse * .95;
+    modificationObj.otherMethodData.consumption = Number(modificationObj.otherMethodData.consumption.toFixed(3));
+    this.modificationData = [modificationObj];
+    this.getResults();
+    this.modificationExists = true;
   }
 }

@@ -207,7 +207,7 @@ export class StandaloneService {
       let output: PipeSizes = standaloneAddon.airVelocity(inputCpy);
       //all sizes metric: cm imperial: in
       for (let key in output) {
-        output[key] = this.convertUnitsService.value(output[key]).from('in').to('cm');
+        output[key] = this.convertUnitsService.value(output[key]).from('ft').to('m');
       }
       return output;
     }
@@ -282,8 +282,16 @@ export class StandaloneService {
     }
   }
 
-  CHPcalculator(inputs: CombinedHeatPower): CombinedHeatPowerOutput {
-    return standaloneAddon.CHPcalculator(inputs);
+  CHPcalculator(inputs: CombinedHeatPower, settings: Settings): CombinedHeatPowerOutput {
+    let inputCpy: CombinedHeatPower = JSON.parse(JSON.stringify(inputs));
+    if (settings.unitsOfMeasure != 'Imperial') {
+      let fuelCostHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
+      inputCpy.boilerThermalFuelCosts = inputCpy.boilerThermalFuelCosts / fuelCostHelper;
+      inputCpy.boilerThermalFuelCostsCHPcase = inputCpy.boilerThermalFuelCostsCHPcase / fuelCostHelper;
+      inputCpy.CHPfuelCosts = inputCpy.CHPfuelCosts / fuelCostHelper;
+      inputCpy.annualThermalDemand = this.convertUnitsService.value(inputCpy.annualThermalDemand).from('GJ').to('MMBtu');
+    }
+    return standaloneAddon.CHPcalculator(inputCpy);
   }
 
   usableAirCapacity(input: CalculateUsableCapacity, settings: Settings): number {
@@ -312,7 +320,8 @@ export class StandaloneService {
   }
 
   compressedAirReduction(inputObj: CompressedAirReductionInput): CompressedAirReductionResult {
-    return calculatorAddon.compressedAirReduction(inputObj);
+    let results: CompressedAirReductionResult = calculatorAddon.compressedAirReduction(inputObj);
+    return results;
   }
 
   compressedAirPressureReduction(inputObj: CompressedAirPressureReductionInput): CompressedAirPressureReductionResult {

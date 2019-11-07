@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../models/settings';
 
 @Component({
@@ -32,14 +32,17 @@ export class ExportableTableComponent implements OnInit {
   showNotification: boolean = false;
   activateCheckmark: boolean = false;
 
-  constructor() { }
+  constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
     this.updateTableString();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.rowData) {
+    if (changes.rowData && changes.rowData.firstChange == false) {
       this.updateTableString();
     }
   }
@@ -60,6 +63,7 @@ export class ExportableTableComponent implements OnInit {
       }
       this.exportRowData.push(tmpArray);
     }
+    this.cd.detectChanges();
   }
 
 

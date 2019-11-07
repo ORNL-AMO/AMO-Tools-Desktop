@@ -1,0 +1,6 @@
+<div class="d-flex w-100 justify-content-center pl-2 pr-2" *ngIf="rowData.length != 0">
+    <app-exportable-table class="exportable-table-container" [settings]="settings" [columnTitles]="columnTitles"
+        [rowData]="rowData" [keyColors]="keyColors" (highlightPoint)="highlightPoint($event)"
+        (unhighlightPoint)="unhighlightPoint($event)" (deleteFromTable)="deleteFromTable($event)">
+    </app-exportable-table>
+</div>

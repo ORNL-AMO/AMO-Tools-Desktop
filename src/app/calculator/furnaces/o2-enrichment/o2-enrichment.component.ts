@@ -53,7 +53,6 @@ export class O2EnrichmentComponent implements OnInit {
   originalCalculator: Calculator;
   o2Form: FormGroup;
   toggleResetData: boolean = true;
-  toggleExampleData: boolean = true;
   constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService,
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
 
@@ -112,11 +111,7 @@ export class O2EnrichmentComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
     this.generateExample();
-    this.toggleExampleData = !this.toggleExampleData;
     this.calculate();
   }
 

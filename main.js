@@ -1,8 +1,10 @@
-const { app, BrowserWindow, ipcMain, crashReporter } = require('electron');
+const { app, BrowserWindow, ipcMain, crashReporter, Menu } = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
+// const Menu = require('menu');
+
 
 function isDev() {
   return process.mainModule.filename.indexOf('app.asar') === -1;
@@ -82,6 +84,27 @@ app.on('ready', function () {
     submitURL: "https://ornl-amo.sp.backtrace.io:6098/post?format=minidump&token=9e914fbd14a36589b7e2ce09cf8c3b4b5b3e37368da52bf1dabff576f156126c",
     uploadToServer: true
   });
+
+  var template = [{
+    label: "Application",
+    submenu: [
+      { label: "Quit", accelerator: "Command+Q", click: function () { app.quit(); } }
+    ]
+  }, {
+    label: "Edit",
+    submenu: [
+      { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+      { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+      { type: "separator" },
+      { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+      { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+      { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+    ]
+  }
+  ];
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  win.setAutoHideMenuBar(true)
 });
 
 // Listen for message from core.component to either download updates or not
@@ -101,7 +124,5 @@ app.on('activate', () => {
 });
 
 app.on('window-all-closed', function () {
-  if (process.platform != 'darwin') {
-    app.quit();
-  }
+  app.quit();
 });

@@ -132,11 +132,15 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
 
   ngOnInit() {
     this.initData();
+  }
+
+  ngAfterViewInit() {
     this.initCanvas();
     if (this.chartContainerHeight && this.chartContainerWidth) {
       this.buildChart();
     }
   }
+
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
@@ -415,7 +419,6 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
 
   buildChart() {
     this.host.html('');
-
     let containerWidth: number, containerHeight: number;
 
     if (!this.expanded) {
@@ -618,8 +621,11 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   }
 
   addYAxisLabel() {
-    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement !== this.defaultTempUnit) {
+    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement == 'F') {
       this.yAxisLabel = "Temperature &#8457;"; // F
+    }
+    else if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement == 'K') {
+      this.yAxisLabel = "Temperature K"; // K
     }
     else {
       this.yAxisLabel = "Temperature &#8451;"; // C

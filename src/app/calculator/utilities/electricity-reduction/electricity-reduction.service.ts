@@ -22,9 +22,14 @@ export class ElectricityReductionService {
       averageCurrent: 0,
       powerFactor: 0.85
     };
+    let ratedMotorPower: number = 200;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      ratedMotorPower = this.convertUnitsService.value(ratedMotorPower).from('hp').to(settings.powerMeasurement);
+      ratedMotorPower = Number(ratedMotorPower.toFixed(2));
+    }
 
     let defaultNameplateObj: NameplateData = {
-      ratedMotorPower: settings.powerMeasurement === undefined ? 200 : this.convertUnitsService.value(200).from('hp').to(settings.powerMeasurement),
+      ratedMotorPower: ratedMotorPower,
       variableSpeedMotor: true,
       operationalFrequency: 50,
       lineFrequency: 60,
@@ -40,7 +45,7 @@ export class ElectricityReductionService {
       energy: 400000
     };
 
-    let hoursPerYear: number = 8736;
+    let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
@@ -167,10 +172,16 @@ export class ElectricityReductionService {
 
   generateExample(settings: Settings, isBaseline: boolean): ElectricityReductionData {
     let defaultData: ElectricityReductionData
+    let ratedMotorPower: number = 200;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      ratedMotorPower = this.convertUnitsService.value(ratedMotorPower).from('hp').to(settings.powerMeasurement);
+      ratedMotorPower = Number(ratedMotorPower.toFixed(2));
+    }
+
     if (isBaseline) {
       defaultData = {
         name: 'Equipment #1',
-        operatingHours: 8736,
+        operatingHours: 8760,
         electricityCost: settings.electricityCost,
         measurementMethod: 1,
         multimeterData: {
@@ -180,7 +191,7 @@ export class ElectricityReductionService {
           powerFactor: 0.0
         },
         nameplateData: {
-          ratedMotorPower: this.convertUnitsService.roundVal(this.convertUnitsService.value(200).from('hp').to(settings.powerMeasurement), 2),
+          ratedMotorPower: ratedMotorPower,
           variableSpeedMotor: true,
           operationalFrequency: 50,
           lineFrequency: 60,
@@ -199,7 +210,7 @@ export class ElectricityReductionService {
     else {
       defaultData = {
         name: 'Equipment #1',
-        operatingHours: 8736,
+        operatingHours: 8760,
         electricityCost: settings.electricityCost,
         measurementMethod: 1,
         multimeterData: {
@@ -273,8 +284,10 @@ export class ElectricityReductionService {
 
   convertInputs(inputArray: Array<ElectricityReductionData>, settings: Settings): Array<ElectricityReductionData> {
     //need to loop through for conversions prior to calculation
-    for (let i = 0; i < inputArray.length; i++) {
-      inputArray[i].nameplateData.ratedMotorPower = this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from(settings.powerMeasurement).to('kW');
+    if (settings.unitsOfMeasure == 'Imperial') {
+      for (let i = 0; i < inputArray.length; i++) {
+        inputArray[i].nameplateData.ratedMotorPower = this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from('hp').to('kW');
+      }
     }
     return inputArray;
   }

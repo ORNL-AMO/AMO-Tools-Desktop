@@ -88,7 +88,7 @@ export class PhastReportComponent implements OnInit {
     }
 
     if (!this.phast.operatingHours.hoursPerYear) {
-      this.phast.operatingHours.hoursPerYear = 8736;
+      this.phast.operatingHours.hoursPerYear = 8760;
     }
 
     if (this.inRollup) {

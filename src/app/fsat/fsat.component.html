@@ -52,16 +52,17 @@
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-fan-analysis *ngIf="calcTab == 'fan-analysis'" [assessment]="assessment" [settings]="settings">
     </app-fan-analysis>
-    <app-pump-curve *ngIf="calcTab == 'system-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings"
-      [assessment]="assessment" [fsat]="_fsat" [pumpCurvePrimary]="false"></app-pump-curve>
+    <app-system-and-equipment-curve *ngIf="calcTab == 'system-curve'" [settings]="settings" [equipmentType]="'fan'"
+      [assessment]="assessment" [isEquipmentCurvePrimary]="false"></app-system-and-equipment-curve>
     <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment"
       [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings" [inAssessment]="true"
       [assessment]="assessment" [fsat]="_fsat"></app-motor-performance>
     <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inAssessment]="true"
       [assessment]="assessment" [settings]="settings" [fsat]="_fsat"></app-nema-energy-efficiency>
-    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings"
-      [assessment]="assessment" [fsat]="_fsat" [pumpCurvePrimary]="true"></app-pump-curve>
+
+    <app-system-and-equipment-curve *ngIf="calcTab == 'fan-curve'" [settings]="settings" [equipmentType]="'fan'"
+      [assessment]="assessment" [isEquipmentCurvePrimary]="true"></app-system-and-equipment-curve>
   </div>
   <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100"
     [ngStyle]="{'height.px': containerHeight}">
@@ -79,7 +80,7 @@
   </div>
 
   <div #footer id="fsatFooter" class="footer hide-print" *ngIf="mainTab == 'assessment' || mainTab == 'system-setup'">
-    <div class="pull-left" *ngIf="stepTab != 'system-basics'">
+    <div class="pull-left" *ngIf="stepTab != 'system-basics' || mainTab == 'assessment'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
     <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">

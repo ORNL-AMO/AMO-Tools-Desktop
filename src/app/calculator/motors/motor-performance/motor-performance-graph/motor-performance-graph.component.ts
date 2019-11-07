@@ -151,10 +151,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('graph, changes()');
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
-        console.log('toggleCalculate');
         if (this.checkForm()) {
           this.makeGraph();
         }
@@ -190,7 +188,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       formatX: false
     });
   }
-  
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeGraph();
@@ -385,8 +383,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   makeGraph() {
-    console.log('makeGraph()');
-
     if (this.tempMotorPower !== this.performanceForm.controls.horsePower.value) {
       this.curveChanged = true;
       this.tempMotorPower = this.performanceForm.controls.horsePower.value;
@@ -454,6 +450,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.svg.append("path")
       .attr("id", "areaUnderCurve");
     this.lineChartHelperService.setXAxisLabel(this.svg, this.width, this.height, 0, 70, "Motor Shaft Load (%)");
+    this.lineChartHelperService.setYAxisLabel(this.svg, this.width, this.height, -60, 0, "Current (% FLA), Efficiency (%), PF (%)");
 
     // Define the div for the tooltip
     this.detailBox = this.lineChartHelperService.appendDetailBox(this.ngChart);
@@ -503,6 +500,49 @@ export class MotorPerformanceGraphComponent implements OnInit {
       this.replaceFocusPoints();
     }
     d3.selectAll("line").style("pointer-events", "none");
+    this.addLegend();
+  }
+
+  addLegend() {
+    this.svg.append("line")
+      .attr("x1", this.width - 30)
+      .attr("y1", this.height + 47)
+      .attr("x2", this.width - 5)
+      .attr("y2", this.height + 47)
+      .attr("stroke", "#145A32")
+      .attr("stroke-width", 2);
+    this.svg.append("text")
+      .attr("x", this.width - 35)
+      .attr("y", this.height + 49)
+      .attr("text-anchor", "end")
+      .attr("font-size", 10)
+      .text("Current");
+    this.svg.append("line")
+      .attr("x1", this.width - 30)
+      .attr("y1", this.height + 57)
+      .attr("x2", this.width - 5)
+      .attr("y2", this.height + 57)
+      .attr("stroke", "#3498DB")
+      .attr("stroke-width", 2);
+    this.svg.append("text")
+      .attr("x", this.width - 35)
+      .attr("y", this.height + 59)
+      .attr("text-anchor", "end")
+      .attr("font-size", 10)
+      .text("Power");
+    this.svg.append("line")
+      .attr("x1", this.width - 30)
+      .attr("y1", this.height + 67)
+      .attr("x2", this.width - 5)
+      .attr("y2", this.height + 67)
+      .attr("stroke", "#A569BD")
+      .attr("stroke-width", 2);
+    this.svg.append("text")
+      .attr("x", this.width - 35)
+      .attr("y", this.height + 69)
+      .attr("text-anchor", "end")
+      .attr("font-size", 10)
+      .text("Efficiency");
   }
 
 

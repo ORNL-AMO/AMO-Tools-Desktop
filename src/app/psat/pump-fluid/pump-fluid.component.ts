@@ -208,16 +208,17 @@ export class PumpFluidComponent implements OnInit {
     }
   }
 
-  isPumpSpecifiedDifferent() {
+  isPumpTypeDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isPumpSpecifiedDifferent();
+      return this.compareService.isPumpTypeDifferent();
     } else {
       return false;
     }
   }
-  isPumpStyleDifferent() {
+
+  isPumpSpecifiedDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isPumpStyleDifferent();
+      return this.compareService.isPumpSpecifiedDifferent();
     } else {
       return false;
     }

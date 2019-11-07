@@ -63,7 +63,7 @@
     <!--replace existing motor-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
-      class="card calc-card-item motors m-2" (click)="selectReplaceExisting()">
+      class="card calc-card-item m-2" (click)="selectReplaceExisting()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon-div d-flex justify-content-center align-items-center">
           <img class="calc-img" src="assets/images/calculator-icons/motor-icons/replace.png">
@@ -78,7 +78,7 @@
     <!--upgrade motor drive-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
-      class="card calc-card-item motors m-2" (click)="selectMotorDrive()">
+      class="card calc-card-item m-2" (click)="selectMotorDrive()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon-div d-flex justify-content-center align-items-center">
           <img class="calc-img" src="assets/images/calculator-icons/motor-icons/motor-drive.png">
@@ -165,7 +165,7 @@
     </div>
     <!--steam reduction-->
     <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam') && (treasureHunt.currentEnergyUsage.steamUsed == true)"
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Steam' || displayCalculatorType == 'Natural Gas' || displayCalculatorType == 'Other Fuel') && (treasureHunt.currentEnergyUsage.naturalGasUsed == true || treasureHunt.currentEnergyUsage.steamUsed == true || treasureHunt.currentEnergyUsage.otherFuelUsed == true)"
       class="card calc-card-item m-2" (click)="selectSteamReduction()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">

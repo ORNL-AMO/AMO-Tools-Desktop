@@ -81,11 +81,6 @@ export class PreAssessmentComponent implements OnInit {
     }
   }
 
-  btnResetData() {
-    this.nameIndex = 1;
-    this.initAssessments();
-  }
-
   getHeight() {
     setTimeout(() => {
       if (this.container.nativeElement) {
@@ -96,14 +91,35 @@ export class PreAssessmentComponent implements OnInit {
     }, 200);
   }
 
-  initAssessments() {
-    if(this.settings.unitsOfMeasure == 'Custom'){
+  btnResetData() {
+    this.nameIndex = 1;
+    this.initAssessments(true);
+  }
+
+  btnGenerateExample() {
+    this.generateExample();
+    this.calculate();
+  }
+
+  generateExample() {
+    if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
     }
     this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     if (!this.calculator) {
-      if (!this.inModal && !this.inAssessment && this.preAssessmentService.standaloneInputData) {
+      this.preAssessments = this.preAssessmentService.generateExample(this.settings, graphColors);
+    }
+  }
+
+  initAssessments(isReset?: boolean) {
+    if (this.settings.unitsOfMeasure == 'Custom') {
+      this.settings.unitsOfMeasure = 'Imperial';
+    }
+    this.assessmentGraphColors = graphColors;
+    this.results = new Array<any>();
+    if (!this.calculator) {
+      if (!this.inModal && !this.inAssessment && this.preAssessmentService.standaloneInputData && !isReset) {
         this.preAssessments = this.preAssessmentService.standaloneInputData;
       } else {
         if (this.inAssessment) {

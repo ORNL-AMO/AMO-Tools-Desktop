@@ -26,13 +26,16 @@
           <input name="motorSize" type="number" min="0" step="1" class="form-control" id="motorSize"
             formControlName="motorSize" (input)="calculate()" onfocus="this.select();"
             (focus)="focusField('motorSize')">
-          <span class="units">hp</span>
+          <span class="units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+          <span class="units" *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="replaceExistingForm.controls.motorSize.invalid && !replaceExistingForm.controls.motorSize.pristine">
           <span *ngIf="replaceExistingForm.controls.motorSize.errors.required">Value required.</span>
           <span *ngIf="replaceExistingForm.controls.motorSize.errors.min">Value cannot not be lower than
-            {{replaceExistingForm.controls.motorSize.errors.min.min}} hp.
+            {{replaceExistingForm.controls.motorSize.errors.min.min}} <span
+              *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>.
           </span>
         </span>
       </div>

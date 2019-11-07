@@ -17,11 +17,6 @@ export class TutorialsComponent implements OnInit {
     this.assessmentService.tutorialShown = false;
     this.assessmentService.showTutorial.next('landing-screen');
   }
-  
-  viewPhastTutorial() {
-    this.assessmentService.tutorialShown = false;
-    this.assessmentService.showTutorial.next('phast-tutorial');
-  }
 
   viewDashboardTutorial() {
     this.assessmentService.tutorialShown = false;

@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ReceiverTankMeteredStorage } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
-import { CompressedAirService } from '../../compressed-air.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ReceiverTankService } from '../receiver-tank.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-metered-storage-form',
@@ -11,52 +12,24 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class MeteredStorageFormComponent implements OnInit {
   @Input()
-  toggleResetData: boolean;
-  @Input()
   settings: Settings;
-  @Input()
-  toggleGenerateExample: boolean;
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
 
   inputs: ReceiverTankMeteredStorage;
   totalReceiverVolume: number;
-
-  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
+  setFormSub: Subscription;
+  constructor(private receiverTankService: ReceiverTankService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
-    this.inputs = this.compressedAirService.meteredStorageInputs;
-    this.getTotalReceiverVolume();
+    this.setFormSub = this.receiverTankService.setForm.subscribe(val => {
+      this.inputs = this.receiverTankService.meteredStorageInputs;
+      this.getTotalReceiverVolume();
+    });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
-      this.resetData();
-    }
-    if (changes.toggleGenerateExample && !changes.toggleGenerateExample.firstChange) {
-      this.generateExample();
-    }
-  }
-
-  generateExample() {
-    let tempInputs = {
-      method: 2,
-      lengthOfDemand: 1.5,
-      airFlowRequirement: 900,
-      atmosphericPressure: 14.7,
-      initialTankPressure: 100,
-      finalTankPressure: 70,
-      meteredControl: 45,
-    };
-    this.inputs = this.compressedAirService.convertTankMeteredStorageExample(tempInputs, this.settings);
-    this.getTotalReceiverVolume();
-  }
-
-  resetData() {
-    this.compressedAirService.initReceiverTankInputs();
-    this.inputs = this.compressedAirService.meteredStorageInputs;
-    this.getTotalReceiverVolume();
+  ngOnDestroy() {
+    this.setFormSub.unsubscribe();
+    this.receiverTankService.meteredStorageInputs = this.inputs;
   }
 
   getTotalReceiverVolume() {
@@ -64,6 +37,6 @@ export class MeteredStorageFormComponent implements OnInit {
   }
 
   changeField(str: string) {
-    this.emitChangeField.emit(str);
+    this.receiverTankService.currentField.next(str);
   }
 }

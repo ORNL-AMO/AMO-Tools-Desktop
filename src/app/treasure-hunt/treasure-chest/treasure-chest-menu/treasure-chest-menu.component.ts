@@ -109,13 +109,18 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.selectAll.next(false);
   }
 
+  deselectAll(){
+    this.treasureChestMenuService.deselectAll.next(true);
+    this.treasureChestMenuService.deselectAll.next(false);
+  }
+
   setTeams(oppData: Array<OpportunityCardData>) {
     let teamNames: Array<string> = this.treasureChestMenuService.getAllTeams(oppData);
     this.teams = new Array();
     teamNames.forEach(name => {
       this.teams.push({ name: name, selected: false });
     });
-    this.sortCardsData.teams = [];
+    this.sortCardsData.teams = _.intersection(this.sortCardsData.teams, teamNames);
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
@@ -125,7 +130,7 @@ export class TreasureChestMenuComponent implements OnInit {
     equipmentNames.forEach(equipment => {
       this.equipments.push({ name: equipment, selected: false });
     });
-    this.sortCardsData.teams = [];
+    this.sortCardsData.equipments = _.intersection(this.sortCardsData.equipments, equipmentNames);
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
