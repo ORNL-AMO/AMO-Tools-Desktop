@@ -36,7 +36,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   save(newSSMT: SSMT) {
     this.ssmt = newSSMT;
-    this.ssmt.modifications[this.exploreModIndex].ssmt.resultsCalculated = false;
     this.emitSave.emit(this.ssmt);
   }
 

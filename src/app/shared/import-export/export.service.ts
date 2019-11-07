@@ -91,9 +91,8 @@ export class ExportService {
   }
 
   deleteSsmtResults(ssmt: SSMT): SSMT {
-    if (ssmt.resultsCalculated == true && ssmt.outputData) {
+    if (ssmt.outputData) {
       delete ssmt.outputData;
-      ssmt.resultsCalculated = false;
     }
     return ssmt;
   }
