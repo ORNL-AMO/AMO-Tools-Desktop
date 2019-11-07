@@ -22,6 +22,8 @@ export class OperatingCostsComponent implements OnInit {
   inSetup: boolean;
   @Input()
   idString: string;
+  @Input()
+  isBaseline: boolean;
   
   constructor(private compareService: CompareService, private ssmtService: SsmtService) { }
 

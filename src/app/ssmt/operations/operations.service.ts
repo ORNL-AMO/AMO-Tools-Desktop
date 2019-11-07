@@ -23,6 +23,7 @@ export class OperationsService {
       electricityCost: [ssmt.operatingCosts.electricityCost, [Validators.required, Validators.min(.0000001)]],
       makeUpWaterCost: [ssmt.operatingCosts.makeUpWaterCost, [Validators.required, Validators.min(.0000001)]],
       hoursPerYear: [ssmt.operatingHours.hoursPerYear, [Validators.required, Validators.min(1), Validators.max(8760)]],
+      implementationCosts: [ssmt.operatingCosts.implementationCosts, Validators.min(0)]
     })
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
@@ -38,7 +39,8 @@ export class OperationsService {
     let operatingCosts: OperatingCosts = {
       fuelCost: form.controls.fuelCost.value,
       electricityCost: form.controls.electricityCost.value,
-      makeUpWaterCost: form.controls.makeUpWaterCost.value
+      makeUpWaterCost: form.controls.makeUpWaterCost.value,
+      implementationCosts: form.controls.implementationCosts.value
     }
 
     let generalSteamOperations: GeneralSteamOperations = {

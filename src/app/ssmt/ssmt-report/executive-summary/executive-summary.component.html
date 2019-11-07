@@ -144,6 +144,28 @@
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
+      <tr>
+        <td>Implementation Cost</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
+        <td *ngFor="let modification of ssmt.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modification.ssmt.operatingCosts.implementationCosts">
+            {{modification.ssmt.operatingCosts.implementationCosts | currency:'USD'}}
+          </span>
+          <span *ngIf="!modification.ssmt.operatingCosts.implementationCosts">&mdash;</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Payback Period (months)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
+        <td *ngFor="let modification of ssmt.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modification.ssmt.operatingCosts.implementationCosts">
+            {{getPayback(modificationOutputs[index].outputData.operationsOutput.totalOperatingCost, baselineOutput.operationsOutput.totalOperatingCost, modification.ssmt.operatingCosts.implementationCosts) | number:'1.0'}}
+          </span>
+          <span *ngIf="!modification.ssmt.operatingCosts.implementationCosts">&mdash;</span>
+        </td>
+      </tr>
       <tr class="hide-print" *ngIf="inRollup">
         <td>Use for Summary</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
