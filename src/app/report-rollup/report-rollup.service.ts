@@ -223,7 +223,7 @@ export class ReportRollupService {
   initResultsArr(psatArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllPsatResultsData>();
     psatArr.forEach(val => {
-      if (val.assessment.psat.setupDone && (val.assessment.psat.modifications.length !== 0)) {
+      if (val.assessment.psat.setupDone) {
         let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.assessment.psat.inputs)), val.settings);
         if (val.assessment.psat.modifications) {
           if (val.assessment.psat.modifications.length !== 0) {
@@ -378,7 +378,7 @@ export class ReportRollupService {
   initFsatResultsArr(fsatArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllFsatResultsData>();
     fsatArr.forEach(val => {
-      if (val.assessment.fsat.setupDone && val.assessment.fsat.modifications.length !== 0) {
+      if (val.assessment.fsat.setupDone) {
         let baselineResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.assessment.fsat)), true, val.settings);
         if (val.assessment.fsat.modifications) {
           if (val.assessment.fsat.modifications.length !== 0) {
@@ -420,12 +420,12 @@ export class ReportRollupService {
       let minCost = _.minBy(result.modificationResults, (result) => { return result.operationsOutput.totalOperatingCost; });
       let modIndex;
       if (minCost != undefined) {
-        modIndex = _.findIndex(result.modificationResults, { totalOperatingCost: minCost.operationsOutput.totalOperatingCost });
+        modIndex = _.findIndex(result.modificationResults, (result) => { return result.operationsOutput.totalOperatingCost == minCost.operationsOutput.totalOperatingCost });
       }
       let ssmtAssessments = this.ssmtAssessments.value;
       let assessmentIndex = _.findIndex(ssmtAssessments, (val) => { return val.assessment.id === result.assessmentId; });
       let item = ssmtAssessments[assessmentIndex];
-      if (result.isBaseline || modIndex == undefined) {
+      if (result.isBaseline || modIndex == undefined || modIndex == -1) {
         tmpResults.push({ baseline: item.assessment.ssmt, modification: item.assessment.ssmt, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
       } else {
         tmpResults.push({ baseline: item.assessment.ssmt, modification: item.assessment.ssmt.modifications[modIndex].ssmt, assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
@@ -446,28 +446,20 @@ export class ReportRollupService {
     this.selectedSsmt.next(tmpSelected);
   }
 
-  initSsmtResultsArr(fsatArr: Array<ReportItem>) {
+  initSsmtResultsArr(ssmtArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllSsmtResultsData>();
-    fsatArr.forEach(val => {
-      if (val.assessment.ssmt.setupDone && val.assessment.ssmt.modifications.length !== 0) {
+    ssmtArr.forEach(val => {
+      if (val.assessment.ssmt.setupDone) {
         //get results
-        if (!val.assessment.ssmt.resultsCalculated) {
-          val.assessment.ssmt.outputData = this.ssmtService.calculateModel(val.assessment.ssmt, val.settings, true, 0).outputData;
-          val.assessment.ssmt.resultsCalculated = true;
-        }
+        val.assessment.ssmt.outputData = this.ssmtService.calculateModel(val.assessment.ssmt, val.settings, true, 0).outputData;
         let baselineResults: SSMTOutput = val.assessment.ssmt.outputData;
         if (val.assessment.ssmt.modifications) {
           if (val.assessment.ssmt.modifications.length !== 0) {
             let modResultsArr = new Array<SSMTOutput>();
             val.assessment.ssmt.modifications.forEach(mod => {
-              if (!mod.ssmt.resultsCalculated) {
-                mod.ssmt.outputData = this.ssmtService.calculateModel(mod.ssmt, val.settings, false, baselineResults.operationsOutput.sitePowerDemand).outputData;
-                mod.ssmt.resultsCalculated = true;
-              }
+              mod.ssmt.outputData = this.ssmtService.calculateModel(mod.ssmt, val.settings, false, baselineResults.operationsOutput.sitePowerDemand).outputData;
               let tmpResults: SSMTOutput = mod.ssmt.outputData;
-              //if (tmpResults.boilerOutput) {
               modResultsArr.push(tmpResults);
-              //}
             });
             tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
           } else {

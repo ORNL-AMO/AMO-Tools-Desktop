@@ -97,7 +97,6 @@ export class SsmtRollupSteamSummaryComponent implements OnInit {
     this.title = graphOption;
     this.chartLabels = new Array();
     let i = 1;
-
     this.resultData.forEach(data => {
       let num1 = 0;
       let num2 = 0;

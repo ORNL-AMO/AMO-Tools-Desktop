@@ -17,7 +17,6 @@ export interface SSMT {
     headerInput?: HeaderInput;
     turbineInput?: TurbineInput;
     outputData?: SSMTOutput;
-    resultsCalculated?: boolean;
 }
 
 export interface SSMTInputs {

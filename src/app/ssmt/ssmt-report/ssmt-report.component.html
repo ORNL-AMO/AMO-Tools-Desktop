@@ -100,7 +100,7 @@
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
-        [assessment]="assessment" [printView]="printExecutiveSummary"></app-executive-summary>
+        [assessment]="assessment" [printView]="printExecutiveSummary" [ssmt]="assessment.ssmt"></app-executive-summary>
     </div>
     <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'energySummary' && !showPrint) || (showPrint && printEnergySummary)) && dataCalculated"
