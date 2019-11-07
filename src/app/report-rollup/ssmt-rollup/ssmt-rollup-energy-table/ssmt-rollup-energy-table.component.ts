@@ -24,6 +24,7 @@ export class SsmtRollupEnergyTableComponent implements OnInit {
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    console.log(this.resultData);
     this.graphColors = graphColors;
   }
 

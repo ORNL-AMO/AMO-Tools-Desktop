@@ -44,15 +44,15 @@
         <td *ngIf="data.modName">{{data.modName}}</td>
         <td *ngIf="!data.modName">&mdash;</td>
         <!-- energy use -->
-        <td>{{data.baselineResults.boilerFuelUsage | sigFigs:'5'}}</td>
-        <td *ngIf="data.modName">{{data.modificationResults.boilerFuelUsage | sigFigs:'5'}}</td>
+        <td>{{data.baselineResults.operationsOutput.boilerFuelUsage | sigFigs:'5'}}</td>
+        <td *ngIf="data.modName">{{data.modificationResults.operationsOutput.boilerFuelUsage | sigFigs:'5'}}</td>
         <td *ngIf="!data.modName">&mdash;</td>
         <!-- annual cost -->
-        <td>{{data.baselineResults.totalOperatingCost | currency:'USD':'symbol':'1.0-0'}}</td>
-        <td *ngIf="data.modName">{{data.modificationResults.totalOperatingCost | currency:'USD':'symbol':'1.0-0'}}</td>
+        <td>{{data.baselineResults.operationsOutput.totalOperatingCost | currency:'USD':'symbol':'1.0-0'}}</td>
+        <td *ngIf="data.modName">{{data.modificationResults.operationsOutput.totalOperatingCost | currency:'USD':'symbol':'1.0-0'}}</td>
         <td *ngIf="!data.modName">&mdash;</td>
         <!-- savings -->
-        <td *ngIf="data.modName">{{getSavings(data.modificationResults.totalOperatingCost, data.baselineResults.totalOperatingCost) | currency:'USD':'symbol':'1.0-0'}}</td>
+        <td *ngIf="data.modName">{{getSavings(data.modificationResults.operationsOutput.totalOperatingCost, data.baselineResults.operationsOutput.totalOperatingCost) | currency:'USD':'symbol':'1.0-0'}}</td>
         <td *ngIf="!data.modName">&mdash;</td>
         <!-- implementation costs -->
         <td *ngIf="data.modName">
@@ -65,10 +65,10 @@
         <!-- simple patback -->
         <td *ngIf="data.modName">
           <span *ngIf="getPayback(data.modificationResults.totalOperatingCost, data.baselineResults.totalOperatingCost, data.modification.implementationCosts)">
-            {{getPayback(data.modificationResults.totalOperatingCost, data.baselineResults.totalOperatingCost, data.modification.implementationCosts)
+            {{getPayback(data.modificationResults.operationsOutput.totalOperatingCost, data.baselineResults.operationsOutput.totalOperatingCost, data.modification.implementationCosts)
             | sigFigs:'3'}}
           </span>
-          <span *ngIf="!getPayback(data.modificationResults.totalOperatingCost, data.baselineResults.totalOperatingCost, data.modification.implementationCosts)">
+          <span *ngIf="!getPayback(data.modificationResults.operationsOutput.totalOperatingCost, data.baselineResults.operationsOutput.totalOperatingCost, data.modification.implementationCosts)">
             &mdash;
           </span>
         </td>

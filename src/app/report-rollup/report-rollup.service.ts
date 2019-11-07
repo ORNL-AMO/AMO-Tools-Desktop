@@ -223,7 +223,7 @@ export class ReportRollupService {
   initResultsArr(psatArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllPsatResultsData>();
     psatArr.forEach(val => {
-      if (val.assessment.psat.setupDone && (val.assessment.psat.modifications.length !== 0)) {
+      if (val.assessment.psat.setupDone) {
         let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.assessment.psat.inputs)), val.settings);
         if (val.assessment.psat.modifications) {
           if (val.assessment.psat.modifications.length !== 0) {
@@ -378,7 +378,7 @@ export class ReportRollupService {
   initFsatResultsArr(fsatArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllFsatResultsData>();
     fsatArr.forEach(val => {
-      if (val.assessment.fsat.setupDone && val.assessment.fsat.modifications.length !== 0) {
+      if (val.assessment.fsat.setupDone) {
         let baselineResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.assessment.fsat)), true, val.settings);
         if (val.assessment.fsat.modifications) {
           if (val.assessment.fsat.modifications.length !== 0) {
@@ -446,10 +446,10 @@ export class ReportRollupService {
     this.selectedSsmt.next(tmpSelected);
   }
 
-  initSsmtResultsArr(fsatArr: Array<ReportItem>) {
+  initSsmtResultsArr(ssmtArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllSsmtResultsData>();
-    fsatArr.forEach(val => {
-      if (val.assessment.ssmt.setupDone && val.assessment.ssmt.modifications.length !== 0) {
+    ssmtArr.forEach(val => {
+      if (val.assessment.ssmt.setupDone) {
         //get results
         val.assessment.ssmt.outputData = this.ssmtService.calculateModel(val.assessment.ssmt, val.settings, true, 0).outputData;
         let baselineResults: SSMTOutput = val.assessment.ssmt.outputData;
@@ -459,9 +459,7 @@ export class ReportRollupService {
             val.assessment.ssmt.modifications.forEach(mod => {
               mod.ssmt.outputData = this.ssmtService.calculateModel(mod.ssmt, val.settings, false, baselineResults.operationsOutput.sitePowerDemand).outputData;
               let tmpResults: SSMTOutput = mod.ssmt.outputData;
-              //if (tmpResults.boilerOutput) {
               modResultsArr.push(tmpResults);
-              //}
             });
             tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
           } else {
