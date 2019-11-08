@@ -236,11 +236,11 @@ export class SteamService {
       inputCpy.quantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.quantityValue, settings);
     }
     if (inputCpy.feedwaterThermodynamicQuantity === 0) {
-      inputCpy.feedwaterQuantityValue = this.convertSteamService.convertSteamTemperatureInput(inputCpy.quantityValue, settings);
+      inputCpy.feedwaterQuantityValue = this.convertSteamService.convertSteamTemperatureInput(inputCpy.feedwaterQuantityValue, settings);
     } else if (inputCpy.feedwaterThermodynamicQuantity === 1) {
-      inputCpy.feedwaterQuantityValue = this.convertSteamService.convertSteamSpecificEnthalpyInput(inputCpy.quantityValue, settings);
+      inputCpy.feedwaterQuantityValue = this.convertSteamService.convertSteamSpecificEnthalpyInput(inputCpy.feedwaterQuantityValue, settings);
     } else if (inputCpy.feedwaterThermodynamicQuantity === 2) {
-      inputCpy.feedwaterQuantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.quantityValue, settings);
+      inputCpy.feedwaterQuantityValue = this.convertSteamService.convertSteamSpecificEntropyInput(inputCpy.feedwaterQuantityValue, settings);
     }
     //call suite calculator
     let results: PrvOutput = steamAddon.prvWithDesuperheating(inputCpy);
