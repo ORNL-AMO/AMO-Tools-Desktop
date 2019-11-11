@@ -172,7 +172,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.tooltipData.push({
       label: "Current",
       value: null,
-      unit: "% FLC",
+      unit: "% FLA",
       formatX: false
     });
     this.tooltipData.push({
@@ -450,8 +450,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.svg.append("path")
       .attr("id", "areaUnderCurve");
     this.lineChartHelperService.setXAxisLabel(this.svg, this.width, this.height, 0, 70, "Motor Shaft Load (%)");
-    this.lineChartHelperService.setYAxisLabel(this.svg, this.width, this.height, -60, 0, "Current (% FLA), Efficiency (%), PF (%)");
-
+    // this.lineChartHelperService.setYAxisLabel(this.svg, this.width, this.height, -60, 0, "Current (% FLA), Efficiency (%), PF (%)");
+    this.svg.append("text")
+      .attr("class", "small")
+      .attr("text-anchor", "middle")
+      .attr("transform", "translate(" + -60 + "," + (this.height / 2) + ")rotate(-90)")
+      .html("Current (% FLA), Efficiency (%), PF (%)");
     // Define the div for the tooltip
     this.detailBox = this.lineChartHelperService.appendDetailBox(this.ngChart);
     this.detailBoxPointer = this.lineChartHelperService.appendDetailBoxPointer(this.ngChart);
