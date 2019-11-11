@@ -116,7 +116,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   setDesuperheatSteam() {
-    let ranges: HeaderRanges = this.headerService.getRanges(this.settings);
+    let ranges: HeaderRanges = this.headerService.getRanges(this.settings, undefined, undefined, undefined, this.headerForm.controls.pressure.value);
     let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
     if (this.headerForm.controls.desuperheatSteamIntoNextHighest.value === true) {
       tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
