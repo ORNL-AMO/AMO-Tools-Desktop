@@ -18,6 +18,7 @@ import { CompressedAirPressureReductionModule } from './compressed-air-pressure-
 import { SteamReductionModule } from './steam-reduction/steam-reduction.module';
 import { CashFlowModule } from './cash-flow/cash-flow.module';
 import { UnitConverterModule } from './unit-converter/unit-converter.module';
+import { PipeInsulationReductionModule } from './pipe-insulation-reduction/pipe-insulation-reduction.module';
 
 @NgModule({
     declarations: [
@@ -40,6 +41,7 @@ import { UnitConverterModule } from './unit-converter/unit-converter.module';
         CompressedAirPressureReductionModule,
         SteamReductionModule,
         WaterReductionModule,
+        PipeInsulationReductionModule,
         CashFlowModule,
         UnitConverterModule
     ]
