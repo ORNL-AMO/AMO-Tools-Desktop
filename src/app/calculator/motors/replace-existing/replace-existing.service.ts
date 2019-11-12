@@ -91,28 +91,37 @@ export class ReplaceExistingService {
       simplePayback: 0,
       percentSavings: 0,
       rewoundEnergyUse: 0,
-      rewoundEnergyCost: 0
+      rewoundEnergyCost: 0,
+      incrementalSunkCost: inputCpy.rewindCost,
+      incrementalAnnualEnergySavings: 0,
+      incrementalCostDifference: 0,
+      incrementalEnergyCostSavings: 0,
+      incrementalSimplePayback: 0
     };
     if (settings.unitsOfMeasure != 'Imperial') {
       inputCpy.motorSize = this.convertUnitsService.value(inputCpy.motorSize).from('kW').to('hp');
     }
-    results.existingEnergyUse = this.getExistingEnergyUse(inputCpy, settings);
-    results.newEnergyUse = this.getNewEnergyUse(inputCpy, settings);
+    results.existingEnergyUse = this.getExistingEnergyUse(inputCpy);
+    results.newEnergyUse = this.getNewEnergyUse(inputCpy);
     results.existingEnergyCost = this.getExistingEnergyCost(inputCpy, results);
     results.newEnergyCost = this.getNewEnergyCost(inputCpy, results);
     results.annualEnergySavings = this.getAnnualEnergySavings(results);
     results.costSavings = this.getCostSavings(inputCpy, results);
     results.simplePayback = this.getSimplePayback(inputCpy, results);
-    results.rewoundEnergyUse = this.getRewoundEnergyUse(inputCpy, settings);
+    results.rewoundEnergyUse = this.getRewoundEnergyUse(inputCpy);
     results.rewoundEnergyCost = this.getRewoundEnergyCost(inputCpy, results);
     results.percentSavings = this.getPercentSavings(results);
+    results.incrementalAnnualEnergySavings = this.getIncrementalAnnualEnergySavings(results);
+    results.incrementalCostDifference = this.getIncrementalCostDifference(inputCpy);
+    results.incrementalEnergyCostSavings = this.getIncrementalEnergyCostSavings(results, inputCpy);
+    results.incrementalSimplePayback = this.getIncrementalSimplePayback(results);
     return results;
   }
 
-  getExistingEnergyUse(inputs: ReplaceExistingData, settings: Settings): number {
+  getExistingEnergyUse(inputs: ReplaceExistingData): number {
     return .746 * inputs.motorSize * inputs.load * inputs.operatingHours * (1 / inputs.existingEfficiency);
   }
-  getNewEnergyUse(inputs: ReplaceExistingData, settings: Settings): number {
+  getNewEnergyUse(inputs: ReplaceExistingData): number {
     return .746 * inputs.motorSize * inputs.load * inputs.operatingHours * (1 / inputs.newEfficiency);
   }
   getExistingEnergyCost(inputs: ReplaceExistingData, results: ReplaceExistingResults): number {
@@ -131,7 +140,7 @@ export class ReplaceExistingService {
     return inputs.purchaseCost / results.costSavings;
   }
 
-  getRewoundEnergyUse(inputs: ReplaceExistingData, settings: Settings): number {
+  getRewoundEnergyUse(inputs: ReplaceExistingData): number {
     return 0.746 * inputs.motorSize * (inputs.load / 100) * inputs.operatingHours * (100 / (inputs.existingEfficiency - inputs.rewindEfficiencyLoss));
   }
   getRewoundEnergyCost(inputs: ReplaceExistingData, results: ReplaceExistingResults): number {
@@ -141,5 +150,19 @@ export class ReplaceExistingService {
   //may want to add percent savings as a result. talk to kristina first
   getPercentSavings(results: ReplaceExistingResults): number {
     return ((results.existingEnergyCost - results.newEnergyCost) / results.existingEnergyCost) * 100;
+  }
+
+  //incrementalResults
+  getIncrementalAnnualEnergySavings(results: ReplaceExistingResults): number {
+    return results.rewoundEnergyUse - results.newEnergyUse;
+  }
+  getIncrementalCostDifference(inputs: ReplaceExistingData): number {
+    return inputs.purchaseCost - inputs.rewindCost;
+  }
+  getIncrementalEnergyCostSavings(results: ReplaceExistingResults, inputs: ReplaceExistingData): number {
+    return results.incrementalAnnualEnergySavings * inputs.electricityCost;
+  }
+  getIncrementalSimplePayback(results: ReplaceExistingResults): number {
+    return results.incrementalCostDifference / results.incrementalEnergyCostSavings;
   }
 }

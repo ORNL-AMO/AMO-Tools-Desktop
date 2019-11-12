@@ -137,6 +137,11 @@ export interface ReplaceExistingResults {
     percentSavings: number;
     rewoundEnergyUse: number;
     rewoundEnergyCost: number;
+    incrementalSunkCost: number;
+    incrementalAnnualEnergySavings: number;
+    incrementalCostDifference: number;
+    incrementalEnergyCostSavings: number;
+    incrementalSimplePayback: number;
 }
 
 
