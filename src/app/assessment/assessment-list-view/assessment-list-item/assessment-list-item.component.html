@@ -10,7 +10,8 @@
         <img *ngIf="assessment.type == 'PHAST'" class="icon-image pl-1 pr-1" src="assets/images/ico-phast-diagram.png">
         <img *ngIf="assessment.type == 'FSAT'" class="icon-image pl-1 pr-1" src="assets/images/ico-fsat-diagram.png">
         <img *ngIf="assessment.type == 'SSMT'" class="icon-image pl-1 pr-1" src="assets/images/ico-ssmt-diagram.png">
-        <img *ngIf="assessment.type == 'TreasureHunt'" class="icon-image pl-1 pr-1" src="assets/images/treasure-hunt.png">
+        <img *ngIf="assessment.type == 'TreasureHunt'" class="icon-image pl-1 pr-1"
+          src="assets/images/treasure-hunt.png">
         <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
         <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
       </div>
@@ -18,13 +19,15 @@
     </div>
   </div>
   <div class="d-flex flex-column flex-fill">
-    <div class="justify-content-end btn-group">
-      <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
-      </button>
-      <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
-        <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
-        <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
-        <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
+    <div class="actions justify-content-end">
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
+        </button>
+        <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
+          <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
+          <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
+          <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
+        </div>
       </div>
     </div>
     <div class="actions pt-1 justify-content-end " *ngIf="isSetup">
