@@ -111,7 +111,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       this.systemAndEquipmentCurveService.byDataInputs.next(undefined);
       this.systemAndEquipmentCurveService.byEquationInputs.next(undefined);
       this.systemAndEquipmentCurveService.equipmentInputs.next(undefined);
-    } else if (this.equipmentType == 'pump') {
+    } else if (this.equipmentType == 'pump' && this.assessment == undefined) {
       this.systemAndEquipmentCurveService.pumpByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
       this.systemAndEquipmentCurveService.pumpByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
       this.systemAndEquipmentCurveService.pumpEquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
