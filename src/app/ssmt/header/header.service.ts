@@ -74,7 +74,7 @@ export class HeaderService {
   }
 
   getHeaderFormFromObj(obj: HeaderNotHighestPressure, settings: Settings, pressureMin: number, pressureMax: number): FormGroup {
-    let ranges: HeaderRanges = this.getRanges(settings, undefined, pressureMin, pressureMax);
+    let ranges: HeaderRanges = this.getRanges(settings, undefined, pressureMin, pressureMax, obj.pressure);
     let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
     if (obj.desuperheatSteamIntoNextHighest) {
       tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
@@ -108,7 +108,7 @@ export class HeaderService {
     };
   }
 
-  getRanges(settings: Settings, boilerInput?: BoilerInput, pressureMin?: number, pressureMax?: number): HeaderRanges {
+  getRanges(settings: Settings, boilerInput?: BoilerInput, pressureMin?: number, pressureMax?: number, headerPressure?: number): HeaderRanges {
     let tmpPressureMin: number = this.convertUnitsService.value(-14.5).from('psia').to(settings.steamPressureMeasurement);
     let tmpPressureMax: number = this.convertUnitsService.value(3185).from('psia').to(settings.steamPressureMeasurement);
     if (pressureMin > tmpPressureMin) {
@@ -133,11 +133,20 @@ export class HeaderService {
         0,
         settings
       );
-      tmpCondensateReturnTempMax = this.convertUnitsService.roundVal(satPropertiesOutput.saturatedTemperature, 0);;
+      tmpCondensateReturnTempMax = this.convertUnitsService.roundVal(satPropertiesOutput.saturatedTemperature, 0);
     }
     let tmpDesuperheatingTempMin: number = this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement);
-    tmpDesuperheatingTempMin = this.convertUnitsService.roundVal(tmpDesuperheatingTempMin, 0);
 
+    if (headerPressure) {
+      tmpDesuperheatingTempMin = this.steamService.saturatedProperties(
+        {
+          saturatedPressure: headerPressure
+        },
+        0,
+        settings
+      ).saturatedTemperature;
+    }
+    tmpDesuperheatingTempMin = this.convertUnitsService.roundVal(tmpDesuperheatingTempMin, 0);
     let tmpDesuperheatingTempMax: number = this.convertUnitsService.value(1472).from('F').to(settings.temperatureMeasurement);
     tmpDesuperheatingTempMax = this.convertUnitsService.roundVal(tmpDesuperheatingTempMax, 0);
 

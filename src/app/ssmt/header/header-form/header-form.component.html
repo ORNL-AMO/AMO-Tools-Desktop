@@ -8,7 +8,7 @@
     <label for="{{idString+pressureLevel+'_pressure'}}">Pressure</label>
     <div class="input-group">
       <input name="pressure" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_pressure'}}"
-        (input)="save()" [readonly]="!selected" formControlName="pressure" (focus)="focusField('pressure')"
+        (input)="setDesuperheatSteam()" [readonly]="!selected" formControlName="pressure" (focus)="focusField('pressure')"
         (blur)="focusOut()" [ngClass]="{'indicate-different': isPressureDifferent()}">
       <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
     </div>
