@@ -51,9 +51,8 @@
     <div class="d-flex">
       <app-stack-loss-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-stack-loss-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <h5 class="text-center">Stack Loss (%)</h5>
-        <app-percent-graph [value]="stackLossPercent" [valueDescription]="'Stack Loss'" [fontSize]="32" [unit]="'%'"
-          [title]="'stack-loss-percent'"></app-percent-graph>
+        <h3 class="text-center mb-0">Stack Loss (%)</h3>
+        <app-percent-graph [value]="stackLossPercent" [width]="200"></app-percent-graph>
       </div>
     </div>
   </div>
