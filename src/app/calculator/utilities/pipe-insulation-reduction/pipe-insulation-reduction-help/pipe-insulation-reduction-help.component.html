@@ -6,8 +6,8 @@
     <div class="my-2">
         <h6>
             <small class="text-muted">
-                <!-- This calculator can be used to quantify typical steam energy savings opportunities like:
-                <hr class="my-1">Reduce the operation time of equipment which uses steam
+                This calculator is used to quantify the energy savings associated with insulating hot pipes.
+                <!-- <hr class="my-1">Reduce the operation time of equipment which uses steam
                 <hr class="my-1">Decrease the flow rate of the "fluid" being heated. (The most common "fluids" heated
                 are water
                 and air)
@@ -37,7 +37,7 @@
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
                     ($/MMBtu).
                 </span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
                     ($/GJ).
                 </span>
                 <hr>
@@ -50,7 +50,7 @@
             System Efficiency
             <small class="text-muted">
                 <br>
-                Description needed.
+                Specify the end-to-end efficiency of the piped system.
                 <hr>
             </small>
         </h6>
@@ -61,7 +61,9 @@
             Pipe Length
             <small class="text-muted">
                 <br>
-                Description needed.
+                Provide the length of the pipe in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(ft)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(m)</span>.
                 <hr>
             </small>
         </h6>
@@ -72,7 +74,8 @@
             Pipe Diameter
             <small class="text-muted">
                 <br>
-                Description needed.
+                Select one of the provided pipe diameter options. These options will automatically provide a
+                corresponding value for pipe thickness.
                 <hr>
             </small>
         </h6>
@@ -83,7 +86,7 @@
             Average Wind Speed
             <small class="text-muted">
                 <br>
-                Description needed.
+                Enter the average velocity of air flow over the length of the pipe.
                 <hr>
             </small>
         </h6>
@@ -94,7 +97,9 @@
             Pipe Temperature
             <small class="text-muted">
                 <br>
-                Description needed.
+                Provide the average temperature of the pipe material in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(&#8451;)</span>.
                 <hr>
             </small>
         </h6>
@@ -105,7 +110,9 @@
             Ambient Temperature
             <small class="text-muted">
                 <br>
-                Description needed.
+                Enter the average temperature of the ambient air in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(&#8451;)</span>.
                 <hr>
             </small>
         </h6>
@@ -116,7 +123,7 @@
             Pipe Base Material
             <small class="text-muted">
                 <br>
-                Description needed.
+                Select the base material of the pipe. This will provide a corresponding emissivity to the calculation.
                 <hr>
             </small>
         </h6>
@@ -127,7 +134,7 @@
             Insulation Material
             <small class="text-muted">
                 <br>
-                Description needed.
+                Select the insulation material, if any, that is used on the pipe.
                 <hr>
             </small>
         </h6>
@@ -138,7 +145,9 @@
             Insulation Thickness
             <small class="text-muted">
                 <br>
-                Description needed.
+                Provide the thickness of the insulation in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(in)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(m)</span>.
                 <hr>
             </small>
         </h6>
@@ -149,7 +158,8 @@
             Pipe Jacket Material
             <small class="text-muted">
                 <br>
-                Description needed.
+                Select the pipe jacket material if the pipe has a jacket. A corresponding emissivity will be provided to
+                the calculation.
                 <hr>
             </small>
         </h6>

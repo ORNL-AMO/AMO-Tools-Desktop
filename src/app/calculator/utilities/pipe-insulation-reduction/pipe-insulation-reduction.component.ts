@@ -37,6 +37,7 @@ export class PipeInsulationReductionComponent implements OnInit {
   containerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
+  updateForm: boolean = false;
   baselineSelected: boolean = true;
   modifiedSelected: boolean = false;
   modificationExists: boolean = false;
@@ -135,20 +136,31 @@ export class PipeInsulationReductionComponent implements OnInit {
   }
 
   btnResetData() {
-    let tmpObj: PipeInsulationReductionInput = this.pipeInsulationReductionService.initObject(this.settings, this.operatingHours);
-    this.baselineData = tmpObj;
+    this.baselineData = this.pipeInsulationReductionService.initObject(this.settings, this.operatingHours);
+    this.pipeInsulationReductionService.baselineData = this.baselineData;
     this.modificationData = null;
+    this.pipeInsulationReductionService.modificationData = this.modificationData;
     this.modificationExists = false;
+    this.updateForm = !this.updateForm;
     this.getResults();
   }
 
   btnGenerateExample() {
-    let tmpObj: PipeInsulationReductionInput = this.pipeInsulationReductionService.initObject(this.settings, this.operatingHours);
-    this.baselineData = tmpObj;
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
     this.getResults();
-    let modificationObj: PipeInsulationReductionInput = JSON.parse(JSON.stringify(tmpObj));
-    this.modificationData = modificationObj;
-    this.getResults();
+  }
+
+  generateExample() {
+    this.baselineData = this.pipeInsulationReductionService.generateExample(this.settings, true);
+    this.pipeInsulationReductionService.baselineData = this.baselineData;
+    this.modificationData = this.pipeInsulationReductionService.generateExample(this.settings, false);
+    this.pipeInsulationReductionService.modificationData = this.modificationData;
     this.modificationExists = true;
+    this.baselineSelected = true;
+    this.modifiedSelected = false;
+    this.updateForm = !this.updateForm;
   }
 }

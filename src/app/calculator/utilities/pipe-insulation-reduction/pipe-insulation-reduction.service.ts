@@ -31,22 +31,22 @@ export class PipeInsulationReductionService {
       utilityCost: settings.fuelCost,
       naturalGasUtilityCost: settings.fuelCost,
       otherUtilityCost: settings.otherFuelCost,
-      pipeLength: 50,
+      pipeLength: 0,
       pipeDiameterSelection: 3,
       pipeDiameter: this.nps[3].pipeSizeM,
       pipeThickness: this.nps[3].thickness,
-      pipeTemperature: 300,
-      ambientTemperature: 80,
-      windVelocity: 2,
-      systemEfficiency: 90,
+      pipeTemperature: 0,
+      ambientTemperature: 0,
+      windVelocity: 0,
+      systemEfficiency: 0,
       insulationThickness: 0,
-      pipeEmissivity: 0.8,
+      pipeEmissivity: this.getPipeEmissivity(0),
       pipeJacketMaterialSelection: 0,
       jacketEmissivity: 0,
       pipeBaseMaterialSelection: 0,
       pipeMaterialCoefficients: this.getBaseMaterialCoefficients(0),
-      insulationMaterialSelection: 1,
-      insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(1)
+      insulationMaterialSelection: 0,
+      insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(0)
     };
     return obj;
   }
@@ -115,6 +115,60 @@ export class PipeInsulationReductionService {
       insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(form.controls.insulationMaterialSelection.value)
     };
     return obj;
+  }
+
+  generateExample(settings: Settings, isBaseline: boolean): PipeInsulationReductionInput {
+    let example: PipeInsulationReductionInput;
+    if (isBaseline) {
+      example = {
+        operatingHours: 8760,
+        utilityType: 0,
+        utilityCost: settings.fuelCost,
+        naturalGasUtilityCost: settings.fuelCost,
+        otherUtilityCost: settings.otherFuelCost,
+        pipeLength: 50,
+        pipeDiameterSelection: 3,
+        pipeDiameter: this.nps[3].pipeSizeM,
+        pipeThickness: this.nps[3].thickness,
+        pipeTemperature: 300,
+        ambientTemperature: 80,
+        windVelocity: 2,
+        systemEfficiency: 90,
+        insulationThickness: 0,
+        pipeEmissivity: 0.8,
+        pipeJacketMaterialSelection: 0,
+        jacketEmissivity: this.getJacketEmissivity(0),
+        pipeBaseMaterialSelection: 0,
+        pipeMaterialCoefficients: this.getBaseMaterialCoefficients(0),
+        insulationMaterialSelection: 0,
+        insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(0)
+      };
+    } else {
+      example = {
+        operatingHours: 8760,
+        utilityType: 0,
+        utilityCost: settings.fuelCost,
+        naturalGasUtilityCost: settings.fuelCost,
+        otherUtilityCost: settings.otherFuelCost,
+        pipeLength: 50,
+        pipeDiameterSelection: 3,
+        pipeDiameter: this.nps[3].pipeSizeM,
+        pipeThickness: this.nps[3].thickness,
+        pipeTemperature: 300,
+        ambientTemperature: 80,
+        windVelocity: 2,
+        systemEfficiency: 90,
+        insulationThickness: 3,
+        pipeEmissivity: 0.8,
+        pipeJacketMaterialSelection: 8,
+        jacketEmissivity: this.getJacketEmissivity(8),
+        pipeBaseMaterialSelection: 0,
+        pipeMaterialCoefficients: this.getBaseMaterialCoefficients(0),
+        insulationMaterialSelection: 2,
+        insulationMaterialCoefficients: this.getInsulationMaterialCoefficients(2)
+      };
+    }
+    return example;
   }
 
   getResults(settings: Settings, baseline: PipeInsulationReductionInput, modification?: PipeInsulationReductionInput) {
@@ -191,27 +245,31 @@ export class PipeInsulationReductionService {
   // get insulation material coefficients - use this function until support is added for custom materials
   getInsulationMaterialCoefficients(material: number) {
     if (material == 0) {
+      //no insulation
+      return [0, 0, 0, 0, 0];
+    }
+    else if (material == 1) {
       //calcium silicate
       return [3.15711e-13, -7.46414e-10, 7.36555e-7, -0.000224881, 0.07333604];
-    } else if (material == 1) {
+    } else if (material == 2) {
       //fiber glass
       return [1.57526e-12, -2.02822e-9, 8.6328e-7, 0, 0.006729488];
-    } else if (material == 2) {
+    } else if (material == 3) {
       //mineral fiber
       return [4.61278e-11, -7.42824e-8, 4.44951e-5, -0.011562712, 1.131348303];
-    } else if (material == 3) {
+    } else if (material == 4) {
       //glass and resin
       return [-2.11005e-11, 3.45583E-08, -2.02956E-05, 0.005220797, -0.467788289];
-    } else if (material == 4) {
+    } else if (material == 5) {
       //cellular glass
       return [2.15612E-11, -3.02553E-08, 1.59039E-05, -0.003524638, 0.314093419];
-    } else if (material == 5) {
+    } else if (material == 6) {
       //polystyrene
       return [-1.93278E-09, 2.32707E-06, -0.001050362, 0.210773437, -15.8404154];
-    } else if (material == 6) {
+    } else if (material == 7) {
       //polyofelin
       return [1.33333E-08, -1.60433E-05, 0.007230837, -1.446699957, 108.4294544];
-    } else if (material == 7) {
+    } else if (material == 8) {
       //flexible aerogel
       return [7.57576E-14, 1.04141E-10, -1.17653E-07, 6.54415E-05, 0.008307081];
     }
