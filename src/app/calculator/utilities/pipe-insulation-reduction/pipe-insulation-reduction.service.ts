@@ -65,13 +65,14 @@ export class PipeInsulationReductionService {
       pipeBaseMaterialSelection: [obj.pipeBaseMaterialSelection],
       insulationMaterialSelection: [obj.insulationMaterialSelection],
       insulationThickness: [obj.insulationThickness],
-      pipeJacketMaterialSelection: [obj.pipeJacketMaterialSelection]
+      pipeJacketMaterialSelection: [{ value: obj.pipeJacketMaterialSelection, disabled: obj.insulationMaterialSelection == 0 ? true : false }]
     });
 
     if (obj.insulationMaterialSelection != 0) {
       form.controls.insulationThickness.setValidators([Validators.required, Validators.min(0), Validators.max(1000000)]);
     } else {
       form.controls.insulationThickness.clearValidators();
+      // form.controls.pipeJacketMaterialSelection.disable();
     }
 
     return form;

@@ -200,7 +200,7 @@
             <label class="small" for="{{'insulationMaterialSelection_'+idString}}">Insulation Material</label>
             <select class="form-control" name="insulationMaterialSelection"
                 id="{{'insulationMaterialSelection_'+idString}}" formControlName="insulationMaterialSelection"
-                (change)="calculate()" (focus)="focusField('insulationMaterialSelection')" (blur)="focusOut()">
+                (change)="changeInsulationMaterial()" (focus)="focusField('insulationMaterialSelection')" (blur)="focusOut()">
                 <option *ngFor="let option of insulationMaterials" [ngValue]="option.value">{{option.name}}</option>
             </select>
         </div>

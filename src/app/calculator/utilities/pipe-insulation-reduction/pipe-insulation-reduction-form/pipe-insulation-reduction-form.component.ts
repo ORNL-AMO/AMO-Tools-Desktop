@@ -91,6 +91,7 @@ export class PipeInsulationReductionFormComponent implements OnInit {
   constructor(private pipeInsulationReductionService: PipeInsulationReductionService) { }
 
   ngOnInit() {
+    console.log('init');
     if (this.isBaseline) {
       this.idString = 'baseline';
     }
@@ -101,6 +102,9 @@ export class PipeInsulationReductionFormComponent implements OnInit {
     this.form = this.pipeInsulationReductionService.getFormFromObj(this.data, this.isBaseline);
     if (this.selected == false) {
       this.form.disable();
+    }
+    if (this.form.controls.insulationMaterialSelection.value == 0) {
+      this.form.controls.pipeJacketMaterialSelection.disable();
     }
   }
 
@@ -128,11 +132,17 @@ export class PipeInsulationReductionFormComponent implements OnInit {
           this.form.controls.utilityType.disable();
           this.form.controls.utilityCost.disable();
         }
+        if (this.form.controls.insulationMaterialSelection.value == 0) {
+          this.form.controls.pipeJacketMaterialSelection.disable();
+        }
       }
     }
 
     if (changes.updateForm && !changes.updateForm.firstChange) {
       this.form = this.pipeInsulationReductionService.getFormFromObj(this.data, this.isBaseline);
+      if (this.form.controls.insulationMaterialSelection.value == 0) {
+        this.form.controls.pipeJacketMaterialSelection.disable();
+      }
       this.calculate();
     }
   }
@@ -146,6 +156,16 @@ export class PipeInsulationReductionFormComponent implements OnInit {
       tmpCost = this.data.otherUtilityCost;
     }
     this.form.controls.utilityCost.setValue(tmpCost);
+    this.calculate();
+  }
+
+  changeInsulationMaterial() {
+    if (this.form.controls.insulationMaterialSelection.value == 0) {
+      this.form.controls.pipeJacketMaterialSelection.patchValue(0);
+      this.form.controls.pipeJacketMaterialSelection.disable();
+    } else {
+      this.form.controls.pipeJacketMaterialSelection.enable();
+    }
     this.calculate();
   }
 
