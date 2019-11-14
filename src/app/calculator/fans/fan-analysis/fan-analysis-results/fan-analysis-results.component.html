@@ -1,18 +1,14 @@
 <div class="d-flex w-100 justify-content-center pt-2 pl-2">
   <div class="card card-body col-3 p-2">
-    <app-percent-graph [value]="results.fanEfficiencyTotalPressure" [valueDescription]="'Fan Total Efficiency'"
-      [fontSize]="32" [unit]="'%'" [title]="'total-efficiency'"></app-percent-graph>
+    <app-percent-graph [value]="results.fanEfficiencyTotalPressure"></app-percent-graph>
     <label>Total Pressure Efficiency</label>
   </div>
   <div class="card card-body col-3 p-2">
-    <app-percent-graph [value]="results.fanEfficiencyStaticPressure" [valueDescription]="'Fan Static Efficiency'"
-      [fontSize]="32" [unit]="'%'" [title]="'static-pressure-efficiency'"></app-percent-graph>
+    <app-percent-graph [value]="results.fanEfficiencyStaticPressure"></app-percent-graph>
     <label>Static Pressure Efficiency</label>
   </div>
   <div class="card card-body col-3 p-2">
-    <app-percent-graph [value]="results.fanEfficiencyStaticPressureRise"
-      [valueDescription]="'Fan Efficiency based on Static Pressure Rise'" [fontSize]="32" [unit]="'%'"
-      [title]="'static-pressure-rise-efficiency'"></app-percent-graph>
+    <app-percent-graph [value]="results.fanEfficiencyStaticPressureRise"></app-percent-graph>
     <label>Efficiency based on Static Pressure Rise</label>
   </div>
 </div>

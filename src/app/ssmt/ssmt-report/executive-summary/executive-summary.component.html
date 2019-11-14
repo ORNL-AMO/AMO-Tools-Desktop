@@ -22,8 +22,7 @@
           <div class="hide-print"
             *ngIf="modResults.outputData.boilerOutput && getSavingsPercentage(baselineOutput.operationsOutput.totalOperatingCost, modResults.outputData.operationsOutput.totalOperatingCost)">
             <app-percent-graph
-              [value]="getSavingsPercentage(baselineOutput.operationsOutput.totalOperatingCost, modResults.outputData.operationsOutput.totalOperatingCost)"
-              [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'ssmt-opportunities-savings'">
+              [value]="getSavingsPercentage(baselineOutput.operationsOutput.totalOperatingCost, modResults.outputData.operationsOutput.totalOperatingCost)">
             </app-percent-graph>
           </div>
           <div class="show-print text-center"
