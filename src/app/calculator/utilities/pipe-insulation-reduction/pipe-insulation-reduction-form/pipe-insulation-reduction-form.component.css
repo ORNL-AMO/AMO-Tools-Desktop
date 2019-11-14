@@ -1,12 +1,3 @@
-.form-section {
-    padding-bottom: .25rem;
-    border-bottom: 1px dashed;
-}
-
-.form-row-pad-fix {
-    margin-left: -15px !important;
-}
-
 .input-group-addon.units.op-hour-addon {
     border-left: solid 1px;
     border-right: none;
