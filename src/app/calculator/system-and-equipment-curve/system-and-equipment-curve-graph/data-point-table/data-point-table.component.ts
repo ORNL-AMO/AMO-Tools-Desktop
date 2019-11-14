@@ -116,6 +116,8 @@ export class DataPointTableComponent implements OnInit {
     this.systemCurveCollapsedSub.unsubscribe();
     this.selectedDataPointSub.unsubscribe();
     this.systemAndEquipmentCurveGraphService.selectedDataPoint.next(undefined);
+    this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(undefined);
+    this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.next(undefined);
     this.baselineIntersectionPointSub.unsubscribe();
     this.clearAllSub.unsubscribe();
     this.modificationIntersectionPointSub.unsubscribe();
