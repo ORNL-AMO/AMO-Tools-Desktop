@@ -8,7 +8,8 @@
   </h5>
   <hr class="my-1 hr-spacer">
 
-  <div class="my-2" *ngIf="psat.modifications.length == 0 || psat.modifications === undefined || psat.modifications === null">
+  <div class="my-2"
+    *ngIf="psat.modifications.length == 0 || psat.modifications === undefined || psat.modifications === null">
     <h6>
       <small class="text-muted">
         First determine if your pump’s operating conditions (head, flow) are correct for your system needs. If they are
@@ -245,6 +246,24 @@
         <br> This value will be used to estimate achievable pump efficiencies based on pump style and operating
         conditions.
         <hr>
+      </small>
+      <div class="d-flex">
+        <div class="d-flex flex-column">
+          <label class="group-label">Overhung Impeller</label>
+          <img class="w-100 p-2" src="assets/images/pump-types/overhung-impeller-pump.png">
+          <label class="group-label">Between Bearings Impeller</label>
+          <img class="w-100 p-2" src="assets/images/pump-types/between-bearings-impeller-pump.png">
+        </div>
+        <div class="d-flex flex-column">
+          <label class="group-label">Vertical Turbine</label>
+          <img class="w-100 p-2" src="assets/images/pump-types/vertical-turbine.png">
+        </div>
+      </div>
+      <hr>
+      <small class="text-muted">
+        For more information visit the <a href="http://pumps.org/Pump_Fundamentals_Rotodynamic_Pumps.aspx"
+          target="_blank">Hydraulic
+          Institue webpage</a> or the ANSI/HI standards regarding Rotodynamic Pumps.
       </small>
     </h6>
   </div>
