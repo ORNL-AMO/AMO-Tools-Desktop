@@ -35,27 +35,24 @@
             <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
                 <div class="modification baseline w-50 panel-column" (click)="setBaselineSelected()"
                     [ngClass]="{'disabled': baselineSelected == false}">
-                    <div class="header mx-2 mb-4">
+                    <div class="header mx-2">
                         <h3>Baseline</h3>
                     </div>
-                    <div class="d-flex flex-column mx-4 mb-4">
-                        <!-- app form -->
-                        <app-pipe-insulation-reduction-form [settings]="settings" [data]="baselineData"
-                            [isBaseline]="true" (emitCalculate)="updateBaselineData($event)"
-                            (emitChangeField)="changeField($event)" [selected]="baselineSelected" [utilityType]="0"
-                            [updateForm]="updateForm">
-                        </app-pipe-insulation-reduction-form>
-                        <div class="w-100 justify content-center btn-group btn-group-sm">
-                            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
-                                (click)="btnResetData()">
-                                Reset Data
-                            </button>
-                            <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
-                            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
-                                (click)="btnGenerateExample()">
-                                Generate Example
-                            </button>
-                        </div>
+                    <!-- app form -->
+                    <app-pipe-insulation-reduction-form [settings]="settings" [data]="baselineData" [isBaseline]="true"
+                        (emitCalculate)="updateBaselineData($event)" (emitChangeField)="changeField($event)"
+                        [selected]="baselineSelected" [utilityType]="0" [updateForm]="updateForm">
+                    </app-pipe-insulation-reduction-form>
+                    <div class="w-100 justify content-center btn-group btn-group-sm">
+                        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
+                            (click)="btnResetData()">
+                            Reset Data
+                        </button>
+                        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+                        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+                            (click)="btnGenerateExample()">
+                            Generate Example
+                        </button>
                     </div>
                 </div>
 
@@ -63,19 +60,17 @@
                 <div *ngIf="modificationExists" class="w-50 panel-column modification"
                     (click)="setModificationSelected()" [ngClass]="{'disabled': baselineSelected == true}">
                     <!-- modification header -->
-                    <div class="header mx-2 mb-4">
+                    <div class="header mx-2">
                         <h3>Modification</h3>
                     </div>
                     <!-- forms -->
-                    <div class="d-flex flex-column mx-4 mb-4">
-                        <!-- app form -->
-                        <app-pipe-insulation-reduction-form [settings]="settings" [data]="modificationData"
-                            [isBaseline]="false" (emitCalculate)="updateModificationData($event)"
-                            (emitChangeField)="changeField($event)" [selected]="!baselineSelected"
-                            [utilityType]="baselineData.utilityType" [utilityCost]="baselineData.utilityCost"
-                            [updateForm]="updateForm">
-                        </app-pipe-insulation-reduction-form>
-                    </div>
+                    <!-- app form -->
+                    <app-pipe-insulation-reduction-form [settings]="settings" [data]="modificationData"
+                        [isBaseline]="false" (emitCalculate)="updateModificationData($event)"
+                        (emitChangeField)="changeField($event)" [selected]="!baselineSelected"
+                        [utilityType]="baselineData.utilityType" [utilityCost]="baselineData.utilityCost"
+                        [updateForm]="updateForm">
+                    </app-pipe-insulation-reduction-form>
                 </div>
 
                 <!-- no content message -->
