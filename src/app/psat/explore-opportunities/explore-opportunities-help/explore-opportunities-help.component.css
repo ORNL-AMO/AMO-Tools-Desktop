@@ -1,4 +1,8 @@
+
 .group-label{
-    width: fit-content;
     font-size: larger;
+}
+
+td{
+    vertical-align: middle;
 }
