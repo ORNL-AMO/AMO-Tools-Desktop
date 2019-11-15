@@ -39,9 +39,9 @@
                         <h3>Baseline</h3>
                     </div>
                     <!-- app form -->
-                    <app-pipe-insulation-reduction-form [settings]="settings" [data]="baselineData" [isBaseline]="true"
-                        (emitCalculate)="updateBaselineData($event)" (emitChangeField)="changeField($event)"
-                        [selected]="baselineSelected" [utilityType]="0" [updateForm]="updateForm">
+                    <app-pipe-insulation-reduction-form [settings]="settings" [form]="baselineForm" [isBaseline]="true"
+                        (emitCalculate)="getResults($event)" (emitChangeField)="changeField($event)"
+                        [selected]="baselineSelected">
                     </app-pipe-insulation-reduction-form>
                     <div class="w-100 justify content-center btn-group btn-group-sm">
                         <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
@@ -65,17 +65,17 @@
                     </div>
                     <!-- forms -->
                     <!-- app form -->
-                    <app-pipe-insulation-reduction-form [settings]="settings" [data]="modificationData"
-                        [isBaseline]="false" (emitCalculate)="updateModificationData($event)"
+                    <app-pipe-insulation-reduction-form [settings]="settings" [form]="modificationForm"
+                        [isBaseline]="false" (emitCalculate)="getResults($event)"
                         (emitChangeField)="changeField($event)" [selected]="!baselineSelected"
-                        [utilityType]="baselineData.utilityType" [utilityCost]="baselineData.utilityCost"
-                        [updateForm]="updateForm">
+                        [utilityType]="pipeInsulationReductionService.baselineData.utilityType"
+                        [utilityCost]="pipeInsulationReductionService.baselineData.utilityCost">
                     </app-pipe-insulation-reduction-form>
                 </div>
 
                 <!-- no content message -->
                 <div class="w-50 panel-column modification" *ngIf="!modificationExists"
-                    (click)="setModificationSelected()" [ngClass]="{'disabled': modifiedSelected == false}">
+                    (click)="setModificationSelected()" [ngClass]="{'disabled': baselineSelected == true}">
                     <div class="header mx-2">
                         <h3>Modification</h3>
                     </div>

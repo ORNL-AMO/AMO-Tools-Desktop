@@ -13,10 +13,8 @@ import { OperatingHours } from '../../../../shared/models/operations';
 export class PipeInsulationReductionFormComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  data: PipeInsulationReductionInput;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<PipeInsulationReductionInput>();
+  emitCalculate = new EventEmitter<boolean>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
   @Input()
@@ -28,7 +26,7 @@ export class PipeInsulationReductionFormComponent implements OnInit {
   @Input()
   utilityCost: number;
   @Input()
-  updateForm: boolean;
+  form: FormGroup;
 
   formWidth: number;
   showOperatingHoursModal: boolean;
@@ -84,14 +82,11 @@ export class PipeInsulationReductionFormComponent implements OnInit {
   npsList: Array<{ value: number, name: string }>;
 
   idString: string;
-  individualResults: PipeInsulationReductionResult;
   isEditingName: boolean = false;
-  form: FormGroup;
 
   constructor(private pipeInsulationReductionService: PipeInsulationReductionService) { }
 
   ngOnInit() {
-    console.log('init');
     if (this.isBaseline) {
       this.idString = 'baseline';
     }
@@ -99,13 +94,6 @@ export class PipeInsulationReductionFormComponent implements OnInit {
       this.idString = 'modification';
     }
     this.initNpsList();
-    this.form = this.pipeInsulationReductionService.getFormFromObj(this.data, this.isBaseline);
-    if (this.selected == false) {
-      this.form.disable();
-    }
-    if (this.form.controls.insulationMaterialSelection.value == 0) {
-      this.form.controls.pipeJacketMaterialSelection.disable();
-    }
   }
 
   ngAfterViewInit() {
@@ -122,38 +110,23 @@ export class PipeInsulationReductionFormComponent implements OnInit {
     if (changes.utilityCost && !changes.utilityCost.firstChange) {
       this.form.patchValue({ utilityCost: this.utilityCost });
     }
-
-    if (changes.selected && !changes.selected.firstChange) {
-      if (this.selected == false) {
-        this.form.disable();
-      } else {
-        this.form.enable();
-        if (!this.isBaseline) {
-          this.form.controls.utilityType.disable();
-          this.form.controls.utilityCost.disable();
-        }
-        if (this.form.controls.insulationMaterialSelection.value == 0) {
-          this.form.controls.pipeJacketMaterialSelection.disable();
-        }
-      }
-    }
-
-    if (changes.updateForm && !changes.updateForm.firstChange) {
-      this.form = this.pipeInsulationReductionService.getFormFromObj(this.data, this.isBaseline);
-      if (this.form.controls.insulationMaterialSelection.value == 0) {
-        this.form.controls.pipeJacketMaterialSelection.disable();
-      }
-      this.calculate();
-    }
   }
 
   changeUtilityType() {
     let tmpCost;
     if (this.form.controls.utilityType.value == 0) {
-      tmpCost = this.data.naturalGasUtilityCost;
+      if (this.isBaseline == true) {
+        tmpCost = this.pipeInsulationReductionService.baselineData.naturalGasUtilityCost;
+      } else {
+        tmpCost = this.pipeInsulationReductionService.modificationData.naturalGasUtilityCost;
+      }
     }
     else {
-      tmpCost = this.data.otherUtilityCost;
+      if (this.isBaseline == true) {
+        tmpCost = this.pipeInsulationReductionService.baselineData.otherUtilityCost;
+      } else {
+        tmpCost = this.pipeInsulationReductionService.modificationData.otherUtilityCost;
+      }
     }
     this.form.controls.utilityCost.setValue(tmpCost);
     this.calculate();
@@ -171,9 +144,13 @@ export class PipeInsulationReductionFormComponent implements OnInit {
 
   calculate() {
     if (this.form.valid) {
-      let tmpObj = this.pipeInsulationReductionService.getObjFromForm(this.form, this.data);
-      this.data = tmpObj;
-      this.emitCalculate.emit(tmpObj);
+      if (this.isBaseline == true) {
+        this.pipeInsulationReductionService.baselineData = this.pipeInsulationReductionService.getObjFromForm(this.form, this.pipeInsulationReductionService.baselineData);
+        this.emitCalculate.emit(true);
+      } else {
+        this.pipeInsulationReductionService.modificationData = this.pipeInsulationReductionService.getObjFromForm(this.form, this.pipeInsulationReductionService.modificationData);
+        this.emitCalculate.emit(true);
+      }
     }
   }
 
