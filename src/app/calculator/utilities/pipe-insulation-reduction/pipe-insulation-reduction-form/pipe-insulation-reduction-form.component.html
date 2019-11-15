@@ -176,8 +176,11 @@
                 <label class="small bold" for="{{'pipeEmissivity_'+idString}}">Emissivity</label>
             </div>
             <div class="col-6 text-center">
-                <span class="small bold">
-                    {{data.pipeEmissivity}}
+                <span class="small bold" *ngIf="isBaseline == true">
+                    {{pipeInsulationReductionService.baselineData.pipeEmissivity}}
+                </span>
+                <span class="small bold" *ngIf="isBaseline == false">
+                    {{pipeInsulationReductionService.modificationData.pipeEmissivity}}
                 </span>
             </div>
         </div>
@@ -200,7 +203,8 @@
             <label class="small" for="{{'insulationMaterialSelection_'+idString}}">Insulation Material</label>
             <select class="form-control" name="insulationMaterialSelection"
                 id="{{'insulationMaterialSelection_'+idString}}" formControlName="insulationMaterialSelection"
-                (change)="calculate()" (focus)="focusField('insulationMaterialSelection')" (blur)="focusOut()">
+                (change)="changeInsulationMaterial()" (focus)="focusField('insulationMaterialSelection')"
+                (blur)="focusOut()">
                 <option *ngFor="let option of insulationMaterials" [ngValue]="option.value">{{option.name}}</option>
             </select>
         </div>
@@ -241,8 +245,11 @@
                 <label class="small bold" for="{{'pipeJacketEmissivity_'+idString}}">Emissivity</label>
             </div>
             <div class="col-6 text-center">
-                <span class="small bold">
-                    {{data.jacketEmissivity}}
+                <span class="small bold" *ngIf="isBaseline == true">
+                    {{pipeInsulationReductionService.baselineData.jacketEmissivity}}
+                </span>
+                <span class="small bold" *ngIf="isBaseline == false">
+                    {{pipeInsulationReductionService.modificationData.pipeEmissivity}}
                 </span>
             </div>
         </div>

@@ -30,7 +30,7 @@ export class PipeInsulationReductionService {
       utilityType: 0,
       utilityCost: settings.fuelCost,
       naturalGasUtilityCost: settings.fuelCost,
-      otherUtilityCost: settings.otherFuelCost,
+      otherUtilityCost: settings.otherFuelCost || 0,
       pipeLength: 0,
       pipeDiameterSelection: 3,
       pipeDiameter: this.nps[3].pipeSizeM,
@@ -72,6 +72,7 @@ export class PipeInsulationReductionService {
       form.controls.insulationThickness.setValidators([Validators.required, Validators.min(0), Validators.max(1000000)]);
     } else {
       form.controls.insulationThickness.clearValidators();
+      form.controls.pipeJacketMaterialSelection.disable();
     }
 
     return form;
@@ -125,7 +126,7 @@ export class PipeInsulationReductionService {
         utilityType: 0,
         utilityCost: settings.fuelCost,
         naturalGasUtilityCost: settings.fuelCost,
-        otherUtilityCost: settings.otherFuelCost,
+        otherUtilityCost: settings.otherFuelCost || 0,
         pipeLength: 50,
         pipeDiameterSelection: 3,
         pipeDiameter: this.nps[3].pipeSizeM,
@@ -149,7 +150,7 @@ export class PipeInsulationReductionService {
         utilityType: 0,
         utilityCost: settings.fuelCost,
         naturalGasUtilityCost: settings.fuelCost,
-        otherUtilityCost: settings.otherFuelCost,
+        otherUtilityCost: settings.otherFuelCost || 0,
         pipeLength: 50,
         pipeDiameterSelection: 3,
         pipeDiameter: this.nps[3].pipeSizeM,
