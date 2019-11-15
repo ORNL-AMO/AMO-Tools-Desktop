@@ -85,8 +85,8 @@ export class PrvComponent implements OnInit {
     this.calculate(this.inletForm, this.feedwaterForm);
   }
 
-  setFeedwaterFormDesuperheatValidation(inletPressure: number) {
-    let ranges: FeedwaterRanges = this.prvService.getFeedwaterRangeValues(this.settings, this.input.feedwaterThermodynamicQuantity, inletPressure);
+  setFeedwaterFormDesuperheatValidation(outletPressure: number) {
+    let ranges: FeedwaterRanges = this.prvService.getFeedwaterRangeValues(this.settings, this.input.feedwaterThermodynamicQuantity, outletPressure);
     this.feedwaterForm.controls.desuperheatingTemp.setValidators([Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]);
     this.feedwaterForm.controls.desuperheatingTemp.reset(this.feedwaterForm.controls.desuperheatingTemp.value);
     this.feedwaterForm.controls.desuperheatingTemp.markAsDirty();
@@ -98,8 +98,8 @@ export class PrvComponent implements OnInit {
   }
 
   calculate(inletForm: FormGroup, feedwaterForm: FormGroup) {
-    if (this.inletForm.controls.inletPressure.value != this.input.inletPressure) {
-      this.setFeedwaterFormDesuperheatValidation(this.inletForm.controls.inletPressure.value)
+    if (this.inletForm.controls.outletPressure.value != this.input.outletPressure) {
+      this.setFeedwaterFormDesuperheatValidation(this.inletForm.controls.outletPressure.value)
     }
     this.input = this.prvService.getObjFromForm(inletForm, feedwaterForm, this.isSuperHeating);
     this.prvService.prvInput = this.input;
