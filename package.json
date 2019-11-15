@@ -84,7 +84,7 @@
     "linux": {
       "target": [
         "tar.gz",
-        "deb"
+        "AppImage"
       ],
       "icon": "src/assets/icons/png/",
       "executableName": "MEASUR",
