@@ -46,7 +46,7 @@ export class PipeInsulationReductionComponent implements OnInit {
   baselineForm: FormGroup;
   modificationForm: FormGroup;
 
-  constructor(private settingsDbService: SettingsDbService, private pipeInsulationReductionService: PipeInsulationReductionService, private cd: ChangeDetectorRef) { }
+  constructor(private settingsDbService: SettingsDbService, private pipeInsulationReductionService: PipeInsulationReductionService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -158,6 +158,5 @@ export class PipeInsulationReductionComponent implements OnInit {
     this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, false);
     this.modificationExists = true;
     this.setBaselineSelected();
-    this.cd.detectChanges();
   }
 }
