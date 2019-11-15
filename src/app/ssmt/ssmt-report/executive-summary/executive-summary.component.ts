@@ -56,7 +56,7 @@ export class ExecutiveSummaryComponent implements OnInit {
 
   getPayback(modCost: number, baselineCost: number, implementationCost: number) {
     if (implementationCost) {
-      let val = (implementationCost / (baselineCost - modCost)) * 12;
+      let val = (implementationCost / (baselineCost - modCost)) * 12 * 1000;
       if (isNaN(val) === false) {
         return val;
       } else {

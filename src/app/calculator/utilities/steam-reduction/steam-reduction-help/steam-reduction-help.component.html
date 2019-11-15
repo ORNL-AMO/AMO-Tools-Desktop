@@ -25,7 +25,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
           ($/MMBtu).
         </span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
           ($/MJ).
         </span>
         <hr>
@@ -73,7 +73,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
           (psig).
         </span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
           (Pag).
         </span>
         <hr>
@@ -112,7 +112,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
           (lb/hr).
         </span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
           (kg/hr).
         </span>
         <hr>
@@ -229,7 +229,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
           (MMBtu).
         </span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
           (MJ).
         </span>
         <hr>

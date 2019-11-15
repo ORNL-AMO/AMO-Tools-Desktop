@@ -19,7 +19,8 @@ export class PrvHelpComponent implements OnInit {
   @Input()
   isSuperHeating: boolean;
   @Input()
-  inletPressure: number; 
+  outletPressure: number; 
+  
   rangeValues: PrvRanges;
   feedwaterRangesValues: FeedwaterRanges;
   constructor(private prvService: PrvService) { }
@@ -39,7 +40,7 @@ export class PrvHelpComponent implements OnInit {
 
   getRanges() {
     this.rangeValues = this.prvService.getRangeValues(this.settings, this.thermodynamicQuantity);
-    this.feedwaterRangesValues = this.prvService.getFeedwaterRangeValues(this.settings, this.feedwaterThermodynamicQuantity, this.inletPressure);
+    this.feedwaterRangesValues = this.prvService.getFeedwaterRangeValues(this.settings, this.feedwaterThermodynamicQuantity, this.outletPressure);
   }
 
   getOptionDisplayUnit(quantity: number) {

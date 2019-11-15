@@ -116,16 +116,18 @@ export class HeaderFormComponent implements OnInit {
   }
 
   setDesuperheatSteam() {
-    let ranges: HeaderRanges = this.headerService.getRanges(this.settings, undefined, undefined, undefined, this.headerForm.controls.pressure.value);
-    let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
-    if (this.headerForm.controls.desuperheatSteamIntoNextHighest.value === true) {
-      tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
-    } else {
-      tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
+    if (this.pressureLevel != 'highPressure') {
+      let ranges: HeaderRanges = this.headerService.getRanges(this.settings, undefined, undefined, undefined, this.headerForm.controls.pressure.value);
+      let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
+      if (this.headerForm.controls.desuperheatSteamIntoNextHighest.value === true) {
+        tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
+      } else {
+        tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
+      }
+      this.headerForm.controls.desuperheatSteamTemperature.setValidators(tmpDesuperheatSteamTemperatureValidators);
+      this.headerForm.controls.desuperheatSteamTemperature.reset(this.headerForm.controls.desuperheatSteamTemperature.value);
+      this.headerForm.controls.desuperheatSteamTemperature.markAsDirty();
     }
-    this.headerForm.controls.desuperheatSteamTemperature.setValidators(tmpDesuperheatSteamTemperatureValidators);
-    this.headerForm.controls.desuperheatSteamTemperature.reset(this.headerForm.controls.desuperheatSteamTemperature.value);
-    this.headerForm.controls.desuperheatSteamTemperature.markAsDirty();
     this.save();
   }
 
@@ -138,28 +140,28 @@ export class HeaderFormComponent implements OnInit {
   }
   isPressureDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isPressureDifferent(this.pressureLevel+'Header');
+      return this.compareService.isPressureDifferent(this.pressureLevel + 'Header');
     } else {
       return false;
     }
   }
   isProcessSteamUsageDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isProcessSteamUsageDifferent(this.pressureLevel+'Header');
+      return this.compareService.isProcessSteamUsageDifferent(this.pressureLevel + 'Header');
     } else {
       return false;
     }
   }
   isCondensationRecoveryRateDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isCondensationRecoveryRateDifferent(this.pressureLevel+'Header');
+      return this.compareService.isCondensationRecoveryRateDifferent(this.pressureLevel + 'Header');
     } else {
       return false;
     }
   }
   isHeatLossDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isHeatLossDifferent(this.pressureLevel+'Header');
+      return this.compareService.isHeatLossDifferent(this.pressureLevel + 'Header');
     } else {
       return false;
     }
@@ -180,21 +182,21 @@ export class HeaderFormComponent implements OnInit {
   }
   isFlashCondensateIntoHeaderDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isFlashCondensateIntoHeaderDifferent(this.pressureLevel+'Header');
+      return this.compareService.isFlashCondensateIntoHeaderDifferent(this.pressureLevel + 'Header');
     } else {
       return false;
     }
   }
   isDesuperheatSteamIntoNextHighestDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isDesuperheatSteamIntoNextHighestDifferent(this.pressureLevel+'Header');
+      return this.compareService.isDesuperheatSteamIntoNextHighestDifferent(this.pressureLevel + 'Header');
     } else {
       return false;
     }
   }
   isDesuperheatSteamTemperatureDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isDesuperheatSteamTemperatureDifferent(this.pressureLevel+'Header');
+      return this.compareService.isDesuperheatSteamTemperatureDifferent(this.pressureLevel + 'Header');
     } else {
       return false;
     }

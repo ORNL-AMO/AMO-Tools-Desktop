@@ -83,7 +83,7 @@ export class TreasureHuntGaugeComponent implements OnInit {
       },
       size: {
         height: this.chartHeight,
-        width: this.chartWidth
+        width: undefined
       }
     });
   }

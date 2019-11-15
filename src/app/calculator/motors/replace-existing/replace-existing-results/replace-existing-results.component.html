@@ -3,11 +3,11 @@
     <h5 class="text-center">Percent Savings</h5>
   </div>
   <div class="d-flex w-100 justify-content-center">
-    <app-percent-graph [value]="results.percentSavings" [fontSize]="32" [unit]="'%'" [title]="'replace-existing'">
-    </app-percent-graph>
+    <app-percent-graph [value]="results.percentSavings"></app-percent-graph>
   </div>
 </div>
 
+<label class="group-label">Savings Compared to Existing Motor</label>
 <table #copyTable class="table table-hover table-striped">
   <tbody>
     <tr>
@@ -67,4 +67,44 @@
 </table>
 
 <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>
+
+<label class="group-label" *ngIf="!inTreasureHunt">Replace vs. Rewind - Incremental Savings Analysis</label>
+<table #copyTable2 class="table table-hover table-striped" *ngIf="!inTreasureHunt">
+  <tbody>
+    <tr>
+      <td class="bold">
+        Sunk Cost
+      </td>
+      <td>{{results.incrementalSunkCost | currency:'USD'}}</td>
+    </tr>
+    <tr>
+      <td class="bold">
+        Annual Energy Savings
+      </td>
+      <td>{{results.incrementalAnnualEnergySavings | number : '1.0-2'}} kWh/yr</td>
+    </tr>
+    <tr>
+      <td class="bold">
+        Cost Difference
+      </td>
+      <td>{{results.incrementalCostDifference | currency:'USD'}}</td>
+    </tr>
+    <tr>
+      <td class="bold">
+        Energy Cost Savings
+      </td>
+      <td>{{results.incrementalEnergyCostSavings | currency:'USD'}} /yr</td>
+    </tr>
+    <tr>
+      <td class="bold">
+        Simple Payback
+      </td>
+      <td>{{results.incrementalSimplePayback | number : '1.0-2'}} yrs</td>
+    </tr>
+  </tbody>
+</table>
+
+<app-exportable-results-table *ngIf="!inTreasureHunt" [tableString]="tableString2"
+  (updateTableString2)="updateTableString2()">
 </app-exportable-results-table>
