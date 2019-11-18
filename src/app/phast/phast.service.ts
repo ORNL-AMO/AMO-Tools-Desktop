@@ -557,8 +557,9 @@ export class PhastService {
       inputs.flueGasTemp = this.convertUnitsService.value(inputs.flueGasTemp).from('C').to('F');
       inputs.combAirTempEnriched = this.convertUnitsService.value(inputs.combAirTempEnriched).from('C').to('F');
       inputs.flueGasTempEnriched = this.convertUnitsService.value(inputs.flueGasTempEnriched).from('C').to('F');
-      inputs.fuelConsumption = this.convertUnitsService.value(inputs.combAirTemp).from('GJ').to('MMBtu');
+      inputs.fuelConsumption = this.convertUnitsService.value(inputs.fuelConsumption).from('GJ').to('MMBtu');
       let results = phastAddon.o2Enrichment(inputs);
+      results.fuelConsumption = this.convertUnitsService.value(results.fuelConsumption).from('MMBtu').to('GJ');
       results.fuelConsumptionEnriched = this.convertUnitsService.value(results.fuelConsumptionEnriched).from('MMBtu').to('GJ');
       return results;
     } else {
