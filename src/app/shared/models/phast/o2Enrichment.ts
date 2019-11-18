@@ -1,6 +1,6 @@
 export interface O2Enrichment {
-    operatingHours: number,
-    operatingHoursEnriched: number,
+    operatingHours: number;
+    operatingHoursEnriched: number;
     o2CombAir: number;
     o2CombAirEnriched: number;
     flueGasTemp: number;
