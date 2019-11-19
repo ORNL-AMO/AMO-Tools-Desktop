@@ -1,4 +1,7 @@
-<div *ngIf="selectedTool == 'none'">
+<div class="stand-alone-calc tab-content">
+  <router-outlet></router-outlet>
+</div>
+<!-- <div *ngIf="selectedTool == 'none'">
 
   <div class="d-flex steam">
     <div class="col-10 mx-auto">
@@ -217,4 +220,4 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'boiler-blowdown-rate'">
   <app-boiler-blowdown-rate></app-boiler-blowdown-rate>
-</div>
+</div> -->

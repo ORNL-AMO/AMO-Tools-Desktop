@@ -8,8 +8,11 @@
                 (openModal)="openModal($event)">
             </app-sidebar>
         </div>
+        <div class="col-10 scroll-item dashboard-scroll skyline pl-0 pr-0">
+            <router-outlet></router-outlet>
+        </div>
 
-        <div class="col-10 pb-4 skyline" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
+        <!-- <div class="col-10 pb-4 skyline" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"
                 (deleteDataSignal)="showDeleteModal()" (deleteCheckedItems)="showDeleteItemsModal()"
@@ -49,7 +52,7 @@
         <div class="col-10 dashboard-scroll scroll-item skyline"
             *ngIf="allDirectories && dashboardView == 'custom-materials'">
             <app-custom-materials [settings]="workingDirectorySettings"></app-custom-materials>
-        </div>
+        </div> -->
     </div>
 </div>
 

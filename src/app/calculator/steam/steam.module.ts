@@ -14,6 +14,8 @@ import { HeaderModule } from './header/header.module';
 import { TurbineModule } from './turbine/turbine.module';
 import { ConvertSteamService } from './convert-steam.service';
 import { BoilerBlowdownRateModule } from './boiler-blowdown-rate/boiler-blowdown-rate.module';
+import { SteamListComponent } from './steam-list/steam-list.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -29,13 +31,15 @@ import { BoilerBlowdownRateModule } from './boiler-blowdown-rate/boiler-blowdown
     DeaeratorModule,
     HeaderModule,
     TurbineModule,
-    BoilerBlowdownRateModule
+    BoilerBlowdownRateModule,
+    RouterModule
   ],
   declarations: [
-    SteamComponent
+    SteamComponent,
+    SteamListComponent
   ],
   exports: [
-    SteamComponent
+    SteamListComponent
   ],
   providers: [
     SteamService,

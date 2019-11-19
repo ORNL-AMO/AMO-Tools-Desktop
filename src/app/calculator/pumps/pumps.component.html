@@ -1,4 +1,7 @@
-<div class="psat" *ngIf="selectedTool == 'none'">
+<div class="stand-alone-calc tab-content">
+  <router-outlet></router-outlet>
+</div>
+<!-- <div class="psat" *ngIf="selectedTool == 'none'">
 
   <div class="d-flex psat">
     <div class="col-10 mx-auto">
@@ -100,4 +103,4 @@
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'pump-curve'">
   <app-system-and-equipment-curve [equipmentType]="'pump'" [isEquipmentCurvePrimary]="true">
   </app-system-and-equipment-curve>
-</div>
+</div> -->

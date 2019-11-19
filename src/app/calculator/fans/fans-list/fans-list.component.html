@@ -1,0 +1,64 @@
+<div class="col-10 mx-auto fsat">
+    <div class="content-container calculator-list">
+        <h2 class="mb-1">Fan Calculators</h2>
+        <!--new fan analysis-->
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/fan-icons/operating-point-icon.png" class="calc-img"
+                        (click)="showTool('fan-analysis')">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a class="click-item" (click)="showTool('fan-analysis')">Fan Traverse Analysis</a>
+                <p>
+                    Calculate the power, flow rate, pressure and fan efficiency via pitot tube analysis
+                </p>
+            </div>
+        </div>
+
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/system-curve-tran.png" class="calc-img"
+                        (click)="showTool('system-curve')">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a class="click-item" (click)="showTool('system-curve')">Fan System Curve</a>
+                <p>
+                    Plot the system curve using static head and an operating point; can also plot fan curve
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/pump-curve.png" class="calc-img"
+                        (click)="showTool('fan-curve')">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a class="click-item" (click)="showTool('fan-curve')">Fan Curve</a>
+                <p>
+                    Develop a fan curve and explore the effects of changes in pressure, flow, fan speed and impeller
+                    diameter
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/pump-eff.png" class="calc-img"
+                        (click)="showTool('fan-efficiency')">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a class="click-item" (click)="showTool('fan-efficiency')">Achievable Efficiency</a>
+                <p>
+                    Estimate the achievable fan efficiency for various fan styles
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

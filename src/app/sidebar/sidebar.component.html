@@ -1,19 +1,20 @@
 <div>
-  <span (click)="changeDashboardView('landing-screen')">
+  <span routerLink="/landing-screen">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
   </span>
 </div>
 
 <div class="sidebar-group create-button">
   <div class="p-2">
-    <button type="button" class="btn btn-primary btn-block mx-auto" (click)="showCreateAssessment()">Add Assessment</button>
+    <button type="button" class="btn btn-primary btn-block mx-auto" (click)="showCreateAssessment()">Add
+      Assessment</button>
   </div>
 </div>
 
 <div class="sidebar-group secondary">
   <ul>
-    <li [ngClass]="{'selected': dashboardView == 'landing-screen'}">
-      <span (click)="changeDashboardView('landing-screen')">Home</span>
+    <li routerLink="/landing-screen" routerLinkActive="selected">
+      <span>Home</span>
     </li>
   </ul>
 </div>
@@ -25,8 +26,9 @@
         <i class="fa fa-folder" aria-hidden="true"></i> All Assessments</span>
     </li>
     <li *ngIf="directory">
-      <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
-        (collapseSignal)="toggleDirectoryCollapse($event)" [newDirEventToggle]="newDirEventToggle" [dashboardView]="dashboardView"></app-directory-item>
+      <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId"
+        (selectSignal)="toggleSelected($event)" (collapseSignal)="toggleDirectoryCollapse($event)"
+        [newDirEventToggle]="newDirEventToggle" [dashboardView]="dashboardView"></app-directory-item>
     </li>
   </ul>
 </div>
@@ -41,23 +43,23 @@
 
 <div class="sidebar-group secondary">
   <ul>
-    <li [ngClass]="{'selected':dashboardView == 'settings'}">
-      <span class="sidebar-item" (click)="changeDashboardView('settings')">Settings</span>
+    <li routerLink="/settings" routerLinkActive="selected">
+      <span class="sidebar-item">Settings</span>
     </li>
-    <li [ngClass]="{'selected':dashboardView == 'custom-materials'}">
-      <span class="sidebar-item" (click)="changeDashboardView('custom-materials')">Custom Materials</span>
+    <li routerLink="/custom-materials" routerLinkActive="selected">
+      <span class="sidebar-item">Custom Materials</span>
     </li>
-    <li [ngClass]="{'selected': dashboardView == 'tutorials'}">
-      <span class="sidebar-item" (click)="changeDashboardView('tutorials')">Tutorials</span>
+    <li routerLink="/tutorials" routerLinkActive="selected">
+      <span class="sidebar-item">Tutorials</span>
     </li>
-    <li [ngClass]="{'selected': dashboardView == 'about-page'}">
-      <span class="sidebar-item" (click)="changeDashboardView('about-page')">About</span>
+    <li routerLink="/about" routerLinkActive="selected">
+      <span class="sidebar-item">About</span>
     </li>
-    <li [ngClass]="{'selected': dashboardView == 'contact'}">
-      <span class="sidebar-item" (click)="changeDashboardView('contact')">Feedback</span>
+    <li routerLink="/contact" routerLinkActive="selected">
+      <span class="sidebar-item">Feedback</span>
     </li>
-    <li [ngClass]="{'selected': dashboardView == 'acknowledgments-page'}">
-      <span class="sidebar-item" (click)="changeDashboardView('acknowledgments-page')">Acknowledgments</span>
+    <li routerLink="/acknowledgments" routerLinkActive="selected">
+      <span class="sidebar-item">Acknowledgments</span>
     </li>
     <!--<a href="mailto:accawigk@ornl.gov">Contact</a></li>-->
   </ul>

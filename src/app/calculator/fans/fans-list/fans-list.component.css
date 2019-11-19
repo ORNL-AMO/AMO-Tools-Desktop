@@ -1,0 +1,21 @@
+a:not([href]):not([tabindex]):hover {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a:not([href]):not([tabindex]){
+    color: blue;
+}
+
+.content-container{
+    padding: 1rem;
+}
+
+p{
+    font-size: medium;
+}
+
+img {
+    cursor: pointer;
+}

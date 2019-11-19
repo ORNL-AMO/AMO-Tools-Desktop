@@ -1,4 +1,7 @@
-<div *ngIf="selectedTool == 'none'">
+<div class="stand-alone-calc tab-content">
+  <router-outlet></router-outlet>
+</div>
+<!-- <div *ngIf="selectedTool == 'none'">
   <div class="d-flex utilities">
     <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
@@ -243,4 +246,4 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'pipe-insulation-reduction'">
   <app-pipe-insulation-reduction></app-pipe-insulation-reduction>
-</div>
+</div> -->

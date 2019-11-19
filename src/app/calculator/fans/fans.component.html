@@ -1,10 +1,14 @@
-<div class="fsat" *ngIf="selectedTool == 'none'">
+<div class="stand-alone-calc tab-content">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- <div class="fsat" *ngIf="selectedTool == 'none'">
 
   <div class="d-flex fsat">
     <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
         <h2 class="mb-1">Fan Calculators</h2>
-        <!--new fan analysis-->
+        <!--new fan analysis--
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
@@ -70,7 +74,7 @@
 
 <!-- <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fsat-203'">
   <app-fsat-203></app-fsat-203>
-</div> -->
+</div> --
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fan-analysis'">
   <app-fan-analysis></app-fan-analysis>
@@ -88,4 +92,4 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fan-efficiency'">
   <app-fan-efficiency></app-fan-efficiency>
-</div>
+</div> -->

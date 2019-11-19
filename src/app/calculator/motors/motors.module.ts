@@ -7,13 +7,16 @@ import { MotorsComponent } from './motors.component';
 import { PercentLoadEstimationModule } from "./percent-load-estimation/percent-load-estimation.module";
 import { MotorDriveModule } from './motor-drive/motor-drive.module';
 import { ReplaceExistingModule } from './replace-existing/replace-existing.module';
+import { RouterModule } from '@angular/router';
+import { MotorsListComponent } from './motors-list/motors-list.component';
 
 @NgModule({
   declarations: [
-    MotorsComponent
+    MotorsComponent,
+    MotorsListComponent
   ],
   exports: [
-    MotorsComponent
+    MotorsListComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +24,8 @@ import { ReplaceExistingModule } from './replace-existing/replace-existing.modul
     MotorPerformanceModule,
     PercentLoadEstimationModule,
     MotorDriveModule,
-    ReplaceExistingModule
+    ReplaceExistingModule,
+    RouterModule
   ]
 })
 
