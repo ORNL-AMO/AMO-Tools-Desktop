@@ -3,6 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ReceiverTankService } from './receiver-tank.service';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-receiver-tank',
@@ -44,10 +45,13 @@ export class ReceiverTankComponent implements OnInit {
   ];
   currentField: string;
   currentFieldSub: Subscription;
-  constructor(public receiverTankService: ReceiverTankService, private settingsDbService: SettingsDbService) {
+  constructor(public receiverTankService: ReceiverTankService, private settingsDbService: SettingsDbService, private router: Router) {
   }
 
   ngOnInit() {
+    if (this.calcType == undefined) {
+      this.setCalcType();
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -65,6 +69,15 @@ export class ReceiverTankComponent implements OnInit {
   ngOnDestroy() {
     this.currentFieldSub.unsubscribe();
   }
+
+  setCalcType() {
+    if (this.router.url.indexOf('usable-air') != -1) {
+      this.calcType = 'usable-air';
+    } else {
+      this.calcType = 'size-calculations';
+    }
+  }
+
 
   btnResetData() {
     if (this.calcType == 'size-calculations') {
@@ -85,7 +98,7 @@ export class ReceiverTankComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader.nativeElement) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }

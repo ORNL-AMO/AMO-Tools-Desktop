@@ -8,6 +8,7 @@ import { Calculator } from '../../shared/models/calculators';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { CurveDataService } from './curve-data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-system-and-equipment-curve',
@@ -34,9 +35,13 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   systemCurveCollapsedSub: Subscription;
   maxFlowRate: number = 0;
   constructor(private settingsDbService: SettingsDbService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private curveDataService: CurveDataService) { }
+    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private curveDataService: CurveDataService,
+    private router: Router) { }
 
   ngOnInit() {
+    if (!this.equipmentType) {
+      this.setEquipmentType();
+    }
     this.setCalculatorTitle();
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
@@ -83,7 +88,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     });
 
     this.systemCurveCollapsedSub = this.systemAndEquipmentCurveService.systemCurveCollapsed.subscribe(val => {
-      if(val != 'open'){
+      if (val != 'open') {
         this.updateEquipmentCurveResultData();
       }
     })
@@ -120,6 +125,15 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       this.systemAndEquipmentCurveService.equipmentInputs.next(undefined);
     }
     this.systemAndEquipmentCurveService.systemCurveDataPoints = undefined;
+  }
+
+  setEquipmentType() {
+    this.isEquipmentCurvePrimary = (this.router.url.indexOf('system-curve') == -1);
+    if (this.router.url.indexOf('pump') != -1) {
+      this.equipmentType = 'pump';
+    } else if (this.router.url.indexOf('fan') != -1) {
+      this.equipmentType = 'fan';
+    }
   }
 
   updateSystemCurveResultData() {

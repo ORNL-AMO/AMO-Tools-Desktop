@@ -34,6 +34,10 @@ export const compressedAirRoutes: Routes = [
         component: PneumaticAirComponent
     },
     {
+        path: 'receiver-tank-usable-air',
+        component: ReceiverTankComponent
+    },
+    {
         path: 'receiver-tank',
         component: ReceiverTankComponent
     },

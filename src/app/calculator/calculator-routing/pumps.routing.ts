@@ -3,6 +3,7 @@ import { AchievableEfficiencyComponent } from "../pumps/achievable-efficiency/ac
 import { HeadToolComponent } from "../pumps/head-tool/head-tool.component";
 import { SpecificSpeedComponent } from "../pumps/specific-speed/specific-speed.component";
 import { PumpsListComponent } from "../pumps/pumps-list/pumps-list.component";
+import { SystemAndEquipmentCurveComponent } from "../system-and-equipment-curve/system-and-equipment-curve.component";
 
 export const pumpRoutes: Routes = [
     {
@@ -20,5 +21,13 @@ export const pumpRoutes: Routes = [
     {
         path: 'specific-speed',
         component: SpecificSpeedComponent   
+    },
+    {
+        path: 'system-curve',
+        component: SystemAndEquipmentCurveComponent
+    },
+    {
+        path: 'pump-curve',
+        component: SystemAndEquipmentCurveComponent
     }
 ]
