@@ -5,3 +5,12 @@ li.show-border{
 .hide{
     display: none;
 }
+
+
+li.show-border ul{
+    display: block;
+}
+
+li ul{
+    display: none;
+}

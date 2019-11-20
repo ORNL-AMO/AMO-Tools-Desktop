@@ -3,9 +3,8 @@
     <span class="sidebar-item">All Calculators</span>
   </li>
   <li routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-    <span class="sidebar-item" routerLink="/calculators/motors-list" routerLinkActive="selected"
-      #motorRla="routerLinkActive">Motors</span>
-    <ul [ngClass]="{'hide': motorRla.isActive == false}">
+    <span class="sidebar-item" routerLink="/calculators/motors-list" routerLinkActive="selected">Motors</span>
+    <ul>
       <li routerLink="/calculators/nema-energy-efficiency" routerLinkActive="selected">
         <span class="sidebar-item">NEMA Energy Efficiency</span>
       </li>
@@ -24,13 +23,12 @@
     </ul>
   </li>
   <li routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-    <span class="sidebar-item" routerLink="/calculators/pumps-list" routerLinkActive="selected"
-      #pumpsRla="routerLinkActive">Pumps</span>
-    <ul [ngClass]="{'hide': pumpsRla.isActive == false}">
-      <li routerLink="/calculators/percent-load-estimation" routerLinkActive="selected">
+    <span class="sidebar-item" routerLink="/calculators/pumps-list" routerLinkActive="selected">Pumps</span>
+    <ul>
+      <li routerLink="/calculators/head-tool" routerLinkActive="selected">
         <span class="sidebar-item">Pump Head Tool</span>
       </li>
-      <li routerLink="/calculators/system-curve" routerLinkActive="selected">
+      <li routerLink="/calculators/pump-system-curve" routerLinkActive="selected">
         <span class="sidebar-item">Pump System Curve</span>
       </li>
       <li routerLink="/calculators/specific-speed" routerLinkActive="selected">
@@ -45,13 +43,12 @@
     </ul>
   </li>
   <li routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-    <span class="sidebar-item" routerLink="/calculators/fans-list" routerLinkActive="selected"
-      #fansRla="routerLinkActive">Fans</span>
-    <ul [ngClass]="{'hide': fansRla.isActive == false}">
+    <span class="sidebar-item" routerLink="/calculators/fans-list" routerLinkActive="selected">Fans</span>
+    <ul>
       <li routerLink="/calculators/fan-analysis" routerLinkActive="selected">
         <span class="sidebar-item">Fan Traverse Analysis</span>
       </li>
-      <li routerLink="/calculators/system-curve" routerLinkActive="selected">
+      <li routerLink="/calculators/fan-system-curve" routerLinkActive="selected">
         <span class="sidebar-item">Fan System Curve</span>
       </li>
       <li routerLink="/calculators/fan-curve" routerLinkActive="selected">
@@ -63,28 +60,26 @@
     </ul>
   </li>
   <li routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-    <span class="sidebar-item" routerLink="/calculators/process-heating-list" routerLinkActive="selected"
-      #phRla="routerLinkActive">Process
+    <span class="sidebar-item" routerLink="/calculators/process-heating-list" routerLinkActive="selected">Process
       Heating</span>
-    <ul [ngClass]="{'hide': phRla.isActive == false}">
-      <li routerLink="/calculators/fan-efficiency" routerLinkActive="selected">
-        <span class="sidebar-item" (click)="selectCalculator('o2-enrichment')">O<sub>2</sub> Enrichment</span>
+    <ul>
+      <li routerLink="/calculators/o2-enrichment" routerLinkActive="selected">
+        <span class="sidebar-item">O<sub>2</sub> Enrichment</span>
       </li>
-      <li routerLink="/calculators/fan-efficiency" routerLinkActive="selected">
-        <span class="sidebar-item" (click)="selectCalculator('efficiency-improvement')">Efficiency Improvement</span>
+      <li routerLink="/calculators/efficiency-improvement" routerLinkActive="selected">
+        <span class="sidebar-item">Efficiency Improvement</span>
       </li>
-      <li routerLink="/calculators/fan-efficiency" routerLinkActive="selected">
-        <span class="sidebar-item" (click)="selectCalculator('energy-equivalency')">Energy Equivalency</span>
+      <li routerLink="/calculators/energy-equivalency" routerLinkActive="selected">
+        <span class="sidebar-item">Energy Equivalency</span>
       </li>
-      <li routerLink="/calculators/fan-efficiency" routerLinkActive="selected">
-        <span class="sidebar-item" (click)="selectCalculator('energy-use')">Flow and Energy Used</span>
+      <li routerLink="/calculators/energy-use'" routerLinkActive="selected">
+        <span class="sidebar-item">Flow and Energy Used</span>
       </li>
     </ul>
   </li>
   <li routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-    <span class="sidebar-item" routerLink="/calculators/steam-list" routerLinkActive="selected"
-      #steamRla="routerLinkActive">Steam</span>
-    <ul [ngClass]="{'hide': steamRla.isActive == false}">
+    <span class="sidebar-item" routerLink="/calculators/steam-list" routerLinkActive="selected">Steam</span>
+    <ul>
       <li routerLink="/calculators/steam-properties" routerLinkActive="selected">
         <span class="sidebar-item">Steam Properties</span>
       </li>
@@ -121,10 +116,9 @@
     </ul>
   </li>
   <li routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-    <span class="sidebar-item" routerLink="/calculators/compressed-air-list" routerLinkActive="selected"
-      #compressedAirRla="routerLinkActive">Compressed
+    <span class="sidebar-item" routerLink="/calculators/compressed-air-list" routerLinkActive="selected">Compressed
       Air</span>
-    <ul [ngClass]="{'hide': compressedAirRla.isActive == false}">
+    <ul>
       <li routerLink="/calculators/bag-method" routerLinkActive="selected">
         <span class="sidebar-item">Leak Loss Estimator - Bag Method</span>
       </li>
@@ -153,9 +147,8 @@
   </li>
 
   <li routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-    <span class="sidebar-item" routerLink="/calculators/lighting-list" routerLinkActive="selected"
-      #lightingRla="routerLinkActive">Lighting</span>
-    <ul [ngClass]="{'hide': lightingRla.isActive == false}">
+    <span class="sidebar-item" routerLink="/calculators/lighting-list" routerLinkActive="selected">Lighting</span>
+    <ul>
       <li routerLink="/calculators/lighting-replacement" routerLinkActive="selected">
         <span class="sidebar-item">Lighting Replacement</span>
       </li>
@@ -163,9 +156,8 @@
   </li>
 
   <li routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-    <span class="sidebar-item" routerLink="/calculators/general-list" routerLinkActive="selected"
-      #generalRla="routerLinkActive">General</span>
-    <ul [ngClass]="{'hide': generalRla.isActive == false}">
+    <span class="sidebar-item" routerLink="/calculators/general-list" routerLinkActive="selected">General</span>
+    <ul>
       <li routerLink="/calculators/pre-assessment" routerLinkActive="selected">
         <span class="sidebar-item">Pre-Assessment Screening</span>
       </li>
