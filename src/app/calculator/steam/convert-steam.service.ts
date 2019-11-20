@@ -495,11 +495,15 @@ export class ConvertSteamService {
   }
 
   convertApproachTemperature(approachTemp: number, settings: Settings): number {
-    let approachTempUnit: string = 'R';
-    if (settings.steamTemperatureMeasurement == 'C' || settings.steamTemperatureMeasurement == 'K') {
-      approachTempUnit = 'K';
+    if (approachTemp) {
+      let approachTempUnit: string = 'R';
+      if (settings.steamTemperatureMeasurement == 'C' || settings.steamTemperatureMeasurement == 'K') {
+        approachTempUnit = 'K';
+      }
+      approachTemp = this.convertUnitsService.value(approachTemp).from(approachTempUnit).to('K');
+    } else {
+      approachTemp = null;
     }
-    approachTemp = this.convertUnitsService.value(approachTemp).from(approachTempUnit).to('K');
     return approachTemp;
   }
 
