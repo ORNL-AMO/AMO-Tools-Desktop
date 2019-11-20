@@ -5,11 +5,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img class="calc-img" src="assets/images/calculator-icons/pump-icons/head-tool.png"
-                        (click)="showTool('head-tool')">
+                        routerLink="head-tool">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" (click)="showTool('head-tool')">Pump Head Tool</a>
+                <a class="click-item" routerLink="head-tool">Pump Head Tool</a>
                 <p>
                     Calculate pump head using inlet and out pressures, elevation and pipe diameter
                 </p>
@@ -19,11 +19,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img class="calc-img" src="assets/images/calculator-icons/system-curve-tran.png"
-                        (click)="showTool('system-curve')">
+                        routerLink="system-curve">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" (click)="showTool('system-curve')">Pump System Curve</a>
+                <a class="click-item" routerLink="system-curve">Pump System Curve</a>
                 <p>
                     Plot the system curve using static head and an operating point; can also plot pump curve
                 </p>
@@ -33,11 +33,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img class="calc-img" src="assets/images/calculator-icons/pump-icons/speed-tran.png"
-                        (click)="showTool('specific-speed')">
+                        routerLink="specific-speed">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" (click)="showTool('specific-speed')">Specific Speed</a>
+                <a class="click-item" routerLink="specific-speed">Specific Speed</a>
                 <p>
                     Calculate the optimal specific speed for a pump and the penalty due to non-optimal operation
                 </p>
@@ -47,11 +47,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img class="calc-img" src="assets/images/calculator-icons/pump-icons/pump-efficiency.png"
-                        (click)="showTool('achievable-efficiency')">
+                        routerLink="achievable-efficiency">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" (click)="showTool('achievable-efficiency')">Pump Achievable Efficiency</a>
+                <a class="click-item" routerLink="achievable-efficiency">Pump Achievable Efficiency</a>
                 <p>
                     Estimate the achievable pump efficiency for various pump styles based on ANSI/HI 13-2000
                 </p>
@@ -61,11 +61,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img class="calc-img" src="assets/images/calculator-icons/pump-curve.png"
-                        (click)="showTool('pump-curve')">
+                        routerLink="pump-curve">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" (click)="showTool('pump-curve')">Pump Curve</a>
+                <a class="click-item" routerLink="pump-curve">Pump Curve</a>
                 <p>
                     Develop a pump curve and explore the effects of changes in head, flow, pump speed and impeller
                     diameter

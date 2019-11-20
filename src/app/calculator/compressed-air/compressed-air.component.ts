@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CalculatorService } from '../calculator.service';
 
 @Component({
   selector: 'app-compressed-air',
@@ -7,17 +6,8 @@ import { CalculatorService } from '../calculator.service';
   styleUrls: ['./compressed-air.component.css']
 })
 export class CompressedAirComponent implements OnInit {
-  @Input()
-  selectedTool: string;
-
-  constructor(private calculatorService: CalculatorService) { }
+  constructor() { }
 
   ngOnInit() {
   }
-
-  showTool(str: string) {
-    this.calculatorService.selectedTool.next(str);
-    this.calculatorService.selectedToolType.next('compressed-air');
-  }
-
 }

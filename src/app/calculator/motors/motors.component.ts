@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { CalculatorService } from '../calculator.service';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-motors',
@@ -7,18 +6,9 @@ import { CalculatorService } from '../calculator.service';
   styleUrls: ['./motors.component.css']
 })
 export class MotorsComponent implements OnInit {
-  @Input()
-  selectedTool: string;
-
-  constructor(private calculatorService: CalculatorService) { }
+  constructor() { }
 
   ngOnInit() {
-
-  }
-  
-  showTool(str: string) {
-    this.calculatorService.selectedTool.next(str);
-    this.calculatorService.selectedToolType.next('motors');
   }
 }
 

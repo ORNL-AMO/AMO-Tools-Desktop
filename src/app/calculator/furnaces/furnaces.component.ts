@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { CalculatorService } from '../calculator.service';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-furnaces',
@@ -7,17 +6,10 @@ import { CalculatorService } from '../calculator.service';
   styleUrls: ['./furnaces.component.css']
 })
 export class FurnacesComponent implements OnInit {
-  @Input()
-  selectedTool: string;
 
-  constructor(private calculatorService: CalculatorService) { }
+  constructor() { }
 
   ngOnInit() {
 
-  }
-  
-  showTool(str: string) {
-    this.calculatorService.selectedTool.next(str);
-    this.calculatorService.selectedToolType.next('furnaces');
   }
 }
