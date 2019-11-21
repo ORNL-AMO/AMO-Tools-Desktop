@@ -1,6 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Directory } from '../shared/models/directory';
-import { CalculatorService } from '../calculator/calculator.service';
 import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
@@ -9,13 +7,11 @@ import { AssessmentService } from '../assessment/assessment.service';
   styleUrls: ['./landing-screen.component.css']
 })
 export class LandingScreenComponent implements OnInit {
-  @Input()
-  directory: Directory;
 
   displayVideo: boolean = false;
   showCreateAssessment: boolean = false;
   createAssessmentType: string;
-  constructor(private calculatorService: CalculatorService, private assessmentService: AssessmentService) { }
+  constructor(private assessmentService: AssessmentService) { }
 
   ngOnInit() {
   }
@@ -26,11 +22,6 @@ export class LandingScreenComponent implements OnInit {
 
   hideScreen() {
     this.assessmentService.dashboardView.next('assessment-dashboard');
-  }
-
-  chooseCalculator(str: string) {
-    this.assessmentService.dashboardView.next('calculator');
-    this.calculatorService.selectedToolType.next(str);
   }
 
   createAssessment(str?: string) {

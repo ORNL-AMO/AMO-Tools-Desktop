@@ -35,7 +35,7 @@
 								</p>
 							</div>
 							<div class="col-6 text-center">
-								<a class="click-link" (click)="chooseCalculator('all')">Properties &amp; Equipment
+								<a class="click-link" [routerLink]="['/calculators']">Properties &amp; Equipment
 									Calculators</a>
 								<p class="text-help small">Generate detailed properties and test a variety of
 									adjustments.</p>
@@ -122,7 +122,8 @@
 											<a (click)="createAssessment('TreasureHunt')"
 												class="click-link p-0 steam">Create
 												Treasure Hunt</a>
-											<span class="former-name steam">Energy efficiency calculators for facilitating a Treasure Hunt</span>
+											<span class="former-name steam">Energy efficiency calculators for
+												facilitating a Treasure Hunt</span>
 										</div>
 									</div>
 								</div>
@@ -134,40 +135,40 @@
 							</div>
 							<div class="col-6">
 								<div class="p-2">
-									<a class="icon click-link" (click)="chooseCalculator('motors')">
+									<a class="icon click-link" [routerLink]="['/calculators/motors-list']">
 										<i class="fa fa-calculator"></i> Motors
 									</a>
 								</div>
 								<div class="p-2">
-									<a class="icon click-link" (click)="chooseCalculator('pumps')">
+									<a class="icon click-link" [routerLink]="['/calculators/pumps-list']">
 										<i class="fa fa-calculator"></i> Pumps</a>
 								</div>
 								<div class="p-2">
-									<a class="icon click-link" (click)="chooseCalculator('fans')">
+									<a class="icon click-link" [routerLink]="['/calculators/fans-list']">
 										<i class="fa fa-calculator"></i> Fans</a>
 								</div>
 								<div class="p-2">
-									<a class="icon click-link furnace" (click)="chooseCalculator('furnaces')">
+									<a class="icon click-link furnace" [routerLink]="['/calculators/process-heating-list']">
 										<i class="fa fa-calculator"></i> Process Heating
 									</a>
 								</div>
 								<div class="p-2">
-									<a class="icon click-link furnace" (click)="chooseCalculator('steam')">
+									<a class="icon click-link furnace" [routerLink]="['/calculators/steam-list']">
 										<i class="fa fa-calculator"></i> Steam
 									</a>
 								</div>
 								<div class="p-2">
-									<a class="icon click-link" (click)="chooseCalculator('compressed-air')">
+									<a class="icon click-link" [routerLink]="['/calculators/compressed-air-list']">
 										<i class="fa fa-calculator"></i> Compressed Air
 									</a>
 								</div>
 								<div class="p-2">
-									<a class="icon click-link" (click)="chooseCalculator('lighting')">
+									<a class="icon click-link" [routerLink]="['/calculators/lighting-list']">
 										<i class="fa fa-calculator"></i> Lighting
 									</a>
 								</div>
 								<div class="p-2">
-									<a class="icon click-link" (click)="chooseCalculator('utilities')">
+									<a class="icon click-link" [routerLink]="['/calculators/general-list']">
 										<i class="fa fa-calculator"></i> General
 									</a>
 								</div>
