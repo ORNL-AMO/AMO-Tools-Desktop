@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
@@ -8,16 +8,11 @@ import { AssessmentService } from '../assessment/assessment.service';
 })
 export class LandingScreenComponent implements OnInit {
 
-  displayVideo: boolean = false;
   showCreateAssessment: boolean = false;
   createAssessmentType: string;
   constructor(private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-  }
-
-  showVideo() {
-    this.displayVideo = true;
   }
 
   hideScreen() {

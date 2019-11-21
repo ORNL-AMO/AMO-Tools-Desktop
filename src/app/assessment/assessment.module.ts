@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ModalModule } from 'ngx-bootstrap';
 
-import { AssessmentBannerComponent } from './assessment-banner/assessment-banner.component';
 import { AssessmentMenuComponent } from './assessment-menu/assessment-menu.component';
 import { AssessmentGridViewComponent } from './assessment-grid-view/assessment-grid-view.component';
 import { AssessmentListViewComponent } from './assessment-list-view/assessment-list-view.component';
@@ -39,7 +38,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [
-    AssessmentBannerComponent,
     AssessmentMenuComponent,
     AssessmentGridViewComponent,
     AssessmentListViewComponent,
