@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UtilitiesComponent } from './utilities.component';
 import { CombinedHeatPowerModule } from './combined-heat-power/combined-heat-power.module';
 import { PreAssessmentModule } from './pre-assessment/pre-assessment.module';
 import { PowerFactorCorrectionModule } from './power-factor-correction/power-factor-correction.module';
@@ -20,7 +19,6 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
     declarations: [
-        UtilitiesComponent,
         UtilitiesListComponent
     ],
     exports: [

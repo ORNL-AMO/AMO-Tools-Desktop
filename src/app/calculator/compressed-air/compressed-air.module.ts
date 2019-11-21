@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CompressedAirComponent } from './compressed-air.component';
 import { AirVelocityModule } from './air-velocity/air-velocity.module';
 import { BagMethodModule } from './bag-method/bag-method.module';
 // import { FlowFactorModule } from './flow-factor/flow-factor.module';
@@ -26,7 +25,6 @@ import { RouterModule } from '@angular/router';
     RouterModule
   ],
   declarations: [
-    CompressedAirComponent,
     CompressedAirListComponent
   ],
   exports: [
