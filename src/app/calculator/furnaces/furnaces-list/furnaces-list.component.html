@@ -5,11 +5,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/furnace-icons/o2.png" class="calc-img"
-                        routerLink="o2-enrichment">
+                        [routerLink]="['/calculators/o2-enrichment']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a routerLink="o2-enrichment">O<sub>2</sub> Enrichment</a>
+                <a [routerLink]="['/calculators/o2-enrichment']">O<sub>2</sub> Enrichment</a>
                 <p>
                     Estimate fuel savings via adjusting the oxygen content of combustion and flue gases
                 </p>
@@ -19,11 +19,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/furnace-icons/eff-impr.png" class="calc-img"
-                        routerLink="efficiency-improvement">
+                        [routerLink]="['/calculators/efficiency-improvement']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a routerLink="efficiency-improvement">Efficiency Improvement</a>
+                <a [routerLink]="['/calculators/efficiency-improvement']">Efficiency Improvement</a>
                 <p>
                     Explore potential fuel savings from adjusting burner operating conditions
                 </p>
@@ -33,11 +33,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/furnace-icons/energy-equ.png" class="calc-img"
-                        routerLink="energy-equivalency">
+                        [routerLink]="['/calculators/energy-equivalency']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a routerLink="energy-equivalency">Energy Equivalency</a>
+                <a [routerLink]="['/calculators/energy-equivalency']">Energy Equivalency</a>
                 <p>
                     Estimate required heat input when switching heat source from fuel-fired to electric or vice versa
                 </p>
@@ -47,11 +47,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/furnace-icons/flow.png" class="calc-img"
-                        routerLink="energy-use">
+                        [routerLink]="['/calculators/energy-use']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a routerLink="energy-use')">Flow and Energy Used</a>
+                <a [routerLink]="['/calculators/energy-use']">Flow and Energy Used</a>
                 <p>
                     Calculate the energy flow into the furnace by calculating the gas flow from data obtained by an
                     orifice

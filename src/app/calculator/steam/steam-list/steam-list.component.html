@@ -5,11 +5,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
                     <img src="assets/images/calculator-icons/steam-icons/steam-properties.png" class="calc-img"
-                        routerLink="steam-properties">
+                        [routerLink]="['/calculators/steam-properties']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="steam-properties">Steam Properties</a>
+                <a class="click-item" [routerLink]="['/calculators/steam-properties']">Steam Properties</a>
                 <p>
                     Calculate the properties of steam, via IAPWS R7-97
                 </p>
@@ -20,11 +20,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
                     <img src="assets/images/calculator-icons/steam-icons/saturated-properties.png" class="calc-img"
-                        routerLink="saturated-properties">
+                        [routerLink]="['/calculators/saturated-properties']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center steam">
-                <a class="click-item" routerLink="saturated-properties">Saturated Properties</a>
+                <a class="click-item" [routerLink]="['/calculators/saturated-properties']">Saturated Properties</a>
                 <p>
                     Calculate the properties of saturated steam, via IAPWS R7-97 </p>
             </div>
@@ -34,11 +34,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/steam-icons/stack-loss.png" class="calc-img"
-                        routerLink="stack-loss">
+                        [routerLink]="['/calculators/stack-loss']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="stack-loss">Stack Loss</a>
+                <a class="click-item" [routerLink]="['/calculators/stack-loss']">Stack Loss</a>
                 <p>
                     Determine the amount of heat lost in the boiler stack gas
                 </p>
@@ -49,11 +49,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/steam-icons/heat-loss.png" class="calc-img w-75"
-                        routerLink="heat-loss">
+                        [routerLink]="['/calculators/heat-loss']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="heat-loss">Heat Loss</a>
+                <a class="click-item" [routerLink]="['/calculators/heat-loss']">Heat Loss</a>
                 <p>
                     Calculate the energy (heat) loss and outlet steam properties given inlet steam conditions and a %
                     heat
@@ -65,11 +65,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/steam-icons/boiler.png" class="calc-img"
-                        routerLink="boiler">
+                        [routerLink]="['/calculators/boiler']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="boiler">Boiler</a>
+                <a class="click-item" [routerLink]="['/calculators/boiler']">Boiler</a>
                 <p>
                     Determine the amount of fuel energy required to produce steam in boiler
                 </p>
@@ -80,11 +80,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/steam-icons/flash-tank.png" class="calc-img flash-tank"
-                        routerLink="flash-tank">
+                        [routerLink]="['/calculators/flash-tank']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="flash-tank">Flash Tank</a>
+                <a class="click-item" [routerLink]="['/calculators/flash-tank']">Flash Tank</a>
                 <p>
                     Determine the mass flows and properties of any resulting outlet gas and/or liquid for given inlet
                     conditions
@@ -95,11 +95,11 @@
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
-                    <img src="assets/images/calculator-icons/steam-icons/prv.png" class="calc-img prv" routerLink="prv">
+                    <img src="assets/images/calculator-icons/steam-icons/prv.png" class="calc-img prv" [routerLink]="['/calculators/prv']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="prv">PRV W/ Desuperheating</a>
+                <a class="click-item" [routerLink]="['/calculators/prv']">PRV W/ Desuperheating</a>
                 <p>
                     Calculate the properties of steam after a pressure drop with optional desuperheating
                 </p>
@@ -109,11 +109,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/steam-icons/deaerator.png" class="calc-img"
-                        routerLink="deaerator">
+                        [routerLink]="['/calculators/deaerator']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="deaerator">Deaerator</a>
+                <a class="click-item" [routerLink]="['/calculators/deaerator']">Deaerator</a>
                 <p>
                     Determine the required water and steam flows for a required feedwater mass flow
                 </p>
@@ -124,11 +124,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/steam-icons/header.png" class="calc-img header-steam"
-                        routerLink="header">
+                        [routerLink]="['/calculators/header']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="header">Header</a>
+                <a class="click-item" [routerLink]="['/calculators/header']">Header</a>
                 <p>
                     Calculate the combined steam properties of multiple steam inlets
                 </p>
@@ -139,11 +139,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
                     <img src="assets/images/calculator-icons/steam-icons/steam-turbine.png"
-                        class="calc-img steam-turbine" routerLink="turbine">
+                        class="calc-img steam-turbine" [routerLink]="['/calculators/turbine']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="turbine">Steam Turbine</a>
+                <a class="click-item" [routerLink]="['/calculators/turbine']">Steam Turbine</a>
                 <p>
                     Calculate the energy generated or steam outlet conditions for a steam turbine
                 </p>
@@ -154,11 +154,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center steam">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center steam">
                     <img src="assets/images/calculator-icons/steam-icons/blowdown-rate.png" class="calc-img"
-                        routerLink="boiler-blowdown-rate">
+                        [routerLink]="['/calculators/boiler-blowdown-rate']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="boiler-blowdown-rate">Boiler Blowdown Rate</a>
+                <a class="click-item" [routerLink]="['/calculators/boiler-blowdown-rate']">Boiler Blowdown Rate</a>
                 <p>
                     Calculate the blowdown rate of a boiler
                 </p>

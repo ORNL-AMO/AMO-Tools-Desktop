@@ -5,11 +5,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img class="calc-img" src="assets/images/calculator-icons/motor-icons/nema.png"
-                        routerLink="nema-energy-efficiency">
+                        [routerLink]="['/calculators/nema-energy-efficiency']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a routerLink="nema-energy-efficiency">NEMA Energy Efficiency</a>
+                <a [routerLink]="['/calculators/nema-energy-efficiency']">NEMA Energy Efficiency</a>
                 <p>
                     Shows the predicted efficiency of an induction motor, based on size, rotating speed and efficiency
                     class
@@ -20,11 +20,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img class="calc-img" src="assets/images/calculator-icons/motor-icons/performance.png"
-                        routerLink="motor-performance">
+                        [routerLink]="['/calculators/motor-performance']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a routerLink="motor-performance">Motor Performance</a>
+                <a [routerLink]="['/calculators/motor-performance']">Motor Performance</a>
                 <p>
                     Plots current, efficiency, power factor vs motor shaft load for a given motor description </p>
             </div>
@@ -33,11 +33,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img class="calc-img" src="assets/images/calculator-icons/motor-icons/load-est.png"
-                        routerLink="percent-load-estimation">
+                        [routerLink]="['/calculators/percent-load-estimation']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a routerLink="percent-load-estimation"> Percent Load Estimation</a>
+                <a [routerLink]="['/calculators/percent-load-estimation']"> Percent Load Estimation</a>
                 <p>
                     Calculate percent load via slip method or field measurements </p>
             </div>
@@ -46,11 +46,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img class="calc-img" src="assets/images/calculator-icons/motor-icons/motor-drive.png"
-                        routerLink="motor-drive">
+                        [routerLink]="['/calculators/motor-drive']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a routerLink="motor-drive"> Motor Drive</a>
+                <a [routerLink]="['/calculators/motor-drive']"> Motor Drive</a>
                 <p>
                     Compares the annual energy cost of different motor drives
                 </p>
@@ -60,11 +60,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img class="calc-img" src="assets/images/calculator-icons/motor-icons/replace.png"
-                        routerLink="replace-existing">
+                        [routerLink]="['/calculators/replace-existing']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a routerLink="replace-existing"> Replace vs Rewind</a>
+                <a [routerLink]="['/calculators/replace-existing']"> Replace vs Rewind</a>
                 <p>
                     Compares the cost and energy of rewinding a failed motor versus replacing it with a new
                     energy-efficient

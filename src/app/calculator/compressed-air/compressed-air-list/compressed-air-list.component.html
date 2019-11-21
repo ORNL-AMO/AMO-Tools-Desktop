@@ -5,11 +5,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/compressed-air-icons/leakage-loss-estimator.png"
-                        class="calc-img" routerLink="bag-method">
+                        class="calc-img" [routerLink]="['/calculators/bag-method']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="bag-method">Leak Loss Estimator - Bag
+                <a class="click-item" [routerLink]="['/calculators/bag-method']">Leak Loss Estimator - Bag
                     Method</a>
                 <p>
                     Estimates the leakage losses in a compressed air system using the bag method
@@ -20,11 +20,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/compressed-air-icons/pneumatic-air-requirement.png"
-                        class="calc-img" routerLink="pneumatic-air">
+                        class="calc-img" [routerLink]="['/calculators/pneumatic-air']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="pneumatic-air">Pneumatic Air
+                <a class="click-item" [routerLink]="['/calculators/pneumatic-air']">Pneumatic Air
                     Requirement</a>
                 <p>
                     Estimate the quantity of air required by a specific single acting or a double acting piston cylinder
@@ -36,11 +36,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/compressed-air-icons/receiver-tank-calculation.png"
-                        class="calc-img" routerLink="receiver-tank">
+                        class="calc-img" [routerLink]="['/calculators/receiver-tank']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="receiver-tank">Receiver Tank Sizing</a>
+                <a class="click-item" [routerLink]="['/calculators/receiver-tank']">Receiver Tank Sizing</a>
                 <p>
                     Calculate the required size of the receiver tank
                 </p>
@@ -50,11 +50,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/compressed-air-icons/receiver-tank-calculation.png"
-                        class="calc-img" routerLink="receiver-tank-usable-air">
+                        class="calc-img" [routerLink]="['/calculators/receiver-tank-usable-air']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="receiver-tank-usable-air">Usable Air
+                <a class="click-item" [routerLink]="['/calculators/receiver-tank-usable-air']">Usable Air
                     Capacity</a>
                 <p>
                     Estimate the quantity of compressed air that is available for use
@@ -65,11 +65,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/compressed-air-icons/pipe-sizing.png" class="calc-img"
-                        routerLink="pipe-sizing">
+                        [routerLink]="['/calculators/pipe-sizing']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="pipe-sizing">Pipe Sizing</a>
+                <a class="click-item" [routerLink]="['/calculators/pipe-sizing']">Pipe Sizing</a>
                 <p>
                     Determine pipe diameter when the volumetric flow velocity, pressure, and design velocity are known
                 </p>
@@ -79,11 +79,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/compressed-air-icons/velocity-in-piping.png"
-                        class="calc-img" routerLink="air-velocity">
+                        class="calc-img" [routerLink]="['/calculators/air-velocity']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="air-velocity">Velocity in the Piping</a>
+                <a class="click-item" [routerLink]="['/calculators/air-velocity']">Velocity in the Piping</a>
                 <p>
                     Estimate the velocity of compressed air throughout system piping
                 </p>
@@ -93,11 +93,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/compressed-air-icons/air-system-capacity.png"
-                        class="calc-img" routerLink="system-capacity">
+                        class="calc-img" [routerLink]="['/calculators/system-capacity']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="system-capacity">System Capacity</a>
+                <a class="click-item" [routerLink]="['/calculators/system-capacity']">System Capacity</a>
                 <p>
                     Determine total capacity of compressed air system or specific pipes and receiver tanks
                 </p>
@@ -107,11 +107,11 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/compressed-air-icons/operation-cost.png" class="calc-img"
-                        routerLink="operation-cost">
+                        [routerLink]="['/calculators/operating-cost']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
-                <a class="click-item" routerLink="operation-cost">Operation Costs</a>
+                <a class="click-item" [routerLink]="['/calculators/operating-cost']">Operation Costs</a>
                 <p>
                     Estimate the cost of operation of the compressor in both fully and partially loaded instances
                 </p>
