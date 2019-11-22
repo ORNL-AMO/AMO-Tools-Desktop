@@ -57,7 +57,8 @@
               "src/assets/styles/ssmt-diagram.css",
               "src/assets/styles/toggle-switch.css",
               "src/assets/styles/assessment-banner.css",
-              "src/assets/styles/c3-charts.css"
+              "src/assets/styles/c3-charts.css",
+              "src/assets/styles/directory-dashboard.css"
             ],
             "scripts": [
 
@@ -119,7 +120,8 @@
               "src/assets/styles/utilities.css",
               "src/assets/styles/graphs.css",
               "src/assets/styles/forms.css",
-              "src/assets/styles/assessment-banner.css"
+              "src/assets/styles/assessment-banner.css",
+              "src/assets/styles/directory-dashboard.css"
             ],
             "assets": [
               "src/assets",

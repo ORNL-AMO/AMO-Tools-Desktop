@@ -21,8 +21,8 @@
 
 <div class="sidebar-group secondary">
   <ul>
-    <li [ngClass]="{'selected':selectedDirectoryId == directory.id && dashboardView == 'assessment-dashboard'}">
-      <span (click)="toggleSelected(directory)">
+    <li [routerLink]="['/directory-dashboard', 1]" routerLinkActive="selected">
+      <span>
         <i class="fa fa-folder" aria-hidden="true"></i> All Assessments</span>
     </li>
     <li *ngIf="directory">

@@ -15,6 +15,7 @@ import { AssessmentSettingsComponent } from '../assessment/assessment-settings/a
 import { CustomMaterialsComponent } from '../suiteDb/custom-materials/custom-materials.component';
 import { calculatorRoutes } from '../calculator/calculator-routing/calculators.routing';
 import { CalculatorComponent } from '../calculator/calculator.component';
+import { DirectoryDashboardComponent } from '../directory-dashboard/directory-dashboard.component';
 
 export const coreRoutes: Routes = [
   {
@@ -33,6 +34,10 @@ export const coreRoutes: Routes = [
       {
         component: AssessmentDashboardComponent,
         path: 'assessment-dashboard'
+      },
+      {
+        component: DirectoryDashboardComponent,
+        path: 'directory-dashboard/:id',
       },
       {
         component: TutorialsComponent,

@@ -697,8 +697,10 @@ Assessments: List View
 }
 .list-row {
   padding: 14px;
-  background: #fbfbfb;
+  background: white;
   border-radius: .25rem;
+  margin-top: .5rem;
+  box-shadow: 3px 0px 5px 2px grey
 
 }
   .list-row:after {

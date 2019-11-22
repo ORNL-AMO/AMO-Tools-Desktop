@@ -45,6 +45,7 @@ import { UpdateToastComponent } from '../update-toast/update-toast.component';
 import { HelperServicesModule } from '../shared/helper-services/helper-services.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { TutorialsModule } from '../tutorials/tutorials.module';
+import { DirectoryDashboardModule } from '../directory-dashboard/directory-dashboard.module';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { TutorialsModule } from '../tutorials/tutorials.module';
     TreasureHuntModule,
     HelperServicesModule,
     ToastModule,
-    TutorialsModule
+    TutorialsModule,
+    DirectoryDashboardModule
   ],
   providers: [
     AssessmentService,

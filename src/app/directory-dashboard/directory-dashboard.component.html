@@ -1,0 +1,50 @@
+<div class="d-flex flex-column justify-content-center dashboard-content">
+    <div class="col-12 pt-4 pb-4 scroll-item">
+        <div class="card card-item">
+            <div class="card-body">
+                <!-- <app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [directory]="directory"
+				 [view]="view" (deleteItems)="signalDeleteItems()" (selectAll)="selectAllItems($event)" (newDir)="newDir()" (genReport)="emitGenReport()"
+				 (exportEmit)="emitExport()" (importEmit)="emitImport()" (emitPreAssessment)="preAssessmentEmit()" [directorySettings]="directorySettings">
+                </app-assessment-menu> -->
+                <app-directory-dashboard-menu></app-directory-dashboard-menu>
+                <hr class="my-1">
+                <!-- <app-folder-summary [directory]="directory" [directorySettings]="directorySettings" [assessments]="directory.assessments"></app-folder-summary> -->
+            </div>
+        </div>
+        <div class="row" *ngIf="dashboardView == 'grid'">
+            <div class="col-4 summary-card" *ngFor="let calculator of directory.calculators; let index = index;">
+                <app-pre-assessment-card [settings]="directorySettings" [directory]="directory"
+                    [calculator]="calculator" [index]="index"></app-pre-assessment-card>
+            </div>
+            <div class="col-4 summary-card" *ngFor="let assessment of directory.assessments">
+                <app-assessment-card [assessment]="assessment">
+                </app-assessment-card>
+            </div>
+            <div class="col-4 summary-card" *ngFor="let directory of directory.subDirectory">
+                <app-directory-card [directory]="directory"></app-directory-card>
+            </div>
+        </div>
+
+        <div class="list-view" *ngIf="dashboardView == 'list'">
+            <div class="list-item" *ngFor="let calculator of directory.calculators; let index = index;">
+                <app-pre-assessment-list-item [calculator]="calculator" [index]="index" [settings]="directorySettings"
+                [directory]="directory">
+                </app-pre-assessment-list-item>
+            </div>
+
+            <div class="list-item" *ngFor="let assessment of directory.assessments">
+                <app-assessment-list-item [assessment]="assessment"></app-assessment-list-item>
+            </div>
+            <div class="list-item" *ngFor="let directory of directory.subDirectory">
+                <app-directory-list-item [directory]="directory"></app-directory-list-item>
+            </div>
+        </div>
+        <!-- <app-assessment-grid-view *ngIf="view == 'grid'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"
+		 (emitPreAssessment)="preAssessmentEmit($event)" [directorySettings]="directorySettings">
+		</app-assessment-grid-view>
+
+		<app-assessment-list-view *ngIf="view == 'list'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"
+		 (emitPreAssessment)="preAssessmentEmit($event)">
+		</app-assessment-list-view> -->
+    </div>
+</div>
