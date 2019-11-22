@@ -28,7 +28,7 @@
         <div class="list-view" *ngIf="dashboardView == 'list'">
             <div class="list-item" *ngFor="let calculator of directory.calculators; let index = index;">
                 <app-pre-assessment-list-item [calculator]="calculator" [index]="index" [settings]="directorySettings"
-                [directory]="directory">
+                    [directory]="directory">
                 </app-pre-assessment-list-item>
             </div>
 
@@ -48,3 +48,6 @@
 		</app-assessment-list-view> -->
     </div>
 </div>
+
+<app-assessment-create *ngIf="createAssessment" [directory]="directory" [settings]="directorySettings"></app-assessment-create>
+<app-create-folder *ngIf="createFolder" [directory]="directory" [settings]="directorySettings"></app-create-folder>

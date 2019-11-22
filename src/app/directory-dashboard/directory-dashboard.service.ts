@@ -6,8 +6,12 @@ export class DirectoryDashboardService {
 
   selectAll: BehaviorSubject<boolean>;
   dashboardView: BehaviorSubject<string>;
+  createAssessment: BehaviorSubject<boolean>;
+  createFolder: BehaviorSubject<boolean>;
   constructor() { 
     this.selectAll = new BehaviorSubject<boolean>(false);
     this.dashboardView = new BehaviorSubject<string>('grid');
+    this.createAssessment = new BehaviorSubject<boolean>(false);
+    this.createFolder = new BehaviorSubject<boolean>(false);
   }
 }

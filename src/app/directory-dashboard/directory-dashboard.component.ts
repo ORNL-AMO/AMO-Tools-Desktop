@@ -6,6 +6,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from './directory-dashboard.service';
+import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
   selector: 'app-directory-dashboard',
@@ -19,23 +20,38 @@ export class DirectoryDashboardComponent implements OnInit {
   selectAllSub: Subscription;
   dashboardView: string;
   dashboardViewSub: Subscription;
+  directoryId: number;
+  createAssessment: boolean;
+  createAssessmentSub: Subscription;
+  createFolder: boolean;
+  createFolderSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
-    private directoryDashboardService: DirectoryDashboardService) { }
+    private directoryDashboardService: DirectoryDashboardService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      let id = Number(params['id']);
-      this.directory = this.directoryDbService.getById(id);
-      console.log(this.directory);
-      this.directorySettings = this.settingsDbService.getByDirectoryId(id);
+      this.directoryId = Number(params['id']);
+      this.directory = this.directoryDbService.getById(this.directoryId);
+      this.directorySettings = this.settingsDbService.getByDirectoryId(this.directoryId);
     });
-
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;
     });
     this.selectAllSub = this.directoryDashboardService.selectAll.subscribe(val => {
-      console.log('select all ' + val);
       this.selectAll(val);
+    });
+    this.assessmentService.updateSidebarData.subscribe(val => {
+      if (val) {
+        this.directory = this.directoryDbService.getById(this.directoryId);
+        console.log(this.directory)
+      }
+    });
+    this.createAssessmentSub = this.directoryDashboardService.createAssessment.subscribe(val => {
+      this.createAssessment = val;
+    });
+    this.createFolderSub = this.directoryDashboardService.createFolder.subscribe(val => {
+      console.log('create folder ' + val);
+      this.createFolder = val;
     })
   }
 
@@ -43,6 +59,10 @@ export class DirectoryDashboardComponent implements OnInit {
     this.dashboardViewSub.unsubscribe();
     this.selectAllSub.unsubscribe();
     this.directoryDashboardService.selectAll.next(false);
+    this.createAssessmentSub.unsubscribe();
+    this.directoryDashboardService.createAssessment.next(false);
+    this.createFolderSub.unsubscribe();
+    this.directoryDashboardService.createFolder.next(false);
   }
 
   selectAll(isSelected: boolean) {
@@ -52,7 +72,7 @@ export class DirectoryDashboardComponent implements OnInit {
       });
       this.directory.subDirectory.forEach(subDir => {
         subDir.selected = isSelected;
-      })
+      });
     }
   }
 
