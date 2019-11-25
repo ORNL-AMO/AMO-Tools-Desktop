@@ -41,7 +41,6 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/assets",
               "src/favicon.ico"
             ],
             "styles": [
@@ -122,7 +121,6 @@
               "src/assets/styles/assessment-banner.css"
             ],
             "assets": [
-              "src/assets",
               "src/assets",
               "src/favicon.ico"
             ]
