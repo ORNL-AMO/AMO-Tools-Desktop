@@ -7,8 +7,9 @@ import { Settings } from '../../shared/models/settings';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import * as _ from 'lodash';
-import { DirectoryDashboardService } from '../directory-dashboard.service';
+import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
 import { AssessmentService } from '../../assessment/assessment.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-create-folder',
@@ -34,11 +35,20 @@ export class CreateFolderComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService,
-    private assessmentService: AssessmentService) { }
+    private assessmentService: AssessmentService,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.newFolderForm = this.initForm();
     this.directories = this.directoryDbService.getAll();
+    this.activatedRoute.params.subscribe(params => {
+      let id: number = Number(params['id']);
+      if(id == undefined){
+        id = 1;
+      }
+      this.directory = this.directoryDbService.getById(id);
+      this.settings = this.settingsDbService.getByDirectoryId(id);
+      this.newFolderForm = this.initForm();
+    });
   }
 
   ngAfterViewInit(){

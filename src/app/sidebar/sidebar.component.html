@@ -25,10 +25,8 @@
       <span>
         <i class="fa fa-folder" aria-hidden="true"></i> All Assessments</span>
     </li>
-    <li *ngIf="directory">
-      <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId"
-        (selectSignal)="toggleSelected($event)" (collapseSignal)="toggleDirectoryCollapse($event)"
-        [newDirEventToggle]="newDirEventToggle" [dashboardView]="dashboardView"></app-directory-item>
+    <li>
+      <app-directory-item [directory]="rootDirectory"></app-directory-item>
     </li>
   </ul>
 </div>

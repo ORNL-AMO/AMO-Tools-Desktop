@@ -19,6 +19,8 @@ import { ExportService } from '../shared/import-export/export.service';
 import { ImportExportData } from '../shared/import-export/importExportModel';
 import { ImportService } from '../shared/import-export/import.service';
 import { CalculatorService } from '../calculator/calculator.service';
+import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -69,18 +71,31 @@ export class DashboardComponent implements OnInit {
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+
+  createFolder: boolean;
+  createFolderSub: Subscription;
+  directoryId: number;
   constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
-    private deleteDataService: DeleteDataService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef, private calculatorService: CalculatorService) {
+    private deleteDataService: DeleteDataService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef, private calculatorService: CalculatorService,
+    private directoryDashboardService: DirectoryDashboardService, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
     //start toolts suite database if it has not started
     this.initData();
 
-    this.createAssessmentSub = this.assessmentService.createAssessment.subscribe(val => {
-      this.createAssessment = val;
+
+    this.createFolderSub = this.directoryDashboardService.createFolder.subscribe(val => {
+      this.createFolder = val;
     });
+    this.createAssessmentSub = this.directoryDashboardService.createAssessment.subscribe(val => {
+      this.createAssessment = val;
+    })
+
+    // this.createAssessmentSub = this.assessmentService.createAssessment.subscribe(val => {
+    //   this.createAssessment = val;
+    // });
 
     //this.initializeTutorials();
 
@@ -120,6 +135,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardViewSub.unsubscribe();
     this.selectedToolSub.unsubscribe();
     this.sidebarDataSub.unsubscribe();
+    this.createFolderSub.unsubscribe();
   }
 
   ngAfterViewInit() {

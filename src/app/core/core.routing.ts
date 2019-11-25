@@ -16,6 +16,7 @@ import { CustomMaterialsComponent } from '../suiteDb/custom-materials/custom-mat
 import { calculatorRoutes } from '../calculator/calculator-routing/calculators.routing';
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { DirectoryDashboardComponent } from '../directory-dashboard/directory-dashboard.component';
+import { ReportRollupComponent } from '../report-rollup/report-rollup.component';
 
 export const coreRoutes: Routes = [
   {

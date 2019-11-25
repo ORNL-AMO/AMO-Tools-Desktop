@@ -1,18 +1,17 @@
 <div class="container-fluid">
-    <div class="row dashboard-content" *ngIf="dashboardView != 'detailed-report'">
-
+    <div class="row dashboard-content">
         <div class="col-2 sidebar-bg p-0" [ngClass]="{'modal-open': isModalOpen}">
-            <app-sidebar *ngIf="allDirectories" [directory]="getAllDirectories()"
-                [newDirEventToggle]="newDirEventToggle" [workingDirectory]="getWorkingDirectory()"
-                [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
-                (openModal)="openModal($event)">
-            </app-sidebar>
+            <app-sidebar></app-sidebar>
         </div>
         <div class="col-10 scroll-item dashboard-scroll skyline pl-0 pr-0">
             <router-outlet></router-outlet>
         </div>
+    </div>
+</div>
 
-        <!-- <div class="col-10 pb-4 skyline" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
+<app-assessment-create *ngIf="createAssessment" [id]="directoryId"></app-assessment-create>
+<app-create-folder *ngIf="createFolder"></app-create-folder>
+<!-- <div class="col-10 pb-4 skyline" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"
                 (deleteDataSignal)="showDeleteModal()" (deleteCheckedItems)="showDeleteItemsModal()"
@@ -52,10 +51,10 @@
         <div class="col-10 dashboard-scroll scroll-item skyline"
             *ngIf="allDirectories && dashboardView == 'custom-materials'">
             <app-custom-materials [settings]="workingDirectorySettings"></app-custom-materials>
-        </div> -->
+        </div> --
     </div>
 </div>
-
+<!-- 
 <div class="report" *ngIf="dashboardView == 'detailed-report'">
     <app-report-rollup (emitCloseReport)="closeReport()"></app-report-rollup>
 </div>
@@ -134,7 +133,7 @@
                 <h3>Choose .json File to be Imported</h3>
                 <!--<p id="inputModalTitleHelp" class="text-muted text-help">
                     Assessments will be imported into working directory
-                </p>-->
+                </p>--
                 <button class="close" aria-label="Close" (click)="hideImportModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -170,7 +169,7 @@
                 <button class="close" aria-label="Close" (click)="hidePreAssessmentModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div> -->
+            </div> --
             <div class="modal-body pr-0 pl-0 tab-content" *ngIf="showPreAssessment">
                 <app-pre-assessment [inModal]="true" [(calculator)]="workingDirectory.calculators[selectedCalcIndex]"
                     [settings]="workingDirectorySettings"></app-pre-assessment>
@@ -186,4 +185,4 @@
 </div>
 
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-    [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'warning'"></app-toast>
+    [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'warning'"></app-toast> -->

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input, EventEmitter, Output } from '@angu
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -12,7 +12,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../../assessment/assessment.service';
-import { DirectoryDashboardService } from '../directory-dashboard.service';
+import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
 
 @Component({
   selector: 'app-assessment-create',
@@ -21,13 +21,9 @@ import { DirectoryDashboardService } from '../directory-dashboard.service';
 })
 export class AssessmentCreateComponent implements OnInit {
   @Input()
-  directory: Directory;
-  @Input()
-  settings: Settings;
-  // @Output('hideModal')
-  // hideModal = new EventEmitter<boolean>();
-  @Input()
   type: string;
+  @Input()
+  id: number;
 
   newAssessmentForm: FormGroup;
   selectedEquip: string = 'new';
@@ -37,6 +33,9 @@ export class AssessmentCreateComponent implements OnInit {
   directories: Array<Directory>;
   showNewFolder: boolean = false;
   newFolderForm: FormGroup;
+  directory: Directory;
+  settings: Settings;
+
   constructor(
     private formBuilder: FormBuilder,
     private assessmentService: AssessmentService,
@@ -48,13 +47,12 @@ export class AssessmentCreateComponent implements OnInit {
     private directoryDashboardService: DirectoryDashboardService) { }
 
   ngOnInit() {
-    if (!this.directory) {
-      this.directory = this.directoryDbService.getById(1);
-      this.settings = this.settingsDbService.getByDirectoryId(1);
-    } else if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
     this.directories = this.directoryDbService.getAll();
+    if (isNaN(this.id) == true) {
+      this.id = 1;
+    }
+    this.directory = this.directoryDbService.getById(this.id);
+    this.settings = this.settingsDbService.getByDirectoryId(this.id);
     this.newAssessmentForm = this.initForm();
     this.newFolderForm = this.initFolderForm();
     this.canCreate = true;
@@ -63,7 +61,6 @@ export class AssessmentCreateComponent implements OnInit {
         assessmentType: this.type
       });
     }
-
   }
 
   ngAfterViewInit() {

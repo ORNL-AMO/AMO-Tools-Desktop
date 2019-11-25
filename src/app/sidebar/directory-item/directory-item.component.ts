@@ -12,51 +12,40 @@ import { AssessmentService } from '../../assessment/assessment.service';
 export class DirectoryItemComponent implements OnInit {
   @Input()
   directory: Directory;
-  @Input()
-  selectedDirectoryId: number;
-  @Output('selectSignal')
-  selectSignal = new EventEmitter<Directory>();
-  @Output('collapseSignal')
-  collapseSignal = new EventEmitter<Directory>();
-  @Input()
-  newDirEventToggle: boolean;
-  @Input()
-  dashboardView: string;
 
   childDirectories: Directory;
   validDirectory: boolean = false;
   constructor(private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.directory && !changes.directory.firstChange) {
-      this.populateDirectories(this.directory);
-    }
-    if (changes.newDirEventToggle && !changes.newDirEventToggle.firstChange) {
-      this.populateDirectories(this.directory);
-    }
-    
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (changes.directory && !changes.directory.firstChange) {
+  //     this.populateDirectories(this.directory);
+  //   }
+  //   if (changes.newDirEventToggle && !changes.newDirEventToggle.firstChange) {
+  //     this.populateDirectories(this.directory);
+  //   }
+  // }
 
   ngOnInit() {
-    if (this.directory.id != undefined) {
-      this.validDirectory = true;
-      this.populateDirectories(this.directory);
-    }
+    // if (this.directory.id != undefined) {
+    //   this.validDirectory = true;
+    //   this.populateDirectories(this.directory);
+    // }
   }
 
   toggleSelected(directory: Directory) {
-    this.assessmentService.dashboardView.next('assessment-dashboard');
-    this.selectSignal.emit(directory);
+    // this.assessmentService.dashboardView.next('assessment-dashboard');
+    // this.selectSignal.emit(directory);
   }
 
   toggleDirectoryCollapse(directory: Directory) {
-    this.collapseSignal.emit(directory);
+    // this.collapseSignal.emit(directory);
   }
 
-  populateDirectories(directoryRef: DirectoryDbRef) {
-    this.directory.assessments = this.assessmentDbService.getByDirectoryId(directoryRef.id);
-    this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directoryRef.id);
-    this.directory.collapsed = false;
-    this.cd.detectChanges();
-  }
+  // populateDirectories(directoryRef: DirectoryDbRef) {
+  //   this.directory.assessments = this.assessmentDbService.getByDirectoryId(directoryRef.id);
+  //   this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directoryRef.id);
+  //   this.directory.collapsed = false;
+  //   this.cd.detectChanges();
+  // }
 }

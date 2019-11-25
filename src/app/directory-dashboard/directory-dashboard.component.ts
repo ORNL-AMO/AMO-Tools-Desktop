@@ -21,10 +21,6 @@ export class DirectoryDashboardComponent implements OnInit {
   dashboardView: string;
   dashboardViewSub: Subscription;
   directoryId: number;
-  createAssessment: boolean;
-  createAssessmentSub: Subscription;
-  createFolder: boolean;
-  createFolderSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
     private directoryDashboardService: DirectoryDashboardService, private assessmentService: AssessmentService) { }
 
@@ -43,26 +39,14 @@ export class DirectoryDashboardComponent implements OnInit {
     this.assessmentService.updateSidebarData.subscribe(val => {
       if (val) {
         this.directory = this.directoryDbService.getById(this.directoryId);
-        console.log(this.directory)
       }
     });
-    this.createAssessmentSub = this.directoryDashboardService.createAssessment.subscribe(val => {
-      this.createAssessment = val;
-    });
-    this.createFolderSub = this.directoryDashboardService.createFolder.subscribe(val => {
-      console.log('create folder ' + val);
-      this.createFolder = val;
-    })
   }
 
   ngOnDestroy() {
     this.dashboardViewSub.unsubscribe();
     this.selectAllSub.unsubscribe();
     this.directoryDashboardService.selectAll.next(false);
-    this.createAssessmentSub.unsubscribe();
-    this.directoryDashboardService.createAssessment.next(false);
-    this.createFolderSub.unsubscribe();
-    this.directoryDashboardService.createFolder.next(false);
   }
 
   selectAll(isSelected: boolean) {
