@@ -6,3 +6,7 @@
 li.show-border{
     border-left: .5px solid gray;
 }
+
+.collapsed{
+    display: none;
+}

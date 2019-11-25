@@ -22,13 +22,14 @@
 
 
 <ul>
-  <li *ngIf="directory.id != 1" [routerLink]="['/directory-dashboard', directory.id]" routerLinkActive="selected">
-    <span class="sidebar-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)">
+  <li *ngIf="directory.id != 1" routerLinkActive="selected" [routerLinkActiveOptions]="{exact:true}">
+    <span class="sidebar-item" [routerLink]="['/directory-dashboard', directory.id]"
+      (dblclick)="toggleDirectoryCollapse(directory)">
       <i class="fa fa-folder" aria-hidden="true"></i>
       {{directory.name}}
     </span>
   </li>
-  <li class="sub-directory show-border" *ngIf="directory.subDirectory">
+  <li class="sub-directory show-border" *ngIf="directory.subDirectory && directory.collapsed == false">
     <ul>
       <li class="assessments pl-0" *ngIf="directory.assessments">
         <ul>

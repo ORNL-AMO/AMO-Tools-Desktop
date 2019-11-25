@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<app-assessment-create *ngIf="createAssessment" [id]="directoryId"></app-assessment-create>
+<app-assessment-create *ngIf="createAssessment" [directoryId]="directoryId"></app-assessment-create>
 <app-create-folder *ngIf="createFolder"></app-create-folder>
 <!-- <div class="col-10 pb-4 skyline" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
 

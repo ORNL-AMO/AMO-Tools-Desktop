@@ -27,6 +27,7 @@ export class DirectoryDashboardComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.directoryId = Number(params['id']);
+      this.directoryDashboardService.selectedDirectoryId.next(this.directoryId);
       this.directory = this.directoryDbService.getById(this.directoryId);
       this.directorySettings = this.settingsDbService.getByDirectoryId(this.directoryId);
     });
@@ -47,6 +48,7 @@ export class DirectoryDashboardComponent implements OnInit {
     this.dashboardViewSub.unsubscribe();
     this.selectAllSub.unsubscribe();
     this.directoryDashboardService.selectAll.next(false);
+    this.directoryDashboardService.selectedDirectoryId.next(1);
   }
 
   selectAll(isSelected: boolean) {

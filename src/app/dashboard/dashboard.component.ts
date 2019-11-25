@@ -21,6 +21,7 @@ import { ImportService } from '../shared/import-export/import.service';
 import { CalculatorService } from '../calculator/calculator.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { ActivatedRoute } from '@angular/router';
+import { DashboardService } from './dashboard.service';
 
 
 @Component({
@@ -75,10 +76,11 @@ export class DashboardComponent implements OnInit {
   createFolder: boolean;
   createFolderSub: Subscription;
   directoryId: number;
+  directoryIdSub: Subscription;
   constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private deleteDataService: DeleteDataService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef, private calculatorService: CalculatorService,
-    private directoryDashboardService: DirectoryDashboardService, private activatedRoute: ActivatedRoute) {
+    private directoryDashboardService: DirectoryDashboardService) {
   }
 
   ngOnInit() {
@@ -91,7 +93,10 @@ export class DashboardComponent implements OnInit {
     });
     this.createAssessmentSub = this.directoryDashboardService.createAssessment.subscribe(val => {
       this.createAssessment = val;
-    })
+    });
+    this.directoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(id => {
+      this.directoryId = id;
+    });
 
     // this.createAssessmentSub = this.assessmentService.createAssessment.subscribe(val => {
     //   this.createAssessment = val;
@@ -136,6 +141,7 @@ export class DashboardComponent implements OnInit {
     this.selectedToolSub.unsubscribe();
     this.sidebarDataSub.unsubscribe();
     this.createFolderSub.unsubscribe();
+    this.directoryIdSub.unsubscribe();
   }
 
   ngAfterViewInit() {

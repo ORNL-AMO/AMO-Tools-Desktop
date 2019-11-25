@@ -23,7 +23,7 @@ export class AssessmentCreateComponent implements OnInit {
   @Input()
   type: string;
   @Input()
-  id: number;
+  directoryId: number;
 
   newAssessmentForm: FormGroup;
   selectedEquip: string = 'new';
@@ -48,11 +48,12 @@ export class AssessmentCreateComponent implements OnInit {
 
   ngOnInit() {
     this.directories = this.directoryDbService.getAll();
-    if (isNaN(this.id) == true) {
-      this.id = 1;
+    console.log(this.directoryId);
+    if (isNaN(this.directoryId) == true) {
+      this.directoryId = 1;
     }
-    this.directory = this.directoryDbService.getById(this.id);
-    this.settings = this.settingsDbService.getByDirectoryId(this.id);
+    this.directory = this.directoryDbService.getById(this.directoryId);
+    this.settings = this.settingsDbService.getByDirectoryId(this.directoryId);
     this.newAssessmentForm = this.initForm();
     this.newFolderForm = this.initFolderForm();
     this.canCreate = true;
