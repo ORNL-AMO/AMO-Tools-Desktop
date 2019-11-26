@@ -54,11 +54,16 @@ export class SsmtResultsPanelComponent implements OnInit {
 
   getResults() {
     //baseline
-    let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModel(this.ssmt, this.settings, true, 0);
+    console.log('Baseline: ');
+    let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.ssmt, this.settings);
+
     this.baselineInputs = resultData.inputData;
     this.baselineOutput = resultData.outputData;
+    console.log('====');
+    console.log('Modification: ');
     //modification
-    resultData = this.ssmtService.calculateModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, this.baselineOutput.operationsOutput.sitePowerDemand);
+    resultData = this.ssmtService.calculateModificationModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, this.baselineOutput);
+
     this.modificationInputs = resultData.inputData;
     this.modificationOutput = resultData.outputData;
     this.checkValid();

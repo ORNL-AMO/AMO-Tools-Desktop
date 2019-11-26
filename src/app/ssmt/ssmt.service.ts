@@ -9,6 +9,7 @@ import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { OperationsService } from './operations/operations.service';
 import { ConvertSteamService } from '../calculator/steam/convert-steam.service';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class SsmtService {
@@ -28,7 +29,7 @@ export class SsmtService {
   calcTab: BehaviorSubject<string>;
   saveSSMT: BehaviorSubject<SSMT>;
   constructor(private steamService: SteamService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
-    private turbineService: TurbineService, private operationsService: OperationsService) {
+    private turbineService: TurbineService, private operationsService: OperationsService, private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
@@ -46,13 +47,13 @@ export class SsmtService {
     this.saveSSMT = new BehaviorSubject<SSMT>(undefined);
   }
 
-  calculateModel(ssmt: SSMT, settings: Settings, isBaselineCalculation: boolean, baselinePowerDemand: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
+  calculateBaselineModel(ssmt: SSMT, settings: Settings): { inputData: SSMTInputs, outputData: SSMTOutput } {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(ssmt));
     let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, settings);
     let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, settings, ssmtCopy.boilerInput);
     let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCopy.turbineInput, ssmtCopy.headerInput, settings);
     let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, settings).valid;
-    let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, baselinePowerDemand, isBaselineCalculation);
+    let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, 0, true);
     if (turbineValid && headerValid && boilerValid && operationsValid) {
       // let convertedInputData: SSMTInputs = this.convertSteamService.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
       let outputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
@@ -62,6 +63,50 @@ export class SsmtService {
       return { inputData: setupInputData, outputData: outputData };
     }
   }
+
+  calculateModificationModel(ssmt: SSMT, settings: Settings, baselineResults: SSMTOutput): { inputData: SSMTInputs, outputData: SSMTOutput } {
+    let ssmtCopy: SSMT = JSON.parse(JSON.stringify(ssmt));
+    let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, settings, ssmtCopy.boilerInput);
+    let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCopy.turbineInput, ssmtCopy.headerInput, settings);
+    let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, settings).valid;
+    let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, baselineResults.operationsOutput.sitePowerDemand, false);
+    if (turbineValid && headerValid && boilerValid && operationsValid) {
+      let modificationOutputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
+      if (ssmt.headerInput.numberOfHeaders > 1) {
+        if (ssmt.headerInput.numberOfHeaders == 3) {
+          if (modificationOutputData.mediumPressureProcessSteamUsage.energyFlow != baselineResults.mediumPressureProcessSteamUsage.energyFlow) {
+            ssmt.headerInput.mediumPressure.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.mediumPressureProcessSteamUsage.energyFlow, modificationOutputData.mediumPressureHeaderSteam.specificEnthalpy, settings);
+            modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
+          }
+        }
+        if (modificationOutputData.lowPressureProcessSteamUsage.energyFlow != baselineResults.lowPressureProcessSteamUsage.energyFlow) {
+          ssmt.headerInput.lowPressure.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.lowPressureProcessSteamUsage.energyFlow, modificationOutputData.lowPressureHeaderSteam.specificEnthalpy, settings);
+          modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
+        }
+      }
+
+      return { inputData: setupInputData, outputData: modificationOutputData };
+    } else {
+      let outputData: SSMTOutput = this.getEmptyResults();
+      return { inputData: setupInputData, outputData: outputData };
+    }
+  }
+
+  calculateProcessSteamUsageFromEnergy(energyFlow: number, specificEnthalpy: number, settings: Settings): number {
+    console.log('energy flow: ' + energyFlow);
+    console.log('enthalpy: ' + specificEnthalpy);
+    let convertedEnthalpy: number = this.convertSteamService.convertSteamSpecificEnthalpyInput(specificEnthalpy, settings);
+    let convertedEnergy: number = this.convertSteamService.convertEnergyFlowInput(energyFlow, settings);
+    console.log('converted energy flow: ' + energyFlow);
+    console.log('converted enthalpy: ' + specificEnthalpy);
+    let neededProcessSteamUsage: number = convertedEnergy / convertedEnthalpy;
+    console.log('neede process steam: ' + neededProcessSteamUsage);
+    neededProcessSteamUsage = this.convertSteamService.convertSteamMassFlowOutput(neededProcessSteamUsage, settings);
+    console.log('converted process steam: ' + neededProcessSteamUsage);
+    return neededProcessSteamUsage;
+  }
+
 
   setupInputData(ssmt: SSMT, baselinePowerDemand: number, isBaselineCalculation: boolean): SSMTInputs {
     let inputData: SSMTInputs = {
