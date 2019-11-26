@@ -73,16 +73,22 @@ export class SsmtService {
     let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, baselineResults.operationsOutput.sitePowerDemand, false);
     if (turbineValid && headerValid && boilerValid && operationsValid) {
       let modificationOutputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
-      if (ssmt.headerInput.numberOfHeaders > 1) {
-        if (ssmt.headerInput.numberOfHeaders == 3) {
-          if (modificationOutputData.mediumPressureProcessSteamUsage.energyFlow != baselineResults.mediumPressureProcessSteamUsage.energyFlow) {
-            ssmt.headerInput.mediumPressure.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.mediumPressureProcessSteamUsage.energyFlow, modificationOutputData.mediumPressureHeaderSteam.specificEnthalpy, settings);
+      if (ssmtCopy.headerInput.numberOfHeaders > 1) {
+        if (ssmtCopy.headerInput.numberOfHeaders == 3) {
+          if (modificationOutputData.mediumPressureProcessSteamUsage.processUsage != baselineResults.mediumPressureProcessSteamUsage.processUsage) {
+            ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.mediumPressureProcessSteamUsage.processUsage, modificationOutputData.mediumPressureHeaderSteam.specificEnthalpy - modificationOutputData.mediumPressureCondensate.specificEnthalpy, settings);
+            setupInputData = this.setupInputData(ssmtCopy, baselineResults.operationsOutput.sitePowerDemand, false);
             modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
           }
         }
-        if (modificationOutputData.lowPressureProcessSteamUsage.energyFlow != baselineResults.lowPressureProcessSteamUsage.energyFlow) {
-          ssmt.headerInput.lowPressure.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.lowPressureProcessSteamUsage.energyFlow, modificationOutputData.lowPressureHeaderSteam.specificEnthalpy, settings);
+        if (modificationOutputData.lowPressureProcessSteamUsage.processUsage != baselineResults.lowPressureProcessSteamUsage.processUsage) {
+          // console.log('basleine energy flow: ' + baselineResults.lowPressureProcessSteamUsage.processUsage);
+          ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.lowPressureProcessSteamUsage.processUsage, modificationOutputData.lowPressureHeaderSteam.specificEnthalpy - modificationOutputData.lowPressureCondensate.specificEnthalpy, settings);
+          // console.log('calculated process usage: ' + ssmtCopy.headerInput.lowPressureHeader.processSteamUsage);
+          setupInputData = this.setupInputData(ssmtCopy, baselineResults.operationsOutput.sitePowerDemand, false);
+          // console.log('setup input data: ' + setupInputData.headerInput.lowPressureHeader.processSteamUsage);
           modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
+          // console.log('mod results process: ' + modificationOutputData.lowPressureProcessSteamUsage.processUsage);
         }
       }
 
@@ -94,16 +100,11 @@ export class SsmtService {
   }
 
   calculateProcessSteamUsageFromEnergy(energyFlow: number, specificEnthalpy: number, settings: Settings): number {
-    console.log('energy flow: ' + energyFlow);
-    console.log('enthalpy: ' + specificEnthalpy);
+    // console.log('enthalpy '+ specificEnthalpy);
     let convertedEnthalpy: number = this.convertSteamService.convertSteamSpecificEnthalpyInput(specificEnthalpy, settings);
     let convertedEnergy: number = this.convertSteamService.convertEnergyFlowInput(energyFlow, settings);
-    console.log('converted energy flow: ' + energyFlow);
-    console.log('converted enthalpy: ' + specificEnthalpy);
     let neededProcessSteamUsage: number = convertedEnergy / convertedEnthalpy;
-    console.log('neede process steam: ' + neededProcessSteamUsage);
     neededProcessSteamUsage = this.convertSteamService.convertSteamMassFlowOutput(neededProcessSteamUsage, settings);
-    console.log('converted process steam: ' + neededProcessSteamUsage);
     return neededProcessSteamUsage;
   }
 
