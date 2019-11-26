@@ -75,18 +75,18 @@ export class SsmtService {
       let modificationOutputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
       if (ssmtCopy.headerInput.numberOfHeaders > 1) {
         if (ssmtCopy.headerInput.numberOfHeaders == 3) {
-          if (modificationOutputData.mediumPressureProcessSteamUsage.processUsage != baselineResults.mediumPressureProcessSteamUsage.processUsage) {
+          if (ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.mediumPressureProcessSteamUsage.processUsage != baselineResults.mediumPressureProcessSteamUsage.processUsage) {
             ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.mediumPressureProcessSteamUsage.processUsage, modificationOutputData.mediumPressureHeaderSteam.specificEnthalpy - modificationOutputData.mediumPressureCondensate.specificEnthalpy, settings);
             setupInputData = this.setupInputData(ssmtCopy, baselineResults.operationsOutput.sitePowerDemand, false);
             modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
           }
         }
-        if (modificationOutputData.lowPressureProcessSteamUsage.processUsage != baselineResults.lowPressureProcessSteamUsage.processUsage) {
+        if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.lowPressureProcessSteamUsage.processUsage != baselineResults.lowPressureProcessSteamUsage.processUsage) {
           // console.log('basleine energy flow: ' + baselineResults.lowPressureProcessSteamUsage.processUsage);
           ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.lowPressureProcessSteamUsage.processUsage, modificationOutputData.lowPressureHeaderSteam.specificEnthalpy - modificationOutputData.lowPressureCondensate.specificEnthalpy, settings);
           // console.log('calculated process usage: ' + ssmtCopy.headerInput.lowPressureHeader.processSteamUsage);
           setupInputData = this.setupInputData(ssmtCopy, baselineResults.operationsOutput.sitePowerDemand, false);
-          console.log('setup input data: ' + setupInputData.headerInput.lowPressureHeader.processSteamUsage);
+          // console.log('setup input data: ' + setupInputData.headerInput.lowPressureHeader.processSteamUsage);
           modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
           // console.log('mod results process: ' + modificationOutputData.lowPressureProcessSteamUsage.processUsage);
         }
