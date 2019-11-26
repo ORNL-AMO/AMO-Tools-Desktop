@@ -72,10 +72,6 @@ export class HeaderService {
       desuperheatSteamTemperature: [undefined, [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
       useBaselineProcessSteamUsage: [useBaselineProcessSteamUsage]
     });
-
-    if (useBaselineProcessSteamUsage) {
-      form.controls.processSteamUsage.disable();
-    }
     return form;
   }
 
