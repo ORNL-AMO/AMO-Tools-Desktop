@@ -54,7 +54,7 @@ export class AssessmentCardComponent implements OnInit {
     delete this.assessmentCopy.id;
 
     let tmpCalculator: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-  
+
     if (tmpCalculator) {
       this.assessmentCalculatorCopy = JSON.parse(JSON.stringify(tmpCalculator));
       this.calculatorId = this.assessmentCalculatorCopy.id;
@@ -126,6 +126,10 @@ export class AssessmentCardComponent implements OnInit {
         this.assessmentCopy.phast.modifications = new Array();
       } else if (this.assessmentCopy.type === 'PSAT') {
         this.assessmentCopy.psat.modifications = new Array();
+      } else if (this.assessmentCopy.type == 'FSAT') {
+        this.assessmentCopy.fsat.modifications = new Array();
+      } else if (this.assessmentCopy.type == 'SSMT') {
+        this.assessmentCopy.ssmt.modifications = new Array();
       }
     }
 
