@@ -119,7 +119,6 @@ export class HeaderFormComponent implements OnInit {
       this.emitSave.emit(tmpHeader);
     } else {
       let tmpHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.headerForm);
-      console.log(tmpHeader.useBaselineProcessSteamUsage);
       this.emitSave.emit(tmpHeader);
     }
   }
