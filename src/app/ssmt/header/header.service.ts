@@ -97,11 +97,7 @@ export class HeaderService {
       desuperheatSteamTemperature: [obj.desuperheatSteamTemperature, tmpDesuperheatSteamTemperatureValidators],
       useBaselineProcessSteamUsage: [obj.useBaselineProcessSteamUsage]
     });
-
-    if (obj.useBaselineProcessSteamUsage) {
-      form.controls.processSteamUsage.disable();
-    }
-
+    
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }

@@ -50,6 +50,8 @@ export class AddModificationComponent implements OnInit {
       exploreOpportunities: (this.assessmentTab === 'explore-opportunities')
     };
     tmpModification.ssmt.name = this.newModificationName;
+    tmpModification.ssmt.headerInput.lowPressureHeader.useBaselineProcessSteamUsage = true;
+    tmpModification.ssmt.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage = true;  
     this.save.emit(tmpModification);
   }
 }

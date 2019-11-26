@@ -8,8 +8,8 @@
     <label for="{{idString+pressureLevel+'_pressure'}}">Pressure</label>
     <div class="input-group">
       <input name="pressure" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_pressure'}}"
-        (input)="setDesuperheatSteam()" [readonly]="!selected" formControlName="pressure" (focus)="focusField('pressure')"
-        (blur)="focusOut()" [ngClass]="{'indicate-different': isPressureDifferent()}">
+        (input)="setDesuperheatSteam()" [readonly]="!selected" formControlName="pressure"
+        (focus)="focusField('pressure')" (blur)="focusOut()" [ngClass]="{'indicate-different': isPressureDifferent()}">
       <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
     </div>
     <span class="alert-danger pull-right small"
@@ -27,8 +27,15 @@
   </div>
 
   <div class="form-group">
-    <label for="{{idString+pressureLevel+'_processSteamUsage'}}">Process Steam Usage</label>
-    <div class="input-group">
+    <label for="{{idString+pressureLevel+'_processSteamUsage'}}">Process Steam Usage
+      <a *ngIf="isBaseline == false && showProcessSteamUsage == true && pressureLevel != 'highPressure'"
+        class="form-text small click-link" (click)="setUseBaselineProcessUsage()">Use
+        baseline process steam usage.</a>
+      <a *ngIf="isBaseline == false && showProcessSteamUsage == false" class="form-text small click-link"
+        (click)="setCustomProcessUsage()">Use
+        custom process steam usage.</a>
+    </label>
+    <div class="input-group" *ngIf="showProcessSteamUsage == true">
       <input name="processSteamUsage" type="number" step="any" class="form-control"
         id="{{idString+pressureLevel+'_processSteamUsage'}}" (input)="save()" [readonly]="!selected"
         formControlName="processSteamUsage" (focus)="focusField('processSteamUsage')" (blur)="focusOut()"
@@ -46,6 +53,9 @@
         {{headerForm.controls.processSteamUsage.errors.min.min}}
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
     </span>
+    <div class="help-text text-center small" *ngIf="showProcessSteamUsage == false">
+      Process steam usage calculated from your baseline during modeling.
+    </div>
   </div>
 
   <div class="form-group">

@@ -86,7 +86,7 @@ export class SsmtService {
           ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.lowPressureProcessSteamUsage.processUsage, modificationOutputData.lowPressureHeaderSteam.specificEnthalpy - modificationOutputData.lowPressureCondensate.specificEnthalpy, settings);
           // console.log('calculated process usage: ' + ssmtCopy.headerInput.lowPressureHeader.processSteamUsage);
           setupInputData = this.setupInputData(ssmtCopy, baselineResults.operationsOutput.sitePowerDemand, false);
-          // console.log('setup input data: ' + setupInputData.headerInput.lowPressureHeader.processSteamUsage);
+          console.log('setup input data: ' + setupInputData.headerInput.lowPressureHeader.processSteamUsage);
           modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
           // console.log('mod results process: ' + modificationOutputData.lowPressureProcessSteamUsage.processUsage);
         }

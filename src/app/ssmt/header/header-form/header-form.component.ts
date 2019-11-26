@@ -28,10 +28,15 @@ export class HeaderFormComponent implements OnInit {
   inSetup: boolean;
   @Input()
   idString: string;
+  @Input()
+  isBaseline: boolean;
+  @Input()
+  headerInput: HeaderNotHighestPressure | HeaderWithHighestPressure;
 
   headerLabel: string;
   minPressureErrorMsg: string;
   maxPressureErrorMsg: string;
+  showProcessSteamUsage: boolean = true;
   constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -41,6 +46,9 @@ export class HeaderFormComponent implements OnInit {
       this.enableForm();
     }
     this.setErrorMsgs();
+    if (this.isBaseline == false && this.pressureLevel != 'highPressure' && this.headerForm.controls.useBaselineProcessSteamUsage.value == true) {
+      this.showProcessSteamUsage = false;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -111,6 +119,7 @@ export class HeaderFormComponent implements OnInit {
       this.emitSave.emit(tmpHeader);
     } else {
       let tmpHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.headerForm);
+      console.log(tmpHeader.useBaselineProcessSteamUsage);
       this.emitSave.emit(tmpHeader);
     }
   }
@@ -128,6 +137,18 @@ export class HeaderFormComponent implements OnInit {
       this.headerForm.controls.desuperheatSteamTemperature.reset(this.headerForm.controls.desuperheatSteamTemperature.value);
       this.headerForm.controls.desuperheatSteamTemperature.markAsDirty();
     }
+    this.save();
+  }
+
+  setCustomProcessUsage() {
+    this.headerForm.controls.useBaselineProcessSteamUsage.patchValue(false);
+    this.showProcessSteamUsage = true;
+    this.save();
+  }
+
+  setUseBaselineProcessUsage() {
+    this.headerForm.controls.useBaselineProcessSteamUsage.patchValue(true);
+    this.showProcessSteamUsage = false;
     this.save();
   }
 

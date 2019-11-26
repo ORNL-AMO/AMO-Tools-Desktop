@@ -36,8 +36,8 @@
         </app-boiler>
         <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings"
           [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput" (emitSave)="saveModHeader($event)"
-          [modificationIndex]="modificationIndex"
-          [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput">
+          [modificationIndex]="modificationIndex" [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput"
+          [isBaseline]="false">
         </app-header>
         <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings"
           [turbineInput]="ssmt.modifications[modificationIndex].ssmt.turbineInput"
