@@ -19,6 +19,7 @@ import { SteamReductionModule } from './steam-reduction/steam-reduction.module';
 import { CashFlowModule } from './cash-flow/cash-flow.module';
 import { UnitConverterModule } from './unit-converter/unit-converter.module';
 import { PipeInsulationReductionModule } from './pipe-insulation-reduction/pipe-insulation-reduction.module';
+import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-insulation-reduction.module';
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { PipeInsulationReductionModule } from './pipe-insulation-reduction/pipe-
         SteamReductionModule,
         WaterReductionModule,
         PipeInsulationReductionModule,
+        TankInsulationReductionModule,
         CashFlowModule,
         UnitConverterModule
     ]

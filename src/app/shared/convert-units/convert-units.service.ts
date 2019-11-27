@@ -39,11 +39,12 @@ import { specificEnergy } from './definitions/specificEnergy';
 import { density } from './definitions/density';
 import { volumetricEnergy } from './definitions/volumetricEnergy';
 import { specificVolume } from './definitions/specificVolume';
+import { thermalConductivity } from './definitions/thermalConductivity';
+
 
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
-
 @Injectable()
 export class ConvertUnitsService {
   _measures = {
@@ -75,7 +76,8 @@ export class ConvertUnitsService {
     specificEnergy: specificEnergy,
     density: density,
     volumetricEnergy: volumetricEnergy,
-    specificVolume: specificVolume
+    specificVolume: specificVolume,
+    thermalConductivity: thermalConductivity
   };
   origin: any;
   destination: any;

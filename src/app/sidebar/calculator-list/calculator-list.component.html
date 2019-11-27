@@ -211,6 +211,10 @@
         <span class="sidebar-item" (click)="selectCalculator('pipe-insulation-reduction')">Pipe Insulation
           Reduction</span>
       </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'tank-insulation-reduction'}">
+        <span class="sidebar-item" (click)="selectCalculator('tank-insulation-reduction')">Tank Insulation
+          Reduction</span>
+      </li>
     </ul>
   </li>
 </ul>

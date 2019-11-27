@@ -1,17 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { PipeInsulationReductionService } from './pipe-insulation-reduction.service';
-import { PipeInsulationReductionInput, PipeInsulationReductionResults } from '../../../shared/models/standalone';
 import { FormGroup } from '@angular/forms';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { TankInsulationReductionService } from './tank-insulation-reduction.service';
+import { TankInsulationReductionResults } from '../../../shared/models/standalone';
 
 @Component({
-  selector: 'app-pipe-insulation-reduction',
-  templateUrl: './pipe-insulation-reduction.component.html',
-  styleUrls: ['./pipe-insulation-reduction.component.css']
+  selector: 'app-tank-insulation-reduction',
+  templateUrl: './tank-insulation-reduction.component.html',
+  styleUrls: ['./tank-insulation-reduction.component.css']
 })
-export class PipeInsulationReductionComponent implements OnInit {
+export class TankInsulationReductionComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @Output('emitSave')
@@ -41,12 +41,12 @@ export class PipeInsulationReductionComponent implements OnInit {
   baselineSelected: boolean = true;
   modificationExists: boolean = false;
 
-  pipeInsulationReductionResults: PipeInsulationReductionResults;
+  tankInsulationReductionResults: TankInsulationReductionResults;
 
   baselineForm: FormGroup;
   modificationForm: FormGroup;
 
-  constructor(private settingsDbService: SettingsDbService, private pipeInsulationReductionService: PipeInsulationReductionService) { }
+  constructor(private settingsDbService: SettingsDbService, private tankInsulationReductionService: TankInsulationReductionService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -59,6 +59,7 @@ export class PipeInsulationReductionComponent implements OnInit {
     this.getResults();
   }
 
+  
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
@@ -67,8 +68,8 @@ export class PipeInsulationReductionComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.inTreasureHunt) {
-      this.pipeInsulationReductionService.baselineData = undefined;
-      this.pipeInsulationReductionService.modificationData = undefined;
+      this.tankInsulationReductionService.baselineData = undefined;
+      this.tankInsulationReductionService.modificationData = undefined;
     }
   }
 
@@ -87,33 +88,32 @@ export class PipeInsulationReductionComponent implements OnInit {
   }
 
   initData() {
-    if (this.pipeInsulationReductionService.baselineData == undefined) {
-      this.pipeInsulationReductionService.baselineData = this.pipeInsulationReductionService.initObject(this.settings, this.operatingHours);
+    if (this.tankInsulationReductionService.baselineData == undefined) {
+      this.tankInsulationReductionService.baselineData = this.tankInsulationReductionService.initObject(this.settings, this.operatingHours);
     }
-    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, true);
-    if (this.pipeInsulationReductionService.modificationData) {
-      this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, false);
+    this.baselineForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.baselineData, true);
+    if (this.tankInsulationReductionService.modificationData) {
+      this.modificationForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.modificationData, false);
     }
-    
   }
 
   createModification() {
-    this.pipeInsulationReductionService.modificationData = JSON.parse(JSON.stringify(this.pipeInsulationReductionService.baselineData));
-    this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, false);
+    this.tankInsulationReductionService.modificationData = JSON.parse(JSON.stringify(this.tankInsulationReductionService.baselineData));
+    this.modificationForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.modificationData, false);
     this.getResults();
     this.modificationExists = true;
     this.setModificationSelected();
   }
 
   getResults() {
-    this.pipeInsulationReductionResults = this.pipeInsulationReductionService.getResults(this.settings, this.pipeInsulationReductionService.baselineData, this.pipeInsulationReductionService.modificationData);
+    this.tankInsulationReductionResults = this.tankInsulationReductionService.getResults(this.settings, this.tankInsulationReductionService.baselineData, this.tankInsulationReductionService.modificationData);
   }
 
   setBaselineSelected() {
     this.baselineSelected = true;
     this.baselineForm.enable();
     if (this.baselineForm.controls.insulationMaterialSelection.value == 0) {
-      this.baselineForm.controls.pipeJacketMaterialSelection.disable();
+      this.baselineForm.controls.jacketMaterialSelection.disable();
     }
     if (this.modificationForm) {
       this.modificationForm.disable();
@@ -128,16 +128,16 @@ export class PipeInsulationReductionComponent implements OnInit {
       this.modificationForm.controls.utilityType.disable();
       this.modificationForm.controls.utilityCost.disable();
       if (this.modificationForm.controls.insulationMaterialSelection.value == 0) {
-        this.modificationForm.controls.pipeJacketMaterialSelection.disable();
+        this.modificationForm.controls.tankJacketMaterialSelection.disable();
       }
     }
   }
 
   btnResetData() {
-    this.pipeInsulationReductionService.baselineData = this.pipeInsulationReductionService.initObject(this.settings, this.operatingHours);
-    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, true);
+    this.tankInsulationReductionService.baselineData = this.tankInsulationReductionService.initObject(this.settings, this.operatingHours);
+    this.baselineForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.baselineData, true);
     this.baselineForm.updateValueAndValidity();
-    this.pipeInsulationReductionService.modificationData = null;
+    this.tankInsulationReductionService.modificationData = null;
     this.baselineSelected = true;
     this.modificationExists = false;
     this.modificationForm = undefined;
@@ -153,10 +153,10 @@ export class PipeInsulationReductionComponent implements OnInit {
   }
 
   generateExample() {
-    this.pipeInsulationReductionService.baselineData = this.pipeInsulationReductionService.generateExample(this.settings, true);
-    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, true);
-    this.pipeInsulationReductionService.modificationData = this.pipeInsulationReductionService.generateExample(this.settings, false);
-    this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, false);
+    this.tankInsulationReductionService.baselineData = this.tankInsulationReductionService.generateExample(this.settings, true);
+    this.baselineForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.baselineData, true);
+    this.tankInsulationReductionService.modificationData = this.tankInsulationReductionService.generateExample(this.settings, false);
+    this.modificationForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.modificationData, false);
     this.modificationExists = true;
     this.setBaselineSelected();
   }
