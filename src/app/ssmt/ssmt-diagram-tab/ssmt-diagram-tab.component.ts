@@ -77,7 +77,12 @@ export class SsmtDiagramTabComponent implements OnInit {
   }
 
   calculateResultsWithMarginalCosts() {
-    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } = this.ssmtService.calculateMarginalCosts(this.selectedSSMT, this.outputData, this.settings);
+    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number };
+    if (this.selectedSSMT.name == 'Baseline') {
+      marginalCosts = this.ssmtService.calculateBaselineMarginalCosts(this.selectedSSMT, this.outputData, this.settings);
+    } else {
+      marginalCosts = this.ssmtService.calculateModificationMarginalCosts(this.selectedSSMT, this.outputData, this.baselineResults, this.settings);
+    }
     this.outputData.marginalHPCost = marginalCosts.marginalHPCost;
     this.outputData.marginalMPCost = marginalCosts.marginalMPCost;
     this.outputData.marginalLPCost = marginalCosts.marginalLPCost;
