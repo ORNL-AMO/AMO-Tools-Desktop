@@ -136,8 +136,12 @@ export class ModificationListComponent implements OnInit {
     let ssmtCopy: SSMT = (JSON.parse(JSON.stringify(ssmt)));
     delete ssmtCopy.modifications;
     ssmtCopy.name = this.newModificationName;
-    ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage = true;
-    ssmtCopy.headerInput.mediumPressure.useBaselineProcessSteamUsage = true;
+    if (ssmtCopy.headerInput.lowPressureHeader) {
+      ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage = true;
+    }
+    if (ssmtCopy.headerInput.mediumPressureHeader) {
+      ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage = true;
+    }
     let tmpModification: Modification = {
       ssmt: ssmtCopy,
       exploreOpportunities: (this.assessmentTab === 'explore-opportunities')

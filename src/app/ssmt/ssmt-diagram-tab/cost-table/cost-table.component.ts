@@ -21,7 +21,6 @@ export class CostTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.outputData.operationsOutput.totalOperatingCost);
   }
 
   calculateMarginalCosts(){
