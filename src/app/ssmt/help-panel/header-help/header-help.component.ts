@@ -15,6 +15,8 @@ export class HeaderHelpComponent implements OnInit {
   numberOfHeadersSubscription: Subscription;
   pressureLevel: string;
   pressureLevelSubscription: Subscription;
+  isBaselineFocused: boolean;
+  isBaselineFocusedSub: Subscription;
   constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
@@ -24,6 +26,9 @@ export class HeaderHelpComponent implements OnInit {
     this.pressureLevelSubscription = this.ssmtService.headerPressureLevelHelp.subscribe(val => {
       this.pressureLevel = val;
     });
+    this.isBaselineFocusedSub = this.ssmtService.isBaselineFocused.subscribe(val => {
+      this.isBaselineFocused = val;
+    })
   }
 
   ngOnDestroy() {

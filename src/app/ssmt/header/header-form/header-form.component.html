@@ -29,10 +29,11 @@
   <div class="form-group">
     <label for="{{idString+pressureLevel+'_processSteamUsage'}}">Process Steam Usage
       <a *ngIf="isBaseline == false && showProcessSteamUsage == true && pressureLevel != 'highPressure'"
-        class="form-text small click-link" (click)="setUseBaselineProcessUsage()">Use
+        class="form-text small click-link" (click)="setUseBaselineProcessUsage()"
+        (focus)="focusField('processSteamUsage')">Use
         baseline process steam usage.</a>
       <a *ngIf="isBaseline == false && showProcessSteamUsage == false" class="form-text small click-link"
-        (click)="setCustomProcessUsage()">Use
+        (click)="setCustomProcessUsage()" (focus)="focusField('processSteamUsage')">Use
         custom process steam usage.</a>
     </label>
     <div class="input-group" *ngIf="showProcessSteamUsage == true">

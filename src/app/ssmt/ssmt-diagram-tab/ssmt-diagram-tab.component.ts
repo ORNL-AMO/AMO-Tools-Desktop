@@ -72,6 +72,7 @@ export class SsmtDiagramTabComponent implements OnInit {
     }
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;
+    console.log(this.outputData.operationsOutput.totalOperatingCost);
     this.dataCalculated = true;
     this.selectedTable = 'default';
   }

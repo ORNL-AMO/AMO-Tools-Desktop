@@ -16,7 +16,8 @@
       Number Of Headers
       <br>
       <small class="text-muted">
-        Choose the number of headers from the options (1, 2, or 3). With two or three headers notice that you must specify the highest and lowest pressure header.
+        Choose the number of headers from the options (1, 2, or 3). With two or three headers notice that you must
+        specify the highest and lowest pressure header.
         <hr>
       </small>
     </h6>
@@ -54,6 +55,10 @@
       <small class="text-muted">
         Mass flow of steam used by processes. Includes any header steam leaks.
         <hr>
+        <span class="alert alert-warning" *ngIf="pressureLevel != 'hightPressure' && isBaselineFocused == false">
+          Note: This will override any Steam Usage numbers calculated by MEASUR for adding/removing a turbine or flashed
+          condensate. Please ensure that your process usage energy is sufficient for your needs.
+        </span>
       </small>
     </h6>
   </div>
@@ -104,7 +109,7 @@
       Heat Loss
       <br>
       <small class="text-muted">
-          Estimate of Heat lost in header piping before use in turbines and process.
+        Estimate of Heat lost in header piping before use in turbines and process.
         <hr>
       </small>
     </h6>
@@ -112,13 +117,14 @@
   <div class="my-2" *ngIf="currentField == 'desuperheatSteamIntoNextHighest'">
     <h6>
       Desuperheat Steam Into
-      <span *ngIf="numberOfHeaders == 2 && pressureLevel == 'lowPressure' || numberOfHeaders == 3 && pressureLevel == 'mediumPressure'">Highest
+      <span
+        *ngIf="numberOfHeaders == 2 && pressureLevel == 'lowPressure' || numberOfHeaders == 3 && pressureLevel == 'mediumPressure'">Highest
         Pressure</span>
       <span *ngIf="numberOfHeaders == 3 && pressureLevel == 'lowPressure'">Medium Pressure</span>
       Header
       <br>
       <small class="text-muted">
-          Select YES if your system uses feedwater to desuperheat steam in pressure reducing values.
+        Select YES if your system uses feedwater to desuperheat steam in pressure reducing values.
         <hr>
       </small>
     </h6>

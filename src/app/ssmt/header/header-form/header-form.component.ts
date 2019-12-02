@@ -106,6 +106,7 @@ export class HeaderFormComponent implements OnInit {
   focusField(str: string) {
     this.ssmtService.numberOfHeadersHelp.next(this.numberOfHeaders);
     this.ssmtService.headerPressureLevelHelp.next(this.pressureLevel);
+    this.ssmtService.isBaselineFocused.next(this.isBaseline);
     this.ssmtService.currentField.next(str);
   }
 
@@ -167,7 +168,12 @@ export class HeaderFormComponent implements OnInit {
   }
   isProcessSteamUsageDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isProcessSteamUsageDifferent(this.pressureLevel + 'Header');
+      if (this.pressureLevel == 'highPressure') {
+        return this.compareService.isHighPressureProcessSteamUsageDifferent();
+      } else {
+        return this.compareService.isNotHighPressureProcessSteamUsageDifferent(this.pressureLevel + 'Header');
+      }
+
     } else {
       return false;
     }

@@ -28,6 +28,7 @@ export class SsmtService {
   numberOfHeadersHelp: BehaviorSubject<number>;
   calcTab: BehaviorSubject<string>;
   saveSSMT: BehaviorSubject<SSMT>;
+  isBaselineFocused: BehaviorSubject<boolean>;
   constructor(private steamService: SteamService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
     private turbineService: TurbineService, private operationsService: OperationsService, private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
@@ -45,6 +46,7 @@ export class SsmtService {
     this.numberOfHeadersHelp = new BehaviorSubject<number>(1);
     this.calcTab = new BehaviorSubject<string>('boiler');
     this.saveSSMT = new BehaviorSubject<SSMT>(undefined);
+    this.isBaselineFocused = new BehaviorSubject<boolean>(true);
   }
 
   calculateBaselineModel(ssmt: SSMT, settings: Settings): { inputData: SSMTInputs, outputData: SSMTOutput } {
@@ -55,7 +57,6 @@ export class SsmtService {
     let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, settings).valid;
     let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, 0, true);
     if (turbineValid && headerValid && boilerValid && operationsValid) {
-      // let convertedInputData: SSMTInputs = this.convertSteamService.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
       let outputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
       return { inputData: setupInputData, outputData: outputData };
     } else {
@@ -66,32 +67,29 @@ export class SsmtService {
 
   calculateModificationModel(ssmt: SSMT, settings: Settings, baselineResults: SSMTOutput): { inputData: SSMTInputs, outputData: SSMTOutput } {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(ssmt));
+    let resultsCpy: SSMTOutput = JSON.parse(JSON.stringify(baselineResults));
     let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, settings);
     let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, settings, ssmtCopy.boilerInput);
     let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCopy.turbineInput, ssmtCopy.headerInput, settings);
     let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, settings).valid;
-    let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, baselineResults.operationsOutput.sitePowerDemand, false);
+    let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, resultsCpy.operationsOutput.sitePowerDemand, false);
     if (turbineValid && headerValid && boilerValid && operationsValid) {
       let modificationOutputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
       if (ssmtCopy.headerInput.numberOfHeaders > 1) {
         if (ssmtCopy.headerInput.numberOfHeaders == 3) {
-          if (ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.mediumPressureProcessSteamUsage.processUsage != baselineResults.mediumPressureProcessSteamUsage.processUsage) {
-            ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.mediumPressureProcessSteamUsage.processUsage, modificationOutputData.mediumPressureHeaderSteam.specificEnthalpy - modificationOutputData.mediumPressureCondensate.specificEnthalpy, settings);
-            setupInputData = this.setupInputData(ssmtCopy, baselineResults.operationsOutput.sitePowerDemand, false);
+          if (ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.mediumPressureProcessSteamUsage.processUsage != resultsCpy.mediumPressureProcessSteamUsage.processUsage) {
+            ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(resultsCpy.mediumPressureProcessSteamUsage.processUsage, modificationOutputData.mediumPressureHeaderSteam.specificEnthalpy - modificationOutputData.mediumPressureCondensate.specificEnthalpy, settings);
+            setupInputData = this.setupInputData(ssmtCopy, resultsCpy.operationsOutput.sitePowerDemand, false);
+            
             modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
           }
         }
-        if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.lowPressureProcessSteamUsage.processUsage != baselineResults.lowPressureProcessSteamUsage.processUsage) {
-          // console.log('basleine energy flow: ' + baselineResults.lowPressureProcessSteamUsage.processUsage);
-          ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResults.lowPressureProcessSteamUsage.processUsage, modificationOutputData.lowPressureHeaderSteam.specificEnthalpy - modificationOutputData.lowPressureCondensate.specificEnthalpy, settings);
-          // console.log('calculated process usage: ' + ssmtCopy.headerInput.lowPressureHeader.processSteamUsage);
-          setupInputData = this.setupInputData(ssmtCopy, baselineResults.operationsOutput.sitePowerDemand, false);
-          // console.log('setup input data: ' + setupInputData.headerInput.lowPressureHeader.processSteamUsage);
+        if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.lowPressureProcessSteamUsage.processUsage != resultsCpy.lowPressureProcessSteamUsage.processUsage) {
+          ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(resultsCpy.lowPressureProcessSteamUsage.processUsage, modificationOutputData.lowPressureHeaderSteam.specificEnthalpy - modificationOutputData.lowPressureCondensate.specificEnthalpy, settings);
+          setupInputData = this.setupInputData(ssmtCopy, resultsCpy.operationsOutput.sitePowerDemand, false);
           modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
-          // console.log('mod results process: ' + modificationOutputData.lowPressureProcessSteamUsage.processUsage);
         }
       }
-
       return { inputData: setupInputData, outputData: modificationOutputData };
     } else {
       let outputData: SSMTOutput = this.getEmptyResults();
@@ -100,7 +98,6 @@ export class SsmtService {
   }
 
   calculateProcessSteamUsageFromEnergy(energyFlow: number, specificEnthalpy: number, settings: Settings): number {
-    // console.log('enthalpy '+ specificEnthalpy);
     let convertedEnthalpy: number = this.convertSteamService.convertSteamSpecificEnthalpyInput(specificEnthalpy, settings);
     let convertedEnergy: number = this.convertSteamService.convertEnergyFlowInput(energyFlow, settings);
     let neededProcessSteamUsage: number = convertedEnergy / convertedEnthalpy;
@@ -256,27 +253,37 @@ export class SsmtService {
     let marginalHPCost: number = 0;
     let marginalMPCost: number = 0;
     let marginalLPCost: number = 0;
+    if (ssmtCopy.headerInput.numberOfHeaders > 1) {
+      ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage = false;
+      ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = balancedResults.lowPressureProcessSteamUsage.massFlow;
+      if (ssmtCopy.headerInput.numberOfHeaders == 3) {
+        ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage = false;
+        ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = balancedResults.mediumPressureProcessSteamUsage.massFlow;
+      }
+    }
     //high pressure header
     ssmtCopy.headerInput.highPressureHeader.processSteamUsage = ssmtCopy.headerInput.highPressureHeader.processSteamUsage + 100;
-    let highPressureMarginalResults: SSMTOutput = this.calculateModificationModel(ssmtCopy, settings, baselineResults).outputData;
+    let highPressureMarginalResults: SSMTOutput = this.calculateBaselineModel(ssmtCopy, settings).outputData;
     ssmtCopy.headerInput.highPressureHeader.processSteamUsage = ssmtCopy.headerInput.highPressureHeader.processSteamUsage - 100;
     marginalHPCost = this.getCostDifference(balancedResults, highPressureMarginalResults, ssmtCopy);
 
     if (ssmtCopy.headerInput.numberOfHeaders > 1) {
       //low pressure header
       ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = ssmtCopy.headerInput.lowPressureHeader.processSteamUsage + 100;
-      let lowPressureMarginalResults: SSMTOutput = this.calculateModificationModel(ssmtCopy, settings, baselineResults).outputData;
+      let lowPressureMarginalResults: SSMTOutput = this.calculateBaselineModel(ssmtCopy, settings).outputData;
       ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = ssmtCopy.headerInput.lowPressureHeader.processSteamUsage - 100;
       marginalLPCost = this.getCostDifference(balancedResults, lowPressureMarginalResults, ssmtCopy);
+
 
       //medium pressure header
       if (ssmtCopy.headerInput.numberOfHeaders === 3) {
         ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage + 100;
-        let mediumPressureMarginalResults: SSMTOutput = this.calculateModificationModel(ssmtCopy, settings, baselineResults).outputData;
+        let mediumPressureMarginalResults: SSMTOutput = this.calculateBaselineModel(ssmtCopy, settings).outputData;
         ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage - 100;
         marginalMPCost = this.getCostDifference(balancedResults, mediumPressureMarginalResults, ssmtCopy);
       }
     }
+
     return { marginalHPCost: marginalHPCost, marginalMPCost: marginalMPCost, marginalLPCost: marginalLPCost };
   }
 
