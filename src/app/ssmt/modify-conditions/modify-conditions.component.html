@@ -31,8 +31,8 @@
           [modificationIndex]="modificationIndex"></app-operations>
         <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"
           [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput" (emitSave)="saveModBoiler($event)"
-          [modificationIndex]="modificationIndex"
-          [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput">
+          [modificationIndex]="modificationIndex" [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput"
+          [isBaseline]="false">
         </app-boiler>
         <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings"
           [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput" (emitSave)="saveModHeader($event)"
@@ -42,7 +42,8 @@
         <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings"
           [turbineInput]="ssmt.modifications[modificationIndex].ssmt.turbineInput"
           [numberOfHeaders]="ssmt.modifications[modificationIndex].ssmt.headerInput.numberOfHeaders"
-          (emitSave)="saveModTurbine($event)" [modificationIndex]="modificationIndex"></app-turbine>
+          (emitSave)="saveModTurbine($event)" [modificationIndex]="modificationIndex" [isBaseline]="false">
+        </app-turbine>
       </div>
       <!-- No content message -->
       <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()"

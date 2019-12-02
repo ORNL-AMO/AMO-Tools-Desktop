@@ -90,6 +90,12 @@
         Select YES if the model uses a flash to reduce the pressure of the combined condensate before joining the
         makeup water stream.
         <hr>
+        <span class="alert alert-warning" *ngIf="isBaselineFocused == false">
+          Note: Adding or removing flashed condensate will change the overall enthalpy of the header. To compensate for
+          this MEASUR keeps the energy into your defined process constant by altering the corresponding process steam
+          usage unless
+          specified otherwise in the Header tab.
+        </span>
       </small>
     </h6>
   </div>
@@ -101,6 +107,12 @@
         Select YES if your system uses a flash tank to reduce the pressure of the combined condensate, sending the flash
         steam to another header.
         <hr>
+        <span class="alert alert-warning" *ngIf="isBaselineFocused == false">
+          Note: Adding or removing flashed condensate will change the overall enthalpy of the header. To compensate for
+          this MEASUR keeps the energy into your defined process constant by altering the corresponding process steam
+          usage unless
+          specified otherwise in the Header tab..
+        </span>
       </small>
     </h6>
   </div>

@@ -105,6 +105,7 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
 
   focusField(str: string) {
     this.ssmtService.turbineOperationHelp.next('pressure');
+    this.ssmtService.isBaselineFocused.next(false);
     this.exploreOpportunitiesService.currentTab.next('turbine');
     this.exploreOpportunitiesService.currentField.next(str);
   }

@@ -4,6 +4,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { HeaderService, HeaderRanges } from '../../../header/header.service';
 import { FormGroup, Validators } from '@angular/forms';
+import { SsmtService } from '../../../ssmt.service';
 
 @Component({
   selector: 'app-header-form',
@@ -37,7 +38,8 @@ export class HeaderFormComponent implements OnInit {
 
   baselineMediumPressureForm: FormGroup;
   modificationMediumPressureForm: FormGroup;
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private headerService: HeaderService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private headerService: HeaderService,
+    private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.initForms();
@@ -258,6 +260,7 @@ export class HeaderFormComponent implements OnInit {
 
   focusField(str: string) {
     this.exploreOpportunitiesService.currentTab.next('header');
+    this.ssmtService.isBaselineFocused.next(false);
     this.exploreOpportunitiesService.currentField.next(str);
   }
 

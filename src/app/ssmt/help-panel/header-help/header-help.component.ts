@@ -34,6 +34,7 @@ export class HeaderHelpComponent implements OnInit {
   ngOnDestroy() {
     this.numberOfHeadersSubscription.unsubscribe();
     this.pressureLevelSubscription.unsubscribe();
+    this.isBaselineFocusedSub.unsubscribe();
   }
 
 }
