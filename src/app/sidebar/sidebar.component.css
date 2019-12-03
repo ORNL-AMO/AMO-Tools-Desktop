@@ -15,3 +15,7 @@
 .sidebar-item:hover{
     background-color: #eee;
 }
+
+.fa-globe{
+    display: initial;
+}

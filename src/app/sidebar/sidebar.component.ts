@@ -3,6 +3,9 @@ import { Directory } from '../shared/models/directory';
 import { AssessmentService } from '../assessment/assessment.service';
 declare const packageJson;
 import { Subscription } from 'rxjs';
+import { CoreService } from '../core/core.service';
+declare var google: any;
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -33,7 +36,8 @@ export class SidebarComponent implements OnInit {
   updateSub: Subscription;
   dashboardViewSub: Subscription;
   currentDashboardView: string;
-  constructor(private assessmentService: AssessmentService) { }
+  googleTranslateAvailable: boolean;
+  constructor(private assessmentService: AssessmentService, private coreService: CoreService) { }
 
   ngOnInit() {
     this.versionNum = packageJson.version;
@@ -48,7 +52,13 @@ export class SidebarComponent implements OnInit {
 
     this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(val => {
       this.currentDashboardView = val;
-    })
+    });
+    try {
+      google;
+      this.googleTranslateAvailable = true;
+    } catch{
+      this.googleTranslateAvailable = false;
+    }
   }
 
   ngOnDestroy() {
@@ -113,5 +123,9 @@ export class SidebarComponent implements OnInit {
   closeVersionModal() {
     this.openModal.emit(false);
     this.showVersionModal = false;
+  }
+
+  emitTranslate() {
+    this.coreService.showTranslateModal.next(true);
   }
 }
