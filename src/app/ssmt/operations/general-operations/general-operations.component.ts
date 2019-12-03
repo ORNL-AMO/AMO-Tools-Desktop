@@ -26,6 +26,8 @@ export class GeneralOperationsComponent implements OnInit {
   idString: string;
   @Input()
   ssmt: SSMT;
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])

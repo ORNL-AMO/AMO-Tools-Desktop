@@ -60,7 +60,6 @@ export class SsmtResultsPanelComponent implements OnInit {
     this.baselineOutput = resultData.outputData;
     //modification
     resultData = this.ssmtService.calculateModificationModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, this.baselineOutput);
-    console.log(resultData.outputData.operationsOutput.totalOperatingCost);
     this.modificationInputs = resultData.inputData;
     this.modificationOutput = resultData.outputData;
     this.checkValid();

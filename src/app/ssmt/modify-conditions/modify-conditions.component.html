@@ -28,7 +28,7 @@
         </div>
         <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt.modifications[modificationIndex].ssmt"
           [settings]="settings" (emitSave)="saveModSsmt($event)" [selected]="modifiedSelected"
-          [modificationIndex]="modificationIndex"></app-operations>
+          [modificationIndex]="modificationIndex" [isBaseline]="false"></app-operations>
         <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"
           [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput" (emitSave)="saveModBoiler($event)"
           [modificationIndex]="modificationIndex" [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput"
