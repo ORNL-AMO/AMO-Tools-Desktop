@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { SSMTInputs, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
+import { SSMTOutput } from '../../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-header-input-table',
@@ -18,7 +19,9 @@ export class HeaderInputTableComponent implements OnInit {
   numMods: number;
   @Input()
   settings: Settings;
-  
+  @Input()
+  modificationOutputs: Array<SSMTOutput>;
+
   pressureDiff: Array<boolean>;
   processSteamUsageDiff: Array<boolean>;
   condensationRecoveryRateDiff: Array<boolean>;
@@ -32,7 +35,9 @@ export class HeaderInputTableComponent implements OnInit {
   baseline: HeaderWithHighestPressure | HeaderNotHighestPressure;
   modifications: Array<HeaderWithHighestPressure | HeaderNotHighestPressure>;
   tableLabel: string;
-  constructor(private cd: ChangeDetectorRef) { }
+  constructor(private cd: ChangeDetectorRef) {
+    
+   }
 
   ngOnInit() {
     if (this.headerLevel === 'high') {

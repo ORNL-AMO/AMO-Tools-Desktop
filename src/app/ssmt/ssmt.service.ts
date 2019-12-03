@@ -290,14 +290,9 @@ export class SsmtService {
 
   getCostDifference(balancedResults: SSMTOutput, adjustedResults: SSMTOutput, inputData: SSMT): number {
     let powerGenOC: number = balancedResults.operationsOutput.powerGenerated * inputData.operatingCosts.electricityCost;
-    console.log('powerGenOC ' + powerGenOC);
     let adjustedPowerGenOC: number = adjustedResults.operationsOutput.powerGenerated * inputData.operatingCosts.electricityCost;
-    console.log('adjustedPowerGenOC ' + adjustedPowerGenOC);
     let totalOC: number = balancedResults.operationsOutput.totalOperatingCost / inputData.operatingHours.hoursPerYear;
-    console.log('totalOC ' + totalOC);
     let adjustedTotalOC: number = adjustedResults.operationsOutput.totalOperatingCost / inputData.operatingHours.hoursPerYear;
-    console.log('adjustedTotalOC ' + adjustedTotalOC);
-    console.log('===')
     return ((adjustedTotalOC - totalOC) + (powerGenOC - adjustedPowerGenOC)) / 100;
   }
 }
