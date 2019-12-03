@@ -39,7 +39,7 @@ export class CompareService {
 
     if (baseline && modification) {
       return (
-        this.isSitePowerImportDifferent(baseline, modification) ||
+        // this.isSitePowerImportDifferent(baseline, modification) ||
         this.isMakeUpWaterTemperatureDifferent(baseline, modification) ||
         this.isHoursPerYearDifferent(baseline, modification) ||
         this.isFuelCostDifferent(baseline, modification) ||
@@ -52,23 +52,24 @@ export class CompareService {
   }
 
   // sitePowerImport
-  isSitePowerImportDifferent(baseline?: SSMT, modification?: SSMT): boolean {
-    if (!baseline) {
-      baseline = this.baselineSSMT;
-    }
-    if (!modification) {
-      modification = this.modifiedSSMT;
-    }
-    if (baseline && modification) {
-      if (baseline.generalSteamOperations.sitePowerImport !== modification.generalSteamOperations.sitePowerImport) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
+  //unused modification is calculated
+  // isSitePowerImportDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+  //   if (!baseline) {
+  //     baseline = this.baselineSSMT;
+  //   }
+  //   if (!modification) {
+  //     modification = this.modifiedSSMT;
+  //   }
+  //   if (baseline && modification) {
+  //     if (baseline.generalSteamOperations.sitePowerImport !== modification.generalSteamOperations.sitePowerImport) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  // }
   // makeUpWaterTemperature
   isMakeUpWaterTemperatureDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
