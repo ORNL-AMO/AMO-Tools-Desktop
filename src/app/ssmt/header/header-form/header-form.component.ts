@@ -122,6 +122,7 @@ export class HeaderFormComponent implements OnInit {
       let tmpHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.headerForm);
       this.emitSave.emit(tmpHeader);
     }
+    console.log(this.headerForm.controls.pressure)
   }
 
   setDesuperheatSteam() {

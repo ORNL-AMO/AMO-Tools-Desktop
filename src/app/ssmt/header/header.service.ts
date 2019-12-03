@@ -24,7 +24,7 @@ export class HeaderService {
     let ranges: HeaderRanges = this.getRanges(settings, boilerInput, minPressure, undefined);
 
     return this.formBuilder.group({
-      pressure: [undefined, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax)]],
+      pressure: [undefined, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax), this.boilerTempValidator(boilerInput.steamTemperature, settings)]],
       processSteamUsage: [undefined, [Validators.required, Validators.min(ranges.processUsageMin)]],
       condensationRecoveryRate: [undefined, [Validators.required, Validators.min(0), Validators.max(100)]],
       heatLoss: [.1, [Validators.required, Validators.min(0), Validators.max(10)]],
@@ -93,7 +93,7 @@ export class HeaderService {
       desuperheatSteamTemperature: [obj.desuperheatSteamTemperature, tmpDesuperheatSteamTemperatureValidators],
       useBaselineProcessSteamUsage: [obj.useBaselineProcessSteamUsage]
     });
-    
+
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
