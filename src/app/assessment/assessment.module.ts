@@ -13,7 +13,6 @@ import { DirectoryListItemComponent } from './assessment-list-view/directory-lis
 import { AssessmentListItemComponent } from './assessment-list-view/assessment-list-item/assessment-list-item.component';
 import { CreateFolderComponent } from './assessment-menu/create-folder/create-folder.component';
 import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
-import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
 import { SettingsModule } from '../settings/settings.module';
 
 import { ImportExportModule } from '../shared/import-export/import-export.module';
@@ -28,7 +27,6 @@ import { AssessmentDashboardComponent } from './assessment-dashboard/assessment-
 import { PreAssessmentListItemComponent } from './assessment-list-view/pre-assessment-list-item/pre-assessment-list-item.component';
 import { FsatSummaryCardComponent } from './assessment-grid-view/assessment-card/fsat-summary-card/fsat-summary-card.component';
 import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
-import { ResetDataModalComponent } from './reset-data-modal/reset-data-modal.component';
 import { SsmtSummaryCardComponent } from './assessment-grid-view/assessment-card/ssmt-summary-card/ssmt-summary-card.component';
 import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
 import { TreasureHuntSummaryCardComponent } from './assessment-grid-view/assessment-card/treasure-hunt-summary-card/treasure-hunt-summary-card.component';
@@ -47,7 +45,7 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     AssessmentListItemComponent,
     CreateFolderComponent,
     AssessmentCreateComponent,
-    AssessmentSettingsComponent,
+    // AssessmentSettingsComponent,
     PhastSummaryCardComponent,
     PsatSummaryCardComponent,
     FolderSummaryComponent,
@@ -56,13 +54,13 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     AssessmentDashboardComponent,
     PreAssessmentListItemComponent,
     FsatSummaryCardComponent,
-    ResetDataModalComponent,
+    // ResetDataModalComponent,
     SsmtSummaryCardComponent,
     TreasureHuntSummaryCardComponent
   ],
   exports: [
     AssessmentCreateComponent,
-    AssessmentSettingsComponent,
+    // AssessmentSettingsComponent,
     AssessmentDashboardComponent
   ],
   imports: [

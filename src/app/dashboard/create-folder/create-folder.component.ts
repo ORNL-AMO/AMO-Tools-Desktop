@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
@@ -8,8 +8,7 @@ import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import * as _ from 'lodash';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
-import { AssessmentService } from '../../assessment/assessment.service';
-import { ActivatedRoute } from '@angular/router';
+import { DashboardService } from '../dashboard.service';
 
 @Component({
   selector: 'app-create-folder',
@@ -34,8 +33,7 @@ export class CreateFolderComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService,
-    private assessmentService: AssessmentService,
-    private activatedRoute: ActivatedRoute) { }
+    private dashboardService: DashboardService) { }
 
   ngOnInit() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
@@ -96,7 +94,7 @@ export class CreateFolderComponent implements OnInit {
               this.canAdd = true;
               this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(this.directory.id);
               this.newFolderForm = this.initForm();
-              this.assessmentService.updateSidebarData.next(true);
+              this.dashboardService.updateSidebarData.next(true);
             });
           });
         });

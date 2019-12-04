@@ -7,6 +7,7 @@ import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from './directory-dashboard.service';
 import { AssessmentService } from '../../assessment/assessment.service';
+import { DashboardService } from '../dashboard.service';
 
 @Component({
   selector: 'app-directory-dashboard',
@@ -21,27 +22,31 @@ export class DirectoryDashboardComponent implements OnInit {
   dashboardView: string;
   dashboardViewSub: Subscription;
   directoryId: number;
+  showDeleteItemsModal: boolean;
+  showDeleteItemsModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
-    private directoryDashboardService: DirectoryDashboardService, private assessmentService: AssessmentService) { }
+    private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.directoryId = Number(params['id']);
-      console.log(this.directoryId);
       this.directoryDashboardService.selectedDirectoryId.next(this.directoryId);
       this.directory = this.directoryDbService.getById(this.directoryId);
       this.directorySettings = this.settingsDbService.getByDirectoryId(this.directoryId);
     });
-    this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
-      this.dashboardView = val;
-    });
     this.selectAllSub = this.directoryDashboardService.selectAll.subscribe(val => {
       this.selectAll(val);
     });
-    this.assessmentService.updateSidebarData.subscribe(val => {
+    this.dashboardService.updateSidebarData.subscribe(val => {
       if (val) {
         this.directory = this.directoryDbService.getById(this.directoryId);
       }
+    });
+    this.showDeleteItemsModalSub = this.directoryDashboardService.showDeleteItemsModal.subscribe(val => {
+      this.showDeleteItemsModal = val;
+    });
+    this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
+      this.dashboardView = val;
     });
   }
 
@@ -50,6 +55,7 @@ export class DirectoryDashboardComponent implements OnInit {
     this.selectAllSub.unsubscribe();
     this.directoryDashboardService.selectAll.next(false);
     this.directoryDashboardService.selectedDirectoryId.next(1);
+    this.showDeleteItemsModalSub.unsubscribe();
   }
 
   selectAll(isSelected: boolean) {

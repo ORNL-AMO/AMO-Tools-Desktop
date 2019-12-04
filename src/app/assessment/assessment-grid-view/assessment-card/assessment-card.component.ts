@@ -170,7 +170,7 @@ export class AssessmentCardComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(val => {
       this.assessmentDbService.setAll().then(() => {
         this.changeDirectory.emit(true);
-        this.assessmentService.updateSidebarData.next(true);
+        // this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
       });
     });
@@ -198,13 +198,13 @@ export class AssessmentCardComponent implements OnInit {
               this.indexedDbService.deleteCalculator(this.calculatorId).then(() => {
                 this.calculatorDbService.setAll().then(() => {
                   this.hideDeleteModal();
-                  this.assessmentService.updateSidebarData.next(true);
+                  // this.assessmentService.updateSidebarData.next(true);
                 });
               });
             } else {
               console.log('delete');
               this.hideDeleteModal();
-              this.assessmentService.updateSidebarData.next(true);
+              // this.assessmentService.updateSidebarData.next(true);
             }
           });
         });

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { SettingsService } from '../../settings/settings.service';
+import { SettingsService } from '../settings.service'
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { FormGroup } from '@angular/forms';

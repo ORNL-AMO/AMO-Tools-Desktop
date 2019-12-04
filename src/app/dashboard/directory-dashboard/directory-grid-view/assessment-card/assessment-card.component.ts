@@ -12,6 +12,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { CalculatorDbService } from '../../../../indexedDb/calculator-db.service';
 import { Calculator } from '../../../../shared/models/calculators';
 import { AssessmentService } from '../../../../assessment/assessment.service';
+import { DashboardService } from '../../../dashboard.service';
 
 @Component({
   selector: 'app-assessment-card',
@@ -39,7 +40,7 @@ export class AssessmentCardComponent implements OnInit {
   constructor(private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService, private formBuilder: FormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService) { }
+    private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService) { }
 
 
   ngOnInit() {
@@ -144,7 +145,7 @@ export class AssessmentCardComponent implements OnInit {
     this.assessment.directoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putAssessment(this.assessment).then(val => {
       this.assessmentDbService.setAll().then(() => {
-        this.assessmentService.updateSidebarData.next(true);
+        this.dashboardService.updateSidebarData.next(true);
         this.hideEditModal();
       });
     });
@@ -172,13 +173,13 @@ export class AssessmentCardComponent implements OnInit {
               this.indexedDbService.deleteCalculator(this.calculatorId).then(() => {
                 this.calculatorDbService.setAll().then(() => {
                   this.hideDeleteModal();
-                  this.assessmentService.updateSidebarData.next(true);
+                  this.dashboardService.updateSidebarData.next(true);
                 });
               });
             } else {
               console.log('delete');
               this.hideDeleteModal();
-              this.assessmentService.updateSidebarData.next(true);
+              this.dashboardService.updateSidebarData.next(true);
             }
           });
         });

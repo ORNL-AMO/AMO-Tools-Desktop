@@ -1,21 +1,21 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { Settings } from '../../shared/models/settings';
-import { MockPhastSettings, MockPhast } from '../../core/mockPhast';
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { MockPsat, MockPsatCalculator, MockPsatSettings } from '../../core/mockPsat';
-import { MockFsat, MockFsatSettings } from '../../core/mockFsat';
-import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
-import { Directory } from '../../shared/models/directory';
-import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import { Assessment } from '../../shared/models/assessment';
-import { CoreService } from '../../core/core.service';
-import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
-import { AssessmentService } from '../assessment.service';
-import { MockSsmt, MockSsmtSettings } from '../../core/mockSsmt';
-import { MockTreasureHunt, MockTreasureHuntSettings } from '../../core/mockTreasureHunt';
-
+import { Settings } from '../../../shared/models/settings';
+import { MockPhastSettings, MockPhast } from '../../../core/mockPhast';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { MockPsat, MockPsatCalculator, MockPsatSettings } from '../../../core/mockPsat';
+import { MockFsat, MockFsatSettings } from '../../../core/mockFsat';
+import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
+import { Directory } from '../../../shared/models/directory';
+import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
+import { Assessment } from '../../../shared/models/assessment';
+import { CoreService } from '../../../core/core.service';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { AssessmentService } from '../../../assessment/assessment.service';
+import { MockSsmt, MockSsmtSettings } from '../../../core/mockSsmt';
+import { MockTreasureHunt, MockTreasureHuntSettings } from '../../../core/mockTreasureHunt';
+import { DashboardService } from '../../../dashboard/dashboard.service';
 @Component({
   selector: 'app-reset-data-modal',
   templateUrl: './reset-data-modal.component.html',
@@ -32,7 +32,7 @@ export class ResetDataModalComponent implements OnInit {
   resetUserAssessments: boolean = false;
   resetCustomMaterials: boolean = false;
   deleting: boolean = false;
-  constructor(private assessmentService: AssessmentService, private calculatorDbService: CalculatorDbService, private coreService: CoreService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService) { }
+  constructor(private dashboardService: DashboardService, private calculatorDbService: CalculatorDbService, private coreService: CoreService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService) { }
 
   ngOnInit() {
   }
@@ -47,7 +47,7 @@ export class ResetDataModalComponent implements OnInit {
 
   hideResetSystemSettingsModal() {
     this.resetSystemSettingsModal.hide();
-    this.assessmentService.updateSidebarData.next(true);
+    this.dashboardService.updateSidebarData.next(true);
     this.closeModal.emit(true);
   }
 
@@ -345,7 +345,7 @@ export class ResetDataModalComponent implements OnInit {
       this.assessmentDbService.setAll().then(() => {
         this.settingsDbService.setAll().then(() => {
           this.calculatorDbService.setAll().then(() => {
-            this.assessmentService.updateSidebarData.next(true);
+            this.dashboardService.updateSidebarData.next(true);
             this.hideResetSystemSettingsModal();
           });
         });

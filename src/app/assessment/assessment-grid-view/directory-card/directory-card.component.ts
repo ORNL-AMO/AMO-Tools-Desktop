@@ -94,7 +94,7 @@ export class DirectoryCardComponent implements OnInit {
     this.indexedDbService.putDirectory(this.directory).then(val => {
       this.directoryDbService.setAll().then(() => {
         this.updateDirectory.emit(true);
-        this.assessmentService.updateSidebarData.next(true);
+        // this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
       });
     });

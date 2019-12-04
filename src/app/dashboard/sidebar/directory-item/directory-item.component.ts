@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Directory } from '../../../shared/models/directory';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-directory-item',

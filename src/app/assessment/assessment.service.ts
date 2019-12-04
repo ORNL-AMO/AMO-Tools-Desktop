@@ -22,7 +22,7 @@ export class AssessmentService {
   tutorialShown: boolean = false;
   dashboardView: BehaviorSubject<string>;
   workingDirectoryId: BehaviorSubject<number>;
-  updateSidebarData: BehaviorSubject<boolean>;
+  // updateSidebarData: BehaviorSubject<boolean>;
   constructor(private router: Router) {
     this.createAssessment = new BehaviorSubject<boolean>(null);
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);
@@ -30,7 +30,7 @@ export class AssessmentService {
     this.showTutorial = new BehaviorSubject<string>(null);
     this.dashboardView = new BehaviorSubject<string>('landing-screen');
     this.workingDirectoryId = new BehaviorSubject<number>(null);
-    this.updateSidebarData = new BehaviorSubject<boolean>(null);
+    // this.updateSidebarData = new BehaviorSubject<boolean>(null);
   }
 
   goToAssessment(assessment: Assessment, str?: string, str2?: string) {

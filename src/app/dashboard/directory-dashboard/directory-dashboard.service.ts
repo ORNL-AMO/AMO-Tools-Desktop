@@ -9,11 +9,13 @@ export class DirectoryDashboardService {
   createAssessment: BehaviorSubject<boolean>;
   createFolder: BehaviorSubject<boolean>;
   selectedDirectoryId: BehaviorSubject<number>;
+  showDeleteItemsModal: BehaviorSubject<boolean>;
   constructor() { 
     this.selectAll = new BehaviorSubject<boolean>(false);
     this.dashboardView = new BehaviorSubject<string>('grid');
     this.createAssessment = new BehaviorSubject<boolean>(false);
     this.createFolder = new BehaviorSubject<boolean>(false);
     this.selectedDirectoryId = new BehaviorSubject<number>(1);
+    this.showDeleteItemsModal = new BehaviorSubject<boolean>(false);
   }
 }

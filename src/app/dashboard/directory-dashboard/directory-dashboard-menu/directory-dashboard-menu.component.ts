@@ -32,7 +32,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;
-    })
+    });
   }
 
   getBreadcrumbs(dirId: number) {
@@ -54,7 +54,13 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   checkSelected() {
-    let checkAssessmentDirectorySelected: boolean = this.checkReport();
+    let assessmentSelectedTest: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
+    let directorySelectedTest: Directory = _.find(this.directory.subDirectory, (value) => {
+      if (value.selected == true) {
+        return true;
+      }
+    });
+    let checkAssessmentDirectorySelected: boolean = (assessmentSelectedTest != undefined) || (directorySelectedTest != undefined);
     let calculatorSelectedTest: Calculator
     if (this.directory.calculators) {
       calculatorSelectedTest = _.find(this.directory.calculators, (value) => { return value.selected == true });
@@ -74,11 +80,19 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     return (assessmentSelectedTest != undefined) || (directorySelectedTest != undefined);
   }
 
-  showCreateAssessment(){
+  checkDeleteSelected() {
+
+  }
+
+  showCreateAssessment() {
     this.directoryDashboardService.createAssessment.next(true);
   }
 
-  showCreateFolder(){
+  showCreateFolder() {
     this.directoryDashboardService.createFolder.next(true);
+  }
+
+  showDeleteItemsModal() {
+    this.directoryDashboardService.showDeleteItemsModal.next(true);
   }
 }

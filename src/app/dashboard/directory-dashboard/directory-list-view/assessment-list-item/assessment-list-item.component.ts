@@ -9,6 +9,8 @@ import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service
 import { Settings } from '../../../../shared/models/settings';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { AssessmentService } from '../../../../assessment/assessment.service';
+import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
+import { DashboardService } from '../../../dashboard.service';
 
 @Component({
   selector: 'app-assessment-list-item',
@@ -36,7 +38,7 @@ export class AssessmentListItemComponent implements OnInit {
   settingsCopy: Settings;
 
   @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
-  constructor(private assessmentService: AssessmentService, private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService) { }
+  constructor(private assessmentService: AssessmentService, private dashboardService: DashboardService, private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (this.assessment.phast) {
@@ -93,7 +95,7 @@ export class AssessmentListItemComponent implements OnInit {
     this.assessment.directoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putAssessment(this.assessment).then(val => {
       this.assessmentDbService.setAll().then(() => {
-        this.assessmentService.updateSidebarData.next(true);
+        this.dashboardService.updateSidebarData.next(true);
         this.hideEditModal();
       });
     });

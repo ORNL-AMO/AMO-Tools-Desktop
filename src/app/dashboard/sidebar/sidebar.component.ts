@@ -5,6 +5,7 @@ declare const packageJson;
 import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
+import { DashboardService } from '../dashboard.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -19,15 +20,20 @@ export class SidebarComponent implements OnInit {
   showModal: boolean;
   showVersionModal: boolean;
   updateSub: Subscription;
+  updateSidebarDataSub: Subscription;
   rootDirectory: Directory;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
-    private directoryDashboardService: DirectoryDashboardService) { }
+    private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
-    this.rootDirectory = this.directoryDbService.getById(1);
     this.versionNum = packageJson.version;
     this.updateSub = this.assessmentService.updateAvailable.subscribe(val => {
       this.isUpdateAvailable = val;
+    });
+
+    this.updateSidebarDataSub = this.dashboardService.updateSidebarData.subscribe(val => {
+      this.rootDirectory = this.directoryDbService.getById(1);
+      this.rootDirectory.collapsed = false;
     });
   }
 

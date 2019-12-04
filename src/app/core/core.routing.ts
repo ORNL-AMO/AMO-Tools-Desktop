@@ -11,7 +11,7 @@ import { TutorialsComponent } from '../tutorials/tutorials.component';
 import { AboutPageComponent } from '../dashboard/about-page/about-page.component';
 import { ContactPageComponent } from '../dashboard/contact-page/contact-page.component';
 import { AcknowledgmentsPageComponent } from '../dashboard/acknowledgments-page/acknowledgments-page.component';
-import { AssessmentSettingsComponent } from '../assessment/assessment-settings/assessment-settings.component';
+import { AssessmentSettingsComponent } from '../settings/assessment-settings/assessment-settings.component';
 import { CustomMaterialsComponent } from '../suiteDb/custom-materials/custom-materials.component';
 import { calculatorRoutes } from '../calculator/calculator-routing/calculators.routing';
 import { CalculatorComponent } from '../calculator/calculator.component';

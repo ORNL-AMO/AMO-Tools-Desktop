@@ -23,6 +23,7 @@ import { DirectoryDashboardService } from './directory-dashboard.service';
 import { AssessmentListItemComponent } from './directory-list-view/assessment-list-item/assessment-list-item.component';
 import { DirectoryListItemComponent } from './directory-list-view/directory-list-item/directory-list-item.component';
 import { PreAssessmentListItemComponent } from './directory-list-view/pre-assessment-list-item/pre-assessment-list-item.component';
+import { DeleteItemsModalComponent } from './delete-items-modal/delete-items-modal.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { PreAssessmentListItemComponent } from './directory-list-view/pre-assess
      DirectoryCardComponent,
      AssessmentListItemComponent,
      DirectoryListItemComponent,
-     PreAssessmentListItemComponent
+     PreAssessmentListItemComponent,
+     DeleteItemsModalComponent
     ],
   imports: [
     CommonModule,

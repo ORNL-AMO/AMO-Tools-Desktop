@@ -39,7 +39,7 @@
                 <button class="btn btn-secondary action-btn" [disabled]="!checkReport()" type="button"
                     (click)="emitGenReport()">Generate Report</button>
                 <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button"
-                    (click)="signalDeleteItems()">Delete</button>
+                    (click)="showDeleteItemsModal()">Delete</button>
                 <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button"
                     (click)="emitExport()">Export</button>
                 <button class="btn btn-secondary action-btn" type="button" (click)="emitImport()">Import</button>

@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { AssessmentService } from '../../../../assessment/assessment.service';
+import { DashboardService } from '../../../dashboard.service';
 
 @Component({
   selector: 'app-directory-list-item',
@@ -20,7 +21,7 @@ export class DirectoryListItemComponent implements OnInit {
   editForm: FormGroup;
   directories: Array<Directory>;
   @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService) { }
+  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private directoryDbService: DirectoryDbService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
     this.indexedDbService.getAllDirectories().then(dirs => {
@@ -60,7 +61,7 @@ export class DirectoryListItemComponent implements OnInit {
     this.directory.parentDirectoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putDirectory(this.directory).then(val => {
       this.directoryDbService.setAll().then(() => {
-        this.assessmentService.updateSidebarData.next(true);
+        this.dashboardService.updateSidebarData.next(true);
         this.hideEditModal();
       });
     });
