@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { ElectronService } from 'ngx-electron';
-import { Directory } from '../models/directory';
+import { Directory } from '../../shared/models/directory';
 
 import { BehaviorSubject } from 'rxjs';
 

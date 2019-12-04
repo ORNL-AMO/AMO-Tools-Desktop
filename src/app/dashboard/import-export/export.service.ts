@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ImportExportAssessment, ImportExportDirectory, ImportExportData } from './importExportModel';
-import { Directory } from '../models/directory';
-import { Assessment } from '../models/assessment';
+import { Directory } from '../../shared/models/directory';
+import { Assessment } from '../../shared/models/assessment';
 import * as _ from 'lodash';
-import { Calculator } from '../models/calculators';
-import { Settings } from '../models/settings';
+import { Calculator } from '../../shared/models/calculators';
+import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { BehaviorSubject } from 'rxjs';
-import { SSMT } from '../models/steam/ssmt';
+import { SSMT } from '../../shared/models/steam/ssmt';
 
 @Injectable()
 export class ExportService {

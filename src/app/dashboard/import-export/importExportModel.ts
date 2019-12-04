@@ -1,7 +1,7 @@
-import { Settings } from "../models/settings";
-import { Assessment } from "../models/assessment";
-import { Directory } from "../models/directory";
-import { Calculator } from "../models/calculators";
+import { Settings } from "../../shared/models/settings";
+import { Assessment } from "../../shared/models/assessment";
+import { Directory } from "../../shared/models/directory";
+import { Calculator } from "../../shared/models/calculators";
 
 export interface ImportExportAssessment {
     settings: Settings;

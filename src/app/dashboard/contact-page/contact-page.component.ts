@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ImportExportService } from '../../shared/import-export/import-export.service';
-import { ExportService } from '../../shared/import-export/export.service';
+import { ImportExportService } from '../import-export/import-export.service';
+import { ExportService } from '../import-export/export.service';
 @Component({
   selector: 'app-contact-page',
   templateUrl: './contact-page.component.html',

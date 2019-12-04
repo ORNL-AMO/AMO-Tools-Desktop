@@ -3,7 +3,7 @@ import { Directory } from '../../shared/models/directory';
 import { AssessmentService } from '../assessment.service';
 import { Settings } from 'electron';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import { ExportService } from '../../shared/import-export/export.service';
+import { ExportService } from '../../dashboard/import-export/export.service';
 
 @Component({
   selector: 'app-assessment-menu',

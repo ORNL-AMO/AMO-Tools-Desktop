@@ -15,9 +15,9 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { DeleteDataService } from '../indexedDb/delete-data.service';
-import { ExportService } from '../shared/import-export/export.service';
-import { ImportExportData } from '../shared/import-export/importExportModel';
-import { ImportService } from '../shared/import-export/import.service';
+import { ExportService } from './import-export/export.service';
+import { ImportExportData } from './import-export/importExportModel';
+import { ImportService } from './import-export/import.service';
 import { CalculatorService } from '../calculator/calculator.service';
 import { DirectoryDashboardService } from './directory-dashboard/directory-dashboard.service';
 import { ActivatedRoute } from '@angular/router';
@@ -75,7 +75,12 @@ export class DashboardComponent implements OnInit {
 
   createFolder: boolean;
   createFolderSub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private exportService: ExportService,
+
+  showImportModalSub: Subscription;
+  showImportModal: boolean;
+
+  dashboardToastMessageSub: Subscription;
+  constructor(private dashboardService: DashboardService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private deleteDataService: DeleteDataService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef, private calculatorService: CalculatorService,
     private directoryDashboardService: DirectoryDashboardService) {
@@ -93,6 +98,12 @@ export class DashboardComponent implements OnInit {
       this.createAssessment = val;
     });
 
+    this.dashboardToastMessageSub = this.dashboardService.dashboardToastMessage.subscribe(val => {
+      if (val != undefined) {
+        this.addToast(val);
+        this.dashboardService.dashboardToastMessage.next(undefined);
+      }
+    })
     // this.createAssessmentSub = this.assessmentService.createAssessment.subscribe(val => {
     //   this.createAssessment = val;
     // });
@@ -110,6 +121,9 @@ export class DashboardComponent implements OnInit {
       }
     });
 
+    this.showImportModalSub = this.directoryDashboardService.showImportModal.subscribe(val => {
+      this.showImportModal = val;
+    });
     // this.workingDirectorySub = this.assessmentService.workingDirectoryId.subscribe(id => {
     //   if (id) {
     //     let directory: Directory = this.directoryDbService.getById(id);
@@ -129,6 +143,7 @@ export class DashboardComponent implements OnInit {
   ngOnDestroy() {
     this.assessmentService.createAssessment.next(false);
     this.createAssessmentSub.unsubscribe();
+    this.dashboardToastMessageSub.unsubscribe();
     // if (this.dontShowSub) this.dontShowSub.unsubscribe();
     // this.exportAllSub.unsubscribe();
     // this.workingDirectorySub.unsubscribe();
@@ -136,6 +151,7 @@ export class DashboardComponent implements OnInit {
     // this.selectedToolSub.unsubscribe();
     // this.sidebarDataSub.unsubscribe();
     this.createFolderSub.unsubscribe();
+    this.showImportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -299,19 +315,19 @@ export class DashboardComponent implements OnInit {
     this.isImportView = false;
   }
 
-  showImportModal() {
-    this.isImportView = true;
-    this.isExportView = false;
-    this.showImportExport = true;
-    this.importModal.show();
-  }
+  // showImportModal() {
+  //   this.isImportView = true;
+  //   this.isExportView = false;
+  //   this.showImportExport = true;
+  //   this.importModal.show();
+  // }
 
-  hideImportModal() {
-    this.importModal.hide();
-    this.showImportExport = false;
-    this.isExportView = false;
-    this.isImportView = false;
-  }
+  // hideImportModal() {
+  //   this.importModal.hide();
+  //   this.showImportExport = false;
+  //   this.isExportView = false;
+  //   this.isImportView = false;
+  // }
 
   // checkSelected() {
   //   let tmpArray = new Array();

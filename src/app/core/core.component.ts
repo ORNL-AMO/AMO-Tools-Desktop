@@ -9,8 +9,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
-import { ExportService } from '../shared/import-export/export.service';
-import { Router, ActivatedRoute } from '../../../node_modules/@angular/router';
+import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 declare var google: any;
 @Component({
@@ -59,7 +58,7 @@ export class CoreComponent implements OnInit {
   showTranslate: string = 'hide';
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
-    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router, private activatedRoute: ActivatedRoute) {
+    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router) {
   }
 
   ngOnInit() {
@@ -132,7 +131,6 @@ export class CoreComponent implements OnInit {
     if (this.calcSub) this.calcSub.unsubscribe();
     if (this.assessmentSub) this.assessmentSub.unsubscribe();
     if (this.settingsSub) this.settingsSub.unsubscribe();
-    this.exportService.exportAllClick.next(false);
     this.updateAvailableSubscription.unsubscribe();
     this.showTranslateModalSub.unsubscribe();
   }

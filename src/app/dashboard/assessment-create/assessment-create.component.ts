@@ -23,6 +23,7 @@ export class AssessmentCreateComponent implements OnInit {
   @Input()
   type: string;
 
+  @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
   newAssessmentForm: FormGroup;
   selectedEquip: string = 'new';
   showDropdown: boolean = false;
@@ -72,7 +73,6 @@ export class AssessmentCreateComponent implements OnInit {
   }
 
   //  CREATE ASSESSMENT MODAL
-  @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
   showCreateModal() {
     this.createModal.show();
   }

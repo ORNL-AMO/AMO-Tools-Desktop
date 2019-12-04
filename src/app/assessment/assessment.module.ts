@@ -15,7 +15,7 @@ import { CreateFolderComponent } from './assessment-menu/create-folder/create-fo
 import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
 import { SettingsModule } from '../settings/settings.module';
 
-import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { ImportExportModule } from '../dashboard/import-export/import-export.module';
 import { PhastSummaryCardComponent } from './assessment-grid-view/assessment-card/phast-summary-card/phast-summary-card.component';
 import { PsatSummaryCardComponent } from './assessment-grid-view/assessment-card/psat-summary-card/psat-summary-card.component';
 import { PhastReportModule } from '../phast/phast-report/phast-report.module';

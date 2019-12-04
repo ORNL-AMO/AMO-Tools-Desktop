@@ -95,4 +95,9 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   showDeleteItemsModal() {
     this.directoryDashboardService.showDeleteItemsModal.next(true);
   }
+
+  showImportModal(){
+    this.directoryDashboardService.showImportModal.next(true);
+
+  }
 }

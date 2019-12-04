@@ -11,6 +11,7 @@
 
 <app-assessment-create *ngIf="createAssessment"></app-assessment-create>
 <app-create-folder *ngIf="createFolder"></app-create-folder>
+<app-import-modal *ngIf="showImportModal"></app-import-modal>
 <!-- <div class="col-10 pb-4 skyline" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"
