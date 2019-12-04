@@ -6,7 +6,8 @@
 
 <div class="sidebar-group create-button">
   <div class="p-2">
-    <button type="button" class="btn btn-primary btn-block mx-auto" (click)="showCreateAssessment()">Add Assessment</button>
+    <button type="button" class="btn btn-primary btn-block mx-auto" (click)="showCreateAssessment()">Add
+      Assessment</button>
   </div>
 </div>
 
@@ -25,8 +26,9 @@
         <i class="fa fa-folder" aria-hidden="true"></i> All Assessments</span>
     </li>
     <li *ngIf="directory">
-      <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
-        (collapseSignal)="toggleDirectoryCollapse($event)" [newDirEventToggle]="newDirEventToggle" [dashboardView]="dashboardView"></app-directory-item>
+      <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId"
+        (selectSignal)="toggleSelected($event)" (collapseSignal)="toggleDirectoryCollapse($event)"
+        [newDirEventToggle]="newDirEventToggle" [dashboardView]="dashboardView"></app-directory-item>
     </li>
   </ul>
 </div>
@@ -59,6 +61,9 @@
     <li [ngClass]="{'selected': dashboardView == 'acknowledgments-page'}">
       <span class="sidebar-item" (click)="changeDashboardView('acknowledgments-page')">Acknowledgments</span>
     </li>
+    <li *ngIf="googleTranslateAvailable">
+      <span class="sidebar-item" (click)="emitTranslate()"><span class="fa fa-globe"></span> Translate</span>
+    </li>
     <!--<a href="mailto:accawigk@ornl.gov">Contact</a></li>-->
   </ul>
 </div>
@@ -73,6 +78,7 @@
     <li>
       <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
     </li>
+
   </ul>
 </div>
 
