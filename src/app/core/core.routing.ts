@@ -6,16 +6,16 @@ import { FsatComponent } from '../fsat/fsat.component';
 import { SsmtComponent } from '../ssmt/ssmt.component';
 import { TreasureHuntComponent } from '../treasure-hunt/treasure-hunt.component';
 import { AssessmentDashboardComponent } from '../assessment/assessment-dashboard/assessment-dashboard.component';
-import { LandingScreenComponent } from '../landing-screen/landing-screen.component';
+import { LandingScreenComponent } from '../dashboard/landing-screen/landing-screen.component';
 import { TutorialsComponent } from '../tutorials/tutorials.component';
-import { AboutPageComponent } from '../about-page/about-page.component';
-import { ContactPageComponent } from '../contact-page/contact-page.component';
-import { AcknowledgmentsPageComponent } from '../acknowledgments-page/acknowledgments-page.component';
+import { AboutPageComponent } from '../dashboard/about-page/about-page.component';
+import { ContactPageComponent } from '../dashboard/contact-page/contact-page.component';
+import { AcknowledgmentsPageComponent } from '../dashboard/acknowledgments-page/acknowledgments-page.component';
 import { AssessmentSettingsComponent } from '../assessment/assessment-settings/assessment-settings.component';
 import { CustomMaterialsComponent } from '../suiteDb/custom-materials/custom-materials.component';
 import { calculatorRoutes } from '../calculator/calculator-routing/calculators.routing';
 import { CalculatorComponent } from '../calculator/calculator.component';
-import { DirectoryDashboardComponent } from '../directory-dashboard/directory-dashboard.component';
+import { DirectoryDashboardComponent } from '../dashboard/directory-dashboard/directory-dashboard.component';
 import { ReportRollupComponent } from '../report-rollup/report-rollup.component';
 
 export const coreRoutes: Routes = [

@@ -5,11 +5,16 @@ import { CreateFolderComponent } from './create-folder/create-folder.component';
 import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardService } from './dashboard.service';
-import { SidebarModule } from '../sidebar/sidebar.module';
-import { LandingScreenComponent } from '../landing-screen/landing-screen.component';
+import { SidebarModule } from './sidebar/sidebar.module';
+import { LandingScreenComponent } from './landing-screen/landing-screen.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { RouterModule } from '@angular/router';
-import { MeasurComponent } from '../landing-screen/measur/measur.component';
+import { MeasurComponent } from './landing-screen/measur/measur.component';
+import { AboutPageComponent } from './about-page/about-page.component';
+import { AcknowledgmentsPageComponent } from './acknowledgments-page/acknowledgments-page.component';
+import { ContactPageComponent } from './contact-page/contact-page.component';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { DirectoryDashboardModule } from './directory-dashboard/directory-dashboard.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +22,10 @@ import { MeasurComponent } from '../landing-screen/measur/measur.component';
     CreateFolderComponent,
     AssessmentCreateComponent,
     LandingScreenComponent,
-    MeasurComponent
+    MeasurComponent,
+    AboutPageComponent,
+    AcknowledgmentsPageComponent,
+    ContactPageComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +33,9 @@ import { MeasurComponent } from '../landing-screen/measur/measur.component';
     ReactiveFormsModule,
     SidebarModule,
     ModalModule,
-    RouterModule
+    RouterModule,
+    ImportExportModule,
+    DirectoryDashboardModule
   ],
   providers: [
     DashboardService

@@ -12,7 +12,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../../assessment/assessment.service';
-import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
+import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 
 @Component({
   selector: 'app-assessment-create',
@@ -22,8 +22,6 @@ import { DirectoryDashboardService } from '../../directory-dashboard/directory-d
 export class AssessmentCreateComponent implements OnInit {
   @Input()
   type: string;
-  @Input()
-  directoryId: number;
 
   newAssessmentForm: FormGroup;
   selectedEquip: string = 'new';
@@ -48,12 +46,9 @@ export class AssessmentCreateComponent implements OnInit {
 
   ngOnInit() {
     this.directories = this.directoryDbService.getAll();
-    console.log(this.directoryId);
-    if (isNaN(this.directoryId) == true) {
-      this.directoryId = 1;
-    }
-    this.directory = this.directoryDbService.getById(this.directoryId);
-    this.settings = this.settingsDbService.getByDirectoryId(this.directoryId);
+    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
+    this.directory = this.directoryDbService.getById(directoryId);
+    this.settings = this.settingsDbService.getByDirectoryId(directoryId);
     this.newAssessmentForm = this.initForm();
     this.newFolderForm = this.initFolderForm();
     this.canCreate = true;

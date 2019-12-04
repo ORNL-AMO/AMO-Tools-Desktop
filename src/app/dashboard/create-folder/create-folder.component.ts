@@ -7,7 +7,7 @@ import { Settings } from '../../shared/models/settings';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import * as _ from 'lodash';
-import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
+import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { AssessmentService } from '../../assessment/assessment.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -17,9 +17,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./create-folder.component.css']
 })
 export class CreateFolderComponent implements OnInit {
-  @Input()
+
   directory: Directory;
-  @Input()
   settings: Settings;
 
   //  CREATE FOLDER MODAL
@@ -39,19 +38,14 @@ export class CreateFolderComponent implements OnInit {
     private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directories = this.directoryDbService.getAll();
-    this.activatedRoute.params.subscribe(params => {
-      let id: number = Number(params['id']);
-      if(id == undefined){
-        id = 1;
-      }
-      this.directory = this.directoryDbService.getById(id);
-      this.settings = this.settingsDbService.getByDirectoryId(id);
-      this.newFolderForm = this.initForm();
-    });
+    this.directory = this.directoryDbService.getById(directoryId);
+    this.settings = this.settingsDbService.getByDirectoryId(directoryId);
+    this.newFolderForm = this.initForm();
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.showCreateModal();
   }
 
@@ -63,7 +57,7 @@ export class CreateFolderComponent implements OnInit {
       'directoryId': [this.directory.id, Validators.required]
     });
   }
-  
+
   showCreateModal() {
     this.createModal.show();
   }
