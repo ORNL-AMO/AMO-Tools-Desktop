@@ -4,6 +4,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { HeaderService, HeaderRanges } from '../../../header/header.service';
 import { FormGroup, Validators } from '@angular/forms';
+import { SsmtService } from '../../../ssmt.service';
 
 @Component({
   selector: 'app-header-form',
@@ -37,7 +38,8 @@ export class HeaderFormComponent implements OnInit {
 
   baselineMediumPressureForm: FormGroup;
   modificationMediumPressureForm: FormGroup;
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private headerService: HeaderService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private headerService: HeaderService,
+    private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.initForms();
@@ -85,7 +87,7 @@ export class HeaderFormComponent implements OnInit {
       }
       this.baselineLowPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.lowPressureHeader, this.settings, undefined, pressureMax);
     } else {
-      this.baselineLowPressureForm = this.headerService.initHeaderForm(this.settings);
+      this.baselineLowPressureForm = this.headerService.initHeaderForm(this.settings, false);
     }
     if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressureHeader) {
       let pressureMax: number;
@@ -96,18 +98,18 @@ export class HeaderFormComponent implements OnInit {
       }
       this.modificationLowPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressureHeader, this.settings, undefined, pressureMax);
     } else {
-      this.modificationLowPressureForm = this.headerService.initHeaderForm(this.settings);
+      this.modificationLowPressureForm = this.headerService.initHeaderForm(this.settings, true);
     }
 
     if (this.ssmt.headerInput.mediumPressureHeader) {
       this.baselineMediumPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.mediumPressureHeader, this.settings, this.ssmt.headerInput.lowPressureHeader.pressure, this.ssmt.headerInput.highPressureHeader.pressure);
     } else {
-      this.baselineMediumPressureForm = this.headerService.initHeaderForm(this.settings);
+      this.baselineMediumPressureForm = this.headerService.initHeaderForm(this.settings, false);
     }
     if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressureHeader) {
       this.modificationMediumPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressureHeader, this.settings, this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressureHeader.pressure, this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressureHeader.pressure);
     } else {
-      this.modificationMediumPressureForm = this.headerService.initHeaderForm(this.settings);
+      this.modificationMediumPressureForm = this.headerService.initHeaderForm(this.settings, true);
     }
     this.baselineHighPressureForm.disable();
     this.baselineLowPressureForm.disable();
@@ -197,12 +199,12 @@ export class HeaderFormComponent implements OnInit {
     }
   }
   initMediumPressureSteamUsage() {
-    if (this.baselineMediumPressureForm.controls.processSteamUsage.value !== this.modificationMediumPressureForm.controls.processSteamUsage.value) {
+    if (this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.value == false) {
       this.showMediumPressureSteamUsage = true;
     }
   }
   initLowPressureSteamUsage() {
-    if (this.baselineLowPressureForm.controls.processSteamUsage.value !== this.modificationLowPressureForm.controls.processSteamUsage.value) {
+    if (this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.value == false) {
       this.showLowPressureSteamUsage = true;
     }
   }
@@ -231,6 +233,7 @@ export class HeaderFormComponent implements OnInit {
       this.modificationMediumPressureForm.controls.processSteamUsage.patchValue(this.baselineMediumPressureForm.controls.processSteamUsage.value);
       this.save();
     }
+    this.modificationMediumPressureForm.controls.useBaselineProcessSteamUsage.patchValue(!this.showMediumPressureSteamUsage);
   }
 
   toggleLowPressureSteamUsage() {
@@ -238,6 +241,7 @@ export class HeaderFormComponent implements OnInit {
       this.modificationLowPressureForm.controls.processSteamUsage.patchValue(this.baselineLowPressureForm.controls.processSteamUsage.value);
       this.save();
     }
+    this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.patchValue(!this.showLowPressureSteamUsage);
   }
 
   save() {
@@ -256,6 +260,7 @@ export class HeaderFormComponent implements OnInit {
 
   focusField(str: string) {
     this.exploreOpportunitiesService.currentTab.next('header');
+    this.ssmtService.isBaselineFocused.next(false);
     this.exploreOpportunitiesService.currentField.next(str);
   }
 

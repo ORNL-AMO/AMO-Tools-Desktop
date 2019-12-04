@@ -121,6 +121,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
 
   focusField(str: string) {
     this.ssmtService.turbineOperationHelp.next('condensing');
+    this.ssmtService.isBaselineFocused.next(false);
     this.exploreOpportunitiesService.currentTab.next('turbine');
     this.exploreOpportunitiesService.currentField.next(str);
   }

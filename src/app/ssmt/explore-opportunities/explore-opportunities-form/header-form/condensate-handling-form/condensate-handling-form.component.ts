@@ -3,6 +3,7 @@ import { SSMT } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
 import { FormGroup } from '@angular/forms';
+import { SsmtService } from '../../../../ssmt.service';
 
 @Component({
   selector: 'app-condensate-handling-form',
@@ -39,7 +40,7 @@ export class CondensateHandlingFormComponent implements OnInit {
   showReturnTemperature: boolean = false;
   showFlashCondensateMediumPressure: boolean = false;
   showFlashCondensateLowPressure: boolean = false;
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.initCondensateHandling();
@@ -180,6 +181,7 @@ export class CondensateHandlingFormComponent implements OnInit {
 
   focusField(str: string) {
     this.exploreOpportunitiesService.currentTab.next('turbine');
+    this.ssmtService.isBaselineFocused.next(false);
     this.exploreOpportunitiesService.currentField.next(str);
   }
 

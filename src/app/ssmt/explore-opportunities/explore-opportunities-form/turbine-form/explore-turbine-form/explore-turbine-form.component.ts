@@ -3,6 +3,7 @@ import { PressureTurbine, CondensingTurbine } from '../../../../../shared/models
 import { Settings } from '../../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
 import { FormGroup } from '@angular/forms';
+import { SsmtService } from '../../../../ssmt.service';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class ExploreTurbineFormComponent implements OnInit {
   showGenerationEfficiency: boolean;
   showIsentropicEfficiency: boolean;
   showBaseline: boolean;
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.initForm();
@@ -107,6 +108,7 @@ export class ExploreTurbineFormComponent implements OnInit {
 
   focusField(str: string) {
     this.exploreOpportunitiesService.currentTab.next('turbine');
+    this.ssmtService.isBaselineFocused.next(false);
     this.exploreOpportunitiesService.currentField.next(str);
   }
 

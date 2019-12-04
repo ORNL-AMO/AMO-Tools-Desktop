@@ -131,7 +131,8 @@ export const MockSsmt: Assessment = {
                             "heatLoss": 0.1,
                             "flashCondensateIntoHeader": false,
                             "desuperheatSteamIntoNextHighest": false,
-                            "desuperheatSteamTemperature": null
+                            "desuperheatSteamTemperature": null,
+                            "useBaselineProcessSteamUsage": true
                         },
                         "lowPressureHeader": {
                             "pressure": 20,
@@ -140,7 +141,8 @@ export const MockSsmt: Assessment = {
                             "heatLoss": 0.1,
                             "flashCondensateIntoHeader": false,
                             "desuperheatSteamIntoNextHighest": false,
-                            "desuperheatSteamTemperature": null
+                            "desuperheatSteamTemperature": null,
+                            "useBaselineProcessSteamUsage": true
                         }
                     }
                 },
@@ -273,7 +275,8 @@ export const MockSsmt: Assessment = {
                                         "heatLoss": 0.1,
                                         "flashCondensateIntoHeader": false,
                                         "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null
+                                        "desuperheatSteamTemperature": null,
+                                        "useBaselineProcessSteamUsage": true
                                     },
                                     "lowPressureHeader": {
                                         "pressure": 20,
@@ -282,7 +285,8 @@ export const MockSsmt: Assessment = {
                                         "heatLoss": 0.1,
                                         "flashCondensateIntoHeader": false,
                                         "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null
+                                        "desuperheatSteamTemperature": null,
+                                        "useBaselineProcessSteamUsage": true
                                     }
                                 },
                             },
@@ -318,7 +322,8 @@ export const MockSsmt: Assessment = {
                             "heatLoss": 0.1,
                             "flashCondensateIntoHeader": true,
                             "desuperheatSteamIntoNextHighest": false,
-                            "desuperheatSteamTemperature": null
+                            "desuperheatSteamTemperature": null,
+                            "useBaselineProcessSteamUsage": true
                         },
                         "lowPressureHeader": {
                             "pressure": 20,
@@ -327,7 +332,8 @@ export const MockSsmt: Assessment = {
                             "heatLoss": 0.1,
                             "flashCondensateIntoHeader": true,
                             "desuperheatSteamIntoNextHighest": false,
-                            "desuperheatSteamTemperature": null
+                            "desuperheatSteamTemperature": null,
+                            "useBaselineProcessSteamUsage": true
                         }
                     }
                 },
@@ -460,7 +466,8 @@ export const MockSsmt: Assessment = {
                                         "heatLoss": 0.1,
                                         "flashCondensateIntoHeader": false,
                                         "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null
+                                        "desuperheatSteamTemperature": null,
+                                        "useBaselineProcessSteamUsage": true
                                     },
                                     "lowPressureHeader": {
                                         "pressure": 20,
@@ -469,7 +476,8 @@ export const MockSsmt: Assessment = {
                                         "heatLoss": 0.1,
                                         "flashCondensateIntoHeader": false,
                                         "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null
+                                        "desuperheatSteamTemperature": null,
+                                        "useBaselineProcessSteamUsage": true
                                     }
                                 },
                             },
@@ -602,7 +610,8 @@ export const MockSsmt: Assessment = {
                                                     "heatLoss": 0.1,
                                                     "flashCondensateIntoHeader": false,
                                                     "desuperheatSteamIntoNextHighest": false,
-                                                    "desuperheatSteamTemperature": null
+                                                    "desuperheatSteamTemperature": null,
+                                                    "useBaselineProcessSteamUsage": true
                                                 },
                                                 "lowPressureHeader": {
                                                     "pressure": 20,
@@ -611,7 +620,8 @@ export const MockSsmt: Assessment = {
                                                     "heatLoss": 0.1,
                                                     "flashCondensateIntoHeader": false,
                                                     "desuperheatSteamIntoNextHighest": false,
-                                                    "desuperheatSteamTemperature": null
+                                                    "desuperheatSteamTemperature": null,
+                                                    "useBaselineProcessSteamUsage": true
                                                 }
                                             },
                                         },
@@ -647,7 +657,8 @@ export const MockSsmt: Assessment = {
                                         "heatLoss": 0.1,
                                         "flashCondensateIntoHeader": true,
                                         "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null
+                                        "desuperheatSteamTemperature": null,
+                                        "useBaselineProcessSteamUsage": true
                                     },
                                     "lowPressureHeader": {
                                         "pressure": 20,
@@ -656,7 +667,8 @@ export const MockSsmt: Assessment = {
                                         "heatLoss": 0.1,
                                         "flashCondensateIntoHeader": true,
                                         "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null
+                                        "desuperheatSteamTemperature": null,
+                                        "useBaselineProcessSteamUsage": true
                                     }
                                 },
                             },
@@ -692,7 +704,8 @@ export const MockSsmt: Assessment = {
                             "heatLoss": 0.1,
                             "flashCondensateIntoHeader": false,
                             "desuperheatSteamIntoNextHighest": false,
-                            "desuperheatSteamTemperature": null
+                            "desuperheatSteamTemperature": null,
+                            "useBaselineProcessSteamUsage": true
                         },
                         "lowPressureHeader": {
                             "pressure": 20,
@@ -701,7 +714,8 @@ export const MockSsmt: Assessment = {
                             "heatLoss": 0.1,
                             "flashCondensateIntoHeader": false,
                             "desuperheatSteamIntoNextHighest": false,
-                            "desuperheatSteamTemperature": null
+                            "desuperheatSteamTemperature": null,
+                            "useBaselineProcessSteamUsage": true
                         }
                     },
                 },
@@ -737,7 +751,8 @@ export const MockSsmt: Assessment = {
                 "heatLoss": 0.1,
                 "flashCondensateIntoHeader": false,
                 "desuperheatSteamIntoNextHighest": false,
-                "desuperheatSteamTemperature": null
+                "desuperheatSteamTemperature": null,
+                "useBaselineProcessSteamUsage": true
             },
             "lowPressureHeader": {
                 "pressure": 20,
@@ -746,7 +761,8 @@ export const MockSsmt: Assessment = {
                 "heatLoss": 0.1,
                 "flashCondensateIntoHeader": false,
                 "desuperheatSteamIntoNextHighest": false,
-                "desuperheatSteamTemperature": null
+                "desuperheatSteamTemperature": null,
+                "useBaselineProcessSteamUsage": true
             }
         }
     }

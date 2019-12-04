@@ -17,7 +17,7 @@ export class AddModificationComponent implements OnInit {
   save = new EventEmitter<Modification>();
   @Input()
   modificationExists: boolean;
-  
+
   newModificationName: string;
   assessmentTab: string;
   assessmentTabSub: Subscription;
@@ -50,6 +50,12 @@ export class AddModificationComponent implements OnInit {
       exploreOpportunities: (this.assessmentTab === 'explore-opportunities')
     };
     tmpModification.ssmt.name = this.newModificationName;
+    if (tmpModification.ssmt.headerInput.lowPressureHeader) {
+      tmpModification.ssmt.headerInput.lowPressureHeader.useBaselineProcessSteamUsage = true;
+    }
+    if (tmpModification.ssmt.headerInput.mediumPressureHeader) {
+      tmpModification.ssmt.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage = true;
+    }
     this.save.emit(tmpModification);
   }
 }

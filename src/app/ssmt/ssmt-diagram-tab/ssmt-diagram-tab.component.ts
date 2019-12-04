@@ -37,11 +37,12 @@ export class SsmtDiagramTabComponent implements OnInit {
   scaleValue: number = 100;
 
   setDiagramPixelWidth: number = 900;
-  baselinePowerDemand: number;
+  baselineResults: SSMTOutput;
   constructor(private ssmtService: SsmtService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.ssmt.name = 'Baseline';
+    this.baselineResults = this.ssmtService.calculateBaselineModel(this.ssmt, this.settings).outputData;
     this.selectedSSMT = this.ssmt;
     this.calculateResults();
   }
@@ -65,10 +66,9 @@ export class SsmtDiagramTabComponent implements OnInit {
   calculateResults() {
     let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput };
     if (this.selectedSSMT.name == 'Baseline') {
-      resultsData = this.ssmtService.calculateModel(this.selectedSSMT, this.settings, true, 0);
-      this.baselinePowerDemand = resultsData.outputData.operationsOutput.sitePowerDemand;
+      resultsData = this.ssmtService.calculateBaselineModel(this.selectedSSMT, this.settings);
     } else {
-      resultsData = this.ssmtService.calculateModel(this.selectedSSMT, this.settings, false, this.baselinePowerDemand);
+      resultsData = this.ssmtService.calculateModificationModel(this.selectedSSMT, this.settings, this.baselineResults);
     }
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;
@@ -77,7 +77,12 @@ export class SsmtDiagramTabComponent implements OnInit {
   }
 
   calculateResultsWithMarginalCosts() {
-    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } = this.ssmtService.calculateMarginalCosts(this.selectedSSMT, this.outputData, this.settings);
+    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number };
+    if (this.selectedSSMT.name == 'Baseline') {
+      marginalCosts = this.ssmtService.calculateBaselineMarginalCosts(this.selectedSSMT, this.outputData, this.settings);
+    } else {
+      marginalCosts = this.ssmtService.calculateModificationMarginalCosts(this.selectedSSMT, this.outputData, this.baselineResults, this.settings);
+    }
     this.outputData.marginalHPCost = marginalCosts.marginalHPCost;
     this.outputData.marginalMPCost = marginalCosts.marginalMPCost;
     this.outputData.marginalLPCost = marginalCosts.marginalLPCost;

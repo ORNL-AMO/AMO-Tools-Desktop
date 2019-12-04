@@ -115,7 +115,7 @@ export class FolderSummaryComponent implements OnInit {
         } else if (assessment.type === 'SSMT') {
           if (assessment.ssmt.setupDone) {
             let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-            let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModel(assessment.ssmt, settings, true, 0);
+            let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(assessment.ssmt, settings);
             if (results.outputData.boilerOutput != undefined) {
               results.outputData.operationsOutput.boilerFuelUsage = this.convertUnitsService.value(results.outputData.operationsOutput.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
               this.ssmtEnergyUsed = results.outputData.operationsOutput.boilerFuelUsage + this.ssmtEnergyUsed;

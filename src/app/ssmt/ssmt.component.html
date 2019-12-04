@@ -120,8 +120,9 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-modification-list *ngIf="modListOpen" [ssmt]="_ssmt" (save)="save()"
-          [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
+        <app-modification-list *ngIf="modListOpen" [ssmt]="_ssmt" (save)="saveSsmt($event)"
+          (saveNewMod)="saveNewMod($event)" [modificationIndex]="modificationIndex" (close)="closeSelectModification()">
+        </app-modification-list>
       </div>
     </div>
   </div>
