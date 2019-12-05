@@ -29,6 +29,8 @@ export class SsmtService {
   calcTab: BehaviorSubject<string>;
   saveSSMT: BehaviorSubject<SSMT>;
   isBaselineFocused: BehaviorSubject<boolean>;
+
+  iterationCount: number;
   constructor(private steamService: SteamService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
     private turbineService: TurbineService, private operationsService: OperationsService, private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
@@ -84,6 +86,7 @@ export class SsmtService {
       }
       let modificationOutputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
       if (ssmtCopy.headerInput.numberOfHeaders > 1) {
+        this.iterationCount = 0;
         let updatedResults: { inputData: SSMTInputs, outputData: SSMTOutput } = this.updateProcessSteamAndCalculate(ssmtCopy, settings, setupInputData, baselineResultsCpy, modificationOutputData);
         setupInputData = updatedResults.inputData;
         modificationOutputData = updatedResults.outputData;
@@ -118,7 +121,8 @@ export class SsmtService {
       if (ssmtCopy.headerInput.numberOfHeaders == 3 && ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true) {
         mediumPressureToleranceTest = Math.abs(baselineResultsCpy.mediumPressureProcessSteamUsage.processUsage - modificationOutputData.mediumPressureProcessSteamUsage.processUsage);
       }
-      if (mediumPressureToleranceTest > .01 || lowPressureToleranceTest > .01) {
+      if ((mediumPressureToleranceTest > .01 || lowPressureToleranceTest > .01) && this.iterationCount < 10) {
+        this.iterationCount++;
         return this.updateProcessSteamAndCalculate(ssmtCopy, settings, setupInputData, baselineResultsCpy, modificationOutputData);
       }
     }
