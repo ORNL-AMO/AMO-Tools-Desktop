@@ -11,6 +11,7 @@ export class DirectoryDashboardService {
   selectedDirectoryId: BehaviorSubject<number>;
   showDeleteItemsModal: BehaviorSubject<boolean>;
   showImportModal: BehaviorSubject<boolean>;
+  showExportModal: BehaviorSubject<boolean>;
   constructor() {
     this.selectAll = new BehaviorSubject<boolean>(false);
     this.dashboardView = new BehaviorSubject<string>('grid');
@@ -19,5 +20,6 @@ export class DirectoryDashboardService {
     this.selectedDirectoryId = new BehaviorSubject<number>(1);
     this.showDeleteItemsModal = new BehaviorSubject<boolean>(false);
     this.showImportModal = new BehaviorSubject<boolean>(false);
+    this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 }

@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
+import { ExportService } from '../../import-export/export.service';
 @Component({
   selector: 'app-directory-dashboard-menu',
   templateUrl: './directory-dashboard-menu.component.html',
@@ -20,7 +21,8 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   isAllSelected: boolean;
   dashboardView: string;
   dashboardViewSub: Subscription;
-  constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService) { }
+  constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
+    private exportService: ExportService) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -33,6 +35,11 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;
     });
+  }
+
+  ngOnDestroy(){
+    this.dashboardViewSub.unsubscribe();
+    this.directoryDashboardService.selectAll.next(false);
   }
 
   getBreadcrumbs(dirId: number) {
@@ -98,6 +105,10 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
   showImportModal(){
     this.directoryDashboardService.showImportModal.next(true);
+  }
 
+  showExportModal(){
+    this.exportService.exportAll = false;
+    this.directoryDashboardService.showExportModal.next(true);
   }
 }

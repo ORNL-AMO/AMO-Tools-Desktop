@@ -23,7 +23,8 @@ import { ModalModule } from 'ngx-bootstrap';
   ],
   exports: [  
     // ImportExportComponent
-    ImportModalComponent
+    ImportModalComponent,
+    ExportModalComponent
   ]
 })
 export class ImportExportModule { }

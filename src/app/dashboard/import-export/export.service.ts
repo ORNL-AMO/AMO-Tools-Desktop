@@ -15,25 +15,24 @@ import { SSMT } from '../../shared/models/steam/ssmt';
 @Injectable()
 export class ExportService {
 
-  exportAllClick: BehaviorSubject<boolean>;
+  exportAll: boolean = false;
   exportData: ImportExportData;
   exportDirectories: Array<ImportExportDirectory>;
   exportAssessments: Array<ImportExportAssessment>;
-  workingDirId: number;
-  selectAllFolder: boolean;
+  // workingDirId: number;
+  // selectAllFolder: boolean;
   constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService) {
-    this.exportAllClick = new BehaviorSubject<boolean>(false);
+    // this.exportAllClick = new BehaviorSubject<boolean>(false);
   }
 
 
-  getSelected(dir: Directory, workingDirId: number) {
-    this.workingDirId = workingDirId;
+  getSelected(dir: Directory, isSelectAll: boolean): ImportExportData {
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDirectories = new Array<ImportExportDirectory>();
     let assessments: Array<Assessment>;
     let subDirs: Array<Directory>;
-    let calculators: Array<Calculator>;
-    if (!this.selectAllFolder) {
+    let calculators: Array<Calculator> = new Array<Calculator>();
+    if (!isSelectAll) {
       assessments = _.filter(dir.assessments, (assessment) => { return assessment.selected === true; });
       subDirs = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
       calculators = _.filter(dir.calculators, (calc) => { return calc.selected === true; });

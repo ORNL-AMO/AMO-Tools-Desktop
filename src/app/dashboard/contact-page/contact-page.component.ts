@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ImportExportService } from '../import-export/import-export.service';
 import { ExportService } from '../import-export/export.service';
+import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 @Component({
   selector: 'app-contact-page',
   templateUrl: './contact-page.component.html',
@@ -8,13 +9,9 @@ import { ExportService } from '../import-export/export.service';
 })
 export class ContactPageComponent implements OnInit {
 
-  constructor(private importExportService: ImportExportService, private exportService: ExportService) { }
+  constructor(private importExportService: ImportExportService, private exportService: ExportService, private directoryDashboardService: DirectoryDashboardService) { }
 
   ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this.exportService.exportAllClick.next(null);
   }
 
   sendMail() {
@@ -22,7 +19,8 @@ export class ContactPageComponent implements OnInit {
   }
 
   downloadData() {
-    this.exportService.exportAllClick.next(true);
+    this.exportService.exportAll = true;
+    this.directoryDashboardService.showExportModal.next(true);
   }
 
 }

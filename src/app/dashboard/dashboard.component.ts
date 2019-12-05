@@ -80,6 +80,10 @@ export class DashboardComponent implements OnInit {
   showImportModal: boolean;
 
   dashboardToastMessageSub: Subscription;
+
+  showExportModalSub: Subscription;
+  showExportModal: boolean;
+
   constructor(private dashboardService: DashboardService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private deleteDataService: DeleteDataService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef, private calculatorService: CalculatorService,
@@ -110,11 +114,11 @@ export class DashboardComponent implements OnInit {
 
     //this.initializeTutorials();
 
-    this.exportAllSub = this.exportService.exportAllClick.subscribe(val => {
-      if (val) {
-        this.exportAll();
-      }
-    });
+    // this.exportAllSub = this.exportService.exportAllClick.subscribe(val => {
+    //   if (val) {
+    //     this.exportAll();
+    //   }
+    // });
     this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(viewStr => {
       if (viewStr) {
         this.dashboardView = viewStr;
@@ -123,6 +127,10 @@ export class DashboardComponent implements OnInit {
 
     this.showImportModalSub = this.directoryDashboardService.showImportModal.subscribe(val => {
       this.showImportModal = val;
+    });
+
+    this.showExportModalSub = this.directoryDashboardService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
     });
     // this.workingDirectorySub = this.assessmentService.workingDirectoryId.subscribe(id => {
     //   if (id) {
@@ -301,19 +309,19 @@ export class DashboardComponent implements OnInit {
     this.deleteItemsModal.hide();
   }
 
-  showExportModal() {
-    this.isExportView = true;
-    this.isImportView = false;
-    this.showImportExport = true;
-    this.exportModal.show();
-  }
+  // showExportModal() {
+  //   this.isExportView = true;
+  //   this.isImportView = false;
+  //   this.showImportExport = true;
+  //   this.exportModal.show();
+  // }
 
-  hideExportModal() {
-    this.exportModal.hide();
-    this.showImportExport = false;
-    this.isExportView = false;
-    this.isImportView = false;
-  }
+  // hideExportModal() {
+  //   this.exportModal.hide();
+  //   this.showImportExport = false;
+  //   this.isExportView = false;
+  //   this.isImportView = false;
+  // }
 
   // showImportModal() {
   //   this.isImportView = true;
@@ -412,10 +420,10 @@ export class DashboardComponent implements OnInit {
   //   }
   // }
 
-  exportAll() {
-    this.exportData = this.exportService.getSelected(JSON.parse(JSON.stringify(this.allDirectories)), 1);
-    this.showExportModal();
-  }
+  // exportAll() {
+  //   this.exportData = this.exportService.getSelected(JSON.parse(JSON.stringify(this.allDirectories)), 1);
+  //   this.showExportModal();
+  // }
 
   returnSelected() {
     return this.selectedItems;

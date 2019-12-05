@@ -1,4 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalDirective } from 'ngx-bootstrap';
+import { ExportService } from '../export.service';
+import { DirectoryDashboardService } from '../../directory-dashboard/directory-dashboard.service';
+import { ImportExportData, ImportExportDirectory, ImportExportAssessment } from '../importExportModel';
+import { Directory } from '../../../shared/models/directory';
+import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
+import { ImportExportService } from '../import-export.service';
+import { Assessment } from '../../../shared/models/assessment';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-export-modal',
@@ -7,9 +16,56 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExportModalComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
+
+  exportData: ImportExportData;
+  canExport: boolean = false;
+  noDirectoryAssessments: Array<ImportExportAssessment>;
+  exportName: string;
+  constructor(private exportService: ExportService, private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
+    private importExportService: ImportExportService) { }
 
   ngOnInit() {
+    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
+    let directory: Directory = this.directoryDbService.getById(directoryId);
+    let isSelectAllFolder: boolean = this.directoryDashboardService.selectAll.getValue();
+    this.exportData = this.exportService.getSelected(directory, isSelectAllFolder);
+    this.getNoDirectoryAssessments();
+    this.canExport = this.importExportService.test(this.exportData);
+  }
+
+  ngAfterViewInit() {
+    this.showExportModal();
+  }
+
+  showExportModal() {
+    this.exportModal.show();
+  }
+
+  hideExportModal() {
+    this.exportModal.hide();
+    this.exportModal.onHidden.subscribe(val => {
+      this.exportService.exportAll = false;
+      this.directoryDashboardService.showExportModal.next(false);
+    })
+  }
+
+  getNoDirectoryAssessments() {
+    this.noDirectoryAssessments = new Array();
+    let allAssessments: Array<ImportExportAssessment> = JSON.parse(JSON.stringify(this.exportData.assessments));
+    if (allAssessments != undefined && allAssessments.length != 0) {
+      this.noDirectoryAssessments = _.filter(allAssessments, (assessment) => {
+        let testVal: ImportExportDirectory = _.find(this.exportData.directories, (directory => { return directory.directory.id == assessment.assessment.directoryId }));
+        if (testVal == undefined) {
+          return true;
+        }
+      });
+    }
+  }
+
+  buildExportJSON() {
+    this.importExportService.downloadData(this.exportData, this.exportName);
+    this.hideExportModal();
   }
 
 }

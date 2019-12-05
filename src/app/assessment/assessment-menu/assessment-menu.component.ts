@@ -94,7 +94,7 @@ export class AssessmentMenuComponent implements OnInit {
   }
 
   emitExport() {
-    this.exportService.selectAllFolder = this.isAllSelected;
+    // this.exportService.selectAllFolder = this.isAllSelected;
     this.exportEmit.emit(true);
   }
 
