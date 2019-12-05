@@ -116,7 +116,7 @@ export class SsmtService {
       let mediumPressureToleranceTest: number = 0;
       let lowPressureToleranceTest: number = 0
       if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true) {
-        Math.abs(baselineResultsCpy.lowPressureProcessSteamUsage.processUsage - modificationOutputData.lowPressureProcessSteamUsage.processUsage);
+        lowPressureToleranceTest = Math.abs(baselineResultsCpy.lowPressureProcessSteamUsage.processUsage - modificationOutputData.lowPressureProcessSteamUsage.processUsage);
       }
       if (ssmtCopy.headerInput.numberOfHeaders == 3 && ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true) {
         mediumPressureToleranceTest = Math.abs(baselineResultsCpy.mediumPressureProcessSteamUsage.processUsage - modificationOutputData.mediumPressureProcessSteamUsage.processUsage);
