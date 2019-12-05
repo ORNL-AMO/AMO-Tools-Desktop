@@ -122,7 +122,6 @@ export class HeaderFormComponent implements OnInit {
       let tmpHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.headerForm);
       this.emitSave.emit(tmpHeader);
     }
-    console.log(this.headerForm.controls.pressure)
   }
 
   setDesuperheatSteam() {
@@ -149,6 +148,11 @@ export class HeaderFormComponent implements OnInit {
 
   setUseBaselineProcessUsage() {
     this.headerForm.controls.useBaselineProcessSteamUsage.patchValue(true);
+    if (this.pressureLevel == 'lowPressure') {
+      this.headerForm.controls.processSteamUsage.patchValue(this.compareService.baselineSSMT.headerInput.lowPressureHeader.processSteamUsage);
+    } else if (this.pressureLevel == 'mediumPressure') {
+      this.headerForm.controls.processSteamUsage.patchValue(this.compareService.baselineSSMT.headerInput.mediumPressureHeader.processSteamUsage);
+    }
     this.showProcessSteamUsage = false;
     this.save();
   }

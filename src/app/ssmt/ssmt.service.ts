@@ -74,6 +74,14 @@ export class SsmtService {
     let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, settings).valid;
     let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, baselineResultsCpy.operationsOutput.sitePowerDemand, false);
     if (turbineValid && headerValid && boilerValid && operationsValid) {
+      if (ssmtCopy.headerInput.numberOfHeaders > 1) {
+        if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true) {
+          ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = baselineResultsCpy.lowPressureProcessSteamUsage.processUsage;
+        }
+        if (ssmtCopy.headerInput.numberOfHeaders == 3 && ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true) {
+          ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = baselineResultsCpy.lowPressureProcessSteamUsage.processUsage;
+        }
+      }
       let modificationOutputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
       if (ssmtCopy.headerInput.numberOfHeaders > 1) {
         let updatedResults: { inputData: SSMTInputs, outputData: SSMTOutput } = this.updateProcessSteamAndCalculate(ssmtCopy, settings, setupInputData, baselineResultsCpy, modificationOutputData);
@@ -103,8 +111,11 @@ export class SsmtService {
       setupInputData = this.setupInputData(ssmtCopy, baselineResultsCpy.operationsOutput.sitePowerDemand, false);
       modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
       let mediumPressureToleranceTest: number = 0;
-      let lowPressureToleranceTest: number = Math.abs(baselineResultsCpy.lowPressureProcessSteamUsage.processUsage - modificationOutputData.lowPressureProcessSteamUsage.processUsage);
-      if (ssmtCopy.headerInput.numberOfHeaders == 3) {
+      let lowPressureToleranceTest: number = 0
+      if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true) {
+        Math.abs(baselineResultsCpy.lowPressureProcessSteamUsage.processUsage - modificationOutputData.lowPressureProcessSteamUsage.processUsage);
+      }
+      if (ssmtCopy.headerInput.numberOfHeaders == 3 && ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true) {
         mediumPressureToleranceTest = Math.abs(baselineResultsCpy.mediumPressureProcessSteamUsage.processUsage - modificationOutputData.mediumPressureProcessSteamUsage.processUsage);
       }
       if (mediumPressureToleranceTest > .01 || lowPressureToleranceTest > .01) {
