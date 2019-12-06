@@ -4,6 +4,7 @@ import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
 import { AssessmentDbService } from './assessment-db.service';
 import { CalculatorDbService } from './calculator-db.service';
+import { Calculator } from '../shared/models/calculators';
 @Injectable()
 export class DirectoryDbService {
 

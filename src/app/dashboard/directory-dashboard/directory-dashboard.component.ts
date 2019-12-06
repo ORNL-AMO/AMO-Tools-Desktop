@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from './directory-dashboard.service';
 import { AssessmentService } from '../../assessment/assessment.service';
 import { DashboardService } from '../dashboard.service';
+import { Calculator } from '../../shared/models/calculators';
 
 @Component({
   selector: 'app-directory-dashboard',
@@ -24,6 +25,8 @@ export class DirectoryDashboardComponent implements OnInit {
   directoryId: number;
   showDeleteItemsModal: boolean;
   showDeleteItemsModalSub: Subscription;
+  showPreAssessmentModalSub: Subscription;
+  showPreAssessmentModalIndex: number;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
 
@@ -48,6 +51,9 @@ export class DirectoryDashboardComponent implements OnInit {
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;
     });
+    this.showPreAssessmentModalSub = this.directoryDashboardService.showPreAssessmentModalIndex.subscribe(val => {
+      this.showPreAssessmentModalIndex = val;
+    })
   }
 
   ngOnDestroy() {
@@ -56,6 +62,7 @@ export class DirectoryDashboardComponent implements OnInit {
     this.directoryDashboardService.selectAll.next(false);
     this.directoryDashboardService.selectedDirectoryId.next(1);
     this.showDeleteItemsModalSub.unsubscribe();
+    this.showPreAssessmentModalSub.unsubscribe();
   }
 
   selectAll(isSelected: boolean) {

@@ -27,6 +27,8 @@ import { DeleteItemsModalComponent } from './delete-items-modal/delete-items-mod
 import { DirectorySummaryComponent } from './directory-summary/directory-summary.component';
 import { DirectoryContactInfoComponent } from './directory-contact-info/directory-contact-info.component';
 import { SettingsModule } from '../../settings/settings.module';
+import { PreAssessmentModalComponent } from './pre-assessment-modal/pre-assessment-modal.component';
+import { PreAssessmentModule } from '../../calculator/utilities/pre-assessment/pre-assessment.module';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,8 @@ import { SettingsModule } from '../../settings/settings.module';
      PreAssessmentListItemComponent,
      DeleteItemsModalComponent,
      DirectorySummaryComponent,
-     DirectoryContactInfoComponent
+     DirectoryContactInfoComponent,
+     PreAssessmentModalComponent
     ],
   imports: [
     CommonModule,
@@ -59,7 +62,8 @@ import { SettingsModule } from '../../settings/settings.module';
     SsmtReportModule,
     PhastReportModule,
     SharedPipesModule,
-    SettingsModule
+    SettingsModule,
+    PreAssessmentModule
   ],
   providers: [DirectoryDashboardService]
 })

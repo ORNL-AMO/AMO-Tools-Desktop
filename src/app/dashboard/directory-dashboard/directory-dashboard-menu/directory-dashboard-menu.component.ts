@@ -111,4 +111,8 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.exportService.exportAll = false;
     this.directoryDashboardService.showExportModal.next(true);
   }
+
+  showPreAssessment(){
+    this.directoryDashboardService.showPreAssessmentModalIndex.next(1);
+  }
 }
