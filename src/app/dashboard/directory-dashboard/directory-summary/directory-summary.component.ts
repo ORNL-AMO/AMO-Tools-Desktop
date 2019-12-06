@@ -5,7 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { DashboardService } from '../../dashboard.service';
 import { Subscription } from 'rxjs';
 import { Directory } from '../../../shared/models/directory';
-import { Settings } from '../../../shared/models/settings';
+import { Settings, FacilityInfo } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { PsatService } from '../../../psat/psat.service';
 import * as _ from 'lodash';
@@ -178,9 +178,11 @@ export class DirectorySummaryComponent implements OnInit {
 
   updateSettings() {
     let id = this.directorySettings.id;
+    let facilityInfo: FacilityInfo = this.directorySettings.facilityInfo;
     this.directorySettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.directorySettings.directoryId = this.directory.id;
     this.directorySettings.id = id;
+    this.directorySettings.facilityInfo = facilityInfo;
     this.indexedDbService.putSettings(this.directorySettings).then(() => {
       this.settingsDbService.setAll().then(() => {
         this.calculateSummary();

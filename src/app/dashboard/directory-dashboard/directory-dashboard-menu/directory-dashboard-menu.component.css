@@ -28,3 +28,35 @@ a:not([href]):not([tabindex]) {
 .btn-default.active{
     background-color: gray;
 }
+
+/*
+Breadcrumb
+=========================================== */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 6px;
+    font-size: 18px;
+  }
+  
+  .list-menu {
+    margin-top: 20px;
+  }
+  
+    .breadcrumb .active a {
+      color: #333;
+    }
+    .breadcrumb .active a:hover {
+      text-decoration: none;
+    }
+  
+  
+  .main-menu .btn {
+    padding: 8px 10px 6px;
+    font-size: 15px;
+  }
+  
+  .space-left {
+    margin-left: 20px;
+  }
+  
