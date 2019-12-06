@@ -24,6 +24,9 @@ import { AssessmentListItemComponent } from './directory-list-view/assessment-li
 import { DirectoryListItemComponent } from './directory-list-view/directory-list-item/directory-list-item.component';
 import { PreAssessmentListItemComponent } from './directory-list-view/pre-assessment-list-item/pre-assessment-list-item.component';
 import { DeleteItemsModalComponent } from './delete-items-modal/delete-items-modal.component';
+import { DirectorySummaryComponent } from './directory-summary/directory-summary.component';
+import { DirectoryContactInfoComponent } from './directory-contact-info/directory-contact-info.component';
+import { SettingsModule } from '../../settings/settings.module';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,9 @@ import { DeleteItemsModalComponent } from './delete-items-modal/delete-items-mod
      AssessmentListItemComponent,
      DirectoryListItemComponent,
      PreAssessmentListItemComponent,
-     DeleteItemsModalComponent
+     DeleteItemsModalComponent,
+     DirectorySummaryComponent,
+     DirectoryContactInfoComponent
     ],
   imports: [
     CommonModule,
@@ -53,7 +58,8 @@ import { DeleteItemsModalComponent } from './delete-items-modal/delete-items-mod
     TreasureHuntReportModule,
     SsmtReportModule,
     PhastReportModule,
-    SharedPipesModule
+    SharedPipesModule,
+    SettingsModule
   ],
   providers: [DirectoryDashboardService]
 })
