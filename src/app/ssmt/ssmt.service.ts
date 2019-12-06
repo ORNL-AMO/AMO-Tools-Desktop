@@ -101,15 +101,16 @@ export class SsmtService {
 
   updateProcessSteamAndCalculate(ssmtCopy: SSMT, settings: Settings, setupInputData: SSMTInputs, baselineResultsCpy: SSMTOutput, modificationOutputData: SSMTOutput): { inputData: SSMTInputs, outputData: SSMTOutput } {
     let recalculate: boolean = false;
+    //update medium pressure process usage with baseline value if applicable
     if (ssmtCopy.headerInput.numberOfHeaders == 3 && ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.mediumPressureProcessSteamUsage.processUsage != baselineResultsCpy.mediumPressureProcessSteamUsage.processUsage) {
       recalculate = true;
       ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResultsCpy.mediumPressureProcessSteamUsage.processUsage, modificationOutputData.mediumPressureHeaderSteam.specificEnthalpy - modificationOutputData.mediumPressureCondensate.specificEnthalpy, settings);
     }
+    //update low pressure process usage with baseline value if applicable
     if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.lowPressureProcessSteamUsage.processUsage != baselineResultsCpy.lowPressureProcessSteamUsage.processUsage) {
       recalculate = true;
       ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResultsCpy.lowPressureProcessSteamUsage.processUsage, modificationOutputData.lowPressureHeaderSteam.specificEnthalpy - modificationOutputData.lowPressureCondensate.specificEnthalpy, settings);
     }
-
     if (recalculate == true) {
       setupInputData = this.setupInputData(ssmtCopy, baselineResultsCpy.operationsOutput.sitePowerDemand, false);
       modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
