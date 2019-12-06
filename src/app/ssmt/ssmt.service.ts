@@ -29,6 +29,8 @@ export class SsmtService {
   calcTab: BehaviorSubject<string>;
   saveSSMT: BehaviorSubject<SSMT>;
   isBaselineFocused: BehaviorSubject<boolean>;
+
+  iterationCount: number;
   constructor(private steamService: SteamService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
     private turbineService: TurbineService, private operationsService: OperationsService, private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
@@ -67,34 +69,65 @@ export class SsmtService {
 
   calculateModificationModel(ssmt: SSMT, settings: Settings, baselineResults: SSMTOutput): { inputData: SSMTInputs, outputData: SSMTOutput } {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(ssmt));
-    let resultsCpy: SSMTOutput = JSON.parse(JSON.stringify(baselineResults));
+    let baselineResultsCpy: SSMTOutput = JSON.parse(JSON.stringify(baselineResults));
     let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, settings);
     let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, settings, ssmtCopy.boilerInput);
     let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCopy.turbineInput, ssmtCopy.headerInput, settings);
     let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, settings).valid;
-    let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, resultsCpy.operationsOutput.sitePowerDemand, false);
+    let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, baselineResultsCpy.operationsOutput.sitePowerDemand, false);
     if (turbineValid && headerValid && boilerValid && operationsValid) {
+      if (ssmtCopy.headerInput.numberOfHeaders > 1) {
+        if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true) {
+          ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = baselineResultsCpy.lowPressureProcessSteamUsage.processUsage;
+        }
+        if (ssmtCopy.headerInput.numberOfHeaders == 3 && ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true) {
+          ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = baselineResultsCpy.lowPressureProcessSteamUsage.processUsage;
+        }
+      }
       let modificationOutputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
       if (ssmtCopy.headerInput.numberOfHeaders > 1) {
-        if (ssmtCopy.headerInput.numberOfHeaders == 3) {
-          if (ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.mediumPressureProcessSteamUsage.processUsage != resultsCpy.mediumPressureProcessSteamUsage.processUsage) {
-            ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(resultsCpy.mediumPressureProcessSteamUsage.processUsage, modificationOutputData.mediumPressureHeaderSteam.specificEnthalpy - modificationOutputData.mediumPressureCondensate.specificEnthalpy, settings);
-            setupInputData = this.setupInputData(ssmtCopy, resultsCpy.operationsOutput.sitePowerDemand, false);
-
-            modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
-          }
-        }
-        if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.lowPressureProcessSteamUsage.processUsage != resultsCpy.lowPressureProcessSteamUsage.processUsage) {
-          ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(resultsCpy.lowPressureProcessSteamUsage.processUsage, modificationOutputData.lowPressureHeaderSteam.specificEnthalpy - modificationOutputData.lowPressureCondensate.specificEnthalpy, settings);
-          setupInputData = this.setupInputData(ssmtCopy, resultsCpy.operationsOutput.sitePowerDemand, false);
-          modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
-        }
+        this.iterationCount = 0;
+        let updatedResults: { inputData: SSMTInputs, outputData: SSMTOutput } = this.updateProcessSteamAndCalculate(ssmtCopy, settings, setupInputData, baselineResultsCpy, modificationOutputData);
+        setupInputData = updatedResults.inputData;
+        modificationOutputData = updatedResults.outputData;
       }
       return { inputData: setupInputData, outputData: modificationOutputData };
     } else {
       let outputData: SSMTOutput = this.getEmptyResults();
       return { inputData: setupInputData, outputData: outputData };
     }
+  }
+
+
+  updateProcessSteamAndCalculate(ssmtCopy: SSMT, settings: Settings, setupInputData: SSMTInputs, baselineResultsCpy: SSMTOutput, modificationOutputData: SSMTOutput): { inputData: SSMTInputs, outputData: SSMTOutput } {
+    let recalculate: boolean = false;
+    //update medium pressure process usage with baseline value if applicable
+    if (ssmtCopy.headerInput.numberOfHeaders == 3 && ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.mediumPressureProcessSteamUsage.processUsage != baselineResultsCpy.mediumPressureProcessSteamUsage.processUsage) {
+      recalculate = true;
+      ssmtCopy.headerInput.mediumPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResultsCpy.mediumPressureProcessSteamUsage.processUsage, modificationOutputData.mediumPressureHeaderSteam.specificEnthalpy - modificationOutputData.mediumPressureCondensate.specificEnthalpy, settings);
+    }
+    //update low pressure process usage with baseline value if applicable
+    if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true && modificationOutputData.lowPressureProcessSteamUsage.processUsage != baselineResultsCpy.lowPressureProcessSteamUsage.processUsage) {
+      recalculate = true;
+      ssmtCopy.headerInput.lowPressureHeader.processSteamUsage = this.calculateProcessSteamUsageFromEnergy(baselineResultsCpy.lowPressureProcessSteamUsage.processUsage, modificationOutputData.lowPressureHeaderSteam.specificEnthalpy - modificationOutputData.lowPressureCondensate.specificEnthalpy, settings);
+    }
+    if (recalculate == true) {
+      setupInputData = this.setupInputData(ssmtCopy, baselineResultsCpy.operationsOutput.sitePowerDemand, false);
+      modificationOutputData = this.steamService.steamModeler(setupInputData, settings);
+      let mediumPressureToleranceTest: number = 0;
+      let lowPressureToleranceTest: number = 0
+      if (ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage == true) {
+        lowPressureToleranceTest = Math.abs(baselineResultsCpy.lowPressureProcessSteamUsage.processUsage - modificationOutputData.lowPressureProcessSteamUsage.processUsage);
+      }
+      if (ssmtCopy.headerInput.numberOfHeaders == 3 && ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage == true) {
+        mediumPressureToleranceTest = Math.abs(baselineResultsCpy.mediumPressureProcessSteamUsage.processUsage - modificationOutputData.mediumPressureProcessSteamUsage.processUsage);
+      }
+      if ((mediumPressureToleranceTest > .01 || lowPressureToleranceTest > .01) && this.iterationCount < 10) {
+        this.iterationCount++;
+        return this.updateProcessSteamAndCalculate(ssmtCopy, settings, setupInputData, baselineResultsCpy, modificationOutputData);
+      }
+    }
+    return { inputData: setupInputData, outputData: modificationOutputData };
   }
 
   calculateProcessSteamUsageFromEnergy(energyFlow: number, specificEnthalpy: number, settings: Settings): number {
