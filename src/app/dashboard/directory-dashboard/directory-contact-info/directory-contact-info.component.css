@@ -110,3 +110,12 @@ td, a{
 .modal-dialog{
   top: 1rem;
 }
+
+.group-label{
+  font-size: 14px;
+  padding-bottom: 0px;
+}
+
+.no-border-top td{
+  border-top: none;
+}

@@ -29,6 +29,7 @@ import { DirectoryContactInfoComponent } from './directory-contact-info/director
 import { SettingsModule } from '../../settings/settings.module';
 import { PreAssessmentModalComponent } from './pre-assessment-modal/pre-assessment-modal.component';
 import { PreAssessmentModule } from '../../calculator/utilities/pre-assessment/pre-assessment.module';
+import { AddPreAssessmentCardComponent } from './directory-grid-view/add-pre-assessment-card/add-pre-assessment-card.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { PreAssessmentModule } from '../../calculator/utilities/pre-assessment/p
      DeleteItemsModalComponent,
      DirectorySummaryComponent,
      DirectoryContactInfoComponent,
-     PreAssessmentModalComponent
+     PreAssessmentModalComponent,
+     AddPreAssessmentCardComponent
     ],
   imports: [
     CommonModule,

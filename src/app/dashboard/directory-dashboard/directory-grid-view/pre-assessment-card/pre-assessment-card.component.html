@@ -1,14 +1,4 @@
-<!-- <div class="card calc-card" (click)="showPreAssessment()">
-  <div class="card-body" *ngIf="calculator.preAssessments">
-    <a>View or Edit
-      <br> PH Pre-Assessment / Screening</a>
-  </div>
-  <div class="card-body" *ngIf="!calculator.preAssessments">
-    <a>Add
-      <br> PH Pre-Assessment / Screening</a>
-  </div>
-</div> -->
-<div class="card card-item" *ngIf="preAssessmentExists" [ngClass]="{'psat': calculator.type =='pump', 'fsat': calculator.type =='fan', 'phast': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
+<div class="card card-item" [ngClass]="{'psat': calculator.type =='pump', 'fsat': calculator.type =='fan', 'phast': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
   <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
     <input type="checkbox" [(ngModel)]="calculator.selected">
     <div class="d-flex align-items-center">
@@ -67,22 +57,6 @@
     <div class="last-updated text-center">Pre-Assessment / Screening</div>
   </div>
 </div>
-<div class="card card-item" *ngIf="!preAssessmentExists">
-  <div class="card-header summary-card-header">
-    <a (click)="showPreAssessment()">{{directory.name}} Pre-Assessment</a>
-  </div>
-  <div class="card-body summary-card-body scroll-item text-center">
-    <div class="no-assessment-data" (click)="showPreAssessment()">
-      Add Pre-Assessment / Screening
-      <br>
-      <span class="fa fa-plus-circle"></span>
-      <br>
-      <p class="small">No Pre-Assessment found for this facility.</p>
-    </div>
-  </div>
-</div>
-
-
 
 <div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
   [config]="{backdrop: 'static'}" [ngClass]="{'phast': calculator.type == 'furnace', 'psat': calculator.type == 'pump'}">

@@ -1,7 +1,7 @@
 <div class="d-flex flex-column justify-content-center dashboard-content">
     <div class="col-12 pt-4 pb-4 scroll-item">
         <div class="card card-item">
-            <div class="card-body">
+            <div class="card-body p-2">
                 <app-directory-dashboard-menu></app-directory-dashboard-menu>
                 <hr class="my-1">
                 <app-directory-contact-info></app-directory-contact-info>
@@ -13,6 +13,9 @@
             <div class="col-4 summary-card" *ngFor="let calculator of directory.calculators; let index = index;">
                 <app-pre-assessment-card [calculator]="calculator" [index]="index">
                 </app-pre-assessment-card>
+            </div>
+            <div class="col-4 summary-card" *ngIf="directory.calculators.length == 0">
+                <app-add-pre-assessment-card></app-add-pre-assessment-card>
             </div>
             <div class="col-4 summary-card" *ngFor="let assessment of directory.assessments">
                 <app-assessment-card [assessment]="assessment">

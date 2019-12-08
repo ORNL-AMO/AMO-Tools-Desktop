@@ -35,14 +35,10 @@ Breadcrumb
 .breadcrumb {
     background-color: transparent;
     padding: 0;
-    margin-bottom: 6px;
-    font-size: 18px;
+    font-size: 20px;
+    margin-bottom: 0;
   }
-  
-  .list-menu {
-    margin-top: 20px;
-  }
-  
+   
     .breadcrumb .active a {
       color: #333;
     }
@@ -54,9 +50,5 @@ Breadcrumb
   .main-menu .btn {
     padding: 8px 10px 6px;
     font-size: 15px;
-  }
-  
-  .space-left {
-    margin-left: 20px;
   }
   

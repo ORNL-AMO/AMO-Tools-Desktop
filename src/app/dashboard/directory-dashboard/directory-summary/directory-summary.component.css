@@ -36,3 +36,8 @@ td, a{
 .table{
   margin-bottom: 0px;
 }
+
+.group-label{
+  font-size: 14px;
+  padding-bottom: 0px;
+}

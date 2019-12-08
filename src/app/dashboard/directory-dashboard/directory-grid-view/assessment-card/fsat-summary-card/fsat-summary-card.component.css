@@ -36,3 +36,7 @@ a:not([href]):not([tabindex]):hover {
     max-height: 85vh;
     overflow: auto;
   }
+
+  .no-border-top{
+    border-top: none;
+  }

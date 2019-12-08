@@ -26,7 +26,7 @@ export class DirectoryDashboardComponent implements OnInit {
   showDeleteItemsModal: boolean;
   showDeleteItemsModalSub: Subscription;
   showPreAssessmentModalSub: Subscription;
-  showPreAssessmentModalIndex: number;
+  showPreAssessmentModalIndex: { index: number, isNew: boolean };
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
 
@@ -43,6 +43,7 @@ export class DirectoryDashboardComponent implements OnInit {
     this.dashboardService.updateSidebarData.subscribe(val => {
       if (val) {
         this.directory = this.directoryDbService.getById(this.directoryId);
+        console.log(this.directory);
       }
     });
     this.showDeleteItemsModalSub = this.directoryDashboardService.showDeleteItemsModal.subscribe(val => {

@@ -37,7 +37,6 @@ export class PreAssessmentCardComponent implements OnInit {
   numUnits: number = 0;
   energyUsed: number = 0;
   energyCost: number = 0;
-  preAssessmentExists: boolean;
   dropdownOpen: boolean = false;
 
   settings: Settings;
@@ -51,7 +50,6 @@ export class PreAssessmentCardComponent implements OnInit {
       this.directory = this.directoryDbService.getById(this.calculator.directoryId);
       this.allDirectories = this.directoryDbService.getAll();
       this.settings = this.settingsDbService.getByDirectoryId(this.calculator.directoryId);
-      this.checkPreAssessment();
       this.calculateData();
     });
   }
@@ -61,30 +59,10 @@ export class PreAssessmentCardComponent implements OnInit {
   }
 
   calculateData() {
-    if (this.preAssessmentExists) {
-      this.numUnits = this.calculator.preAssessments.length;
-      let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu');
-      this.energyUsed = _.sumBy(tmpResults, 'value');
-      this.energyCost = _.sumBy(tmpResults, 'energyCost');
-    } else {
-      this.energyCost = 0;
-      this.energyUsed = 0;
-      this.numUnits = 0;
-    }
-  }
-
-  checkPreAssessment() {
-    if (this.calculator) {
-      if (this.calculator.preAssessments) {
-        if (this.calculator.preAssessments.length > 0) {
-          this.preAssessmentExists = true;
-        } else {
-          this.preAssessmentExists = false;
-        }
-      } else {
-        this.preAssessmentExists = false;
-      }
-    }
+    this.numUnits = this.calculator.preAssessments.length;
+    let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu');
+    this.energyUsed = _.sumBy(tmpResults, 'value');
+    this.energyCost = _.sumBy(tmpResults, 'energyCost');
   }
 
   deletePreAssessment() {
@@ -96,8 +74,7 @@ export class PreAssessmentCardComponent implements OnInit {
   }
 
   showPreAssessment() {
-    console.log('SHOW')
-    this.directoryDashboardService.showPreAssessmentModalIndex.next(this.index);
+    this.directoryDashboardService.showPreAssessmentModalIndex.next({ index: this.index, isNew: false });
   }
 
   showEditModal() {

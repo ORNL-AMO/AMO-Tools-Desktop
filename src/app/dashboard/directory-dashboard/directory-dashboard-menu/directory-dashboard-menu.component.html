@@ -1,14 +1,11 @@
-<div class="d-flex">
+<div class="d-flex no-gutters p-1">
     <div class="col-10">
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item disabled"><span class="fa fa-folder"></span></li>
                 <li class="breadcrumb-item" *ngFor="let directory of breadCrumbs; let first = first;">
-                    <a *ngIf="first" [routerLink]="['/directory-dashboard', directory.id]"> All Assessments
-                    </a>
-                    <a *ngIf="!first" [routerLink]="['/directory-dashboard', directory.id]">
-                        {{directory.name}}
-                    </a>
+                    <a *ngIf="first" [routerLink]="['/directory-dashboard', directory.id]">All Assessments</a>
+                    <a *ngIf="!first" [routerLink]="['/directory-dashboard', directory.id]">{{directory.name}}</a>
                 </li>
                 <li class="breadcrumb-item active">{{directory.name}}</li>
             </ol>
@@ -26,7 +23,7 @@
     </div>
 </div>
 <hr class="my-1">
-<div class="d-flex">
+<div class="d-flex no-gutters">
     <div class="col-12">
         <div class="actions d-flex align-items-center">
             <div class="d-flex flex-wrap">

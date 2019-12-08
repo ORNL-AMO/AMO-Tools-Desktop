@@ -8,6 +8,8 @@ import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Calculator } from '../../../shared/models/calculators';
+import { PreAssessment } from '../../../calculator/utilities/pre-assessment/pre-assessment';
+import { DashboardService } from '../../dashboard.service';
 
 @Component({
   selector: 'app-pre-assessment-modal',
@@ -22,16 +24,25 @@ export class PreAssessmentModalComponent implements OnInit {
   directorySettings: Settings;
   preAssessmentCalculator: Calculator;
   constructor(private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService, private settingsDbService: SettingsDbService,
-    private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
+    private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
-    console.log('init');
-    
+
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
     this.directorySettings = this.settingsDbService.getByDirectoryId(directoryId);
-    let preAssessmentCalculatorIndex: number = this.directoryDashboardService.showPreAssessmentModalIndex.getValue();
-    this.preAssessmentCalculator = this.directory.calculators[preAssessmentCalculatorIndex];
+    let preAssessmentCalculatorIndex: { index: number, isNew: boolean } = this.directoryDashboardService.showPreAssessmentModalIndex.getValue();
+    if (preAssessmentCalculatorIndex.isNew == false) {
+      this.preAssessmentCalculator = this.directory.calculators[preAssessmentCalculatorIndex.index];
+    } else {
+      console.log('new');
+      this.preAssessmentCalculator = {
+        directoryId: this.directory.id,
+        name: '',
+        preAssessments: new Array<PreAssessment>(),
+        selected: false
+      }
+    }
 
   }
 
@@ -47,6 +58,26 @@ export class PreAssessmentModalComponent implements OnInit {
     this.preAssessmentModal.hide();
     this.preAssessmentModal.onHidden.subscribe(val => {
       this.directoryDashboardService.showPreAssessmentModalIndex.next(undefined);
+    });
+  }
+
+  savePreAssessment() {
+    let preAssessmentCalculatorIndex: { index: number, isNew: boolean } = this.directoryDashboardService.showPreAssessmentModalIndex.getValue();
+    if (preAssessmentCalculatorIndex.isNew == true) {
+      this.indexedDbService.addCalculator(this.preAssessmentCalculator).then(calculatorId => {
+        this.updateAllAndClose();
+      });
+    } else {
+      this.indexedDbService.putCalculator(this.preAssessmentCalculator).then(() => {
+        this.updateAllAndClose();
+      })
+    }
+  }
+
+  updateAllAndClose() {
+    this.calculatorDbService.setAll().then(() => {
+      this.dashboardService.updateSidebarData.next(true);
+      this.hidePreAssessmentModal();
     });
   }
 

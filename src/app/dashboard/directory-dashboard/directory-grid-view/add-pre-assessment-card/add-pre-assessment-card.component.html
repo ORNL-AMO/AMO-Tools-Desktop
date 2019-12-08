@@ -1,0 +1,14 @@
+<div class="card card-item">
+    <div class="card-header summary-card-header">
+        <a (click)="showPreAssessment()">{{directory.name}} Pre-Assessment</a>
+    </div>
+    <div class="card-body summary-card-body scroll-item text-center no-assessment-data">
+        <div class="no-assessment-data" (click)="showPreAssessment()">
+            Add Pre-Assessment / Screening
+            <br>
+            <span class="fa fa-plus-circle"></span>
+            <br>
+            <p class="small">No Pre-Assessment found for this facility.</p>
+        </div>
+    </div>
+</div>

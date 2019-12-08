@@ -29,8 +29,8 @@ export class PhastSummaryCardComponent implements OnInit {
 
     ngOnInit() {
         this.setupDone = this.assessment.phast.setupDone;
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
         if (this.setupDone) {
-            this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
             this.phastResults = this.executiveSummaryService.getSummary(this.assessment.phast, false, this.settings, this.assessment.phast);
             let tmpSavings = 0;
             if (this.assessment.phast.modifications) {

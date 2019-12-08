@@ -37,7 +37,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.dashboardViewSub.unsubscribe();
     this.directoryDashboardService.selectAll.next(false);
   }
@@ -103,16 +103,16 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.directoryDashboardService.showDeleteItemsModal.next(true);
   }
 
-  showImportModal(){
+  showImportModal() {
     this.directoryDashboardService.showImportModal.next(true);
   }
 
-  showExportModal(){
+  showExportModal() {
     this.exportService.exportAll = false;
     this.directoryDashboardService.showExportModal.next(true);
   }
 
-  showPreAssessment(){
-    this.directoryDashboardService.showPreAssessmentModalIndex.next(1);
+  showPreAssessment() {
+    this.directoryDashboardService.showPreAssessmentModalIndex.next({ isNew: true, index: 0 });
   }
 }
