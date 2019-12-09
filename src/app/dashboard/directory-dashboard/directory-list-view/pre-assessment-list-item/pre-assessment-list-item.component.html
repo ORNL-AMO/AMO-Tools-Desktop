@@ -1,4 +1,4 @@
-<div class="list-row pre-assessment" *ngIf="preAssessmentExists" [ngClass]="{'pump': calculator.type =='pump', 'fan': calculator.type =='fan', 'furnace': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
+<div class="list-row pre-assessment" [ngClass]="{'pump': calculator.type =='pump', 'fan': calculator.type =='fan', 'furnace': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
   <div class="assessment-name">
     <input type="checkbox" [(ngModel)]="calculator.selected" />
     <i class="fa fa-pie-chart" aria-hidden="true"></i>
@@ -17,12 +17,6 @@
   <div class="last-updated">Pre-assessment / Screening</div>
 </div>
 
-<div class="list-row pre-assessment text-center general"  *ngIf="!preAssessmentExists">
-  <a class="click-link" (click)="showPreAssessment()">Add Pre-Assessment / Screening</a><br>
-  <span class="small help-text">No Pre-Assessment found for this facility.</span>
-</div>
-
-
 <div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
   [config]="{backdrop: 'static'}" [ngClass]="{'phast': calculator.type == 'furnace', 'psat': calculator.type == 'pump'}">
   <div class="modal-dialog modal-md">
@@ -39,10 +33,10 @@
             <label>Edit Pre Assessment Name</label>
             <input type="text" class="form-control w-100" formControlName="name">
           </div>
-          <div class="form-group" *ngIf="directories">
+          <div class="form-group" *ngIf="allDirectories">
             <label>Change Folder Location</label>
             <select class="form-control w-100" formControlName="directoryId">
-              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+              <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
                 <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
                 <span class="bold">{{dir.name}}/</span>
               </option>
@@ -74,10 +68,10 @@
             <label>Copy Pre-Assessment Name</label>
             <input type="text" class="form-control w-100" formControlName="name">
           </div>
-          <div class="form-group" *ngIf="directories">
+          <div class="form-group" *ngIf="allDirectories">
             <label>Move Pre-Assessment to Different Folder</label>
             <select class="form-control w-100" formControlName="directoryId">
-              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+              <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
                 <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
                 <span class="bold">{{dir.name}}/</span>
               </option>

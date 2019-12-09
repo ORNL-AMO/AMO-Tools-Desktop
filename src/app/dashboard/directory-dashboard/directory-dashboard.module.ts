@@ -30,6 +30,7 @@ import { SettingsModule } from '../../settings/settings.module';
 import { PreAssessmentModalComponent } from './pre-assessment-modal/pre-assessment-modal.component';
 import { PreAssessmentModule } from '../../calculator/utilities/pre-assessment/pre-assessment.module';
 import { AddPreAssessmentCardComponent } from './directory-grid-view/add-pre-assessment-card/add-pre-assessment-card.component';
+import { AddPreAssessmentListItemComponent } from './directory-list-view/add-pre-assessment-list-item/add-pre-assessment-list-item.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { AddPreAssessmentCardComponent } from './directory-grid-view/add-pre-ass
      DirectorySummaryComponent,
      DirectoryContactInfoComponent,
      PreAssessmentModalComponent,
-     AddPreAssessmentCardComponent
+     AddPreAssessmentCardComponent,
+     AddPreAssessmentListItemComponent
     ],
   imports: [
     CommonModule,

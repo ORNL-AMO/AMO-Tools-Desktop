@@ -7,6 +7,11 @@ import * as _ from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { CalculatorDbService } from '../../../../indexedDb/calculator-db.service';
+import { Subscription } from 'rxjs';
+import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
+import { DashboardService } from '../../../dashboard.service';
+import { DirectoryDashboardService } from '../../directory-dashboard.service';
+import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 @Component({
   selector: 'app-pre-assessment-list-item',
   templateUrl: './pre-assessment-list-item.component.html',
@@ -16,10 +21,6 @@ export class PreAssessmentListItemComponent implements OnInit {
   @Input()
   calculator: Calculator;
   @Input()
-  directory: Directory;
-  @Input()
-  settings: Settings;
-  @Input()
   index: number;
 
   @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
@@ -27,50 +28,42 @@ export class PreAssessmentListItemComponent implements OnInit {
   @ViewChild('copyModal', { static: false }) public copyModal: ModalDirective;
 
 
-  directories: Array<Directory>;
+  allDirectories: Array<Directory>;
+  directory: Directory;
   preAssessmentExists: boolean;
   editForm: FormGroup;
   copyForm: FormGroup;
   dropdownOpen: boolean = false;
 
   calculatorCopy: Calculator;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private calculatorDbService: CalculatorDbService) { }
+  settings: Settings;
+
+  updateSidebarDataSub: Subscription;
+  constructor(private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private formBuilder: FormBuilder, private calculatorDbService: CalculatorDbService,
+    private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
+
 
   ngOnInit() {
-    this.checkPreAssessment();
-    this.calculatorCopy = JSON.parse(JSON.stringify(this.calculator));
-    delete this.calculatorCopy.id;
+    this.updateSidebarDataSub = this.dashboardService.updateSidebarData.subscribe(val => {
+      this.directory = this.directoryDbService.getById(this.calculator.directoryId);
+      this.allDirectories = this.directoryDbService.getAll();
+      this.settings = this.settingsDbService.getByDirectoryId(this.calculator.directoryId);
+    });
   }
 
-  checkPreAssessment() {
-    if (this.calculator) {
-      if (this.calculator.preAssessments) {
-        if (this.calculator.preAssessments.length > 0) {
-          this.preAssessmentExists = true;
-        } else {
-          this.preAssessmentExists = false;
-        }
-      } else {
-        this.preAssessmentExists = false;
-      }
-    }
+  ngOnDestroy() {
+    this.updateSidebarDataSub.unsubscribe();
   }
+
   showPreAssessment() {
-    if (this.preAssessmentExists) {
-      // this.viewPreAssessment.emit(this.index);
-    } else {
-      // this.viewPreAssessment.emit(undefined);
-    }
+    this.directoryDashboardService.showPreAssessmentModalIndex.next({ index: this.index, isNew: false });
   }
   showEditModal() {
-    this.indexedDbService.getAllDirectories().then(dirs => {
-      this.directories = dirs;
-      this.editForm = this.formBuilder.group({
-        'name': [this.calculator.name],
-        'directoryId': [this.calculator.directoryId]
-      });
-      this.editModal.show();
+    this.editForm = this.formBuilder.group({
+      'name': [this.calculator.name],
+      'directoryId': [this.calculator.directoryId]
     });
+    this.editModal.show();
   }
 
   hideEditModal() {
@@ -78,11 +71,11 @@ export class PreAssessmentListItemComponent implements OnInit {
   }
 
   getParentDirStr(id: number) {
-    let parentDir = _.find(this.directories, (dir) => { return dir.id === id; });
+    let parentDir = _.find(this.allDirectories, (dir) => { return dir.id === id; });
     if (parentDir) {
       let str = parentDir.name + '/';
       while (parentDir.parentDirectoryId) {
-        parentDir = _.find(this.directories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
+        parentDir = _.find(this.allDirectories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
         str = parentDir.name + '/' + str;
       }
       return str;
@@ -114,14 +107,13 @@ export class PreAssessmentListItemComponent implements OnInit {
   }
 
   showCopyModal() {
-    this.indexedDbService.getAllDirectories().then(dirs => {
-      this.directories = dirs;
-      this.copyForm = this.formBuilder.group({
-        'name': [this.calculator.name + ' (copy)', Validators.required],
-        'directoryId': [this.calculator.directoryId, Validators.required]
-      });
-      this.copyModal.show();
+    this.calculatorCopy = JSON.parse(JSON.stringify(this.calculator));
+    delete this.calculatorCopy.id;
+    this.copyForm = this.formBuilder.group({
+      'name': [this.calculator.name + ' (copy)', Validators.required],
+      'directoryId': [this.calculator.directoryId, Validators.required]
     });
+    this.copyModal.show();
   }
 
   hideCopyModal() {

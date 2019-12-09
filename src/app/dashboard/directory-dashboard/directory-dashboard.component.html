@@ -28,9 +28,12 @@
 
         <div class="list-view" *ngIf="dashboardView == 'list'">
             <div class="list-item" *ngFor="let calculator of directory.calculators; let index = index;">
-                <app-pre-assessment-list-item [calculator]="calculator" [index]="index" [settings]="directorySettings"
-                    [directory]="directory">
+                <app-pre-assessment-list-item [calculator]="calculator" [index]="index">
                 </app-pre-assessment-list-item>
+            </div>
+
+            <div class="list-item" *ngIf="directory.calculators.length == 0">
+                <app-add-pre-assessment-list-item></app-add-pre-assessment-list-item>
             </div>
 
             <div class="list-item" *ngFor="let assessment of directory.assessments">

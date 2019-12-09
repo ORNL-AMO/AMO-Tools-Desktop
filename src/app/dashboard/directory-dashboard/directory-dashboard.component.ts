@@ -6,9 +6,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from './directory-dashboard.service';
-import { AssessmentService } from '../../assessment/assessment.service';
 import { DashboardService } from '../dashboard.service';
-import { Calculator } from '../../shared/models/calculators';
 
 @Component({
   selector: 'app-directory-dashboard',
@@ -43,7 +41,6 @@ export class DirectoryDashboardComponent implements OnInit {
     this.dashboardService.updateSidebarData.subscribe(val => {
       if (val) {
         this.directory = this.directoryDbService.getById(this.directoryId);
-        console.log(this.directory);
       }
     });
     this.showDeleteItemsModalSub = this.directoryDashboardService.showDeleteItemsModal.subscribe(val => {
@@ -74,6 +71,9 @@ export class DirectoryDashboardComponent implements OnInit {
       this.directory.subDirectory.forEach(subDir => {
         subDir.selected = isSelected;
       });
+      this.directory.calculators.forEach(calculator => {
+        calculator.selected = isSelected;
+      })
     }
   }
 
