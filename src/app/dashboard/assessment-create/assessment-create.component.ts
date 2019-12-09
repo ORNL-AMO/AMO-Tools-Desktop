@@ -11,7 +11,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import * as _ from 'lodash';
-import { AssessmentService } from '../../assessment/assessment.service';
+import { AssessmentService } from '../assessment.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 
 @Component({
@@ -102,7 +102,6 @@ export class AssessmentCreateComponent implements OnInit {
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
             this.assessmentDbService.setAll().then(() => {
               tmpAssessment.id = assessmentId;
-              this.assessmentService.createAssessment.next(false);
               this.router.navigateByUrl('/psat/' + tmpAssessment.id);
             });
           });
@@ -123,7 +122,6 @@ export class AssessmentCreateComponent implements OnInit {
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
             this.assessmentDbService.setAll().then(() => {
               tmpAssessment.id = assessmentId;
-              this.assessmentService.createAssessment.next(false);
               this.router.navigateByUrl('/phast/' + tmpAssessment.id);
             });
           });
@@ -152,7 +150,6 @@ export class AssessmentCreateComponent implements OnInit {
                 modifiedDate: this.directory.modifiedDate
               };
               this.indexedDbService.putDirectory(tmpDirRef).then(results => {
-                this.assessmentService.createAssessment.next(false);
                 this.router.navigateByUrl('/fsat/' + tmpAssessment.id);
               });
             });
@@ -181,7 +178,6 @@ export class AssessmentCreateComponent implements OnInit {
                 modifiedDate: this.directory.modifiedDate
               };
               this.indexedDbService.putDirectory(tmpDirRef).then(results => {
-                this.assessmentService.createAssessment.next(false);
                 this.router.navigateByUrl('/ssmt/' + tmpAssessment.id);
               });
             });
@@ -209,7 +205,6 @@ export class AssessmentCreateComponent implements OnInit {
                 modifiedDate: this.directory.modifiedDate
               }
               this.indexedDbService.putDirectory(tmpDirRef).then(results => {
-                this.assessmentService.createAssessment.next(false);
                 this.router.navigateByUrl('/treasure-hunt/' + tmpAssessment.id)
               });
             })

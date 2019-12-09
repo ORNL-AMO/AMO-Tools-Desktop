@@ -5,7 +5,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { PsatService } from '../../../../../psat/psat.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
-import { AssessmentService } from '../../../../../assessment/assessment.service';
+import { AssessmentService } from '../../../../assessment.service';
 
 @Component({
     selector: 'app-psat-summary-card',

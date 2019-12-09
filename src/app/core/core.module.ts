@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxElectronModule } from 'ngx-electron';
-import { AssessmentModule } from '../assessment/assessment.module';
 import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
 import { CalculatorModule } from '../calculator/calculator.module';
 import { ModalModule } from 'ngx-bootstrap';
 
 import { CoreComponent } from './core.component';
-import { AssessmentService } from '../assessment/assessment.service';
+import { AssessmentService } from '../dashboard/assessment.service';
 import { SettingsModule } from '../settings/settings.module';
 
 import { SuiteDbModule } from '../suiteDb/suiteDb.module';
@@ -41,7 +40,6 @@ import { UpdateToastComponent } from '../update-toast/update-toast.component';
   imports: [
     CommonModule,
     RouterModule,
-    AssessmentModule,
     PsatModule,
     PhastModule,
     CalculatorModule,

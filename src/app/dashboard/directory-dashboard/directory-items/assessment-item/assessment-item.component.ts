@@ -10,7 +10,7 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { CalculatorDbService } from '../../../../indexedDb/calculator-db.service';
 import { Calculator } from '../../../../shared/models/calculators';
-import { AssessmentService } from '../../../../assessment/assessment.service';
+import { AssessmentService } from '../../../assessment.service';
 import { DashboardService } from '../../../dashboard.service';
 import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';

@@ -5,7 +5,6 @@ import { PsatComponent } from '../psat/psat.component';
 import { FsatComponent } from '../fsat/fsat.component';
 import { SsmtComponent } from '../ssmt/ssmt.component';
 import { TreasureHuntComponent } from '../treasure-hunt/treasure-hunt.component';
-import { AssessmentDashboardComponent } from '../assessment/assessment-dashboard/assessment-dashboard.component';
 import { LandingScreenComponent } from '../dashboard/landing-screen/landing-screen.component';
 import { TutorialsComponent } from '../tutorials/tutorials.component';
 import { AboutPageComponent } from '../dashboard/about-page/about-page.component';
@@ -31,10 +30,6 @@ export const coreRoutes: Routes = [
       {
         path: 'landing-screen',
         component: LandingScreenComponent
-      },
-      {
-        component: AssessmentDashboardComponent,
-        path: 'assessment-dashboard'
       },
       {
         component: DirectoryDashboardComponent,

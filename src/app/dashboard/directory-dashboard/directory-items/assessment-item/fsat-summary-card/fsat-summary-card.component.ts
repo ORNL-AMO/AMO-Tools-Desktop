@@ -5,7 +5,7 @@ import { SettingsDbService } from '../../../../../indexedDb/settings-db.service'
 import { FsatService } from '../../../../../fsat/fsat.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { FsatOutput, FSAT } from '../../../../../shared/models/fans';
-import { AssessmentService } from '../../../../../assessment/assessment.service';
+import { AssessmentService } from '../../../../assessment.service';
 
 @Component({
   selector: 'app-fsat-summary-card',

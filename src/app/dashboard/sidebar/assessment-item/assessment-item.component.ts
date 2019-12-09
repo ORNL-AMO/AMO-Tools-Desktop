@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
-import { AssessmentService } from '../../../assessment/assessment.service';
+import { AssessmentService } from '../../assessment.service';
 @Component({
   selector: 'app-assessment-item',
   templateUrl: './assessment-item.component.html',

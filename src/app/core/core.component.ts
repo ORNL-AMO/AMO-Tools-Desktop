@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { AssessmentService } from '../assessment/assessment.service';
+import { AssessmentService } from '../dashboard/assessment.service';
 import { Subscription } from 'rxjs';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -36,7 +36,6 @@ declare var google: any;
 
 export class CoreComponent implements OnInit {
   showUpdateModal: boolean;
-  showTutorial: boolean = false;
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
   idbStarted: boolean = false;
@@ -46,8 +45,6 @@ export class CoreComponent implements OnInit {
   settingsSub: Subscription;
   tutorialType: string;
   inTutorialsView: boolean;
-  dashboardTab: string;
-  dashboardViewSub: Subscription;
   updateError: boolean = false;
 
   showSurvey: string = 'hide';
@@ -57,7 +54,8 @@ export class CoreComponent implements OnInit {
   showTranslateModalSub: Subscription;
   showTranslate: string = 'hide';
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
-    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
+    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, 
+    private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router) {
   }
 
@@ -72,19 +70,14 @@ export class CoreComponent implements OnInit {
 
     //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
-    this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(val => {
-      this.dashboardTab = val;
-    });
-
 
     this.electronService.ipcRenderer.once('release-info', (event, info) => {
       this.info = info;
     })
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
-      this.inTutorialsView = (this.router.url === '/') && this.dashboardTab === 'tutorials';
+      this.inTutorialsView = (this.router.url === '/tutorials');
       if (val && !this.assessmentService.tutorialShown) {
-        this.showTutorial = true;
         this.hideTutorial = false;
         this.tutorialType = val;
         this.changeDetectorRef.detectChanges();
@@ -184,23 +177,7 @@ export class CoreComponent implements OnInit {
 
   closeTutorial() {
     this.assessmentService.tutorialShown = true;
-    this.showTutorial = false;
     this.hideTutorial = true;
-  }
-
-
-
-
-  success(pos) {
-    console.log('SUCCESS');
-    var crd = pos.coords;
-
-    console.log(pos);
-  }
-
-  error(err) {
-    console.log('ERRR')
-    console.warn(err);
   }
 
   closeTranslate() {

@@ -5,7 +5,7 @@ import { ExecutiveSummaryService } from '../../../../../phast/phast-report/execu
 import { Settings } from '../../../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
-import { AssessmentService } from '../../../../../assessment/assessment.service';
+import { AssessmentService } from '../../../../assessment.service';
 
 
 @Component({

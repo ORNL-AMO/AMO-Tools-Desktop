@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
-import { AssessmentService } from '../../assessment/assessment.service';
+import { AssessmentService } from '../assessment.service';
 declare const packageJson;
 import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';

@@ -6,7 +6,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { SSMTOutput } from '../../../../../shared/models/steam/steam-outputs';
 import { SSMTInputs, SSMT } from '../../../../../shared/models/steam/ssmt';
 import { SsmtService } from '../../../../../ssmt/ssmt.service';
-import { AssessmentService } from '../../../../../assessment/assessment.service';
+import { AssessmentService } from '../../../../assessment.service';
 
 @Component({
   selector: 'app-ssmt-summary-card',

@@ -5,7 +5,7 @@ import { TreasureHuntResults, UtilityUsageData } from '../../../../../shared/mod
 import { Settings } from '../../../../../shared/models/settings';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { AssessmentService } from '../../../../../assessment/assessment.service';
+import { AssessmentService } from '../../../../assessment.service';
 
 @Component({
   selector: 'app-treasure-hunt-summary-card',

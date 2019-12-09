@@ -12,7 +12,7 @@ import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { CoreService } from '../../../core/core.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { AssessmentService } from '../../../assessment/assessment.service';
+import { AssessmentService } from '../../../dashboard/assessment.service';
 import { MockSsmt, MockSsmtSettings } from '../../../core/mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from '../../../core/mockTreasureHunt';
 import { DashboardService } from '../../../dashboard/dashboard.service';

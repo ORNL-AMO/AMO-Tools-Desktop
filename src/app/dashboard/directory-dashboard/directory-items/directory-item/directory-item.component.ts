@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
-import { AssessmentService } from '../../../../assessment/assessment.service';
+import { AssessmentService } from '../../../assessment.service';
 import { DashboardService } from '../../../dashboard.service';
 import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
