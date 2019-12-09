@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DashboardService } from '../dashboard.service';
 
 @Component({
   selector: 'app-landing-screen',
@@ -7,21 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingScreenComponent implements OnInit {
 
-  showCreateAssessment: boolean = false;
-  createAssessmentType: string;
-  constructor() { }
+  constructor(private dashboardService: DashboardService) { }
 
   ngOnInit() {
   }
 
   createAssessment(str?: string) {
     if (str) {
-      this.createAssessmentType = str;
+      this.dashboardService.newAssessmentType = str;
     }
-    this.showCreateAssessment = true;
-  }
-
-  hideCreateAssessment() {
-    this.showCreateAssessment = false;
+    this.dashboardService.createAssessment.next(true);
   }
 }

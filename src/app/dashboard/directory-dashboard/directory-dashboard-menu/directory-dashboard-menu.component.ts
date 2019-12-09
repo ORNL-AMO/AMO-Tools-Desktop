@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { ExportService } from '../../import-export/export.service';
+import { DashboardService } from '../../dashboard.service';
 @Component({
   selector: 'app-directory-dashboard-menu',
   templateUrl: './directory-dashboard-menu.component.html',
@@ -22,7 +23,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   dashboardView: string;
   dashboardViewSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
-    private exportService: ExportService) { }
+    private exportService: ExportService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -92,7 +93,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   showCreateAssessment() {
-    this.directoryDashboardService.createAssessment.next(true);
+    this.dashboardService.createAssessment.next(true);
   }
 
   showCreateFolder() {

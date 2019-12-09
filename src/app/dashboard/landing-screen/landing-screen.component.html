@@ -129,7 +129,7 @@
 								</div>
 								<hr>
 								<div class="d-flex flex-column">
-									<a (click)="hideScreen()" class="click-link align-self-center">
+									<a [routerLink]="['/directory-dashboard', 1]" class="click-link align-self-center">
 										<span class="fa fa-folder-o"></span> View All Your Assessments</a>
 								</div>
 							</div>
@@ -180,7 +180,3 @@
 		</div>
 	</div>
 </div>
-<!-- </div> -->
-
-<!-- <app-assessment-create *ngIf="showCreateAssessment" [directory]="directory" (hideModal)="hideCreateAssessment()"
-	[type]="createAssessmentType"></app-assessment-create> -->

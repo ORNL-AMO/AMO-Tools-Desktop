@@ -13,6 +13,7 @@ import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../assessment.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
+import { DashboardService } from '../dashboard.service';
 
 @Component({
   selector: 'app-assessment-create',
@@ -20,8 +21,7 @@ import { DirectoryDashboardService } from '../directory-dashboard/directory-dash
   styleUrls: ['./assessment-create.component.css']
 })
 export class AssessmentCreateComponent implements OnInit {
-  @Input()
-  type: string;
+
 
   @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
   newAssessmentForm: FormGroup;
@@ -34,7 +34,6 @@ export class AssessmentCreateComponent implements OnInit {
   newFolderForm: FormGroup;
   directory: Directory;
   settings: Settings;
-
   constructor(
     private formBuilder: FormBuilder,
     private assessmentService: AssessmentService,
@@ -43,7 +42,8 @@ export class AssessmentCreateComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
     private directoryDbService: DirectoryDbService,
-    private directoryDashboardService: DirectoryDashboardService) { }
+    private directoryDashboardService: DirectoryDashboardService,
+    private dashboardService: DashboardService) { }
 
   ngOnInit() {
     this.directories = this.directoryDbService.getAll();
@@ -53,9 +53,9 @@ export class AssessmentCreateComponent implements OnInit {
     this.newAssessmentForm = this.initForm();
     this.newFolderForm = this.initFolderForm();
     this.canCreate = true;
-    if (this.type) {
+    if (this.dashboardService.newAssessmentType) {
       this.newAssessmentForm.patchValue({
-        assessmentType: this.type
+        assessmentType: this.dashboardService.newAssessmentType
       });
     }
   }
@@ -80,7 +80,8 @@ export class AssessmentCreateComponent implements OnInit {
   hideCreateModal(bool?: boolean) {
     this.showDropdown = false;
     this.createModal.hide();
-    this.directoryDashboardService.createAssessment.next(false);
+    this.dashboardService.newAssessmentType = undefined;
+    this.dashboardService.createAssessment.next(false);
   }
 
   createAssessment() {

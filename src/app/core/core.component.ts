@@ -39,10 +39,6 @@ export class CoreComponent implements OnInit {
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
   idbStarted: boolean = false;
-  dirSub: Subscription;
-  calcSub: Subscription;
-  assessmentSub: Subscription;
-  settingsSub: Subscription;
   tutorialType: string;
   inTutorialsView: boolean;
   updateError: boolean = false;
@@ -120,10 +116,6 @@ export class CoreComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
-    if (this.dirSub) this.dirSub.unsubscribe();
-    if (this.calcSub) this.calcSub.unsubscribe();
-    if (this.assessmentSub) this.assessmentSub.unsubscribe();
-    if (this.settingsSub) this.settingsSub.unsubscribe();
     this.updateAvailableSubscription.unsubscribe();
     this.showTranslateModalSub.unsubscribe();
   }

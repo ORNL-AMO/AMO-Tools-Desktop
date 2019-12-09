@@ -15,6 +15,7 @@ import { AcknowledgmentsPageComponent } from './acknowledgments-page/acknowledgm
 import { ContactPageComponent } from './contact-page/contact-page.component';
 import { ImportExportModule } from './import-export/import-export.module';
 import { DirectoryDashboardModule } from './directory-dashboard/directory-dashboard.module';
+import { ToastModule } from '../shared/toast/toast.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { DirectoryDashboardModule } from './directory-dashboard/directory-dashbo
     ModalModule,
     RouterModule,
     ImportExportModule,
-    DirectoryDashboardModule
+    DirectoryDashboardModule,
+    ToastModule
   ],
   providers: [
     DashboardService

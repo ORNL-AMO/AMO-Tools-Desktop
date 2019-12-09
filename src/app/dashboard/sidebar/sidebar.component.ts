@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit {
   }
 
   showCreateAssessment() {
-    this.directoryDashboardService.createAssessment.next(true);
+    this.dashboardService.createAssessment.next(true);
   }
 
   openUpdateModal() {
