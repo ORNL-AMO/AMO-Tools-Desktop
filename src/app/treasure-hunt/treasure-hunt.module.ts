@@ -29,6 +29,7 @@ import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-c
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { ConvertInputDataService } from './convert-input-data.service';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import { ConvertInputDataService } from './convert-input-data.service';
     TreasureHuntReportModule,
     AnimatedCheckmarkModule,
     OperatingHoursModalModule,
-    ToastModule
+    ToastModule,
+    RouterModule
   ],
   declarations: [
     TreasureHuntComponent, 
