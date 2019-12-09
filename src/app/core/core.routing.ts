@@ -90,5 +90,9 @@ export const coreRoutes: Routes = [
   {
     path: 'treasure-hunt/:id',
     component: TreasureHuntComponent
+  },
+  {
+    path: 'report-rollup',
+    component: ReportRollupComponent
   }
 ];

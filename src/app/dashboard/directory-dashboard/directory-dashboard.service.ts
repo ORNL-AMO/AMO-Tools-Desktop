@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class DirectoryDashboardService {
 
-  selectAll: BehaviorSubject<boolean>;
   dashboardView: BehaviorSubject<string>;
   createFolder: BehaviorSubject<boolean>;
   selectedDirectoryId: BehaviorSubject<number>;
@@ -13,7 +12,6 @@ export class DirectoryDashboardService {
   showExportModal: BehaviorSubject<boolean>;
   showPreAssessmentModalIndex: BehaviorSubject<{index: number, isNew: boolean}>;
   constructor() {
-    this.selectAll = new BehaviorSubject<boolean>(false);
     this.dashboardView = new BehaviorSubject<string>('grid');
     this.createFolder = new BehaviorSubject<boolean>(false);
     this.selectedDirectoryId = new BehaviorSubject<number>(1);

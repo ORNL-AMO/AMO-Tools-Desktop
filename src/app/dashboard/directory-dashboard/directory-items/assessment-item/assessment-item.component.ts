@@ -44,6 +44,7 @@ export class AssessmentItemComponent implements OnInit {
 
 
   ngOnInit() {
+    this.assessment.selected = false;
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.allDirectories = this.directoryDbService.getAll();
     });

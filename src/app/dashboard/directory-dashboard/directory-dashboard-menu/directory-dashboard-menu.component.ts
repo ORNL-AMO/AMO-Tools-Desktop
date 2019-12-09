@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
@@ -9,6 +9,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { ExportService } from '../../import-export/export.service';
 import { DashboardService } from '../../dashboard.service';
+import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 @Component({
   selector: 'app-directory-dashboard-menu',
   templateUrl: './directory-dashboard-menu.component.html',
@@ -23,13 +24,14 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   dashboardView: string;
   dashboardViewSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
-    private exportService: ExportService, private dashboardService: DashboardService) { }
+    private exportService: ExportService, private dashboardService: DashboardService, private reportRollupService: ReportRollupService, private router: Router) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       let id: number = Number(params['id']);
       this.breadCrumbs = new Array();
       this.directory = this.directoryDbService.getById(id);
+      this.isAllSelected = false;
       this.getBreadcrumbs(id);
     });
 
@@ -40,7 +42,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
   ngOnDestroy() {
     this.dashboardViewSub.unsubscribe();
-    this.directoryDashboardService.selectAll.next(false);
   }
 
   getBreadcrumbs(dirId: number) {
@@ -54,7 +55,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   toggleSelectAll() {
-    // this.directoryDashboardService.selectAll.next(this.isAllSelected);
+    this.directory.selected = this.isAllSelected;
     this.directory.assessments.forEach(assessment => {
       assessment.selected = this.isAllSelected;
     });
@@ -97,10 +98,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     return (assessmentSelectedTest != undefined) || (directorySelectedTest != undefined);
   }
 
-  checkDeleteSelected() {
-
-  }
-
   showCreateAssessment() {
     this.dashboardService.createAssessment.next(true);
   }
@@ -124,5 +121,10 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
   showPreAssessment() {
     this.directoryDashboardService.showPreAssessmentModalIndex.next({ isNew: true, index: 0 });
+  }
+
+  generateReport() {
+    this.reportRollupService.getReportData(this.directory);
+    this.router.navigateByUrl('/report-rollup');
   }
 }

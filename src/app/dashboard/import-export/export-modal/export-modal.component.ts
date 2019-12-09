@@ -6,7 +6,6 @@ import { ImportExportData, ImportExportDirectory, ImportExportAssessment } from 
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { ImportExportService } from '../import-export.service';
-import { Assessment } from '../../../shared/models/assessment';
 import * as _ from 'lodash';
 
 @Component({
@@ -28,7 +27,7 @@ export class ExportModalComponent implements OnInit {
   ngOnInit() {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     let directory: Directory = this.directoryDbService.getById(directoryId);
-    let isSelectAllFolder: boolean = this.directoryDashboardService.selectAll.getValue();
+    let isSelectAllFolder: boolean = directory.selected;
     this.exportData = this.exportService.getSelected(directory, isSelectAllFolder);
     this.getNoDirectoryAssessments();
     this.canExport = this.importExportService.test(this.exportData);

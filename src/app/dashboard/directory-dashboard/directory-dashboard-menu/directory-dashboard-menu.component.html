@@ -34,7 +34,7 @@
                 <button class="btn btn-secondary action-btn" (click)="showCreateFolder()" type="button">Add Folder</button>
                 <!-- <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()"></app-create-folder> -->
                 <button class="btn btn-secondary action-btn" [disabled]="!checkReport()" type="button"
-                    (click)="emitGenReport()">Generate Report</button>
+                    (click)="generateReport()">Generate Report</button>
                 <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button"
                     (click)="showDeleteItemsModal()">Delete</button>
                 <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button"

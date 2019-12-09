@@ -1,14 +1,13 @@
-import { Component, OnInit, ViewChild, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { Assessment } from '../../shared/models/assessment';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../assessment.service';

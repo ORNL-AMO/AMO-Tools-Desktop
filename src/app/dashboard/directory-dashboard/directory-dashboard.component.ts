@@ -17,7 +17,6 @@ export class DirectoryDashboardComponent implements OnInit {
 
   directory: Directory;
   directorySettings: Settings;
-  selectAllSub: Subscription;
   dashboardView: string;
   dashboardViewSub: Subscription;
   directoryId: number;
@@ -35,9 +34,6 @@ export class DirectoryDashboardComponent implements OnInit {
       this.directoryDashboardService.selectedDirectoryId.next(this.directoryId);
       this.directory = this.directoryDbService.getById(this.directoryId);
       this.directorySettings = this.settingsDbService.getByDirectoryId(this.directoryId);
-    });
-    this.selectAllSub = this.directoryDashboardService.selectAll.subscribe(val => {
-      this.selectAll(val);
     });
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       if (val) {
@@ -57,26 +53,8 @@ export class DirectoryDashboardComponent implements OnInit {
 
   ngOnDestroy() {
     this.dashboardViewSub.unsubscribe();
-    this.selectAllSub.unsubscribe();
-    this.directoryDashboardService.selectAll.next(false);
-    this.directoryDashboardService.selectedDirectoryId.next(1);
     this.showDeleteItemsModalSub.unsubscribe();
     this.showPreAssessmentModalSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
-  }
-
-  selectAll(isSelected: boolean) {
-    if (this.directory) {
-      this.directory.assessments.forEach(assessment => {
-        assessment.selected = isSelected;
-      });
-      this.directory.subDirectory.forEach(subDir => {
-        subDir.selected = isSelected;
-      });
-      this.directory.calculators.forEach(calculator => {
-        calculator.selected = isSelected;
-      })
-    }
-  }
-
+ }
 }

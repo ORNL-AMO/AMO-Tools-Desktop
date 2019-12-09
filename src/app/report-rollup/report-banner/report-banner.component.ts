@@ -1,4 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { DirectoryDashboardService } from '../../dashboard/directory-dashboard/directory-dashboard.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-report-banner',
@@ -6,21 +8,21 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./report-banner.component.css']
 })
 export class ReportBannerComponent implements OnInit {
-  @Output('emitCloseReport')
-  emitCloseReport = new EventEmitter<boolean>();
   @Output('emitExport')
   emitExport = new EventEmitter<boolean>();
   @Output('emitPrint')
   emitPrint = new EventEmitter<boolean>();
   @Output('emitShowUnitModal')
   emitShowUnitModal = new EventEmitter<boolean>();
-  constructor() { }
+
+  constructor(private directoryDashboardService: DirectoryDashboardService, private router: Router) { }
 
   ngOnInit() {
   }
 
   closeReport() {
-    this.emitCloseReport.emit(true);
+    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
+    this.router.navigateByUrl('/directory-dashboard/' + directoryId);
   }
 
   exportToCsv() {
