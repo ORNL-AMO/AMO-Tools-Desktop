@@ -42,7 +42,7 @@ export class DirectorySummaryComponent implements OnInit {
   ssmtSummary: AssessmentTypeSummary;
 
   settingsForm: FormGroup;
-  updateSidebarDataSub: Subscription;
+  updateDashboardDataSub: Subscription;
   directoryIdSub: Subscription;
   counter: NodeJS.Timeout;
   constructor(private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
@@ -58,14 +58,14 @@ export class DirectorySummaryComponent implements OnInit {
       this.calculateSummary();
     })
 
-    this.updateSidebarDataSub = this.dashboardService.updateSidebarData.subscribe(val => {
+    this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.directory = this.directoryDbService.getById(this.directory.id);
       this.calculateSummary();
     });
   }
 
   ngOnDestroy() {
-    this.updateSidebarDataSub.unsubscribe();
+    this.updateDashboardDataSub.unsubscribe();
     this.directoryIdSub.unsubscribe();
   }
 

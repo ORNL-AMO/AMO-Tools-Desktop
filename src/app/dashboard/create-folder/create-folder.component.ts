@@ -94,7 +94,7 @@ export class CreateFolderComponent implements OnInit {
               this.canAdd = true;
               this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(this.directory.id);
               this.newFolderForm = this.initForm();
-              this.dashboardService.updateSidebarData.next(true);
+              this.dashboardService.updateDashboardData.next(true);
             });
           });
         });

@@ -25,6 +25,7 @@ export class DirectoryDashboardComponent implements OnInit {
   showDeleteItemsModalSub: Subscription;
   showPreAssessmentModalSub: Subscription;
   showPreAssessmentModalIndex: { index: number, isNew: boolean };
+  updateDashboardDataSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
 
@@ -38,7 +39,7 @@ export class DirectoryDashboardComponent implements OnInit {
     this.selectAllSub = this.directoryDashboardService.selectAll.subscribe(val => {
       this.selectAll(val);
     });
-    this.dashboardService.updateSidebarData.subscribe(val => {
+    this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       if (val) {
         this.directory = this.directoryDbService.getById(this.directoryId);
       }
@@ -61,6 +62,7 @@ export class DirectoryDashboardComponent implements OnInit {
     this.directoryDashboardService.selectedDirectoryId.next(1);
     this.showDeleteItemsModalSub.unsubscribe();
     this.showPreAssessmentModalSub.unsubscribe();
+    this.updateDashboardDataSub.unsubscribe();
   }
 
   selectAll(isSelected: boolean) {

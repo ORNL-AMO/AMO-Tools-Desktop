@@ -24,7 +24,7 @@ export class DirectoryItemComponent implements OnInit {
   editForm: FormGroup;
   allDirectories: Array<Directory>;
   @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
-  updateSidebarDataSub: Subscription;
+  updateDashboardDataSub: Subscription;
   dashboardView: string;
   dashboardViewSub: Subscription;
   constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService,
@@ -32,7 +32,7 @@ export class DirectoryItemComponent implements OnInit {
 
   ngOnInit() {
     this.directory.selected = false;
-    this.updateSidebarDataSub = this.dashboardService.updateSidebarData.subscribe(val => {
+    this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.allDirectories = this.directoryDbService.getAll();
       this.populateDirectories(this.directory);
     });
@@ -43,7 +43,7 @@ export class DirectoryItemComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.updateSidebarDataSub.unsubscribe();
+    this.updateDashboardDataSub.unsubscribe();
     this.dashboardViewSub.unsubscribe();
   }
 
@@ -89,7 +89,7 @@ export class DirectoryItemComponent implements OnInit {
     this.directory.parentDirectoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putDirectory(this.directory).then(val => {
       this.directoryDbService.setAll().then(() => {
-        this.dashboardService.updateSidebarData.next(true);
+        this.dashboardService.updateDashboardData.next(true);
         this.hideEditModal();
       });
     });

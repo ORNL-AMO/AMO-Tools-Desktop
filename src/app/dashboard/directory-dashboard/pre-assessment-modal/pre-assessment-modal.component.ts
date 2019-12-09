@@ -27,7 +27,6 @@ export class PreAssessmentModalComponent implements OnInit {
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
-
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.directory = this.directoryDbService.getById(directoryId);
     this.directorySettings = this.settingsDbService.getByDirectoryId(directoryId);
@@ -35,7 +34,6 @@ export class PreAssessmentModalComponent implements OnInit {
     if (preAssessmentCalculatorIndex.isNew == false) {
       this.preAssessmentCalculator = this.directory.calculators[preAssessmentCalculatorIndex.index];
     } else {
-      console.log('new');
       this.preAssessmentCalculator = {
         directoryId: this.directory.id,
         name: '',
@@ -76,7 +74,7 @@ export class PreAssessmentModalComponent implements OnInit {
 
   updateAllAndClose() {
     this.calculatorDbService.setAll().then(() => {
-      this.dashboardService.updateSidebarData.next(true);
+      this.dashboardService.updateDashboardData.next(true);
       this.hidePreAssessmentModal();
     });
   }

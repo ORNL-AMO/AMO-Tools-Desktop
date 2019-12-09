@@ -12,7 +12,6 @@ import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { CoreService } from '../../../core/core.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { AssessmentService } from '../../../dashboard/assessment.service';
 import { MockSsmt, MockSsmtSettings } from '../../../core/mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from '../../../core/mockTreasureHunt';
 import { DashboardService } from '../../../dashboard/dashboard.service';
@@ -47,7 +46,7 @@ export class ResetDataModalComponent implements OnInit {
 
   hideResetSystemSettingsModal() {
     this.resetSystemSettingsModal.hide();
-    this.dashboardService.updateSidebarData.next(true);
+    this.dashboardService.updateDashboardData.next(true);
     this.closeModal.emit(true);
   }
 
@@ -345,7 +344,7 @@ export class ResetDataModalComponent implements OnInit {
       this.assessmentDbService.setAll().then(() => {
         this.settingsDbService.setAll().then(() => {
           this.calculatorDbService.setAll().then(() => {
-            this.dashboardService.updateSidebarData.next(true);
+            this.dashboardService.updateDashboardData.next(true);
             this.hideResetSystemSettingsModal();
           });
         });

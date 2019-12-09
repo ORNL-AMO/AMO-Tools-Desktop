@@ -5,11 +5,11 @@ import { BehaviorSubject } from 'rxjs';
 export class DashboardService {
 
   newAssessmentType: string;
-  updateSidebarData: BehaviorSubject<boolean>;
+  updateDashboardData: BehaviorSubject<boolean>;
   createAssessment: BehaviorSubject<boolean>;
   dashboardToastMessage: BehaviorSubject<string>;
   constructor() {
-    this.updateSidebarData = new BehaviorSubject<boolean>(false);
+    this.updateDashboardData = new BehaviorSubject<boolean>(false);
     this.dashboardToastMessage = new BehaviorSubject<string>(undefined);
     this.createAssessment = new BehaviorSubject<boolean>(false);
   }

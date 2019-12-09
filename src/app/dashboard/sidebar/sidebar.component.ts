@@ -20,7 +20,7 @@ export class SidebarComponent implements OnInit {
   showModal: boolean;
   showVersionModal: boolean;
   updateSub: Subscription;
-  updateSidebarDataSub: Subscription;
+  updateDashboardDataSub: Subscription;
   rootDirectory: Directory;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
@@ -31,7 +31,7 @@ export class SidebarComponent implements OnInit {
       this.isUpdateAvailable = val;
     });
 
-    this.updateSidebarDataSub = this.dashboardService.updateSidebarData.subscribe(val => {
+    this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.rootDirectory = this.directoryDbService.getById(1);
       this.rootDirectory.collapsed = false;
     });

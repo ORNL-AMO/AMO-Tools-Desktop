@@ -62,7 +62,7 @@ export class DirectoryContactInfoComponent implements OnInit {
       this.indexedDbService.addSettings(this.settings).then(val => {
         this.settingsDbService.setAll().then(() => {
           this.checkShow();
-          this.dashboardService.updateSidebarData.next(true);
+          this.dashboardService.updateDashboardData.next(true);
           this.hideFacilityModal();
         });
       });
@@ -70,7 +70,7 @@ export class DirectoryContactInfoComponent implements OnInit {
       this.indexedDbService.putSettings(this.settings).then(returnVal => {
         this.settingsDbService.setAll().then(() => {
           this.checkShow();
-          this.dashboardService.updateSidebarData.next(true);
+          this.dashboardService.updateDashboardData.next(true);
           this.hideFacilityModal();
         });
       });

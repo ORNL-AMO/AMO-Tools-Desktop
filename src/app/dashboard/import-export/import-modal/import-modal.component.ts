@@ -84,7 +84,7 @@ export class ImportModalComponent implements OnInit {
       setTimeout(() => {
         this.hideImportModal();
         this.importInProgress = false;
-        this.dashboardService.updateSidebarData.next(true);
+        this.dashboardService.updateDashboardData.next(true);
       }, 1500);
     }
     else {

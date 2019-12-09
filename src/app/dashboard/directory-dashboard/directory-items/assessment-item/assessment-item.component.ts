@@ -32,7 +32,7 @@ export class AssessmentItemComponent implements OnInit {
   editForm: FormGroup;
   copyForm: FormGroup;
   dropdownOpen: boolean = false;
-  updateSidebarDataSub: Subscription;
+  updateDashboardDataSub: Subscription;
   dashboardView: string;
   dashboardViewSub: Subscription;
   isSetup: boolean;
@@ -44,7 +44,7 @@ export class AssessmentItemComponent implements OnInit {
 
 
   ngOnInit() {
-    this.updateSidebarDataSub = this.dashboardService.updateSidebarData.subscribe(val => {
+    this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.allDirectories = this.directoryDbService.getAll();
     });
 
@@ -66,7 +66,7 @@ export class AssessmentItemComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.updateSidebarDataSub.unsubscribe();
+    this.updateDashboardDataSub.unsubscribe();
     this.dashboardViewSub.unsubscribe();
   }
 
@@ -134,12 +134,12 @@ export class AssessmentItemComponent implements OnInit {
               assessmentCalculatorCopy.assessmentId = newAssessmentId;
               this.indexedDbService.addCalculator(assessmentCalculatorCopy).then(() => {
                 this.calculatorDbService.setAll().then(() => {
-                  this.dashboardService.updateSidebarData.next(true);
+                  this.dashboardService.updateDashboardData.next(true);
                   this.hideCopyModal();
                 });
               });
             } else {
-              this.dashboardService.updateSidebarData.next(true);
+              this.dashboardService.updateDashboardData.next(true);
               this.hideCopyModal();
             }
           });
@@ -163,7 +163,7 @@ export class AssessmentItemComponent implements OnInit {
     this.assessment.directoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putAssessment(this.assessment).then(val => {
       this.assessmentDbService.setAll().then(() => {
-        this.dashboardService.updateSidebarData.next(true);
+        this.dashboardService.updateDashboardData.next(true);
         this.hideEditModal();
       });
     });
@@ -191,12 +191,12 @@ export class AssessmentItemComponent implements OnInit {
             if (assessmentCalculatorCopy) {
               this.indexedDbService.deleteCalculator(assessmentCalculatorCopy.id).then(() => {
                 this.calculatorDbService.setAll().then(() => {
-                  this.dashboardService.updateSidebarData.next(true);
+                  this.dashboardService.updateDashboardData.next(true);
                   this.hideDeleteModal();
                 });
               });
             } else {
-              this.dashboardService.updateSidebarData.next(true);
+              this.dashboardService.updateDashboardData.next(true);
               this.hideDeleteModal();
             }
           });

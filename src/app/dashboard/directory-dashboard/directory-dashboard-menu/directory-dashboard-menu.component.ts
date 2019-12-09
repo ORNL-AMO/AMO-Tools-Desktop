@@ -54,7 +54,16 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   toggleSelectAll() {
-    this.directoryDashboardService.selectAll.next(this.isAllSelected);
+    // this.directoryDashboardService.selectAll.next(this.isAllSelected);
+    this.directory.assessments.forEach(assessment => {
+      assessment.selected = this.isAllSelected;
+    });
+    this.directory.subDirectory.forEach(subDir => {
+      subDir.selected = this.isAllSelected;
+    });
+    this.directory.calculators.forEach(calculator => {
+      calculator.selected = this.isAllSelected;
+    })
   }
 
   setView(str: string) {
