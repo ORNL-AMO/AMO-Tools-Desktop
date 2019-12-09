@@ -1,4 +1,5 @@
-<div class="card card-item">
+<!--grid view-->
+<div class="card card-item" *ngIf="dashboardView == 'grid'">
     <div class="card-header summary-card-header">
         <a (click)="showPreAssessment()">{{directory.name}} Pre-Assessment</a>
     </div>
@@ -11,4 +12,9 @@
             <p class="small">No Pre-Assessment found for this facility.</p>
         </div>
     </div>
+</div>
+<!--list view-->
+<div class="list-row pre-assessment text-center general" *ngIf="dashboardView == 'list'">
+    <a class="click-link" (click)="showPreAssessment()">Add Pre-Assessment / Screening</a><br>
+    <span class="small help-text">No Pre-Assessment found for this facility.</span>
 </div>
