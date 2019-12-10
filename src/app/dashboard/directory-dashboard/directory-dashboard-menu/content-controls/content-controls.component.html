@@ -1,0 +1,36 @@
+<div class="btn-group pull-right" role="group">
+    <button class="btn btn-secondary action-btn" (click)="setView('list')"
+        [ngClass]="{'active': dashboardView == 'list'}">
+        <i class="fa fa-list"></i>
+    </button>
+    <button class="btn btn-secondary action-btn" (click)="setView('grid')"
+        [ngClass]="{'active': dashboardView == 'grid'}">
+        <i class="fa fa-th"></i>
+    </button>
+</div>
+<button class="btn btn-secondary action-btn mr-2 pull-right" (click)="toggleFilterDropdown()">
+    <span class="fa fa-filter"></span> Filter
+</button>
+<div class="dropdown-menu p-0" [ngClass]="{'show': filterDropdown == true}">
+    <div class="list-group">
+        <a class="list-group-item bold">Filter Displayed Items:</a>
+        <a class="list-group-item list-group-item-action">Pumps</a>
+        <a class="list-group-item list-group-item-action">Fans</a>
+        <a class="list-group-item list-group-item-action">Steams</a>
+        <a class="list-group-item list-group-item-action">Treasure Hunt</a>
+        <a class="list-group-item list-group-item-action">Sub Directory</a>
+        <a class="list-group-item list-group-item-action">Pre-Assessment</a>
+    </div>
+</div>
+<button class="btn btn-secondary action-btn mr-2 pull-right" (click)="toggleSortDropdown()">
+    <span class="fa fa-sort"></span> Sort
+</button>
+<div class="dropdown-menu p-0" [ngClass]="{'show': sortByDropdown == true}">
+    <div class="list-group">
+        <a class="list-group-item list-group-item-action">Name</a>
+        <a class="list-group-item list-group-item-action">Creation Date</a>
+        <a class="list-group-item list-group-item-action">Last Updated Date</a>
+        <a class="list-group-item list-group-item-action">Cost Savings</a>
+        <a class="list-group-item list-group-item-action">Annual Consumption/Energy Use</a>
+    </div>
+</div>

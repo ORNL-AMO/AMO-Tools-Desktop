@@ -84,15 +84,7 @@ Buttons
 .btn-secondary {
   color: #343434;
   background: #ffffff;
-  background: -moz-linear-gradient(top,  #ffffff 0%, #f9f9f9 100%);
-  background: -webkit-linear-gradient(top,  #ffffff 0%,#f9f9f9 100%);
-  background: linear-gradient(to bottom,  #ffffff 0%,#f9f9f9 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f9f9f9',GradientType=0 );
   border-color: #717171;
-}
-
-.btn-secondary:hover{
-  color:#007bff;
 }
 
 .btn.disabled, .btn:disabled {

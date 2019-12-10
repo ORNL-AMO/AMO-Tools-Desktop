@@ -1,0 +1,14 @@
+.btn{
+    padding: 6px;
+}
+
+
+.actions{
+    padding: .25rem;
+    border-radius: .25rem;
+    background: white;
+}
+
+.btn-secondary.active{
+    background-color: gray;
+}

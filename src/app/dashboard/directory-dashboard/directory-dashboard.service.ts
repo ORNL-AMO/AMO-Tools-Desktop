@@ -10,7 +10,9 @@ export class DirectoryDashboardService {
   showDeleteItemsModal: BehaviorSubject<boolean>;
   showImportModal: BehaviorSubject<boolean>;
   showExportModal: BehaviorSubject<boolean>;
-  showPreAssessmentModalIndex: BehaviorSubject<{index: number, isNew: boolean}>;
+  showPreAssessmentModalIndex: BehaviorSubject<{ index: number, isNew: boolean }>;
+  filterDashboardBy: BehaviorSubject<FilterDashboardBy>;
+
   constructor() {
     this.dashboardView = new BehaviorSubject<string>('grid');
     this.createFolder = new BehaviorSubject<boolean>(false);
@@ -18,6 +20,11 @@ export class DirectoryDashboardService {
     this.showDeleteItemsModal = new BehaviorSubject<boolean>(false);
     this.showImportModal = new BehaviorSubject<boolean>(false);
     this.showExportModal = new BehaviorSubject<boolean>(false);
-    this.showPreAssessmentModalIndex = new BehaviorSubject<{index: number, isNew: boolean}>(undefined);
+    this.showPreAssessmentModalIndex = new BehaviorSubject<{ index: number, isNew: boolean }>(undefined);
   }
+}
+
+
+export interface FilterDashboardBy {
+
 }

@@ -21,8 +21,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   directory: Directory;
   view: string = 'grid';
   isAllSelected: boolean;
-  dashboardView: string;
-  dashboardViewSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
     private exportService: ExportService, private dashboardService: DashboardService, private reportRollupService: ReportRollupService, private router: Router) { }
 
@@ -34,14 +32,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
       this.isAllSelected = false;
       this.getBreadcrumbs(id);
     });
-
-    this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
-      this.dashboardView = val;
-    });
-  }
-
-  ngOnDestroy() {
-    this.dashboardViewSub.unsubscribe();
   }
 
   getBreadcrumbs(dirId: number) {
@@ -67,9 +57,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     })
   }
 
-  setView(str: string) {
-    this.directoryDashboardService.dashboardView.next(str);
-  }
+
 
   checkSelected() {
     let assessmentSelectedTest: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
@@ -127,4 +115,5 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.reportRollupService.getReportData(this.directory);
     this.router.navigateByUrl('/report-rollup');
   }
+
 }

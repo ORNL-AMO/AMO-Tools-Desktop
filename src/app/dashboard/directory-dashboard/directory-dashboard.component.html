@@ -10,40 +10,30 @@
             </div>
         </div>
         <div [ngClass]="{'row': dashboardView == 'grid', 'list-view': dashboardView == 'list'}">
-            <div *ngFor="let calculator of directory.calculators; let index = index;"
+            <div *ngIf="displayAddPreAssessment"
                 [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
-                <app-pre-assessment-item [calculator]="calculator" [index]="index">
-                </app-pre-assessment-item>
-            </div>
-            <div *ngIf="directory.calculators.length == 0" [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
                 <app-add-pre-assessment-item></app-add-pre-assessment-item>
             </div>
-            <div *ngFor="let assessment of directory.assessments" [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
-                <app-assessment-item [assessment]="assessment">
+
+            <div *ngFor="let directoryItem of directoryItems"
+                [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
+                <app-pre-assessment-item *ngIf="directoryItem.type == 'calculator'"
+                    [calculator]="directoryItem.calculator" [index]="directoryItem.calculatorIndex">
+                </app-pre-assessment-item>
+                <app-assessment-item *ngIf="directoryItem.type == 'assessment'" [assessment]="directoryItem.assessment">
                 </app-assessment-item>
+                <app-directory-item *ngIf="directoryItem.type == 'directory'" [directory]="directoryItem.subDirectory">
+                </app-directory-item>
             </div>
-            <div *ngFor="let directory of directory.subDirectory" [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
-                <app-directory-item [directory]="directory"></app-directory-item>
+            <!-- <div *ngFor="let assessment of directory.assessments"
+                [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
+
             </div>
+            <div *ngFor="let directory of directory.subDirectory"
+                [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
+
+            </div> -->
         </div>
-
-        <!-- <div class="list-view" *ngIf="dashboardView == 'list'">
-            <div class="list-item" *ngFor="let calculator of directory.calculators; let index = index;">
-                <app-pre-assessment-list-item [calculator]="calculator" [index]="index">
-                </app-pre-assessment-list-item>
-            </div>
-
-            <div class="list-item" *ngIf="directory.calculators.length == 0">
-                <app-add-pre-assessment-list-item></app-add-pre-assessment-list-item>
-            </div>
-
-            <div class="list-item" *ngFor="let assessment of directory.assessments">
-                <app-assessment-list-item [assessment]="assessment"></app-assessment-list-item>
-            </div>
-            <div class="list-item" *ngFor="let directory of directory.subDirectory">
-                <app-directory-list-item [directory]="directory"></app-directory-list-item>
-            </div>
-        </div> -->
     </div>
 </div>
 

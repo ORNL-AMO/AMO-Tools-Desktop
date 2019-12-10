@@ -27,6 +27,7 @@ import { AssessmentItemComponent } from './directory-items/assessment-item/asses
 import { DirectoryItemComponent } from './directory-items/directory-item/directory-item.component';
 import { PreAssessmentItemComponent } from './directory-items/pre-assessment-item/pre-assessment-item.component';
 import { AddPreAssessmentItemComponent } from './directory-items/add-pre-assessment-item/add-pre-assessment-item.component';
+import { ContentControlsComponent } from './directory-dashboard-menu/content-controls/content-controls.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { AddPreAssessmentItemComponent } from './directory-items/add-pre-assessm
      AssessmentItemComponent,
      DirectoryItemComponent,
      PreAssessmentItemComponent,
-     AddPreAssessmentItemComponent
+     AddPreAssessmentItemComponent,
+     ContentControlsComponent
     ],
   imports: [
     CommonModule,
