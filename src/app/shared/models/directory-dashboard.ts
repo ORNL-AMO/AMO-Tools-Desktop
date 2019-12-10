@@ -9,6 +9,9 @@ export interface DirectoryItem {
     assessment?: Assessment;
     type: string;
     isShown: boolean;
+    createdDate: Date,
+    modifiedDate: Date,
+    name: string
 }
 
 export interface FilterDashboardBy {

@@ -30,6 +30,8 @@ export class DirectoryDashboardComponent implements OnInit {
 
   filterDashboardBy: FilterDashboardBy;
   filterDashboardBySub: Subscription;
+  sortBy: string;
+  sortBySub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
 
@@ -57,7 +59,11 @@ export class DirectoryDashboardComponent implements OnInit {
     });
     this.filterDashboardBySub = this.directoryDashboardService.filterDashboardBy.subscribe(val => {
       this.filterDashboardBy = val;
-    })
+    });
+
+    this.sortBySub = this.directoryDashboardService.sortBy.subscribe(val => {
+      this.sortBy = val;
+    });
   }
 
   ngOnDestroy() {
@@ -66,6 +72,7 @@ export class DirectoryDashboardComponent implements OnInit {
     this.showPreAssessmentModalSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
     this.filterDashboardBySub.unsubscribe();
+    this.sortBySub.unsubscribe();
   }
 
   setDirectoryItems() {
@@ -78,7 +85,10 @@ export class DirectoryDashboardComponent implements OnInit {
         type: 'calculator',
         calculator: calculator,
         calculatorIndex: calculatorIndex,
-        isShown: true
+        isShown: true,
+        createdDate: calculator.createdDate,
+        modifiedDate: calculator.modifiedDate,
+        name: calculator.name
       });
       calculatorIndex++;
     })
@@ -86,14 +96,20 @@ export class DirectoryDashboardComponent implements OnInit {
       this.directoryItems.push({
         type: 'assessment',
         assessment: assessment,
-        isShown: true
+        isShown: true,
+        createdDate: assessment.createdDate,
+        modifiedDate: assessment.modifiedDate,
+        name: assessment.name
       })
     });
     this.directory.subDirectory.forEach(subDirectory => {
       this.directoryItems.push({
         type: 'directory',
         subDirectory: subDirectory,
-        isShown: true
+        isShown: true,
+        createdDate: subDirectory.createdDate,
+        modifiedDate: subDirectory.modifiedDate,
+        name: subDirectory.name
       })
     })
   }

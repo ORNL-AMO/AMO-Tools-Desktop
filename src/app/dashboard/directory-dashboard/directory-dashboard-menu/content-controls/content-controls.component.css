@@ -9,10 +9,17 @@
     background: white;
 }
 
-.btn-secondary.active{
-    background-color: gray;
-}
-
 .list-group-item{
     padding: .25rem;
+}
+
+.dropdown-menu{
+    left: auto;
+    right: auto;
+    top: 50px;
+}
+
+.list-group-item.active{
+    background-color: #545b62;
+    border-color: #545b62;
 }

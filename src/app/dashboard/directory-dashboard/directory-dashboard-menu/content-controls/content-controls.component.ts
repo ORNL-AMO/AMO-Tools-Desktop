@@ -16,6 +16,8 @@ export class ContentControlsComponent implements OnInit {
   filterDropdown: boolean = false;
   filterDashboardBy: FilterDashboardBy;
   filterDashboardBySub: Subscription;
+  sortBy: string;
+  sortByLabel: string;
   constructor(private directoryDashboardService: DirectoryDashboardService) { }
 
   ngOnInit() {
@@ -24,6 +26,8 @@ export class ContentControlsComponent implements OnInit {
     });
 
     this.filterDashboardBy = this.directoryDashboardService.filterDashboardBy.getValue();
+    this.sortBy = this.directoryDashboardService.sortBy.getValue();
+    this.setSortByLabel();
   }
 
   ngOnDestroy() {
@@ -53,4 +57,21 @@ export class ContentControlsComponent implements OnInit {
     this.directoryDashboardService.filterDashboardBy.next(this.filterDashboardBy);
   }
 
+  setSortBy(str: string) {
+    this.sortBy = str;
+    this.setSortByLabel();
+    this.directoryDashboardService.sortBy.next(this.sortBy)
+  }
+
+  setSortByLabel() {
+    if (this.sortBy == 'name') {
+      this.sortByLabel = 'Name';
+    } else if (this.sortBy == 'createdDate') {
+      this.sortByLabel = 'Created Date';
+    } else if (this.sortBy == 'modifiedDate') {
+      this.sortByLabel = 'Last Updated';
+    } else {
+      this.sortByLabel = undefined;
+    }
+  }
 }

@@ -14,7 +14,7 @@ export class DirectoryDashboardService {
   showExportModal: BehaviorSubject<boolean>;
   showPreAssessmentModalIndex: BehaviorSubject<{ index: number, isNew: boolean }>;
   filterDashboardBy: BehaviorSubject<FilterDashboardBy>;
-
+  sortBy: BehaviorSubject<string>;
   constructor() {
     this.dashboardView = new BehaviorSubject<string>('grid');
     this.createFolder = new BehaviorSubject<boolean>(false);
@@ -31,7 +31,9 @@ export class DirectoryDashboardService {
       showSubFolders: true,
       showPreAssessments: true,
       showPhast: true
-    })
+    });
+
+    this.sortBy = new BehaviorSubject<string>('none');
   }
 
 
@@ -49,7 +51,7 @@ export class DirectoryDashboardService {
         item.isShown = false;
       } else if (item.assessment.type == 'TreasureHunt' && filterDashboardBy.showTreasureHunt == false) {
         item.isShown = false;
-      } else if (item.assessment.type == 'PHAST' && filterDashboardBy.showTreasureHunt == false) {
+      } else if (item.assessment.type == 'PHAST' && filterDashboardBy.showPhast == false) {
         item.isShown = false;
       } else if (item.isShown == false) {
         item.isShown = true;
@@ -68,8 +70,9 @@ export class DirectoryDashboardService {
     return directoryItems;
   }
 
-  sortDirectoryItems() {
-
+  sortDirectoryItems(directoryItems: Array<DirectoryItem>, sortStr: string): Array<DirectoryItem> {
+    directoryItems = _.sortBy(directoryItems, sortStr);
+    return directoryItems;
   }
 
 

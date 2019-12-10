@@ -13,6 +13,7 @@ export class DirectoryDashboardPipe implements PipeTransform {
 
   transform(directoryItems: Array<DirectoryItem>, sortBy: string, filterDashboard: FilterDashboardBy): Array<DirectoryItem> {
     directoryItems = this.directoryDashboardService.filterDirectoryItems(directoryItems, filterDashboard);
+    directoryItems = this.directoryDashboardService.sortDirectoryItems(directoryItems, sortBy);
     return directoryItems;
   }
 

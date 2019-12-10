@@ -15,9 +15,8 @@
                 <app-add-pre-assessment-item></app-add-pre-assessment-item>
             </div>
 
-            <div *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:'none':filterDashboardBy"
-            class="directory-item"
-                [ngClass]="
+            <div *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:sortBy:filterDashboardBy"
+                class="directory-item" [ngClass]="
                 {
                     'col-4 summary-card': (dashboardView == 'grid'), 
                     'list-item': (dashboardView == 'list'),
@@ -31,14 +30,6 @@
                 <app-directory-item *ngIf="directoryItem.type == 'directory'" [directory]="directoryItem.subDirectory">
                 </app-directory-item>
             </div>
-            <!-- <div *ngFor="let assessment of directory.assessments"
-                [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
-
-            </div>
-            <div *ngFor="let directory of directory.subDirectory"
-                [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
-
-            </div> -->
         </div>
     </div>
 </div>
