@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
-import { Settings } from '../../shared/models/settings';
 import { ActivatedRoute } from '@angular/router';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from './directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
-import { Calculator } from '../../shared/models/calculators';
-import { Assessment } from '../../shared/models/assessment';
+import { DirectoryItem, FilterDashboardBy } from '../../shared/models/directory-dashboard';
 
 @Component({
   selector: 'app-directory-dashboard',
@@ -29,7 +27,10 @@ export class DirectoryDashboardComponent implements OnInit {
 
   directoryItems: Array<DirectoryItem>;
   displayAddPreAssessment: boolean;
-  constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
+
+  filterDashboardBy: FilterDashboardBy;
+  filterDashboardBySub: Subscription;
+  constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
 
   ngOnInit() {
@@ -53,6 +54,9 @@ export class DirectoryDashboardComponent implements OnInit {
     });
     this.showPreAssessmentModalSub = this.directoryDashboardService.showPreAssessmentModalIndex.subscribe(val => {
       this.showPreAssessmentModalIndex = val;
+    });
+    this.filterDashboardBySub = this.directoryDashboardService.filterDashboardBy.subscribe(val => {
+      this.filterDashboardBy = val;
     })
   }
 
@@ -61,6 +65,7 @@ export class DirectoryDashboardComponent implements OnInit {
     this.showDeleteItemsModalSub.unsubscribe();
     this.showPreAssessmentModalSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
+    this.filterDashboardBySub.unsubscribe();
   }
 
   setDirectoryItems() {
@@ -72,30 +77,25 @@ export class DirectoryDashboardComponent implements OnInit {
       this.directoryItems.push({
         type: 'calculator',
         calculator: calculator,
-        calculatorIndex: calculatorIndex
+        calculatorIndex: calculatorIndex,
+        isShown: true
       });
       calculatorIndex++;
     })
     this.directory.assessments.forEach(assessment => {
       this.directoryItems.push({
         type: 'assessment',
-        assessment: assessment
+        assessment: assessment,
+        isShown: true
       })
     });
     this.directory.subDirectory.forEach(subDirectory => {
       this.directoryItems.push({
         type: 'directory',
-        subDirectory: subDirectory
+        subDirectory: subDirectory,
+        isShown: true
       })
     })
   }
 }
 
-
-export interface DirectoryItem {
-  calculator?: Calculator;
-  calculatorIndex?: number;
-  subDirectory?: Directory;
-  assessment?: Assessment;
-  type: string;
-}

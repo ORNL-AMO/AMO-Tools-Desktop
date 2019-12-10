@@ -13,13 +13,39 @@
 </button>
 <div class="dropdown-menu p-0" [ngClass]="{'show': filterDropdown == true}">
     <div class="list-group">
-        <a class="list-group-item bold">Filter Displayed Items:</a>
-        <a class="list-group-item list-group-item-action">Pumps</a>
-        <a class="list-group-item list-group-item-action">Fans</a>
-        <a class="list-group-item list-group-item-action">Steams</a>
-        <a class="list-group-item list-group-item-action">Treasure Hunt</a>
-        <a class="list-group-item list-group-item-action">Sub Directory</a>
-        <a class="list-group-item list-group-item-action">Pre-Assessment</a>
+        <div class="list-group-item bold">Display Items:</div>
+
+        <div class="d-flex list-group-item list-group-item-action align-items-center">
+            <input id="showPumps" type="checkbox" [(ngModel)]="filterDashboardBy.showPumps" (change)="updateFilterBy()">
+            <label for="showPumps" class="pl-1 flex-fill">Pumps</label>
+        </div>
+        <div class="d-flex list-group-item list-group-item-action align-items-center">
+            <input id="showFans" type="checkbox" [(ngModel)]="filterDashboardBy.showFans" (change)="updateFilterBy()">
+            <label for="showFans" class="pl-1">Fans</label>
+        </div>
+        <div class="d-flex list-group-item list-group-item-action align-items-center">
+            <input id="showPhast" type="checkbox" [(ngModel)]="filterDashboardBy.showPhast" (change)="updateFilterBy()">
+            <label for="showPhast" class="pl-1">Process Heating</label>
+        </div>
+        <div class="d-flex list-group-item list-group-item-action align-items-center">
+            <input id="showSteam" type="checkbox" [(ngModel)]="filterDashboardBy.showSteam" (change)="updateFilterBy()">
+            <label for="showSteam" class="pl-1">Steam</label>
+        </div>
+        <div class="d-flex list-group-item list-group-item-action align-items-center">
+            <input id="showTreasureHunt" type="checkbox" [(ngModel)]="filterDashboardBy.showTreasureHunt"
+                (change)="updateFilterBy()">
+            <label for="showTreasureHunt" class="pl-1">Treasure Hunt</label>
+        </div>
+        <div class="d-flex list-group-item list-group-item-action align-items-center">
+            <input id="showSubFolders" type="checkbox" [(ngModel)]="filterDashboardBy.showSubFolders"
+                (change)="updateFilterBy()">
+            <label for="showSubFolders" class="pl-1">Sub-Folders</label>
+        </div>
+        <div class="d-flex list-group-item list-group-item-action align-items-center">
+            <input id="showPreAssessments" type="checkbox" [(ngModel)]="filterDashboardBy.showPreAssessments"
+                (change)="updateFilterBy()">
+            <label for="showPreAssessments" class="pl-1">Pre-Assessment</label>
+        </div>
     </div>
 </div>
 <button class="btn btn-secondary action-btn mr-2 pull-right" (click)="toggleSortDropdown()">

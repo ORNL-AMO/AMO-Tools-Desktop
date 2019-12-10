@@ -10,13 +10,19 @@
             </div>
         </div>
         <div [ngClass]="{'row': dashboardView == 'grid', 'list-view': dashboardView == 'list'}">
-            <div *ngIf="displayAddPreAssessment"
+            <div *ngIf="displayAddPreAssessment && filterDashboardBy.showPreAssessments == true"
                 [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
                 <app-add-pre-assessment-item></app-add-pre-assessment-item>
             </div>
 
-            <div *ngFor="let directoryItem of directoryItems"
-                [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
+            <div *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:'none':filterDashboardBy"
+            class="directory-item"
+                [ngClass]="
+                {
+                    'col-4 summary-card': (dashboardView == 'grid'), 
+                    'list-item': (dashboardView == 'list'),
+                    'hidden': (directoryItem.isShown == false)
+            }">
                 <app-pre-assessment-item *ngIf="directoryItem.type == 'calculator'"
                     [calculator]="directoryItem.calculator" [index]="directoryItem.calculatorIndex">
                 </app-pre-assessment-item>

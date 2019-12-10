@@ -12,3 +12,7 @@
 .btn-secondary.active{
     background-color: gray;
 }
+
+.list-group-item{
+    padding: .25rem;
+}

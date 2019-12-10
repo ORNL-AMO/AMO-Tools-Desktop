@@ -1,0 +1,7 @@
+.hidden{
+    display: none;
+}
+
+.scroll-item{
+    overflow-y: scroll;
+}
