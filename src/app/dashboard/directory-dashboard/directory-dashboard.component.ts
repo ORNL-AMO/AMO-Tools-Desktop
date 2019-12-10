@@ -30,7 +30,7 @@ export class DirectoryDashboardComponent implements OnInit {
 
   filterDashboardBy: FilterDashboardBy;
   filterDashboardBySub: Subscription;
-  sortBy: string;
+  sortBy: { value: string, direction: string };
   sortBySub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }

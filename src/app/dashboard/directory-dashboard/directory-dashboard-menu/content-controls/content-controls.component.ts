@@ -16,7 +16,7 @@ export class ContentControlsComponent implements OnInit {
   filterDropdown: boolean = false;
   filterDashboardBy: FilterDashboardBy;
   filterDashboardBySub: Subscription;
-  sortBy: string;
+  sortBy: { value: string, direction: string };
   sortByLabel: string;
   constructor(private directoryDashboardService: DirectoryDashboardService) { }
 
@@ -58,20 +58,29 @@ export class ContentControlsComponent implements OnInit {
   }
 
   setSortBy(str: string) {
-    this.sortBy = str;
+    this.sortBy.value = str;
     this.setSortByLabel();
     this.directoryDashboardService.sortBy.next(this.sortBy)
   }
 
   setSortByLabel() {
-    if (this.sortBy == 'name') {
+    if (this.sortBy.value == 'name') {
       this.sortByLabel = 'Name';
-    } else if (this.sortBy == 'createdDate') {
+    } else if (this.sortBy.value == 'createdDate') {
       this.sortByLabel = 'Created Date';
-    } else if (this.sortBy == 'modifiedDate') {
+    } else if (this.sortBy.value == 'modifiedDate') {
       this.sortByLabel = 'Last Updated';
     } else {
       this.sortByLabel = undefined;
     }
+  }
+
+  toggleSortDirection() {
+    if (this.sortBy.direction == 'asc') {
+      this.sortBy.direction = 'desc';
+    } else if (this.sortBy.direction == 'desc') {
+      this.sortBy.direction = 'asc';
+    }
+    this.directoryDashboardService.sortBy.next(this.sortBy)
   }
 }

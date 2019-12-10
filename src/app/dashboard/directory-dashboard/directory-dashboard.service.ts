@@ -14,7 +14,7 @@ export class DirectoryDashboardService {
   showExportModal: BehaviorSubject<boolean>;
   showPreAssessmentModalIndex: BehaviorSubject<{ index: number, isNew: boolean }>;
   filterDashboardBy: BehaviorSubject<FilterDashboardBy>;
-  sortBy: BehaviorSubject<string>;
+  sortBy: BehaviorSubject<{ value: string, direction: string }>;
   constructor() {
     this.dashboardView = new BehaviorSubject<string>('grid');
     this.createFolder = new BehaviorSubject<boolean>(false);
@@ -33,7 +33,7 @@ export class DirectoryDashboardService {
       showPhast: true
     });
 
-    this.sortBy = new BehaviorSubject<string>('none');
+    this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'asc' });
   }
 
 
@@ -70,8 +70,8 @@ export class DirectoryDashboardService {
     return directoryItems;
   }
 
-  sortDirectoryItems(directoryItems: Array<DirectoryItem>, sortStr: string): Array<DirectoryItem> {
-    directoryItems = _.sortBy(directoryItems, sortStr);
+  sortDirectoryItems(directoryItems: Array<DirectoryItem>, sortStr: { value: string, direction: string }): Array<DirectoryItem> {
+    directoryItems = _.orderBy(directoryItems, [sortStr.value], sortStr.direction);
     return directoryItems;
   }
 
