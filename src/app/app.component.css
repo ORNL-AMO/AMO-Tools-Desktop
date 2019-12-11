@@ -888,7 +888,7 @@ Sidebar
     cursor: pointer;
   }
 .sidebar-group {
-  margin-bottom: 12px;
+  padding-bottom: 12px;
 }
 
 .sidebar-group .btn-primary {
@@ -906,7 +906,7 @@ Sidebar
   margin: 0;
 }
 .sidebar-group li {
-  padding-left: .25rem;
+  padding-left: .3rem;
   list-style: none;
   margin: 0;
   line-height: 1;

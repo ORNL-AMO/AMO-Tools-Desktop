@@ -19,11 +19,11 @@
   </ul>
 </div>
 
-<div class="sidebar-group secondary">
-  <ul>
-    <li [routerLink]="['/directory-dashboard', 1]" routerLinkActive="selected">
+<div class="sidebar-group secondary pl-1 directory scroll-item">
+  <ul class="pl-0" [ngClass]="{'selected-directory': rootDirectory.id == selectedDirectoryId}">
+    <li class="d-flex flex-fill" [routerLink]="['/directory-dashboard', 1]" routerLinkActive="selected">
       <span>
-        <i class="fa fa-folder" aria-hidden="true"></i> All Assessments</span>
+        <i class="fa fa-folder-open" aria-hidden="true"></i> All Assessments</span>
     </li>
     <li>
       <app-directory-item [directory]="rootDirectory"></app-directory-item>

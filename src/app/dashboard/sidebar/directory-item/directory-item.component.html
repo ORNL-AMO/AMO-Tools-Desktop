@@ -21,17 +21,17 @@
 </ul> -->
 
 
-<ul>
+<ul [ngClass]="{'selected-directory': directory.id == selectedDirectoryId && directory.id != 1}">
   <li *ngIf="directory.id != 1" routerLinkActive="selected" [routerLinkActiveOptions]="{exact:true}">
     <span class="sidebar-item" [routerLink]="['/directory-dashboard', directory.id]"
-      (dblclick)="toggleDirectoryCollapse(directory)">
-      <i class="fa fa-folder" aria-hidden="true"></i>
+      (click)="toggleDirectoryCollapse(directory)">
+      <i class="fa fa-folder" aria-hidden="true" [ngClass]="{'fa-folder': directory.collapsed == true, 'fa-folder-open': !directory.collapsed}"></i>
       {{directory.name}}
     </span>
   </li>
-  <li class="sub-directory show-border"
+  <li class="sub-directory"
     *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:sortBy:filterDashboardBy"
-    [ngClass]="{'hidden': (directoryItem.isShown == false && directoryItem.type != 'directory')}">
+    [ngClass]="{'hidden': (directoryItem.isShown == false && directoryItem.type != 'directory') || directory.collapsed == true }">
     <ul>
       <app-assessment-item *ngIf="directoryItem.type == 'assessment'" [assessment]="directoryItem.assessment">
       </app-assessment-item>

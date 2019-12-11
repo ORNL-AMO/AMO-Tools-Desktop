@@ -5,6 +5,7 @@ import { DirectoryItem, FilterDashboardBy } from '../../../shared/models/directo
 import { Subscription } from 'rxjs';
 import { DashboardService } from '../../dashboard.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-directory-item',
@@ -21,7 +22,10 @@ export class DirectoryItemComponent implements OnInit {
   sortBySub: Subscription;
   sortBy: { value: string, direction: string };
   updateDashboardDataSub: Subscription;
-  constructor(private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
+  selectedDirectoryId: number;
+  selectedDirectoryIdSub: Subscription;
+  constructor(private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService,
+    private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
@@ -34,15 +38,46 @@ export class DirectoryItemComponent implements OnInit {
     this.sortBySub = this.directoryDashboardService.sortBy.subscribe(val => {
       this.sortBy = val;
     });
+    this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
+      this.selectedDirectoryId = val;
+      this.checkSubDirectorySelected();
+    })
   }
 
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
     this.filterDashboardBySub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
+    this.selectedDirectoryIdSub.unsubscribe();
   }
 
   toggleDirectoryCollapse(directory: Directory) {
-    directory.collapsed = !directory.collapsed;
+    if (directory.collapsed == true || directory.id == this.selectedDirectoryId) {
+      directory.collapsed = !directory.collapsed;
+      this.indexedDbService.putDirectory(this.directory).then(() => {
+        this.directoryDbService.setAll();
+      });
+    }
+  }
+
+  checkSubDirectorySelected() {
+    if(this.directory.collapsed == true && this.directory.id == this.selectedDirectoryId){
+      this.toggleDirectoryCollapse(this.directory);
+    }else if (this.directory.collapsed == true && this.directory.subDirectory) {
+      this.checkSubDirectories(this.directory);
+    }
+  }
+
+  checkSubDirectories(directory: Directory) {
+    directory.subDirectory.forEach(directory => {
+      if (directory.id == this.selectedDirectoryId) {
+        this.toggleDirectoryCollapse(this.directory);
+      } else {
+        directory = this.directoryDbService.getById(directory.id);
+        if (directory.subDirectory) {
+          this.checkSubDirectories(directory);
+        }
+      }
+    });
   }
 }

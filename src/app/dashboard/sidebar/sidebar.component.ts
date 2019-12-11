@@ -22,6 +22,8 @@ export class SidebarComponent implements OnInit {
   updateSub: Subscription;
   updateDashboardDataSub: Subscription;
   rootDirectory: Directory;
+  selectedDirectoryId: number;
+  selectedDirectoryIdSub: Subscription;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
 
@@ -35,11 +37,16 @@ export class SidebarComponent implements OnInit {
       this.rootDirectory = this.directoryDbService.getById(1);
       this.rootDirectory.collapsed = false;
     });
+
+    this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
+      this.selectedDirectoryId = val;
+    })
   }
 
   ngOnDestroy() {
     this.updateSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
+    this.selectedDirectoryIdSub.unsubscribe();
   }
 
   showCreateAssessment() {

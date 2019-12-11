@@ -76,7 +76,6 @@ export class DirectoryDashboardComponent implements OnInit {
 
   setDirectoryItems() {
     this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
-    console.log(this.directoryItems);
     let preAssessmentExists = this.directoryItems.find((item) => { return item.type == 'calculator' });
     if (preAssessmentExists == undefined) {
       this.displayAddPreAssessment = true;

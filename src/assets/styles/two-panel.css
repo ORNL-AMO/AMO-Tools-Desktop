@@ -399,8 +399,13 @@
     overflow-y: auto;
 }
 
+.scroll-item::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+}
+  
 .scroll-item::-webkit-scrollbar {
     width: .5em;
+    height: .5rem;
   }
   .scroll-item::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);

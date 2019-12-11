@@ -35,7 +35,7 @@ export class DirectoryDashboardService {
       showAll: true
     });
 
-    this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'asc' });
+    this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'desc' });
   }
 
   getDirectoryItems(directory: Directory): Array<DirectoryItem> {

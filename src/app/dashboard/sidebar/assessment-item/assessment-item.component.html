@@ -1,12 +1,25 @@
-<div class="d-flex align-items-center" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT' }" (click)="goToAssessment(assessment)">
-	<span class="p-1 d-flex align-items-center justify-content-center icon-image">
+<!-- <div class="d-flex align-items-center"
+	[ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT' }"
+	(click)="goToAssessment(assessment)">
+	<!-- <span class="p-1 d-flex align-items-center justify-content-center icon-image">
 		<img *ngIf="assessment.type == 'PSAT'" class="icon" src="assets/images/ico-psat-diagram.png">
 		<img *ngIf="assessment.type == 'PHAST'" class="icon" src="assets/images/ico-phast-diagram.png">
 		<img *ngIf="assessment.type == 'FSAT'" class="icon" src="assets/images/ico-fsat-diagram.png">
 		<img *ngIf="assessment.type == 'SSMT'" class="icon" src="assets/images/ico-ssmt-diagram.png">
 		<img *ngIf="assessment.type == 'TreasureHunt'" class="icon" src="assets/images/treasure-hunt.png">
-	</span>
+	</span> --
 	<span class="p-1">
 		<a class="click-link">{{assessment.name}}</a>
 	</span>
-</div>
+</div> -->
+
+
+
+
+<li [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT',  
+	'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt' }" (click)="goToAssessment(assessment)">
+	<span class="sidebar-item">
+		<i class="fa fa-file" aria-hidden="true"></i>
+		{{assessment.name}}
+	</span>
+</li>
