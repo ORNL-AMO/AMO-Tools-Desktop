@@ -10,7 +10,7 @@
             </div>
         </div>
         <div [ngClass]="{'row': dashboardView == 'grid', 'list-view': dashboardView == 'list'}">
-            <div *ngIf="displayAddPreAssessment && filterDashboardBy.showPreAssessments == true"
+            <div *ngIf="displayAddPreAssessment && (filterDashboardBy.showPreAssessments == true || filterDashboardBy.showAll == true)"
                 [ngClass]="{'col-4 summary-card': dashboardView == 'grid', 'list-item': dashboardView == 'list'}">
                 <app-add-pre-assessment-item></app-add-pre-assessment-item>
             </div>

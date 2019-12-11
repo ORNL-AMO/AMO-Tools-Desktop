@@ -1,94 +1,137 @@
-<div class="btn-group pull-right" role="group">
-    <button class="btn btn-secondary action-btn" (click)="setView('list')"
-        [ngClass]="{'active': dashboardView == 'list'}">
-        <i class="fa fa-list"></i>
-    </button>
-    <button class="btn btn-secondary action-btn" (click)="setView('grid')"
-        [ngClass]="{'active': dashboardView == 'grid'}">
-        <i class="fa fa-th"></i>
-    </button>
-</div>
-<button class="btn btn-secondary action-btn mr-2 pull-right" (click)="toggleFilterDropdown()"
-    [ngClass]="{'active': filterDropdown == true}">
-    <span class="fa fa-filter"></span> Filter
-</button>
-<div class="dropdown-menu p-0" [ngClass]="{'show': filterDropdown == true}">
-    <div class="list-group">
-        <div class="list-group-item bold">Display Items:</div>
+<div class="d-flex flex-column">
+    <div class="d-flex justify-content-end">
+        <div class="mr-1">
+            <div class="btn-group" role="group">
+                <button class="btn btn-secondary action-btn pull-right" (click)="toggleSortDropdown()"
+                    [ngClass]="{'active': sortByDropdown == true}">
+                    Sort By: {{sortByLabel}}
+                </button>
+                <button class="btn btn-secondary action-btn pull-right" (click)="toggleSortDirection()">
+                    <span class="fa fa-arrow-up" *ngIf="sortBy.direction == 'asc'"></span>
+                    <span class="fa fa-arrow-down" *ngIf="sortBy.direction == 'desc'"></span>
+                </button>
+            </div>
 
-        <div class="d-flex list-group-item list-group-item-action align-items-center">
-            <input id="showPumps" type="checkbox" [(ngModel)]="filterDashboardBy.showPumps" (change)="updateFilterBy()">
-            <label for="showPumps" class="pl-1 flex-fill">Pumps</label>
+            <div class="dropdown-menu p-0" [ngClass]="{'show': sortByDropdown == true}">
+                <div class="list-group">
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setSortBy('modifiedDate')" [ngClass]="{'active': sortBy.value == 'modifiedDate'}">
+                        <label class="pl-1">Last Updated Date
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setSortBy('createdDate')" [ngClass]="{'active': sortBy.value == 'createdDate'}">
+                        <label class="pl-1">Created Date
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setSortBy('name')" [ngClass]="{'active': sortBy.value == 'name'}">
+                        <label class="pl-1">Name
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="d-flex list-group-item list-group-item-action align-items-center">
-            <input id="showFans" type="checkbox" [(ngModel)]="filterDashboardBy.showFans" (change)="updateFilterBy()">
-            <label for="showFans" class="pl-1">Fans</label>
+
+        <div class="mr-1">
+            <button class="btn btn-secondary action-btn" (click)="toggleFilterDropdown()"
+                [ngClass]="{'active': filterDropdown == true}">
+                <span class="fa fa-filter"></span> Filter
+            </button>
+            <div class="dropdown-menu p-0 filter-dropdown" [ngClass]="{'show': filterDropdown == true}">
+                <div class="list-group">
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setShowAll('name')" [ngClass]="{'active': filterDashboardBy.showAll == true}">
+                        <label class="pl-1">Display All
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterPump()"
+                        [ngClass]="{'active': filterDashboardBy.showPumps == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Pumps
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterFans()"
+                        [ngClass]="{'active': filterDashboardBy.showFans == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Fans
+                        </label>
+                    </div>
+
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterProcessHeating()"
+                        [ngClass]="{'active': filterDashboardBy.showPhast == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Process Heating
+                        </label>
+                    </div>
+
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterSteam()"
+                        [ngClass]="{'active': filterDashboardBy.showSteam == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Steam
+                        </label>
+                    </div>
+
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterTreasureHunt()"
+                        [ngClass]="{'active': filterDashboardBy.showTreasureHunt == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Treasure Hunt
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterSubFolders()"
+                        [ngClass]="{'active': filterDashboardBy.showSubFolders == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Sub-Folders
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterPreAssessments()"
+                        [ngClass]="{'active': filterDashboardBy.showPreAssessments == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Pre-Assessment
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="d-flex list-group-item list-group-item-action align-items-center">
-            <input id="showPhast" type="checkbox" [(ngModel)]="filterDashboardBy.showPhast" (change)="updateFilterBy()">
-            <label for="showPhast" class="pl-1">Process Heating</label>
-        </div>
-        <div class="d-flex list-group-item list-group-item-action align-items-center">
-            <input id="showSteam" type="checkbox" [(ngModel)]="filterDashboardBy.showSteam" (change)="updateFilterBy()">
-            <label for="showSteam" class="pl-1">Steam</label>
-        </div>
-        <div class="d-flex list-group-item list-group-item-action align-items-center">
-            <input id="showTreasureHunt" type="checkbox" [(ngModel)]="filterDashboardBy.showTreasureHunt"
-                (change)="updateFilterBy()">
-            <label for="showTreasureHunt" class="pl-1">Treasure Hunt</label>
-        </div>
-        <div class="d-flex list-group-item list-group-item-action align-items-center">
-            <input id="showSubFolders" type="checkbox" [(ngModel)]="filterDashboardBy.showSubFolders"
-                (change)="updateFilterBy()">
-            <label for="showSubFolders" class="pl-1">Sub-Folders</label>
-        </div>
-        <div class="d-flex list-group-item list-group-item-action align-items-center">
-            <input id="showPreAssessments" type="checkbox" [(ngModel)]="filterDashboardBy.showPreAssessments"
-                (change)="updateFilterBy()">
-            <label for="showPreAssessments" class="pl-1">Pre-Assessment</label>
+        <div class="btn-group" role="group">
+            <button class="btn btn-secondary action-btn" (click)="setView('list')"
+                [ngClass]="{'active': dashboardView == 'list'}">
+                <i class="fa fa-list"></i>
+            </button>
+            <button class="btn btn-secondary action-btn" (click)="setView('grid')"
+                [ngClass]="{'active': dashboardView == 'grid'}">
+                <i class="fa fa-th"></i>
+            </button>
         </div>
     </div>
-</div>
-
-<div class="btn-group mr-2" role="group">
-    <button class="btn btn-secondary action-btn pull-right" (click)="toggleSortDropdown()"
-        [ngClass]="{'active': sortByDropdown == true}">
-        Sort By: {{sortByLabel}}
-    </button>
-    <button class="btn btn-secondary action-btn pull-right" (click)="toggleSortDirection()">
-        <span class="fa fa-arrow-up" *ngIf="sortBy.direction == 'asc'"></span>
-        <span class="fa fa-arrow-down" *ngIf="sortBy.direction == 'desc'"></span>
-    </button>
-</div>
-
-<div class="dropdown-menu p-0" [ngClass]="{'show': sortByDropdown == true}">
-    <div class="list-group">
-        <div class="d-flex list-group-item list-group-item-action align-items-center" (click)="setSortBy('name')"
-            [ngClass]="{'active': sortBy.value == 'name'}">
-            <label class="pl-1">Name
-                <!-- <span class="fa fa-chevron-up" *ngIf="sortBy.direction == 'asc' && sortBy.value == 'name'"></span>
-                <span class="fa fa-chevron-down" *ngIf="sortBy.direction == 'desc' && sortBy.value == 'name'"></span> -->
-            </label>
-        </div>
-        <div class="d-flex list-group-item list-group-item-action align-items-center" (click)="setSortBy('createdDate')"
-            [ngClass]="{'active': sortBy.value == 'createdDate'}">
-            <label class="pl-1">Created Date
-                <!-- <span class="fa fa-chevron-up"
-                    *ngIf="sortBy.direction == 'asc' && sortBy.value == 'createdDate'"></span>
-                <span class="fa fa-chevron-down"
-                    *ngIf="sortBy.direction == 'desc' && sortBy.value == 'createdDate'"></span> -->
-            </label>
-        </div>
-        <div class="d-flex list-group-item list-group-item-action align-items-center"
-            (click)="setSortBy('modifiedDate')" [ngClass]="{'active': sortBy.value == 'modifiedDate'}">
-            <label class="pl-1">Last Updated Date
-                <!-- <span class="fa fa-chevron-up"
-                    *ngIf="sortBy.direction == 'asc' && sortBy.value == 'modifiedDate'"></span>
-                <span class="fa fa-chevron-down"
-                    *ngIf="sortBy.direction == 'desc' && sortBy.value == 'modifiedDate'"></span> -->
-            </label>
-        </div>
-        <!-- <a class="list-group-item list-group-item-action">Cost Savings</a>
-            <a class="list-group-item list-group-item-action">Annual Consumption/Energy Use</a> -->
+    <div class="d-flex justify-content-end mt-1" *ngIf="filterDashboardBy.showAll == false">
+        <button *ngIf="filterDashboardBy.showPumps == true" class="btn btn-secondary action-btn"
+            (click)="setFilterPump()">
+            <span class="fa fa-close"></span> Pumps
+        </button>
+        <button *ngIf="filterDashboardBy.showFans == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterFans()">
+            <span class="fa fa-close"></span> Fans
+        </button>
+        <button *ngIf="filterDashboardBy.showPhast == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterProcessHeating()">
+            <span class="fa fa-close"></span> Process Heating
+        </button>
+        <button *ngIf="filterDashboardBy.showSteam == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterSteam()">
+            <span class="fa fa-close"></span> Steam
+        </button>
+        <button *ngIf="filterDashboardBy.showTreasureHunt == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterTreasureHunt()">
+            <span class="fa fa-close"></span> Treasure Hunt
+        </button>
+        <button *ngIf="filterDashboardBy.showSubFolders == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterSubFolders()">
+            <span class="fa fa-close"></span> Sub-Folders
+        </button>
+        <button *ngIf="filterDashboardBy.showPreAssessments == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterPreAssessments()">
+            <span class="fa fa-close"></span> Pre-Assessments
+        </button>
     </div>
 </div>

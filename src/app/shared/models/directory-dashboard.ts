@@ -15,6 +15,7 @@ export interface DirectoryItem {
 }
 
 export interface FilterDashboardBy {
+    showAll: boolean,
     showPumps: boolean,
     showFans: boolean,
     showSteam: boolean,

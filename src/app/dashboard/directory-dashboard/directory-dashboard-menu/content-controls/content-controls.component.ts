@@ -15,7 +15,6 @@ export class ContentControlsComponent implements OnInit {
   sortByDropdown: boolean = false;
   filterDropdown: boolean = false;
   filterDashboardBy: FilterDashboardBy;
-  filterDashboardBySub: Subscription;
   sortBy: { value: string, direction: string };
   sortByLabel: string;
   constructor(private directoryDashboardService: DirectoryDashboardService) { }
@@ -67,7 +66,7 @@ export class ContentControlsComponent implements OnInit {
     if (this.sortBy.value == 'name') {
       this.sortByLabel = 'Name';
     } else if (this.sortBy.value == 'createdDate') {
-      this.sortByLabel = 'Created Date';
+      this.sortByLabel = 'Created';
     } else if (this.sortBy.value == 'modifiedDate') {
       this.sortByLabel = 'Last Updated';
     } else {
@@ -82,5 +81,153 @@ export class ContentControlsComponent implements OnInit {
       this.sortBy.direction = 'asc';
     }
     this.directoryDashboardService.sortBy.next(this.sortBy)
+  }
+
+  setShowAll() {
+    this.filterDashboardBy.showAll = true;
+  }
+
+  checkShowAll() {
+    this.filterDashboardBy.showAll = (this.filterDashboardBy.showPumps == false &&
+      this.filterDashboardBy.showFans == false &&
+      this.filterDashboardBy.showSteam == false &&
+      this.filterDashboardBy.showTreasureHunt == false &&
+      this.filterDashboardBy.showSubFolders == false &&
+      this.filterDashboardBy.showPreAssessments == false &&
+      this.filterDashboardBy.showPhast == false
+    );
+  }
+
+  setFilterPump() {
+    if (this.filterDashboardBy.showPumps == false || this.filterDashboardBy.showAll == true) {
+      if (this.filterDashboardBy.showAll == true) {
+        this.filterDashboardBy.showAll = false;
+        this.filterDashboardBy.showFans = false;
+        this.filterDashboardBy.showSteam = false;
+        this.filterDashboardBy.showTreasureHunt = false;
+        this.filterDashboardBy.showSubFolders = false;
+        this.filterDashboardBy.showPreAssessments = false;
+        this.filterDashboardBy.showPhast = false;
+      }
+      this.filterDashboardBy.showPumps = true;
+    } else {
+      this.filterDashboardBy.showPumps = false;
+      this.checkShowAll();
+    }
+    this.updateFilterBy();
+  }
+
+  setFilterFans() {
+    if (this.filterDashboardBy.showFans == false || this.filterDashboardBy.showAll == true) {
+      if (this.filterDashboardBy.showAll == true) {
+        this.filterDashboardBy.showAll = false;
+        this.filterDashboardBy.showPumps = false;
+        this.filterDashboardBy.showSteam = false;
+        this.filterDashboardBy.showTreasureHunt = false;
+        this.filterDashboardBy.showSubFolders = false;
+        this.filterDashboardBy.showPreAssessments = false;
+        this.filterDashboardBy.showPhast = false;
+      }
+      this.filterDashboardBy.showFans = true;
+    } else {
+      this.filterDashboardBy.showFans = false;
+      this.checkShowAll();
+    }
+    this.updateFilterBy();
+  }
+
+  setFilterProcessHeating() {
+    if (this.filterDashboardBy.showPhast == false || this.filterDashboardBy.showAll == true) {
+      if (this.filterDashboardBy.showAll == true) {
+        this.filterDashboardBy.showAll = false;
+        this.filterDashboardBy.showPumps = false;
+        this.filterDashboardBy.showSteam = false;
+        this.filterDashboardBy.showTreasureHunt = false;
+        this.filterDashboardBy.showSubFolders = false;
+        this.filterDashboardBy.showPreAssessments = false;
+        this.filterDashboardBy.showFans = false;
+      }
+      this.filterDashboardBy.showPhast = true;
+    } else {
+      this.filterDashboardBy.showPhast = false;
+      this.checkShowAll();
+    }
+    this.updateFilterBy();
+  }
+
+  setFilterSteam() {
+    if (this.filterDashboardBy.showSteam == false || this.filterDashboardBy.showAll == true) {
+      if (this.filterDashboardBy.showAll == true) {
+        this.filterDashboardBy.showAll = false;
+        this.filterDashboardBy.showPumps = false;
+        this.filterDashboardBy.showPhast = false;
+        this.filterDashboardBy.showSubFolders = false;
+        this.filterDashboardBy.showPreAssessments = false;
+        this.filterDashboardBy.showTreasureHunt = false;
+        this.filterDashboardBy.showFans = false;
+      }
+      this.filterDashboardBy.showSteam = true;
+    } else {
+      this.filterDashboardBy.showSteam = false;
+      this.checkShowAll();
+    }
+    this.updateFilterBy();
+  }
+
+  setFilterTreasureHunt() {
+    if (this.filterDashboardBy.showTreasureHunt == false || this.filterDashboardBy.showAll == true) {
+      if (this.filterDashboardBy.showAll == true) {
+        this.filterDashboardBy.showAll = false;
+        this.filterDashboardBy.showPumps = false;
+        this.filterDashboardBy.showSteam = false;
+        this.filterDashboardBy.showPhast = false;
+        this.filterDashboardBy.showSubFolders = false;
+        this.filterDashboardBy.showPreAssessments = false;
+        this.filterDashboardBy.showFans = false;
+      }
+      this.filterDashboardBy.showTreasureHunt = true;
+    } else {
+      this.filterDashboardBy.showTreasureHunt = false;
+      this.checkShowAll();
+    }
+    this.updateFilterBy();
+  }
+
+  setFilterPreAssessments() {
+    if (this.filterDashboardBy.showPreAssessments == false || this.filterDashboardBy.showAll == true) {
+      if (this.filterDashboardBy.showAll == true) {
+        this.filterDashboardBy.showAll = false;
+        this.filterDashboardBy.showPumps = false;
+        this.filterDashboardBy.showSteam = false;
+        this.filterDashboardBy.showPhast = false;
+        this.filterDashboardBy.showSubFolders = false;
+        this.filterDashboardBy.showTreasureHunt = false;
+        this.filterDashboardBy.showFans = false;
+      }
+      this.filterDashboardBy.showPreAssessments = true;
+    } else {
+      this.filterDashboardBy.showPreAssessments = false;
+      this.checkShowAll();
+    }
+    this.updateFilterBy();
+  }
+
+  setFilterSubFolders() {
+    if (this.filterDashboardBy.showSubFolders == false || this.filterDashboardBy.showAll == true) {
+      if (this.filterDashboardBy.showAll == true) {
+        this.filterDashboardBy.showAll = false;
+        this.filterDashboardBy.showPumps = false;
+        this.filterDashboardBy.showSteam = false;
+        this.filterDashboardBy.showPhast = false;
+        this.filterDashboardBy.showPreAssessments = false;
+        this.filterDashboardBy.showTreasureHunt = false;
+        this.filterDashboardBy.showFans = false;
+      }
+      this.filterDashboardBy.showSubFolders = true;
+    } else {
+      this.filterDashboardBy.showSubFolders = false;
+      this.checkShowAll();
+    }
+    this.updateFilterBy();
   }
 }

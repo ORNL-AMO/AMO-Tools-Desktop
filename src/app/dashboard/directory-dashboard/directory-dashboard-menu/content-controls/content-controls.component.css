@@ -23,3 +23,12 @@
     background-color: #545b62;
     border-color: #545b62;
 }
+
+.dropdown-menu.filter-dropdown{
+    right: 15px;;
+}
+
+.list-group-item:hover,
+.list-group-item label:hover{
+    cursor: pointer;
+}

@@ -30,7 +30,8 @@ export class DirectoryDashboardService {
       showTreasureHunt: true,
       showSubFolders: true,
       showPreAssessments: true,
-      showPhast: true
+      showPhast: true,
+      showAll: true
     });
 
     this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'asc' });
@@ -41,28 +42,27 @@ export class DirectoryDashboardService {
     let assessmentItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'assessment' });
     let preAssessmentItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'calculator' });
     let subDirectoryItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'directory' });
-
     assessmentItems.forEach(item => {
-      if (item.assessment.type == 'PSAT' && filterDashboardBy.showPumps == false) {
+      if (item.assessment.type == 'PSAT' && filterDashboardBy.showPumps == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
-      } else if (item.assessment.type == 'FSAT' && filterDashboardBy.showFans == false) {
+      } else if (item.assessment.type == 'FSAT' && filterDashboardBy.showFans == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
-      } else if (item.assessment.type == 'SSMT' && filterDashboardBy.showSteam == false) {
+      } else if (item.assessment.type == 'SSMT' && filterDashboardBy.showSteam == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
-      } else if (item.assessment.type == 'TreasureHunt' && filterDashboardBy.showTreasureHunt == false) {
+      } else if (item.assessment.type == 'TreasureHunt' && filterDashboardBy.showTreasureHunt == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
-      } else if (item.assessment.type == 'PHAST' && filterDashboardBy.showPhast == false) {
+      } else if (item.assessment.type == 'PHAST' && filterDashboardBy.showPhast == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
       } else if (item.isShown == false) {
         item.isShown = true;
       }
     })
-    if (filterDashboardBy.showSubFolders == false) {
+    if (filterDashboardBy.showSubFolders == false && filterDashboardBy.showAll == false) {
       subDirectoryItems.forEach(item => { item.isShown = false; });
     } else {
       subDirectoryItems.forEach(item => { item.isShown = true });
     }
-    if (filterDashboardBy.showPreAssessments == false) {
+    if (filterDashboardBy.showPreAssessments == false && filterDashboardBy.showAll == false) {
       preAssessmentItems.forEach(item => { item.isShown = false });
     } else {
       preAssessmentItems.forEach(item => { item.isShown = true });
