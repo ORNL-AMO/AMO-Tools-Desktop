@@ -11,6 +11,7 @@ import { AssessmentService } from '../../../assessment.service';
 import { DashboardService } from '../../../dashboard.service';
 import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
+import { DirectoryItem, FilterDashboardBy } from '../../../../shared/models/directory-dashboard';
 
 @Component({
   selector: 'app-directory-item',
@@ -27,29 +28,37 @@ export class DirectoryItemComponent implements OnInit {
   updateDashboardDataSub: Subscription;
   dashboardView: string;
   dashboardViewSub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService,
-    private assessmentService: AssessmentService, private formBuilder: FormBuilder, private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService) { }
+  directoryItems: Array<DirectoryItem>;
+  filterDashboardBy: FilterDashboardBy;
+  filterDashboardBySub: Subscription;
+  sortBy: { value: string, direction: string };
+  sortBySub: Subscription;
+  constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService, 
+    private formBuilder: FormBuilder, private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService) { }
 
-  ngOnInit() {
+  ngOnInit() {    
     this.directory.selected = false;
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      this.allDirectories = this.directoryDbService.getAll();
-      this.populateDirectories(this.directory);
+      this.directory = this.directoryDbService.getById(this.directory.id);
+      this.directory.selected = false;
+      this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
     });
-
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;
+    });
+    this.filterDashboardBySub = this.directoryDashboardService.filterDashboardBy.subscribe(val => {
+      this.filterDashboardBy = val;
+    });
+    this.sortBySub = this.directoryDashboardService.sortBy.subscribe(val => {
+      this.sortBy = val;
     });
   }
 
   ngOnDestroy() {
     this.updateDashboardDataSub.unsubscribe();
     this.dashboardViewSub.unsubscribe();
-  }
-
-  populateDirectories(directory: Directory) {
-    directory.assessments = this.assessmentDbService.getByDirectoryId(directory.id);
-    directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directory.id);
+    this.sortBySub.unsubscribe();
+    this.filterDashboardBySub.unsubscribe();
   }
 
   goToAssessment(assessment: Assessment) {
@@ -57,6 +66,7 @@ export class DirectoryItemComponent implements OnInit {
   }
 
   showEditModal() {
+    this.allDirectories = this.directoryDbService.getAll();
     _.remove(this.allDirectories, (dir) => { return dir.id === this.directory.id; });
     _.remove(this.allDirectories, (dir) => { return dir.parentDirectoryId === this.directory.id; });
     this.editForm = this.formBuilder.group({

@@ -60,7 +60,6 @@ export class DirectoryDashboardComponent implements OnInit {
     this.filterDashboardBySub = this.directoryDashboardService.filterDashboardBy.subscribe(val => {
       this.filterDashboardBy = val;
     });
-
     this.sortBySub = this.directoryDashboardService.sortBy.subscribe(val => {
       this.sortBy = val;
     });
@@ -76,42 +75,14 @@ export class DirectoryDashboardComponent implements OnInit {
   }
 
   setDirectoryItems() {
-    this.directoryItems = new Array();
-    this.displayAddPreAssessment = true;
-    let calculatorIndex: number = 0;
-    this.directory.calculators.forEach(calculator => {
+    this.directoryItems = this.directoryDashboardService.getDirectoryItems(this.directory);
+    console.log(this.directoryItems);
+    let preAssessmentExists = this.directoryItems.find((item) => { return item.type == 'calculator' });
+    if (preAssessmentExists == undefined) {
+      this.displayAddPreAssessment = true;
+    } else {
       this.displayAddPreAssessment = false;
-      this.directoryItems.push({
-        type: 'calculator',
-        calculator: calculator,
-        calculatorIndex: calculatorIndex,
-        isShown: true,
-        createdDate: calculator.createdDate,
-        modifiedDate: calculator.modifiedDate,
-        name: calculator.name
-      });
-      calculatorIndex++;
-    })
-    this.directory.assessments.forEach(assessment => {
-      this.directoryItems.push({
-        type: 'assessment',
-        assessment: assessment,
-        isShown: true,
-        createdDate: assessment.createdDate,
-        modifiedDate: assessment.modifiedDate,
-        name: assessment.name
-      })
-    });
-    this.directory.subDirectory.forEach(subDirectory => {
-      this.directoryItems.push({
-        type: 'directory',
-        subDirectory: subDirectory,
-        isShown: true,
-        createdDate: subDirectory.createdDate,
-        modifiedDate: subDirectory.modifiedDate,
-        name: subDirectory.name
-      })
-    })
+    }
   }
 }
 

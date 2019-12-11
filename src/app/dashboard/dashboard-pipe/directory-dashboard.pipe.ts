@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DirectoryItem, FilterDashboardBy } from '../../shared/models/directory-dashboard';
-import { DirectoryDashboardService } from './directory-dashboard.service';
+import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 
 @Pipe({
   name: 'directoryDashboardFilter',

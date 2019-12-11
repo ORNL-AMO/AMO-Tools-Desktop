@@ -1,27 +1,4 @@
 <!-- <ul>
-  <li *ngIf="validDirectory && directory.id != 1" [ngClass]="{'selected':selectedDirectoryId == directory.id  && dashboardView == 'assessment-dashboard'}">
-    <span class="sidebar-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)">
-      <i class="fa fa-folder" [ngClass]="{'selected':selectedDirectoryId == directory.id}" aria-hidden="true"></i>
-      {{directory.name}}
-    </span>
-  </li>
-  <li class="sub-directory" *ngIf="directory.subDirectory && directory.collapsed == false" [ngClass]="{'show-border': directory.collapsed == false}">
-    <ul>
-      <li class="assessments pl-0" *ngIf="directory.assessments && directory.collapsed == false">
-        <ul>
-          <li *ngFor="let assessment of directory.assessments">
-            <app-assessment-item [assessment]="assessment"></app-assessment-item>
-          </li>
-        </ul>
-      </li>
-      <app-directory-item *ngFor="let directory of directory.subDirectory" [directory]="directory" [selectedDirectoryId]="selectedDirectoryId"
-        (selectSignal)="toggleSelected($event)" (collapseSignal)="toggleDirectoryCollapse($event)" [dashboardView]="dashboardView" [newDirEventToggle]="newDirEventToggle"></app-directory-item>
-    </ul>
-  </li>
-</ul> -->
-
-
-<ul>
   <li *ngIf="directory.id != 1" routerLinkActive="selected" [routerLinkActiveOptions]="{exact:true}">
     <span class="sidebar-item" [routerLink]="['/directory-dashboard', directory.id]"
       (dblclick)="toggleDirectoryCollapse(directory)">
@@ -39,6 +16,27 @@
         </ul>
       </li>
       <app-directory-item *ngFor="let directory of directory.subDirectory" [directory]="directory"></app-directory-item>
+    </ul>
+  </li>
+</ul> -->
+
+
+<ul>
+  <li *ngIf="directory.id != 1" routerLinkActive="selected" [routerLinkActiveOptions]="{exact:true}">
+    <span class="sidebar-item" [routerLink]="['/directory-dashboard', directory.id]"
+      (dblclick)="toggleDirectoryCollapse(directory)">
+      <i class="fa fa-folder" aria-hidden="true"></i>
+      {{directory.name}}
+    </span>
+  </li>
+  <li class="sub-directory show-border"
+    *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:sortBy:filterDashboardBy"
+    [ngClass]="{'hidden': (directoryItem.isShown == false && directoryItem.type != 'directory')}">
+    <ul>
+      <app-assessment-item *ngIf="directoryItem.type == 'assessment'" [assessment]="directoryItem.assessment">
+      </app-assessment-item>
+      <app-directory-item *ngIf="directoryItem.type == 'directory'" [directory]="directoryItem.subDirectory">
+      </app-directory-item>
     </ul>
   </li>
 </ul>

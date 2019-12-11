@@ -28,7 +28,7 @@ import { DirectoryItemComponent } from './directory-items/directory-item/directo
 import { PreAssessmentItemComponent } from './directory-items/pre-assessment-item/pre-assessment-item.component';
 import { AddPreAssessmentItemComponent } from './directory-items/add-pre-assessment-item/add-pre-assessment-item.component';
 import { ContentControlsComponent } from './directory-dashboard-menu/content-controls/content-controls.component';
-import { DirectoryDashboardPipe } from './directory-dashboard.pipe';
+import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
 
 @NgModule({
   declarations: [
@@ -47,8 +47,7 @@ import { DirectoryDashboardPipe } from './directory-dashboard.pipe';
      DirectoryItemComponent,
      PreAssessmentItemComponent,
      AddPreAssessmentItemComponent,
-     ContentControlsComponent,
-     DirectoryDashboardPipe
+     ContentControlsComponent
     ],
   imports: [
     CommonModule,
@@ -63,7 +62,8 @@ import { DirectoryDashboardPipe } from './directory-dashboard.pipe';
     PhastReportModule,
     SharedPipesModule,
     SettingsModule,
-    PreAssessmentModule
+    PreAssessmentModule,
+    DashboardPipeModule
   ],
   providers: [DirectoryDashboardService]
 })

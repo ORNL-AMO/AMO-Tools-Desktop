@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FilterDashboardBy, DirectoryItem } from '../../shared/models/directory-dashboard';
 import * as _ from 'lodash';
+import { Directory } from '../../shared/models/directory';
 
 @Injectable()
 export class DirectoryDashboardService {
@@ -37,11 +38,51 @@ export class DirectoryDashboardService {
     this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'asc' });
   }
 
+  getDirectoryItems(directory: Directory): Array<DirectoryItem> {
+    let directoryItems = new Array<DirectoryItem>();
+    // this.displayAddPreAssessment = true;
+    let calculatorIndex: number = 0;
+    directory.calculators.forEach(calculator => {
+      // this.displayAddPreAssessment = false;
+      directoryItems.push({
+        type: 'calculator',
+        calculator: calculator,
+        calculatorIndex: calculatorIndex,
+        isShown: true,
+        createdDate: calculator.createdDate,
+        modifiedDate: calculator.modifiedDate,
+        name: calculator.name
+      });
+      calculatorIndex++;
+    })
+    directory.assessments.forEach(assessment => {
+      directoryItems.push({
+        type: 'assessment',
+        assessment: assessment,
+        isShown: true,
+        createdDate: assessment.createdDate,
+        modifiedDate: assessment.modifiedDate,
+        name: assessment.name
+      })
+    });
+    directory.subDirectory.forEach(subDirectory => {
+      directoryItems.push({
+        type: 'directory',
+        subDirectory: subDirectory,
+        isShown: true,
+        createdDate: subDirectory.createdDate,
+        modifiedDate: subDirectory.modifiedDate,
+        name: subDirectory.name
+      })
+    });
+    return directoryItems;
+  }
+
 
   filterDirectoryItems(directoryItems: Array<DirectoryItem>, filterDashboardBy: FilterDashboardBy): Array<DirectoryItem> {
     let assessmentItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'assessment' });
     let preAssessmentItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'calculator' });
-    let subDirectoryItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'directory' });
+    // let subDirectoryItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'directory' });
     assessmentItems.forEach(item => {
       if (item.assessment.type == 'PSAT' && filterDashboardBy.showPumps == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
@@ -57,11 +98,11 @@ export class DirectoryDashboardService {
         item.isShown = true;
       }
     })
-    if (filterDashboardBy.showSubFolders == false && filterDashboardBy.showAll == false) {
-      subDirectoryItems.forEach(item => { item.isShown = false; });
-    } else {
-      subDirectoryItems.forEach(item => { item.isShown = true });
-    }
+    // if (filterDashboardBy.showSubFolders == false && filterDashboardBy.showAll == false) {
+    //   subDirectoryItems.forEach(item => { item.isShown = false; });
+    // } else {
+    //   subDirectoryItems.forEach(item => { item.isShown = true });
+    // }
     if (filterDashboardBy.showPreAssessments == false && filterDashboardBy.showAll == false) {
       preAssessmentItems.forEach(item => { item.isShown = false });
     } else {

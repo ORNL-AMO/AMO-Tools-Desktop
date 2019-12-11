@@ -29,21 +29,11 @@ li{
     padding-top: 4px;
     font-size: larger;
   }
-  /* 
-  .fsat
-  .fsat.icon-image{
-    width: 24px;
-  }
-  
-  .psat.icon-image{
-    width: 24px;
-  }
-  
-  .phast.icon-image{
-    width: 18px;
-  } */
   
   .icon-image{
     width: 28px;
   }
   
+  .hidden{
+    display: none;
+  }

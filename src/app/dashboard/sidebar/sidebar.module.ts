@@ -7,6 +7,7 @@ import { CalculatorListComponent } from './calculator-list/calculator-list.compo
 import { DirectoryItemComponent } from './directory-item/directory-item.component';
 import { VersionModalComponent } from './version-modal/version-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ModalModule } from 'ngx-bootstrap';
   imports: [
     CommonModule,
     RouterModule,
-    ModalModule
+    ModalModule,
+    DashboardPipeModule
   ],
   exports: [
     SidebarComponent

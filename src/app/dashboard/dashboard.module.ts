@@ -16,6 +16,7 @@ import { ContactPageComponent } from './contact-page/contact-page.component';
 import { ImportExportModule } from './import-export/import-export.module';
 import { DirectoryDashboardModule } from './directory-dashboard/directory-dashboard.module';
 import { ToastModule } from '../shared/toast/toast.module';
+import { DirectoryDashboardPipe } from './dashboard-pipe/directory-dashboard.pipe';
 
 @NgModule({
   declarations: [
