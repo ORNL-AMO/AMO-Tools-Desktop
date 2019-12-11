@@ -68,6 +68,7 @@ export class DirectoryItemComponent implements OnInit {
 
   hideEditModal() {
     this.editModal.hide();
+    this.directoryDbService.setAll();
   }
 
   getParentDirStr(id: number) {

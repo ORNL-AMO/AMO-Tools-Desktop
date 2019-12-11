@@ -39,6 +39,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnDestroy() {
     this.updateSub.unsubscribe();
+    this.updateDashboardDataSub.unsubscribe();
   }
 
   showCreateAssessment() {
