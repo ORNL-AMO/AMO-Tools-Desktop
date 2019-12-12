@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { DashboardService } from '../dashboard.service';
 
 @Component({
@@ -7,6 +7,8 @@ import { DashboardService } from '../dashboard.service';
   styleUrls: ['./drag-bar.component.css']
 })
 export class DragBarComponent implements OnInit {
+
+  @ViewChild('dragBar', { static: false }) public dragBar: ElementRef;
 
   @HostListener('drag', ['$event'])
   onDrag(event: DragEvent) {
@@ -18,6 +20,13 @@ export class DragBarComponent implements OnInit {
   constructor(private dashboardService: DashboardService) { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    let sidebarXValue: number = this.dashboardService.sidebarX.getValue();
+    if (sidebarXValue == undefined && this.dragBar != undefined) {
+      this.dashboardService.sidebarX.next(this.dragBar.nativeElement.offsetLeft);
+    }
   }
 
 }

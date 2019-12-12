@@ -15,7 +15,7 @@
   <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
 </div>
 
-<div class="sidebar-group secondary pl-1 directory scroll-item">
+<div class="sidebar-group secondary pl-1 horizontal scroll-item">
   <app-directory-item [directory]="rootDirectory"></app-directory-item>
 </div>
 
@@ -24,40 +24,19 @@
 </div>
 
 <div class="sidebar-group secondary">
-  <ul>
-    <li routerLink="/settings" routerLinkActive="selected">
-      <span class="sidebar-item">Settings</span>
-    </li>
-    <li routerLink="/custom-materials" routerLinkActive="selected">
-      <span class="sidebar-item">Custom Materials</span>
-    </li>
-    <li routerLink="/tutorials" routerLinkActive="selected">
-      <span class="sidebar-item">Tutorials</span>
-    </li>
-    <li routerLink="/about" routerLinkActive="selected">
-      <span class="sidebar-item">About</span>
-    </li>
-    <li routerLink="/contact" routerLinkActive="selected">
-      <span class="sidebar-item">Feedback</span>
-    </li>
-    <li routerLink="/acknowledgments" routerLinkActive="selected">
-      <span class="sidebar-item">Acknowledgments</span>
-    </li>
-    <!--<a href="mailto:accawigk@ornl.gov">Contact</a></li>-->
-  </ul>
+  <span routerLink="/settings" routerLinkActive="selected" class="sidebar-item">Settings</span>
+  <span routerLink="/custom-materials" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
+  <span routerLink="/tutorials" routerLinkActive="selected" class="sidebar-item">Tutorials</span>
+  <span routerLink="/about" routerLinkActive="selected" class="sidebar-item">About</span>
+  <span routerLink="/contact" routerLinkActive="selected" class="sidebar-item">Feedback</span>
+  <span routerLink="/acknowledgments" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
 </div>
 
 <div class="sidebar-group">
-  <ul>
-    <li>
-      <span class="version-num">v{{versionNum}}
-        <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
-      </span>
-    </li>
-    <li>
-      <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
-    </li>
-  </ul>
+  <span class="version-num">v{{versionNum}}
+    <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
+  </span>
+  <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
 </div>
 
 <app-version-modal *ngIf="showVersionModal" (closeModal)="closeVersionModal()"></app-version-modal>

@@ -1,6 +1,7 @@
 .version-num{
     cursor: default !important;
     color: darkslategray;
+    padding-left: .3rem;
 }
 
 .fa-info-circle{
@@ -10,11 +11,12 @@
 .update-available{
     cursor: pointer;
     color: darkslategray;
+    padding-left: .3rem;
 }
 
 
 
-.directory.scroll-item{
+.horizontal.scroll-item{
     max-width: 100%;
     overflow-y: auto;
     white-space: nowrap;
@@ -35,4 +37,8 @@
   }
 .doe-logo:hover {
     cursor: pointer;
+}
+
+.calculator-group{
+    padding-left: .3rem;
 }
