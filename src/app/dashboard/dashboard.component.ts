@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { Settings } from '../shared/models/settings';
 import { Assessment } from '../shared/models/assessment';
@@ -15,7 +15,7 @@ import { DashboardService } from './dashboard.service';
 })
 export class DashboardComponent implements OnInit {
 
-  @ViewChild('dragbar', { static: false }) public dragbar: ElementRef;
+  @ViewChild('dashboardContent', { static: false }) public dashboardContent: ElementRef;
 
   createAssessment: boolean;
   createAssessmentSub: Subscription;
@@ -35,7 +35,8 @@ export class DashboardComponent implements OnInit {
   showExportModal: boolean;
   sidebarWidth: number;
   sidebarWidthSub: Subscription;
-  constructor(private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService) {
+  contentWidth: number;
+  constructor(private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService, private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -63,7 +64,10 @@ export class DashboardComponent implements OnInit {
 
     this.sidebarWidthSub = this.dashboardService.sidebarX.subscribe(val => {
       this.sidebarWidth = val;
-    })
+      if (this.dashboardContent && this.sidebarWidth) {
+        this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -72,6 +76,13 @@ export class DashboardComponent implements OnInit {
     this.createFolderSub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.sidebarWidthSub.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    if (this.dashboardContent && this.sidebarWidth) {
+      this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
+      this.cd.detectChanges();
+    }
   }
 
   //TOAST HERE

@@ -9,13 +9,13 @@
     </div>
 </div> -->
 
-<div class="d-flex dashboard-content w-100">
+<div class="d-flex dashboard-content w-100" #dashboardContent>
     <div class="sidebar-bg" [ngStyle]="{'width.px': sidebarWidth}">
         <app-sidebar></app-sidebar>
     </div>
     <!-- <div #dragbar draggable="true" class="dragbar" (dragover)="testDrag($event)"></div> -->
     <app-drag-bar></app-drag-bar>
-    <div class="flex-fill scroll-item dashboard-scroll skyline">
+    <div class="flex-fill scroll-item dashboard-scroll skyline" [ngStyle]="{'width.px': contentWidth}">
         <router-outlet></router-outlet>
     </div>
 </div>

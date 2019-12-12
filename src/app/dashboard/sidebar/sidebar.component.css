@@ -12,9 +12,6 @@
     color: darkslategray;
 }
 
-.sidebar-item:hover{
-    background-color: #eee;
-}
 
 
 .directory.scroll-item{
@@ -30,4 +27,12 @@
 .max-width, 
 .doe-logo{
     max-width: 250px;
+}
+
+.doe-logo {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+.doe-logo:hover {
+    cursor: pointer;
 }
