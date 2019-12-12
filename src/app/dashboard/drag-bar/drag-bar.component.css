@@ -1,0 +1,18 @@
+.drag-bar{
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 0;
+    /* background-color: black; */
+    /* color: white; */
+    z-index: +4;
+}
+
+.btn{
+    padding: 3px;
+    opacity: .5;
+}
+
+.btn:hover{
+    opacity: 1;
+}

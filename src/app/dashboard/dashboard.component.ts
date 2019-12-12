@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { Settings } from '../shared/models/settings';
 import { Assessment } from '../shared/models/assessment';
@@ -15,7 +15,8 @@ import { DashboardService } from './dashboard.service';
 })
 export class DashboardComponent implements OnInit {
 
- 
+  @ViewChild('dragbar', { static: false }) public dragbar: ElementRef;
+
   createAssessment: boolean;
   createAssessmentSub: Subscription;
 
@@ -32,7 +33,8 @@ export class DashboardComponent implements OnInit {
 
   showExportModalSub: Subscription;
   showExportModal: boolean;
-
+  sidebarWidth: number;
+  sidebarWidthSub: Subscription;
   constructor(private dashboardService: DashboardService, private directoryDashboardService: DirectoryDashboardService) {
   }
 
@@ -58,6 +60,10 @@ export class DashboardComponent implements OnInit {
     this.showExportModalSub = this.directoryDashboardService.showExportModal.subscribe(val => {
       this.showExportModal = val;
     });
+
+    this.sidebarWidthSub = this.dashboardService.sidebarX.subscribe(val => {
+      this.sidebarWidth = val;
+    })
   }
 
   ngOnDestroy() {
@@ -65,8 +71,9 @@ export class DashboardComponent implements OnInit {
     this.dashboardToastMessageSub.unsubscribe();
     this.createFolderSub.unsubscribe();
     this.showImportModalSub.unsubscribe();
+    this.sidebarWidthSub.unsubscribe();
   }
-  
+
   //TOAST HERE
   addToast(msg: string) {
     this.toastData.title = msg;

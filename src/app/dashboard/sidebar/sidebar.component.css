@@ -26,3 +26,8 @@
 .selected-directory{
     border-left: .5px solid gray;
 }
+
+.max-width, 
+.doe-logo{
+    max-width: 250px;
+}

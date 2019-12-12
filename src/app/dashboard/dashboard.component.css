@@ -2,6 +2,11 @@
     top: .5rem;
 }
 
+.dragbar{
+    width: 4px;
+    height: 100%;
+    background-color: black;
+}
 
 .sidebar-bg{
     max-height: 100%;
@@ -79,4 +84,8 @@
     background-attachment: fixed;
     background-position: bottom center; 
     background-size: 100%;
+}
+
+.sidebar-bg{
+    width: 15%;
 }

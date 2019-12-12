@@ -8,9 +8,11 @@ export class DashboardService {
   updateDashboardData: BehaviorSubject<boolean>;
   createAssessment: BehaviorSubject<boolean>;
   dashboardToastMessage: BehaviorSubject<string>;
+  sidebarX: BehaviorSubject<number>;
   constructor() {
     this.updateDashboardData = new BehaviorSubject<boolean>(false);
     this.dashboardToastMessage = new BehaviorSubject<string>(undefined);
     this.createAssessment = new BehaviorSubject<boolean>(false);
+    this.sidebarX = new BehaviorSubject<number>(undefined);
   }
 }
