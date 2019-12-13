@@ -198,7 +198,7 @@
           [(ngModel)]="showMediumPressureSteamUsage" /> Adjust Medium Pressure Steam Usage
       </label>
     </div>
-    <form [formGroup]="baselineMediumPressureForm" *ngIf="showMediumPressureSteamUsage">
+    <form [formGroup]="baselineMediumPressureForm" *ngIf="modificationMediumPressureForm.controls.useBaselineProcessSteamUsage.value == false">
       <div class="form-group">
         <label for="baselineMPSteamUsage">Baseline Steam Usage</label>
         <div class="input-group">
@@ -217,7 +217,7 @@
         </span>
       </div>
     </form>
-    <form [formGroup]="modificationMediumPressureForm" *ngIf="showMediumPressureSteamUsage">
+    <form [formGroup]="modificationMediumPressureForm" *ngIf="modificationMediumPressureForm.controls.useBaselineProcessSteamUsage.value == false">
       <div class="form-group">
         <label for="modificationMPSteamUsage">Modification Steam Usage</label>
         <div class="input-group">
@@ -245,7 +245,7 @@
           [(ngModel)]="showLowPressureSteamUsage" /> Adjust Low Pressure Steam Usage
       </label>
     </div>
-    <form [formGroup]="baselineLowPressureForm" *ngIf="showLowPressureSteamUsage">
+    <form [formGroup]="baselineLowPressureForm" *ngIf="modificationLowPressureForm.controls.useBaselineProcessSteamUsage.value == false">
       <div class="form-group">
         <label for="baselineLPSteamUsage">Baseline Steam Usage</label>
         <div class="input-group">
@@ -264,7 +264,7 @@
         </span>
       </div>
     </form>
-    <form [formGroup]="modificationLowPressureForm" *ngIf="showLowPressureSteamUsage">
+    <form [formGroup]="modificationLowPressureForm" *ngIf="modificationLowPressureForm.controls.useBaselineProcessSteamUsage.value == false">
       <div class="form-group">
         <label for="modificationLPSteamUsage">Modification Steam Usage</label>
         <div class="input-group">

@@ -123,6 +123,10 @@ export class AssessmentItemComponent implements OnInit {
         assessmentCopy.phast.modifications = new Array();
       } else if (assessmentCopy.type === 'PSAT') {
         assessmentCopy.psat.modifications = new Array();
+      } else if (assessmentCopy.type == 'FSAT') {
+        assessmentCopy.fsat.modifications = new Array();
+      } else if (assessmentCopy.type == 'SSMT') {
+        assessmentCopy.ssmt.modifications = new Array();
       }
     }
 

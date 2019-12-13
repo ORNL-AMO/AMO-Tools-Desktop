@@ -26,6 +26,8 @@ export class GeneralOperationsComponent implements OnInit {
   idString: string;
   @Input()
   ssmt: SSMT;
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -58,13 +60,14 @@ export class GeneralOperationsComponent implements OnInit {
     }
   }
 
-  isSitePowerImportDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isSitePowerImportDifferent();
-    } else {
-      return false;
-    }
-  }
+  //unused site power import is calculated for modifications
+  // isSitePowerImportDifferent() {
+  //   if (this.canCompare()) {
+  //     return this.compareService.isSitePowerImportDifferent();
+  //   } else {
+  //     return false;
+  //   }
+  // }
   isMakeUpWaterTemperatureDifferent() {
     if (this.canCompare()) {
       return this.compareService.isMakeUpWaterTemperatureDifferent();

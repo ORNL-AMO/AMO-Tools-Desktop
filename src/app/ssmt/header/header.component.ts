@@ -46,17 +46,9 @@ export class HeaderComponent implements OnInit {
       this.headerInput = this.headerService.initHeaderDataObj();
     }
     this.initForms();
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.selected && !changes.selected.isFirstChange()) {
-      if (this.selected === true) {
-        //  this.enableForm();
-      } else if (this.selected === false) {
-        //  this.disableForm();
-      }
-    }
     if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
       this.initForms();
     }
@@ -85,7 +77,7 @@ export class HeaderComponent implements OnInit {
       }
       this.mediumPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.mediumPressureHeader, this.settings, min, max);
     } else {
-      this.mediumPressureForm = this.headerService.initHeaderForm(this.settings);
+      this.mediumPressureForm = this.headerService.initHeaderForm(this.settings, this.isBaseline);
     }
 
     if (this.headerInput.lowPressureHeader) {
@@ -97,7 +89,7 @@ export class HeaderComponent implements OnInit {
       }
       this.lowPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.settings, this.boilerInput.deaeratorPressure, pressureMax);
     } else {
-      this.lowPressureForm = this.headerService.initHeaderForm(this.settings, this.boilerInput.deaeratorPressure);
+      this.lowPressureForm = this.headerService.initHeaderForm(this.settings, this.isBaseline, this.boilerInput.deaeratorPressure);
     }
   }
 

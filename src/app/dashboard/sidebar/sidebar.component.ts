@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
+import { CoreService } from '../../core/core.service';
+declare var google: any;
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -24,8 +26,10 @@ export class SidebarComponent implements OnInit {
   rootDirectory: Directory;
   selectedDirectoryId: number;
   selectedDirectoryIdSub: Subscription;
+  googleTranslateAvailable: boolean;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
-    private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
+    private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
+    private coreService: CoreService) { }
 
   ngOnInit() {
     this.versionNum = packageJson.version;
@@ -41,6 +45,12 @@ export class SidebarComponent implements OnInit {
     this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
       this.selectedDirectoryId = val;
     })
+    try {
+      google;
+      this.googleTranslateAvailable = true;
+    } catch{
+      this.googleTranslateAvailable = false;
+    }
   }
 
   ngOnDestroy() {
@@ -65,5 +75,9 @@ export class SidebarComponent implements OnInit {
   closeVersionModal() {
     this.openModal.emit(false);
     this.showVersionModal = false;
+  }
+
+  emitTranslate(){
+    this.coreService.showTranslateModal.next(true);
   }
 }

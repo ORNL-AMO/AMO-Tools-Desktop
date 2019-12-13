@@ -152,11 +152,13 @@ export class DirectorySummaryComponent implements OnInit {
     let totalCost: number = 0;
     ssmtAssessments.forEach(assessment => {
       if (assessment.ssmt.setupDone) {
-        let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-        let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModel(assessment.ssmt, assessmentSettings, true, 0);
-        results.outputData.operationsOutput.boilerFuelUsage = this.convertUnitsService.value(results.outputData.operationsOutput.boilerFuelUsage).from(assessmentSettings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
-        totalEnergyUsed = results.outputData.operationsOutput.boilerFuelUsage + totalEnergyUsed;
-        totalCost = results.outputData.operationsOutput.totalOperatingCost + totalCost;
+        let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+        let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(assessment.ssmt, settings);
+        if (results.outputData.boilerOutput != undefined) {
+          results.outputData.operationsOutput.boilerFuelUsage = this.convertUnitsService.value(results.outputData.operationsOutput.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
+          totalEnergyUsed = results.outputData.operationsOutput.boilerFuelUsage + totalEnergyUsed;
+          totalCost = results.outputData.operationsOutput.totalOperatingCost + totalCost;
+        }
       }
     });
     this.ssmtSummary = {

@@ -28,10 +28,15 @@ export class HeaderFormComponent implements OnInit {
   inSetup: boolean;
   @Input()
   idString: string;
+  @Input()
+  isBaseline: boolean;
+  @Input()
+  headerInput: HeaderNotHighestPressure | HeaderWithHighestPressure;
 
   headerLabel: string;
   minPressureErrorMsg: string;
   maxPressureErrorMsg: string;
+  showProcessSteamUsage: boolean = true;
   constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -41,6 +46,9 @@ export class HeaderFormComponent implements OnInit {
       this.enableForm();
     }
     this.setErrorMsgs();
+    if (this.isBaseline == false && this.pressureLevel != 'highPressure' && this.headerForm.controls.useBaselineProcessSteamUsage.value == true) {
+      this.showProcessSteamUsage = false;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -98,6 +106,7 @@ export class HeaderFormComponent implements OnInit {
   focusField(str: string) {
     this.ssmtService.numberOfHeadersHelp.next(this.numberOfHeaders);
     this.ssmtService.headerPressureLevelHelp.next(this.pressureLevel);
+    this.ssmtService.isBaselineFocused.next(this.isBaseline);
     this.ssmtService.currentField.next(str);
   }
 
@@ -131,6 +140,23 @@ export class HeaderFormComponent implements OnInit {
     this.save();
   }
 
+  setCustomProcessUsage() {
+    this.headerForm.controls.useBaselineProcessSteamUsage.patchValue(false);
+    this.showProcessSteamUsage = true;
+    this.save();
+  }
+
+  setUseBaselineProcessUsage() {
+    this.headerForm.controls.useBaselineProcessSteamUsage.patchValue(true);
+    if (this.pressureLevel == 'lowPressure') {
+      this.headerForm.controls.processSteamUsage.patchValue(this.compareService.baselineSSMT.headerInput.lowPressureHeader.processSteamUsage);
+    } else if (this.pressureLevel == 'mediumPressure') {
+      this.headerForm.controls.processSteamUsage.patchValue(this.compareService.baselineSSMT.headerInput.mediumPressureHeader.processSteamUsage);
+    }
+    this.showProcessSteamUsage = false;
+    this.save();
+  }
+
   canCompare(): boolean {
     if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
       return true;
@@ -147,7 +173,12 @@ export class HeaderFormComponent implements OnInit {
   }
   isProcessSteamUsageDifferent(): boolean {
     if (this.canCompare()) {
-      return this.compareService.isProcessSteamUsageDifferent(this.pressureLevel + 'Header');
+      if (this.pressureLevel == 'highPressure') {
+        return this.compareService.isHighPressureProcessSteamUsageDifferent();
+      } else {
+        return this.compareService.isNotHighPressureProcessSteamUsageDifferent(this.pressureLevel + 'Header');
+      }
+
     } else {
       return false;
     }

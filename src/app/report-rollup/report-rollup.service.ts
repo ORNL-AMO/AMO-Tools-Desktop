@@ -451,13 +451,13 @@ export class ReportRollupService {
     ssmtArr.forEach(val => {
       if (val.assessment.ssmt.setupDone) {
         //get results
-        val.assessment.ssmt.outputData = this.ssmtService.calculateModel(val.assessment.ssmt, val.settings, true, 0).outputData;
+        val.assessment.ssmt.outputData = this.ssmtService.calculateBaselineModel(val.assessment.ssmt, val.settings).outputData;
         let baselineResults: SSMTOutput = val.assessment.ssmt.outputData;
         if (val.assessment.ssmt.modifications) {
           if (val.assessment.ssmt.modifications.length !== 0) {
             let modResultsArr = new Array<SSMTOutput>();
             val.assessment.ssmt.modifications.forEach(mod => {
-              mod.ssmt.outputData = this.ssmtService.calculateModel(mod.ssmt, val.settings, false, baselineResults.operationsOutput.sitePowerDemand).outputData;
+              mod.ssmt.outputData = this.ssmtService.calculateModificationModel(mod.ssmt, val.settings, baselineResults).outputData;
               let tmpResults: SSMTOutput = mod.ssmt.outputData;
               modResultsArr.push(tmpResults);
             });

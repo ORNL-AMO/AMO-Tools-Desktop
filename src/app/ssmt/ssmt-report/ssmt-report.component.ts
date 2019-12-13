@@ -73,7 +73,8 @@ export class SsmtReportComponent implements OnInit {
   ngOnInit() {
     if (this.assessment.ssmt.setupDone) {
       setTimeout(() => {
-        let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModel(this.assessment.ssmt, this.settings, true, 0);
+        let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.assessment.ssmt, this.settings);
+        this.assessment.ssmt.name = 'Baseline';
         resultData.outputData = this.calculateResultsWithMarginalCosts(this.assessment.ssmt, resultData.outputData);
         this.assessment.ssmt.outputData = resultData.outputData;
         this.baselineOutput = resultData.outputData;
@@ -84,8 +85,8 @@ export class SsmtReportComponent implements OnInit {
         this.modificationLosses = new Array<{ name: string, outputData: SSMTLosses }>();
         if (this.assessment.ssmt.modifications) {
           this.assessment.ssmt.modifications.forEach(modification => {
-            let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModel(modification.ssmt, this.settings, false, this.baselineOutput.operationsOutput.sitePowerDemand);
-            resultData.outputData = this.calculateResultsWithMarginalCosts(modification.ssmt, resultData.outputData);
+            let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModificationModel(modification.ssmt, this.settings, this.baselineOutput);
+            resultData.outputData = this.calculateResultsWithMarginalCosts(modification.ssmt, resultData.outputData, this.baselineOutput);
             modification.ssmt.outputData = resultData.outputData;
             this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData });
             this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData });
@@ -276,8 +277,13 @@ export class SsmtReportComponent implements OnInit {
     }, 2000);
   }
 
-  calculateResultsWithMarginalCosts(ssmt: SSMT, outputData: SSMTOutput): SSMTOutput {
-    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } = this.ssmtService.calculateMarginalCosts(ssmt, outputData, this.settings);
+  calculateResultsWithMarginalCosts(ssmt: SSMT, outputData: SSMTOutput, baselineResults?: SSMTOutput): SSMTOutput {
+    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number };
+    if (ssmt.name == 'Baseline') {
+      marginalCosts = this.ssmtService.calculateBaselineMarginalCosts(ssmt, outputData, this.settings);
+    } else {
+      marginalCosts = this.ssmtService.calculateModificationMarginalCosts(ssmt, outputData, baselineResults, this.settings);
+    }
     outputData.marginalHPCost = marginalCosts.marginalHPCost;
     outputData.marginalMPCost = marginalCosts.marginalMPCost;
     outputData.marginalLPCost = marginalCosts.marginalLPCost;

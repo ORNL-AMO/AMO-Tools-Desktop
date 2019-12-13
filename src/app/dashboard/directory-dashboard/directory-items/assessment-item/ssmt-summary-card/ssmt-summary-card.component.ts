@@ -66,9 +66,9 @@ export class SsmtSummaryCardComponent implements OnInit {
 
   getData(ssmt: SSMT, isBaseline: boolean): { inputData: SSMTInputs, outputData: SSMTOutput } {
     if (isBaseline) {
-      return this.ssmtService.calculateModel(ssmt, this.settings, true, 0);
+      return this.ssmtService.calculateBaselineModel(ssmt, this.settings);
     } else {
-      return this.ssmtService.calculateModel(ssmt, this.settings, false, this.baselineData.outputData.operationsOutput.sitePowerDemand);
+      return this.ssmtService.calculateModificationModel(ssmt, this.settings, this.baselineData.outputData);
     }
   }
 

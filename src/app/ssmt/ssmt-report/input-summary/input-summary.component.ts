@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
+import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-input-summary',
@@ -16,6 +17,8 @@ export class InputSummaryComponent implements OnInit {
   settings: Settings;
   @Input()
   printView: boolean;
+  @Input()
+  modificationOutputs: Array<SSMTOutput>;
 
   constructor() { }
 

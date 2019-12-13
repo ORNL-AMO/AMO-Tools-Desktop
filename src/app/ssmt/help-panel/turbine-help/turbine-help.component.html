@@ -198,4 +198,17 @@
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="isBaselineFocused == false">
+    <h6>
+      <small class="text-muted">
+        <span class="alert alert-warning">
+          Note: Adding, removing or adjusting a turbine will change the enthalpy of the outgoing steam. To compensate for this
+          MEASUR
+          keeps the energy into your defined process constant by altering the corresponding process steam usage unless
+          specified otherwise in the Header tab.
+        </span>
+      </small>
+    </h6>
+  </div>
+
 </div>
