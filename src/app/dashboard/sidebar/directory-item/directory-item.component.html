@@ -1,9 +1,10 @@
 <div [ngClass]="{'selected-directory': directory.id == selectedDirectoryId, 'ml-0 pt-0': directory.id == 1}">
-  <span class="sidebar-item" [routerLink]="['/directory-dashboard', directory.id]" routerLinkActive="selected"
-    (click)="toggleDirectoryCollapse(directory)">
-    <i class="fa fa-folder" aria-hidden="true"
-      [ngClass]="{'fa-folder': directory.collapsed == true, 'fa-folder-open': !directory.collapsed}"></i>
-    {{directory.name}}
+  <span class="sidebar-item" routerLinkActive="selected" [routerLinkActiveOptions]="{exact:true}">
+    <i class="fa" aria-hidden="true"
+      [ngClass]="{'fa-folder': directory.collapsed == true, 'fa-folder-open': !directory.collapsed}"
+      (click)="toggleDirectoryCollapse(directory)"></i>
+    <a class="ml-1" [routerLink]="['/directory-dashboard', directory.id]"
+      routerLinkActive="selected">{{directory.name}}</a>
   </span>
   <div class="directory-item"
     *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:sortBy:filterDashboardBy"

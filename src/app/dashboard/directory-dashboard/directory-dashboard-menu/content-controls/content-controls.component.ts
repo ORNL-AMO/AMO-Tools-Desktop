@@ -69,6 +69,8 @@ export class ContentControlsComponent implements OnInit {
       this.sortByLabel = 'Created';
     } else if (this.sortBy.value == 'modifiedDate') {
       this.sortByLabel = 'Last Updated';
+    } else if (this.sortBy.value == 'type') {
+      this.sortByLabel = 'Type';
     } else {
       this.sortByLabel = undefined;
     }

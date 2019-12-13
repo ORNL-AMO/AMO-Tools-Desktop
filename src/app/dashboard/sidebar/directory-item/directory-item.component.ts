@@ -52,12 +52,12 @@ export class DirectoryItemComponent implements OnInit {
   }
 
   toggleDirectoryCollapse(directory: Directory) {
-    if (directory.collapsed == true || directory.id == this.selectedDirectoryId) {
+    // if (directory.collapsed == true || directory.id == this.selectedDirectoryId) {
       directory.collapsed = !directory.collapsed;
       this.indexedDbService.putDirectory(this.directory).then(() => {
         this.directoryDbService.setAll();
       });
-    }
+    // }
   }
 
   checkSubDirectorySelected() {

@@ -62,7 +62,8 @@ export class DirectoryDashboardService {
         isShown: true,
         createdDate: assessment.createdDate,
         modifiedDate: assessment.modifiedDate,
-        name: assessment.name
+        name: assessment.name,
+        assessmentType: assessment.type
       })
     });
     directory.subDirectory.forEach(subDirectory => {
@@ -112,7 +113,11 @@ export class DirectoryDashboardService {
   }
 
   sortDirectoryItems(directoryItems: Array<DirectoryItem>, sortStr: { value: string, direction: string }): Array<DirectoryItem> {
-    directoryItems = _.orderBy(directoryItems, [sortStr.value], sortStr.direction);
+    let orderBy: Array<string> = [sortStr.value]
+    if (sortStr.value == 'type') {
+      orderBy = [sortStr.value, 'assessmentType', 'name'];
+    }
+    directoryItems = _.orderBy(directoryItems, orderBy, sortStr.direction);
     return directoryItems;
   }
 
