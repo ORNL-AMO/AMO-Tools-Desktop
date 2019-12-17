@@ -18,6 +18,7 @@ import { DirectoryDashboardModule } from './directory-dashboard/directory-dashbo
 import { ToastModule } from '../shared/toast/toast.module';
 import { DirectoryDashboardPipe } from './dashboard-pipe/directory-dashboard.pipe';
 import { DragBarComponent } from './drag-bar/drag-bar.component';
+import { CreateToolAssessmentComponent } from './create-tool-assessment/create-tool-assessment.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { DragBarComponent } from './drag-bar/drag-bar.component';
     AboutPageComponent,
     AcknowledgmentsPageComponent,
     ContactPageComponent,
-    DragBarComponent
+    DragBarComponent,
+    CreateToolAssessmentComponent
   ],
   imports: [
     CommonModule,

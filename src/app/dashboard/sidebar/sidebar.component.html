@@ -20,6 +20,10 @@
 </div>
 
 <div class="sidebar-group secondary">
+  <span routerLink="/tools" routerLinkActive="selected" class="sidebar-item">Data Visualization</span>
+</div>
+
+<div class="sidebar-group secondary">
   <app-calculator-list></app-calculator-list>
 </div>
 
@@ -30,7 +34,8 @@
   <span routerLink="/about" routerLinkActive="selected" class="sidebar-item">About</span>
   <span routerLink="/contact" routerLinkActive="selected" class="sidebar-item">Feedback</span>
   <span routerLink="/acknowledgments" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
-  <span *ngIf="googleTranslateAvailable" class="sidebar-item" (click)="emitTranslate()"><span class="fa fa-globe"></span> Translate</span>
+  <span *ngIf="googleTranslateAvailable" class="sidebar-item" (click)="emitTranslate()"><span
+      class="fa fa-globe"></span> Translate</span>
 </div>
 
 <div class="sidebar-group">

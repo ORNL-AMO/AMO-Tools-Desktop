@@ -29,6 +29,9 @@ export class DashboardComponent implements OnInit {
   showImportModalSub: Subscription;
   showImportModal: boolean;
 
+  createToolAssessment: boolean;
+  createToolAssessmentSub: Subscription;
+
   dashboardToastMessageSub: Subscription;
 
   showExportModalSub: Subscription;
@@ -68,6 +71,10 @@ export class DashboardComponent implements OnInit {
         this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
       }
     });
+
+    this.createToolAssessmentSub = this.dashboardService.createToolAssessment.subscribe(val => {
+      this.createToolAssessment = val;
+    });
   }
 
   ngOnDestroy() {
@@ -76,6 +83,7 @@ export class DashboardComponent implements OnInit {
     this.createFolderSub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.sidebarWidthSub.unsubscribe();
+    this.createToolAssessmentSub.unsubscribe();
   }
 
   ngAfterViewInit() {
