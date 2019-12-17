@@ -117,7 +117,7 @@ export class ExecutiveSummaryComponent implements OnInit {
       let teamName: string = team;
       let costSavings: number = _.sumBy(teamOpps, 'annualCostSavings');
       let implementationCost: number = _.sumBy(teamOpps, 'implementationCost');
-      let paybackPeriod: number = _.sumBy(teamOpps, 'paybackPeriod');
+      let paybackPeriod: number = implementationCost / costSavings;
       this.teamData.push({
         team: teamName,
         costSavings: costSavings,
