@@ -6,15 +6,24 @@ export class CsvToJsonService {
 
   constructor() { }
 
-  parseCSV(csvData: any) {
-    let results = Papa.parse(csvData, {
+  parseCSV(csvData: any): CsvImportData {
+    let results: CsvImportData = Papa.parse(csvData, {
       header: true,
       dynamicTyping: true
     });
-    console.log(results);
-    console.log("headers");
-    results.meta.fields.forEach(field => {
-      console.log(field);
-    })
+    return results;
   }
+}
+
+
+export interface CsvImportData {
+  meta: {
+    aborted: boolean,
+    delimeter: string,
+    fields: Array<string>,
+    linebreak: string,
+    truncated: boolean;
+  },
+  errors: Array<{ code: string, message: string, row: number, type: string }>,
+  data: Array<any>,
 }

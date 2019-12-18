@@ -1,4 +1,4 @@
-<nav class="treasure-hunt navbar banner d-flex mr-auto p-0 flex-nowrap">
+<nav class="log-tool navbar banner d-flex mr-auto p-0 flex-nowrap">
     <div class="d-flex align-items-center p-1">
         <div class="img-col col-sm-auto col-md-auto col-lg-auto">
             <!-- <img class="img-icon" src="assets/images/treasure-hunt.png"> -->
@@ -16,19 +16,18 @@
         </div>
     </div>
     <div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
-		<div class="nav-item">
-			<a class="nav-link active">Setup</a>
-		</div>
-		<div class="nav-item">
-			<a class="nav-link">Visualization</a>
-		</div>
-		<div class="nav-item">
-			<a class="nav-link">Report</a>
-		</div>
-	</div>
+        <div class="nav-item">
+            <a class="nav-link" [routerLink]="['/log-tool/system-setup']" routerLinkActive="active">Setup</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" [routerLink]="['/log-tool/visualize']" routerLinkActive="active">Visualization</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" [routerLink]="['/log-tool/report']" routerLinkActive="active">Report</a>
+        </div>
+    </div>
     <div class="d-flex ml-auto pr-2 h-100">
-        <div class="pl-2 pr-2 border-right border-left home-nav-item"
-            [routerLink]="['/tools']">
+        <div class="pl-2 pr-2 border-right border-left home-nav-item" [routerLink]="['/tools']">
             <span class="fa fa-folder-open"></span>
         </div>
         <div class="pl-2 pr-2 border-right home-nav-item" [routerLink]="['/landing-screen']">
@@ -37,13 +36,21 @@
     </div>
 </nav>
 
-
-
-<ul class="tabs subtabs progress-tabs treasure-hunt" *ngIf="mainTab == 'system-setup'">
-	<li [ngClass]="{'active': subTab == 'settings'}">
-		<a (click)="changeSubTab('settings')">Assessment Basics</a>
-	</li>
-	<li [ngClass]="{'active': subTab == 'operation-costs'}">
-		<a (click)="changeSubTab('operation-costs')">Energy Usage and Cost</a>
-	</li>
-</ul>
+<nav class="hide-print hidden" routerLinkActive="show" [routerLinkActiveOptions]="{exact:false}">
+    <div class="d-flex tabs subtabs progress-tabs flex-wrap log-tool">
+        <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+            <a [routerLink]="['/log-tool/system-setup/setup-data']">
+                <span class="step-number">1</span> Setup Data</a>
+        </div>
+        <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+            <a [routerLink]="['/log-tool/system-setup/day-types']" routerLinkActive="active">
+                <span class="step-number">2</span>
+                Day Types</a>
+        </div>
+        <!--<div class="fixed-tab-size">
+            <a [routerLink]="['/log-tool/system-setup/setup-data']" routerLinkActive="active">
+                <span class="step-number">3</span>
+                Motor</a>
+        </div> -->
+    </div>
+</nav>

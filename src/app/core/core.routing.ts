@@ -18,6 +18,7 @@ import { DirectoryDashboardComponent } from '../dashboard/directory-dashboard/di
 import { ReportRollupComponent } from '../report-rollup/report-rollup.component';
 import { LogToolComponent } from '../log-tool/log-tool.component';
 import { ToolsComponent } from '../dashboard/tools/tools.component';
+import { logToolRoutes } from '../log-tool/log-tool.routings';
 
 export const coreRoutes: Routes = [
   {
@@ -103,6 +104,7 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'log-tool',
-    component: LogToolComponent
+    component: LogToolComponent,
+    children: logToolRoutes
   }
 ];

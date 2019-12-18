@@ -1,6 +1,9 @@
 <div #content class="log-tool-container log-tool d-flex flex-column">
     <!--header-->
-    <div #header class="w-100 hide-print sticky-top" id="treasureHuntBanner">
+    <div #header class="w-100 hide-print sticky-top">
         <app-log-tool-banner></app-log-tool-banner>
+    </div>
+    <div [ngStyle]="{'height.px': containerHeight}">
+        <router-outlet></router-outlet>
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-log-tool',
@@ -6,10 +6,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./log-tool.component.css']
 })
 export class LogToolComponent implements OnInit {
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
+  containerHeight: number;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getContainerHeight();
+  }
   constructor() { }
 
   ngOnInit() {
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
+
+  getContainerHeight() {
+    if (this.content) {
+      setTimeout(() => {
+        let contentHeight = this.content.nativeElement.clientHeight;
+        let headerHeight = this.header.nativeElement.clientHeight;
+        this.containerHeight = contentHeight - headerHeight;
+      }, 100);
+    }
+  }
 }
