@@ -1,0 +1,21 @@
+<div class="p-2">
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <td class="bold" colspan="2">Daily Averages</td>
+            </tr>
+            <tr>
+                <td class="bold">Day</td>
+                <td class="bold" *ngFor="let avgLabel of daySummaries[0].averages">{{avgLabel.label}}</td>
+            </tr>
+            <tr *ngFor="let daySummary of daySummaries">
+                <td>
+                    {{daySummary.day | date}}
+                </td>
+                <td *ngFor="let averageVal of daySummary.averages">
+                    {{averageVal.value | number}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

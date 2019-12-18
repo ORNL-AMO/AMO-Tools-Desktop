@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CsvToJsonService, CsvImportData } from '../../../shared/helper-services/csv-to-json.service';
 import * as moment from 'moment';
 import { _dateFormats } from './date-formats';
+import { LogToolService } from '../../log-tool.service';
 @Component({
   selector: 'app-setup-data',
   templateUrl: './setup-data.component.html',
@@ -14,12 +15,11 @@ export class SetupDataComponent implements OnInit {
   validFile: boolean;
   importData: any = null;
   importDataFromCsv: CsvImportData;
-  startDate: Date;
   endDate: Date;
-  dateFormat: string = "MM-DD-YYYY HH:mm";
+  dateFormat: Array<string> = ['DD/MM/YY hh:mm a', 'DD/MM/YY hh:mm A'];
   dateFormats: Array<{ display: string, value: Array<string> }> = _dateFormats;
   validDate: boolean;
-  constructor(private csvToJsonService: CsvToJsonService) { }
+  constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService) { }
 
   ngOnInit() {
   }
@@ -35,7 +35,6 @@ export class SetupDataComponent implements OnInit {
           this.importFile();
         } else {
           this.validFile = false;
-
         }
       }
     }
@@ -51,11 +50,11 @@ export class SetupDataComponent implements OnInit {
 
   parseImportData() {
     this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
+    this.logToolService.setImportDataFromCsv(this.importDataFromCsv);
     let foundDate: string = this.testForDate();
     if (foundDate != undefined) {
-      this.startDate = new Date(foundDate);
-      console.log(this.startDate);
       this.validDate = true;
+      this.logToolService.parseImportData();
     } else {
       this.validDate = false;
     }
@@ -66,9 +65,14 @@ export class SetupDataComponent implements OnInit {
       let value = this.importDataFromCsv.data[0][key];
       let test = moment(value, this.dateFormat, true);
       if (test.isValid() == true) {
+        this.logToolService.dateField = key;
         return value;
       }
     }
     return undefined;
+  }
+
+  setDateFormat(){
+    this.logToolService.dateFormat = this.dateFormat;
   }
 }

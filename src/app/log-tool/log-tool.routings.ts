@@ -3,7 +3,8 @@ import { SystemSetupComponent } from "./system-setup/system-setup.component";
 import { ReportComponent } from "./report/report.component";
 import { VisualizeComponent } from "./visualize/visualize.component";
 import { SetupDataComponent } from "./system-setup/setup-data/setup-data.component";
-import { DayTypesComponent } from "./system-setup/day-types/day-types.component";
+import { CleanDataComponent } from "./system-setup/clean-data/clean-data.component";
+import { DayTypeAnalysisComponent } from "./day-type-analysis/day-type-analysis.component";
 
 
 export const logToolRoutes: Routes = [
@@ -26,8 +27,8 @@ export const logToolRoutes: Routes = [
                 component: SetupDataComponent
             },
             {
-                path: 'day-types',
-                component: DayTypesComponent
+                path: 'clean-data',
+                component: CleanDataComponent
             }
         ]
     },
@@ -38,5 +39,9 @@ export const logToolRoutes: Routes = [
     {
         path: 'report',
         component: ReportComponent
+    },
+    {
+        path: 'day-type-analysis',
+        component: DayTypeAnalysisComponent
     }
 ]

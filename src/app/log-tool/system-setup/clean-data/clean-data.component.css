@@ -9,12 +9,3 @@ td{
 tbody{
     box-shadow: 0 4px 8px 0 grey
 }
-
-.btn{
-    padding: 6px;
-}
-
-.router-link:hover{
-    cursor: pointer;
-    background-color: #efefef;
-}

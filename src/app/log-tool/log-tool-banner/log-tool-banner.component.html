@@ -20,7 +20,10 @@
             <a class="nav-link" [routerLink]="['/log-tool/system-setup']" routerLinkActive="active">Setup</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [routerLink]="['/log-tool/visualize']" routerLinkActive="active">Visualization</a>
+            <a class="nav-link" [routerLink]="['/log-tool/day-type-analysis']" routerLinkActive="active">Day Type Analysis</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" [routerLink]="['/log-tool/visualize']" routerLinkActive="active">Data Visualization</a>
         </div>
         <div class="nav-item">
             <a class="nav-link" [routerLink]="['/log-tool/report']" routerLinkActive="active">Report</a>
@@ -43,14 +46,9 @@
                 <span class="step-number">1</span> Setup Data</a>
         </div>
         <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <a [routerLink]="['/log-tool/system-setup/day-types']" routerLinkActive="active">
+            <a [routerLink]="['/log-tool/system-setup/clean-data']" routerLinkActive="active">
                 <span class="step-number">2</span>
-                Day Types</a>
+                Clean Data</a>
         </div>
-        <!--<div class="fixed-tab-size">
-            <a [routerLink]="['/log-tool/system-setup/setup-data']" routerLinkActive="active">
-                <span class="step-number">3</span>
-                Motor</a>
-        </div> -->
     </div>
 </nav>

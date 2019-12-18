@@ -1,10 +1,10 @@
-<form>
+<form class="p-0">
     <div class="d-flex flex-column">
         <div class="header mr-2 ml-2">
             <h3>Import Logger Data from .csv file</h3>
             <br>
         </div>
-        <div class="p-4">
+        <div class="p-2">
             <div class="form-group">
                 <label>
                     Log File
@@ -23,7 +23,7 @@
                     File Date Format
                     <a class="form-text small">"-" and "/" are interchangeable</a>
                 </label>
-                <select class="form-control" name="dateFormat" [(ngModel)]="dateFormat">
+                <select class="form-control" name="dateFormat" [(ngModel)]="dateFormat" (change)="setDateFormat()">
                     <option *ngFor="let format of dateFormats" [ngValue]="format.value">{{format.display}}</option>
                 </select>
             </div>
@@ -33,7 +33,7 @@
             </div>
 
             <div class="text-center p-2" *ngIf="validDate == true">
-                <div class="alert-success">
+                <div class="alert-success router-link" [routerLink]="['/log-tool/system-setup/clean-data']">
                     Data parsing successful! Click here or the tab for Step 2: "Clean Data" to continue.
                 </div>
             </div>

@@ -9,20 +9,39 @@ import { HelpPanelComponent } from './system-setup/help-panel/help-panel.compone
 import { VisualizeComponent } from './visualize/visualize.component';
 import { ReportComponent } from './report/report.component';
 import { SetupDataComponent } from './system-setup/setup-data/setup-data.component';
-import { DayTypesComponent } from './system-setup/day-types/day-types.component';
 import { FormsModule } from '@angular/forms';
-
-
+import { CleanDataComponent } from './system-setup/clean-data/clean-data.component';
+import { DayTypeAnalysisComponent } from './day-type-analysis/day-type-analysis.component';
+import { DayTypesComponent } from './day-type-analysis/day-types/day-types.component';
+import { DayTypeSummaryComponent } from './day-type-analysis/day-type-summary/day-type-summary.component';
+import { DayTypeGraphComponent } from './day-type-analysis/day-type-graph/day-type-graph.component';
+import { DayTypeCalendarComponent } from './day-type-analysis/day-type-calendar/day-type-calendar.component';
+import { DayTypeAnalysisService } from './day-type-analysis/day-type-analysis.service';
 
 @NgModule({
-  declarations: [LogToolComponent, LogToolBannerComponent, SystemSetupComponent, HelpPanelComponent, VisualizeComponent, ReportComponent, SetupDataComponent, DayTypesComponent],
+  declarations: [
+    LogToolComponent,
+    LogToolBannerComponent,
+    SystemSetupComponent,
+    HelpPanelComponent,
+    VisualizeComponent,
+    ReportComponent,
+    SetupDataComponent,
+    CleanDataComponent,
+    DayTypeAnalysisComponent,
+    DayTypesComponent,
+    DayTypeSummaryComponent,
+    DayTypeGraphComponent,
+    DayTypeCalendarComponent
+  ],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule
   ],
   providers: [
-    LogToolService
+    LogToolService,
+    DayTypeAnalysisService
   ]
 })
 export class LogToolModule { }
