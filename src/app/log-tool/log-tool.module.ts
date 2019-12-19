@@ -18,6 +18,12 @@ import { DayTypeGraphComponent } from './day-type-analysis/day-type-graph/day-ty
 import { DayTypeCalendarComponent } from './day-type-analysis/day-type-calendar/day-type-calendar.component';
 import { DayTypeAnalysisService } from './day-type-analysis/day-type-analysis.service';
 
+import * as PlotlyJs from 'plotly.js';
+import { PlotlyModule } from 'angular-plotly.js';
+import { DayTypeGraphService } from './day-type-analysis/day-type-graph/day-type-graph.service';
+
+PlotlyModule.plotlyjs = PlotlyJs;
+
 @NgModule({
   declarations: [
     LogToolComponent,
@@ -37,11 +43,13 @@ import { DayTypeAnalysisService } from './day-type-analysis/day-type-analysis.se
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    PlotlyModule
   ],
   providers: [
     LogToolService,
-    DayTypeAnalysisService
+    DayTypeAnalysisService,
+    DayTypeGraphService
   ]
 })
 export class LogToolModule { }
