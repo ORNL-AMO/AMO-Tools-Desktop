@@ -2,6 +2,12 @@
     <label class="group-label">Day Types</label>
     <table class="table table-striped mb-0">
         <tbody>
+            <tr *ngFor="let dayType of dayTypes">
+                <td class="w-25 text-center">
+                    <input type="checkbox" [(ngModel)]="dayType.useDayType" (change)="setDayTypes()">
+                </td>
+                <td class="day-type-label" [ngStyle]="{'border-left-color': dayType.color}">{{dayType.label}}</td>
+            </tr>
             <tr>
                 <td class="w-25 bold text-center">Use</td>
                 <td class="bold day-type-label">Label</td>
@@ -17,12 +23,6 @@
                     <input type="checkbox" [disabled]="true">
                 </td>
                 <td class="day-type-label" [ngStyle]="{'border-left-color': 'blue'}">Weekend</td>
-            </tr>
-            <tr *ngFor="let dayType of dayTypes">
-                <td class="w-25 text-center">
-                    <input type="checkbox" [(ngModel)]="dayType.useDayType">
-                </td>
-                <td class="day-type-label" [ngStyle]="{'border-left-color': dayType.color}">{{dayType.label}}</td>
             </tr>
             <tr>
                 <td class="text-center click-cell" colspan="2" (click)="showAddNewDayType()" *ngIf="!addNewDayType">

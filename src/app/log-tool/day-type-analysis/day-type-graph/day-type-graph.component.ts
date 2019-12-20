@@ -22,6 +22,7 @@ export class DayTypeGraphComponent implements OnInit {
       this.graph.data = new Array();
       let graphData: Array<{ xData: Array<any>, yData: Array<number>, date: Date, color: string }> = this.dayTypeGraphService.getDayTypeScatterPlotData();
       graphData.forEach(entry => {
+        
         this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: entry.color }, name: entry.date.toDateString() })
       });
     });

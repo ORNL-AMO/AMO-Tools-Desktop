@@ -50,11 +50,13 @@ export class DayTypeGraphService {
     //iterate day types to see if any match with date
     let typeOfDay: { color: string, label: string, useDayType: boolean, dates?: Array<Date> } = _.find(dayTypes, (dayType) => {
       let test: boolean = false;
-      dayType.dates.forEach(date => {
-        if (this.dayTypeAnalysisService.checkSameDay(date, _date)) {
-          test = true;
-        }
-      });
+      if (dayType.useDayType == true) {
+        dayType.dates.forEach(date => {
+          if (this.dayTypeAnalysisService.checkSameDay(date, _date)) {
+            test = true;
+          }
+        });
+      }
       return test;
     });
     if (typeOfDay != undefined) {

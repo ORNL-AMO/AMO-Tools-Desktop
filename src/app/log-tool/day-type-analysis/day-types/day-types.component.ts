@@ -12,7 +12,7 @@ export class DayTypesComponent implements OnInit {
   addNewDayType: boolean = false;
   newDayTypeName: string = "New Day Type";
   newDayTypeColor: string = "#6a28d7";
-  dayTypes: Array<{ color: string, label: string }>;
+  dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>;
   dayTypesSub: Subscription;
   daySummaries: Array<{ day: Date, averages: Array<{ value: number, label: string }> }>;
   selectedDays: Array<string> = [];
@@ -51,5 +51,9 @@ export class DayTypesComponent implements OnInit {
     });
     this.dayTypeAnalysisService.dayTypes.next(dayTypes);
     this.hideAddNewDayType();
+  }
+
+  setDayTypes(){
+    this.dayTypeAnalysisService.dayTypes.next(this.dayTypes);
   }
 }
