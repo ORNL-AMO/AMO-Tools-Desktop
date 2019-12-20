@@ -32,7 +32,6 @@ import { TutorialsModule } from '../tutorials/tutorials.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { UpdateToastComponent } from '../update-toast/update-toast.component';
 import { LogToolModule } from '../log-tool/log-tool.module';
-import { ToolsModule } from '../dashboard/tools/tools.module';
 
 @NgModule({
   declarations: [
@@ -60,8 +59,7 @@ import { ToolsModule } from '../dashboard/tools/tools.module';
     ToastModule,
     TutorialsModule,
     DashboardModule,
-    LogToolModule,
-    ToolsModule
+    LogToolModule
   ],
   providers: [
     AssessmentService,
