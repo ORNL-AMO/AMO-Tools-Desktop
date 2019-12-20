@@ -14,12 +14,15 @@ export class DayTypesComponent implements OnInit {
   newDayTypeColor: string = "#6a28d7";
   dayTypes: Array<{ color: string, label: string }>;
   dayTypesSub: Subscription;
+  daySummaries: Array<{ day: Date, averages: Array<{ value: number, label: string }> }>;
+  selectedDays: Array<string> = [];
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(val => {
       this.dayTypes = val;
-    })
+    });
+    this.daySummaries = this.dayTypeAnalysisService.daySummaries;
   }
 
   ngOnDestroy() {
@@ -35,11 +38,16 @@ export class DayTypesComponent implements OnInit {
   }
 
   submitNewDayType() {
-    let dayTypes: Array<{ color: string, label: string, useDayType: boolean }> = this.dayTypeAnalysisService.dayTypes.getValue();
+    let dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }> = this.dayTypeAnalysisService.dayTypes.getValue();
+    let dates: Array<Date> = new Array();
+    this.selectedDays.forEach(date =>{
+      dates.push(new Date(date));
+    })
     dayTypes.push({
       color: this.newDayTypeColor,
       label: this.newDayTypeName,
-      useDayType: true
+      useDayType: true,
+      dates: dates
     });
     this.dayTypeAnalysisService.dayTypes.next(dayTypes);
     this.hideAddNewDayType();

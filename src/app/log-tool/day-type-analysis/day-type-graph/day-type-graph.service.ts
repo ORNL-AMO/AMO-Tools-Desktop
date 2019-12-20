@@ -8,11 +8,13 @@ export class DayTypeGraphService {
   selectedDataField: string = 'CFM';
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolService: LogToolService) { }
 
-  getDayTypeScatterPlotData(): Array<{ xData: Array<any>, yData: Array<number>, date: Date }> {
-    let dayTypePlotData: Array<{ xData: Array<any>, yData: Array<number>, date: Date }> = new Array();
+  getDayTypeScatterPlotData(): Array<{ xData: Array<any>, yData: Array<number>, date: Date, color: string }> {
+    let dayTypePlotData: Array<{ xData: Array<any>, yData: Array<number>, date: Date, color: string }> = new Array();
     this.dayTypeAnalysisService.filteredDays.forEach((dayItems: Array<any>) => {
       let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(dayItems);
-      dayTypePlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, date: new Date(dayItems[0][this.logToolService.dateField])});
+      let date: Date = new Date(dayItems[0][this.logToolService.dateField]);
+      let color: string = this.getDateColor(date);
+      dayTypePlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, date: date, color: color });
     })
     return dayTypePlotData;
   }
@@ -41,5 +43,29 @@ export class DayTypeGraphService {
       xData.push(tmpDay.getHours());
     })
     return { xData: xData, yData: yData };
+  }
+
+  getDateColor(_date: Date): string {
+    let dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }> = this.dayTypeAnalysisService.dayTypes.getValue();
+    //iterate day types to see if any match with date
+    let typeOfDay: { color: string, label: string, useDayType: boolean, dates?: Array<Date> } = _.find(dayTypes, (dayType) => {
+      let test: boolean = false;
+      dayType.dates.forEach(date => {
+        if (this.dayTypeAnalysisService.checkSameDay(date, _date)) {
+          test = true;
+        }
+      });
+      return test;
+    });
+    if (typeOfDay != undefined) {
+      return typeOfDay.color;
+    } else {
+      let dayCode: number = _date.getDay();
+      if (dayCode == 0 || dayCode == 6) {
+        return 'blue';
+      } else {
+        return 'green';
+      }
+    }
   }
 }

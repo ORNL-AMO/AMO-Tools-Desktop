@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DayTypeGraphService } from './day-type-graph.service';
+import { DayTypeAnalysisService } from '../day-type-analysis.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-day-type-graph',
@@ -12,19 +14,20 @@ export class DayTypeGraphComponent implements OnInit {
     data: [],
     layout: { title: 'CFM', hovermode: "closest" }
   };
-
-  constructor(private dayTypeGraphService: DayTypeGraphService) { }
+  dayTypesSubscription: Subscription;
+  constructor(private dayTypeGraphService: DayTypeGraphService, private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {
-    let graphData: Array<{ xData: Array<any>, yData: Array<number>, date: Date }> = this.dayTypeGraphService.getDayTypeScatterPlotData();
-    graphData.forEach(entry => {
-      let color: string = 'green';
-      let dayCode: number = entry.date.getDay();
-      if(dayCode == 0 || dayCode == 6){
-        color = 'blue';
-      }
-      this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: color }, name: entry.date.toDateString() })
+    this.dayTypesSubscription = this.dayTypeAnalysisService.dayTypes.subscribe(dayTypes => {
+      this.graph.data = new Array();
+      let graphData: Array<{ xData: Array<any>, yData: Array<number>, date: Date, color: string }> = this.dayTypeGraphService.getDayTypeScatterPlotData();
+      graphData.forEach(entry => {
+        this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: entry.color }, name: entry.date.toDateString() })
+      });
     });
   }
 
+  ngOnDestroy() {
+    this.dayTypesSubscription.unsubscribe();
+  }
 }

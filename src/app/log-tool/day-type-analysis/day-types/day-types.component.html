@@ -6,10 +6,21 @@
                 <td class="w-25 bold text-center">Use</td>
                 <td class="bold day-type-label">Label</td>
             </tr>
+            <tr>
+                <td class="w-25 text-center">
+                    <input type="checkbox" [disabled]="true">
+                </td>
+                <td class="day-type-label" [ngStyle]="{'border-left-color': 'green'}">Weekday</td>
+            </tr>
+            <tr>
+                <td class="w-25 text-center">
+                    <input type="checkbox" [disabled]="true">
+                </td>
+                <td class="day-type-label" [ngStyle]="{'border-left-color': 'blue'}">Weekend</td>
+            </tr>
             <tr *ngFor="let dayType of dayTypes">
                 <td class="w-25 text-center">
-                    <input type="checkbox" [(ngModel)]="dayType.useDayType"
-                        [disabled]="dayType.label == 'Weekend' || dayType.label == 'Weekday'">
+                    <input type="checkbox" [(ngModel)]="dayType.useDayType">
                 </td>
                 <td class="day-type-label" [ngStyle]="{'border-left-color': dayType.color}">{{dayType.label}}</td>
             </tr>
@@ -34,6 +45,15 @@
                     <label for="newDayTypeColor">Color</label>
                     <input class="form-control color-picker" type="color" name="newDayTypeColor"
                         [(ngModel)]="newDayTypeColor" [ngStyle]="{'background-color': newDayTypeColor}">
+                </div>
+                <div class="form-group">
+                    <label for="selectedDays">Applicable Days</label>
+                </div>
+                <div class="form-group">
+                    <select class="custom-select form-control w-100 p-0 scroll-item" multiple [(ngModel)]="selectedDays"
+                        name="selectedDays">
+                        <option *ngFor="let daySummary of daySummaries">{{daySummary.day | date}}</option>
+                    </select>
                 </div>
             </form>
         </div>

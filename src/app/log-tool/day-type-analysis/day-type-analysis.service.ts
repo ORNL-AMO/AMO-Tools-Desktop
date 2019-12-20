@@ -8,20 +8,9 @@ export class DayTypeAnalysisService {
 
   daySummaries: Array<{ day: Date, averages: Array<{ value: number, label: string }> }>;
   filteredDays: Array<any>;
-  dayTypes: BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean }>>;
+  dayTypes: BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>;
   constructor(private logToolService: LogToolService) {
-    this.dayTypes = new BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean }>>([
-      {
-        color: 'green',
-        label: 'Weekend',
-        useDayType: true
-      },
-      {
-        color: 'blue',
-        label: 'Weekday',
-        useDayType: true
-      }
-    ]);
+    this.dayTypes = new BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>(new Array());
   }
 
   getDaySummaries() {
@@ -39,9 +28,7 @@ export class DayTypeAnalysisService {
         let dayData = _.filter(this.logToolService.importDataFromCsv.data, (dataItem) => {
           if (dataItem[this.logToolService.dateField]) {
             let date = new Date(dataItem[this.logToolService.dateField]);
-            let dateVal = date.getDate();
-            let compareVal = tmpDay.getDate();
-            return compareVal == dateVal;
+            return this.checkSameDay(tmpDay, date);
           }
         });
         this.filteredDays.push(dayData);
