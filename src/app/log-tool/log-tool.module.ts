@@ -21,7 +21,7 @@ import { DayTypeAnalysisService } from './day-type-analysis/day-type-analysis.se
 import * as PlotlyJs from 'plotly.js';
 import { PlotlyModule } from 'angular-plotly.js';
 import { DayTypeGraphService } from './day-type-analysis/day-type-graph/day-type-graph.service';
-
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 PlotlyModule.plotlyjs = PlotlyJs;
 
 @NgModule({
@@ -44,7 +44,8 @@ PlotlyModule.plotlyjs = PlotlyJs;
     CommonModule,
     RouterModule,
     FormsModule,
-    PlotlyModule
+    PlotlyModule,
+    NgbDatepickerModule
   ],
   providers: [
     LogToolService,

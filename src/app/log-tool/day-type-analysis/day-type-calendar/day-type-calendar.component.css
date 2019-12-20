@@ -1,0 +1,22 @@
+ .custom-day {      
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    border-radius: 1rem;
+    display: inline-block;
+    width: 2rem;
+    color: white;
+}
+  /* .hidden {
+    display: none;
+  } */
+.card{
+    box-shadow: 0 4px 8px 0 grey;
+}
+
+ngb-datepicker .ngb-dp-header{
+    display: none !important;
+}
+
+ngb-datepicker{
+    border: none;
+}

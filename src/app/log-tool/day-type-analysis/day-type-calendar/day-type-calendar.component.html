@@ -1,1 +1,11 @@
-<p>day-type-calendar works!</p>
+<div class="p-2">
+    <div class="card card-body p-2">
+        <ngb-datepicker [dayTemplate]="customDay" [navigation]="'none'"></ngb-datepicker>
+    </div>
+</div>
+
+<ng-template #customDay let-date="date">
+    <div class="custom-day" [style.background-color]="getDateBackground(date)">
+        {{ date.day }}
+    </div>
+</ng-template>

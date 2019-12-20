@@ -1,9 +1,7 @@
 <div class="p-2">
+    <label class="group-label">Daily Averages</label>
     <table class="table table-striped">
         <tbody>
-            <tr>
-                <td class="bold" colspan="2">Daily Averages</td>
-            </tr>
             <tr>
                 <td class="bold">Day</td>
                 <td class="bold" *ngFor="let avgLabel of daySummaries[0].averages">{{avgLabel.label}}</td>
