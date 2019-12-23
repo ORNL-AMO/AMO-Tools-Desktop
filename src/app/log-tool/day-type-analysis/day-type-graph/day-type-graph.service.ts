@@ -46,19 +46,7 @@ export class DayTypeGraphService {
   }
 
   getDateColor(_date: Date): string {
-    let dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }> = this.dayTypeAnalysisService.dayTypes.getValue();
-    //iterate day types to see if any match with date
-    let typeOfDay: { color: string, label: string, useDayType: boolean, dates?: Array<Date> } = _.find(dayTypes, (dayType) => {
-      let test: boolean = false;
-      if (dayType.useDayType == true) {
-        dayType.dates.forEach(date => {
-          if (this.dayTypeAnalysisService.checkSameDay(date, _date)) {
-            test = true;
-          }
-        });
-      }
-      return test;
-    });
+    let typeOfDay: { color: string, label: string, useDayType: boolean, dates?: Array<Date> } = this.dayTypeAnalysisService.getDayType(_date);
     if (typeOfDay != undefined) {
       return typeOfDay.color;
     } else {
@@ -70,4 +58,5 @@ export class DayTypeGraphService {
       }
     }
   }
+
 }

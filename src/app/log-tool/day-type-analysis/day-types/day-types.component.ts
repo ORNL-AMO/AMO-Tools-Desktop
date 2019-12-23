@@ -16,6 +16,8 @@ export class DayTypesComponent implements OnInit {
   dayTypesSub: Subscription;
   daySummaries: Array<{ day: Date, averages: Array<{ value: number, label: string }> }>;
   selectedDays: Array<string> = [];
+  weekdaySelected: boolean = true;
+  weekendSelected: boolean = true;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {
@@ -40,9 +42,9 @@ export class DayTypesComponent implements OnInit {
   submitNewDayType() {
     let dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }> = this.dayTypeAnalysisService.dayTypes.getValue();
     let dates: Array<Date> = new Array();
-    this.selectedDays.forEach(date =>{
+    this.selectedDays.forEach(date => {
       dates.push(new Date(date));
-    })
+    });
     dayTypes.push({
       color: this.newDayTypeColor,
       label: this.newDayTypeName,
@@ -53,7 +55,7 @@ export class DayTypesComponent implements OnInit {
     this.hideAddNewDayType();
   }
 
-  setDayTypes(){
+  setDayTypes() {
     this.dayTypeAnalysisService.dayTypes.next(this.dayTypes);
   }
 }

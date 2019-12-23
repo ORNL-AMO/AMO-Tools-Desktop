@@ -47,4 +47,50 @@ export class DayTypeAnalysisService {
   checkSameDay(day1: Date, day2: Date) {
     return moment(day1).isSame(day2, 'day');
   }
+
+
+  getDayType(_date: Date): { color: string, label: string, useDayType: boolean, dates?: Array<Date> } {
+    let dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }> = this.dayTypes.getValue();
+    //iterate day types to see if any match with date
+    let typeOfDay: { color: string, label: string, useDayType: boolean, dates?: Array<Date> } = _.find(dayTypes, (dayType) => {
+      let test: boolean = false;
+      if (dayType.useDayType == true) {
+        dayType.dates.forEach(date => {
+          if (this.checkSameDay(date, _date)) {
+            test = true;
+          }
+        });
+      }
+      return test;
+    });
+    return typeOfDay;
+  }
+
+  toggleDateType(_date: Date) {
+    let _dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }> = this.dayTypes.getValue();
+    if (_dayTypes.length != 0) {
+      let dayTypeIndex: number = _.findIndex(_dayTypes, (dayType) => {
+        let test: boolean = false;
+        dayType.dates.forEach(date => {
+          if (this.checkSameDay(date, _date)) {
+            test = true;
+          }
+        });
+        return test;
+      });
+      if (dayTypeIndex != -1) {
+        _.remove(_dayTypes[dayTypeIndex].dates, (date) => {
+          return this.checkSameDay(date, _date);
+        });
+        dayTypeIndex++;
+        if (dayTypeIndex < _dayTypes.length) {
+          _dayTypes[dayTypeIndex].dates.push(_date);
+          this.dayTypes.next(_dayTypes);
+        }
+      } else {
+        _dayTypes[0].dates.push(_date);
+        this.dayTypes.next(_dayTypes);
+      }
+    }
+  }
 }

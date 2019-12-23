@@ -11,8 +11,12 @@ tbody{
     box-shadow: 0 4px 8px 0 grey
 }
 
+tbody tr{
+    background-color:  rgba(0, 0, 0, 0.12);
+}
+
 .day-type-label{
-    border-left: solid 15px;
+    color: white;
 }
 
 .click-cell:hover{

@@ -1,28 +1,33 @@
 <div class="p-2">
     <label class="group-label">Day Types</label>
-    <table class="table table-striped mb-0">
+    <table class="table mb-0">
         <tbody>
+            <tr>
+                <td class="w-25 bold text-center">Use</td>
+                <td class="bold">Label</td>
+            </tr>
             <tr *ngFor="let dayType of dayTypes">
                 <td class="w-25 text-center">
                     <input type="checkbox" [(ngModel)]="dayType.useDayType" (change)="setDayTypes()">
                 </td>
-                <td class="day-type-label" [ngStyle]="{'border-left-color': dayType.color}">{{dayType.label}}</td>
-            </tr>
-            <tr>
-                <td class="w-25 bold text-center">Use</td>
-                <td class="bold day-type-label">Label</td>
+                <td class="day-type-label" [ngStyle]="{'background-color': dayType.color}">{{dayType.label}}
+                    <br *ngIf="dayType.dates.length != 0">
+                    <span class="pl-2" *ngFor="let date of dayType.dates">{{date | date}}
+                        <br>
+                    </span>
+                </td>
             </tr>
             <tr>
                 <td class="w-25 text-center">
-                    <input type="checkbox" [disabled]="true">
+                    <input type="checkbox" [disabled]="true" [(ngModel)]="weekdaySelected">
                 </td>
-                <td class="day-type-label" [ngStyle]="{'border-left-color': 'green'}">Weekday</td>
+                <td class="day-type-label" [ngStyle]="{'background-color': 'green'}">Weekday</td>
             </tr>
             <tr>
                 <td class="w-25 text-center">
-                    <input type="checkbox" [disabled]="true">
+                    <input type="checkbox" [disabled]="true" [(ngModel)]="weekendSelected">
                 </td>
-                <td class="day-type-label" [ngStyle]="{'border-left-color': 'blue'}">Weekend</td>
+                <td class="day-type-label" [ngStyle]="{'background-color': 'blue'}">Weekend</td>
             </tr>
             <tr>
                 <td class="text-center click-cell" colspan="2" (click)="showAddNewDayType()" *ngIf="!addNewDayType">
@@ -33,6 +38,8 @@
     </table>
 </div>
 
+
+<!--add new day type-->
 <div class="pl-2 pr-2 tab-content" *ngIf="addNewDayType == true">
     <div class="card">
         <div class="card-body p-2">
