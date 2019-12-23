@@ -30,13 +30,13 @@ export class LogToolService {
         return new Date(dataItem[this.dateField])
       }
     });
-    this.startDate = startDateItem[this.dateField];
+    this.startDate = new Date(startDateItem[this.dateField]);
     let endDateItem = _.maxBy(this.importDataFromCsv.data, (dataItem) => {
       if (dataItem[this.dateField]) {
         return new Date(dataItem[this.dateField])
       }
     });
-    this.endDate = endDateItem[this.dateField];
+    this.endDate = new Date(endDateItem[this.dateField]);
   }
 
   setFields(_fields: Array<string>) {

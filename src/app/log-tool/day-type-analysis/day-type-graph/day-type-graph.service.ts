@@ -2,11 +2,14 @@ import { Injectable } from '@angular/core';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { LogToolService } from '../../log-tool.service';
 import * as _ from 'lodash';
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class DayTypeGraphService {
 
-  selectedDataField: string = 'CFM';
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolService: LogToolService) { }
+  selectedDataField: BehaviorSubject<string>;
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolService: LogToolService) {
+    this.selectedDataField = new BehaviorSubject<string>(undefined);
+   }
 
   getDayTypeScatterPlotData(): Array<{ xData: Array<any>, yData: Array<number>, date: Date, color: string }> {
     let dayTypePlotData: Array<{ xData: Array<any>, yData: Array<number>, date: Date, color: string }> = new Array();
@@ -38,7 +41,7 @@ export class DayTypeGraphService {
           return compareVal == dateVal;
         };
       });
-      let dayMean: number = _.meanBy(filteredDaysByHour, (filteredDay) => { return filteredDay[this.selectedDataField] });
+      let dayMean: number = _.meanBy(filteredDaysByHour, (filteredDay) => { return filteredDay[this.selectedDataField.getValue()] });
       yData.push(dayMean);
       xData.push(tmpDay.getHours());
     })

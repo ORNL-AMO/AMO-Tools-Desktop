@@ -34,7 +34,7 @@ export class DayTypeAnalysisService {
         this.filteredDays.push(dayData);
         let dayAverages: Array<{ value: number, label: string }> = new Array();
         this.logToolService.fields.forEach(field => {
-          if (field.fieldName != this.logToolService.dateField) {
+          if (field.fieldName != this.logToolService.dateField && field.useField == true) {
             let mean = _.meanBy(dayData, field.fieldName);
             dayAverages.push({ value: mean, label: field.alias });
           }
@@ -85,8 +85,8 @@ export class DayTypeAnalysisService {
         dayTypeIndex++;
         if (dayTypeIndex < _dayTypes.length) {
           _dayTypes[dayTypeIndex].dates.push(_date);
-          this.dayTypes.next(_dayTypes);
-        }
+        } 
+        this.dayTypes.next(_dayTypes);
       } else {
         _dayTypes[0].dates.push(_date);
         this.dayTypes.next(_dayTypes);
