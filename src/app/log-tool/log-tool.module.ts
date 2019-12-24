@@ -22,6 +22,11 @@ import * as PlotlyJs from 'plotly.js';
 import { PlotlyModule } from 'angular-plotly.js';
 import { DayTypeGraphService } from './day-type-analysis/day-type-graph/day-type-graph.service';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { VisualizeTabsComponent } from './visualize/visualize-tabs/visualize-tabs.component';
+import { VisualizeGraphComponent } from './visualize/visualize-graph/visualize-graph.component';
+import { VisualizeDataComponent } from './visualize/visualize-data/visualize-data.component';
+import { VisualizeService } from './visualize/visualize.service';
+import { VisualizeMenuComponent } from './visualize/visualize-menu/visualize-menu.component';
 PlotlyModule.plotlyjs = PlotlyJs;
 
 @NgModule({
@@ -38,7 +43,11 @@ PlotlyModule.plotlyjs = PlotlyJs;
     DayTypesComponent,
     DayTypeSummaryComponent,
     DayTypeGraphComponent,
-    DayTypeCalendarComponent
+    DayTypeCalendarComponent,
+    VisualizeTabsComponent,
+    VisualizeGraphComponent,
+    VisualizeDataComponent,
+    VisualizeMenuComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +59,8 @@ PlotlyModule.plotlyjs = PlotlyJs;
   providers: [
     LogToolService,
     DayTypeAnalysisService,
-    DayTypeGraphService
+    DayTypeGraphService,
+    VisualizeService
   ]
 })
 export class LogToolModule { }

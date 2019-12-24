@@ -1,0 +1,33 @@
+<div class="d-flex w-100">
+    <button class="btn btn-secondary action-btn" (click)="toggleXDataFieldDropdown()"
+        [ngClass]="{'active': xDataFieldDropdown == true}">
+        X Axis: {{selectedGraphData.selectedXDataField.fieldName}}
+    </button>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': xDataFieldDropdown == true}">
+        <div class="list-group">
+            <div *ngFor="let dataField of dataFields"
+                class="d-flex list-group-item list-group-item-action align-items-center"
+                (click)="setXDataField(dataField)"
+                [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedXDataField.fieldName}">
+                <label class="pl-1">{{dataField.fieldName}}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-secondary action-btn" (click)="toggleYDataFieldDropdown()"
+        [ngClass]="{'active': yDataFieldDropdown == true}">
+        Y Axis: {{selectedGraphData.selectedYDataField.fieldName}}
+    </button>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': yDataFieldDropdown == true}">
+        <div class="list-group">
+            <div *ngFor="let dataField of dataFields"
+                class="d-flex list-group-item list-group-item-action align-items-center"
+                (click)="setYDataField(dataField)"
+                [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedYDataField.fieldName}">
+                <label class="pl-1">{{dataField.fieldName}}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

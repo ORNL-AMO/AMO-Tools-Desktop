@@ -8,7 +8,7 @@ export class LogToolService {
   importDataFromCsv: CsvImportData;
   startDate: Date;
   endDate: Date;
-  fields: Array<{ fieldName: string, alias: string, useField: boolean, isDateField: boolean, unit: string }>;
+  fields: Array<LogToolField>;
   dateField: string;
   dateFormat: Array<string>;
   numberOfDataPoints: number;
@@ -24,6 +24,11 @@ export class LogToolService {
 
   parseImportData() {
     this.setFields(this.importDataFromCsv.meta.fields);
+    if (this.dateField != undefined) {
+      console.log(this.importDataFromCsv.data);
+      this.importDataFromCsv.data = _.orderBy(this.importDataFromCsv.data, (data) => { return new Date(data[this.dateField]) }, ['asc']);
+      console.log(this.importDataFromCsv.data);
+    }
     this.numberOfDataPoints = this.importDataFromCsv.data.length;
     let startDateItem = _.minBy(this.importDataFromCsv.data, (dataItem) => {
       if (dataItem[this.dateField]) {
@@ -43,7 +48,7 @@ export class LogToolService {
     this.fields = new Array();
     _fields.forEach(field => {
       let unit: string = '';
-      if(field == this.dateField){
+      if (field == this.dateField) {
         unit = 'Date';
       }
       this.fields.push({
@@ -55,4 +60,18 @@ export class LogToolService {
       });
     });
   }
+
+  getAllFieldData(fieldName: string): Array<number> {
+    let mapppedValues: Array<any> = _.mapValues(this.importDataFromCsv.data, (dataItem) => { return dataItem[fieldName] });
+    let valueArr = _.values(mapppedValues);
+    return valueArr;
+  }
+}
+
+export interface LogToolField {
+  fieldName: string,
+  alias: string,
+  useField: boolean,
+  isDateField: boolean,
+  unit: string
 }
