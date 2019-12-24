@@ -13,6 +13,7 @@ export class DayTypeCalendarComponent implements OnInit {
 
   model: NgbDateStruct;
   startDate: { year: number, month: number, day: number };
+  numberOfMonths: number;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private logToolService: LogToolService) { }
 
   ngOnInit() {
@@ -21,6 +22,7 @@ export class DayTypeCalendarComponent implements OnInit {
       month: this.logToolService.startDate.getMonth() + 1,
       day: this.logToolService.startDate.getDate()
     };
+    this.findNumberOfMonths();
   }
 
   getDateBackground(date: NgbDateStruct) {
@@ -36,5 +38,11 @@ export class DayTypeCalendarComponent implements OnInit {
   onDateSelect(date: NgbDate) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
     this.dayTypeAnalysisService.toggleDateType(d);
+  }
+
+  findNumberOfMonths() {
+    let startMonth: number = this.logToolService.startDate.getMonth();
+    let endMonth: number = this.logToolService.endDate.getMonth();
+    this.numberOfMonths = endMonth - startMonth + 1;
   }
 }

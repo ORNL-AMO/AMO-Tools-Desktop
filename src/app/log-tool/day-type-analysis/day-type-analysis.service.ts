@@ -41,8 +41,8 @@ export class DayTypeAnalysisService {
 
   getDataDays(): Array<any> {
     let dataDays: Array<any> = new Array();
-    let startDate: Date = this.logToolService.startDate;
-    let endDate: Date = this.logToolService.endDate;
+    let startDate: Date = new Date(this.logToolService.startDate);
+    let endDate: Date = new Date(this.logToolService.endDate);
     endDate.setDate(endDate.getDate()+1);
     for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
       let dataDay = _.find(this.logToolService.importDataFromCsv.data, (dataItem) => {
@@ -53,7 +53,6 @@ export class DayTypeAnalysisService {
         dataDays.push(dataDay);
       }
     }
-    console.log(dataDays);
     return dataDays;
   }
 
