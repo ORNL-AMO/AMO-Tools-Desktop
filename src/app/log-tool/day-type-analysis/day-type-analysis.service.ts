@@ -16,12 +16,7 @@ export class DayTypeAnalysisService {
   getDaySummaries() {
     this.daySummaries = new Array();
     this.filteredDays = new Array();
-    let dataDays = _.uniqBy(this.logToolService.importDataFromCsv.data, (dataItem) => {
-      if (dataItem[this.logToolService.dateField] != null || dataItem[this.logToolService.dateField] != undefined) {
-        let date = new Date(dataItem[this.logToolService.dateField]);
-        return date.getDay();
-      };
-    });
+    let dataDays = this.getDataDays();
     dataDays.forEach(day => {
       if (day[this.logToolService.dateField]) {
         let tmpDay: Date = new Date(day[this.logToolService.dateField]);
@@ -41,7 +36,25 @@ export class DayTypeAnalysisService {
         })
         this.daySummaries.push({ day: tmpDay, averages: dayAverages });
       }
-    })
+    });
+  }
+
+  getDataDays(): Array<any> {
+    let dataDays: Array<any> = new Array();
+    let startDate: Date = this.logToolService.startDate;
+    let endDate: Date = this.logToolService.endDate;
+    endDate.setDate(endDate.getDate()+1);
+    for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
+      let dataDay = _.find(this.logToolService.importDataFromCsv.data, (dataItem) => {
+        let tmpDay: Date = new Date(dataItem[this.logToolService.dateField]);
+        return this.checkSameDay(tmpDay, tmpDate);
+      });
+      if (dataDay != undefined) {
+        dataDays.push(dataDay);
+      }
+    }
+    console.log(dataDays);
+    return dataDays;
   }
 
   checkSameDay(day1: Date, day2: Date) {
@@ -85,7 +98,7 @@ export class DayTypeAnalysisService {
         dayTypeIndex++;
         if (dayTypeIndex < _dayTypes.length) {
           _dayTypes[dayTypeIndex].dates.push(_date);
-        } 
+        }
         this.dayTypes.next(_dayTypes);
       } else {
         _dayTypes[0].dates.push(_date);
