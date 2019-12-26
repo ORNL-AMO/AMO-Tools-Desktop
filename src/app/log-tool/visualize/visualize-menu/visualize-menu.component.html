@@ -1,33 +1,51 @@
-<div class="d-flex w-100">
-    <button class="btn btn-secondary action-btn" (click)="toggleXDataFieldDropdown()"
-        [ngClass]="{'active': xDataFieldDropdown == true}">
-        X Axis: {{selectedGraphData.selectedXDataField.fieldName}}
-    </button>
-    <div class="dropdown-menu p-0" [ngClass]="{'show': xDataFieldDropdown == true}">
-        <div class="list-group">
-            <div *ngFor="let dataField of dataFields"
-                class="d-flex list-group-item list-group-item-action align-items-center"
-                (click)="setXDataField(dataField)"
-                [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedXDataField.fieldName}">
-                <label class="pl-1">{{dataField.fieldName}}
-                </label>
+<nav class="navbar no-gutters" #navbar>
+    <div class="col-3">
+        <div class="form-group">
+            <input class="form-control w-100" type="text" name="graphName" [(ngModel)]="selectedGraphData.graphName">
+        </div>
+    </div>
+    <div class="col-9 d-flex justify-content-end">
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" (click)="toggleGraphType()">
+                Graph Type: {{selectedGraphData.graphType.label}}
+            </a>
+            <div class="dropdown-menu p-0" [ngClass]="{'show': graphTypeDropdown == true}">
+                <div class="list-group">
+                    <a *ngFor="let graphType of graphTypes" class="list-group-item list-group-item-action"
+                        (click)="setGraphType(graphType)"
+                        [ngClass]="{'active': graphType.value == selectedGraphData.graphType.value}">{{graphType.label}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="nav-item ml-2" *ngIf="selectedGraphData.graphType.value == 'scatter'">
+            <div class="btn-group">
+                <button class="btn btn-sm" [ngClass]="{'active': showScatterLines == true}" (click)="toggleScatterLines()">Lines</button>
+                <button class="btn btn-sm" [ngClass]="{'active': showScatterMarkers == true}" (click)="toggleScatterMarkers()">Markers</button>
+            </div>
+        </div>
+        <div class="nav-item dropdown ml-2">
+            <a class="nav-link dropdown-toggle" (click)="toggleXDataFieldDropdown()">
+                X Axis: {{selectedGraphData.selectedXDataField.fieldName}}
+            </a>
+            <div class="dropdown-menu p-0" [ngClass]="{'show': xDataFieldDropdown == true}">
+                <div class="list-group">
+                    <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
+                        (click)="setXDataField(dataField)"
+                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedXDataField.fieldName}">{{dataField.fieldName}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="nav-item dropdown ml-2">
+            <a class="nav-link dropdown-toggle" (click)="toggleYDataFieldDropdown()">
+                Y Axis: {{selectedGraphData.selectedYDataField.fieldName}}
+            </a>
+            <div class="dropdown-menu p-0" [ngClass]="{'show': yDataFieldDropdown == true}">
+                <div class="list-group">
+                    <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
+                        (click)="setYDataField(dataField)"
+                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedYDataField.fieldName}">{{dataField.fieldName}}</a>
+                </div>
             </div>
         </div>
     </div>
-
-    <button class="btn btn-secondary action-btn" (click)="toggleYDataFieldDropdown()"
-        [ngClass]="{'active': yDataFieldDropdown == true}">
-        Y Axis: {{selectedGraphData.selectedYDataField.fieldName}}
-    </button>
-    <div class="dropdown-menu p-0" [ngClass]="{'show': yDataFieldDropdown == true}">
-        <div class="list-group">
-            <div *ngFor="let dataField of dataFields"
-                class="d-flex list-group-item list-group-item-action align-items-center"
-                (click)="setYDataField(dataField)"
-                [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedYDataField.fieldName}">
-                <label class="pl-1">{{dataField.fieldName}}
-                </label>
-            </div>
-        </div>
-    </div>
-</div>
+</nav>

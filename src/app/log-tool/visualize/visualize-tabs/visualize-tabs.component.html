@@ -14,10 +14,10 @@
 </nav> -->
 
 
-<nav class="navbar assessment-bar">
+<nav class="navbar assessment-bar p-0">
     <div class="d-flex tabs subtabs log-tool mr-auto w-100">
         <div class="assessment-tab" *ngFor="let graphDataObj of graphData" (click)="selectGraph(graphDataObj)"
-            [ngClass]="{'active': graphDataObj.graphName == selectedGraphData.graphName}">
+            [ngClass]="{'active': graphDataObj.graphId == selectedGraphData.graphId}">
             <a>{{graphDataObj.graphName}}</a>
         </div>
         <div class="assessment-tab pull-right" (click)="addNewGraphDataObj()">

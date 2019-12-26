@@ -62,8 +62,8 @@ export class LogToolService {
   }
 
   getAllFieldData(fieldName: string): Array<number> {
-    let mapppedValues: Array<any> = _.mapValues(this.importDataFromCsv.data, (dataItem) => { return dataItem[fieldName] });
-    let valueArr = _.values(mapppedValues);
+    let mappedValues: Array<any> = _.mapValues(this.importDataFromCsv.data, (dataItem) => { return dataItem[fieldName] });
+    let valueArr = _.values(mappedValues);
     return valueArr;
   }
 }

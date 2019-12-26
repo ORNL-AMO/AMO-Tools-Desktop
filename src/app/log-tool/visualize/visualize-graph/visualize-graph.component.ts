@@ -18,8 +18,9 @@ export class VisualizeGraphComponent implements OnInit {
 
   ngOnInit() {
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphData.subscribe(graphData => {
+      console.log(graphData);
       this.graph.layout.title = graphData.selectedXDataField.alias + ' vs ' + graphData.selectedYDataField.alias;
-      this.graph.data = [{ x: graphData.xData, y: graphData.yData, type: graphData.graphType, name: graphData.graphName }];
+      this.graph.data = [{ x: graphData.xData, y: graphData.yData, type: graphData.graphType.value, mode: graphData.scatterPlotMode, name: graphData.graphName }];
     });
   }
 

@@ -34,12 +34,14 @@ export class VisualizeService {
     }
     let xData: Array<number> = this.logToolService.getAllFieldData(selectedXDataField.fieldName);
     return {
-      graphType: 'scatter',
+      graphType: { label: 'Scatter Plot', value: 'scatter' },
       selectedXDataField: selectedXDataField,
       xData: xData,
       selectedYDataField: selectedYDataField,
       yData: yData,
-      graphName: 'New Graph'
+      graphName: 'New Graph',
+      graphId: Math.random().toString(36).substr(2, 9),
+      scatterPlotMode: 'markers'
     }
   }
 
@@ -49,44 +51,55 @@ export class VisualizeService {
     this.graphData.next(currentGraphData);
   }
 
-  updateSelectedYDataField(dataField: LogToolField){
-
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();    
+  updateSelectedYDataField(dataField: LogToolField) {
+    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
     let yData: Array<number> = this.logToolService.getAllFieldData(dataField.fieldName);
     currentSelectedGraphData.yData = yData;
     currentSelectedGraphData.selectedYDataField = dataField;
-    
-    let currentAllGraphData: Array<GraphDataObj> = this.graphData.getValue();
-    let updatedGraphDataIndex: number = currentAllGraphData.findIndex(dataObj => {return dataObj.graphName == dataField.fieldName});
-    currentAllGraphData[updatedGraphDataIndex] = currentSelectedGraphData;
-    
     this.selectedGraphData.next(currentSelectedGraphData);
-    this.graphData.next(currentAllGraphData);
+    this.updateAllGraphItems(currentSelectedGraphData);
   }
 
-  updateSelectedXDataField(dataField: LogToolField){
-    
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();    
+  updateSelectedXDataField(dataField: LogToolField) {
+    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
     let yData: Array<number> = this.logToolService.getAllFieldData(dataField.fieldName);
     currentSelectedGraphData.xData = yData;
     currentSelectedGraphData.selectedXDataField = dataField;
-    
-    let currentAllGraphData: Array<GraphDataObj> = this.graphData.getValue();
-    let updatedGraphDataIndex: number = currentAllGraphData.findIndex(dataObj => {return dataObj.graphName == dataField.fieldName});
-    currentAllGraphData[updatedGraphDataIndex] = currentSelectedGraphData;
-    
     this.selectedGraphData.next(currentSelectedGraphData);
+    this.updateAllGraphItems(currentSelectedGraphData);
+  }
+
+  updateGraphType(newGraphType: { label: string, value: string }) {
+    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
+    currentSelectedGraphData.graphType = newGraphType;
+    this.selectedGraphData.next(currentSelectedGraphData);
+    this.updateAllGraphItems(currentSelectedGraphData);
+  }
+
+  updateAllGraphItems(currentSelectedGraphData: GraphDataObj) {
+    let currentAllGraphData: Array<GraphDataObj> = this.graphData.getValue();
+    let updatedGraphDataIndex: number = currentAllGraphData.findIndex(dataObj => { return dataObj.graphId == currentSelectedGraphData.graphId });
+    currentAllGraphData[updatedGraphDataIndex] = currentSelectedGraphData;
     this.graphData.next(currentAllGraphData);
+  }
+
+  updateGraphScatterPlotMode(str: string) {
+    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
+    currentSelectedGraphData.scatterPlotMode = str;
+    this.selectedGraphData.next(currentSelectedGraphData);
+    this.updateAllGraphItems(currentSelectedGraphData);
   }
 }
 
 
 
 export interface GraphDataObj {
-  graphType: string,
+  graphType: { label: string, value: string },
+  scatterPlotMode: string,
   selectedXDataField: LogToolField,
   xData: Array<number>,
   selectedYDataField: LogToolField,
   yData: Array<number>,
-  graphName: string
+  graphName: string,
+  graphId: string;
 }
