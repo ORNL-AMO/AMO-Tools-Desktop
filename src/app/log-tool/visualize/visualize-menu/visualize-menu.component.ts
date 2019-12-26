@@ -101,5 +101,23 @@ export class VisualizeMenuComponent implements OnInit {
     }
   }
 
+  setUseStandardDeviation() {
+    if (this.selectedGraphData.useStandardDeviation == false) {
+      this.visualizeService.updateUseStandardDeviation(true);
+    }
+  }
 
+  setUseBins() {
+    if (this.selectedGraphData.useStandardDeviation == true) {
+      this.visualizeService.updateUseStandardDeviation(false);
+    }
+  }
+
+  decreaseNumberOfBins() {
+    this.selectedGraphData.numberOfBins--;
+  }
+
+  increaseNumberOfBins() {
+    this.selectedGraphData.numberOfBins++;
+  }
 }

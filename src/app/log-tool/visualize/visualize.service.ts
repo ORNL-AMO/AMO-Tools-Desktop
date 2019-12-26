@@ -14,7 +14,6 @@ export class VisualizeService {
     this.graphData = new BehaviorSubject([initGraphData]);
   }
 
-
   addNewGraphDataObj() {
     let currentGraphData: Array<GraphDataObj> = this.graphData.getValue();
     let newGraphDataObj: GraphDataObj = this.getNewGraphDataObject();
@@ -41,7 +40,9 @@ export class VisualizeService {
       yData: yData,
       graphName: 'New Graph',
       graphId: Math.random().toString(36).substr(2, 9),
-      scatterPlotMode: 'markers'
+      scatterPlotMode: 'markers',
+      useStandardDeviation: true,
+      numberOfBins: 5
     }
   }
 
@@ -89,6 +90,13 @@ export class VisualizeService {
     this.selectedGraphData.next(currentSelectedGraphData);
     this.updateAllGraphItems(currentSelectedGraphData);
   }
+
+  updateUseStandardDeviation(useStandardDeviation: boolean){
+    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
+    currentSelectedGraphData.useStandardDeviation = useStandardDeviation;
+    this.selectedGraphData.next(currentSelectedGraphData);
+    this.updateAllGraphItems(currentSelectedGraphData);
+  }
 }
 
 
@@ -102,4 +110,6 @@ export interface GraphDataObj {
   yData: Array<number>,
   graphName: string,
   graphId: string;
+  useStandardDeviation: boolean;
+  numberOfBins: number;
 }

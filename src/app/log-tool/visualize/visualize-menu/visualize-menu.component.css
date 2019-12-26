@@ -1,6 +1,6 @@
 .nav-item .dropdown-toggle{
     color: white;
-    background: #2E4053;
+    background: #117A65;
 }
 
 .navbar-nav .dropdown-menu{
@@ -10,7 +10,7 @@
 
 .navbar{
     background: white;
-    border-bottom: solid 4px;
+    border-bottom: solid 4px #117A65;
     font-size: small;
 }
 
@@ -26,7 +26,7 @@
 
 .list-group-item.active, .btn.active{
     color: white;
-    background: #2E4053;
+    background: #117A65;
 }
 
 .dropdown-menu.filter-menu{
