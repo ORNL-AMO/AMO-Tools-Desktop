@@ -38,7 +38,7 @@ export class ExecutiveSummaryComponent implements OnInit {
 
   chartContainerHeight: number;
   chartContainerWidth: number;
-  
+
 
   pieChartLabels: Array<string>;
   pieChartValues: Array<number>;
@@ -113,7 +113,7 @@ export class ExecutiveSummaryComponent implements OnInit {
     let teams: Array<string> = this.treasureChestMenuService.getAllTeams(this.opportunityCardsData);
     this.teamData = new Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>();
     teams.forEach(team => {
-      let teamOpps: Array<OpportunityCardData> = this.opportunityCardsData.filter(cardData => { return cardData.teamName == team });
+      let teamOpps: Array<OpportunityCardData> = this.opportunityCardsData.filter(cardData => { return cardData.teamName == team && cardData.selected == true });
       let teamName: string = team;
       let costSavings: number = _.sumBy(teamOpps, 'annualCostSavings');
       let implementationCost: number = _.sumBy(teamOpps, 'implementationCost');
