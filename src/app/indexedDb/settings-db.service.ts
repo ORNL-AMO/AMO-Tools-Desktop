@@ -4,11 +4,13 @@ import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
 import { Assessment } from '../shared/models/assessment';
 import { SettingsService } from '../settings/settings.service';
+import { DirectoryDbService } from './directory-db.service';
+import { Directory } from '../shared/models/directory';
 @Injectable()
 export class SettingsDbService {
   allSettings: Array<Settings>;
   globalSettings: Settings;
-  constructor(private indexedDbService: IndexedDbService, private settingService: SettingsService) { }
+  constructor(private indexedDbService: IndexedDbService, private settingService: SettingsService, private directoryDbService: DirectoryDbService) { }
 
   setAll(): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -39,7 +41,12 @@ export class SettingsDbService {
   getByDirectoryId(id: number): Settings {
     let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.directoryId === id; });
     if (!selectedSettings) {
-      selectedSettings = this.globalSettings;
+      let directory: Directory = this.directoryDbService.getById(id);
+      if (directory.parentDirectoryId) {
+        return this.getByDirectoryId(directory.parentDirectoryId);
+      } else {
+        selectedSettings = this.globalSettings;
+      }
     }
     selectedSettings = this.checkSettings(selectedSettings);
     return selectedSettings;

@@ -14,6 +14,8 @@ export interface Calculator {
     assessmentId?: number;
     id?: number;
     name?: string;
+    createdDate?: Date,
+    modifiedDate?: Date,
     type?: string;
     preAssessments?: Array<PreAssessment>;
     headTool?: HeadTool;

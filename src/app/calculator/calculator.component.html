@@ -1,8 +1,3 @@
-<app-motors [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'motors' || selectedCalculator == 'all'"></app-motors>
-<app-pumps [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'pumps' || selectedCalculator == 'all'"></app-pumps>
-<app-fans [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'fans' || selectedCalculator == 'all'"></app-fans>
-<app-furnaces [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'furnaces' || selectedCalculator == 'all'"></app-furnaces>
-<app-steam [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'steam' || selectedCalculator == 'all'"></app-steam>
-<app-compressed-air [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'compressed-air' || selectedCalculator == 'all'"></app-compressed-air>
-<app-lighting [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'lighting' || selectedCalculator == 'all'"></app-lighting>
-<app-utilities [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'utilities' || selectedCalculator == 'all'"></app-utilities>
+<div class="stand-alone-calc tab-content">
+    <router-outlet></router-outlet>
+</div>

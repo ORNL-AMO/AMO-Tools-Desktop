@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SteamPropertiesModule } from './steam-properties/steam-properties.module';
-import { SteamComponent } from "./steam.component";
 import { SteamService } from "./steam.service";
 import { SaturatedPropertiesModule } from "./saturated-properties/saturated-properties.module";
 import { StackLossModule } from './stack-loss/stack-loss.module';
@@ -14,6 +13,8 @@ import { HeaderModule } from './header/header.module';
 import { TurbineModule } from './turbine/turbine.module';
 import { ConvertSteamService } from './convert-steam.service';
 import { BoilerBlowdownRateModule } from './boiler-blowdown-rate/boiler-blowdown-rate.module';
+import { SteamListComponent } from './steam-list/steam-list.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -29,13 +30,14 @@ import { BoilerBlowdownRateModule } from './boiler-blowdown-rate/boiler-blowdown
     DeaeratorModule,
     HeaderModule,
     TurbineModule,
-    BoilerBlowdownRateModule
+    BoilerBlowdownRateModule,
+    RouterModule
   ],
   declarations: [
-    SteamComponent
+    SteamListComponent
   ],
   exports: [
-    SteamComponent
+    SteamListComponent
   ],
   providers: [
     SteamService,

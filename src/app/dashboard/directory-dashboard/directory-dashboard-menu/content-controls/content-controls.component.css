@@ -1,0 +1,34 @@
+.btn{
+    padding: 6px;
+}
+
+
+.actions{
+    padding: .25rem;
+    border-radius: .25rem;
+    background: white;
+}
+
+.list-group-item{
+    padding: .25rem;
+}
+
+.dropdown-menu{
+    left: auto;
+    right: auto;
+    top: 50px;
+}
+
+.list-group-item.active{
+    background-color: #545b62;
+    border-color: #545b62;
+}
+
+.dropdown-menu.filter-dropdown{
+    right: 15px;;
+}
+
+.list-group-item:hover,
+.list-group-item label:hover{
+    cursor: pointer;
+}

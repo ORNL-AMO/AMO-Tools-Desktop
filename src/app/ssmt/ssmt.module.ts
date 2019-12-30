@@ -45,6 +45,7 @@ import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-mod
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -72,7 +73,8 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     BlowdownRateModalModule,
     TabsTooltipModule,
     ToastModule,
-    SharedPipesModule
+    SharedPipesModule,
+    RouterModule
   ],
   declarations: [
     SsmtComponent,

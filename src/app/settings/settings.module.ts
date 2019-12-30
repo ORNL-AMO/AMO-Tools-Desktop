@@ -11,6 +11,10 @@ import { FacilityInfoComponent } from './facility-info/facility-info.component';
 import { FsatSettingsComponent } from './fsat-settings/fsat-settings.component';
 import { TutorialSettingsComponent } from './tutorial-settings/tutorial-settings.component';
 import { TreasureHuntSettingsComponent } from './treasure-hunt-settings/treasure-hunt-settings.component';
+import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
+import { ResetDataModalComponent } from './assessment-settings/reset-data-modal/reset-data-modal.component';
+import { ModalModule } from 'ngx-bootstrap';
+import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
 
 @NgModule({
     declarations: [
@@ -21,12 +25,17 @@ import { TreasureHuntSettingsComponent } from './treasure-hunt-settings/treasure
         SteamSettingsComponent,
         FacilityInfoComponent,
         TutorialSettingsComponent,
-        TreasureHuntSettingsComponent
+        TreasureHuntSettingsComponent,
+        AssessmentSettingsComponent,
+        ResetDataModalComponent
+
     ],
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        ModalModule,
+        AnimatedCheckmarkModule
     ],
     providers: [
         SettingsService
@@ -39,7 +48,8 @@ import { TreasureHuntSettingsComponent } from './treasure-hunt-settings/treasure
         FsatSettingsComponent,
         SteamSettingsComponent,
         TutorialSettingsComponent,
-        TreasureHuntSettingsComponent
+        TreasureHuntSettingsComponent,
+        AssessmentSettingsComponent
     ]
 })
 

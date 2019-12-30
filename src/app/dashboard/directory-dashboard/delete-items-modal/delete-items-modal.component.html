@@ -1,0 +1,44 @@
+<div bsModal #deleteItemsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="deleteItemsModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Selected Items</h3>
+                <button class="close" aria-label="Close" (click)="hideDeleteItemsModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="!deleting" class="row">
+                    <div class="col-12">
+                        Selected items will be deleted from application.
+                        <span class="red">This cannot be undone!</span>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center" *ngIf="deleting">
+                    <div class="col-10">
+                        <div class="main-content text-center">
+                            <div class="spinner">
+                                <div class="bounce1"></div>
+                                <div class="bounce2"></div>
+                                <div class="bounce3"></div>
+                            </div>
+                            <h1>Deleting Data...</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="!deleting" class="row">
+                    <div class="col-12">
+                        <button class="btn btn-secondary pull-left" (click)="hideDeleteItemsModal()">Cancel</button>
+                        <button class="btn btn-danger pull-right" (click)="deleteSelected()">Delete
+                            Selected
+                            Items
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

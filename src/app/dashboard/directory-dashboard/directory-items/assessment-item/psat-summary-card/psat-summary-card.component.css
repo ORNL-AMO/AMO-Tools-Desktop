@@ -1,0 +1,43 @@
+td{
+    padding: 0px;
+    font-size: small;
+}
+a:not([href]):not([tabindex]):hover {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  a:not([href]):not([tabindex]){
+    color: blue;
+  }
+
+
+  .modal-dialog{
+    max-width: 100vw;
+    margin: 10px;
+    top: 0px;
+  }
+
+  .modal-body{
+    padding: 0px;
+  }
+
+  p{
+    text-align: left;
+    font-size: small;
+  }
+
+  .no-card-data{
+    text-align: center;
+  }
+
+  .modal-body{
+    max-height: 85vh;
+    overflow: auto;
+  }
+
+  
+  .no-border-top{
+    border-top: none;
+  }

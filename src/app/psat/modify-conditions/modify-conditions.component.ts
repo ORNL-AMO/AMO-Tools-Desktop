@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
-import { AssessmentService } from '../../assessment/assessment.service';
+import { AssessmentService } from '../../dashboard/assessment.service';
 import { Assessment } from '../../shared/models/assessment';
 import { CompareService } from '../compare.service';
 import { Subscription } from 'rxjs';

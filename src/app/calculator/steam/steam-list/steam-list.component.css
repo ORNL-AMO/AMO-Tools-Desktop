@@ -1,0 +1,23 @@
+a:not([href]):not([tabindex]):hover {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  a:not([href]):not([tabindex]){
+    color: blue;
+  }
+  .content-container{
+    padding: 1rem;
+  }
+  img {
+    cursor: pointer;
+  }
+    
+  .flash-tank, .header-steam{
+    width: 55%;
+  }
+  
+  .prv, .steam-turbine{
+    width: 45%;
+  }

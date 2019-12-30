@@ -1,0 +1,63 @@
+/* .list-group-item{
+  background-color: #003054;
+} */
+
+
+.nav-item:hover, .pointer-item:hover {
+  cursor: pointer;
+}
+
+.selected{
+  font-weight: bold;
+  color: #000;
+}
+
+.sidebar-item:hover{
+  background-color: #eee;
+}
+
+.icon-image{
+  width: 30px;
+}
+
+.icon{
+  width: 100%;
+}
+
+.phast .fa-file{
+  /* border-left: #BF3D00 groove 2px; */
+  /* border-image: linear-gradient(to right,#F0F3F4, #BF3D00) 50 / 2; */
+  color: #BF3D00;
+}
+
+.psat .fa-file{
+  /* border-left: #2980b9 groove 2px; */
+  /* border-image: linear-gradient(to right,#F0F3F4, #2980b9) 50 / 2; */
+  color: #2980b9;
+}
+
+.fsat .fa-file{
+  /* border-left: #FFE400 groove 2px; */
+  /* border-image: linear-gradient(to right, #F0F3F4, #FFE400) 50 / 2; */
+  color: #FFE400;
+}
+.ssmt .fa-file{
+  /* border-left: #F39C12 groove 2px; */
+  /* border-image: linear-gradient(to right, #F0F3F4, #F39C12) 50 / 2; */
+  color: #F39C12;
+}
+
+.treasure-hunt .fa-file{
+  /* border-left: #2E4053 groove 2px; */
+  /* border-image: linear-gradient(to right, #F0F3F4, #2E4053) 50 / 2; */
+  color: #2E4053;
+}
+
+.assessment-link{
+    text-overflow: ellipsis;
+    padding-left: .2rem;
+}
+
+.fa.fa-file{
+  font-size: 14px;
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
-import { ImportExportService } from '../../../shared/import-export/import-export.service';
+import { ImportExportService } from '../../../dashboard/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { ImportOpportunitiesService } from '../import-opportunities.service';
 import { OpportunityCardsService } from '../opportunity-cards/opportunity-cards.service';
