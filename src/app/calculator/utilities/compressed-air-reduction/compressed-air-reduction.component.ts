@@ -125,7 +125,7 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours);
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours, this.baselineData[0].utilityType);
     this.modificationData.push(tmpObj);
     this.getResults();
   }
