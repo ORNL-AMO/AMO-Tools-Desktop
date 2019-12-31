@@ -6,9 +6,9 @@
                 <td class="bold">Day</td>
                 <td class="bold" *ngFor="let avgLabel of daySummaries[0].averages">{{avgLabel.label}}</td>
             </tr>
-            <tr class="day-summary-role" *ngFor="let daySummary of daySummaries" [ngStyle]="{'background-color': getDateColor(daySummary.day)}">
+            <tr class="day-summary-role" *ngFor="let daySummary of daySummaries" [ngStyle]="{'background-color': getDateColor(daySummary)}">
                 <td>
-                    {{daySummary.day | date}}
+                    {{daySummary.date | date}}
                 </td>
                 <td *ngFor=" let averageVal of daySummary.averages">
                     {{averageVal.value | number}}

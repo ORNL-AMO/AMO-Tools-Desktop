@@ -19,6 +19,12 @@
             </tr>
             <tr>
                 <td class="w-25 text-center">
+                    <input type="checkbox" [disabled]="true" [(ngModel)]="excludedSelected">
+                </td>
+                <td class="day-type-label" [ngStyle]="{'background-color': 'red'}">Excluded</td>
+            </tr>
+            <tr>
+                <td class="w-25 text-center">
                     <input type="checkbox" [disabled]="true" [(ngModel)]="weekdaySelected">
                 </td>
                 <td class="day-type-label" [ngStyle]="{'background-color': 'green'}">Weekday</td>
@@ -59,7 +65,7 @@
                 <div class="form-group">
                     <select class="custom-select form-control w-100 p-0 scroll-item" multiple [(ngModel)]="selectedDays"
                         name="selectedDays">
-                        <option *ngFor="let daySummary of daySummaries">{{daySummary.day | date}}</option>
+                        <option *ngFor="let daySummary of daySummaries">{{daySummary.date | date}}</option>
                     </select>
                 </div>
             </form>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DayTypeAnalysisService } from '../day-type-analysis.service';
+import { DayTypeAnalysisService, DaySummary } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -14,10 +14,11 @@ export class DayTypesComponent implements OnInit {
   newDayTypeColor: string = "#6a28d7";
   dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>;
   dayTypesSub: Subscription;
-  daySummaries: Array<{ day: Date, averages: Array<{ value: number, label: string }> }>;
+  daySummaries: Array<DaySummary>;
   selectedDays: Array<string> = [];
   weekdaySelected: boolean = true;
   weekendSelected: boolean = true;
+  excludedSelected: boolean = true;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {

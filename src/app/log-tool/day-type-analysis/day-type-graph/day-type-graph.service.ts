@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DayTypeAnalysisService } from '../day-type-analysis.service';
+import { DayTypeAnalysisService, DaySummary } from '../day-type-analysis.service';
 import { LogToolService } from '../../log-tool.service';
 import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
@@ -9,15 +9,14 @@ export class DayTypeGraphService {
   selectedDataField: BehaviorSubject<string>;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolService: LogToolService) {
     this.selectedDataField = new BehaviorSubject<string>(undefined);
-   }
+  }
 
   getDayTypeScatterPlotData(): Array<{ xData: Array<any>, yData: Array<number>, date: Date, color: string }> {
     let dayTypePlotData: Array<{ xData: Array<any>, yData: Array<number>, date: Date, color: string }> = new Array();
-    this.dayTypeAnalysisService.filteredDays.forEach((dayItems: Array<any>) => {
-      let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(dayItems);
-      let date: Date = new Date(dayItems[0][this.logToolService.dateField]);
-      let color: string = this.getDateColor(date);
-      dayTypePlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, date: date, color: color });
+    this.dayTypeAnalysisService.daySummaries.forEach((daySummary) => {
+      let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(daySummary.dayData);
+      let color: string = this.getDateColor(daySummary);
+      dayTypePlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, date: daySummary.date, color: color });
     })
     return dayTypePlotData;
   }
@@ -48,16 +47,20 @@ export class DayTypeGraphService {
     return { xData: xData, yData: yData };
   }
 
-  getDateColor(_date: Date): string {
-    let typeOfDay: { color: string, label: string, useDayType: boolean, dates?: Array<Date> } = this.dayTypeAnalysisService.getDayType(_date);
+  getDateColor(daySummary: DaySummary): string {
+    let typeOfDay: { color: string, label: string, useDayType: boolean, dates?: Array<Date> } = this.dayTypeAnalysisService.getDayType(daySummary.date);
     if (typeOfDay != undefined) {
       return typeOfDay.color;
     } else {
-      let dayCode: number = _date.getDay();
-      if (dayCode == 0 || dayCode == 6) {
-        return 'blue';
+      if (daySummary.dayData.length != this.dayTypeAnalysisService.validDayTypeNumberOfDataPoints) {
+        return 'red';
       } else {
-        return 'green';
+        let dayCode: number = daySummary.date.getDay();
+        if (dayCode == 0 || dayCode == 6) {
+          return 'blue';
+        } else {
+          return 'green';
+        }
       }
     }
   }

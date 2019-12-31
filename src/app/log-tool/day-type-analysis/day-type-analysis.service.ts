@@ -6,16 +6,17 @@ import * as moment from 'moment';
 @Injectable()
 export class DayTypeAnalysisService {
 
-  daySummaries: Array<{ day: Date, averages: Array<{ value: number, label: string }> }>;
-  filteredDays: Array<any>;
+  daySummaries: Array<DaySummary>;
   dayTypes: BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>;
+  validDayTypeNumberOfDataPoints: number;
   constructor(private logToolService: LogToolService) {
     this.dayTypes = new BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>(new Array());
   }
 
   getDaySummaries() {
     this.daySummaries = new Array();
-    this.filteredDays = new Array();
+    // this.filteredDays = new Array();
+    let dayDataNumberOfEntries: Array<number> = new Array();
     let dataDays = this.getDataDays();
     dataDays.forEach(day => {
       if (day[this.logToolService.dateField]) {
@@ -26,7 +27,7 @@ export class DayTypeAnalysisService {
             return this.checkSameDay(tmpDay, date);
           }
         });
-        this.filteredDays.push(dayData);
+        // this.filteredDays.push(dayData);
         let dayAverages: Array<{ value: number, label: string }> = new Array();
         this.logToolService.fields.forEach(field => {
           if (field.fieldName != this.logToolService.dateField && field.useField == true) {
@@ -34,16 +35,21 @@ export class DayTypeAnalysisService {
             dayAverages.push({ value: mean, label: field.alias });
           }
         })
-        this.daySummaries.push({ day: tmpDay, averages: dayAverages });
+        dayDataNumberOfEntries.push(dayData.length);
+        this.daySummaries.push({ date: tmpDay, averages: dayAverages, dayData: dayData });
       }
     });
+
+    let tmpArr = _.countBy(dayDataNumberOfEntries);
+    let tmpArr2 = _.entries(tmpArr)
+    this.validDayTypeNumberOfDataPoints = Number(_.maxBy(_.last(tmpArr2)));
   }
 
   getDataDays(): Array<any> {
     let dataDays: Array<any> = new Array();
     let startDate: Date = new Date(this.logToolService.startDate);
     let endDate: Date = new Date(this.logToolService.endDate);
-    endDate.setDate(endDate.getDate()+1);
+    endDate.setDate(endDate.getDate() + 1);
     for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
       let dataDay = _.find(this.logToolService.importDataFromCsv.data, (dataItem) => {
         let tmpDay: Date = new Date(dataItem[this.logToolService.dateField]);
@@ -105,4 +111,11 @@ export class DayTypeAnalysisService {
       }
     }
   }
+}
+
+
+export interface DaySummary {
+  date: Date,
+  averages: Array<{ value: number, label: string }>,
+  dayData: Array<any>
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DayTypeAnalysisService } from '../day-type-analysis.service';
+import { DayTypeAnalysisService, DaySummary } from '../day-type-analysis.service';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 })
 export class DayTypeSummaryComponent implements OnInit {
 
-  daySummaries: Array<{ day: Date, averages: Array<{ value: number, label: string }> }>;
+  daySummaries: Array<DaySummary>;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService) { }
 
   ngOnInit() {
@@ -17,8 +17,8 @@ export class DayTypeSummaryComponent implements OnInit {
   }
 
 
-  getDateColor(date: Date): string{
-    return this.dayTypeGraphService.getDateColor(date);
+  getDateColor(daySummary: DaySummary): string{
+    return this.dayTypeGraphService.getDateColor(daySummary);
   }
 
 }

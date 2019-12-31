@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import { DayTypeAnalysisService } from '../day-type-analysis.service';
+import { DayTypeAnalysisService, DaySummary } from '../day-type-analysis.service';
 import * as _ from 'lodash';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 import { LogToolService } from '../../log-tool.service';
@@ -27,9 +27,10 @@ export class DayTypeCalendarComponent implements OnInit {
 
   getDateBackground(date: NgbDateStruct) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (day) => { return this.dayTypeAnalysisService.checkSameDay(d, day.day) });
+    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.dayTypeAnalysisService.checkSameDay(d, daySummary.date) });
     if (testExists != undefined) {
-      return this.dayTypeGraphService.getDateColor(d);
+      let daySummary: DaySummary = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.dayTypeAnalysisService.checkSameDay(d, daySummary.date) });
+      return this.dayTypeGraphService.getDateColor(daySummary);
     } else {
       return 'lightgray';
     }
