@@ -48,16 +48,27 @@
   </div>
 
   <div class="my-2" *ngIf="currentField == 'averageMotorLoad'">
-    <h6>
-      Average Motor Load
+    <h6>Average Motor Load
       <br>
-      <small class="text-muted">
+      <!--<small class="text-muted">
         Also called load factor, defined as the ratio between actual load and rated load. Maximum efficiency is usually near 75%
         of rated load. Overloaded motors can overheat and lose efficiency. Underloaded motors, those loaded below 50% of
         rated load, are inefficient and exhibit low power factor. Surveys of installed motors indicate that a large portion
         of motors in use are improperly loaded.
         <hr>
+      </small>-->
+      <small class="text-muted">
+        Also called load factor, this is the ratio between actual load and rated load. Often motors are installed larger (more horsepower) than required by the driven load to compensate for time degradation and variations in the demand. The Percent Load is best determined by measurement of the current and voltage, percent loaded can then be calculated (the Percent Load Estimation Calculator can help).
+        <br><br>
       </small>
+      <small class="text-muted pt-2">
+        If a measurement is not possible, then it can be estimated using the following rule-of-thumb. If the motor is part of OEM equipment then 100% is probably correct, if the motor was installed as part of a system and loading is not known 75% or 80% Is a conservative estimate.
+        <br><br>
+      </small>
+      <small class="text-muted pt-2">
+        Maximum efficiency is usually near 75% of rated load. Overloaded motors can overheat and lose efficiency. Underloaded motors, those loaded below 50% of rated load, are inefficient and exhibit low power factor.
+      </small>
+      <hr>
     </h6>
   </div>
 

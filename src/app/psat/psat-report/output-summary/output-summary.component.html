@@ -79,7 +79,7 @@
         </td>
       </tr>
       <tr>
-        <td>Load factor (%)</td>
+        <td>Percent Loaded (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.load_factor*100 |
           number:'1.0-1'}}</td>
         <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
