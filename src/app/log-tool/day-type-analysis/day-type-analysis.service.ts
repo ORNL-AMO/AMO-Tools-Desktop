@@ -119,3 +119,10 @@ export interface DaySummary {
   averages: Array<{ value: number, label: string }>,
   dayData: Array<any>
 }
+
+export interface DayType { 
+  color: string, 
+  label: string, 
+  useDayType: boolean, 
+  dates?: Array<Date> 
+}
