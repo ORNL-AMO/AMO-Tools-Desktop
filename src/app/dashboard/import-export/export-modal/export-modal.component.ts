@@ -25,12 +25,11 @@ export class ExportModalComponent implements OnInit {
     private importExportService: ImportExportService) { }
 
   ngOnInit() {
-    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-    let directory: Directory = this.directoryDbService.getById(directoryId);
-    let isSelectAllFolder: boolean = directory.selected;
-    this.exportData = this.exportService.getSelected(directory, isSelectAllFolder);
-    this.getNoDirectoryAssessments();
-    this.canExport = this.importExportService.test(this.exportData);
+    if (this.exportService.exportAll == true) {
+      this.exportAllData();
+    } else {
+      this.exportDirectoryData();
+    }
   }
 
   ngAfterViewInit() {
@@ -48,6 +47,24 @@ export class ExportModalComponent implements OnInit {
       this.directoryDashboardService.showExportModal.next(false);
     })
   }
+
+  exportAllData() {
+    let directoryId: number = 1;
+    let directory: Directory = this.directoryDbService.getById(directoryId);
+    this.exportData = this.exportService.getSelected(directory, true);
+    this.getNoDirectoryAssessments();
+    this.canExport = this.importExportService.test(this.exportData);
+  }
+
+  exportDirectoryData() {
+    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
+    let directory: Directory = this.directoryDbService.getById(directoryId);
+    let isSelectAllFolder: boolean = directory.selected;
+    this.exportData = this.exportService.getSelected(directory, isSelectAllFolder);
+    this.getNoDirectoryAssessments();
+    this.canExport = this.importExportService.test(this.exportData);
+  }
+
 
   getNoDirectoryAssessments() {
     this.noDirectoryAssessments = new Array();
