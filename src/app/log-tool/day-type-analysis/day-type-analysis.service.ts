@@ -8,9 +8,85 @@ export class DayTypeAnalysisService {
 
   daySummaries: Array<DaySummary>;
   dayTypes: BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>;
+  secondaryDayTypes: BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>;
   validDayTypeNumberOfDataPoints: number;
+  dayTypeSummaries: BehaviorSubject<Array<DayTypeSummary>>;
   constructor(private logToolService: LogToolService) {
     this.dayTypes = new BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>(new Array());
+    this.secondaryDayTypes = new BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>(new Array());
+    this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
+  }
+
+  initSecondaryDayTypes() {
+    let dayTypesArr: Array<DayType> = new Array();
+    let startDate: Date = new Date(this.logToolService.startDate);
+    let endDate: Date = new Date(this.logToolService.endDate);
+    endDate.setDate(endDate.getDate() + 1);
+    let excludedDates: Array<Date> = new Array();
+    let weekendDates: Array<Date> = new Array();
+    let weekdayDates: Array<Date> = new Array();
+
+    for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
+      let secondaryDayType: string = this.getSecondaryDayType(tmpDate);
+      if (secondaryDayType == 'Excluded') {
+        excludedDates.push(new Date(tmpDate));
+      } else if (secondaryDayType == 'Weekend') {
+        weekendDates.push(new Date(tmpDate));
+      } else if (secondaryDayType == 'Weekday') {
+        weekdayDates.push(new Date(tmpDate));
+      }
+    }
+
+    if (excludedDates.length != 0) {
+      dayTypesArr.push({
+        color: 'red',
+        label: 'Excluded',
+        useDayType: true,
+        dates: excludedDates
+      });
+    }
+
+    if (weekendDates.length != 0) {
+      dayTypesArr.push({
+        color: 'blue',
+        label: 'Weekend',
+        useDayType: true,
+        dates: weekendDates
+      });
+    }
+
+    if (weekdayDates.length != 0) {
+      dayTypesArr.push({
+        color: 'green',
+        label: 'Weekday',
+        useDayType: true,
+        dates: weekdayDates
+      });
+    }
+    this.secondaryDayTypes.next(dayTypesArr);
+  }
+
+
+  getSecondaryDayType(date: Date): string {
+    let daySummary: DaySummary = this.daySummaries.find(day => { return this.checkSameDay(day.date, date) });
+    if (daySummary.dayData.length != this.validDayTypeNumberOfDataPoints) {
+      return 'Excluded';
+    } else {
+      let dayCode: number = date.getDay();
+      if (dayCode == 0 || dayCode == 6) {
+        return 'Weekend';
+      } else {
+        return 'Weekday';
+      }
+    }
+  }
+
+  addSecondaryDayType(date: Date) {
+    let secondaryDayTypeLabel: string = this.getSecondaryDayType(date);
+    let secondaryDayTypes = this.secondaryDayTypes.getValue();
+    let addDayType = secondaryDayTypes.find(dayType => { return dayType.label == secondaryDayTypeLabel });
+    addDayType.dates.push(date);
+    this.secondaryDayTypes.next(secondaryDayTypes);
   }
 
   getDaySummaries() {
@@ -103,12 +179,70 @@ export class DayTypeAnalysisService {
         dayTypeIndex++;
         if (dayTypeIndex < _dayTypes.length) {
           _dayTypes[dayTypeIndex].dates.push(_date);
+        } else {
+          this.addSecondaryDayType(_date);
         }
         this.dayTypes.next(_dayTypes);
       } else {
         _dayTypes[0].dates.push(_date);
+        this.removeFromSecondary(_date);
         this.dayTypes.next(_dayTypes);
       }
+    }
+  }
+
+  removeFromSecondary(_date: Date) {
+    let secondaryDayTypes = this.secondaryDayTypes.getValue();
+    if (this.secondaryDayTypes.getValue().length != 0) {
+      let dayTypeIndex: number = _.findIndex(secondaryDayTypes, (dayType) => {
+        let test: boolean = false;
+        dayType.dates.forEach(date => {
+          if (this.checkSameDay(date, _date)) {
+            test = true;
+          }
+        });
+        return test;
+      });
+      if (dayTypeIndex != -1) {
+        _.remove(secondaryDayTypes[dayTypeIndex].dates, (date) => {
+          return this.checkSameDay(date, _date);
+        });
+      }
+    }
+    this.secondaryDayTypes.next(secondaryDayTypes);
+  }
+
+
+  setDayTypeSummaries() {
+    let dayTypeSummaries: Array<DayTypeSummary> = new Array();
+    //day types
+    let currentDayTypes: Array<DayType> = this.dayTypes.getValue();
+    currentDayTypes.forEach(dayType => {
+      if(dayType.useDayType == true){
+        let dayTypeSummary: DayTypeSummary = this.getDayTypeSummary(dayType);
+        dayTypeSummaries.push(dayTypeSummary);
+      }      
+    });
+    let secondaryDayTypes: Array<DayType> = this.secondaryDayTypes.getValue();
+    secondaryDayTypes.forEach(dayType => {
+      let dayTypeSummary: DayTypeSummary = this.getDayTypeSummary(dayType);
+      dayTypeSummaries.push(dayTypeSummary);
+    });
+    this.dayTypeSummaries.next(dayTypeSummaries);
+  }
+
+  getDayTypeSummary(dayType: DayType): DayTypeSummary {
+    let dayTypeData: Array<any> = _.filter(this.logToolService.importDataFromCsv.data, (dataItem) => {
+      let dataItemDate: Date = new Date(dataItem[this.logToolService.dateField]);
+      let test = _.find(dayType.dates, (date) => { return this.checkSameDay(date, dataItemDate) });
+      if (test != undefined) {
+        return true;
+      } else { return false };
+    });
+
+    return {
+      dayType: dayType,
+      data: dayTypeData
     }
   }
 }
@@ -120,9 +254,14 @@ export interface DaySummary {
   dayData: Array<any>
 }
 
-export interface DayType { 
-  color: string, 
-  label: string, 
-  useDayType: boolean, 
-  dates?: Array<Date> 
+export interface DayType {
+  color: string,
+  label: string,
+  useDayType: boolean,
+  dates?: Array<Date>
+}
+
+export interface DayTypeSummary {
+  dayType: DayType
+  data: Array<any>
 }

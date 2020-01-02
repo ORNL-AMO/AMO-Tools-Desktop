@@ -19,6 +19,7 @@ export class DayTypeAnalysisComponent implements OnInit {
     });
     this.dayTypeGraphService.selectedDataField.next(field.fieldName);
     this.dayTypeAnalysisService.getDaySummaries();
+    this.dayTypeAnalysisService.initSecondaryDayTypes();
   }
 
 }

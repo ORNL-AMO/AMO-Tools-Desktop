@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DayTypeAnalysisService, DaySummary } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-day-types',
   templateUrl: './day-types.component.html',
@@ -14,6 +14,8 @@ export class DayTypesComponent implements OnInit {
   newDayTypeColor: string = "#6a28d7";
   dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>;
   dayTypesSub: Subscription;
+  secondaryDayTypesSub: Subscription;
+  secondaryDayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>;
   daySummaries: Array<DaySummary>;
   selectedDays: Array<string> = [];
   weekdaySelected: boolean = true;
@@ -25,11 +27,15 @@ export class DayTypesComponent implements OnInit {
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(val => {
       this.dayTypes = val;
     });
+    this.secondaryDayTypesSub = this.dayTypeAnalysisService.secondaryDayTypes.subscribe(val => {
+      this.secondaryDayTypes = val;
+    })
     this.daySummaries = this.dayTypeAnalysisService.daySummaries;
   }
 
   ngOnDestroy() {
     this.dayTypesSub.unsubscribe();
+    this.secondaryDayTypesSub.unsubscribe();
   }
 
   showAddNewDayType() {
@@ -44,8 +50,10 @@ export class DayTypesComponent implements OnInit {
     let dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }> = this.dayTypeAnalysisService.dayTypes.getValue();
     let dates: Array<Date> = new Array();
     this.selectedDays.forEach(date => {
+      this.dayTypeAnalysisService.removeFromSecondary(new Date(date));
       dates.push(new Date(date));
     });
+
     dayTypes.push({
       color: this.newDayTypeColor,
       label: this.newDayTypeName,
@@ -55,6 +63,8 @@ export class DayTypesComponent implements OnInit {
     this.dayTypeAnalysisService.dayTypes.next(dayTypes);
     this.hideAddNewDayType();
   }
+
+
 
   setDayTypes() {
     this.dayTypeAnalysisService.dayTypes.next(this.dayTypes);

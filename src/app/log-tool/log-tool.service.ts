@@ -25,9 +25,7 @@ export class LogToolService {
   parseImportData() {
     this.setFields(this.importDataFromCsv.meta.fields);
     if (this.dateField != undefined) {
-      console.log(this.importDataFromCsv.data);
       this.importDataFromCsv.data = _.orderBy(this.importDataFromCsv.data, (data) => { return new Date(data[this.dateField]) }, ['asc']);
-      console.log(this.importDataFromCsv.data);
     }
     this.numberOfDataPoints = this.importDataFromCsv.data.length;
     let startDateItem = _.minBy(this.importDataFromCsv.data, (dataItem) => {

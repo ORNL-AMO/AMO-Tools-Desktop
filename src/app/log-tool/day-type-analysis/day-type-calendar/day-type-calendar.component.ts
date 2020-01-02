@@ -38,7 +38,11 @@ export class DayTypeCalendarComponent implements OnInit {
 
   onDateSelect(date: NgbDate) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    this.dayTypeAnalysisService.toggleDateType(d);
+    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.dayTypeAnalysisService.checkSameDay(d, daySummary.date) });
+    if (testExists != undefined) {
+      let d: Date = new Date(date.year, date.month - 1, date.day);
+      this.dayTypeAnalysisService.toggleDateType(d);
+    }
   }
 
   findNumberOfMonths() {

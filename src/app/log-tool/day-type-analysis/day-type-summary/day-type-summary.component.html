@@ -1,12 +1,34 @@
 <div class="p-2">
+    <label class="group-label">Day Type Averages</label>
+    <table class="table table-striped mb-0">
+        <tbody>
+            <tr>
+                <td class="bold">Day Type</td>
+                <td class="bold" *ngFor="let avgLabel of daySummaries[0].averages">{{avgLabel.label}}</td>
+            </tr>
+            <tr class="day-summary-role" *ngFor="let dayTypeSummaryAverage of dayTypeSummaryAverages"
+                [ngStyle]="{'background-color': dayTypeSummaryAverage.dayType.color}">
+                <td>
+                    {{dayTypeSummaryAverage.dayType.label}}
+                </td>
+                <td>
+                    {{dayTypeSummaryAverage.average | number}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="p-2">
     <label class="group-label">Daily Averages</label>
-    <table class="table table-striped">
+    <table class="table table-striped mb-0">
         <tbody>
             <tr>
                 <td class="bold">Day</td>
                 <td class="bold" *ngFor="let avgLabel of daySummaries[0].averages">{{avgLabel.label}}</td>
             </tr>
-            <tr class="day-summary-role" *ngFor="let daySummary of daySummaries" [ngStyle]="{'background-color': getDateColor(daySummary)}">
+            <tr class="day-summary-role" *ngFor="let daySummary of daySummaries"
+                [ngStyle]="{'background-color': getDateColor(daySummary)}">
                 <td>
                     {{daySummary.date | date}}
                 </td>
