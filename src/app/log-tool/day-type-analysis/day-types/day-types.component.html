@@ -3,27 +3,31 @@
     <table class="table mb-0">
         <tbody>
             <tr>
-                <td class="w-25 bold text-center">Use</td>
-                <td class="bold">Label</td>
+                <td class="w-25 bold text-center">Label</td>
+                <td class="bold">Dates</td>
             </tr>
-            <tr *ngFor="let dayType of secondaryDayTypes">
-                <td class="w-25 text-center">
+            <tr *ngFor="let dayType of secondaryDayTypes" [ngStyle]="{'background-color': dayType.color}">
+                <!-- <td class="w-25 text-center">
                     <input type="checkbox" [disabled]="true" [(ngModel)]="dayType.useDayType" (change)="setDayTypes()">
+                </td> -->
+                <td class="day-type-label text-center">
+                    {{dayType.label}}
                 </td>
-                <td class="day-type-label" [ngStyle]="{'background-color': dayType.color}">{{dayType.label}}
-                    <br *ngIf="dayType.dates.length != 0">
-                    <span class="pl-2" *ngFor="let date of dayType.dates">{{date | date}}
+                <td class="day-type-label">
+                    <span *ngFor="let date of dayType.dates">{{date | date}}
                         <br>
                     </span>
                 </td>
             </tr>
-            <tr *ngFor="let dayType of dayTypes">
-                <td class="w-25 text-center">
+            <tr *ngFor="let dayType of dayTypes" [ngStyle]="{'background-color': dayType.color}">
+                <!-- <td class="w-25 text-center">
                     <input type="checkbox" [(ngModel)]="dayType.useDayType" (change)="setDayTypes()">
+                </td> -->
+                <td class="day-type-label text-center">
+                    {{dayType.label}}
                 </td>
-                <td class="day-type-label" [ngStyle]="{'background-color': dayType.color}">{{dayType.label}}
-                    <br *ngIf="dayType.dates.length != 0">
-                    <span class="pl-2" *ngFor="let date of dayType.dates">{{date | date}}
+                <td class="day-type-label">
+                    <span *ngFor="let date of dayType.dates">{{date | date}}
                         <br>
                     </span>
                 </td>

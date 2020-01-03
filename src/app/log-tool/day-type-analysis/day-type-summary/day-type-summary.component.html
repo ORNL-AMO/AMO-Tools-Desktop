@@ -1,5 +1,7 @@
 <div class="p-2">
-    <label class="group-label">Day Type Averages</label>
+    <label class="group-label">Day Type Averages
+    </label>
+    <a *ngIf="selectedGraphType != 'dayType'" class="small pull-right click-link" (click)="showDayTypeGraph()">Show Graph</a>
     <table class="table table-striped mb-0">
         <tbody>
             <tr>
@@ -20,7 +22,9 @@
 </div>
 
 <div class="p-2">
-    <label class="group-label">Daily Averages</label>
+    <label class="group-label">Daily Averages
+    </label>
+    <a *ngIf="selectedGraphType != 'daily'" class="small pull-right click-link" (click)="showDailyGraph()">Show Graph</a>
     <table class="table table-striped mb-0">
         <tbody>
             <tr>

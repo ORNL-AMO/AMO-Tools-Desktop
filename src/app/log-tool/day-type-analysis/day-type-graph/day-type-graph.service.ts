@@ -7,17 +7,28 @@ import { BehaviorSubject } from 'rxjs';
 export class DayTypeGraphService {
 
   selectedDataField: BehaviorSubject<string>;
+  selectedGraphType: BehaviorSubject<string>;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolService: LogToolService) {
     this.selectedDataField = new BehaviorSubject<string>(undefined);
+    this.selectedGraphType = new BehaviorSubject<string>('daily');
   }
 
-  getDayTypeScatterPlotData(): Array<{ xData: Array<any>, yData: Array<number>, date: Date, color: string }> {
-    let dayTypePlotData: Array<{ xData: Array<any>, yData: Array<number>, date: Date, color: string }> = new Array();
-    this.dayTypeAnalysisService.daySummaries.forEach((daySummary) => {
-      let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(daySummary.dayData);
-      let color: string = this.getDateColor(daySummary);
-      dayTypePlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, date: daySummary.date, color: color });
-    })
+  getDayTypeScatterPlotData(): Array<{ xData: Array<any>, yData: Array<number>, name: string, color: string }> {
+    let dayTypePlotData: Array<{ xData: Array<any>, yData: Array<number>, name: string, color: string }> = new Array();
+    if (this.selectedGraphType.getValue() == 'daily') {
+      this.dayTypeAnalysisService.daySummaries.forEach((daySummary) => {
+        let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(daySummary.dayData);
+        let color: string = this.getDateColor(daySummary);
+        dayTypePlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: daySummary.date.toUTCString(), color: color });
+      })
+    } else {
+      let dayTypeSummaries = this.dayTypeAnalysisService.dayTypeSummaries.getValue();
+      dayTypeSummaries.forEach(summary => {
+        let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(summary.data);
+        let color: string = summary.dayType.color;
+        dayTypePlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: summary.dayType.label, color: color });
+      })
+    }
     return dayTypePlotData;
   }
 

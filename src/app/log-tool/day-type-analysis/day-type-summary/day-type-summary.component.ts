@@ -15,26 +15,37 @@ export class DayTypeSummaryComponent implements OnInit {
   dayTypeSummaries: Array<DayTypeSummary>;
   dayTypesSub: Subscription;
   dayTypeSummaryAverages: Array<{ dayType: DayType, average: number }>;
+  selectedGraphTypeSub: Subscription;
+  selectedGraphType: string;
+  secondaryDayTypesSub: Subscription;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService) { }
 
   ngOnInit() {
     this.daySummaries = this.dayTypeAnalysisService.daySummaries;
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(val => {
       this.dayTypeAnalysisService.setDayTypeSummaries();
-    });;
+    });
+    this.secondaryDayTypesSub = this.dayTypeAnalysisService.secondaryDayTypes.subscribe(val => {
+      this.dayTypeAnalysisService.setDayTypeSummaries();
+    });
     this.dayTypeSummariesSub = this.dayTypeAnalysisService.dayTypeSummaries.subscribe(val => {
       this.dayTypeSummaries = val;
       if (this.dayTypeSummaries == undefined) {
         this.dayTypeAnalysisService.setDayTypeSummaries();
       }
-      console.log(this.dayTypeSummaries)
       this.setDayTypeSummaryAverages();
+    });
+
+    this.selectedGraphTypeSub = this.dayTypeGraphService.selectedGraphType.subscribe(val => {
+      this.selectedGraphType = val;
     });
   }
 
   ngOnDestroy() {
     this.dayTypeSummariesSub.unsubscribe();
     this.dayTypesSub.unsubscribe();
+    this.selectedGraphTypeSub.unsubscribe();
+    this.secondaryDayTypesSub.unsubscribe();
   }
 
 
@@ -53,6 +64,14 @@ export class DayTypeSummaryComponent implements OnInit {
         }
       )
     })
+  }
+
+  showDayTypeGraph() {
+    this.dayTypeGraphService.selectedGraphType.next('dayType');
+  }
+
+  showDailyGraph() {
+    this.dayTypeGraphService.selectedGraphType.next('daily');
   }
 
 }

@@ -218,15 +218,17 @@ export class DayTypeAnalysisService {
     //day types
     let currentDayTypes: Array<DayType> = this.dayTypes.getValue();
     currentDayTypes.forEach(dayType => {
-      if(dayType.useDayType == true){
+      if (dayType.dates.length != 0) {
         let dayTypeSummary: DayTypeSummary = this.getDayTypeSummary(dayType);
         dayTypeSummaries.push(dayTypeSummary);
-      }      
+      }
     });
     let secondaryDayTypes: Array<DayType> = this.secondaryDayTypes.getValue();
     secondaryDayTypes.forEach(dayType => {
-      let dayTypeSummary: DayTypeSummary = this.getDayTypeSummary(dayType);
-      dayTypeSummaries.push(dayTypeSummary);
+      if (dayType.dates.length != 0) {
+        let dayTypeSummary: DayTypeSummary = this.getDayTypeSummary(dayType);
+        dayTypeSummaries.push(dayTypeSummary);
+      }
     });
     this.dayTypeSummaries.next(dayTypeSummaries);
   }
