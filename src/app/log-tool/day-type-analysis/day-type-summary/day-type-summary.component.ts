@@ -3,6 +3,7 @@ import { DayTypeAnalysisService, DaySummary, DayTypeSummary, DayType } from '../
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
+import { LogToolService, LogToolField } from '../../log-tool.service';
 @Component({
   selector: 'app-day-type-summary',
   templateUrl: './day-type-summary.component.html',
@@ -17,22 +18,22 @@ export class DayTypeSummaryComponent implements OnInit {
   dayTypeSummaryAverages: Array<{ dayType: DayType, average: number }>;
   selectedGraphTypeSub: Subscription;
   selectedGraphType: string;
-  secondaryDayTypesSub: Subscription;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService) { }
+  selectedDataFieldSub: Subscription;
+  selectedDataField: LogToolField;
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private logToolService: LogToolService) { }
 
   ngOnInit() {
+    this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(field => {
+      this.selectedDataField = field;
+    });
     this.daySummaries = this.dayTypeAnalysisService.daySummaries;
+
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(val => {
       this.dayTypeAnalysisService.setDayTypeSummaries();
     });
-    this.secondaryDayTypesSub = this.dayTypeAnalysisService.secondaryDayTypes.subscribe(val => {
-      this.dayTypeAnalysisService.setDayTypeSummaries();
-    });
+
     this.dayTypeSummariesSub = this.dayTypeAnalysisService.dayTypeSummaries.subscribe(val => {
       this.dayTypeSummaries = val;
-      if (this.dayTypeSummaries == undefined) {
-        this.dayTypeAnalysisService.setDayTypeSummaries();
-      }
       this.setDayTypeSummaryAverages();
     });
 
@@ -45,7 +46,7 @@ export class DayTypeSummaryComponent implements OnInit {
     this.dayTypeSummariesSub.unsubscribe();
     this.dayTypesSub.unsubscribe();
     this.selectedGraphTypeSub.unsubscribe();
-    this.secondaryDayTypesSub.unsubscribe();
+    this.selectedDataFieldSub.unsubscribe();
   }
 
 
@@ -56,7 +57,7 @@ export class DayTypeSummaryComponent implements OnInit {
   setDayTypeSummaryAverages() {
     this.dayTypeSummaryAverages = new Array();
     this.dayTypeSummaries.forEach(summary => {
-      let average: number = _.meanBy(summary.data, this.dayTypeGraphService.selectedDataField.getValue());
+      let average: number = _.meanBy(summary.data, this.selectedDataField.fieldName);
       this.dayTypeSummaryAverages.push(
         {
           dayType: summary.dayType,
@@ -74,4 +75,7 @@ export class DayTypeSummaryComponent implements OnInit {
     this.dayTypeGraphService.selectedGraphType.next('daily');
   }
 
+  getAverageDataItem(daySummary: DaySummary): { field: LogToolField, value: number } {
+    return _.find(daySummary.averages, (averageObj) => { return averageObj.field.fieldName == this.selectedDataField.fieldName });
+  }
 }

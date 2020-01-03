@@ -1,41 +1,39 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { LogToolService } from '../log-tool.service';
+import { LogToolService, LogToolField } from '../log-tool.service';
 import { BehaviorSubject } from 'rxjs';
-import * as moment from 'moment';
+import { LogToolDataService } from '../log-tool-data.service';
 @Injectable()
 export class DayTypeAnalysisService {
 
+  selectedDataField: BehaviorSubject<LogToolField>;
   daySummaries: Array<DaySummary>;
-  dayTypes: BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>;
-  secondaryDayTypes: BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>;
-  validDayTypeNumberOfDataPoints: number;
+  dayTypes: BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>;
+  // secondaryDayTypes: BehaviorSubject<Array<DayType>>;
   dayTypeSummaries: BehaviorSubject<Array<DayTypeSummary>>;
-  constructor(private logToolService: LogToolService) {
-    this.dayTypes = new BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>(new Array());
-    this.secondaryDayTypes = new BehaviorSubject<Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>>(new Array());
+  constructor(private logToolDataService: LogToolDataService, private logToolService: LogToolService) {
+    this.dayTypes = new BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>({ addedDayTypes: new Array(), primaryDayTypes: new Array() });
+    // this.secondaryDayTypes = new BehaviorSubject<Array<DayType>>(new Array());
     this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
+    this.selectedDataField = new BehaviorSubject<LogToolField>(undefined);
   }
 
   initSecondaryDayTypes() {
     let dayTypesArr: Array<DayType> = new Array();
-    let startDate: Date = new Date(this.logToolService.startDate);
-    let endDate: Date = new Date(this.logToolService.endDate);
-    endDate.setDate(endDate.getDate() + 1);
     let excludedDates: Array<Date> = new Array();
     let weekendDates: Array<Date> = new Array();
     let weekdayDates: Array<Date> = new Array();
 
-    for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
-      let secondaryDayType: string = this.getSecondaryDayType(tmpDate);
+    this.logToolDataService.logToolDays.forEach(day => {
+      let secondaryDayType: string = this.getSecondaryDayType(day.date);
       if (secondaryDayType == 'Excluded') {
-        excludedDates.push(new Date(tmpDate));
+        excludedDates.push(new Date(day.date));
       } else if (secondaryDayType == 'Weekend') {
-        weekendDates.push(new Date(tmpDate));
+        weekendDates.push(new Date(day.date));
       } else if (secondaryDayType == 'Weekday') {
-        weekdayDates.push(new Date(tmpDate));
+        weekdayDates.push(new Date(day.date));
       }
-    }
+    })
 
     if (excludedDates.length != 0) {
       dayTypesArr.push({
@@ -63,13 +61,12 @@ export class DayTypeAnalysisService {
         dates: weekdayDates
       });
     }
-    this.secondaryDayTypes.next(dayTypesArr);
+    this.dayTypes.next({ primaryDayTypes: dayTypesArr, addedDayTypes: [] });
   }
 
-
   getSecondaryDayType(date: Date): string {
-    let daySummary: DaySummary = this.daySummaries.find(day => { return this.checkSameDay(day.date, date) });
-    if (daySummary.dayData.length != this.validDayTypeNumberOfDataPoints) {
+    let daySummary: DaySummary = this.daySummaries.find(day => { return this.logToolDataService.checkSameDay(day.date, date) });
+    if (daySummary.dayData.length != this.logToolDataService.validNumberOfDayDataPoints) {
       return 'Excluded';
     } else {
       let dayCode: number = date.getDay();
@@ -81,150 +78,108 @@ export class DayTypeAnalysisService {
     }
   }
 
-  addSecondaryDayType(date: Date) {
+  addPrimaryDayType(date: Date) {
     let secondaryDayTypeLabel: string = this.getSecondaryDayType(date);
-    let secondaryDayTypes = this.secondaryDayTypes.getValue();
-    let addDayType = secondaryDayTypes.find(dayType => { return dayType.label == secondaryDayTypeLabel });
+    let dayTypes = this.dayTypes.getValue();
+    let addDayType = dayTypes.primaryDayTypes.find(dayType => { return dayType.label == secondaryDayTypeLabel });
     addDayType.dates.push(date);
-    this.secondaryDayTypes.next(secondaryDayTypes);
+    this.dayTypes.next(dayTypes);
   }
 
   getDaySummaries() {
     this.daySummaries = new Array();
-    // this.filteredDays = new Array();
-    let dayDataNumberOfEntries: Array<number> = new Array();
-    let dataDays = this.getDataDays();
-    dataDays.forEach(day => {
-      if (day[this.logToolService.dateField]) {
-        let tmpDay: Date = new Date(day[this.logToolService.dateField]);
-        let dayData = _.filter(this.logToolService.importDataFromCsv.data, (dataItem) => {
-          if (dataItem[this.logToolService.dateField]) {
-            let date = new Date(dataItem[this.logToolService.dateField]);
-            return this.checkSameDay(tmpDay, date);
+    this.logToolDataService.logToolDays.forEach(logToolDay => {
+      let dayAverages: Array<{ value: number, field: LogToolField }> = new Array();
+      this.logToolService.fields.forEach(field => {
+        if (field.fieldName != this.logToolService.dateField && field.useField == true) {
+          if (this.selectedDataField.getValue() == undefined) {
+            this.selectedDataField.next(field);
           }
-        });
-        // this.filteredDays.push(dayData);
-        let dayAverages: Array<{ value: number, label: string }> = new Array();
-        this.logToolService.fields.forEach(field => {
-          if (field.fieldName != this.logToolService.dateField && field.useField == true) {
-            let mean = _.meanBy(dayData, field.fieldName);
-            dayAverages.push({ value: mean, label: field.alias });
-          }
-        })
-        dayDataNumberOfEntries.push(dayData.length);
-        this.daySummaries.push({ date: tmpDay, averages: dayAverages, dayData: dayData });
-      }
-    });
-
-    let tmpArr = _.countBy(dayDataNumberOfEntries);
-    let tmpArr2 = _.entries(tmpArr)
-    this.validDayTypeNumberOfDataPoints = Number(_.maxBy(_.last(tmpArr2)));
-  }
-
-  getDataDays(): Array<any> {
-    let dataDays: Array<any> = new Array();
-    let startDate: Date = new Date(this.logToolService.startDate);
-    let endDate: Date = new Date(this.logToolService.endDate);
-    endDate.setDate(endDate.getDate() + 1);
-    for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
-      let dataDay = _.find(this.logToolService.importDataFromCsv.data, (dataItem) => {
-        let tmpDay: Date = new Date(dataItem[this.logToolService.dateField]);
-        return this.checkSameDay(tmpDay, tmpDate);
+          let fieldAverage: number = _.meanBy(logToolDay.data, field.fieldName);
+          dayAverages.push({ field: field, value: fieldAverage });
+        }
       });
-      if (dataDay != undefined) {
-        dataDays.push(dataDay);
-      }
-    }
-    return dataDays;
-  }
-
-  checkSameDay(day1: Date, day2: Date) {
-    return moment(day1).isSame(day2, 'day');
-  }
-
-
-  getDayType(_date: Date): { color: string, label: string, useDayType: boolean, dates?: Array<Date> } {
-    let dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }> = this.dayTypes.getValue();
-    //iterate day types to see if any match with date
-    let typeOfDay: { color: string, label: string, useDayType: boolean, dates?: Array<Date> } = _.find(dayTypes, (dayType) => {
-      let test: boolean = false;
-      if (dayType.useDayType == true) {
-        dayType.dates.forEach(date => {
-          if (this.checkSameDay(date, _date)) {
-            test = true;
-          }
-        });
-      }
-      return test;
+      this.daySummaries.push({ date: logToolDay.date, averages: dayAverages, dayData: logToolDay.data })
     });
-    return typeOfDay;
   }
 
-  toggleDateType(_date: Date) {
-    let _dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }> = this.dayTypes.getValue();
-    if (_dayTypes.length != 0) {
-      let dayTypeIndex: number = _.findIndex(_dayTypes, (dayType) => {
-        let test: boolean = false;
-        dayType.dates.forEach(date => {
-          if (this.checkSameDay(date, _date)) {
-            test = true;
-          }
-        });
-        return test;
+  getDayType(_date: Date): DayType {
+    let dayTypes = this.dayTypes.getValue();
+    let combinedDayTypes: Array<DayType> = _.union(dayTypes.primaryDayTypes, dayTypes.addedDayTypes);
+    //iterate day types to see if any match with date
+    let typeOfDay: DayType = _.find(combinedDayTypes, (dayType) => {
+      return this.checkDateExistsInDayType(_date, dayType);
+    });
+    if (typeOfDay) {
+      return typeOfDay;
+    }
+  }
+
+  checkDateExistsInDayType(checkDateExists: Date, dayType: DayType): boolean {
+    let test: boolean = false;
+    if (dayType.useDayType == true) {
+      dayType.dates.forEach(date => {
+        if (this.logToolDataService.checkSameDay(date, checkDateExists)) {
+          test = true;
+        }
+      });
+    }
+    return test;
+  }
+
+  toggleDateType(toggleDate: Date) {
+    let dayTypes = this.dayTypes.getValue();
+    if (dayTypes.addedDayTypes.length != 0) {
+      let dayTypeIndex: number = _.findIndex(dayTypes.addedDayTypes, (dayType) => {
+        return this.checkDateExistsInDayType(toggleDate, dayType);
       });
       if (dayTypeIndex != -1) {
-        _.remove(_dayTypes[dayTypeIndex].dates, (date) => {
-          return this.checkSameDay(date, _date);
+        _.remove(dayTypes.addedDayTypes[dayTypeIndex].dates, (dateToBeRemoved) => {
+          return this.logToolDataService.checkSameDay(dateToBeRemoved, toggleDate);
         });
         dayTypeIndex++;
-        if (dayTypeIndex < _dayTypes.length) {
-          _dayTypes[dayTypeIndex].dates.push(_date);
+        if (dayTypeIndex < dayTypes.addedDayTypes.length) {
+          dayTypes[dayTypeIndex].dates.push(toggleDate);
         } else {
-          this.addSecondaryDayType(_date);
+          this.addPrimaryDayType(toggleDate);
         }
-        this.dayTypes.next(_dayTypes);
+        this.dayTypes.next(dayTypes);
       } else {
-        _dayTypes[0].dates.push(_date);
-        this.removeFromSecondary(_date);
-        this.dayTypes.next(_dayTypes);
+        dayTypes.addedDayTypes[0].dates.push(toggleDate);
+        this.removeFromPrimary(toggleDate);
+        this.dayTypes.next(dayTypes);
       }
     }
   }
 
-  removeFromSecondary(_date: Date) {
-    let secondaryDayTypes = this.secondaryDayTypes.getValue();
-    if (this.secondaryDayTypes.getValue().length != 0) {
-      let dayTypeIndex: number = _.findIndex(secondaryDayTypes, (dayType) => {
-        let test: boolean = false;
-        dayType.dates.forEach(date => {
-          if (this.checkSameDay(date, _date)) {
-            test = true;
-          }
-        });
-        return test;
+  removeFromPrimary(dateToBeRemoved: Date) {
+    let dayTypes = this.dayTypes.getValue();
+    if (dayTypes.primaryDayTypes.length != 0) {
+      let dayTypeIndex: number = _.findIndex(dayTypes.primaryDayTypes, (dayType) => {
+        return this.checkDateExistsInDayType(dateToBeRemoved, dayType);
       });
       if (dayTypeIndex != -1) {
-        _.remove(secondaryDayTypes[dayTypeIndex].dates, (date) => {
-          return this.checkSameDay(date, _date);
+        _.remove(dayTypes.primaryDayTypes[dayTypeIndex].dates, (date) => {
+          return this.logToolDataService.checkSameDay(date, dateToBeRemoved);
         });
       }
     }
-    this.secondaryDayTypes.next(secondaryDayTypes);
+    this.dayTypes.next(dayTypes);
   }
 
 
   setDayTypeSummaries() {
     let dayTypeSummaries: Array<DayTypeSummary> = new Array();
     //day types
-    let currentDayTypes: Array<DayType> = this.dayTypes.getValue();
-    currentDayTypes.forEach(dayType => {
+    let dayTypes = this.dayTypes.getValue();
+    dayTypes.addedDayTypes.forEach(dayType => {
       if (dayType.dates.length != 0) {
         let dayTypeSummary: DayTypeSummary = this.getDayTypeSummary(dayType);
         dayTypeSummaries.push(dayTypeSummary);
       }
     });
-    let secondaryDayTypes: Array<DayType> = this.secondaryDayTypes.getValue();
-    secondaryDayTypes.forEach(dayType => {
+    // let secondaryDayTypes: Array<DayType> = this.secondaryDayTypes.getValue();
+    dayTypes.primaryDayTypes.forEach(dayType => {
       if (dayType.dates.length != 0) {
         let dayTypeSummary: DayTypeSummary = this.getDayTypeSummary(dayType);
         dayTypeSummaries.push(dayTypeSummary);
@@ -234,17 +189,19 @@ export class DayTypeAnalysisService {
   }
 
   getDayTypeSummary(dayType: DayType): DayTypeSummary {
-    let dayTypeData: Array<any> = _.filter(this.logToolService.importDataFromCsv.data, (dataItem) => {
-      let dataItemDate: Date = new Date(dataItem[this.logToolService.dateField]);
-      let test = _.find(dayType.dates, (date) => { return this.checkSameDay(date, dataItemDate) });
+    let dayTypeData: Array<any> = _.filter(this.logToolDataService.logToolDays, (logToolDay) => {
+      let test = _.find(dayType.dates, (dayTypeDate) => { return this.logToolDataService.checkSameDay(dayTypeDate, logToolDay.date) });
       if (test != undefined) {
         return true;
       } else { return false };
     });
-
+    let data: Array<any> = new Array();
+    dayTypeData.forEach(dataItem => {
+      data = _.union(data, dataItem.data)
+    });
     return {
       dayType: dayType,
-      data: dayTypeData
+      data: data
     }
   }
 }
@@ -252,7 +209,7 @@ export class DayTypeAnalysisService {
 
 export interface DaySummary {
   date: Date,
-  averages: Array<{ value: number, label: string }>,
+  averages: Array<{ value: number, field: LogToolField }>,
   dayData: Array<any>
 }
 

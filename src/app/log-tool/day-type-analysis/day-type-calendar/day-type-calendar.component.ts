@@ -4,6 +4,7 @@ import { DayTypeAnalysisService, DaySummary } from '../day-type-analysis.service
 import * as _ from 'lodash';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 import { LogToolService } from '../../log-tool.service';
+import { LogToolDataService } from '../../log-tool-data.service';
 @Component({
   selector: 'app-day-type-calendar',
   templateUrl: './day-type-calendar.component.html',
@@ -14,7 +15,7 @@ export class DayTypeCalendarComponent implements OnInit {
   model: NgbDateStruct;
   startDate: { year: number, month: number, day: number };
   numberOfMonths: number;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private logToolService: LogToolService) { }
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private logToolService: LogToolService, private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
     this.startDate = {
@@ -27,9 +28,9 @@ export class DayTypeCalendarComponent implements OnInit {
 
   getDateBackground(date: NgbDateStruct) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.dayTypeAnalysisService.checkSameDay(d, daySummary.date) });
+    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.date) });
     if (testExists != undefined) {
-      let daySummary: DaySummary = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.dayTypeAnalysisService.checkSameDay(d, daySummary.date) });
+      let daySummary: DaySummary = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.date) });
       return this.dayTypeGraphService.getDateColor(daySummary);
     } else {
       return 'lightgray';
@@ -38,7 +39,7 @@ export class DayTypeCalendarComponent implements OnInit {
 
   onDateSelect(date: NgbDate) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.dayTypeAnalysisService.checkSameDay(d, daySummary.date) });
+    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.date) });
     if (testExists != undefined) {
       let d: Date = new Date(date.year, date.month - 1, date.day);
       this.dayTypeAnalysisService.toggleDateType(d);

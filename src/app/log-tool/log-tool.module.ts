@@ -27,6 +27,7 @@ import { VisualizeGraphComponent } from './visualize/visualize-graph/visualize-g
 import { VisualizeDataComponent } from './visualize/visualize-data/visualize-data.component';
 import { VisualizeService } from './visualize/visualize.service';
 import { VisualizeMenuComponent } from './visualize/visualize-menu/visualize-menu.component';
+import { LogToolDataService } from './log-tool-data.service';
 PlotlyModule.plotlyjs = PlotlyJs;
 
 @NgModule({
@@ -60,7 +61,8 @@ PlotlyModule.plotlyjs = PlotlyJs;
     LogToolService,
     DayTypeAnalysisService,
     DayTypeGraphService,
-    VisualizeService
+    VisualizeService,
+    LogToolDataService
   ]
 })
 export class LogToolModule { }

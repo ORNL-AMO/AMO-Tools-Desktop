@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DayTypeAnalysisService, DaySummary } from '../day-type-analysis.service';
+import { DayTypeAnalysisService, DaySummary, DayType } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 @Component({
@@ -12,10 +12,8 @@ export class DayTypesComponent implements OnInit {
   addNewDayType: boolean = false;
   newDayTypeName: string = "New Day Type";
   newDayTypeColor: string = "#6a28d7";
-  dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>;
+  dayTypes: { addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> };
   dayTypesSub: Subscription;
-  secondaryDayTypesSub: Subscription;
-  secondaryDayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }>;
   daySummaries: Array<DaySummary>;
   selectedDays: Array<string> = [];
   weekdaySelected: boolean = true;
@@ -27,15 +25,11 @@ export class DayTypesComponent implements OnInit {
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(val => {
       this.dayTypes = val;
     });
-    this.secondaryDayTypesSub = this.dayTypeAnalysisService.secondaryDayTypes.subscribe(val => {
-      this.secondaryDayTypes = val;
-    })
     this.daySummaries = this.dayTypeAnalysisService.daySummaries;
   }
 
   ngOnDestroy() {
     this.dayTypesSub.unsubscribe();
-    this.secondaryDayTypesSub.unsubscribe();
   }
 
   showAddNewDayType() {
@@ -47,14 +41,13 @@ export class DayTypesComponent implements OnInit {
   }
 
   submitNewDayType() {
-    let dayTypes: Array<{ color: string, label: string, useDayType: boolean, dates?: Array<Date> }> = this.dayTypeAnalysisService.dayTypes.getValue();
     let dates: Array<Date> = new Array();
     this.selectedDays.forEach(date => {
-      this.dayTypeAnalysisService.removeFromSecondary(new Date(date));
+      this.dayTypeAnalysisService.removeFromPrimary(new Date(date));
       dates.push(new Date(date));
     });
-
-    dayTypes.push({
+    let dayTypes: { addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> } = this.dayTypeAnalysisService.dayTypes.getValue();
+    dayTypes.addedDayTypes.push({
       color: this.newDayTypeColor,
       label: this.newDayTypeName,
       useDayType: true,
@@ -63,8 +56,6 @@ export class DayTypesComponent implements OnInit {
     this.dayTypeAnalysisService.dayTypes.next(dayTypes);
     this.hideAddNewDayType();
   }
-
-
 
   setDayTypes() {
     this.dayTypeAnalysisService.dayTypes.next(this.dayTypes);

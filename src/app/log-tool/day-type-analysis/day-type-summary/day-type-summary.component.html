@@ -1,12 +1,13 @@
 <div class="p-2">
     <label class="group-label">Day Type Averages
     </label>
-    <a *ngIf="selectedGraphType != 'dayType'" class="small pull-right click-link" (click)="showDayTypeGraph()">Show Graph</a>
+    <a *ngIf="selectedGraphType != 'dayType'" class="small pull-right click-link" (click)="showDayTypeGraph()">Show
+        Graph</a>
     <table class="table table-striped mb-0">
         <tbody>
             <tr>
                 <td class="bold">Day Type</td>
-                <td class="bold" *ngFor="let avgLabel of daySummaries[0].averages">{{avgLabel.label}}</td>
+                <td class="bold">{{getAverageDataItem(daySummaries[0]).field.alias}}</td>
             </tr>
             <tr class="day-summary-role" *ngFor="let dayTypeSummaryAverage of dayTypeSummaryAverages"
                 [ngStyle]="{'background-color': dayTypeSummaryAverage.dayType.color}">
@@ -24,20 +25,21 @@
 <div class="p-2">
     <label class="group-label">Daily Averages
     </label>
-    <a *ngIf="selectedGraphType != 'daily'" class="small pull-right click-link" (click)="showDailyGraph()">Show Graph</a>
+    <a *ngIf="selectedGraphType != 'daily'" class="small pull-right click-link" (click)="showDailyGraph()">Show
+        Graph</a>
     <table class="table table-striped mb-0">
         <tbody>
             <tr>
                 <td class="bold">Day</td>
-                <td class="bold" *ngFor="let avgLabel of daySummaries[0].averages">{{avgLabel.label}}</td>
+                <td class="bold">{{getAverageDataItem(daySummaries[0]).field.alias}}</td>
             </tr>
             <tr class="day-summary-role" *ngFor="let daySummary of daySummaries"
                 [ngStyle]="{'background-color': getDateColor(daySummary)}">
                 <td>
                     {{daySummary.date | date}}
                 </td>
-                <td *ngFor=" let averageVal of daySummary.averages">
-                    {{averageVal.value | number}}
+                <td>
+                    {{getAverageDataItem(daySummary).value | number}}
                 </td>
             </tr>
         </tbody>

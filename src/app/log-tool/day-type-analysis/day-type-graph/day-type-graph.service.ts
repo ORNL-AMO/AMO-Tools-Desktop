@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { DayTypeAnalysisService, DaySummary } from '../day-type-analysis.service';
+import { DayTypeAnalysisService, DaySummary, DayType } from '../day-type-analysis.service';
 import { LogToolService } from '../../log-tool.service';
 import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class DayTypeGraphService {
 
-  selectedDataField: BehaviorSubject<string>;
+
   selectedGraphType: BehaviorSubject<string>;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolService: LogToolService) {
-    this.selectedDataField = new BehaviorSubject<string>(undefined);
     this.selectedGraphType = new BehaviorSubject<string>('daily');
   }
 
@@ -51,7 +50,7 @@ export class DayTypeGraphService {
           return compareVal == dateVal;
         };
       });
-      let dayMean: number = _.meanBy(filteredDaysByHour, (filteredDay) => { return filteredDay[this.selectedDataField.getValue()] });
+      let dayMean: number = _.meanBy(filteredDaysByHour, (filteredDay) => { return filteredDay[this.dayTypeAnalysisService.selectedDataField.getValue().fieldName] });
       yData.push(dayMean);
       xData.push(tmpDay.getHours());
     })
@@ -59,20 +58,11 @@ export class DayTypeGraphService {
   }
 
   getDateColor(daySummary: DaySummary): string {
-    let typeOfDay: { color: string, label: string, useDayType: boolean, dates?: Array<Date> } = this.dayTypeAnalysisService.getDayType(daySummary.date);
-    if (typeOfDay != undefined) {
+    let typeOfDay: DayType = this.dayTypeAnalysisService.getDayType(daySummary.date);
+    if (typeOfDay) {
       return typeOfDay.color;
     } else {
-      if (daySummary.dayData.length != this.dayTypeAnalysisService.validDayTypeNumberOfDataPoints) {
-        return 'red';
-      } else {
-        let dayCode: number = daySummary.date.getDay();
-        if (dayCode == 0 || dayCode == 6) {
-          return 'blue';
-        } else {
-          return 'green';
-        }
-      }
+      return;
     }
   }
 

@@ -3,6 +3,7 @@ import { CsvToJsonService, CsvImportData } from '../../../shared/helper-services
 import * as moment from 'moment';
 import { _dateFormats } from './date-formats';
 import { LogToolService } from '../../log-tool.service';
+import { LogToolDataService } from '../../log-tool-data.service';
 @Component({
   selector: 'app-setup-data',
   templateUrl: './setup-data.component.html',
@@ -19,7 +20,7 @@ export class SetupDataComponent implements OnInit {
   dateFormat: Array<string> = ['DD/MM/YY hh:mm a', 'DD/MM/YY hh:mm A'];
   dateFormats: Array<{ display: string, value: Array<string> }> = _dateFormats;
   validDate: boolean;
-  constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService) { }
+  constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
   }
@@ -55,6 +56,8 @@ export class SetupDataComponent implements OnInit {
     if (foundDate != undefined) {
       this.validDate = true;
       this.logToolService.parseImportData();
+      this.logToolDataService.setLogToolDays();
+      this.logToolDataService.setValidNumberOfDayDataPoints();
     } else {
       this.validDate = false;
     }
