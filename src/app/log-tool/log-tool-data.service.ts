@@ -24,12 +24,11 @@ export class LogToolDataService {
         data: filteredDayData
       });
     }
-    console.log(this.logToolDays);
   }
 
   getDataForDay(date: Date, data: Array<any>): Array<any> {
-    //remove matching day items from all day data and return array
-    let filteredDayData: Array<any> = _.remove(data, (dataItem) => {
+    //filter matching day items from all day data and return array
+    let filteredDayData: Array<any> = _.filter(data, (dataItem) => {
       let dataItemDate: Date = new Date(dataItem[this.logToolService.dateField]);
       return this.checkSameDay(date, dataItemDate);
     });
@@ -40,7 +39,7 @@ export class LogToolDataService {
     return moment(day1).isSame(day2, 'day');
   }
 
-  setValidNumberOfDayDataPoints(){
+  setValidNumberOfDayDataPoints() {
     let dayDataNumberOfEntries: Array<number> = new Array();
     this.logToolDays.forEach(day => {
       dayDataNumberOfEntries.push(day.data.length);

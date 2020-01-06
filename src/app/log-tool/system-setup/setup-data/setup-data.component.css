@@ -18,3 +18,7 @@ tbody{
     cursor: pointer;
     background-color: #efefef;
 }
+
+.importing-text{
+    font-size: xx-large;
+}

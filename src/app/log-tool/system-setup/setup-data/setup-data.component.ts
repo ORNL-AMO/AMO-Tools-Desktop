@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CsvToJsonService, CsvImportData } from '../../../shared/helper-services/csv-to-json.service';
 import * as moment from 'moment';
 import { _dateFormats } from './date-formats';
@@ -20,11 +20,11 @@ export class SetupDataComponent implements OnInit {
   dateFormat: Array<string> = ['DD/MM/YY hh:mm a', 'DD/MM/YY hh:mm A'];
   dateFormats: Array<{ display: string, value: Array<string> }> = _dateFormats;
   validDate: boolean;
-  constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private logToolDataService: LogToolDataService) { }
+  importingData: boolean = false;
+  constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private logToolDataService: LogToolDataService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
-
 
   setImportFile($event) {
     if ($event.target.files) {
@@ -50,17 +50,23 @@ export class SetupDataComponent implements OnInit {
   }
 
   parseImportData() {
-    this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
-    this.logToolService.setImportDataFromCsv(this.importDataFromCsv);
-    let foundDate: string = this.testForDate();
-    if (foundDate != undefined) {
-      this.validDate = true;
-      this.logToolService.parseImportData();
-      this.logToolDataService.setLogToolDays();
-      this.logToolDataService.setValidNumberOfDayDataPoints();
-    } else {
-      this.validDate = false;
-    }
+    this.importingData = true;
+    this.cd.detectChanges();
+    setTimeout(() => {
+      this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
+      this.logToolService.setImportDataFromCsv(this.importDataFromCsv);
+      let foundDate: string = this.testForDate();
+      if (foundDate != undefined) {
+        this.validDate = true;
+        this.logToolService.parseImportData();
+        this.logToolDataService.setLogToolDays();
+        this.logToolDataService.setValidNumberOfDayDataPoints();
+      } else {
+        this.validDate = false;
+      }
+      this.importingData = false;
+      this.cd.detectChanges();
+    }, 500);
   }
 
   testForDate(): string {
@@ -75,7 +81,7 @@ export class SetupDataComponent implements OnInit {
     return undefined;
   }
 
-  setDateFormat(){
+  setDateFormat() {
     this.logToolService.dateFormat = this.dateFormat;
   }
 }
