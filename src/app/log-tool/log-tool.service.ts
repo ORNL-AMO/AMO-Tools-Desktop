@@ -25,6 +25,7 @@ export class LogToolService {
   parseImportData() {
     this.setFields(this.importDataFromCsv.meta.fields);
     if (this.dateField != undefined) {
+      this.importDataFromCsv.data = _.filter(this.importDataFromCsv.data, (data) => { return data[this.dateField] != undefined });
       this.importDataFromCsv.data = _.orderBy(this.importDataFromCsv.data, (data) => { return new Date(data[this.dateField]) }, ['asc']);
     }
     this.numberOfDataPoints = this.importDataFromCsv.data.length;
