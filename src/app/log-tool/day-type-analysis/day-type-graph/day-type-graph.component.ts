@@ -20,6 +20,8 @@ export class DayTypeGraphComponent implements OnInit {
 
   ngOnInit() {
     this.dayTypesSubscription = this.dayTypeAnalysisService.dayTypes.subscribe(dayTypes => {
+      this.dayTypeGraphService.setDayTypeScatterPlotData();
+      this.dayTypeGraphService.setIndividualDayScatterPlotData();
       this.setGraphData();
     });
 

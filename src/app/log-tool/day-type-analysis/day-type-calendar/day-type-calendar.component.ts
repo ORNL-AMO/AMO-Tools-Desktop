@@ -28,10 +28,9 @@ export class DayTypeCalendarComponent implements OnInit {
 
   getDateBackground(date: NgbDateStruct) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.date) });
-    if (testExists != undefined) {
-      let daySummary: DaySummary = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.date) });
-      return this.dayTypeGraphService.getDateColor(daySummary);
+    let testDateExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.date) });
+    if (testDateExists != undefined) {
+      return this.dayTypeGraphService.getDateColorFromDaySummary(testDateExists);
     } else {
       return 'lightgray';
     }

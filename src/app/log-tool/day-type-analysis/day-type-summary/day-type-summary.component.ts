@@ -51,7 +51,7 @@ export class DayTypeSummaryComponent implements OnInit {
 
 
   getDateColor(daySummary: DaySummary): string {
-    return this.dayTypeGraphService.getDateColor(daySummary);
+    return this.dayTypeGraphService.getDateColorFromDaySummary(daySummary);
   }
 
   setDayTypeSummaryAverages() {
