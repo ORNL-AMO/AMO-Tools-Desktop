@@ -59,12 +59,6 @@ export class LogToolService {
       });
     });
   }
-
-  getAllFieldData(fieldName: string): Array<number> {
-    let mappedValues: Array<any> = _.mapValues(this.importDataFromCsv.data, (dataItem) => { return dataItem[fieldName] });
-    let valueArr = _.values(mappedValues);
-    return valueArr;
-  }
 }
 
 export interface LogToolField {

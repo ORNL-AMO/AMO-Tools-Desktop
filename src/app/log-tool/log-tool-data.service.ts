@@ -49,6 +49,11 @@ export class LogToolDataService {
     this.validNumberOfDayDataPoints = Number(_.maxBy(_.last(tmpArr2)));
   }
 
+  getAllFieldData(fieldName: string): Array<number> {
+    let mappedValues: Array<any> = _.mapValues(this.logToolService.importDataFromCsv.data, (dataItem) => { return dataItem[fieldName] });
+    let valueArr = _.values(mappedValues);
+    return valueArr;
+  }
 }
 
 
