@@ -20,7 +20,7 @@ export class VisualizeMenuComponent implements OnInit {
   histogramDataFieldDropdown: boolean = false;
   dataFields: Array<LogToolField>;
 
-  graphTypes: Array<{ label: string, value: string }> = [{ value: 'scatter', label: 'Scatter Plot' }, { value: 'bar', label: 'Histogram' }]
+  graphTypes: Array<{ label: string, value: string }> = [{ value: 'scattergl', label: 'Scatter Plot' }, { value: 'bar', label: 'Histogram' }]
   showScatterLines: boolean = false;
   showScatterMarkers: boolean = true;
   constructor(private visualizeService: VisualizeService, private logToolService: LogToolService) { }
@@ -33,7 +33,7 @@ export class VisualizeMenuComponent implements OnInit {
     });
     this.selectedGraphDataSub = this.visualizeService.selectedGraphData.subscribe(selectedGraphData => {
       this.selectedGraphData = selectedGraphData;
-      this.setScatterBools()
+      // this.setScatterBools()
     });
   }
 
@@ -42,18 +42,18 @@ export class VisualizeMenuComponent implements OnInit {
     this.graphDataSubscription.unsubscribe();
   }
 
-  setScatterBools() {
-    if (this.selectedGraphData.scatterPlotMode == 'lines+markers') {
-      this.showScatterMarkers = true;
-      this.showScatterLines = true;
-    } else if (this.selectedGraphData.scatterPlotMode == 'markers') {
-      this.showScatterMarkers = true;
-      this.showScatterLines = false;
-    } else if (this.selectedGraphData.scatterPlotMode == 'lines') {
-      this.showScatterLines = true;
-      this.showScatterMarkers = false;
-    }
-  }
+  // setScatterBools() {
+  //   if (this.selectedGraphData.scatterPlotMode == 'lines+markers') {
+  //     this.showScatterMarkers = true;
+  //     this.showScatterLines = true;
+  //   } else if (this.selectedGraphData.scatterPlotMode == 'markers') {
+  //     this.showScatterMarkers = true;
+  //     this.showScatterLines = false;
+  //   } else if (this.selectedGraphData.scatterPlotMode == 'lines') {
+  //     this.showScatterLines = true;
+  //     this.showScatterMarkers = false;
+  //   }
+  // }
 
   toggleXDataFieldDropdown() {
     this.xDataFieldDropdown = !this.xDataFieldDropdown;

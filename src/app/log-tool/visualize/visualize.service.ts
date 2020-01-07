@@ -39,7 +39,7 @@ export class VisualizeService {
     // console.timeEnd('histogramData')
     // console.timeEnd('getNewGraphDataObj');
     return {
-      graphType: { label: 'Scatter Plot', value: 'scatter' },
+      graphType: { label: 'Scatter Plot', value: 'scattergl' },
       selectedXDataField: selectedXDataField,
       xData: xData,
       selectedYDataField: selectedYDataField,

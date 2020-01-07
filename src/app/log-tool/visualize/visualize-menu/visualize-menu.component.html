@@ -19,51 +19,51 @@
         </div>
 
 
-        <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'scatter'">
+        <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'scattergl'">
             <a class="nav-link dropdown-toggle" (click)="toggleXDataFieldDropdown()">
-                X Axis: {{selectedGraphData.selectedXDataField.fieldName}}
+                X Axis: {{selectedGraphData.selectedXDataField.alias}}
             </a>
             <div class="dropdown-menu p-0" [ngClass]="{'show': xDataFieldDropdown == true}">
                 <div class="list-group">
                     <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
                         (click)="setXDataField(dataField)"
-                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedXDataField.fieldName}">{{dataField.fieldName}}</a>
+                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedXDataField.fieldName}">{{dataField.alias}}</a>
                 </div>
             </div>
         </div>
-        <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'scatter'">
+        <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'scattergl'">
             <a class="nav-link dropdown-toggle" (click)="toggleYDataFieldDropdown()">
-                Y Axis: {{selectedGraphData.selectedYDataField.fieldName}}
+                Y Axis: {{selectedGraphData.selectedYDataField.alias}}
             </a>
             <div class="dropdown-menu p-0" [ngClass]="{'show': yDataFieldDropdown == true}">
                 <div class="list-group">
                     <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
                         (click)="setYDataField(dataField)"
-                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedYDataField.fieldName}">{{dataField.fieldName}}</a>
+                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedYDataField.fieldName}">{{dataField.alias}}</a>
                 </div>
             </div>
         </div>
         <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'bar'">
             <a class="nav-link dropdown-toggle" (click)="toggleHistogramDataFieldDropdown()">
-                Histogram Data: {{selectedGraphData.selectedYDataField.fieldName}}
+                Histogram Data: {{selectedGraphData.histogramDataField.alias}}
             </a>
             <div class="dropdown-menu p-0" [ngClass]="{'show': histogramDataFieldDropdown == true}">
                 <div class="list-group">
                     <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
                         (click)="setHistogramDataField(dataField)"
-                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.histogramDataField.fieldName}">{{dataField.fieldName}}</a>
+                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.histogramDataField.fieldName}">{{dataField.alias}}</a>
                 </div>
             </div>
         </div>
 
-        <div class="nav-item ml-2" *ngIf="selectedGraphData.graphType.value == 'scatter'">
+        <!-- <div class="nav-item ml-2" *ngIf="selectedGraphData.graphType.value == 'scattergl'">
             <div class="btn-group">
                 <button class="btn btn-sm" [ngClass]="{'active': showScatterLines == true}"
                     (click)="toggleScatterLines()">Lines</button>
                 <button class="btn btn-sm" [ngClass]="{'active': showScatterMarkers == true}"
                     (click)="toggleScatterMarkers()">Markers</button>
             </div>
-        </div>
+        </div> -->
         <div class="nav-item ml-2" *ngIf="selectedGraphData.graphType.value == 'bar'">
             <div class="btn-group">
                 <button class="btn btn-sm" [ngClass]="{'active': selectedGraphData.useStandardDeviation == true}"

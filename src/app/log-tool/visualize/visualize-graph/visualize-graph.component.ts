@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
+import * as Plotly from 'plotly.js';
 
 @Component({
   selector: 'app-visualize-graph',
@@ -24,6 +25,7 @@ export class VisualizeGraphComponent implements OnInit {
     }
   };
   selectedGraphDataSubscription: Subscription;
+  chartShown: boolean = false;
   constructor(private visualizeService: VisualizeService) { }
 
   ngOnInit() {
@@ -35,6 +37,8 @@ export class VisualizeGraphComponent implements OnInit {
         this.graph.layout.title = graphData.selectedXDataField.alias + ' vs ' + graphData.selectedYDataField.alias;
         this.graph.data = [{ x: graphData.xData, y: graphData.yData, type: graphData.graphType.value, mode: graphData.scatterPlotMode, name: graphData.graphName }];
       }
+      // Plotly.deleteTraces('plotlyDiv', 0);
+      Plotly.newPlot('plotlyDiv', this.graph.data);
     });
   }
 
@@ -42,4 +46,16 @@ export class VisualizeGraphComponent implements OnInit {
     this.selectedGraphDataSubscription.unsubscribe();
   }
 
+  showChart() {
+    this.chartShown = true;
+  }
+
+
+  gaussianRand() {
+    var rand = 0;
+    for (var i = 0; i < 6; i += 1) {
+      rand += Math.random();
+    }
+    return (rand / 6) - 0.5;
+  }
 }

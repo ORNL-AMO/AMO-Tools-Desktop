@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DayTypeGraphService } from './day-type-graph.service';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
-
+import * as Plotly from 'plotly.js';
 @Component({
   selector: 'app-day-type-graph',
   templateUrl: './day-type-graph.component.html',
@@ -42,5 +42,6 @@ export class DayTypeGraphComponent implements OnInit {
     graphData.forEach(entry => {
       this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: entry.color }, name: entry.name })
     });
+    Plotly.newPlot('dayTypePlotDiv', this.graph.data);
   }
 }

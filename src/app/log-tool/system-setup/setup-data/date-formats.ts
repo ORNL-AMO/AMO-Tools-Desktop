@@ -17,7 +17,7 @@ export const _dateFormats: Array<{ value: Array<string>, display: string }> = [
     },
     {
         display: 'MM-DD-YYYY 24:00',
-        value: ['MM/DD/YYYY HH:mm', 'M/DD/YYYY H:mm']
+        value: ['MM/DD/YYYY HH:mm', 'M/DD/YYYY H:mm', 'M/DD/YYYY H:mm:s']
     },
     {
         display: 'MM-DD-YY 24:00',
