@@ -24,7 +24,7 @@ export class VisualizeService {
   }
 
   getNewGraphDataObject(): GraphDataObj {
-    console.time('getNewGraphDataObj')
+    // console.time('getNewGraphDataObj')
     let selectedYDataField: LogToolField = this.logToolService.fields.find((field) => { return field.fieldName != this.logToolService.dateField });
     let yData: Array<number> = this.logToolDataService.getAllFieldData(selectedYDataField.fieldName);
     let selectedXDataField: LogToolField;
@@ -34,10 +34,10 @@ export class VisualizeService {
       selectedXDataField = this.logToolService.fields.find((field) => { return field.fieldName != this.logToolService.dateField || field.fieldName != selectedYDataField.fieldName });
     }
     let xData: Array<number> = this.logToolDataService.getAllFieldData(selectedXDataField.fieldName);
-    console.time('histogramData');
+    // console.time('histogramData');
     let histogramData: { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } = this.getStandardDevBarChartData(selectedYDataField);
-    console.timeEnd('histogramData')
-    console.timeEnd('getNewGraphDataObj');
+    // console.timeEnd('histogramData')
+    // console.timeEnd('getNewGraphDataObj');
     return {
       graphType: { label: 'Scatter Plot', value: 'scatter' },
       selectedXDataField: selectedXDataField,
@@ -102,19 +102,59 @@ export class VisualizeService {
   updateUseStandardDeviation(useStandardDeviation: boolean) {
     let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
     currentSelectedGraphData.useStandardDeviation = useStandardDeviation;
+    currentSelectedGraphData.histogramData = this.getHistogramData();
     this.selectedGraphData.next(currentSelectedGraphData);
     this.updateAllGraphItems(currentSelectedGraphData);
   }
 
-  getHistogramData(): { xLabels: Array<string>, yValues: Array<number> } {
+  updateNumberOfBins(numberOfBins: number) {
+    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
+    currentSelectedGraphData.numberOfBins = numberOfBins;
+    currentSelectedGraphData.histogramData = this.getHistogramData();
+    this.selectedGraphData.next(currentSelectedGraphData);
+    this.updateAllGraphItems(currentSelectedGraphData);
+  }
+
+  getHistogramData(): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
     let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
     if (currentSelectedGraphData.useStandardDeviation == true) {
       //get bin data using standard deviation
       return this.getStandardDevBarChartData(currentSelectedGraphData.histogramDataField);
     } else {
       //get bin data using number of bins
+      return this.getNumberOfBinsBarChartData(currentSelectedGraphData.histogramDataField, currentSelectedGraphData.numberOfBins);
     }
   }
+
+
+  getNumberOfBinsBarChartData(dataField: LogToolField, numberOfBins: number): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
+    let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
+    let graphDataMin: number = _.min(graphData);
+    let graphDataMax: number = _.max(graphData);
+    let graphRange: number = graphDataMax - graphDataMin;
+    let mean: number = _.mean(graphData);
+    // let numberOfBins: number = graphRange / standardDeviation;
+    let sizeOfBins: number = graphRange / numberOfBins;
+    let xLabels: Array<string> = new Array();
+    let yValues: Array<number> = new Array();
+    let minValue: number = graphDataMin;
+    for (let i = 0; i < numberOfBins; i++) {
+      let maxValue: number = Number((minValue + sizeOfBins).toFixed(2));
+      let graphDataInRange: Array<number> = _.filter(graphData, (dataItem) => {
+        if (dataItem >= minValue && dataItem <= maxValue) {
+          return true;
+        }
+      });
+      let numberOfItemsInBin: number = graphDataInRange.length;
+      let xLabel: string = minValue + ' - ' + maxValue;
+      xLabels.push(xLabel)
+      yValues.push(numberOfItemsInBin);
+      minValue = Number((minValue + sizeOfBins).toFixed(2));
+    }
+    return { xLabels: xLabels, yValues: yValues, standardDeviation: 0, average: mean };
+  }
+
+
 
   getStandardDevBarChartData(dataField: LogToolField): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
     let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);

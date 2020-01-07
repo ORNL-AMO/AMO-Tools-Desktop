@@ -40,7 +40,8 @@
                 <div class="input-group">
                     <button class="btn btn-sm input-group-prepend" (click)="decreaseNumberOfBins()"><span
                             class="fa fa-minus"></span></button>
-                    <input type="number" name="numberOfBins" [(ngModel)]="selectedGraphData.numberOfBins">
+                    <input type="number" name="numberOfBins" [(ngModel)]="selectedGraphData.numberOfBins"
+                        (input)="updateNumberOfBins()">
                     <button class="btn btn-sm input-group-append" (click)="increaseNumberOfBins()"><span
                             class="fa fa-plus"></span></button>
                 </div>

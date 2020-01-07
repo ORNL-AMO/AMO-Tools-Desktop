@@ -115,9 +115,15 @@ export class VisualizeMenuComponent implements OnInit {
 
   decreaseNumberOfBins() {
     this.selectedGraphData.numberOfBins--;
+    this.updateNumberOfBins();
   }
 
   increaseNumberOfBins() {
     this.selectedGraphData.numberOfBins++;
+    this.updateNumberOfBins();
+  }
+
+  updateNumberOfBins() {
+    this.visualizeService.updateNumberOfBins(this.selectedGraphData.numberOfBins);
   }
 }
