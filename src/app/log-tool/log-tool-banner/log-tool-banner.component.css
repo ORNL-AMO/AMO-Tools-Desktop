@@ -10,3 +10,8 @@
 .hidden.show{
     display: inherit;
 }
+
+
+.nav-item{
+    color: white;
+}

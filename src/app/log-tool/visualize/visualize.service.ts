@@ -99,6 +99,16 @@ export class VisualizeService {
     this.updateAllGraphItems(currentSelectedGraphData);
   }
 
+
+  //HISTOGRAM
+  updateSelectedHistogramDataField(dataField: LogToolField) {
+    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
+    currentSelectedGraphData.histogramDataField = dataField;
+    currentSelectedGraphData.histogramData = this.getHistogramData();
+    this.selectedGraphData.next(currentSelectedGraphData);
+    this.updateAllGraphItems(currentSelectedGraphData);
+  }
+
   updateUseStandardDeviation(useStandardDeviation: boolean) {
     let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
     currentSelectedGraphData.useStandardDeviation = useStandardDeviation;

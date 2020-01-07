@@ -17,6 +17,45 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'scatter'">
+            <a class="nav-link dropdown-toggle" (click)="toggleXDataFieldDropdown()">
+                X Axis: {{selectedGraphData.selectedXDataField.fieldName}}
+            </a>
+            <div class="dropdown-menu p-0" [ngClass]="{'show': xDataFieldDropdown == true}">
+                <div class="list-group">
+                    <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
+                        (click)="setXDataField(dataField)"
+                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedXDataField.fieldName}">{{dataField.fieldName}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'scatter'">
+            <a class="nav-link dropdown-toggle" (click)="toggleYDataFieldDropdown()">
+                Y Axis: {{selectedGraphData.selectedYDataField.fieldName}}
+            </a>
+            <div class="dropdown-menu p-0" [ngClass]="{'show': yDataFieldDropdown == true}">
+                <div class="list-group">
+                    <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
+                        (click)="setYDataField(dataField)"
+                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedYDataField.fieldName}">{{dataField.fieldName}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'bar'">
+            <a class="nav-link dropdown-toggle" (click)="toggleHistogramDataFieldDropdown()">
+                Histogram Data: {{selectedGraphData.selectedYDataField.fieldName}}
+            </a>
+            <div class="dropdown-menu p-0" [ngClass]="{'show': histogramDataFieldDropdown == true}">
+                <div class="list-group">
+                    <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
+                        (click)="setHistogramDataField(dataField)"
+                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.histogramDataField.fieldName}">{{dataField.fieldName}}</a>
+                </div>
+            </div>
+        </div>
+
         <div class="nav-item ml-2" *ngIf="selectedGraphData.graphType.value == 'scatter'">
             <div class="btn-group">
                 <button class="btn btn-sm" [ngClass]="{'active': showScatterLines == true}"
@@ -36,40 +75,15 @@
 
         <div class="nav-item ml-2"
             *ngIf="selectedGraphData.graphType.value == 'bar' && selectedGraphData.useStandardDeviation == false">
-            <div class="form-group">
-                <div class="input-group">
-                    <button class="btn btn-sm input-group-prepend" (click)="decreaseNumberOfBins()"><span
-                            class="fa fa-minus"></span></button>
-                    <input type="number" name="numberOfBins" [(ngModel)]="selectedGraphData.numberOfBins"
-                        (input)="updateNumberOfBins()">
-                    <button class="btn btn-sm input-group-append" (click)="increaseNumberOfBins()"><span
-                            class="fa fa-plus"></span></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="nav-item dropdown ml-2">
-            <a class="nav-link dropdown-toggle" (click)="toggleXDataFieldDropdown()">
-                X Axis: {{selectedGraphData.selectedXDataField.fieldName}}
-            </a>
-            <div class="dropdown-menu p-0" [ngClass]="{'show': xDataFieldDropdown == true}">
-                <div class="list-group">
-                    <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
-                        (click)="setXDataField(dataField)"
-                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedXDataField.fieldName}">{{dataField.fieldName}}</a>
-                </div>
-            </div>
-        </div>
-        <div class="nav-item dropdown ml-2">
-            <a class="nav-link dropdown-toggle" (click)="toggleYDataFieldDropdown()">
-                Y Axis: {{selectedGraphData.selectedYDataField.fieldName}}
-            </a>
-            <div class="dropdown-menu p-0" [ngClass]="{'show': yDataFieldDropdown == true}">
-                <div class="list-group">
-                    <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
-                        (click)="setYDataField(dataField)"
-                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedYDataField.fieldName}">{{dataField.fieldName}}</a>
-                </div>
+            <!-- <div class="form-group"> -->
+            <div class="input-group">
+                <button class="btn btn-sm input-group-prepend" (click)="decreaseNumberOfBins()"><span
+                        class="fa fa-minus"></span></button>
+                <input type="number" name="numberOfBins" [(ngModel)]="selectedGraphData.numberOfBins"
+                    (input)="updateNumberOfBins()">
+                <button class="btn btn-sm input-group-append" (click)="increaseNumberOfBins()"><span
+                        class="fa fa-plus"></span></button>
+                <!-- </div> -->
             </div>
         </div>
     </div>

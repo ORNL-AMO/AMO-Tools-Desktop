@@ -17,6 +17,7 @@ export class VisualizeMenuComponent implements OnInit {
   xDataFieldDropdown: boolean = false;
   yDataFieldDropdown: boolean = false;
   graphTypeDropdown: boolean = false;
+  histogramDataFieldDropdown: boolean = false;
   dataFields: Array<LogToolField>;
 
   graphTypes: Array<{ label: string, value: string }> = [{ value: 'scatter', label: 'Scatter Plot' }, { value: 'bar', label: 'Histogram' }]
@@ -125,5 +126,14 @@ export class VisualizeMenuComponent implements OnInit {
 
   updateNumberOfBins() {
     this.visualizeService.updateNumberOfBins(this.selectedGraphData.numberOfBins);
+  }
+
+  toggleHistogramDataFieldDropdown() {
+    this.histogramDataFieldDropdown = !this.histogramDataFieldDropdown;
+  }
+
+  setHistogramDataField(dataField: LogToolField) {
+    this.visualizeService.updateSelectedHistogramDataField(dataField);
+    this.histogramDataFieldDropdown = false;
   }
 }
