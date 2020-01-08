@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DayTypeAnalysisService } from './day-type-analysis.service';
 import { Subscription } from 'rxjs';
-
+import { LogToolField, LogToolService } from '../log-tool.service';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-day-type-analysis',
   templateUrl: './day-type-analysis.component.html',
@@ -12,12 +13,22 @@ export class DayTypeAnalysisComponent implements OnInit {
   showContent: boolean = false;
   displayDayTypeCalanderSub: Subscription;
   displayDayTypeCalander: boolean;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService) { }
+  dataFields: Array<LogToolField>;
+  selectedDataFieldDropdown: boolean = false;
+
+  selectedDataField: LogToolField;
+  selectedDataFieldSub: Subscription;
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolService: LogToolService) { }
 
   ngOnInit() {
+    this.dataFields = this.getDataFieldOptions();
     this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
     this.displayDayTypeCalanderSub = this.dayTypeAnalysisService.displayDayTypeCalander.subscribe(val => {
       this.displayDayTypeCalander = val;
+    });
+
+    this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(val => {
+      this.selectedDataField = val;
     });
   }
 
@@ -32,5 +43,21 @@ export class DayTypeAnalysisComponent implements OnInit {
 
   ngOnDestroy() {
     this.displayDayTypeCalanderSub.unsubscribe();
+    this.selectedDataFieldSub.unsubscribe();
+  }
+
+  setSelectedDataField(dataField: LogToolField) {
+    this.dayTypeAnalysisService.selectedDataField.next(dataField);
+    this.selectedDataFieldDropdown = false;
+  }
+
+  toggleSelectedDataFieldDropdown() {
+    this.selectedDataFieldDropdown = !this.selectedDataFieldDropdown;
+  }
+
+  getDataFieldOptions(): Array<LogToolField> {
+    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
+    _.remove(tmpFields, (field) => { return field.useField == false || field.fieldName == this.logToolService.dateField });
+    return tmpFields;
   }
 }
