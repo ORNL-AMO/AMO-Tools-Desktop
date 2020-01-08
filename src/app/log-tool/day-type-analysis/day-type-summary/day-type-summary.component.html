@@ -1,47 +1,58 @@
-<div class="p-2">
-    <label class="group-label">Day Type Averages
-    </label>
-    <a *ngIf="selectedGraphType != 'dayType'" class="small pull-right click-link" (click)="showDayTypeGraph()">Show
-        Graph</a>
-    <table class="table table-striped mb-0">
-        <tbody>
-            <tr>
-                <td class="bold">Day Type</td>
-                <td class="bold">{{getAverageDataItem(daySummaries[0]).field.alias}}</td>
-            </tr>
-            <tr class="day-summary-role" *ngFor="let dayTypeSummaryAverage of dayTypeSummaryAverages"
-                [ngStyle]="{'background-color': dayTypeSummaryAverage.dayType.color}">
-                <td>
-                    {{dayTypeSummaryAverage.dayType.label}}
-                </td>
-                <td>
-                    {{dayTypeSummaryAverage.average | number}}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div class="pt-2 pr-2 pb-2">
+    <div class="card">
+        <div class="card-header p-2">
+            Day Type Averages
+            <a *ngIf="selectedGraphType != 'dayType'" class="small pull-right click-link"
+                (click)="showDayTypeGraph()">View Graph</a>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <tbody>
+                    <tr>
+                        <td class="bold">Day Type</td>
+                        <td class="bold">{{getAverageDataItem(daySummaries[0]).field.alias}}</td>
+                    </tr>
+                    <tr class="day-summary-role" *ngFor="let dayTypeSummaryAverage of dayTypeSummaryAverages"
+                        [ngStyle]="{'background-color': dayTypeSummaryAverage.dayType.color}">
+                        <td>
+                            {{dayTypeSummaryAverage.dayType.label}}
+                        </td>
+                        <td>
+                            {{dayTypeSummaryAverage.average | number}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<div class="p-2">
-    <label class="group-label">Daily Averages
-    </label>
-    <a *ngIf="selectedGraphType != 'daily'" class="small pull-right click-link" (click)="showDailyGraph()">Show
-        Graph</a>
-    <table class="table table-striped mb-0">
-        <tbody>
-            <tr>
-                <td class="bold">Day</td>
-                <td class="bold">{{getAverageDataItem(daySummaries[0]).field.alias}}</td>
-            </tr>
-            <tr class="day-summary-role" *ngFor="let daySummary of daySummaries"
-                [ngStyle]="{'background-color': getDateColor(daySummary)}">
-                <td>
-                    {{daySummary.date | date}}
-                </td>
-                <td>
-                    {{getAverageDataItem(daySummary).value | number}}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div class="pr-2">
+    <div class="card">
+        <div class="card-header p-2">
+            Daily Averages
+            <a *ngIf="selectedGraphType != 'daily'" class="small pull-right click-link" (click)="showDailyGraph()">View
+                Graph</a>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <tbody>
+                    <tr>
+                        <td class="bold">Day</td>
+                        <td class="bold">{{getAverageDataItem(daySummaries[0]).field.alias}}</td>
+                    </tr>
+                    <tr class="day-summary-role" *ngFor="let daySummary of daySummaries"
+                        [ngStyle]="{'background-color': getDateColor(daySummary)}">
+                        <td>
+                            {{daySummary.date | date}}
+                        </td>
+                        <td>
+                            {{getAverageDataItem(daySummary).value | number}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
