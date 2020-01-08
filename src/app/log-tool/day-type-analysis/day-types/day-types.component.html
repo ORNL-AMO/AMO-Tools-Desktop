@@ -5,11 +5,10 @@
         class="badge badge-pill">{{dayType.label}}</span>
     <!--added day types-->
     <span *ngFor="let dayType of dayTypes.addedDayTypes" [ngStyle]="{'background-color': dayType.color}"
-        class="badge badge-pill secondary-day-type" (click)="removeDayType(dayType)"><span class="fa fa-close"></span> {{dayType.label}}</span>
-    <!--add new pill-->
-    <span class="badge badge-pill add-new-badge pull-right">
-        <a class="click-link" (click)="showAddNewDayType()">+Add New</a>
-    </span>
+        class="badge badge-pill secondary-day-type" (click)="removeDayType(dayType)"><span class="fa fa-close"></span>
+        {{dayType.label}}</span>
+    <!--add new-->
+    <a class="click-link pull-right" (click)="showAddNewDayType()" *ngIf="addNewDayType == false">+Add New</a>
 </div>
 
 <!--add new day type-->

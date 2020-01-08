@@ -32,7 +32,7 @@ tbody tr{
     padding: .25rem;
 }
 
-.card-footer{
+.card-footer, .card-header{
     background-color: white;
 }
 
@@ -58,4 +58,9 @@ tbody tr{
 
 .secondary-day-type:hover{
     cursor: pointer;
+}
+
+ngb-datepicker{
+    border-top: none;
+    border-bottom: none;
 }

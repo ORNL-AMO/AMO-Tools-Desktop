@@ -18,5 +18,6 @@
 }
 
 ngb-datepicker{
-  border: none;
+  border-top: none;
+  border-bottom: none;
 }

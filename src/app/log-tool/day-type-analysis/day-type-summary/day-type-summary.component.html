@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header p-2">
             Day Type Averages
-            <a *ngIf="selectedGraphType != 'dayType'" class="small pull-right click-link"
+            <a *ngIf="selectedGraphType != 'dayType'" class="pull-right click-link"
                 (click)="showDayTypeGraph()">View Graph</a>
         </div>
         <div class="card-body p-0">
@@ -27,11 +27,11 @@
     </div>
 </div>
 
-<div class="pr-2">
+<div class="pt-2 pr-2">
     <div class="card">
         <div class="card-header p-2">
             Daily Averages
-            <a *ngIf="selectedGraphType != 'daily'" class="small pull-right click-link" (click)="showDailyGraph()">View
+            <a *ngIf="selectedGraphType != 'daily'" class="pull-right click-link" (click)="showDailyGraph()">View
                 Graph</a>
         </div>
         <div class="card-body p-0">

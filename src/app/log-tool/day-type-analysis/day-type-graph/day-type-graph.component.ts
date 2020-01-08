@@ -57,6 +57,6 @@ export class DayTypeGraphComponent implements OnInit {
     graphData.forEach(entry => {
       this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: entry.color }, name: entry.name })
     });
-    Plotly.newPlot('dayTypePlotDiv', this.graph.data, this.graph.layout);
+    Plotly.newPlot('dayTypePlotDiv', this.graph.data, this.graph.layout, {responsive: true});
   }
 }
