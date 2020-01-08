@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import { DayTypeAnalysisService, DaySummary } from '../day-type-analysis.service';
+import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import * as _ from 'lodash';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
-import { LogToolService } from '../../log-tool.service';
 import { LogToolDataService } from '../../log-tool-data.service';
 @Component({
   selector: 'app-day-type-calendar',
@@ -15,15 +14,11 @@ export class DayTypeCalendarComponent implements OnInit {
   model: NgbDateStruct;
   startDate: { year: number, month: number, day: number };
   numberOfMonths: number;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private logToolService: LogToolService, private logToolDataService: LogToolDataService) { }
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
-    this.startDate = {
-      year: this.logToolService.startDate.getFullYear(),
-      month: this.logToolService.startDate.getMonth() + 1,
-      day: this.logToolService.startDate.getDate()
-    };
-    this.findNumberOfMonths();
+    this.startDate = this.dayTypeAnalysisService.calendarStartDate;
+    this.numberOfMonths = this.dayTypeAnalysisService.numberOfMonths;
   }
 
   getDateBackground(date: NgbDateStruct) {
@@ -43,11 +38,5 @@ export class DayTypeCalendarComponent implements OnInit {
       let d: Date = new Date(date.year, date.month - 1, date.day);
       this.dayTypeAnalysisService.toggleDateType(d);
     }
-  }
-
-  findNumberOfMonths() {
-    let startMonth: number = this.logToolService.startDate.getMonth();
-    let endMonth: number = this.logToolService.endDate.getMonth();
-    this.numberOfMonths = endMonth - startMonth + 1;
   }
 }

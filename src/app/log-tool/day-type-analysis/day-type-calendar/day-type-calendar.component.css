@@ -13,10 +13,10 @@
     box-shadow: 0 4px 8px 0 grey;
 }
 
-ngb-datepicker .ngb-dp-header{
-    display: none !important;
+.ngb-dp-month-name{
+  background-color: white;
 }
 
 ngb-datepicker{
-    border: none;
+  border: none;
 }

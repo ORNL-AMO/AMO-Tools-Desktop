@@ -1,75 +1,48 @@
-<div class="p-2">
-    <label class="group-label">Day Types</label>
-    <table class="table mb-0">
-        <tbody>
-            <tr>
-                <td class="w-25 bold text-center">Label</td>
-                <td class="bold">Dates</td>
-            </tr>
-            <tr *ngFor="let dayType of dayTypes.primaryDayTypes" [ngStyle]="{'background-color': dayType.color}">
-                <!-- <td class="w-25 text-center">
-                    <input type="checkbox" [disabled]="true" [(ngModel)]="dayType.useDayType" (change)="setDayTypes()">
-                </td> -->
-                <td class="day-type-label text-center">
-                    {{dayType.label}}
-                </td>
-                <td class="day-type-label">
-                    <span *ngFor="let date of dayType.dates">{{date | date}}
-                        <br>
-                    </span>
-                </td>
-            </tr>
-            <tr *ngFor="let dayType of dayTypes.addedDayTypes" [ngStyle]="{'background-color': dayType.color}">
-                <!-- <td class="w-25 text-center">
-                    <input type="checkbox" [(ngModel)]="dayType.useDayType" (change)="setDayTypes()">
-                </td> -->
-                <td class="day-type-label text-center">
-                    {{dayType.label}}
-                </td>
-                <td class="day-type-label">
-                    <span *ngFor="let date of dayType.dates">{{date | date}}
-                        <br>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-center click-cell" colspan="2" (click)="showAddNewDayType()" *ngIf="!addNewDayType">
-                    <span class="fa fa-plus-circle pr-2"></span>Add Day Type
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div class="card-header p-2">
+    Day Types:
+    <!--primary day types-->
+    <span *ngFor="let dayType of dayTypes.primaryDayTypes" [ngStyle]="{'background-color': dayType.color}"
+        class="badge badge-pill">{{dayType.label}}</span>
+    <!--added day types-->
+    <span *ngFor="let dayType of dayTypes.addedDayTypes" [ngStyle]="{'background-color': dayType.color}"
+        class="badge badge-pill secondary-day-type" (click)="removeDayType(dayType)"><span class="fa fa-close"></span> {{dayType.label}}</span>
+    <!--add new pill-->
+    <span class="badge badge-pill add-new-badge pull-right">
+        <a class="click-link" (click)="showAddNewDayType()">+Add New</a>
+    </span>
 </div>
 
-
 <!--add new day type-->
-<div class="pl-2 pr-2 tab-content" *ngIf="addNewDayType == true">
-    <div class="card">
-        <div class="card-body p-2">
+<div class="card-body p-0" *ngIf="addNewDayType == true">
+    <div class="d-flex">
+        <div class="p-2">
             <form>
                 <div class="form-group">
                     <label for="newDayTypeName">Day Type Name</label>
-                    <input class="form-control" type="text" [(ngModel)]="newDayTypeName" name="newDayTypeName">
+                    <input class="w-100 form-control" type="text" [(ngModel)]="newDayTypeName" name="newDayTypeName">
                 </div>
                 <div class="form-group">
-                    <label for="newDayTypeColor">Color</label>
-                    <input class="form-control color-picker" type="color" name="newDayTypeColor"
+                    <label for="newDayTypeColor">Select Color</label>
+                    <input class="w-100 form-control color-picker" type="color" name="newDayTypeColor"
                         [(ngModel)]="newDayTypeColor" [ngStyle]="{'background-color': newDayTypeColor}">
                 </div>
-                <div class="form-group">
-                    <label for="selectedDays">Applicable Days</label>
-                </div>
-                <div class="form-group">
-                    <select class="custom-select form-control w-100 p-0 scroll-item" multiple [(ngModel)]="selectedDays"
-                        name="selectedDays">
-                        <option *ngFor="let daySummary of daySummaries">{{daySummary.date | date}}</option>
-                    </select>
-                </div>
+                <div class="alert alert-info p-2 small mb-0">Select dates to apply new day type.</div>
             </form>
         </div>
-        <div class="card-footer p-2">
-            <button class="btn btn-danger pull-left small" (click)="hideAddNewDayType()">Cancel</button>
-            <button class="btn btn-primary pull-right small" (click)="submitNewDayType()">Submit</button>
-        </div>
+        <ngb-datepicker [dayTemplate]="customDay" [navigation]="'none'" (select)="onDateSelect($event)"
+            [outsideDays]="'hidden'" [startDate]="startDate" [displayMonths]="numberOfMonths" [showWeekdays]="false">
+        </ngb-datepicker>
     </div>
 </div>
+<div class="card-footer p-2 justify-content-between" *ngIf="addNewDayType == true">
+    <button class="btn btn-danger small" (click)="hideAddNewDayType()">Cancel</button>
+    <button class="btn btn-primary small ml-2" (click)="submitNewDayType()">Submit</button>
+</div>
+
+
+<ng-template #customDay let-date="date">
+    <div class="custom-day" [style.background-color]="getDateBackground(date)"
+        [style.display]="{'hidden': getDateBackground(date) == undefined}">
+        {{ date.day }}
+    </div>
+</ng-template>

@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { LogToolService, LogToolField } from '../log-tool.service';
 import { LogToolDataService } from '../log-tool-data.service';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 @Injectable()
 export class VisualizeService {
 
@@ -24,7 +25,6 @@ export class VisualizeService {
   }
 
   getNewGraphDataObject(): GraphDataObj {
-    // console.time('getNewGraphDataObj')
     let selectedYDataField: LogToolField = this.logToolService.fields.find((field) => { return field.fieldName != this.logToolService.dateField });
     let yData: Array<number> = this.logToolDataService.getAllFieldData(selectedYDataField.fieldName);
     let selectedXDataField: LogToolField;
@@ -34,10 +34,7 @@ export class VisualizeService {
       selectedXDataField = this.logToolService.fields.find((field) => { return field.fieldName != this.logToolService.dateField || field.fieldName != selectedYDataField.fieldName });
     }
     let xData: Array<number> = this.logToolDataService.getAllFieldData(selectedXDataField.fieldName);
-    // console.time('histogramData');
     let histogramData: { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } = this.getStandardDevBarChartData(selectedYDataField);
-    // console.timeEnd('histogramData')
-    // console.timeEnd('getNewGraphDataObj');
     return {
       graphType: { label: 'Scatter Plot', value: 'scattergl' },
       selectedXDataField: selectedXDataField,

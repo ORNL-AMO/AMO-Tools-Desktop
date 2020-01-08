@@ -1,9 +1,7 @@
-<div class="p-2">
-    <div class="card card-body p-2">
-        <ngb-datepicker [dayTemplate]="customDay" [navigation]="'none'" (select)="onDateSelect($event)"
-            [outsideDays]="'hidden'" [startDate]="startDate" [displayMonths]="numberOfMonths">
-        </ngb-datepicker>
-    </div>
+<div class="card-body p-0">
+    <ngb-datepicker [dayTemplate]="customDay" [navigation]="'none'" (select)="onDateSelect($event)"
+        [outsideDays]="'hidden'" [startDate]="startDate" [displayMonths]="numberOfMonths" [showWeekdays]="false">
+    </ngb-datepicker>
 </div>
 
 <ng-template #customDay let-date="date">

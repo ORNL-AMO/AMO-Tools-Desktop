@@ -11,11 +11,16 @@ export class DayTypeAnalysisService {
   dayTypes: BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>;
   // secondaryDayTypes: BehaviorSubject<Array<DayType>>;
   dayTypeSummaries: BehaviorSubject<Array<DayTypeSummary>>;
+  displayDayTypeCalander: BehaviorSubject<boolean>;
+
+  calendarStartDate: { year: number, month: number, day: number };
+  numberOfMonths: number;
   constructor(private logToolDataService: LogToolDataService, private logToolService: LogToolService) {
     this.dayTypes = new BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>({ addedDayTypes: new Array(), primaryDayTypes: new Array() });
     // this.secondaryDayTypes = new BehaviorSubject<Array<DayType>>(new Array());
     this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
     this.selectedDataField = new BehaviorSubject<LogToolField>(undefined);
+    this.displayDayTypeCalander = new BehaviorSubject<boolean>(true);
   }
 
   initSecondaryDayTypes() {
@@ -25,12 +30,12 @@ export class DayTypeAnalysisService {
     let weekdayDates: Array<Date> = new Array();
 
     this.logToolDataService.logToolDays.forEach(day => {
-      let secondaryDayType: string = this.getSecondaryDayType(day.date);
-      if (secondaryDayType == 'Excluded') {
+      let primaryDayType: string = this.getPrimaryDayType(day.date);
+      if (primaryDayType == 'Excluded') {
         excludedDates.push(new Date(day.date));
-      } else if (secondaryDayType == 'Weekend') {
+      } else if (primaryDayType == 'Weekend') {
         weekendDates.push(new Date(day.date));
-      } else if (secondaryDayType == 'Weekday') {
+      } else if (primaryDayType == 'Weekday') {
         weekdayDates.push(new Date(day.date));
       }
     })
@@ -64,7 +69,7 @@ export class DayTypeAnalysisService {
     this.dayTypes.next({ primaryDayTypes: dayTypesArr, addedDayTypes: [] });
   }
 
-  getSecondaryDayType(date: Date): string {
+  getPrimaryDayType(date: Date): string {
     let daySummary: DaySummary = this.daySummaries.find(day => { return this.logToolDataService.checkSameDay(day.date, date) });
     if (daySummary.dayData.length != this.logToolDataService.validNumberOfDayDataPoints) {
       return 'Excluded';
@@ -79,9 +84,9 @@ export class DayTypeAnalysisService {
   }
 
   addPrimaryDayType(date: Date) {
-    let secondaryDayTypeLabel: string = this.getSecondaryDayType(date);
+    let primaryDayTypeLabel: string = this.getPrimaryDayType(date);
     let dayTypes = this.dayTypes.getValue();
-    let addDayType = dayTypes.primaryDayTypes.find(dayType => { return dayType.label == secondaryDayTypeLabel });
+    let addDayType = dayTypes.primaryDayTypes.find(dayType => { return dayType.label == primaryDayTypeLabel });
     addDayType.dates.push(date);
     this.dayTypes.next(dayTypes);
   }
@@ -203,6 +208,17 @@ export class DayTypeAnalysisService {
       dayType: dayType,
       data: data
     }
+  }
+
+  setStartDateAndNumberOfMonths() {
+    this.calendarStartDate = {
+      year: this.logToolService.startDate.getFullYear(),
+      month: this.logToolService.startDate.getMonth() + 1,
+      day: this.logToolService.startDate.getDate()
+    };
+    let startMonth: number = this.logToolService.startDate.getMonth();
+    let endMonth: number = this.logToolService.endDate.getMonth();
+    this.numberOfMonths = endMonth - startMonth + 1;
   }
 }
 

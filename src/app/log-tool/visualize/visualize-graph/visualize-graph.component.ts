@@ -17,45 +17,40 @@ export class VisualizeGraphComponent implements OnInit {
       hovermode: "closest",
       xaxis: {
         autorange: true,
+        title: {
+          text: 'x axis'
+        }
       },
       yaxis: {
         autorange: true,
-        type: 'linear'
+        // type: 'linear',
+        title: {
+          text: 'y axis'
+        }
       }
     }
   };
   selectedGraphDataSubscription: Subscription;
-  chartShown: boolean = false;
   constructor(private visualizeService: VisualizeService) { }
 
   ngOnInit() {
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphData.subscribe(graphData => {
       if (graphData.graphType.value == 'bar') {
         this.graph.layout.title = 'Number of ' + graphData.histogramDataField.alias + ' Data Points';
+        this.graph.layout.xaxis.title.text = graphData.histogramDataField.alias;
+        this.graph.layout.yaxis.title.text = 'Number of Data Points';
         this.graph.data = [{ x: graphData.histogramData.xLabels, y: graphData.histogramData.yValues, type: graphData.graphType.value, mode: graphData.scatterPlotMode, name: graphData.graphName }];
       } else {
         this.graph.layout.title = graphData.selectedXDataField.alias + ' vs ' + graphData.selectedYDataField.alias;
+        this.graph.layout.xaxis.title.text = graphData.selectedXDataField.alias;
+        this.graph.layout.yaxis.title.text = graphData.selectedYDataField.alias;
         this.graph.data = [{ x: graphData.xData, y: graphData.yData, type: graphData.graphType.value, mode: graphData.scatterPlotMode, name: graphData.graphName }];
       }
-      // Plotly.deleteTraces('plotlyDiv', 0);
-      Plotly.newPlot('plotlyDiv', this.graph.data);
+      Plotly.newPlot('plotlyDiv', this.graph.data, this.graph.layout, { responsive: true });
     });
   }
 
   ngOnDestroy() {
     this.selectedGraphDataSubscription.unsubscribe();
-  }
-
-  showChart() {
-    this.chartShown = true;
-  }
-
-
-  gaussianRand() {
-    var rand = 0;
-    for (var i = 0; i < 6; i += 1) {
-      rand += Math.random();
-    }
-    return (rand / 6) - 0.5;
   }
 }
