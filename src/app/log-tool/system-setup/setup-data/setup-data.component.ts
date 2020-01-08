@@ -50,6 +50,7 @@ export class SetupDataComponent implements OnInit {
   }
 
   parseImportData() {
+    this.validDate = undefined;
     this.importingData = true;
     this.cd.detectChanges();
     setTimeout(() => {

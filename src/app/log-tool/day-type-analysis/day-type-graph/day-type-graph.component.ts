@@ -12,7 +12,20 @@ export class DayTypeGraphComponent implements OnInit {
 
   graph = {
     data: [],
-    layout: { title: undefined, hovermode: "closest" }
+    layout: { 
+      title: undefined, 
+      hovermode: "closest",
+      xaxis: {
+        title: {
+          text: 'x axis'
+        }
+      },
+      yaxis: {
+        title: {
+          text: 'y axis'
+        }
+      }
+    }
   };
   dayTypesSubscription: Subscription;
   selectedGraphTypeSub: Subscription;
@@ -27,7 +40,7 @@ export class DayTypeGraphComponent implements OnInit {
 
     this.selectedGraphTypeSub = this.dayTypeGraphService.selectedGraphType.subscribe(val => {
       this.setGraphData();
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -37,11 +50,13 @@ export class DayTypeGraphComponent implements OnInit {
 
   setGraphData() {
     this.graph.data = new Array();
-    this.graph.layout.title = this.dayTypeAnalysisService.selectedDataField.getValue();
+    this.graph.layout.title = 'Hourly ' + this.dayTypeAnalysisService.selectedDataField.getValue().alias + ' Data';
+    this.graph.layout.xaxis.title.text = 'Hour of day';
+    this.graph.layout.yaxis.title.text = this.dayTypeAnalysisService.selectedDataField.getValue().alias;
     let graphData: Array<{ xData: Array<any>, yData: Array<number>, name: string, color: string }> = this.dayTypeGraphService.getDayTypeScatterPlotData();
     graphData.forEach(entry => {
       this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: entry.color }, name: entry.name })
     });
-    Plotly.newPlot('dayTypePlotDiv', this.graph.data);
+    Plotly.newPlot('dayTypePlotDiv', this.graph.data, this.graph.layout);
   }
 }

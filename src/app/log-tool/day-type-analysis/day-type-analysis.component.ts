@@ -8,11 +8,21 @@ import { DayTypeAnalysisService } from './day-type-analysis.service';
 })
 export class DayTypeAnalysisComponent implements OnInit {
 
+  showContent: boolean = false;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {
-    this.dayTypeAnalysisService.getDaySummaries();
-    this.dayTypeAnalysisService.initSecondaryDayTypes();
-    this.dayTypeAnalysisService.setDayTypeSummaries();
+  }
+
+  ngAfterViewInit() {
+    console.log('after init');
+    setTimeout(() => {
+      console.time('initData')
+      this.dayTypeAnalysisService.getDaySummaries();
+      this.dayTypeAnalysisService.initSecondaryDayTypes();
+      this.dayTypeAnalysisService.setDayTypeSummaries();
+      this.showContent = true;
+      console.timeEnd('initData')
+    }, 100);
   }
 }

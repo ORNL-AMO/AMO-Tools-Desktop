@@ -4,6 +4,8 @@ import { LogToolService } from '../../log-tool.service';
 import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
+import * as moment from 'moment';
+
 @Injectable()
 export class DayTypeGraphService {
 
@@ -29,8 +31,9 @@ export class DayTypeGraphService {
     this.dayTypeAnalysisService.daySummaries.forEach((daySummary) => {
       let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(daySummary.dayData);
       let color: string = this.getDateColorFromDaySummary(daySummary);
-      this.individualDayScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: daySummary.date.toUTCString(), color: color });
-    })
+      let formatedDate: string = moment(daySummary.date).format("MMM D, YYYY").toString();
+      this.individualDayScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: formatedDate, color: color });
+    });
   }
 
   getDayTypeScatterPlotData(): Array<{ xData: Array<any>, yData: Array<number>, name: string, color: string }> {
