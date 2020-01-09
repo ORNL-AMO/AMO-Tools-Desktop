@@ -23,12 +23,7 @@ export class DayTypeAnalysisService {
     this.displayDayTypeCalander = new BehaviorSubject<boolean>(true);
   }
 
-  getDataFieldOptions(): Array<LogToolField> {
-    //non date and used fields
-    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
-    _.remove(tmpFields, (field) => { return field.useField == false || field.fieldName == this.logToolService.dateField });
-    return tmpFields;
-  }
+
 
   initSecondaryDayTypes() {
     let dayTypesArr: Array<DayType> = new Array();
@@ -209,8 +204,6 @@ export class DayTypeAnalysisService {
     this.dayTypes.next(dayTypes);
   }
 
-
-
   setDayTypeSummaries() {
     let dayTypeSummaries: Array<DayTypeSummary> = new Array();
     let dayTypes = this.dayTypes.getValue();
@@ -240,7 +233,7 @@ export class DayTypeAnalysisService {
     dayTypeData.forEach(dataItem => {
       data = _.union(data, dataItem.data)
     });
-    let fields: Array<LogToolField> = this.getDataFieldOptions();
+    let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
     let fieldAverages: Array<{ field: LogToolField, value: number }> = new Array();
     fields.forEach(field => {
       let fieldAverage: number = _.meanBy(data, field.fieldName);

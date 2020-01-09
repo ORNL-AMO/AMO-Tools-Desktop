@@ -37,6 +37,9 @@ export class DayTypeCalendarComponent implements OnInit {
     if (testExists != undefined) {
       let d: Date = new Date(date.year, date.month - 1, date.day);
       this.dayTypeAnalysisService.toggleDateType(d);
+      this.dayTypeAnalysisService.setDayTypeSummaries();
+      this.dayTypeGraphService.updateIndividualDayScatterPlotDataColors();
+      this.dayTypeGraphService.setDayTypeScatterPlotData();
     }
   }
 }

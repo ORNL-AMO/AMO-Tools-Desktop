@@ -306,6 +306,6 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     display: none !important;
 }
 
-.ngb-dp-month-name{
+.ngb-dp-month-name, .ngb-dp-weekdays{
     background-color: white !important;
 }

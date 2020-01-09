@@ -3,6 +3,8 @@ import { DayTypeAnalysisService } from './day-type-analysis.service';
 import { Subscription } from 'rxjs';
 import { LogToolField } from '../log-tool.service';
 import * as _ from 'lodash';
+import { DayTypeGraphService } from './day-type-graph/day-type-graph.service';
+import { LogToolDataService } from '../log-tool-data.service';
 @Component({
   selector: 'app-day-type-analysis',
   templateUrl: './day-type-analysis.component.html',
@@ -18,10 +20,10 @@ export class DayTypeAnalysisComponent implements OnInit {
 
   selectedDataField: LogToolField;
   selectedDataFieldSub: Subscription;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService) { }
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
-    this.dataFields = this.dayTypeAnalysisService.getDataFieldOptions();
+    this.dataFields = this.logToolDataService.getDataFieldOptions();
     this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
     this.displayDayTypeCalanderSub = this.dayTypeAnalysisService.displayDayTypeCalander.subscribe(val => {
       this.displayDayTypeCalander = val;
@@ -37,6 +39,8 @@ export class DayTypeAnalysisComponent implements OnInit {
       this.dayTypeAnalysisService.getDaySummaries();
       this.dayTypeAnalysisService.initSecondaryDayTypes();
       this.dayTypeAnalysisService.setDayTypeSummaries();
+      this.dayTypeGraphService.setDayTypeScatterPlotData();
+      this.dayTypeGraphService.setIndividualDayScatterPlotData();
       this.showContent = true;
     }, 100);
   }
@@ -48,6 +52,9 @@ export class DayTypeAnalysisComponent implements OnInit {
 
   setSelectedDataField(dataField: LogToolField) {
     this.dayTypeAnalysisService.selectedDataField.next(dataField);
+    this.dayTypeAnalysisService.setDayTypeSummaries();
+    this.dayTypeGraphService.setDayTypeScatterPlotData();
+    this.dayTypeGraphService.setIndividualDayScatterPlotData();
     this.selectedDataFieldDropdown = false;
   }
 

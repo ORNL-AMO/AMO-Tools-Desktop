@@ -29,7 +29,7 @@
             </form>
         </div>
         <ngb-datepicker [dayTemplate]="customDay" [navigation]="'none'" (select)="onDateSelect($event)"
-            [outsideDays]="'hidden'" [startDate]="startDate" [displayMonths]="numberOfMonths" [showWeekdays]="false">
+            [outsideDays]="'hidden'" [startDate]="startDate" [displayMonths]="numberOfMonths">
         </ngb-datepicker>
     </div>
 </div>
@@ -40,8 +40,7 @@
 
 
 <ng-template #customDay let-date="date">
-    <div class="custom-day" [style.background-color]="getDateBackground(date)"
-        [style.display]="{'hidden': getDateBackground(date) == undefined}">
+    <div class="custom-day" [style.background-color]="getDateBackground(date)">
         {{ date.day }}
     </div>
 </ng-template>

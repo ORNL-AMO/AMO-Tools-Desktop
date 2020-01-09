@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DayTypeGraphService } from './day-type-graph.service';
+import { DayTypeGraphService, DayTypeGraphItem } from './day-type-graph.service';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js';
@@ -12,8 +12,8 @@ export class DayTypeGraphComponent implements OnInit {
 
   graph = {
     data: [],
-    layout: { 
-      title: undefined, 
+    layout: {
+      title: undefined,
       hovermode: "closest",
       xaxis: {
         title: {
@@ -27,32 +27,39 @@ export class DayTypeGraphComponent implements OnInit {
       }
     }
   };
-  dayTypesSubscription: Subscription;
+  dayTypeScatterPlotDataSub: Subscription;
+  dayTypeScatterPlotData: Array<DayTypeGraphItem>;
   selectedGraphTypeSub: Subscription;
-  selectedDataFieldSub: Subscription;
+  selectedGraphType: string;
+  individualDayScatterPlotDataSub: Subscription;
+  individualDayScatterPlotData: Array<DayTypeGraphItem>;
   constructor(private dayTypeGraphService: DayTypeGraphService, private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {
-    this.dayTypesSubscription = this.dayTypeAnalysisService.dayTypes.subscribe(dayTypes => {
-      this.dayTypeGraphService.setDayTypeScatterPlotData();
-      this.dayTypeGraphService.setIndividualDayScatterPlotData();
-      this.setGraphData();
-    });
+
+    this.dayTypeScatterPlotDataSub = this.dayTypeGraphService.dayTypeScatterPlotData.subscribe(val => {
+      this.dayTypeScatterPlotData = val;
+      if (this.selectedGraphType == 'dayType') {
+        this.setGraphData();
+      }
+    })
+
+    this.individualDayScatterPlotDataSub = this.dayTypeGraphService.individualDayScatterPlotData.subscribe(val => {
+      this.individualDayScatterPlotData = val;
+      if (this.selectedGraphType == 'individualDay') {
+        this.setGraphData();
+      }
+    })
 
     this.selectedGraphTypeSub = this.dayTypeGraphService.selectedGraphType.subscribe(val => {
-      this.setGraphData();
-    });
-
-    this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(val => {
-      this.dayTypeGraphService.setDayTypeScatterPlotData();
-      this.dayTypeGraphService.setIndividualDayScatterPlotData();
+      this.selectedGraphType = val;
       this.setGraphData();
     });
   }
 
   ngOnDestroy() {
-    this.dayTypesSubscription.unsubscribe();
-    this.selectedDataFieldSub.unsubscribe();
+    this.individualDayScatterPlotDataSub.unsubscribe();
+    this.dayTypeScatterPlotDataSub.unsubscribe();
     this.selectedGraphTypeSub.unsubscribe();
   }
 
@@ -61,10 +68,18 @@ export class DayTypeGraphComponent implements OnInit {
     this.graph.layout.title = 'Hourly ' + this.dayTypeAnalysisService.selectedDataField.getValue().alias + ' Data';
     this.graph.layout.xaxis.title.text = 'Hour of day';
     this.graph.layout.yaxis.title.text = this.dayTypeAnalysisService.selectedDataField.getValue().alias;
-    let graphData: Array<{ xData: Array<any>, yData: Array<number>, name: string, color: string }> = this.dayTypeGraphService.getDayTypeScatterPlotData();
+    let graphData: Array<DayTypeGraphItem> = this.getGraphData();
     graphData.forEach(entry => {
       this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: entry.color }, name: entry.name })
     });
-    Plotly.newPlot('dayTypePlotDiv', this.graph.data, this.graph.layout, {responsive: true});
+    Plotly.newPlot('dayTypePlotDiv', this.graph.data, this.graph.layout, { responsive: true });
+  }
+
+  getGraphData(): Array<DayTypeGraphItem> {
+    if (this.selectedGraphType == 'individualDay') {
+      return this.individualDayScatterPlotData;
+    } else if (this.selectedGraphType == 'dayType') {
+      return this.dayTypeScatterPlotData;
+    }
   }
 }

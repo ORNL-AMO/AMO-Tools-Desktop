@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LogToolService } from './log-tool.service';
+import { LogToolService, LogToolField } from './log-tool.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 @Injectable()
@@ -8,6 +8,19 @@ export class LogToolDataService {
   logToolDays: Array<LogToolDay>;
   validNumberOfDayDataPoints: number;
   constructor(private logToolService: LogToolService) { }
+
+  getDataFieldOptions(): Array<LogToolField> {
+    //non date and used fields
+    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
+    _.remove(tmpFields, (field) => { return field.useField == false || field.fieldName == this.logToolService.dateField });
+    return tmpFields;
+  }
+
+  getDataFieldOptionsWithDate(){
+    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
+    _.remove(tmpFields, (field) => { return field.useField == false });
+    return tmpFields;
+  }
 
   //seperate log tool data into days
   setLogToolDays() {

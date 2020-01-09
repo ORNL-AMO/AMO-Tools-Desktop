@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { VisualizeService, GraphDataObj } from '../visualize.service';
 import { Subscription } from 'rxjs';
 import { LogToolService, LogToolField } from '../../log-tool.service';
+import { LogToolDataService } from '../../log-tool-data.service';
 
 @Component({
   selector: 'app-visualize-menu',
@@ -23,11 +24,11 @@ export class VisualizeMenuComponent implements OnInit {
   graphTypes: Array<{ label: string, value: string }> = [{ value: 'scattergl', label: 'Scatter Plot' }, { value: 'bar', label: 'Histogram' }]
   showScatterLines: boolean = false;
   showScatterMarkers: boolean = true;
-  constructor(private visualizeService: VisualizeService, private logToolService: LogToolService) { }
+  constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
 
   ngOnInit() {
-    this.dataFields = this.logToolService.fields.filter((field) => { return field.useField == true });
+    this.dataFields = this.logToolDataService.getDataFieldOptionsWithDate();
     this.graphDataSubscription = this.visualizeService.graphData.subscribe(graphData => {
       this.graphData = graphData;
     });

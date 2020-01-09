@@ -25,13 +25,14 @@ export class VisualizeService {
   }
 
   getNewGraphDataObject(): GraphDataObj {
-    let selectedYDataField: LogToolField = this.logToolService.fields.find((field) => { return field.fieldName != this.logToolService.dateField });
+    let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptionsWithDate();
+    let selectedYDataField: LogToolField = fields.find((field) => { return field.fieldName != this.logToolService.dateField });
     let yData: Array<number> = this.logToolDataService.getAllFieldData(selectedYDataField.fieldName);
     let selectedXDataField: LogToolField;
     if (this.logToolService.dateField != undefined) {
-      selectedXDataField = this.logToolService.fields.find((field) => { return field.fieldName == this.logToolService.dateField });
+      selectedXDataField = fields.find((field) => { return field.fieldName == this.logToolService.dateField });
     } else {
-      selectedXDataField = this.logToolService.fields.find((field) => { return field.fieldName != this.logToolService.dateField || field.fieldName != selectedYDataField.fieldName });
+      selectedXDataField = fields.find((field) => { return field.fieldName != this.logToolService.dateField || field.fieldName != selectedYDataField.fieldName });
     }
     let xData: Array<number> = this.logToolDataService.getAllFieldData(selectedXDataField.fieldName);
     let histogramData: { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } = this.getStandardDevBarChartData(selectedYDataField);

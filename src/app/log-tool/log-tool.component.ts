@@ -28,7 +28,7 @@ export class LogToolComponent implements OnInit {
       this.getContainerHeight();
     }, 100);
   }
-
+  
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {

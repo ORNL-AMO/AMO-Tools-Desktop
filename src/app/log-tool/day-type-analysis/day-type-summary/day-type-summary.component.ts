@@ -52,7 +52,7 @@ export class DayTypeSummaryComponent implements OnInit {
   }
 
   showDailyGraph() {
-    this.dayTypeGraphService.selectedGraphType.next('daily');
+    this.dayTypeGraphService.selectedGraphType.next('individualDay');
   }
 
   getAverageDataItem(daySummary: DaySummary | DayTypeSummary): { field: LogToolField, value: number } {

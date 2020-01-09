@@ -55,6 +55,9 @@ export class DayTypesComponent implements OnInit {
 
   submitNewDayType() {
     this.dayTypeAnalysisService.addNewDayTypes(this.selectedDays, this.newDayTypeColor, this.newDayTypeName);
+    this.dayTypeAnalysisService.setDayTypeSummaries();
+    this.dayTypeGraphService.updateIndividualDayScatterPlotDataColors();
+    this.dayTypeGraphService.setDayTypeScatterPlotData();
     this.hideAddNewDayType();
   }
 
@@ -71,24 +74,30 @@ export class DayTypesComponent implements OnInit {
         return this.newDayTypeColor;
       }
     } else {
-      return undefined;
+      return 'lightgray';
     }
   }
 
   onDateSelect(date: NgbDate) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testIsDateSelected = _.find(this.selectedDays, (selectedDay) => {
-      return this.logToolDataService.checkSameDay(d, selectedDay)
-    });
-    if (testIsDateSelected != undefined) {
-      _.remove(this.selectedDays, (selectedDay) => { return this.logToolDataService.checkSameDay(d, selectedDay) })
-    } else {
-      this.selectedDays.push(d);
+    let testDateExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.date) });
+    if (testDateExists) {
+      let testIsDateSelected = _.find(this.selectedDays, (selectedDay) => {
+        return this.logToolDataService.checkSameDay(d, selectedDay)
+      });
+      if (testIsDateSelected != undefined) {
+        _.remove(this.selectedDays, (selectedDay) => { return this.logToolDataService.checkSameDay(d, selectedDay) })
+      } else {
+        this.selectedDays.push(d);
+      }
     }
   }
 
   removeDayType(dayType: DayType) {
     this.dayTypeAnalysisService.removeFromSecondary(dayType);
+    this.dayTypeAnalysisService.setDayTypeSummaries();
+    this.dayTypeGraphService.updateIndividualDayScatterPlotDataColors();
+    this.dayTypeGraphService.setDayTypeScatterPlotData();
   }
 
   getRandomColor() {

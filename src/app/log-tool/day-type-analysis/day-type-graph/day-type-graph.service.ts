@@ -10,44 +10,42 @@ import * as moment from 'moment';
 export class DayTypeGraphService {
 
   selectedGraphType: BehaviorSubject<string>;
-  dayTypeScatterPlotData: Array<{ xData: Array<any>, yData: Array<number>, name: string, color: string }>;
-  individualDayScatterPlotData: Array<{ xData: Array<any>, yData: Array<number>, name: string, color: string }>;
+  dayTypeScatterPlotData: BehaviorSubject<Array<DayTypeGraphItem>>;
+  individualDayScatterPlotData: BehaviorSubject<Array<DayTypeGraphItem>>;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
-    this.selectedGraphType = new BehaviorSubject<string>('daily');
+    this.selectedGraphType = new BehaviorSubject<string>('individualDay');
+    this.dayTypeScatterPlotData = new BehaviorSubject<Array<DayTypeGraphItem>>(new Array());
+    this.individualDayScatterPlotData = new BehaviorSubject<Array<DayTypeGraphItem>>(new Array());
   }
 
   setDayTypeScatterPlotData() {
-    console.log('setDayTypeScatterPlotData');
-    console.time('setDayTypeScatterPlotData');
-    this.dayTypeScatterPlotData = new Array();
+    let dayTypeScatterPlotData = new Array();
     let dayTypeSummaries = this.dayTypeAnalysisService.dayTypeSummaries.getValue();
     dayTypeSummaries.forEach(summary => {
       let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(summary.data);
       let color: string = summary.dayType.color;
-      this.dayTypeScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: summary.dayType.label, color: color });
+      dayTypeScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: summary.dayType.label, color: color, dayType: summary.dayType });
     });
-    console.timeEnd('setDayTypeScatterPlotData');
+    this.dayTypeScatterPlotData.next(dayTypeScatterPlotData);
   }
 
   setIndividualDayScatterPlotData() {
-    console.log('setIndividualDayScatterPlotData');
-    console.time('setIndividualDayScatterPlotData');
-    this.individualDayScatterPlotData = new Array();
+    let individualDayScatterPlotData = new Array();
     this.dayTypeAnalysisService.daySummaries.forEach((daySummary) => {
       let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(daySummary.dayData);
       let color: string = this.getDateColorFromDaySummary(daySummary);
       let formatedDate: string = moment(daySummary.date).format("MMM D, YYYY").toString();
-      this.individualDayScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: formatedDate, color: color });
+      individualDayScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: formatedDate, color: color, date: daySummary.date });
     });
-    console.timeEnd('setIndividualDayScatterPlotData');
+    this.individualDayScatterPlotData.next(individualDayScatterPlotData);
   }
 
-  getDayTypeScatterPlotData(): Array<{ xData: Array<any>, yData: Array<number>, name: string, color: string }> {
-    if (this.selectedGraphType.getValue() == 'daily') {
-      return this.individualDayScatterPlotData;
-    } else {
-      return this.dayTypeScatterPlotData;
-    }
+  updateIndividualDayScatterPlotDataColors() {
+    let individualDayScatterPlotData = this.individualDayScatterPlotData.getValue();
+    individualDayScatterPlotData.forEach((daySummary) => {
+      daySummary.color = this.getDateColorFromDate(daySummary.date);
+    });
+    this.individualDayScatterPlotData.next(individualDayScatterPlotData);
   }
 
   //calculates averages per hour in a day
@@ -55,7 +53,7 @@ export class DayTypeGraphService {
     let xData: Array<any> = new Array();
     let yData: Array<number> = new Array();
     //24 hrs in a day
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i <= 25; i++) {
       let filteredDaysByHour = _.filter(dayItems, (dayItem) => {
         if (dayItem[this.logToolService.dateField]) {
           let date = new Date(dayItem[this.logToolService.dateField]);
@@ -84,4 +82,13 @@ export class DayTypeGraphService {
     return this.getDateColorFromDaySummary(daySummary);
   }
 
+}
+
+export interface DayTypeGraphItem {
+  xData: Array<any>,
+  yData: Array<number>,
+  name: string,
+  color: string,
+  date?: Date,
+  dayType?: DayType
 }
