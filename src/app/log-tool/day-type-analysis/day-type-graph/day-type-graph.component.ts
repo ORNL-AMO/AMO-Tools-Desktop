@@ -29,6 +29,7 @@ export class DayTypeGraphComponent implements OnInit {
   };
   dayTypesSubscription: Subscription;
   selectedGraphTypeSub: Subscription;
+  selectedDataFieldSub: Subscription;
   constructor(private dayTypeGraphService: DayTypeGraphService, private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {
@@ -41,10 +42,17 @@ export class DayTypeGraphComponent implements OnInit {
     this.selectedGraphTypeSub = this.dayTypeGraphService.selectedGraphType.subscribe(val => {
       this.setGraphData();
     });
+
+    this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(val => {
+      this.dayTypeGraphService.setDayTypeScatterPlotData();
+      this.dayTypeGraphService.setIndividualDayScatterPlotData();
+      this.setGraphData();
+    });
   }
 
   ngOnDestroy() {
     this.dayTypesSubscription.unsubscribe();
+    this.selectedDataFieldSub.unsubscribe();
     this.selectedGraphTypeSub.unsubscribe();
   }
 

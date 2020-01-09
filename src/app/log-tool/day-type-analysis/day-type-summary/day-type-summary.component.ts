@@ -25,6 +25,9 @@ export class DayTypeSummaryComponent implements OnInit {
   ngOnInit() {
     this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(field => {
       this.selectedDataField = field;
+      if (this.dayTypeSummaries) {
+        this.setDayTypeSummaryAverages();
+      }
     });
     this.daySummaries = this.dayTypeAnalysisService.daySummaries;
 
