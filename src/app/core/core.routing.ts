@@ -16,6 +16,8 @@ import { calculatorRoutes } from '../calculator/calculator-routing/calculators.r
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { DirectoryDashboardComponent } from '../dashboard/directory-dashboard/directory-dashboard.component';
 import { ReportRollupComponent } from '../report-rollup/report-rollup.component';
+import { LogToolComponent } from '../log-tool/log-tool.component';
+import { logToolRoutes } from '../log-tool/log-tool.routings';
 
 export const coreRoutes: Routes = [
   {
@@ -94,5 +96,10 @@ export const coreRoutes: Routes = [
   {
     path: 'report-rollup',
     component: ReportRollupComponent
+  },
+  {
+    path: 'log-tool',
+    component: LogToolComponent,
+    children: logToolRoutes
   }
 ];

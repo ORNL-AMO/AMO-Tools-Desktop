@@ -1235,6 +1235,12 @@ Banner
     color: white;
   }
 
+  .banner.log-tool{
+    background: #117A65;
+    color: white;
+  }
+
+
   .banner.fsat .btn-dashboard, .banner.fsat .title, 
   .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{
     color: #000;

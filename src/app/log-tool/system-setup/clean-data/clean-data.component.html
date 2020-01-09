@@ -1,0 +1,59 @@
+<div class="d-flex flex-column">
+    <div class="header mr-2 ml-2">
+        <h3>Data Summary</h3>
+        <br>
+    </div>
+    <div class="text-center p-2">
+        <div class="pt-2">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td class="bold w-50">Number of Data Points</td>
+                        <td>{{numberOfDataPoints | number}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="pt-2">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td class="bold w-50">Start Date</td>
+                        <td class="bold">End Date</td>
+                    </tr>
+                    <tr>
+                        <td>{{startDate | date}}</td>
+                        <td>{{endDate | date}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="pt-2">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td class="bold" colspan="4">Data Columns</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Use Column</td>
+                        <td class="bold">Column Name</td>
+                        <td class="bold">Alias</td>
+                        <td class="bold">Unit</td>
+                    </tr>
+                    <tr *ngFor="let field of dataFields">
+                        <td>
+                            <input type="checkbox" [(ngModel)]="field.useField" [disabled]="field.isDateField">
+                        </td>
+                        <td>{{field.fieldName}}</td>
+                        <td>
+                            <input type="text" class="form-control w-100" [(ngModel)]="field.alias">
+                        </td>
+                        <td>
+                            {{field.unit}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

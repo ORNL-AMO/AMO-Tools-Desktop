@@ -299,3 +299,13 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .standalone-calculator{
     background: #ececec;
 }
+
+
+.ngb-dp-header{
+    /* background-color: white !important; */
+    display: none !important;
+}
+
+.ngb-dp-month-name, .ngb-dp-weekdays{
+    background-color: white !important;
+}

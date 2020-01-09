@@ -1,0 +1,58 @@
+<div class="pt-2 pr-2 pb-2">
+    <div class="card">
+        <div class="card-header p-2">
+            Day Type Averages
+            <a *ngIf="selectedGraphType != 'dayType'" class="pull-right click-link" (click)="showDayTypeGraph()">View
+                Graph</a>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <tbody>
+                    <tr>
+                        <td class="bold">Day Type</td>
+                        <td class="bold">{{getAverageDataItem(dayTypeSummaries[0]).field.alias}}</td>
+                    </tr>
+                    <tr class="day-summary-role" *ngFor="let dayTypeSummary of dayTypeSummaries"
+                        [ngStyle]="{'background-color': dayTypeSummary.dayType.color}">
+                        <td>
+                            {{dayTypeSummary.dayType.label}}
+                        </td>
+                        <td>
+                            {{getAverageDataItem(dayTypeSummary).value | number}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="pt-2 pr-2">
+    <div class="card">
+        <div class="card-header p-2">
+            Daily Averages
+            <a *ngIf="selectedGraphType != 'individualDay'" class="pull-right click-link" (click)="showDailyGraph()">View
+                Graph</a>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <tbody>
+                    <tr>
+                        <td class="bold">Day</td>
+                        <td class="bold">{{getAverageDataItem(daySummaries[0]).field.alias}}</td>
+                    </tr>
+                    <tr class="day-summary-role" *ngFor="let daySummary of daySummaries"
+                        [ngStyle]="{'background-color': getDateColor(daySummary)}">
+                        <td>
+                            {{daySummary.date | date}}
+                        </td>
+                        <td>
+                            {{getAverageDataItem(daySummary).value | number}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

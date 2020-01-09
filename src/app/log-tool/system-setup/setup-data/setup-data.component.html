@@ -1,0 +1,69 @@
+<form class="p-0">
+    <div class="d-flex flex-column">
+        <div class="header mr-2 ml-2">
+            <h3>Import Logger Data from .csv file</h3>
+            <br>
+        </div>
+        <div class="p-2">
+            <div class="form-group">
+                <label>
+                    Log File
+                </label>
+                <input type="file" class="form-control" (change)="setImportFile($event)">
+                <span class="alert-danger small w-100 text-center" *ngIf="validFile == false">Invalid File Type - Must
+                    have a .csv file extension</span>
+            </div>
+
+            <!-- <span class="small alert-warning w-100 text-center p-2">
+                Choose .csv logger file to visualize.
+            </span> -->
+
+            <div class="form-group">
+                <label>
+                    File Date Format
+                    <a class="form-text small">"-" and "/" are interchangeable</a>
+                </label>
+                <select class="form-control" name="dateFormat" [(ngModel)]="dateFormat" (change)="setDateFormat()">
+                    <option *ngFor="let format of dateFormats" [ngValue]="format.value">{{format.display}}</option>
+                </select>
+            </div>
+            <div class="d-flex w-100 justify-content-end">
+                <button class="btn btn-primary pull-right" role="button" (click)="parseImportData()"
+                    [disabled]="importData == undefined">Parse CSV Data</button>
+            </div>
+
+            <div class="text-center p-2" *ngIf="validDate == true">
+                <div class="alert-success router-link" [routerLink]="['/log-tool/system-setup/clean-data']">
+                    Data parsing successful! Click here or the tab for Step 2: "Clean Data" to continue.
+                </div>
+            </div>
+            <div class="text-center p-2" *ngIf="validDate == false">
+                <div class="alert-danger">No column from .csv file matches date format you have selected. View the
+                    first row below and adjust your format to match.</div>
+                <div class="pt-2">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td class="bold" *ngFor="let field of importDataFromCsv.meta.fields">{{field}}</td>
+                            </tr>
+                            <tr>
+                                <td *ngFor="let field of importDataFromCsv.meta.fields">
+                                    {{importDataFromCsv.data[0][field]}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="d-flex flex-column align-items-center w-100 h-100" *ngIf="importingData == true">
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <span class="importing-text">Importing Data, One Moment...</span>
+            </div>
+        </div>
+
+    </div>
+</form>

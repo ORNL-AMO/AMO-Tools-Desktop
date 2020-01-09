@@ -1,0 +1,17 @@
+
+td{
+    font-size: small;
+    padding: 3px;
+}
+
+.card{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+.day-summary-role{
+    color: white;
+}
+
+.card-header{
+    background-color: white;
+}
