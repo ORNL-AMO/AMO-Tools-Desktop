@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DayTypeAnalysisService } from './day-type-analysis.service';
 import { Subscription } from 'rxjs';
-import { LogToolField, LogToolService } from '../log-tool.service';
+import { LogToolField } from '../log-tool.service';
 import * as _ from 'lodash';
 @Component({
   selector: 'app-day-type-analysis',
@@ -18,10 +18,10 @@ export class DayTypeAnalysisComponent implements OnInit {
 
   selectedDataField: LogToolField;
   selectedDataFieldSub: Subscription;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolService: LogToolService) { }
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {
-    this.dataFields = this.getDataFieldOptions();
+    this.dataFields = this.dayTypeAnalysisService.getDataFieldOptions();
     this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
     this.displayDayTypeCalanderSub = this.dayTypeAnalysisService.displayDayTypeCalander.subscribe(val => {
       this.displayDayTypeCalander = val;
@@ -55,9 +55,5 @@ export class DayTypeAnalysisComponent implements OnInit {
     this.selectedDataFieldDropdown = !this.selectedDataFieldDropdown;
   }
 
-  getDataFieldOptions(): Array<LogToolField> {
-    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
-    _.remove(tmpFields, (field) => { return field.useField == false || field.fieldName == this.logToolService.dateField });
-    return tmpFields;
-  }
+
 }

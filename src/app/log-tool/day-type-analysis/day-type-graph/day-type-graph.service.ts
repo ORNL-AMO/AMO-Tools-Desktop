@@ -17,16 +17,21 @@ export class DayTypeGraphService {
   }
 
   setDayTypeScatterPlotData() {
+    console.log('setDayTypeScatterPlotData');
+    console.time('setDayTypeScatterPlotData');
     this.dayTypeScatterPlotData = new Array();
     let dayTypeSummaries = this.dayTypeAnalysisService.dayTypeSummaries.getValue();
     dayTypeSummaries.forEach(summary => {
       let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(summary.data);
       let color: string = summary.dayType.color;
       this.dayTypeScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: summary.dayType.label, color: color });
-    })
+    });
+    console.timeEnd('setDayTypeScatterPlotData');
   }
 
   setIndividualDayScatterPlotData() {
+    console.log('setIndividualDayScatterPlotData');
+    console.time('setIndividualDayScatterPlotData');
     this.individualDayScatterPlotData = new Array();
     this.dayTypeAnalysisService.daySummaries.forEach((daySummary) => {
       let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(daySummary.dayData);
@@ -34,6 +39,7 @@ export class DayTypeGraphService {
       let formatedDate: string = moment(daySummary.date).format("MMM D, YYYY").toString();
       this.individualDayScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: formatedDate, color: color });
     });
+    console.timeEnd('setIndividualDayScatterPlotData');
   }
 
   getDayTypeScatterPlotData(): Array<{ xData: Array<any>, yData: Array<number>, name: string, color: string }> {
@@ -49,7 +55,7 @@ export class DayTypeGraphService {
     let xData: Array<any> = new Array();
     let yData: Array<number> = new Array();
     //24 hrs in a day
-    for (let i = 0; i <= 25; i++) {
+    for (let i = 0; i < 25; i++) {
       let filteredDaysByHour = _.filter(dayItems, (dayItem) => {
         if (dayItem[this.logToolService.dateField]) {
           let date = new Date(dayItem[this.logToolService.dateField]);

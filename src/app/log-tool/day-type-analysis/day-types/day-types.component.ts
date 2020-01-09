@@ -31,7 +31,6 @@ export class DayTypesComponent implements OnInit {
       this.dayTypes = val;
     });
     this.daySummaries = this.dayTypeAnalysisService.daySummaries;
-
     this.startDate = this.dayTypeAnalysisService.calendarStartDate;
     this.numberOfMonths = this.dayTypeAnalysisService.numberOfMonths;
   }
@@ -55,19 +54,7 @@ export class DayTypesComponent implements OnInit {
   }
 
   submitNewDayType() {
-    let dates: Array<Date> = new Array();
-    this.selectedDays.forEach(date => {
-      this.dayTypeAnalysisService.removeFromPrimary(new Date(date));
-      dates.push(new Date(date));
-    });
-    let dayTypes: { addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> } = this.dayTypeAnalysisService.dayTypes.getValue();
-    dayTypes.addedDayTypes.push({
-      color: this.newDayTypeColor,
-      label: this.newDayTypeName,
-      useDayType: true,
-      dates: dates
-    });
-    this.dayTypeAnalysisService.dayTypes.next(dayTypes);
+    this.dayTypeAnalysisService.addNewDayTypes(this.selectedDays, this.newDayTypeColor, this.newDayTypeName);
     this.hideAddNewDayType();
   }
 
@@ -101,16 +88,7 @@ export class DayTypesComponent implements OnInit {
   }
 
   removeDayType(dayType: DayType) {
-    let dayTypeIndex: number = _.findIndex(this.dayTypes.addedDayTypes, (addedDayType) => { return (dayType.color == addedDayType.color && dayType.label == addedDayType.label) });
-    if (dayTypeIndex != -1) {
-      this.dayTypes.addedDayTypes.splice(dayTypeIndex, 1);
-      dayType.dates.forEach(date => {
-        let primaryDayTypeStr: string = this.dayTypeAnalysisService.getPrimaryDayType(date);
-        let primaryDayType: DayType = _.find(this.dayTypes.primaryDayTypes, (primaryDayType) => { return primaryDayType.label == primaryDayTypeStr });
-        primaryDayType.dates.push(date);
-      });
-      this.dayTypeAnalysisService.dayTypes.next(this.dayTypes);
-    }
+    this.dayTypeAnalysisService.removeFromSecondary(dayType);
   }
 
   getRandomColor() {

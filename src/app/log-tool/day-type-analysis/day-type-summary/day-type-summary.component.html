@@ -2,23 +2,23 @@
     <div class="card">
         <div class="card-header p-2">
             Day Type Averages
-            <a *ngIf="selectedGraphType != 'dayType'" class="pull-right click-link"
-                (click)="showDayTypeGraph()">View Graph</a>
+            <a *ngIf="selectedGraphType != 'dayType'" class="pull-right click-link" (click)="showDayTypeGraph()">View
+                Graph</a>
         </div>
         <div class="card-body p-0">
             <table class="table table-striped mb-0">
                 <tbody>
                     <tr>
                         <td class="bold">Day Type</td>
-                        <td class="bold">{{getAverageDataItem(daySummaries[0]).field.alias}}</td>
+                        <td class="bold">{{getAverageDataItem(dayTypeSummaries[0]).field.alias}}</td>
                     </tr>
-                    <tr class="day-summary-role" *ngFor="let dayTypeSummaryAverage of dayTypeSummaryAverages"
-                        [ngStyle]="{'background-color': dayTypeSummaryAverage.dayType.color}">
+                    <tr class="day-summary-role" *ngFor="let dayTypeSummary of dayTypeSummaries"
+                        [ngStyle]="{'background-color': dayTypeSummary.dayType.color}">
                         <td>
-                            {{dayTypeSummaryAverage.dayType.label}}
+                            {{dayTypeSummary.dayType.label}}
                         </td>
                         <td>
-                            {{dayTypeSummaryAverage.average | number}}
+                            {{getAverageDataItem(dayTypeSummary).value | number}}
                         </td>
                     </tr>
                 </tbody>

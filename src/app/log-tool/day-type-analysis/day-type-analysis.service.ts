@@ -23,6 +23,13 @@ export class DayTypeAnalysisService {
     this.displayDayTypeCalander = new BehaviorSubject<boolean>(true);
   }
 
+  getDataFieldOptions(): Array<LogToolField> {
+    //non date and used fields
+    let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
+    _.remove(tmpFields, (field) => { return field.useField == false || field.fieldName == this.logToolService.dateField });
+    return tmpFields;
+  }
+
   initSecondaryDayTypes() {
     let dayTypesArr: Array<DayType> = new Array();
     let excludedDates: Array<Date> = new Array();
@@ -151,14 +158,13 @@ export class DayTypeAnalysisService {
         this.dayTypes.next(dayTypes);
       } else {
         dayTypes.addedDayTypes[0].dates.push(toggleDate);
-        this.removeFromPrimary(toggleDate);
+        this.removeFromPrimary(toggleDate, dayTypes);
         this.dayTypes.next(dayTypes);
       }
     }
   }
 
-  removeFromPrimary(dateToBeRemoved: Date) {
-    let dayTypes = this.dayTypes.getValue();
+  removeFromPrimary(dateToBeRemoved: Date, dayTypes: { addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }): { addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> } {
     if (dayTypes.primaryDayTypes.length != 0) {
       let dayTypeIndex: number = _.findIndex(dayTypes.primaryDayTypes, (dayType) => {
         return this.checkDateExistsInDayType(dateToBeRemoved, dayType);
@@ -169,13 +175,44 @@ export class DayTypeAnalysisService {
         });
       }
     }
+    return dayTypes;
+  }
+
+  removeFromSecondary(dayType: DayType) {
+    let dayTypes = this.dayTypes.getValue();
+    let dayTypeIndex: number = _.findIndex(dayTypes.addedDayTypes, (addedDayType) => { return (dayType.color == addedDayType.color && dayType.label == addedDayType.label) });
+    if (dayTypeIndex != -1) {
+      dayTypes.addedDayTypes.splice(dayTypeIndex, 1);
+      dayType.dates.forEach(date => {
+        let primaryDayTypeStr: string = this.getPrimaryDayType(date);
+        let primaryDayType: DayType = _.find(dayTypes.primaryDayTypes, (primaryDayType) => { return primaryDayType.label == primaryDayTypeStr });
+        primaryDayType.dates.push(date);
+      });
+      this.dayTypes.next(dayTypes);
+    }
+  }
+
+  addNewDayTypes(newDates: Array<Date>, newDayTypeColor: string, newDayTypeName: string) {
+    let dayTypes: { addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> } = this.dayTypes.getValue();
+    let dates: Array<Date> = new Array();
+    newDates.forEach(date => {
+      dayTypes = this.removeFromPrimary(new Date(date), dayTypes);
+      dates.push(new Date(date));
+    });
+
+    dayTypes.addedDayTypes.push({
+      color: newDayTypeColor,
+      label: newDayTypeName,
+      useDayType: true,
+      dates: dates
+    });
     this.dayTypes.next(dayTypes);
   }
 
 
+
   setDayTypeSummaries() {
     let dayTypeSummaries: Array<DayTypeSummary> = new Array();
-    //day types
     let dayTypes = this.dayTypes.getValue();
     dayTypes.addedDayTypes.forEach(dayType => {
       if (dayType.dates.length != 0) {
@@ -183,7 +220,6 @@ export class DayTypeAnalysisService {
         dayTypeSummaries.push(dayTypeSummary);
       }
     });
-    // let secondaryDayTypes: Array<DayType> = this.secondaryDayTypes.getValue();
     dayTypes.primaryDayTypes.forEach(dayType => {
       if (dayType.dates.length != 0) {
         let dayTypeSummary: DayTypeSummary = this.getDayTypeSummary(dayType);
@@ -204,9 +240,19 @@ export class DayTypeAnalysisService {
     dayTypeData.forEach(dataItem => {
       data = _.union(data, dataItem.data)
     });
+    let fields: Array<LogToolField> = this.getDataFieldOptions();
+    let fieldAverages: Array<{ field: LogToolField, value: number }> = new Array();
+    fields.forEach(field => {
+      let fieldAverage: number = _.meanBy(data, field.fieldName);
+      fieldAverages.push({
+        field: field,
+        value: fieldAverage
+      })
+    })
     return {
       dayType: dayType,
-      data: data
+      data: data,
+      averages: fieldAverages
     }
   }
 
@@ -237,6 +283,10 @@ export interface DayType {
 }
 
 export interface DayTypeSummary {
-  dayType: DayType
-  data: Array<any>
+  dayType: DayType,
+  data: Array<any>,
+  averages: Array<{
+    field: LogToolField,
+    value: number
+  }>
 }
