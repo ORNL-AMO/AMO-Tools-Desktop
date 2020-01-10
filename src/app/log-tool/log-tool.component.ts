@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DayTypeAnalysisService } from './day-type-analysis/day-type-analysis.service';
 
 @Component({
   selector: 'app-log-tool',
@@ -15,7 +16,7 @@ export class LogToolComponent implements OnInit {
   onResize(event) {
     this.getContainerHeight();
   }
-  constructor(private activatedRoute: ActivatedRoute) { }
+  constructor(private activatedRoute: ActivatedRoute, private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {
     this.activatedRoute.url.subscribe(() => {
@@ -28,7 +29,11 @@ export class LogToolComponent implements OnInit {
       this.getContainerHeight();
     }, 100);
   }
-  
+
+  ngOnDestroy(){
+    this.dayTypeAnalysisService.selectedDataField.next(undefined);
+  }
+
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {

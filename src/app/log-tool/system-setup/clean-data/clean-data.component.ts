@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LogToolService } from '../../log-tool.service';
+import { LogToolDataService } from '../../log-tool-data.service';
 
 @Component({
   selector: 'app-clean-data',
@@ -12,7 +13,7 @@ export class CleanDataComponent implements OnInit {
   endDate: Date;
   dataFields: Array<{ fieldName: string, alias: string, useField: boolean, isDateField: boolean }>;
   numberOfDataPoints: number;
-  constructor(private logToolService: LogToolService) { }
+  constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
     this.startDate = this.logToolService.startDate;
@@ -21,4 +22,12 @@ export class CleanDataComponent implements OnInit {
     this.numberOfDataPoints = this.logToolService.numberOfDataPoints;
   }
 
+
+  submit() {
+    console.log('submit');
+    console.time('submit');
+    this.logToolDataService.setLogToolDays();
+    this.logToolDataService.setValidNumberOfDayDataPoints();
+    console.timeEnd('submit');
+  }
 }

@@ -60,8 +60,8 @@ export class SetupDataComponent implements OnInit {
       if (foundDate != undefined) {
         this.validDate = true;
         this.logToolService.parseImportData();
-        this.logToolDataService.setLogToolDays();
-        this.logToolDataService.setValidNumberOfDayDataPoints();
+        // this.logToolDataService.setLogToolDays();
+        // this.logToolDataService.setValidNumberOfDayDataPoints();
       } else {
         this.validDate = false;
       }

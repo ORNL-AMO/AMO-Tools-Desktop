@@ -32,12 +32,44 @@ export class LogToolDataService {
     //iterate thru days from start day to end day
     for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
       let filteredDayData: Array<any> = this.getDataForDay(tmpDate, csvDataCopy);
+      let hourlyAverages = this.getHourlyAverages(filteredDayData);
       this.logToolDays.push({
         date: new Date(tmpDate),
-        data: filteredDayData
+        data: filteredDayData,
+        hourlyAverages: hourlyAverages
       });
     }
+    console.log(this.logToolDays);
   }
+
+  getHourlyAverages(dayData: Array<any>): Array<{hour: number, averages: Array<{ value: number, field: LogToolField }>}>{
+    let hourlyAverages: Array<{hour: number, averages: Array<{ value: number, field: LogToolField }>}> = new Array();
+    let fields: Array<LogToolField> = this.getDataFieldOptions();
+    for (let i = 0; i < 24; i++) {
+      let filteredDaysByHour = _.filter(dayData, (dayItem) => {
+        if (dayItem[this.logToolService.dateField]) {
+          let date = new Date(dayItem[this.logToolService.dateField]);
+          let dateVal = date.getHours();
+          return i == dateVal;
+        };
+      });
+      let averages: Array<{value: number, field: LogToolField}> = new Array();
+      fields.forEach(field => {
+        let hourFieldMean: number = _.meanBy(filteredDaysByHour, field.fieldName);
+        averages.push({
+          value: hourFieldMean,
+          field: field
+        })
+      })
+      hourlyAverages.push({
+        hour: i,
+        averages: averages
+      });
+    }
+    return hourlyAverages;
+  }
+
+
 
   getDataForDay(date: Date, data: Array<any>): Array<any> {
     //filter matching day items from all day data and return array
@@ -73,4 +105,11 @@ export class LogToolDataService {
 export interface LogToolDay {
   date: Date,
   data: Array<any>,
+  hourlyAverages: Array<{
+    hour: number,
+    averages: Array<{
+      value: number,
+      field: LogToolField
+    }>
+  }>
 }
