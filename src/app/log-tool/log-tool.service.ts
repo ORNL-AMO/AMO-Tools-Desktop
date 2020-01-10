@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CsvImportData } from '../shared/helper-services/csv-to-json.service';
 import * as _ from 'lodash';
+import { LogToolField } from './log-tool-models';
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class LogToolService {
 
@@ -12,7 +14,10 @@ export class LogToolService {
   dateField: string;
   dateFormat: Array<string>;
   numberOfDataPoints: number;
-  constructor() { }
+  dataSubmitted: BehaviorSubject<boolean>;
+  constructor() { 
+    this.dataSubmitted = new BehaviorSubject<boolean>(false);
+  }
 
   setDateField(str: string) {
     this.dateField = str;
@@ -59,12 +64,4 @@ export class LogToolService {
       });
     });
   }
-}
-
-export interface LogToolField {
-  fieldName: string,
-  alias: string,
-  useField: boolean,
-  isDateField: boolean,
-  unit: string
 }

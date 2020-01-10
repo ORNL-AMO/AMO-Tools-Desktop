@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DayTypeGraphService, DayTypeGraphItem } from './day-type-graph.service';
+import { DayTypeGraphService } from './day-type-graph.service';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js';
+import { DayTypeGraphItem } from '../../log-tool-models';
 @Component({
   selector: 'app-day-type-graph',
   templateUrl: './day-type-graph.component.html',

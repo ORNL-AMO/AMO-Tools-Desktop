@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { LogToolService, LogToolField } from '../log-tool.service';
+import { LogToolService } from '../log-tool.service';
 import { LogToolDataService } from '../log-tool-data.service';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import { GraphDataObj, LogToolField } from '../log-tool-models';
 @Injectable()
 export class VisualizeService {
 
@@ -201,27 +201,5 @@ export class VisualizeService {
     let averageSquareDiff: number = _.mean(squareDiffs);
     let squareRootOfAverageSquareDiff: number = Math.sqrt(averageSquareDiff);
     return squareRootOfAverageSquareDiff;
-  }
-}
-
-
-
-export interface GraphDataObj {
-  graphType: { label: string, value: string },
-  scatterPlotMode: string,
-  selectedXDataField: LogToolField,
-  xData: Array<number>,
-  selectedYDataField: LogToolField,
-  yData: Array<number>,
-  graphName: string,
-  graphId: string;
-  useStandardDeviation: boolean;
-  numberOfBins: number;
-  histogramDataField: LogToolField;
-  histogramData: {
-    xLabels: Array<string>,
-    yValues: Array<number>,
-    standardDeviation: number,
-    average: number
   }
 }

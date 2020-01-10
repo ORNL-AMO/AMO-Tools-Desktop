@@ -1,4 +1,4 @@
-<nav class="log-tool navbar banner d-flex mr-auto p-0 flex-nowrap">
+<nav class="log-tool navbar banner d-flex mr-auto pt-2 pb-2 pl-0 pr-0 flex-nowrap">
     <div class="d-flex align-items-center p-1">
         <div class="img-col col-sm-auto col-md-auto col-lg-auto">
             <!-- <img class="img-icon" src="assets/images/treasure-hunt.png"> -->
@@ -7,12 +7,6 @@
             <div class="h2-name">
                 Log Tool Assessment
             </div>
-            <div class="h2-name">
-                <span class="small">
-                    Last modified:
-                    <!--{{assessment.modifiedDate | date:'mediumDate'}} -->
-                </span>
-            </div>
         </div>
     </div>
     <div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
@@ -20,20 +14,26 @@
             <a class="nav-link" [routerLink]="['/log-tool/system-setup']" routerLinkActive="active">Setup</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [routerLink]="['/log-tool/day-type-analysis']" routerLinkActive="active">Day Type Analysis</a>
+            <a *ngIf="dataSubmitted == true" class="nav-link" [routerLink]="['/log-tool/day-type-analysis']"
+                routerLinkActive="active">Day Type Analysis</a>
+            <a *ngIf="dataSubmitted == false" class="nav-link disabled">Day Type Analysis</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [routerLink]="['/log-tool/visualize']" routerLinkActive="active">Data Visualization</a>
+            <a *ngIf="dataSubmitted == true" class="nav-link" [routerLink]="['/log-tool/visualize']"
+                routerLinkActive="active">Data Visualization</a>
+            <a *ngIf="dataSubmitted == false" class="nav-link disabled">Data Visualization</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [routerLink]="['/log-tool/report']" routerLinkActive="active">Report</a>
+            <a class="nav-link disabled">Report</a>
+            <!-- <a class="nav-link" [routerLink]="['/log-tool/report']" routerLinkActive="active">Report</a> -->
+
         </div>
     </div>
     <div class="d-flex ml-auto pr-2 h-100">
         <!-- <div class="pl-2 pr-2 border-right border-left home-nav-item" [routerLink]="['/tools']">
             <span class="fa fa-folder-open"></span>
         </div> -->
-        <div class="pl-2 pr-2 border-right home-nav-item" [routerLink]="['/landing-screen']">
+        <div class="pl-2 pr-2 border-left home-nav-item" [routerLink]="['/landing-screen']">
             <span class="fa fa-home"></span>
         </div>
     </div>

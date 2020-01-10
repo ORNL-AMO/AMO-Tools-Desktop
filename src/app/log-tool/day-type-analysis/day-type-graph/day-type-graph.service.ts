@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { DayTypeAnalysisService, DaySummary, DayType } from '../day-type-analysis.service';
+import { DayTypeAnalysisService} from '../day-type-analysis.service';
 import { LogToolService } from '../../log-tool.service';
 import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 import * as moment from 'moment';
+import { DaySummary, DayType, DayTypeGraphItem } from '../../log-tool-models';
 
 @Injectable()
 export class DayTypeGraphService {
@@ -28,6 +29,13 @@ export class DayTypeGraphService {
     });
     this.dayTypeScatterPlotData.next(dayTypeScatterPlotData);
   }
+
+  // getDaySummaryAverages(dayTypeSummary: DayTypeSummary): {xData: Array<number>, yData: Array<number>}{
+  //   let xData: Array<number> = new Array();
+  //   let yData: Array<number> = new Array();
+    
+
+  // }
 
   setIndividualDayScatterPlotData() {
     let individualDayScatterPlotData = new Array();
@@ -82,13 +90,4 @@ export class DayTypeGraphService {
     return this.getDateColorFromDaySummary(daySummary);
   }
 
-}
-
-export interface DayTypeGraphItem {
-  xData: Array<any>,
-  yData: Array<number>,
-  name: string,
-  color: string,
-  date?: Date,
-  dayType?: DayType
 }

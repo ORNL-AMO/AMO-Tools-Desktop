@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { VisualizeService, GraphDataObj } from '../visualize.service';
+import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
-import { LogToolService, LogToolField } from '../../log-tool.service';
 import { LogToolDataService } from '../../log-tool-data.service';
+import { GraphDataObj, LogToolField } from '../../log-tool-models';
 
 @Component({
   selector: 'app-visualize-menu',

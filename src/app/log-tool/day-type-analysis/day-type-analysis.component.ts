@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DayTypeAnalysisService } from './day-type-analysis.service';
 import { Subscription } from 'rxjs';
-import { LogToolField } from '../log-tool.service';
 import * as _ from 'lodash';
 import { DayTypeGraphService } from './day-type-graph/day-type-graph.service';
 import { LogToolDataService } from '../log-tool-data.service';
+import { LogToolField } from '../log-tool-models';
 @Component({
   selector: 'app-day-type-analysis',
   templateUrl: './day-type-analysis.component.html',

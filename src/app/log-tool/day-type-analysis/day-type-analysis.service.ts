@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { LogToolService, LogToolField } from '../log-tool.service';
+import { LogToolService } from '../log-tool.service';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../log-tool-data.service';
+import { LogToolField, DaySummary, DayType, DayTypeSummary } from '../log-tool-models';
 @Injectable()
 export class DayTypeAnalysisService {
 
@@ -259,27 +260,4 @@ export class DayTypeAnalysisService {
     let endMonth: number = this.logToolService.endDate.getMonth();
     this.numberOfMonths = endMonth - startMonth + 1;
   }
-}
-
-
-export interface DaySummary {
-  date: Date,
-  averages: Array<{ value: number, field: LogToolField }>,
-  dayData: Array<any>
-}
-
-export interface DayType {
-  color: string,
-  label: string,
-  useDayType: boolean,
-  dates?: Array<Date>
-}
-
-export interface DayTypeSummary {
-  dayType: DayType,
-  data: Array<any>,
-  averages: Array<{
-    field: LogToolField,
-    value: number
-  }>
 }

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { LogToolService, LogToolField } from './log-tool.service';
+import { LogToolService } from './log-tool.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { LogToolDay, LogToolField } from './log-tool-models';
 @Injectable()
 export class LogToolDataService {
 
@@ -16,7 +17,7 @@ export class LogToolDataService {
     return tmpFields;
   }
 
-  getDataFieldOptionsWithDate(){
+  getDataFieldOptionsWithDate() {
     let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
     _.remove(tmpFields, (field) => { return field.useField == false });
     return tmpFields;
@@ -42,8 +43,8 @@ export class LogToolDataService {
     console.log(this.logToolDays);
   }
 
-  getHourlyAverages(dayData: Array<any>): Array<{hour: number, averages: Array<{ value: number, field: LogToolField }>}>{
-    let hourlyAverages: Array<{hour: number, averages: Array<{ value: number, field: LogToolField }>}> = new Array();
+  getHourlyAverages(dayData: Array<any>): Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> {
+    let hourlyAverages: Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> = new Array();
     let fields: Array<LogToolField> = this.getDataFieldOptions();
     for (let i = 0; i < 24; i++) {
       let filteredDaysByHour = _.filter(dayData, (dayItem) => {
@@ -53,9 +54,12 @@ export class LogToolDataService {
           return i == dateVal;
         };
       });
-      let averages: Array<{value: number, field: LogToolField}> = new Array();
+      let averages: Array<{ value: number, field: LogToolField }> = new Array();
       fields.forEach(field => {
-        let hourFieldMean: number = _.meanBy(filteredDaysByHour, field.fieldName);
+        let hourFieldMean: number = 0;
+        if (filteredDaysByHour.length != 0) {
+          hourFieldMean = _.meanBy(filteredDaysByHour, (filteredDay) => { return filteredDay[field.fieldName] });
+        }
         averages.push({
           value: hourFieldMean,
           field: field
@@ -101,15 +105,3 @@ export class LogToolDataService {
   }
 }
 
-
-export interface LogToolDay {
-  date: Date,
-  data: Array<any>,
-  hourlyAverages: Array<{
-    hour: number,
-    averages: Array<{
-      value: number,
-      field: LogToolField
-    }>
-  }>
-}

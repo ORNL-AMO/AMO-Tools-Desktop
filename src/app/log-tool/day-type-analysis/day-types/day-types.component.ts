@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { DayTypeAnalysisService, DaySummary, DayType } from '../day-type-analysis.service';
+import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
+import { DayType, DaySummary } from '../../log-tool-models';
 @Component({
   selector: 'app-day-types',
   templateUrl: './day-types.component.html',

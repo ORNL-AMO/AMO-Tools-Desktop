@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { VisualizeService, GraphDataObj } from '../visualize.service';
+import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
+import { GraphDataObj } from '../../log-tool-models';
 
 @Component({
   selector: 'app-visualize-tabs',

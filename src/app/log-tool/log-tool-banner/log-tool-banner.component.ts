@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LogToolService } from '../log-tool.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-log-tool-banner',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LogToolBannerComponent implements OnInit {
 
-  constructor() { }
+  dataSubmitted: boolean;
+  dataSubmittedSub: Subscription;
+  constructor(private logToolService: LogToolService) { }
 
   ngOnInit() {
+    this.dataSubmittedSub = this.logToolService.dataSubmitted.subscribe(val => {
+      this.dataSubmitted = val;
+    })
+  }
+
+  ngOnDestroy(){
+    this.dataSubmittedSub.unsubscribe();
   }
 
 }
