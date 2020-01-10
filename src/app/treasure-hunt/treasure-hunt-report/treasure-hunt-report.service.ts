@@ -23,7 +23,7 @@ export class TreasureHuntReportService {
     let totalBaselineCost: number = this.getTotalBaselineCost(currentEnergyUsage);
     //Mixed
     let mixedSummaries: Array<OpportunitySummary> = opportunitySummaries.filter(summary => { return summary.utilityType == 'Mixed' && summary.selected == true });
-    let otherUtilityUsage: UtilityUsageData = this.getUtilityUsageData(mixedSummaries, 'Mixed', currentEnergyUsage.electricityUsage, currentEnergyUsage.electricityCosts);
+    let otherUtilityUsage: UtilityUsageData = this.getUtilityUsageData(mixedSummaries, 'Mixed', 0, 0);
     //Electricity
     let electricitySummaries: Array<OpportunitySummary> = opportunitySummaries.filter(summary => { return summary.utilityType == 'Electricity' && summary.selected == true });
     let electricityUtilityUsage: UtilityUsageData = this.getUtilityUsageData(electricitySummaries, 'Electricity', currentEnergyUsage.electricityUsage, currentEnergyUsage.electricityCosts, mixedSummaries);
