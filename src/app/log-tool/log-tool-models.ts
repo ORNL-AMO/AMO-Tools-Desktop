@@ -40,7 +40,7 @@ export interface GraphDataObj {
 }
 
 export interface DaySummary {
-    date: Date,
+    logToolDay: LogToolDay,
     averages: Array<{ value: number, field: LogToolField }>,
     dayData: Array<any>
 }
@@ -49,7 +49,7 @@ export interface DayType {
     color: string,
     label: string,
     useDayType: boolean,
-    dates?: Array<Date>
+    logToolDays?: Array<LogToolDay>
 }
 
 export interface DayTypeSummary {
@@ -58,6 +58,13 @@ export interface DayTypeSummary {
     averages: Array<{
         field: LogToolField,
         value: number
+    }>,
+    hourlyAverages: Array<{
+        hour: number,
+        averages: Array<{
+            value: number,
+            field: LogToolField
+        }>
     }>
 }
 

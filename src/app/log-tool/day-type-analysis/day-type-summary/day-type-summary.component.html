@@ -44,7 +44,7 @@
                     <tr class="day-summary-role" *ngFor="let daySummary of daySummaries"
                         [ngStyle]="{'background-color': getDateColor(daySummary)}">
                         <td>
-                            {{daySummary.date | date}}
+                            {{daySummary.logToolDay.date | date}}
                         </td>
                         <td>
                             {{getAverageDataItem(daySummary).value | number}}

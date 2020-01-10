@@ -64,7 +64,7 @@ export class DayTypesComponent implements OnInit {
 
   getDateBackground(date: NgbDate) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.date) });
+    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.logToolDay.date) });
     if (testExists != undefined) {
       let testIsDateSelected = _.find(this.selectedDays, (selectedDay) => {
         return this.logToolDataService.checkSameDay(d, selectedDay)
@@ -81,7 +81,7 @@ export class DayTypesComponent implements OnInit {
 
   onDateSelect(date: NgbDate) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testDateExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.date) });
+    let testDateExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.logToolDay.date) });
     if (testDateExists) {
       let testIsDateSelected = _.find(this.selectedDays, (selectedDay) => {
         return this.logToolDataService.checkSameDay(d, selectedDay)

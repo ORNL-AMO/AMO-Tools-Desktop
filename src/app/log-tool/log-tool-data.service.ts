@@ -23,6 +23,11 @@ export class LogToolDataService {
     return tmpFields;
   }
 
+  getLogToolDayFromDate(date: Date){
+    let logToolDay: LogToolDay = this.logToolDays.find(logToolDay => { return this.checkSameDay(logToolDay.date, date) });
+    return logToolDay
+  }
+
   //seperate log tool data into days
   setLogToolDays() {
     let csvDataCopy: Array<any> = JSON.parse(JSON.stringify(this.logToolService.importDataFromCsv.data));
