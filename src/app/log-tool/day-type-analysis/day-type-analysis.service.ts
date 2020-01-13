@@ -18,7 +18,6 @@ export class DayTypeAnalysisService {
   numberOfMonths: number;
   constructor(private logToolDataService: LogToolDataService, private logToolService: LogToolService) {
     this.dayTypes = new BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>({ addedDayTypes: new Array(), primaryDayTypes: new Array() });
-    // this.secondaryDayTypes = new BehaviorSubject<Array<DayType>>(new Array());
     this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
     this.selectedDataField = new BehaviorSubject<LogToolField>(undefined);
     this.displayDayTypeCalander = new BehaviorSubject<boolean>(true);
@@ -223,27 +222,14 @@ export class DayTypeAnalysisService {
         dayTypeSummaries.push(dayTypeSummary);
       }
     });
-    console.log(dayTypeSummaries);
     this.dayTypeSummaries.next(dayTypeSummaries);
   }
 
   getDayTypeSummary(dayType: DayType): DayTypeSummary {
     let dayTypeData: Array<any> = new Array();
-
     dayType.logToolDays.forEach(logToolDay => {
       dayTypeData = _.union(dayTypeData, logToolDay.data);
     })
-
-    // _.filter(this.logToolDataService.logToolDays, (logToolDay) => {
-    //   let test = _.find(dayType.logToolDays, (logToolDay) => { return this.logToolDataService.checkSameDay(logToolDay.date, logToolDay.date) });
-    //   if (test != undefined) {
-    //     return true;
-    //   } else { return false };
-    // });
-    // let data: Array<any> = new Array();
-    // dayTypeData.forEach(dataItem => {
-    //   data = _.union(data, dataItem.data)
-    // });
     let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
     let fieldAverages: Array<{ field: LogToolField, value: number }> = new Array();
     fields.forEach(field => {

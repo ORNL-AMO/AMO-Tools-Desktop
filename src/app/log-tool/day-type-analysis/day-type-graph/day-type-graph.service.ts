@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
-import { LogToolService } from '../../log-tool.service';
 import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
@@ -13,7 +12,7 @@ export class DayTypeGraphService {
   selectedGraphType: BehaviorSubject<string>;
   dayTypeScatterPlotData: BehaviorSubject<Array<DayTypeGraphItem>>;
   individualDayScatterPlotData: BehaviorSubject<Array<DayTypeGraphItem>>;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolDataService: LogToolDataService) {
     this.selectedGraphType = new BehaviorSubject<string>('individualDay');
     this.dayTypeScatterPlotData = new BehaviorSubject<Array<DayTypeGraphItem>>(new Array());
     this.individualDayScatterPlotData = new BehaviorSubject<Array<DayTypeGraphItem>>(new Array());
@@ -35,12 +34,16 @@ export class DayTypeGraphService {
     let yData: Array<number> = new Array();
 
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
-    for (let i = 0; i < 24; i++) {
-      let hourlyAverageObj = dayTypeSummary.hourlyAverages.find(hourlyAverage => { return hourlyAverage.hour == i });
+    for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
+      let hourlyAverageObj = dayTypeSummary.hourlyAverages.find(hourlyAverage => { return hourlyAverage.hour == hourOfDay });
       if (hourlyAverageObj) {
-        let hourlyAverage: number = _.meanBy(hourlyAverageObj.averages, selectedDataField.fieldName);
-        xData.push(hourlyAverage);
-        yData.push(i);
+        let hourlyAverage: number = _.meanBy(hourlyAverageObj.averages, (averageObj) => {
+          if (averageObj.field.fieldName == selectedDataField.fieldName) {
+            return averageObj.value
+          }
+        });
+        xData.push(hourOfDay);
+        yData.push(hourlyAverage);
       }
     }
     return { xData: xData, yData: yData }
@@ -71,20 +74,12 @@ export class DayTypeGraphService {
     let yData: Array<number> = new Array();
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
     //24 hrs in a day
-    for (let i = 0; i < 24; i++) {
-      // let filteredDaysByHour = _.filter(dayItems, (dayItem) => {
-      //   if (dayItem[this.logToolService.dateField]) {
-      //     let date = new Date(dayItem[this.logToolService.dateField]);
-      //     let dateVal = date.getHours();
-      //     return i == dateVal;
-      //   };
-      // });
-      let hourAverageObj: { hour: number, averages: Array<{ value: number, field: LogToolField }> } = _.find(logToolDay.hourlyAverages, (hourlyAverageObj) => { return hourlyAverageObj.hour == i })
+    for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
+      let hourAverageObj: { hour: number, averages: Array<{ value: number, field: LogToolField }> } = _.find(logToolDay.hourlyAverages, (hourlyAverageObj) => { return hourlyAverageObj.hour == hourOfDay })
       if (hourAverageObj) {
         let hourAverage: number = _.find(hourAverageObj.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName }).value;
-        // let dayMean: number = _.meanBy(filteredDaysByHour, (filteredDay) => { return filteredDay[this.dayTypeAnalysisService.selectedDataField.getValue().fieldName] });
         yData.push(hourAverage);
-        xData.push(i);
+        xData.push(hourOfDay);
       }
     }
     return { xData: xData, yData: yData };
