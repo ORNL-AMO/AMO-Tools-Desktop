@@ -1,6 +1,23 @@
 <div class="d-flex w-100 h-100" *ngIf="showContent">
     <div class="d-flex flex-column w-75 h-100">
-        <app-day-type-graph></app-day-type-graph>
+        <div class="p-2">
+            <div class="card">
+                <div class="card-header p-0 justify-content-between">
+                    <div class="navbar assessment-bar">
+                        <div class="d-flex tabs subtabs log-tool mr-auto">
+                            <div class="assessment-tab" [ngClass]="{'active': dataView == 'graph'}">
+                                <a (click)="changeDataView('graph')">Graph</a>
+                            </div>
+                            <div class="assessment-tab" [ngClass]="{'active': dataView == 'dataTable'}">
+                                <a (click)="changeDataView('dataTable')">Data Table</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <app-day-type-graph [ngClass]="{'hidden': dataView != 'graph'}"></app-day-type-graph>
+                <app-day-type-table [ngClass]="{'hidden': dataView != 'dataTable'}"></app-day-type-table>
+            </div>
+        </div>
         <div class="p-2">
             <div class="card p-0">
                 <app-day-types></app-day-types>

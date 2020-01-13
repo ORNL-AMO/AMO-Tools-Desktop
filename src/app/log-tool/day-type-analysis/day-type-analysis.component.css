@@ -27,3 +27,21 @@
     box-shadow: 0 4px 8px 0 grey;
     text-align: center;
 }
+
+.tabs.subtabs.log-tool{
+    border-bottom: none;
+}
+
+.navbar{
+    padding: 0px;
+    background: white;
+    border-bottom: #117A65 solid 3px;
+}
+
+.card{
+    box-shadow: 0 4px 8px 0 grey;
+}
+
+.hidden{
+    display: none;
+}

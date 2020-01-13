@@ -16,11 +16,14 @@ export class DayTypeAnalysisService {
   calendarStartDate: { year: number, month: number, day: number };
   numberOfMonths: number;
   dayTypesCalculated: boolean = false;
+
+  dataView: BehaviorSubject<string>;
   constructor(private logToolDataService: LogToolDataService, private logToolService: LogToolService) {
     this.dayTypes = new BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>({ addedDayTypes: new Array(), primaryDayTypes: new Array() });
     this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
     this.selectedDataField = new BehaviorSubject<LogToolField>(undefined);
     this.displayDayTypeCalander = new BehaviorSubject<boolean>(true);
+    this.dataView = new BehaviorSubject<string>('graph');
   }
 
   resetData(){
@@ -28,6 +31,7 @@ export class DayTypeAnalysisService {
     this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
     this.selectedDataField = new BehaviorSubject<LogToolField>(undefined);
     this.displayDayTypeCalander = new BehaviorSubject<boolean>(true);
+    this.dataView = new BehaviorSubject<string>('graph');
     this.calendarStartDate = undefined;
     this.numberOfMonths = undefined;
     this.dayTypesCalculated = false;

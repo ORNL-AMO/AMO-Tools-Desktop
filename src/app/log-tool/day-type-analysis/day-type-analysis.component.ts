@@ -20,6 +20,9 @@ export class DayTypeAnalysisComponent implements OnInit {
 
   selectedDataField: LogToolField;
   selectedDataFieldSub: Subscription;
+
+  dataViewSub: Subscription;
+  dataView: string;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private logToolDataService: LogToolDataService,
     private cd: ChangeDetectorRef) { }
 
@@ -32,6 +35,9 @@ export class DayTypeAnalysisComponent implements OnInit {
 
     this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(val => {
       this.selectedDataField = val;
+    });
+    this.dataViewSub = this.dayTypeAnalysisService.dataView.subscribe(val => {
+      this.dataView = val;
     });
   }
 
@@ -56,6 +62,7 @@ export class DayTypeAnalysisComponent implements OnInit {
   ngOnDestroy() {
     this.displayDayTypeCalanderSub.unsubscribe();
     this.selectedDataFieldSub.unsubscribe();
+    this.dataViewSub.unsubscribe();
   }
 
   setSelectedDataField(dataField: LogToolField) {
@@ -70,5 +77,7 @@ export class DayTypeAnalysisComponent implements OnInit {
     this.selectedDataFieldDropdown = !this.selectedDataFieldDropdown;
   }
 
-
+  changeDataView(str: string) {
+    this.dayTypeAnalysisService.dataView.next(str);
+  }
 }
