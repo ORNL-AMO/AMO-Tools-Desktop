@@ -10,6 +10,11 @@ export class LogToolDataService {
   validNumberOfDayDataPoints: number;
   constructor(private logToolService: LogToolService) { }
 
+  resetData(){
+    this.logToolDays = new Array();
+    this.validNumberOfDayDataPoints = undefined;
+  }
+
   getDataFieldOptions(): Array<LogToolField> {
     //non date and used fields
     let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));

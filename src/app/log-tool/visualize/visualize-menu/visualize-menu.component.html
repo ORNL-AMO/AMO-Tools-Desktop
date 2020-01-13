@@ -56,14 +56,6 @@
             </div>
         </div>
 
-        <!-- <div class="nav-item ml-2" *ngIf="selectedGraphData.graphType.value == 'scattergl'">
-            <div class="btn-group">
-                <button class="btn btn-sm" [ngClass]="{'active': showScatterLines == true}"
-                    (click)="toggleScatterLines()">Lines</button>
-                <button class="btn btn-sm" [ngClass]="{'active': showScatterMarkers == true}"
-                    (click)="toggleScatterMarkers()">Markers</button>
-            </div>
-        </div> -->
         <div class="nav-item ml-2" *ngIf="selectedGraphData.graphType.value == 'bar'">
             <div class="btn-group">
                 <button class="btn btn-sm" [ngClass]="{'active': selectedGraphData.useStandardDeviation == true}"
@@ -75,7 +67,6 @@
 
         <div class="nav-item ml-2"
             *ngIf="selectedGraphData.graphType.value == 'bar' && selectedGraphData.useStandardDeviation == false">
-            <!-- <div class="form-group"> -->
             <div class="input-group">
                 <button class="btn btn-sm input-group-prepend" (click)="decreaseNumberOfBins()"><span
                         class="fa fa-minus"></span></button>
@@ -83,7 +74,6 @@
                     (input)="updateNumberOfBins()">
                 <button class="btn btn-sm input-group-append" (click)="increaseNumberOfBins()"><span
                         class="fa fa-plus"></span></button>
-                <!-- </div> -->
             </div>
         </div>
     </div>

@@ -18,6 +18,12 @@ export class DayTypeGraphService {
     this.individualDayScatterPlotData = new BehaviorSubject<Array<DayTypeGraphItem>>(new Array());
   }
 
+  resetData(){
+    this.selectedGraphType = new BehaviorSubject<string>('individualDay');
+    this.dayTypeScatterPlotData = new BehaviorSubject<Array<DayTypeGraphItem>>(new Array());
+    this.individualDayScatterPlotData = new BehaviorSubject<Array<DayTypeGraphItem>>(new Array());
+  }
+
   setDayTypeScatterPlotData() {
     let dayTypeScatterPlotData = new Array();
     let dayTypeSummaries = this.dayTypeAnalysisService.dayTypeSummaries.getValue();

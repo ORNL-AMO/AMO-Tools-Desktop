@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class LogToolService {
 
-  fileReference: any;
   importDataFromCsv: CsvImportData;
   startDate: Date;
   endDate: Date;
@@ -17,6 +16,17 @@ export class LogToolService {
   dataSubmitted: BehaviorSubject<boolean>;
   constructor() { 
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
+  }
+
+  resetData(){
+    this.importDataFromCsv = undefined;
+    this.startDate = undefined;
+    this.endDate = undefined;
+    this.fields = new Array();
+    this.dateField = undefined;
+    this.numberOfDataPoints = undefined;
+    this.dateFormat = new Array();
+    this.dataSubmitted.next(false);
   }
 
   setDateField(str: string) {

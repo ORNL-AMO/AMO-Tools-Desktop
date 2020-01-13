@@ -34,7 +34,6 @@ export class VisualizeMenuComponent implements OnInit {
     });
     this.selectedGraphDataSub = this.visualizeService.selectedGraphData.subscribe(selectedGraphData => {
       this.selectedGraphData = selectedGraphData;
-      // this.setScatterBools()
     });
   }
 
@@ -42,19 +41,6 @@ export class VisualizeMenuComponent implements OnInit {
     this.selectedGraphDataSub.unsubscribe()
     this.graphDataSubscription.unsubscribe();
   }
-
-  // setScatterBools() {
-  //   if (this.selectedGraphData.scatterPlotMode == 'lines+markers') {
-  //     this.showScatterMarkers = true;
-  //     this.showScatterLines = true;
-  //   } else if (this.selectedGraphData.scatterPlotMode == 'markers') {
-  //     this.showScatterMarkers = true;
-  //     this.showScatterLines = false;
-  //   } else if (this.selectedGraphData.scatterPlotMode == 'lines') {
-  //     this.showScatterLines = true;
-  //     this.showScatterMarkers = false;
-  //   }
-  // }
 
   toggleXDataFieldDropdown() {
     this.xDataFieldDropdown = !this.xDataFieldDropdown;
@@ -81,26 +67,6 @@ export class VisualizeMenuComponent implements OnInit {
 
   toggleGraphType() {
     this.graphTypeDropdown = !this.graphTypeDropdown;
-  }
-
-  toggleScatterLines() {
-    this.showScatterLines = !this.showScatterLines;
-    this.setScatterPlotMode();
-  }
-
-  toggleScatterMarkers() {
-    this.showScatterMarkers = !this.showScatterMarkers;
-    this.setScatterPlotMode();
-  }
-
-  setScatterPlotMode() {
-    if (this.showScatterMarkers == true && this.showScatterLines == true) {
-      this.visualizeService.updateGraphScatterPlotMode('lines+markers');
-    } else if (this.showScatterMarkers == true) {
-      this.visualizeService.updateGraphScatterPlotMode('markers');
-    } else if (this.showScatterLines == true) {
-      this.visualizeService.updateGraphScatterPlotMode('lines');
-    }
   }
 
   setUseStandardDeviation() {

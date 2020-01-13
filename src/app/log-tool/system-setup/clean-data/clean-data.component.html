@@ -58,5 +58,18 @@
         <div class="d-flex w-100 justify-content-end">
             <button class="btn btn-sm btn-primary" (click)="submit()">Submit</button>
         </div>
+        <div class="d-flex flex-column align-items-center w-100 h-100" *ngIf="cleaningData == true">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+            <span class="importing-text">Cleaning and setting up day data, one moment...</span>
+        </div>
+        <div class="text-center p-2" *ngIf="dataSubmitted == true">
+            <div class="alert-success router-link" [routerLink]="['/log-tool/day-type-analysis']">
+                Data cleaning finished! Click here or the tab for "Day Type Analysis" to continue.
+            </div>
+        </div>
     </div>
 </div>

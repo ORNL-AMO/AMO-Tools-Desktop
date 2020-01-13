@@ -21,9 +21,10 @@ export class SetupDataComponent implements OnInit {
   dateFormats: Array<{ display: string, value: Array<string> }> = _dateFormats;
   validDate: boolean;
   importingData: boolean = false;
-  constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private logToolDataService: LogToolDataService, private cd: ChangeDetectorRef) { }
+  constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    // this.dateFormat = this.logToolService.dateFormat;
   }
 
   setImportFile($event) {
@@ -60,8 +61,6 @@ export class SetupDataComponent implements OnInit {
       if (foundDate != undefined) {
         this.validDate = true;
         this.logToolService.parseImportData();
-        // this.logToolDataService.setLogToolDays();
-        // this.logToolDataService.setValidNumberOfDayDataPoints();
       } else {
         this.validDate = false;
       }

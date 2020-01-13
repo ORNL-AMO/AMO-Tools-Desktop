@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DayTypeAnalysisService } from './day-type-analysis.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
@@ -20,7 +20,8 @@ export class DayTypeAnalysisComponent implements OnInit {
 
   selectedDataField: LogToolField;
   selectedDataFieldSub: Subscription;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private logToolDataService: LogToolDataService) { }
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private logToolDataService: LogToolDataService,
+    private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.dataFields = this.logToolDataService.getDataFieldOptions();
@@ -35,14 +36,21 @@ export class DayTypeAnalysisComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.dayTypeAnalysisService.getDaySummaries();
-      this.dayTypeAnalysisService.initSecondaryDayTypes();
-      this.dayTypeAnalysisService.setDayTypeSummaries();
-      this.dayTypeGraphService.setDayTypeScatterPlotData();
-      this.dayTypeGraphService.setIndividualDayScatterPlotData();
+    if (this.dayTypeAnalysisService.dayTypesCalculated == false) {
+      setTimeout(() => {
+        this.dayTypeAnalysisService.getDaySummaries();
+        this.dayTypeAnalysisService.initSecondaryDayTypes();
+        this.dayTypeAnalysisService.setDayTypeSummaries();
+        this.dayTypeGraphService.setDayTypeScatterPlotData();
+        this.dayTypeGraphService.setIndividualDayScatterPlotData();
+        this.showContent = true;
+        this.dayTypeAnalysisService.dayTypesCalculated = true;
+      }, 100);
+    } else {
       this.showContent = true;
-    }, 100);
+      this.cd.detectChanges();
+    }
+
   }
 
   ngOnDestroy() {

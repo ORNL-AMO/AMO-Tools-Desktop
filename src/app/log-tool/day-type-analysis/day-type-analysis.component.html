@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="d-flex flex-column w-25 h-100 scroll-item">
-        <div class="pt-2 pr-2 pb-2">
+        <div class="pt-2 pr-2 pb-2" *ngIf="dataFields.length != 1">
             <div class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" (click)="toggleSelectedDataFieldDropdown()">
                     Selected Data: {{selectedDataField.alias}}

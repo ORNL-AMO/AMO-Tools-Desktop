@@ -10,10 +10,16 @@ export class VisualizeService {
 
   graphData: BehaviorSubject<Array<GraphDataObj>>;
   selectedGraphData: BehaviorSubject<GraphDataObj>;
+  visualizeDataInitialized: boolean = false;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
-    let initGraphData: GraphDataObj = this.getNewGraphDataObject();
-    this.selectedGraphData = new BehaviorSubject<GraphDataObj>(initGraphData);
-    this.graphData = new BehaviorSubject([initGraphData]);
+    this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
+    this.graphData = new BehaviorSubject(new Array());
+  }
+
+  resetData(){
+    this.graphData.next(new Array());
+    this.selectedGraphData.next(undefined);
+    this.visualizeDataInitialized = false;
   }
 
   addNewGraphDataObj() {

@@ -10,12 +10,12 @@ export class DayTypeAnalysisService {
   selectedDataField: BehaviorSubject<LogToolField>;
   daySummaries: Array<DaySummary>;
   dayTypes: BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>;
-  // secondaryDayTypes: BehaviorSubject<Array<DayType>>;
   dayTypeSummaries: BehaviorSubject<Array<DayTypeSummary>>;
   displayDayTypeCalander: BehaviorSubject<boolean>;
 
   calendarStartDate: { year: number, month: number, day: number };
   numberOfMonths: number;
+  dayTypesCalculated: boolean = false;
   constructor(private logToolDataService: LogToolDataService, private logToolService: LogToolService) {
     this.dayTypes = new BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>({ addedDayTypes: new Array(), primaryDayTypes: new Array() });
     this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
@@ -23,7 +23,15 @@ export class DayTypeAnalysisService {
     this.displayDayTypeCalander = new BehaviorSubject<boolean>(true);
   }
 
-
+  resetData(){
+    this.dayTypes = new BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>({ addedDayTypes: new Array(), primaryDayTypes: new Array() });
+    this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
+    this.selectedDataField = new BehaviorSubject<LogToolField>(undefined);
+    this.displayDayTypeCalander = new BehaviorSubject<boolean>(true);
+    this.calendarStartDate = undefined;
+    this.numberOfMonths = undefined;
+    this.dayTypesCalculated = false;
+  }
 
   initSecondaryDayTypes() {
     let dayTypesArr: Array<DayType> = new Array();
