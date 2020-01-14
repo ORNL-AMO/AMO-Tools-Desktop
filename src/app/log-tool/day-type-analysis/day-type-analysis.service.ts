@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { LogToolService } from '../log-tool.service';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../log-tool-data.service';
-import { LogToolField, DaySummary, DayType, DayTypeSummary, LogToolDay } from '../log-tool-models';
+import { LogToolField, DaySummary, DayType, DayTypeSummary, LogToolDay, HourlyAverage } from '../log-tool-models';
 @Injectable()
 export class DayTypeAnalysisService {
 
@@ -252,16 +252,13 @@ export class DayTypeAnalysisService {
       })
     });
 
-    let hourlyAverages: Array<{
-      hour: number,
-      averages: Array<{
-        value: number,
-        field: LogToolField
-      }>
-    }> = new Array();
+    let hourlyAverages: Array<HourlyAverage> = new Array();
     dayType.logToolDays.forEach(logToolDay => {
       hourlyAverages = _.union(hourlyAverages, logToolDay.hourlyAverages);
     });
+
+
+
     return {
       dayType: dayType,
       data: dayTypeData,
@@ -269,6 +266,23 @@ export class DayTypeAnalysisService {
       hourlyAverages: hourlyAverages
     }
   }
+
+  // setDayTypeHourlyAverages(hourlyAverages: Array<HourlyAverage>): Array<HourlyAverage>{
+  //   let selectedDataField: LogToolField = this.selectedDataField.getValue();
+  //   for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
+  //     let hourlyAverageObj = hourlyAverages.find(hourlyAverage => { return hourlyAverage.hour == hourOfDay });
+  //     if (hourlyAverageObj) {
+  //       let hourlyAverage: number = _.meanBy(hourlyAverageObj.averages, (averageObj) => {
+  //         if (averageObj.field.fieldName == selectedDataField.fieldName) {
+  //           return averageObj.value
+  //         }
+  //       });
+  //       xData.push(hourOfDay);
+  //       yData.push(hourlyAverage);
+  //     }
+  //   }
+  // }
+
 
   setStartDateAndNumberOfMonths() {
     this.calendarStartDate = {

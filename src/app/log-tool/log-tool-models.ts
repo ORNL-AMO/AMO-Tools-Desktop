@@ -69,6 +69,14 @@ export interface DayTypeSummary {
 }
 
 
+export interface HourlyAverage {
+    hour: number,
+    averages: Array<{
+        value: number,
+        field: LogToolField
+    }>
+}
+
 
 export interface DayTypeGraphItem {
     xData: Array<any>,
@@ -77,5 +85,4 @@ export interface DayTypeGraphItem {
     color: string,
     date?: Date,
     dayType?: DayType
-  }
-  
+}

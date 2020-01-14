@@ -28,14 +28,14 @@ export class DayTypeGraphService {
     let dayTypeScatterPlotData = new Array();
     let dayTypeSummaries = this.dayTypeAnalysisService.dayTypeSummaries.getValue();
     dayTypeSummaries.forEach(summary => {
-      let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDaySummaryAverages(summary);
+      let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayTypeSummaryAverages(summary);
       let color: string = summary.dayType.color;
       dayTypeScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: summary.dayType.label, color: color, dayType: summary.dayType });
     });
     this.dayTypeScatterPlotData.next(dayTypeScatterPlotData);
   }
 
-  getDaySummaryAverages(dayTypeSummary: DayTypeSummary): { xData: Array<number>, yData: Array<number> } {
+  getDayTypeSummaryAverages(dayTypeSummary: DayTypeSummary): { xData: Array<number>, yData: Array<number> } {
     let xData: Array<number> = new Array();
     let yData: Array<number> = new Array();
 

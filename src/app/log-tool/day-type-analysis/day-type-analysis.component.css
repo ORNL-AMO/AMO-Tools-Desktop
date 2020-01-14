@@ -2,46 +2,6 @@
     box-shadow: 0 4px 8px 0 grey;
 }
 
-
-.list-group-item{
-    padding: 8px;
-    font-size: small;
-}
-
-.list-group-item.active, .btn.active{
-    color: white;
-    background: #117A65;
-}
-
-
-.dropdown-menu.filter-menu{
-    right: 0px;
-    left: inherit;
-}
-
-
-.nav-item .dropdown-toggle{
-    color: white;
-    background: #117A65;
-    border-radius: .25rem;
-    box-shadow: 0 4px 8px 0 grey;
-    text-align: center;
-}
-
-.tabs.subtabs.log-tool{
-    border-bottom: none;
-}
-
-.navbar{
-    padding: 0px;
-    background: white;
-    border-bottom: #117A65 solid 3px;
-}
-
-.card{
-    box-shadow: 0 4px 8px 0 grey;
-}
-
 .hidden{
     display: none;
 }

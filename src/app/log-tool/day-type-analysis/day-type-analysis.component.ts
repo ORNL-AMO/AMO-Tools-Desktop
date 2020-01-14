@@ -15,11 +15,11 @@ export class DayTypeAnalysisComponent implements OnInit {
   showContent: boolean = false;
   displayDayTypeCalanderSub: Subscription;
   displayDayTypeCalander: boolean;
-  dataFields: Array<LogToolField>;
-  selectedDataFieldDropdown: boolean = false;
+  // dataFields: Array<LogToolField>;
+  // selectedDataFieldDropdown: boolean = false;
 
-  selectedDataField: LogToolField;
-  selectedDataFieldSub: Subscription;
+  // selectedDataField: LogToolField;
+  // selectedDataFieldSub: Subscription;
 
   dataViewSub: Subscription;
   dataView: string;
@@ -27,15 +27,15 @@ export class DayTypeAnalysisComponent implements OnInit {
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.dataFields = this.logToolDataService.getDataFieldOptions();
+    // this.dataFields = this.logToolDataService.getDataFieldOptions();
     this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
     this.displayDayTypeCalanderSub = this.dayTypeAnalysisService.displayDayTypeCalander.subscribe(val => {
       this.displayDayTypeCalander = val;
     });
 
-    this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(val => {
-      this.selectedDataField = val;
-    });
+    // this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(val => {
+    //   this.selectedDataField = val;
+    // });
     this.dataViewSub = this.dayTypeAnalysisService.dataView.subscribe(val => {
       this.dataView = val;
     });
@@ -61,23 +61,21 @@ export class DayTypeAnalysisComponent implements OnInit {
 
   ngOnDestroy() {
     this.displayDayTypeCalanderSub.unsubscribe();
-    this.selectedDataFieldSub.unsubscribe();
+    // this.selectedDataFieldSub.unsubscribe();
     this.dataViewSub.unsubscribe();
   }
 
-  setSelectedDataField(dataField: LogToolField) {
-    this.dayTypeAnalysisService.selectedDataField.next(dataField);
-    this.dayTypeAnalysisService.setDayTypeSummaries();
-    this.dayTypeGraphService.setDayTypeScatterPlotData();
-    this.dayTypeGraphService.setIndividualDayScatterPlotData();
-    this.selectedDataFieldDropdown = false;
-  }
+  // setSelectedDataField(dataField: LogToolField) {
+  //   this.dayTypeAnalysisService.selectedDataField.next(dataField);
+  //   this.dayTypeAnalysisService.setDayTypeSummaries();
+  //   this.dayTypeGraphService.setDayTypeScatterPlotData();
+  //   this.dayTypeGraphService.setIndividualDayScatterPlotData();
+  //   this.selectedDataFieldDropdown = false;
+  // }
 
-  toggleSelectedDataFieldDropdown() {
-    this.selectedDataFieldDropdown = !this.selectedDataFieldDropdown;
-  }
+  // toggleSelectedDataFieldDropdown() {
+  //   this.selectedDataFieldDropdown = !this.selectedDataFieldDropdown;
+  // }
 
-  changeDataView(str: string) {
-    this.dayTypeAnalysisService.dataView.next(str);
-  }
+
 }

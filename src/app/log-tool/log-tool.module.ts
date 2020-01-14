@@ -29,6 +29,7 @@ import { VisualizeService } from './visualize/visualize.service';
 import { VisualizeMenuComponent } from './visualize/visualize-menu/visualize-menu.component';
 import { LogToolDataService } from './log-tool-data.service';
 import { DayTypeTableComponent } from './day-type-analysis/day-type-table/day-type-table.component';
+import { DayTypeMenuComponent } from './day-type-analysis/day-type-menu/day-type-menu.component';
 // PlotlyModule.plotlyjs = PlotlyJs;
 
 @NgModule({
@@ -50,7 +51,8 @@ import { DayTypeTableComponent } from './day-type-analysis/day-type-table/day-ty
     VisualizeGraphComponent,
     VisualizeDataComponent,
     VisualizeMenuComponent,
-    DayTypeTableComponent
+    DayTypeTableComponent,
+    DayTypeMenuComponent
   ],
   imports: [
     CommonModule,

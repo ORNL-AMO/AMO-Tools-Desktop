@@ -1,1 +1,20 @@
-<p>day-type-table works!</p>
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <td class="bold">
+                Day Type
+            </td>
+            <td *ngFor="let hourlyAverage of dayTypeSummaries[0].hourlyAverages">
+                {{hourlyAverage.hour}}
+            </td>
+        </tr>
+        <tr *ngFor="let dayTypeSummary of dayTypeSummaries">
+            <td>
+                {{dayTypeSummary.dayType.label}}
+            </td>
+            <td *ngFor="let hourlyAverage of dayTypeSummary.hourlyAverages">
+                {{getAverageValue(hourlyAverage.averages) | number}}
+            </td>
+        </tr>
+    </tbody>
+</table>

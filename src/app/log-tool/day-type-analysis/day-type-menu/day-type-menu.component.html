@@ -1,0 +1,23 @@
+<div class="navbar assessment-bar">
+    <div class="d-flex tabs subtabs log-tool mr-auto">
+        <div class="assessment-tab" [ngClass]="{'active': dataView == 'graph'}">
+            <a (click)="changeDataView('graph')">Graph</a>
+        </div>
+        <div class="assessment-tab" [ngClass]="{'active': dataView == 'dataTable'}">
+            <a (click)="changeDataView('dataTable')">Data Table</a>
+        </div>
+    </div>
+
+    <div class="nav-item dropdown pr-2">
+        <a class="nav-link dropdown-toggle" (click)="toggleSelectedDataFieldDropdown()">
+            Selected Data: {{selectedDataField.alias}}
+        </a>
+        <div class="dropdown-menu p-0" [ngClass]="{'show': selectedDataFieldDropdown == true}">
+            <div class="list-group">
+                <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
+                    (click)="setSelectedDataField(dataField)"
+                    [ngClass]="{'active': dataField.fieldName == selectedDataField.fieldName}">{{dataField.alias}}</a>
+            </div>
+        </div>
+    </div>
+</div>
