@@ -13,13 +13,9 @@ import { FormsModule } from '@angular/forms';
 import { CleanDataComponent } from './system-setup/clean-data/clean-data.component';
 import { DayTypeAnalysisComponent } from './day-type-analysis/day-type-analysis.component';
 import { DayTypesComponent } from './day-type-analysis/day-types/day-types.component';
-import { DayTypeSummaryComponent } from './day-type-analysis/day-type-summary/day-type-summary.component';
 import { DayTypeGraphComponent } from './day-type-analysis/day-type-graph/day-type-graph.component';
 import { DayTypeCalendarComponent } from './day-type-analysis/day-type-calendar/day-type-calendar.component';
 import { DayTypeAnalysisService } from './day-type-analysis/day-type-analysis.service';
-
-// import * as PlotlyJs from 'plotly.js';
-// import { PlotlyModule } from 'angular-plotly.js';
 import { DayTypeGraphService } from './day-type-analysis/day-type-graph/day-type-graph.service';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { VisualizeTabsComponent } from './visualize/visualize-tabs/visualize-tabs.component';
@@ -30,7 +26,6 @@ import { VisualizeMenuComponent } from './visualize/visualize-menu/visualize-men
 import { LogToolDataService } from './log-tool-data.service';
 import { DayTypeTableComponent } from './day-type-analysis/day-type-table/day-type-table.component';
 import { DayTypeMenuComponent } from './day-type-analysis/day-type-menu/day-type-menu.component';
-// PlotlyModule.plotlyjs = PlotlyJs;
 
 @NgModule({
   declarations: [
@@ -44,7 +39,6 @@ import { DayTypeMenuComponent } from './day-type-analysis/day-type-menu/day-type
     CleanDataComponent,
     DayTypeAnalysisComponent,
     DayTypesComponent,
-    DayTypeSummaryComponent,
     DayTypeGraphComponent,
     DayTypeCalendarComponent,
     VisualizeTabsComponent,
@@ -58,7 +52,6 @@ import { DayTypeMenuComponent } from './day-type-analysis/day-type-menu/day-type
     CommonModule,
     RouterModule,
     FormsModule,
-    // PlotlyModule,
     NgbDatepickerModule
   ],
   providers: [

@@ -1,12 +1,8 @@
 <div class="d-flex w-100 h-100" *ngIf="showContent">
     <div class="d-flex flex-column w-100 h-100">
         <app-day-type-menu></app-day-type-menu>
-        <div class="p-2">
-            <div class="card">
-                <app-day-type-graph *ngIf="dataView == 'graph'"></app-day-type-graph>
-                <app-day-type-table *ngIf="dataView == 'dataTable'"></app-day-type-table>
-            </div>
-        </div>
+            <app-day-type-graph *ngIf="dataView == 'graph'"></app-day-type-graph>
+            <app-day-type-table *ngIf="dataView == 'dataTable'"></app-day-type-table>
         <div class="p-2">
             <div class="card p-0">
                 <app-day-types></app-day-types>

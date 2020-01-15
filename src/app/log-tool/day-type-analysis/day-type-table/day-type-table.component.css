@@ -2,3 +2,15 @@ td{
     font-size: small;
     padding: 3px;
 }
+
+.scroll-item{
+    overflow-x: auto;
+}
+
+.card{
+    box-shadow: 0 4px 8px 0 grey;
+}
+
+.day-type-label{
+    color: white;
+}

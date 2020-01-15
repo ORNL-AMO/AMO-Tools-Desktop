@@ -1,20 +1,67 @@
-<table class="table table-striped">
-    <tbody>
-        <tr>
-            <td class="bold">
-                Day Type
-            </td>
-            <td *ngFor="let hourlyAverage of dayTypeSummaries[0].hourlyAverages">
-                {{hourlyAverage.hour}}
-            </td>
-        </tr>
-        <tr *ngFor="let dayTypeSummary of dayTypeSummaries">
-            <td>
-                {{dayTypeSummary.dayType.label}}
-            </td>
-            <td *ngFor="let hourlyAverage of dayTypeSummary.hourlyAverages">
-                {{getAverageValue(hourlyAverage.averages) | number}}
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="p-2">
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="scroll-item">
+                <table class="table table-bordered mb-0">
+                    <tbody>
+                        <tr>
+                            <td class="bold">
+                                &nbsp;
+                            </td>
+                            <td class="bold text-center"
+                                *ngFor="let hourlyAverage of dayTypeSummaries[0].hourlyAverages">
+                                {{hourlyAverage.hour}}
+                            </td>
+                        </tr>
+                        <tr *ngFor="let dayTypeSummary of dayTypeSummaries">
+                            <td class="bold day-type-label" [ngStyle]="{'background-color': dayTypeSummary.dayType.color}">
+                                {{dayTypeSummary.dayType.label}}
+                            </td>
+                            <td *ngFor="let hourlyAverage of dayTypeSummary.hourlyAverages">
+                                {{getAverageValue(hourlyAverage.averages) | number}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="p-2">
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="scroll-item">
+                <table class="table table-bordered mb-0">
+                    <tbody *ngFor="let dayTypeDaySummary of dayTypeDaySummaries; let index = index;">
+                        <tr *ngIf="index == 0">
+                            <td class="bold">
+                                &nbsp;
+                            </td>
+                            <td class="bold text-center"
+                                *ngFor="let hourlyAverage of dayTypeDaySummary.logToolDays[0].hourlyAverages">
+                                {{hourlyAverage.hour}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bold day-type-label" [ngStyle]="{'background-color': dayTypeDaySummary.dayType.color}">
+                                {{dayTypeDaySummary.dayType.label}}
+                            </td>
+                            <td colspan="24">
+                                &nbsp;
+                            </td>
+                        </tr>
+                        <tr *ngFor="let logToolDay of dayTypeDaySummary.logToolDays">
+                            <td class="bold">
+                                {{logToolDay.date | date}}
+                            </td>
+                            <td *ngFor="let hourlyAverage of logToolDay.hourlyAverages">
+                                {{getAverageValue(hourlyAverage.averages) | number}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
