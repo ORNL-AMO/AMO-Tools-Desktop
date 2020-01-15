@@ -50,7 +50,6 @@ export class LogToolDataService {
         hourlyAverages: hourlyAverages
       });
     }
-    console.log(this.logToolDays);
   }
 
   getHourlyAverages(dayData: Array<any>): Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> {
@@ -82,8 +81,6 @@ export class LogToolDataService {
     }
     return hourlyAverages;
   }
-
-
 
   getDataForDay(date: Date, data: Array<any>): Array<any> {
     //filter matching day items from all day data and return array

@@ -18,6 +18,8 @@ export class DayTypeMenuComponent implements OnInit {
   selectedDataFieldDropdown: boolean = false;
   selectedDataField: LogToolField;
   selectedDataFieldSub: Subscription;
+  selectedGraphType: string;
+  selectedGraphTypeSub: Subscription;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolDataService: LogToolDataService, private dayTypeGraphService: DayTypeGraphService) { }
 
   ngOnInit() {
@@ -28,11 +30,15 @@ export class DayTypeMenuComponent implements OnInit {
     this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(val => {
       this.selectedDataField = val;
     });
+    this.selectedGraphTypeSub = this.dayTypeGraphService.selectedGraphType.subscribe(val => {
+      this.selectedGraphType = val;
+    });
   }
 
   ngOnDestroy() {
     this.dataViewSub.unsubscribe();
     this.selectedDataFieldSub.unsubscribe();
+    this.selectedGraphTypeSub.unsubscribe();
   }
 
   changeDataView(str: string) {
@@ -49,5 +55,9 @@ export class DayTypeMenuComponent implements OnInit {
     this.dayTypeGraphService.setDayTypeScatterPlotData();
     this.dayTypeGraphService.setIndividualDayScatterPlotData();
     this.selectedDataFieldDropdown = false;
+  }
+
+  setSelectedGraphType(str: string){
+    this.dayTypeGraphService.selectedGraphType.next(str);
   }
 }

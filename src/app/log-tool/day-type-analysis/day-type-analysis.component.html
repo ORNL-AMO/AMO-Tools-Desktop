@@ -3,8 +3,8 @@
         <app-day-type-menu></app-day-type-menu>
         <div class="p-2">
             <div class="card">
-                <app-day-type-graph [ngClass]="{'hidden': dataView != 'graph'}"></app-day-type-graph>
-                <app-day-type-table [ngClass]="{'hidden': dataView != 'dataTable'}"></app-day-type-table>
+                <app-day-type-graph *ngIf="dataView == 'graph'"></app-day-type-graph>
+                <app-day-type-table *ngIf="dataView == 'dataTable'"></app-day-type-table>
             </div>
         </div>
         <div class="p-2">
@@ -14,23 +14,6 @@
             </div>
         </div>
     </div>
-    <!-- <div class="d-flex flex-column w-25 h-100 scroll-item">
-        <div class="pt-2 pr-2 pb-2" *ngIf="dataFields.length != 1">
-            <div class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" (click)="toggleSelectedDataFieldDropdown()">
-                    Selected Data: {{selectedDataField.alias}}
-                </a>
-                <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': selectedDataFieldDropdown == true}">
-                    <div class="list-group">
-                        <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
-                            (click)="setSelectedDataField(dataField)"
-                            [ngClass]="{'active': dataField.fieldName == selectedDataField.fieldName}">{{dataField.alias}}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <app-day-type-summary></app-day-type-summary>
-    </div> -->
 </div>
 <div class="d-flex w-100 h-100" *ngIf="!showContent">
     <div class="card card-body d-flex flex-column align-items-center">

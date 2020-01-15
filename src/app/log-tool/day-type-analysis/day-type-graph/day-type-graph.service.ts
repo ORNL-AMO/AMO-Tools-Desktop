@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 import * as moment from 'moment';
-import { DaySummary, DayType, DayTypeGraphItem, LogToolDay, LogToolField, DayTypeSummary } from '../../log-tool-models';
+import { DayType, DayTypeGraphItem, LogToolDay, LogToolField, DayTypeSummary, HourlyAverage } from '../../log-tool-models';
 
 @Injectable()
 export class DayTypeGraphService {
@@ -18,7 +18,7 @@ export class DayTypeGraphService {
     this.individualDayScatterPlotData = new BehaviorSubject<Array<DayTypeGraphItem>>(new Array());
   }
 
-  resetData(){
+  resetData() {
     this.selectedGraphType = new BehaviorSubject<string>('individualDay');
     this.dayTypeScatterPlotData = new BehaviorSubject<Array<DayTypeGraphItem>>(new Array());
     this.individualDayScatterPlotData = new BehaviorSubject<Array<DayTypeGraphItem>>(new Array());
@@ -40,28 +40,21 @@ export class DayTypeGraphService {
     let yData: Array<number> = new Array();
 
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
-    for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
-      let hourlyAverageObj = dayTypeSummary.hourlyAverages.find(hourlyAverage => { return hourlyAverage.hour == hourOfDay });
-      if (hourlyAverageObj) {
-        let hourlyAverage: number = _.meanBy(hourlyAverageObj.averages, (averageObj) => {
-          if (averageObj.field.fieldName == selectedDataField.fieldName) {
-            return averageObj.value
-          }
-        });
-        xData.push(hourOfDay);
-        yData.push(hourlyAverage);
-      }
-    }
+    dayTypeSummary.hourlyAverages.forEach(hourlyAverage => {
+      let currentFieldAverageValue: number = _.find(hourlyAverage.averages, (averageObj) => {return averageObj.field.fieldName == selectedDataField.fieldName}).value;
+      xData.push(hourlyAverage.hour);
+      yData.push(currentFieldAverageValue);
+    });
     return { xData: xData, yData: yData }
   }
 
   setIndividualDayScatterPlotData() {
     let individualDayScatterPlotData = new Array();
-    this.dayTypeAnalysisService.daySummaries.forEach((daySummary) => {
-      let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(daySummary.logToolDay);
-      let color: string = this.getDateColorFromDaySummary(daySummary);
-      let formatedDate: string = moment(daySummary.logToolDay.date).format("MMM D, YYYY").toString();
-      individualDayScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: formatedDate, color: color, date: daySummary.logToolDay.date });
+    this.logToolDataService.logToolDays.forEach((logToolDay) => {
+      let dayAverages: { xData: Array<any>, yData: Array<number> } = this.getDayAverages(logToolDay);
+      let color: string = this.getDateColorFromDay(logToolDay);
+      let formatedDate: string = moment(logToolDay.date).format("MMM D, YYYY").toString();
+      individualDayScatterPlotData.push({ xData: dayAverages.xData, yData: dayAverages.yData, name: formatedDate, color: color, date: logToolDay.date });
     });
     this.individualDayScatterPlotData.next(individualDayScatterPlotData);
   }
@@ -81,7 +74,7 @@ export class DayTypeGraphService {
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
     //24 hrs in a day
     for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
-      let hourAverageObj: { hour: number, averages: Array<{ value: number, field: LogToolField }> } = _.find(logToolDay.hourlyAverages, (hourlyAverageObj) => { return hourlyAverageObj.hour == hourOfDay })
+      let hourAverageObj: HourlyAverage = _.find(logToolDay.hourlyAverages, (hourlyAverageObj) => { return hourlyAverageObj.hour == hourOfDay })
       if (hourAverageObj) {
         let hourAverage: number = _.find(hourAverageObj.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName }).value;
         yData.push(hourAverage);
@@ -91,8 +84,8 @@ export class DayTypeGraphService {
     return { xData: xData, yData: yData };
   }
 
-  getDateColorFromDaySummary(daySummary: DaySummary): string {
-    let typeOfDay: DayType = this.dayTypeAnalysisService.getDayType(daySummary.logToolDay.date);
+  getDateColorFromDay(logToolDay: LogToolDay): string {
+    let typeOfDay: DayType = this.dayTypeAnalysisService.getDayType(logToolDay.date);
     if (typeOfDay) {
       return typeOfDay.color;
     } else {
@@ -101,8 +94,8 @@ export class DayTypeGraphService {
   }
 
   getDateColorFromDate(date: Date) {
-    let daySummary: DaySummary = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(date, daySummary.logToolDay.date) });
-    return this.getDateColorFromDaySummary(daySummary);
+    let logToolDay: LogToolDay = _.find(this.logToolDataService.logToolDays, (logToolDay) => { return this.logToolDataService.checkSameDay(date, logToolDay.date) });
+    return this.getDateColorFromDay(logToolDay);
   }
 
 }

@@ -8,6 +8,15 @@
         </div>
     </div>
 
+    <div class="nav-item pr-2">
+        <div class="btn-group">
+            <button class="btn" (click)="setSelectedGraphType('dayType')"
+                [ngClass]="{'active': selectedGraphType == 'dayType'}">Day Types</button>
+            <button class="btn" (click)="setSelectedGraphType('individualDay')"
+                [ngClass]="{'active': selectedGraphType == 'individualDay'}">Days</button>
+        </div>
+    </div>
+
     <div class="nav-item dropdown pr-2">
         <a class="nav-link dropdown-toggle" (click)="toggleSelectedDataFieldDropdown()">
             Selected Data: {{selectedDataField.alias}}

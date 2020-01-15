@@ -39,11 +39,11 @@ export interface GraphDataObj {
     }
 }
 
-export interface DaySummary {
-    logToolDay: LogToolDay,
-    averages: Array<{ value: number, field: LogToolField }>,
-    dayData: Array<any>
-}
+// export interface DaySummary {
+//     logToolDay: LogToolDay,
+//     // averages: Array<{ value: number, field: LogToolField }>,
+//     dayData: Array<any>
+// }
 
 export interface DayType {
     color: string,
@@ -55,10 +55,10 @@ export interface DayType {
 export interface DayTypeSummary {
     dayType: DayType,
     data: Array<any>,
-    averages: Array<{
-        field: LogToolField,
-        value: number
-    }>,
+    // averages: Array<{
+    //     field: LogToolField,
+    //     value: number
+    // }>,
     hourlyAverages: Array<{
         hour: number,
         averages: Array<{

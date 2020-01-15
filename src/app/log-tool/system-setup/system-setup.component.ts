@@ -20,7 +20,6 @@ export class SystemSetupComponent implements OnInit {
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
     }
-    console.log(this.dataExists);
   }
 
   resetData(){

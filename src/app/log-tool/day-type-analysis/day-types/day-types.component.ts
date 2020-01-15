@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
-import { DayType, DaySummary } from '../../log-tool-models';
+import { DayType } from '../../log-tool-models';
 @Component({
   selector: 'app-day-types',
   templateUrl: './day-types.component.html',
@@ -18,7 +18,7 @@ export class DayTypesComponent implements OnInit {
   newDayTypeColor: string;
   dayTypes: { addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> };
   dayTypesSub: Subscription;
-  daySummaries: Array<DaySummary>;
+  // daySummaries: Array<DaySummary>;
   selectedDays: Array<Date> = [];
   weekdaySelected: boolean = true;
   weekendSelected: boolean = true;
@@ -31,7 +31,7 @@ export class DayTypesComponent implements OnInit {
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(val => {
       this.dayTypes = val;
     });
-    this.daySummaries = this.dayTypeAnalysisService.daySummaries;
+    // this.daySummaries = this.dayTypeAnalysisService.daySummaries;
     this.startDate = this.dayTypeAnalysisService.calendarStartDate;
     this.numberOfMonths = this.dayTypeAnalysisService.numberOfMonths;
   }
@@ -64,13 +64,13 @@ export class DayTypesComponent implements OnInit {
 
   getDateBackground(date: NgbDate) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.logToolDay.date) });
-    if (testExists != undefined) {
+    let testDateExists = _.find(this.logToolDataService.logToolDays, (logToolDay) => { return this.logToolDataService.checkSameDay(d, logToolDay.date) });
+    if (testDateExists != undefined) {
       let testIsDateSelected = _.find(this.selectedDays, (selectedDay) => {
         return this.logToolDataService.checkSameDay(d, selectedDay)
       });
       if (testIsDateSelected == undefined) {
-        return this.dayTypeGraphService.getDateColorFromDaySummary(testExists);
+        return this.dayTypeGraphService.getDateColorFromDay(testDateExists);
       } else {
         return this.newDayTypeColor;
       }
@@ -81,7 +81,7 @@ export class DayTypesComponent implements OnInit {
 
   onDateSelect(date: NgbDate) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testDateExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.logToolDay.date) });
+    let testDateExists = _.find(this.logToolDataService.logToolDays, (logToolDay) => { return this.logToolDataService.checkSameDay(d, logToolDay.date) });
     if (testDateExists) {
       let testIsDateSelected = _.find(this.selectedDays, (selectedDay) => {
         return this.logToolDataService.checkSameDay(d, selectedDay)

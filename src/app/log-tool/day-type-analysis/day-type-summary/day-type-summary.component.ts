@@ -3,7 +3,7 @@ import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
-import { DaySummary, LogToolField, DayTypeSummary } from '../../log-tool-models';
+import { LogToolField, DayTypeSummary, LogToolDay } from '../../log-tool-models';
 @Component({
   selector: 'app-day-type-summary',
   templateUrl: './day-type-summary.component.html',
@@ -11,7 +11,7 @@ import { DaySummary, LogToolField, DayTypeSummary } from '../../log-tool-models'
 })
 export class DayTypeSummaryComponent implements OnInit {
 
-  daySummaries: Array<DaySummary>;
+  // daySummaries: Array<DaySummary>;
   dayTypeSummariesSub: Subscription;
   dayTypeSummaries: Array<DayTypeSummary>;
   selectedGraphTypeSub: Subscription;
@@ -22,7 +22,7 @@ export class DayTypeSummaryComponent implements OnInit {
 
   ngOnInit() {
     //never change, just color changes
-    this.daySummaries = this.dayTypeAnalysisService.daySummaries;
+    // this.daySummaries = this.dayTypeAnalysisService.daySummaries;
     this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(field => {
       this.selectedDataField = field;
     });
@@ -43,8 +43,8 @@ export class DayTypeSummaryComponent implements OnInit {
   }
 
 
-  getDateColor(daySummary: DaySummary): string {
-    return this.dayTypeGraphService.getDateColorFromDaySummary(daySummary);
+  getDateColor(logToolDay: LogToolDay): string {
+    return this.dayTypeGraphService.getDateColorFromDay(logToolDay);
   }
 
   showDayTypeGraph() {
@@ -55,7 +55,7 @@ export class DayTypeSummaryComponent implements OnInit {
     this.dayTypeGraphService.selectedGraphType.next('individualDay');
   }
 
-  getAverageDataItem(daySummary: DaySummary | DayTypeSummary): { field: LogToolField, value: number } {
-    return _.find(daySummary.averages, (averageObj) => { return averageObj.field.fieldName == this.selectedDataField.fieldName });
-  }
+  // getAverageDataItem(daySummary: DayTypeSummary): { field: LogToolField, value: number } {
+  //   return _.find(daySummary.averages, (averageObj) => { return averageObj.field.fieldName == this.selectedDataField.fieldName });
+  // }
 }

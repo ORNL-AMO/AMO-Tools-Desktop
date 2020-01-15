@@ -3,12 +3,12 @@ import * as _ from 'lodash';
 import { LogToolService } from '../log-tool.service';
 import { BehaviorSubject } from 'rxjs';
 import { LogToolDataService } from '../log-tool-data.service';
-import { LogToolField, DaySummary, DayType, DayTypeSummary, LogToolDay, HourlyAverage } from '../log-tool-models';
+import { LogToolField, DayType, DayTypeSummary, LogToolDay, HourlyAverage } from '../log-tool-models';
 @Injectable()
 export class DayTypeAnalysisService {
 
   selectedDataField: BehaviorSubject<LogToolField>;
-  daySummaries: Array<DaySummary>;
+  // daySummaries: Array<DaySummary>;
   dayTypes: BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>;
   dayTypeSummaries: BehaviorSubject<Array<DayTypeSummary>>;
   displayDayTypeCalander: BehaviorSubject<boolean>;
@@ -26,7 +26,7 @@ export class DayTypeAnalysisService {
     this.dataView = new BehaviorSubject<string>('graph');
   }
 
-  resetData(){
+  resetData() {
     this.dayTypes = new BehaviorSubject<{ addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> }>({ addedDayTypes: new Array(), primaryDayTypes: new Array() });
     this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
     this.selectedDataField = new BehaviorSubject<LogToolField>(undefined);
@@ -84,8 +84,8 @@ export class DayTypeAnalysisService {
   }
 
   getPrimaryDayType(date: Date): string {
-    let daySummary: DaySummary = this.daySummaries.find(day => { return this.logToolDataService.checkSameDay(day.logToolDay.date, date) });
-    if (daySummary.dayData.length != this.logToolDataService.validNumberOfDayDataPoints) {
+    let logToolDay: LogToolDay = this.logToolDataService.logToolDays.find(day => { return this.logToolDataService.checkSameDay(day.date, date) });
+    if (logToolDay.data.length != this.logToolDataService.validNumberOfDayDataPoints) {
       return 'Excluded';
     } else {
       let dayCode: number = date.getDay();
@@ -106,22 +106,22 @@ export class DayTypeAnalysisService {
     this.dayTypes.next(dayTypes);
   }
 
-  getDaySummaries() {
-    this.daySummaries = new Array();
-    this.logToolDataService.logToolDays.forEach(logToolDay => {
-      let dayAverages: Array<{ value: number, field: LogToolField }> = new Array();
-      this.logToolService.fields.forEach(field => {
-        if (field.fieldName != this.logToolService.dateField && field.useField == true) {
-          if (this.selectedDataField.getValue() == undefined) {
-            this.selectedDataField.next(field);
-          }
-          let fieldAverage: number = _.meanBy(logToolDay.data, field.fieldName);
-          dayAverages.push({ field: field, value: fieldAverage });
-        }
-      });
-      this.daySummaries.push({ logToolDay: logToolDay, averages: dayAverages, dayData: logToolDay.data })
-    });
-  }
+  // getDaySummaries() {
+  //   this.daySummaries = new Array();
+  //   this.logToolDataService.logToolDays.forEach(logToolDay => {
+  //     let dayAverages: Array<{ value: number, field: LogToolField }> = new Array();
+  //     this.logToolService.fields.forEach(field => {
+  //       if (field.fieldName != this.logToolService.dateField && field.useField == true) {
+  //         if (this.selectedDataField.getValue() == undefined) {
+  //           this.selectedDataField.next(field);
+  //         }
+  //         let fieldAverage: number = _.meanBy(logToolDay.data, field.fieldName);
+  //         dayAverages.push({ field: field, value: fieldAverage });
+  //       }
+  //     });
+  //     this.daySummaries.push({ logToolDay: logToolDay, averages: dayAverages, dayData: logToolDay.data })
+  //   });
+  // }
 
   getDayType(_date: Date): DayType {
     let dayTypes = this.dayTypes.getValue();
@@ -239,49 +239,52 @@ export class DayTypeAnalysisService {
 
   getDayTypeSummary(dayType: DayType): DayTypeSummary {
     let dayTypeData: Array<any> = new Array();
+    let allDayTypeHourlyAverages: Array<HourlyAverage> = new Array();
     dayType.logToolDays.forEach(logToolDay => {
       dayTypeData = _.union(dayTypeData, logToolDay.data);
+      allDayTypeHourlyAverages = _.union(allDayTypeHourlyAverages, logToolDay.hourlyAverages);
     })
-    let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
-    let fieldAverages: Array<{ field: LogToolField, value: number }> = new Array();
-    fields.forEach(field => {
-      let fieldAverage: number = _.meanBy(dayTypeData, field.fieldName);
-      fieldAverages.push({
-        field: field,
-        value: fieldAverage
-      })
-    });
-
-    let hourlyAverages: Array<HourlyAverage> = new Array();
-    dayType.logToolDays.forEach(logToolDay => {
-      hourlyAverages = _.union(hourlyAverages, logToolDay.hourlyAverages);
-    });
-
-
-
+    let hourlyAverages: Array<HourlyAverage> = this.calculateDayTypeHourlyAverages(allDayTypeHourlyAverages);
     return {
       dayType: dayType,
       data: dayTypeData,
-      averages: fieldAverages,
       hourlyAverages: hourlyAverages
     }
   }
 
-  // setDayTypeHourlyAverages(hourlyAverages: Array<HourlyAverage>): Array<HourlyAverage>{
-  //   let selectedDataField: LogToolField = this.selectedDataField.getValue();
-  //   for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
-  //     let hourlyAverageObj = hourlyAverages.find(hourlyAverage => { return hourlyAverage.hour == hourOfDay });
-  //     if (hourlyAverageObj) {
-  //       let hourlyAverage: number = _.meanBy(hourlyAverageObj.averages, (averageObj) => {
-  //         if (averageObj.field.fieldName == selectedDataField.fieldName) {
-  //           return averageObj.value
-  //         }
-  //       });
-  //       xData.push(hourOfDay);
-  //       yData.push(hourlyAverage);
-  //     }
-  //   }
-  // }
+  calculateDayTypeHourlyAverages(hourlyAverages: Array<HourlyAverage>): Array<HourlyAverage> {
+    let summedHourlyAverages: Array<HourlyAverage> = new Array();
+    for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
+      let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
+      let fieldAverages: Array<{ field: LogToolField, value: number }> = new Array();
+      fields.forEach(field => {
+        let combinedDaysHourlyAverage: number = this.getCombinedHourlyAverage(hourlyAverages, field, hourOfDay);
+        fieldAverages.push({
+          field: field,
+          value: combinedDaysHourlyAverage
+        });
+      });
+      summedHourlyAverages.push({
+        hour: hourOfDay,
+        averages: fieldAverages
+      });
+    }
+    return summedHourlyAverages;
+  }
+
+  getCombinedHourlyAverage(hourlyAverages: Array<HourlyAverage>, field: LogToolField, hourOfDay: number) {
+    let filteredHourlyAverageObj = _.filter(hourlyAverages, (hourlyAverage) => { return hourlyAverage.hour == hourOfDay });
+    let combinedAverages: Array<{ field: LogToolField, value: number }> = new Array();
+    filteredHourlyAverageObj.forEach(obj => {
+      combinedAverages = _.union(combinedAverages, obj.averages);
+    });
+    let hourlyAverage: number = _.meanBy(combinedAverages, (averageObj) => {
+      if (averageObj.field.fieldName == field.fieldName) {
+        return averageObj.value
+      }
+    });
+    return hourlyAverage;
+  }
 
 
   setStartDateAndNumberOfMonths() {

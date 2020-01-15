@@ -23,9 +23,9 @@ export class DayTypeCalendarComponent implements OnInit {
 
   getDateBackground(date: NgbDateStruct) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testDateExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.logToolDay.date) });
+    let testDateExists = _.find(this.logToolDataService.logToolDays, (logToolDay) => { return this.logToolDataService.checkSameDay(d, logToolDay.date) });
     if (testDateExists != undefined) {
-      return this.dayTypeGraphService.getDateColorFromDaySummary(testDateExists);
+      return this.dayTypeGraphService.getDateColorFromDay(testDateExists);
     } else {
       return 'lightgray';
     }
@@ -33,8 +33,8 @@ export class DayTypeCalendarComponent implements OnInit {
 
   onDateSelect(date: NgbDate) {
     let d: Date = new Date(date.year, date.month - 1, date.day);
-    let testExists = _.find(this.dayTypeAnalysisService.daySummaries, (daySummary) => { return this.logToolDataService.checkSameDay(d, daySummary.logToolDay.date) });
-    if (testExists != undefined) {
+    let testDateExists = _.find(this.logToolDataService.logToolDays, (logToolDay) => { return this.logToolDataService.checkSameDay(d, logToolDay.date) });
+    if (testDateExists != undefined) {
       let d: Date = new Date(date.year, date.month - 1, date.day);
       this.dayTypeAnalysisService.toggleDateType(d);
       this.dayTypeAnalysisService.setDayTypeSummaries();
