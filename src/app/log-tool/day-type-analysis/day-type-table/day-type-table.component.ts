@@ -15,10 +15,11 @@ export class DayTypeTableComponent implements OnInit {
 
   selectedDataFieldSub: Subscription;
   selectedDataField: LogToolField;
-  dayTypes: { addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> };
+  dayTypes: Array<DayType>;
   dayTypesSub: Subscription;
 
   dayTypeDaySummaries: Array<{ dayType: DayType, logToolDays: Array<LogToolDay> }>
+  hourLabels: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService) { }
 
   ngOnInit() {
@@ -31,7 +32,6 @@ export class DayTypeTableComponent implements OnInit {
     });
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(dayTypes => {
       this.dayTypes = dayTypes;
-      this.setDayTypeDaySummaries();
     });
   }
 
@@ -44,16 +44,4 @@ export class DayTypeTableComponent implements OnInit {
   getAverageValue(averages: Array<{ value: number, field: LogToolField }>): number {
     return _.find(averages, (average) => { return average.field.fieldName == this.selectedDataField.fieldName }).value;
   }
-
-  setDayTypeDaySummaries() {
-    let combinedDayTypes: Array<DayType> = _.union(this.dayTypes.addedDayTypes, this.dayTypes.primaryDayTypes);
-    this.dayTypeDaySummaries = new Array();
-    combinedDayTypes.forEach(dayType => {
-      this.dayTypeDaySummaries.push({
-        dayType: dayType,
-        logToolDays: dayType.logToolDays
-      });
-    });
-  }
-
 }

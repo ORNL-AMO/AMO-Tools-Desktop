@@ -16,7 +16,7 @@ export class DayTypesComponent implements OnInit {
   addNewDayType: boolean = false;
   newDayTypeName: string;
   newDayTypeColor: string;
-  dayTypes: { addedDayTypes: Array<DayType>, primaryDayTypes: Array<DayType> };
+  dayTypes: Array<DayType>;
   dayTypesSub: Subscription;
   // daySummaries: Array<DaySummary>;
   selectedDays: Array<Date> = [];
@@ -95,10 +95,15 @@ export class DayTypesComponent implements OnInit {
   }
 
   removeDayType(dayType: DayType) {
-    this.dayTypeAnalysisService.removeFromSecondary(dayType);
-    this.dayTypeAnalysisService.setDayTypeSummaries();
-    this.dayTypeGraphService.updateIndividualDayScatterPlotDataColors();
-    this.dayTypeGraphService.setDayTypeScatterPlotData();
+    if(dayType.label != 'Excluded'){
+      this.dayTypeAnalysisService.removeDayType(dayType);
+      dayType.logToolDays.forEach(day => {
+        this.dayTypeAnalysisService.toggleDateType(day.date);
+      });
+      this.dayTypeAnalysisService.setDayTypeSummaries();
+      this.dayTypeGraphService.updateIndividualDayScatterPlotDataColors();
+      this.dayTypeGraphService.setDayTypeScatterPlotData();
+    }
   }
 
   getRandomColor() {
@@ -108,5 +113,11 @@ export class DayTypesComponent implements OnInit {
       color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+  }
+
+  resetDayTypes(){
+    this.dayTypeAnalysisService.initDayTypes();
+    this.dayTypeGraphService.updateIndividualDayScatterPlotDataColors();
+    this.dayTypeGraphService.setDayTypeScatterPlotData();
   }
 }

@@ -36,7 +36,7 @@ export class DayTypeAnalysisComponent implements OnInit {
   ngAfterViewInit() {
     if (this.dayTypeAnalysisService.dayTypesCalculated == false) {
       setTimeout(() => {
-        this.dayTypeAnalysisService.initSecondaryDayTypes();
+        this.dayTypeAnalysisService.initDayTypes();
         this.dayTypeAnalysisService.setDayTypeSummaries();
         this.dayTypeGraphService.setDayTypeScatterPlotData();
         this.dayTypeGraphService.setIndividualDayScatterPlotData();

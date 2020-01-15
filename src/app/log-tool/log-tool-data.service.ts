@@ -10,7 +10,7 @@ export class LogToolDataService {
   validNumberOfDayDataPoints: number;
   constructor(private logToolService: LogToolService) { }
 
-  resetData(){
+  resetData() {
     this.logToolDays = new Array();
     this.validNumberOfDayDataPoints = undefined;
   }
@@ -28,7 +28,7 @@ export class LogToolDataService {
     return tmpFields;
   }
 
-  getLogToolDayFromDate(date: Date){
+  getLogToolDayFromDate(date: Date) {
     let logToolDay: LogToolDay = this.logToolDays.find(logToolDay => { return this.checkSameDay(logToolDay.date, date) });
     return logToolDay
   }
@@ -65,7 +65,7 @@ export class LogToolDataService {
       });
       let averages: Array<{ value: number, field: LogToolField }> = new Array();
       fields.forEach(field => {
-        let hourFieldMean: number = 0;
+        let hourFieldMean: number;
         if (filteredDaysByHour.length != 0) {
           hourFieldMean = _.meanBy(filteredDaysByHour, (filteredDay) => { return filteredDay[field.fieldName] });
         }

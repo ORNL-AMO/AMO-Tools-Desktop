@@ -8,13 +8,13 @@
                             <td class="bold">
                                 &nbsp;
                             </td>
-                            <td class="bold text-center"
-                                *ngFor="let hourlyAverage of dayTypeSummaries[0].hourlyAverages">
-                                {{hourlyAverage.hour}}
+                            <td class="bold text-center" *ngFor="let hourLabel of hourLabels">
+                                {{hourLabel}}
                             </td>
                         </tr>
                         <tr *ngFor="let dayTypeSummary of dayTypeSummaries">
-                            <td class="bold day-type-label" [ngStyle]="{'background-color': dayTypeSummary.dayType.color}">
+                            <td class="bold day-type-label"
+                                [ngStyle]="{'background-color': dayTypeSummary.dayType.color}">
                                 {{dayTypeSummary.dayType.label}}
                             </td>
                             <td *ngFor="let hourlyAverage of dayTypeSummary.hourlyAverages">
@@ -33,25 +33,24 @@
         <div class="card-body p-0">
             <div class="scroll-item">
                 <table class="table table-bordered mb-0">
-                    <tbody *ngFor="let dayTypeDaySummary of dayTypeDaySummaries; let index = index;">
+                    <tbody *ngFor="let dayType of dayTypes; let index = index;">
                         <tr *ngIf="index == 0">
                             <td class="bold">
                                 &nbsp;
                             </td>
-                            <td class="bold text-center"
-                                *ngFor="let hourlyAverage of dayTypeDaySummary.logToolDays[0].hourlyAverages">
-                                {{hourlyAverage.hour}}
+                            <td class="bold text-center" *ngFor="let hourLabel of hourLabels">
+                                {{hourLabel}}
                             </td>
                         </tr>
                         <tr>
-                            <td class="bold day-type-label" [ngStyle]="{'background-color': dayTypeDaySummary.dayType.color}">
-                                {{dayTypeDaySummary.dayType.label}}
+                            <td class="bold day-type-label" [ngStyle]="{'background-color': dayType.color}">
+                                {{dayType.label}}
                             </td>
                             <td colspan="24">
                                 &nbsp;
                             </td>
                         </tr>
-                        <tr *ngFor="let logToolDay of dayTypeDaySummary.logToolDays">
+                        <tr *ngFor="let logToolDay of dayType.logToolDays">
                             <td class="bold">
                                 {{logToolDay.date | date}}
                             </td>
