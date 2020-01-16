@@ -148,6 +148,7 @@ export class BoilerComponent implements OnInit {
 
   focusField(str: string) {
     this.ssmtService.currentField.next(str);
+    this.ssmtService.isBaselineFocused.next(this.isBaseline);
   }
 
   focusOut() {

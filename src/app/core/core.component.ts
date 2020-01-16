@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { AssessmentService } from '../assessment/assessment.service';
+import { AssessmentService } from '../dashboard/assessment.service';
 import { Subscription } from 'rxjs';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -9,7 +9,6 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
-import { ExportService } from '../shared/import-export/export.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 declare var google: any;
@@ -37,18 +36,11 @@ declare var google: any;
 
 export class CoreComponent implements OnInit {
   showUpdateModal: boolean;
-  showTutorial: boolean = false;
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
   idbStarted: boolean = false;
-  dirSub: Subscription;
-  calcSub: Subscription;
-  assessmentSub: Subscription;
-  settingsSub: Subscription;
   tutorialType: string;
   inTutorialsView: boolean;
-  dashboardTab: string;
-  dashboardViewSub: Subscription;
   updateError: boolean = false;
 
   showSurvey: string = 'hide';
@@ -58,8 +50,9 @@ export class CoreComponent implements OnInit {
   showTranslateModalSub: Subscription;
   showTranslate: string = 'hide';
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
-    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
-    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
+    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, 
+    private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
+    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router) {
   }
 
   ngOnInit() {
@@ -73,19 +66,14 @@ export class CoreComponent implements OnInit {
 
     //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
-    this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(val => {
-      this.dashboardTab = val;
-    });
-
 
     this.electronService.ipcRenderer.once('release-info', (event, info) => {
       this.info = info;
     })
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
-      this.inTutorialsView = (this.router.url === '/') && this.dashboardTab === 'tutorials';
+      this.inTutorialsView = (this.router.url === '/tutorials');
       if (val && !this.assessmentService.tutorialShown) {
-        this.showTutorial = true;
         this.hideTutorial = false;
         this.tutorialType = val;
         this.changeDetectorRef.detectChanges();
@@ -128,11 +116,6 @@ export class CoreComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
-    if (this.dirSub) this.dirSub.unsubscribe();
-    if (this.calcSub) this.calcSub.unsubscribe();
-    if (this.assessmentSub) this.assessmentSub.unsubscribe();
-    if (this.settingsSub) this.settingsSub.unsubscribe();
-    this.exportService.exportAllClick.next(false);
     this.updateAvailableSubscription.unsubscribe();
     this.showTranslateModalSub.unsubscribe();
   }
@@ -186,23 +169,7 @@ export class CoreComponent implements OnInit {
 
   closeTutorial() {
     this.assessmentService.tutorialShown = true;
-    this.showTutorial = false;
     this.hideTutorial = true;
-  }
-
-
-
-
-  success(pos) {
-    console.log('SUCCESS');
-    var crd = pos.coords;
-
-    console.log(pos);
-  }
-
-  error(err) {
-    console.log('ERRR')
-    console.warn(err);
   }
 
   closeTranslate() {

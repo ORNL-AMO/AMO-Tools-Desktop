@@ -1,0 +1,148 @@
+<div bsModal #versionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="versionModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <h3>Release Notes for v{{versionNum}}</h3>
+        <button class="close" (click)="hideVersionModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body scroll-item">
+        <h4>Release Notes v.0.6.3-beta</h4>
+        <label>Steam:</label>
+        <ul>
+          <li>
+            Fixed: Steam algorithm for process steam energy to be the same for modifications
+          </li>
+        </ul>
+        
+        <h4>Release Notes v.0.6.2-beta</h4>
+        <label>Application:</label>
+        <ul>
+          <li>
+            Enhanced: Added link to homepage side bar for translation
+          </li>
+        </ul>
+
+        <label>Steam: </label>
+        <ul>
+          <li>Enhanced: Amended algorithm to calculate scenario steam mass usage to keep process steam energy usage the
+            same as baseline</li>
+          <li>Enhanced: Verified data structures of old steam assessments translated to new data structures</li>
+          <li>Fixed: Bug where application would crash if enter more than one digit after decimal place</li>
+          <li>Fixed: Bug where highest pressure steam pressure validation check was not displaying an error immediately
+          </li>
+          <li>Updated: Example to account for algorithm update</li>
+          <li>Updated: Modification header process steam usage inputs updated to account for algorithm update</li>
+          <li>Updated: Removed unused input for site power import in modifications</li>
+        </ul>
+
+        <h4>Release Notes v.0.6.1-beta</h4>
+        <label>Application</label>
+        <ul>
+          <li>
+            Fixed: Tutorials extension bug causing images to offset
+          </li>
+        </ul>
+
+        <h4>Release Notes for v0.6.0-beta</h4>
+        <label>Application</label>
+        <ul>
+          <li>Added: All calculators within an assessment are included with export data</li>
+          <li>Added: Treasure Hunt to rollup report printing</li>
+          <li>Fixed: Bug relating to the rapid appearance and disappearance of scroll bars</li>
+          <li>Updated: Application wide use of 8760 as default for operating hours</li>
+          <li>Updated: Changed default setting to be results instead of help</li>
+          <li>Updated: Verbiage of MEASUR sub-header</li>
+          <li>Updated: Home and Dashboard Tutorials</li>
+          <li>Fixed: Bug for copy/paste functionality with keyboard</li>
+          <li>Fixed: App quits on close of mac</li>
+        </ul>
+        <label>Pumps</label>
+        <ul>
+          <li>Enhanced: Added more guidance to pump type help text</li>
+          <li>Fixed: Issues with badges</li>
+          <li>Fixed: Pump and System curves are now exported with assessment</li>
+          <li>Updated: Example to include VFD opportunity and utilize pump curve</li>
+          <li>Updated: Tutorial</li>
+        </ul>
+        <label>Process Heating</label>
+        <ul>
+          <li>Updated: Tutorial</li>
+        </ul>
+        <label>Fans</label>
+        <ul>
+          <li>Added: Field validation for Field Data pressure fields</li>
+          <li>Fixed: Fan and System curves are now exported with assessment</li>
+          <li>Fixed: Issues with badges</li>
+          <li>Updated: Tutorial</li>
+        </ul>
+        <label>Steam</label>
+        <ul>
+          <li>Added: Input field for implementation costs and payback to results</li>
+          <li>Added: Modal for the calculation of Boiler Efficiency</li>
+          <li>Added: Tutorial</li>
+          <li>Added: Validation for Desuperheat Temperature</li>
+          <li>Fixed: Form label for "Header" and Turbine Tabs</li>
+          <li>Removed: Iterative calculations for system modeler moved from MEASUR Desktop to suite code</li>
+          <li>Updated: Modal for the calculation of Blowdown Fraction</li>
+        </ul>
+        <label>Treasure Hunt</label>
+        <ul>
+          <li>Added: Ability to filter and sort Treasure Chest</li>
+          <li>Added: Ability to sort TH Opportunities in report</li>
+          <li>Added: Auto-unit conversion functionality</li>
+          <li>Added: Graph and table to TH report relating to teams' findings</li>
+          <li>Added: Report printing functionality</li>
+          <li>Added: Select/de-select all buttons for Treasure Chest</li>
+          <li>Added: Steam reduction calculator</li>
+          <li>Added: Tutorial</li>
+          <li>Added: Water Reduction Calculator</li>
+          <li>Enhanced: Clarified language for Annual Utility Usage and Costs' Compressed Air and Steam as being
+            utilities produced off-site</li>
+          <li>Enhanced: Navigation within TH</li>
+          <li>Fixed: Bug preventing saving of Annual Utility Usage and Costs</li>
+          <li>Fixed: Bug where Electricity Unit Costs was refilling blank field with default value</li>
+          <li>Fixed: Default value for Compressed Air (utility) cost</li>
+          <li>Updated: Example to include new calculators</li>
+          <li>Updated: Icons for pressure reduction, steam, motor drive and replace motor</li>
+          <li>Updated: Verbiage within Treasure Chest</li>
+        </ul>
+
+        <label>Calculators</label>
+        <ul>
+          <li>Added: Buttons to "Generate Example" and "Reset Data" for each calculator</li>
+          <li>Added: Calculator for conducting blowdown rate and related savings</li>
+          <li>Added: Calculator for estimating energy savings from adding pipe insulation</li>
+          <li>Added: Copy table functionality to Steam and Saturated Properties calculators</li>
+          <li>Added: Field validation for Fan Achievable Efficiency calculator pressure fields</li>
+          <li>Added: Lighting fixture database</li>
+          <li>Enhanced: Updated the color of "Copy Table" button to be easier to see</li>
+          <li>Fixed: Bug in Energy Equivalency Calculator not properly calculating Equivalent Fuel Heat</li>
+          <li>Fixed: Bug relating to compressed air calculator saving</li>
+          <li>Fixed: Bug relating to Electricity costs field not displaying in Compressed Air Reduction</li>
+          <li>Fixed: Bug where P-H and T-S diagram were not displaying</li>
+          <li>Fixed: Imperial and metric unit labels for Velocity in Pipes Calculator</li>
+          <li>Fixed: Increased decimal places displayed in CO2 Savings Calculator</li>
+          <li>Fixed: Name of "Combined Heat and Power" Calculator</li>
+          <li>Fixed: Natural Gas Reduction's metric unit labels</li>
+          <li>Fixed: Problems relating to pump, fan and system curves</li>
+          <li>Fixed: Re-added the legend for the Motor Performance Calculator graph</li>
+          <li>Fixed: Several Bugs relating to pump and fan curves</li>
+          <li>Fixed: Steam properties & Saturation Properties T-S diagram cut off for low T values</li>
+          <li>Updated: Lighting calculator UI and calculations to include Ballast Factor, Lumen Degradation Factor and
+            Coefficient of Utilization</li>
+        </ul>
+
+        <label>Known Issues</label>
+        <ul>
+          <li>The Mac and Linux releases do not support Auto-updating</li>
+          <li>Renaming an export in Windows Download menu can delete the file extension (.json)</li>
+          <li>Assessments made in a previous release may experience errors</li>
+          <li>Import files made in a previous release will not be useable</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

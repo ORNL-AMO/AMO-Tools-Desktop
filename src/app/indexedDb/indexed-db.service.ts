@@ -190,6 +190,8 @@ export class IndexedDbService {
 
   //ASSESSMENTS
   addAssessment(_assessment: Assessment): Promise<any> {
+    _assessment.createdDate = new Date();
+    _assessment.modifiedDate = new Date();
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.assessments);
@@ -262,6 +264,7 @@ export class IndexedDbService {
   // }
 
   putAssessment(assessment: Assessment): Promise<any> {
+    assessment.modifiedDate = new Date();
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.assessments);
@@ -302,6 +305,8 @@ export class IndexedDbService {
 
   //DIRECTORIES
   addDirectory(directoryRef: DirectoryDbRef): Promise<any> {
+    directoryRef.createdDate = new Date();
+    directoryRef.modifiedDate = new Date();
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.directories);
@@ -363,6 +368,7 @@ export class IndexedDbService {
   // }
 
   putDirectory(directoryRef: DirectoryDbRef): Promise<any> {
+    directoryRef.modifiedDate = new Date();
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.directories);
@@ -626,7 +632,7 @@ export class IndexedDbService {
       };
     });
   }
-  
+
   //liquidLoadChargeMaterial
   addLiquidLoadChargeMaterial(_material: LiquidLoadChargeMaterial): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -1030,7 +1036,7 @@ export class IndexedDbService {
       };
     });
   }
-  
+
   putFlueGasMaterial(material: FlueGasMaterial): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readwrite');
@@ -1210,6 +1216,8 @@ export class IndexedDbService {
 
   //calculator
   addCalculator(_calculator: Calculator): Promise<any> {
+    _calculator.createdDate = new Date();
+    _calculator.modifiedDate = new Date();
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.calculator);
@@ -1287,6 +1295,7 @@ export class IndexedDbService {
   }
 
   putCalculator(calculator: Calculator): Promise<any> {
+    calculator.modifiedDate = new Date();
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.calculator);

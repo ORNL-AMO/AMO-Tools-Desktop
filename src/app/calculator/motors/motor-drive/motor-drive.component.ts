@@ -1,9 +1,10 @@
-import {Component, OnInit, ViewChild, HostListener, ElementRef, Input, EventEmitter, Output} from '@angular/core';
-import {MotorDriveService} from './motor-drive.service';
-import {SettingsDbService} from '../../../indexedDb/settings-db.service';
-import {Settings} from '../../../shared/models/settings';
-import {MotorDriveInputs, MotorDriveOutputs} from '../../../shared/models/calculators';
-import {FormGroup} from '@angular/forms';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, Input, EventEmitter, Output } from '@angular/core';
+import { MotorDriveService } from './motor-drive.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Settings } from '../../../shared/models/settings';
+import { MotorDriveInputs, MotorDriveOutputs } from '../../../shared/models/calculators';
+import { FormGroup } from '@angular/forms';
+import { MotorDriveInputsTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-motor-drive',
@@ -14,7 +15,7 @@ export class MotorDriveComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @Output('emitSave')
-  emitSave = new EventEmitter<MotorDriveInputs>();
+  emitSave = new EventEmitter<MotorDriveInputsTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
   @Output('emitAddOpportunitySheet')
@@ -100,7 +101,7 @@ export class MotorDriveComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit(this.motorDriveData);
+    this.emitSave.emit({ motorDriveInputs: this.motorDriveData });
   }
 
   cancel() {

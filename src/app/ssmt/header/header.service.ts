@@ -24,7 +24,7 @@ export class HeaderService {
     let ranges: HeaderRanges = this.getRanges(settings, boilerInput, minPressure, undefined);
 
     return this.formBuilder.group({
-      pressure: [undefined, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax)]],
+      pressure: [undefined, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax), this.boilerTempValidator(boilerInput.steamTemperature, settings)]],
       processSteamUsage: [undefined, [Validators.required, Validators.min(ranges.processUsageMin)]],
       condensationRecoveryRate: [undefined, [Validators.required, Validators.min(0), Validators.max(100)]],
       heatLoss: [.1, [Validators.required, Validators.min(0), Validators.max(10)]],
@@ -60,9 +60,9 @@ export class HeaderService {
     };
   }
 
-  initHeaderForm(settings: Settings, pressureMin?: number, pressureMax?: number): FormGroup {
+  initHeaderForm(settings: Settings, useBaselineProcessSteamUsage: boolean, pressureMin?: number, pressureMax?: number): FormGroup {
     let ranges: HeaderRanges = this.getRanges(settings, undefined, pressureMin, pressureMax);
-    return this.formBuilder.group({
+    let form: FormGroup = this.formBuilder.group({
       pressure: [undefined, [Validators.required, GreaterThanValidator.greaterThan(ranges.pressureMin), LessThanValidator.lessThan(ranges.pressureMax)]],
       processSteamUsage: [undefined, [Validators.required, Validators.min(ranges.processUsageMin)]],
       condensationRecoveryRate: [undefined, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -70,7 +70,9 @@ export class HeaderService {
       flashCondensateIntoHeader: [false, Validators.required],
       desuperheatSteamIntoNextHighest: [false, Validators.required],
       desuperheatSteamTemperature: [undefined, [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
+      useBaselineProcessSteamUsage: [useBaselineProcessSteamUsage]
     });
+    return form;
   }
 
   getHeaderFormFromObj(obj: HeaderNotHighestPressure, settings: Settings, pressureMin: number, pressureMax: number): FormGroup {
@@ -89,7 +91,9 @@ export class HeaderService {
       flashCondensateIntoHeader: [obj.flashCondensateIntoHeader, Validators.required],
       desuperheatSteamIntoNextHighest: [obj.desuperheatSteamIntoNextHighest, Validators.required],
       desuperheatSteamTemperature: [obj.desuperheatSteamTemperature, tmpDesuperheatSteamTemperatureValidators],
+      useBaselineProcessSteamUsage: [obj.useBaselineProcessSteamUsage]
     });
+
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
@@ -104,7 +108,8 @@ export class HeaderService {
       heatLoss: form.controls.heatLoss.value,
       flashCondensateIntoHeader: form.controls.flashCondensateIntoHeader.value,
       desuperheatSteamIntoNextHighest: form.controls.desuperheatSteamIntoNextHighest.value,
-      desuperheatSteamTemperature: form.controls.desuperheatSteamTemperature.value
+      desuperheatSteamTemperature: form.controls.desuperheatSteamTemperature.value,
+      useBaselineProcessSteamUsage: form.controls.useBaselineProcessSteamUsage.value
     };
   }
 

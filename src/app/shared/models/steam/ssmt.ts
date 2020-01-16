@@ -164,4 +164,5 @@ export interface HeaderNotHighestPressure {
     flashCondensateIntoHeader: boolean;
     desuperheatSteamIntoNextHighest: boolean;
     desuperheatSteamTemperature: number;
+    useBaselineProcessSteamUsage: boolean;
 }

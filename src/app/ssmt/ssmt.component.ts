@@ -17,7 +17,7 @@ import * as _ from 'lodash';
 import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { BoilerService } from './boiler/boiler.service';
-import { AssessmentService } from '../assessment/assessment.service';
+import { AssessmentService } from '../dashboard/assessment.service';
 import { OperationsService } from './operations/operations.service';
 
 @Component({

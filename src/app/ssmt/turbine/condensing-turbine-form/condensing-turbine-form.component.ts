@@ -25,6 +25,8 @@ export class CondensingTurbineFormComponent implements OnInit {
   inSetup: boolean;
   @Input()
   idString: string;
+  @Input()
+  isBaseline: boolean;
   
   turbineOptionTypes: Array<Quantity>;
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private turbineService: TurbineService) {
@@ -76,6 +78,7 @@ export class CondensingTurbineFormComponent implements OnInit {
   focusField(str: string) {
     this.ssmtService.turbineOperationValue.next(this.turbineForm.controls.operationType.value);
     this.ssmtService.turbineOperationHelp.next('condensing');
+    this.ssmtService.isBaselineFocused.next(this.isBaseline);
     this.ssmtService.currentField.next(str);
   }
 

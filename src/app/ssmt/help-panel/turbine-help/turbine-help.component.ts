@@ -15,6 +15,8 @@ export class TurbineHelpComponent implements OnInit {
   turbineOperationValueSubscription: Subscription;
   currentTurbine: string;
   currentOperationValue: number;
+  isBaselineFocused: boolean;
+  isBaselineFocusedSub: Subscription;
   constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
@@ -24,11 +26,15 @@ export class TurbineHelpComponent implements OnInit {
     this.turbineOperationValueSubscription = this.ssmtService.turbineOperationValue.subscribe(val => {
       this.currentOperationValue = val;
     });
+    this.isBaselineFocusedSub = this.ssmtService.isBaselineFocused.subscribe(val => {
+      this.isBaselineFocused = val;
+    })
   }
 
   ngOnDestroy() {
     this.turbineHelpSubscription.unsubscribe();
     this.turbineOperationValueSubscription.unsubscribe();
+    this.isBaselineFocusedSub.unsubscribe();
   }
 
 }

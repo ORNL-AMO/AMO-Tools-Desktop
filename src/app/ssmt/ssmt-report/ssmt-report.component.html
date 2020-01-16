@@ -133,7 +133,8 @@
       *ngIf="((currentTab == 'inputData' && !showPrint) || (showPrint && printInputData)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData"
-        [modificationInputData]="modificationInputData" [printView]="printInputData"></app-input-summary>
+        [modificationInputData]="modificationInputData" [printView]="printInputData"
+        [modificationOutputs]="modificationOutputs"></app-input-summary>
     </div>
 
     <div class="results scroll-item hide-print" *ngIf="!dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">

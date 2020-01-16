@@ -17,9 +17,11 @@ export class ModificationListComponent implements OnInit {
   @Input()
   ssmt: SSMT;
   @Output('save')
-  save = new EventEmitter<boolean>();
+  save = new EventEmitter<SSMT>();
   @Output('close')
   close = new EventEmitter<boolean>();
+  @Output('saveNewMod')
+  saveNewMod = new EventEmitter<Modification>();
 
   newModificationName: string;
   dropdown: Array<boolean>;
@@ -112,10 +114,10 @@ export class ModificationListComponent implements OnInit {
     } else if (index < this.modificationIndex) {
       this.selectModification(this.modificationIndex - 1);
     }
-    this.save.emit(true);
+    this.save.emit(this.ssmt);
   }
   saveUpdates(index: number) {
-    this.save.emit(true);
+    this.save.emit(this.ssmt);
     this.renameMod(index);
   }
 
@@ -133,16 +135,21 @@ export class ModificationListComponent implements OnInit {
     }
     let ssmtCopy: SSMT = (JSON.parse(JSON.stringify(ssmt)));
     delete ssmtCopy.modifications;
+    ssmtCopy.name = this.newModificationName;
+    if (ssmtCopy.headerInput.lowPressureHeader) {
+      ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage = true;
+    }
+    if (ssmtCopy.headerInput.mediumPressureHeader) {
+      ssmtCopy.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage = true;
+    }
     let tmpModification: Modification = {
       ssmt: ssmtCopy,
       exploreOpportunities: (this.assessmentTab === 'explore-opportunities')
     };
-    ssmtCopy.name = this.newModificationName;
     this.dropdown.push(false);
     this.rename.push(false);
     this.deleteArr.push(false);
-    this.ssmt.modifications.push(tmpModification);
-    this.save.emit(true);
+    this.saveNewMod.emit(tmpModification);
     this.selectModification(this.ssmt.modifications.length - 1);
     this.newModificationName = undefined;
   }

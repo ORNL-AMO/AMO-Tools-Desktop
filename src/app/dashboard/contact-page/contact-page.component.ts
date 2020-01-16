@@ -1,0 +1,26 @@
+import { Component, OnInit } from '@angular/core';
+import { ImportExportService } from '../import-export/import-export.service';
+import { ExportService } from '../import-export/export.service';
+import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
+@Component({
+  selector: 'app-contact-page',
+  templateUrl: './contact-page.component.html',
+  styleUrls: ['./contact-page.component.css']
+})
+export class ContactPageComponent implements OnInit {
+
+  constructor(private importExportService: ImportExportService, private exportService: ExportService, private directoryDashboardService: DirectoryDashboardService) { }
+
+  ngOnInit() {
+  }
+
+  sendMail() {
+    this.importExportService.openMailTo();
+  }
+
+  downloadData() {
+    this.exportService.exportAll = true;
+    this.directoryDashboardService.showExportModal.next(true);
+  }
+
+}
