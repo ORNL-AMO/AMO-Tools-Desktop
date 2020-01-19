@@ -5,6 +5,8 @@ import { OperationsService, OperationsWarnings } from '../operations.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-operations-form',
   templateUrl: './operations-form.component.html',
@@ -23,6 +25,8 @@ export class OperationsFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   phast: PHAST;
+  @Input()
+  settings: Settings;
 
   @ViewChild('lossForm', { static: false }) lossForm: ElementRef;
   @HostListener('window:resize', ['$event'])
