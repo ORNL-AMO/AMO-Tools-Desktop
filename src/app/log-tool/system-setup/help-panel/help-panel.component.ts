@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-help-panel',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HelpPanelComponent implements OnInit {
 
-  constructor() { }
+  activeHelpPanel: string;
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
+    this.activatedRoute.url.subscribe(url => {
+      this.activeHelpPanel = this.activatedRoute.firstChild.routeConfig.path
+    });
   }
 
 }

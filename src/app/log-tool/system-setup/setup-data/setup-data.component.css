@@ -22,3 +22,9 @@ tbody{
 .importing-text{
     font-size: xx-large;
 }
+
+.form-text.small:hover{
+    text-decoration: none;
+    color: inherit;
+    pointer-events: none;
+}

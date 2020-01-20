@@ -14,20 +14,15 @@
             <a class="nav-link" [routerLink]="['/log-tool/system-setup']" routerLinkActive="active">Setup</a>
         </div>
         <div class="nav-item">
-            <a *ngIf="dataSubmitted == true" class="nav-link" [routerLink]="['/log-tool/day-type-analysis']"
+            <a *ngIf="dataCleaned == true" class="nav-link" [routerLink]="['/log-tool/day-type-analysis']"
                 routerLinkActive="active">Day Type Analysis</a>
-            <a *ngIf="dataSubmitted == false" class="nav-link disabled">Day Type Analysis</a>
+            <a *ngIf="dataCleaned == false" class="nav-link disabled">Day Type Analysis</a>
         </div>
         <div class="nav-item">
-            <a *ngIf="dataSubmitted == true" class="nav-link" [routerLink]="['/log-tool/visualize']"
+            <a *ngIf="dataCleaned == true" class="nav-link" [routerLink]="['/log-tool/visualize']"
                 routerLinkActive="active">Data Visualization</a>
-            <a *ngIf="dataSubmitted == false" class="nav-link disabled">Data Visualization</a>
+            <a *ngIf="dataCleaned == false" class="nav-link disabled">Data Visualization</a>
         </div>
-        <!-- <div class="nav-item">
-            <a class="nav-link disabled">Report</a>
-             <a class="nav-link" [routerLink]="['/log-tool/report']" routerLinkActive="active">Report</a>
-
-        </div> -->
     </div>
     <div class="d-flex ml-auto pr-2 h-100">
         <!-- <div class="pl-2 pr-2 border-right border-left home-nav-item" [routerLink]="['/tools']">
@@ -46,7 +41,11 @@
                 <span class="step-number">1</span> Setup Data</a>
         </div>
         <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <a [routerLink]="['/log-tool/system-setup/clean-data']" routerLinkActive="active">
+            <a [routerLink]="['/log-tool/system-setup/clean-data']" routerLinkActive="active"
+                *ngIf="dataSubmitted == true">
+                <span class="step-number">2</span>
+                Clean Data</a>
+            <a *ngIf="dataSubmitted == false" class="disabled">
                 <span class="step-number">2</span>
                 Clean Data</a>
         </div>

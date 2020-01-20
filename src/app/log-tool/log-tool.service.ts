@@ -13,9 +13,11 @@ export class LogToolService {
   dateField: string;
   dateFormat: Array<string>;
   numberOfDataPoints: number;
+  dataCleaned: BehaviorSubject<boolean>;
   dataSubmitted: BehaviorSubject<boolean>;
   constructor() { 
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
+    this.dataCleaned = new BehaviorSubject<boolean>(false);
   }
 
   resetData(){
@@ -26,6 +28,7 @@ export class LogToolService {
     this.dateField = undefined;
     this.numberOfDataPoints = undefined;
     this.dateFormat = new Array();
+    this.dataCleaned.next(false);
     this.dataSubmitted.next(false);
   }
 

@@ -9,7 +9,8 @@
                 <label>
                     Log File
                 </label>
-                <input type="file" class="form-control" (change)="setImportFile($event)">
+                <input type="file" class="form-control" (change)="setImportFile($event)"
+                    [disabled]="dataExists == true">
                 <span class="alert-danger small w-100 text-center" *ngIf="validFile == false">Invalid File Type - Must
                     have a .csv file extension</span>
             </div>
@@ -23,7 +24,8 @@
                     File Date Format
                     <a class="form-text small">"-" and "/" are interchangeable</a>
                 </label>
-                <select class="form-control" name="dateFormat" [(ngModel)]="dateFormat" (change)="setDateFormat()">
+                <select class="form-control" name="dateFormat" [(ngModel)]="dateFormat" (change)="setDateFormat()"
+                    [disabled]="dataExists == true">
                     <option *ngFor="let format of dateFormats" [ngValue]="format.value">{{format.display}}</option>
                 </select>
             </div>
@@ -40,20 +42,20 @@
             <div class="text-center p-2" *ngIf="validDate == false">
                 <div class="alert-danger">No column from .csv file matches date format you have selected. View the
                     first row below and adjust your format to match.</div>
-                <div class="pt-2">
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <td class="bold" *ngFor="let field of importDataFromCsv.meta.fields">{{field}}</td>
-                            </tr>
-                            <tr>
-                                <td *ngFor="let field of importDataFromCsv.meta.fields">
-                                    {{importDataFromCsv.data[0][field]}}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            </div>
+            <div class="p-2" *ngIf="validDate != undefined">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td class="bold" *ngFor="let field of importDataFromCsv.meta.fields">{{field}}</td>
+                        </tr>
+                        <tr>
+                            <td *ngFor="let field of importDataFromCsv.meta.fields">
+                                {{importDataFromCsv.data[0][field]}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="d-flex flex-column align-items-center w-100 h-100" *ngIf="importingData == true">
                 <div class="spinner">
@@ -62,6 +64,14 @@
                     <div class="bounce3"></div>
                 </div>
                 <span class="importing-text">Importing Data, One Moment...</span>
+            </div>
+            <div class="p-2" *ngIf="dataExists == true">
+                <div class="alert-info p-2">
+                    Your log tool data is setup and graphs have been created. If you would like to start over, click the
+                    button below. This cannot be undone.
+                </div>
+                <hr>
+                <button class="btn btn-danger pull-right" (click)="resetData()">Start Over</button>
             </div>
         </div>
 

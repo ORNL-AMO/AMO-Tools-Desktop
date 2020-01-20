@@ -11,16 +11,22 @@ export class LogToolBannerComponent implements OnInit {
 
   dataSubmitted: boolean;
   dataSubmittedSub: Subscription;
+  dataCleaned: boolean;
+  dataCleanedSub: Subscription;
   constructor(private logToolService: LogToolService) { }
 
   ngOnInit() {
     this.dataSubmittedSub = this.logToolService.dataSubmitted.subscribe(val => {
       this.dataSubmitted = val;
-    })
+    });
+    this.dataCleanedSub = this.logToolService.dataCleaned.subscribe(val => {
+      this.dataCleaned = val;
+    });
   }
 
   ngOnDestroy(){
     this.dataSubmittedSub.unsubscribe();
+    this.dataCleanedSub.unsubscribe();
   }
 
 }

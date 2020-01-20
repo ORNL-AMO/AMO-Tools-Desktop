@@ -42,11 +42,11 @@
                     </tr>
                     <tr *ngFor="let field of dataFields">
                         <td>
-                            <input type="checkbox" [(ngModel)]="field.useField" [disabled]="field.isDateField">
+                            <input type="checkbox" [(ngModel)]="field.useField" [disabled]="field.isDateField || dataExists == true">
                         </td>
                         <td>{{field.fieldName}}</td>
                         <td>
-                            <input type="text" class="form-control w-100" [(ngModel)]="field.alias">
+                            <input type="text" class="form-control w-100" [(ngModel)]="field.alias" [disabled]="dataExists == true">
                         </td>
                         <td>
                             {{field.unit}}
@@ -56,7 +56,7 @@
             </table>
         </div>
         <div class="d-flex w-100 justify-content-end">
-            <button class="btn btn-sm btn-primary" (click)="submit()">Submit</button>
+            <button class="btn btn-sm btn-primary" (click)="submit()" [disabled]="dataExists == true">Submit</button>
         </div>
         <div class="d-flex flex-column align-items-center w-100 h-100" *ngIf="cleaningData == true">
             <div class="spinner">
@@ -70,6 +70,15 @@
             <div class="alert-success router-link" [routerLink]="['/log-tool/day-type-analysis']">
                 Data cleaning finished! Click here or the tab for "Day Type Analysis" to continue.
             </div>
+        </div>
+
+        <div class="p-2" *ngIf="dataExists == true">
+            <div class="alert-info p-2">
+                Your log tool data is setup and graphs have been created. If you would like to start over, click the
+                button below. This cannot be undone.
+            </div>
+            <hr>
+            <button class="btn btn-danger pull-right" (click)="resetData()">Start Over</button>
         </div>
     </div>
 </div>
