@@ -140,7 +140,7 @@ export class TankInsulationReductionService {
         otherUtilityCost: settings.otherFuelCost,
         tankHeight: 50,
         tankDiameter: 1.0,
-        tankThickness: 2,
+        tankThickness: 0.25,
         tankEmissivity: this.getTankMaterialData(6).emissivity,
         tankConductivity: this.getTankMaterialData(6).conductivity,
         tankTemperature: 300,
@@ -163,7 +163,7 @@ export class TankInsulationReductionService {
         otherUtilityCost: settings.otherFuelCost,
         tankHeight: 50,
         tankDiameter: 1.0,
-        tankThickness: 2,
+        tankThickness: 0.25,
         tankEmissivity: this.getTankMaterialData(6).emissivity,
         tankConductivity: this.getTankMaterialData(6).conductivity,
         tankTemperature: 300,
@@ -249,8 +249,8 @@ export class TankInsulationReductionService {
       warningValUnit = 'm';
     }
     //we are always comparing in imperial, 0.6 ft is limit
-    if (tankThickness < 0.6 && tankThickness > 0) {
-      return 'Tank thickness should be greater than or equal to ' + (Math.round(warningVal * 100) / 100) + ' ' + warningValUnit + '.';
+    if (tankThickness > 0.6) {
+      return 'Tank thickness should be less than or equal to ' + (Math.round(warningVal * 100) / 100) + ' ' + warningValUnit + '.';
     } else {
       return null;
     }
@@ -267,8 +267,8 @@ export class TankInsulationReductionService {
       warningValUnit = 'm';
     }
     //we are always comparing in imperial, 1 ft is limit
-    if (insulationThickness < 1 && insulationThickness > 0) {
-      return 'Insulation thickness should be greater than or equal to ' + (Math.round(warningVal * 100) / 100) + ' ' + warningValUnit + '.';
+    if (insulationThickness > 1) {
+      return 'Insulation thickness should be less than or equal to ' + (Math.round(warningVal * 100) / 100) + ' ' + warningValUnit + '.';
     } else {
       return null;
     }
