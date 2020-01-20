@@ -30,6 +30,8 @@ export class TankInsulationReductionFormComponent implements OnInit {
 
   formWidth: number;
   showOperatingHoursModal: boolean;
+  tankThicknessWarning: string = null;
+  insulationThicknessWarning: string = null;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -173,6 +175,7 @@ export class TankInsulationReductionFormComponent implements OnInit {
   }
 
   calculate() {
+    this.checkWarnings();
     if (this.form.valid) {
       if (this.isBaseline == true) {
         this.tankInsulationReductionService.baselineData = this.tankInsulationReductionService.getObjFromForm(this.form, this.tankInsulationReductionService.baselineData, this.settings);
@@ -214,5 +217,10 @@ export class TankInsulationReductionFormComponent implements OnInit {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
+  }
+
+  checkWarnings() {
+    this.tankThicknessWarning = this.tankInsulationReductionService.checkTankThickness(this.form.controls.tankThickness.value, this.settings);
+    this.insulationThicknessWarning = this.tankInsulationReductionService.checkInsulationThickness(this.form.controls.insulationThickness.value, this.settings);
   }
 }

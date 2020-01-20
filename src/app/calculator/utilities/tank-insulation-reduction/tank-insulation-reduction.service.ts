@@ -60,7 +60,7 @@ export class TankInsulationReductionService {
       tankConductivity: [obj.tankConductivity, [Validators.required, Validators.min(0)]],
       tankTemperature: [obj.tankTemperature, [Validators.required]],
       ambientTemperature: [obj.ambientTemperature, [Validators.required]],
-      insulationThickness: [obj.insulationThickness, [Validators.required, Validators.min(0)]],
+      insulationThickness: [obj.insulationThickness, [Validators.required, Validators.min(0), Validators.max(1000000)]],
       tankMaterialSelection: [obj.tankMaterialSelection],
       insulationMaterialSelection: [obj.insulationMaterialSelection],
       customInsulationConductivity: [obj.customInsulationConductivity],
@@ -74,7 +74,7 @@ export class TankInsulationReductionService {
       } else {
         form.controls.customInsulationConductivity.clearValidators();
       }
-    } else {
+    } else if (obj.insulationMaterialSelection == 0) {
       form.controls.insulationThickness.clearValidators();
       form.controls.customInsulationConductivity.clearValidators();
       form.controls.jacketMaterialSelection.disable();
@@ -236,6 +236,42 @@ export class TankInsulationReductionService {
       results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('MMBtu').to('MJ');
     }
     return results;
+  }
+
+  checkTankThickness(tankThickness: number, settings: Settings) {
+    let warningVal = 0.6;
+    let warningValUnit = 'ft';
+    if (settings.unitsOfMeasure !== 'Imperial') {
+      //units of measure are metric, convert metric value to imperial equivalent
+      tankThickness = this.convertUnitsService.value(tankThickness).from('m').to('ft');
+      //the test value by default is in imperial, convert it to metric for warning message
+      warningVal = this.convertUnitsService.value(warningVal).from('ft').to('m');
+      warningValUnit = 'm';
+    }
+    //we are always comparing in imperial, 0.6 ft is limit
+    if (tankThickness < 0.6 && tankThickness > 0) {
+      return 'Tank thickness should be greater than or equal to ' + (Math.round(warningVal * 100) / 100) + ' ' + warningValUnit + '.';
+    } else {
+      return null;
+    }
+  }
+
+  checkInsulationThickness(insulationThickness: number, settings: Settings) {
+    let warningVal = 1; //ft
+    let warningValUnit = 'ft';
+    if (settings.unitsOfMeasure !== 'Imperial') {
+      //units of measure are metric, convert metric value to imperial equivalent
+      insulationThickness = this.convertUnitsService.value(insulationThickness).from('m').to('ft');
+      //the test value by default is in imperial, convert it to metric for warning message
+      warningVal = this.convertUnitsService.value(warningVal).from('ft').to('m');
+      warningValUnit = 'm';
+    }
+    //we are always comparing in imperial, 1 ft is limit
+    if (insulationThickness < 1 && insulationThickness > 0) {
+      return 'Insulation thickness should be greater than or equal to ' + (Math.round(warningVal * 100) / 100) + ' ' + warningValUnit + '.';
+    } else {
+      return null;
+    }
   }
 
   getTankMaterialData(material: number): { conductivity: number, emissivity: number } {

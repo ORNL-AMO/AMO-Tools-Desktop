@@ -130,6 +130,8 @@
                 <span *ngIf="form.controls.tankThickness.errors.min">Value can't be less than
                     {{form.controls.tankThickness.errors.min.min}}.</span>
             </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="tankThicknessWarning !== null && !form.controls.tankThickness.invalid && !form.controls.tankThickness.pristine">{{tankThicknessWarning}}</span>
         </div>
 
 
@@ -293,6 +295,8 @@
                 <span *ngIf="form.controls.insulationThickness.errors.max">Value can't be more than
                     {{form.controls.insulationThickness.errors.max.max}}.</span>
             </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="insulationThicknessWarning !== null && !form.controls.insulationThickness.invalid && !form.controls.insulationThickness.pristine">{{insulationThicknessWarning}}</span>
         </div>
 
         <!-- Jacket Material -->
