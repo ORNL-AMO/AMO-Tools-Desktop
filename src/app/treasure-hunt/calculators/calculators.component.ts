@@ -36,6 +36,8 @@ export class CalculatorsComponent implements OnInit {
   treasureHuntSub: Subscription;
 
   calculatorOpportunitySheet: OpportunitySheet;
+  mainTab: string;
+  mainTabSub: Subscription;
   constructor(private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
@@ -44,12 +46,16 @@ export class CalculatorsComponent implements OnInit {
     });
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
-    })
+    });
+    this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
+      this.mainTab = val;
+    });
   }
   ngOnDestroy() {
     this.selectedCalcSubscription.unsubscribe();
     this.treasureHuntSub.unsubscribe();
     this.calculatorsService.selectedCalc.next('none');
+    this.mainTabSub.unsubscribe();
   }
 
   showSaveCalcModal() {
@@ -70,6 +76,9 @@ export class CalculatorsComponent implements OnInit {
     this.calculatorOpportunitySheet = updatedOpportunitySheet;
     this.calculatorsService.calcOpportunitySheet = updatedOpportunitySheet;
     this.hideOpportunitySheetModal();
+    if (this.mainTab == 'find-treasure') {
+      this.confirmSaveCalc();
+    }
   }
 
   confirmSaveCalc() {
@@ -97,7 +106,11 @@ export class CalculatorsComponent implements OnInit {
   }
   initSaveCalc() {
     this.calculatorOpportunitySheet = this.calculatorsService.calcOpportunitySheet;
-    this.showSaveCalcModal();
+    if (this.mainTab == 'find-treasure') {
+      this.showOpportunitySheetModal();
+    } else {
+      this.showSaveCalcModal();
+    }
   }
   finishSaveCalc() {
     this.hideSaveCalcModal();
