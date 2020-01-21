@@ -101,6 +101,12 @@ RUN npm install -g @angular/cli@^8.0.0
 RUN npm install --save-dev @angular/cli@^8.0.0
 RUN ng --version
 
+# Install Electron
+RUN npm install electron@1.7.9 -g --unsafe-perm=true
+RUN npm install electron@1.7.9 --save-dev
+#RUN npm i electron-version -S
+#RUN electron-version
+
 # Add AMO-Tools-Desktop
 RUN mkdir AMO
 RUN mkdir AMO/AMO-Tools-Desktop
