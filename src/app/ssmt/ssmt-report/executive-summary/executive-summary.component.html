@@ -149,7 +149,7 @@
         <td *ngFor="let modification of ssmt.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.ssmt.operatingCosts.implementationCosts">
-            {{modification.ssmt.operatingCosts.implementationCosts / 1000  | currency:'USD'}}
+            {{modification.ssmt.operatingCosts.implementationCosts  | currency:'USD'}}
           </span>
           <span *ngIf="!modification.ssmt.operatingCosts.implementationCosts">&mdash;</span>
         </td>
