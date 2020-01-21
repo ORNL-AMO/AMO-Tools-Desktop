@@ -1,0 +1,28 @@
+docker image build -t comma64/ornl:issue-258 .
+docker run -t -d --name amo comma64/ornl:issue-258
+docker exec -it amo /bin/bash
+docker container rm --force amo
+
+docker login
+docker push comma64/ornl:issue-258
+
+
+# Commands to run for building/testing/running AMO-Tools-Suite
+# -------------------------------------------------------------
+
+cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=OFF --config Debug ./
+alternatively: ccmake .
+
+cmake --build . --target amo_tools_suite_tests
+alternatively: cmake --build .
+
+./bin/amo_tools_suite_tests
+
+npm install (OR (if necessary): npm install --unsafe-perm)
+alternatively (if already installed): node-gyp rebuild
+
+npm run test
+
+npm run at
+#--------------------------------------------------------------
+
