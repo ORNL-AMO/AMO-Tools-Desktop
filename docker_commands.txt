@@ -1,10 +1,10 @@
-docker image build -t comma64/ornl:issue-258 .
-docker run -t -d --name amo comma64/ornl:issue-258
-docker exec -it amo /bin/bash
-docker container rm --force amo
+docker image build -t comma64/ornl:issue-3505 .
+docker run -t -d --name amo-desktop comma64/ornl:issue-3505
+docker exec -it amo-desktop /bin/bash
+docker container rm --force amo-desktop
 
 docker login
-docker push comma64/ornl:issue-258
+docker push comma64/ornl:issue-3505
 
 
 # Commands to run for building/testing/running AMO-Tools-Suite
