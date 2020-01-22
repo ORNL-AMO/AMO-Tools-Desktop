@@ -47,7 +47,7 @@ app.on('ready', function () {
 
   //signal from core.component to check for update
   ipcMain.on('ready', (coreCompEvent, arg) => {
-    if (!isDev()) {
+    // if (!isDev()) {
       autoUpdater.checkForUpdates().then(() => {
         log.info('done checking for updates');
         coreCompEvent.sender.send('release-info', autoUpdater.updateInfoAndProvider.info);
@@ -68,7 +68,7 @@ app.on('ready', function () {
         // autoUpdater.quitAndInstall();
         coreCompEvent.sender.send('update-downloaded');
       });
-    }
+    // }
   })
 
   ipcMain.once('quit-and-install', (event, arg) => {
