@@ -18,8 +18,6 @@ export class CompressedAirReductionComponent implements OnInit {
   emitSave = new EventEmitter<CompressedAirReductionTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  @Output('emitAddOpportunitySheet')
-  emitAddOpportunitySheet = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
   @Input()
@@ -199,10 +197,6 @@ export class CompressedAirReductionComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
-  }
-
-  addOpportunitySheet() {
-    this.emitAddOpportunitySheet.emit(true);
   }
 
   setBaselineSelected() {
