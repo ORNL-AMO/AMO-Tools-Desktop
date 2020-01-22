@@ -55,7 +55,7 @@
         <input name="implementationCosts" min="0" type="number" step="any" class="form-control"
           id="implementationCosts" (input)="save()" formControlName="implementationCosts" (focus)="focusField('implementationCosts')"
           (blur)="focusOut()">
-        <span class="units input-group-addon">$</span>
+        <span class="units input-group-addon">$k</span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="form.controls.implementationCosts.invalid && !form.controls.implementationCosts.pristine">
