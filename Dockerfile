@@ -104,7 +104,7 @@ RUN ng --version
 # Install Electron
 # 1.7.9, ^4.0.0
 RUN npm install electron@4.0.8 -g --unsafe-perm=true
-RUN npm install electron@^4.0.8 --save-dev
+RUN npm install electron@4.0.8 --save-dev
 #RUN npm i electron-version -S
 #RUN electron -v
 
