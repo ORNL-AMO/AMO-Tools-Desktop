@@ -102,11 +102,11 @@ RUN npm install --save-dev @angular/cli@^8.0.0
 RUN ng --version
 
 # Install Electron
-# 1.7.9
-RUN npm install electron@^4.0.0 -g --unsafe-perm=true
-RUN npm install electron@^4.0.0 --save-dev
+# 1.7.9, ^4.0.0
+RUN npm install electron@4.0.8 -g --unsafe-perm=true
+RUN npm install electron@^4.0.8 --save-dev
 #RUN npm i electron-version -S
-#RUN electron-version
+#RUN electron -v
 
 # Add AMO-Tools-Desktop
 RUN mkdir AMO
@@ -134,9 +134,22 @@ RUN emacs --version
 #apt-get -y update
 #apt-get -y install libnss3-dev
 RUN apt-get -y install libgtkextra-dev libgconf2-dev libnss3 libasound2 libxtst-dev libxss1
+#RUN electron -v
 
 # Install Chromium
 RUN apt-get -y install chromium-browser
+RUN chromium-browser --version
+#RUN apt-get install chromium
+#RUN chromium --version
+
+# Install X11
+#RUN apt-get -y install xorg openbox
+
+# Command to run on host machine: xhost local:root
+
+# Install canberra-gtk
+#RUN apt install -y libcanberra-gtk0 libcanberra-gtk-module
+RUN apt-get -y install libcanberra-gtk3-module
 
 
 # Commands to run for building/testing/running AMO-Tools-Desktop
@@ -144,8 +157,9 @@ RUN apt-get -y install chromium-browser
 WORKDIR /home/AMO/AMO-Tools-Desktop
 
 RUN npm run clean
+# yes | npm install ?
 RUN npm install
-#RUN node-gyp rebuild
+##RUN node-gyp rebuild
 RUN npm run build
 RUN npm update
 #RUN npm run electron

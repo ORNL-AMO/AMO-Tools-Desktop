@@ -7,6 +7,19 @@ docker login
 docker push comma64/ornl:issue-3505
 
 
+docker run -t -d -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY --device /dev/dri --device /dev/snd --device /dev/video0 -v /etc/localtime:/etc/localtime:ro -v $HOME/.config/app:/root/.config/app --device /dev/input --name amo-desktop comma64/ornl:issue-3505
+
+docker run [--rm [-it]|-d] \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-e DISPLAY \
+--device /dev/dri \
+--device /dev/snd \
+--device /dev/video0 \
+-v /etc/localtime:/etc/localtime:ro \
+-v $HOME/.config/app:/root/.config/app \
+--device /dev/input \
+--name amo-desktop comma64/ornl:issue-3505 [cmd]
+
 # Commands to run for building/testing/running AMO-Tools-Suite
 # -------------------------------------------------------------
 
