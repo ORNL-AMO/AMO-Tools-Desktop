@@ -102,7 +102,7 @@ RUN npm install --save-dev @angular/cli@^8.0.0
 RUN ng --version
 
 # Install Electron
-# 1.7.9, ^4.0.0
+# 1.7.9, ^4.0.0, 4.0.8
 RUN npm install electron@4.0.8 -g --unsafe-perm=true
 RUN npm install electron@4.0.8 --save-dev
 #RUN npm i electron-version -S
@@ -136,16 +136,49 @@ RUN emacs --version
 RUN apt-get -y install libgtkextra-dev libgconf2-dev libnss3 libasound2 libxtst-dev libxss1
 #RUN electron -v
 
+# Install wget
+RUN apt-get -y install wget
+
 # Install Chromium
 RUN apt-get -y install chromium-browser
 RUN chromium-browser --version
 #RUN apt-get install chromium
 #RUN chromium --version
 
+# Install Google Chrome
+RUN apt install -y fonts-liberation
+RUN apt install -y libappindicator3-1
+RUN apt -y --fix-broken install
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_current_amd64.deb
+RUN google-chrome --version
+#RUN echo 'exec -a "$0" "$HERE/chrome" "$@" --user-data-dir --no-sandbox' >> /opt/google/chrome/google-chrome
+
+
+# -----------------------------------------------------------------------------------------
+# Workaround for running Google Chrome as root (https://stackoverflow.com/questions/12258086/how-do-i-run-google-chrome-as-root)
+
+#Run from terminal
+
+# google-chrome --no-sandbox --user-data-dir
+
+#or
+
+#Open the file /opt/google/chrome/google-chrome and replace
+
+#    exec -a "$0" "$HERE/chrome" "$@"
+
+#to
+
+#    exec -a "$0" "$HERE/chrome" "$@" --user-data-dir --no-sandbox
+
+#It's working for chrome version 49 in CentOS 6. Chrome will give warning also.
+# -----------------------------------------------------------------------------------------
+
 # Install X11
 #RUN apt-get -y install xorg openbox
 
-# Command to run on host machine: xhost local:root
+# Command to run on host machine: xhost local:root  (https://stackoverflow.com/questions/28392949/running-chromium-inside-docker-gtk-cannot-open-display-0)
 
 # Install canberra-gtk
 #RUN apt install -y libcanberra-gtk0 libcanberra-gtk-module
