@@ -55,7 +55,7 @@ RUN apt-get update \
 
 # nvm environment variables
 ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 12.8.0
+ENV NODE_VERSION 10.11.0
 
 # install nvm
 # https://github.com/creationix/nvm#install-script
@@ -102,8 +102,9 @@ RUN npm install --save-dev @angular/cli@^8.0.0
 RUN ng --version
 
 # Install Electron
-RUN npm install electron@1.7.9 -g --unsafe-perm=true
-RUN npm install electron@1.7.9 --save-dev
+# 1.7.9
+RUN npm install electron@^4.0.0 -g --unsafe-perm=true
+RUN npm install electron@^4.0.0 --save-dev
 #RUN npm i electron-version -S
 #RUN electron-version
 
@@ -129,15 +130,24 @@ WORKDIR /home/
 RUN apt-get -y install emacs
 RUN emacs --version
 
+# Install libnss3 and related dependencies needed by Electron
+#apt-get -y update
+#apt-get -y install libnss3-dev
+RUN apt-get -y install libgtkextra-dev libgconf2-dev libnss3 libasound2 libxtst-dev libxss1
+
+# Install Chromium
+RUN apt-get -y install chromium-browser
+
 
 # Commands to run for building/testing/running AMO-Tools-Desktop
 # -------------------------------------------------------------
 WORKDIR /home/AMO/AMO-Tools-Desktop
 
-#RUN npm run clean
-#RUN npm install
+RUN npm run clean
+RUN npm install
 #RUN node-gyp rebuild
-#RUN npm run build
+RUN npm run build
+RUN npm update
 #RUN npm run electron
 
 #--------------------------------------------------------------
