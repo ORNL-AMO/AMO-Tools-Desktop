@@ -83,8 +83,8 @@
     },
     "linux": {
       "target": [
-        "tar.gz",
-        "AppImage"
+        "AppImage",
+        "tar.gz"
       ],
       "icon": "src/assets/icons/png/",
       "executableName": "MEASUR",
@@ -92,8 +92,7 @@
     },
     "mac": {
       "target": [
-        "dmg",
-        "zip"
+        "dmg"
       ],
       "icon": "src/assets/icons/mac/icon.icns"
     }
