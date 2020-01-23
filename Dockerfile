@@ -195,6 +195,7 @@ RUN npm install
 ##RUN node-gyp rebuild
 RUN npm run build
 RUN npm update
+RUN ./node_modules/.bin/electron-builder
 #RUN npm run electron
 
 #--------------------------------------------------------------
