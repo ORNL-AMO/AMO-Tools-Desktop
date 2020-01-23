@@ -200,4 +200,4 @@ RUN ./node_modules/.bin/electron-builder
 
 #--------------------------------------------------------------
 
-WORKDIR /home/
+WORKDIR /home/AMO/AMO-Tools-Desktop

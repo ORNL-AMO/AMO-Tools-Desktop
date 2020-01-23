@@ -1,4 +1,4 @@
-docker image build -t comma64/ornl:issue-3505 .
+docker image build -f Docker/Dockerfile -t comma64/ornl:issue-3505 .
 docker run -t -d --name amo-desktop comma64/ornl:issue-3505
 docker exec -it amo-desktop /bin/bash
 docker container rm --force amo-desktop
@@ -21,6 +21,15 @@ docker run [--rm [-it]|-d] \
 -v $HOME/.config/app:/root/.config/app \
 --device /dev/input \
 --name amo-desktop comma64/ornl:issue-3505 [cmd]
+
+
+docker stop $(docker ps -aq) 2>/dev/null || true
+docker rm $(docker ps -a -q) 2>/dev/null|| true
+docker rmi $(docker images -q) 2>/dev/null || true
+docker image prune -fa || sudo systemctl restart docker
+docker system prune -fa || sudo systemctl restart docker
+
+
 
 # Commands to run for building/testing/running AMO-Tools-Suite
 # -------------------------------------------------------------
