@@ -9,8 +9,8 @@ os:
 #
 #compiler:
 #  - gcc
-##  - clang
-
+#  - clang
+##
 before_install:
   - travis_retry npm i -g npm@6.4.0
 
