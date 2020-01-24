@@ -23,8 +23,18 @@ before_install:
 #      sudo apt-get install npm;
 #    fi
 
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      export OS_NAME="linux"
+    elif [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
+      export OS_NAME="windows"
+    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      export OS_NAME="mac"
+    fi
+
+  - echo "$OS_NAME"
+
 install: travis_retry npm install
 
 script:
   - npm run build
-  - npm run "$TRAVIS_OS_NAME"
+  - npm run "$OS_NAME"
