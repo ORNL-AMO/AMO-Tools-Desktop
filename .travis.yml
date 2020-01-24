@@ -9,7 +9,7 @@ os:
 #
 #compiler:
 #  - gcc
-##  - clang
+#  - clang
 
 before_install:
   - travis_retry npm i -g npm@6.4.0
@@ -27,3 +27,4 @@ install: travis_retry npm install
 
 script:
   - npm run build
+  - npm run "$TRAVIS_OS_NAME"
