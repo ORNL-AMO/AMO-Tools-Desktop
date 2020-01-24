@@ -25,9 +25,9 @@ before_install:
 
   - export OS_NAME="linux"
   
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      export OS_NAME="mac"
-    fi
+  -  if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+     export OS_NAME="mac"
+     fi
 
   - echo "$OS_NAME"
 
