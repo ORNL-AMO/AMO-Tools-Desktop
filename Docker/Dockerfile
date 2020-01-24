@@ -184,6 +184,9 @@ RUN google-chrome --version
 #RUN apt install -y libcanberra-gtk0 libcanberra-gtk-module
 RUN apt-get -y install libcanberra-gtk3-module
 
+# Install FUSE
+apt-get install -y fuse
+
 
 # Commands to run for building/testing/running AMO-Tools-Desktop
 # -------------------------------------------------------------
