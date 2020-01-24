@@ -185,7 +185,7 @@ RUN google-chrome --version
 RUN apt-get -y install libcanberra-gtk3-module
 
 # Install FUSE
-apt-get install -y fuse
+RUN apt-get install -y fuse
 
 
 # Commands to run for building/testing/running AMO-Tools-Desktop
@@ -203,4 +203,4 @@ RUN ./node_modules/.bin/electron-builder
 
 #--------------------------------------------------------------
 
-WORKDIR /home/AMO/AMO-Tools-Desktop
+#WORKDIR /home/AMO/AMO-Tools-Desktop
