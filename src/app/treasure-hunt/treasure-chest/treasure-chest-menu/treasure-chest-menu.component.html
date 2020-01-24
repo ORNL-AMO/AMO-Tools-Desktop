@@ -88,16 +88,16 @@
   <div class="card-header p-2">
     <span class="modal-card-header">Additional Filters</span>
   </div>
-  <div class="card-body p-2">
-    <div class="row">
-      <div class="col-6">
+  <div class="card-body p-2 scroll-item">
+    <div class="row no-gutters">
+      <div class="col-6 pr-1">
         <h5>Select Teams</h5>
         <div class="list-group list-group-flush">
           <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
             [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">{{team.name}}</a>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-6 pl-1">
         <h5>Select Process / Equipment</h5>
         <div class="list-group list-group-flush">
           <a class="list-group-item list-group-item-action" *ngFor="let equipment of equipments"
@@ -126,8 +126,6 @@
     <span class="modal-card-header" *ngIf="importExportOption == 'export'">Export Selected Opportunities</span>
     <button class="nav-btn pull-right" (click)="hideImportExportModal()">Close</button>
   </div>
-  <div class="card-body p-2">
-    <app-import-export-opportunities [tabSelect]="importExportOption" (emitClose)="hideImportExportModal();">
-    </app-import-export-opportunities>
-  </div>
+  <app-import-export-opportunities [tabSelect]="importExportOption" (emitClose)="hideImportExportModal();">
+  </app-import-export-opportunities>
 </div>
