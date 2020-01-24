@@ -24,10 +24,8 @@ before_install:
 #    fi
 
   - export OS_NAME="linux"
-  
-  -  if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-     export OS_NAME="mac"
-     fi
+
+  - bash travis_scripts/get_os.sh
 
   - echo "$OS_NAME"
 
