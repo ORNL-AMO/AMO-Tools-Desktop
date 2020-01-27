@@ -83,17 +83,18 @@
     },
     "linux": {
       "target": [
-        "tar.gz",
-        "AppImage"
+        "AppImage",
+        "tar.gz"
       ],
       "icon": "src/assets/icons/png/",
       "executableName": "MEASUR",
-      "maintainer": "Advanced Manufacturing Office"
+      "maintainer": "Advanced Manufacturing Office",
+      "artifactName": "${productName}-${version}.${ext}",
+      "category": "Science"
     },
     "mac": {
       "target": [
-        "dmg",
-        "zip"
+        "dmg"
       ],
       "icon": "src/assets/icons/mac/icon.icns"
     }
