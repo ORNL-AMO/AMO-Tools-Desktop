@@ -128,7 +128,7 @@ export class CostSummaryChartService {
       .tickPadding(tickPadding)
       .tickSize(tickSize)
       .ticks(ticks)
-      .tickFormat(d3.formatPrefix("$,.1", 1e4));
+      .tickFormat(d3.formatPrefix("$,.0", 1e4));
     yAxis = svg.append('g')
       .attr("class", "y axis")
       .call(yAxis)
