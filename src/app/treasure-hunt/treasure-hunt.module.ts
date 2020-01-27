@@ -14,7 +14,6 @@ import { SummaryCardComponent } from './treasure-chest/summary-card/summary-card
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
 import { TreasureChestMenuComponent } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.component';
 import { TreasureHuntReportService } from './treasure-hunt-report/treasure-hunt-report.service';
-import { ImportExportOpportunitiesComponent } from './treasure-chest/import-export-opportunities/import-export-opportunities.component';
 import { ImportOpportunitiesService } from './treasure-chest/import-opportunities.service';
 import { OpportunityCardsComponent } from './treasure-chest/opportunity-cards/opportunity-cards.component';
 import { OpportunityCardsService } from './treasure-chest/opportunity-cards/opportunity-cards.service';
@@ -56,7 +55,6 @@ import { ExportOpportunitiesComponent } from './treasure-chest/export-opportunit
     SummaryCardComponent, 
     OperationCostsComponent, 
     TreasureChestMenuComponent,
-    ImportExportOpportunitiesComponent,
     OpportunityCardsComponent,
     SortCardsByPipe,
     UtilitySummaryComponent,

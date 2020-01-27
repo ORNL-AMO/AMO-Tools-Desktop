@@ -111,19 +111,5 @@
   </div>
 </div>
 
-
-
-
-<!--import modal-->
-<div class="card menu-modal" [@menuModal]="displayImportExportModal" [ngStyle]="{'width.px': navbarWidth}">
-  <div class="card-header p-2">
-    <span class="modal-card-header" *ngIf="importExportOption == 'import'">Import Opportunities From File</span>
-    <span class="modal-card-header" *ngIf="importExportOption == 'export'">Export Selected Opportunities</span>
-    <button class="nav-btn pull-right" (click)="hideImportExportModal()">Close</button>
-  </div>
-  <app-import-export-opportunities [tabSelect]="importExportOption" (emitClose)="hideImportExportModal();">
-  </app-import-export-opportunities>
-</div>
-
 <app-import-opportunities *ngIf="showImportModal"></app-import-opportunities>
 <app-export-opportunities *ngIf="showExportModal"></app-export-opportunities>

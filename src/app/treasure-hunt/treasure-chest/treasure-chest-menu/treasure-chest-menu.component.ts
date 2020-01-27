@@ -47,7 +47,6 @@ export class TreasureChestMenuComponent implements OnInit {
   displayUtilityTypeDropdown: boolean = false;
   displayCalculatorTypeDropdown: boolean = false;
   displayAdditionalFiltersDropdown: string = 'hide';
-  displayImportExportModal: string = 'hide';
   sortByDropdown: boolean = false;
   treasureHunt: TreasureHunt;
   sortCardsData: SortCardsData;
@@ -57,7 +56,6 @@ export class TreasureChestMenuComponent implements OnInit {
   equipments: Array<{ name: string, selected: boolean }>;
   opportunityCardsSub: Subscription;
   opportunityCardsData: Array<OpportunityCardData>;
-  importExportOption: string;
 
   showImportModal: boolean;
   showImportModalSub: Subscription;
@@ -360,18 +358,10 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   openImportModal() {
-    // this.displayImportExportModal = 'show';
-    // this.importExportOption = 'import';
     this.treasureChestMenuService.showImportModal.next(true);
   }
 
   openExportModal() {
-    // this.displayImportExportModal = 'show';
-    // this.importExportOption = 'export';
     this.treasureChestMenuService.showExportModal.next(true);
-  }
-
-  hideImportExportModal() {
-    this.displayImportExportModal = 'hide';
   }
 }
