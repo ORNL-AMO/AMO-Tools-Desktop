@@ -15,7 +15,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   animations: [
     trigger('menuModal', [
       state('show', style({
-        top: '20px'
+        top: '20px',
+        bottom: '20px'
       })),
       transition('hide => show', animate('.5s ease-in')),
       transition('show => hide', animate('.5s ease-out'))

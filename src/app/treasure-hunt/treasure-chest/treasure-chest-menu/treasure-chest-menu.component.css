@@ -75,6 +75,10 @@ a.list-group-item.active:hover{
     left: 10px;
   }
 
+  .menu-modal.show{
+      bottom: 10px;
+  }
+
   .modal-card-header{
       font-size: 1.5rem;
       font-weight: bold;
