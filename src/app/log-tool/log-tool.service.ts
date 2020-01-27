@@ -15,12 +15,14 @@ export class LogToolService {
   numberOfDataPoints: number;
   dataCleaned: BehaviorSubject<boolean>;
   dataSubmitted: BehaviorSubject<boolean>;
-  constructor() { 
+  noDayTypeAnalysis: BehaviorSubject<boolean>;
+  constructor() {
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
     this.dataCleaned = new BehaviorSubject<boolean>(false);
+    this.noDayTypeAnalysis = new BehaviorSubject<boolean>(false);
   }
 
-  resetData(){
+  resetData() {
     this.importDataFromCsv = undefined;
     this.startDate = undefined;
     this.endDate = undefined;
@@ -44,21 +46,23 @@ export class LogToolService {
     this.setFields(this.importDataFromCsv.meta.fields);
     if (this.dateField != undefined) {
       this.importDataFromCsv.data = _.filter(this.importDataFromCsv.data, (data) => { return data[this.dateField] != undefined });
-      this.importDataFromCsv.data = _.orderBy(this.importDataFromCsv.data, (data) => { return new Date(data[this.dateField]) }, ['asc']);
     }
     this.numberOfDataPoints = this.importDataFromCsv.data.length;
-    let startDateItem = _.minBy(this.importDataFromCsv.data, (dataItem) => {
-      if (dataItem[this.dateField]) {
-        return new Date(dataItem[this.dateField])
-      }
-    });
-    this.startDate = new Date(startDateItem[this.dateField]);
-    let endDateItem = _.maxBy(this.importDataFromCsv.data, (dataItem) => {
-      if (dataItem[this.dateField]) {
-        return new Date(dataItem[this.dateField])
-      }
-    });
-    this.endDate = new Date(endDateItem[this.dateField]);
+    if (this.noDayTypeAnalysis.getValue() == true) {
+      this.importDataFromCsv.data = _.orderBy(this.importDataFromCsv.data, (data) => { return new Date(data[this.dateField]) }, ['asc']);
+      let startDateItem = _.minBy(this.importDataFromCsv.data, (dataItem) => {
+        if (dataItem[this.dateField]) {
+          return new Date(dataItem[this.dateField])
+        }
+      });
+      this.startDate = new Date(startDateItem[this.dateField]);
+      let endDateItem = _.maxBy(this.importDataFromCsv.data, (dataItem) => {
+        if (dataItem[this.dateField]) {
+          return new Date(dataItem[this.dateField])
+        }
+      });
+      this.endDate = new Date(endDateItem[this.dateField]);
+    }
   }
 
   setFields(_fields: Array<string>) {

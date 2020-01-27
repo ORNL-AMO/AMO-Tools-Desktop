@@ -7,6 +7,7 @@ import { LogToolDataService } from '../../log-tool-data.service';
 import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysis.service';
 import { VisualizeService } from '../../visualize/visualize.service';
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-setup-data',
   templateUrl: './setup-data.component.html',
@@ -27,7 +28,7 @@ export class SetupDataComponent implements OnInit {
   dataExists: boolean;
   constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
-    private logToolDataService: LogToolDataService) { }
+    private logToolDataService: LogToolDataService, private router: Router) { }
 
   ngOnInit() {
     this.dateFormat = this.logToolService.dateFormat;
@@ -80,12 +81,14 @@ export class SetupDataComponent implements OnInit {
   }
 
   testForDate(): string {
-    for (var key in this.importDataFromCsv.data[0]) {
-      let value = this.importDataFromCsv.data[0][key];
-      let test = moment(value, this.dateFormat, true);
-      if (test.isValid() == true) {
-        this.logToolService.dateField = key;
-        return value;
+    if (this.dateFormat != undefined) {
+      for (var key in this.importDataFromCsv.data[0]) {
+        let value = this.importDataFromCsv.data[0][key];
+        let test = moment(value, this.dateFormat, true);
+        if (test.isValid() == true) {
+          this.logToolService.dateField = key;
+          return value;
+        }
       }
     }
     return undefined;
@@ -95,12 +98,23 @@ export class SetupDataComponent implements OnInit {
     this.logToolService.dateFormat = this.dateFormat;
   }
 
-  resetData(){
+  resetData() {
     this.dayTypeAnalysisService.resetData();
     this.visualizeService.resetData();
     this.dayTypeGraphService.resetData();
     this.logToolService.resetData();
     this.logToolDataService.resetData();
     this.dataExists = false;
+  }
+
+  continueWithoutDayType() {
+    this.importingData = true;
+    this.cd.detectChanges();
+    setTimeout(() => {
+      this.logToolService.parseImportData();
+      this.logToolService.noDayTypeAnalysis.next(true);
+      this.logToolService.dataSubmitted.next(true);
+      this.router.navigateByUrl('/log-tool/system-setup/clean-data');
+    }, 500);
   }
 }
