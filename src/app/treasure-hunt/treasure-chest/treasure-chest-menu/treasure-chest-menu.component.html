@@ -89,7 +89,7 @@
     <span class="modal-card-header">Additional Filters</span>
   </div>
   <div class="card-body p-2 scroll-item">
-    <div class="row no-gutters">
+    <div class="row no-gutters" *ngIf="displayAdditionalFiltersDropdown == 'show'">
       <div class="col-6 pr-1">
         <h5>Select Teams</h5>
         <div class="list-group list-group-flush">
