@@ -80,7 +80,7 @@ export class PercentLoadEstimationComponent implements OnInit {
     this.fieldMeasurementData = data;
     this.percentLoadEstimationService.fieldMeasurementInputs = this.fieldMeasurementData;
     this.fieldMeasurementResults = this.percentLoadEstimationService.getResults(data);
-    if (isNaN(this.fieldMeasurementResults.percentLoad) === false && this.fieldMeasurementResults.percentLoad !== Infinity) {
+    if (isNaN(this.fieldMeasurementResults.percentLoad) == false && this.fieldMeasurementResults.percentLoad != Infinity) {
       this.percentLoadEstimation = this.fieldMeasurementResults.percentLoad;
     } else {
       this.percentLoadEstimation = 0;
@@ -96,10 +96,13 @@ export class PercentLoadEstimationComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.fieldMeasurementData = this.percentLoadEstimationService.generateFieldMeasurementInputs();
+    this.fieldMeasurementData = this.percentLoadEstimationService.generateFieldMeasurementInputsExample();
     this.slipMethodData = this.percentLoadEstimationService.generateSlipMethodInputsExample();
-    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
-    this.calculateSlipMethod(this.slipMethodData);
+    if (this.loadEstimationMethod == 0) {
+      this.calculateSlipMethod(this.slipMethodData);
+    } else {
+      this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
+    }
     this.toggleExampleData = !this.toggleExampleData;
   }
 }
