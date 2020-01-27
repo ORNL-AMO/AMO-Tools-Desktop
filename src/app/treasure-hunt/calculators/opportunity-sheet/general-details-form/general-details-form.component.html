@@ -12,8 +12,12 @@
     </div>
     <div class="form-group">
       <label for="opportunitySheetEquipment">Process / Equipment</label>
-      <input type="text" class="form-control" [(ngModel)]="opportunitySheet.equipment" name="opportunitySheetEquipment"
+      <!-- <input type="text" class="form-control" [(ngModel)]="opportunitySheet.equipment" name="opportunitySheetEquipment"
+        id="opportunitySheetEquipment" (focus)="focusField('opportunitySheetEquipment')"> -->
+      <select class="form-control" [(ngModel)]="opportunitySheet.equipment" name="opportunitySheetEquipment"
         id="opportunitySheetEquipment" (focus)="focusField('opportunitySheetEquipment')">
+        <option *ngFor="let option of processEquipmentOptions" [ngValue]="option.value">{{option.display}}</option>
+      </select>
     </div>
   </div>
   <div class="col-md-6 col-sm-12">
@@ -25,7 +29,8 @@
     <div class="form-group">
       <label for="opportunitySheetBusinessUnits">Plant / Business Unit</label>
       <input type="text" class="form-control" [(ngModel)]="opportunitySheet.businessUnits"
-        name="opportunitySheetBusinessUnits" id="opportunitySheetBusinessUnits" (focus)="focusField('opportunitySheetBusinessUnits')">
+        name="opportunitySheetBusinessUnits" id="opportunitySheetBusinessUnits"
+        (focus)="focusField('opportunitySheetBusinessUnits')">
     </div>
   </div>
   <div class="col-12">
