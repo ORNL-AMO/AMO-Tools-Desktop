@@ -58,7 +58,7 @@
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/GJ</span>
           </div>
           <div class="form-group">
-            <label for="annualNaturalGasUsage">Natural Gas Consumption</label>
+            <label for="annualNaturalGasUsage">Natural Gas Annual Consumption</label>
             <div class="input-group">
               <input class="form-control" name="annualNaturalGasUsage" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.naturalGasUsage" (input)="save()">
@@ -67,7 +67,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="annualNaturalGasCosts">Natural Gas Costs</label>
+            <label for="annualNaturalGasCosts">Natural Gas Annual Costs</label>
             <div class="input-group">
               <input class="form-control" name="annualNaturalGasCosts" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.naturalGasCosts" (input)="save()">
@@ -96,7 +96,7 @@
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/GJ</span>
           </div>
           <div class="form-group">
-            <label for="annualOtherFuelUsage">Other Fuel Consumption</label>
+            <label for="annualOtherFuelUsage">Other Fuel Annual Consumption</label>
             <div class="input-group">
               <input class="form-control" name="annualOtherFuelUsage" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelUsage" (input)="save()">
@@ -105,7 +105,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="annualOtherFuelCosts">Other Fuel Costs</label>
+            <label for="annualOtherFuelCosts">Other Fuel Annual Costs</label>
             <div class="input-group">
               <input class="form-control" name="annualOtherFuelCosts" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCosts" (input)="save()">
@@ -126,7 +126,7 @@
           Water
         </label>
         <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.waterUsed == true">
-          <label for="waterCost">Water</label>
+          <label for="waterCost">Water Unit Cost</label>
           <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="settings.waterCost" id="waterCost"
               (input)="setSaveSettings()">
@@ -134,7 +134,7 @@
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/L</span>
           </div>
           <div class="form-group">
-            <label for="annualWaterUsage">Water Consumption</label>
+            <label for="annualWaterUsage">Water Annual Consumption</label>
             <div class="input-group">
               <input class="form-control" name="annualWaterUsage" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.waterUsage" (input)="save()">
@@ -143,7 +143,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="annualWaterCosts">Water Costs</label>
+            <label for="annualWaterCosts">Water Annual Costs</label>
             <div class="input-group">
               <input class="form-control" name="annualWaterCosts" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.waterCosts" (input)="save()">
@@ -172,7 +172,7 @@
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/L</span>
           </div>
           <div class="form-group">
-            <label for="annualWasteWaterUsage">Waste Water Consumption</label>
+            <label for="annualWasteWaterUsage">Waste Water Annual Consumption</label>
             <div class="input-group">
               <input class="form-control" name="annualWasteWaterUsage" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.wasteWaterUsage" (input)="save()">
@@ -181,7 +181,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="annualWasteWaterCosts">Waste Water Costs</label>
+            <label for="annualWasteWaterCosts">Waste Water Annual Costs</label>
             <div class="input-group">
               <input class="form-control" name="annualWasteWaterCosts" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.wasteWaterCosts" (input)="save()">
@@ -210,7 +210,7 @@
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/m<sup>3</sup></span>
           </div>
           <div class="form-group">
-            <label for="annualCompressedAirUsage">Compressed Air Consumption</label>
+            <label for="annualCompressedAirUsage">Compressed Air Annual Consumption</label>
             <div class="input-group">
               <input class="form-control" name="annualCompressedAirUsage" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.compressedAirUsage" (input)="save()">
@@ -220,7 +220,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="annualCompressedAirCosts">Compressed Air Costs</label>
+            <label for="annualCompressedAirCosts">Compressed Air Annual Costs</label>
             <div class="input-group">
               <input class="form-control" name="annualCompressedAirCosts" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.compressedAirCosts" (input)="save()">
@@ -249,7 +249,7 @@
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/tonne</span>
           </div>
           <div class="form-group">
-            <label for="annualSteamUsage">Steam Consumption</label>
+            <label for="annualSteamUsage">Steam Annual Consumption</label>
             <div class="input-group">
               <input class="form-control" name="annualSteamUsage" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.steamUsage" (input)="save()">
@@ -258,7 +258,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="annualSteamCosts">Steam Costs</label>
+            <label for="annualSteamCosts">Steam Annual Costs</label>
             <div class="input-group">
               <input class="form-control" name="annualSteamCosts" type="number"
                 [(ngModel)]="treasureHunt.currentEnergyUsage.steamCosts" (input)="save()">
