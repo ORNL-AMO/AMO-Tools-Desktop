@@ -124,3 +124,6 @@
   <app-import-export-opportunities [tabSelect]="importExportOption" (emitClose)="hideImportExportModal();">
   </app-import-export-opportunities>
 </div>
+
+<app-import-opportunities *ngIf="showImportModal"></app-import-opportunities>
+<app-export-opportunities *ngIf="showExportModal"></app-export-opportunities>

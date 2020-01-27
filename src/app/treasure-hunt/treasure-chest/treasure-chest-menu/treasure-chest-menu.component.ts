@@ -58,6 +58,11 @@ export class TreasureChestMenuComponent implements OnInit {
   opportunityCardsSub: Subscription;
   opportunityCardsData: Array<OpportunityCardData>;
   importExportOption: string;
+
+  showImportModal: boolean;
+  showImportModalSub: Subscription;
+  showExportModal: boolean;
+  showExportModalSub: Subscription;
   constructor(private opportuntiyCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService) { }
 
   ngOnInit() {
@@ -73,12 +78,22 @@ export class TreasureChestMenuComponent implements OnInit {
       this.setEnergyTypeOptions(val);
       this.setCalculatorOptions(val);
     });
+
+    this.showImportModalSub = this.treasureChestMenuService.showImportModal.subscribe(val => {
+      this.showImportModal = val;
+    });
+    
+    this.showExportModalSub = this.treasureChestMenuService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
   }
 
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
     this.opportunityCardsSub.unsubscribe();
     this.clearAllFilters();
+    this.showImportModalSub.unsubscribe();
+    this.showExportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -212,6 +227,8 @@ export class TreasureChestMenuComponent implements OnInit {
     this.sortCardsData.calculatorType = 'All';
     this.displayCalculatorType = 'All';
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+    this.treasureChestMenuService.showImportModal.next(false);
+    this.treasureChestMenuService.showExportModal.next(false);
   }
 
   getNavbarWidth() {
@@ -343,13 +360,15 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   openImportModal() {
-    this.displayImportExportModal = 'show';
-    this.importExportOption = 'import';
+    // this.displayImportExportModal = 'show';
+    // this.importExportOption = 'import';
+    this.treasureChestMenuService.showImportModal.next(true);
   }
 
   openExportModal() {
-    this.displayImportExportModal = 'show';
-    this.importExportOption = 'export';
+    // this.displayImportExportModal = 'show';
+    // this.importExportOption = 'export';
+    this.treasureChestMenuService.showExportModal.next(true);
   }
 
   hideImportExportModal() {

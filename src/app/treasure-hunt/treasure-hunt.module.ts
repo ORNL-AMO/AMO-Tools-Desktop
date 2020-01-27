@@ -30,6 +30,8 @@ import { OperatingHoursModalModule } from '../shared/operating-hours-modal/opera
 import { ToastModule } from '../shared/toast/toast.module';
 import { ConvertInputDataService } from './convert-input-data.service';
 import { RouterModule } from '@angular/router';
+import { ImportOpportunitiesComponent } from './treasure-chest/import-opportunities/import-opportunities.component';
+import { ExportOpportunitiesComponent } from './treasure-chest/export-opportunities/export-opportunities.component';
 
 @NgModule({
   imports: [
@@ -58,7 +60,9 @@ import { RouterModule } from '@angular/router';
     OpportunityCardsComponent,
     SortCardsByPipe,
     UtilitySummaryComponent,
-    TreasureHuntGaugeComponent
+    TreasureHuntGaugeComponent,
+    ImportOpportunitiesComponent,
+    ExportOpportunitiesComponent
   ],
   providers: [ 
     TreasureHuntService, 
