@@ -1,0 +1,15 @@
+.modal-dialog{
+    top: 0px !important;
+}
+
+.modal-content{
+    max-height: 90vh;
+}
+
+.modal-body{
+    font-size: small;
+}
+
+.btn{
+    padding: 6px;
+}
