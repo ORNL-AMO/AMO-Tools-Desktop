@@ -95,7 +95,7 @@ export class CompressedAirReductionComponent implements OnInit {
     if (this.compressedAirReductionService.baselineData) {
       this.baselineData = this.compressedAirReductionService.baselineData;
     } else {
-      let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(0, this.settings, this.operatingHours);
+      let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(0, this.settings, this.operatingHours, 1);
       this.baselineData = [tmpObj];
     }
     if (this.compressedAirReductionService.modificationData) {
@@ -169,7 +169,7 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   btnResetData() {
-    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(0, this.settings, this.operatingHours);
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(0, this.settings, this.operatingHours, 1);
     this.baselineData = [tmpObj];
     this.modificationData = new Array<CompressedAirReductionData>();
     this.modificationExists = false;
