@@ -32,6 +32,7 @@ export class LogToolService {
     this.dateFormat = new Array();
     this.dataCleaned.next(false);
     this.dataSubmitted.next(false);
+    this.noDayTypeAnalysis.next(false);
   }
 
   setDateField(str: string) {
@@ -48,7 +49,7 @@ export class LogToolService {
       this.importDataFromCsv.data = _.filter(this.importDataFromCsv.data, (data) => { return data[this.dateField] != undefined });
     }
     this.numberOfDataPoints = this.importDataFromCsv.data.length;
-    if (this.noDayTypeAnalysis.getValue() == true) {
+    if (this.noDayTypeAnalysis.getValue() == false) {
       this.importDataFromCsv.data = _.orderBy(this.importDataFromCsv.data, (data) => { return new Date(data[this.dateField]) }, ['asc']);
       let startDateItem = _.minBy(this.importDataFromCsv.data, (dataItem) => {
         if (dataItem[this.dateField]) {

@@ -111,8 +111,8 @@ export class SetupDataComponent implements OnInit {
     this.importingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
-      this.logToolService.parseImportData();
       this.logToolService.noDayTypeAnalysis.next(true);
+      this.logToolService.parseImportData();
       this.logToolService.dataSubmitted.next(true);
       this.router.navigateByUrl('/log-tool/system-setup/clean-data');
     }, 500);
