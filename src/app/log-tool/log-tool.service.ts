@@ -10,7 +10,7 @@ export class LogToolService {
   startDate: Date;
   endDate: Date;
   fields: Array<LogToolField>;
-  dateField: string;
+  dateFields: Array<string>;
   dateFormat: Array<string>;
   numberOfDataPoints: number;
   dataCleaned: BehaviorSubject<boolean>;
@@ -27,7 +27,7 @@ export class LogToolService {
     this.startDate = undefined;
     this.endDate = undefined;
     this.fields = new Array();
-    this.dateField = undefined;
+    this.dateFields = new Array();
     this.numberOfDataPoints = undefined;
     this.dateFormat = new Array();
     this.dataCleaned.next(false);
@@ -35,39 +35,66 @@ export class LogToolService {
     this.noDayTypeAnalysis.next(false);
   }
 
-  setDateField(str: string) {
-    this.dateField = str;
+  addDateField(str: string) {
+    if (this.dateFields == undefined) {
+      this.dateFields = new Array();
+    }
+    this.dateFields.push(str);
   }
 
   setImportDataFromCsv(data: CsvImportData) {
     this.importDataFromCsv = data;
   }
 
-  addAdditionalCsvData(data: CsvImportData){
+  addAdditionalCsvData(data: CsvImportData) {
     this.importDataFromCsv.meta.fields = this.importDataFromCsv.meta.fields.concat(data.meta.fields);
     this.importDataFromCsv.data = this.importDataFromCsv.data.concat(data.data);
   }
 
   parseImportData() {
     this.setFields(this.importDataFromCsv.meta.fields);
-    if (this.dateField != undefined) {
-      this.importDataFromCsv.data = _.filter(this.importDataFromCsv.data, (data) => { return data[this.dateField] != undefined });
-    }
+    // if (this.dateFields != undefined) {
+    //   this.importDataFromCsv.data = _.filter(this.importDataFromCsv.data, (data) => { return data[this.dateField] != undefined });
+    // }
     this.numberOfDataPoints = this.importDataFromCsv.data.length;
     if (this.noDayTypeAnalysis.getValue() == false) {
-      this.importDataFromCsv.data = _.orderBy(this.importDataFromCsv.data, (data) => { return new Date(data[this.dateField]) }, ['asc']);
+      this.importDataFromCsv.data = _.orderBy(this.importDataFromCsv.data, (data) => {
+        let date: Date;
+        this.dateFields.forEach(field => {
+          if (data[field]) {
+            date = new Date(data[field]);
+          }
+        })
+        return date;
+      }, ['asc']);
       let startDateItem = _.minBy(this.importDataFromCsv.data, (dataItem) => {
-        if (dataItem[this.dateField]) {
-          return new Date(dataItem[this.dateField])
+        let date: Date;
+        this.dateFields.forEach(field => {
+          if (dataItem[field]) {
+            date = new Date(dataItem[field]);
+          }
+        })
+        return date;
+      });
+      this.dateFields.forEach(field => {
+        if (startDateItem[field]) {
+          this.startDate = new Date(startDateItem[field]);
         }
       });
-      this.startDate = new Date(startDateItem[this.dateField]);
       let endDateItem = _.maxBy(this.importDataFromCsv.data, (dataItem) => {
-        if (dataItem[this.dateField]) {
-          return new Date(dataItem[this.dateField])
+        let date: Date;
+        this.dateFields.forEach(field => {
+          if (dataItem[field]) {
+            date = new Date(dataItem[field]);
+          }
+        })
+        return date;
+      });
+      this.dateFields.forEach(field => {
+        if (endDateItem[field]) {
+          this.endDate = new Date(endDateItem[field]);
         }
       });
-      this.endDate = new Date(endDateItem[this.dateField]);
     }
   }
 
@@ -75,14 +102,15 @@ export class LogToolService {
     this.fields = new Array();
     _fields.forEach(field => {
       let unit: string = '';
-      if (field == this.dateField) {
+      let testExist = this.dateFields.find(dateField => {return field == dateField})
+      if (testExist) {
         unit = 'Date';
       }
       this.fields.push({
         fieldName: field,
         alias: field,
         useField: true,
-        isDateField: field == this.dateField,
+        isDateField: unit == 'Date',
         unit: unit
       });
     });

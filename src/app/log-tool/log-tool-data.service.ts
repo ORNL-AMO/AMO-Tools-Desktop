@@ -18,7 +18,7 @@ export class LogToolDataService {
   getDataFieldOptions(): Array<LogToolField> {
     //non date and used fields
     let tmpFields: Array<LogToolField> = JSON.parse(JSON.stringify(this.logToolService.fields));
-    _.remove(tmpFields, (field) => { return field.useField == false || field.fieldName == this.logToolService.dateField });
+    _.remove(tmpFields, (field) => { return field.useField == false || field.isDateField == false });
     return tmpFields;
   }
 
@@ -57,11 +57,13 @@ export class LogToolDataService {
     let fields: Array<LogToolField> = this.getDataFieldOptions();
     for (let i = 0; i < 24; i++) {
       let filteredDaysByHour = _.filter(dayData, (dayItem) => {
-        if (dayItem[this.logToolService.dateField]) {
-          let date = new Date(dayItem[this.logToolService.dateField]);
-          let dateVal = date.getHours();
-          return i == dateVal;
-        };
+        this.logToolService.dateFields.forEach(field => {
+          if (dayItem[field]) {
+            let date = new Date(dayItem[field]);
+            let dateVal = date.getHours();
+            return i == dateVal;
+          };
+        })
       });
       let averages: Array<{ value: number, field: LogToolField }> = new Array();
       fields.forEach(field => {
@@ -85,8 +87,14 @@ export class LogToolDataService {
   getDataForDay(date: Date, data: Array<any>): Array<any> {
     //filter matching day items from all day data and return array
     let filteredDayData: Array<any> = _.filter(data, (dataItem) => {
-      let dataItemDate: Date = new Date(dataItem[this.logToolService.dateField]);
-      return this.checkSameDay(date, dataItemDate);
+      let dataItemDate: Date;
+      this.logToolService.dateFields.forEach(field => {
+        if (dataItem[field] != undefined) {
+          dataItemDate = new Date(dataItem[field]);
+          return this.checkSameDay(date, dataItemDate);
+        }
+      })
+
     });
     return filteredDayData;
   }

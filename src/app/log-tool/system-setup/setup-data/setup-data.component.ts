@@ -87,7 +87,7 @@ export class SetupDataComponent implements OnInit {
         let value = this.importDataFromCsv.data[0][key];
         let test = moment(value, this.dateFormat, true);
         if (test.isValid() == true) {
-          this.logToolService.dateField = key;
+          this.logToolService.addDateField(key);
           return value;
         }
       }
@@ -123,7 +123,6 @@ export class SetupDataComponent implements OnInit {
     this.fileReference = undefined;
     this.dateFormat = new Array();
     this.addingAdditionalData = true;
-
   }
 
   parseAdditionalImportData() {
@@ -133,16 +132,15 @@ export class SetupDataComponent implements OnInit {
     setTimeout(() => {
       this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
       this.logToolService.addAdditionalCsvData(this.importDataFromCsv);
-      console.log(this.logToolService.importDataFromCsv);
-      // let foundDate: string = this.testForDate();
-      // if (foundDate != undefined) {
-      //   this.validDate = true;
-      //   this.logToolService.parseImportData();
-      // } else {
-      //   this.validDate = false;
-      // }
-      // this.importingData = false;
-      // this.logToolService.dataSubmitted.next(true);
+      let foundDate: string = this.testForDate();
+      if (foundDate != undefined) {
+        this.validDate = true;
+        this.logToolService.parseImportData();
+      } else {
+        this.validDate = false;
+      }
+      this.importingData = false;
+      this.logToolService.dataSubmitted.next(true);
       this.cd.detectChanges();
     }, 500);
   }
