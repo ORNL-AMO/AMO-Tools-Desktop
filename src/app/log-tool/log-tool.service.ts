@@ -43,6 +43,11 @@ export class LogToolService {
     this.importDataFromCsv = data;
   }
 
+  addAdditionalCsvData(data: CsvImportData){
+    this.importDataFromCsv.meta.fields = this.importDataFromCsv.meta.fields.concat(data.meta.fields);
+    this.importDataFromCsv.data = this.importDataFromCsv.data.concat(data.data);
+  }
+
   parseImportData() {
     this.setFields(this.importDataFromCsv.meta.fields);
     if (this.dateField != undefined) {

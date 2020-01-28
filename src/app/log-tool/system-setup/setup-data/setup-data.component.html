@@ -15,10 +15,6 @@
                     have a .csv file extension</span>
             </div>
 
-            <!-- <span class="small alert-warning w-100 text-center p-2">
-                Choose .csv logger file to visualize.
-            </span> -->
-
             <div class="form-group">
                 <label>
                     File Date Format
@@ -31,7 +27,9 @@
             </div>
             <div class="d-flex w-100 justify-content-end">
                 <button class="btn btn-primary pull-right" role="button" (click)="parseImportData()"
-                    [disabled]="importData == undefined">Parse CSV Data</button>
+                    [disabled]="importData == undefined" *ngIf="addingAdditionalData == false">Parse CSV Data</button>
+                <button class="btn btn-primary pull-right" role="button" (click)="parseAdditionalImportData()"
+                    [disabled]="importData == undefined" *ngIf="addingAdditionalData == true">Parse CSV Data</button>
             </div>
 
             <div class="text-center pt-2" *ngIf="validDate == true">
@@ -60,6 +58,10 @@
             <div class="text-center pt-2" *ngIf="validDate == false">
                 <button class="btn btn-primary pull-right" (click)="continueWithoutDayType()">Continue Without Day Type
                     Analysis</button>
+            </div>
+            <div class="text-center pt-2" *ngIf="validDate != undefined">
+                <button class="btn btn-secondary pull-right" (click)="addAdditionalCsvData()">Add Additional .csv
+                    Data</button>
             </div>
             <div class="d-flex flex-column align-items-center w-100 h-100" *ngIf="importingData == true">
                 <div class="spinner">
