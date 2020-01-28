@@ -13,12 +13,11 @@
       <option [ngValue]="'Steam'">Steam</option>
       <option [ngValue]="'Water'">Water</option>
       <option [ngValue]="'WWT'">WWT</option>
-      <option [ngValue]="'Other'">Other</option>
     </select>
     <div class="input-group pl-2">
       <input type="number" class="form-control" [(ngModel)]="energyItem.amount" name="{{'amount_'+index}}"
         (input)="save()" (focus)="focusField('energyUseAmount')">
-      <span *ngIf="energyItem.type != 'Other'" class="input-group-addon units" [innerHTML]="getEnergyUnit(energyItem.type) + '/yr'"></span>
+      <span class="input-group-addon units" [innerHTML]="getEnergyUnit(energyItem.type) + '/yr'"></span>
       <span class="input-group-addon units remove-item" (click)="removeEnergyItem(index)">
         <span class="fa fa-times"></span>
       </span>
