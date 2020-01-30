@@ -116,13 +116,13 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       this.newMaterial = {
         id: this.existingMaterial.id,
         substance: this.existingMaterial.substance,
-        carbon: this.existingMaterial.carbon*100,
-        hydrogen: this.existingMaterial.hydrogen*100,
-        inertAsh: this.existingMaterial.inertAsh*100,
-        moisture: this.existingMaterial.moisture*100,
-        nitrogen: this.existingMaterial.nitrogen*100,
-        o2: this.existingMaterial.o2*100,
-        sulphur: this.existingMaterial.sulphur*100,
+        carbon: this.existingMaterial.carbon,
+        hydrogen: this.existingMaterial.hydrogen,
+        inertAsh: this.existingMaterial.inertAsh,
+        moisture: this.existingMaterial.moisture,
+        nitrogen: this.existingMaterial.nitrogen,
+        o2: this.existingMaterial.o2,
+        sulphur: this.existingMaterial.sulphur,
         heatingValue: 0
       }
       this.setHHV();
