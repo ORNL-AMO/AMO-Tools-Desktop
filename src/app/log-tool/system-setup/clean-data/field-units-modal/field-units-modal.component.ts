@@ -22,11 +22,13 @@ export class FieldUnitsModalComponent implements OnInit {
   measurementOptions: Array<{ measure: string, display: string }>;
   selectedMeasure: string;
   unitOptions: Array<{ unit: any, display: string, displayUnit: string }>;
+  editFieldUnit: string;
   constructor(private convertUnitsService: ConvertUnitsService, private logToolService: LogToolService) { }
 
   ngOnInit() {
     this.measurementOptions = measurementOptions;
     if (this.editField.unit) {
+      this.editFieldUnit = this.editField.unit;
       let selectedUnit = this.convertUnitsService.getUnit(this.editField.unit);
       if (selectedUnit.measure) {
         this.selectedMeasure = selectedUnit.measure;
@@ -62,6 +64,7 @@ export class FieldUnitsModalComponent implements OnInit {
   }
 
   setUnit() {
+    this.editField.unit = this.editFieldUnit;
     this.logToolService.updateFieldUnit(this.editField);
     this.hideEditModal();
   }
