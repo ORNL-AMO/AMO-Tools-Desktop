@@ -42,14 +42,24 @@
                     </tr>
                     <tr *ngFor="let field of dataFields">
                         <td>
-                            <input type="checkbox" [(ngModel)]="field.useField" [disabled]="field.isDateField || dataExists == true">
+                            <input type="checkbox" [(ngModel)]="field.useField"
+                                [disabled]="field.isDateField || dataExists == true">
                         </td>
                         <td>{{field.fieldName}}</td>
                         <td>
-                            <input type="text" class="form-control w-100" [(ngModel)]="field.alias" [disabled]="dataExists == true">
+                            <input type="text" class="form-control w-100" [(ngModel)]="field.alias"
+                                [disabled]="dataExists == true">
                         </td>
                         <td>
-                            {{field.unit}}
+                            <span *ngIf="field.isDateField == true">
+                                {{field.unit}}
+                            </span>
+                            <span *ngIf="field.unit != undefined && field.isDateField == false">
+                                <a class="click-link" (click)="editUnit(field)">{{field.unit}}</a>
+                            </span>
+                            <span *ngIf="field.unit == undefined">
+                                <a class="click-link" (click)="editUnit(field)">+Add</a>
+                            </span>
                         </td>
                     </tr>
                 </tbody>
@@ -82,3 +92,5 @@
         </div>
     </div>
 </div>
+
+<app-field-units-modal *ngIf="showEditModal" [editField]="editField" (emitClose)="closeEditModal()"></app-field-units-modal>

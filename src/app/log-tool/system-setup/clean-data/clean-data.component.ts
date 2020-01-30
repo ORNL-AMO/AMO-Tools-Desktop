@@ -21,6 +21,8 @@ export class CleanDataComponent implements OnInit {
   cleaningData: boolean = false;
   dataSubmitted: boolean = false;
   dataExists: boolean = false;
+  showEditModal: boolean = false;
+  editField: LogToolField;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
     private router: Router) { }
@@ -48,13 +50,24 @@ export class CleanDataComponent implements OnInit {
     }, 500)
   }
 
-  
-  resetData(){
+
+  resetData() {
     this.dayTypeAnalysisService.resetData();
     this.visualizeService.resetData();
     this.dayTypeGraphService.resetData();
     this.logToolService.resetData();
     this.logToolDataService.resetData();
     this.router.navigateByUrl('/log-tool/system-setup/setup-data');
+  }
+
+  editUnit(field: LogToolField) {
+    this.logToolService.isModalOpen.next(true);
+    this.editField = field;
+    this.showEditModal = true;
+  }
+
+  closeEditModal() {
+    this.logToolService.isModalOpen.next(false);
+    this.showEditModal = false;
   }
 }
