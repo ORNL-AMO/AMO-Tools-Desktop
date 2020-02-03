@@ -147,6 +147,9 @@ export class CoreComponent implements OnInit {
       this.assessmentDbService.setAll().then(() => {
         this.settingsDbService.setAll().then(() => {
           this.calculatorDbService.setAll().then(() => {
+            if(this.suiteDbService.hasStarted == true){
+              this.suiteDbService.initCustomDbMaterials();
+            }
             this.idbStarted = true;
             this.changeDetectorRef.detectChanges();
           });
