@@ -39,7 +39,10 @@ export class LogToolService {
     if (this.dateFields == undefined) {
       this.dateFields = new Array();
     }
-    this.dateFields.push(str);
+    let testForExists: string = _.find(this.dateFields, (field) => { return field == str });
+    if (testForExists == undefined) {
+      this.dateFields.push(str);
+    }
   }
 
   setImportDataFromCsv(data: CsvImportData) {
@@ -47,7 +50,15 @@ export class LogToolService {
   }
 
   addAdditionalCsvData(data: CsvImportData) {
-    this.importDataFromCsv.meta.fields = this.importDataFromCsv.meta.fields.concat(data.meta.fields);
+    // this.importDataFromCsv.meta.fields = this.importDataFromCsv.meta.fields.concat(data.meta.fields);
+    data.meta.fields.forEach(field => {
+      let testExists: string = this.importDataFromCsv.meta.fields.find(currentField => {
+        return currentField == field;
+      });
+      if(testExists == undefined){
+        this.importDataFromCsv.meta.fields.push(field);
+      }
+    })
     this.importDataFromCsv.data = this.importDataFromCsv.data.concat(data.data);
   }
 
@@ -102,7 +113,7 @@ export class LogToolService {
     this.fields = new Array();
     _fields.forEach(field => {
       let unit: string = '';
-      let testExist = this.dateFields.find(dateField => {return field == dateField})
+      let testExist = this.dateFields.find(dateField => { return field == dateField })
       if (testExist) {
         unit = 'Date';
       }
