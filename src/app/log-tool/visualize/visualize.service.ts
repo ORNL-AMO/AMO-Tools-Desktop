@@ -38,7 +38,7 @@ export class VisualizeService {
     if (this.logToolService.dateField != undefined) {
       selectedXDataField = fields.find((field) => { return field.fieldName == this.logToolService.dateField });
     } else {
-      selectedXDataField = fields.find((field) => { return field.fieldName != this.logToolService.dateField || field.fieldName != selectedYDataField.fieldName });
+      selectedXDataField = fields.find((field) => { return field.fieldName != selectedYDataField.fieldName });
     }
     let xData: Array<number> = this.logToolDataService.getAllFieldData(selectedXDataField.fieldName);
     let histogramData: { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } = this.getStandardDevBarChartData(selectedYDataField);

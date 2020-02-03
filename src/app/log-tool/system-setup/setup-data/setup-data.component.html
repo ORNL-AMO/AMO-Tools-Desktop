@@ -34,16 +34,16 @@
                     [disabled]="importData == undefined">Parse CSV Data</button>
             </div>
 
-            <div class="text-center p-2" *ngIf="validDate == true">
+            <div class="text-center pt-2" *ngIf="validDate == true">
                 <div class="alert-success router-link" [routerLink]="['/log-tool/system-setup/clean-data']">
                     Data parsing successful! Click here or the tab for Step 2: "Clean Data" to continue.
                 </div>
             </div>
-            <div class="text-center p-2" *ngIf="validDate == false">
-                <div class="alert-danger">No column from .csv file matches date format you have selected. View the
+            <div class="text-center pt-2" *ngIf="validDate == false">
+                <div class="alert-danger p-2">No column from .csv file matches date format you have selected. View the
                     first row below and adjust your format to match.</div>
             </div>
-            <div class="p-2" *ngIf="validDate != undefined">
+            <div class="pt-2" *ngIf="validDate != undefined">
                 <table class="table table-striped">
                     <tbody>
                         <tr>
@@ -56,6 +56,10 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="text-center pt-2" *ngIf="validDate == false">
+                <button class="btn btn-primary pull-right" (click)="continueWithoutDayType()">Continue Without Day Type
+                    Analysis</button>
             </div>
             <div class="d-flex flex-column align-items-center w-100 h-100" *ngIf="importingData == true">
                 <div class="spinner">
