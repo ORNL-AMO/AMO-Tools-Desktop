@@ -15,7 +15,7 @@
     "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --prod --aot",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build",
     "build-aot": "ng build --aot",
     "build-watch": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --watch",
     "build-prod": "ng build --aot",

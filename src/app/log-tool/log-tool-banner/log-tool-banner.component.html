@@ -14,9 +14,9 @@
             <a class="nav-link" [routerLink]="['/log-tool/system-setup']" routerLinkActive="active">Setup</a>
         </div>
         <div class="nav-item">
-            <a *ngIf="dataCleaned == true" class="nav-link" [routerLink]="['/log-tool/day-type-analysis']"
+            <a *ngIf="dataCleaned == true && noDayTypeAnalysis == false" class="nav-link" [routerLink]="['/log-tool/day-type-analysis']"
                 routerLinkActive="active">Day Type Analysis</a>
-            <a *ngIf="dataCleaned == false" class="nav-link disabled">Day Type Analysis</a>
+            <a *ngIf="dataCleaned == false || noDayTypeAnalysis == true" class="nav-link disabled">Day Type Analysis</a>
         </div>
         <div class="nav-item">
             <a *ngIf="dataCleaned == true" class="nav-link" [routerLink]="['/log-tool/visualize']"

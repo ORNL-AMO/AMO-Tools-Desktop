@@ -42,8 +42,10 @@ export class CleanDataComponent implements OnInit {
     this.cleaningData = true;
     this.cd.detectChanges();
     setTimeout(() => {
-      this.logToolDataService.setLogToolDays();
-      this.logToolDataService.setValidNumberOfDayDataPoints();
+      if (this.logToolService.noDayTypeAnalysis.getValue() == false) {
+        this.logToolDataService.setLogToolDays();
+        this.logToolDataService.setValidNumberOfDayDataPoints();
+      }
       this.logToolService.dataCleaned.next(true);
       this.cleaningData = false;
       this.dataSubmitted = true;
