@@ -18,8 +18,6 @@ export class MotorDriveComponent implements OnInit {
   emitSave = new EventEmitter<MotorDriveInputsTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  @Output('emitAddOpportunitySheet')
-  emitAddOpportunitySheet = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
   @Input()
@@ -106,10 +104,6 @@ export class MotorDriveComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
-  }
-
-  addOpportunitySheet() {
-    this.emitAddOpportunitySheet.emit(true);
   }
 
   btnResetData() {
