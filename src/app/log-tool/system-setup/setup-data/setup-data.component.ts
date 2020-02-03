@@ -27,6 +27,7 @@ export class SetupDataComponent implements OnInit {
   importingData: boolean = false;
   dataExists: boolean;
   addingAdditionalData: boolean = false;
+  disableImportFile: boolean = false;
   constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
     private logToolDataService: LogToolDataService, private router: Router) { }
@@ -62,17 +63,20 @@ export class SetupDataComponent implements OnInit {
   }
 
   parseImportData() {
+    this.disableImportFile = true;
     this.validDate = undefined;
     this.importingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
       this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
-      this.logToolService.setImportDataFromCsv(this.importDataFromCsv);
       let foundDate: string = this.testForDate();
       if (foundDate != undefined) {
         this.validDate = true;
+        this.logToolService.invalidDateDataFromCsv = undefined;
+        this.logToolService.setImportDataFromCsv(this.importDataFromCsv, this.fileReference.name, this.validDate);
         this.logToolService.parseImportData();
       } else {
+        this.logToolService.invalidDateDataFromCsv = this.importDataFromCsv;
         this.validDate = false;
       }
       this.importingData = false;
@@ -110,33 +114,42 @@ export class SetupDataComponent implements OnInit {
 
   continueWithoutDayType() {
     this.importingData = true;
+    this.logToolService.invalidDateDataFromCsv = undefined;
+    this.validDate = undefined;
     this.cd.detectChanges();
     setTimeout(() => {
       this.logToolService.noDayTypeAnalysis.next(true);
+      this.logToolService.addAdditionalCsvData(this.importDataFromCsv, this.fileReference.name, false);
       this.logToolService.parseImportData();
+      this.importingData = false;
       this.logToolService.dataSubmitted.next(true);
-      this.router.navigateByUrl('/log-tool/system-setup/clean-data');
     }, 500);
   }
 
   addAdditionalCsvData() {
     this.fileReference = undefined;
     this.dateFormat = new Array();
+    this.validDate = undefined;
     this.addingAdditionalData = true;
+    this.disableImportFile = false;
   }
 
   parseAdditionalImportData() {
+    this.logToolService.dataSubmitted.next(false);
+    this.disableImportFile = true;
     this.validDate = undefined;
     this.importingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
       this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
-      this.logToolService.addAdditionalCsvData(this.importDataFromCsv);
       let foundDate: string = this.testForDate();
       if (foundDate != undefined) {
         this.validDate = true;
+        this.logToolService.invalidDateDataFromCsv = undefined;
+        this.logToolService.addAdditionalCsvData(this.importDataFromCsv, this.fileReference.name, this.validDate);
         this.logToolService.parseImportData();
       } else {
+        this.logToolService.invalidDateDataFromCsv = this.importDataFromCsv;
         this.validDate = false;
       }
       this.importingData = false;

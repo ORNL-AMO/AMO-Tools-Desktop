@@ -6,7 +6,12 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class LogToolService {
 
-  importDataFromCsv: CsvImportData;
+  combinedDataFromCsv: CsvImportData;
+  individualDataFromCsv: Array<{
+    data: CsvImportData,
+    csvName: string,
+    isDateValid: boolean
+  }>;
   startDate: Date;
   endDate: Date;
   fields: Array<LogToolField>;
@@ -16,14 +21,16 @@ export class LogToolService {
   dataCleaned: BehaviorSubject<boolean>;
   dataSubmitted: BehaviorSubject<boolean>;
   noDayTypeAnalysis: BehaviorSubject<boolean>;
+  invalidDateDataFromCsv: CsvImportData;
   constructor() {
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
     this.dataCleaned = new BehaviorSubject<boolean>(false);
     this.noDayTypeAnalysis = new BehaviorSubject<boolean>(false);
+    this.individualDataFromCsv = new Array();
   }
 
   resetData() {
-    this.importDataFromCsv = undefined;
+    this.combinedDataFromCsv = undefined;
     this.startDate = undefined;
     this.endDate = undefined;
     this.fields = new Array();
@@ -33,6 +40,7 @@ export class LogToolService {
     this.dataCleaned.next(false);
     this.dataSubmitted.next(false);
     this.noDayTypeAnalysis.next(false);
+    this.individualDataFromCsv = new Array();
   }
 
   addDateField(str: string) {
@@ -45,31 +53,32 @@ export class LogToolService {
     }
   }
 
-  setImportDataFromCsv(data: CsvImportData) {
-    this.importDataFromCsv = data;
+  setImportDataFromCsv(data: CsvImportData, csvName: string, isDateValid: boolean) {
+    if (this.individualDataFromCsv == undefined) {
+      this.individualDataFromCsv = new Array();
+    }
+    this.individualDataFromCsv.push({ data: JSON.parse(JSON.stringify(data)), csvName: csvName, isDateValid: isDateValid });
+    this.combinedDataFromCsv = data;
   }
 
-  addAdditionalCsvData(data: CsvImportData) {
-    // this.importDataFromCsv.meta.fields = this.importDataFromCsv.meta.fields.concat(data.meta.fields);
+  addAdditionalCsvData(data: CsvImportData, csvName: string, isDateValid: boolean) {
+    this.individualDataFromCsv.push({ data: JSON.parse(JSON.stringify(data)), csvName: csvName, isDateValid: isDateValid });
     data.meta.fields.forEach(field => {
-      let testExists: string = this.importDataFromCsv.meta.fields.find(currentField => {
+      let testExists: string = this.combinedDataFromCsv.meta.fields.find(currentField => {
         return currentField == field;
       });
-      if(testExists == undefined){
-        this.importDataFromCsv.meta.fields.push(field);
+      if (testExists == undefined) {
+        this.combinedDataFromCsv.meta.fields.push(field);
       }
     })
-    this.importDataFromCsv.data = this.importDataFromCsv.data.concat(data.data);
+    this.combinedDataFromCsv.data = this.combinedDataFromCsv.data.concat(data.data);
   }
 
   parseImportData() {
-    this.setFields(this.importDataFromCsv.meta.fields);
-    // if (this.dateFields != undefined) {
-    //   this.importDataFromCsv.data = _.filter(this.importDataFromCsv.data, (data) => { return data[this.dateField] != undefined });
-    // }
-    this.numberOfDataPoints = this.importDataFromCsv.data.length;
+    this.setFields(this.combinedDataFromCsv.meta.fields);
+    this.numberOfDataPoints = this.combinedDataFromCsv.data.length;
     if (this.noDayTypeAnalysis.getValue() == false) {
-      this.importDataFromCsv.data = _.orderBy(this.importDataFromCsv.data, (data) => {
+      this.combinedDataFromCsv.data = _.orderBy(this.combinedDataFromCsv.data, (data) => {
         let date: Date;
         this.dateFields.forEach(field => {
           if (data[field]) {
@@ -78,7 +87,7 @@ export class LogToolService {
         })
         return date;
       }, ['asc']);
-      let startDateItem = _.minBy(this.importDataFromCsv.data, (dataItem) => {
+      let startDateItem = _.minBy(this.combinedDataFromCsv.data, (dataItem) => {
         let date: Date;
         this.dateFields.forEach(field => {
           if (dataItem[field]) {
@@ -92,7 +101,7 @@ export class LogToolService {
           this.startDate = new Date(startDateItem[field]);
         }
       });
-      let endDateItem = _.maxBy(this.importDataFromCsv.data, (dataItem) => {
+      let endDateItem = _.maxBy(this.combinedDataFromCsv.data, (dataItem) => {
         let date: Date;
         this.dateFields.forEach(field => {
           if (dataItem[field]) {

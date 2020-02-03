@@ -35,7 +35,7 @@ export class LogToolDataService {
 
   //seperate log tool data into days
   setLogToolDays() {
-    let csvDataCopy: Array<any> = JSON.parse(JSON.stringify(this.logToolService.importDataFromCsv.data));
+    let csvDataCopy: Array<any> = JSON.parse(JSON.stringify(this.logToolService.combinedDataFromCsv.data));
     this.logToolDays = new Array();
     let startDate: Date = new Date(this.logToolService.startDate);
     let endDate: Date = new Date(this.logToolService.endDate);
@@ -114,7 +114,7 @@ export class LogToolDataService {
   }
 
   getAllFieldData(fieldName: string): Array<number> {
-    let mappedValues: Array<any> = _.mapValues(this.logToolService.importDataFromCsv.data, (dataItem) => { return dataItem[fieldName] });
+    let mappedValues: Array<any> = _.mapValues(this.logToolService.combinedDataFromCsv.data, (dataItem) => { return dataItem[fieldName] });
     let valueArr = _.values(mappedValues);
     return valueArr;
   }
