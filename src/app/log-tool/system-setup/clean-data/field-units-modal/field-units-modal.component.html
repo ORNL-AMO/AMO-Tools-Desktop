@@ -1,0 +1,33 @@
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md export-modal">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                Choose {{editField.alias}} Unit
+                <button class="close" aria-label="Close" (click)="hideEditModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-2">
+                <div class="form-group">
+                    <label>Measurement</label>
+                    <select class="form-control" id="type" [(ngModel)]="selectedMeasure" (change)="setUnitOptions()">
+                        <option *ngFor="let option of measurementOptions" [ngValue]="option.measure">
+                            {{option.display}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Unit</label>
+                    <select class="form-control" id="editFieldUnit" [(ngModel)]="editFieldUnit">
+                        <option *ngFor="let unitOption of unitOptions" [value]="unitOption.unit">{{unitOption.display}}
+                            <span [innerHTML]="unitOption.displayUnit"></span>
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end p-2">
+                <button class="btn btn-primary" (click)="setUnit()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

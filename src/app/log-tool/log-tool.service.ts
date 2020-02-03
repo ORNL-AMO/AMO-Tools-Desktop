@@ -15,10 +15,13 @@ export class LogToolService {
   numberOfDataPoints: number;
   dataCleaned: BehaviorSubject<boolean>;
   dataSubmitted: BehaviorSubject<boolean>;
+  isModalOpen: BehaviorSubject<boolean>;
   noDayTypeAnalysis: BehaviorSubject<boolean>;
-  constructor() {
+
+  constructor() { 
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
     this.dataCleaned = new BehaviorSubject<boolean>(false);
+    this.isModalOpen = new BehaviorSubject<boolean>(false);
     this.noDayTypeAnalysis = new BehaviorSubject<boolean>(false);
   }
 
@@ -69,7 +72,7 @@ export class LogToolService {
   setFields(_fields: Array<string>) {
     this.fields = new Array();
     _fields.forEach(field => {
-      let unit: string = '';
+      let unit: string;
       if (field == this.dateField) {
         unit = 'Date';
       }
@@ -81,5 +84,13 @@ export class LogToolService {
         unit: unit
       });
     });
+  }
+
+  updateFieldUnit(fieldToUpdate: LogToolField){
+    this.fields.forEach(field => {
+      if(field.fieldName == fieldToUpdate.fieldName){
+        field = fieldToUpdate;
+      }
+    })
   }
 }
