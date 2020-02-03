@@ -76,6 +76,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
       }
+      // this.convertDecimals();
       let suiteDbResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
       if (suiteDbResult == true) {
         this.indexedDbService.addSolidLiquidFlueGasMaterial(this.newMaterial).then(idbResults => {
@@ -90,6 +91,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
+    // this.convertDecimals();
     let suiteDbResult = this.suiteDbService.updateSolidLiquidFlueGasMaterial(this.newMaterial);
     if (suiteDbResult == true) {
       //need to set id for idb to put updates
@@ -109,6 +111,21 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
         });
       }
     }
+  }
+
+  convertDecimals() {
+      this.newMaterial = {
+        id: this.existingMaterial.id,
+        substance: this.existingMaterial.substance,
+        carbon: this.existingMaterial.carbon/100,
+        hydrogen: this.existingMaterial.hydrogen/100,
+        inertAsh: this.existingMaterial.inertAsh/100,
+        moisture: this.existingMaterial.moisture/100,
+        nitrogen: this.existingMaterial.nitrogen/100,
+        o2: this.existingMaterial.o2/100,
+        sulphur: this.existingMaterial.sulphur/100,
+        heatingValue: 0
+      }
   }
 
   setExisting() {
