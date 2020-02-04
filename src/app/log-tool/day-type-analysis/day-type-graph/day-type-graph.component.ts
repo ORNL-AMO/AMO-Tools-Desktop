@@ -3,7 +3,8 @@ import { DayTypeGraphService } from './day-type-graph.service';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js';
-import { DayTypeGraphItem } from '../../log-tool-models';
+import { DayTypeGraphItem, LogToolField } from '../../log-tool-models';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-day-type-graph',
   templateUrl: './day-type-graph.component.html',
@@ -34,7 +35,7 @@ export class DayTypeGraphComponent implements OnInit {
   selectedGraphType: string;
   individualDayScatterPlotDataSub: Subscription;
   individualDayScatterPlotData: Array<DayTypeGraphItem>;
-  constructor(private dayTypeGraphService: DayTypeGraphService, private dayTypeAnalysisService: DayTypeAnalysisService) { }
+  constructor(private dayTypeGraphService: DayTypeGraphService, private dayTypeAnalysisService: DayTypeAnalysisService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
 
@@ -66,9 +67,15 @@ export class DayTypeGraphComponent implements OnInit {
 
   setGraphData() {
     this.graph.data = new Array();
-    this.graph.layout.title = 'Hourly ' + this.dayTypeAnalysisService.selectedDataField.getValue().alias + ' Data';
+    let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
+    let labelStr: string = selectedDataField.alias;
+    if(selectedDataField.unit){
+      let displayUnit: string = this.getUnitDisplay(selectedDataField.unit);
+      labelStr = labelStr + ' ' + displayUnit;
+    }
+    this.graph.layout.title = 'Hourly ' + labelStr + ' Data';
     this.graph.layout.xaxis.title.text = 'Hour of day';
-    this.graph.layout.yaxis.title.text = this.dayTypeAnalysisService.selectedDataField.getValue().alias;
+    this.graph.layout.yaxis.title.text = labelStr;
     let graphData: Array<DayTypeGraphItem> = this.getGraphData();
     graphData.forEach(entry => {
       this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: entry.color }, name: entry.name })
@@ -81,6 +88,12 @@ export class DayTypeGraphComponent implements OnInit {
       return this.individualDayScatterPlotData;
     } else if (this.selectedGraphType == 'dayType') {
       return this.dayTypeScatterPlotData;
+    }
+  }
+
+  getUnitDisplay(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
   }
 }

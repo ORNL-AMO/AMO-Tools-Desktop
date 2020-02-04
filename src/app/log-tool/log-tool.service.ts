@@ -20,11 +20,13 @@ export class LogToolService {
   numberOfDataPoints: number;
   dataCleaned: BehaviorSubject<boolean>;
   dataSubmitted: BehaviorSubject<boolean>;
+  isModalOpen: BehaviorSubject<boolean>;
   noDayTypeAnalysis: BehaviorSubject<boolean>;
   invalidDateDataFromCsv: CsvImportData;
   constructor() {
     this.dataSubmitted = new BehaviorSubject<boolean>(false);
     this.dataCleaned = new BehaviorSubject<boolean>(false);
+    this.isModalOpen = new BehaviorSubject<boolean>(false);
     this.noDayTypeAnalysis = new BehaviorSubject<boolean>(false);
     this.individualDataFromCsv = new Array();
   }
@@ -136,5 +138,13 @@ export class LogToolService {
         unit: unit
       });
     });
+  }
+
+  updateFieldUnit(fieldToUpdate: LogToolField){
+    this.fields.forEach(field => {
+      if(field.fieldName == fieldToUpdate.fieldName){
+        field = fieldToUpdate;
+      }
+    })
   }
 }

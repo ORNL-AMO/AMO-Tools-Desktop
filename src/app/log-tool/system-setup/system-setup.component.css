@@ -14,3 +14,7 @@
 .card-body, .card-header, .card-footer{
       padding: .5rem;
   }
+
+  .modal-open {
+    z-index: initial !important;
+}
