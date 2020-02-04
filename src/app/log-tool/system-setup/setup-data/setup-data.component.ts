@@ -8,6 +8,7 @@ import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysi
 import { VisualizeService } from '../../visualize/visualize.service';
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-setup-data',
   templateUrl: './setup-data.component.html',
@@ -25,9 +26,11 @@ export class SetupDataComponent implements OnInit {
   dateFormats: Array<{ display: string, value: Array<string> }> = _dateFormats;
   validDate: boolean;
   importingData: boolean = false;
-  dataExists: boolean;
+  dataExists: boolean = false;
   addingAdditionalData: boolean = false;
   disableImportFile: boolean = false;
+  noDayTypeAnalysis: boolean;
+  noDayTypeAnalysisSub: Subscription;
   constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
     private logToolDataService: LogToolDataService, private router: Router) { }
@@ -37,6 +40,17 @@ export class SetupDataComponent implements OnInit {
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
     }
+    if (this.logToolService.combinedDataFromCsv != undefined) {
+      this.validDate = true;
+      this.disableImportFile = true;
+    }
+    this.noDayTypeAnalysisSub = this.logToolService.noDayTypeAnalysis.subscribe(val => {
+      this.noDayTypeAnalysis = val;
+    });
+  }
+
+  ngOnDestroy() {
+    this.noDayTypeAnalysisSub.unsubscribe();
   }
 
   setImportFile($event) {
@@ -69,6 +83,7 @@ export class SetupDataComponent implements OnInit {
     this.cd.detectChanges();
     setTimeout(() => {
       this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
+      console.log(this.importDataFromCsv);
       let foundDate: string = this.testForDate();
       if (foundDate != undefined) {
         this.validDate = true;
@@ -110,6 +125,8 @@ export class SetupDataComponent implements OnInit {
     this.logToolService.resetData();
     this.logToolDataService.resetData();
     this.dataExists = false;
+    this.disableImportFile = false;
+    this.validDate = undefined;
   }
 
   continueWithoutDayType() {
@@ -119,10 +136,15 @@ export class SetupDataComponent implements OnInit {
     this.cd.detectChanges();
     setTimeout(() => {
       this.logToolService.noDayTypeAnalysis.next(true);
-      this.logToolService.addAdditionalCsvData(this.importDataFromCsv, this.fileReference.name, false);
+      if (this.addingAdditionalData == true) {
+        this.logToolService.addAdditionalCsvData(this.importDataFromCsv, this.fileReference.name, false);
+      } else {
+        this.logToolService.setImportDataFromCsv(this.importDataFromCsv, this.fileReference.name, false);
+      }
       this.logToolService.parseImportData();
       this.importingData = false;
       this.logToolService.dataSubmitted.next(true);
+      this.validDate = true;
     }, 500);
   }
 

@@ -122,9 +122,11 @@ export class LogToolService {
     this.fields = new Array();
     _fields.forEach(field => {
       let unit: string = '';
-      let testExist = this.dateFields.find(dateField => { return field == dateField })
-      if (testExist) {
-        unit = 'Date';
+      if (this.dateFields) {
+        let testExist = this.dateFields.find(dateField => { return field == dateField })
+        if (testExist) {
+          unit = 'Date';
+        }
       }
       this.fields.push({
         fieldName: field,
