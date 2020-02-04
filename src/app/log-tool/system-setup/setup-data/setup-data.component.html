@@ -8,7 +8,7 @@
             <div>
                 <app-data-table></app-data-table>
             </div>
-            <div class="form-group" *ngIf="disableImportFile == false">
+            <div class="form-group" *ngIf="disableImportFile == false && dataExists == false">
                 <label>
                     Log File
                 </label>
@@ -18,7 +18,7 @@
                     have a .csv file extension</span>
             </div>
 
-            <div class="form-group" *ngIf="validDate == false || disableImportFile == false">
+            <div class="form-group" *ngIf="(validDate == false || disableImportFile == false) && dataExists == false">
                 <label>
                     File Date Format
                     <a class="form-text small">"-" and "/" are interchangeable</a>

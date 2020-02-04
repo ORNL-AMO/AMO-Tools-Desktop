@@ -128,7 +128,6 @@ export class SetupDataComponent implements OnInit {
 
   addAdditionalCsvData() {
     this.fileReference = undefined;
-    this.dateFormat = new Array();
     this.validDate = undefined;
     this.addingAdditionalData = true;
     this.disableImportFile = false;
