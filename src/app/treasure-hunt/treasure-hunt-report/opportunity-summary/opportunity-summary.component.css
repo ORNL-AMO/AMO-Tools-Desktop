@@ -1,20 +1,22 @@
 .output-summary .table {
     font-size: small;
 }
+
 .output-summary .table th {
     border: none;
     padding: 0px 10px;
 }
+
 .output-summary .table td {
     padding: 2px 8px;
     vertical-align: middle;
 }
 
-tr > td{
+tr>td {
     text-align: center;
 }
 
-.table-header{
+.table-header {
     font-weight: bold;
 }
 
@@ -23,42 +25,51 @@ tr > td{
     text-decoration: underline;
 }
 
-.table-header td.active{
+.table-header td.active {
     text-decoration: underline;
 }
 
-
 @media print {
-    .show-print{
+    .output-summary {
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+        margin-top: 150px;
+    }
+    .output-summary.table {
+        height: 90vh;
+        width: 100vw;
+        margin-right: 100px;
+    }
+    .show-print {
         display: inline !important;
     }
-    .hide-print{
+    .hide-print {
         display: none !important;
     }
-
-    .chart-row{
+    .chart-row {
         padding: 0px !important;
     }
 }
 
-.show-print{
+.show-print {
     display: none;
 }
 
-.positive-savings{
+.positive-savings {
     color: #27AE60;
 }
 
-.selected-modification{
+.selected-modification {
     z-index: 2;
     background: #e5efe9;
 }
 
-thead td{
+thead td {
     width: 10%;
 }
 
-.selected-opportunity{
+.selected-opportunity {
     z-index: 2;
     background: #e5efe9 !important;
 }
