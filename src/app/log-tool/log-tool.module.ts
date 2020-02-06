@@ -26,6 +26,7 @@ import { VisualizeMenuComponent } from './visualize/visualize-menu/visualize-men
 import { LogToolDataService } from './log-tool-data.service';
 import { DayTypeTableComponent } from './day-type-analysis/day-type-table/day-type-table.component';
 import { DayTypeMenuComponent } from './day-type-analysis/day-type-menu/day-type-menu.component';
+import { DataTableComponent } from './system-setup/setup-data/data-table/data-table.component';
 import { FieldUnitsModalComponent } from './system-setup/clean-data/field-units-modal/field-units-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
 
@@ -49,6 +50,7 @@ import { ModalModule } from 'ngx-bootstrap';
     VisualizeMenuComponent,
     DayTypeTableComponent,
     DayTypeMenuComponent,
+    DataTableComponent,
     FieldUnitsModalComponent
   ],
   imports: [

@@ -1,0 +1,35 @@
+<div class="d-flex w-100 flex-column pb-2">
+    <div *ngFor="let csvDataItem of logToolService.individualDataFromCsv">
+        <label class="group-label">{{csvDataItem.csvName}}
+            <span class="pull-right" *ngIf="csvDataItem.isDateValid == false">*No Valid Date Field Selected</span>
+        </label>
+        <table class="table table-striped mb-2">
+            <tbody>
+                <tr>
+                    <td class="bold" *ngFor="let field of csvDataItem.data.meta.fields">{{field}}</td>
+                </tr>
+                <tr>
+                    <td *ngFor="let field of csvDataItem.data.meta.fields">
+                        {{csvDataItem.data.data[0][field]}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pt-4" *ngIf="logToolService.invalidDateDataFromCsv != undefined">
+        <label class="group-label danger">Invalid Date Format</label>
+        <table class="table table-striped mb-2">
+            <tbody>
+                <tr>
+                    <td class="bold" *ngFor="let field of logToolService.invalidDateDataFromCsv.meta.fields">{{field}}</td>
+                </tr>
+                <tr>
+                    <td *ngFor="let field of logToolService.invalidDateDataFromCsv.meta.fields">
+                        {{logToolService.invalidDateDataFromCsv.data[0][field]}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

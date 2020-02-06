@@ -16,7 +16,7 @@ export class VisualizeService {
     this.graphData = new BehaviorSubject(new Array());
   }
 
-  resetData(){
+  resetData() {
     this.graphData.next(new Array());
     this.selectedGraphData.next(undefined);
     this.visualizeDataInitialized = false;
@@ -32,14 +32,16 @@ export class VisualizeService {
 
   getNewGraphDataObject(): GraphDataObj {
     let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptionsWithDate();
-    let selectedYDataField: LogToolField = fields.find((field) => { return field.fieldName != this.logToolService.dateField });
-    let yData: Array<number> = this.logToolDataService.getAllFieldData(selectedYDataField.fieldName);
+    let selectedYDataField: LogToolField
     let selectedXDataField: LogToolField;
-    if (this.logToolService.dateField != undefined) {
-      selectedXDataField = fields.find((field) => { return field.fieldName == this.logToolService.dateField });
+    if (this.logToolService.dateFields != undefined) {
+      selectedXDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) });
+      selectedYDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) == undefined });
     } else {
+      selectedYDataField = fields[0];
       selectedXDataField = fields.find((field) => { return field.fieldName != selectedYDataField.fieldName });
     }
+    let yData: Array<number> = this.logToolDataService.getAllFieldData(selectedYDataField.fieldName);
     let xData: Array<number> = this.logToolDataService.getAllFieldData(selectedXDataField.fieldName);
     let histogramData: { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } = this.getStandardDevBarChartData(selectedYDataField);
     return {
@@ -203,7 +205,7 @@ export class VisualizeService {
       let squareDiff: number = diff * diff;
       return squareDiff;
     });
-
+    _.remove(squareDiffs, (diff) => { return isNaN(diff) == true });
     let averageSquareDiff: number = _.mean(squareDiffs);
     let squareRootOfAverageSquareDiff: number = Math.sqrt(averageSquareDiff);
     return squareRootOfAverageSquareDiff;
