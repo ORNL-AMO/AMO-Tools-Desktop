@@ -1,4 +1,4 @@
-<div class="d-flex flex-column output-summary">
+<div class="d-flex flex-column output-summary" *ngIf="!showPrint">
 
   <table class="table table-striped table-hover">
     <tbody>
@@ -198,4 +198,213 @@
       </tr>
     </tbody>
   </table>
+
+</div>
+
+<!-- print version -->
+<div *ngIf="showPrint">
+  <div class="d-flex flex-column output-summary break-table"
+    *ngFor="let printOpportunitySummary of printOpportunitySummaries">
+    <table class="table table-striped table-hover">
+      <tbody>
+        <tr class="table-header">
+          <td *ngIf="inRollup">
+            Use Opportunity
+          </td>
+          <td (click)="setSortBy('opportunityName')" [ngClass]="{'active': sortBy == 'opportunityName'}">
+            Opportunity Name
+            <span *ngIf="sortBy == 'opportunityName'">
+              <span class="fa"
+                [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+            </span>
+          </td>
+          <td (click)="setSortBy('utilityType')" [ngClass]="{'active': sortBy == 'utilityType'}">
+            Utility
+            <span *ngIf="sortBy == 'utilityType'">
+              <span class="fa"
+                [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+            </span>
+          </td>
+          <td (click)="setSortBy('totalEnergySavings')" [ngClass]="{'active': sortBy == 'totalEnergySavings'}">
+            Utility Savings
+            <span *ngIf="sortBy == 'totalEnergySavings'">
+              <span class="fa"
+                [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+            </span>
+          </td>
+          <td>
+
+          </td>
+          <td (click)="setSortBy('costSavings')" [ngClass]="{'active': sortBy == 'costSavings'}">
+            Cost Savings
+            <span *ngIf="sortBy == 'costSavings'">
+              <span class="fa"
+                [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+            </span>
+          </td>
+          <td (click)="setSortBy('opportunityCost.material')"
+            [ngClass]="{'active': sortBy == 'opportunityCost.material'}">
+            Material Cost
+            <span *ngIf="sortBy == 'opportunityCost.material'">
+              <span class="fa"
+                [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+            </span>
+          </td>
+          <td (click)="setSortBy('opportunityCost.labor')" [ngClass]="{'active': sortBy == 'opportunityCost.labor'}">
+            Labor Cost
+            <span *ngIf="sortBy == 'opportunityCost.labor'">
+              <span class="fa"
+                [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+            </span>
+          </td>
+          <td (click)="setSortBy('opportunityCost.engineeringServices')"
+            [ngClass]="{'active': sortBy == 'opportunityCost.engineeringServices'}">
+            Engineering Cost
+            <span *ngIf="sortBy == 'opportunityCost.engineeringServices'">
+              <span class="fa"
+                [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+            </span>
+          </td>
+          <td (click)="setSortBy('opportunityCost.otherCosts')"
+            [ngClass]="{'active': sortBy == 'opportunityCost.otherCosts'}">
+            Other Cost
+            <span *ngIf="sortBy == 'opportunityCost.otherCosts'">
+              <span class="fa"
+                [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+            </span>
+          </td>
+          <td (click)="setSortBy('totalCost')" [ngClass]="{'active': sortBy == 'totalCost'}">
+            Total Cost
+            <span *ngIf="sortBy == 'totalCost'">
+              <span class="fa"
+                [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+            </span>
+          </td>
+          <td (click)="setSortBy('payback')" [ngClass]="{'active': sortBy == 'payback'}">
+            Simple Payback
+            <span *ngIf="sortBy == 'payback'">
+              <span class="fa"
+                [ngClass]="{'fa-chevron-up': sortByDirection == 'asc', 'fa-chevron-down': sortByDirection == 'desc'}"></span>
+            </span>
+          </td>
+        </tr>
+        <tr *ngFor="let opportunity of printOpportunitySummary | sortSummaries:sortBy:sortByDirection"
+          [ngClass]="{'selected-opportunity': inRollup == true && opportunity.selected == true}">
+          <!--apply opportunity to rollup report-->
+          <td class="text-center" *ngIf="inRollup">
+            <input type="checkbox" [(ngModel)]="opportunity.selected" (change)="updateOpportunities()" />
+          </td>
+          <!--name-->
+          <td>
+            {{opportunity.opportunityName}}
+          </td>
+          <!--type-->
+          <td *ngIf="opportunity.utilityType != 'Mixed'">
+            {{opportunity.utilityType}}
+          </td>
+          <td *ngIf="opportunity.utilityType == 'Mixed'">
+            <span *ngFor="let result of opportunity.mixedIndividualResults">
+              {{result.utilityType}} <br>
+            </span>
+          </td>
+          <!--energy savings-->
+          <td *ngIf="opportunity.utilityType != 'Mixed'">
+            {{opportunity.totalEnergySavings | number:'1.0-0'}}
+          </td>
+          <td *ngIf="opportunity.utilityType == 'Mixed'">
+            <span *ngFor="let result of opportunity.mixedIndividualResults">
+              {{result.totalEnergySavings | number:'1.0-0'}}<br>
+            </span>
+          </td>
+          <!--unit-->
+          <td>
+            <span *ngIf="opportunity.utilityType == 'Electricity'">kWh</span>
+
+            <span *ngIf="opportunity.utilityType == 'Compressed Air'">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+            </span>
+
+            <span *ngIf="opportunity.utilityType == 'Water' || opportunity.utilityType == 'Waste Water'">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            </span>
+
+            <span *ngIf="opportunity.utilityType == 'Steam'">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+            </span>
+
+            <span *ngIf="opportunity.utilityType == 'Natural Gas' || opportunity.utilityType == 'Other Fuel'">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+            </span>
+            <!--mixed-->
+            <span *ngIf="opportunity.utilityType == 'Mixed'">
+              <span *ngFor="let result of opportunity.mixedIndividualResults">
+                <span *ngIf="result.utilityType == 'Electricity'">kWh</span>
+
+                <span *ngIf="result.utilityType == 'Compressed Air'">
+                  <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</span>
+                  <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+                </span>
+
+                <span *ngIf="result.utilityType == 'Steam'">
+                  <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+                  <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+                </span>
+
+                <span *ngIf="result.utilityType == 'Water' || result.utilityType == 'Waste Water'">
+                  <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+                  <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                </span>
+
+                <span *ngIf="result.utilityType == 'Natural Gas' || result.utilityType == 'Other Fuel'">
+                  <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                  <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+                </span>
+                <br>
+              </span>
+            </span>
+          </td>
+          <!--cost savings-->
+          <td *ngIf="opportunity.utilityType != 'Mixed'">
+            {{opportunity.costSavings | currency:'USD'}}
+          </td>
+          <td *ngIf="opportunity.utilityType == 'Mixed'">
+            <span *ngFor="let result of opportunity.mixedIndividualResults">
+              {{result.costSavings | currency:'USD'}}<br>
+            </span>
+          </td>
+          <!--material cost-->
+          <td>
+            {{getMaterialCost(opportunity.opportunityCost) | currency:'USD'}}
+          </td>
+          <!--labor cost-->
+          <td>
+            {{getLaborCost(opportunity.opportunityCost) | currency:'USD'}}
+          </td>
+          <!--engineering cost-->
+          <td>
+            {{getEngineeringCost(opportunity.opportunityCost) | currency:'USD'}}
+          </td>
+          <!--other cost-->
+          <td>
+            {{getOtherCost(opportunity.opportunityCost) | currency:'USD'}}
+          </td>
+          <!--total cost-->
+          <td>
+            {{opportunity.totalCost | currency:'USD'}}
+          </td>
+          <!--payback-->
+          <td>
+            {{opportunity.payback | number:'1.0-2'}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
 </div>

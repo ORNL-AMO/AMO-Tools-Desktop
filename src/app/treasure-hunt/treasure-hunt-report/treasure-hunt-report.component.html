@@ -112,7 +112,8 @@
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Opportunity Summary</h4>
       <app-opportunity-summary [opportunitySummaries]="treasureHuntResults.opportunitySummaries" [settings]="settings"
-        [inRollup]="inRollup" (emitUpdateOpportunities)="updateResults($event)" [assessment]="assessment">
+        [inRollup]="inRollup" (emitUpdateOpportunities)="updateResults($event)" [assessment]="assessment"
+        [showPrint]="showPrint">
       </app-opportunity-summary>
     </div>
 
