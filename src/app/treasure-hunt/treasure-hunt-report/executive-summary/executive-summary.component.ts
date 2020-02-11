@@ -104,7 +104,7 @@ export class ExecutiveSummaryComponent implements OnInit {
     this.pieChartValues = new Array<number>();
     this.pieChartLabels = new Array<string>();
     for (let i = 0; i < this.teamData.length; i++) {
-      this.pieChartLabels.push(this.teamData[i].team + ' $' + (Math.round(this.teamData[i].costSavings)));
+      this.pieChartLabels.push(this.teamData[i].team + ' $' + Number(Math.round(this.teamData[i].costSavings)).toLocaleString());
       this.pieChartValues.push(this.teamData[i].costSavings);
     }
   }

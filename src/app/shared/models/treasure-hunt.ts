@@ -161,10 +161,12 @@ export interface OpportunitySheetResults {
 export interface OpportunitySheetResult {
     baselineEnergyUse: number,
     baselineEnergyCost: number,
+    baselineItems: number,
     modificationEnergyUse: number,
     modificationEnergyCost: number,
+    modificationItems: number,
     energySavings: number,
-    energyCostSavings: number
+    energyCostSavings: number,
 }
 
 export interface MotorDriveInputsTreasureHunt{

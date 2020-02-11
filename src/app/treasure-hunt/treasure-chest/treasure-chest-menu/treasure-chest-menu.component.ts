@@ -15,7 +15,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   animations: [
     trigger('menuModal', [
       state('show', style({
-        top: '20px'
+        top: '20px',
+        bottom: '20px'
       })),
       transition('hide => show', animate('.5s ease-in')),
       transition('show => hide', animate('.5s ease-out'))
@@ -46,7 +47,6 @@ export class TreasureChestMenuComponent implements OnInit {
   displayUtilityTypeDropdown: boolean = false;
   displayCalculatorTypeDropdown: boolean = false;
   displayAdditionalFiltersDropdown: string = 'hide';
-  displayImportExportModal: string = 'hide';
   sortByDropdown: boolean = false;
   treasureHunt: TreasureHunt;
   sortCardsData: SortCardsData;
@@ -56,7 +56,11 @@ export class TreasureChestMenuComponent implements OnInit {
   equipments: Array<{ name: string, selected: boolean }>;
   opportunityCardsSub: Subscription;
   opportunityCardsData: Array<OpportunityCardData>;
-  importExportOption: string;
+
+  showImportModal: boolean;
+  showImportModalSub: Subscription;
+  showExportModal: boolean;
+  showExportModalSub: Subscription;
   constructor(private opportuntiyCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService) { }
 
   ngOnInit() {
@@ -72,12 +76,22 @@ export class TreasureChestMenuComponent implements OnInit {
       this.setEnergyTypeOptions(val);
       this.setCalculatorOptions(val);
     });
+
+    this.showImportModalSub = this.treasureChestMenuService.showImportModal.subscribe(val => {
+      this.showImportModal = val;
+    });
+    
+    this.showExportModalSub = this.treasureChestMenuService.showExportModal.subscribe(val => {
+      this.showExportModal = val;
+    });
   }
 
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
     this.opportunityCardsSub.unsubscribe();
     this.clearAllFilters();
+    this.showImportModalSub.unsubscribe();
+    this.showExportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -211,6 +225,8 @@ export class TreasureChestMenuComponent implements OnInit {
     this.sortCardsData.calculatorType = 'All';
     this.displayCalculatorType = 'All';
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+    this.treasureChestMenuService.showImportModal.next(false);
+    this.treasureChestMenuService.showExportModal.next(false);
   }
 
   getNavbarWidth() {
@@ -342,16 +358,10 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   openImportModal() {
-    this.displayImportExportModal = 'show';
-    this.importExportOption = 'import';
+    this.treasureChestMenuService.showImportModal.next(true);
   }
 
   openExportModal() {
-    this.displayImportExportModal = 'show';
-    this.importExportOption = 'export';
-  }
-
-  hideImportExportModal() {
-    this.displayImportExportModal = 'hide';
+    this.treasureChestMenuService.showExportModal.next(true);
   }
 }

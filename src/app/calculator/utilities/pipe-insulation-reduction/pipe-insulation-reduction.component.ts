@@ -18,8 +18,6 @@ export class PipeInsulationReductionComponent implements OnInit {
   emitSave = new EventEmitter<null>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  @Output('emitAddOpportunitySheet')
-  emitAddOpportunitySheet = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
   @Input()

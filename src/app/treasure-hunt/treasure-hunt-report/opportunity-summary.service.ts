@@ -373,54 +373,54 @@ export class OpportunitySummaryService {
     let totalEnergySavings: number = 0;
     let energyTypeLabel: string;
     for (let key in oppSheetResults) {
-      if (oppSheetResults[key].baselineEnergyUse != 0 && oppSheetResults[key].baselineEnergyUse != undefined) {
+      if (oppSheetResults[key].baselineItems != 0 || oppSheetResults[key].modificationItems != 0 && oppSheetResults[key].baselineItems != undefined) {
         numEnergyTypes = numEnergyTypes + 1;
       }
     }
     //electricity
-    if (oppSheetResults.electricityResults.baselineEnergyUse != 0) {
+    if (oppSheetResults.electricityResults.baselineItems != 0 || oppSheetResults.electricityResults.modificationItems != 0) {
       energyTypeLabel = 'Electricity';
       totalEnergySavings = totalEnergySavings + oppSheetResults.electricityResults.energySavings;
       let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.electricityResults.energyCostSavings, oppSheetResults.electricityResults.energySavings, oppSheet.opportunityCost, oppSheetResults.electricityResults.baselineEnergyCost, oppSheetResults.electricityResults.modificationEnergyCost)
       mixedIndividualSummaries.push(oppSummary);
     }
     //compressed air
-    if (oppSheetResults.compressedAirResults.baselineEnergyUse != 0) {
+    if (oppSheetResults.compressedAirResults.baselineItems != 0 || oppSheetResults.compressedAirResults.modificationItems != 0) {
       energyTypeLabel = 'Compressed Air';
       totalEnergySavings = totalEnergySavings + oppSheetResults.compressedAirResults.energySavings;
       let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.compressedAirResults.energyCostSavings, oppSheetResults.compressedAirResults.energySavings, oppSheet.opportunityCost, oppSheetResults.compressedAirResults.baselineEnergyCost, oppSheetResults.compressedAirResults.modificationEnergyCost)
       mixedIndividualSummaries.push(oppSummary);
     }
     //natural gas
-    if (oppSheetResults.gasResults.baselineEnergyUse != 0) {
+    if (oppSheetResults.gasResults.baselineItems != 0 || oppSheetResults.gasResults.modificationItems != 0) {
       energyTypeLabel = 'Natural Gas';
       totalEnergySavings = totalEnergySavings + oppSheetResults.gasResults.energySavings;
       let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.gasResults.energyCostSavings, oppSheetResults.gasResults.energySavings, oppSheet.opportunityCost, oppSheetResults.gasResults.baselineEnergyCost, oppSheetResults.gasResults.modificationEnergyCost)
       mixedIndividualSummaries.push(oppSummary);
     }
     //water
-    if (oppSheetResults.waterResults.baselineEnergyUse != 0) {
+    if (oppSheetResults.waterResults.baselineItems != 0 || oppSheetResults.waterResults.modificationItems != 0) {
       energyTypeLabel = 'Water';
       totalEnergySavings = totalEnergySavings + oppSheetResults.waterResults.energySavings;
       let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.waterResults.energyCostSavings, oppSheetResults.waterResults.energySavings, oppSheet.opportunityCost, oppSheetResults.waterResults.baselineEnergyCost, oppSheetResults.waterResults.modificationEnergyCost)
       mixedIndividualSummaries.push(oppSummary);
     }
     //waste water
-    if (oppSheetResults.wasteWaterResults.baselineEnergyUse != 0) {
+    if (oppSheetResults.wasteWaterResults.baselineItems != 0 || oppSheetResults.wasteWaterResults.modificationItems != 0) {
       energyTypeLabel = 'Waste Water';
       totalEnergySavings = totalEnergySavings + oppSheetResults.wasteWaterResults.energySavings;
       let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.wasteWaterResults.energyCostSavings, oppSheetResults.wasteWaterResults.energySavings, oppSheet.opportunityCost, oppSheetResults.wasteWaterResults.baselineEnergyCost, oppSheetResults.wasteWaterResults.modificationEnergyCost)
       mixedIndividualSummaries.push(oppSummary);
     }
     //steam
-    if (oppSheetResults.steamResults.baselineEnergyUse != 0) {
+    if (oppSheetResults.steamResults.baselineItems != 0 || oppSheetResults.steamResults.modificationItems != 0) {
       energyTypeLabel = 'Steam';
       totalEnergySavings = totalEnergySavings + oppSheetResults.steamResults.energySavings;
       let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.steamResults.energyCostSavings, oppSheetResults.steamResults.energySavings, oppSheet.opportunityCost, oppSheetResults.steamResults.baselineEnergyCost, oppSheetResults.steamResults.modificationEnergyCost)
       mixedIndividualSummaries.push(oppSummary);
     }
     //other fuel
-    if (oppSheetResults.otherFuelResults.baselineEnergyUse != 0) {
+    if (oppSheetResults.otherFuelResults.baselineItems != 0 || oppSheetResults.otherFuelResults.modificationItems != 0) {
       energyTypeLabel = 'Other Fuel';
       totalEnergySavings = totalEnergySavings + oppSheetResults.otherFuelResults.energySavings;
       let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.otherFuelResults.energyCostSavings, oppSheetResults.otherFuelResults.energySavings, oppSheet.opportunityCost, oppSheetResults.otherFuelResults.baselineEnergyCost, oppSheetResults.otherFuelResults.modificationEnergyCost)
@@ -433,6 +433,9 @@ export class OpportunitySummaryService {
     } else if (numEnergyTypes > 1) {
       //more then one energy source in opp sheet, implemenetation cost in other
       oppSummary = this.getNewOpportunitySummary(oppSheet.name, 'Mixed', oppSheetResults.totalCostSavings, oppSheetResults.totalEnergySavings, oppSheet.opportunityCost, 0, 0, mixedIndividualSummaries);
+    } else {
+      //no energy savings
+      oppSummary = this.getNewOpportunitySummary(oppSheet.name, 'None', 0, 0, undefined, 0, 0);
     }
     return oppSummary;
   }

@@ -1,6 +1,5 @@
 <app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
-  (emitSave)="saveLighting($event)" (emitCancel)="cancelEditLighting()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  (emitSave)="saveLighting($event)" (emitCancel)="cancelEditLighting()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-lighting-replacement>
 
 <app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'"
@@ -10,42 +9,37 @@
 
 <app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="cancelReplaceExisting()"
   (emitSave)="saveReplaceExisting($event)" [settings]="settings" [inTreasureHunt]="true"
-  [opperatingHours]="treasureHunt.operatingHours" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
+  [opperatingHours]="treasureHunt.operatingHours">
 </app-replace-existing>
 
 <app-motor-drive *ngIf="selectedCalc == 'motor-drive'" (emitCancel)="cancelMotorDrive()"
   (emitSave)="saveMotorDrive($event)" [settings]="settings" [inTreasureHunt]="true"
-  [opperatingHours]="treasureHunt.operatingHours" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
+  [opperatingHours]="treasureHunt.operatingHours">
 </app-motor-drive>
 
 <app-natural-gas-reduction *ngIf="selectedCalc == 'natural-gas-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveNaturalGasReduction($event)" (emitCancel)="cancelNaturalGasReduction()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  (emitSave)="saveNaturalGasReduction($event)" (emitCancel)="cancelNaturalGasReduction()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-natural-gas-reduction>
 
 <app-electricity-reduction *ngIf="selectedCalc == 'electricity-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveElectricityReduction($event)" (emitCancel)="cancelElectricityReduction()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  (emitSave)="saveElectricityReduction($event)" (emitCancel)="cancelElectricityReduction()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-electricity-reduction>
 
 <app-compressed-air-reduction *ngIf="selectedCalc == 'compressed-air-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveCompressedAirReduction($event)" (emitCancel)="cancelCompressedAirReduction()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  (emitSave)="saveCompressedAirReduction($event)" (emitCancel)="cancelCompressedAirReduction()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-reduction>
 
 <app-compressed-air-pressure-reduction *ngIf="selectedCalc == 'compressed-air-pressure-reduction'"
   [inTreasureHunt]="true" (emitSave)="saveCompressedAirPressureReduction($event)"
-  (emitCancel)="cancelCompressedAirPressureReduction()" (emitAddOpportunitySheet)="showOpportunitySheetModal()"
-  [settings]="settings" [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-pressure-reduction>
+  (emitCancel)="cancelCompressedAirPressureReduction()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-pressure-reduction>
 
 <app-water-reduction *ngIf="selectedCalc == 'water-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveWaterReduction($event)" (emitCancel)="cancelWaterReduction()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  (emitSave)="saveWaterReduction($event)" (emitCancel)="cancelWaterReduction()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-water-reduction>
 
 <app-steam-reduction *ngIf="selectedCalc == 'steam-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveSteamReduction($event)" (emitCancel)="cancelSteamReduction()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  (emitSave)="saveSteamReduction($event)" (emitCancel)="cancelSteamReduction()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-steam-reduction>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"

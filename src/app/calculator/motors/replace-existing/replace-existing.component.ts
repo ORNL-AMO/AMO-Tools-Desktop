@@ -19,8 +19,6 @@ export class ReplaceExistingComponent implements OnInit {
   emitSave = new EventEmitter<ReplaceExistingMotorTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  @Output('emitAddOpportunitySheet')
-  emitAddOpportunitySheet = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
   @Input()
@@ -133,10 +131,6 @@ export class ReplaceExistingComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
-  }
-
-  addOpportunitySheet() {
-    this.emitAddOpportunitySheet.emit(true);
   }
 }
 

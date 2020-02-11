@@ -6,7 +6,7 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         type: '2-lamp T8 HBF',
         lampsPerFixture: 2,
         wattsPerLamp: 32,
-        lumensPerLamp: 27000,
+        lumensPerLamp: 2700,
         lampLife: 30000,
         coefficientOfUtilization: .6,
         ballastFactor: 1.2,
