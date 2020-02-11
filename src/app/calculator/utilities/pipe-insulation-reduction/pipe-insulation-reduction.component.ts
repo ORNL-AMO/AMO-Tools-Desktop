@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { PipeInsulationReductionService } from './pipe-insulation-reduction.service';
-import { PipeInsulationReductionInput, PipeInsulationReductionResults } from '../../../shared/models/standalone';
+import { PipeInsulationReductionResults } from '../../../shared/models/standalone';
 import { FormGroup } from '@angular/forms';
+import { PipeInsulationReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-pipe-insulation-reduction',
@@ -15,7 +16,7 @@ export class PipeInsulationReductionComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @Output('emitSave')
-  emitSave = new EventEmitter<null>();
+  emitSave = new EventEmitter<PipeInsulationReductionTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
   @Input()
@@ -87,10 +88,12 @@ export class PipeInsulationReductionComponent implements OnInit {
   initData() {
     if (this.pipeInsulationReductionService.baselineData == undefined) {
       this.pipeInsulationReductionService.baselineData = this.pipeInsulationReductionService.initObject(this.settings, this.operatingHours);
-      this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, true);
     }
+    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, true);
     if (this.pipeInsulationReductionService.modificationData) {
       this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, false);
+      this.modificationExists = true;
+      this.modificationForm.disable();
     }
   }
 
@@ -156,5 +159,13 @@ export class PipeInsulationReductionComponent implements OnInit {
     this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, false);
     this.modificationExists = true;
     this.setBaselineSelected();
+  }
+
+  save() {
+    this.emitSave.emit({ baseline: this.pipeInsulationReductionService.baselineData, modification: this.pipeInsulationReductionService.modificationData });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
   }
 }

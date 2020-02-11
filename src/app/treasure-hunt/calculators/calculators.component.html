@@ -42,6 +42,11 @@
   (emitSave)="saveSteamReduction($event)" (emitCancel)="cancelSteamReduction()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-steam-reduction>
 
+<app-pipe-insulation-reduction *ngIf="selectedCalc == 'pipe-insulation-reduction'" [inTreasureHunt]="true"
+  (emitSave)="savePipeInsulationReduction($event)" (emitCancel)="cancelPipeInsulationReduction()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours">
+</app-pipe-insulation-reduction>
+
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
