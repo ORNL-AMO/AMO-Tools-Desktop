@@ -56,10 +56,10 @@
     "font-awesome": "^4.7.0",
     "ngx-electron": "2.1.1",
     "regression": "^2.0.0",
-    "rxjs": "6.4.0",
+    "rxjs": "6.5.4",
     "rxjs-compat": "^6.4.0",
     "save-svg-as-png": "1.2.0",
-    "zone.js": "^0.8.12"
+    "zone.js": "0.10.2"
   },
   "build": {
     "appId": "com.electron.amo-tools-desktop",
@@ -107,7 +107,7 @@
     "@types/lodash": "4.14.100",
     "@types/node": "11.11.1",
     "chart.js": "^2.7.0",
-    "codelyzer": "4.5.0",
+    "codelyzer": "5.2.1",
     "electron": "4.0.8",
     "electron-builder": "20.39.0",
     "electron-download-tf": "^4.3.4",
