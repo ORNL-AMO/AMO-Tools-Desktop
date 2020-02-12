@@ -6,80 +6,14 @@
                     (click)="showPumpModal()" [ngClass]="{'disabled': numPsats == 0}">
                     <app-psat-summary [numPsats]="numPsats"></app-psat-summary>
                 </li>
-                <!-- <li *ngIf="numPsats == 0" [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
-                    <div class="summary-header">
-                        <h3>Pumps</h3>
-                        <span>
-                            <span>--</span>
-                        </span>
-                    </div>
-                    <dl class="summary-list">
-                        <dt>Maximum Annual
-                            <br />Cost Savings</dt>
-                        <dd>$----</dd>
-                        <dt>Annual Cost</dt>
-                        <dd>$----</dd>
-                    </dl>
-                    <dl class="summary-list">
-                        <dt>Maximum Annual
-                            <br />Energy Savings</dt>
-                        <dd>---- MWh</dd>
-                        <dt>Annual Energy</dt>
-                        <dd>---- MWh</dd>
-                    </dl>
-                </li> -->
                 <li *ngIf="numPhasts != 0" [hidden]="showSummary == 'closed'" class="furnace-summary"
                     (click)="showFurnaceRollup()">
                     <app-phast-summary [settings]="settings" [numPhasts]="numPhasts"></app-phast-summary>
                 </li>
-                <!-- <li *ngIf="numPhasts == 0" [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
-                    <div class="summary-header">
-                        <h3>Furnaces</h3>
-                        <span>
-                            <span>--</span>
-                        </span>
-                    </div>
-                    <dl class="summary-list">
-                        <dt>Maximum Annual
-                            <br />Cost Savings</dt>
-                        <dd>$----</dd>
-                        <dt>Annual Cost</dt>
-                        <dd>$----</dd>
-                    </dl>
-                    <dl class="summary-list">
-                        <dt>Maximum Annual
-                            <br />Energy Savings</dt>
-                        <dd>---- MWh</dd>
-                        <dt>Annual Energy</dt>
-                        <dd>---- MWh</dd>
-                    </dl>
-                </li> -->
                 <li *ngIf="numFsats != 0" [hidden]="showSummary == 'closed'" class="fan-summary"
                     (click)="showFanModal()" [ngClass]="{'disabled': numFsats == 0}">
                     <app-fsat-summary [numFsats]="numFsats"></app-fsat-summary>
                 </li>
-                <!-- <li *ngIf="numFsats == 0" [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
-                    <div class="summary-header fans">
-                        <h3>Fans</h3>
-                        <span>
-                            <span>--</span>
-                        </span>
-                    </div>
-                    <dl class="summary-list">
-                        <dt>Maximum Annual
-                            <br />Cost Savings</dt>
-                        <dd>$----</dd>
-                        <dt>Annual Cost</dt>
-                        <dd>$----</dd>
-                    </dl>
-                    <dl class="summary-list">
-                        <dt>Maximum Annual
-                            <br />Energy Savings</dt>
-                        <dd>---- MWh</dd>
-                        <dt>Annual Energy</dt>
-                        <dd>---- MWh</dd>
-                    </dl>
-                </li> -->
                 <li *ngIf="numSsmt != 0" [hidden]="showSummary == 'closed'" class="ssmt-summary"
                     (click)="showSteamModal()" [ngClass]="{'disabled': numSsmt == 0}">
                     <app-ssmt-summary [numSsmt]="numSsmt" [settings]="settings"></app-ssmt-summary>
@@ -88,28 +22,6 @@
                     [ngClass]="{'disabled': numTreasureHunt == 0}">
                     <app-treasure-hunt-summary [numTreasureHunt]="numTreasureHunt"></app-treasure-hunt-summary>
                 </li>
-                <!-- <li *ngIf="numSsmt == 0" [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
-                    <div class="summary-header steam">
-                        <h3>Steam</h3>
-                        <span>
-                            <span>--</span>
-                        </span>
-                    </div>
-                    <dl class="summary-list">
-                        <dt>Maximum Annual
-                            <br />Cost Savings</dt>
-                        <dd>$----</dd>
-                        <dt>Annual Cost</dt>
-                        <dd>$----</dd>
-                    </dl>
-                    <dl class="summary-list">
-                        <dt>Maximum Annual
-                            <br />Energy Savings</dt>
-                        <dd>---- MWh</dd>
-                        <dt>Annual Energy</dt>
-                        <dd>---- MWh</dd>
-                    </dl>
-                </li> -->
             </ul>
         </div>
     </div>
