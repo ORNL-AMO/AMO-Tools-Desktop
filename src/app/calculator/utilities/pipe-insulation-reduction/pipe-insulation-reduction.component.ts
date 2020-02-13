@@ -87,11 +87,12 @@ export class PipeInsulationReductionComponent implements OnInit {
   initData() {
     if (this.pipeInsulationReductionService.baselineData == undefined) {
       this.pipeInsulationReductionService.baselineData = this.pipeInsulationReductionService.initObject(this.settings, this.operatingHours);
-      this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, true);
     }
+    this.baselineForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.baselineData, true);
     if (this.pipeInsulationReductionService.modificationData) {
       this.modificationForm = this.pipeInsulationReductionService.getFormFromObj(this.pipeInsulationReductionService.modificationData, false);
     }
+    
   }
 
   createModification() {
