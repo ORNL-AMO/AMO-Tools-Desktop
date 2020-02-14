@@ -23,8 +23,6 @@ before_install:
 #      sudo apt-get install npm;
 #    fi
 
-  - export OS_NAME="linux"
-
   - bash travis_scripts/get_os.sh
 
   - echo "$OS_NAME"
