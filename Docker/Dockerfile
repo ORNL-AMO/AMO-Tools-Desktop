@@ -201,6 +201,9 @@ RUN npm update
 RUN ./node_modules/.bin/electron-builder
 #RUN npm run electron
 
+#Package, create installer:
+#npm install && npm run build
+#npm run OS (OS = mac, linux, or windows)
 #--------------------------------------------------------------
 
 #WORKDIR /home/AMO/AMO-Tools-Desktop
