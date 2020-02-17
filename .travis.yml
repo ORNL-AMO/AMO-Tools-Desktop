@@ -5,7 +5,7 @@ node_js:
 
 os:
   - linux
-  - osx
+  #- osx
 #
 #compiler:
 #  - gcc
@@ -23,12 +23,13 @@ before_install:
 #      sudo apt-get install npm;
 #    fi
 
-  - bash travis_scripts/get_os.sh
+  #- bash travis_scripts/get_os.sh
 
-  - echo "$OS_NAME"
+  #- echo "$OS_NAME"
 
 install: travis_retry npm install
 
 script:
-  - npm run build
-  - npm run "$OS_NAME"
+  #- npm run build
+  #- npm run "$OS_NAME"
+  - npm install && npm run build-prod && npm run linux
