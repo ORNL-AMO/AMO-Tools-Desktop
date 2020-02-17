@@ -49,6 +49,9 @@ export class ExecutiveSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.graphColors = graphColors;
+  }
+
+  ngOnChanges(){
     this.prepChartData();
     if (this.opportunityCardsData) {
       this.prepTeamData();

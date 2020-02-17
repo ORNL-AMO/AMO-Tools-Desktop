@@ -1,5 +1,5 @@
 <nav class="navbar" #navbar>
-  <div class="nav-item dropdown">
+  <div class="nav-item dropdown" *ngIf="!inReport">
     <a class="nav-link dropdown-toggle" (click)="toggleSortBy()">
       Sort By ({{sortByLabel}})
     </a>
@@ -55,7 +55,7 @@
     </div>
   </div>
 
-  <div class="nav-item">
+  <div class="nav-item" *ngIf="!inReport">
     <div class="btn-group">
       <button type="button" class="nav-btn" (click)="openImportModal()">Import</button>
       <button type="button" class="nav-btn middle" (click)="openExportModal()">Export</button>

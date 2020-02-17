@@ -26,7 +26,9 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 export class TreasureChestMenuComponent implements OnInit {
   @Input()
   settings: Settings;
-
+  @Input()
+  inReport: boolean;
+  
   @ViewChild('navbar', { static: false }) navbar: ElementRef;
   navbarWidth: number;
 
