@@ -2,12 +2,14 @@ import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
-import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary } from '../../shared/models/treasure-hunt';
+import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, TreasureHunt } from '../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from './treasure-hunt-report.service';
 import { OpportunityPaybackService } from './opportunity-payback.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Subscription } from 'rxjs';
 import { OpportunityCardsService, OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import { TreasureChestMenuService } from '../treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
+import { SortCardsService } from '../treasure-chest/opportunity-cards/sort-cards.service';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -52,19 +54,24 @@ export class TreasureHuntReportComponent implements OnInit {
   opportunityCardsData: Array<OpportunityCardData>;
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
   showPrintSub: Subscription;
+  sortBySub: Subscription;
   constructor(private treasureHuntReportService: TreasureHuntReportService,
     private opportunityPaybackService: OpportunityPaybackService, private windowRefService: WindowRefService,
-    private opportunityCardsService: OpportunityCardsService) { }
+    private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
+    private sortCardsService: SortCardsService) { }
 
   ngOnInit() {
     if (this.assessment) {
       this.getDirectoryList(this.assessment.id);
     }
-    if (this.assessment.treasureHunt.setupDone == true) {
-      this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.assessment.treasureHunt, this.settings);
-      this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.assessment.treasureHunt, this.settings);
-      this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
-    }
+    this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
+      if (this.assessment.treasureHunt.setupDone == true) {
+        let filteredTreasureHunt: TreasureHunt = this.sortCardsService.sortTreasureHunt(this.assessment.treasureHunt, val, this.settings);
+        this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(filteredTreasureHunt, this.settings);
+        this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(filteredTreasureHunt, this.settings);
+        this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
+      }
+    });
 
     if (this.inRollup) {
       this.setTab('opportunitySummary');
@@ -102,6 +109,7 @@ export class TreasureHuntReportComponent implements OnInit {
 
   ngOnDestroy() {
     this.showPrintSub.unsubscribe();
+    this.sortBySub.unsubscribe();
   }
 
   getContainerHeight() {

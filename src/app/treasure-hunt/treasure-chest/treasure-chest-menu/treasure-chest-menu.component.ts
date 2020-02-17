@@ -89,7 +89,7 @@ export class TreasureChestMenuComponent implements OnInit {
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
     this.opportunityCardsSub.unsubscribe();
-    this.clearAllFilters();
+    // this.clearAllFilters();
     this.showImportModalSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
   }
@@ -349,6 +349,11 @@ export class TreasureChestMenuComponent implements OnInit {
     let steamReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'steam-reduction' }).length;
     if (steamReductions != 0) {
       this.calculatorTypeOptions.push({ display: 'Steam Reduction', value: 'steam-reduction', numCalcs: steamReductions });
+    }
+    //pipe insulation reduction
+    let pipeInsulationReduction: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'pipe-insulation-reduction' }).length;
+    if (pipeInsulationReduction != 0) {
+      this.calculatorTypeOptions.push({ display: 'Pipe Insulation Reduction', value: 'pipe-insulation-reduction', numCalcs: pipeInsulationReduction });
     }
   }
 
