@@ -8,19 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutPageComponent implements OnInit {
 
-  showSystemRequirements: boolean = false;
+  showSteam: boolean = false;
   showPSAT: boolean = false;
   showPHAST: boolean = false;
   showUser: boolean = false;
   showFAST: boolean = false;
+  showDisclosure: boolean = false;
+  showTreasureHunt: boolean = false;
   constructor() { }
 
   ngOnInit() {
-  }
-
-
-  toggleShowSystemRequirements() {
-    this.showSystemRequirements = !this.showSystemRequirements;
   }
   toggleShowPSAT() {
     this.showPSAT = !this.showPSAT;
@@ -33,5 +30,14 @@ export class AboutPageComponent implements OnInit {
   }
   toggleShowFAST() {
     this.showFAST = !this.showFAST;
+  }
+  toggleDisclosure(){
+    this.showDisclosure = !this.showDisclosure;
+  }
+  toggleSteam(){
+    this.showSteam = !this.showSteam;
+  }
+  toggleTreasureHunt(){
+    this.showTreasureHunt = !this.showTreasureHunt;
   }
 }
