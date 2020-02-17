@@ -204,6 +204,9 @@ RUN ./node_modules/.bin/electron-builder
 #Package, create installer:
 #npm install && npm run build
 #npm run OS (OS = mac, linux, or windows)
+
+#./'MEASUR 0.6.4-beta.AppImage' --appimage-extract-and-run
+#gunzip zip_file
 #--------------------------------------------------------------
 
 #WORKDIR /home/AMO/AMO-Tools-Desktop
