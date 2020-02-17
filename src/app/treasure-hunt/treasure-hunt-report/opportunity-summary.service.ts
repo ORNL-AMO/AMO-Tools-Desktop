@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpportunitySheetService } from '../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
-import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { LightingReplacementResults } from '../../shared/models/lighting';
@@ -8,12 +8,13 @@ import { ReplaceExistingService } from '../../calculator/motors/replace-existing
 import { ReplaceExistingResults, MotorDriveOutputs } from '../../shared/models/calculators';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
-import { ElectricityReductionResults, NaturalGasReductionResults, CompressedAirReductionResults, WaterReductionResults, CompressedAirPressureReductionResults, SteamReductionResults } from '../../shared/models/standalone';
+import { ElectricityReductionResults, NaturalGasReductionResults, CompressedAirReductionResults, WaterReductionResults, CompressedAirPressureReductionResults, SteamReductionResults, PipeInsulationReductionResults } from '../../shared/models/standalone';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
 import { CompressedAirReductionService } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
 import { CompressedAirPressureReductionService } from '../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
 import { SteamReductionService } from '../../calculator/utilities/steam-reduction/steam-reduction.service';
+import { PipeInsulationReductionService } from '../../calculator/utilities/pipe-insulation-reduction/pipe-insulation-reduction.service';
 
 @Injectable()
 export class OpportunitySummaryService {
@@ -22,7 +23,7 @@ export class OpportunitySummaryService {
     private replaceExistingService: ReplaceExistingService, private motorDriveService: MotorDriveService, private electricityReductionService: ElectricityReductionService,
     private naturalGasReductionService: NaturalGasReductionService, private compressedAirReductionService: CompressedAirReductionService,
     private waterReductionService: WaterReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
-    private steamReductionService: SteamReductionService) { }
+    private steamReductionService: SteamReductionService, private pipeInsulationReductionService: PipeInsulationReductionService) { }
 
   getOpportunitySummaries(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySummary> {
     let opportunitySummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
@@ -44,6 +45,8 @@ export class OpportunitySummaryService {
     opportunitySummaries = this.getWaterReductionSummaries(treasureHunt.waterReductions, opportunitySummaries, settings);
     //steam reduction
     opportunitySummaries = this.getSteamReductionSummaries(treasureHunt.steamReductions, opportunitySummaries, settings);
+    //pipe insulation reduction
+    opportunitySummaries = this.getPipeInsulationReductionSummaries(treasureHunt.pipeInsulationReductions, opportunitySummaries, settings);
     //standalone opp sheets
     opportunitySummaries = this.getOpportunitySheetSummaries(treasureHunt.opportunitySheets, opportunitySummaries, settings);
 
@@ -345,6 +348,43 @@ export class OpportunitySummaryService {
     } else if (steamReduction.baseline[0].utilityType == 2) {
       utilityTypeStr = 'Other Fuel';
       energySavings = results.annualEnergySavings;
+    }
+
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+    return oppSummary;
+  }
+
+  //getInsulationReductionSummaries
+  getPipeInsulationReductionSummaries(pipeInsulationReductions: Array<PipeInsulationReductionTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
+    if (pipeInsulationReductions) {
+      let index: number = 1;
+      pipeInsulationReductions.forEach(pipeInsulationReduction => {
+        if (pipeInsulationReduction.selected) {
+          let oppSummary: OpportunitySummary = this.getPipeInsulationReductionSummary(pipeInsulationReduction, index, settings);
+          opportunitySummaries.push(oppSummary);
+        }
+        index++;
+      });
+    }
+    return opportunitySummaries;
+  }
+
+  getPipeInsulationReductionSummary(pipeInsulationReduction: PipeInsulationReductionTreasureHunt, index: number, settings: Settings): OpportunitySummary {
+    let name: string = 'Pipe Insulation Reduction #' + index;
+    let results: PipeInsulationReductionResults = this.pipeInsulationReductionService.getResults(settings, pipeInsulationReduction.baseline, pipeInsulationReduction.modification);
+    let opportunityCost: OpportunityCost;
+    if (pipeInsulationReduction.opportunitySheet) {
+      if (pipeInsulationReduction.opportunitySheet.name) {
+        name = pipeInsulationReduction.opportunitySheet.name;
+      }
+      opportunityCost = pipeInsulationReduction.opportunitySheet.opportunityCost;
+    }
+    let energySavings: number = results.annualHeatSavings;
+    let utilityTypeStr: string;
+    if (pipeInsulationReduction.baseline.utilityType == 0) {
+      utilityTypeStr = 'Natural Gas';
+    } else if (pipeInsulationReduction.baseline.utilityType == 1) {
+      utilityTypeStr = 'Other Fuel';
     }
 
     let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
