@@ -37,7 +37,7 @@ export class OpportunityCardsService {
       card.index = index;
       index++;
     })
-    this.opportunityCards.next(opportunityCardsData);
+    // this.opportunityCards.next(opportunityCardsData);
 
     return opportunityCardsData;
   }

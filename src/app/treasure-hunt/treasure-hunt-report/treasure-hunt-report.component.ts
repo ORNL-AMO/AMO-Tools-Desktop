@@ -69,6 +69,11 @@ export class TreasureHuntReportComponent implements OnInit {
         let filteredTreasureHunt: TreasureHunt = this.sortCardsService.sortTreasureHunt(this.assessment.treasureHunt, val, this.settings);
         this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(filteredTreasureHunt, this.settings);
         this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(filteredTreasureHunt, this.settings);
+        let oppCards = this.opportunityCardsService.opportunityCards.getValue();
+        console.log(oppCards);
+        if(oppCards.length != this.opportunityCardsData.length){
+          this.opportunityCardsService.opportunityCards.next(this.opportunityCardsData);
+        }
         this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
       }
     });
@@ -110,6 +115,10 @@ export class TreasureHuntReportComponent implements OnInit {
   ngOnDestroy() {
     this.showPrintSub.unsubscribe();
     this.sortBySub.unsubscribe();
+  }
+
+  setOpportunityCardsData(){
+    
   }
 
   getContainerHeight() {

@@ -135,7 +135,7 @@ export class TreasureChestMenuComponent implements OnInit {
       this.teams.push({ name: name, selected: false });
     });
     this.sortCardsData.teams = _.intersection(this.sortCardsData.teams, teamNames);
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+    // this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
   setEquipments(oppData: Array<OpportunityCardData>) {
@@ -145,7 +145,7 @@ export class TreasureChestMenuComponent implements OnInit {
       this.equipments.push({ name: equipment, selected: false });
     });
     this.sortCardsData.equipments = _.intersection(this.sortCardsData.equipments, equipmentNames);
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+    // this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
   setSelectedTeam(team: { name: string, selected: boolean }) {

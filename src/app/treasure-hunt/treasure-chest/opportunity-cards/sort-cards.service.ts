@@ -128,7 +128,10 @@ export class SortCardsService {
   }
 
   checkCardItemIncluded(cardItem: OpportunityCardData, sortBy: SortCardsData): boolean {
-    let isUtilityType: boolean = _.includes(cardItem.utilityType, sortBy.utilityType);
+    let isUtilityType: boolean = true;
+    if (sortBy.utilityType != 'All') {
+      isUtilityType = _.includes(cardItem.utilityType, sortBy.utilityType);
+    }
     let isTeamIncluded: boolean = true;
     if (sortBy.teams.length != 0) {
       isTeamIncluded = _.includes(sortBy.teams, cardItem.teamName);
