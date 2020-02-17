@@ -1,4 +1,4 @@
-version: 0.2.{build}
+version: 0.2.{build}-{branch}
 branches:
   only:
   - develop
@@ -7,7 +7,6 @@ install:
 - cmd: choco install nodejs.install --version 10.13
 build_script:
 - cmd: >-
-    appveyor-retry npm install
-​
+    npm install
     npm run build
 test: off
