@@ -1,0 +1,13 @@
+version: 0.2.{build}
+branches:
+  only:
+  - develop
+image: Visual Studio 2017
+install:
+- cmd: choco install nodejs.install --version 10.13
+build_script:
+- cmd: >-
+    appveyor-retry npm install
+​
+    npm run build
+test: off
