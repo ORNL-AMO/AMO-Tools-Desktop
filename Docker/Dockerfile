@@ -205,6 +205,12 @@ RUN ./node_modules/.bin/electron-builder
 #npm install && npm run build
 #npm run OS (OS = mac, linux, or windows)
 
+RUN npm install && npm run build-prod && npm run linux
+
+#RUN npm install
+#RUN npm run build-prod
+#RUN npm run linux
+
 #./'MEASUR 0.6.4-beta.AppImage' --appimage-extract-and-run
 #gunzip zip_file
 #--------------------------------------------------------------
