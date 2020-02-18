@@ -32,4 +32,4 @@ install: travis_retry npm install
 script:
   #- npm run build
   #- npm run "$OS_NAME"
-  - npm install && npm run build-prod && npm run linux
+  - npm run ng-high-memory && npm run linux
