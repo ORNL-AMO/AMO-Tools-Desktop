@@ -27,7 +27,10 @@ before_install:
 
   #- echo "$OS_NAME"
 
-install: travis_retry npm install
+install:
+  - travis_retry npm install
+  - travis_retry npm update
+  - travis_retry ./node_modules/.bin/electron-builder
 
 script:
   #- npm run build
