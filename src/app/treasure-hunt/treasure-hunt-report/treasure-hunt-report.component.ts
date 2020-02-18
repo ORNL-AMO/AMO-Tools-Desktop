@@ -120,7 +120,9 @@ export class TreasureHuntReportComponent implements OnInit {
 
   ngOnDestroy() {
     this.showPrintSub.unsubscribe();
-    this.sortBySub.unsubscribe();
+    if (!this.inRollup) {
+      this.sortBySub.unsubscribe();
+    }
   }
 
   getContainerHeight() {

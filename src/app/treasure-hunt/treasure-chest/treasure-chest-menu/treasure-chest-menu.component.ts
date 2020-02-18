@@ -28,7 +28,7 @@ export class TreasureChestMenuComponent implements OnInit {
   settings: Settings;
   @Input()
   inReport: boolean;
-  
+
   @ViewChild('navbar', { static: false }) navbar: ElementRef;
   navbarWidth: number;
 
@@ -39,8 +39,8 @@ export class TreasureChestMenuComponent implements OnInit {
 
 
 
-  displayEnergyType: string = 'All';
-  displayCalculatorType: string = 'All';
+  displayEnergyType: string;
+  displayCalculatorType: string;
 
   energyTypeOptions: Array<{ value: string, numCalcs: number }> = [];
   calculatorTypeOptions: Array<{ display: string, value: string, numCalcs: number }> = [];
@@ -82,10 +82,13 @@ export class TreasureChestMenuComponent implements OnInit {
     this.showImportModalSub = this.treasureChestMenuService.showImportModal.subscribe(val => {
       this.showImportModal = val;
     });
-    
+
     this.showExportModalSub = this.treasureChestMenuService.showExportModal.subscribe(val => {
       this.showExportModal = val;
     });
+    let initSortByData: SortCardsData = this.treasureChestMenuService.sortBy.getValue();
+    this.displayEnergyType = initSortByData.utilityType;
+    this.displayCalculatorType = this.calculatorTypeOptions.find(item => { return item.value == initSortByData.calculatorType }).display;
   }
 
   ngOnDestroy() {
@@ -125,7 +128,7 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.selectAll.next(false);
   }
 
-  deselectAll(){
+  deselectAll() {
     this.treasureChestMenuService.deselectAll.next(true);
     this.treasureChestMenuService.deselectAll.next(false);
   }
@@ -242,6 +245,7 @@ export class TreasureChestMenuComponent implements OnInit {
   setEnergyType(str: string) {
     this.sortCardsData.utilityType = str;
     this.sortCardsData.calculatorType = 'All';
+    this.displayCalculatorType = 'All';
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
     this.setCalculatorOptions(this.opportunityCardsData);
     this.toggleUtilityType();

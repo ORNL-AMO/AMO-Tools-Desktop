@@ -13,6 +13,8 @@ import { Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { CalculatorsService } from './calculators/calculators.service';
+import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
+import { SortCardsData } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -55,7 +57,8 @@ export class TreasureHuntComponent implements OnInit {
     private assessmentDbService: AssessmentDbService,
     private treasureHuntService: TreasureHuntService,
     private cd: ChangeDetectorRef,
-    private calculatorsService: CalculatorsService
+    private calculatorsService: CalculatorsService,
+    private treasureChestMenuService: TreasureChestMenuService
   ) { }
 
   ngOnInit() {
@@ -133,7 +136,9 @@ export class TreasureHuntComponent implements OnInit {
     this.modalOpenSub.unsubscribe();
     this.treasureHuntService.treasureHunt.next(undefined);
     this.treasureHuntSub.unsubscribe();
-    this.selectedCalcSub.unsubscribe();
+    this.selectedCalcSub.unsubscribe();    
+    let defaultData: SortCardsData = this.treasureChestMenuService.getDefaultSortByData();
+    this.treasureChestMenuService.sortBy.next(defaultData);
   }
 
   ngAfterViewInit() {
