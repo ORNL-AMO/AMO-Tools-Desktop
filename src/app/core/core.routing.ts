@@ -72,6 +72,7 @@ import { SaturatedPropertiesComponent } from '../calculator/steam/saturated-prop
 import { StackLossComponent } from '../calculator/steam/stack-loss/stack-loss.component';
 import { SteamPropertiesComponent } from '../calculator/steam/steam-properties/steam-properties.component';
 import { TurbineComponent } from '../calculator/steam/turbine/turbine.component';
+import { TankInsulationReductionComponent } from '../calculator/utilities/tank-insulation-reduction/tank-insulation-reduction.component';
 
 export const coreRoutes: Routes = [
   {
@@ -317,48 +318,52 @@ export const coreRoutes: Routes = [
             component: SystemAndEquipmentCurveComponent
           },
           {
-              path: 'boiler',
-              component: BoilerComponent
+            path: 'boiler',
+            component: BoilerComponent
           },
           {
-              path: 'boiler-blowdown-rate',
-              component: BoilerBlowdownRateComponent
+            path: 'boiler-blowdown-rate',
+            component: BoilerBlowdownRateComponent
           },
           {
-              path: 'deaerator',
-              component: DeaeratorComponent
+            path: 'deaerator',
+            component: DeaeratorComponent
           },
           {
-              path: 'flash-tank',
-              component: FlashTankComponent   
+            path: 'flash-tank',
+            component: FlashTankComponent
           },
           {
-              path: 'header',
-              component: HeaderComponent
+            path: 'header',
+            component: HeaderComponent
           },
           {
-              path: 'heat-loss',
-              component: HeatLossComponent   
+            path: 'heat-loss',
+            component: HeatLossComponent
           },
           {
-              path: 'prv',
-              component: PrvComponent
+            path: 'prv',
+            component: PrvComponent
           },
           {
-              path: 'saturated-properties',
-              component: SaturatedPropertiesComponent
+            path: 'saturated-properties',
+            component: SaturatedPropertiesComponent
           },
           {
-              path: 'stack-loss',
-              component: StackLossComponent
+            path: 'stack-loss',
+            component: StackLossComponent
           },
           {
-              path: 'steam-properties',
-              component: SteamPropertiesComponent
+            path: 'steam-properties',
+            component: SteamPropertiesComponent
           },
           {
-              path: 'turbine',
-              component: TurbineComponent
+            path: 'turbine',
+            component: TurbineComponent
+          },
+          {
+            path: 'tank-insulation-reduction',
+            component: TankInsulationReductionComponent
           }
         ]
       }
