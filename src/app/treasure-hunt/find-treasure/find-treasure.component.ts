@@ -76,4 +76,8 @@ export class FindTreasureComponent implements OnInit {
   selectSteamReduction(){
     this.calculatorsService.addNewSteamReduction();
   }
+
+  selectPipeInsulationReduction(){
+    this.calculatorsService.addNewPipeInsulationReduction();
+  }
 }
