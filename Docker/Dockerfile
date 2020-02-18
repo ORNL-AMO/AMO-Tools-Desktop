@@ -192,23 +192,29 @@ RUN apt-get install -y fuse
 # -------------------------------------------------------------
 WORKDIR /home/AMO/AMO-Tools-Desktop
 
-RUN npm run clean
+###RUN npm run clean
+
 # yes | npm install ?
-RUN npm install
+
+###RUN npm install
+
 ##RUN node-gyp rebuild
-RUN npm run build
-RUN npm update
-RUN ./node_modules/.bin/electron-builder
+
+###RUN npm run build
+###RUN npm update
+###RUN ./node_modules/.bin/electron-builder
+
 #RUN npm run electron
 
 #Package, create installer:
 #npm install && npm run build
 #npm run OS (OS = mac, linux, or windows)
 
-RUN npm install && npm run build-prod && npm run linux
+#RUN npm install && npm run build-prod && npm run linux
 
 #RUN npm install
 #RUN npm run build-prod
+#RUN npm run ng-high-memory
 #RUN npm run linux
 
 #./'MEASUR 0.6.4-beta.AppImage' --appimage-extract-and-run

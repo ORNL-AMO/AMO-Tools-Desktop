@@ -1,6 +1,6 @@
 docker image build -f Docker/Dockerfile -t comma64/ornl:issue-3505 .
 //docker run -t -d --name amo-desktop comma64/ornl:issue-3505
-docker run -t -d -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY --device /dev/dri --device /dev/snd --device /dev/video0 -v /etc/localtime:/etc/localtime:ro -v $HOME/.config/app:/root/.config/app --device /dev/input --name amo-desktop comma64/ornl:issue-3505
+docker run -t -d -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY --device /dev/dri --device /dev/snd --device /dev/video0 -v /etc/localtime:/etc/localtime:ro -v $HOME/.config/app:/root/.config/app --device /dev/input -v $HOME/AMO/ouput:/home/AMO/output --name amo-desktop comma64/ornl:issue-3505
 
 docker exec -it amo-desktop /bin/bash
 docker container rm --force amo-desktop
