@@ -361,7 +361,7 @@
 
   <div class="d-flex flex-column hide-print" *ngIf="title == 'Cost Summary'">
     <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles"
-      [data]="data" [chartContainerWidth]="getChartWidth('bar')" [chartContainerHeight]="getChartHeight('bar')">
+      [data]="data" [chartContainerWidth]="barChartWidth" [chartContainerHeight]="barChartHeight">
     </app-cost-summary-chart>
   </div>
 
@@ -388,8 +388,8 @@
 
   <div class="d-flex flex-column hide-print" *ngIf="title == 'Team Summary' && teamData.length > 0">
     <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels"
-      [printView]="showPrint" [exportName]="'treasure-hunt-team-savings'" [chartContainerWidth]="getChartWidth('pie')"
-      [chartContainerHeight]="getChartHeight('pie')" [sideBySide]="false"></app-pie-chart>
+      [printView]="showPrint" [exportName]="'treasure-hunt-team-savings'" [chartContainerWidth]="pieChartWidth"
+      [chartContainerHeight]="pieChartHeight" [sideBySide]="false"></app-pie-chart>
   </div>
 
 </div>
