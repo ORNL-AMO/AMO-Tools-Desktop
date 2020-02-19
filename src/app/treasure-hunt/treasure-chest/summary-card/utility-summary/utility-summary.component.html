@@ -1,6 +1,9 @@
 <div class="d-flex w-100 h-100 flex-column justify-content-end">
-  <label class="group-label pt-2">{{label}} Cost Savings</label>
-  <app-treasure-hunt-gauge [value]="summaryData.totalPercentSavings" [chartHeight]="75">
+  <label class="group-label pt-2">{{ label }} Cost Savings</label>
+  <app-treasure-hunt-gauge
+    [value]="summaryData.totalPercentSavings"
+    [chartHeight]="75"
+  >
   </app-treasure-hunt-gauge>
   <table class="mx-auto">
     <tbody>
@@ -9,7 +12,7 @@
           Baseline
         </td>
         <td>
-          {{summaryData.baselineCost | currency:'USD'}}
+          {{ summaryData.baselineCost | currency: "USD":"symbol":"1.0-0" }}
         </td>
       </tr>
       <tr>
@@ -17,7 +20,7 @@
           Modified
         </td>
         <td>
-          {{summaryData.modificationCost | currency:'USD'}}
+          {{ summaryData.modificationCost | currency: "USD":"symbol":"1.0-0" }}
         </td>
       </tr>
       <tr class="bold">
@@ -25,7 +28,7 @@
           Annual Savings
         </td>
         <td>
-          {{summaryData.totalCostSavings | currency:'USD'}}
+          {{ summaryData.totalCostSavings | currency: "USD":"symbol":"1.0-0" }}
         </td>
       </tr>
     </tbody>
