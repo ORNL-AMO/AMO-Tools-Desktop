@@ -26,4 +26,4 @@ before_install:
 install: travis_retry npm install
 
 script:
-  - npm run ng-high-memory
+  - npm run build

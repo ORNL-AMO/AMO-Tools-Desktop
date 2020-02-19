@@ -8,5 +8,5 @@ install:
 build_script:
 - cmd: >-
     npm install
-    npm run ng-high-memory
+    npm run build
 test: off
