@@ -29,8 +29,7 @@ before_install:
 
 install:
   - travis_retry npm install
-  - travis_retry npm update
-  - travis_retry ./node_modules/.bin/electron-builder
+  - npm update
 
 script:
   #- npm run build
