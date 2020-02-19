@@ -1,3 +1,4 @@
+<app-treasure-chest-menu class="hide-print" [settings]="settings" [inReport]="true" *ngIf="!inRollup"></app-treasure-chest-menu> 
 <div class="assessment-report treasure-hunt report-in-treasure-hunt" *ngIf="assessment && settings"
   [ngClass]="{'report-in-rollup': inRollup}">
 
@@ -112,7 +113,8 @@
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Opportunity Summary</h4>
       <app-opportunity-summary [opportunitySummaries]="treasureHuntResults.opportunitySummaries" [settings]="settings"
-        [inRollup]="inRollup" (emitUpdateOpportunities)="updateResults($event)" [assessment]="assessment">
+        [inRollup]="inRollup" (emitUpdateOpportunities)="updateResults($event)" [assessment]="assessment"
+        [showPrint]="showPrint">
       </app-opportunity-summary>
     </div>
 

@@ -26,6 +26,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 export class TreasureChestMenuComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inReport: boolean;
 
   @ViewChild('navbar', { static: false }) navbar: ElementRef;
   navbarWidth: number;
@@ -37,8 +39,8 @@ export class TreasureChestMenuComponent implements OnInit {
 
 
 
-  displayEnergyType: string = 'All';
-  displayCalculatorType: string = 'All';
+  displayEnergyType: string;
+  displayCalculatorType: string;
 
   energyTypeOptions: Array<{ value: string, numCalcs: number }> = [];
   calculatorTypeOptions: Array<{ display: string, value: string, numCalcs: number }> = [];
@@ -80,16 +82,19 @@ export class TreasureChestMenuComponent implements OnInit {
     this.showImportModalSub = this.treasureChestMenuService.showImportModal.subscribe(val => {
       this.showImportModal = val;
     });
-    
+
     this.showExportModalSub = this.treasureChestMenuService.showExportModal.subscribe(val => {
       this.showExportModal = val;
     });
+    let initSortByData: SortCardsData = this.treasureChestMenuService.sortBy.getValue();
+    this.displayEnergyType = initSortByData.utilityType;
+    this.displayCalculatorType = this.calculatorTypeOptions.find(item => { return item.value == initSortByData.calculatorType }).display;
   }
 
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
     this.opportunityCardsSub.unsubscribe();
-    this.clearAllFilters();
+    // this.clearAllFilters();
     this.showImportModalSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
   }
@@ -123,7 +128,7 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.selectAll.next(false);
   }
 
-  deselectAll(){
+  deselectAll() {
     this.treasureChestMenuService.deselectAll.next(true);
     this.treasureChestMenuService.deselectAll.next(false);
   }
@@ -135,7 +140,7 @@ export class TreasureChestMenuComponent implements OnInit {
       this.teams.push({ name: name, selected: false });
     });
     this.sortCardsData.teams = _.intersection(this.sortCardsData.teams, teamNames);
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+    // this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
   setEquipments(oppData: Array<OpportunityCardData>) {
@@ -145,7 +150,7 @@ export class TreasureChestMenuComponent implements OnInit {
       this.equipments.push({ name: equipment, selected: false });
     });
     this.sortCardsData.equipments = _.intersection(this.sortCardsData.equipments, equipmentNames);
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+    // this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
   setSelectedTeam(team: { name: string, selected: boolean }) {
@@ -240,6 +245,7 @@ export class TreasureChestMenuComponent implements OnInit {
   setEnergyType(str: string) {
     this.sortCardsData.utilityType = str;
     this.sortCardsData.calculatorType = 'All';
+    this.displayCalculatorType = 'All';
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
     this.setCalculatorOptions(this.opportunityCardsData);
     this.toggleUtilityType();
@@ -349,6 +355,11 @@ export class TreasureChestMenuComponent implements OnInit {
     let steamReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'steam-reduction' }).length;
     if (steamReductions != 0) {
       this.calculatorTypeOptions.push({ display: 'Steam Reduction', value: 'steam-reduction', numCalcs: steamReductions });
+    }
+    //pipe insulation reduction
+    let pipeInsulationReduction: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'pipe-insulation-reduction' }).length;
+    if (pipeInsulationReduction != 0) {
+      this.calculatorTypeOptions.push({ display: 'Pipe Insulation Reduction', value: 'pipe-insulation-reduction', numCalcs: pipeInsulationReduction });
     }
   }
 

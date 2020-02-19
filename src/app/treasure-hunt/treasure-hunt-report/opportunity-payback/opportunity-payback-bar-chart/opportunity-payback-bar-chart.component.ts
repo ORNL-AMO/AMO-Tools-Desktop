@@ -30,6 +30,12 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
     this.initChart();
   }
 
+  ngOnChanges() {
+    if (this.chart) {
+      this.initChart();
+    }
+  }
+
   ngOnDestroy() {}
 
   initChart() {

@@ -19,6 +19,7 @@ import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/fa
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { SortSummariesPipe } from './opportunity-summary/sort-summaries.pipe';
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
+import { TreasureChestMenuModule } from '../treasure-chest/treasure-chest-menu/treasure-chest-menu.module';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
     FormsModule,
     FacilityInfoSummaryModule,
     PrintOptionsMenuModule,
-    PieChartModule
+    PieChartModule,
+    TreasureChestMenuModule
   ],
   declarations: [
     TreasureHuntReportComponent,

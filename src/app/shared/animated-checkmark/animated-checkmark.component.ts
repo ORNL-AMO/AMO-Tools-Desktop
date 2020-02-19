@@ -29,18 +29,16 @@ export class AnimatedCheckmarkComponent implements OnInit {
   host: d3.Selection<any>;
   svg: d3.Selection<any>;
   circle: any;
-  // checkMark: any;
 
   shortLine: any;
   longLine: any;
 
-  animationTime: number;
+  animationTime: number = 350;
 
 
   constructor() { }
 
   ngOnInit() {
-    this.animationTime = 350;
     this.initColors();
   }
 
@@ -154,14 +152,12 @@ export class AnimatedCheckmarkComponent implements OnInit {
     if (this.circle === undefined) {
       return;
     }
-
     let radius = this.radius;
 
     this.circle.transition()
       .duration(this.animationTime)
       .style('fill', this.activeFillColor)
       .style('stroke', this.activeFillColor);
-
 
     this.shortLine.transition()
       .duration(this.animationTime)
@@ -172,7 +168,6 @@ export class AnimatedCheckmarkComponent implements OnInit {
       .duration(this.animationTime)
       .attr('x2', radius * 1.633)
       .attr('y2', radius * .533);
-
   }
 
   removeCheckMark(): void {

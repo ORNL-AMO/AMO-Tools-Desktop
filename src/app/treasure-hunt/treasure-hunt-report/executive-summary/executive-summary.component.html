@@ -1,7 +1,7 @@
 <div class="d-flex"
   [ngClass]="{'flex-row print-space-from-title' : (title == 'Cost Summary' || title == 'Team Summary'), 'flex-column' : title == 'Detailed Summary'}">
 
-  <div class="d-flex flex-column output-summary pb-5" *ngIf="title != 'Team Summary'" #costSummaryChartContainer>
+  <div class="d-flex flex-column output-summary" *ngIf="title != 'Team Summary'" #costSummaryChartContainer>
 
     <label class="group-label">{{title}}</label>
     <table class="table table-striped table-hover">
@@ -361,7 +361,7 @@
 
   <div class="d-flex flex-column hide-print" *ngIf="title == 'Cost Summary'">
     <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles"
-      [data]="data" [chartContainerWidth]="getChartWidth('bar')" [chartContainerHeight]="getChartHeight('bar')">
+      [data]="data" [chartContainerWidth]="barChartWidth" [chartContainerHeight]="barChartHeight">
     </app-cost-summary-chart>
   </div>
 
@@ -388,8 +388,8 @@
 
   <div class="d-flex flex-column hide-print" *ngIf="title == 'Team Summary' && teamData.length > 0">
     <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels"
-      [printView]="showPrint" [exportName]="'treasure-hunt-team-savings'" [chartContainerWidth]="getChartWidth('pie')"
-      [chartContainerHeight]="getChartHeight('pie')" [sideBySide]="false"></app-pie-chart>
+      [printView]="showPrint" [exportName]="'treasure-hunt-team-savings'" [chartContainerWidth]="pieChartWidth"
+      [chartContainerHeight]="pieChartHeight" [sideBySide]="false"></app-pie-chart>
   </div>
 
 </div>
@@ -397,7 +397,7 @@
 <!-- print version of the chart -->
 <div class="d-flex flex-row show-print print-bottom-padding" *ngIf="title == 'Cost Summary' && showPrint">
   <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles" [data]="data"
-    [chartContainerWidth]="getChartWidth('bar')" [chartContainerHeight]="getChartHeight('bar')">
+    [chartContainerWidth]="barChartWidth" [chartContainerHeight]="barChartHeight">
   </app-cost-summary-chart>
 </div>
 
@@ -405,6 +405,6 @@
 <div class="d-flex flex-row show-print print-bottom-padding"
   *ngIf="title == 'Team Summary' && showPrint && teamData.length > 0">
   <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels" [printView]="showPrint"
-    [exportName]="treasure-hunt-team-savings" [chartContainerWidth]="getChartWidth('pie')"
-    [chartContainerHeight]="getChartHeight('pie')"></app-pie-chart>
+    [exportName]="treasure-hunt-team-savings" [chartContainerWidth]="pieChartWidth"
+    [chartContainerHeight]="pieChartHeight"></app-pie-chart>
 </div>

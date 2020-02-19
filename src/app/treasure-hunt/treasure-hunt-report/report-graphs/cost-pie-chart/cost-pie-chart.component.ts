@@ -30,6 +30,13 @@ export class CostPieChartComponent implements OnInit {
     this.initChart();
   }
 
+  ngOnChanges(){
+    if(this.chart){
+      this.getColumnData();
+      this.initChart();
+    }
+  }
+
   ngOnDestroy() { }
 
   getColumnData() {
