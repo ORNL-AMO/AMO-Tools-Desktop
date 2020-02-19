@@ -1,10 +1,18 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
-import * as c3 from 'c3';
-import { OpportunitiesPaybackDetails } from '../../../../shared/models/treasure-hunt';
+import {
+  Component,
+  OnInit,
+  Input,
+  ElementRef,
+  ViewChild,
+  HostListener,
+  SimpleChanges
+} from "@angular/core";
+import * as c3 from "c3";
+import { OpportunitiesPaybackDetails } from "../../../../shared/models/treasure-hunt";
 @Component({
-  selector: 'app-opportunity-payback-bar-chart',
-  templateUrl: './opportunity-payback-bar-chart.component.html',
-  styleUrls: ['./opportunity-payback-bar-chart.component.css']
+  selector: "app-opportunity-payback-bar-chart",
+  templateUrl: "./opportunity-payback-bar-chart.component.html",
+  styleUrls: ["./opportunity-payback-bar-chart.component.css"]
 })
 export class OpportunityPaybackBarChartComponent implements OnInit {
   @Input()
@@ -13,34 +21,46 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
   showPrint: boolean;
 
   chart: any;
-  @ViewChild('barChartElement', { static: false }) barChartElement: ElementRef;
-  constructor() { }
+  @ViewChild("barChartElement", { static: false }) barChartElement: ElementRef;
+  constructor() {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.initChart();
   }
 
-  ngOnChanges(){
-    if(this.chart){
+  ngOnChanges() {
+    if (this.chart) {
       this.initChart();
     }
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 
   initChart() {
     if (this.showPrint) {
       this.chart = c3.generate({
         bindto: this.barChartElement.nativeElement,
         data: {
-          type: 'bar',
+          type: "bar",
           columns: [
-            ['Less than 1 Year ', this.opportunitiesPaybackDetails.lessThanOneYear.totalSavings],
-            ['1 to 2 Years ', this.opportunitiesPaybackDetails.oneToTwoYears.totalSavings],
-            ['2 to 3 Years ', this.opportunitiesPaybackDetails.twoToThreeYears.totalSavings],
-            ['More than 3 Years ', this.opportunitiesPaybackDetails.moreThanThreeYears.totalSavings],
+            [
+              "Less than 1 Year ",
+              this.opportunitiesPaybackDetails.lessThanOneYear.totalSavings
+            ],
+            [
+              "1 to 2 Years ",
+              this.opportunitiesPaybackDetails.oneToTwoYears.totalSavings
+            ],
+            [
+              "2 to 3 Years ",
+              this.opportunitiesPaybackDetails.twoToThreeYears.totalSavings
+            ],
+            [
+              "More than 3 Years ",
+              this.opportunitiesPaybackDetails.moreThanThreeYears.totalSavings
+            ]
           ]
         },
         axis: {
@@ -50,16 +70,24 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
           //   },
           //   tick: {
           //     type: 'category',
-          //     categories:  ['Payback Period'] 
+          //     categories:  ['Payback Period']
           //   }
           // },
           y: {
             label: {
               text: "Cost Savings",
-              position: 'outer-middle'
+              position: "outer-middle"
             },
             tick: {
-              format: function (d) { return '$ ' + (d).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); }
+              format: function(d) {
+                const localeOptions = {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0
+                };
+                return d.toLocaleString("en-US", localeOptions);
+              }
             }
           }
         },
@@ -80,12 +108,24 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       this.chart = c3.generate({
         bindto: this.barChartElement.nativeElement,
         data: {
-          type: 'bar',
+          type: "bar",
           columns: [
-            ['Less than 1 Year ', this.opportunitiesPaybackDetails.lessThanOneYear.totalSavings],
-            ['1 to 2 Years ', this.opportunitiesPaybackDetails.oneToTwoYears.totalSavings],
-            ['2 to 3 Years ', this.opportunitiesPaybackDetails.twoToThreeYears.totalSavings],
-            ['More than 3 Years ', this.opportunitiesPaybackDetails.moreThanThreeYears.totalSavings],
+            [
+              "Less than 1 Year ",
+              this.opportunitiesPaybackDetails.lessThanOneYear.totalSavings
+            ],
+            [
+              "1 to 2 Years ",
+              this.opportunitiesPaybackDetails.oneToTwoYears.totalSavings
+            ],
+            [
+              "2 to 3 Years ",
+              this.opportunitiesPaybackDetails.twoToThreeYears.totalSavings
+            ],
+            [
+              "More than 3 Years ",
+              this.opportunitiesPaybackDetails.moreThanThreeYears.totalSavings
+            ]
           ]
         },
         axis: {
@@ -95,16 +135,24 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
           //   },
           //   tick: {
           //     type: 'category',
-          //     categories:  ['Payback Period'] 
+          //     categories:  ['Payback Period']
           //   }
           // },
           y: {
             label: {
               text: "Cost Savings",
-              position: 'outer-middle'
+              position: "outer-middle"
             },
             tick: {
-              format: function (d) { return '$ ' + (d).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); }
+              format: function(d) {
+                const localeOptions = {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0
+                };
+                return d.toLocaleString("en-US", localeOptions);
+              }
             }
           }
         },
