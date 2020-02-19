@@ -6,6 +6,7 @@ import { ImportOpportunitiesComponent } from '../import-opportunities/import-opp
 import { ExportOpportunitiesComponent } from '../export-opportunities/export-opportunities.component';
 import { ImportOpportunitiesService } from '../import-opportunities.service';
 import { ModalModule } from 'ngx-bootstrap';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ModalModule } from 'ngx-bootstrap';
   ],
   imports: [
     CommonModule,
-    ModalModule
+    ModalModule,
+    FormsModule
   ],
   providers: [
     TreasureChestMenuService,
