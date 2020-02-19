@@ -34,12 +34,14 @@ tr>td {
         -webkit-transform: rotate(-90deg);
         -moz-transform: rotate(-90deg);
         filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-        margin-top: 150px;
+        margin-top: 250px;
+        margin-left: -150px;
+        width: 80vh;
+        height: 80vw;
     }
     .output-summary.table {
-        height: 90vh;
-        width: 100vw;
-        margin-right: 100px;
+        height: 100%;
+        width: 100%;
     }
     .show-print {
         display: inline !important;
@@ -49,6 +51,9 @@ tr>td {
     }
     .chart-row {
         padding: 0px !important;
+    }
+    .break-table {
+        page-break-after: always;
     }
 }
 
