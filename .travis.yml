@@ -11,6 +11,8 @@ os:
 #  - gcc
 #  - clang
 
+api_key: "GITHUB OAUTH TOKEN"
+
 before_install:
   - travis_retry npm i -g npm@6.4.0
 
@@ -34,5 +36,5 @@ install:
 script:
   #- npm run build
   #- npm run "$OS_NAME"
-  - npm run ng-high-memory --publish-never
+  - npm run ng-high-memory
   - npm run linux
