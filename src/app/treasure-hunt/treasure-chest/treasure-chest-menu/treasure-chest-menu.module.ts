@@ -5,6 +5,7 @@ import { TreasureChestMenuService } from './treasure-chest-menu.service';
 import { ImportOpportunitiesComponent } from '../import-opportunities/import-opportunities.component';
 import { ExportOpportunitiesComponent } from '../export-opportunities/export-opportunities.component';
 import { ImportOpportunitiesService } from '../import-opportunities.service';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { ImportOpportunitiesService } from '../import-opportunities.service';
   ],
   imports: [
     CommonModule,
+    ModalModule
   ],
   providers: [
     TreasureChestMenuService,
