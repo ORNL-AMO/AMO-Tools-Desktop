@@ -258,7 +258,7 @@
           <label class="small bold">Flow Rate</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{individualResults.flowRate | number:'.0-4'}}
+          <span class="small bold">{{individualResults.flowRate | number:'1.0-0'}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
           </span>
@@ -299,7 +299,7 @@
           <label class="small" for="compressorControlAdjustment">Compressor Control Adjustment</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{form.controls.compressorControlAdjustment.value | number:'.0-1'}} %</span>
+          <span class="small bold">{{form.controls.compressorControlAdjustment.value | number:'1.0-0'}} %</span>
         </div>
       </div>
 
@@ -340,7 +340,7 @@
           <label class="small" for="compressorSpecificPower">Compressor Specific Power</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{form.controls.compressorSpecificPower.value | number:'.0-2'}}
+          <span class="small bold">{{form.controls.compressorSpecificPower.value | number:'1.0-0'}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
           </span>
