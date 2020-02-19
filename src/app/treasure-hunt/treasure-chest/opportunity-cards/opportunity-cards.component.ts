@@ -41,6 +41,7 @@ export class OpportunityCardsComponent implements OnInit {
       if (val == true) {
         this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
         this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
+        this.opportunityCardsService.opportunityCards.next(this.opportunityCardsData);
         this.opportunityCardsService.updateOpportunityCards.next(false);
       }
     });

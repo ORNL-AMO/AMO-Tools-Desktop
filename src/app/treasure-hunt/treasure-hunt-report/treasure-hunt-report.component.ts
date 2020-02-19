@@ -2,12 +2,15 @@ import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
-import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary } from '../../shared/models/treasure-hunt';
+import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, TreasureHunt } from '../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from './treasure-hunt-report.service';
 import { OpportunityPaybackService } from './opportunity-payback.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Subscription } from 'rxjs';
 import { OpportunityCardsService, OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import { TreasureChestMenuService } from '../treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
+import { SortCardsService } from '../treasure-chest/opportunity-cards/sort-cards.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -52,15 +55,30 @@ export class TreasureHuntReportComponent implements OnInit {
   opportunityCardsData: Array<OpportunityCardData>;
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
   showPrintSub: Subscription;
+  sortBySub: Subscription;
   constructor(private treasureHuntReportService: TreasureHuntReportService,
     private opportunityPaybackService: OpportunityPaybackService, private windowRefService: WindowRefService,
-    private opportunityCardsService: OpportunityCardsService) { }
+    private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
+    private sortCardsService: SortCardsService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
     if (this.assessment) {
-      this.getDirectoryList(this.assessment.id);
+      this.getDirectoryList(this.assessment.directoryId);
     }
-    if (this.assessment.treasureHunt.setupDone == true) {
+    if (!this.inRollup) {
+      this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
+        if (this.assessment.treasureHunt.setupDone == true) {
+          let filteredTreasureHunt: TreasureHunt = this.sortCardsService.sortTreasureHunt(this.assessment.treasureHunt, val, this.settings);
+          this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(filteredTreasureHunt, this.settings);
+          this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(filteredTreasureHunt, this.settings);
+          let oppCards = this.opportunityCardsService.opportunityCards.getValue();
+          if (oppCards.length != this.opportunityCardsData.length) {
+            this.opportunityCardsService.opportunityCards.next(this.opportunityCardsData);
+          }
+          this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
+        }
+      });
+    } else {
       this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.assessment.treasureHunt, this.settings);
       this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.assessment.treasureHunt, this.settings);
       this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
@@ -102,6 +120,9 @@ export class TreasureHuntReportComponent implements OnInit {
 
   ngOnDestroy() {
     this.showPrintSub.unsubscribe();
+    if (!this.inRollup) {
+      this.sortBySub.unsubscribe();
+    }
   }
 
   getContainerHeight() {
@@ -115,13 +136,13 @@ export class TreasureHuntReportComponent implements OnInit {
   }
 
   getDirectoryList(id: number) {
-    // if (id && id !== 1) {
-    //   let results = this.directoryDbService.getById(id);
-    //   this.assessmentDirectories.push(results);
-    //   if (results.parentDirectoryId !== 1) {
-    //     this.getDirectoryList(results.parentDirectoryId);
-    //   }
-    // }
+    if (id && id !== 1) {
+      let results = this.directoryDbService.getById(id);
+      this.assessmentDirectories.push(results);
+      if (results.parentDirectoryId !== 1) {
+        this.getDirectoryList(results.parentDirectoryId);
+      }
+    }
   }
 
   updateResults(opportunitySummaries: Array<OpportunitySummary>) {

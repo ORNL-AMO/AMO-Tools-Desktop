@@ -12,14 +12,12 @@ import { FormsModule } from '@angular/forms';
 import { TreasureChestComponent } from './treasure-chest/treasure-chest.component';
 import { SummaryCardComponent } from './treasure-chest/summary-card/summary-card.component';
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
-import { TreasureChestMenuComponent } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.component';
 import { TreasureHuntReportService } from './treasure-hunt-report/treasure-hunt-report.service';
 import { ImportOpportunitiesService } from './treasure-chest/import-opportunities.service';
 import { OpportunityCardsComponent } from './treasure-chest/opportunity-cards/opportunity-cards.component';
 import { OpportunityCardsService } from './treasure-chest/opportunity-cards/opportunity-cards.service';
 import { CalculatorsModule } from './calculators/calculators.module';
 import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-report.module';
-import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 import { SortCardsByPipe } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
 import { UtilitySummaryComponent } from './treasure-chest/summary-card/utility-summary/utility-summary.component';
 import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.service';
@@ -31,6 +29,7 @@ import { ConvertInputDataService } from './convert-input-data.service';
 import { RouterModule } from '@angular/router';
 import { ImportOpportunitiesComponent } from './treasure-chest/import-opportunities/import-opportunities.component';
 import { ExportOpportunitiesComponent } from './treasure-chest/export-opportunities/export-opportunities.component';
+import { TreasureChestMenuModule } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.module';
 
 @NgModule({
   imports: [
@@ -43,7 +42,8 @@ import { ExportOpportunitiesComponent } from './treasure-chest/export-opportunit
     AnimatedCheckmarkModule,
     OperatingHoursModalModule,
     ToastModule,
-    RouterModule
+    RouterModule,
+    TreasureChestMenuModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -54,7 +54,6 @@ import { ExportOpportunitiesComponent } from './treasure-chest/export-opportunit
     TreasureChestComponent, 
     SummaryCardComponent, 
     OperationCostsComponent, 
-    TreasureChestMenuComponent,
     OpportunityCardsComponent,
     SortCardsByPipe,
     UtilitySummaryComponent,
@@ -67,7 +66,6 @@ import { ExportOpportunitiesComponent } from './treasure-chest/export-opportunit
     TreasureHuntReportService, 
     ImportOpportunitiesService, 
     OpportunityCardsService, 
-    TreasureChestMenuService,
     SortCardsService,
     ConvertInputDataService
   ]
