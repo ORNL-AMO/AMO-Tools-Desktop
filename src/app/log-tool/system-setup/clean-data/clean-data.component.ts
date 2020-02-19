@@ -31,6 +31,7 @@ export class CleanDataComponent implements OnInit {
     this.startDate = this.logToolService.startDate;
     this.endDate = this.logToolService.endDate;
     this.dataFields = this.logToolService.fields;
+    console.log(this.dataFields);
     this.numberOfDataPoints = this.logToolService.numberOfDataPoints;
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
