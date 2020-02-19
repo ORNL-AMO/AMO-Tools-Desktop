@@ -7,13 +7,13 @@
     </tr>
     <tr>
       <td class="bold">Energy Use</td>
-      <td class="text-center">{{compressedAirPressureReductionResults.baselineResults.energyUse | number:'.0-0'}}
+      <td class="text-center">{{compressedAirPressureReductionResults.baselineResults.energyUse | number:'1.0-0'}}
         <span> kWh/yr</span>
       </td>
       <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span
-          *ngIf="modificationExists">{{compressedAirPressureReductionResults.modificationResults.energyCost | number:'.0-0'}}
+          *ngIf="modificationExists">{{compressedAirPressureReductionResults.modificationResults.energyCost | number:'1.0-0'}}
           <span> kWh/yr</span>
         </span>
       </td>
@@ -21,12 +21,12 @@
     <tr>
       <td class="bold">Energy Cost</td>
       <td class="text-center">
-        {{compressedAirPressureReductionResults.baselineResults.energyCost | currency: 'USD'}} /yr
+        {{compressedAirPressureReductionResults.baselineResults.energyCost | currency: 'USD': 'symbol' : '1.0-0'}} /yr
       </td>
       <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span
-          *ngIf="modificationExists">{{compressedAirPressureReductionResults.modificationResults.energyCost | currency: 'USD'}}
+          *ngIf="modificationExists">{{compressedAirPressureReductionResults.modificationResults.energyCost | currency: 'USD': 'symbol' : '1.0-0'}}
           /yr
         </span>
       </td>
@@ -36,7 +36,7 @@
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{compressedAirPressureReductionResults.annualEnergySavings | number: '.0-0'}}
+          {{compressedAirPressureReductionResults.annualEnergySavings | number: '1.0-0'}}
           <span> kWh/yr</span>
         </span>
       </td>
@@ -46,7 +46,7 @@
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{compressedAirPressureReductionResults.annualCostSavings | currency: 'USD'}} /yr
+          {{compressedAirPressureReductionResults.annualCostSavings | currency: 'USD': 'symbol' : '1.0-0'}} /yr
         </span>
       </td>
     </tr>

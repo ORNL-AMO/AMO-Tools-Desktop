@@ -8,13 +8,13 @@
     </tr>
     <tr>
       <td class="bold">Water Use</td>
-      <td class="text-center">{{waterReductionResults.baselineResults.waterUse | number:'.0-0'}}
+      <td class="text-center">{{waterReductionResults.baselineResults.waterUse | number:'1.0-0'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
       </td>
       <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">{{waterReductionResults.modificationResults.waterUse | number:'.0-0'}}
+        <span *ngIf="modificationExists">{{waterReductionResults.modificationResults.waterUse | number:'1.0-0'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
         </span>
@@ -24,11 +24,11 @@
       <td class="bold" *ngIf="!isWastewater">Water Cost</td>
       <td class="bold" *ngIf="isWastewater">Wastewater Disposal Cost</td>
       <td class="text-center">
-        {{waterReductionResults.baselineResults.waterCost | currency: 'USD'}} /yr
+        {{waterReductionResults.baselineResults.waterCost | currency: 'USD': 'symbol': '1.0-0'}} /yr
       </td>
       <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">{{waterReductionResults.modificationResults.waterCost | currency: 'USD'}} /yr
+        <span *ngIf="modificationExists">{{waterReductionResults.modificationResults.waterCost | currency: 'USD': 'symbol': '1.0-0'}} /yr
         </span>
       </td>
     </tr>
@@ -37,7 +37,7 @@
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{waterReductionResults.annualWaterSavings | number: '.0-0'}}
+          {{waterReductionResults.annualWaterSavings | number: '1.0-0'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
         </span>
@@ -49,7 +49,7 @@
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{waterReductionResults.annualCostSavings | currency: 'USD'}} /yr
+          {{waterReductionResults.annualCostSavings | currency: 'USD': 'symbol': '1.0-0'}} /yr
         </span>
       </td>
     </tr>

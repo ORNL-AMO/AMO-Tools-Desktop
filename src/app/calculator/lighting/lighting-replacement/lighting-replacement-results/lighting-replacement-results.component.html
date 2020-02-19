@@ -79,7 +79,7 @@
       </td>
       <td class="text-center">{{lightingReplacementResults.baselineResults.totalElectricityUse | number:'1.0-0'}}</td>
       <td class="text-center">{{lightingReplacementResults.baselineResults.totalLighting | number:'1.0-0'}}</td>
-      <td class="text-center">{{lightingReplacementResults.baselineResults.totalOperatingCosts | currency:'USD'}}</td>
+      <td class="text-center">{{lightingReplacementResults.baselineResults.totalOperatingCosts | currency:'USD':'symbol':'1.0-0'}}</td>
     </tr>
     <tr>
       <td class="bold">Modification</td>
@@ -88,7 +88,7 @@
       <td class="text-center">{{lightingReplacementResults.modificationResults.totalElectricityUse | number:'1.0-0'}}
       </td>
       <td class="text-center">{{lightingReplacementResults.modificationResults.totalLighting | number:'1.0-0'}}</td>
-      <td class="text-center">{{lightingReplacementResults.modificationResults.totalOperatingCosts | currency:'USD'}}
+      <td class="text-center">{{lightingReplacementResults.modificationResults.totalOperatingCosts | currency:'USD':'symbol':'1.0-0'}}
       </td>
     </tr>
   </tbody>
@@ -106,7 +106,7 @@
     <tr>
       <td class="bold w-50">Electricity Cost Savings</td>
       <td class="text-center w-50">{{lightingReplacementResults.totalCostSavings |
-          currency:'USD'}} /yr</td>
+          currency:'USD':'symbol':'1.0-0'}} /yr</td>
     </tr>
     <tr>
       <td class="bold w-50">Change In Lighting Level</td>
