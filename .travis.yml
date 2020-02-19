@@ -13,6 +13,8 @@ os:
 
 api_key: "GITHUB OAUTH TOKEN"
 
+env: "GH_TOKEN"
+
 before_install:
   - travis_retry npm i -g npm@6.4.0
 
