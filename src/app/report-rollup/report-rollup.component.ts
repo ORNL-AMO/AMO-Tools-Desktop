@@ -8,6 +8,7 @@ import { Calculator } from '../shared/models/calculators';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ReportItem } from './report-rollup-models';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-report-rollup',
@@ -25,7 +26,7 @@ export class ReportRollupComponent implements OnInit {
   _fsatAssessments: Array<ReportItem>;
   _ssmtAssessments: Array<ReportItem>;
   _treasureHuntAssessments: Array<ReportItem>;
-  focusedAssessment: Assessment;
+  // focusedAssessment: Assessment;
   //debug
   selectedPhastCalcs: Array<Calculator>;
   selectedPsatCalcs: Array<Calculator>;
@@ -89,7 +90,7 @@ export class ReportRollupComponent implements OnInit {
 
   gatheringAssessments: boolean = true;
   sidebarCollapsed: boolean = false;
-  constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef) { }
+  constructor(private viewportScroller: ViewportScroller, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();
@@ -123,10 +124,10 @@ export class ReportRollupComponent implements OnInit {
     this.createdDate = new Date();
     this.reportAssessmentsSub = this.reportRollupService.reportAssessments.subscribe(items => {
       if (items) {
-        if (items.length !== 0) {
-          this._reportAssessments = items;
-          // this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
-        }
+        // if (items.length !== 0) {
+        this._reportAssessments = items;
+        // this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
+        // }
       }
     });
     this.allPhastSub = this.reportRollupService.allPhastResults.subscribe(val => {
@@ -141,64 +142,64 @@ export class ReportRollupComponent implements OnInit {
     });
     this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
       if (items) {
-        if (items.length !== 0) {
-          this._psatAssessments = items;
-          this.numPsats = this._psatAssessments.length;
-          if (!this.focusedAssessment) {
-            this.focusedAssessment = this._psatAssessments[0].assessment;
-          }
-        }
+        // if (items.length !== 0) {
+        this._psatAssessments = items;
+        this.numPsats = this._psatAssessments.length;
+        // if (!this.focusedAssessment) {
+        //   this.focusedAssessment = this._psatAssessments[0].assessment;
+        // }
+        // }
       }
     });
     this.phastAssessmentsSub = this.reportRollupService.phastAssessments.subscribe(items => {
       if (items) {
-        if (items.length !== 0) {
-          this.reportRollupService.initPhastResultsArr(items);
-          this._phastAssessments = items;
-          this.numPhasts = this._phastAssessments.length;
-          if (!this.focusedAssessment) {
-            this.focusedAssessment = this._phastAssessments[0].assessment;
-          }
-        }
+        // if (items.length !== 0) {
+        this.reportRollupService.initPhastResultsArr(items);
+        this._phastAssessments = items;
+        this.numPhasts = this._phastAssessments.length;
+        // if (!this.focusedAssessment) {
+        //   this.focusedAssessment = this._phastAssessments[0].assessment;
+        // }
+        // }
       }
     });
 
     this.fsatAssessmentsSub = this.reportRollupService.fsatAssessments.subscribe(items => {
       if (items) {
-        if (items.length !== 0) {
-          this._fsatAssessments = items;
-          this.numFsats = this._fsatAssessments.length;
-          this.reportRollupService.initFsatResultsArr(items);
-          if (!this.focusedAssessment) {
-            this.focusedAssessment = this._fsatAssessments[0].assessment;
-          }
-        }
+        // if (items.length !== 0) {
+        this._fsatAssessments = items;
+        this.numFsats = this._fsatAssessments.length;
+        this.reportRollupService.initFsatResultsArr(items);
+        // if (!this.focusedAssessment) {
+        //   this.focusedAssessment = this._fsatAssessments[0].assessment;
+        // }
+        // }
       }
     });
 
     this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
       if (items) {
-        if (items.length !== 0) {
-          this._ssmtAssessments = items;
-          this.numSsmt = this._ssmtAssessments.length;
-          this.reportRollupService.initSsmtResultsArr(items);
-          if (!this.focusedAssessment) {
-            this.focusedAssessment = this._ssmtAssessments[0].assessment;
-          }
-        }
+        // if (items.length !== 0) {
+        this._ssmtAssessments = items;
+        this.numSsmt = this._ssmtAssessments.length;
+        this.reportRollupService.initSsmtResultsArr(items);
+        // if (!this.focusedAssessment) {
+        //   this.focusedAssessment = this._ssmtAssessments[0].assessment;
+        // }
+        // }
       }
     });
 
     this.treasureHuntAssesmentsSub = this.reportRollupService.treasureHuntAssessments.subscribe(items => {
       if (items) {
-        if (items.length !== 0) {
-          this._treasureHuntAssessments = items;
-          this.numTreasureHunt = this._treasureHuntAssessments.length;
-          this.reportRollupService.initTreasureHuntResultsArray(this._treasureHuntAssessments);
-          if (!this.focusedAssessment) {
-            this.focusedAssessment = this._treasureHuntAssessments[0].assessment;
-          }
-        }
+        // if (items.length !== 0) {
+        this._treasureHuntAssessments = items;
+        this.numTreasureHunt = this._treasureHuntAssessments.length;
+        this.reportRollupService.initTreasureHuntResultsArray(this._treasureHuntAssessments);
+        // if (!this.focusedAssessment) {
+        //   this.focusedAssessment = this._treasureHuntAssessments[0].assessment;
+        // }
+        // }
       }
     });
 
@@ -460,15 +461,17 @@ export class ReportRollupComponent implements OnInit {
     this.emitCloseReport.emit(true);
   }
 
-  setFocused(assessment: Assessment) {
-    this.focusedAssessment = assessment;
-  }
+  // setFocused(assessment: Assessment) {
+  //   this.focusedAssessment = assessment;
+  // }
 
   setSidebarHeight() {
     let window = this.windowRefService.nativeWindow;
     let wndHeight = window.innerHeight;
     this.bannerHeight = this.reportHeader.nativeElement.clientHeight;
     this.sidebarHeight = wndHeight - this.bannerHeight;
+    
+    this.viewportScroller.setOffset([0, this.bannerHeight + 15]);
   }
 
   checkActiveAssessment($event) {
@@ -479,7 +482,7 @@ export class ReportRollupComponent implements OnInit {
         let element = doc.getElementById('assessment_' + item.assessment.id);
         let diff = Math.abs(Math.abs(this.reportHeader.nativeElement.clientHeight - element.offsetTop) - scrollAmount);
         if (diff > 0 && diff < 50) {
-          this.focusedAssessment = item.assessment;
+          // this.focusedAssessment = item.assessment;
         }
       });
     }
@@ -536,7 +539,7 @@ export class ReportRollupComponent implements OnInit {
     this.showPrintMenu = false;
   }
 
-  collapseSidebar() {
-    this.sidebarCollapsed = !this.sidebarCollapsed;
-  }
+  // collapseSidebar() {
+  //   this.sidebarCollapsed = !this.sidebarCollapsed;
+  // }
 }

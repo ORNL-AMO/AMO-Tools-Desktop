@@ -11,7 +11,7 @@
     <p class="report-notes">{{reportNotes}}</p>
 </div>
 
-<div class="row sticky-top" id="reportHeader" *ngIf="printView && settings">
+<div class="row sticky-top no-gutters" id="reportHeader" *ngIf="printView && settings">
     <div class="col-12">
         <div class="report-header hide-print">
             <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()"
@@ -38,7 +38,7 @@
 
         <p class="report-notes">{{reportNotes}}</p>
     </div>
-    <div #reportHeader class="row sticky-top" id="reportHeader" *ngIf="!printView">
+    <div #reportHeader class="row sticky-top no-gutters" id="reportHeader" *ngIf="!printView">
         <div class="col-12">
             <div class="report-header hide-print">
                 <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()"
@@ -58,217 +58,12 @@
 
     <div class="d-flex">
 
-        <div class="sidebar hide-print scroll-item" id="sidebar"
-            [ngStyle]="{'height.px': sidebarHeight, 'top.px':bannerHeight}"
-            [ngClass]="{'set-width': !sidebarCollapsed}">
-            <ul id="sidebar-list">
-                <li class="collapse-option">
-                    <div class="d-flex align-items-center" (click)="collapseSidebar()">
-                        <div class="p-1 d-flex text-center">
-                            <span *ngIf="!sidebarCollapsed" class="fa fa-chevron-left"></span>
-                            <span *ngIf="sidebarCollapsed" class="fa fa-chevron-right pr-2 pl-2"></span>
-                        </div>
-                        <div class="p-0" [ngClass]="{'collapse': sidebarCollapsed}">
-                            Collapse Sidebar
-                        </div>
-                    </div>
-                </li>
-                <li *ngFor="let item of _psatAssessments"
-                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
-                    <div class="d-flex align-items-center psat">
-                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                            <img class="icon" src="assets/images/ico-psat-diagram.png">
-                        </span>
-                        <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}"
-                                (click)="setFocused(item.assessment)">{{item.assessment.name}}</a>
-                        </span>
-                    </div>
-                </li>
-                <li *ngFor="let item of _phastAssessments"
-                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
-                    <div class="d-flex align-items-center phast">
-                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                            <img class="icon" src="assets/images/ico-phast-diagram.png">
-                        </span>
-                        <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}"
-                                (click)="setFocused(item.assessment)">{{item.assessment.name}}</a>
-                        </span>
-                    </div>
-                </li>
-                <li *ngFor="let item of _fsatAssessments"
-                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
-                    <div class="d-flex align-items-center fsat">
-                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                            <img class="icon" src="assets/images/ico-fsat-diagram.png">
-                        </span>
-                        <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}"
-                                (click)="setFocused(item.assessment)">{{item.assessment.name}}</a>
-                        </span>
-                    </div>
-                </li>
-                <li *ngFor="let item of _ssmtAssessments"
-                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
-                    <div class="d-flex align-items-center ssmt">
-                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                            <img class="icon" src="assets/images/ico-ssmt-diagram.png">
-                        </span>
-                        <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}"
-                                (click)="setFocused(item.assessment)">{{item.assessment.name}}</a>
-                        </span>
-                    </div>
-                </li>
-                <li *ngFor="let item of _treasureHuntAssessments"
-                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
-                    <div class="d-flex align-items-center ssmt">
-                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                            <img class="icon" src="assets/images/treasure-hunt.png">
-                        </span>
-                        <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}"
-                                (click)="setFocused(item.assessment)">{{item.assessment.name}}</a>
-                        </span>
-                    </div>
-                </li>
-            </ul>
-        </div>
+        <app-sidebar [sidebarHeight]="sidebarHeight" [bannerHeight]="bannerHeight"></app-sidebar>
         <!-- End .sidebar -->
 
-
         <div class="assessment-padding d-flex flex-column scroll-item print-height w-100 skyline"
-            [ngStyle]="{'height.px': sidebarHeight}" (scroll)="checkActiveAssessment($event)">
-            <!-- print layout -->
-            <div class="print-container" *ngIf="printView">
-                <div *ngIf="_psatAssessments.length > 0 && printPsatRollup" class="row print-break-before">
-                    <div class="col-12">
-                        <app-psat-rollup-print [settings]="settings"></app-psat-rollup-print>
-                    </div>
-                </div>
-                <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}"
-                    class="assessment-item row">
-                    <div class="col-12">
-                        <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
-                            [printView]="printView" (selectModification)="updateSummary($event)"
-                            [settings]="item.settings" [printInputData]="printInputData"
-                            [printReportGraphs]="printReportGraphs" [printReportSankey]="printReportSankey"
-                            [printResults]="printResults">
-                        </app-psat-report>
-                    </div>
-                </div>
-
-                <div *ngIf="_phastAssessments.length > 0 && printPhastRollup" class="row"
-                    [ngClass]="{'print-break-before' : (printPsatRollup && _psatAssessments.length > 0)}">
-                    <div class="col-12">
-                        <app-phast-rollup-print [settings]="settings" [calculators]="selectedCalcs">
-                        </app-phast-rollup-print>
-                    </div>
-                </div>
-                <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}"
-                    class="assessment-item row">
-                    <div class="col-12">
-                        <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast"
-                            [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings"
-                            [printView]="printView" [printInputSummary]="printInputData"
-                            [printResultsData]="printResults" [printReportGraphs]="printReportGraphs"
-                            [printReportSankey]="printReportSankey" [printEnergyUsed]="printEnergyUsed"
-                            [printExecutiveSummary]="printExecutiveSummary">
-                        </app-phast-report>
-                    </div>
-                </div>
-
-                <div *ngIf="_fsatAssessments.length > 0 && printFsatRollup" class="row print-break-before">
-                    <div class="col-12">
-                        <!--fsat print-->
-                        <app-fsat-rollup-print [settings]="settings"></app-fsat-rollup-print>
-                    </div>
-                </div>
-                <div class="assessment-item row" *ngFor="let item of _fsatAssessments"
-                    id="{{'assessment_'+item.assessment.id}}">
-                    <div class="col-12">
-                        <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat"
-                            [assessment]="item.assessment" [settings]="item.settings" [inRollup]="true"
-                            [printView]="printView" [printInputData]="printInputData"
-                            [printReportGraphs]="printReportGraphs" [printReportSankey]="printReportSankey"
-                            [printResults]="printResults"></app-fsat-report>
-                    </div>
-                </div>
-
-                <!-- <div *ngIf="_ssmtAssessments.length > 0 && printSsmtRollup" class="row print-break-before">
-                    <div class="col-12">
-                        <app-ssmt-rollup-print [settings]="settings"></app-ssmt-rollup-print>
-                    </div>
-                </div> -->
-                <div class="assessment-item row" *ngFor="let item of _ssmtAssessments"
-                    id="{{'assessment_'+item.assessment.id}}">
-                    <div class="col-12">
-                        <app-ssmt-report *ngIf="item.assessment.ssmt" [assessment]="item.assessment"
-                            [settings]="item.settings" [inRollup]="true" [printView]="printView"
-                            [printExecutiveSummary]="printExecutiveSummary" [printEnergySummary]="printEnergySummary"
-                            [printLossesSummary]="printLossesSummary" [printInputData]="printInputData"
-                            [printReportGraphs]="printReportGraphs"></app-ssmt-report>
-                    </div>
-                </div>
-
-                <div *ngIf="_treasureHuntAssessments.length > 0 && printTreasureHuntRollup"
-                    class="row print-break-before">
-                    <div class="col-12">
-                        <!--treasure hunt print-->
-                        <!-- <app-treasure-hunt-rollup-print [settings]="settings"></app-treasure-hunt-rollup-print> -->
-                    </div>
-                </div>
-                <div class="assessment-item row" *ngFor="let item of _treasureHuntAssessments"
-                    id="{{'assessment_'+item.assessment.id}}">
-                    <div class="col-12">
-                        <app-treasure-hunt-report *ngIf="item.assessment.treasureHunt" [assessment]="item.assessment"
-                            [settings]="item.settings" [inRollup]="true" [printView]="printView"
-                            [printReportGraphs]="printReportGraphs" [printExecutiveSummary]="printExecutiveSummary"
-                            [printReportOpportunityPayback]="printReportOpportunityPayback"
-                            [printReportOpportunitySummary]="printReportOpportunitySummary">
-                        </app-treasure-hunt-report>
-                    </div>
-                </div>
-            </div>
-
-            <!-- app layout -->
-            <div>
-                <div *ngIf="!printView">
-                    <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}"
-                        class="assessment-item">
-                        <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
-                            (selectModification)="updateSummary($event)" [settings]="item.settings">
-                        </app-psat-report>
-                    </div>
-
-                    <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}"
-                        class="assessment-item">
-                        <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast"
-                            [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings">
-                        </app-phast-report>
-                    </div>
-                    <div *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}"
-                        class="assessment-item">
-                        <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat"
-                            [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings">
-                        </app-fsat-report>
-                    </div>
-                    <div *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}"
-                        class="assessment-item">
-                        <app-ssmt-report *ngIf="item.assessment.ssmt" [assessment]="item.assessment"
-                            [settings]="item.settings" [inRollup]="true">
-                        </app-ssmt-report>
-                    </div>
-                    <div class="assessment-item" *ngFor="let item of _treasureHuntAssessments"
-                        id="{{'assessment_'+item.assessment.id}}">
-                        <app-treasure-hunt-report *ngIf="item.assessment.treasureHunt" [assessment]="item.assessment"
-                            [settings]="item.settings" [inRollup]="true">
-                        </app-treasure-hunt-report>
-                    </div>
-                </div>
-            </div>
-            <!-- End .content -->
+            (scroll)="checkActiveAssessment($event)">
+            <router-outlet></router-outlet>
         </div>
         <!-- End .report-container -->
     </div>

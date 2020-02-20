@@ -1,5 +1,5 @@
 <div class="report-summary">
-    <div class="row">
+    <div class="row no-gutters">
         <div class="col-12">
             <ul>
                 <li *ngIf="numPsats != 0" [hidden]="showSummary == 'closed'" class="pump-summary"
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row no-gutters">
         <div class="col-12">
             <a *ngIf="showSummary == 'open'" class="click-link pull-right" (click)="collapseSummary('closed')">-
                 Collapse Summaries</a>
