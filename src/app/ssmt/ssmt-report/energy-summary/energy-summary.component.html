@@ -28,7 +28,7 @@
     </thead>
     <tbody>
       <tr>
-        <td class="bold">Power ($K/yr)</td>
+        <td class="bold">Power ($/yr)</td>
         <td
           [ngClass]="{
             'selected-modification': selectedModificationIndex == -1
@@ -36,7 +36,7 @@
         >
           <span *ngIf="baselineOutput.boilerOutput">
             {{
-              baselineOutput.operationsOutput.powerGenerationCost / 1000
+              baselineOutput.operationsOutput.powerGenerationCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
@@ -50,7 +50,7 @@
         >
           <span *ngIf="modResults.outputData.boilerOutput">
             {{
-              modResults.outputData.operationsOutput.powerGenerationCost / 1000
+              modResults.outputData.operationsOutput.powerGenerationCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
@@ -161,7 +161,7 @@
         </td>
       </tr>
       <tr>
-        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Fuel ($K/yr)</td>
+        <td class="bold" [ngStyle]="{ 'width.%': 15 }">Fuel ($/yr)</td>
         <td
           [ngClass]="{
             'selected-modification': selectedModificationIndex == -1
@@ -169,7 +169,7 @@
         >
           <span *ngIf="baselineOutput.boilerOutput">
             {{
-              baselineOutput.operationsOutput.boilerFuelCost / 1000
+              baselineOutput.operationsOutput.boilerFuelCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
@@ -183,7 +183,7 @@
         >
           <span *ngIf="modResults.outputData.boilerOutput">
             {{
-              modResults.outputData.operationsOutput.boilerFuelCost / 1000
+              modResults.outputData.operationsOutput.boilerFuelCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
@@ -222,7 +222,7 @@
         </td>
       </tr>
       <tr>
-        <td class="bold">Make-up Water ($K/yr)</td>
+        <td class="bold">Make-up Water ($/yr)</td>
         <td
           [ngClass]="{
             'selected-modification': selectedModificationIndex == -1
@@ -230,7 +230,7 @@
         >
           <span *ngIf="baselineOutput.boilerOutput">
             {{
-              baselineOutput.operationsOutput.makeupWaterCost / 1000
+              baselineOutput.operationsOutput.makeupWaterCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
@@ -244,7 +244,7 @@
         >
           <span *ngIf="modResults.outputData.boilerOutput">
             {{
-              modResults.outputData.operationsOutput.makeupWaterCost / 1000
+              modResults.outputData.operationsOutput.makeupWaterCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
