@@ -1,7 +1,7 @@
 <!-- <div class="assessment-padding d-flex flex-column scroll-item print-height w-100 skyline"
     [ngStyle]="{'height.px': sidebarHeight}" (scroll)="checkActiveAssessment($event)"> -->
-    <!-- print layout -->
-    <!-- <div class="print-container" *ngIf="printView">
+<!-- print layout -->
+<!-- <div class="print-container" *ngIf="printView">
         <div *ngIf="_psatAssessments.length > 0 && printPsatRollup" class="row print-break-before">
             <div class="col-12">
                 <app-psat-rollup-print [settings]="settings"></app-psat-rollup-print>
@@ -71,7 +71,7 @@
         <div *ngIf="_treasureHuntAssessments.length > 0 && printTreasureHuntRollup" class="row print-break-before">
             <div class="col-12">
                 <!--treasure hunt print-->
-    <!-- <app-treasure-hunt-rollup-print [settings]="settings"></app-treasure-hunt-rollup-print> --
+<!-- <app-treasure-hunt-rollup-print [settings]="settings"></app-treasure-hunt-rollup-print> --
             </div>
         </div>
         <div class="assessment-item row" *ngFor="let item of _treasureHuntAssessments"
@@ -87,8 +87,8 @@
         </div>
     </div> -->
 
-    <!-- app layout -->
-    <!-- <div *ngIf="!printView"> -->
+<!-- app layout -->
+<div *ngIf="!printView" (scroll)="checkActiveAssessment($event)">
     <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
         <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
             (selectModification)="updateSummary($event)" [settings]="item.settings">
@@ -116,6 +116,6 @@
             [settings]="item.settings" [inRollup]="true">
         </app-treasure-hunt-report>
     </div>
-    <!-- </div> -->
-    <!-- End .content -->
+</div>
+<!-- End .content -->
 <!-- </div> -->

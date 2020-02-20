@@ -14,6 +14,8 @@ export class SidebarComponent implements OnInit {
   sidebarHeight: number;
   @Input()
   bannerHeight: number;
+  @Input()
+  focusedAssessment: Assessment;
 
   sidebarCollapsed: boolean = false;
   _phastAssessments: Array<ReportItem>;
@@ -26,7 +28,6 @@ export class SidebarComponent implements OnInit {
   psatAssessmentSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
-  focusedAssessment: Assessment;
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit(): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { ReportRollupService } from './report-rollup.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
@@ -17,6 +17,11 @@ import { ViewportScroller } from '@angular/common';
 })
 export class ReportRollupComponent implements OnInit {
 
+  @HostListener("window:scroll", [])
+  onWindowScroll() {
+    this.checkActiveAssessment();
+  }
+
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
   @ViewChild('reportTemplate', { static: false }) reportTemplate: TemplateRef<any>;
@@ -26,7 +31,7 @@ export class ReportRollupComponent implements OnInit {
   _fsatAssessments: Array<ReportItem>;
   _ssmtAssessments: Array<ReportItem>;
   _treasureHuntAssessments: Array<ReportItem>;
-  // focusedAssessment: Assessment;
+  focusedAssessment: Assessment;
   //debug
   selectedPhastCalcs: Array<Calculator>;
   selectedPsatCalcs: Array<Calculator>;
@@ -44,6 +49,7 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('ssmtRollupModal', { static: false }) public ssmtRollupModal: ModalDirective;
 
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
+  @ViewChild('assessmentReportsDiv', {static: false}) assessmentReportsDiv: ElementRef;
   // @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
 
   numPhasts: number = 0;
@@ -470,19 +476,18 @@ export class ReportRollupComponent implements OnInit {
     let wndHeight = window.innerHeight;
     this.bannerHeight = this.reportHeader.nativeElement.clientHeight;
     this.sidebarHeight = wndHeight - this.bannerHeight;
-    
     this.viewportScroller.setOffset([0, this.bannerHeight + 15]);
   }
 
-  checkActiveAssessment($event) {
-    let scrollAmount = $event.target.scrollTop;
+  checkActiveAssessment() {
+    let scrollAmount = this.windowRefService.nativeWindow.pageYOffset;
     if (this.reportHeader && scrollAmount) {
       this._reportAssessments.forEach(item => {
         let doc = this.windowRefService.getDoc();
         let element = doc.getElementById('assessment_' + item.assessment.id);
-        let diff = Math.abs(Math.abs(this.reportHeader.nativeElement.clientHeight - element.offsetTop) - scrollAmount);
+        let diff = Math.abs(Math.abs(this.bannerHeight - element.offsetTop) - scrollAmount);
         if (diff > 0 && diff < 50) {
-          // this.focusedAssessment = item.assessment;
+          this.focusedAssessment = item.assessment;
         }
       });
     }
