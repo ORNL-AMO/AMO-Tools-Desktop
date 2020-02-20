@@ -11,7 +11,7 @@ os:
 #  - gcc
 #  - clang
 
-api_key: "ACCESS_TOKEN"
+#api_key: "ACCESS_TOKEN"
 
 #env: "ACCESS_TOKEN"
 
@@ -38,5 +38,6 @@ install:
 script:
   #- npm run build
   #- npm run "$OS_NAME"
+  api_key: api_key: "ACCESS_TOKEN"
   - npm run ng-high-memory
   - npm run linux
