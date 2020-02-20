@@ -40,4 +40,4 @@ script:
   #- npm run "$OS_NAME"
   - npm run ng-high-memory
   #- npm run linux
-  - cd ../output/
+  - ls
