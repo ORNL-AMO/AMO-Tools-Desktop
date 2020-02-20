@@ -6,7 +6,6 @@ export interface SSMT {
     name?: string;
     selected?: boolean;
     notes?: Notes;
-    implementationCosts?: number;
     setupDone?: boolean;
     operatingHours?: OperatingHours;
     operatingCosts?: OperatingCosts;

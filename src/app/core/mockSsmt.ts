@@ -18,13 +18,13 @@ export const MockSsmt: Assessment = {
         "operatingCosts": {
             "fuelCost": 5.78,
             "electricityCost": 0.05,
-            "makeUpWaterCost": 0.0025
+            "makeUpWaterCost": 0.0025,
+            "implementationCosts": 0,
         },
         "generalSteamOperations": {
             "sitePowerImport": 5000,
             "makeUpWaterTemperature": 50
         },
-        "implementationCosts": 0,
         "equipmentNotes": "",
         "turbineInput": {
             "condensingTurbine": {
@@ -67,13 +67,13 @@ export const MockSsmt: Assessment = {
                     "operatingCosts": {
                         "fuelCost": 5.78,
                         "electricityCost": 0.05,
-                        "makeUpWaterCost": 0.0025
+                        "makeUpWaterCost": 0.0025,
+                        "implementationCosts": 0,
                     },
                     "generalSteamOperations": {
                         "sitePowerImport": 5000,
                         "makeUpWaterTemperature": 50
                     },
-                    "implementationCosts": 0,
                     "equipmentNotes": "",
                     "turbineInput": {
                         "condensingTurbine": {
@@ -162,13 +162,13 @@ export const MockSsmt: Assessment = {
                     "operatingCosts": {
                         "fuelCost": 5.78,
                         "electricityCost": 0.05,
-                        "makeUpWaterCost": 0.0025
+                        "makeUpWaterCost": 0.0025,
+                        "implementationCosts": 0,
                     },
                     "generalSteamOperations": {
                         "sitePowerImport": 5000,
                         "makeUpWaterTemperature": 50
                     },
-                    "implementationCosts": 0,
                     "equipmentNotes": "",
                     "turbineInput": {
                         "condensingTurbine": {
@@ -196,103 +196,7 @@ export const MockSsmt: Assessment = {
                             "operationType": 0
                         }
                     },
-                    "modifications": [
-                        {
-                            "ssmt": {
-                                "name": "Remove Turbines",
-                                "setupDone": true,
-                                "operatingHours": {
-                                    "weeksPerYear": 52,
-                                    "daysPerWeek": 7,
-                                    // "shiftsPerDay": 3,
-                                    // "hoursPerShift": 8,
-                                    "hoursPerYear": 8000
-                                },
-                                "operatingCosts": {
-                                    "fuelCost": 5.78,
-                                    "electricityCost": 0.05,
-                                    "makeUpWaterCost": 0.0025
-                                },
-                                "generalSteamOperations": {
-                                    "sitePowerImport": 5000,
-                                    "makeUpWaterTemperature": 50
-                                },
-                                "implementationCosts": 0,
-                                "equipmentNotes": "",
-                                "turbineInput": {
-                                    "condensingTurbine": {
-                                        "useTurbine": false,
-                                        "operationType": 0
-                                    },
-                                    "highToLowTurbine": {
-                                        "isentropicEfficiency": 65,
-                                        "generationEfficiency": 100,
-                                        "operationType": 2,
-                                        "operationValue1": null,
-                                        "operationValue2": null,
-                                        "useTurbine": false
-                                    },
-                                    "highToMediumTurbine": {
-                                        "isentropicEfficiency": 65,
-                                        "generationEfficiency": 100,
-                                        "operationType": 2,
-                                        "operationValue1": null,
-                                        "operationValue2": null,
-                                        "useTurbine": false
-                                    },
-                                    "mediumToLowTurbine": {
-                                        "useTurbine": false,
-                                        "operationType": 0
-                                    }
-                                },
-                                "modifications": [],
-                                "boilerInput": {
-                                    "fuelType": 1,
-                                    "fuel": 1,
-                                    "combustionEfficiency": 85,
-                                    "blowdownRate": 2,
-                                    "blowdownFlashed": false,
-                                    "preheatMakeupWater": false,
-                                    "steamTemperature": 588.9,
-                                    "deaeratorVentRate": 0.1,
-                                    "deaeratorPressure": 15,
-                                    "approachTemperature": undefined
-                                },
-                                "headerInput": {
-                                    "numberOfHeaders": 3,
-                                    "highPressureHeader": {
-                                        "pressure": 600,
-                                        "processSteamUsage": 50,
-                                        "condensationRecoveryRate": 50,
-                                        "heatLoss": 0.1,
-                                        "condensateReturnTemperature": 150,
-                                        "flashCondensateReturn": false
-                                    },
-                                    "mediumPressureHeader": {
-                                        "pressure": 150,
-                                        "processSteamUsage": 100,
-                                        "condensationRecoveryRate": 50,
-                                        "heatLoss": 0.1,
-                                        "flashCondensateIntoHeader": false,
-                                        "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null,
-                                        "useBaselineProcessSteamUsage": true
-                                    },
-                                    "lowPressureHeader": {
-                                        "pressure": 20,
-                                        "processSteamUsage": 200,
-                                        "condensationRecoveryRate": 50,
-                                        "heatLoss": 0.1,
-                                        "flashCondensateIntoHeader": false,
-                                        "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null,
-                                        "useBaselineProcessSteamUsage": true
-                                    }
-                                },
-                            },
-                            "exploreOpportunities": true
-                        }
-                    ],
+                    "modifications": [],
                     "boilerInput": {
                         "fuelType": 1,
                         "fuel": 1,
@@ -353,13 +257,13 @@ export const MockSsmt: Assessment = {
                     "operatingCosts": {
                         "fuelCost": 5.78,
                         "electricityCost": 0.05,
-                        "makeUpWaterCost": 0.0025
+                        "makeUpWaterCost": 0.0025,
+                        "implementationCosts": 0,
                     },
                     "generalSteamOperations": {
                         "sitePowerImport": 5000,
                         "makeUpWaterTemperature": 50
                     },
-                    "implementationCosts": 0,
                     "equipmentNotes": "",
                     "turbineInput": {
                         "condensingTurbine": {
@@ -387,294 +291,7 @@ export const MockSsmt: Assessment = {
                             "operationType": 0
                         }
                     },
-                    "modifications": [
-                        {
-                            "ssmt": {
-                                "name": "Remove Turbines",
-                                "setupDone": true,
-                                "operatingHours": {
-                                    "weeksPerYear": 52,
-                                    "daysPerWeek": 7,
-                                    // "shiftsPerDay": 3,
-                                    // "hoursPerShift": 8,
-                                    "hoursPerYear": 8000
-                                },
-                                "operatingCosts": {
-                                    "fuelCost": 5.78,
-                                    "electricityCost": 0.05,
-                                    "makeUpWaterCost": 0.0025
-                                },
-                                "generalSteamOperations": {
-                                    "sitePowerImport": 5000,
-                                    "makeUpWaterTemperature": 50
-                                },
-                                "implementationCosts": 0,
-                                "equipmentNotes": "",
-                                "turbineInput": {
-                                    "condensingTurbine": {
-                                        "useTurbine": false,
-                                        "operationType": 0
-                                    },
-                                    "highToLowTurbine": {
-                                        "isentropicEfficiency": 65,
-                                        "generationEfficiency": 100,
-                                        "operationType": 2,
-                                        "operationValue1": null,
-                                        "operationValue2": null,
-                                        "useTurbine": false
-                                    },
-                                    "highToMediumTurbine": {
-                                        "isentropicEfficiency": 65,
-                                        "generationEfficiency": 100,
-                                        "operationType": 2,
-                                        "operationValue1": null,
-                                        "operationValue2": null,
-                                        "useTurbine": false
-                                    },
-                                    "mediumToLowTurbine": {
-                                        "useTurbine": false,
-                                        "operationType": 0
-                                    }
-                                },
-                                "modifications": [],
-                                "boilerInput": {
-                                    "fuelType": 1,
-                                    "fuel": 1,
-                                    "combustionEfficiency": 85,
-                                    "blowdownRate": 2,
-                                    "blowdownFlashed": false,
-                                    "preheatMakeupWater": false,
-                                    "steamTemperature": 588.9,
-                                    "deaeratorVentRate": 0.1,
-                                    "deaeratorPressure": 15,
-                                    "approachTemperature": undefined
-                                },
-                                "headerInput": {
-                                    "numberOfHeaders": 3,
-                                    "highPressureHeader": {
-                                        "pressure": 600,
-                                        "processSteamUsage": 50,
-                                        "condensationRecoveryRate": 50,
-                                        "heatLoss": 0.1,
-                                        "condensateReturnTemperature": 150,
-                                        "flashCondensateReturn": false
-                                    },
-                                    "mediumPressureHeader": {
-                                        "pressure": 150,
-                                        "processSteamUsage": 100,
-                                        "condensationRecoveryRate": 50,
-                                        "heatLoss": 0.1,
-                                        "flashCondensateIntoHeader": false,
-                                        "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null,
-                                        "useBaselineProcessSteamUsage": true
-                                    },
-                                    "lowPressureHeader": {
-                                        "pressure": 20,
-                                        "processSteamUsage": 200,
-                                        "condensationRecoveryRate": 50,
-                                        "heatLoss": 0.1,
-                                        "flashCondensateIntoHeader": false,
-                                        "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null,
-                                        "useBaselineProcessSteamUsage": true
-                                    }
-                                },
-                            },
-                            "exploreOpportunities": true
-                        },
-                        {
-                            "ssmt": {
-                                "name": "Flash Condensate",
-                                "setupDone": true,
-                                "operatingHours": {
-                                    "weeksPerYear": 52,
-                                    "daysPerWeek": 7,
-                                    // "shiftsPerDay": 3,
-                                    // "hoursPerShift": 8,
-                                    "hoursPerYear": 8000
-                                },
-                                "operatingCosts": {
-                                    "fuelCost": 5.78,
-                                    "electricityCost": 0.05,
-                                    "makeUpWaterCost": 0.0025
-                                },
-                                "generalSteamOperations": {
-                                    "sitePowerImport": 5000,
-                                    "makeUpWaterTemperature": 50
-                                },
-                                "implementationCosts": 0,
-                                "equipmentNotes": "",
-                                "turbineInput": {
-                                    "condensingTurbine": {
-                                        "useTurbine": false,
-                                        "operationType": 0
-                                    },
-                                    "highToLowTurbine": {
-                                        "isentropicEfficiency": 65,
-                                        "generationEfficiency": 100,
-                                        "operationType": 2,
-                                        "operationValue1": null,
-                                        "operationValue2": null,
-                                        "useTurbine": true
-                                    },
-                                    "highToMediumTurbine": {
-                                        "isentropicEfficiency": 65,
-                                        "generationEfficiency": 100,
-                                        "operationType": 2,
-                                        "operationValue1": null,
-                                        "operationValue2": null,
-                                        "useTurbine": true
-                                    },
-                                    "mediumToLowTurbine": {
-                                        "useTurbine": false,
-                                        "operationType": 0
-                                    }
-                                },
-                                "modifications": [
-                                    {
-                                        "ssmt": {
-                                            "name": "Remove Turbines",
-                                            "setupDone": true,
-                                            "operatingHours": {
-                                                "weeksPerYear": 52,
-                                                "daysPerWeek": 7,
-                                                // "shiftsPerDay": 3,
-                                                // "hoursPerShift": 8,
-                                                "hoursPerYear": 8000
-                                            },
-                                            "operatingCosts": {
-                                                "fuelCost": 5.78,
-                                                "electricityCost": 0.05,
-                                                "makeUpWaterCost": 0.0025
-                                            },
-                                            "generalSteamOperations": {
-                                                "sitePowerImport": 5000,
-                                                "makeUpWaterTemperature": 50
-                                            },
-                                            "implementationCosts": 0,
-                                            "equipmentNotes": "",
-                                            "turbineInput": {
-                                                "condensingTurbine": {
-                                                    "useTurbine": false,
-                                                    "operationType": 0
-                                                },
-                                                "highToLowTurbine": {
-                                                    "isentropicEfficiency": 65,
-                                                    "generationEfficiency": 100,
-                                                    "operationType": 2,
-                                                    "operationValue1": null,
-                                                    "operationValue2": null,
-                                                    "useTurbine": false
-                                                },
-                                                "highToMediumTurbine": {
-                                                    "isentropicEfficiency": 65,
-                                                    "generationEfficiency": 100,
-                                                    "operationType": 2,
-                                                    "operationValue1": null,
-                                                    "operationValue2": null,
-                                                    "useTurbine": false
-                                                },
-                                                "mediumToLowTurbine": {
-                                                    "useTurbine": false,
-                                                    "operationType": 0
-                                                }
-                                            },
-                                            "modifications": [],
-                                            "boilerInput": {
-                                                "fuelType": 1,
-                                                "fuel": 1,
-                                                "combustionEfficiency": 85,
-                                                "blowdownRate": 2,
-                                                "blowdownFlashed": false,
-                                                "preheatMakeupWater": false,
-                                                "steamTemperature": 588.9,
-                                                "deaeratorVentRate": 0.1,
-                                                "deaeratorPressure": 15,
-                                                "approachTemperature": undefined
-                                            },
-                                            "headerInput": {
-                                                "numberOfHeaders": 3,
-                                                "highPressureHeader": {
-                                                    "pressure": 600,
-                                                    "processSteamUsage": 50,
-                                                    "condensationRecoveryRate": 50,
-                                                    "heatLoss": 0.1,
-                                                    "condensateReturnTemperature": 150,
-                                                    "flashCondensateReturn": false
-                                                },
-                                                "mediumPressureHeader": {
-                                                    "pressure": 150,
-                                                    "processSteamUsage": 100,
-                                                    "condensationRecoveryRate": 50,
-                                                    "heatLoss": 0.1,
-                                                    "flashCondensateIntoHeader": false,
-                                                    "desuperheatSteamIntoNextHighest": false,
-                                                    "desuperheatSteamTemperature": null,
-                                                    "useBaselineProcessSteamUsage": true
-                                                },
-                                                "lowPressureHeader": {
-                                                    "pressure": 20,
-                                                    "processSteamUsage": 200,
-                                                    "condensationRecoveryRate": 50,
-                                                    "heatLoss": 0.1,
-                                                    "flashCondensateIntoHeader": false,
-                                                    "desuperheatSteamIntoNextHighest": false,
-                                                    "desuperheatSteamTemperature": null,
-                                                    "useBaselineProcessSteamUsage": true
-                                                }
-                                            },
-                                        },
-                                        "exploreOpportunities": true
-                                    }
-                                ],
-                                "boilerInput": {
-                                    "fuelType": 1,
-                                    "fuel": 1,
-                                    "combustionEfficiency": 85,
-                                    "blowdownRate": 2,
-                                    "blowdownFlashed": true,
-                                    "preheatMakeupWater": false,
-                                    "steamTemperature": 588.9,
-                                    "deaeratorVentRate": 0.1,
-                                    "deaeratorPressure": 15,
-                                    "approachTemperature": undefined
-                                },
-                                "headerInput": {
-                                    "numberOfHeaders": 3,
-                                    "highPressureHeader": {
-                                        "pressure": 600,
-                                        "processSteamUsage": 50,
-                                        "condensationRecoveryRate": 50,
-                                        "heatLoss": 0.1,
-                                        "condensateReturnTemperature": 150,
-                                        "flashCondensateReturn": false
-                                    },
-                                    "mediumPressureHeader": {
-                                        "pressure": 150,
-                                        "processSteamUsage": 100,
-                                        "condensationRecoveryRate": 50,
-                                        "heatLoss": 0.1,
-                                        "flashCondensateIntoHeader": true,
-                                        "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null,
-                                        "useBaselineProcessSteamUsage": true
-                                    },
-                                    "lowPressureHeader": {
-                                        "pressure": 20,
-                                        "processSteamUsage": 200,
-                                        "condensationRecoveryRate": 50,
-                                        "heatLoss": 0.1,
-                                        "flashCondensateIntoHeader": true,
-                                        "desuperheatSteamIntoNextHighest": false,
-                                        "desuperheatSteamTemperature": null,
-                                        "useBaselineProcessSteamUsage": true
-                                    }
-                                },
-                            },
-                            "exploreOpportunities": true
-                        }
-                    ],
+                    "modifications": [],
                     "boilerInput": {
                         "fuelType": 1,
                         "fuel": 1,
