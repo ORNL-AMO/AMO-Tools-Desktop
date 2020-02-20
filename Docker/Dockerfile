@@ -217,6 +217,8 @@ WORKDIR /home/AMO/AMO-Tools-Desktop
 #RUN npm run ng-high-memory
 #RUN npm run linux
 
+# npm install && npm update && npm run ng-high-memory && npm run linux
+
 #./'MEASUR 0.6.4-beta.AppImage' --appimage-extract-and-run
 #gunzip zip_file
 #--------------------------------------------------------------
