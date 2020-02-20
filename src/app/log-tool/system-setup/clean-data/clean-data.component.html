@@ -54,10 +54,10 @@
                             <span *ngIf="field.isDateField == true">
                                 {{field.unit}}
                             </span>
-                            <span *ngIf="field.unit != undefined && field.isDateField == false">
+                            <span *ngIf="field.unit && field.isDateField == false">
                                 <a class="click-link" (click)="editUnit(field)">{{field.unit}}</a>
                             </span>
-                            <span *ngIf="field.unit == undefined">
+                            <span *ngIf="!field.unit">
                                 <a class="click-link" (click)="editUnit(field)">+Add</a>
                             </span>
                         </td>
