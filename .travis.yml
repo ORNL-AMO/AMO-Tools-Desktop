@@ -11,9 +11,9 @@ os:
 #  - gcc
 #  - clang
 
-api_key: "GITHUB OAUTH TOKEN"
+api_key: "ACCESS_TOKEN"
 
-env: "ACCESS_TOKEN"
+#env: "ACCESS_TOKEN"
 
 before_install:
   - travis_retry npm i -g npm@6.4.0
