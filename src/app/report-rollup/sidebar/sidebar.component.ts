@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { ReportItem } from '../report-rollup-models';
 import { Subscription } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ReportRollupService } from '../report-rollup.service';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +15,12 @@ export class SidebarComponent implements OnInit {
   sidebarHeight: number;
   @Input()
   bannerHeight: number;
-  @Input()
+
+  @HostListener("window:scroll", [])
+  onWindowScroll() {
+    this.checkActiveAssessment();
+  }
+  
   focusedAssessment: Assessment;
 
   sidebarCollapsed: boolean = false;
@@ -23,12 +29,14 @@ export class SidebarComponent implements OnInit {
   _fsatAssessments: Array<ReportItem>;
   _ssmtAssessments: Array<ReportItem>;
   _treasureHuntAssessments: Array<ReportItem>;
+  _reportAssessments: Array<ReportItem>;
   phastAssessmentsSub: Subscription;
   fsatAssessmentsSub: Subscription;
   psatAssessmentSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService) { }
+  reportAssessmentsSub: Subscription;
+  constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService) { }
 
   ngOnInit(): void {
     this._phastAssessments = new Array<ReportItem>();
@@ -64,6 +72,14 @@ export class SidebarComponent implements OnInit {
         this._treasureHuntAssessments = items;
       }
     });
+    this.reportAssessmentsSub = this.reportRollupService.reportAssessments.subscribe(items => {
+      if (items) {
+        // if (items.length !== 0) {
+        this._reportAssessments = items;
+        // this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
+        // }
+      }
+    });
     this.initFocusedAssessment();
   }
 
@@ -97,5 +113,19 @@ export class SidebarComponent implements OnInit {
 
   setFocused(assessment: Assessment) {
     this.focusedAssessment = assessment;
+  }
+
+  checkActiveAssessment() {
+    let scrollAmount = this.windowRefService.nativeWindow.pageYOffset;
+    if (scrollAmount) {
+      this._reportAssessments.forEach(item => {
+        let doc = this.windowRefService.getDoc();
+        let element = doc.getElementById('assessment_' + item.assessment.id);
+        let diff = Math.abs(Math.abs(this.bannerHeight - element.offsetTop) - scrollAmount);
+        if (diff > 0 && diff < 50) {
+          this.focusedAssessment = item.assessment;
+        }
+      });
+    }
   }
 }

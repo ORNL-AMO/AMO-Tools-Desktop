@@ -17,10 +17,7 @@ import { ViewportScroller } from '@angular/common';
 })
 export class ReportRollupComponent implements OnInit {
 
-  @HostListener("window:scroll", [])
-  onWindowScroll() {
-    this.checkActiveAssessment();
-  }
+
 
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
@@ -31,7 +28,7 @@ export class ReportRollupComponent implements OnInit {
   _fsatAssessments: Array<ReportItem>;
   _ssmtAssessments: Array<ReportItem>;
   _treasureHuntAssessments: Array<ReportItem>;
-  focusedAssessment: Assessment;
+  // focusedAssessment: Assessment;
   //debug
   selectedPhastCalcs: Array<Calculator>;
   selectedPsatCalcs: Array<Calculator>;
@@ -59,7 +56,7 @@ export class ReportRollupComponent implements OnInit {
   numTreasureHunt: number = 0;
   sidebarHeight: number = 0;
   printView: boolean = false;
-  reportAssessmentsSub: Subscription;
+  // reportAssessmentsSub: Subscription;
   phastAssessmentsSub: Subscription;
   fsatAssessmentsSub: Subscription;
   allPhastSub: Subscription;
@@ -128,14 +125,14 @@ export class ReportRollupComponent implements OnInit {
     this.checkSettings();
 
     this.createdDate = new Date();
-    this.reportAssessmentsSub = this.reportRollupService.reportAssessments.subscribe(items => {
-      if (items) {
-        // if (items.length !== 0) {
-        this._reportAssessments = items;
-        // this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
-        // }
-      }
-    });
+    // this.reportAssessmentsSub = this.reportRollupService.reportAssessments.subscribe(items => {
+    //   if (items) {
+    //     // if (items.length !== 0) {
+    //     this._reportAssessments = items;
+    //     // this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
+    //     // }
+    //   }
+    // });
     this.allPhastSub = this.reportRollupService.allPhastResults.subscribe(val => {
       if (val.length !== 0) {
         this.reportRollupService.initPhastCompare(val);
@@ -235,7 +232,7 @@ export class ReportRollupComponent implements OnInit {
 
   ngOnDestroy() {
     this.reportRollupService.initSummary();
-    if (this.reportAssessmentsSub) this.reportAssessmentsSub.unsubscribe();
+    // if (this.reportAssessmentsSub) this.reportAssessmentsSub.unsubscribe();
     if (this.phastAssessmentsSub) this.phastAssessmentsSub.unsubscribe();
     if (this.allPhastSub) this.allPhastSub.unsubscribe();
     if (this.selectedPhastSub) this.selectedPhastSub.unsubscribe();
@@ -479,19 +476,7 @@ export class ReportRollupComponent implements OnInit {
     this.viewportScroller.setOffset([0, this.bannerHeight + 15]);
   }
 
-  checkActiveAssessment() {
-    let scrollAmount = this.windowRefService.nativeWindow.pageYOffset;
-    if (this.reportHeader && scrollAmount) {
-      this._reportAssessments.forEach(item => {
-        let doc = this.windowRefService.getDoc();
-        let element = doc.getElementById('assessment_' + item.assessment.id);
-        let diff = Math.abs(Math.abs(this.bannerHeight - element.offsetTop) - scrollAmount);
-        if (diff > 0 && diff < 50) {
-          this.focusedAssessment = item.assessment;
-        }
-      });
-    }
-  }
+ 
 
   showPhastModal() {
     this.phastRollupModal.show();
@@ -543,8 +528,4 @@ export class ReportRollupComponent implements OnInit {
     }
     this.showPrintMenu = false;
   }
-
-  // collapseSidebar() {
-  //   this.sidebarCollapsed = !this.sidebarCollapsed;
-  // }
 }
