@@ -11,7 +11,7 @@ os:
 #  - gcc
 #  - clang
 
-api_key: "ACCESS_TOKEN"
+#api_key: "ACCESS_TOKEN"
 
 #env: "ACCESS_TOKEN"
 
