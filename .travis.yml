@@ -32,8 +32,8 @@ before_install:
   - echo "$OS_FLAG"
 
 install:
-  - npm update
   - travis_retry npm install
+  - npm update
 
 script:
   #- npm run build
