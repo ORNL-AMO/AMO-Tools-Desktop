@@ -42,3 +42,4 @@ script:
   - ./node_modules/.bin/build -l --x64 --publish="never"
   #- npm run linux
   - ls
+  - ls ../output/
