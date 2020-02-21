@@ -86,11 +86,11 @@
         </div>
     </div>
 
-    <div *ngIf="_ssmtAssessments.length > 0 && rollupPrintOptions.printSsmtRollup" class="row print-break-before">
+    <!-- <div *ngIf="_ssmtAssessments.length > 0 && rollupPrintOptions.printSsmtRollup" class="row print-break-before">
         <div class="col-12">
             <app-ssmt-rollup-print [settings]="settings"></app-ssmt-rollup-print>
         </div>
-    </div>
+    </div> -->
     <div class="assessment-item row" *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}">
         <div class="col-12">
             <app-ssmt-report *ngIf="item.assessment.ssmt" [assessment]="item.assessment" [settings]="item.settings"
