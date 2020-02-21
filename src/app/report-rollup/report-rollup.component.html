@@ -11,33 +11,21 @@
     <p class="report-notes">{{reportNotes}}</p>
 </div>
 
-<div class="row sticky-top no-gutters" id="reportHeader" *ngIf="printView && settings">
+<!-- <div class="row sticky-top no-gutters" id="reportHeader" *ngIf="printView && settings">
     <div class="col-12">
         <div class="report-header hide-print">
             <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()"
                 (emitPrint)="showPrintModal()" (emitShowUnitModal)="showUnitModal()">
             </app-report-banner>
-            <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats"
-                [numFsats]="numFsats" [numTreasureHunt]="numTreasureHunt" (showPhastModal)="showPhastModal()"
+            <app-report-summary id="reportSummary" [settings]="settings" (showPhastModal)="showPhastModal()"
                 (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()" (showFsatModal)="showFsatModal()">
             </app-report-summary>
         </div>
     </div>
-</div>
+</div> -->
 <!--END PRINT-->
 
 <div *ngIf="settings && !gatheringAssessments">
-
-    <div class="report-cover" *ngIf="!printView">
-        <img src="assets/images/DOE-banner-color.png" class="doe-logo">
-
-        <div class="report-title">
-            <h4>Efficiency Report:</h4>
-            <h5>{{createdDate| date:'medium'}}</h5>
-        </div>
-
-        <p class="report-notes">{{reportNotes}}</p>
-    </div>
     <div #reportHeader class="row sticky-top no-gutters" id="reportHeader" *ngIf="!printView">
         <div class="col-12">
             <div class="report-header hide-print">
@@ -46,160 +34,142 @@
                     <!-- <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()"
                     (emitShowUnitModal)="showUnitModal()"> -->
                 </app-report-banner>
-                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts"
-                    [numFsats]="numFsats" [numPsats]="numPsats" [numTreasureHunt]="numTreasureHunt" [numSsmt]="numSsmt"
-                    (showPhastModal)="showPhastModal()" (showPsatModal)="showPsatModal()"
-                    (hideSummary)="setSidebarHeight()" (showFsatModal)="showFsatModal()"
-                    (showSsmtModal)="showSsmtModal()"></app-report-summary>
+                <app-report-summary id="reportSummary" [settings]="settings" (showPhastModal)="showPhastModal()"
+                    (showPsatModal)="showPsatModal()" (hideSummary)="setSidebarHeight()"
+                    (showFsatModal)="showFsatModal()" (showSsmtModal)="showSsmtModal()"></app-report-summary>
             </div>
         </div>
     </div>
     <!-- End .report-header -->
-
     <div class="d-flex">
-
         <app-sidebar [sidebarHeight]="sidebarHeight" [bannerHeight]="bannerHeight"></app-sidebar>
-        <!-- End .sidebar -->
-
         <div #assessmentReportsDiv class="assessment-padding d-flex flex-column scroll-item print-height w-100 skyline">
             <router-outlet></router-outlet>
         </div>
-        <!-- End .report-container -->
     </div>
+</div>
 
-    <div *ngIf="!assessmentsGathered"
-        class="gathering-assessments d-flex justify-content-center align-items-center skyline">
-        <div class="main-content">
-            <div class="spinner text-center">
-                <div class="bounce1"></div>
-                <div class="bounce2"></div>
-                <div class="bounce3"></div>
-            </div>
-            <h1 *ngIf="gatheringAssessments">Gathering Assessments</h1>
-            <h1 *ngIf="!gatheringAssessments">Calculating Results</h1>
+<div *ngIf="!assessmentsGathered"
+    class="gathering-assessments d-flex justify-content-center align-items-center skyline">
+    <div class="main-content">
+        <div class="spinner text-center">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
         </div>
+        <h1 *ngIf="gatheringAssessments">Gathering Assessments</h1>
+        <h1 *ngIf="!gatheringAssessments">Calculating Results</h1>
     </div>
+</div>
 
-    <div class="print-notification hide-print" *ngIf="printView">
-        <div class="col-12 mx-auto">
-            <div class="print-div row justify-content-center align-items-center">
-                <div class="print-col">
-                    <h4>Building Print View</h4>
-                    <h5>One Moment Please</h5>
-                    <span class="fa fa-print"></span>
-                    <div class="spinner">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--psat rollup modal -->
-    <div bsModal #psatRollupModal="bs-modal" class="psat-modal modal fade psat" tabindex="-1" role="dialog"
-        aria-labelledby="psatRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Pump assessment Rollup</h5>
-                    <button class="close" aria-label="Close" (click)="hidePsatModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body panel-container psat scroll-item">
-                    <app-psat-rollup [settings]="settings" [calculators]="selectedPsatCalcs"></app-psat-rollup>
+<div class="print-notification hide-print" *ngIf="printView">
+    <div class="col-12 mx-auto">
+        <div class="print-div row justify-content-center align-items-center">
+            <div class="print-col">
+                <h4>Building Print View</h4>
+                <h5>One Moment Please</h5>
+                <span class="fa fa-print"></span>
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!--phast rollup modal-->
-    <div bsModal #phastRollupModal="bs-modal" class="phast-modal modal fade phast" tabindex="-1" role="dialog"
-        aria-labelledby="phastRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}"
-        *ngIf="assessmentsGathered">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Process Heating Rollup</h5>
-                    <button class="close" aria-label="Close" (click)="hidePhastModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body panel-container phast scroll-item">
-                    <app-phast-rollup [settings]="settings" [calculators]="selectedPhastCalcs"></app-phast-rollup>
-                </div>
+<app-report-rollup-modals></app-report-rollup-modals>
+
+<!--psat rollup modal -->
+<div bsModal #psatRollupModal="bs-modal" class="psat-modal modal fade psat" tabindex="-1" role="dialog"
+    aria-labelledby="psatRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Pump assessment Rollup</h5>
+                <button class="close" aria-label="Close" (click)="hidePsatModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel-container psat scroll-item">
+                <app-psat-rollup [settings]="settings" [calculators]="selectedPsatCalcs"></app-psat-rollup>
             </div>
         </div>
     </div>
+</div>
 
-    <!--fsat rollup modal -->
-    <div bsModal #fsatRollupModal="bs-modal" class="fsat-modal modal fade fsat" tabindex="-1" role="dialog"
-        aria-labelledby="fsatRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Fan Assessment Rollup</h5>
-                    <button class="close" aria-label="Close" (click)="hideFsatModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body panel-container fsat scroll-item">
-                    <app-fsat-rollup [settings]="settings" [calculators]="selectedFsatCalcs"></app-fsat-rollup>
-                </div>
+<!--phast rollup modal-->
+<div bsModal #phastRollupModal="bs-modal" class="phast-modal modal fade phast" tabindex="-1" role="dialog"
+    aria-labelledby="phastRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Process Heating Rollup</h5>
+                <button class="close" aria-label="Close" (click)="hidePhastModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel-container phast scroll-item">
+                <app-phast-rollup [settings]="settings" [calculators]="selectedPhastCalcs"></app-phast-rollup>
             </div>
         </div>
     </div>
+</div>
 
-    <!--ssmt rollup modal -->
-    <div bsModal #ssmtRollupModal="bs-modal" class="ssmt-modal modal fade ssmt" tabindex="-1" role="dialog"
-        aria-labelledby="ssmtRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Steam Assessment Rollup</h5>
-                    <button class="close" aria-label="Close" (click)="hideSsmtModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body panel-container ssmt scroll-item">
-                    <app-ssmt-rollup [settings]="settings"></app-ssmt-rollup>
-                </div>
+<!--fsat rollup modal -->
+<div bsModal #fsatRollupModal="bs-modal" class="fsat-modal modal fade fsat" tabindex="-1" role="dialog"
+    aria-labelledby="fsatRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Fan Assessment Rollup</h5>
+                <button class="close" aria-label="Close" (click)="hideFsatModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel-container fsat scroll-item">
+                <app-fsat-rollup [settings]="settings" [calculators]="selectedFsatCalcs"></app-fsat-rollup>
             </div>
         </div>
     </div>
+</div>
 
-
-
-    <!--units modal-->
-    <div bsModal #unitModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unitModal"
-        aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Report Units</h5>
-                    <button class="close" aria-label="Close" (click)="hideUnitModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <app-report-rollup-units *ngIf="settings" [settings]="settings" (closeUnitModal)="hideUnitModal()">
-                    </app-report-rollup-units>
-                </div>
+<!--ssmt rollup modal -->
+<div bsModal #ssmtRollupModal="bs-modal" class="ssmt-modal modal fade ssmt" tabindex="-1" role="dialog"
+    aria-labelledby="ssmtRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Steam Assessment Rollup</h5>
+                <button class="close" aria-label="Close" (click)="hideSsmtModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel-container ssmt scroll-item">
+                <app-ssmt-rollup [settings]="settings"></app-ssmt-rollup>
             </div>
         </div>
     </div>
+</div>
 
 
-    <app-print-options-menu *ngIf="showPrintMenu" [showRollupReportOptions]="showRollupReportOptions"
-        [showPsatReportOptions]="showPsatReportOptions" [showFsatReportOptions]="showFsatReportOptions"
-        [showPhastReportOptions]="showPhastReportOptions" [showTHReportOptions]="showTreasureHuntReportOptions"
-        [showSsmtReportOptions]="showSsmtReportOptions" [selectAll]="selectAll" [printReportGraphs]="printReportGraphs"
-        [printReportSankey]="printReportSankey" [printResults]="printResults" [printInputData]="printInputData"
-        [printEnergyUsed]="printEnergyUsed" [printExecutiveSummary]="printExecutiveSummary"
-        [printEnergySummary]="printEnergySummary" [printLossesSummary]="printLossesSummary"
-        [printPsatRollup]="printPsatRollup" [printFsatRollup]="printFsatRollup" [printPhastRollup]="printPhastRollup"
-        (emitClosePrintModal)="closePrintModal($event)" (emitTogglePrint)="togglePrint($event)"
-        (emitPrint)="setPrintViewThenPrint()">
-    </app-print-options-menu>
+
+<!--units modal-->
+<div bsModal #unitModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unitModal"
+    aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Report Units</h5>
+                <button class="close" aria-label="Close" (click)="hideUnitModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <app-report-rollup-units *ngIf="settings" [settings]="settings" (closeUnitModal)="hideUnitModal()">
+                </app-report-rollup-units>
+            </div>
+        </div>
+    </div>
+</div>

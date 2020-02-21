@@ -13,8 +13,6 @@ import { PhastResultsData } from '../../report-rollup-models';
 export class PhastSummaryComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  numPhasts: number;
 
   furnaceSavingsPotential: number = 0;
   energySavingsPotential: number = 0;

@@ -18,8 +18,6 @@ export class OutputSummaryComponent implements OnInit {
   settings: Settings;
   @Input()
   inRollup: boolean;
-  @Output('selectModification')
-  selectModification = new EventEmitter<any>();
   @Input()
   assessment: Assessment;
 

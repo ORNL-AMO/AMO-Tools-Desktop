@@ -52,6 +52,8 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { AssessmentReportsComponent } from './assessment-reports/assessment-reports.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
+import { RollupPrintService } from './rollup-print.service';
+import { ReportRollupModalsComponent } from './report-rollup-modals/report-rollup-modals.component';
 
 @NgModule({
   imports: [
@@ -108,9 +110,10 @@ import { RouterModule } from '@angular/router';
     TreasureHuntSummaryComponent,
     AssessmentReportsComponent,
     SidebarComponent,
+    ReportRollupModalsComponent,
 
   ],
-  providers: [ReportRollupService],
+  providers: [ReportRollupService, RollupPrintService],
   exports: [ReportRollupComponent]
 })
 export class ReportRollupModule { }

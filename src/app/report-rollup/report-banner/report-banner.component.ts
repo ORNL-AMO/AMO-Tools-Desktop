@@ -1,6 +1,10 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { DirectoryDashboardService } from '../../dashboard/directory-dashboard/directory-dashboard.service';
 import { Router } from '@angular/router';
+import { RollupPrintService, RollupPrintOptions } from '../rollup-print.service';
+import { Subscription } from 'rxjs';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { ReportRollupService } from '../report-rollup.service';
 
 @Component({
   selector: 'app-report-banner',
@@ -8,14 +12,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./report-banner.component.css']
 })
 export class ReportBannerComponent implements OnInit {
-  @Output('emitExport')
-  emitExport = new EventEmitter<boolean>();
-  @Output('emitPrint')
-  emitPrint = new EventEmitter<boolean>();
+  // @Output('emitExport')
+  // emitExport = new EventEmitter<boolean>();
   @Output('emitShowUnitModal')
   emitShowUnitModal = new EventEmitter<boolean>();
 
-  constructor(private directoryDashboardService: DirectoryDashboardService, private router: Router) { }
+
+  constructor(private directoryDashboardService: DirectoryDashboardService, private router: Router,
+    private rollupPrintService: RollupPrintService) { }
 
   ngOnInit() {
   }
@@ -25,12 +29,8 @@ export class ReportBannerComponent implements OnInit {
     this.router.navigateByUrl('/directory-dashboard/' + directoryId);
   }
 
-  exportToCsv() {
-    this.emitExport.emit(true);
-  }
-
-  print() {
-    this.emitPrint.emit(true);
+  showPrintModal() {
+    this.rollupPrintService.showPrintOptionsModal.next(true);
   }
 
   showUnitsModal() {

@@ -62,7 +62,11 @@ export class ReportRollupService {
 
   calcsArray: Array<Calculator>;
   selectedCalcs: BehaviorSubject<Array<Calculator>>;
-
+  numPhasts: number = 0;
+  numPsats: number = 0;
+  numFsats: number = 0;
+  numSsmt: number = 0;
+  numTreasureHunt: number = 0;
   constructor(
     private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService,

@@ -1,0 +1,16 @@
+<app-print-options-menu *ngIf="showPrintMenu" [showRollupReportOptions]="true"
+    [showPsatReportOptions]="showPsatReportOptions" [showFsatReportOptions]="showFsatReportOptions"
+    [showPhastReportOptions]="showPhastReportOptions" [showTHReportOptions]="showTHReportOptions"
+    [showSsmtReportOptions]="showSsmtReportOptions" [selectAll]="rollupPrintOptions.selectAll"
+    [printReportGraphs]="rollupPrintOptions.printReportGraphs"
+    [printReportSankey]="rollupPrintOptions.printReportSankey" [printResults]="rollupPrintOptions.printResults"
+    [printInputData]="rollupPrintOptions.printInputData" [printEnergyUsed]="rollupPrintOptions.printEnergyUsed"
+    [printExecutiveSummary]="rollupPrintOptions.printExecutiveSummary"
+    [printEnergySummary]="rollupPrintOptions.printEnergySummary"
+    [printLossesSummary]="rollupPrintOptions.printLossesSummary" [printPsatRollup]="rollupPrintOptions.printPsatRollup"
+    [printFsatRollup]="rollupPrintOptions.printFsatRollup" [printPhastRollup]="rollupPrintOptions.printPhastRollup"
+    [printReportOpportunityPayback]="rollupPrintOptions.printReportOpportunityPayback"
+    [printReportOpportunitySummary]="rollupPrintOptions.printReportOpportunitySummary"
+    [printSsmtRollup]="rollupPrintOptions.printSsmtRollup" (emitClosePrintMenu)="closePrintModal($event)"
+    (emitTogglePrint)="togglePrint($event)" (emitPrint)="setPrintViewThenPrint()">
+</app-print-options-menu>

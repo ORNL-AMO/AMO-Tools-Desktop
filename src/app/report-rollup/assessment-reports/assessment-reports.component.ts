@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ReportItem } from '../report-rollup-models';
 import { ReportRollupService } from '../report-rollup.service';
-import { Router, Scroll } from '@angular/router';
-import { ViewportScroller } from '@angular/common';
-import { filter } from 'rxjs/operators';
+import { RollupPrintService, RollupPrintOptions } from '../rollup-print.service';
 
 @Component({
   selector: 'app-assessment-reports',
@@ -23,7 +21,11 @@ export class AssessmentReportsComponent implements OnInit {
   psatAssessmentSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService, private router: Router, private viewportScroller: ViewportScroller) { }
+  printView: boolean;
+  printViewSub: Subscription;
+  rollupPrintOptions: RollupPrintOptions;
+  rollupPrintOptionsSub: Subscription;
+  constructor(private reportRollupService: ReportRollupService, private rollupPrintService: RollupPrintService) { }
 
   ngOnInit(): void {
     this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
@@ -55,20 +57,13 @@ export class AssessmentReportsComponent implements OnInit {
       }
     });
 
-    // this.router.events.pipe(filter(e => e instanceof Scroll)).subscribe((e: any) => {
-    //   console.log(e);
+    this.printViewSub = this.rollupPrintService.showPrintView.subscribe(val => {
+      this.printView = val;
+    });
 
-    //   // this is fix for dynamic generated(loaded..?) content
-    //   setTimeout(() => {
-    //     if (e.position) {
-    //       this.viewportScroller.scrollToPosition(e.position);
-    //     } else if (e.anchor) {
-    //       this.viewportScroller.scrollToAnchor(e.anchor);
-    //     } else {
-    //       this.viewportScroller.scrollToPosition([0, 0]);
-    //     }
-    //   });
-    // });
+    this.rollupPrintOptionsSub = this.rollupPrintService.rollupPrintOptions.subscribe(val => {
+      this.rollupPrintOptions = val;
+    });
   }
 
   ngOnDestroy() {
@@ -77,5 +72,6 @@ export class AssessmentReportsComponent implements OnInit {
     this.psatAssessmentSub.unsubscribe();
     this.ssmtAssessmentsSub.unsubscribe();
     this.treasureHuntAssesmentsSub.unsubscribe();
+    this.printViewSub.unsubscribe();
   }
 }

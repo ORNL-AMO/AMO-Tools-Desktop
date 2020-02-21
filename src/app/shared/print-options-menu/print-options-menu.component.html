@@ -51,7 +51,7 @@
                         Fan Assessment Rollup Summary
                     </div>
                 </div>
-                <!-- <div class="row toggle-btn pad-top-10" *ngIf="showSsmtReportOptions && showRollupReportOptions"
+                <div class="row toggle-btn pad-top-10" *ngIf="showSsmtReportOptions && showRollupReportOptions"
                     (click)="togglePrint('ssmtRollup')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printSsmtRollup"></app-animated-checkmark>
@@ -59,7 +59,7 @@
                     <div class="col-8 bottom-divider">
                         SSMT Rollup Summary
                     </div>
-                </div> -->
+                </div>
 
                 <div *ngIf="!showSsmtReportOptions && !showTHReportOptions" class="row toggle-btn pad-top-10"
                     (click)="togglePrint('results')">
