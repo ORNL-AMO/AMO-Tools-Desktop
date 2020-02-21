@@ -11,58 +11,16 @@ import { ReportRollupService } from '../report-rollup.service';
 export class ReportSummaryComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Output('showPhastModal')
-  showPhastModal = new EventEmitter<boolean>();
-  @Output('showPsatModal')
-  showPsatModal = new EventEmitter<boolean>();
-  @Output('showFsatModal')
-  showFsatModal = new EventEmitter<boolean>();
-  @Output('showSsmtModal')
-  showSsmtModal = new EventEmitter<boolean>();
-  @Input()
-  phastResults: Array<PhastResultsData>;
-  // @Input()
-  // numPhasts: number;
-  // @Input()
-  // numPsats: number;
-  // @Input()
-  // numFsats: number;
-  // @Input()
-  // numSsmt: number;
-  // @Input()
-  // numTreasureHunt: number;
-
   @Output('hideSummary')
   hideSummary = new EventEmitter<boolean>();
-  // @ViewChild('rollupModal') public rollupModal: ModalDirective;
   showSummary: string = 'open';
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
   }
 
-
-  showFurnaceRollup() {
-    this.showPhastModal.emit(true);
-  }
-  // showModal() {
-  //     this.rollupModal.show();
-  // }
-
-  // hideModal() {
-  //   this.rollupModal.hide();
-  // }
-
-  showPumpModal() {
-    this.showPsatModal.emit(true);
-  }
-
-  showFanModal() {
-    this.showFsatModal.emit(true);
-  }
-
-  showSteamModal(){
-    this.showSsmtModal.emit(true);
+  showAssessmentModal(assessmentModalType: string){
+    this.reportRollupService.showSummaryModal.next(assessmentModalType);
   }
 
   collapseSummary(str: string) {

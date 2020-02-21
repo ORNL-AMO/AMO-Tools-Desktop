@@ -3,19 +3,19 @@
         <div class="col-12">
             <ul>
                 <li *ngIf="reportRollupService.numPsats != 0" [hidden]="showSummary == 'closed'" class="pump-summary"
-                    (click)="showPumpModal()">
+                    (click)="showAssessmentModal('psat')">
                     <app-psat-summary></app-psat-summary>
                 </li>
                 <li *ngIf="reportRollupService.numPhasts != 0" [hidden]="showSummary == 'closed'"
-                    class="furnace-summary" (click)="showFurnaceRollup()">
+                    class="furnace-summary" (click)="showAssessmentModal('phast')">
                     <app-phast-summary [settings]="settings"></app-phast-summary>
                 </li>
                 <li *ngIf="reportRollupService.numFsats != 0" [hidden]="showSummary == 'closed'" class="fan-summary"
-                    (click)="showFanModal()">
+                    (click)="showAssessmentModal('fsat')">
                     <app-fsat-summary></app-fsat-summary>
                 </li>
                 <li *ngIf="reportRollupService.numSsmt != 0" [hidden]="showSummary == 'closed'" class="ssmt-summary"
-                    (click)="showSteamModal()">
+                    (click)="showAssessmentModal('ssmt')">
                     <app-ssmt-summary [settings]="settings"></app-ssmt-summary>
                 </li>
                 <li *ngIf="reportRollupService.numTreasureHunt != 0" [hidden]="showSummary == 'closed'"

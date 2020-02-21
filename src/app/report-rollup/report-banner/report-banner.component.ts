@@ -14,12 +14,10 @@ import { ReportRollupService } from '../report-rollup.service';
 export class ReportBannerComponent implements OnInit {
   // @Output('emitExport')
   // emitExport = new EventEmitter<boolean>();
-  @Output('emitShowUnitModal')
-  emitShowUnitModal = new EventEmitter<boolean>();
 
 
   constructor(private directoryDashboardService: DirectoryDashboardService, private router: Router,
-    private rollupPrintService: RollupPrintService) { }
+    private rollupPrintService: RollupPrintService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
   }
@@ -34,7 +32,7 @@ export class ReportBannerComponent implements OnInit {
   }
 
   showUnitsModal() {
-    this.emitShowUnitModal.emit(true);
+    this.reportRollupService.showSummaryModal.next('unitsModal');
   }
 
 }

@@ -67,6 +67,7 @@ export class ReportRollupService {
   numFsats: number = 0;
   numSsmt: number = 0;
   numTreasureHunt: number = 0;
+  showSummaryModal: BehaviorSubject<string>;
   constructor(
     private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService,
@@ -112,6 +113,7 @@ export class ReportRollupService {
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
 
     this.allTreasureHuntResults = new BehaviorSubject<Array<TreasureHuntResultsData>>(new Array<TreasureHuntResultsData>())
+    this.showSummaryModal = new BehaviorSubject<string>(undefined);
   }
 
 
