@@ -220,13 +220,13 @@ export class AssessmentService {
       operatingCosts: {
         fuelCost: 5.78,
         makeUpWaterCost: 0.03,
-        electricityCost: .05
+        electricityCost: .05,
+        implementationCosts: 0.0
       },
       generalSteamOperations: {
         sitePowerImport: undefined,
         makeUpWaterTemperature: 50
       },
-      implementationCosts: 0.0,
       equipmentNotes: '',
       turbineInput: {
         condensingTurbine: {

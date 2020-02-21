@@ -4,7 +4,7 @@
     <tr>
       <td class="bold w-50">Energy Use</td>
       <td class="text-center w-50">
-        {{results.baselineResults.energyUse | number:'.1-3'}}
+        {{results.baselineResults.energyUse | number:'1.0-0'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
       </td>
@@ -12,13 +12,13 @@
     <tr>
       <td class="bold w-50">Energy Cost</td>
       <td class="text-center w-50">
-        {{results.baselineResults.energyCost | currency}}/yr
+        {{results.baselineResults.energyCost | currency: 'USD':'symbol': '1.0-0'}}/yr
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Total Flow</td>
       <td class="text-center w-50">
-        {{results.baselineResults.totalFlow | number:'.1-3'}}
+        {{results.baselineResults.totalFlow | number:'1.0-0'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>3</sup>/yr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>/yr
       </td>
@@ -37,7 +37,7 @@
     <tr>
       <td class="bold w-50">Energy Use</td>
       <td class="text-center w-50">
-        {{results.modificationResults.energyUse | number:'.1-3'}}
+        {{results.modificationResults.energyUse | number:'1.0-0'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
       </td>
@@ -45,13 +45,13 @@
     <tr>
       <td class="bold w-50">Energy Cost</td>
       <td class="text-center w-50">
-        {{results.modificationResults.energyCost | currency}}/yr
+        {{results.modificationResults.energyCost | currency:'USD':'symbol': '1.0-0'}}/yr
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Total Flow</td>
       <td class="text-center w-50">
-        {{results.modificationResults.totalFlow | number:'.1-3'}}
+        {{results.modificationResults.totalFlow | number:'1.0-0'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>3</sup>/yr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>/yr
       </td>
@@ -66,14 +66,14 @@
   <tbody>
     <tr>
       <td class="bold w-50">Annual Energy Savings</td>
-      <td class="text-center w-50">{{results.annualEnergySavings | number:'.1-3'}}
+      <td class="text-center w-50">{{results.annualEnergySavings | number:'1.0-0'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/yr</span>
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Annual Cost Savings</td>
-      <td class="text-center w-50">{{results.annualCostSavings | currency}}/yr</td>
+      <td class="text-center w-50">{{results.annualCostSavings | currency:'USD':'symbol': '1.0-0'}}/yr</td>
     </tr>
   </tbody>
 </table>

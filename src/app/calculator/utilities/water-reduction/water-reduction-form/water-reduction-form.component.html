@@ -209,7 +209,7 @@
         <label class="small bold" *ngIf="isWastewater">Wastewater Disposal</label>
       </div>
       <div class="col-6 text-center">
-        <span class="small bold">{{individualResults.waterUse | number:'.0-1'}}
+        <span class="small bold">{{individualResults.waterUse | number:'1.0-0'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
         </span>
