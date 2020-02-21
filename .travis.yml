@@ -41,7 +41,7 @@ script:
   #- npm run "$OS_NAME"
   #- ls node_modules/
   - ls ./node_modules/@angular/cli/bin/
-  - npm run ng-high-memory
+  - travis_wait npm run ng-high-memory
   - ./node_modules/.bin/build -"$OS_FLAG" --x64 --publish="never"
   #- npm run linux
   - ls
