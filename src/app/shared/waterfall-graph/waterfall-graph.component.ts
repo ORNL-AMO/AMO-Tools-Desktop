@@ -24,6 +24,7 @@ export class WaterfallGraphComponent implements OnInit {
   containerHeight: number;
   @Input()
   printView: boolean;
+
   @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
   canvasWidth: number;
   canvasHeight: number;
@@ -48,19 +49,24 @@ export class WaterfallGraphComponent implements OnInit {
   constructor(private waterfallGraphService: WaterfallGraphService) { }
 
   ngOnInit() {
-    this.checkInputs();
-    this.resizeGraph();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.waterfallInput1 && !changes.waterfallInput1.firstChange) {
-      this.checkInputs();
-      this.resizeGraph();
+    if (this.ngChart) {
+      if (changes.waterfallInput1 && !changes.waterfallInput1.firstChange) {
+        this.checkInputs();
+        this.resizeGraph();
+      }
+      if (changes.waterfallInput2 && !changes.waterfallInput2.firstChange) {
+        this.checkInputs();
+        this.resizeGraph();
+      }
     }
-    if (changes.waterfallInput2 && !changes.waterfallInput2.firstChange) {
-      this.checkInputs();
-      this.resizeGraph();
-    }
+  }
+
+  ngAfterViewInit() {
+    this.checkInputs();
+    this.resizeGraph();
   }
 
   checkInputs() {
