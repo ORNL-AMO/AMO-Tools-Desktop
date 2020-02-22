@@ -88,7 +88,7 @@
     <div class="dropdown-menu p-0 teams-dropdown" [ngClass]="{'show': displayEquipment == true}">
       <div class="list-group">
         <a class="list-group-item list-group-item-action" *ngFor="let equipment of equipments"
-          [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.name}}
+          [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.display}}
         </a>
       </div>
     </div>
@@ -129,7 +129,7 @@
         <h5>Select Process / Equipment</h5>
         <div class="list-group list-group-flush">
           <a class="list-group-item list-group-item-action" *ngFor="let equipment of equipments"
-            [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.name}}</a>
+            [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.display}}</a>
         </div>
       </div>
     </div>

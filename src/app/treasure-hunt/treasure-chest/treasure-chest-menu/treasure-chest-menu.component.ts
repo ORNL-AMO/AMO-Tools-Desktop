@@ -7,6 +7,7 @@ import { TreasureChestMenuService } from './treasure-chest-menu.service';
 import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { OpportunityCardsService, OpportunityCardData } from '../opportunity-cards/opportunity-cards.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { processEquipmentOptions } from '../../calculators/opportunity-sheet/general-details-form/processEquipmentOptions';
 
 @Component({
   selector: 'app-treasure-chest-menu',
@@ -57,7 +58,7 @@ export class TreasureChestMenuComponent implements OnInit {
   sortBySub: Subscription;
   sortByLabel: string;
   teams: Array<{ name: string, selected: boolean }>;
-  equipments: Array<{ name: string, selected: boolean }>;
+  equipments: Array<{ value: string, display: string, selected: boolean }>;
   opportunityCardsSub: Subscription;
   opportunityCardsData: Array<OpportunityCardData>;
 
@@ -121,7 +122,7 @@ export class TreasureChestMenuComponent implements OnInit {
     this.displayTeamDropdown = !this.displayTeamDropdown;
   }
 
-  toggleEquipment(){
+  toggleEquipment() {
     this.displayEquipment = !this.displayEquipment;
   }
 
@@ -160,7 +161,8 @@ export class TreasureChestMenuComponent implements OnInit {
     let equipmentNames: Array<string> = this.treasureChestMenuService.getAllEquipment(oppData);
     this.equipments = new Array();
     equipmentNames.forEach(equipment => {
-      this.equipments.push({ name: equipment, selected: false });
+      let equipmentVal: { value: string, display: string } = processEquipmentOptions.find(option => { return option.value == equipment });
+      this.equipments.push({ display: equipmentVal.display, value: equipmentVal.value, selected: false });
     });
     this.sortCardsData.equipments = _.intersection(this.sortCardsData.equipments, equipmentNames);
   }
@@ -177,12 +179,12 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
-  setSelectedEquipment(equipment: { name: string, selected: boolean }) {
+  setSelectedEquipment(equipment: { display: string, value: string, selected: boolean }) {
     equipment.selected = !equipment.selected;
     let selectedEquipment: Array<string> = new Array();
     this.equipments.forEach(equipment => {
       if (equipment.selected == true) {
-        selectedEquipment.push(equipment.name);
+        selectedEquipment.push(equipment.value);
       }
     })
     this.sortCardsData.equipments = selectedEquipment;
@@ -202,7 +204,7 @@ export class TreasureChestMenuComponent implements OnInit {
   removeEquipment(equipmentName: string, index: number) {
     this.sortCardsData.equipments.splice(index, 1);
     this.equipments.forEach(equipment => {
-      if (equipment.name == equipmentName) {
+      if (equipment.value == equipmentName) {
         equipment.selected = false;
       }
     });
