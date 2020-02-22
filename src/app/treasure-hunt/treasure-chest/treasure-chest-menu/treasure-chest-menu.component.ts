@@ -48,6 +48,8 @@ export class TreasureChestMenuComponent implements OnInit {
 
   displayUtilityTypeDropdown: boolean = false;
   displayCalculatorTypeDropdown: boolean = false;
+  displayTeamDropdown: boolean = false;
+  displayEquipment: boolean = false;
   displayAdditionalFiltersDropdown: string = 'hide';
   sortByDropdown: boolean = false;
   treasureHunt: TreasureHunt;
@@ -73,8 +75,12 @@ export class TreasureChestMenuComponent implements OnInit {
 
     this.opportunityCardsSub = this.opportuntiyCardsService.opportunityCards.subscribe(val => {
       this.opportunityCardsData = val;
-      this.setTeams(val);
-      this.setEquipments(val);
+      if (this.teams == undefined) {
+        this.setTeams(val);
+      }
+      if (this.equipments == undefined) {
+        this.setEquipments(val);
+      }
       this.setEnergyTypeOptions(val);
       this.setCalculatorOptions(val);
     });
@@ -111,6 +117,14 @@ export class TreasureChestMenuComponent implements OnInit {
     this.displayCalculatorTypeDropdown = !this.displayCalculatorTypeDropdown;
   }
 
+  toggleTeams() {
+    this.displayTeamDropdown = !this.displayTeamDropdown;
+  }
+
+  toggleEquipment(){
+    this.displayEquipment = !this.displayEquipment;
+  }
+
   toggleAdditionalFilters() {
     if (this.displayAdditionalFiltersDropdown == 'hide') {
       this.displayAdditionalFiltersDropdown = 'show';
@@ -140,7 +154,6 @@ export class TreasureChestMenuComponent implements OnInit {
       this.teams.push({ name: name, selected: false });
     });
     this.sortCardsData.teams = _.intersection(this.sortCardsData.teams, teamNames);
-    // this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
   setEquipments(oppData: Array<OpportunityCardData>) {
@@ -150,7 +163,6 @@ export class TreasureChestMenuComponent implements OnInit {
       this.equipments.push({ name: equipment, selected: false });
     });
     this.sortCardsData.equipments = _.intersection(this.sortCardsData.equipments, equipmentNames);
-    // this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
   setSelectedTeam(team: { name: string, selected: boolean }) {

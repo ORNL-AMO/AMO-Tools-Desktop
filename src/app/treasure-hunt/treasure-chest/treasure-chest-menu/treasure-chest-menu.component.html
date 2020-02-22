@@ -64,11 +64,39 @@
     </div>
   </div>
 
-  <div class="nav-item dropdown">
+  <div *ngIf="!inReport" class="nav-item dropdown">
     <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
   </div>
+
+  <div *ngIf="inReport" class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleTeams()">
+      Teams
+    </a>
+    <div class="dropdown-menu p-0 teams-dropdown" [ngClass]="{'show': displayTeamDropdown == true}">
+      <div class="list-group">
+        <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
+          [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">{{team.name}}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="inReport" class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleEquipment()">
+      Equipment
+    </a>
+    <div class="dropdown-menu p-0 teams-dropdown" [ngClass]="{'show': displayEquipment == true}">
+      <div class="list-group">
+        <a class="list-group-item list-group-item-action" *ngFor="let equipment of equipments"
+          [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.name}}
+        </a>
+      </div>
+    </div>
+  </div>
+
 </nav>
-<nav class="navbar second-nav" *ngIf="sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0">
+<nav class="navbar second-nav"
+  *ngIf="(sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0) && !inReport">
   <div class="nav-item" *ngFor="let team of sortCardsData.teams; let index = index;">
     <button type="button" class="nav-btn" (click)="removeTeam(team, index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{team}}</button>
