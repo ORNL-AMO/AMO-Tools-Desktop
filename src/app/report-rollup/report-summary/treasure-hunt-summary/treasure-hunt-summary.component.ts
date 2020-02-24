@@ -11,8 +11,6 @@ import { TreasureHuntResultsData } from '../../report-rollup-models';
 })
 export class TreasureHuntSummaryComponent implements OnInit {
   @Input()
-  numTreasureHunt: number;
-  @Input()
   settings: Settings;
 
   treasureHuntAssessmentsSub: Subscription;

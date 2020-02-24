@@ -49,6 +49,12 @@ import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-sum
 import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
 import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { AssessmentReportsComponent } from './assessment-reports/assessment-reports.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { RouterModule } from '@angular/router';
+import { RollupPrintService } from './rollup-print.service';
+import { ReportRollupModalsComponent } from './report-rollup-modals/report-rollup-modals.component';
+import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessment-print.component';
 
 @NgModule({
   imports: [
@@ -63,7 +69,8 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     TreasureHuntReportModule,
     PrintOptionsMenuModule,
     PieChartModule,
-    SharedPipesModule
+    SharedPipesModule,
+    RouterModule
   ],
   declarations: [
     ReportRollupComponent, 
@@ -102,9 +109,13 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     SsmtRollupEnergyTableComponent,
     SsmtRollupSteamSummaryTableComponent,
     TreasureHuntSummaryComponent,
+    AssessmentReportsComponent,
+    SidebarComponent,
+    ReportRollupModalsComponent,
+    PreAssessmentPrintComponent,
 
   ],
-  providers: [ReportRollupService],
+  providers: [ReportRollupService, RollupPrintService],
   exports: [ReportRollupComponent]
 })
 export class ReportRollupModule { }

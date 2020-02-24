@@ -101,8 +101,7 @@
         <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printResults}"
             *ngIf="currentTab == 'results' || (showPrint && printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment"
-                (selectModification)="useModification($event)">
+            <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment">
             </app-output-summary>
         </div>
         <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportGraphs}"
