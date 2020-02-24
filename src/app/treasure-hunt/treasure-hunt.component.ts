@@ -136,7 +136,7 @@ export class TreasureHuntComponent implements OnInit {
     this.modalOpenSub.unsubscribe();
     this.treasureHuntService.treasureHunt.next(undefined);
     this.treasureHuntSub.unsubscribe();
-    this.selectedCalcSub.unsubscribe();    
+    this.selectedCalcSub.unsubscribe();
     let defaultData: SortCardsData = this.treasureChestMenuService.getDefaultSortByData();
     this.treasureChestMenuService.sortBy.next(defaultData);
   }
@@ -242,10 +242,12 @@ export class TreasureHuntComponent implements OnInit {
   }
 
   disclaimerToast() {
-    this.toastData.title = 'Disclaimer';
-    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-    this.showToast = true;
-    this.cd.detectChanges();
+    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
+      this.toastData.title = 'Disclaimer';
+      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+      this.showToast = true;
+      this.cd.detectChanges();
+    }
   }
 
   hideToast() {
@@ -256,6 +258,14 @@ export class TreasureHuntComponent implements OnInit {
       setTimeoutVal: undefined
     };
     this.cd.detectChanges();
+  }
+
+  disableDisclaimer() {
+    this.settingsDbService.globalSettings.disableDisclaimer = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
+    this.hideToast();
   }
 
   checkTutorials() {

@@ -8,4 +8,7 @@
   <div class="card-body" *ngIf="body">
     <p class="mb-0">{{body}}</p>
   </div>
+  <div class="card-footer text-right" *ngIf="showDisableFooter">
+    <a class="click-link" (click)="disable()">Disable</a>
+  </div>
 </div>
