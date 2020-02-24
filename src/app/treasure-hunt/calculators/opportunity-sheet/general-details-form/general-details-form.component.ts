@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { OpportunitySheet } from '../../../../shared/models/treasure-hunt';
+import { processEquipmentOptions } from './processEquipmentOptions';
 
 @Component({
   selector: 'app-general-details-form',
@@ -12,45 +13,10 @@ export class GeneralDetailsFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-  processEquipmentOptions: Array<{ value: string, display: string }> = [
-    {
-      value: 'motor',
-      display: 'Motor'
-    },
-    {
-      value: 'pump',
-      display: 'Pump'
-    },
-    {
-      value: 'fan',
-      display: 'Fan'
-    },
-    {
-      value: 'compressedAir',
-      display: 'Compressed Air'
-    },
-    {
-      value: 'lights',
-      display: 'Lights'
-    },
-    {
-      value: 'processHeating',
-      display: 'Process Heating'
-    },
-    {
-      value: 'processCooling',
-      display: 'Process Cooling'
-    },
-    {
-      value: 'steam',
-      display: 'Steam'
-    },
-    {
-      value: 'other',
-      display: 'Other'
-    },
-  ]
-  constructor() { }
+  processEquipmentOptions: Array<{ value: string, display: string }>;
+  constructor() { 
+    this.processEquipmentOptions = processEquipmentOptions;
+  }
 
   ngOnInit() {
   }
