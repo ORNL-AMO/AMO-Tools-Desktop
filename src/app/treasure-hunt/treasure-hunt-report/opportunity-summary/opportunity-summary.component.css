@@ -30,15 +30,6 @@ tr>td {
 }
 
 @media print {
-    .output-summary {
-        -webkit-transform: rotate(-90deg);
-        -moz-transform: rotate(-90deg);
-        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-        margin-top: 250px;
-        margin-left: -150px;
-        width: 80vh;
-        height: 80vw;
-    }
     .output-summary.table {
         height: 100%;
         width: 100%;

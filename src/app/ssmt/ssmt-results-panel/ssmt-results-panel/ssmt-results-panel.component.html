@@ -50,18 +50,18 @@
   </div>
   <div class="d-flex my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="table-text">Fuel Cost ($K/yr)</span>
+      <span class="table-text">Fuel Cost ($/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="table-text">{{
-        baselineOutput.operationsOutput.boilerFuelCost / 1000
+        baselineOutput.operationsOutput.boilerFuelCost 
           | currency: "USD":"symbol":"1.0-0"
       }}</span>
       <span *ngIf="!baselineValid">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid" class="table-text">{{
-        modificationOutput.operationsOutput.boilerFuelCost / 1000
+        modificationOutput.operationsOutput.boilerFuelCost 
           | currency: "USD":"symbol":"1.0-0"
       }}</span>
       <span *ngIf="!modValid">&mdash;</span>
@@ -89,18 +89,18 @@
   </div>
   <div class="d-flex my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="table-text">Electricity Cost ($K/yr)</span>
+      <span class="table-text">Electricity Cost ($/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="table-text">{{
-        baselineOutput.operationsOutput.powerGenerationCost / 1000
+        baselineOutput.operationsOutput.powerGenerationCost 
           | currency: "USD":"symbol":"1.0-0"
       }}</span>
       <span *ngIf="!baselineValid">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid" class="table-text">{{
-        modificationOutput.operationsOutput.powerGenerationCost / 1000
+        modificationOutput.operationsOutput.powerGenerationCost 
           | currency: "USD":"symbol":"1.0-0"
       }}</span>
       <span *ngIf="!modValid">&mdash;</span>
@@ -132,18 +132,18 @@
   </div>
   <div class="d-flex my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="table-text">Water Cost ($K/yr)</span>
+      <span class="table-text">Water Cost ($/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="table-text">{{
-        baselineOutput.operationsOutput.makeupWaterCost / 1000
+        baselineOutput.operationsOutput.makeupWaterCost 
           | currency: "USD":"symbol":"1.0-0"
       }}</span>
       <span *ngIf="!baselineValid">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid" class="table-text">{{
-        modificationOutput.operationsOutput.makeupWaterCost / 1000
+        modificationOutput.operationsOutput.makeupWaterCost 
           | currency: "USD":"symbol":"1.0-0"
       }}</span>
       <span *ngIf="!modValid">&mdash;</span>
@@ -310,11 +310,11 @@
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Cost ($K/yr)</span>
+      <span class="bold table-text">Annual Cost ($/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span *ngIf="baselineValid" class="bold table-text">{{
-        baselineOutput.operationsOutput.totalOperatingCost / 1000
+        baselineOutput.operationsOutput.totalOperatingCost 
           | currency: "USD":"symbol":"1.0-0"
       }}</span>
       <span *ngIf="!baselineValid">&mdash;</span>
@@ -327,7 +327,7 @@
         "
         [ngClass]="{ 'positive-savings': percentSavings > 10 }"
         >{{
-          modificationOutput.operationsOutput.totalOperatingCost / 1000
+          modificationOutput.operationsOutput.totalOperatingCost 
             | currency: "USD":"symbol":"1.0-0"
         }}</span
       >
@@ -343,7 +343,7 @@
 
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Savings ($K/yr)</span>
+      <span class="bold table-text">Annual Savings ($/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1 col-4">
       <span class="bold table-text">&mdash;</span>
@@ -354,7 +354,7 @@
         *ngIf="annualSavings && modValid"
         [ngClass]="{ 'positive-savings': percentSavings > 10 }"
       >
-        {{ annualSavings / 1000 | currency: "USD":"symbol":"1.0-0" }}</span
+        {{ annualSavings  | currency: "USD":"symbol":"1.0-0" }}</span
       >
       <span class="bold table-text" *ngIf="!annualSavings || !modValid"
         >&mdash;</span

@@ -10,9 +10,6 @@ import { PsatResultsData } from '../../report-rollup-models';
 })
 export class PsatSummaryComponent implements OnInit {
 
-  @Input()
-  numPsats: number;
-
   pumpSavingsPotential: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
@@ -25,7 +22,6 @@ export class PsatSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.assessmentSub = this.reportRollupService.psatAssessments.subscribe(val => {
-      this.numPsats = val.length;
       if (val.length !== 0) {
         this.reportRollupService.initResultsArr(val);
       }

@@ -109,3 +109,9 @@ a.list-group-item.active:hover{
       background-color: white;
       color: black;
   }
+
+  .teams-dropdown{
+      left: auto;
+      right: 0;
+      
+  }

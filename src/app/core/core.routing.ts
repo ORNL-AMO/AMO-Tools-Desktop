@@ -73,6 +73,7 @@ import { StackLossComponent } from '../calculator/steam/stack-loss/stack-loss.co
 import { SteamPropertiesComponent } from '../calculator/steam/steam-properties/steam-properties.component';
 import { TurbineComponent } from '../calculator/steam/turbine/turbine.component';
 import { TankInsulationReductionComponent } from '../calculator/utilities/tank-insulation-reduction/tank-insulation-reduction.component';
+import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
 
 export const coreRoutes: Routes = [
   {
@@ -396,6 +397,17 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'report-rollup',
-    component: ReportRollupComponent
+    component: ReportRollupComponent,
+    children: [
+      // {
+      //   path: '',
+      //   pathMatch: 'full',
+      //   redirectTo: 'assessment-reports'
+      // },
+      {
+        path: '',
+        component: AssessmentReportsComponent
+      }
+    ]
   }
 ];

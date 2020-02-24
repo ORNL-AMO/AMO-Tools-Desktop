@@ -11,8 +11,6 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class SsmtSummaryComponent implements OnInit {
   @Input()
-  numSsmt: number;
-  @Input()
   settings: Settings;
 
   ssmtSavingPotential: number = 0;

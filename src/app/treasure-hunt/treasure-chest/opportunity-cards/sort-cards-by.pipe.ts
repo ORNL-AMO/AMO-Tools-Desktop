@@ -9,7 +9,7 @@ import { SortCardsService } from './sort-cards.service';
 })
 export class SortCardsByPipe implements PipeTransform {
 
-  constructor(private sortCardsService: SortCardsService){
+  constructor(private sortCardsService: SortCardsService) {
 
   }
 
@@ -47,7 +47,7 @@ export class SortCardsByPipe implements PipeTransform {
 export interface SortCardsData {
   sortBy: string;
   teams: Array<string>;
-  equipments: Array<string>;
+  equipments: Array<{ display: string, value: string }>;
   utilityType: string;
   calculatorType: string;
 }

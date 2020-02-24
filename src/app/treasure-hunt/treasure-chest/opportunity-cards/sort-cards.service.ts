@@ -25,7 +25,8 @@ export class SortCardsService {
     if (sortByData.equipments.length != 0) {
       value = _.filter(value, (item: OpportunityCardData) => {
         if (item.opportunitySheet) {
-          return _.includes(sortByData.equipments, item.opportunitySheet.equipment);
+          let equipmentValues: Array<string> = _.map(sortByData.equipments, (equipmentValue) => { return equipmentValue.value });
+          return _.includes(equipmentValues, item.opportunitySheet.equipment);
         } else {
           return false;
         }
@@ -139,7 +140,8 @@ export class SortCardsService {
     let isEquipmentIncluded: boolean = true;
     if (sortBy.equipments.length != 0) {
       if (cardItem.opportunitySheet) {
-        isEquipmentIncluded = _.includes(sortBy.equipments, cardItem.opportunitySheet.equipment);
+        let equipmentValues: Array<string> = _.map(sortBy.equipments, (equipmentValue) => { return equipmentValue.value });
+        isEquipmentIncluded = _.includes(equipmentValues, cardItem.opportunitySheet.equipment);
       } else {
         isEquipmentIncluded = false;
       }

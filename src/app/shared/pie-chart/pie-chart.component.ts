@@ -47,27 +47,34 @@ export class PieChartComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.values || changes.labels) {
-      if (!changes.values.firstChange) {
-        if (!this.svg || this.svg === undefined) {
-          this.setupPie();
-          this.buildPie();
-        }
-        this.updatePie();
-      }
-    }
-    if (changes.chartContainerWidth) {
-      if (this.values || this.labels) {
-        if (this.chartContainerWidth > 0) {
-          this.setupPie();
-          this.buildPie();
-        }
-        else if (this.printView) {
-          this.setupPie();
-          this.buildPie();
+    if (this.ngChart != undefined) {
+      if (changes.values || changes.labels) {
+        if (!changes.values.firstChange) {
+          if (!this.svg || this.svg === undefined) {
+            this.setupPie();
+            this.buildPie();
+          }
+          this.updatePie();
         }
       }
+      if (changes.chartContainerWidth) {
+        if (this.values || this.labels) {
+          if (this.chartContainerWidth > 0) {
+            this.setupPie();
+            this.buildPie();
+          }
+          else if (this.printView) {
+            this.setupPie();
+            this.buildPie();
+          }
+        }
+      }
     }
+  }
+
+  ngAfterViewInit(){
+    this.setupPie();
+    this.buildPie();
   }
 
   // ========== export/gridline tooltip functions ==========

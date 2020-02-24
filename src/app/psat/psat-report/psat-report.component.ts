@@ -30,8 +30,6 @@ export class PsatReportComponent implements OnInit {
   exportData = new EventEmitter<boolean>();
   @Input()
   inRollup: boolean;
-  @Output('selectModification')
-  selectModification = new EventEmitter<any>();
   @Input()
   quickReport: boolean;
   @Input()
@@ -162,11 +160,6 @@ export class PsatReportComponent implements OnInit {
   exportToCsv() {
     this.exportData.emit(true);
   }
-
-  useModification(event: any) {
-    this.selectModification.emit(event);
-  }
-
 
   initPrintLogic() {
     if (!this.inRollup) {
