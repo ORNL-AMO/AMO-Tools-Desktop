@@ -8,6 +8,8 @@ import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { OpportunityCardsService, OpportunityCardData } from '../opportunity-cards/opportunity-cards.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { processEquipmentOptions } from '../../calculators/opportunity-sheet/general-details-form/processEquipmentOptions';
+import { TreasureHuntService } from '../../treasure-hunt.service';
+import { SortCardsService } from '../opportunity-cards/sort-cards.service';
 
 @Component({
   selector: 'app-treasure-chest-menu',
@@ -66,22 +68,26 @@ export class TreasureChestMenuComponent implements OnInit {
   showImportModalSub: Subscription;
   showExportModal: boolean;
   showExportModalSub: Subscription;
-  constructor(private opportuntiyCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService) { }
+  constructor(private opportuntityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService, 
+    private treasureHuntService: TreasureHuntService, private sortCardsService: SortCardsService) { }
 
   ngOnInit() {
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortCardsData = val;
       this.setSortByLabel();
+      if (this.opportunityCardsData) {
+        this.setEnergyTypeOptions(this.opportunityCardsData);
+        this.setCalculatorOptions(this.opportunityCardsData);
+      }
     });
 
-    this.opportunityCardsSub = this.opportuntiyCardsService.opportunityCards.subscribe(val => {
+    let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+    let oppData = this.opportuntityCardsService.getOpportunityCardsData(treasureHunt, this.settings);
+    this.setTeams(oppData);
+    this.setEquipments(oppData);
+
+    this.opportunityCardsSub = this.opportuntityCardsService.opportunityCards.subscribe(val => {
       this.opportunityCardsData = val;
-      if (this.teams == undefined) {
-        this.setTeams(val);
-      }
-      if (this.equipments == undefined) {
-        this.setEquipments(val);
-      }
       this.setEnergyTypeOptions(val);
       this.setCalculatorOptions(val);
     });
@@ -152,7 +158,12 @@ export class TreasureChestMenuComponent implements OnInit {
     let teamNames: Array<string> = this.treasureChestMenuService.getAllTeams(oppData);
     this.teams = new Array();
     teamNames.forEach(name => {
-      this.teams.push({ name: name, selected: false });
+      let existingTeam: string = this.sortCardsData.teams.find(team => { return team == name });
+      let isTeamSelected: boolean = false;
+      if (existingTeam != undefined) {
+        isTeamSelected = true;
+      }
+      this.teams.push({ name: name, selected: isTeamSelected });
     });
     this.sortCardsData.teams = _.intersection(this.sortCardsData.teams, teamNames);
   }
@@ -162,7 +173,12 @@ export class TreasureChestMenuComponent implements OnInit {
     this.equipments = new Array();
     equipmentNames.forEach(equipment => {
       let equipmentVal: { value: string, display: string } = processEquipmentOptions.find(option => { return option.value == equipment });
-      this.equipments.push({ display: equipmentVal.display, value: equipmentVal.value, selected: false });
+      let equipmentSelected: string = this.sortCardsData.equipments.find(existingEquipment => { return existingEquipment == equipment });
+      let isEquipmentSelected: boolean = false;
+      if (equipmentSelected != undefined) {
+        isEquipmentSelected = true;
+      }
+      this.equipments.push({ display: equipmentVal.display, value: equipmentVal.value, selected: isEquipmentSelected });
     });
     this.sortCardsData.equipments = _.intersection(this.sortCardsData.equipments, equipmentNames);
   }
@@ -266,6 +282,7 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   setEnergyTypeOptions(oppData: Array<OpportunityCardData>) {
+    oppData = this.sortCardsService.sortCards(oppData, this.sortCardsData);
     this.energyTypeOptions = new Array();
     let numSteam: number = this.getFilteredCalcsByUtility(oppData, 'Steam').length;
     let numElectricity: number = this.getFilteredCalcsByUtility(oppData, 'Electricity').length;
@@ -314,6 +331,7 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   setCalculatorOptions(oppData: Array<OpportunityCardData>) {
+    oppData = this.sortCardsService.sortCards(oppData, this.sortCardsData);
     this.calculatorTypeOptions = new Array();
     let filteredCalcs: Array<OpportunityCardData> = oppData;
     if (this.sortCardsData.utilityType != 'All') {
