@@ -4,7 +4,8 @@ import {
   Input,
   SimpleChanges,
   ViewChild,
-  ElementRef
+  ElementRef,
+  Renderer2
 } from "@angular/core";
 import { PSAT, PsatOutputs, PsatInputs } from "../../shared/models/psat";
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
@@ -12,6 +13,7 @@ import { Settings } from "../../shared/models/settings";
 import { PsatService } from "../psat.service";
 import * as Plotly from "plotly.js";
 import { CompareService } from "../compare.service";
+import { ReceiverTankService } from "../../calculator/compressed-air/receiver-tank/receiver-tank.service";
 
 @Component({
   selector: "app-psat-sankey",
@@ -32,6 +34,7 @@ export class PsatSankeyComponent implements OnInit {
   @Input()
   assessmentName: string;
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
+
   @Input()
   isBaseline: boolean;
   @Input()
@@ -66,7 +69,9 @@ export class PsatSankeyComponent implements OnInit {
   constructor(
     private psatService: PsatService,
     private convertUnitsService: ConvertUnitsService,
-    private compareService: CompareService
+    private compareService: CompareService,
+    private _dom: ElementRef,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit() {
@@ -90,6 +95,11 @@ export class PsatSankeyComponent implements OnInit {
   ngAfterViewInit() {
     this.getResults();
     this.sankey(this.selectedResults);
+    console.log(this._dom.nativeElement.querySelector('.sankey'));
+    console.log(this._dom.nativeElement.querySelector('.sankey-node-set'));
+    console.log(this._dom.nativeElement.querySelectorAll('.node-rect'));
+    console.log(this._dom.nativeElement.querySelectorAll('.node-capture'));
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -254,7 +264,7 @@ export class PsatSankeyComponent implements OnInit {
       valuesuffix: "kW",
       colorscale: 'Electric',
       node: {
-        pad: 50,
+        pad: 20,
         line: {
           color: "rgba(255,255,255,.5)",
           width: .5
@@ -301,6 +311,31 @@ export class PsatSankeyComponent implements OnInit {
     console.log('link', sankeyLink);
     console.log('layout', layout);
     Plotly.react(this.ngChart.nativeElement, [sankeyData], layout, config);
+
+    // =================================
+    //Add svg arrows
+    // this.renderer.createElement("path", 'svg')
+    const rects = this._dom.nativeElement.querySelectorAll('.node-rect')
+    const linkPaths = this._dom.nativeElement.querySelectorAll('.sankey-link');
+    // const captures = this._dom.nativeElement.querySelectorAll('.node-capture')
+    console.log(linkPaths);
+    const mainSVG = this._dom.nativeElement.querySelector('.main-svg')
+    mainSVG.setAttribute('height', '1000px');
+
+    for (let i = 0; i < rects.length; i++) {
+      if (i > 1) {
+        // rects[i].setAttribute('height', '100px');
+        // rects[i].setAttribute('style', `width: ${nodes[i] / 10}px; height: ${nodes[i] / 10 }px; clip-path:  polygon(100% 50%, 0 0, 0 100%); 
+        // stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: rgb(140, 86, 75); fill-opacity: 0.8;`);
+        // const height = rects[i].getAttribute('height');
+        // console.log(height);
+        // const width = height / 2;
+        // console.log(height + '' + width)
+        rects[i].setAttribute('style', `clip-path:  polygon(100% 50%, 0 0, 0 100%); 
+        stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: rgb(140, 86, 75); fill-opacity: 0.8;`);
+      }
+      
+    }
   }
 
   calcLosses(results) {
