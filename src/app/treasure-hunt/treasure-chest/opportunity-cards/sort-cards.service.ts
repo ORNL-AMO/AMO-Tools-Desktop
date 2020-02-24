@@ -140,7 +140,8 @@ export class SortCardsService {
     let isEquipmentIncluded: boolean = true;
     if (sortBy.equipments.length != 0) {
       if (cardItem.opportunitySheet) {
-        isEquipmentIncluded = _.includes(sortBy.equipments, cardItem.opportunitySheet.equipment['value']);
+        let equipmentValues: Array<string> = _.map(sortBy.equipments, (equipmentValue) => { return equipmentValue.value });
+        isEquipmentIncluded = _.includes(equipmentValues, cardItem.opportunitySheet.equipment);
       } else {
         isEquipmentIncluded = false;
       }
