@@ -53,6 +53,7 @@
     "electron-updater": "4.0.6",
     "font-awesome": "^4.7.0",
     "ngx-electron": "2.1.1",
+    "plotly.js": "^1.52.2",
     "regression": "^2.0.0",
     "rxjs": "6.5.4",
     "rxjs-compat": "^6.4.0",
