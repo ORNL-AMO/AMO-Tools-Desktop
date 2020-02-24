@@ -50,7 +50,7 @@ export class CoreComponent implements OnInit {
   showTranslateModalSub: Subscription;
   showTranslate: string = 'hide';
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
-    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, 
+    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router) {
   }
@@ -87,9 +87,7 @@ export class CoreComponent implements OnInit {
       this.initData();
     }
 
-    setTimeout(() => {
-      this.showSurvey = 'show';
-    }, 3500);
+
 
     this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
       if (val == true) {
@@ -121,6 +119,13 @@ export class CoreComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    setTimeout(() => {
+      if (this.settingsDbService.globalSettings.disableSurveyMonkey != true) {
+        this.showSurvey = 'show';
+      }else{
+        this.destroySurvey = true;
+      }
+    }, 3500);
   }
 
 
@@ -147,7 +152,7 @@ export class CoreComponent implements OnInit {
       this.assessmentDbService.setAll().then(() => {
         this.settingsDbService.setAll().then(() => {
           this.calculatorDbService.setAll().then(() => {
-            if(this.suiteDbService.hasStarted == true){
+            if (this.suiteDbService.hasStarted == true) {
               this.suiteDbService.initCustomDbMaterials();
             }
             this.idbStarted = true;
@@ -177,6 +182,15 @@ export class CoreComponent implements OnInit {
 
   closeTranslate() {
     this.showTranslate = 'hide';
+  }
+
+
+  disableSurvey() {
+    this.settingsDbService.globalSettings.disableSurveyMonkey = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
+    this.closeSurvey();
   }
 
 }
