@@ -309,7 +309,7 @@ export class SettingsService {
         fanBarometricPressure: 'kPaa',
         fanSpecificHeatGas: 'kJkgC',
         fanTemperatureMeasurement: 'C',
-        steamEnergyMeasurement: 'MJ',
+        steamEnergyMeasurement: 'GJ',
         steamPowerMeasurement: 'kW'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
