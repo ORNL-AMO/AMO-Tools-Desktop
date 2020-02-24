@@ -71,7 +71,7 @@
         <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="calculatorOpportunitySheet">Edit
           Opportunity Sheet</a>
       </div>
-      <div class="modal-body text-center" *ngIf="selectedCalc == 'opportunity-sheet'">
+      <div class="modal-body text-center" *ngIf="selectedCalc == 'opportunity-sheet' && mainTab != 'find-treasure'">
         <p class="help-text">Are you sure you want to save the changes to your existing opportunity? These changes
           cannot be
           undone.</p>
