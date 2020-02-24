@@ -1,5 +1,3 @@
-
-
 <!-- NOT PRINT -->
 <div *ngIf="!printView">
     <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
@@ -36,7 +34,7 @@
 <div class="print-container" *ngIf="printView">
     <div *ngIf="_psatAssessments.length > 0 && rollupPrintOptions.printPsatRollup" class="row print-break-before">
         <div class="col-12">
-            <app-psat-rollup-print [settings]="settings"></app-psat-rollup-print>
+            <app-psat-rollup-print [settings]="settings" [calculators]="selectedPsatCalcs"></app-psat-rollup-print>
         </div>
     </div>
     <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
@@ -49,9 +47,9 @@
         </div>
     </div>
 
-    <div *ngIf="_phastAssessments.length > 0 && printPhastRollup" class="row print-break-before">
+    <div *ngIf="_phastAssessments.length > 0 && rollupPrintOptions.printPhastRollup" class="row print-break-before">
         <div class="col-12">
-            <app-phast-rollup-print [settings]="settings" [calculators]="selectedCalcs">
+            <app-phast-rollup-print [settings]="settings" [calculators]="selectedPhastCalcs">
             </app-phast-rollup-print>
         </div>
     </div>
@@ -72,7 +70,7 @@
     <div *ngIf="_fsatAssessments.length > 0 && rollupPrintOptions.printFsatRollup" class="row print-break-before">
         <div class="col-12">
             <!--fsat print-->
-            <app-fsat-rollup-print [settings]="settings"></app-fsat-rollup-print>
+            <app-fsat-rollup-print [settings]="settings" [calculators]="selectedFsatCalcs"></app-fsat-rollup-print>
         </div>
     </div>
     <div class="assessment-item row" *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}">
@@ -103,7 +101,8 @@
         </div>
     </div>
 
-    <div *ngIf="_treasureHuntAssessments.length > 0 && rollupPrintOptions.printTreasureHuntRollup" class="row print-break-before">
+    <div *ngIf="_treasureHuntAssessments.length > 0 && rollupPrintOptions.printTreasureHuntRollup"
+        class="row print-break-before">
         <div class="col-12">
             <!--treasure hunt print-->
             <!-- <app-treasure-hunt-rollup-print [settings]="settings"></app-treasure-hunt-rollup-print> -->

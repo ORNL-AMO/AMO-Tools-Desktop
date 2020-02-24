@@ -149,10 +149,19 @@ export class ReportRollupService {
     this.fsatArray = new Array<ReportItem>();
     this.ssmtArray = new Array<ReportItem>();
     this.treasureHuntArray = new Array<ReportItem>();
+    this.calcsArray = new Array<Calculator>();
     let selected = directory.assessments.filter((val) => { return val.selected; });
     selected.forEach(assessment => {
       this.pushAssessment(assessment);
     });
+    if(directory.calculators){
+      directory.calculators.forEach(calc =>{
+        if(calc.selected == true && calc.preAssessments){
+          this.calcsArray.push(calc);
+        }
+      })
+      this.selectedCalcs.next(this.calcsArray);
+    }
     directory.subDirectory.forEach(subDir => {
       if (subDir.selected) {
         this.getChildDirectoryAssessments(subDir.id);

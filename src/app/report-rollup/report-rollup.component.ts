@@ -38,7 +38,6 @@ export class ReportRollupComponent implements OnInit {
   allPhastSub: Subscription;
   selectedPhastSub: Subscription;
   psatAssessmentSub: Subscription;
-  selectedCalcsSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
   showPrintSub: Subscription;

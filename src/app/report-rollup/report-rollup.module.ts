@@ -54,6 +54,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { RollupPrintService } from './rollup-print.service';
 import { ReportRollupModalsComponent } from './report-rollup-modals/report-rollup-modals.component';
+import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessment-print.component';
 
 @NgModule({
   imports: [
@@ -111,6 +112,7 @@ import { ReportRollupModalsComponent } from './report-rollup-modals/report-rollu
     AssessmentReportsComponent,
     SidebarComponent,
     ReportRollupModalsComponent,
+    PreAssessmentPrintComponent,
 
   ],
   providers: [ReportRollupService, RollupPrintService],
