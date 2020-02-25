@@ -30,6 +30,7 @@ deploy:
   skip_cleanup: true
   draft: true
   name: "TEST RELEASE DRAFT"
+  tag_name: "test-release"
   on:
     repo: ORNL-AMO/AMO-Tools-Desktop
     branch: issue-3505
