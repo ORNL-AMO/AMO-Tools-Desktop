@@ -114,9 +114,21 @@ export class LogToolDataService {
   }
 
   getAllFieldData(fieldName: string): Array<number> {
-    let mappedValues: Array<any> = _.mapValues(this.logToolService.combinedDataFromCsv.data, (dataItem) => { return dataItem[fieldName] });
+    let data: Array<any> = this.getData(fieldName);
+    let mappedValues: Array<any> = _.mapValues(data, (dataItem) => { return dataItem[fieldName] });
     let valueArr = _.values(mappedValues);
     return valueArr;
   }
+
+  getData(fieldName: string): Array<any> {
+    let data: Array<any> = new Array();
+    this.logToolService.individualDataFromCsv.forEach(individualDataItem => {
+      let foundData = individualDataItem.data.meta.fields.find(field => { return field == fieldName });
+      if (foundData) {
+        data = _.concat(data, individualDataItem.data.data);
+      }
+    })
+    return data;
+  };
 }
 

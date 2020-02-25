@@ -4,7 +4,8 @@ export interface LogToolField {
     alias: string,
     useField: boolean,
     isDateField: boolean,
-    unit: string
+    unit: string,
+    invalidField: boolean
 }
 
 export interface LogToolDay {

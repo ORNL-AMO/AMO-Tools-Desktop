@@ -409,7 +409,7 @@ Pump Fluid CSS
 =============================================== */
 /**/
 
-canvas {
+/* canvas {
   display: block;
   float: left;
   height: 30px !important;
@@ -425,7 +425,7 @@ app-nema-energy-efficiency-graph h1 {
     top: 123px;
     left: 112px;
     font-size: 30px !important;
-}
+} */
 
 /*
 In-Assessment Calculators

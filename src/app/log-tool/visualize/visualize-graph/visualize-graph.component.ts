@@ -17,13 +17,14 @@ export class VisualizeGraphComponent implements OnInit {
       hovermode: "closest",
       xaxis: {
         autorange: true,
+        type: 'linear',
         title: {
           text: 'x axis'
         }
       },
       yaxis: {
         autorange: true,
-        // type: 'linear',
+        type: 'linear',
         title: {
           text: 'y axis'
         }
@@ -46,6 +47,7 @@ export class VisualizeGraphComponent implements OnInit {
         this.graph.layout.yaxis.title.text = graphData.selectedYDataField.alias;
         this.graph.data = [{ x: graphData.xData, y: graphData.yData, type: graphData.graphType.value, mode: graphData.scatterPlotMode, name: graphData.graphName }];
       }
+      console.log(this.graph.data);
       Plotly.newPlot('plotlyDiv', this.graph.data, this.graph.layout, { responsive: true });
     });
   }

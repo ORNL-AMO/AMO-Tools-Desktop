@@ -31,13 +31,26 @@ export class CleanDataComponent implements OnInit {
     this.startDate = this.logToolService.startDate;
     this.endDate = this.logToolService.endDate;
     this.dataFields = this.logToolService.fields;
-    console.log(this.dataFields);
+    this.checkFields();
     this.numberOfDataPoints = this.logToolService.numberOfDataPoints;
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
     }
   }
 
+  checkFields() {
+    console.log(this.logToolService.individualDataFromCsv);
+    this.dataFields.forEach(field => {
+      if (field.isDateField == false) {
+        let data = this.logToolDataService.getAllFieldData(field.fieldName);
+        // debugger
+        if (isNaN(data[0])) {
+          field.useField = false;
+          field.invalidField = true;
+        }
+      }
+    });
+  }
 
   submit() {
     this.cleaningData = true;

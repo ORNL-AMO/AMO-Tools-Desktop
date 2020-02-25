@@ -135,7 +135,8 @@ export class LogToolService {
         alias: field,
         useField: true,
         isDateField: unit == 'Date',
-        unit: unit
+        unit: unit,
+        invalidField: false
       });
     });
   }
