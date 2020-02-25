@@ -16,6 +16,8 @@ export class PhastRollupPrintComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('PRINT PHAST ROLLUP')
+    console.log(this.calculators);
   }
 
 }

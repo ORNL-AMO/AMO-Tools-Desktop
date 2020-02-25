@@ -532,3 +532,44 @@ export interface PipeInsulationReductionResult {
 };
 
 //===== END pipe insulation reduction objects =====
+
+
+
+//====== tank insulation reduction objects ======
+export interface TankInsulationReductionInput {
+  operatingHours: number,
+  utilityType: number,
+  utilityCost: number,
+  naturalGasUtilityCost: number,
+  otherUtilityCost: number,
+  tankHeight: number,
+  tankDiameter: number,
+  tankThickness: number,
+  tankEmissivity: number,
+  tankConductivity: number,
+  tankTemperature: number,
+  ambientTemperature: number,
+  systemEfficiency: number,
+  insulationThickness: number,
+  insulationConductivity: number,
+  customInsulationConductivity: number,
+  jacketEmissivity: number,
+  tankMaterialSelection: number,
+  insulationMaterialSelection: number,
+  jacketMaterialSelection: number
+};
+
+export interface TankInsulationReductionResults {
+  baselineResults: TankInsulationReductionResult,
+  modificationResults: TankInsulationReductionResult,
+  annualHeatSavings: number,
+  annualCostSavings: number
+};
+
+export interface TankInsulationReductionResult {
+  heatLoss: number,
+  annualHeatLoss: number,
+  energyCost: number
+};
+
+//===== END tank insulation reduction objects =====

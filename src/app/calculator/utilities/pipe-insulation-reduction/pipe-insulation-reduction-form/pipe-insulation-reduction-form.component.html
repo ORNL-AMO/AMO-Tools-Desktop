@@ -177,10 +177,10 @@
             </div>
             <div class="col-6 text-center">
                 <span class="small bold" *ngIf="isBaseline == true">
-                    {{pipeInsulationReductionService.baselineData.pipeEmissivity}}
+                    {{pipeInsulationReductionService.baselineData.pipeEmissivity | number:'1.0-0'}}
                 </span>
                 <span class="small bold" *ngIf="isBaseline == false">
-                    {{pipeInsulationReductionService.modificationData.pipeEmissivity}}
+                    {{pipeInsulationReductionService.modificationData.pipeEmissivity | number:'1.0-0'}}
                 </span>
             </div>
         </div>
@@ -246,10 +246,10 @@
             </div>
             <div class="col-6 text-center">
                 <span class="small bold" *ngIf="isBaseline == true">
-                    {{pipeInsulationReductionService.baselineData.jacketEmissivity}}
+                    {{pipeInsulationReductionService.baselineData.jacketEmissivity | number:'1.0-0'}}
                 </span>
                 <span class="small bold" *ngIf="isBaseline == false">
-                    {{pipeInsulationReductionService.modificationData.pipeEmissivity}}
+                    {{pipeInsulationReductionService.modificationData.pipeEmissivity | number:'1.0-0'}}
                 </span>
             </div>
         </div>

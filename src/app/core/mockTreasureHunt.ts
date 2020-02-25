@@ -100,8 +100,8 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Insulate Hoses in Yard",
-                "equipment": "Boiler",
-                "description": "",
+                "equipment": "steam",
+                "description": "Boiler",
                 "originator": "",
                 "date": new Date(),
                 "owner": "Utilities",
@@ -175,7 +175,7 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Pump Insulation",
-                "equipment": "Pumps 1 & 2",
+                "equipment": "pump",
                 "description": "Add insulation to 2 pumps",
                 "originator": "",
                 "date": new Date(),
@@ -250,8 +250,8 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Insulate pipe near burner",
-                "equipment": "Boiler",
-                "description": "",
+                "equipment": "steam",
+                "description": "Boiler",
                 "originator": "",
                 "date": new Date(),
                 "owner": "Utilities",
@@ -382,7 +382,7 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Yard Lighting Replacement",
-                "equipment": "Lighting",
+                "equipment": "lights",
                 "description": "",
                 "originator": "",
                 "date": new Date(),
@@ -486,7 +486,7 @@ export const MockTreasureHunt: Assessment = {
             "modificationElectricityCost": 0.05,
             "opportunitySheet": {
                 "name": "Office Lighting",
-                "equipment": "Lighting",
+                "equipment": "lights",
                 "description": "Various lighting replacements",
                 "originator": "",
                 "date": new Date(),
@@ -540,7 +540,7 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Process Lighting A",
-                "equipment": "Lighting",
+                "equipment": "lights",
                 "description": "Replace T5s with LEDs",
                 "originator": "",
                 "date": new Date(),
@@ -593,7 +593,7 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Process Lighting B",
-                "equipment": "Lighting",
+                "equipment": "lights",
                 "description": "upgrade side room lighting",
                 "originator": "",
                 "date": new Date(),
@@ -673,7 +673,7 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Eliminate Air Leaks",
-                "equipment": "Compressor",
+                "equipment": "compressedAir",
                 "description": "",
                 "originator": "",
                 "date": new Date(),
@@ -751,7 +751,7 @@ export const MockTreasureHunt: Assessment = {
             }],
             "opportunitySheet": {
                 "name": "CA Flow Reduction",
-                "equipment": "Compressor",
+                "equipment": "compressedAir",
                 "description": "Reduce compressed air pressure 10 lbs",
                 "originator": "",
                 "date": new Date(),
@@ -866,7 +866,7 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Turn off cooling tower pumps",
-                "equipment": "Cooling",
+                "equipment": "processCooling",
                 "description": "Turn off cooling tower pumps during non-operation",
                 "originator": "",
                 "date": new Date(),
@@ -935,7 +935,7 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Turn off Exhaust Fan",
-                "equipment": "HVAC System",
+                "equipment": "hvac",
                 "description": "Turn off the HVAC exhaust fan in the warehouse",
                 "originator": "",
                 "date": new Date(),
@@ -957,7 +957,7 @@ export const MockTreasureHunt: Assessment = {
         }],
         "opportunitySheets": [{
             "name": "Increase Boiler CoC",
-            "equipment": "Boiler",
+            "equipment": "steam",
             "description": "Increase Boiler cycles of concentration",
             "originator": "",
             "date": new Date(),
@@ -1001,7 +1001,7 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Replace conveyor 5 motor",
-                "equipment": "Motor",
+                "equipment": "motor",
                 "description": "Replace old, inefficient motor",
                 "originator": "",
                 "date": new Date(),
@@ -1035,7 +1035,7 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Replace blower motor",
-                "equipment": "Motor",
+                "equipment": "motor",
                 "description": "Replace old, inefficient motor",
                 "originator": "",
                 "date": new Date(),
@@ -1094,7 +1094,7 @@ export const MockTreasureHunt: Assessment = {
             }],
             "opportunitySheet": {
                 "name": "Eliminate Pipe Leaks",
-                "equipment": "Feedwater Pipes",
+                "equipment": "steam",
                 "description": "",
                 "originator": "",
                 "date": new Date(),
@@ -1136,7 +1136,7 @@ export const MockTreasureHunt: Assessment = {
             }],
             "opportunitySheet": {
                 "name": "CA Pressure Reduction",
-                "equipment": "Compressor 2",
+                "equipment": "compressedAir",
                 "description": "",
                 "originator": "",
                 "date": new Date(),

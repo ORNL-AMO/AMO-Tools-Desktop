@@ -13,6 +13,8 @@ import { Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { CalculatorsService } from './calculators/calculators.service';
+import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
+import { SortCardsData } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -55,7 +57,8 @@ export class TreasureHuntComponent implements OnInit {
     private assessmentDbService: AssessmentDbService,
     private treasureHuntService: TreasureHuntService,
     private cd: ChangeDetectorRef,
-    private calculatorsService: CalculatorsService
+    private calculatorsService: CalculatorsService,
+    private treasureChestMenuService: TreasureChestMenuService
   ) { }
 
   ngOnInit() {
@@ -134,6 +137,8 @@ export class TreasureHuntComponent implements OnInit {
     this.treasureHuntService.treasureHunt.next(undefined);
     this.treasureHuntSub.unsubscribe();
     this.selectedCalcSub.unsubscribe();
+    let defaultData: SortCardsData = this.treasureChestMenuService.getDefaultSortByData();
+    this.treasureChestMenuService.sortBy.next(defaultData);
   }
 
   ngAfterViewInit() {
@@ -237,10 +242,12 @@ export class TreasureHuntComponent implements OnInit {
   }
 
   disclaimerToast() {
-    this.toastData.title = 'Disclaimer';
-    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-    this.showToast = true;
-    this.cd.detectChanges();
+    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
+      this.toastData.title = 'Disclaimer';
+      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+      this.showToast = true;
+      this.cd.detectChanges();
+    }
   }
 
   hideToast() {
@@ -251,6 +258,14 @@ export class TreasureHuntComponent implements OnInit {
       setTimeoutVal: undefined
     };
     this.cd.detectChanges();
+  }
+
+  disableDisclaimer() {
+    this.settingsDbService.globalSettings.disableDisclaimer = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
+    this.hideToast();
   }
 
   checkTutorials() {

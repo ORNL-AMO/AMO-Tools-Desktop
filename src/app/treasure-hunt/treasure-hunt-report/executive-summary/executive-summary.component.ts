@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { TreasureHuntResults, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, ChangeDetectorRef } from '@angular/core';
+import { TreasureHuntResults } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
@@ -25,6 +25,11 @@ export class ExecutiveSummaryComponent implements OnInit {
   @Input()
   opportunityCardsData: Array<OpportunityCardData>;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setChartHeightAndWidth();
+  }
+
   @ViewChild('costSummaryChartContainer', { static: false }) costSummaryChartContainer: ElementRef;
   @ViewChild('teamSummaryChartContainer', { static: false }) teamSummaryChartContainer: ElementRef;
 
@@ -44,16 +49,27 @@ export class ExecutiveSummaryComponent implements OnInit {
   pieChartValues: Array<number>;
   graphColors: Array<string>;
 
+  barChartHeight: number;
+  barChartWidth: number;
+  pieChartHeight: number;
+  pieChartWidth: number;
 
-  constructor(private treasureChestMenuService: TreasureChestMenuService) { }
+  constructor(private treasureChestMenuService: TreasureChestMenuService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
+  }
+
+  ngOnChanges() {
     this.prepChartData();
     if (this.opportunityCardsData) {
       this.prepTeamData();
       this.prepPieChartData();
     }
+  }
+
+  ngAfterViewInit() {
+    this.setChartHeightAndWidth();
   }
 
   prepChartData(): void {
@@ -104,7 +120,7 @@ export class ExecutiveSummaryComponent implements OnInit {
     this.pieChartValues = new Array<number>();
     this.pieChartLabels = new Array<string>();
     for (let i = 0; i < this.teamData.length; i++) {
-      this.pieChartLabels.push(this.teamData[i].team + ' $' + (Math.round(this.teamData[i].costSavings)));
+      this.pieChartLabels.push(this.teamData[i].team + ' $' + Number(Math.round(this.teamData[i].costSavings)).toLocaleString());
       this.pieChartValues.push(this.teamData[i].costSavings);
     }
   }
@@ -127,39 +143,16 @@ export class ExecutiveSummaryComponent implements OnInit {
     });
   }
 
-  getChartHeight(chart: string): number {
-    if (chart == 'pie') {
-      if (this.teamSummaryChartContainer) {
-        return this.teamSummaryChartContainer.nativeElement.clientHeight;
-      } else {
-        return 0;
-      }
-    } else {
-      if (this.costSummaryChartContainer) {
-        return this.costSummaryChartContainer.nativeElement.clientHeight;
-      } else {
-        return 0;
-      }
+  setChartHeightAndWidth() {
+    if (this.teamSummaryChartContainer) {
+      this.pieChartHeight = this.teamSummaryChartContainer.nativeElement.clientHeight;
+      this.pieChartWidth = this.teamSummaryChartContainer.nativeElement.clientWidth;
     }
-  }
-
-  getChartWidth(chart: string): number {
-    if (chart == 'pie') {
-      if (this.teamSummaryChartContainer) {
-        return this.teamSummaryChartContainer.nativeElement.clientWidth;
-      } else {
-        return 0;
-      }
-    } else {
-      if (this.costSummaryChartContainer) {
-        let width = this.costSummaryChartContainer.nativeElement.clientWidth;
-        width = width + 170;
-        return width;
-      } else {
-        return 0;
-      }
+    if (this.costSummaryChartContainer) {
+      this.barChartHeight = this.costSummaryChartContainer.nativeElement.clientHeight;
+      this.barChartWidth = this.costSummaryChartContainer.nativeElement.clientWidth + 170;
     }
-
+    this.cd.detectChanges();
   }
 
 

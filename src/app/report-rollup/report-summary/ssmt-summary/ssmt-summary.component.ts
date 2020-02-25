@@ -11,8 +11,6 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class SsmtSummaryComponent implements OnInit {
   @Input()
-  numSsmt: number;
-  @Input()
   settings: Settings;
 
   ssmtSavingPotential: number = 0;
@@ -23,7 +21,7 @@ export class SsmtSummaryComponent implements OnInit {
   allSub: Subscription;
   selectedSub: Subscription;
   resultsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(public reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.assessmentSub = this.reportRollupService.ssmtAssessments.subscribe(val => {

@@ -17,10 +17,13 @@
           Less than 1 year
         </td>
         <td>
-          {{opportunitiesPaybackDetails.lessThanOneYear.numOpportunities}}
+          {{ opportunitiesPaybackDetails.lessThanOneYear.numOpportunities }}
         </td>
         <td>
-          {{opportunitiesPaybackDetails.lessThanOneYear.totalSavings | currency:'USD'}}
+          {{
+            opportunitiesPaybackDetails.lessThanOneYear.totalSavings
+              | currency: "USD":"symbol":"1.0-0"
+          }}
         </td>
       </tr>
       <tr>
@@ -28,10 +31,13 @@
           1 to 2 years
         </td>
         <td>
-          {{opportunitiesPaybackDetails.oneToTwoYears.numOpportunities}}
+          {{ opportunitiesPaybackDetails.oneToTwoYears.numOpportunities }}
         </td>
         <td>
-          {{opportunitiesPaybackDetails.oneToTwoYears.totalSavings | currency:'USD'}}
+          {{
+            opportunitiesPaybackDetails.oneToTwoYears.totalSavings
+              | currency: "USD":"symbol":"1.0-0"
+          }}
         </td>
       </tr>
       <tr>
@@ -39,10 +45,13 @@
           2 to 3 years
         </td>
         <td>
-          {{opportunitiesPaybackDetails.twoToThreeYears.numOpportunities}}
+          {{ opportunitiesPaybackDetails.twoToThreeYears.numOpportunities }}
         </td>
         <td>
-          {{opportunitiesPaybackDetails.twoToThreeYears.totalSavings | currency:'USD'}}
+          {{
+            opportunitiesPaybackDetails.twoToThreeYears.totalSavings
+              | currency: "USD":"symbol":"1.0-0"
+          }}
         </td>
       </tr>
       <tr>
@@ -50,10 +59,13 @@
           More than 3 years
         </td>
         <td>
-          {{opportunitiesPaybackDetails.moreThanThreeYears.numOpportunities}}
+          {{ opportunitiesPaybackDetails.moreThanThreeYears.numOpportunities }}
         </td>
         <td>
-          {{opportunitiesPaybackDetails.moreThanThreeYears.totalSavings | currency:'USD'}}
+          {{
+            opportunitiesPaybackDetails.moreThanThreeYears.totalSavings
+              | currency: "USD":"symbol":"1.0-0"
+          }}
         </td>
       </tr>
       <tr>
@@ -61,10 +73,13 @@
           Total
         </td>
         <td>
-          {{opportunitiesPaybackDetails.totals.numOpportunities}}
+          {{ opportunitiesPaybackDetails.totals.numOpportunities }}
         </td>
         <td>
-          {{opportunitiesPaybackDetails.totals.totalSavings | currency:'USD'}}
+          {{
+            opportunitiesPaybackDetails.totals.totalSavings
+              | currency: "USD":"symbol":"1.0-0"
+          }}
         </td>
       </tr>
     </tbody>

@@ -1,0 +1,35 @@
+.phast .modal-dialog,
+.psat .modal-dialog,
+.fsat .modal-dialog,
+.ssmt .modal-dialog{
+    top: 0px;
+    max-width: none;
+    margin: 10px;
+}
+
+.phast .modal-header{
+    background-color: #BF3D00;
+    color: #fff;
+}
+
+.psat .modal-header{
+    background-color: #2980b9;
+    color: #fff;
+}
+
+.fsat .modal-header{
+    background-color: #FFE400;
+    color: black;
+}
+
+.ssmt .modal-header{
+    background-color: #F39C12;
+    color: #fff;
+}
+
+.phast .modal-body,
+.psat .modal-body,
+.fsat .modal-body,
+.ssmt .modal-body{
+    height: 85vh;
+}

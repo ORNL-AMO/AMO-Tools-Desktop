@@ -68,6 +68,9 @@ export interface Settings {
     disableTreasureHuntReportTutorial?: boolean,
     disableTreasureHuntSetupTutorial?: boolean,
     disableTreasureHuntTreasureChestTutorial?: boolean,
+
+    disableSurveyMonkey?: boolean,
+    disableDisclaimer?: boolean,
     //costs
     electricityCost?: number,
     fuelCost?: number,

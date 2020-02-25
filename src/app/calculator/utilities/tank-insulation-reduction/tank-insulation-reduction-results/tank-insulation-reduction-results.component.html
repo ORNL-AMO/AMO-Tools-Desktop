@@ -1,0 +1,73 @@
+<table #copyTable0 class="table table-hover table-striped">
+    <tbody>
+        <tr>
+            <td></td>
+            <td class="bold text-center">Baseline</td>
+            <td class="bold text-center">Modification</td>
+        </tr>
+        <tr>
+            <td class="bold">Heat Loss</td>
+            <td class="text-center">
+                {{results.baselineResults.annualHeatLoss | number:'.0-3'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    MMBtu
+                </span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                    MJ
+                </span>
+            </td>
+            <td class="text-center">
+                <span *ngIf="!results.modificationResults">&mdash;</span>
+                <span *ngIf="results.modificationResults">
+                    {{results.modificationResults.annualHeatLoss | number:'.0-3'}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                        MMBtu
+                    </span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                        MJ
+                    </span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="bold">Energy Cost</td>
+            <td class="text-center">
+                {{results.baselineResults.energyCost | currency}}
+            </td>
+            <td class="text-center w-50">
+                <span *ngIf="!results.modificationResults">&mdash;</span>
+                <span *ngIf="results.modificationResults">
+                    {{results.modificationResults.energyCost | currency}}
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="bold">Annual Energy Savings</td>
+            <td class="text-center" colspan="2">
+                <span *ngIf="!results.modificationResults">&mdash;</span>
+                <span *ngIf="results.modificationResults">
+                    {{results.annualHeatSavings | number:'.0-3'}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                        MMBtu
+                    </span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                        MJ
+                    </span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="bold">Annual Cost Savings</td>
+            <td class="text-center" colspan="2">
+                <span *ngIf="!results.modificationResults">&mdash;</span>
+                <span *ngIf="results.modificationResults">
+                    {{results.annualCostSavings | currency}}
+                </span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- export table component -->
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table>

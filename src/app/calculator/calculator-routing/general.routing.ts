@@ -13,6 +13,7 @@ import { UnitConverterComponent } from "../utilities/unit-converter/unit-convert
 import { WaterReductionComponent } from "../utilities/water-reduction/water-reduction.component";
 import { UtilitiesListComponent } from "../utilities/utilities-list/utilities-list.component";
 import { SteamReductionComponent } from "../utilities/steam-reduction/steam-reduction.component";
+import { TankInsulationReductionComponent } from "../utilities/tank-insulation-reduction/tank-insulation-reduction.component";
 
 export const generalRoutes: Routes = [
     {
@@ -70,5 +71,9 @@ export const generalRoutes: Routes = [
     {
         path: 'steam-reduction',
         component: SteamReductionComponent
+    },
+    {
+        path: 'tank-insulation-reduction',
+        component: TankInsulationReductionComponent
     }
 ]

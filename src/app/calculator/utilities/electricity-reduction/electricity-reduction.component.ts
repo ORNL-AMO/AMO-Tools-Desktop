@@ -18,8 +18,6 @@ export class ElectricityReductionComponent implements OnInit {
   emitSave = new EventEmitter<ElectricityReductionTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  @Output('emitAddOpportunitySheet')
-  emitAddOpportunitySheet = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
   @Input()
@@ -199,10 +197,7 @@ export class ElectricityReductionComponent implements OnInit {
   cancel() {
     this.emitCancel.emit(true);
   }
-
-  addOpportunitySheet() {
-    this.emitAddOpportunitySheet.emit(true);
-  }
+  
   setBaselineSelected() {
     if (this.baselineSelected == false) {
       this.baselineSelected = true;

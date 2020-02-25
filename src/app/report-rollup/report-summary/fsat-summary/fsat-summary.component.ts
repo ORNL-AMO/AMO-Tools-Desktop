@@ -9,8 +9,6 @@ import { FsatResultsData } from '../../report-rollup-models';
   styleUrls: ['./fsat-summary.component.css', '../report-summary.component.css']
 })
 export class FsatSummaryComponent implements OnInit {
-  @Input()
-  numFsats: number;
 
   fanSavingPotential: number = 0;
   energySavingsPotential: number = 0;
@@ -20,11 +18,10 @@ export class FsatSummaryComponent implements OnInit {
   allSub: Subscription;
   selectedSub: Subscription;
   resultsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(public reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.assessmentSub = this.reportRollupService.fsatAssessments.subscribe(val => {
-      this.numFsats = val.length
       if (val.length != 0) {
         this.reportRollupService.initFsatResultsArr(val);
       }

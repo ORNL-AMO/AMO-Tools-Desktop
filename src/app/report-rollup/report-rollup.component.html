@@ -1,4 +1,4 @@
-<!--PRINT-->
+<!--PRINT TITLE PAGE-->
 <div class="report-cover" *ngIf="printView && settings">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
@@ -10,402 +10,60 @@
 
     <p class="report-notes">{{reportNotes}}</p>
 </div>
+<!--END PRINT-->
 
-<div class="row sticky-top" id="reportHeader" *ngIf="printView && settings">
-    <div class="col-12">
-        <div class="report-header hide-print">
-            <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()"
-                (emitPrint)="showPrintModal()" (emitShowUnitModal)="showUnitModal()">
-            </app-report-banner>
-            <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats"
-                [numFsats]="numFsats" [numTreasureHunt]="numTreasureHunt" (showPhastModal)="showPhastModal()"
-                (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()" (showFsatModal)="showFsatModal()">
-            </app-report-summary>
+<!--CONTENT-->
+<div *ngIf="settings && !gatheringAssessments">
+    <!--TOP BANNER (NOT PRINT)-->
+    <div #reportHeader class="row sticky-top no-gutters" id="reportHeader" *ngIf="!printView">
+        <div class="col-12">
+            <div class="report-header hide-print">
+                <app-report-banner></app-report-banner>
+                <app-report-summary id="reportSummary" [settings]="settings" (hideSummary)="setSidebarHeight()">
+                </app-report-summary>
+            </div>
+        </div>
+    </div>
+    <!-- SIDEBAR AND REPORTS -->
+    <div class="d-flex">
+        <app-sidebar [sidebarHeight]="sidebarHeight" [bannerHeight]="bannerHeight"></app-sidebar>
+        <div #assessmentReportsDiv class="assessment-padding d-flex flex-column scroll-item print-height w-100 skyline">
+            <router-outlet></router-outlet>
         </div>
     </div>
 </div>
-<!--END PRINT-->
 
-<div *ngIf="settings && !gatheringAssessments">
-
-    <div class="report-cover" *ngIf="!printView">
-        <img src="assets/images/DOE-banner-color.png" class="doe-logo">
-
-        <div class="report-title">
-            <h4>Efficiency Report:</h4>
-            <h5>{{createdDate| date:'medium'}}</h5>
+<!--GATHERING ASSESSMENTS-->
+<div *ngIf="!assessmentsGathered"
+    class="gathering-assessments d-flex justify-content-center align-items-center skyline">
+    <div class="main-content">
+        <div class="spinner text-center">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
         </div>
-
-        <p class="report-notes">{{reportNotes}}</p>
+        <h1 *ngIf="gatheringAssessments">Gathering Assessments</h1>
+        <h1 *ngIf="!gatheringAssessments">Calculating Results</h1>
     </div>
-    <div #reportHeader class="row sticky-top" id="reportHeader" *ngIf="!printView">
-        <div class="col-12">
-            <div class="report-header hide-print">
-                <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()"
-                    (emitPrint)="showPrintModal()" (emitShowUnitModal)="showUnitModal()">
-                    <!-- <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()"
-                    (emitShowUnitModal)="showUnitModal()"> -->
-                </app-report-banner>
-                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts"
-                    [numFsats]="numFsats" [numPsats]="numPsats" [numTreasureHunt]="numTreasureHunt" [numSsmt]="numSsmt"
-                    (showPhastModal)="showPhastModal()" (showPsatModal)="showPsatModal()"
-                    (hideSummary)="setSidebarHeight()" (showFsatModal)="showFsatModal()"
-                    (showSsmtModal)="showSsmtModal()"></app-report-summary>
-            </div>
-        </div>
-    </div>
-    <!-- End .report-header -->
+</div>
 
-    <div class="d-flex">
-
-        <div class="sidebar hide-print scroll-item" id="sidebar"
-            [ngStyle]="{'height.px': sidebarHeight, 'top.px':bannerHeight}"
-            [ngClass]="{'set-width': !sidebarCollapsed}">
-            <ul id="sidebar-list">
-                <li class="collapse-option">
-                    <div class="d-flex align-items-center" (click)="collapseSidebar()">
-                        <div class="p-1 d-flex text-center">
-                            <span *ngIf="!sidebarCollapsed" class="fa fa-chevron-left"></span>
-                            <span *ngIf="sidebarCollapsed" class="fa fa-chevron-right pr-2 pl-2"></span>
-                        </div>
-                        <div class="p-0" [ngClass]="{'collapse': sidebarCollapsed}">
-                            Collapse Sidebar
-                        </div>
-                    </div>
-                </li>
-                <li *ngFor="let item of _psatAssessments"
-                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
-                    <div class="d-flex align-items-center psat">
-                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                            <img class="icon" src="assets/images/ico-psat-diagram.png">
-                        </span>
-                        <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}"
-                                (click)="setFocused(item.assessment)">{{item.assessment.name}}</a>
-                        </span>
-                    </div>
-                </li>
-                <li *ngFor="let item of _phastAssessments"
-                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
-                    <div class="d-flex align-items-center phast">
-                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                            <img class="icon" src="assets/images/ico-phast-diagram.png">
-                        </span>
-                        <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}"
-                                (click)="setFocused(item.assessment)">{{item.assessment.name}}</a>
-                        </span>
-                    </div>
-                </li>
-                <li *ngFor="let item of _fsatAssessments"
-                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
-                    <div class="d-flex align-items-center fsat">
-                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                            <img class="icon" src="assets/images/ico-fsat-diagram.png">
-                        </span>
-                        <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}"
-                                (click)="setFocused(item.assessment)">{{item.assessment.name}}</a>
-                        </span>
-                    </div>
-                </li>
-                <li *ngFor="let item of _ssmtAssessments"
-                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
-                    <div class="d-flex align-items-center ssmt">
-                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                            <img class="icon" src="assets/images/ico-ssmt-diagram.png">
-                        </span>
-                        <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}"
-                                (click)="setFocused(item.assessment)">{{item.assessment.name}}</a>
-                        </span>
-                    </div>
-                </li>
-                <li *ngFor="let item of _treasureHuntAssessments"
-                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id, 'collapse': sidebarCollapsed}">
-                    <div class="d-flex align-items-center ssmt">
-                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                            <img class="icon" src="assets/images/treasure-hunt.png">
-                        </span>
-                        <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}"
-                                (click)="setFocused(item.assessment)">{{item.assessment.name}}</a>
-                        </span>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <!-- End .sidebar -->
-
-
-        <div class="assessment-padding d-flex flex-column scroll-item print-height w-100 skyline"
-            [ngStyle]="{'height.px': sidebarHeight}" (scroll)="checkActiveAssessment($event)">
-            <!-- print layout -->
-            <div class="print-container" *ngIf="printView">
-                <div *ngIf="_psatAssessments.length > 0 && printPsatRollup" class="row print-break-before">
-                    <div class="col-12">
-                        <app-psat-rollup-print [settings]="settings"></app-psat-rollup-print>
-                    </div>
-                </div>
-                <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}"
-                    class="assessment-item row">
-                    <div class="col-12">
-                        <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
-                            [printView]="printView" (selectModification)="updateSummary($event)"
-                            [settings]="item.settings" [printInputData]="printInputData"
-                            [printReportGraphs]="printReportGraphs" [printReportSankey]="printReportSankey"
-                            [printResults]="printResults">
-                        </app-psat-report>
-                    </div>
-                </div>
-
-                <div *ngIf="_phastAssessments.length > 0 && printPhastRollup" class="row"
-                    [ngClass]="{'print-break-before' : (printPsatRollup && _psatAssessments.length > 0)}">
-                    <div class="col-12">
-                        <app-phast-rollup-print [settings]="settings" [calculators]="selectedCalcs">
-                        </app-phast-rollup-print>
-                    </div>
-                </div>
-                <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}"
-                    class="assessment-item row">
-                    <div class="col-12">
-                        <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast"
-                            [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings"
-                            [printView]="printView" [printInputSummary]="printInputData"
-                            [printResultsData]="printResults" [printReportGraphs]="printReportGraphs"
-                            [printReportSankey]="printReportSankey" [printEnergyUsed]="printEnergyUsed"
-                            [printExecutiveSummary]="printExecutiveSummary">
-                        </app-phast-report>
-                    </div>
-                </div>
-
-                <div *ngIf="_fsatAssessments.length > 0 && printFsatRollup" class="row print-break-before">
-                    <div class="col-12">
-                        <!--fsat print-->
-                        <app-fsat-rollup-print [settings]="settings"></app-fsat-rollup-print>
-                    </div>
-                </div>
-                <div class="assessment-item row" *ngFor="let item of _fsatAssessments"
-                    id="{{'assessment_'+item.assessment.id}}">
-                    <div class="col-12">
-                        <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat"
-                            [assessment]="item.assessment" [settings]="item.settings" [inRollup]="true"
-                            [printView]="printView" [printInputData]="printInputData"
-                            [printReportGraphs]="printReportGraphs" [printReportSankey]="printReportSankey"
-                            [printResults]="printResults"></app-fsat-report>
-                    </div>
-                </div>
-
-                <!-- <div *ngIf="_ssmtAssessments.length > 0 && printSsmtRollup" class="row print-break-before">
-                    <div class="col-12">
-                        <app-ssmt-rollup-print [settings]="settings"></app-ssmt-rollup-print>
-                    </div>
-                </div> -->
-                <div class="assessment-item row" *ngFor="let item of _ssmtAssessments"
-                    id="{{'assessment_'+item.assessment.id}}">
-                    <div class="col-12">
-                        <app-ssmt-report *ngIf="item.assessment.ssmt" [assessment]="item.assessment"
-                            [settings]="item.settings" [inRollup]="true" [printView]="printView"
-                            [printExecutiveSummary]="printExecutiveSummary" [printEnergySummary]="printEnergySummary"
-                            [printLossesSummary]="printLossesSummary" [printInputData]="printInputData"
-                            [printReportGraphs]="printReportGraphs"></app-ssmt-report>
-                    </div>
-                </div>
-
-                <div *ngIf="_treasureHuntAssessments.length > 0 && printTreasureHuntRollup"
-                    class="row print-break-before">
-                    <div class="col-12">
-                        <!--treasure hunt print-->
-                        <!-- <app-treasure-hunt-rollup-print [settings]="settings"></app-treasure-hunt-rollup-print> -->
-                    </div>
-                </div>
-                <div class="assessment-item row" *ngFor="let item of _treasureHuntAssessments"
-                    id="{{'assessment_'+item.assessment.id}}">
-                    <div class="col-12">
-                        <app-treasure-hunt-report *ngIf="item.assessment.treasureHunt" [assessment]="item.assessment"
-                            [settings]="item.settings" [inRollup]="true" [printView]="printView"
-                            [printReportGraphs]="printReportGraphs" [printExecutiveSummary]="printExecutiveSummary"
-                            [printReportOpportunityPayback]="printReportOpportunityPayback"
-                            [printReportOpportunitySummary]="printReportOpportunitySummary">
-                        </app-treasure-hunt-report>
-                    </div>
-                </div>
-            </div>
-
-            <!-- app layout -->
-            <div>
-                <div *ngIf="!printView">
-                    <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}"
-                        class="assessment-item">
-                        <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
-                            (selectModification)="updateSummary($event)" [settings]="item.settings">
-                        </app-psat-report>
-                    </div>
-
-                    <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}"
-                        class="assessment-item">
-                        <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast"
-                            [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings">
-                        </app-phast-report>
-                    </div>
-                    <div *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}"
-                        class="assessment-item">
-                        <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat"
-                            [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings">
-                        </app-fsat-report>
-                    </div>
-                    <div *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}"
-                        class="assessment-item">
-                        <app-ssmt-report *ngIf="item.assessment.ssmt" [assessment]="item.assessment"
-                            [settings]="item.settings" [inRollup]="true">
-                        </app-ssmt-report>
-                    </div>
-                    <div class="assessment-item" *ngFor="let item of _treasureHuntAssessments"
-                        id="{{'assessment_'+item.assessment.id}}">
-                        <app-treasure-hunt-report *ngIf="item.assessment.treasureHunt" [assessment]="item.assessment"
-                            [settings]="item.settings" [inRollup]="true">
-                        </app-treasure-hunt-report>
-                    </div>
-                </div>
-            </div>
-            <!-- End .content -->
-        </div>
-        <!-- End .report-container -->
-    </div>
-
-    <div *ngIf="!assessmentsGathered"
-        class="gathering-assessments d-flex justify-content-center align-items-center skyline">
-        <div class="main-content">
-            <div class="spinner text-center">
-                <div class="bounce1"></div>
-                <div class="bounce2"></div>
-                <div class="bounce3"></div>
-            </div>
-            <h1 *ngIf="gatheringAssessments">Gathering Assessments</h1>
-            <h1 *ngIf="!gatheringAssessments">Calculating Results</h1>
-        </div>
-    </div>
-
-    <div class="print-notification hide-print" *ngIf="printView">
-        <div class="col-12 mx-auto">
-            <div class="print-div row justify-content-center align-items-center">
-                <div class="print-col">
-                    <h4>Building Print View</h4>
-                    <h5>One Moment Please</h5>
-                    <span class="fa fa-print"></span>
-                    <div class="spinner">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
-                    </div>
+<!--BUILDING PRINT VIEW-->
+<div class="print-notification hide-print" *ngIf="printView">
+    <div class="col-12 mx-auto">
+        <div class="print-div row justify-content-center align-items-center">
+            <div class="print-col">
+                <h4>Building Print View</h4>
+                <h5>One Moment Please</h5>
+                <span class="fa fa-print"></span>
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!--psat rollup modal -->
-    <div bsModal #psatRollupModal="bs-modal" class="psat-modal modal fade psat" tabindex="-1" role="dialog"
-        aria-labelledby="psatRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>PSAT Rollup</h5>
-                    <button class="close" aria-label="Close" (click)="hidePsatModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body panel-container psat scroll-item">
-                    <app-psat-rollup [settings]="settings" [calculators]="selectedPsatCalcs"></app-psat-rollup>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--phast rollup modal-->
-    <div bsModal #phastRollupModal="bs-modal" class="phast-modal modal fade phast" tabindex="-1" role="dialog"
-        aria-labelledby="phastRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}"
-        *ngIf="assessmentsGathered">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>PHAST Rollup</h5>
-                    <button class="close" aria-label="Close" (click)="hidePhastModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body panel-container phast scroll-item">
-                    <app-phast-rollup [settings]="settings" [calculators]="selectedPhastCalcs"></app-phast-rollup>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--fsat rollup modal -->
-    <div bsModal #fsatRollupModal="bs-modal" class="fsat-modal modal fade fsat" tabindex="-1" role="dialog"
-        aria-labelledby="fsatRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>FSAT Rollup</h5>
-                    <button class="close" aria-label="Close" (click)="hideFsatModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body panel-container fsat scroll-item">
-                    <app-fsat-rollup [settings]="settings" [calculators]="selectedFsatCalcs"></app-fsat-rollup>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--ssmt rollup modal -->
-    <div bsModal #ssmtRollupModal="bs-modal" class="ssmt-modal modal fade ssmt" tabindex="-1" role="dialog"
-        aria-labelledby="ssmtRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>SSMT Rollup</h5>
-                    <button class="close" aria-label="Close" (click)="hideSsmtModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body panel-container ssmt scroll-item">
-                    <app-ssmt-rollup [settings]="settings"></app-ssmt-rollup>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <!--units modal-->
-    <div bsModal #unitModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unitModal"
-        aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Report Units</h5>
-                    <button class="close" aria-label="Close" (click)="hideUnitModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <app-report-rollup-units *ngIf="settings" [settings]="settings" (closeUnitModal)="hideUnitModal()">
-                    </app-report-rollup-units>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <app-print-options-menu *ngIf="showPrintMenu" [showRollupReportOptions]="showRollupReportOptions"
-        [showPsatReportOptions]="showPsatReportOptions" [showFsatReportOptions]="showFsatReportOptions"
-        [showPhastReportOptions]="showPhastReportOptions" [showTHReportOptions]="showTreasureHuntReportOptions"
-        [showSsmtReportOptions]="showSsmtReportOptions" [selectAll]="selectAll" [printReportGraphs]="printReportGraphs"
-        [printReportSankey]="printReportSankey" [printResults]="printResults" [printInputData]="printInputData"
-        [printEnergyUsed]="printEnergyUsed" [printExecutiveSummary]="printExecutiveSummary"
-        [printEnergySummary]="printEnergySummary" [printLossesSummary]="printLossesSummary"
-        [printPsatRollup]="printPsatRollup" [printFsatRollup]="printFsatRollup" [printPhastRollup]="printPhastRollup"
-        (emitClosePrintModal)="closePrintModal($event)" (emitTogglePrint)="togglePrint($event)"
-        (emitPrint)="setPrintViewThenPrint()">
-    </app-print-options-menu>
+<!--MODALS-->
+<app-report-rollup-modals [settings]="settings"></app-report-rollup-modals>
