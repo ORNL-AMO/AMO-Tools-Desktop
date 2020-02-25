@@ -17,3 +17,7 @@
     color: inherit;
     pointer-events: none;
 }
+
+.header .click-link{
+    margin-top: 10px;
+}
