@@ -18,7 +18,7 @@ export class PsatSummaryComponent implements OnInit {
   allSub: Subscription;
   selectedSub: Subscription;
   resultsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(public reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.assessmentSub = this.reportRollupService.psatAssessments.subscribe(val => {
