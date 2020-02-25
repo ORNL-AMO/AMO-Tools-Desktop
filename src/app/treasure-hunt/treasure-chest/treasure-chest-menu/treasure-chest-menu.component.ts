@@ -178,7 +178,9 @@ export class TreasureChestMenuComponent implements OnInit {
       if (equipmentSelected != undefined) {
         isEquipmentSelected = true;
       }
-      this.equipments.push({ display: equipmentVal.display, value: equipmentVal.value, selected: isEquipmentSelected });
+      if (equipmentVal) {
+        this.equipments.push({ display: equipmentVal.display, value: equipmentVal.value, selected: isEquipmentSelected });
+      }
     });
     this.sortCardsData.equipments = _.intersection(this.sortCardsData.equipments, equipmentNames['value']);
   }
