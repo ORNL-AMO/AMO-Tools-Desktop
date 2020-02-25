@@ -5,15 +5,16 @@ node_js:
 
 os:
   - linux
-  #- osx
+  - osx
+  #- windows
 #
 #compiler:
 #  - gcc
 #  - clang
 
-#api_key: "ACCESS_TOKEN"
+api_key: "GH_TOKEN"
 
-env: "GH_TOKEN"
+#env: "GH_TOKEN"
 
 before_install:
   - travis_retry npm i -g npm@6.4.0
@@ -27,9 +28,9 @@ before_install:
 #      sudo apt-get install npm;
 #    fi
 
-  #- bash travis_scripts/get_os.sh
+  - bash travis_scripts/get_os.sh
 
-  #- echo "$OS_NAME"
+  - echo "$OS_FLAG"
 
 install:
   - travis_retry npm install
@@ -38,7 +39,10 @@ install:
 script:
   #- npm run build
   #- npm run "$OS_NAME"
-  - npm run ng-high-memory
-  - ./node_modules/.bin/build -l --x64 --publish="never"
+  #- ls node_modules/
+  - ls ./node_modules/@angular/cli/bin/
+  - travis_wait 30 npm run ng-high-memory
+  - ./node_modules/.bin/build -"$OS_FLAG" --x64 --publish="never"
   #- npm run linux
   - ls
+  - ls ../output/
