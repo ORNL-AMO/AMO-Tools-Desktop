@@ -13,7 +13,6 @@ import { Settings } from "../../shared/models/settings";
 import { PsatService } from "../psat.service";
 import * as Plotly from "plotly.js";
 import { CompareService } from "../compare.service";
-import { ReceiverTankService } from "../../calculator/compressed-air/receiver-tank/receiver-tank.service";
 
 @Component({
   selector: "app-psat-sankey",
@@ -103,6 +102,7 @@ export class PsatSankeyComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
     if (changes.psat) {
       if (!changes.psat.firstChange) {
         if (this.location != "sankey-diagram" && !this.printView) {
@@ -147,6 +147,7 @@ export class PsatSankeyComponent implements OnInit {
 
   closeSankey() {
     // Remove Sankey
+    Plotly.purge(this.ngChart.nativeElement);
   }
 
   sankey(results: PsatOutputs) {
@@ -224,38 +225,38 @@ export class PsatSankeyComponent implements OnInit {
         width: 0.25
       },
       // Colorscale / gradient with dummy color vals
-      colorscales: [
-        {
-          label: "Energy Input",
-          colorscale: [
-            [0.0, "rgb(165,0,38)"],
-            [0.1111111111111111, "rgb(215,48,39)"],
-            [0.2222222222222222, "rgb(244,109,67)"],
-            [0.3333333333333333, "rgb(253,174,97)"],
-            [0.4444444444444444, "rgb(254,224,144)"],
-            [0.5555555555555556, "rgb(224,243,248)"],
-            [0.6666666666666666, "rgb(171,217,233)"],
-            [0.7777777777777778, "rgb(116,173,209)"],
-            [0.8888888888888888, "rgb(69,117,180)"],
-            [1.0, "rgb(49,54,149)"]
-          ]
-        },
-        {
-          label: "Motor Losses",
-          colorscale: [
-            [0.0, "rgb(165,0,38)"],
-            [0.1111111111111111, "rgb(215,48,39)"],
-            [0.2222222222222222, "rgb(244,109,67)"],
-            [0.3333333333333333, "rgb(253,174,97)"],
-            [0.4444444444444444, "rgb(254,224,144)"],
-            [0.5555555555555556, "rgb(224,243,248)"],
-            [0.6666666666666666, "rgb(171,217,233)"],
-            [0.7777777777777778, "rgb(116,173,209)"],
-            [0.8888888888888888, "rgb(69,117,180)"],
-            [1.0, "rgb(49,54,149)"]
-          ]
-        }
-      ]
+      // colorscales: [
+      //   {
+      //     label: "Energy Input",
+      //     colorscale: [
+      //       [0.0, "rgb(165,0,38)"],
+      //       [0.1111111111111111, "rgb(215,48,39)"],
+      //       [0.2222222222222222, "rgb(244,109,67)"],
+      //       [0.3333333333333333, "rgb(253,174,97)"],
+      //       [0.4444444444444444, "rgb(254,224,144)"],
+      //       [0.5555555555555556, "rgb(224,243,248)"],
+      //       [0.6666666666666666, "rgb(171,217,233)"],
+      //       [0.7777777777777778, "rgb(116,173,209)"],
+      //       [0.8888888888888888, "rgb(69,117,180)"],
+      //       [1.0, "rgb(49,54,149)"]
+      //     ]
+      //   },
+      //   {
+      //     label: "Motor Losses",
+      //     colorscale: [
+      //       [0.0, "rgb(165,0,38)"],
+      //       [0.1111111111111111, "rgb(215,48,39)"],
+      //       [0.2222222222222222, "rgb(244,109,67)"],
+      //       [0.3333333333333333, "rgb(253,174,97)"],
+      //       [0.4444444444444444, "rgb(254,224,144)"],
+      //       [0.5555555555555556, "rgb(224,243,248)"],
+      //       [0.6666666666666666, "rgb(171,217,233)"],
+      //       [0.7777777777777778, "rgb(116,173,209)"],
+      //       [0.8888888888888888, "rgb(69,117,180)"],
+      //       [1.0, "rgb(49,54,149)"]
+      //     ]
+      //   }
+      // ]
     };
 
     const sankeyData = {
@@ -271,13 +272,13 @@ export class PsatSankeyComponent implements OnInit {
         },
         label: nodes.map(node => node.name),
         // color: [
-          // statically set node marker
-        //   "#2433C5",
-        //   "#2433C5",
-        //   "#4E5CDF",
-        //   "#616EE2",
-        //   "#7580E6",
-        //   "#8992E9"
+        //   // statically set node marker
+        //   "gold",
+        //   "gold",
+        //   "gold",
+        //   "gold",
+        //   "gold",
+        //   "gold"
         // ],
         // hoverlabel: {
         //   bgcolor: '',
@@ -312,31 +313,88 @@ export class PsatSankeyComponent implements OnInit {
     console.log('layout', layout);
     Plotly.react(this.ngChart.nativeElement, [sankeyData], layout, config);
 
-    // =================================
-    //Add svg arrows
-    // this.renderer.createElement("path", 'svg')
-    const rects = this._dom.nativeElement.querySelectorAll('.node-rect')
-    const linkPaths = this._dom.nativeElement.querySelectorAll('.sankey-link');
-    // const captures = this._dom.nativeElement.querySelectorAll('.node-capture')
-    console.log(linkPaths);
-    const mainSVG = this._dom.nativeElement.querySelector('.main-svg')
-    mainSVG.setAttribute('height', '1000px');
+    // ====================
+    //Add SVG manipulations - Gradients, Arrows
+    // const rects = this._dom.nativeElement.querySelectorAll('.node-rect')
+    // const linkPaths = this._dom.nativeElement.querySelectorAll('.sankey-link');
+    // console.log(linkPaths);
+    // const mainSVG = this._dom.nativeElement.querySelector('.main-svg')
+    // const svgDefs = this._dom.nativeElement.querySelector('defs')
 
-    for (let i = 0; i < rects.length; i++) {
-      if (i > 1) {
-        // rects[i].setAttribute('height', '100px');
-        // rects[i].setAttribute('style', `width: ${nodes[i] / 10}px; height: ${nodes[i] / 10 }px; clip-path:  polygon(100% 50%, 0 0, 0 100%); 
-        // stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: rgb(140, 86, 75); fill-opacity: 0.8;`);
-        // const height = rects[i].getAttribute('height');
-        // console.log(height);
-        // const width = height / 2;
-        // console.log(height + '' + width)
-        rects[i].setAttribute('style', `clip-path:  polygon(100% 50%, 0 0, 0 100%); 
-        stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: rgb(140, 86, 75); fill-opacity: 0.8;`);
-      }
+    // svgDefs.innerHTML = `
+    // <linearGradient id="linkGrad">
+    //   <stop offset="20%" stop-color="#1C20DB" />
+    //   <stop offset="90%" stop-color="#40B8DB" />
+    // </linearGradient>
+    // `
+    // this.renderer.appendChild(mainSVG, svgDefs);
+
+    // for (let i = 0; i < rects.length; i++) {
+    //   if (i > 1) {
+    //     const height = rects[i].getAttribute('height');
+
+    //     rects[i].setAttribute('style', `width: ${height / 1.5}px; clip-path:  polygon(100% 50%, 0 0, 0 100%); 
+    //     stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: rgb(140, 86, 75); fill-opacity: 0.8;`);
+    //   }    
+    // }
+
+    // for (let i = 0; i < linkPaths.length; i++) {
+    //   console.log(i + '' + linkPaths[i]);
+    //   if (i === 0) {
+    //     linkPaths[i].setAttribute('fill', '#1C20DB');
+    //     linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: #1C20DB; !important; fill-opacity: 0.6; stroke-width: 0.25; opacity: 1;`);
+    //   } else {
+    //     linkPaths[i].setAttribute('fill', 'url("#linkGrad")');
+    //     linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: url("#linkGrad") !important; fill-opacity: 0.6; stroke-width: 0.25; opacity: 1;`);
+    //   }
       
-    }
+    // }
+
+    // // Establish gradients
+    // linkPaths[0].setAttribute('fill', '#1C20DB');
+    // linkPaths[0].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: #1C20DB; !important; fill-opacity: 0.6; stroke-width: 0.25; opacity: 1;`);
+    
+    // this.setGradient(linkPaths[1]);
+    // this.setGradient(linkPaths[2]);
+    // this.setGradient(linkPaths[3]);
+    // this.setGradient(linkPaths[4]);
   }
+
+  setGradient(linkPath) {
+    linkPath.setAttribute('fill', 'url("#testGrad")');
+    linkPath.setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: url("#testGrad") !important; fill-opacity: 0.6; stroke-width: 0.25; opacity: 1;`);
+  }
+
+  // Returns a single rgb color interpolation between given rgb color
+  // based on the factor given; via https://codepen.io/njmcode/pen/axoyD?editors=0010
+  // interpolateColor(color1, color2, factor) {
+  //   if (arguments.length < 3) { 
+  //       factor = 0.5; 
+  //   }
+  //   var result = color1.slice();
+  //   for (var i = 0; i < 3; i++) {
+  //       result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+  //   }
+  //   return result;
+  // };
+
+  // // My function to interpolate between two colors completely, returning an array
+  // interpolateColors(color1, color2, steps) {
+  // var stepFactor = 1 / (steps - 1),
+  //     interpolatedColorArray = [];
+
+  // color1 = color1.match(/\d+/g).map(Number);
+  // color2 = color2.match(/\d+/g).map(Number);
+
+  // for(var i = 0; i < steps; i++) {
+  //     interpolatedColorArray.push(this.interpolateColor(color1, color2, stepFactor * i));
+  // }
+
+  //   return interpolatedColorArray;
+  // }
+  // document.body.innerText += interpolateColors("rgb(94, 79, 162)", "rgb(247, 148, 89)", 5).join("\n");
+
+
 
   calcLosses(results) {
     var motorShaftPower;
