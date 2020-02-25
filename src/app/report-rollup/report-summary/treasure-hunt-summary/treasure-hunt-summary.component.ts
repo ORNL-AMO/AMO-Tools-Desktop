@@ -16,7 +16,7 @@ export class TreasureHuntSummaryComponent implements OnInit {
   treasureHuntAssessmentsSub: Subscription;
   totalSavings: number;
   totalCost: number;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(public reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.treasureHuntAssessmentsSub = this.reportRollupService.allTreasureHuntResults.subscribe(val => {
