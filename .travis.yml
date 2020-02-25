@@ -12,7 +12,7 @@ os:
 #  - gcc
 #  - clang
 
-#api_key: "ACCESS_TOKEN"
+api_key: "GH_TOKEN"
 
 #env: "GH_TOKEN"
 
