@@ -26,8 +26,8 @@ deploy:
     - "../output/MEASUR 0.6.4-beta.AppImage"
     - "../output/amo-tools-desktop-0.6.4-beta.tar.gz"
     - "../output/latest-linux.yml"
-    - "../output/MEASUR-0.6.4-beta.dmg
-    - "../output/latest-mac.yml
+    - "../output/MEASUR-0.6.4-beta.dmg"
+    - "../output/latest-mac.yml"
   overwrite: true
   skip_cleanup: true
   draft: true
