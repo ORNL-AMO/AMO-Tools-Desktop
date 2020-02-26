@@ -3,13 +3,14 @@ stages:
   - name: release
     # deploy stage will only run on issue-3505 branch
     if: branch = issue-3505
+    
+language: node_js
+node_js:
+  - '10.11'
   
 jobs:
   include:
     - stage: build
-      language: node_js
-      node_js:
-        - '10.11'
       os:
         - linux
         - osx
