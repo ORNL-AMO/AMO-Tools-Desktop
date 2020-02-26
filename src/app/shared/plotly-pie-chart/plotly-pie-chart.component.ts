@@ -34,15 +34,25 @@ export class PlotlyPieChartComponent implements OnInit {
       values: this.values,
       labels: this.labels,
       type: 'pie',
-      textposition: 'outside',
+      textposition: 'auto',
       automargin: true,
-      textinfo: 'label+percent'
+      textinfo: 'label+percent',
+      hoverformat: '.2r',
+      text: undefined,
+      hoverinfo: 'text'
     }];
 
     var layout = {
       margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
       showlegend: false
     };
+
+    var trace = data[0];
+    trace.text = trace.values.map(function (v) {
+      return (v).toFixed(2);
+    });
+
+    trace.hoverinfo = 'text';
 
     Plotly.react(this.plotlyPieChart.nativeElement, data, layout, { responsive: true });
   }
