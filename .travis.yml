@@ -1,8 +1,8 @@
 stages:
   - build
   - name: release
-  # deploy stage will only run on issue-3505 branch
-  if: branch = issue-3505
+    # deploy stage will only run on issue-3505 branch
+    if: branch = issue-3505
   
 jobs:
   include:
