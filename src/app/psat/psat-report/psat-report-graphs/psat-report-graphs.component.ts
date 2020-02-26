@@ -156,13 +156,13 @@ export class PsatReportGraphsComponent implements OnInit {
     pumpLoss = (results.motor_power - motorLoss - driveLoss) * (1 - (results.pump_efficiency / 100));
     usefulOutput = results.motor_power - (motorLoss + driveLoss + pumpLoss);
 
-    selectedPieLabels.push('Motor Loss: ' + (100 * motorLoss / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieLabels.push('Motor Loss');
     selectedPieValues.push(motorLoss);
-    selectedPieLabels.push('Drive Loss: ' + (100 * driveLoss / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieLabels.push('Drive Loss');
     selectedPieValues.push(driveLoss);
-    selectedPieLabels.push('Pump Loss: ' + (100 * pumpLoss / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieLabels.push('Pump Loss');
     selectedPieValues.push(pumpLoss);
-    selectedPieLabels.push('Useful Output: ' + (100 * usefulOutput / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieLabels.push('Useful Output');
     selectedPieValues.push(usefulOutput);
 
     selectedBarValues.push(energyInput);

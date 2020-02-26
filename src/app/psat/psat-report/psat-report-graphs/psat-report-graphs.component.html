@@ -38,7 +38,8 @@
         <div #pieChartContainer class="col-12">
           <!-- <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="selectedPsat1PieLabels"
             [values]="selectedPsat1PieValues" [exportName]="selectedPsat1ExportName"></app-pie-chart> -->
-          <app-plotly-pie-chart></app-plotly-pie-chart>
+          <app-plotly-pie-chart [values]="selectedPsat1PieValues" [labels]="selectedPsat1PieLabels">
+          </app-plotly-pie-chart>
         </div>
       </div>
     </div>
@@ -53,14 +54,16 @@
             <!-- <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
               [labels]="selectedPsat1PieLabels" [values]="selectedPsat1PieValues"
               [exportName]="selectedPsat1ExportName"></app-pie-chart> -->
-            <app-plotly-pie-chart></app-plotly-pie-chart>
+            <app-plotly-pie-chart [values]="selectedPsat1PieValues" [labels]="selectedPsat1PieLabels">
+            </app-plotly-pie-chart>
           </div>
           <div class="col-6">
             <!-- <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
               [labels]="selectedPsat2PieLabels" [values]="selectedPsat2PieValues"
               [exportName]="selectedPsat2ExportName"></app-pie-chart> -->
 
-            <app-plotly-pie-chart></app-plotly-pie-chart>
+            <app-plotly-pie-chart [labels]="selectedPsat2PieLabels" [values]="selectedPsat2PieValues">
+            </app-plotly-pie-chart>
           </div>
         </div>
       </div>

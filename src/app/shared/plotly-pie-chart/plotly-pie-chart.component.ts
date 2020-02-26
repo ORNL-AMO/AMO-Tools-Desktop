@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 import * as Plotly from 'plotly.js';
 
 @Component({
@@ -7,24 +7,43 @@ import * as Plotly from 'plotly.js';
   styleUrls: ['./plotly-pie-chart.component.css']
 })
 export class PlotlyPieChartComponent implements OnInit {
+  @Input()
+  values: Array<number>;
+  @Input()
+  labels: Array<string>;
 
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit() {
+    this.drawPlot();
+  }
+
+  ngOnChanges() {
+    if (this.plotlyPieChart) {
+      this.drawPlot();
+    }
+  }
+
+  drawPlot() {
     var data = [{
-      values: [19, 26, 55],
-      labels: ['Residential', 'Non-Residential', 'Utility'],
-      type: 'pie'
+      values: this.values,
+      labels: this.labels,
+      type: 'pie',
+      textposition: 'outside',
+      automargin: true,
+      textinfo: 'label+percent'
     }];
 
     var layout = {
-      height: 400,
-      width: 500
+      margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
+      showlegend: false
     };
 
-    Plotly.newPlot(this.plotlyPieChart, data, layout, { showSendToCloud: true });
+    Plotly.react(this.plotlyPieChart.nativeElement, data, layout, { responsive: true });
   }
-
 }
