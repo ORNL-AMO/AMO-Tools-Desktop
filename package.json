@@ -95,7 +95,9 @@
       ],
       "icon": "src/assets/icons/mac/icon.icns",
       "hardenedRuntime": true,
-      "entitlements": "entitlements.mac.inherit.plist"
+      "entitlements": "entitlements.mac.inherit.plist",
+      "entitlementsInherit": "entitlements.mac.inherit.plist",
+      "gatekeeperAssess": false
     }
   },
   "devDependencies": {
@@ -109,7 +111,7 @@
     "chart.js": "^2.7.0",
     "codelyzer": "5.2.1",
     "electron": "4.0.8",
-    "electron-builder": "20.41.0",
+    "electron-builder": "20.43.0",
     "electron-download-tf": "^4.3.4",
     "electron-packager": "13.1.1",
     "jasmine-core": "~2.5.2",
