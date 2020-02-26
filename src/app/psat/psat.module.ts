@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
@@ -118,7 +118,8 @@ import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipmen
     PsatTabService,
     PumpFluidService,
     MotorService,
-    FieldDataService
+    FieldDataService,
+    DecimalPipe
   ]
 })
 

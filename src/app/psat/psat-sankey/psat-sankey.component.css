@@ -1,5 +1,0 @@
-.arrow {
-    width: 50px !important;
-    /* Browser compatibility of this? */
-    clip-path: polygon(100% 50%, 0 0, 0 100%) !important;
-}
