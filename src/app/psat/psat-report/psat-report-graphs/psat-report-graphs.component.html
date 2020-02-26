@@ -4,7 +4,8 @@
       <div class="row">
         <div class="col-12">
           <div class="form-group">
-            <select name="selectedPsat1" class="form-control mx-auto" id="selectedPsat1" [(ngModel)]="selectedPsat1" (ngModelChange)="selectNewPsat(1)">
+            <select name="selectedPsat1" class="form-control mx-auto" id="selectedPsat1" [(ngModel)]="selectedPsat1"
+              (ngModelChange)="selectNewPsat(1)">
               <option *ngFor="let psat of psatOptions" [ngValue]="psat">{{psat.name}}</option>
             </select>
           </div>
@@ -15,7 +16,8 @@
       <div class="row">
         <div class="col-12">
           <div class="form-group">
-            <select name="selectedPsat2" class="form-control mx-auto" id="selectedPsat2" [(ngModel)]="selectedPsat2" (ngModelChange)="selectNewPsat(2)">
+            <select name="selectedPsat2" class="form-control mx-auto" id="selectedPsat2" [(ngModel)]="selectedPsat2"
+              (ngModelChange)="selectNewPsat(2)">
               <option *ngFor="let psat of psatOptions" [ngValue]="psat">{{psat.name}}</option>
             </select>
           </div>
@@ -34,8 +36,9 @@
       </div>
       <div class="row print-solo">
         <div #pieChartContainer class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="selectedPsat1PieLabels"
-            [values]="selectedPsat1PieValues" [exportName]="selectedPsat1ExportName"></app-pie-chart>
+          <!-- <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="selectedPsat1PieLabels"
+            [values]="selectedPsat1PieValues" [exportName]="selectedPsat1ExportName"></app-pie-chart> -->
+          <app-plotly-pie-chart></app-plotly-pie-chart>
         </div>
       </div>
     </div>
@@ -47,12 +50,17 @@
       <div class="col-12">
         <div class="row">
           <div #pieChartContainer class="col-6">
-            <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="selectedPsat1PieLabels"
-              [values]="selectedPsat1PieValues" [exportName]="selectedPsat1ExportName"></app-pie-chart>
+            <!-- <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
+              [labels]="selectedPsat1PieLabels" [values]="selectedPsat1PieValues"
+              [exportName]="selectedPsat1ExportName"></app-pie-chart> -->
+            <app-plotly-pie-chart></app-plotly-pie-chart>
           </div>
           <div class="col-6">
-            <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="selectedPsat2PieLabels"
-              [values]="selectedPsat2PieValues" [exportName]="selectedPsat2ExportName"></app-pie-chart>
+            <!-- <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
+              [labels]="selectedPsat2PieLabels" [values]="selectedPsat2PieValues"
+              [exportName]="selectedPsat2ExportName"></app-pie-chart> -->
+
+            <app-plotly-pie-chart></app-plotly-pie-chart>
           </div>
         </div>
       </div>
@@ -63,9 +71,10 @@
   <!-- if there is a mod, show bar chart -->
   <div class="row align-items-center hide-print medium-padding-top" *ngIf="modExists">
     <div #barChartContainer class="col-10 mx-auto">
-      <app-psat-bar-chart [settings]="settings" [printView]="false" [graphColors]="graphColors" [labels]="allChartData.barLabels"
-        [psat1Name]="selectedPsat1.name" [psat2Name]="selectedPsat2.name" [psat1Values]="selectedPsat1BarValues" [psat2Values]="selectedPsat2BarValues"
-        [chartContainerWidth]="getBarWidth()"></app-psat-bar-chart>
+      <!-- <app-psat-bar-chart [settings]="settings" [printView]="false" [graphColors]="graphColors"
+        [labels]="allChartData.barLabels" [psat1Name]="selectedPsat1.name" [psat2Name]="selectedPsat2.name"
+        [psat1Values]="selectedPsat1BarValues" [psat2Values]="selectedPsat2BarValues"
+        [chartContainerWidth]="getBarWidth()"></app-psat-bar-chart> -->
     </div>
   </div>
 
@@ -74,8 +83,10 @@
   <div *ngIf="printView" class="row show-print print-component">
     <!-- contains pie and bar chart print views -->
     <div class="col-12">
-      <app-psat-report-graphs-print [settings]="settings" [graphColors]="graphColors" [psatOptions]="psatOptions" [pieChartWidth]="getPieWidth()"
-        [printView]="true" [modExists]="modExists" [printSankey]="printSankey" [printGraphs]="printGraphs" [allChartData]="allChartData" [assessmentName]="assessment.name"></app-psat-report-graphs-print>
+      <app-psat-report-graphs-print [settings]="settings" [graphColors]="graphColors" [psatOptions]="psatOptions"
+        [pieChartWidth]="getPieWidth()" [printView]="true" [modExists]="modExists" [printSankey]="printSankey"
+        [printGraphs]="printGraphs" [allChartData]="allChartData" [assessmentName]="assessment.name">
+      </app-psat-report-graphs-print>
     </div>
   </div>
 
