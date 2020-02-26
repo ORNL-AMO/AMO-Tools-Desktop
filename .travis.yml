@@ -14,7 +14,6 @@ os:
 jobs:
   include:
     - stage: build
-      skip_cleaning: true
       before_install:
         - travis_retry npm i -g npm@6.4.0
         - bash travis_scripts/get_os.sh
