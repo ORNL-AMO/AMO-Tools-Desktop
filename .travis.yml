@@ -7,13 +7,14 @@ stages:
 language: node_js
 node_js:
   - '10.11'
+os:
+  - linux
+  - osx
   
 jobs:
   include:
     - stage: build
-      os:
-        - linux
-        - osx
+      skip_cleaning: true
       before_install:
         - travis_retry npm i -g npm@6.4.0
         - bash travis_scripts/get_os.sh
