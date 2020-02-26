@@ -18,7 +18,6 @@ export class OpportunitySheetComponent implements OnInit {
   constructor(private opportunitySheetService: OpportunitySheetService) { }
 
   ngOnInit() {
-    console.log(this.opportunitySheet);
     if (!this.opportunitySheet) {
       this.opportunitySheet = this.opportunitySheetService.initOpportunitySheet();
     }

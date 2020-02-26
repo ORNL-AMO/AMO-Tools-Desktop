@@ -1,4 +1,4 @@
-<span [routerLink]="['/calculators']" routerLinkActive="selected" class="sidebar-item">All Calculators</span>
+<span [routerLink]="['/calculators/calculators-list']" routerLinkActive="selected" class="sidebar-item">All Calculators</span>
 <!--MOTORS-->
 <div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
   <span class="sidebar-item" [routerLink]="['/calculators/motors-list']" routerLinkActive="selected">Motors</span>
@@ -142,6 +142,9 @@
       Reduction</span>
     <span [routerLink]="['/calculators/pipe-insulation-reduction']" routerLinkActive="selected"
       class="sidebar-item">Pipe Insulation
+      Reduction</span>
+    <span [routerLink]="['/calculators/tank-insulation-reduction']" routerLinkActive="selected"
+      class="sidebar-item">Tank Insulation
       Reduction</span>
   </div>
 </div>

@@ -1,0 +1,195 @@
+<div class="px-2 pt-3 d-flex flex-column help-info">
+    <h5>
+        Tank Insulation Reduction
+        <br>
+    </h5>
+    <div class="my-2">
+        <h6>
+            <small class="text-muted">
+                This calculator is used to quantify the energy savings associated with insulating hot tanks.
+                <!-- <hr class="my-1">Reduce the operation time of equipment which uses steam
+                    <hr class="my-1">Decrease the flow rate of the "fluid" being heated. (The most common "fluids" heated
+                    are water
+                    and air)
+                    <hr class="my-1">Reducing the operational hours of the boiler house
+                    <hr class="my-1">Changing set point to a lower temperature -->
+                <!-- <hr> -->
+                <!-- <div class="alert alert-info alert-disclaimer">
+                    <strong>Disclaimer:</strong> Cost savings estimates are based on a simplified system analysis. For
+                    steam systems with back-pressure turbines, this analysis may not be accurate.
+                </div> -->
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+        <h6>
+            Operation Hours
+            <small class="text-muted">
+                <br>
+                Number of annual operating hours for the equipment.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'utilityCost'">
+        <h6>
+            Utility Cost
+            <small class="text-muted">
+                <br>
+                Per unit cost of natural gas/other in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    ($/MMBtu).
+                </span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                    ($/GJ).
+                </span>
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'systemEfficiency'">
+        <h6>
+            System Efficiency
+            <small class="text-muted">
+                <br>
+                System Efficiency of Natural Gas (or other fuel) system.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'tankHeight'">
+        <h6>
+            Tank Height
+            <small class="text-muted">
+                <br>
+                Height of the bare tank in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(ft)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(m)</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'tankDiameter'">
+        <h6>
+            Tank Diameter
+            <small class="text-muted">
+                <br>
+                Interior diameter of the bare tank in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(ft)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(m)</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'tankThickness'">
+        <h6>
+            Tank Wall Thickness
+            <small class="text-muted">
+                <br>
+                Average thickness of the bare tank walls in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(ft)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(m)</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'tankTemperature'">
+        <h6>
+            Internal Tank Temperature
+            <small class="text-muted">
+                <br>
+                Average temperature inside the tank or the surface temperature of the tank in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(&#8451;)</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'ambientTemperature'">
+        <h6>
+            Ambient Temperature
+            <small class="text-muted">
+                <br>
+                Average air temperature outside the tank in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(&#8451;)</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'tankMaterialSelection'">
+        <h6>
+            Tank Base Material
+            <small class="text-muted">
+                <br>
+                Select the base material of the tank. This will provide a corresponding emissivity and thermal
+                conductivity to
+                the calculation.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'insulationMaterialSelection'">
+        <h6>
+            Insulation Material
+            <small class="text-muted">
+                <br>
+                Select the insulation material, if any, that is used on the tank. This will provide a thermal
+                conductivity value for the calculation.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'customInsulationConductivity'">
+        <h6>
+            Insulation Conductivity
+            <small class="text-muted">
+                <br>
+                The thermal conductivity of the material. Thermal Conductivity is a measure of its ability to conduct
+                heat. A high thermal conductivity allows heat transfer to occur at a faster rate. It is usually
+                expressed in terms of power per length per degree temperature difference:
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(hr * ft * &#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">W/mK</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'insulationThickness'">
+        <h6>
+            Insulation Thickness
+            <small class="text-muted">
+                <br>
+                Average thickness of the insulation material in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(ft)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(m)</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'jacketMaterialSelection'">
+        <h6>
+            Tank Jacket Material
+            <small class="text-muted">
+                <br>
+                Select the tank jacket material if the pipe has a jacket. A corresponding emissivity will be provided to
+                the calculation.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+</div>

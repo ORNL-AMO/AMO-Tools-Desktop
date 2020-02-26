@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.6.3-beta",
+  "version": "0.6.5-beta",
   "main": "main.js",
   "license": "MIT",
   "description": "MEASUR",
@@ -8,15 +8,13 @@
   "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
   "engines": {
-    "node": "12.8.0",
+    "node": "10.13.0",
     "npm": "6.4.1"
   },
   "scripts": {
     "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --prod --aot",
-    "ng": "ng",
     "start": "ng serve",
     "build": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build",
-    "build-aot": "ng build --aot",
     "build-watch": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --watch",
     "build-prod": "ng build --aot",
     "build-prod-windows": "./scripts/ng.sh build --prod --aot",
@@ -35,33 +33,33 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "8.2.6",
-    "@angular/common": "8.2.6",
-    "@angular/compiler": "8.2.6",
-    "@angular/compiler-cli": "8.2.6",
-    "@angular/core": "8.2.6",
-    "@angular/forms": "8.2.6",
-    "@angular/http": "7.2.15",
-    "@angular/platform-browser": "8.2.6",
-    "@angular/platform-browser-dynamic": "8.2.6",
-    "@angular/platform-server": "8.2.6",
-    "@angular/router": "8.2.6",
-    "@ng-bootstrap/ng-bootstrap": "^5.1.4",
+    "@angular/animations": "9.0.0",
+    "@angular/common": "9.0.0",
+    "@angular/compiler": "9.0.0",
+    "@angular/compiler-cli": "9.0.0",
+    "@angular/core": "9.0.0",
+    "@angular/forms": "9.0.0",
+    "@angular/localize": "^9.0.2",
+    "@angular/platform-browser": "9.0.0",
+    "@angular/platform-browser-dynamic": "9.0.0",
+    "@angular/platform-server": "9.0.0",
+    "@angular/router": "9.0.0",
+    "@ng-bootstrap/ng-bootstrap": "6.0.0",
     "ajv": "^5.2.2",
-    "amo-tools-suite": "0.6.1",
+    "amo-tools-suite": "0.6.2",
     "bootstrap": "4.3.1",
     "c3": "^0.4.18",
-    "core-js": "^2.4.1",
+    "core-js": "2.5.7",
     "d3": "4.5.0",
     "electron-log": "3.0.1",
     "electron-updater": "4.0.6",
     "font-awesome": "^4.7.0",
     "ngx-electron": "2.1.1",
     "regression": "^2.0.0",
-    "rxjs": "6.4.0",
+    "rxjs": "6.5.4",
     "rxjs-compat": "^6.4.0",
     "save-svg-as-png": "1.2.0",
-    "zone.js": "^0.8.12"
+    "zone.js": "0.10.2"
   },
   "build": {
     "appId": "com.electron.amo-tools-desktop",
@@ -84,32 +82,33 @@
     },
     "linux": {
       "target": [
-        "tar.gz",
-        "AppImage"
+        "AppImage",
+        "tar.gz"
       ],
       "icon": "src/assets/icons/png/",
       "executableName": "MEASUR",
-      "maintainer": "Advanced Manufacturing Office"
+      "maintainer": "Advanced Manufacturing Office",
+      "artifactName": "${productName}-${version}.${ext}",
+      "category": "Science"
     },
     "mac": {
       "target": [
-        "dmg",
-        "zip"
+        "dmg"
       ],
       "icon": "src/assets/icons/mac/icon.icns"
     }
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.803.4",
-    "@angular-devkit/core": "8.3.4",
-    "@angular-devkit/schematics": "8.3.4",
-    "@angular/cli": "8.3.4",
+    "@angular-devkit/build-angular": "0.900.1",
+    "@angular-devkit/core": "9.0.1",
+    "@angular-devkit/schematics": "9.0.1",
+    "@angular/cli": "9.0.1",
     "@types/jasmine": "2.5.38",
     "@types/lodash": "4.14.100",
     "@types/node": "11.11.1",
     "angular-plotly.js": "^1.4.2",
     "chart.js": "^2.7.0",
-    "codelyzer": "4.5.0",
+    "codelyzer": "5.2.1",
     "electron": "4.0.8",
     "electron-builder": "20.39.0",
     "electron-download-tf": "^4.3.4",
@@ -135,6 +134,6 @@
     "protractor": "^5.4.1",
     "ts-node": "8.0.3",
     "tslint": "^5.13.1",
-    "typescript": "3.5.3"
+    "typescript": "3.7.5"
   }
 }

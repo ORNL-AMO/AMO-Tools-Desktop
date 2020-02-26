@@ -1,0 +1,334 @@
+<div class="mb-4 p-2">
+
+    <form [formGroup]="form" #formElement>
+
+        <!-- Operating Hours -->
+        <div class="form-group">
+            <label class="small" for="{{'operatingHours_'+idString}}">Annual Operating Hours</label>
+            <div class="input-group">
+                <span class="input-group-addon op-hour-addon units">
+                    <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+                </span>
+                <input class="form-control" name="operatingHours" id="{{'operatingHours_'+idString}}"
+                    formControlName="operatingHours" type="number" (input)="calculate()"
+                    (focus)="focusField('operatingHours')" (blur)="focusOut()" onfocus="this.select();">
+                <span class="units input-group-addon">hrs/yr</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
+                <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
+                <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
+                    {{form.controls.operatingHours.errors.max.max}}.</span>
+                <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
+                    {{form.controls.operatingHours.errors.min.min}}.</span>
+            </span>
+        </div>
+
+        <!-- Utility Type -->
+        <div class="form-group">
+            <label class="small" for="{{'utilityType_'+idString}}">Fuel Type</label>
+            <select class="form-control" name="utilityType" id="{{'utilityType_'+idString}}"
+                formControlName="utilityType" (change)="changeUtilityType()" (focus)="focusField('utilityType')"
+                (blur)="focusOut()">
+                <option *ngFor="let option of utilityOptions" [ngValue]="option.value">{{option.name}}</option>
+            </select>
+        </div>
+
+        <!-- Utility Cost -->
+        <div class="form-group">
+            <label class="small" for="{{'utilityCost_'+idString}}">Utility Cost</label>
+            <div class="input-group">
+                <input class="form-control" name="utilityCost" id="{{'utilityCost_'+idString}}"
+                    formControlName="utilityCost" type="number" (input)="calculate()"
+                    (focus)="focusField('utilityCost')" (blur)="focusOut()" onfocus="this.select();">
+                <span class="units input-group-addon">$/<span
+                        *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                    <span
+                        *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure != 'Imperial'">GJ</span>
+                    <span
+                        *ngIf="form.controls.utilityType.value != 0 && settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                    <span
+                        *ngIf="form.controls.utilityType.value != 0 && settings.unitsOfMeasure != 'Imperial'">GJ</span>
+                </span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.utilityCost.invalid && !form.controls.utilityCost.pristine">
+                <span *ngIf="form.controls.utilityCost.errors.required">Value required.</span>
+                <span *ngIf="form.controls.utilityCost.errors.min">Value can't be less than
+                    {{form.controls.utilityCost.errors.min.min}}.</span>
+            </span>
+        </div>
+
+        <!-- System Efficiency -->
+        <div class="form-group">
+            <label class="small" for="{{'systemEfficiency_'+idString}}">System Efficiency</label>
+            <div class="input-group">
+                <input class="form-control" name="systemEfficiency" id="{{'systemEfficiency_'+idString}}"
+                    formControlName="systemEfficiency" type="number" (input)="calculate()"
+                    (focus)="focusField('systemEfficiency')" (blur)="focusOut()" onfocus="this.select();">
+                <span class="units input-group-addon">%</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.systemEfficiency.invalid && !form.controls.systemEfficiency.pristine">
+                <span *ngIf="form.controls.systemEfficiency.errors.required">Value required.</span>
+                <span *ngIf="form.controls.systemEfficiency.errors.min">Value can't be less than
+                    {{form.controls.systemEfficiency.errors.min.min}}.</span>
+                <span *ngIf="form.controls.systemEfficiency.errors.max">Value can't be more than
+                    {{form.controls.systemEfficiency.errors.max.max}}.</span>
+            </span>
+        </div>
+
+        <!-- Tank Height -->
+        <div class="form-group">
+            <label class="small" for="{{'tankHeight_'+idString}}">Tank Height</label>
+            <div class="input-group">
+                <input class="form-control" name="tankHeight" id="{{'tankHeight_'+idString}}"
+                    formControlName="tankHeight" type="number" (input)="calculate()" (focus)="focusField('tankHeight')"
+                    (blur)="focusOut()" onfocus="this.select();">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">m</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.tankHeight.invalid && !form.controls.tankHeight.pristine">
+                <span *ngIf="form.controls.tankHeight.errors.required">Value required.</span>
+                <span *ngIf="form.controls.tankHeight.errors.min">Value can't be less than
+                    {{form.controls.tankHeight.errors.min.min}}.</span>
+            </span>
+        </div>
+
+        <!-- Tank Diameter -->
+        <div class="form-group">
+            <label class="small" for="{{'tankDiameter_'+idString}}">Tank Diameter</label>
+            <div class="input-group">
+                <input class="form-control" name="tankDiameter" id="{{'tankDiameter_'+idString}}"
+                    formControlName="tankDiameter" type="number" (input)="calculate()"
+                    (focus)="focusField('tankDiameter')" (blur)="focusOut()" onfocus="this.select();">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">m</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.tankDiameter.invalid && !form.controls.tankDiameter.pristine">
+                <span *ngIf="form.controls.tankDiameter.errors.required">Value required.</span>
+                <span *ngIf="form.controls.tankDiameter.errors.min">Value can't be less than
+                    {{form.controls.tankDiameter.errors.min.min}}.</span>
+            </span>
+        </div>
+
+        <!-- Tank Thickness  -->
+        <div class="form-group">
+            <label class="small" for="{{'tankThickness_'+idString}}">Tank Thickness</label>
+            <div class="input-group">
+                <input class="form-control" name="tankThickness" id="{{'tankThickness_'+idString}}"
+                    formControlName="tankThickness" type="number" (input)="calculate()"
+                    (focus)="focusField('tankThickness')" (blur)="focusOut()" onfocus="this.select();">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">m</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.tankThickness.invalid && !form.controls.tankThickness.pristine">
+                <span *ngIf="form.controls.tankThickness.errors.required">Value required.</span>
+                <span *ngIf="form.controls.tankThickness.errors.min">Value can't be less than
+                    {{form.controls.tankThickness.errors.min.min}}.</span>
+            </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="tankThicknessWarning !== null && !form.controls.tankThickness.invalid && !form.controls.tankThickness.pristine">{{tankThicknessWarning}}</span>
+        </div>
+
+
+        <!-- Tank Temperature -->
+        <div class="form-group">
+            <label class="small" for="{{'tankTemperature_'+idString}}">Internal Tank Temperature</label>
+            <div class="input-group">
+                <input class="form-control" name="tankTemperature" id="{{'tankTemperature_'+idString}}"
+                    formControlName="tankTemperature" type="number" (input)="calculate()"
+                    (focus)="focusField('tankTemperature')" (blur)="focusOut()" onfocus="this.select();">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">&#8457;</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">&#8451;</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.tankTemperature.invalid && !form.controls.tankTemperature.pristine">
+                <span *ngIf="form.controls.tankTemperature.errors.required">Value required.</span>
+                <span *ngIf="form.controls.tankTemperature.errors.min">Value can't be less than
+                    {{form.controls.tankTemperature.errors.min.min}}.</span>
+            </span>
+        </div>
+
+        <!-- Ambient Temperature -->
+        <div class="form-group">
+            <label class="small" for="{{'ambientTemperature_'+idString}}">Average Ambient Temperature</label>
+            <div class="input-group">
+                <input class="form-control" name="ambientTemperature" id="{{'ambientTemperature_'+idString}}"
+                    formControlName="ambientTemperature" type="number" (input)="calculate()"
+                    (focus)="focusField('ambientTemperature')" (blur)="focusOut()" onfocus="this.select();">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">&#8457;</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">&#8451;</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.ambientTemperature.invalid && !form.controls.ambientTemperature.pristine">
+                <span *ngIf="form.controls.ambientTemperature.errors.required">Value required.</span>
+                <span *ngIf="form.controls.ambientTemperature.errors.min">Value can't be less than
+                    {{form.controls.ambientTemperature.errors.min.min}}.</span>
+            </span>
+        </div>
+
+        <!-- Tank Material -->
+        <div class="form-group">
+            <label class="small" for="{{'tankMaterialSelection_'+idString}}">Tank Base Material</label>
+            <select class="form-control" name="tankMaterialSelection" id="{{'tankMaterialSelection_'+idString}}"
+                formControlName="tankMaterialSelection" (change)="calculate()"
+                (focus)="focusField('tankMaterialSelection')" (blur)="focusOut()">
+                <option *ngFor="let option of tankMaterials" [ngValue]="option.value">{{option.name}}</option>
+            </select>
+        </div>
+
+        <!-- Tank Material Emissivity -->
+        <div class="row">
+            <div class="col-6">
+                <label class="small bold" for="{{'tankEmissivity_'+idString}}">Emissivity</label>
+            </div>
+            <div class="col-6 text-center">
+                <span class="small bold" *ngIf="isBaseline == true">
+                    {{tankInsulationReductionService.baselineData.tankEmissivity}}
+                </span>
+                <span class="small bold" *ngIf="isBaseline == false">
+                    {{tankInsulationReductionService.modificationData.tankEmissivity}}
+                </span>
+            </div>
+        </div>
+
+        <!-- Tank Material Conductivity -->
+        <div class="row">
+            <div class="col-6">
+                <label class="small bold" for="{{'tankConductivity_'+idString}}">Conductivity</label>
+            </div>
+            <div class="col-6 text-center">
+                <span class="small bold" *ngIf="isBaseline == true && settings.unitsOfMeasure == 'Imperial'">
+                    {{tankInsulationReductionService.baselineData.tankConductivity | number:'.0-6'}}
+                </span>
+                <span class="small bold" *ngIf="isBaseline == true && settings.unitsOfMeasure != 'Imperial'">
+                    {{convertConductivity(tankInsulationReductionService.baselineData.tankConductivity) | number:'.0-6'}}
+                </span>
+                <span class="small bold" *ngIf="isBaseline == false && settings.unitsOfMeasure == 'Imperial'">
+                    {{tankInsulationReductionService.modificationData.tankConductivity | number:'.0-6'}}
+                </span>
+                <span class="small bold" *ngIf="isBaseline == false && settings.unitsOfMeasure != 'Imperial'">
+                    {{convertConductivity(tankInsulationReductionService.modificationData.tankConductivity) | number:'.0-6'}}
+                </span>
+                <span class="small bold">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(hr * ft * &#8457;)</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">W/mK</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Insulation Material -->
+        <div class="form-group">
+            <label class="small" for="{{'insulationMaterialSelection_'+idString}}">Insulation Material</label>
+            <select class="form-control" name="insulationMaterialSelection"
+                id="{{'insulationMaterialSelection_'+idString}}" formControlName="insulationMaterialSelection"
+                (change)="changeInsulationMaterial()" (focus)="focusField('insulationMaterialSelection')"
+                (blur)="focusOut()">
+                <option *ngFor="let option of insulationMaterials" [ngValue]="option.value">{{option.name}}</option>
+            </select>
+        </div>
+
+        <!-- Insulation Material Conductivity -->
+        <div class="row" *ngIf="form.controls.insulationMaterialSelection.value != 1">
+            <div class="col-6">
+                <label class="small bold" for="{{'insulationConductivity_'+idString}}">Conductivity</label>
+            </div>
+            <div class="col-6 text-center">
+                <span class="small bold" *ngIf="isBaseline == true && settings.unitsOfMeasure == 'Imperial'">
+                    {{tankInsulationReductionService.baselineData.insulationConductivity | number:'.0-6'}}
+                </span>
+                <span class="small bold" *ngIf="isBaseline == true && settings.unitsOfMeasure != 'Imperial'">
+                    {{convertConductivity(tankInsulationReductionService.baselineData.insulationConductivity) | number:'.0-6'}}
+                </span>
+                <span class="small bold" *ngIf="isBaseline == false && settings.unitsOfMeasure == 'Imperial'">
+                    {{tankInsulationReductionService.modificationData.insulationConductivity | number:'.0-6'}}
+                </span>
+                <span class="small bold" *ngIf="isBaseline == false && settings.unitsOfMeasure != 'Imperial'">
+                    {{convertConductivity(tankInsulationReductionService.modificationData.insulationConductivity) | number:'.0-6'}}
+                </span>
+                <span class="small bold">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(hr * ft * &#8457;)</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">W/mK</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Custom Insulation Material Conductivity -->
+        <div class="form-group" *ngIf="form.controls.insulationMaterialSelection.value == 1">
+            <label class="small" for="{{'customInsulationConductivity_'+idString}}">Insulation Conductivity</label>
+            <div class="input-group">
+                <input class="form-control" name="customInsulationConductivity"
+                    id="{{'customInsulationConductivity_'+idString}}" formControlName="customInsulationConductivity"
+                    type="number" (input)="calculate()" (focus)="focusField('customInsulationConductivity')"
+                    (blur)="focusOut()" onfocus="this.select();">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">Btu/(hr * ft *
+                    &#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">W/mK</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.customInsulationConductivity.invalid && !form.controls.customInsulationConductivity.pristine">
+                <span *ngIf="form.controls.customInsulationConductivity.errors.required">Value required.</span>
+                <span *ngIf="form.controls.customInsulationConductivity.errors.min">Value can't be less than
+                    {{form.controls.customInsulationConductivity.errors.min.min}}.</span>
+            </span>
+        </div>
+
+        <!-- Insulation Thickness -->
+        <div class="form-group" *ngIf="form.controls.insulationMaterialSelection.value != 0">
+            <label class="small" for="{{'insulationThickness_'+idString}}">Insulation Thickness</label>
+            <div class="input-group">
+                <input class="form-control" name="insulationThickness" id="{{'insulationThickness_'+idString}}"
+                    formControlName="insulationThickness" type="number" (input)="calculate()"
+                    (focus)="focusField('insulationThickness')" (blur)="focusOut()" onfocus="this.select();">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">m</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.insulationThickness.invalid && !form.controls.insulationThickness.pristine">
+                <span *ngIf="form.controls.insulationThickness.errors.required">Value required.</span>
+                <span *ngIf="form.controls.insulationThickness.errors.min">Value can't be less than
+                    {{form.controls.insulationThickness.errors.min.min}}.</span>
+                <span *ngIf="form.controls.insulationThickness.errors.max">Value can't be more than
+                    {{form.controls.insulationThickness.errors.max.max}}.</span>
+            </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="insulationThicknessWarning !== null && !form.controls.insulationThickness.invalid && !form.controls.insulationThickness.pristine">{{insulationThicknessWarning}}</span>
+        </div>
+
+        <!-- Jacket Material -->
+        <div class="form-group">
+            <label class="small" for="{{'jacketMaterialSelection_'+idString}}">Tank Jacket Material</label>
+            <select class="form-control" name="jacketMaterialSelection" id="{{'jacketMaterialSelection_'+idString}}"
+                formControlName="jacketMaterialSelection" (change)="calculate()"
+                (focus)="focusField('jacketMaterialSelection')" (blur)="focusOut()">
+                <option *ngFor="let option of jacketMaterials" [ngValue]="option.value">{{option.name}}</option>
+            </select>
+        </div>
+
+        <!-- Jacket Material Emissivity -->
+        <div class="row">
+            <div class="col-6">
+                <label class="small bold" for="{{'jacketEmissivity_'+idString}}">Emissivity</label>
+            </div>
+            <div class="col-6 text-center">
+                <span class="small bold" *ngIf="isBaseline == true">
+                    {{tankInsulationReductionService.baselineData.jacketEmissivity}}
+                </span>
+                <span class="small bold" *ngIf="isBaseline == false">
+                    {{tankInsulationReductionService.modificationData.jacketEmissivity}}
+                </span>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+    [operatingHours]="tankInsulationReductionService.operatingHours">
+</app-operating-hours-modal>

@@ -418,10 +418,12 @@ export class SsmtComponent implements OnInit {
   }
 
   disclaimerToast() {
-    this.toastData.title = 'Disclaimer';
-    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-    this.showToast = true;
-    this.cd.detectChanges();
+    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
+      this.toastData.title = 'Disclaimer';
+      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+      this.showToast = true;
+      this.cd.detectChanges();
+    }
   }
 
   hideToast() {
@@ -434,6 +436,14 @@ export class SsmtComponent implements OnInit {
     this.cd.detectChanges();
   }
 
+  disableDisclaimer() {
+    this.settingsDbService.globalSettings.disableDisclaimer = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
+    this.hideToast();
+  }
+  
   checkTutorials() {
     if (this.mainTab == 'system-setup') {
       if (!this.settingsDbService.globalSettings.disableSsmtSystemSetupTutorial) {

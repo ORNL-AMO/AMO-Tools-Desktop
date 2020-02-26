@@ -2,7 +2,7 @@
     <div class="d-flex flex-column">
         <div class="header mr-2 ml-2">
             <h3>Import Logger Data from .csv file</h3>
-            <br>
+            <a class="click-link pull-right" (click)="resetData()" *ngIf="individualDataFromCsv.length != 0">Start Over</a>
         </div>
         <div class="p-2">
             <div>
@@ -78,7 +78,7 @@
                     button below. This cannot be undone.
                 </div>
                 <hr>
-                <button class="btn btn-danger pull-right" (click)="resetData()">Start Over</button>
+                <!-- <button class="btn btn-danger pull-right" (click)="resetData()">Start Over</button> -->
             </div>
 
             <div class="p-2" *ngIf="noDayTypeAnalysis == true && dataExists == false">
@@ -87,7 +87,7 @@
                     has been turned off. 
                 </div>
                 <hr>
-                <button class="btn btn-danger pull-right" (click)="resetData()">Start Over</button>
+                <!-- <button class="btn btn-danger pull-right" (click)="resetData()">Start Over</button> -->
             </div>
         </div>
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
-import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
@@ -11,6 +11,7 @@ import { CompressedAirPressureReductionService } from '../../calculator/utilitie
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
 import { SteamReductionService } from '../../calculator/utilities/steam-reduction/steam-reduction.service';
+import { PipeInsulationReductionService } from '../../calculator/utilities/pipe-insulation-reduction/pipe-insulation-reduction.service';
 
 @Injectable()
 export class CalculatorsService {
@@ -22,7 +23,8 @@ export class CalculatorsService {
   constructor(private lightingReplacementService: LightingReplacementService, private replaceExistingService: ReplaceExistingService,
     private motorDriveService: MotorDriveService, private naturalGasReductionService: NaturalGasReductionService, private electricityReductionService: ElectricityReductionService,
     private compressedAirReductionService: CompressedAirReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
-    private waterReductionService: WaterReductionService, private opportunitySheetService: OpportunitySheetService, private steamReductionService: SteamReductionService) {
+    private waterReductionService: WaterReductionService, private opportunitySheetService: OpportunitySheetService, private steamReductionService: SteamReductionService,
+    private pipeInsulationReductionService: PipeInsulationReductionService) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
   cancelCalc() {
@@ -244,6 +246,29 @@ export class CalculatorsService {
     this.calcOpportunitySheet = undefined;
     this.steamReductionService.baselineData = undefined;
     this.steamReductionService.modificationData = undefined;
+    this.cancelCalc();
+  }
+
+  //pipe insulation reduction
+  addNewPipeInsulationReduction() {
+    this.calcOpportunitySheet = undefined;
+    this.pipeInsulationReductionService.baselineData = undefined;
+    this.pipeInsulationReductionService.modificationData = undefined;
+    this.isNewOpportunity = true;
+    this.selectedCalc.next('pipe-insulation-reduction');
+  }
+  editPipeInsulationReductionsItem(pipeInsulationReduction: PipeInsulationReductionTreasureHunt, index: number) {
+    this.calcOpportunitySheet = pipeInsulationReduction.opportunitySheet;
+    this.isNewOpportunity = false;
+    this.itemIndex = index;
+    this.pipeInsulationReductionService.baselineData = pipeInsulationReduction.baseline;
+    this.pipeInsulationReductionService.modificationData = pipeInsulationReduction.modification;
+    this.selectedCalc.next('pipe-insulation-reduction');
+  }
+  cancelPipeInsulationReduction() {
+    this.calcOpportunitySheet = undefined;
+    this.pipeInsulationReductionService.baselineData = undefined;
+    this.pipeInsulationReductionService.modificationData = undefined;
     this.cancelCalc();
   }
 }

@@ -14,6 +14,7 @@ import { SteamReductionModule } from './steam-reduction/steam-reduction.module';
 import { CashFlowModule } from './cash-flow/cash-flow.module';
 import { UnitConverterModule } from './unit-converter/unit-converter.module';
 import { PipeInsulationReductionModule } from './pipe-insulation-reduction/pipe-insulation-reduction.module';
+import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-insulation-reduction.module';
 import { UtilitiesListComponent } from './utilities-list/utilities-list.component';
 import { RouterModule } from '@angular/router';
 
@@ -39,6 +40,7 @@ import { RouterModule } from '@angular/router';
         SteamReductionModule,
         WaterReductionModule,
         PipeInsulationReductionModule,
+        TankInsulationReductionModule,
         CashFlowModule,
         UnitConverterModule,
         RouterModule

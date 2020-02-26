@@ -8,7 +8,7 @@ import { LogToolService } from '../../../log-tool.service';
 })
 export class DataTableComponent implements OnInit {
 
-  constructor(private logToolService: LogToolService) { }
+  constructor(public logToolService: LogToolService) { }
 
   ngOnInit() {
   }

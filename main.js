@@ -72,11 +72,12 @@ app.on('ready', function () {
   })
 
   ipcMain.once('quit-and-install', (event, arg) => {
-    autoUpdater.quitAndInstall();
+    autoUpdater.quitAndInstall(false);
   })
 
   //Check for updates and install
   autoUpdater.autoDownload = false;
+  autoUpdater.autoInstallOnAppQuit = false;
 
   crashReporter.start({
     productName: "ORNL-AMO",

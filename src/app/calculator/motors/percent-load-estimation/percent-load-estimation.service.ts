@@ -35,8 +35,8 @@ export class PercentLoadEstimationService {
     return this.slipMethodInputs;
   }
 
-  generateFieldMeasurementInputs(): FieldMeasurementInputs {
-    this.fieldMeasurementInputs = {
+  generateFieldMeasurementInputsExample(): FieldMeasurementInputs {
+    let fieldMeasurementInputs = {
       phase1Voltage: 467,
       phase1Amps: 36,
       phase2Voltage: 473,
@@ -46,8 +46,9 @@ export class PercentLoadEstimationService {
       ratedVoltage: 460,
       ratedCurrent: 72.1,
       powerFactor: 0.77
-    }
-    return this.fieldMeasurementInputs;
+    };
+    this.fieldMeasurementInputs = fieldMeasurementInputs;
+    return fieldMeasurementInputs;
   }
 
   generateSlipMethodInputsExample(): SlipMethod {

@@ -43,21 +43,22 @@
                     <tr *ngFor="let field of dataFields">
                         <td>
                             <input type="checkbox" [(ngModel)]="field.useField"
-                                [disabled]="field.isDateField || dataExists == true">
+                                [disabled]="field.isDateField || dataExists == true || field.invalidField">
                         </td>
                         <td>{{field.fieldName}}</td>
                         <td>
-                            <input type="text" class="form-control w-100" [(ngModel)]="field.alias"
+                            <input *ngIf="!field.invalidField" type="text" class="form-control w-100" [(ngModel)]="field.alias"
                                 [disabled]="dataExists == true">
+                            <span *ngIf="field.invalidField">Invalid field, not number or date. Cannot visualize.</span>
                         </td>
                         <td>
                             <span *ngIf="field.isDateField == true">
                                 {{field.unit}}
                             </span>
-                            <span *ngIf="field.unit && field.isDateField == false">
+                            <span *ngIf="field.unit && field.isDateField == false && !field.invalidField">
                                 <a class="click-link" (click)="editUnit(field)">{{field.unit}}</a>
                             </span>
-                            <span *ngIf="!field.unit">
+                            <span *ngIf="!field.unit && !field.invalidField">
                                 <a class="click-link" (click)="editUnit(field)">+Add</a>
                             </span>
                         </td>
@@ -93,4 +94,5 @@
     </div>
 </div>
 
-<app-field-units-modal *ngIf="showEditModal" [editField]="editField" (emitClose)="closeEditModal()"></app-field-units-modal>
+<app-field-units-modal *ngIf="showEditModal" [editField]="editField" (emitClose)="closeEditModal()">
+</app-field-units-modal>

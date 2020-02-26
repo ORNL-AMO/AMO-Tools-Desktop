@@ -6,9 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StandaloneService } from '../../standalone.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PipeInsulationReductionService {
 
   baselineData: PipeInsulationReductionInput;

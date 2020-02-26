@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { OpportunitySheet } from '../../../../shared/models/treasure-hunt';
+import { processEquipmentOptions } from './processEquipmentOptions';
 
 @Component({
   selector: 'app-general-details-form',
@@ -11,7 +12,11 @@ export class GeneralDetailsFormComponent implements OnInit {
   opportunitySheet: OpportunitySheet;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
-  constructor() { }
+
+  processEquipmentOptions: Array<{ value: string, display: string }>;
+  constructor() { 
+    this.processEquipmentOptions = processEquipmentOptions;
+  }
 
   ngOnInit() {
   }

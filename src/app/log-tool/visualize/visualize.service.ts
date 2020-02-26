@@ -34,7 +34,8 @@ export class VisualizeService {
     let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptionsWithDate();
     let selectedYDataField: LogToolField
     let selectedXDataField: LogToolField;
-    if (this.logToolService.dateFields != undefined) {
+    let noDayTypeAnalysis: boolean = this.logToolService.noDayTypeAnalysis.getValue();
+    if (noDayTypeAnalysis == false) {
       selectedXDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) });
       selectedYDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) == undefined });
     } else {
@@ -77,8 +78,8 @@ export class VisualizeService {
 
   updateSelectedXDataField(dataField: LogToolField) {
     let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    let yData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
-    currentSelectedGraphData.xData = yData;
+    let xData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
+    currentSelectedGraphData.xData = xData;
     currentSelectedGraphData.selectedXDataField = dataField;
     this.selectedGraphData.next(currentSelectedGraphData);
     this.updateAllGraphItems(currentSelectedGraphData);

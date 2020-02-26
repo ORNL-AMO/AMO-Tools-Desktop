@@ -10,11 +10,15 @@ export class TreasureChestMenuService {
   selectAll: BehaviorSubject<boolean>
   sortBy: BehaviorSubject<SortCardsData>;
   deselectAll: BehaviorSubject<boolean>;
+  showImportModal: BehaviorSubject<boolean>;
+  showExportModal: BehaviorSubject<boolean>;
   constructor() {
     this.selectAll = new BehaviorSubject<boolean>(false);
     this.deselectAll = new BehaviorSubject<boolean>(false);
     let defaultData: SortCardsData = this.getDefaultSortByData();
     this.sortBy = new BehaviorSubject<SortCardsData>(defaultData);
+    this.showImportModal = new BehaviorSubject<boolean>(false);
+    this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultSortByData(): SortCardsData {

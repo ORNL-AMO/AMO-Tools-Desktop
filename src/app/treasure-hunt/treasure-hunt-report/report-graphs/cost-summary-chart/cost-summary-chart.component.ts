@@ -76,6 +76,9 @@ export class CostSummaryChartComponent implements OnInit {
     } else if (changes.chartContainerWidth && !changes.chartContainerWidth.firstChange) {
       this.resizeGraph();
     }
+    if(changes.data && this.ngChart){
+      this.makeGraph();
+    }
   }
 
   resizeGraph() {
