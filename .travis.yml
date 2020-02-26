@@ -1,6 +1,6 @@
 stages:
   - build
-  - name: deploy
+  - name: release
   # deploy stage will only run on issue-3505 branch
   if: branch = issue-3505
   
@@ -26,7 +26,7 @@ jobs:
         - ./node_modules/.bin/build -"$OS_FLAG" --x64 --publish="never"
         - ls
         - ls ../output/
-    - stage: deploy
+    - stage: release
       deploy:
         provider: releases
         api_key:
