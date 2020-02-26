@@ -18,6 +18,14 @@ script:
   - ./node_modules/.bin/build -"$OS_FLAG" --x64 --publish="never"
   - ls
   - ls ../output/
+before_deploy: |
+  function keep_alive() {
+    while true; do
+      echo -en "\a"
+      sleep 5
+    done
+  }
+  keep_alive &
 deploy:
   provider: releases
   api_key:
