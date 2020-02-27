@@ -27,13 +27,13 @@ script:
   - ls ../output/
   
 before_deploy:
-  function keep_alive() {
-    while true; do
-      echo -en "\a"
-      sleep 5
-    done
-  }
-  keep_alive &
+  #function keep_alive() {
+  #  while true; do
+  #    echo -en "\a"
+  #    sleep 5
+  #  done
+  #}
+  #keep_alive &
   - export TRAVIS_TAG="preview"
 deploy:
   provider: releases
