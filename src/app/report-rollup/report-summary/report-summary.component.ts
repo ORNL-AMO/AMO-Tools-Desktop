@@ -14,7 +14,7 @@ export class ReportSummaryComponent implements OnInit {
   @Output('hideSummary')
   hideSummary = new EventEmitter<boolean>();
   showSummary: string = 'open';
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(public reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
   }

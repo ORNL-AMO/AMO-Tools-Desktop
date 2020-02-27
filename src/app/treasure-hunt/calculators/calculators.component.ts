@@ -103,13 +103,13 @@ export class CalculatorsComponent implements OnInit {
       this.confirmSaveStandaloneOpportunitySheet();
     } else if (this.selectedCalc == 'steam-reduction') {
       this.confirmSaveSteamReduction();
-    } else if (this.selectedCalc == 'pipe-insulation-reduction'){
+    } else if (this.selectedCalc == 'pipe-insulation-reduction') {
       this.confirmPipeInsulationReduction();
     }
   }
   initSaveCalc() {
     this.calculatorOpportunitySheet = this.calculatorsService.calcOpportunitySheet;
-    if (this.mainTab == 'find-treasure') {
+    if (this.mainTab == 'find-treasure' && this.selectedCalc != 'opportunity-sheet') {
       this.showOpportunitySheetModal();
     } else {
       this.showSaveCalcModal();
