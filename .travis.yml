@@ -8,8 +8,8 @@ script:
   - touch blank.txt
   - ls
 before_deploy:
-  - export TAG="test_release"
-  - git tag $TAG
+  - export TRAVIS_TAG="test_release"
+  - git tag $TRAVIS_TAG
 deploy:
   provider: releases
   api_key:
