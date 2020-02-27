@@ -7,10 +7,10 @@ language: generic
 matrix:
   include:
     - name: "Linux Build"
-    os: linux
+      os: linux
     
     - name: "Mac Build"
-    os: osx
+      os: osx
     
 script:
   - touch blank.txt
