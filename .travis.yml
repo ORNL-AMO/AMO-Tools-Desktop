@@ -25,4 +25,4 @@ deploy:
   on:
     repo: ORNL-AMO/AMO-Tools-Desktop
     branch: issue-3505
-    tags: false
+    #tags: false
