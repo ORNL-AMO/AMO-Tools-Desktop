@@ -40,6 +40,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   titlePlacement: string;
   baselineResults: PsatOutputs;
   modificationResults: PsatOutputs;
+  sankeyView: string = 'Baseline';
 
   tabSelect: string = 'results';
   currentField: string;

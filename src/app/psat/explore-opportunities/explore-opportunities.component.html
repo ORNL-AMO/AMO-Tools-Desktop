@@ -34,8 +34,22 @@
 		</div>
 
 		<div *ngIf="tabSelect == 'sankey' && modificationExists" class="scroll-item" [ngStyle]="{'height.px': helpHeight}">
-			<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings">
-			</app-explore-opportunities-sankey>
+			<div class="d-flex flex-column w-100">
+				<div class="btn-group mt-2 justify-content-center">
+				  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Baseline'" [ngClass]="{'active': sankeyView == 'Baseline'}">Baseline</button>
+				  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Modified'" [ngClass]="{'active': sankeyView == 'Modified'}">Modification</button>
+				</div>
+				<app-psat-sankey *ngIf="sankeyView === 'Baseline'"
+					  [location]="'baseline'"
+					  [settings]="settings"
+					  [baselineResults]="baselineResults"
+					  [isBaseline]="true"></app-psat-sankey>
+				<app-psat-sankey *ngIf="sankeyView === 'Modified'"
+				  [location]="'baseline'"
+				  [settings]="settings"
+				  [modResults]="modificationResults"
+				  [isBaseline]="false"></app-psat-sankey>
+			  </div>
 		</div>
 		<div class="scroll-item" [ngStyle]="{'height.px': helpHeight}" *ngIf="modificationExists && tabSelect == 'results'">
 			<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex"
