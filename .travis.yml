@@ -1,3 +1,5 @@
+if: tag IS blank
+
 language: generic
 #node_js:
   #- '10.11'
@@ -7,12 +9,8 @@ os:
 script:
   - touch blank.txt
   - ls
-#before_deploy:
-  # Set up git user name and tag this commit
-  #- git config --local user.name "causeyc"
-  #- git config --local user.email "causeyc@findlay.edu"
-  #- export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-  #- git tag $TRAVIS_TAG
+before_deploy:
+  - export TRAVIS_TAG="preview"
 deploy:
   provider: releases
   api_key:
@@ -23,7 +21,7 @@ deploy:
   skip_cleanup: true
   draft: true
   name: "TEST RELEASE DRAFT"
-  tag_name: "release_draft"
+  #tag_name: "release_draft"
   on:
     repo: ORNL-AMO/AMO-Tools-Desktop
     branch: issue-3505
