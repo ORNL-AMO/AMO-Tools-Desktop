@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { PieChartComponent } from './pie-chart.component';
 import { SimpleTooltipModule } from '../simple-tooltip/simple-tooltip.module';
 import { PlotlyPieChartComponent } from '../plotly-pie-chart/plotly-pie-chart.component';
+import { PlotlyBarChartComponent } from '../plotly-bar-chart/plotly-bar-chart.component';
 
 
 
 @NgModule({
   declarations: [
     PieChartComponent,
-    PlotlyPieChartComponent
+    PlotlyPieChartComponent,
+    PlotlyBarChartComponent
   ],
   imports: [
     CommonModule,
@@ -17,7 +19,8 @@ import { PlotlyPieChartComponent } from '../plotly-pie-chart/plotly-pie-chart.co
   ],
   exports: [
     PieChartComponent,
-    PlotlyPieChartComponent
+    PlotlyPieChartComponent,
+    PlotlyBarChartComponent
   ]
 })
 export class PieChartModule { }

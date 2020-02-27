@@ -16,8 +16,6 @@ export class PsatReportGraphsComponent implements OnInit {
   settings: Settings;
   @Input()
   psat: PSAT;
-  // @Input()
-  // inPsat: boolean;
   @Input()
   assessment: Assessment;
   @Input()
@@ -26,9 +24,6 @@ export class PsatReportGraphsComponent implements OnInit {
   printSankey: boolean;
   @Input()
   printGraphs: boolean;
-
-  @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
-  @ViewChild('barChartContainer', { static: false }) barChartContainer: ElementRef;
 
   selectedResults: PsatOutputs;
   selectedInputs: PsatInputs;
@@ -65,6 +60,8 @@ export class PsatReportGraphsComponent implements OnInit {
   modExists: boolean = false;
   graphColors: Array<string>;
 
+  barChartData: Array<{ labels: Array<string>, dataPoints: Array<number>, name: string }>;
+
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -73,8 +70,8 @@ export class PsatReportGraphsComponent implements OnInit {
     this.selectedPsat1PieValues = new Array<number>();
     this.selectedPsat2PieLabels = new Array<string>();
     this.selectedPsat2PieValues = new Array<number>();
-    this.selectedPsat1BarValues = new Array<number>();
-    this.selectedPsat2BarValues = new Array<number>();
+    // this.selectedPsat1BarValues = new Array<number>();
+    // this.selectedPsat2BarValues = new Array<number>();
     this.barLabels = new Array<string>();
     this.psatOptions = new Array<{ name: string, psat: PSAT, index: number }>();
     this.prepPsatOptions();
@@ -185,28 +182,18 @@ export class PsatReportGraphsComponent implements OnInit {
       this.selectedPsat2BarValues = this.allChartData.barValues[this.selectedPsat2.index];
       this.selectedPsat2ExportName = this.assessment.name + "-" + this.selectedPsat2.name;
     }
+    this.setBarChartData();
   }
 
-  getPieWidth(): number {
-    if (this.pieChartContainer) {
-      let containerPadding = 50;
-      return this.pieChartContainer.nativeElement.clientWidth - containerPadding;
-    }
-    else {
-      return 0;
-    }
-  }
-
-  getBarWidth(): number {
-    if (this.barChartContainer) {
-      let containerPadding = 30;
-      return this.barChartContainer.nativeElement.clientWidth - containerPadding;
-    }
-    else {
-      return 0;
+  setBarChartData() {
+    this.barChartData = new Array();
+    let barChartDataItem = { labels: this.allChartData.barLabels, dataPoints: this.selectedPsat1BarValues, name: this.selectedPsat1.name };
+    this.barChartData.push(barChartDataItem);
+    if (this.modExists) {
+      let barChartDataItem = { labels: this.allChartData.barLabels, dataPoints: this.selectedPsat2BarValues, name: this.selectedPsat2.name };
+      this.barChartData.push(barChartDataItem);
     }
   }
-
 
   getAllChartData(): { pieLabels: Array<Array<string>>, pieValues: Array<Array<number>>, barLabels: Array<string>, barValues: Array<Array<number>> } {
     let allPieLabels = new Array<Array<string>>();

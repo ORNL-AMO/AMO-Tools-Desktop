@@ -11,6 +11,8 @@ export class PlotlyPieChartComponent implements OnInit {
   values: Array<number>;
   @Input()
   labels: Array<string>;
+  @Input()
+  valuesUnit: string;
 
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
 
@@ -38,7 +40,7 @@ export class PlotlyPieChartComponent implements OnInit {
       automargin: true,
       textinfo: 'label+percent',
       hoverformat: '.2r',
-      text: undefined,
+      text: this.values.map(y => { return (y).toFixed(2) + ' ' + this.valuesUnit; }),
       hoverinfo: 'text'
     }];
 
@@ -46,14 +48,6 @@ export class PlotlyPieChartComponent implements OnInit {
       margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
       showlegend: false
     };
-
-    var trace = data[0];
-    trace.text = trace.values.map(function (v) {
-      return (v).toFixed(2);
-    });
-
-    trace.hoverinfo = 'text';
-
     Plotly.react(this.plotlyPieChart.nativeElement, data, layout, { responsive: true });
   }
 }
