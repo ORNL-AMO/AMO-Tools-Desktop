@@ -23,7 +23,7 @@ deploy:
   skip_cleanup: true
   draft: true
   name: "TEST RELEASE DRAFT"
-  tag_name: $TRAVIS_TAG
+  tag_name: "release_draft"
   on:
     repo: ORNL-AMO/AMO-Tools-Desktop
     branch: issue-3505
