@@ -1,8 +1,8 @@
 if: tag IS blank
 
-language: generic
-#node_js:
-  #- '10.11'
+language: node_js
+node_js:
+  - '10.11'
   
 matrix:
   include:
@@ -12,17 +12,39 @@ matrix:
     - name: "Mac Build"
       os: osx
     
+before_install:
+  - travis_retry npm i -g npm@6.4.0
+  - bash travis_scripts/get_os.sh
+  - echo "$OS_FLAG"
+install:
+  - travis_retry npm install
+  - npm update
 script:
-  - touch blank.txt
+  - ls ./node_modules/@angular/cli/bin/
+  - travis_wait 30 npm run ng-high-memory
+  - ./node_modules/.bin/build -"$OS_FLAG" --x64 --publish="never"
   - ls
+  - ls ../output/
+  
 before_deploy:
+  function keep_alive() {
+    while true; do
+      echo -en "\a"
+      sleep 5
+    done
+  }
+  keep_alive &
   - export TRAVIS_TAG="preview"
 deploy:
   provider: releases
   api_key:
     secure: iRdxjibRf0cHrjX26NqqeH6jvqrnNbOYaxRe/zbQWXs3Lx1jZg8Rh7a3i5SCXY3UGKm0uVfeASPM7HAaRgwZaml2tXsJW4Gkz0YxOvfAWB+LRNredQSHHUHpfIxZU24oMDYgm2yWpsa2jEbJsdMtv3yoRyv2BHDCyCjmfwfFJpxqfrG1kJdjiGqahsuamv7mf3nPmnRCdVLPlwCPhp/BlcqYGNpkhXi0q4/RYU2BB4W+8ZOHfjkXN7ff8KHjz/Jux5U4LRHN0PBxfqnrLByZHFCXp7fT1SM8QUFTovHX7BsSdUWL2ufs+CMeG4H6pPk///VKx0AqVmY4T7pk0xnqbvTZvPQck0jXitDSjRQCo2J8v6tBzQfrWW5nnpqSGKsJyxXQMkjRMMn7VQ68H6VCJjgjKRV1duN7RMw2h8K04FZR0a0emyVyQZFw6HcnSlHQPSuy5/c04jpLZymKWlYVJXkXzrKO6W2ry0TTdRDJmQzxbeeYbmSKlnlZZWXnmeozVDy8mHv99134P93KzGDoet8CCo+WSiz7aYbcIvPwA72bSCnM+XOylHOD45kEV0a99xaLhHV6GjexY4yVPn0z4mRk5/f4WorR2te3rYJRobb29qRBR1TlMZb8LvHPz5cRSzHP2k5WdviEmuvTYhwx60CsOlxKKBo0cXi93ig3MJg=
   file:
-    - "package.json"
+    - "../output/MEASUR 0.6.4-beta.AppImage"
+    - "../output/amo-tools-desktop-0.6.4-beta.tar.gz"
+    - "../output/latest-linux.yml"
+    - "../output/MEASUR-0.6.4-beta.dmg"
+    - "../output/latest-mac.yml"
   overwrite: true
   skip_cleanup: true
   draft: true
