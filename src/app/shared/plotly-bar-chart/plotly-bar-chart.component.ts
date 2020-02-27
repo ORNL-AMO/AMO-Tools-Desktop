@@ -7,11 +7,13 @@ import * as Plotly from 'plotly.js';
 })
 export class PlotlyBarChartComponent implements OnInit {
   @Input()
-  barChartData: Array<{ labels: Array<string>, dataPoints: Array<number>, name: string }>;
+  barChartDataArray: Array<{ barChartLabels: Array<string>, barChartValues: Array<number>, name: string }>;
   @Input()
   yAxisLabel: string;
   @Input()
   chartTitle: string;
+  @Input()
+  yValueUnit: string;
 
   @ViewChild('barChart', { static: false }) barChart: ElementRef;
 
@@ -32,13 +34,13 @@ export class PlotlyBarChartComponent implements OnInit {
 
   drawChart() {
     let traces: Array<{ x: Array<string>, y: Array<number>, name: string, type: string, text: Array<string>, textposition: string, hovertemplate: string }> = new Array();
-    this.barChartData.forEach(bar => {
+    this.barChartDataArray.forEach(bar => {
       traces.push({
-        x: bar.labels,
-        y: bar.dataPoints,
-        text: bar.dataPoints.map((y) => { return y.toFixed(2) }),
+        x: bar.barChartLabels,
+        y: bar.barChartValues,
+        text: bar.barChartValues.map((y) => { return y.toFixed(2) }),
         textposition: 'auto',
-        hovertemplate: 'Power: %{y:.3r} kW<extra></extra>',
+        hovertemplate: 'Power: %{y:.3r} ' + this.yValueUnit + '<extra></extra>',
         name: bar.name,
         type: 'bar',
       })

@@ -1,9 +1,9 @@
-<div *ngFor="let psatOption of psatOptions; let i = index">
+<!-- <div *ngFor="let psatOption of psatOptions; let i = index">
 
   <div *ngIf="!modExists || i > 0">
     <div class="row justify-content-center align-items-center print-graphs-container show-print">
 
-      <!-- page title -->
+      <!-- page title --
       <div *ngIf="modExists" align="center" class="print-page-title print-center-title">
         Scenario: {{psatOption.name}}
       </div>
@@ -12,7 +12,7 @@
       </div>
 
       <div class="col-12">
-        <!-- notes -->
+        <!-- notes --
         <div class="row" *ngIf="modExists">
           <div class="col-12 print-notes-padding">
             <div class="row" *ngFor="let note of allNotes[i - 1]">
@@ -23,7 +23,7 @@
           </div>
         </div>
 
-        <!-- pie chart titles -->
+        <!-- pie chart titles --
         <div class="row print-pad-graph-title" *ngIf="printGraphs">
           <div class="text-center print-graph-sub-title" [ngClass]="modExists ? 'col-6' : 'col-12'">
             Baseline
@@ -33,7 +33,7 @@
           </div>
         </div>
 
-        <!-- pie charts -->
+        <!-- pie charts --
         <div class="row" *ngIf="printGraphs">
           <div class="col-6 print-pie-chart">
             <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth"
@@ -45,13 +45,13 @@
           </div>
         </div>
 
-        <!-- bar chart title -->
+        <!-- bar chart title --
         <div class="row show-print print-bar-chart-title print-pad-graph-title" *ngIf="modExists && printGraphs">
           <div align="center" class="print-center-title">
             Pump Power ({{settings.powerMeasurement}})
           </div>
         </div>
-        <!-- bar chart -->
+        <!-- bar chart --
         <div class="row show-print justify-content-center align-items-center" *ngIf="modExists && printGraphs">
           <div class="col-12">
             <app-psat-bar-chart [settings]="settings" [printView]="true" [graphColors]="graphColors" [labels]="allChartData.barLabels"
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <!-- sankey -->
+        <!-- sankey --
         <div class="row" *ngIf='printSankey' [ngClass]="{'print-sankey': modExists && printGraphs, 'print-only-sankey': modExists && !printGraphs }">
           <div class="col-12">
             <div class="row show-print">
@@ -88,5 +88,31 @@
         </div>
       </div>
     </div>
+  </div>
+</div> -->
+
+<div class="print-graphs-container" *ngFor="let scenarioSummary of scenarioSummaries">
+  <div class="print-page-title print-center-title mb-3">
+    Scenario: {{scenarioSummary.modificationGraphData.name}}
+  </div>
+  <div class="d-block print-mod-notes" *ngFor="let note of scenarioSummary.notes">
+    {{note}}
+    <br>
+  </div>
+  <div class="d-flex">
+    <div class="w-50">
+      <app-plotly-pie-chart [values]="scenarioSummary.baselineGraphData.pieChartValues"
+        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="settings.powerMeasurement">
+      </app-plotly-pie-chart>
+    </div>
+    <div class="w-50">
+      <app-plotly-pie-chart [values]="scenarioSummary.modificationGraphData.pieChartValues"
+        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="settings.powerMeasurement">
+      </app-plotly-pie-chart>
+    </div>
+  </div>
+  <div class="w-100">
+    <app-plotly-bar-chart [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
+      [yAxisLabel]="'Power (kW)'"></app-plotly-bar-chart>
   </div>
 </div>

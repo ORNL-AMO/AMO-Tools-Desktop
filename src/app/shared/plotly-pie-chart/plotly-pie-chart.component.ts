@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 import * as Plotly from 'plotly.js';
+import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 
 @Component({
   selector: 'app-plotly-pie-chart',
@@ -35,6 +36,9 @@ export class PlotlyPieChartComponent implements OnInit {
     var data = [{
       values: this.values,
       labels: this.labels,
+      marker: {
+        colors: graphColors
+      },
       type: 'pie',
       textposition: 'auto',
       automargin: true,

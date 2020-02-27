@@ -111,8 +111,7 @@
                 [printView]="showPrint" [printSankey]="printReportSankey" [printGraphs]="printReportGraphs">
             </app-psat-report-graphs>
         </div>
-        <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportSankey}"
-            *ngIf="currentTab == 'reportSankey' || (showPrint && printReportSankey)"
+        <div class="results scroll-item print-height" *ngIf="currentTab == 'reportSankey' && !showPrint"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-psat-report-sankey [psat]="psat" [settings]="settings" [assessment]="assessment"
                 [printView]="printReportSankey"></app-psat-report-sankey>
