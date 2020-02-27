@@ -3,9 +3,15 @@ if: tag IS blank
 language: generic
 #node_js:
   #- '10.11'
-os:
-  - linux
-  #- osx
+  
+matrix:
+  include:
+    - name: "Linux Build"
+    os: linux
+    
+    - name: "Mac Build"
+    os: osx
+    
 script:
   - touch blank.txt
   - ls
