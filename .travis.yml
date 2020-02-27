@@ -11,6 +11,9 @@ matrix:
     
     - name: "Mac Build"
       os: osx
+      
+    - name: "Windows Build"
+      os: windows
     
 before_install:
   - travis_retry npm i -g npm@6.4.0
