@@ -95,22 +95,6 @@ export class FsatReportComponent implements OnInit {
         this.showPrintView = val;
       }
     })
-
-    // else {
-    //   //subscribe to print event
-    //   this.fsatReportService.showPrint.subscribe(printVal => {
-    //     //shows loading print view
-    //     this.showPrintDiv = printVal;
-    //     if (printVal === true) {
-    //       //use delay to show loading before print payload starts
-    //       setTimeout(() => {
-    //         this.showPrint = printVal;
-    //       }, 20);
-    //     } else {
-    //       this.showPrint = printVal;
-    //     }
-    //   });
-    // }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -125,17 +109,17 @@ export class FsatReportComponent implements OnInit {
     }, 100);
   }
 
-  getContainerHeight() {
-    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
-    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
-  }
-
   ngOnDestroy() {
     if(this.showPrintMenuSub){
             this.showPrintMenuSub.unsubscribe();
     }
     this.showPrintViewSub.unsubscribe();
+  }
+
+  getContainerHeight() {
+    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
   }
 
   setTab(str: string) {

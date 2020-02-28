@@ -54,13 +54,7 @@
     <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
         <div class="col-12">
             <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast"
-                [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings" [printView]="printView"
-                [printInputSummary]="rollupPrintOptions.printInputData"
-                [printResultsData]="rollupPrintOptions.printResults"
-                [printReportGraphs]="rollupPrintOptions.printReportGraphs"
-                [printReportSankey]="rollupPrintOptions.printReportSankey"
-                [printEnergyUsed]="rollupPrintOptions.printEnergyUsed"
-                [printExecutiveSummary]="rollupPrintOptions.printExecutiveSummary">
+                [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings">
             </app-phast-report>
         </div>
     </div>
