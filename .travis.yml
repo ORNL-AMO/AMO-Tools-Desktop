@@ -48,7 +48,7 @@ deploy:
     - "../output/latest-linux.yml"
     - "../output/MEASUR-0.6.4-beta.dmg"
     - "../output/latest-mac.yml"
-    - "..output/MEASUR-Setup-0.6.4-beta.exe"
+    - "../output/MEASUR-Setup-0.6.4-beta.exe"
     - "../output/latest.yml"
   overwrite: true
   skip_cleanup: true
