@@ -40,9 +40,7 @@
     <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
         <div class="col-12">
             <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
-                [printView]="printView" [settings]="item.settings" [printInputData]="printInputData"
-                [printReportGraphs]="rollupPrintOptions.printReportGraphs" [printReportSankey]="printReportSankey"
-                [printResults]="rollupPrintOptions.printResults">
+                [settings]="item.settings">
             </app-psat-report>
         </div>
     </div>

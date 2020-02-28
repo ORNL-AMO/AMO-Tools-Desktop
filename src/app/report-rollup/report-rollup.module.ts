@@ -52,7 +52,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { AssessmentReportsComponent } from './assessment-reports/assessment-reports.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
-import { RollupPrintService } from './rollup-print.service';
 import { ReportRollupModalsComponent } from './report-rollup-modals/report-rollup-modals.component';
 import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessment-print.component';
 
@@ -115,7 +114,7 @@ import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessme
     PreAssessmentPrintComponent,
 
   ],
-  providers: [ReportRollupService, RollupPrintService],
+  providers: [ReportRollupService],
   exports: [ReportRollupComponent]
 })
 export class ReportRollupModule { }

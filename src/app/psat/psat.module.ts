@@ -113,7 +113,6 @@ import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipmen
   providers: [
     PsatService,
     CompareService,
-    PsatReportService,
     PsatWarningService,
     PsatTabService,
     PumpFluidService,

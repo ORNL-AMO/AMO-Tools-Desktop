@@ -18,7 +18,7 @@
                 </div>
                 <div class="row toggle-btn" (click)="togglePrint('selectAll')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="selectAll"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.selectAll"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bold-bottom-divider">
                         Select All
@@ -27,7 +27,7 @@
                 <div class="row toggle-btn pad-top-10" *ngIf="showPsatReportOptions && showRollupReportOptions"
                     (click)="togglePrint('psatRollup')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printPsatRollup"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printPsatRollup"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
                         Pump Assessment Rollup Summary
@@ -36,7 +36,7 @@
                 <div class="row toggle-btn pad-top-10" *ngIf="showPhastReportOptions && showRollupReportOptions"
                     (click)="togglePrint('phastRollup')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printPhastRollup"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printPhastRollup"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
                         Process Heating Rollup Summary
@@ -45,7 +45,7 @@
                 <div class="row toggle-btn pad-top-10" *ngIf="showFsatReportOptions && showRollupReportOptions"
                     (click)="togglePrint('fsatRollup')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printFsatRollup"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printFsatRollup"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
                         Fan Assessment Rollup Summary
@@ -54,7 +54,7 @@
                 <div class="row toggle-btn pad-top-10" *ngIf="showSsmtReportOptions && showRollupReportOptions"
                     (click)="togglePrint('ssmtRollup')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printSsmtRollup"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printSsmtRollup"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
                         SSMT Rollup Summary
@@ -64,7 +64,7 @@
                 <div *ngIf="!showSsmtReportOptions && !showTHReportOptions" class="row toggle-btn pad-top-10"
                     (click)="togglePrint('results')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printResults"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printResults"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
                         Results
@@ -81,7 +81,7 @@
                 </div> -->
                 <div class="row toggle-btn pad-top-10" (click)="togglePrint('reportGraphs')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printReportGraphs"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printReportGraphs"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
                         Report Graphs
@@ -90,7 +90,7 @@
                 <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions"
                     class="row toggle-btn pad-top-10" (click)="togglePrint('reportSankey')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printReportSankey"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printReportSankey"></app-animated-checkmark>
                     </div>
                     <div class="col-8"
                         [ngClass]="{'bold-bottom-divider' : (showFsatReportOptions || showPsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions}">
@@ -101,7 +101,7 @@
                 <div *ngIf="showPhastReportOptions" class="row toggle-btn pad-top-10"
                     (click)="togglePrint('energyUsed')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printEnergyUsed"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printEnergyUsed"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
                         Energy Used
@@ -110,18 +110,22 @@
 
 
                 <!-- treasure hunt specific options -->
-                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('opportunitySummary')">
+                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('opportunitySummary')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printReportOpportunitySummary"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printReportOpportunitySummary">
+                        </app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
                         Opportunity Summary
                     </div>
                 </div>
 
-                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('opportunityPayback')">
+                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('opportunityPayback')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printReportOpportunityPayback"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printReportOpportunityPayback">
+                        </app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
                         Opportunity Payback Details
@@ -133,7 +137,7 @@
                 <div *ngIf="showPhastReportOptions || showSsmtReportOptions || showTHReportOptions"
                     class="row toggle-btn pad-top-10" (click)="togglePrint('executiveSummary')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printExecutiveSummary"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printExecutiveSummary"></app-animated-checkmark>
                     </div>
                     <div class="col-8"
                         [ngClass]="{'bold-bottom-divider' : !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions}">
@@ -144,7 +148,7 @@
                 <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
                     (click)="togglePrint('energySummary')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printEnergySummary"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printEnergySummary"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bottom-divider">
                         Energy Summary
@@ -154,7 +158,7 @@
                 <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
                     (click)="togglePrint('lossesSummary')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printEnergySummary"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printEnergySummary"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bold-bottom-divider">
                         Losses Summary
@@ -163,7 +167,7 @@
 
                 <div *ngIf="!showTHReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printInputData"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printOptions.printInputData"></app-animated-checkmark>
                     </div>
                     <div class="col-8">
                         Input Summary
@@ -172,7 +176,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-primary" (click)="print()"
+                <button type="button" class="btn btn-default btn-primary" (click)="setPrintViewThenPrint()"
                     data-dismiss="modal">Print</button>
                 <button type="button" class="btn btn-default btn-secondary" (click)="closePrintModal(true)"
                     data-dismiss="modal">Cancel</button>
