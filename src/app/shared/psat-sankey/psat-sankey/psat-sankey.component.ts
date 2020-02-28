@@ -14,6 +14,7 @@ import { PsatService } from "../../../psat/psat.service";
 import * as Plotly from "plotly.js";
 import { CompareService } from "../../../psat/compare.service";
 import { DecimalPipe } from "@angular/common";
+import { PsatSankeyNode } from '../../../shared/models/psat/sankey.model';
 
 @Component({
   selector: 'app-psat-sankey',
@@ -76,9 +77,7 @@ export class PsatSankeyComponent implements OnInit {
   nodeStartColor: string = 'rgba(28, 32, 219, .6)';
   nodeArrowColor: string = 'rgba(64, 184, 219, .6)';
   connectingNodes: Array<number> = [];
-  // connectingNodes: Array<string> = [];
   connectingLinkPaths: Array<number> = [];
-  // arrowNodeColorMatch = 'rgb(64, 184, 219)';
 
   constructor(
     private psatService: PsatService,
@@ -136,7 +135,6 @@ export class PsatSankeyComponent implements OnInit {
   }
 
   getResults() {
-    //create copies of inputs to use for calcs
     this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
     let isPsatValid: boolean = this.psatService.isPsatValid(
       this.selectedInputs,
@@ -160,108 +158,16 @@ export class PsatSankeyComponent implements OnInit {
   }
 
   closeSankey() {
-    // Remove Sankey
     Plotly.purge(this.ngChart.nativeElement);
   }
 
   sankey(results: PsatOutputs) {
     const links: Array<{source: number, target: number}> = [];
-    const nodes: Array<{name: string, value: number, x: number, y: number, nodeColor: string,id: string}> = [];
+    let nodes: Array<PsatSankeyNode> = [];
 
+    this.closeSankey();
     this.calcLosses(results);
-    
-    const connectMotor: number = results.motor_power - this.motor;
-    let connectDrive: number = 0;
-    let usefulOutput: number = 0;
-
-    // Commennt out connectingNodes number array if sankeyData.ids start working
-    // this.drive = -1;
-    if (this.drive > 0) {
-      connectDrive = connectMotor - this.drive;
-      this.connectingLinkPaths = [0,1,4];
-      this.connectingNodes = [0,1,2,5];
-
-      usefulOutput = connectDrive - this.pump;
-    } else {
-      this.connectingLinkPaths = [0,1,5];
-      this.connectingNodes = [0,1,2,];
-
-      usefulOutput = connectMotor - this.pump;
-    }
-
-    nodes.push(
-      {
-        name: `Energy Input ${this.decimalPipe.transform(results.motor_power, '1.0-0')} kW`,
-        value: results.motor_power,
-        x: 0,
-        y: .25, 
-        nodeColor: this.nodeStartColor,
-        id: 'connectOrigin'
-      },
-      {
-        name: "",
-        value: 0,
-        x: 0,
-        y: .25, 
-        nodeColor: this.nodeStartColor,
-        id: 'connectInput'
-      },
-      {
-        name: "",
-        value: connectMotor,
-        x: 0,
-        y: .25, 
-        nodeColor: this.nodeStartColor,
-        id: 'connectMotor'
-      },
-      {
-        name: `Motor Losses ${this.decimalPipe.transform(this.motor, '1.0-0')} kW`,
-        value: this.motor,
-        x: .5,
-        y: -.10, 
-        nodeColor: this.nodeArrowColor,
-        id: 'motorLosses'
-      },
-    );
-    if (this.drive > 0) {
-      nodes.push(
-        {
-          name: `Drive Losses ${this.decimalPipe.transform(this.drive, '1.0-0')} kW`,
-          value: this.drive,
-          x: .6,
-          y: -.05,
-          nodeColor: this.nodeArrowColor,
-          id: 'driveLosses'
-        },
-        {
-          name: "",
-          value: connectDrive,
-          x: 0,
-          y: .25, 
-          nodeColor: this.nodeStartColor,
-          id: 'connectDrive'
-        },
-      );
-    }
-    nodes.push(
-      {
-        name: `Pump Losses ${this.decimalPipe.transform(this.pump, '1.0-0')} kW`,
-        value: this.pump,
-        x: 1,
-        // y: -.15, 
-        y: -.05, 
-        nodeColor: this.nodeArrowColor,
-        id: 'pumpLosses'
-      },
-      {
-        name: `Useful Output ${this.decimalPipe.transform(usefulOutput, '1.0-0')} kW`,
-        value: usefulOutput,
-        x: .9,
-        y: .5, 
-        nodeColor: this.nodeArrowColor,
-        id: 'usefulOutput'
-      }
-    );
+    nodes = this.buildNodes(results);
 
     links.push(
       { source: 0, target: 1},
@@ -282,11 +188,6 @@ export class PsatSankeyComponent implements OnInit {
         { source: 2, target: 5 }
       )   
     }
-
-    // console.log('nodes', nodes);
-    // console.log('links', links);
-    // console.log('connectingNodes', this.connectingNodes);
-    // console.log('connectingLinkPaths', this.connectingLinkPaths);
       
     const sankeyLink = {
       value: nodes.map(node => node.value),
@@ -294,8 +195,8 @@ export class PsatSankeyComponent implements OnInit {
       target: links.map(link => link.target),
       hoverinfo: 'none',
       line: {
-        color: "rgba(255,255,255, .5)",
-        width: 1
+        color: this.nodeStartColor,
+        width: 0
       },
     };
 
@@ -309,9 +210,9 @@ export class PsatSankeyComponent implements OnInit {
       },
       arrangement: 'freeform',
       node: {
-        pad: 20,
+        pad: 50,
         line: {
-          color: "rgba(255,255,255, .5)",
+          color: this.nodeStartColor,
           width: 0
         },
         label: nodes.map(node => node.name),
@@ -332,52 +233,144 @@ export class PsatSankeyComponent implements OnInit {
 
     const layout = {
       title: "",
+      autosize: true,
       font: {
         color: '#ffffff',
         size: 14,
       },
+      yaxis: {
+        automargin: true,
+      },
+      xaxis: {
+        automargin: true,
+      },
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',
+      margin: {
+        l: 50,
+        t: 100,
+        pad: 300,
+      }
     };
 
     const config = {
       responsive: true
     };
 
-
     Plotly.react(this.ngChart.nativeElement, [sankeyData], layout, config);
     this.buildSvgArrows();
-
+    
     this.ngChart.nativeElement.on('plotly_afterplot', event => {
-      this.setGradients();
-    });
-
-    //plotly_webglcontextlost, plotly_afterplot, plotly_autosize, plotly_deselect, plotly_doubleclick, plotly_redraw, and plotly_animated
-    this.ngChart.nativeElement.on('plotly_animated', event => {
-      this.setGradients();
-    });
-
-    this.ngChart.nativeElement.on('plotly_redraw', event => {
       this.setGradients();
     });
   }
 
+  buildNodes(results: PsatOutputs): Array<PsatSankeyNode> {
+    let nodes: Array<PsatSankeyNode> = [];
+    const motorConnectorValue: number = results.motor_power - this.motor;
+    let driveConnectorValue: number = 0;
+    let usefulOutput: number = 0;
+
+    if (this.drive > 0 ) {
+      driveConnectorValue = motorConnectorValue - this.drive;
+      this.connectingLinkPaths = [0,1,4];
+      this.connectingNodes = [0,1,2,5];
+      usefulOutput = driveConnectorValue - this.pump;
+    } else {
+      this.connectingLinkPaths = [0,1,5];
+      this.connectingNodes = [0,1,2,];
+      usefulOutput = motorConnectorValue - this.pump;
+    }
+    
+    nodes.push(
+      {
+        name: `Energy Input ${this.decimalPipe.transform(results.motor_power, '1.0-0')} kW`,
+        value: results.motor_power,
+        lossPercent: 0,
+        x: .1,
+        y: .6, 
+        nodeColor: this.nodeStartColor,
+        id: 'OriginConnector'
+      },
+      {
+        name: "",
+        value: 0,
+        lossPercent: 0,
+        x: .25,
+        y: .6, 
+        nodeColor: this.nodeStartColor,
+        id: 'InputConnector'
+      },
+      {
+        name: "",
+        value: motorConnectorValue,
+        lossPercent: 0,
+        x: .5,
+        y: .6, 
+        nodeColor: this.nodeStartColor,
+        id: 'motorConnector'
+      },
+      {
+        name: `Motor Losses ${this.decimalPipe.transform(this.motor, '1.0-0')} kW`,
+        value: this.motor,
+        lossPercent: (this.motor / results.motor_power) * 100,
+        x: .5,
+        y: .10, 
+        nodeColor: this.nodeArrowColor,
+        id: 'motorLosses'
+      },
+    );
+    if (this.drive > 0) {
+      nodes.push(
+        {
+          name: `Drive Losses ${this.decimalPipe.transform(this.drive, '1.0-0')} kW`,
+          value: this.drive,
+          lossPercent: (this.drive / results.motor_power) * 100,
+          x: .6,
+          y: .25,
+          nodeColor: this.nodeArrowColor,
+          id: 'driveLosses'
+        },
+        {
+          name: "",
+          value: driveConnectorValue,
+          lossPercent: 0,
+          x: .7,
+          y: .6, 
+          nodeColor: this.nodeStartColor,
+          id: 'driveConnector'
+        },
+      );
+    }
+    nodes.push(
+      {
+        name: `Pump Losses ${this.decimalPipe.transform(this.pump, '1.0-0')} kW`,
+        value: this.pump,
+        lossPercent: (this.pump / results.motor_power) * 100,
+        x: .8,
+        y: .15, 
+        nodeColor: this.nodeArrowColor,
+        id: 'pumpLosses'
+      },
+      {
+        name: `Useful Output ${this.decimalPipe.transform(usefulOutput, '1.0-0')} kW`,
+        value: usefulOutput,
+        lossPercent: (usefulOutput / results.motor_power) * 100,
+        x: .85,
+        y: .65, 
+        nodeColor: this.nodeArrowColor,
+        id: 'usefulOutput'
+      }
+    );
+
+    return nodes;
+  }
+
 
   buildSvgArrows() {
-    const rects = this._dom.nativeElement.querySelectorAll('.node-rect')
+    const rects = this._dom.nativeElement.querySelectorAll('.node-rect');
     const arrowOpacity = '0.6';
     const arrowShape = 'polygon(100% 50%, 0 0, 0 100%)'
-
-    // for (let i = 0; i < rects.length; i++) {  
-    //   console.log(rects[i]);
-    //   if (rects[i].id.includes('connect')) {
-    //     rects[i].setAttribute('style', `stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: #1C20DB; fill-opacity: 0.6;`);
-    //   } else {
-    //     const height = rects[i].getAttribute('height');
-    //     rects[i].setAttribute('style', `width: ${height / 1.5}px; clip-path:  ${arrowShape}; 
-    //     stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientEndColor}; fill-opacity: ${arrowOpacity};`);
-    //    }
-    // }
 
     for (let i = 0; i < rects.length; i++) {  
        if (this.connectingNodes.includes(i)) {
@@ -385,8 +378,10 @@ export class PsatSankeyComponent implements OnInit {
        } 
        else {
          const height = rects[i].getAttribute('height');
+         const defaultY = rects[i].getAttribute('y');
 
-         rects[i].setAttribute('style', `width: ${height / 1.5}px; clip-path:  ${arrowShape}; 
+         rects[i].setAttribute('y', `${defaultY - (height / 2.75)}`);
+         rects[i].setAttribute('style', `width: ${height}px; height: ${height * 1.75}px; clip-path:  ${arrowShape}; 
          stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientEndColor}; fill-opacity: ${arrowOpacity};`);
         }
     }
@@ -398,7 +393,7 @@ export class PsatSankeyComponent implements OnInit {
     const svgDefs = this._dom.nativeElement.querySelector('defs')
 
     svgDefs.innerHTML = `
-    <linearGradient id="linkGrad">
+    <linearGradient id="linkGradient">
       <stop offset="20%" stop-color="${this.gradientStartColor}" />
       <stop offset="90%" stop-color="${this.gradientEndColor}" />
     </linearGradient>
@@ -411,8 +406,8 @@ export class PsatSankeyComponent implements OnInit {
         linkPaths[i].setAttribute('fill', this.gradientStartColor);
         linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: ${this.gradientStartColor}; fill-opacity: 0.6; stroke-width: 0.25; opacity: 1;`);
       } else {
-        linkPaths[i].setAttribute('fill', 'url("#linkGrad")');
-        linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: url("#linkGrad") !important; fill-opacity: 0.6; stroke-width: 0.25; opacity: 1;`);
+        linkPaths[i].setAttribute('fill', 'url("#linkGradient")');
+        linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: url("#linkGradient") !important; fill-opacity: 0.6; stroke-width: 0.25; opacity: 1;`);
       }
     }
   }
