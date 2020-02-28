@@ -134,7 +134,9 @@ export class PsatReportComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.showPrintMenuSub.unsubscribe();
+    if (this.showPrintMenuSub) {
+      this.showPrintMenuSub.unsubscribe();
+    }
     this.showPrintViewSub.unsubscribe();
   }
 

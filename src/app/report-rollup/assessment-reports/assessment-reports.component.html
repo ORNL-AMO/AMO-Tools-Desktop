@@ -74,11 +74,7 @@
     <div class="assessment-item row" *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}">
         <div class="col-12">
             <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat" [assessment]="item.assessment"
-                [settings]="item.settings" [inRollup]="true" [printView]="printView"
-                [printInputData]="rollupPrintOptions.printInputData"
-                [printReportGraphs]="rollupPrintOptions.printReportGraphs"
-                [printReportSankey]="rollupPrintOptions.printReportSankey"
-                [printResults]="rollupPrintOptions.printResults"></app-fsat-report>
+                [settings]="item.settings" [inRollup]="true"></app-fsat-report>
         </div>
     </div>
 
