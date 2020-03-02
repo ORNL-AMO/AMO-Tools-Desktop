@@ -34,7 +34,6 @@ import { ExploreOpportunitiesModule } from './explore-opportunities/explore-oppo
 import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
-import { PsatReportService } from './psat-report/psat-report.service';
 import { PsatReportSankeyComponent } from './psat-report/psat-report-sankey/psat-report-sankey.component';
 import { PsatReportGraphsComponent } from './psat-report/psat-report-graphs/psat-report-graphs.component';
 import { PsatBarChartComponent } from './psat-report/psat-report-graphs/psat-bar-chart/psat-bar-chart.component';
@@ -113,7 +112,6 @@ import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipmen
   providers: [
     PsatService,
     CompareService,
-    PsatReportService,
     PsatWarningService,
     PsatTabService,
     PumpFluidService,

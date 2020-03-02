@@ -1,10 +1,8 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DirectoryDashboardService } from '../../dashboard/directory-dashboard/directory-dashboard.service';
 import { Router } from '@angular/router';
-import { RollupPrintService, RollupPrintOptions } from '../rollup-print.service';
-import { Subscription } from 'rxjs';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { ReportRollupService } from '../report-rollup.service';
+import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 
 @Component({
   selector: 'app-report-banner',
@@ -17,7 +15,7 @@ export class ReportBannerComponent implements OnInit {
 
 
   constructor(private directoryDashboardService: DirectoryDashboardService, private router: Router,
-    private rollupPrintService: RollupPrintService, private reportRollupService: ReportRollupService) { }
+    private printOptionsMenuService: PrintOptionsMenuService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
   }
@@ -28,7 +26,7 @@ export class ReportBannerComponent implements OnInit {
   }
 
   showPrintModal() {
-    this.rollupPrintService.showPrintOptionsModal.next(true);
+    this.printOptionsMenuService.showPrintOptionsModal.next(true);
   }
 
   showUnitsModal() {

@@ -1,4 +1,4 @@
-<app-print-options-menu *ngIf="showPrintMenu" [showRollupReportOptions]="true"
+<!-- <app-print-options-menu *ngIf="showPrintMenu" [showRollupReportOptions]="true"
     [showPsatReportOptions]="showPsatReportOptions" [showFsatReportOptions]="showFsatReportOptions"
     [showPhastReportOptions]="showPhastReportOptions" [showTHReportOptions]="showTHReportOptions"
     [showSsmtReportOptions]="showSsmtReportOptions" [selectAll]="rollupPrintOptions.selectAll"
@@ -13,7 +13,7 @@
     [printReportOpportunitySummary]="rollupPrintOptions.printReportOpportunitySummary"
     [printSsmtRollup]="rollupPrintOptions.printSsmtRollup" (emitClosePrintMenu)="closePrintModal($event)"
     (emitTogglePrint)="togglePrint($event)" (emitPrint)="setPrintViewThenPrint()">
-</app-print-options-menu>
+</app-print-options-menu> -->
 
 
 <!--psat rollup modal -->
@@ -44,78 +44,3 @@
         </div>
     </div>
 </div>
-
-<!--phast rollup modal--
-<div bsModal #phastRollupModal="bs-modal" class="phast-modal modal fade phast" tabindex="-1" role="dialog"
-    aria-labelledby="phastRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Process Heating Rollup</h5>
-                <button class="close" aria-label="Close" (click)="hidePhastModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body panel-container phast scroll-item">
-                <app-phast-rollup [settings]="settings" [calculators]="selectedPhastCalcs"></app-phast-rollup>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--fsat rollup modal --
-<div bsModal #fsatRollupModal="bs-modal" class="fsat-modal modal fade fsat" tabindex="-1" role="dialog"
-    aria-labelledby="fsatRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Fan Assessment Rollup</h5>
-                <button class="close" aria-label="Close" (click)="hideFsatModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body panel-container fsat scroll-item">
-                <app-fsat-rollup [settings]="settings" [calculators]="selectedFsatCalcs"></app-fsat-rollup>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--ssmt rollup modal --
-<div bsModal #ssmtRollupModal="bs-modal" class="ssmt-modal modal fade ssmt" tabindex="-1" role="dialog"
-    aria-labelledby="ssmtRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Steam Assessment Rollup</h5>
-                <button class="close" aria-label="Close" (click)="hideSsmtModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body panel-container ssmt scroll-item">
-                <app-ssmt-rollup [settings]="settings"></app-ssmt-rollup>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<!--units modal--
-<div bsModal #unitModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unitModal"
-    aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Report Units</h5>
-                <button class="close" aria-label="Close" (click)="hideUnitModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <app-report-rollup-units *ngIf="settings" [settings]="settings" (closeUnitModal)="hideUnitModal()">
-                </app-report-rollup-units>
-            </div>
-        </div>
-    </div>
-</div>-->

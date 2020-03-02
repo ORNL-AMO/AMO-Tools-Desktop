@@ -1,4 +1,5 @@
-<div class="assessment-report report-in-phast phast" *ngIf="phast && settings" [ngClass]="{'assessment-report-padding': inPhast, 'report-in-rollup': inRollup}">
+<div class="assessment-report report-in-phast phast" *ngIf="phast && settings"
+    [ngClass]="{'assessment-report-padding': inPhast, 'report-in-rollup': inRollup}">
 
 
     <div *ngIf="inPhast" class="report-cover">
@@ -18,7 +19,7 @@
     <div #reportHeader class="report-header" [ngClass]="{'hide-print': inPhast}">
 
         <div *ngIf="inPhast && !quickReport" class="btn-group hide-print">
-            <button class="btn btn-secondary" (click)="showModal()">Print</button>
+            <button class="btn btn-secondary" (click)="print()">Print</button>
             <button class="btn btn-secondary" [disabled]="true" (click)="exportToCsv()">Export to CSV</button>
         </div>
 
@@ -34,7 +35,8 @@
                 </h2>
             </div>
             <div class="col-12">
-                <h3 class="custom-name" *ngIf="settings.furnaceType != 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">
+                <h3 class="custom-name"
+                    *ngIf="settings.furnaceType != 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">
                     {{settings.furnaceType}}
                 </h3>
                 <h3 class="custom-name" *ngIf="settings.energySourceType == 'Fuel'">
@@ -43,7 +45,9 @@
                 <h3 class="custom-name" *ngIf="settings.energySourceType == 'Steam'">
                     {{settings.energySourceType}}-based
                 </h3>
-                <h3 class="custom-name" *ngIf="settings.furnaceType == 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">{{settings.furnaceType}}:
+                <h3 class="custom-name"
+                    *ngIf="settings.furnaceType == 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">
+                    {{settings.furnaceType}}:
                     <br>{{settings.customFurnaceName}}</h3>
             </div>
             <div class="col-12">
@@ -59,27 +63,39 @@
     <div class="report-data" *ngIf="phast.setupDone">
 
         <ul #reportBtns class="tabs primary hide-print">
-                <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
-                        <a>Energy Used</a>
-                    </li><!--
-                    --><li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
-                        <a>Executive Summary</a>
-                                </li><!--
-                    --><li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
-                        <a>Result Data</a>
-                                </li><!--
-                    --><li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
-                        <a>Report Graphs</a>
-                                </li><!--
-                    --><li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
-                        <a>Sankey</a>
-                                </li><!--
-                    --><li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
-                        <a>Input Summary</a>
-                                </li><!--
-                    --><li (click)="setTab('facility-info')" [ngClass]="{'active': currentTab == 'facility-info'}">
-                        <a>Facility Info</a>
-                    </li>
+            <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
+                <a>Energy Used</a>
+            </li>
+            <!--
+                    -->
+            <li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
+                <a>Executive Summary</a>
+            </li>
+            <!--
+                    -->
+            <li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
+                <a>Result Data</a>
+            </li>
+            <!--
+                    -->
+            <li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
+                <a>Report Graphs</a>
+            </li>
+            <!--
+                    -->
+            <li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
+                <a>Sankey</a>
+            </li>
+            <!--
+                    -->
+            <li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
+                <a>Input Summary</a>
+            </li>
+            <!--
+                    -->
+            <li (click)="setTab('facility-info')" [ngClass]="{'active': currentTab == 'facility-info'}">
+                <a>Facility Info</a>
+            </li>
         </ul>
 
         <div *ngIf="showPrintDiv" class="print-div row justify-content-center">
@@ -95,48 +111,47 @@
             </div>
         </div>
 
-        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height" *ngIf="currentTab == 'facility-info' || showPrint">
+        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
+            *ngIf="currentTab == 'facility-info' || showPrintView">
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
 
-        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height" [ngClass]="{'hide-print': !printEnergyUsed}" *ngIf="currentTab == 'energy-used' || (printEnergyUsed && showPrint)">
+        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
+            *ngIf="currentTab == 'energy-used' || (printOptions.printEnergyUsed && showPrintView)">
             <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>
-        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-break-before print-height" [ngClass]="{'hide-print': !printExecutiveSummary}" *ngIf="currentTab == 'executive-summary' || (printExecutiveSummary && showPrint)">
-            <app-executive-summary [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
+        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-break-before print-height"
+            *ngIf="currentTab == 'executive-summary' || (printOptions.printExecutiveSummary && showPrintView)">
+            <app-executive-summary [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast">
+            </app-executive-summary>
         </div>
-        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height" [ngClass]="{'hide-print': !printResultsData}" *ngIf="currentTab == 'results-data' || (printResultsData && showPrint)">
-            <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast" [inReport]="true"></app-results-data>
+        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
+            *ngIf="currentTab == 'results-data' || (printOptions.printResultsData && showPrintView)">
+            <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast"
+                [inReport]="true"></app-results-data>
         </div>
-        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height" [ngClass]="{'hide-print': !printInputSummary}" *ngIf="currentTab == 'input-summary' || (printInputSummary && showPrint)">
-            <!-- <div class="results hide-print" *ngIf="currentTab == 'input-summary' || (printInputSummary && showPrint)"> -->
-            <app-phast-input-summary [phast]="phast" [settings]="settings" [showPrint]="printInputSummary"></app-phast-input-summary>
+        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
+            *ngIf="currentTab == 'input-summary' || (printOptions.printInputSummary && showPrintView)">
+            <app-phast-input-summary [phast]="phast" [settings]="settings" [showPrint]="printOptions.printInputSummary">
+            </app-phast-input-summary>
         </div>
-        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportGraphs && !printReportSankey}" *ngIf="currentTab == 'report-graphs' || ((printReportGraphs || printReportSankey) && showPrint)">
-            <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="showPrint" [printGraphs]="printReportGraphs"
-                [printSankey]="printReportSankey"></app-report-graphs>
+        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
+            *ngIf="currentTab == 'report-graphs' || ((printOptions.printReportGraphs || printOptions.printReportSankey) && showPrintView)">
+            <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment"
+                [showPrint]="showPrintView" [printGraphs]="printOptions.printReportGraphs"
+                [printSankey]="printOptions.printReportSankey">
+            </app-report-graphs>
         </div>
-        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'report-sankey' || (printReportSankey && showPrint)">
-            <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="printReportSankey"></app-report-sankey>
+        <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
+            *ngIf="currentTab == 'report-sankey' && !showPrintView">
+            <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment"></app-report-sankey>
         </div>
     </div>
     <div *ngIf="!phast.setupDone">
-        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
+        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
+            see the resulting data.</p>
     </div>
-
 </div>
 
 
-<app-print-options-menu *ngIf="showPrintMenu && !inRollup"
-    [showPhastReportOptions]="true"
-    [selectAll]="selectAll"
-    [printReportGraphs]="printReportGraphs"
-    [printReportSankey]="printReportSankey"
-    [printResults]="printResultsData"
-    [printInputData]="printInputSummary"
-    [printExecutiveSummary]="printExecutiveSummary"
-    [printEnergyUsed]="printEnergyUsed"
-    (emitClosePrintModal)="closeModal($event)"
-    (emitTogglePrint)="togglePrint($event)"
-    (emitPrint)="print()">
-</app-print-options-menu>
+<app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>

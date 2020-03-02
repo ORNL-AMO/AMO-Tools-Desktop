@@ -1,4 +1,5 @@
-<div class="assessment-report report-in-fsat fsat" *ngIf="fsat && settings" [ngClass]="{'assessment-report-padding': inFsat, 'report-in-rollup': inRollup}">
+<div class="assessment-report report-in-fsat fsat" *ngIf="fsat && settings"
+    [ngClass]="{'assessment-report-padding': inFsat, 'report-in-rollup': inRollup}">
 
 
     <div *ngIf="inFsat" class="report-cover">
@@ -16,7 +17,7 @@
     <div #reportHeader class="report-header" [ngClass]="{'hide-print': inFsat}">
 
         <div *ngIf="inFsat && !quickReport" class="btn-group hide-print">
-            <button class="btn btn-secondary" (click)="showModal()" [disabled]="false">Print</button>
+            <button class="btn btn-secondary" (click)="print()">Print</button>
             <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
         </div>
         <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
@@ -87,46 +88,44 @@
             </li>
         </ul>
 
-        <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrint" [ngStyle]="{'height.px':reportContainerHeight}">
+        <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrintView"
+            [ngStyle]="{'height.px':reportContainerHeight}">
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
-        <div class="input-data results scroll-item print-height" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)"
+        <div class="input-data results scroll-item print-height"
+            *ngIf="currentTab == 'inputData' || (showPrintView && printOptions.printInputData)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-input-summary [fsat]="fsat" [settings]="settings" [printView]="printInputData"></app-input-summary>
+            <app-input-summary [fsat]="fsat" [settings]="settings" [printView]="showPrintView"></app-input-summary>
         </div>
-        <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)"
+        <div class="results scroll-item print-height"
+            *ngIf="currentTab == 'results' || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-results-summary [fsat]="fsat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
+            <app-results-summary [fsat]="fsat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment"
+                (selectModification)="useModification($event)">
             </app-results-summary>
         </div>
-        <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'reportGraphs' || (showPrint && (printReportGraphs || printReportSankey))"
+        <div class="results scroll-item print-height"
+            *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-fsat-report-graphs [fsat]="fsat" [settings]="settings" [assessment]="assessment" [printView]="showPrint" [printSankey]="printReportSankey"
-            [printGraphs]="printReportGraphs"></app-fsat-report-graphs>
+            <app-fsat-report-graphs [fsat]="fsat" [settings]="settings" [assessment]="assessment"
+                [printView]="showPrintView" [printSankey]="printOptions.printReportSankey"
+                [printGraphs]="printOptions.printReportGraphs"></app-fsat-report-graphs>
         </div>
-        <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportSankey}" *ngIf="currentTab == 'reportSankey' || (showPrint && printReportSankey)"
+        <div class="results scroll-item print-height" *ngIf="currentTab == 'reportSankey' && !showPrintView"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-fsat-report-sankey [fsat]="fsat" [settings]="settings" [assessment]="assessment" [printView]="showPrint"></app-fsat-report-sankey>
+            <app-fsat-report-sankey [fsat]="fsat" [settings]="settings" [assessment]="assessment">
+            </app-fsat-report-sankey>
         </div>
 
     </div>
     <!-- End .report-data -->
 
     <div *ngIf="!fsat.setupDone">
-        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
+        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
+            see the resulting data.</p>
     </div>
 
 
 </div>
 
-<app-print-options-menu *ngIf="showPrintMenu && !inRollup"
-    [showFsatReportOptions]="true"
-    [selectAll]="selectAll"
-    [printReportGraphs]="printReportGraphs"
-    [printReportSankey]="printReportSankey"
-    [printResults]="printResults"
-    [printInputData]="printInputData"
-    (emitClosePrintModal)="closeModal($event)"
-    (emitTogglePrint)="togglePrint($event)"
-    (emitPrint)="print()">
-</app-print-options-menu>
+<app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>

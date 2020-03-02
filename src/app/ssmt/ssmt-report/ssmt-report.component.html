@@ -16,7 +16,7 @@
   <div #reportHeader class="report-header" [ngClass]="{'hide-print': inSSMT}">
 
     <div *ngIf="!inRollup" class="btn-group hide-print">
-      <button class="btn btn-secondary" (click)="showModal()" [disabled]="false">Print</button>
+      <button class="btn btn-secondary" (click)="print()" [disabled]="false">Print</button>
       <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
     </div>
 
@@ -91,26 +91,28 @@
       </li>
     </ul>
 
-    <div class="results scroll-item print-height" *ngIf="(currentTab == 'facilityInfo' || showPrint) && dataCalculated"
+    <div class="results scroll-item print-height"
+      *ngIf="(currentTab == 'facilityInfo' || showPrintView) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'executiveSummary' && !showPrint) || (showPrint && printExecutiveSummary)) && dataCalculated"
+      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
-        [assessment]="assessment" [printView]="printExecutiveSummary" [ssmt]="assessment.ssmt"></app-executive-summary>
+        [assessment]="assessment" [printView]="printOptions.printExecutiveSummary" [ssmt]="assessment.ssmt">
+      </app-executive-summary>
     </div>
     <div class="results scroll-item print-height"
-      *ngIf="((currentTab == 'energySummary' && !showPrint) || (showPrint && printEnergySummary)) && dataCalculated"
+      *ngIf="((currentTab == 'energySummary' && !showPrintView) || (showPrintView && printOptions.printEnergySummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
         [assessment]="assessment"></app-energy-summary>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'losses' && !showPrint) || (showPrint && printLossesSummary)) && dataCalculated"
+      *ngIf="((currentTab == 'losses' && !showPrintView) || (showPrintView && printOptions.printLossesSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses"
         [settings]="settings" [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"
@@ -123,17 +125,17 @@
       </app-report-diagram>
     </div>
     <div class="results scroll-item print-height"
-      *ngIf="((currentTab == 'reportGraphs' && !showPrint) || (showPrint && printReportGraphs)) && dataCalculated"
+      *ngIf="((currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-graphs [settings]="settings" [assessment]="assessment" [baselineLosses]="baselineLosses"
-        [modificationLosses]="modificationLosses" [printView]="showPrint" [printGraphs]="printReportGraphs">
+        [modificationLosses]="modificationLosses" [printView]="showPrintView" [printGraphs]="printReportGraphs">
       </app-report-graphs>
     </div>
     <div class="results scroll-item input-data print-height print-break-before"
-      *ngIf="((currentTab == 'inputData' && !showPrint) || (showPrint && printInputData)) && dataCalculated"
+      *ngIf="((currentTab == 'inputData' && !showPrintView) || (showPrintView && printOptions.printInputData)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData"
-        [modificationInputData]="modificationInputData" [printView]="printInputData"
+        [modificationInputData]="modificationInputData" [printView]="printOptions.printInputData"
         [modificationOutputs]="modificationOutputs"></app-input-summary>
     </div>
 
@@ -159,17 +161,5 @@
 
 </div>
 
-<!-- no support for diagram, temp version -->
-<app-print-options-menu *ngIf="showPrintMenu && !inRollup" [showSsmtReportOptions]="true" [selectAll]="selectAll"
-  [printReportGraphs]="printReportGraphs" [printInputData]="printInputData"
-  [printExecutiveSummary]="printExecutiveSummary" [printLossesSummary]="printLossesSummary"
-  [printEnergySummary]="printEnergySummary" (emitClosePrintModal)="closeModal($event)"
-  (emitTogglePrint)="togglePrint($event)" (emitPrint)="print()">
-</app-print-options-menu>
-<!-- version supporting diagram -->
-<!-- <app-print-options-menu *ngIf="showPrintMenu && !inRollup" [showSsmtReportOptions]="true" [selectAll]="selectAll"
-  [printReportGraphs]="printReportGraphs" [printResults]="printResults"
-  [printInputData]="printInputData" [printExecutiveSummary]="printExecutiveSummary" [printLossesSummary]="printLossesSummary"
-  [printEnergySummary]="printEnergySummary" [printReportDiagram]="printReportDiagram" (emitClosePrintModal)="closeModal($event)" (emitTogglePrint)="togglePrint($event)"
-  (emitPrint)="print()"> -->
-<!-- </app-print-options-menu> -->
+<!--PRINT MENU-->
+<app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>
