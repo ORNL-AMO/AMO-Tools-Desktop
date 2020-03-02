@@ -21,7 +21,7 @@ var width = 2650,
   bottomReportPositionY = 1250;
 
 @Component({
-  selector: 'app-fsat-sankey',
+  selector: 'app-fsat-sankey-old',
   templateUrl: './fsat-sankey.component.html',
   styleUrls: ['./fsat-sankey.component.css']
 })

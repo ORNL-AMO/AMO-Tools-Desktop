@@ -10,7 +10,7 @@ import { FanMotorSummaryComponent } from './input-summary/fan-motor-summary/fan-
 import { FanSetupSummaryComponent } from './input-summary/fan-setup-summary/fan-setup-summary.component';
 import { BaseGasDensitySummaryComponent } from './input-summary/base-gas-density-summary/base-gas-density-summary.component';
 import { FsatBarChartComponent } from './fsat-report-graphs/fsat-bar-chart/fsat-bar-chart.component';
-import { FsatSankeyModule } from '../fsat-sankey/fsat-sankey.module';
+import { FsatSankeyModule } from '../../shared/fsat-sankey/fsat-sankey.module';
 import { FsatReportSankeyComponent } from './fsat-report-sankey/fsat-report-sankey.component';
 import { FsatReportService } from './fsat-report.service';
 import { ModalModule } from '../../../../node_modules/ngx-bootstrap';
