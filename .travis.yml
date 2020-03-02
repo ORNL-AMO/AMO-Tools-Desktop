@@ -24,10 +24,15 @@ install:
   - npm update
 script:
   - ls ./node_modules/@angular/cli/bin/
-  - travis_wait 30 npm run ng-high-memory
-  - ./node_modules/.bin/build -"$OS_FLAG" --x64 --publish="never"
-  - ls
-  - ls ../output/
+  - |
+    if [[ $TRAVIS_BRANCH == 'master' ]]; then
+      travis_wait 30 npm run ng-high-memory
+      ./node_modules/.bin/build -"$OS_FLAG" --x64 --publish="never"
+      ls
+      ls ../output/
+    else
+      npm run build
+    fi
   
 before_deploy:
   #function keep_alive() {
@@ -37,7 +42,7 @@ before_deploy:
   #  done
   #}
   #keep_alive &
-  - export TRAVIS_TAG="preview"
+  - export TRAVIS_TAG="release_draft"
 deploy:
   provider: releases
   api_key:
@@ -57,5 +62,5 @@ deploy:
   #tag_name: "release_draft"
   on:
     repo: ORNL-AMO/AMO-Tools-Desktop
-    branch: issue-3505
+    branch: master
     #tags: false
