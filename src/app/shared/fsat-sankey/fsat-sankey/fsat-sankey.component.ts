@@ -79,13 +79,6 @@ export class FsatSankeyComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    // if (!this.baselineResults && !this.modResults) {
-    //   this.getResults();
-    // } else {
-    //   this.selectedResults = this.baselineResults || this.modResults;
-    // }
-    // this.sankey(this.selectedResults);
-
     this.getResults();
     this.sankey();
 
@@ -151,8 +144,6 @@ export class FsatSankeyComponent implements OnInit {
     this.driveLosses = driveLoss;
     this.motorLosses = motorLoss;
     this.usefulOutput = usefulOutput;
-
-    console.log('fsat sankey data', this.energyInput, this.fanLosses, this.driveLosses, this.motorLosses, this.usefulOutput);
   }
 
 
