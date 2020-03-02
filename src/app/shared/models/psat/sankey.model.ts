@@ -5,5 +5,4 @@ export interface PsatSankeyNode {
     y: number,
     nodeColor: string,
     id?: string,
-    lossPercent?: number
 }

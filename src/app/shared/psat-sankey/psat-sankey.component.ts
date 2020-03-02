@@ -55,7 +55,6 @@ export class PsatSankeyComponent implements OnInit {
   drive: number;
   pump: number;
 
-  // gradientStartColor: string = '#1C20DB'; 
   gradientStartColor: string = '#1F1EDC';
   gradientEndColor: string = '#3390DE';
   nodeStartColor: string = 'rgba(31, 30, 220, .9)';
@@ -162,15 +161,14 @@ export class PsatSankeyComponent implements OnInit {
       },
     };
 
-    const testHover = 'adsfdhfjdsahfjk';
     const sankeyData = {
       type: "sankey",
       orientation: "h",
-      valuesuffix: "kW",
+      valuesuffix: "%",
       ids: nodes.map(node => node.id),
       textfont: {
-        color: '#ffffff',
-        size: 18
+        color: 'rgba(0, 0, 0)',
+        size: 16
       },
       arrangement: 'freeform',
       node: {
@@ -184,17 +182,14 @@ export class PsatSankeyComponent implements OnInit {
         y: nodes.map(node => node.y),
         color: nodes.map(node => node.nodeColor),
         hoverinfo: 'all',
-        // customdata: ['TEESSSSTTTTTTTTT'],
         hovertemplate: '%{value}<extra></extra>',
-        // hoverlabel: {
-        //   bgcolor: 'rgba(255,255,255,.6)',
-        //   bordercolor: 'rgba(0,0,0,0)',
-        //   font: {
-        //     size: 14,
-        //     color: 'rgba(0,0,0,.5)'
-        //   },
-        //   align: 'auto',
-        // }
+        hoverlabel: {
+          font: {
+            size: 16,
+            color: 'rgba(255, 255, 255)'
+          },
+          align: 'auto',
+        }
       },
       link: sankeyLink
     };
@@ -202,10 +197,6 @@ export class PsatSankeyComponent implements OnInit {
     const layout = {
       title: "",
       autosize: true,
-      font: {
-        color: '#ffffff',
-        size: 14,
-      },
       yaxis: {
         automargin: true,
       },
@@ -233,7 +224,6 @@ export class PsatSankeyComponent implements OnInit {
     });
 
     this.ngChart.nativeElement.on('plotly_hover', event => {
-      console.log(event);
       this.setGradients();
     });
   }
@@ -258,8 +248,7 @@ export class PsatSankeyComponent implements OnInit {
     nodes.push(
       {
         name: "Energy Input " + this.decimalPipe.transform(results.motor_power, '1.0-0') + " kW",
-        value: results.motor_power,
-        lossPercent: 0,
+        value: 100,
         x: .1,
         y: .6,
         nodeColor: this.nodeStartColor,
@@ -268,7 +257,6 @@ export class PsatSankeyComponent implements OnInit {
       {
         name: "",
         value: 0,
-        lossPercent: 0,
         x: .25,
         y: .6,
         nodeColor: this.nodeStartColor,
@@ -276,8 +264,7 @@ export class PsatSankeyComponent implements OnInit {
       },
       {
         name: "",
-        value: motorConnectorValue,
-        lossPercent: 0,
+        value: (motorConnectorValue / results.motor_power) * 100,
         x: .5,
         y: .6,
         nodeColor: this.nodeStartColor,
@@ -285,8 +272,7 @@ export class PsatSankeyComponent implements OnInit {
       },
       {
         name: "Motor Losses " + this.decimalPipe.transform(this.motor, '1.0-0') + " kW",
-        value: this.motor,
-        lossPercent: (this.motor / results.motor_power) * 100,
+        value: (this.motor / results.motor_power) * 100,
         x: .5,
         y: .10,
         nodeColor: this.nodeArrowColor,
@@ -297,8 +283,7 @@ export class PsatSankeyComponent implements OnInit {
       nodes.push(
         {
           name: "Drive Losses " + this.decimalPipe.transform(this.drive, '1.0-0') + "kW",
-          value: this.drive,
-          lossPercent: (this.drive / results.motor_power) * 100,
+          value: (this.drive / results.motor_power) * 100,
           x: .6,
           y: .25,
           nodeColor: this.nodeArrowColor,
@@ -306,8 +291,7 @@ export class PsatSankeyComponent implements OnInit {
         },
         {
           name: "",
-          value: driveConnectorValue,
-          lossPercent: 0,
+          value: (driveConnectorValue / results.motor_power) * 100,
           x: .7,
           y: .6,
           nodeColor: this.nodeStartColor,
@@ -318,8 +302,7 @@ export class PsatSankeyComponent implements OnInit {
     nodes.push(
       {
         name: "Pump Losses " + this.decimalPipe.transform(this.pump, '1.0-0') + "kW",
-        value: this.pump,
-        lossPercent: (this.pump / results.motor_power) * 100,
+        value: (this.pump / results.motor_power) * 100,
         x: .8,
         y: .15,
         nodeColor: this.nodeArrowColor,
@@ -327,8 +310,7 @@ export class PsatSankeyComponent implements OnInit {
       },
       {
         name: "Useful Output " + this.decimalPipe.transform(usefulOutput, '1.0-0') + " kW",
-        value: usefulOutput,
-        lossPercent: (usefulOutput / results.motor_power) * 100,
+        value: (usefulOutput / results.motor_power) * 100,
         x: .85,
         y: .65,
         nodeColor: this.nodeArrowColor,
@@ -336,6 +318,7 @@ export class PsatSankeyComponent implements OnInit {
       }
     );
 
+    
     return nodes;
   }
 
