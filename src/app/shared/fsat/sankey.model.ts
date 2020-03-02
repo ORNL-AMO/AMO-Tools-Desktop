@@ -5,5 +5,4 @@ export interface FsatSankeyNode {
     y: number,
     nodeColor: string,
     id?: string,
-    lossPercent?: number
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { FsatSankeyComponent } from './fsat-sankey/fsat-sankey.component';
+import { FsatSankeyComponent } from './fsat-sankey.component';
 
 
 

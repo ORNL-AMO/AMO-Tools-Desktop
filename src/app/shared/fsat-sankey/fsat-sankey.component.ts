@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, Renderer2 } from '@angular/core';
-import { Settings } from '../../models/settings';
-import { FSAT } from '../../models/fans';
-import { ConvertUnitsService } from '../../convert-units/convert-units.service';
-import { FsatService } from '../../../fsat/fsat.service';
+import { Settings } from '../models/settings';
+import { FSAT } from '../models/fans';
+import { ConvertUnitsService } from '../convert-units/convert-units.service';
+import { FsatService } from '../../fsat/fsat.service';
 import * as Plotly from "plotly.js";
-import { FsatSankeyNode } from '../../fsat/sankey.model';
+import { FsatSankeyNode } from '../fsat/sankey.model';
 import { DecimalPipe } from '@angular/common';
 
 
@@ -34,12 +34,6 @@ export class FsatSankeyComponent implements OnInit {
   height: number;
 
   firstChange: boolean = true;
-  baseSize: number = 300;
-  minSize: number = 3;
-
-  title: string;
-  unit: string;
-  titlePlacement: string;
 
   energyInput: number;
   motorLosses: number;
@@ -47,10 +41,10 @@ export class FsatSankeyComponent implements OnInit {
   fanLosses: number;
   usefulOutput: number;
 
-  gradientEndColor: string = '#FFED5C'; 
-  gradientStartColor: string = '#D1BB00';
-  nodeArrowColor: string = 'rgba(255, 237, 92, .6)';
-  nodeStartColor: string = 'rgba(209, 187, 0 .6)';
+  gradientStartColor: string = '#D4B904'; 
+  gradientEndColor: string = '#E8D952';
+  nodeStartColor: string = 'rgba(214, 185, 0, 1)';
+  nodeArrowColor: string = 'rgba(232, 217, 82, 1)';
   connectingNodes: Array<number> = [];
   connectingLinkPaths: Array<number> = [];
 
@@ -61,45 +55,16 @@ export class FsatSankeyComponent implements OnInit {
               private renderer: Renderer2) { }
 
   ngOnInit() {
-
-    if (!this.printView) {
-      if (this.location !== "sankey-diagram" && this.location !== "explore-opportunities-sankey") {
-        if (this.location === 'baseline') {
-          this.location = this.assessmentName + '-baseline';
-        }
-        else {
-          this.location = this.assessmentName + '-modification';
-        }
-      }
-    }
-    this.location = this.location.replace(/ /g, "");
-    this.location = this.location.replace(/[\])}[{(]/g, '');
-    this.location = this.location.replace(/#/g, "");
-
   }
 
   ngAfterViewInit() {
     this.getResults();
     this.sankey();
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.fsat) {
       if (!changes.fsat.firstChange) {
-        if (this.location !== "sankey-diagram" && !this.printView) {
-          if (this.isBaseline) {
-            this.location = this.assessmentName + '-baseline';
-          }
-          else {
-            this.location = this.assessmentName + '-modification';
-          }
-
-          this.location = this.location.replace(/ /g, "");
-          this.location = this.location.replace(/[\])}[{(]/g, '');
-          this.location = this.location.replace(/#/g, "");
-        }
-
         this.getResults();
         this.sankey();
       }
@@ -199,10 +164,11 @@ export class FsatSankeyComponent implements OnInit {
     const sankeyData = {
       type: "sankey",
       orientation: "h",
-      valuesuffix: "kW",
+      valuesuffix: "%",
       ids: nodes.map(node => node.id),
       textfont: {
-        color: '#ffffff'
+        color: 'rgb(0, 0, 0)',
+        size: 16
       },
       arrangement: 'freeform',
       node: {
@@ -215,13 +181,14 @@ export class FsatSankeyComponent implements OnInit {
         x: nodes.map(node => node.x),
         y: nodes.map(node => node.y),
         color: nodes.map(node => node.nodeColor),
+        hoverinfo: 'all',
+        hovertemplate: '%{value}<extra></extra>',
         hoverlabel: {
-          bgcolor: '#ffffff',
-          bordercolor: '',
           font: {
-            size: 14,
-            color: '#000'
+            size: 16,
+            color: 'rgba(255, 255, 255)'
           },
+          align: 'auto',
         }
       },
       link: sankeyLink
@@ -259,6 +226,10 @@ export class FsatSankeyComponent implements OnInit {
     this.ngChart.nativeElement.on('plotly_afterplot', event => {
       this.setGradients();
     });
+
+    this.ngChart.nativeElement.on('plotly_hover', event => {
+      this.setGradients();
+    });
   }
 
   buildNodes(): Array<FsatSankeyNode> {
@@ -280,9 +251,8 @@ export class FsatSankeyComponent implements OnInit {
     
     nodes.push(
       {
-        name: `Energy Input ${this.decimalPipe.transform(this.energyInput, '1.0-0')} kW`,
-        value: this.energyInput,
-        lossPercent: 0,
+        name: 'Energy Input ' + this.decimalPipe.transform(this.energyInput, '1.0-0') + ' kW',
+        value: 100,
         x: .1,
         y: .6, 
         nodeColor: this.nodeStartColor,
@@ -291,7 +261,6 @@ export class FsatSankeyComponent implements OnInit {
       {
         name: "",
         value: 0,
-        lossPercent: 0,
         x: .25,
         y: .6, 
         nodeColor: this.nodeStartColor,
@@ -299,17 +268,15 @@ export class FsatSankeyComponent implements OnInit {
       },
       {
         name: "",
-        value: motorConnectorValue,
-        lossPercent: 0,
+        value: (motorConnectorValue / this.energyInput ) * 100,
         x: .5,
         y: .6, 
         nodeColor: this.nodeStartColor,
         id: 'motorConnector'
       },
       {
-        name: `Motor Losses ${this.decimalPipe.transform(this.motorLosses, '1.0-0')} kW`,
-        value: this.motorLosses,
-        lossPercent: (this.motorLosses / this.energyInput) * 100,
+        name: 'Motor Losses ' + this.decimalPipe.transform(this.motorLosses, '1.0-0') + ' kW',
+        value: (this.motorLosses / this.energyInput) * 100,
         x: .5,
         y: .10, 
         nodeColor: this.nodeArrowColor,
@@ -319,9 +286,8 @@ export class FsatSankeyComponent implements OnInit {
     if (this.driveLosses > 0) {
       nodes.push(
         {
-          name: `Drive Losses ${this.decimalPipe.transform(this.driveLosses, '1.0-0')} kW`,
-          value: this.driveLosses,
-          lossPercent: (this.driveLosses / this.energyInput) * 100,
+          name: 'Drive Losses ' + this.decimalPipe.transform(this.driveLosses, '1.0-0') + ' kW',
+          value: (this.driveLosses / this.energyInput) * 100,
           x: .6,
           y: .25,
           nodeColor: this.nodeArrowColor,
@@ -329,8 +295,7 @@ export class FsatSankeyComponent implements OnInit {
         },
         {
           name: "",
-          value: driveConnectorValue,
-          lossPercent: 0,
+          value: (driveConnectorValue / this.energyInput) * 100,
           x: .7,
           y: .6, 
           nodeColor: this.nodeStartColor,
@@ -340,18 +305,16 @@ export class FsatSankeyComponent implements OnInit {
     }
     nodes.push(
       {
-        name: `Fan Losses ${this.decimalPipe.transform(this.fanLosses, '1.0-0')} kW`,
-        value: this.fanLosses,
-        lossPercent: (this.fanLosses / this.energyInput) * 100,
+        name: 'Fan Losses ' + this.decimalPipe.transform(this.fanLosses, '1.0-0') + ' kW',
+        value: (this.fanLosses / this.energyInput) * 100,
         x: .8,
         y: .15, 
         nodeColor: this.nodeArrowColor,
         id: 'fanLosses'
       },
       {
-        name: `Useful Output ${this.decimalPipe.transform(usefulOutput, '1.0-0')} kW`,
-        value: usefulOutput,
-        lossPercent: (usefulOutput / this.energyInput) * 100,
+        name: 'Useful Output ' + this.decimalPipe.transform(usefulOutput, '1.0-0') + ' kW',
+        value: (usefulOutput / this.energyInput) * 100,
         x: .85,
         y: .65, 
         nodeColor: this.nodeArrowColor,
@@ -365,12 +328,12 @@ export class FsatSankeyComponent implements OnInit {
 
   buildSvgArrows() {
     const rects = this._dom.nativeElement.querySelectorAll('.node-rect');
-    const arrowOpacity = '0.6';
+    const arrowOpacity = '1';
     const arrowShape = 'polygon(100% 50%, 0 0, 0 100%)'
 
     for (let i = 0; i < rects.length; i++) {  
        if (this.connectingNodes.includes(i)) {
-         rects[i].setAttribute('style', `stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientStartColor}; fill-opacity: 0.6;`);
+         rects[i].setAttribute('style', `stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientStartColor}; fill-opacity: 1;`);
        } 
        else {
          const height = rects[i].getAttribute('height');
@@ -390,8 +353,8 @@ export class FsatSankeyComponent implements OnInit {
 
     svgDefs.innerHTML = `
     <linearGradient id="linkGradient">
-      <stop offset="20%" stop-color="${this.gradientStartColor}" />
-      <stop offset="90%" stop-color="${this.gradientEndColor}" />
+      <stop offset="10%" stop-color="${this.gradientStartColor}" />
+      <stop offset="100%" stop-color="${this.gradientEndColor}" />
     </linearGradient>
     `
     // Insert our gradient Def
@@ -400,10 +363,10 @@ export class FsatSankeyComponent implements OnInit {
     for(let i = 0; i < linkPaths.length; i++) {
       if (this.connectingLinkPaths.includes(i)) {
         linkPaths[i].setAttribute('fill', this.gradientStartColor);
-        linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: ${this.gradientStartColor}; fill-opacity: 0.6; stroke-width: 0.25; opacity: 1;`);
+        linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: ${this.gradientStartColor}; fill-opacity: 1; stroke-width: 0.25; opacity: 1;`);
       } else {
         linkPaths[i].setAttribute('fill', 'url("#linkGradient")');
-        linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: url("#linkGradient") !important; fill-opacity: 0.6; stroke-width: 0.25; opacity: 1;`);
+        linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: url("#linkGradient") !important; fill-opacity: 1; stroke-width: 0.25; opacity: 1;`);
       }
     }
   }
