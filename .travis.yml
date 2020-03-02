@@ -25,7 +25,7 @@ install:
 script:
   - ls ./node_modules/@angular/cli/bin/
   - |
-    if [[ $TRAVIS_BRANCH == 'issue-3505' ]]; then
+    if [[ $TRAVIS_BRANCH == '3505-test' ]]; then
       travis_wait 30 npm run ng-high-memory
       ./node_modules/.bin/build -"$OS_FLAG" --x64 --publish="never"
       ls
@@ -62,5 +62,5 @@ deploy:
   #tag_name: "release_draft"
   on:
     repo: ORNL-AMO/AMO-Tools-Desktop
-    branch: issue-3505
+    branch: 3505-test
     #tags: false
