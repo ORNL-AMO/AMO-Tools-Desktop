@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
-import { AssessmentService } from '../assessment/assessment.service';
+import { AssessmentService } from '../dashboard/assessment.service';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
@@ -118,7 +118,7 @@ export class FsatComponent implements OnInit {
         }
         this.getSettings();
         this.initSankeyList();
-        let tmpTab = this.assessmentService.getTab();
+        let tmpTab: string = this.assessmentService.tab;
         if (tmpTab) {
           this.fsatService.mainTab.next(tmpTab);
         }
@@ -425,10 +425,12 @@ export class FsatComponent implements OnInit {
   }
 
   disclaimerToast() {
-    this.toastData.title = 'Disclaimer';
-    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-    this.showToast = true;
-    this.cd.detectChanges();
+    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
+      this.toastData.title = 'Disclaimer';
+      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+      this.showToast = true;
+      this.cd.detectChanges();
+    }
   }
 
   hideToast() {
@@ -439,5 +441,13 @@ export class FsatComponent implements OnInit {
       setTimeoutVal: undefined
     };
     this.cd.detectChanges();
+  }
+
+  disableDisclaimer() {
+    this.settingsDbService.globalSettings.disableDisclaimer = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
+    this.hideToast();
   }
 }

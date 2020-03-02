@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { PSAT } from '../shared/models/psat';
 import { BehaviorSubject } from 'rxjs';
+import { PsatService } from './psat.service';
+import { Settings } from '../shared/models/settings';
 @Injectable()
 export class CompareService {
 
@@ -9,7 +11,7 @@ export class CompareService {
   selectedModification: BehaviorSubject<PSAT>;
   openModificationModal: BehaviorSubject<boolean>;
   openNewModal: BehaviorSubject<boolean>;
-  constructor() {
+  constructor(private psatService: PsatService) {
     this.selectedModification = new BehaviorSubject<PSAT>(undefined);
     this.openModificationModal = new BehaviorSubject<boolean>(undefined);
     this.openNewModal = new BehaviorSubject<boolean>(undefined);
@@ -32,7 +34,7 @@ export class CompareService {
   }
 
 
-  checkPumpDifferent(baseline?: PSAT, modification?: PSAT) {
+  checkPumpDifferent(settings: Settings, baseline?: PSAT, modification?: PSAT, ) {
     if (!baseline) {
       baseline = this.baselinePSAT;
     }
@@ -41,7 +43,8 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isPumpSpecifiedDifferent(baseline, modification) ||
+        this.isPumpTypeDifferent(baseline, modification) ||
+        this.isPumpSpecifiedDifferent(settings, baseline, modification) ||
         this.isPumpRpmDifferent(baseline, modification) ||
         this.isDriveDifferent(baseline, modification) ||
         this.isSpecifiedDriveEfficiencyDifferent(baseline, modification) ||
@@ -98,8 +101,7 @@ export class CompareService {
     }
   }
 
-  //pump specified
-  isPumpSpecifiedDifferent(baseline?: PSAT, modification?: PSAT) {
+  isPumpTypeDifferent(baseline?: PSAT, modification?: PSAT) {
     if (!baseline) {
       baseline = this.baselinePSAT;
     }
@@ -107,11 +109,37 @@ export class CompareService {
       modification = this.modifiedPSAT;
     }
     if (baseline && modification) {
-      // if (baseline.inputs.pump_specified != modification.inputs.pump_specified &&
-      //   baseline.inputs.pump_style == 11 && modification.inputs.pump_style == 11) {
-      if (baseline.inputs.pump_style == 11 || modification.inputs.pump_style == 11) {
-        if (baseline.inputs.pump_specified != modification.inputs.pump_specified) {
-          return true;
+      if (modification.inputs.pump_style != 11 && baseline.inputs.pump_style != modification.inputs.pump_style) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  //pump specified
+  isPumpSpecifiedDifferent(settings: Settings, baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (baseline && baseline.setupDone) {
+      baseline.outputs = this.psatService.resultsExisting(baseline.inputs, settings);
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.outputs !== undefined) {
+        if (baseline.outputs.pump_efficiency !== null && baseline.outputs.pump_efficiency !== undefined && baseline.outputs.pump_efficiency != modification.inputs.pump_specified) {
+          let baselineCompValue = Math.round(baseline.outputs.pump_efficiency * 10) / 10;
+          let modificationCompValue = Math.round(modification.inputs.pump_specified * 10) / 10;
+          if (baselineCompValue == modificationCompValue) {
+            return false;
+          } else {
+            return true;
+          }
         } else {
           return false;
         }
@@ -612,7 +640,7 @@ export class CompareService {
     }
   }
 
-  getBadges(baseline: PSAT, modification: PSAT): Array<{ badge: string, componentStr: string }> {
+  getBadges(baseline: PSAT, modification: PSAT, settings: Settings): Array<{ badge: string, componentStr: string }> {
     let badges: Array<{ badge: string, componentStr: string }> = [];
     if (baseline && modification) {
       if (this.checkFieldDataDifferent(baseline, modification)) {
@@ -621,7 +649,7 @@ export class CompareService {
       if (this.checkMotorDifferent(baseline, modification)) {
         badges.push({ badge: 'Motor', componentStr: 'motor' })
       }
-      if (this.checkPumpDifferent(baseline, modification)) {
+      if (this.checkPumpDifferent(settings, baseline, modification)) {
         badges.push({ badge: 'Pump Fluid', componentStr: 'pump-fluid' })
       }
     }

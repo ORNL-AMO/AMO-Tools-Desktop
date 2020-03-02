@@ -16,14 +16,14 @@ export class ReportGraphsService {
   getProcessUsageData(ssmt: SSMT): Array<number> {
     let processUsageData = new Array<number>();
     if (ssmt.headerInput) {
-      if (ssmt.headerInput.highPressure) {
-        processUsageData.push(ssmt.headerInput.highPressure.processSteamUsage);
+      if (ssmt.headerInput.highPressureHeader) {
+        processUsageData.push(ssmt.headerInput.highPressureHeader.processSteamUsage);
       }
-      if (ssmt.headerInput.mediumPressure) {
-        processUsageData.push(ssmt.headerInput.mediumPressure.processSteamUsage);
+      if (ssmt.headerInput.mediumPressureHeader) {
+        processUsageData.push(ssmt.headerInput.mediumPressureHeader.processSteamUsage);
       }
-      if (ssmt.headerInput.lowPressure) {
-        processUsageData.push(ssmt.headerInput.lowPressure.processSteamUsage);
+      if (ssmt.headerInput.lowPressureHeader) {
+        processUsageData.push(ssmt.headerInput.lowPressureHeader.processSteamUsage);
       }
     }
     else {
@@ -57,13 +57,13 @@ export class ReportGraphsService {
         generationData.push(ssmt.outputData.condensingTurbine.powerOut);
       }
       if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
-        generationData.push(ssmt.outputData.highToLowPressureTurbine.powerOut);
+        generationData.push(ssmt.outputData.highPressureToLowPressureTurbine.powerOut);
       }
       if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
         generationData.push(ssmt.outputData.highPressureToMediumPressureTurbine.powerOut);
       }
       if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
-        generationData.push(ssmt.outputData.mediumToLowPressureTurbine.powerOut);
+        generationData.push(ssmt.outputData.mediumPressureToLowPressureTurbine.powerOut);
       }
     }
     else {

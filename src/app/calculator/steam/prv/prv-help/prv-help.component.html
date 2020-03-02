@@ -321,10 +321,10 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{feedwaterRangesValues.desuperheatingTempMin}}
-              <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement) | settingsLabel"></span>
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{feedwaterRangesValues.desuperheatingTempMax}}
-              <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement) | settingsLabel"></span>
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
             </td>
           </tr>
         </tbody>

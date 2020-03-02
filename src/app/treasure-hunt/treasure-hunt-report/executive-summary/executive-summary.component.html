@@ -1,7 +1,7 @@
 <div class="d-flex"
-  [ngClass]="{'flex-row print-space-from-title' : title == 'Cost Summary', 'flex-row print-space-from-title' : title == 'Team Summary', 'flex-column' : title == 'Detailed Summary'}">
+  [ngClass]="{'flex-row print-space-from-title' : (title == 'Cost Summary' || title == 'Team Summary'), 'flex-column' : title == 'Detailed Summary'}">
 
-  <div class="d-flex flex-column output-summary pb-5" *ngIf="title != 'Team Summary'" #costSummaryChartContainer>
+  <div class="d-flex flex-column output-summary" *ngIf="title != 'Team Summary'" #costSummaryChartContainer>
 
     <label class="group-label">{{title}}</label>
     <table class="table table-striped table-hover">
@@ -50,13 +50,13 @@
             kWh
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.electricity.baselineEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.electricity.baselineEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.electricity.modifiedEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.electricity.modifiedEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.electricity.energySavings | number:'1.0-1'}}
+            {{treasureHuntResults.electricity.energySavings | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
             ${{treasureHuntResults.electricity.baselineEnergyCost | number:'.0-0'}}
@@ -87,25 +87,25 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.naturalGas.baselineEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.naturalGas.baselineEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.naturalGas.modifiedEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.naturalGas.modifiedEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.naturalGas.energySavings | number:'1.0-1'}}
+            {{treasureHuntResults.naturalGas.energySavings | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.naturalGas.baselineEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.naturalGas.baselineEnergyCost | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.naturalGas.modifiedEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.naturalGas.modifiedEnergyCost | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.naturalGas.costSavings | number:'.0-0'}}
+            ${{treasureHuntResults.naturalGas.costSavings | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.naturalGas.implementationCost | number:'.0-0'}}
+            ${{treasureHuntResults.naturalGas.implementationCost | number:'1.0-0'}}
           </td>
           <td>
             {{treasureHuntResults.naturalGas.paybackPeriod | number:'1.0-2'}}
@@ -124,25 +124,25 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.water.baselineEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.water.baselineEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.water.modifiedEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.water.modifiedEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.water.energySavings | number:'1.0-1'}}
+            {{treasureHuntResults.water.energySavings | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.water.baselineEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.water.baselineEnergyCost | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.water.modifiedEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.water.modifiedEnergyCost | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.water.costSavings | number:'.0-0'}}
+            ${{treasureHuntResults.water.costSavings | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.water.implementationCost | number:'.0-0'}}
+            ${{treasureHuntResults.water.implementationCost | number:'1.0-0'}}
           </td>
           <td>
             {{treasureHuntResults.water.paybackPeriod | number:'1.0-2'}}
@@ -161,25 +161,25 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.wasteWater.baselineEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.wasteWater.baselineEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.wasteWater.modifiedEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.wasteWater.modifiedEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.wasteWater.energySavings | number:'1.0-1'}}
+            {{treasureHuntResults.wasteWater.energySavings | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.wasteWater.baselineEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.wasteWater.baselineEnergyCost | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.wasteWater.modifiedEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.wasteWater.modifiedEnergyCost | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.wasteWater.costSavings | number:'.0-0'}}
+            ${{treasureHuntResults.wasteWater.costSavings | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.wasteWater.implementationCost | number:'.0-0'}}
+            ${{treasureHuntResults.wasteWater.implementationCost | number:'1.0-0'}}
           </td>
           <td>
             {{treasureHuntResults.wasteWater.paybackPeriod | number:'1.0-2'}}
@@ -198,25 +198,25 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.otherFuel.baselineEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.otherFuel.baselineEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.otherFuel.modifiedEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.otherFuel.modifiedEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.otherFuel.energySavings | number:'1.0-1'}}
+            {{treasureHuntResults.otherFuel.energySavings | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.otherFuel.baselineEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.otherFuel.baselineEnergyCost | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.otherFuel.modifiedEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.otherFuel.modifiedEnergyCost | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.otherFuel.costSavings | number:'.0-0'}}
+            ${{treasureHuntResults.otherFuel.costSavings | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.otherFuel.implementationCost | number:'.0-0'}}
+            ${{treasureHuntResults.otherFuel.implementationCost | number:'1.0-0'}}
           </td>
           <td>
             {{treasureHuntResults.otherFuel.paybackPeriod | number:'1.0-2'}}
@@ -235,25 +235,25 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.compressedAir.baselineEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.compressedAir.baselineEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.compressedAir.modifiedEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.compressedAir.modifiedEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.compressedAir.energySavings | number:'1.0-1'}}
+            {{treasureHuntResults.compressedAir.energySavings | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.compressedAir.baselineEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.compressedAir.baselineEnergyCost | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.compressedAir.modifiedEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.compressedAir.modifiedEnergyCost | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.compressedAir.costSavings | number:'.0-0'}}
+            ${{treasureHuntResults.compressedAir.costSavings | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.compressedAir.implementationCost | number:'.0-0'}}
+            ${{treasureHuntResults.compressedAir.implementationCost | number:'1.0-0'}}
           </td>
           <td>
             {{treasureHuntResults.compressedAir.paybackPeriod | number:'1.0-2'}}
@@ -272,25 +272,25 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.steam.baselineEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.steam.baselineEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.steam.modifiedEnergyUsage | number:'1.0-1'}}
+            {{treasureHuntResults.steam.modifiedEnergyUsage | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            {{treasureHuntResults.steam.energySavings | number:'1.0-1'}}
+            {{treasureHuntResults.steam.energySavings | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.steam.baselineEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.steam.baselineEnergyCost | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.steam.modifiedEnergyCost | number:'.0-0'}}
+            ${{treasureHuntResults.steam.modifiedEnergyCost | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.steam.costSavings | number:'.0-0'}}
+            ${{treasureHuntResults.steam.costSavings | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.steam.implementationCost | number:'.0-0'}}
+            ${{treasureHuntResults.steam.implementationCost | number:'1.0-0'}}
           </td>
           <td>
             {{treasureHuntResults.steam.paybackPeriod | number:'1.0-2'}}
@@ -329,16 +329,16 @@
             Total
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.totalBaselineCost | number:'.0-0'}}
+            ${{treasureHuntResults.totalBaselineCost | number:'1.0-0'}}
           </td>
           <td *ngIf="showFullSummary">
-            ${{treasureHuntResults.totalModificationCost | number:'.0-0'}}
+            ${{treasureHuntResults.totalModificationCost | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.totalSavings | number:'.0-0'}}
+            ${{treasureHuntResults.totalSavings | number:'1.0-0'}}
           </td>
           <td>
-            ${{treasureHuntResults.totalImplementationCost | number:'.0-0'}}
+            ${{treasureHuntResults.totalImplementationCost | number:'1.0-0'}}
           </td>
           <td>
             {{treasureHuntResults.paybackPeriod | number:'1.0-2'}}
@@ -361,7 +361,7 @@
 
   <div class="d-flex flex-column hide-print" *ngIf="title == 'Cost Summary'">
     <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles"
-      [data]="data" [chartContainerWidth]="getChartWidth('bar')" [chartContainerHeight]="getChartHeight('bar')">
+      [data]="data" [chartContainerWidth]="barChartWidth" [chartContainerHeight]="barChartHeight">
     </app-cost-summary-chart>
   </div>
 
@@ -378,8 +378,8 @@
         </tr>
         <tr *ngFor="let data of teamData">
           <td>{{data.team}}</td>
-          <td>${{data.costSavings | number:'.0-0'}}</td>
-          <td>${{data.implementationCost | number:'.0-0'}}</td>
+          <td>${{data.costSavings | number:'1.0-0'}}</td>
+          <td>${{data.implementationCost | number:'1.0-0'}}</td>
           <td>{{data.paybackPeriod | number:'1.0-2'}}</td>
         </tr>
       </tbody>
@@ -388,8 +388,8 @@
 
   <div class="d-flex flex-column hide-print" *ngIf="title == 'Team Summary' && teamData.length > 0">
     <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels"
-      [printView]="showPrint" [exportName]="'treasure-hunt-team-savings'" [chartContainerWidth]="getChartWidth('pie')"
-      [chartContainerHeight]="getChartHeight('pie')" [sideBySide]="false"></app-pie-chart>
+      [printView]="showPrint" [exportName]="'treasure-hunt-team-savings'" [chartContainerWidth]="pieChartWidth"
+      [chartContainerHeight]="pieChartHeight" [sideBySide]="false"></app-pie-chart>
   </div>
 
 </div>
@@ -397,7 +397,7 @@
 <!-- print version of the chart -->
 <div class="d-flex flex-row show-print print-bottom-padding" *ngIf="title == 'Cost Summary' && showPrint">
   <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles" [data]="data"
-    [chartContainerWidth]="getChartWidth('bar')" [chartContainerHeight]="getChartHeight('bar')">
+    [chartContainerWidth]="barChartWidth" [chartContainerHeight]="barChartHeight">
   </app-cost-summary-chart>
 </div>
 
@@ -405,6 +405,6 @@
 <div class="d-flex flex-row show-print print-bottom-padding"
   *ngIf="title == 'Team Summary' && showPrint && teamData.length > 0">
   <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels" [printView]="showPrint"
-    [exportName]="treasure-hunt-team-savings" [chartContainerWidth]="getChartWidth('pie')"
-    [chartContainerHeight]="getChartHeight('pie')"></app-pie-chart>
+    [exportName]="treasure-hunt-team-savings" [chartContainerWidth]="pieChartWidth"
+    [chartContainerHeight]="pieChartHeight"></app-pie-chart>
 </div>

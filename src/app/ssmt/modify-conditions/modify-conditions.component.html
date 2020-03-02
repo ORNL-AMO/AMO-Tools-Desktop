@@ -1,6 +1,6 @@
-<div class="row modify-conditions">
+<div class="row modify-conditions no-gutters">
   <div class="scroll-item col-8" [ngStyle]="{'height.px': containerHeight}">
-    <div class="row row-min-height">
+    <div class="row row-min-height no-gutters">
       <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
         [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
         <div class="header mr-2 ml-2">
@@ -28,21 +28,22 @@
         </div>
         <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt.modifications[modificationIndex].ssmt"
           [settings]="settings" (emitSave)="saveModSsmt($event)" [selected]="modifiedSelected"
-          [modificationIndex]="modificationIndex"></app-operations>
+          [modificationIndex]="modificationIndex" [isBaseline]="false"></app-operations>
         <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"
           [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput" (emitSave)="saveModBoiler($event)"
-          [modificationIndex]="modificationIndex"
-          [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput">
+          [modificationIndex]="modificationIndex" [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput"
+          [isBaseline]="false">
         </app-boiler>
         <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings"
           [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput" (emitSave)="saveModHeader($event)"
-          [modificationIndex]="modificationIndex"
-          [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput">
+          [modificationIndex]="modificationIndex" [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput"
+          [isBaseline]="false">
         </app-header>
         <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings"
           [turbineInput]="ssmt.modifications[modificationIndex].ssmt.turbineInput"
           [numberOfHeaders]="ssmt.modifications[modificationIndex].ssmt.headerInput.numberOfHeaders"
-          (emitSave)="saveModTurbine($event)" [modificationIndex]="modificationIndex"></app-turbine>
+          (emitSave)="saveModTurbine($event)" [modificationIndex]="modificationIndex" [isBaseline]="false">
+        </app-turbine>
       </div>
       <!-- No content message -->
       <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()"

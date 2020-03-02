@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
 import * as c3 from 'c3';
 
 @Component({
@@ -10,48 +10,14 @@ export class PercentGraphComponent implements OnInit {
   @Input()
   value: number;
   @Input()
-  title: string;
-  @Input()
-  valueDescription: string;
-  @Input()
-  titlePlacement: string;
-  @Input()
-  fontStyle: string;
-  @Input()
-  fontSize: number;
-  @Input()
-  unit: string;
+  width: number;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.initChart();
   }
-
-
-
-  doughnutChartLabels: string[];
-  doughnutChartData: number[];
-  doughnutChartType: string = 'doughnut';
-  chartOptions: any;
-  chartColors: Array<any> = [{}];
-  chartColorDataSet: Array<any>;
   chart: any;
-  chartHeight: number;
-
-  firstChange: boolean = true;
-  //inChart: boolean = false;
-  exportName: string;
-
-  potential: number = 0;
-
   @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
-  // @ViewChild('btnDownload') btnDownload: ElementRef;
-
-  //booleans for tooltip
-  hoverBtnExport: boolean = false;
-  displayExportTooltip: boolean = false;
-  hoverBtnGridLines: boolean = false;
-  displayGridLinesTooltip: boolean = false;
 
   constructor() { }
 
@@ -67,11 +33,8 @@ export class PercentGraphComponent implements OnInit {
 
   }
 
-  ngOnChanges() {
-    if (this.firstChange) {
-      this.firstChange = !this.firstChange;
-    }
-    else {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.value && !changes.value.isFirstChange()) {
       this.updateChart();
     }
   }
@@ -90,11 +53,14 @@ export class PercentGraphComponent implements OnInit {
   }
 
   initChart() {
+    if(this.width == undefined){
+      this.width = 115;
+    }
     this.chart = c3.generate({
       bindto: this.ngChart.nativeElement,
       data: {
         columns: [
-          ['data', 0]
+          ['data', this.value]
         ],
         type: 'gauge',
       },
@@ -114,11 +80,15 @@ export class PercentGraphComponent implements OnInit {
       },
       tooltip: {
         show: false
+      },
+      size: {
+        height: this.width,
+        // width: this.chartWidth
       }
     });
 
-    if (this.value && this.chart) {
-      this.updateChart();
-    }
+    // if (this.value && this.chart) {
+    //   this.updateChart();
+    // }
   }
 }

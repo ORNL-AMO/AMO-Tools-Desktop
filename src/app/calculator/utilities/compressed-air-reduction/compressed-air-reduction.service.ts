@@ -16,7 +16,7 @@ export class CompressedAirReductionService {
   constructor(private formBuilder: FormBuilder, private convertCompressedAirReductionService: ConvertCompressedAirReductionService, private standaloneService: StandaloneService) { }
 
 
-  initObject(index: number, settings: Settings, operatingHours: OperatingHours): CompressedAirReductionData {
+  initObject(index: number, settings: Settings, operatingHours: OperatingHours, utilityType?: number): CompressedAirReductionData {
     let defaultFlowMeterObj: CompressedAirFlowMeterMethodData = {
       meterReading: 0.2
     };
@@ -46,7 +46,7 @@ export class CompressedAirReductionService {
     let obj: CompressedAirReductionData = {
       name: 'Equipment #' + (index + 1),
       hoursPerYear: hoursPerYear,
-      utilityType: 0,
+      utilityType: utilityType ? utilityType : 0,
       utilityCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
       compressedAirCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
       electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.066,
@@ -74,7 +74,7 @@ export class CompressedAirReductionService {
       hoursPerYear: 8760,
       utilityType: 0,
       utilityCost: 0.12,
-      compressedAirCost: 0.12,
+      compressedAirCost: 0.022,
       electricityCost: settings.electricityCost,
       measurementMethod: 0,
       flowMeterMethodData: {

@@ -2,7 +2,8 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { CustomMaterialsService, MaterialData } from './custom-materials.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { ImportExportService } from '../../shared/import-export/import-export.service';
+import { ImportExportService } from '../../dashboard/import-export/import-export.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-custom-materials',
@@ -10,7 +11,8 @@ import { ImportExportService } from '../../shared/import-export/import-export.se
   styleUrls: ['./custom-materials.component.css']
 })
 export class CustomMaterialsComponent implements OnInit {
-  @Input()
+
+
   settings: Settings;
 
   showFlueModal: boolean = false;
@@ -41,10 +43,10 @@ export class CustomMaterialsComponent implements OnInit {
   importing: boolean = false;
 
   importFileError: string;
-  constructor(private customMaterialService: CustomMaterialsService, private importExportService: ImportExportService) { }
+  constructor(private customMaterialService: CustomMaterialsService, private importExportService: ImportExportService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    console.log('settings.unitsOfMeasure = ' + this.settings.unitsOfMeasure);
+    this.settings = this.settingsDbService.globalSettings;
   }
 
   ngOnDestroy() {

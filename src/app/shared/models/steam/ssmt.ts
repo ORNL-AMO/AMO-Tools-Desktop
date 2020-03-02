@@ -6,7 +6,6 @@ export interface SSMT {
     name?: string;
     selected?: boolean;
     notes?: Notes;
-    implementationCosts?: number;
     setupDone?: boolean;
     operatingHours?: OperatingHours;
     operatingCosts?: OperatingCosts;
@@ -17,7 +16,6 @@ export interface SSMT {
     headerInput?: HeaderInput;
     turbineInput?: TurbineInput;
     outputData?: SSMTOutput;
-    resultsCalculated?: boolean;
 }
 
 export interface SSMTInputs {
@@ -25,6 +23,8 @@ export interface SSMTInputs {
     boilerInput: BoilerInput;
     headerInput: HeaderInput;
     turbineInput: TurbineInput;
+    isBaselineCalc: boolean;
+    baselinePowerDemand: number;
 }
 
 export interface TurbineInput {
@@ -134,9 +134,16 @@ export interface BoilerInput {
 
 export interface HeaderInput {
     numberOfHeaders: number;
-    highPressure: HeaderWithHighestPressure;
+
+    //old model
+    highPressure?: HeaderWithHighestPressure;
     mediumPressure?: HeaderNotHighestPressure;
     lowPressure?: HeaderNotHighestPressure;
+
+    //new suite model
+    highPressureHeader?: HeaderWithHighestPressure;
+    mediumPressureHeader?: HeaderNotHighestPressure;
+    lowPressureHeader?: HeaderNotHighestPressure;
 }
 
 export interface HeaderWithHighestPressure {
@@ -156,4 +163,5 @@ export interface HeaderNotHighestPressure {
     flashCondensateIntoHeader: boolean;
     desuperheatSteamIntoNextHighest: boolean;
     desuperheatSteamTemperature: number;
+    useBaselineProcessSteamUsage: boolean;
 }

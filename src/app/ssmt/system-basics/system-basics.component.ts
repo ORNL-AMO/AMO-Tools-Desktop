@@ -66,11 +66,9 @@ export class SystemBasicsComponent implements OnInit {
 
   updateData() {
     this.assessment.ssmt = this.convertSsmtService.convertAllInputData(this.ssmt, this.oldSettings, this.settings);
-    this.assessment.ssmt.resultsCalculated = false;
     if(this.assessment.ssmt.modifications){
       this.assessment.ssmt.modifications.forEach(mod => {
         mod.ssmt = this.convertSsmtService.convertAllInputData(mod.ssmt, this.oldSettings, this.settings);
-        mod.ssmt.resultsCalculated = false;
       })
     }
     this.emitSaveSsmt.emit(this.assessment.ssmt);

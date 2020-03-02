@@ -4,6 +4,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { SteamReductionResults, SteamReductionData } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamReductionService } from './steam-reduction.service';
+import { SteamReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-steam-reduction',
@@ -14,11 +15,9 @@ export class SteamReductionComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @Output('emitSave')
-  emitSave = new EventEmitter<any>();
+  emitSave = new EventEmitter<SteamReductionTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  @Output('emitAddOpportunitySheet')
-  emitAddOpportunitySheet = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
   @Input()
@@ -191,10 +190,6 @@ export class SteamReductionComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
-  }
-
-  addOpportunitySheet() {
-    this.emitAddOpportunitySheet.emit(true);
   }
 
   setBaselineSelected() {

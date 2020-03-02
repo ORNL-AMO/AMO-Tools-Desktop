@@ -20,12 +20,13 @@ import { ByEquationFormComponent } from './equipment-curve/by-equation-form/by-e
 import { EquipmentCurveFormComponent } from './equipment-curve/equipment-curve-form/equipment-curve-form.component';
 import { EquipmentCurveService } from './equipment-curve/equipment-curve.service';
 import { RegressionEquationsComponent } from './regression-equations/regression-equations.component';
-import { RegressionEquationsService } from './regression-equations/regression-equations.service';
+import { RegressionEquationsService } from './regression-equations.service';
 import { SystemAndEquipmentCurveGraphComponent } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.component';
 import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
 import { DataPointTableComponent } from './system-and-equipment-curve-graph/data-point-table/data-point-table.component';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
+import { CurveDataService } from './curve-data.service';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.
     FanSystemCurveFormService,
     EquipmentCurveService,
     RegressionEquationsService,
-    SystemAndEquipmentCurveGraphService
+    SystemAndEquipmentCurveGraphService,
+    CurveDataService
   ],
   exports: [
     SystemAndEquipmentCurveComponent

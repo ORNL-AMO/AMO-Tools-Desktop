@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { HeaderOutput, HeaderOutputObj } from '../../../../shared/models/steam/steam-outputs';
+import { HeaderOutput, SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-header-results',
@@ -18,7 +18,7 @@ export class HeaderResultsComponent implements OnInit {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
-  resultsArray: Array<HeaderOutputObj>;
+  resultsArray: Array<SteamPropertiesOutput>;
   constructor() { }
 
   ngOnInit() {
@@ -29,7 +29,7 @@ export class HeaderResultsComponent implements OnInit {
   }
 
   getResultsData() {
-    this.resultsArray = new Array<HeaderOutputObj>();
+    this.resultsArray = new Array<SteamPropertiesOutput>();
     let index: number = 0;
     for (let key in this.results) {
       if (index <= this.numberOfInlets) {

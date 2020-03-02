@@ -1,10 +1,6 @@
 <!--summary-->
-<app-diagram-summary-table *ngIf="selectedTable == 'default'" [inputData]="inputData"
-    [powerGenerated]="outputData.powerGenerated" [boiler]="outputData.boilerOutput"
-    [annualMakeupWaterFlow]="outputData.annualMakeupWaterFlow" [makeupWaterCost]="outputData.makeupWaterCost"
-    [boilerFuelCost]="outputData.boilerFuelCost" [powerGenerationCost]="outputData.powerGenerationCost"
-    [totalOperatingCost]="outputData.totalOperatingCost" [boilerFuelUsage]="outputData.boilerFuelUsage"
-    [settings]="settings"></app-diagram-summary-table>
+<app-diagram-summary-table *ngIf="selectedTable == 'default'" [boiler]="outputData.boilerOutput"
+    [operationsOutput]="outputData.operationsOutput" [settings]="settings"></app-diagram-summary-table>
 <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [outputData]="outputData" [settings]="settings"
     (emitCalculateMarginalCosts)="calculateResultsWithMarginalCosts()"></app-cost-table>
 <!--boiler-->
@@ -12,13 +8,13 @@
     [settings]="settings"></app-boiler-table>
 <!--turbines-->
 <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low Pressure'"
-    [turbine]="outputData.highToLowPressureTurbine" [settings]="settings">
+    [turbine]="outputData.highPressureToLowPressureTurbine" [settings]="settings">
 </app-turbine-table>
 <app-turbine-table *ngIf="selectedTable == 'highPressureToMediumPressureTurbine'"
     [turbineName]="'High to Medium Pressure'" [turbine]="outputData.highPressureToMediumPressureTurbine"
     [settings]="settings"></app-turbine-table>
 <app-turbine-table *ngIf="selectedTable == 'mediumToLowPressureTurbine'" [turbineName]="'Medium to Low Pressure'"
-    [turbine]="outputData.mediumToLowPressureTurbine" [settings]="settings"></app-turbine-table>
+    [turbine]="outputData.mediumPressureToLowPressureTurbine" [settings]="settings"></app-turbine-table>
 <app-turbine-table *ngIf="selectedTable == 'condensingTurbine'" [turbineName]="'Condensing'"
     [turbine]="outputData.condensingTurbine" [settings]="settings">
 </app-turbine-table>
@@ -35,9 +31,9 @@
 <app-flash-tank-table *ngIf="selectedTable == 'blowdownFlashTank'" [flashTank]="outputData.blowdownFlashTank"
     [flashTankType]="'Blowdown'" [settings]="settings"></app-flash-tank-table>
 <app-prv-table *ngIf="selectedTable == 'highToMediumPressurePRV'" [prvType]="'highToMediumPressurePRV'"
-    [settings]="settings" [inputData]="inputData" [prv]="outputData.highToMediumPressurePRV"></app-prv-table>
+    [settings]="settings" [inputData]="inputData" [prv]="outputData.highPressureToMediumPressurePrv"></app-prv-table>
 <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'" [settings]="settings"
-    [inputData]="inputData" [prv]="outputData.lowPressurePRV"></app-prv-table>
+    [inputData]="inputData" [prv]="outputData.mediumPressureToLowPressurePrv"></app-prv-table>
 <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="outputData.deaeratorOutput" [settings]="settings"
     [inputData]="inputData"></app-deaerator-table>
 
@@ -79,10 +75,11 @@
     [settings]="settings" [outputData]="outputData" [inputData]="inputData" [inResultsPanel]="true">
 </app-hover-steam-properties>
 <app-hover-steam-properties *ngIf="selectedTable == 'boilerFeedwaterHovered'"
-    [hoveredProperty]="'boilerFeedwaterHovered'" [settings]="settings" [outputData]="outputData"
-    [inputData]="inputData" [inResultsPanel]="true"></app-hover-steam-properties>
+    [hoveredProperty]="'boilerFeedwaterHovered'" [settings]="settings" [outputData]="outputData" [inputData]="inputData"
+    [inResultsPanel]="true"></app-hover-steam-properties>
 <app-hover-steam-properties *ngIf="selectedTable == 'boilerBlowdownHovered'" [hoveredProperty]="'boilerBlowdownHovered'"
-    [settings]="settings" [outputData]="outputData" [inputData]="inputData" [inResultsPanel]="true"></app-hover-steam-properties>
+    [settings]="settings" [outputData]="outputData" [inputData]="inputData" [inResultsPanel]="true">
+</app-hover-steam-properties>
 <!--PRV Properties-->
 <app-hover-steam-properties *ngIf="selectedTable == 'mediumPressurePRVInletHovered'"
     [hoveredProperty]="'mediumPressurePRVInletHovered'" [settings]="settings" [outputData]="outputData"
@@ -182,8 +179,8 @@
     [hoveredProperty]="'heatExchangerColdOutlet'" [settings]="settings" [outputData]="outputData"
     [inputData]="inputData" [inResultsPanel]="true"></app-hover-steam-properties>
 <app-hover-steam-properties *ngIf="selectedTable == 'heatExchangerHotOutlet'"
-    [hoveredProperty]="'heatExchangerHotOutlet'" [settings]="settings" [outputData]="outputData"
-    [inputData]="inputData" [inResultsPanel]="true"></app-hover-steam-properties>
+    [hoveredProperty]="'heatExchangerHotOutlet'" [settings]="settings" [outputData]="outputData" [inputData]="inputData"
+    [inResultsPanel]="true"></app-hover-steam-properties>
 
 <!--Makeup water-->
 <app-hover-steam-properties *ngIf="selectedTable == 'makeupWaterPropertiesHovered'"
@@ -200,17 +197,19 @@
     [hoveredProperty]="'deaeratorInletSteamHovered'" [settings]="settings" [outputData]="outputData"
     [inputData]="inputData" [inResultsPanel]="true"></app-hover-steam-properties>
 <app-hover-steam-properties *ngIf="selectedTable == 'deaeratorVentHovered'" [hoveredProperty]="'deaeratorVentHovered'"
-    [settings]="settings" [outputData]="outputData" [inputData]="inputData" [inResultsPanel]="true"></app-hover-steam-properties>
+    [settings]="settings" [outputData]="outputData" [inputData]="inputData" [inResultsPanel]="true">
+</app-hover-steam-properties>
 <app-hover-steam-properties *ngIf="selectedTable == 'deaeratorFeedwaterHovered'"
     [hoveredProperty]="'deaeratorFeedwaterHovered'" [settings]="settings" [outputData]="outputData"
     [inputData]="inputData" [inResultsPanel]="true"></app-hover-steam-properties>
 <!--Feedwater-->
 <app-hover-steam-properties *ngIf="selectedTable == 'feedwaterHovered'" [hoveredProperty]="'feedwaterHovered'"
-    [settings]="settings" [outputData]="outputData" [inputData]="inputData" [inResultsPanel]="true"></app-hover-steam-properties>
+    [settings]="settings" [outputData]="outputData" [inputData]="inputData" [inResultsPanel]="true">
+</app-hover-steam-properties>
 <!--Vents-->
 <app-hover-steam-properties *ngIf="selectedTable == 'ventedLowPressureSteam'"
-    [hoveredProperty]="'ventedLowPressureSteam'" [settings]="settings" [outputData]="outputData"
-    [inputData]="inputData" [inResultsPanel]="true"></app-hover-steam-properties>
+    [hoveredProperty]="'ventedLowPressureSteam'" [settings]="settings" [outputData]="outputData" [inputData]="inputData"
+    [inResultsPanel]="true"></app-hover-steam-properties>
 <!--Vents-->
 <app-hover-heat-exchanger *ngIf="selectedTable == 'heatExchangerHovered'" [settings]="settings"
     [outputData]="outputData" [inputData]="inputData" [inResultsPanel]="true"></app-hover-heat-exchanger>

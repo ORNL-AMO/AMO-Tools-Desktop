@@ -1,0 +1,207 @@
+<div class="col-10 mx-auto utilities">
+    <div class="content-container calculator-list">
+        <h2 class="mb-1">General Calculators</h2>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/assessment.png" class="calc-img"
+                        [routerLink]="['/calculators/pre-assessment']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/pre-assessment']">Pre-Assessment Screening</a>
+                <p>
+                    Compare the relative energy use of equipment to prioritize energy evaluations and opportunities
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/unit-converter.png" class="calc-img"
+                        [routerLink]="['/calculators/unit-converter']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/unit-converter']">Unit Converter</a>
+                <p>
+                    Perform quick unit conversion calculations
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/chp.png" class="calc-img"
+                        [routerLink]="['/calculators/combined-heat-power']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/combined-heat-power']">Combined Heat and Power</a>
+                <p>
+                    Conduct a preliminary screening of the potential cost savings from CHP
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/cash-flow.png" class="calc-img"
+                        [routerLink]="['/calculators/cash-flow']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/cash-flow']">Cash Flow</a>
+                <p>
+                    Plot the savings and costs associated with an investment
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/power-factor-correction-icon.png"
+                        class="calc-img" [routerLink]="['/calculators/power-factor-correction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/power-factor-correction']">Power Factor Correction</a>
+                <p>
+                    Identify the capacitance (in kVAR) required for improving the power factor to the proposed level
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/co2-savings.png" class="calc-img"
+                        [routerLink]="['/calculators/co2-savings']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/co2-savings']">CO<sub>2</sub> Savings</a>
+                <p>
+                    Estimate carbon dioxide (CO<sub>2</sub>) emissions for given electricity and fuel uses
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png"
+                        class="calc-img" [routerLink]="['/calculators/electricity-reduction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/electricity-reduction']">Electricity Reduction</a>
+                <p>
+                    This calculator is used to quantify the energy savings associated with reducing electricity usage.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/natural-gas-reduction-icon.png"
+                        class="calc-img" [routerLink]="['/calculators/natural-gas-reduction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/natural-gas-reduction']">Natural Gas Reduction</a>
+                <p>
+                    This calculator is used to quantify the energy savings associated with reducing natural gas usage.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png"
+                        class="calc-img" [routerLink]="['/calculators/compressed-air-reduction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/compressed-air-reduction']">Compressed Air Reduction</a>
+                <p>
+                    This calculator is used to quantify the energy savings associated with reducing compressed air
+                    usage.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png"
+                        class="calc-img" [routerLink]="['/calculators/compressed-air-pressure-reduction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/compressed-air-pressure-reduction']">Compressed Air Pressure
+                    Reduction</a>
+                <p>
+                    This calculator is used to quantify the energy savings associated with reducing compressed air
+                    system
+                    pressure.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/steam-reduction-icon.png" class="calc-img"
+                        [routerLink]="['/calculators/steam-reduction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/steam-reduction']">Steam Reduction</a>
+                <p>
+                    This calculator is used to quantify the energy savings associated with reducing steam use.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/water-reduction-icon.png" class="calc-img"
+                        [routerLink]="['/calculators/water-reduction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/water-reduction']">Water/Wastewater Reduction</a>
+                <p>
+                    This calculator is used to quantify the energy savings associated with reducing water usage and
+                    wastewater
+                    disposal.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/pipe-insulation-reduction-icon.png"
+                        class="calc-img" [routerLink]="['/calculators/pipe-insulation-reduction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/pipe-insulation-reduction']">Pipe Insulation Reduction</a>
+                <p>
+                    This calculator is used to quantify the energy savings associated with insulating hot pipes.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/tank-insulation-reduction-icon.png"
+                        class="calc-img" [routerLink]="['/calculators/tank-insulation-reduction']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/tank-insulation-reduction']">Tank Insulation Reduction</a>
+                <p>
+                    This calculator is used to quantify the energy savings associated with insulating hot tanks.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

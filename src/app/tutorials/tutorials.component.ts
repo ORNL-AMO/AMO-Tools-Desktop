@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AssessmentService } from '../assessment/assessment.service';
+import { AssessmentService } from '../dashboard/assessment.service';
 
 @Component({
   selector: 'app-tutorials',
@@ -16,11 +16,6 @@ export class TutorialsComponent implements OnInit {
   viewOpeningTutorial() {
     this.assessmentService.tutorialShown = false;
     this.assessmentService.showTutorial.next('landing-screen');
-  }
-  
-  viewPhastTutorial() {
-    this.assessmentService.tutorialShown = false;
-    this.assessmentService.showTutorial.next('phast-tutorial');
   }
 
   viewDashboardTutorial() {

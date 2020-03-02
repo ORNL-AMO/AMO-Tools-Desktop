@@ -18,8 +18,6 @@ export class NaturalGasReductionComponent implements OnInit {
   emitSave = new EventEmitter<NaturalGasReductionTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  @Output('emitAddOpportunitySheet')
-  emitAddOpportunitySheet = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
   @Input()
@@ -195,10 +193,6 @@ export class NaturalGasReductionComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
-  }
-
-  addOpportunitySheet() {
-    this.emitAddOpportunitySheet.emit(true);
   }
 
   setBaselineSelected() {

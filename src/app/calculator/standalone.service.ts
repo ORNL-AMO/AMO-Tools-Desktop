@@ -7,7 +7,7 @@ import {
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
   PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity,
-  ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput
+  ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput, PipeInsulationReductionInput, PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -207,7 +207,7 @@ export class StandaloneService {
       let output: PipeSizes = standaloneAddon.airVelocity(inputCpy);
       //all sizes metric: cm imperial: in
       for (let key in output) {
-        output[key] = this.convertUnitsService.value(output[key]).from('in').to('cm');
+        output[key] = this.convertUnitsService.value(output[key]).from('ft').to('m');
       }
       return output;
     }
@@ -335,5 +335,13 @@ export class StandaloneService {
   steamReduction(inputObj: SteamReductionInput): any {
     let result = calculatorAddon.steamReduction(inputObj);
     return result;
+  }
+
+  pipeInsulationReduction(inputObj: PipeInsulationReductionInput): PipeInsulationReductionResult {
+    return calculatorAddon.pipeInsulationReduction(inputObj);
+  }
+
+  tankInsulationReduction(inputObj: TankInsulationReductionInput): TankInsulationReductionResult {
+    return calculatorAddon.tankInsulationReduction(inputObj);
   }
 }

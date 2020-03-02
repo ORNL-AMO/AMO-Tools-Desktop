@@ -1,0 +1,123 @@
+<div class="d-flex h-100 modify-conditions general standalone-calculator" #contentContainer>
+    <div class="d-flex flex-column w-100 h-100 scroll-item">
+        <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+            [ngClass]="{'justify-content-between': inTreasureHunt}">
+            <div class="d-flex pl-2 align-items-center">
+                <div class="text-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/tank-insulation-reduction-icon.png"
+                        class="tank-insulation-reduction-icon">
+                </div>
+                <div class="pl-2">
+                    <h3>Tank Insulation</h3>
+                </div>
+            </div>
+
+            <div class="d-flex pr-2" *ngIf="inTreasureHunt">
+                <div class="d-flex help-holder">
+                    <p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
+                        Add an opportunity sheet at any time or click cancel to discard changes and
+                        return to method selection.</p>
+                </div>
+                <div class="pl-2 pr-2 border-right border-left action-item" (click)="addOpportunitySheet()">
+                    <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="opp-sheet-icon">
+                </div>
+                <div class="pl-2 pr-2 border-right action-item" (click)="save()">
+                    <span class="fa fa-save"></span>
+                </div>
+                <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+                    <span class="fa fa-times"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- baseline -->
+        <div class="d-flex">
+            <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
+                <div class="modification baseline w-50 panel-column" (click)="setBaselineSelected()"
+                    [ngClass]="{'disabled': baselineSelected == false}">
+                    <div class="header mx-2">
+                        <h3>Baseline</h3>
+                    </div>
+                    <!-- app form -->
+                    <app-tank-insulation-reduction-form [settings]="settings" [form]="baselineForm" [isBaseline]="true"
+                        (emitCalculate)="getResults()" (emitChangeField)="changeField($event)"
+                        [selected]="baselineSelected">
+                    </app-tank-insulation-reduction-form>
+                    <div class="w-100 justify content-center btn-group btn-group-sm">
+                        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
+                            (click)="btnResetData()">
+                            Reset Data
+                        </button>
+                        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+                        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+                            (click)="btnGenerateExample()">
+                            Generate Example
+                        </button>
+                    </div>
+                </div>
+
+                <!-- modification -->
+                <div *ngIf="modificationExists" class="w-50 panel-column modification"
+                    (click)="setModificationSelected()" [ngClass]="{'disabled': baselineSelected == true}">
+                    <!-- modification header -->
+                    <div class="header mx-2">
+                        <h3>Modification</h3>
+                    </div>
+                    <!-- forms -->
+                    <!-- app form -->
+                    <app-tank-insulation-reduction-form [settings]="settings" [form]="modificationForm"
+                        [isBaseline]="false" (emitCalculate)="getResults()" (emitChangeField)="changeField($event)"
+                        [selected]="!baselineSelected"
+                        [utilityType]="tankInsulationReductionService.baselineData.utilityType"
+                        [utilityCost]="tankInsulationReductionService.baselineData.utilityCost">
+                    </app-tank-insulation-reduction-form>
+                </div>
+
+                <!-- no content message -->
+                <div class="w-50 panel-column modification" *ngIf="!modificationExists"
+                    (click)="setModificationSelected()" [ngClass]="{'disabled': baselineSelected == true}">
+                    <div class="header mx-2">
+                        <h3>Modification</h3>
+                    </div>
+                    <div class="p-3 no-data">
+                        <h3>Once you have set up your baseline..</h3>
+                        <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
+                            Condition</button>
+                        <p>Data will be copied from your current baseline condition.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- help panel -->
+            <div class="col-4 p-0 help-panel">
+                <div class="d-flex flex-column mh-100 scroll-item">
+                    <div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
+                        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                            <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                                (click)="setTab('results')">
+                                <div>Results</div>
+                            </a>
+                        </div>
+                        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                                <div>Help</div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="p-2">
+                        <!-- app results if results tab -->
+                        <app-tank-insulation-reduction-results *ngIf="tabSelect === 'results'" [settings]="settings"
+                            [results]="tankInsulationReductionResults" [modificationExists]="modificationExists">
+                        </app-tank-insulation-reduction-results>
+
+                        <!-- app help if help tab -->
+                        <app-tank-insulation-reduction-help *ngIf="tabSelect === 'help'" [settings]="settings"
+                            [currentField]="currentField"></app-tank-insulation-reduction-help>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

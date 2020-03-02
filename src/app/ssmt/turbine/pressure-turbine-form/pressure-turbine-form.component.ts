@@ -27,6 +27,8 @@ export class PressureTurbineFormComponent implements OnInit {
   inSetup: boolean;
   @Input()
   idString: string;
+  @Input()
+  isBaseline: boolean;
 
   turbineTypeOptions: Array<Quantity>;
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private turbineService: TurbineService) {
@@ -96,6 +98,7 @@ export class PressureTurbineFormComponent implements OnInit {
   focusField(str: string) {
     this.ssmtService.turbineOperationValue.next(this.turbineForm.controls.operationType.value);
     this.ssmtService.turbineOperationHelp.next('pressure');
+    this.ssmtService.isBaselineFocused.next(this.isBaseline);
     this.ssmtService.currentField.next(str);
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
+import { TreasureHuntResults, UtilityUsageData } from '../../../../shared/models/treasure-hunt';
 import * as c3 from 'c3';
 
 @Component({
@@ -30,34 +30,32 @@ export class CostPieChartComponent implements OnInit {
     this.initChart();
   }
 
+  ngOnChanges(){
+    if(this.chart){
+      this.getColumnData();
+      this.initChart();
+    }
+  }
+
   ngOnDestroy() { }
 
   getColumnData() {
     this.columnData = new Array();
-    if (this.isBaseline == true) {
-      this.addColumnItem('Electricity ', this.treasureHuntResults.electricity.baselineEnergyCost);
-      this.addColumnItem('Natural Gas ', this.treasureHuntResults.naturalGas.baselineEnergyCost);
-      this.addColumnItem('Water ', this.treasureHuntResults.water.baselineEnergyCost);
-      this.addColumnItem('Waste Water ', this.treasureHuntResults.wasteWater.baselineEnergyCost);
-      this.addColumnItem('Other Fuel ', this.treasureHuntResults.otherFuel.baselineEnergyCost);
-      this.addColumnItem('Compressed Air ', this.treasureHuntResults.compressedAir.baselineEnergyCost);
-      this.addColumnItem('Steam ', this.treasureHuntResults.steam.baselineEnergyCost);
-      this.addColumnItem('Other ', this.treasureHuntResults.other.baselineEnergyCost);
-    } else {
-      this.addColumnItem('Electricity ', this.treasureHuntResults.electricity.modifiedEnergyCost);
-      this.addColumnItem('Natural Gas ', this.treasureHuntResults.naturalGas.modifiedEnergyCost);
-      this.addColumnItem('Water ', this.treasureHuntResults.water.modifiedEnergyCost);
-      this.addColumnItem('Waste Water ', this.treasureHuntResults.wasteWater.modifiedEnergyCost);
-      this.addColumnItem('Other Fuel ', this.treasureHuntResults.otherFuel.modifiedEnergyCost);
-      this.addColumnItem('Compressed Air ', this.treasureHuntResults.compressedAir.modifiedEnergyCost);
-      this.addColumnItem('Steam ', this.treasureHuntResults.steam.modifiedEnergyCost);
-      this.addColumnItem('Other ', this.treasureHuntResults.other.modifiedEnergyCost);
-    }
+    this.addColumnItem('Electricity ', this.treasureHuntResults.electricity, this.isBaseline);
+    this.addColumnItem('Natural Gas ', this.treasureHuntResults.naturalGas, this.isBaseline);
+    this.addColumnItem('Water ', this.treasureHuntResults.water, this.isBaseline);
+    this.addColumnItem('Waste Water ', this.treasureHuntResults.wasteWater, this.isBaseline);
+    this.addColumnItem('Other Fuel ', this.treasureHuntResults.otherFuel, this.isBaseline);
+    this.addColumnItem('Compressed Air ', this.treasureHuntResults.compressedAir, this.isBaseline);
+    this.addColumnItem('Steam ', this.treasureHuntResults.steam, this.isBaseline);
+    this.addColumnItem('Other ', this.treasureHuntResults.other, this.isBaseline);
   }
 
-  addColumnItem(label: string, value: number) {
-    if (value) {
-      this.columnData.push([label, value]);
+  addColumnItem(label: string, value: UtilityUsageData, isBaseline: boolean) {
+    if (isBaseline && value.baselineEnergyCost) {
+      this.columnData.push([label, value.baselineEnergyCost]);
+    } else if (!isBaseline && value.modifiedEnergyCost) {
+      this.columnData.push([label, value.modifiedEnergyCost]);
     }
   }
 

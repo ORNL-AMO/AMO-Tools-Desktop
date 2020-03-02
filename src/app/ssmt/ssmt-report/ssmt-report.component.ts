@@ -1,16 +1,15 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
+import { SSMTInputs, SSMT } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
 import { SSMTOutput, SSMTLosses } from '../../shared/models/steam/steam-outputs';
-import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
-import { CalculateLossesService } from '../ssmt-calculations/calculate-losses.service';
+import { CalculateLossesService } from '../calculate-losses.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SsmtReportService } from './ssmt-report.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
-import { Co2SavingsModule } from '../../calculator/utilities/co2-savings/co2-savings.module';
+import { SsmtService } from '../ssmt.service';
 
 @Component({
   selector: 'app-ssmt-report',
@@ -69,12 +68,14 @@ export class SsmtReportComponent implements OnInit {
   tableCellWidth: number;
   assessmentDirectories: Directory[];
 
-  constructor(private windowRefService: WindowRefService, private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService, private directoryDbService: DirectoryDbService, private ssmtReportService: SsmtReportService) { }
+  constructor(private windowRefService: WindowRefService, private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService, private directoryDbService: DirectoryDbService, private ssmtReportService: SsmtReportService) { }
 
   ngOnInit() {
     if (this.assessment.ssmt.setupDone) {
       setTimeout(() => {
-        let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.assessment.ssmt, this.settings, true, true);
+        let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.assessment.ssmt, this.settings);
+        this.assessment.ssmt.name = 'Baseline';
+        resultData.outputData = this.calculateResultsWithMarginalCosts(this.assessment.ssmt, resultData.outputData);
         this.assessment.ssmt.outputData = resultData.outputData;
         this.baselineOutput = resultData.outputData;
         this.baselineInputData = resultData.inputData;
@@ -84,9 +85,8 @@ export class SsmtReportComponent implements OnInit {
         this.modificationLosses = new Array<{ name: string, outputData: SSMTLosses }>();
         if (this.assessment.ssmt.modifications) {
           this.assessment.ssmt.modifications.forEach(modification => {
-            // this.calculateModelService.initResults();
-            // this.calculateModelService.initData(modification.ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
-            let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(modification.ssmt, this.settings, false, true, this.baselineOutput.sitePowerDemand);
+            let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModificationModel(modification.ssmt, this.settings, this.baselineOutput);
+            resultData.outputData = this.calculateResultsWithMarginalCosts(modification.ssmt, resultData.outputData, this.baselineOutput);
             modification.ssmt.outputData = resultData.outputData;
             this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData });
             this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData });
@@ -265,7 +265,6 @@ export class SsmtReportComponent implements OnInit {
     }
   }
 
-
   print(): void {
     this.closeModal(false);
     this.ssmtReportService.showPrint.next(true);
@@ -277,4 +276,19 @@ export class SsmtReportComponent implements OnInit {
       this.resetPrintSelection();
     }, 2000);
   }
+
+  calculateResultsWithMarginalCosts(ssmt: SSMT, outputData: SSMTOutput, baselineResults?: SSMTOutput): SSMTOutput {
+    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number };
+    if (ssmt.name == 'Baseline') {
+      marginalCosts = this.ssmtService.calculateBaselineMarginalCosts(ssmt, outputData, this.settings);
+    } else {
+      marginalCosts = this.ssmtService.calculateModificationMarginalCosts(ssmt, outputData, baselineResults, this.settings);
+    }
+    outputData.marginalHPCost = marginalCosts.marginalHPCost;
+    outputData.marginalMPCost = marginalCosts.marginalMPCost;
+    outputData.marginalLPCost = marginalCosts.marginalLPCost;
+    return outputData;
+  }
+
+
 }

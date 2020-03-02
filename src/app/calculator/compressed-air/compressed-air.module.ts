@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CompressedAirComponent } from './compressed-air.component';
 import { AirVelocityModule } from './air-velocity/air-velocity.module';
 import { BagMethodModule } from './bag-method/bag-method.module';
 // import { FlowFactorModule } from './flow-factor/flow-factor.module';
@@ -9,6 +8,8 @@ import { PipeSizingModule } from './pipe-sizing/pipe-sizing.module';
 import { PneumaticAirModule } from './pneumatic-air/pneumatic-air.module';
 import { ReceiverTankModule } from './receiver-tank/receiver-tank.module';
 import { SystemCapacityModule } from './system-capacity/system-capacity.module';
+import { CompressedAirListComponent } from './compressed-air-list/compressed-air-list.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -20,13 +21,14 @@ import { SystemCapacityModule } from './system-capacity/system-capacity.module';
     PipeSizingModule,
     PneumaticAirModule,
     ReceiverTankModule,
-    SystemCapacityModule
+    SystemCapacityModule,
+    RouterModule
   ],
   declarations: [
-    CompressedAirComponent
+    CompressedAirListComponent
   ],
   exports: [
-    CompressedAirComponent
+    CompressedAirListComponent
   ]
 })
 export class CompressedAirModule { }

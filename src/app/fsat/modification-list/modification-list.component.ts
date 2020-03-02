@@ -69,7 +69,7 @@ export class ModificationListComponent implements OnInit {
   }
   getBadges(modification: FSAT) {
     if (modification) {
-      return this.compareService.getBadges(this.fsat, modification);
+      return this.compareService.getBadges(this.fsat, modification, this.settings);
     } else {
       return [];
     }

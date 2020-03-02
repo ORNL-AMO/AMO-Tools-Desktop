@@ -97,7 +97,6 @@ export class SsmtRollupSteamSummaryComponent implements OnInit {
     this.title = graphOption;
     this.chartLabels = new Array();
     let i = 1;
-
     this.resultData.forEach(data => {
       let num1 = 0;
       let num2 = 0;
@@ -105,17 +104,17 @@ export class SsmtRollupSteamSummaryComponent implements OnInit {
         if (i === 1) {
           this.unit = this.settings.steamEnergyMeasurement + '/yr';
         }
-        num1 = data.baselineResults.boilerFuelUsage;
+        num1 = data.baselineResults.operationsOutput.boilerFuelUsage;
         if (data.modName) {
-          num2 = data.modificationResults.boilerFuelUsage;
+          num2 = data.modificationResults.operationsOutput.boilerFuelUsage;
         }
       } else if (graphOption === 'Cost') {
         if (i === 1) {
           this.unit = "$/yr";
         }
-        num1 = data.baselineResults.totalOperatingCost;
+        num1 = data.baselineResults.operationsOutput.totalOperatingCost;
         if (data.modName) {
-          num2 = data.modificationResults.totalOperatingCost;
+          num2 = data.modificationResults.operationsOutput.totalOperatingCost;
         }
       }
       i++;

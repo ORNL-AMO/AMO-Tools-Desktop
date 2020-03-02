@@ -42,7 +42,7 @@ export class HeatExchangerTableComponent implements OnInit {
   }
 
   getData() {
-    this.heatExchangerOutput = this.outputData.heatExchangerOutput;
+    this.heatExchangerOutput = this.outputData.heatExchanger;
     if (this.inputData.boilerInput.blowdownFlashed == true) {
       let hotInletProperties: SteamPropertiesOutput = this.steamService.steamProperties(
         {

@@ -19,8 +19,7 @@
         </td>
         <td class="percent-graph" *ngFor="let modification of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <div class="hide-print" *ngIf="modification.percentSavings">
-            <app-percent-graph [value]="modification.percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'"
-              [title]="'psat-opportunities-savings'"></app-percent-graph>
+            <app-percent-graph [value]="modification.percentSavings"></app-percent-graph>
           </div>
           <div class="show-print text-center" *ngIf="modification.percentSavings">
             {{getSavingsPercentage(baselineResults, modification) | number:'1.0'}} %
@@ -73,7 +72,7 @@
         <!-- <td *ngIf="!modificationResults.motorPowerFactor">&mdash;</td> -->
       </tr>
       <tr>
-        <td>Load factor (%)</td>
+        <td>Percent Loaded (%)</td>
         <td>{{baselineResults.loadFactor*100 | number:'2.0-1'}}</td>
         <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.loadFactor*100
           | number:'2.0-1'}}</td>

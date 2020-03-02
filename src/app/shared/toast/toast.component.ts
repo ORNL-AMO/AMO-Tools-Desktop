@@ -26,6 +26,10 @@ export class ToastComponent implements OnInit {
   setTimeoutVal: number;
   @Input()
   toastClass: string;
+  @Input()
+  showDisableFooter: boolean;
+  @Output('emitDisable')
+  emitDisable = new EventEmitter<boolean>();
 
   showToast: string = 'hide';
   destroyToast: boolean = false;
@@ -49,6 +53,14 @@ export class ToastComponent implements OnInit {
     setTimeout(() => {
       this.destroyToast = true;
       this.emitCloseToast.emit(true);
+    }, 500);
+  }
+
+  disable() {
+    this.showToast = 'hide';
+    setTimeout(() => {
+      this.destroyToast = true;
+      this.emitDisable.emit(true);
     }, 500);
   }
 }

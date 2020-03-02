@@ -110,7 +110,7 @@ export class SettingsService {
       'disableFsatSetupTutorial': settings.disableFsatSetupTutorial || false,
       'disableFsatAssessmentTutorial': settings.disableFsatAssessmentTutorial || false,
       'disableFsatReportTutorial': settings.disableFsatReportTutorial || false,
-      'compressedAirCost': settings.compressedAirCost || 0,
+      'compressedAirCost': settings.compressedAirCost || 0.022,
       'otherFuelCost': settings.otherFuelCost || 0,
       'waterCost': settings.waterCost || 0,
       'waterWasteCost': settings.waterWasteCost || 0
@@ -174,7 +174,7 @@ export class SettingsService {
       disableFsatSetupTutorial: form.controls.disableFsatSetupTutorial.value,
       disableFsatAssessmentTutorial: form.controls.disableFsatAssessmentTutorial.value,
       disableFsatReportTutorial: form.controls.disableFsatReportTutorial.value,
-      compressedAirCost: form.controls.compressedAirCost.value || 0,
+      compressedAirCost: form.controls.compressedAirCost.value || 0.022,
       otherFuelCost: form.controls.otherFuelCost.value || 0,
       waterCost: form.controls.waterCost.value || 0,
       waterWasteCost: form.controls.waterWasteCost.value || 0
@@ -237,7 +237,7 @@ export class SettingsService {
       disableFsatSetupTutorial: settings.disableFsatSetupTutorial,
       disableFsatAssessmentTutorial: settings.disableFsatAssessmentTutorial,
       disableFsatReportTutorial: settings.disableFsatReportTutorial,
-      compressedAirCost: settings.compressedAirCost || 0,
+      compressedAirCost: settings.compressedAirCost || 0.022,
       otherFuelCost: settings.otherFuelCost || 0,
       waterCost: settings.waterCost || 0,
       waterWasteCost: settings.waterWasteCost || 0
@@ -309,7 +309,7 @@ export class SettingsService {
         fanBarometricPressure: 'kPaa',
         fanSpecificHeatGas: 'kJkgC',
         fanTemperatureMeasurement: 'C',
-        steamEnergyMeasurement: 'MJ',
+        steamEnergyMeasurement: 'GJ',
         steamPowerMeasurement: 'kW'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',

@@ -1,0 +1,17 @@
+.selected-directory{
+    border-left: .5px solid gray;
+    padding-left: .1rem;
+}
+
+.hidden{
+    display: none;
+}
+
+
+.sidebar-item a{
+    color: #787878;
+}
+
+.fa.fa-folder:hover, .fa.fa-folder-open:hover{
+    opacity: .5;
+}

@@ -14,7 +14,7 @@ export class FsatSystemSetupComponent implements OnInit {
   inTutorials: boolean;
 
 
-  showItem: Array<boolean> = [true, false, false, false, false, false, false];
+  showItem: Array<boolean> = [true, false, false, false, false, false, false, false];
 
   index: number = 0;
   dontShow: boolean = true;

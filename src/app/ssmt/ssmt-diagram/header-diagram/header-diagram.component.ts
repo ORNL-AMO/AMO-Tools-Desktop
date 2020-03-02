@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { HeaderOutputObj, ProcessSteamUsage, SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, ProcessSteamUsage } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -9,7 +9,7 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class HeaderDiagramComponent implements OnInit {
   @Input()
-  header: HeaderOutputObj;
+  header: SteamPropertiesOutput;
   @Input()
   pressureLevel: string;
   @Input()
@@ -29,6 +29,7 @@ export class HeaderDiagramComponent implements OnInit {
   condensateClasses: Array<string>;
   pressureClasses: Array<string>;
   condensingWarning: boolean;
+  showVentedSteam: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -38,6 +39,11 @@ export class HeaderDiagramComponent implements OnInit {
   ngOnChanges() {
     this.setClasses();
     this.checkWarnings();
+    if (this.ventedLowPressureSteam != undefined && isNaN(this.ventedLowPressureSteam.massFlow) == false && this.ventedLowPressureSteam.massFlow != 0) {
+      this.showVentedSteam = true;
+    } else {
+      this.showVentedSteam = false;
+    }
   }
 
   setClasses() {
@@ -85,11 +91,11 @@ export class HeaderDiagramComponent implements OnInit {
     }
   }
 
-  selectProcessUsage(){
+  selectProcessUsage() {
     this.emitSelectEquipment.emit(this.pressureLevel + 'ProcessSteamHovered');
   }
 
-  selectCondensate(){
+  selectCondensate() {
     this.emitSelectEquipment.emit(this.pressureLevel + 'CondensateHovered');
   }
 
@@ -97,7 +103,7 @@ export class HeaderDiagramComponent implements OnInit {
     this.emitSelectEquipment.emit(this.pressureLevel + 'Hovered');
   }
 
-  selectProcessUsageInlet(){
+  selectProcessUsageInlet() {
     this.emitSelectEquipment.emit(this.pressureLevel + 'ProcessSteamInletHovered');
   }
 }

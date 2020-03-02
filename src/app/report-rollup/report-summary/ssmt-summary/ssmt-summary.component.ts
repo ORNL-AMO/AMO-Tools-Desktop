@@ -11,8 +11,6 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class SsmtSummaryComponent implements OnInit {
   @Input()
-  numSsmt: number;
-  @Input()
   settings: Settings;
 
   ssmtSavingPotential: number = 0;
@@ -23,7 +21,7 @@ export class SsmtSummaryComponent implements OnInit {
   allSub: Subscription;
   selectedSub: Subscription;
   resultsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(public reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.assessmentSub = this.reportRollupService.ssmtAssessments.subscribe(val => {
@@ -63,12 +61,12 @@ export class SsmtSummaryComponent implements OnInit {
     let sumCost = 0;
     let sumEnergySavings = 0;
     resultsData.forEach(result => {
-      let diffCost = result.baselineResults.totalOperatingCost - result.modificationResults.totalOperatingCost;
+      let diffCost = result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost;
       sumSavings += diffCost;
-      sumCost += result.modificationResults.totalOperatingCost;
-      let diffEnergy = result.baselineResults.boilerFuelUsage - result.modificationResults.boilerFuelUsage;
+      sumCost += result.modificationResults.operationsOutput.totalOperatingCost;
+      let diffEnergy = result.baselineResults.operationsOutput.boilerFuelUsage - result.modificationResults.operationsOutput.boilerFuelUsage;
       sumEnergySavings += diffEnergy;
-      sumEnergy += result.modificationResults.boilerFuelUsage;
+      sumEnergy += result.modificationResults.operationsOutput.boilerFuelUsage;
     })
     this.ssmtSavingPotential = sumSavings;
     this.energySavingsPotential = sumEnergySavings;

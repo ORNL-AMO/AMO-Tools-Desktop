@@ -100,7 +100,7 @@
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
-        [assessment]="assessment" [printView]="printExecutiveSummary"></app-executive-summary>
+        [assessment]="assessment" [printView]="printExecutiveSummary" [ssmt]="assessment.ssmt"></app-executive-summary>
     </div>
     <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'energySummary' && !showPrint) || (showPrint && printEnergySummary)) && dataCalculated"
@@ -133,7 +133,8 @@
       *ngIf="((currentTab == 'inputData' && !showPrint) || (showPrint && printInputData)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData"
-        [modificationInputData]="modificationInputData" [printView]="printInputData"></app-input-summary>
+        [modificationInputData]="modificationInputData" [printView]="printInputData"
+        [modificationOutputs]="modificationOutputs"></app-input-summary>
     </div>
 
     <div class="results scroll-item hide-print" *ngIf="!dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">

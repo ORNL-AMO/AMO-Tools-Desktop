@@ -71,7 +71,7 @@ export class PrvService {
     if (settings.steamTemperatureMeasurement !== 'F') {
       tmpDesuperheatingTemp = Math.round(this.convertUnitsService.value(tmpDesuperheatingTemp).from('F').to(settings.steamTemperatureMeasurement) * 100) / 100;
     }
-    let ranges: FeedwaterRanges = this.getFeedwaterRangeValues(settings, 3);
+    let ranges: FeedwaterRanges = this.getFeedwaterRangeValues(settings, 3, undefined);
     let tmpForm: FormGroup = this.formBuilder.group({
       feedwaterPressure: [tmpFeedwaterPressure, [Validators.required, Validators.min(ranges.feedwaterPressureMin), Validators.max(ranges.feedwaterPressureMax)]],
       feedwaterThermodynamicQuantity: [3, Validators.required],
@@ -82,7 +82,7 @@ export class PrvService {
   }
 
   resetFeedwaterForm(settings: Settings): FormGroup {
-    let ranges: FeedwaterRanges = this.getFeedwaterRangeValues(settings, 2);
+    let ranges: FeedwaterRanges = this.getFeedwaterRangeValues(settings, 2, undefined);
     let tmpForm: FormGroup = this.formBuilder.group({
       feedwaterPressure: [0, [Validators.required, Validators.min(ranges.feedwaterPressureMin), Validators.max(ranges.feedwaterPressureMax)]],
       feedwaterThermodynamicQuantity: [2, Validators.required],
@@ -93,7 +93,7 @@ export class PrvService {
   }
 
   getFeedwaterFormFromObj(inputObj: PrvInput, settings: Settings): FormGroup {
-    let ranges: FeedwaterRanges = this.getFeedwaterRangeValues(settings, inputObj.thermodynamicQuantity);
+    let ranges: FeedwaterRanges = this.getFeedwaterRangeValues(settings, inputObj.thermodynamicQuantity, inputObj.outletPressure);
     let tmpForm: FormGroup = this.formBuilder.group({
       feedwaterPressure: [inputObj.feedwaterPressure, [Validators.required, Validators.min(ranges.feedwaterPressureMin), Validators.max(ranges.feedwaterPressureMax)]],
       feedwaterThermodynamicQuantity: [inputObj.feedwaterThermodynamicQuantity || 2],
@@ -145,14 +145,22 @@ export class PrvService {
     return ranges;
   }
 
-  getFeedwaterRangeValues(settings: Settings, feedwaterThermodynamicQuantity: number): FeedwaterRanges {
+  getFeedwaterRangeValues(settings: Settings, feedwaterThermodynamicQuantity: number, outletPressure: number): FeedwaterRanges {
     let feedwaterMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, feedwaterThermodynamicQuantity);
+    let desuperheatingTempMin: number = this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement);
+    if (outletPressure) {
+      desuperheatingTempMin = this.steamService.saturatedProperties({
+        saturatedPressure: outletPressure
+      },
+        0,
+        settings).saturatedTemperature;
+    }
     let ranges: FeedwaterRanges = {
       feedwaterPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       feedwaterPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       feedwaterQuantityValueMin: feedwaterMinMax.min,
       feedwaterQuantityValueMax: feedwaterMinMax.max,
-      desuperheatingTempMin: Number(this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement).toFixed(0)),
+      desuperheatingTempMin: Number(desuperheatingTempMin.toFixed(0)),
       desuperheatingTempMax: Number(this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement).toFixed(0))
     };
     return ranges;

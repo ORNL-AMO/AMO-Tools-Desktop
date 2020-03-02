@@ -39,7 +39,7 @@ export class CompareService {
 
     if (baseline && modification) {
       return (
-        this.isSitePowerImportDifferent(baseline, modification) ||
+        // this.isSitePowerImportDifferent(baseline, modification) ||
         this.isMakeUpWaterTemperatureDifferent(baseline, modification) ||
         this.isHoursPerYearDifferent(baseline, modification) ||
         this.isFuelCostDifferent(baseline, modification) ||
@@ -52,23 +52,24 @@ export class CompareService {
   }
 
   // sitePowerImport
-  isSitePowerImportDifferent(baseline?: SSMT, modification?: SSMT): boolean {
-    if (!baseline) {
-      baseline = this.baselineSSMT;
-    }
-    if (!modification) {
-      modification = this.modifiedSSMT;
-    }
-    if (baseline && modification) {
-      if (baseline.generalSteamOperations.sitePowerImport !== modification.generalSteamOperations.sitePowerImport) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
+  //unused modification is calculated
+  // isSitePowerImportDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+  //   if (!baseline) {
+  //     baseline = this.baselineSSMT;
+  //   }
+  //   if (!modification) {
+  //     modification = this.modifiedSSMT;
+  //   }
+  //   if (baseline && modification) {
+  //     if (baseline.generalSteamOperations.sitePowerImport !== modification.generalSteamOperations.sitePowerImport) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  // }
   // makeUpWaterTemperature
   isMakeUpWaterTemperatureDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
@@ -411,10 +412,10 @@ export class CompareService {
 
     if (baseline && modification) {
       return (
-        this.isPressureDifferent('highPressure', baseline, modification) ||
-        this.isProcessSteamUsageDifferent('highPressure', baseline, modification) ||
-        this.isCondensationRecoveryRateDifferent('highPressure', baseline, modification) ||
-        this.isHeatLossDifferent('highPressure', baseline, modification) ||
+        this.isPressureDifferent('highPressureHeader', baseline, modification) ||
+        this.isHighPressureProcessSteamUsageDifferent(baseline, modification) ||
+        this.isCondensationRecoveryRateDifferent('highPressureHeader', baseline, modification) ||
+        this.isHeatLossDifferent('highPressureHeader', baseline, modification) ||
         this.isCondensateReturnTemperatureDifferent(baseline, modification) ||
         this.isFlashCondensateReturnDifferent(baseline, modification)
       );
@@ -432,13 +433,13 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isPressureDifferent('mediumPressure', baseline, modification) ||
-        this.isProcessSteamUsageDifferent('mediumPressure', baseline, modification) ||
-        this.isCondensationRecoveryRateDifferent('mediumPressure', baseline, modification) ||
-        this.isHeatLossDifferent('mediumPressure', baseline, modification) ||
-        this.isFlashCondensateIntoHeaderDifferent('mediumPressure', baseline, modification) ||
-        this.isDesuperheatSteamIntoNextHighestDifferent('mediumPressure', baseline, modification) ||
-        this.isDesuperheatSteamTemperatureDifferent('mediumPressure', baseline, modification)
+        this.isPressureDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isNotHighPressureProcessSteamUsageDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isCondensationRecoveryRateDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isHeatLossDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isFlashCondensateIntoHeaderDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isDesuperheatSteamIntoNextHighestDifferent('mediumPressureHeader', baseline, modification) ||
+        this.isDesuperheatSteamTemperatureDifferent('mediumPressureHeader', baseline, modification)
       );
     } else {
       return false;
@@ -453,13 +454,13 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isPressureDifferent('lowPressure', baseline, modification) ||
-        this.isProcessSteamUsageDifferent('lowPressure', baseline, modification) ||
-        this.isCondensationRecoveryRateDifferent('lowPressure', baseline, modification) ||
-        this.isHeatLossDifferent('lowPressure', baseline, modification) ||
-        this.isFlashCondensateIntoHeaderDifferent('lowPressure', baseline, modification) ||
-        this.isDesuperheatSteamIntoNextHighestDifferent('lowPressure', baseline, modification) ||
-        this.isDesuperheatSteamTemperatureDifferent('lowPressure', baseline, modification)
+        this.isPressureDifferent('lowPressureHeader', baseline, modification) ||
+        this.isNotHighPressureProcessSteamUsageDifferent('lowPressureHeader', baseline, modification) ||
+        this.isCondensationRecoveryRateDifferent('lowPressureHeader', baseline, modification) ||
+        this.isHeatLossDifferent('lowPressureHeader', baseline, modification) ||
+        this.isFlashCondensateIntoHeaderDifferent('lowPressureHeader', baseline, modification) ||
+        this.isDesuperheatSteamIntoNextHighestDifferent('lowPressureHeader', baseline, modification) ||
+        this.isDesuperheatSteamTemperatureDifferent('lowPressureHeader', baseline, modification)
       );
     } else {
       return false;
@@ -484,7 +485,7 @@ export class CompareService {
       return false;
     }
   }
-  isProcessSteamUsageDifferent(headerTypeString: string, baseline?: SSMT, modification?: SSMT): boolean {
+  isHighPressureProcessSteamUsageDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -492,7 +493,25 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput[headerTypeString].processSteamUsage !== modification.headerInput[headerTypeString].processSteamUsage) {
+      if (baseline.headerInput.highPressureHeader.processSteamUsage !== modification.headerInput.highPressureHeader.processSteamUsage) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isNotHighPressureProcessSteamUsageDifferent(headerTypeString: string, baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (modification.headerInput[headerTypeString].useBaselineProcessSteamUsage == false) {
         return true;
       } else {
         return false;
@@ -544,7 +563,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput.highPressure.condensateReturnTemperature !== modification.headerInput.highPressure.condensateReturnTemperature) {
+      if (baseline.headerInput.highPressureHeader.condensateReturnTemperature !== modification.headerInput.highPressureHeader.condensateReturnTemperature) {
         return true;
       } else {
         return false;
@@ -561,7 +580,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput.highPressure.flashCondensateReturn !== modification.headerInput.highPressure.flashCondensateReturn) {
+      if (baseline.headerInput.highPressureHeader.flashCondensateReturn !== modification.headerInput.highPressureHeader.flashCondensateReturn) {
         return true;
       } else {
         return false;

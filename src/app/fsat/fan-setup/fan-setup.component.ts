@@ -224,7 +224,7 @@ export class FanSetupComponent implements OnInit {
 
   isFanSpecifiedDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isSpecifiedFanEfficiencyDifferent();
+      return this.compareService.isSpecifiedFanEfficiencyDifferent(this.settings);
     } else {
       return false;
     }

@@ -13,15 +13,13 @@ import { PhastResultsData } from '../../report-rollup-models';
 export class PhastSummaryComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  numPhasts: number;
 
   furnaceSavingsPotential: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
   resultsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(public reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.resultsSub = this.reportRollupService.phastResults.subscribe(val => {

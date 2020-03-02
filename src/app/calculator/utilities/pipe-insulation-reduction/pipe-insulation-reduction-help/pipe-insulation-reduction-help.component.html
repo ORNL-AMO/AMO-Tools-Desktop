@@ -1,0 +1,174 @@
+<div class="px-2 pt-3 d-flex flex-column help-info">
+    <h5>
+        Pipe Insulation Reduction
+        <br>
+    </h5>
+    <div class="my-2">
+        <h6>
+            <small class="text-muted">
+                This calculator is used to quantify the energy savings associated with insulating hot pipes.
+                <!-- <hr class="my-1">Reduce the operation time of equipment which uses steam
+                <hr class="my-1">Decrease the flow rate of the "fluid" being heated. (The most common "fluids" heated
+                are water
+                and air)
+                <hr class="my-1">Reducing the operational hours of the boiler house
+                <hr class="my-1">Changing set point to a lower temperature -->
+                <hr>
+                <div class="alert alert-info alert-disclaimer">
+                    <strong>Disclaimer:</strong> Cost savings estimates are based on a simplified system analysis. For
+                    steam systems with back-pressure turbines, this analysis may not be accurate.
+                </div>
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'operatingHours'">
+        <h6>
+            Operation Hours
+            <small class="text-muted">
+                <br>
+                Number of annual operating hours for the equipment.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'utilityCost'">
+        <h6>
+            Utility Cost
+            <small class="text-muted">
+                <br>
+                Per unit cost of natural gas/other in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    ($/MMBtu).
+                </span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">
+                    ($/GJ).
+                </span>
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'systemEfficiency'">
+        <h6>
+            System Efficiency
+            <small class="text-muted">
+                <br>
+                System Efficiency of Natural Gas (or other fuel) system.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'pipeLength'">
+        <h6>
+            Pipe Length
+            <small class="text-muted">
+                <br>
+                Provide the length of the pipe in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(ft)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(m)</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'pipeDiameterSelection'">
+        <h6>
+            Pipe Diameter
+            <small class="text-muted">
+                <br>
+                Select pipe diameter from Nominal Pipe Size list. These options will automatically provide a
+                corresponding value for pipe thickness, this assumes a standard thickness for the pipe diameter.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'windVelocity'">
+        <h6>
+            Average Wind Speed
+            <small class="text-muted">
+                <br>
+                Enter the average velocity of air flow over the length of the pipe.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'pipeTemperature'">
+        <h6>
+            Pipe Temperature
+            <small class="text-muted">
+                <br>
+                Provide the average temperature of the pipe material in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(&#8451;)</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'ambientTemperature'">
+        <h6>
+            Ambient Temperature
+            <small class="text-muted">
+                <br>
+                Enter the average temperature of the ambient air in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(&#8451;)</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'pipeBaseMaterialSelection'">
+        <h6>
+            Pipe Base Material
+            <small class="text-muted">
+                <br>
+                Select the base material of the pipe. This will provide a corresponding emissivity to the calculation.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'insulationMaterialSelection'">
+        <h6>
+            Insulation Material
+            <small class="text-muted">
+                <br>
+                Select the insulation material, if any, that is used on the pipe.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'insulationThickness'">
+        <h6>
+            Insulation Thickness
+            <small class="text-muted">
+                <br>
+                Provide the thickness of the insulation in
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(in)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">(m)</span>.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'pipeJacketMaterialSelection'">
+        <h6>
+            Pipe Jacket Material
+            <small class="text-muted">
+                <br>
+                Select the pipe jacket material if the pipe has a jacket. A corresponding emissivity will be provided to
+                the calculation.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+</div>

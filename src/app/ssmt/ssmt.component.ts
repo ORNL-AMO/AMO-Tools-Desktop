@@ -17,8 +17,7 @@ import * as _ from 'lodash';
 import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { BoilerService } from './boiler/boiler.service';
-import { AssessmentService } from '../assessment/assessment.service';
-import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
+import { AssessmentService } from '../dashboard/assessment.service';
 import { OperationsService } from './operations/operations.service';
 
 @Component({
@@ -94,7 +93,6 @@ export class SsmtComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    //this.steamService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
@@ -115,6 +113,7 @@ export class SsmtComponent implements OnInit {
           this.modificationExists = false;
           this.compareService.setCompareVals(this._ssmt);
         }
+
         this.getSettings();
         let tmpTab = this.assessmentService.getTab();
         if (tmpTab) {
@@ -190,6 +189,7 @@ export class SsmtComponent implements OnInit {
   subscribeTabs() {
     this.mainTabSubscription = this.ssmtService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.checkTutorials();
       this.getContainerHeight();
     });
     this.stepTabSubscription = this.ssmtService.stepTab.subscribe(val => {
@@ -293,24 +293,20 @@ export class SsmtComponent implements OnInit {
 
   saveBoiler(boilerData: BoilerInput) {
     this._ssmt.boilerInput = boilerData;
-    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
   saveHeaderData(headerInput: HeaderInput) {
     this._ssmt.headerInput = headerInput;
-    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
   saveTurbineData(turbineData: TurbineInput) {
     this._ssmt.turbineInput = turbineData;
-    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
   saveSetup(newSSMT: SSMT) {
-    newSSMT.resultsCalculated = false;
     this.saveSsmt(newSSMT);
   }
 
@@ -422,10 +418,12 @@ export class SsmtComponent implements OnInit {
   }
 
   disclaimerToast() {
-    this.toastData.title = 'Disclaimer';
-    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
-    this.showToast = true;
-    this.cd.detectChanges();
+    if (this.settingsDbService.globalSettings.disableDisclaimer != true) {
+      this.toastData.title = 'Disclaimer';
+      this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+      this.showToast = true;
+      this.cd.detectChanges();
+    }
   }
 
   hideToast() {
@@ -436,5 +434,37 @@ export class SsmtComponent implements OnInit {
       setTimeoutVal: undefined
     };
     this.cd.detectChanges();
+  }
+
+  disableDisclaimer() {
+    this.settingsDbService.globalSettings.disableDisclaimer = true;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
+    this.hideToast();
+  }
+  
+  checkTutorials() {
+    if (this.mainTab == 'system-setup') {
+      if (!this.settingsDbService.globalSettings.disableSsmtSystemSetupTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('ssmt-system-setup-tutorial');
+      }
+    } else if (this.mainTab == 'assessment') {
+      if (!this.settingsDbService.globalSettings.disableSsmtAssessmentTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('ssmt-assessment-tutorial');
+      }
+    } else if (this.mainTab == 'diagram') {
+      if (!this.settingsDbService.globalSettings.disableSsmtDiagramTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('ssmt-diagram-tutorial');
+      }
+    } else if (this.mainTab == 'report') {
+      if (!this.settingsDbService.globalSettings.disableSsmtReportTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('ssmt-report-tutorial');
+      }
+    }
   }
 }

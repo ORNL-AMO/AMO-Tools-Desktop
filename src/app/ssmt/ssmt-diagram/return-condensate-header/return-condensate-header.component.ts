@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { HeaderOutputObj, SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -9,7 +9,7 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class ReturnCondensateHeaderComponent implements OnInit {
   @Input()
-  makeupWaterAndCondensateHeader: HeaderOutputObj;
+  makeupWaterAndCondensateHeader: SteamPropertiesOutput;
   @Input()
   returnCondensate: SteamPropertiesOutput;
   @Input()
@@ -37,7 +37,7 @@ export class ReturnCondensateHeaderComponent implements OnInit {
   }
 
   setCondensateMassFlow() {
-    if (this.condensateFlashTank) {
+    if (isNaN(this.condensateFlashTank.outletLiquidMassFlow) == false && this.condensateFlashTank.outletLiquidMassFlow != undefined) {
       this.condensateMassFlow = this.condensateFlashTank.outletLiquidMassFlow;
     } else {
       this.condensateMassFlow = this.returnCondensate.massFlow;

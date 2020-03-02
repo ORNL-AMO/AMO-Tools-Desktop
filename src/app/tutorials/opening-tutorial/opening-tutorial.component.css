@@ -16,14 +16,6 @@
     color: black;
 }
 
-/* .carousel-item{
-    box-shadow: 0px 0px 60px 15px white;
-} */
-
-.carousel-control{
-    /* background-color: gray; */
-}
-
 .img-fluid{
     max-height: 100vh;
 }
@@ -42,42 +34,7 @@
 .caption-control:hover{
     cursor: pointer;
     text-decoration: underline;
-
 }
-
-/* .typewriter{
-    position: absolute;
-    top: 15%;
-    left: 50%;
-    width: 50%;
-    z-index: 10;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    color: #fff;
-    text-align: center;
-    font-size: 30px;
-} */
-/* .typewriter h1 {
-    overflow: hidden;
-    border-right: .15em solid orange;
-
-    margin: 0 auto;
-    letter-spacing: .15em; 
-    animation: 
-      typing 10s steps(140, end);
-      blink-caret .75s step-end infinite;
-  }
-
-  @keyframes typing {
-    from { width: 0 }
-    to { width: 100%}
-  }
-
-  @keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: orange; }
-  } */
-
 
 .carousel-item.active.first-item{
     visibility: visible;
@@ -111,26 +68,7 @@
 
 
 
-  @-webkit-keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-}
-
-@-moz-keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-}
-
-@-webkit-keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: black }
-}
-
-@-moz-keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: black }
-}
-
+ 
 .slide{
     position: absolute;
     width: 100%;
@@ -142,57 +80,6 @@
     color: white;
 }
 
-.welcome-content{
-    width: min-content;
-}
-
-.welcome { 
-    font-size:150%;
-    white-space:nowrap;
-    overflow:hidden;
-    width: min-content;
-    /* border-right: .1em solid white; */
-    color: white;
-    /* position: absolute; */
-    /* left: 25%; */
-    /* text-align: center; */
-}
-
-.welcome-1{
-    top: 5%;
-    -webkit-animation: typing 2s steps(20, end); /* # of steps = # of characters */
-                         /* blink-caret 1s step-end infinite; */
-    -moz-animation: typing 2s steps(20, end); /* # of steps = # of characters */
-                         /* blink-caret 1s step-end infinite; */
-}
-
-.welcome-2{
-    top: 9%;
-    -webkit-animation: typing 3s steps(30, end); /* # of steps = # of characters */
-                         /* blink-caret 1s step-end infinite; */
-    -moz-animation: typing 3s steps(30, end); /* # of steps = # of characters */
-                         /* blink-caret 1s step-end infinite; */
-}
-
-.welcome-3{
-    top: 13%;
-    -webkit-animation: typing 3s steps(30, end); /* # of steps = # of characters */
-                         /* blink-caret 1s step-end infinite; */
-    -moz-animation: typing 3s steps(30, end); /* # of steps = # of characters */
-                        /*  /* blink-caret 1s step-end infinite; */
-}
-
-.welcome-4{
-    top: 17%;
-    -webkit-animation: typing 2s steps(20, end); /* # of steps = # of characters */
-                         /* blink-caret 1s step-end infinite; */
-    -moz-animation: typing 2s steps(20, end); /* # of steps = # of characters */
-                         /* blink-caret 1s step-end infinite; */
-}
-
-.circle-div{
-    /* width: min-content; */
-}
 
 .footer h5{
     margin-bottom: 0px;

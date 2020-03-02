@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { PumpSystemCurveData } from '../system-and-equipment-curve.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
+import { PumpSystemCurveData } from '../../../shared/models/system-and-equipment-curve';
 
 @Injectable()
 export class PumpSystemCurveFormService {

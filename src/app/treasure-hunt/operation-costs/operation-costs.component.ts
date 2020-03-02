@@ -33,7 +33,7 @@ export class OperationCostsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if(this.saveSettingsOnDestroy == true){
+    if (this.saveSettingsOnDestroy == true) {
       this.saveSettings();
     }
     this.treasureHuntSub.unsubscribe();
@@ -178,7 +178,7 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
-  setSaveSettings(){
+  setSaveSettings() {
     this.saveSettingsOnDestroy = true;
   }
 

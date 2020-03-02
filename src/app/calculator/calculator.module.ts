@@ -12,10 +12,13 @@ import { CompressedAirModule } from './compressed-air/compressed-air.module';
 import { FansModule } from './fans/fans.module';
 import { CalculatorService } from './calculator.service';
 import { LightingModule } from './lighting/lighting.module';
+import { RouterModule } from '@angular/router';
+import { CalculatorsListComponent } from './calculators-list/calculators-list.component';
 
 @NgModule({
   declarations: [
-    CalculatorComponent
+    CalculatorComponent,
+    CalculatorsListComponent
   ],
   exports: [
     CalculatorComponent
@@ -29,7 +32,8 @@ import { LightingModule } from './lighting/lighting.module';
     MotorsModule,
     CompressedAirModule,
     FansModule,
-    LightingModule
+    LightingModule,
+    RouterModule
   ],
   providers: [
     StandaloneService,

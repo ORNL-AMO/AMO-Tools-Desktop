@@ -7,13 +7,15 @@ import { EnergyEquivalencyFuel, EnergyEquivalencyElectric } from "./phast/energy
 import { FlowCalculations } from "./phast/flowCalculations";
 import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-efficiency.service";
 import { Fan203Inputs } from "./fans";
-import { SystemAndEquipmentCurveData } from "../../calculator/system-and-equipment-curve/system-and-equipment-curve.service";
+import { SystemAndEquipmentCurveData } from "./system-and-equipment-curve";
 
 export interface Calculator {
     directoryId?: number;
     assessmentId?: number;
     id?: number;
     name?: string;
+    createdDate?: Date,
+    modifiedDate?: Date,
     type?: string;
     preAssessments?: Array<PreAssessment>;
     headTool?: HeadTool;
@@ -137,6 +139,11 @@ export interface ReplaceExistingResults {
     percentSavings: number;
     rewoundEnergyUse: number;
     rewoundEnergyCost: number;
+    incrementalSunkCost: number;
+    incrementalAnnualEnergySavings: number;
+    incrementalCostDifference: number;
+    incrementalEnergyCostSavings: number;
+    incrementalSimplePayback: number;
 }
 
 

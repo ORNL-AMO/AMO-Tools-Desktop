@@ -13,7 +13,7 @@ export class ExecutiveSummaryService {
     let tmpResultsSummary = this.initSummary();
     let tmpPhastResults = this.phastResultsService.getResults(phast, settings);
     tmpResultsSummary.annualEnergyUsed = this.calcAnnualEnergy(tmpPhastResults, phast);
-    tmpResultsSummary.energyPerMass = this.calcEnergyPer(phast, settings);
+    tmpResultsSummary.energyPerMass = this.calcEnergyPer(phast, settings, tmpPhastResults.grossHeatInput);
     tmpResultsSummary.annualCost = this.calcAnnualCost(tmpResultsSummary.annualEnergyUsed, settings, phast);
     if (isMod && baselineSummary) {
       tmpResultsSummary.annualCostSavings = baselineSummary.annualCost - tmpResultsSummary.annualCost;
@@ -39,10 +39,10 @@ export class ExecutiveSummaryService {
     return tmpAnnualEnergy;
   }
 
-  calcEnergyPer(phast: PHAST, settings: Settings): number {
+  calcEnergyPer(phast: PHAST, settings: Settings, calculatedEnergyUsed: number): number {
     //Energy Intensity for Charge Materials
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
-    let calculatedEnergyUsed = this.phastService.sumHeatInput(phast.losses, settings);
+    // let calculatedEnergyUsed = this.phastService.sumHeatInput(phast.losses, settings);
     let calculatedEnergyIntensity = (calculatedEnergyUsed / sumFeedRate) || 0;
     if (settings.energyResultUnit === 'MMBtu') {
       calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('MMBtu').to('Btu');

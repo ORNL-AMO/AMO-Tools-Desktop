@@ -47,7 +47,8 @@ export class BoilerFormComponent implements OnInit {
   baselineForm: FormGroup;
   modificationForm: FormGroup;
 
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private suiteDbService: SuiteDbService, private boilerService: BoilerService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private suiteDbService: SuiteDbService, private boilerService: BoilerService,
+    private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.init();
@@ -237,6 +238,7 @@ export class BoilerFormComponent implements OnInit {
 
   focusField(str: string) {
     this.exploreOpportunitiesService.currentTab.next('boiler');
+    this.ssmtService.isBaselineFocused.next(false);
     this.exploreOpportunitiesService.currentField.next(str);
   }
 

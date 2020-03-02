@@ -18,11 +18,11 @@ import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { FsatOutput } from '../shared/models/fans';
 import { FsatService } from '../fsat/fsat.service';
 import { ReportItem, PsatCompare, PsatResultsData, AllPsatResultsData, PhastCompare, PhastResultsData, AllPhastResultsData, FsatCompare, FsatResultsData, AllFsatResultsData, AllSsmtResultsData, SsmtCompare, SsmtResultsData, TreasureHuntResultsData } from './report-rollup-models';
-import { CalculateModelService } from '../ssmt/ssmt-calculations/calculate-model.service';
 import { SSMTOutput } from '../shared/models/steam/steam-outputs';
 import { TreasureHuntReportService } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.service';
 import { TreasureHuntResults, OpportunitySummary } from '../shared/models/treasure-hunt';
 import { OpportunitySummaryService } from '../treasure-hunt/treasure-hunt-report/opportunity-summary.service';
+import { SsmtService } from '../ssmt/ssmt.service';
 
 
 @Injectable()
@@ -62,7 +62,12 @@ export class ReportRollupService {
 
   calcsArray: Array<Calculator>;
   selectedCalcs: BehaviorSubject<Array<Calculator>>;
-
+  numPhasts: number = 0;
+  numPsats: number = 0;
+  numFsats: number = 0;
+  numSsmt: number = 0;
+  numTreasureHunt: number = 0;
+  showSummaryModal: BehaviorSubject<string>;
   constructor(
     private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService,
@@ -73,7 +78,7 @@ export class ReportRollupService {
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
     private fsatService: FsatService,
-    private calculateModelService: CalculateModelService,
+    private ssmtService: SsmtService,
     private treasureHuntReportService: TreasureHuntReportService,
     private opportunitySummaryService: OpportunitySummaryService
   ) {
@@ -108,6 +113,7 @@ export class ReportRollupService {
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
 
     this.allTreasureHuntResults = new BehaviorSubject<Array<TreasureHuntResultsData>>(new Array<TreasureHuntResultsData>())
+    this.showSummaryModal = new BehaviorSubject<string>(undefined);
   }
 
 
@@ -143,10 +149,19 @@ export class ReportRollupService {
     this.fsatArray = new Array<ReportItem>();
     this.ssmtArray = new Array<ReportItem>();
     this.treasureHuntArray = new Array<ReportItem>();
+    this.calcsArray = new Array<Calculator>();
     let selected = directory.assessments.filter((val) => { return val.selected; });
     selected.forEach(assessment => {
       this.pushAssessment(assessment);
     });
+    if(directory.calculators){
+      directory.calculators.forEach(calc =>{
+        if(calc.selected == true && calc.preAssessments){
+          this.calcsArray.push(calc);
+        }
+      })
+      this.selectedCalcs.next(this.calcsArray);
+    }
     directory.subDirectory.forEach(subDir => {
       if (subDir.selected) {
         this.getChildDirectoryAssessments(subDir.id);
@@ -223,7 +238,7 @@ export class ReportRollupService {
   initResultsArr(psatArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllPsatResultsData>();
     psatArr.forEach(val => {
-      if (val.assessment.psat.setupDone && (val.assessment.psat.modifications.length !== 0)) {
+      if (val.assessment.psat.setupDone) {
         let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.assessment.psat.inputs)), val.settings);
         if (val.assessment.psat.modifications) {
           if (val.assessment.psat.modifications.length !== 0) {
@@ -378,7 +393,7 @@ export class ReportRollupService {
   initFsatResultsArr(fsatArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllFsatResultsData>();
     fsatArr.forEach(val => {
-      if (val.assessment.fsat.setupDone && val.assessment.fsat.modifications.length !== 0) {
+      if (val.assessment.fsat.setupDone) {
         let baselineResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.assessment.fsat)), true, val.settings);
         if (val.assessment.fsat.modifications) {
           if (val.assessment.fsat.modifications.length !== 0) {
@@ -417,15 +432,15 @@ export class ReportRollupService {
   initSsmtCompare(resultsArr: Array<AllSsmtResultsData>) {
     let tmpResults: Array<SsmtCompare> = new Array<SsmtCompare>();
     resultsArr.forEach(result => {
-      let minCost = _.minBy(result.modificationResults, (result) => { return result.totalOperatingCost; });
+      let minCost = _.minBy(result.modificationResults, (result) => { return result.operationsOutput.totalOperatingCost; });
       let modIndex;
       if (minCost != undefined) {
-        modIndex = _.findIndex(result.modificationResults, { totalOperatingCost: minCost.totalOperatingCost });
+        modIndex = _.findIndex(result.modificationResults, (result) => { return result.operationsOutput.totalOperatingCost == minCost.operationsOutput.totalOperatingCost });
       }
       let ssmtAssessments = this.ssmtAssessments.value;
       let assessmentIndex = _.findIndex(ssmtAssessments, (val) => { return val.assessment.id === result.assessmentId; });
       let item = ssmtAssessments[assessmentIndex];
-      if (result.isBaseline || modIndex == undefined) {
+      if (result.isBaseline || modIndex == undefined || modIndex == -1) {
         tmpResults.push({ baseline: item.assessment.ssmt, modification: item.assessment.ssmt, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
       } else {
         tmpResults.push({ baseline: item.assessment.ssmt, modification: item.assessment.ssmt.modifications[modIndex].ssmt, assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
@@ -446,28 +461,20 @@ export class ReportRollupService {
     this.selectedSsmt.next(tmpSelected);
   }
 
-  initSsmtResultsArr(fsatArr: Array<ReportItem>) {
+  initSsmtResultsArr(ssmtArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllSsmtResultsData>();
-    fsatArr.forEach(val => {
-      if (val.assessment.ssmt.setupDone && val.assessment.ssmt.modifications.length !== 0) {
+    ssmtArr.forEach(val => {
+      if (val.assessment.ssmt.setupDone) {
         //get results
-        if (!val.assessment.ssmt.resultsCalculated) {
-          val.assessment.ssmt.outputData = this.calculateModelService.initDataAndRun(val.assessment.ssmt, val.settings, true, false).outputData;
-          val.assessment.ssmt.resultsCalculated = true;
-        }
+        val.assessment.ssmt.outputData = this.ssmtService.calculateBaselineModel(val.assessment.ssmt, val.settings).outputData;
         let baselineResults: SSMTOutput = val.assessment.ssmt.outputData;
         if (val.assessment.ssmt.modifications) {
           if (val.assessment.ssmt.modifications.length !== 0) {
             let modResultsArr = new Array<SSMTOutput>();
             val.assessment.ssmt.modifications.forEach(mod => {
-              if (!mod.ssmt.resultsCalculated) {
-                mod.ssmt.outputData = this.calculateModelService.initDataAndRun(mod.ssmt, val.settings, false, false, baselineResults.sitePowerDemand).outputData;
-                mod.ssmt.resultsCalculated = true;
-              }
+              mod.ssmt.outputData = this.ssmtService.calculateModificationModel(mod.ssmt, val.settings, baselineResults).outputData;
               let tmpResults: SSMTOutput = mod.ssmt.outputData;
-              //if (tmpResults.boilerOutput) {
               modResultsArr.push(tmpResults);
-              //}
             });
             tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
           } else {
@@ -519,7 +526,7 @@ export class ReportRollupService {
     let resultToBeUpdated: TreasureHuntResultsData = currentResults.find(result => { return result.assessment.id == assessmentId });
     let updatedResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, resultToBeUpdated.assessment.treasureHunt.currentEnergyUsage);
     resultToBeUpdated.treasureHuntResults = updatedResults;
-    this.allTreasureHuntResults.next(currentResults);     
+    this.allTreasureHuntResults.next(currentResults);
   }
 
   checkSettings(settings: Settings) {

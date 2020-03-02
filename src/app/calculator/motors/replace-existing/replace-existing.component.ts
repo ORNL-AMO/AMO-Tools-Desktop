@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
 import { FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../shared/models/operations';
+import { ReplaceExistingMotorTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-replace-existing',
@@ -15,11 +16,9 @@ export class ReplaceExistingComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @Output('emitSave')
-  emitSave = new EventEmitter<ReplaceExistingData>();
+  emitSave = new EventEmitter<ReplaceExistingMotorTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  @Output('emitAddOpportunitySheet')
-  emitAddOpportunitySheet = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
   @Input()
@@ -127,15 +126,11 @@ export class ReplaceExistingComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit(this.inputs);
+    this.emitSave.emit({ replaceExistingData: this.inputs });
   }
 
   cancel() {
     this.emitCancel.emit(true);
-  }
-
-  addOpportunitySheet() {
-    this.emitAddOpportunitySheet.emit(true);
   }
 }
 

@@ -17,64 +17,64 @@
       <br>
       <small class="text-muted">
         The energy removed as a percent (%) of the energy removed if turbine were an isentropic process (entropy in =
-        entropy out). Commonly, 55% to 80%. 
-        This can be found in your manufacturer specifications. Single wheel turbines may be as low as 20% and larger, 
+        entropy out). Commonly, 55% to 80%.
+        This can be found in your manufacturer specifications. Single wheel turbines may be as low as 20% and larger,
         more complex turbines 65% or higher.
         <br>
-        
+
         <hr>
       </small>
     </h6>
     <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-              <tbody>
-                <tr>
-                  <th class="w-50 text-center">Turbine Type</th>
-                  <th class="w-50 text-center">Exhaust Type</th>
-                  <th class="w-50 text-center">Average (%)</th>
-                </tr>
-                <tr>
-                  <td class="w-50 text-center">Single Stage</td>
-                  <td class="w-50 text-center">Back Pressure</td>
-                  <td class="w-50 text-center">53</td>
-                </tr>
-                <tr>
-                  <td class="w-50 text-center">Single Stage</td>
-                  <td class="w-50 text-center">Condensing</td>
-                  <td class="w-50 text-center">57</td>
-                </tr>
-                <tr>
-                  <td class="w-50 text-center">Multi-Stage <10MW</td>
-                  <td class="w-50 text-center">Back Pressure</td>
-                  <td class="w-50 text-center">60</td>
-                </tr>
-                <tr>
-                  <td class="w-50 text-center">Multi-Stage <10MW</td>
-                  <td class="w-50 text-center">Condensing</td>
-                  <td class="w-50 text-center">67</td>
-                </tr>
-                <tr>
-                  <td class="w-50 text-center">Multi-Stage >10MW</td>
-                  <td class="w-50 text-center">Back Pressure</td>
-                  <td class="w-50 text-center">75</td>
-                </tr>
-                <tr>
-                  <td class="w-50 text-center">Multi-Stage >10MW</td>
-                  <td class="w-50 text-center">Condensing</td>
-                  <td class="w-50 text-center">80</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="small">Source: <a href="https://www.elliott-turbo.com/TurbineCalculator">https://www.elliott-turbo.com/TurbineCalculator</a></div>
-          </div>
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Turbine Type</th>
+            <th class="text-center">Exhaust Type</th>
+            <th class="text-center">Average (%)</th>
+          </tr>
+          <tr>
+            <td class="text-center">Single Stage</td>
+            <td class="text-center">Back Pressure</td>
+            <td class="text-center">53</td>
+          </tr>
+          <tr>
+            <td class="text-center">Single Stage</td>
+            <td class="text-center">Condensing</td>
+            <td class="text-center">57</td>
+          </tr>
+          <tr>
+            <td class="text-center">Multi-Stage <10MW</td> <td class="text-center">Back Pressure</td>
+            <td class="text-center">60</td>
+          </tr>
+          <tr>
+            <td class="text-center">Multi-Stage <10MW</td> <td class="text-center">Condensing</td>
+            <td class="text-center">67</td>
+          </tr>
+          <tr>
+            <td class="text-center">Multi-Stage >10MW</td>
+            <td class="text-center">Back Pressure</td>
+            <td class="text-center">75</td>
+          </tr>
+          <tr>
+            <td class="text-center">Multi-Stage >10MW</td>
+            <td class="text-center">Condensing</td>
+            <td class="text-center">80</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="small">Source: <a
+          href="https://www.elliott-turbo.com/TurbineCalculator">https://www.elliott-turbo.com/TurbineCalculator</a>
+      </div>
+    </div>
   </div>
   <div class="my-2" *ngIf="currentField == 'generationEfficiency'">
     <h6>
       Generator Efficiency
       <br>
       <small class="text-muted">
-        The ratio of net power generated to total fuel input to the cycle (the conversion efficiency to electricity). 
-        This can be found in your manufacturer specifications. 
+        The ratio of net power generated to total fuel input to the cycle (the conversion efficiency to electricity).
+        This can be found in your manufacturer specifications.
         Typically around 95%.
         <hr>
       </small>
@@ -140,7 +140,8 @@
       Operation Type
       <br>
       <small class="text-muted">
-        Choose which is known for the turbine: 'Steam Flow', 'Power Generation', 'Balance Header', 'Power Range', 'Flow Range'.
+        Choose which is known for the turbine: 'Steam Flow', 'Power Generation', 'Balance Header', 'Power Range', 'Flow
+        Range'.
         <hr>
       </small>
     </h6>
@@ -157,11 +158,11 @@
       <small class="text-muted">
         <span *ngIf="currentOperationValue == 0">
           <!--Put Pressure Turbine Fixed Flow Help Here-->
-            Fixed mass flow rate of steam through the turbine.
+          Fixed mass flow rate of steam through the turbine.
         </span>
         <span *ngIf="currentOperationValue == 1">
           <!--Put Pressure Turbine Fixed Power Help Here-->
-            Fixed power generation by the turbine.
+          Fixed power generation by the turbine.
         </span>
         <span *ngIf="currentOperationValue == 3">
           <!--Put Pressure Turbine Minimum Power Help Here-->
@@ -185,7 +186,7 @@
       <small class="text-muted">
         <span *ngIf="currentOperationValue == 4">
           <!--Put Pressure Turbine Maximum Flow Help Here-->
-        The maximum mass flow rate of steam through the turbine.
+          The maximum mass flow rate of steam through the turbine.
         </span>
         <span *ngIf="currentOperationValue == 3">
           <!--Put Pressure Turbine Maximum Power Help Here-->
@@ -193,6 +194,19 @@
 
         </span>
         <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="isBaselineFocused == false">
+    <h6>
+      <small class="text-muted">
+        <span class="alert alert-warning">
+          Note: Adding, removing or adjusting a turbine will change the enthalpy of the outgoing steam. To compensate for this
+          MEASUR
+          keeps the energy into your defined process constant by altering the corresponding process steam usage unless
+          specified otherwise in the Header tab.
+        </span>
       </small>
     </h6>
   </div>

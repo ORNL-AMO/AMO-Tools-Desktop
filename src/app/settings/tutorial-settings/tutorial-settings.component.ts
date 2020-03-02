@@ -21,7 +21,26 @@ export class TutorialSettingsComponent implements OnInit {
   }
 
   checkDisableAll() {
-    this.disableAllTutorials = (this.settings.disableTutorial && this.settings.disableDashboardTutorial && this.settings.disablePsatSetupTutorial && this.settings.disablePsatAssessmentTutorial && this.settings.disablePsatReportTutorial && this.settings.disablePhastSetupTutorial && this.settings.disablePhastAssessmentTutorial && this.settings.disablePhastReportTutorial && this.settings.disableFsatSetupTutorial && this.settings.disableFsatAssessmentTutorial && this.settings.disableFsatReportTutorial);
+    this.disableAllTutorials = (this.settings.disableTutorial &&
+      this.settings.disableDashboardTutorial &&
+      this.settings.disablePsatSetupTutorial &&
+      this.settings.disablePsatAssessmentTutorial &&
+      this.settings.disablePsatReportTutorial &&
+      this.settings.disablePhastSetupTutorial &&
+      this.settings.disablePhastAssessmentTutorial &&
+      this.settings.disablePhastReportTutorial &&
+      this.settings.disableFsatSetupTutorial &&
+      this.settings.disableFsatAssessmentTutorial &&
+      this.settings.disableFsatReportTutorial &&
+      this.settings.disableSsmtAssessmentTutorial &&
+      this.settings.disableSsmtDiagramTutorial &&
+      this.settings.disableSsmtSystemSetupTutorial &&
+      this.settings.disableSsmtReportTutorial &&
+      this.settings.disableTreasureHuntFindTreasureTutorial &&
+      this.settings.disableTreasureHuntReportTutorial &&
+      this.settings.disableTreasureHuntSetupTutorial &&
+      this.settings.disableTreasureHuntTreasureChestTutorial
+    );
   }
 
   toggleDisableAll() {
@@ -37,6 +56,16 @@ export class TutorialSettingsComponent implements OnInit {
     this.settings.disableFsatSetupTutorial = this.disableAllTutorials;
     this.settings.disableFsatAssessmentTutorial = this.disableAllTutorials;
     this.settings.disableFsatReportTutorial = this.disableAllTutorials;
+
+    this.settings.disableSsmtAssessmentTutorial = this.disableAllTutorials;
+    this.settings.disableSsmtDiagramTutorial = this.disableAllTutorials;
+    this.settings.disableSsmtSystemSetupTutorial = this.disableAllTutorials;
+    this.settings.disableSsmtReportTutorial = this.disableAllTutorials;
+
+    this.settings.disableTreasureHuntFindTreasureTutorial = this.disableAllTutorials;
+    this.settings.disableTreasureHuntReportTutorial = this.disableAllTutorials;
+    this.settings.disableTreasureHuntSetupTutorial = this.disableAllTutorials;
+    this.settings.disableTreasureHuntTreasureChestTutorial = this.disableAllTutorials;
     this.saveTutorialChanges.emit(true);
   }
 
@@ -92,6 +121,48 @@ export class TutorialSettingsComponent implements OnInit {
   }
   toggleFanReport() {
     this.settings.disableFsatReportTutorial = !this.settings.disableFsatReportTutorial;
+    this.checkDisableAll();
+    this.saveTutorialChanges.emit(true);
+  }
+
+  toggleSsmtSystemSetup() {
+    this.settings.disableSsmtSystemSetupTutorial = !this.settings.disableSsmtSystemSetupTutorial;
+    this.checkDisableAll();
+    this.saveTutorialChanges.emit(true);
+  }
+  toggleSsmtAssessment() {
+    this.settings.disableSsmtAssessmentTutorial = !this.settings.disableSsmtAssessmentTutorial;
+    this.checkDisableAll();
+    this.saveTutorialChanges.emit(true);
+  }
+  toggleSsmtReport() {
+    this.settings.disableSsmtReportTutorial = !this.settings.disableSsmtReportTutorial;
+    this.checkDisableAll();
+    this.saveTutorialChanges.emit(true);
+  }
+  toggleSsmtDiagram() {
+    this.settings.disableSsmtDiagramTutorial = !this.settings.disableSsmtDiagramTutorial;
+    this.checkDisableAll();
+    this.saveTutorialChanges.emit(true);
+  }
+
+  toggleTreasureHuntFindTreasure() {
+    this.settings.disableTreasureHuntFindTreasureTutorial = !this.settings.disableTreasureHuntFindTreasureTutorial;
+    this.checkDisableAll();
+    this.saveTutorialChanges.emit(true);
+  }
+  toggleTreasureHuntReport() {
+    this.settings.disableTreasureHuntReportTutorial = !this.settings.disableTreasureHuntReportTutorial;
+    this.checkDisableAll();
+    this.saveTutorialChanges.emit(true);
+  }
+  toggleTreasureHuntSetup() {
+    this.settings.disableTreasureHuntSetupTutorial = !this.settings.disableTreasureHuntSetupTutorial;
+    this.checkDisableAll();
+    this.saveTutorialChanges.emit(true);
+  }
+  toggleTreasureHuntTreasureChest() {
+    this.settings.disableTreasureHuntTreasureChestTutorial = !this.settings.disableTreasureHuntTreasureChestTutorial;
     this.checkDisableAll();
     this.saveTutorialChanges.emit(true);
   }

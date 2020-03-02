@@ -28,8 +28,7 @@ import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pr
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 import { SsmtReportModule } from './ssmt-report/ssmt-report.module';
-import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
-import { CalculateLossesService } from './ssmt-calculations/calculate-losses.service';
+import { CalculateLossesService } from './calculate-losses.service';
 import { SsmtDiagramTabModule } from './ssmt-diagram-tab/ssmt-diagram-tab.module';
 import { SteamPropertiesModule } from '../calculator/steam/steam-properties/steam-properties.module';
 import { SaturatedPropertiesModule } from '../calculator/steam/saturated-properties/saturated-properties.module';
@@ -42,11 +41,11 @@ import { TurbineModule } from '../calculator/steam/turbine/turbine.module';
 import { HeaderModule } from '../calculator/steam/header/header.module';
 import { DeaeratorModule } from '../calculator/steam/deaerator/deaerator.module';
 import { ConvertSsmtService } from './convert-ssmt.service';
-import { HeatExchangerService } from './ssmt-calculations/heat-exchanger.service';
 import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-modal.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -74,7 +73,8 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     BlowdownRateModalModule,
     TabsTooltipModule,
     ToastModule,
-    SharedPipesModule
+    SharedPipesModule,
+    RouterModule
   ],
   declarations: [
     SsmtComponent,
@@ -100,10 +100,8 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     BoilerService,
     HeaderService,
     TurbineService,
-    CalculateModelService,
     CalculateLossesService,
-    ConvertSsmtService,
-    HeatExchangerService
+    ConvertSsmtService
   ]
 })
 export class SsmtModule { }

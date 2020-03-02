@@ -1,0 +1,54 @@
+.btn{
+    padding: 6px;
+}
+
+a:not([href]):not([tabindex]):hover, a:not([href]):not([tabindex]):focus {
+    color: #0056b3;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a:not([href]):not([tabindex]) {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
+}
+
+.actions{
+    padding: .25rem;
+    border-radius: .25rem;
+    background: white;
+}
+
+.select-all{
+    font-size: 16px;
+}
+
+.btn-secondary.active{
+    background-color: gray;
+}
+
+/*
+Breadcrumb
+=========================================== */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    font-size: 20px;
+    margin-bottom: 0;
+  }
+   
+    .breadcrumb .active a {
+      color: #333;
+    }
+    .breadcrumb .active a:hover {
+      text-decoration: none;
+    }
+  
+  
+  .main-menu .btn {
+    padding: 8px 10px 6px;
+    font-size: 15px;
+  }
+  

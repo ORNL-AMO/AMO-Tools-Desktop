@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { SSMTInputs, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
+import { SSMTOutput } from '../../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-header-input-table',
@@ -18,7 +19,9 @@ export class HeaderInputTableComponent implements OnInit {
   numMods: number;
   @Input()
   settings: Settings;
-  
+  @Input()
+  modificationOutputs: Array<SSMTOutput>;
+
   pressureDiff: Array<boolean>;
   processSteamUsageDiff: Array<boolean>;
   condensationRecoveryRateDiff: Array<boolean>;
@@ -32,17 +35,19 @@ export class HeaderInputTableComponent implements OnInit {
   baseline: HeaderWithHighestPressure | HeaderNotHighestPressure;
   modifications: Array<HeaderWithHighestPressure | HeaderNotHighestPressure>;
   tableLabel: string;
-  constructor(private cd: ChangeDetectorRef) { }
+  constructor(private cd: ChangeDetectorRef) {
+    
+   }
 
   ngOnInit() {
     if (this.headerLevel === 'high') {
-      this.baseline = this.baselineInputData.headerInput.highPressure;
+      this.baseline = this.baselineInputData.headerInput.highPressureHeader;
       this.tableLabel = 'High Pressure Header';
     }else if (this.headerLevel === 'medium') {
-      this.baseline = this.baselineInputData.headerInput.mediumPressure;
+      this.baseline = this.baselineInputData.headerInput.mediumPressureHeader;
       this.tableLabel = 'Medium Pressure Header';
     }else if (this.headerLevel === 'low') {
-      this.baseline = this.baselineInputData.headerInput.lowPressure;
+      this.baseline = this.baselineInputData.headerInput.lowPressureHeader;
       this.tableLabel = 'Low Pressure Header';
     }
 
@@ -60,11 +65,11 @@ export class HeaderInputTableComponent implements OnInit {
       this.numMods = this.modificationInputData.length;
       this.modificationInputData.forEach(mod => {
         if (this.headerLevel === 'high') {
-          this.modifications.push(mod.inputData.headerInput.highPressure);
+          this.modifications.push(mod.inputData.headerInput.highPressureHeader);
         }else if (this.headerLevel === 'medium') { 
-          this.modifications.push(mod.inputData.headerInput.mediumPressure);     
+          this.modifications.push(mod.inputData.headerInput.mediumPressureHeader);     
         }else if (this.headerLevel === 'low') {                   
-          this.modifications.push(mod.inputData.headerInput.lowPressure);
+          this.modifications.push(mod.inputData.headerInput.lowPressureHeader);
         }
 
         this.pressureDiff.push(false);

@@ -1,11 +1,12 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
-import { SystemAndEquipmentCurveService, PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import * as _ from 'lodash';
-import { RegressionEquationsService } from '../regression-equations/regression-equations.service';
+import { RegressionEquationsService } from '../regression-equations.service';
 import { BehaviorSubject } from 'rxjs';
 import { SvgToPngService } from '../../../shared/helper-services/svg-to-png.service';
+import { PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../../../shared/models/system-and-equipment-curve';
 @Injectable()
 export class SystemAndEquipmentCurveGraphService {
 
@@ -16,13 +17,11 @@ export class SystemAndEquipmentCurveGraphService {
   xRef: any;
   yRef: any;
   svg: any;
-  maxFlowRate: BehaviorSubject<number>;
   constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private svgToPngService: SvgToPngService) {
     this.selectedDataPoint = new BehaviorSubject(undefined);
     this.baselineIntersectionPoint = new BehaviorSubject(undefined);
     this.modificationIntersectionPoint = new BehaviorSubject(undefined);
     this.clearDataPoints = new BehaviorSubject<boolean>(false);
-    this.maxFlowRate = new BehaviorSubject<number>(0);
   }
 
   initColumnTitles(settings: Settings, equipmentType: string, displayEquipmentCurve: boolean, displayModificationCurve: boolean, displaySystemCurve: boolean): Array<string> {
@@ -76,61 +75,57 @@ export class SystemAndEquipmentCurveGraphService {
     baselineEquipmentData: Array<{ x: number, y: number }>,
     modificationEqupmentData: Array<{ x: number, y: number }>,
     pumpSystemCurveData: PumpSystemCurveData,
-    fanSystemCurveData: FanSystemCurveData
+    fanSystemCurveData: FanSystemCurveData,
+    maxFlowRate: number
   ): {
     xDomain: { min: number, max: number },
     xRange: { min: number, max: number },
     yDomain: { min: number, max: number },
     yRange: { min: number, max: number }
   } {
-    let maxX: { x: number, y: number } = { x: 0, y: 0 };
-    let maxY: { x: number, y: number } = { x: 0, y: 0 };
+    let maxY: number = 0;
 
     if (isEquipmentCurveShown == true && baselineEquipmentData && modificationEqupmentData) {
       let baselineEquipmentDataCopy: Array<{ x: number, y: number }> = JSON.parse(JSON.stringify(baselineEquipmentData));
       let modificationEqupmentDataCopy: Array<{ x: number, y: number }> = JSON.parse(JSON.stringify(modificationEqupmentData));
       let combinedData: Array<{ x: number, y: number }> = modificationEqupmentDataCopy.concat(baselineEquipmentDataCopy);
-      let tmpMaxX = _.maxBy(combinedData, (data) => { return data.x });
-      if (tmpMaxX != undefined) { maxX = tmpMaxX };
+      // let tmpMaxX = _.maxBy(combinedData, (data) => { return data.x });
+      // if (tmpMaxX != undefined) { maxX = tmpMaxX };
       let tmpMaxY = _.maxBy(combinedData, (data) => { return data.y });
-      if (tmpMaxY != undefined) { maxY = tmpMaxY };
+      if (tmpMaxY != undefined) { maxY = tmpMaxY.y };
     }
 
     if (isSystemCurveShown == true) {
       if (equipmentType == 'pump' && pumpSystemCurveData) {
         if (pumpSystemCurveData != undefined) {
           let pumpSystemDataCpy: PumpSystemCurveData = JSON.parse(JSON.stringify(pumpSystemCurveData));
-          let maxXValue: number = _.max([maxX.x, pumpSystemDataCpy.pointOneFlowRate, pumpSystemDataCpy.pointTwoFlowRate]);
-          maxX.x = maxXValue;
-          let maxYValue: number = _.max([maxY.y, pumpSystemDataCpy.pointOneHead, pumpSystemDataCpy.pointTwoHead]);
-          maxY.y = maxYValue;
+          // let maxXValue: number = _.max([maxX.x, pumpSystemDataCpy.pointOneFlowRate, pumpSystemDataCpy.pointTwoFlowRate]);
+          // maxX.x = maxXValue;
+          let maxYValue: number = _.max([maxY, pumpSystemDataCpy.pointOneHead, pumpSystemDataCpy.pointTwoHead]);
+          maxY = maxYValue;
         }
       } else if (equipmentType == 'fan') {
         if (fanSystemCurveData != undefined && fanSystemCurveData) {
           let fanSystemCurveDataCpy: FanSystemCurveData = JSON.parse(JSON.stringify(fanSystemCurveData));
-          let maxXValue: number = _.max([maxX.x, fanSystemCurveDataCpy.pointOneFlowRate, fanSystemCurveDataCpy.pointTwoFlowRate]);
-          maxX.x = maxXValue;
-          let maxYValue: number = _.max([maxY.y, fanSystemCurveDataCpy.pointOnePressure, fanSystemCurveDataCpy.pointTwoPressure]);
-          maxY.y = maxYValue;
+          // let maxXValue: number = _.max([maxX.x, fanSystemCurveDataCpy.pointOneFlowRate, fanSystemCurveDataCpy.pointTwoFlowRate]);
+          // maxX.x = maxXValue;
+          let maxYValue: number = _.max([maxY, fanSystemCurveDataCpy.pointOnePressure, fanSystemCurveDataCpy.pointTwoPressure]);
+          maxY = maxYValue;
         }
       }
     }
 
-    if (maxX.x < 50) {
-      maxX.x = 50;
+    if (maxY < 50) {
+      maxY = 50;
     }
 
-    if (maxY.y < 50) {
-      maxY.y = 50;
-    }
-
-    let paddingX = maxX.x * 0.1;
-    let paddingY = maxY.y * 0.1;
+    let paddingX = maxFlowRate * 0.1;
+    let paddingY = maxY * 0.1;
     //create x and y graph scales
     let xRange: { min: number, max: number } = { min: 0, max: width };
-    let xDomain = { min: 0, max: maxX.x + paddingX };
+    let xDomain = { min: 0, max: maxFlowRate + paddingX };
     let yRange: { min: number, max: number } = { min: height, max: 0 };
-    let yDomain = { min: 0, max: maxY.y + paddingY };
+    let yDomain = { min: 0, max: maxY + paddingY };
     return { xDomain: xDomain, yDomain: yDomain, xRange: xRange, yRange: yRange }
   }
 

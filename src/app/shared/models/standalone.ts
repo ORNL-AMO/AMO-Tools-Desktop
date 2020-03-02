@@ -491,3 +491,85 @@ export interface SteamReductionResult {
   steamUse: number
 };
 //===== END steam reduction objects =====
+
+
+//====== pipe insulation reduction objects ======
+export interface PipeInsulationReductionInput {
+  operatingHours: number,
+  utilityType: number,
+  utilityCost: number,
+  naturalGasUtilityCost: number,
+  otherUtilityCost: number,
+  pipeLength: number,
+  pipeDiameterSelection: number,
+  pipeDiameter: number,
+  pipeThickness: number,
+  pipeTemperature: number,
+  ambientTemperature: number,
+  windVelocity: number,
+  systemEfficiency: number,
+  insulationThickness: number,
+  pipeEmissivity: number,
+  pipeJacketMaterialSelection: number,
+  jacketEmissivity: number,
+  pipeBaseMaterialSelection: number,
+  pipeMaterialCoefficients: Array<number>,
+  insulationMaterialSelection: number,
+  insulationMaterialCoefficients: Array<number>
+};
+
+export interface PipeInsulationReductionResults {
+  baselineResults: PipeInsulationReductionResult,
+  modificationResults: PipeInsulationReductionResult,
+  annualHeatSavings: number,
+  annualCostSavings: number
+};
+
+export interface PipeInsulationReductionResult {
+  heatLength: number,
+  annualHeatLoss: number,
+  energyCost: number
+};
+
+//===== END pipe insulation reduction objects =====
+
+
+
+//====== tank insulation reduction objects ======
+export interface TankInsulationReductionInput {
+  operatingHours: number,
+  utilityType: number,
+  utilityCost: number,
+  naturalGasUtilityCost: number,
+  otherUtilityCost: number,
+  tankHeight: number,
+  tankDiameter: number,
+  tankThickness: number,
+  tankEmissivity: number,
+  tankConductivity: number,
+  tankTemperature: number,
+  ambientTemperature: number,
+  systemEfficiency: number,
+  insulationThickness: number,
+  insulationConductivity: number,
+  customInsulationConductivity: number,
+  jacketEmissivity: number,
+  tankMaterialSelection: number,
+  insulationMaterialSelection: number,
+  jacketMaterialSelection: number
+};
+
+export interface TankInsulationReductionResults {
+  baselineResults: TankInsulationReductionResult,
+  modificationResults: TankInsulationReductionResult,
+  annualHeatSavings: number,
+  annualCostSavings: number
+};
+
+export interface TankInsulationReductionResult {
+  heatLoss: number,
+  annualHeatLoss: number,
+  energyCost: number
+};
+
+//===== END tank insulation reduction objects =====

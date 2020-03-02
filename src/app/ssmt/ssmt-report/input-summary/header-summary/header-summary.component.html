@@ -40,10 +40,16 @@
         </app-header-input-table>
         <app-header-input-table *ngIf="baselineInputData.headerInput.numberOfHeaders == 3"
           [baselineInputData]="baselineInputData" [modificationInputData]="modificationInputData"
-          [headerLevel]="'medium'" [numMods]="numMods" [settings]="settings"></app-header-input-table>
+          [headerLevel]="'medium'" [numMods]="numMods" [settings]="settings"
+          [modificationOutputs]="modificationOutputs"></app-header-input-table>
         <app-header-input-table *ngIf="baselineInputData.headerInput.numberOfHeaders > 1" [headerLevel]="'low'"
           [baselineInputData]="baselineInputData" [modificationInputData]="modificationInputData" [numMods]="numMods"
-          [settings]="settings"></app-header-input-table>
+          [settings]="settings" [modificationOutputs]="modificationOutputs"></app-header-input-table>
+        <div class="w-100 text-center" *ngIf="showProcessSteamUsageNote == true">
+          <span class="alert alert-warning small">
+            *Process steam usage calculated from your baseline during modeling.
+          </span>
+        </div>
 
       </div>
     </div>

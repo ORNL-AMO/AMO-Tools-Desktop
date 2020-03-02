@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef, Hos
 import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
-import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
 import { SsmtService } from '../ssmt.service';
 
 @Component({
@@ -38,23 +37,14 @@ export class SsmtDiagramTabComponent implements OnInit {
   scaleValue: number = 100;
 
   setDiagramPixelWidth: number = 900;
-  constructor(private calculateModelService: CalculateModelService, private ssmtService: SsmtService, private cd: ChangeDetectorRef) { }
+  baselineResults: SSMTOutput;
+  constructor(private ssmtService: SsmtService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.ssmt.name = 'Baseline';
-
-    if (this.ssmt.setupDone && !this.ssmt.resultsCalculated) {
-      setTimeout(() => {
-        this.ssmt.outputData = this.calculateModelService.initDataAndRun(this.ssmt, this.settings, true, false).outputData;
-        this.ssmt.resultsCalculated = true;
-        this.ssmtService.saveSSMT.next(this.ssmt);
-        this.selectedSSMT = this.ssmt;
-        this.calculateResults();
-      }, 100);
-    } else {
-      this.selectedSSMT = this.ssmt;
-      this.calculateResults();
-    }
+    this.baselineResults = this.ssmtService.calculateBaselineModel(this.ssmt, this.settings).outputData;
+    this.selectedSSMT = this.ssmt;
+    this.calculateResults();
   }
 
   ngAfterViewInit() {
@@ -75,18 +65,10 @@ export class SsmtDiagramTabComponent implements OnInit {
 
   calculateResults() {
     let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput };
-    if (this.selectedSSMT.resultsCalculated) {
-      let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(this.selectedSSMT);
-      resultsData = {
-        inputData: inputData,
-        outputData: this.selectedSSMT.outputData
-      };
+    if (this.selectedSSMT.name == 'Baseline') {
+      resultsData = this.ssmtService.calculateBaselineModel(this.selectedSSMT, this.settings);
     } else {
-      if (this.selectedSSMT.name == 'Baseline') {
-        resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, true, false);
-      } else {
-        resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, false, false, this.ssmt.outputData.powerGenerationCost);
-      }
+      resultsData = this.ssmtService.calculateModificationModel(this.selectedSSMT, this.settings, this.baselineResults);
     }
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;
@@ -95,14 +77,15 @@ export class SsmtDiagramTabComponent implements OnInit {
   }
 
   calculateResultsWithMarginalCosts() {
-    let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput };
+    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number };
     if (this.selectedSSMT.name == 'Baseline') {
-      resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, true, true);
+      marginalCosts = this.ssmtService.calculateBaselineMarginalCosts(this.selectedSSMT, this.outputData, this.settings);
     } else {
-      resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, false, true, this.ssmt.outputData.powerGenerationCost);
+      marginalCosts = this.ssmtService.calculateModificationMarginalCosts(this.selectedSSMT, this.outputData, this.baselineResults, this.settings);
     }
-    this.inputData = resultsData.inputData;
-    this.outputData = resultsData.outputData;
+    this.outputData.marginalHPCost = marginalCosts.marginalHPCost;
+    this.outputData.marginalMPCost = marginalCosts.marginalMPCost;
+    this.outputData.marginalLPCost = marginalCosts.marginalLPCost;
   }
 
   setTab(str: string) {

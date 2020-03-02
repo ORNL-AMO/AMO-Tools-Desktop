@@ -11,10 +11,7 @@ export const MockTreasureHunt: Assessment = {
         "operatingHours": {
             "weeksPerYear": 52,
             "daysPerWeek": 7,
-            // "shiftsPerDay": 3,
-            // "hoursPerShift": 8,
-            "hoursPerYear": 8760,
-            //"isCalculated": false
+            "hoursPerYear": 8760
         },
         "currentEnergyUsage": {
             "electricityUsage": 32000000,
@@ -39,238 +36,240 @@ export const MockTreasureHunt: Assessment = {
             "steamCosts": 0,
             "steamUsed": false
         },
-        "naturalGasReductions": [
-            {
-                "baseline": [
-                    {
-                        "name": "Equipment #1",
-                        "operatingHours": 8760,
-                        "fuelCost": 4,
-                        "measurementMethod": 0,
-                        "flowMeterMethodData": {
-                            "flowRate": 5
-                        },
-                        "otherMethodData": {
-                            "consumption": 89900
-                        },
-                        "airMassFlowData": {
-                            "isNameplate": true,
-                            "airMassFlowMeasuredData": {
-                                "areaOfDuct": 5,
-                                "airVelocity": 10
-                            },
-                            "airMassFlowNameplateData": { "airFlow": 50 },
-                            "inletTemperature": 25,
-                            "outletTemperature": 40,
-                            "systemEfficiency": 80
-                        },
-                        "waterMassFlowData": {
-                            "waterFlow": 25,
-                            "inletTemperature": 25,
-                            "outletTemperature": 40,
-                            "systemEfficiency": 80
-                        },
-                        "units": 1
-                    }],
-                "modification": [{
-                    "name": "Equipment #1",
-                    "operatingHours": 8760,
-                    "fuelCost": 4,
-                    "measurementMethod": 3,
-                    "flowMeterMethodData": { "flowRate": 5 },
-                    "otherMethodData": { "consumption": 39000 },
-                    "airMassFlowData": {
-                        "isNameplate": true,
-                        "airMassFlowMeasuredData": {
-                            "areaOfDuct": 5,
-                            "airVelocity": 10
-                        },
-                        "airMassFlowNameplateData": { "airFlow": 50 },
-                        "inletTemperature": 25,
-                        "outletTemperature": 40,
-                        "systemEfficiency": 80
+        "naturalGasReductions": [{
+            "baseline": [{
+                "name": "Equipment #1",
+                "operatingHours": 8760,
+                "fuelCost": 4,
+                "measurementMethod": 0,
+                "flowMeterMethodData": { "flowRate": 5 },
+                "otherMethodData": { "consumption": 89900 },
+                "airMassFlowData": {
+                    "isNameplate": true,
+                    "airMassFlowMeasuredData": {
+                        "areaOfDuct": 5,
+                        "airVelocity": 10
                     },
-                    "waterMassFlowData": {
-                        "waterFlow": 25,
-                        "inletTemperature": 25,
-                        "outletTemperature": 40,
-                        "systemEfficiency": 80
+                    "airMassFlowNameplateData": {
+                        "airFlow": 50
                     },
-                    "units": 1
-                }],
-                "selected": true,
-                "opportunitySheet": {
-                    "name": "Insulate Hoses in Yard",
-                    "equipment": "Boiler",
-                    "description": "",
-                    "originator": "",
-                    "date": new Date(),
-                    "owner": "Chuck",
-                    "businessUnits": "Product 1",
-                    "opportunityCost": {
-                        "engineeringServices": 200,
-                        "material": 9000,
-                        "otherCosts": [],
-                        "costDescription": "",
-                        "labor": 300
-                    },
-                    "baselineEnergyUseItems": [{
-                        "type": "Electricity",
-                        "amount": 0
-                    }],
-                    "modificationEnergyUseItems": []
-                }
-            }, {
-                "baseline": [{
-                    "name": "Equipment #1",
-                    "operatingHours": 8760,
-                    "fuelCost": 4,
-                    "measurementMethod": 3,
-                    "flowMeterMethodData": { "flowRate": 5 },
-                    "otherMethodData": { "consumption": 125 },
-                    "airMassFlowData": {
-                        "isNameplate": true,
-                        "airMassFlowMeasuredData": {
-                            "areaOfDuct": 5,
-                            "airVelocity": 10
-                        },
-                        "airMassFlowNameplateData": { "airFlow": 50 },
-                        "inletTemperature": 25,
-                        "outletTemperature": 40,
-                        "systemEfficiency": 80
-                    },
-                    "waterMassFlowData": {
-                        "waterFlow": 25,
-                        "inletTemperature": 25,
-                        "outletTemperature": 40,
-                        "systemEfficiency": 80
-                    },
-                    "units": 1
-                }],
-                "modification": [{
-                    "name": "Equipment #1",
-                    "operatingHours": 8760,
-                    "fuelCost": 4,
-                    "measurementMethod": 3,
-                    "flowMeterMethodData": { "flowRate": 5 },
-                    "otherMethodData": { "consumption": 0 },
-                    "airMassFlowData": {
-                        "isNameplate": true,
-                        "airMassFlowMeasuredData": {
-                            "areaOfDuct": 5,
-                            "airVelocity": 10
-                        },
-                        "airMassFlowNameplateData": { "airFlow": 50 },
-                        "inletTemperature": 25,
-                        "outletTemperature": 40,
-                        "systemEfficiency": 80
-                    },
-                    "waterMassFlowData": {
-                        "waterFlow": 25,
-                        "inletTemperature": 25,
-                        "outletTemperature": 40,
-                        "systemEfficiency": 80
-                    },
-                    "units": 1
-                }],
-                "selected": true,
-                "opportunitySheet": {
-                    "name": "Pump Insulation",
-                    "equipment": "Pumps 1 & 2",
-                    "description": "Add insulation to 2 pumps",
-                    "originator": "",
-                    "date": new Date(),
-                    "owner": "Anandi",
-                    "businessUnits": "Process 1",
-                    "opportunityCost": {
-                        "engineeringServices": 200,
-                        "material": 300,
-                        "otherCosts": [],
-                        "costDescription": "",
-                        "labor": 200
-                    },
-                    "baselineEnergyUseItems": [{
-                        "type": "Electricity",
-                        "amount": 0
-                    }],
-                    "modificationEnergyUseItems": []
-                }
-            }, {
-                "baseline": [{
-                    "name": "Equipment #1",
-                    "operatingHours": 8760,
-                    "fuelCost": 4,
-                    "measurementMethod": 0,
-                    "flowMeterMethodData": { "flowRate": 5 },
-                    "otherMethodData": { "consumption": 89900 },
-                    "airMassFlowData": {
-                        "isNameplate": true,
-                        "airMassFlowMeasuredData": {
-                            "areaOfDuct": 5,
-                            "airVelocity": 10
-                        },
-                        "airMassFlowNameplateData": { "airFlow": 50 },
-                        "inletTemperature": 25,
-                        "outletTemperature": 40,
-                        "systemEfficiency": 80
-                    },
-                    "waterMassFlowData": {
-                        "waterFlow": 25,
-                        "inletTemperature": 25,
-                        "outletTemperature": 40,
-                        "systemEfficiency": 80
-                    },
-                    "units": 1
-                }],
-                "modification": [{
-                    "name": "Equipment #1",
-                    "operatingHours": 8760,
-                    "fuelCost": 4,
-                    "measurementMethod": 3,
-                    "flowMeterMethodData": { "flowRate": 5 },
-                    "otherMethodData": { "consumption": 44894 },
-                    "airMassFlowData": {
-                        "isNameplate": true,
-                        "airMassFlowMeasuredData": {
-                            "areaOfDuct": 5,
-                            "airVelocity": 10
-                        },
-                        "airMassFlowNameplateData": { "airFlow": 50 },
-                        "inletTemperature": 25,
-                        "outletTemperature": 40,
-                        "systemEfficiency": 80
-                    },
-                    "waterMassFlowData": {
-                        "waterFlow": 25,
-                        "inletTemperature": 25,
-                        "outletTemperature": 40,
-                        "systemEfficiency": 80
-                    },
-                    "units": 1
-                }],
-                "selected": true,
-                "opportunitySheet": {
-                    "name": "Insulate pipe near burner",
-                    "equipment": "Boiler",
-                    "description": "",
-                    "originator": "",
-                    "date": new Date(),
-                    "owner": "Dianna",
-                    "businessUnits": "Process 1",
-                    "opportunityCost": {
-                        "engineeringServices": 0,
-                        "material": 0,
-                        "otherCosts": [],
-                        "costDescription": "",
-                        "labor": 0
-                    },
-                    "baselineEnergyUseItems": [{
-                        "type": "Electricity",
-                        "amount": 0
-                    }],
-                    "modificationEnergyUseItems": []
-                }
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "waterMassFlowData": {
+                    "waterFlow": 25,
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "units": 1
             }],
+            "modification": [{
+                "name": "Equipment #1",
+                "operatingHours": 8760,
+                "fuelCost": 4,
+                "measurementMethod": 3,
+                "flowMeterMethodData": {
+                    "flowRate": 5
+                },
+                "otherMethodData": {
+                    "consumption": 39000
+                },
+                "airMassFlowData": {
+                    "isNameplate": true,
+                    "airMassFlowMeasuredData": {
+                        "areaOfDuct": 5,
+                        "airVelocity": 10
+                    },
+                    "airMassFlowNameplateData": {
+                        "airFlow": 50
+                    },
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "waterMassFlowData": {
+                    "waterFlow": 25,
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "units": 1
+            }],
+            "selected": true,
+            "opportunitySheet": {
+                "name": "Insulate Hoses in Yard",
+                "equipment": "steam",
+                "description": "Boiler",
+                "originator": "",
+                "date": new Date(),
+                "owner": "Utilities",
+                "businessUnits": "Yard",
+                "opportunityCost": {
+                    "engineeringServices": 200,
+                    "material": 9000,
+                    "otherCosts": [],
+                    "costDescription": "",
+                    "labor": 300
+                },
+                "baselineEnergyUseItems": [{
+                    "type": "Electricity",
+                    "amount": 0
+                }],
+                "modificationEnergyUseItems": []
+            }
+        }, {
+            "baseline": [{
+                "name": "Equipment #1",
+                "operatingHours": 8760,
+                "fuelCost": 4,
+                "measurementMethod": 3,
+                "flowMeterMethodData": { "flowRate": 5 },
+                "otherMethodData": { "consumption": 125 },
+                "airMassFlowData": {
+                    "isNameplate": true,
+                    "airMassFlowMeasuredData": {
+                        "areaOfDuct": 5,
+                        "airVelocity": 10
+                    },
+                    "airMassFlowNameplateData": { "airFlow": 50 },
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "waterMassFlowData": {
+                    "waterFlow": 25,
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "units": 1
+            }],
+            "modification": [{
+                "name": "Equipment #1",
+                "operatingHours": 8760,
+                "fuelCost": 4,
+                "measurementMethod": 3,
+                "flowMeterMethodData": { "flowRate": 5 },
+                "otherMethodData": { "consumption": 0 },
+                "airMassFlowData": {
+                    "isNameplate": true,
+                    "airMassFlowMeasuredData": {
+                        "areaOfDuct": 5,
+                        "airVelocity": 10
+                    },
+                    "airMassFlowNameplateData": { "airFlow": 50 },
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "waterMassFlowData": {
+                    "waterFlow": 25,
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "units": 1
+            }],
+            "selected": true,
+            "opportunitySheet": {
+                "name": "Pump Insulation",
+                "equipment": "pump",
+                "description": "Add insulation to 2 pumps",
+                "originator": "",
+                "date": new Date(),
+                "owner": "Process",
+                "businessUnits": "Bld5",
+                "opportunityCost": {
+                    "engineeringServices": 200,
+                    "material": 300,
+                    "otherCosts": [],
+                    "costDescription": "",
+                    "labor": 200
+                },
+                "baselineEnergyUseItems": [{
+                    "type": "Electricity",
+                    "amount": 0
+                }],
+                "modificationEnergyUseItems": []
+            }
+        }, {
+            "baseline": [{
+                "name": "Equipment #1",
+                "operatingHours": 8760,
+                "fuelCost": 4,
+                "measurementMethod": 0,
+                "flowMeterMethodData": { "flowRate": 5 },
+                "otherMethodData": { "consumption": 89900 },
+                "airMassFlowData": {
+                    "isNameplate": true,
+                    "airMassFlowMeasuredData": {
+                        "areaOfDuct": 5,
+                        "airVelocity": 10
+                    },
+                    "airMassFlowNameplateData": { "airFlow": 50 },
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "waterMassFlowData": {
+                    "waterFlow": 25,
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "units": 1
+            }],
+            "modification": [{
+                "name": "Equipment #1",
+                "operatingHours": 8760,
+                "fuelCost": 4,
+                "measurementMethod": 3,
+                "flowMeterMethodData": { "flowRate": 5 },
+                "otherMethodData": { "consumption": 44894 },
+                "airMassFlowData": {
+                    "isNameplate": true,
+                    "airMassFlowMeasuredData": {
+                        "areaOfDuct": 5,
+                        "airVelocity": 10
+                    },
+                    "airMassFlowNameplateData": { "airFlow": 50 },
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "waterMassFlowData": {
+                    "waterFlow": 25,
+                    "inletTemperature": 25,
+                    "outletTemperature": 40,
+                    "systemEfficiency": 80
+                },
+                "units": 1
+            }],
+            "selected": true,
+            "opportunitySheet": {
+                "name": "Insulate pipe near burner",
+                "equipment": "steam",
+                "description": "Boiler",
+                "originator": "",
+                "date": new Date(),
+                "owner": "Utilities",
+                "businessUnits": "Bld2",
+                "opportunityCost": {
+                    "engineeringServices": 0,
+                    "material": 0,
+                    "otherCosts": [],
+                    "costDescription": "",
+                    "labor": 0
+                },
+                "baselineEnergyUseItems": [{
+                    "type": "Electricity",
+                    "amount": 0
+                }],
+                "modificationEnergyUseItems": []
+            }
+        }],
         "lightingReplacements": [{
             "baseline": [{
                 "name": "Fixture #1",
@@ -280,7 +279,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 5,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 54750
+                "electricityUse": 54750,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }, {
                 "name": "Fixture #2",
                 "hoursPerYear": 8760,
@@ -289,7 +292,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 5,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 17520
+                "electricityUse": 17520,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }, {
                 "name": "Fixture #3",
                 "hoursPerYear": 8760,
@@ -298,7 +305,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 5,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 4380
+                "electricityUse": 4380,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }, {
                 "name": "Fixture #4",
                 "hoursPerYear": 8760,
@@ -307,7 +318,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 4,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 5256
+                "electricityUse": 5256,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }],
             "modifications": [{
                 "name": "Fixture #1",
@@ -317,7 +332,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 5,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 10950
+                "electricityUse": 10950,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }, {
                 "name": "Fixture #2",
                 "hoursPerYear": 8760,
@@ -326,7 +345,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 5,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 2190
+                "electricityUse": 2190,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }, {
                 "name": "Fixture #3",
                 "hoursPerYear": 8760,
@@ -335,7 +358,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 5,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 876
+                "electricityUse": 876,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }, {
                 "name": "Fixture #4",
                 "hoursPerYear": 8760,
@@ -344,18 +371,22 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 4,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 700.8000000000001
+                "electricityUse": 700.8000000000001,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }],
             "baselineElectricityCost": 0.05,
             "modificationElectricityCost": 0.05,
             "selected": true,
             "opportunitySheet": {
                 "name": "Yard Lighting Replacement",
-                "equipment": "Lighting",
+                "equipment": "lights",
                 "description": "",
                 "originator": "",
                 "date": new Date(),
-                "owner": "Webster",
+                "owner": "Facilities",
                 "businessUnits": "Exterior",
                 "opportunityCost": {
                     "engineeringServices": 100,
@@ -379,7 +410,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 50,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 153300
+                "electricityUse": 153300,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }, {
                 "name": "Metal Halide 400W",
                 "hoursPerYear": 8760,
@@ -388,7 +423,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 25,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 87600
+                "electricityUse": 87600,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }, {
                 "name": "Metal Halide 250W",
                 "hoursPerYear": 8760,
@@ -397,7 +436,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 20,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 87600
+                "electricityUse": 87600,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }],
             "modifications": [{
                 "name": "LED 25W",
@@ -407,7 +450,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 50,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 21900
+                "electricityUse": 21900,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }, {
                 "name": "LED 30W",
                 "hoursPerYear": 8760,
@@ -416,7 +463,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 25,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 6570
+                "electricityUse": 6570,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }, {
                 "name": "Fixture #3",
                 "hoursPerYear": 8760,
@@ -425,19 +476,22 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 20,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 5256
+                "electricityUse": 5256,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }],
             "baselineElectricityCost": 0.05,
             "modificationElectricityCost": 0.05,
-            "selected": true,
             "opportunitySheet": {
                 "name": "Office Lighting",
-                "equipment": "Lighting",
+                "equipment": "lights",
                 "description": "Various lighting replacements",
                 "originator": "",
                 "date": new Date(),
-                "owner": "Alex",
-                "businessUnits": "Facilities",
+                "owner": "Facilities",
+                "businessUnits": "Bld10",
                 "opportunityCost": {
                     "engineeringServices": 500,
                     "material": 15000,
@@ -450,7 +504,8 @@ export const MockTreasureHunt: Assessment = {
                     "amount": 0
                 }],
                 "modificationEnergyUseItems": []
-            }
+            },
+            "selected": true
         }, {
             "baseline": [{
                 "name": "T5",
@@ -460,7 +515,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 500,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 946080
+                "electricityUse": 946080,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }],
             "modifications": [{
                 "name": "LED",
@@ -470,19 +529,23 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 500,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 350400
+                "electricityUse": 350400,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }],
             "baselineElectricityCost": 0.05,
             "modificationElectricityCost": 0.05,
             "selected": true,
             "opportunitySheet": {
                 "name": "Process Lighting A",
-                "equipment": "Lighting",
+                "equipment": "lights",
                 "description": "Replace T5s with LEDs",
                 "originator": "",
                 "date": new Date(),
-                "owner": "Daniella",
-                "businessUnits": "Process",
+                "owner": "Process",
+                "businessUnits": "Bld5",
                 "opportunityCost": {
                     "engineeringServices": 1000,
                     "material": 27000,
@@ -505,7 +568,11 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 75,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 84096
+                "electricityUse": 84096,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }],
             "modifications": [{
                 "name": "LED",
@@ -515,19 +582,23 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 75,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 52560
+                "electricityUse": 52560,
+                "ballastFactor": 1,
+                "lumenDegradationFactor": 1,
+                "coefficientOfUtilization": 1,
+                "category": 0
             }],
             "baselineElectricityCost": 0.05,
             "modificationElectricityCost": 0.05,
             "selected": true,
             "opportunitySheet": {
                 "name": "Process Lighting B",
-                "equipment": "Lighting",
+                "equipment": "lights",
                 "description": "upgrade side room lighting",
                 "originator": "",
                 "date": new Date(),
-                "owner": "Daniella",
-                "businessUnits": "Process",
+                "owner": "Facilities",
+                "businessUnits": "Bld5",
                 "opportunityCost": {
                     "engineeringServices": 100,
                     "material": 6000,
@@ -602,12 +673,12 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Eliminate Air Leaks",
-                "equipment": "Compressor",
+                "equipment": "compressedAir",
                 "description": "",
                 "originator": "",
                 "date": new Date(),
-                "owner": "Ravinder",
-                "businessUnits": "Facilities",
+                "owner": "Utilities",
+                "businessUnits": "Bld2",
                 "opportunityCost": {
                     "engineeringServices": 0,
                     "material": 0,
@@ -678,15 +749,14 @@ export const MockTreasureHunt: Assessment = {
                 },
                 "units": 1
             }],
-            "selected": true,
             "opportunitySheet": {
-                "name": "CA Pressure Reduction",
-                "equipment": "Compressor",
+                "name": "CA Flow Reduction",
+                "equipment": "compressedAir",
                 "description": "Reduce compressed air pressure 10 lbs",
                 "originator": "",
                 "date": new Date(),
-                "owner": "Ravinder",
-                "businessUnits": "Facilities",
+                "owner": "Utilities",
+                "businessUnits": "Bld4",
                 "opportunityCost": {
                     "engineeringServices": 100,
                     "material": 0,
@@ -699,7 +769,8 @@ export const MockTreasureHunt: Assessment = {
                     "amount": 0
                 }],
                 "modificationEnergyUseItems": []
-            }
+            },
+            "selected": true
         }],
         "electricityReductions": [{
             "baseline": [{
@@ -795,12 +866,12 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Turn off cooling tower pumps",
-                "equipment": "Cooling",
+                "equipment": "processCooling",
                 "description": "Turn off cooling tower pumps during non-operation",
                 "originator": "",
                 "date": new Date(),
-                "owner": "Jaidev",
-                "businessUnits": "Process",
+                "owner": "Process",
+                "businessUnits": "Bld4",
                 "opportunityCost": {
                     "engineeringServices": 200,
                     "material": 0,
@@ -864,12 +935,12 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Turn off Exhaust Fan",
-                "equipment": "HVAC System",
+                "equipment": "hvac",
                 "description": "Turn off the HVAC exhaust fan in the warehouse",
                 "originator": "",
                 "date": new Date(),
-                "owner": "",
-                "businessUnits": "",
+                "owner": "Facilities",
+                "businessUnits": "Bld3",
                 "opportunityCost": {
                     "engineeringServices": 0,
                     "material": 0,
@@ -886,12 +957,12 @@ export const MockTreasureHunt: Assessment = {
         }],
         "opportunitySheets": [{
             "name": "Increase Boiler CoC",
-            "equipment": "Boiler",
+            "equipment": "steam",
             "description": "Increase Boiler cycles of concentration",
             "originator": "",
             "date": new Date(),
-            "owner": "Danny",
-            "businessUnits": "Process",
+            "owner": "Utilities",
+            "businessUnits": "Bld1",
             "opportunityCost": {
                 "engineeringServices": 100,
                 "material": 0,
@@ -930,12 +1001,12 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Replace conveyor 5 motor",
-                "equipment": "Motor",
+                "equipment": "motor",
                 "description": "Replace old, inefficient motor",
                 "originator": "",
                 "date": new Date(),
-                "owner": "Zhong",
-                "businessUnits": "Process",
+                "owner": "Process",
+                "businessUnits": "Bld6",
                 "opportunityCost": {
                     "engineeringServices": 1000,
                     "material": 15000,
@@ -964,12 +1035,12 @@ export const MockTreasureHunt: Assessment = {
             "selected": true,
             "opportunitySheet": {
                 "name": "Replace blower motor",
-                "equipment": "Motor",
+                "equipment": "motor",
                 "description": "Replace old, inefficient motor",
                 "originator": "",
                 "date": new Date(),
-                "owner": "Zhong",
-                "businessUnits": "Process",
+                "owner": "Process",
+                "businessUnits": "Bld5",
                 "opportunityCost": {
                     "engineeringServices": 1000,
                     "material": 30000,
@@ -983,9 +1054,110 @@ export const MockTreasureHunt: Assessment = {
                 }],
                 "modificationEnergyUseItems": []
             }
+        }],
+        "waterReductions": [{
+            "baseline": [{
+                "name": "Equipment #1",
+                "hoursPerYear": 8760,
+                "waterCost": 0.0025,
+                "measurementMethod": 2,
+                "meteredFlowMethodData": { "meterReading": 100 },
+                "volumeMeterMethodData": {
+                    "initialMeterReading": 4235,
+                    "finalMeterReading": 5842,
+                    "elapsedTime": 15
+                },
+                "bucketMethodData": {
+                    "bucketVolume": 10,
+                    "bucketFillTime": 20
+                },
+                "otherMethodData": { "consumption": 15000 },
+                "isWastewater": false
+            }],
+            "modification": [{
+                "name": "Equipment #1",
+                "hoursPerYear": 8760,
+                "waterCost": 0.0025,
+                "measurementMethod": 0,
+                "meteredFlowMethodData": { "meterReading": 28 },
+                "volumeMeterMethodData": {
+                    "initialMeterReading": 4235,
+                    "finalMeterReading": 5842,
+                    "elapsedTime": 15
+                },
+                "bucketMethodData": {
+                    "bucketVolume": 10,
+                    "bucketFillTime": 20
+                },
+                "otherMethodData": { "consumption": 15000 },
+                "isWastewater": false
+            }],
+            "opportunitySheet": {
+                "name": "Eliminate Pipe Leaks",
+                "equipment": "steam",
+                "description": "",
+                "originator": "",
+                "date": new Date(),
+                "owner": "Process",
+                "businessUnits": "Bld5",
+                "opportunityCost": {
+                    "engineeringServices": 300,
+                    "material": 1000,
+                    "otherCosts": [],
+                    "costDescription": "",
+                    "labor": 1000
+                },
+                "baselineEnergyUseItems": [{
+                    "type": "Electricity",
+                    "amount": 0
+                }],
+                "modificationEnergyUseItems": []
+            },
+            "selected": true
+        }],
+        "compressedAirPressureReductions": [{
+            "baseline": [{
+                "name": "Equipment #1",
+                "isBaseline": true,
+                "hoursPerYear": 8760,
+                "electricityCost": 0.05,
+                "compressorPower": 300,
+                "pressure": 120,
+                "proposedPressure": 0
+            }],
+            "modification": [{
+                "name": "Equipment #1",
+                "isBaseline": false,
+                "hoursPerYear": 8760,
+                "electricityCost": 0.05,
+                "compressorPower": 300,
+                "pressure": 120,
+                "proposedPressure": 110
+            }],
+            "opportunitySheet": {
+                "name": "CA Pressure Reduction",
+                "equipment": "compressedAir",
+                "description": "",
+                "originator": "",
+                "date": new Date(),
+                "owner": "Utilities",
+                "businessUnits": "Bld4",
+                "opportunityCost": {
+                    "engineeringServices": 100,
+                    "material": 0,
+                    "otherCosts": [],
+                    "costDescription": "",
+                    "labor": 50
+                },
+                "baselineEnergyUseItems": [{
+                    "type": "Electricity",
+                    "amount": 0
+                }],
+                "modificationEnergyUseItems": []
+            },
+            "selected": true
         }]
-    },
-    "selected": true
+    }
 }
 
 export const MockTreasureHuntSettings: Settings = {
@@ -1048,4 +1220,4 @@ export const MockTreasureHuntSettings: Settings = {
     "otherFuelCost": 0,
     "waterCost": 0.0025,
     "waterWasteCost": 0.005,
-}
+};

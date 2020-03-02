@@ -18,7 +18,7 @@ export class SsmtDiagramTabService {
 
   setBoilerCalculator(inputData: SSMTInputs, boiler: BoilerOutput){
     let boilerInput: BoilerInput = {
-      steamPressure: inputData.headerInput.highPressure.pressure,
+      steamPressure: inputData.headerInput.highPressureHeader.pressure,
       blowdownRate: inputData.boilerInput.blowdownRate,
       steamMassFlow: Number(Math.round(boiler.steamMassFlow).toFixed(2)),
       thermodynamicQuantity: 0, //temperature

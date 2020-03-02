@@ -77,7 +77,7 @@
         <label class="bold">Run-time Un-loaded</label>
         <div class="text-center small">
           <span *ngIf="outputs.runTimeUnloaded">
-            <strong>{{outputs.runTimeUnloaded | number:'1.0-2'}} %</strong>
+            <strong>{{outputs.runTimeUnloaded | number:'1.0-0'}} %</strong>
           </span>
           <span *ngIf="!outputs.runTimeUnloaded">
             <strong>&mdash; &mdash;</strong>
@@ -88,7 +88,7 @@
         <label class="bold">Cost for Loaded Condition</label>
         <div class="text-center small">
           <span *ngIf="outputs.costForLoaded">
-            <strong>$ {{outputs.costForLoaded | number:'1.0-2'}}</strong>
+            <strong>$ {{outputs.costForLoaded | number:'1.0-0'}}</strong>
           </span>
           <span *ngIf="!outputs.costForLoaded">
             <strong>&mdash; &mdash;</strong>
@@ -99,7 +99,7 @@
         <label class="bold">Cost for Un-loaded Condition</label>
         <div class="text-center small">
           <span *ngIf="outputs.costForUnloaded">
-            <strong>$ {{outputs.costForUnloaded | number:'1.0-2'}}</strong>
+            <strong>$ {{outputs.costForUnloaded | number:'1.0-0'}}</strong>
           </span>
           <span *ngIf="!outputs.costForUnloaded">
             <strong>&mdash; &mdash;</strong>
@@ -110,7 +110,7 @@
         <label class="bold">Total Annual Cost</label>
         <div class="text-center small">
           <span *ngIf="outputs.totalAnnualCost">
-            <strong>$ {{outputs.totalAnnualCost | number:'1.0-2'}}</strong>
+            <strong>$ {{outputs.totalAnnualCost | number:'1.0-0'}}</strong>
           </span>
           <span *ngIf="!outputs.totalAnnualCost">
             <strong>&mdash; &mdash;</strong>

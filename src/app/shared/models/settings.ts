@@ -54,10 +54,23 @@ export interface Settings {
     disablePsatReportTutorial?: boolean,
     disablePhastSetupTutorial?: boolean,
     disablePhastAssessmentTutorial?: boolean,
-    disablePhastReportTutorial?: boolean    
+    disablePhastReportTutorial?: boolean,
     disableFsatSetupTutorial?: boolean,
     disableFsatAssessmentTutorial?: boolean,
     disableFsatReportTutorial?: boolean,
+
+    disableSsmtSystemSetupTutorial?: boolean,
+    disableSsmtAssessmentTutorial?: boolean,
+    disableSsmtReportTutorial?: boolean,
+    disableSsmtDiagramTutorial?: boolean,
+
+    disableTreasureHuntFindTreasureTutorial?: boolean,
+    disableTreasureHuntReportTutorial?: boolean,
+    disableTreasureHuntSetupTutorial?: boolean,
+    disableTreasureHuntTreasureChestTutorial?: boolean,
+
+    disableSurveyMonkey?: boolean,
+    disableDisclaimer?: boolean,
     //costs
     electricityCost?: number,
     fuelCost?: number,

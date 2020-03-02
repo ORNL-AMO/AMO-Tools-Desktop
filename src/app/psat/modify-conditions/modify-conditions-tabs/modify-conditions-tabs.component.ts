@@ -113,7 +113,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     if (this.compareService.modifiedPSAT) {
       let tmpModificationPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this.compareService.modifiedPSAT.inputs);
       validModTest = tmpModificationPumpFluidForm.valid;
-      isDifferent = this.compareService.checkPumpDifferent();
+      isDifferent = this.compareService.checkPumpDifferent(this.settings);
     }
     let inputError = this.checkPumpFluidWarnings();
     if (!validBaselineTest || !validModTest) {

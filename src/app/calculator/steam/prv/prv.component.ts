@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { FormGroup } from '../../../../../node_modules/@angular/forms';
+import { FormGroup, Validators } from '../../../../../node_modules/@angular/forms';
 import { PrvInput } from '../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../steam.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { PrvService } from './prv.service';
+import { PrvService, FeedwaterRanges } from './prv.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
@@ -85,12 +85,22 @@ export class PrvComponent implements OnInit {
     this.calculate(this.inletForm, this.feedwaterForm);
   }
 
+  setFeedwaterFormDesuperheatValidation(outletPressure: number) {
+    let ranges: FeedwaterRanges = this.prvService.getFeedwaterRangeValues(this.settings, this.input.feedwaterThermodynamicQuantity, outletPressure);
+    this.feedwaterForm.controls.desuperheatingTemp.setValidators([Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]);
+    this.feedwaterForm.controls.desuperheatingTemp.reset(this.feedwaterForm.controls.desuperheatingTemp.value);
+    this.feedwaterForm.controls.desuperheatingTemp.markAsDirty();
+  }
+
   setInletForm(form: FormGroup) {
     this.inletForm = form;
     this.calculate(this.inletForm, this.feedwaterForm);
   }
 
   calculate(inletForm: FormGroup, feedwaterForm: FormGroup) {
+    if (this.inletForm.controls.outletPressure.value != this.input.outletPressure) {
+      this.setFeedwaterFormDesuperheatValidation(this.inletForm.controls.outletPressure.value)
+    }
     this.input = this.prvService.getObjFromForm(inletForm, feedwaterForm, this.isSuperHeating);
     this.prvService.prvInput = this.input;
     this.prvService.isSuperHeating = this.isSuperHeating;

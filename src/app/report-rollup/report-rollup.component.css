@@ -149,43 +149,6 @@
     }
 }
 
-.phast-modal .modal-dialog,
-.psat-modal .modal-dialog,
-.fsat-modal .modal-dialog,
-.ssmt-modal .modal-dialog{
-    top: 0px;
-    max-width: none;
-    margin: 10px;
-}
-
-.phast-modal .modal-header{
-    background-color: #BF3D00;
-    color: #fff;
-}
-
-.psat-modal .modal-header{
-    background-color: #2980b9;
-    color: #fff;
-}
-
-.fsat-modal .modal-header{
-    background-color: #FFE400;
-    color: black;
-}
-
-.ssmt-modal .modal-header{
-    background-color: #F39C12;
-    color: #fff;
-}
-
-.phast-modal .modal-body,
-.psat-modal .modal-body,
-.fsat-modal .modal-body,
-.ssmt-modal .modal-body{
-    height: 85vh;
-}
-
-
 .assessment-reports{
     padding-left: 50px;
     padding-right: 50px;

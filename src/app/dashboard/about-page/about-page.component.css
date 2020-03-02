@@ -1,0 +1,31 @@
+.card-header:hover{
+    cursor: pointer;
+    background: darkgray;
+}
+
+.content-header{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.content-subheader{
+    font-size: 1rem;
+    font-weight: bold;   
+}
+
+.card-header, .card-body{
+    padding: .5rem;
+}
+
+p{
+    margin-bottom: 0px;
+}
+
+hr{
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+}
+
+ul{
+    margin-bottom: 0px;
+}

@@ -1,18 +1,3 @@
-.percent-chart-container{
+.disp-block{
     display: block;
-}
-
-h1 {
-    animation-name: value-entrance;
-    animation-duration: 3.5s;
-    position: absolute;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-
-@keyframes value-entrance{
-    0% {opacity: 0;}
-    50% {opacity: 0;}
-    100% {opacity: 100;}
 }

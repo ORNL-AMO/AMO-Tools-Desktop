@@ -46,8 +46,8 @@ export class EfficiencyImprovementService {
       return {
         currentFlueGasOxygen: 6,
         newFlueGasOxygen: 2,
-        currentFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to('C'), 2),
-        currentCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(79).from('F').to('C'), 2),
+        currentFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(1600).from('F').to('C'), 2),
+        currentCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to('C'), 2),
         newCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(750).from('F').to('C'), 2),
         currentEnergyInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to('GJ'), 2),
         newFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(1600).from('F').to('C'), 2)
@@ -57,7 +57,7 @@ export class EfficiencyImprovementService {
       return {
         currentFlueGasOxygen: 6,
         newFlueGasOxygen: 2,
-        currentFlueGasTemp: 80,
+        currentFlueGasTemp: 1600,
         currentCombustionAirTemp: 80,
         newCombustionAirTemp: 750,
         currentEnergyInput: 10,

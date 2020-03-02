@@ -3,6 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Assessment } from '../../../shared/models/assessment';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
+import { SSMT } from '../../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-executive-summary',
@@ -24,6 +25,8 @@ export class ExecutiveSummaryComponent implements OnInit {
   assessment: Assessment;
   @Input()
   printView: boolean;
+  @Input()
+  ssmt: SSMT;
 
   selectedModificationIndex: number;
   constructor(private reportRollupService: ReportRollupService) { }
@@ -49,6 +52,19 @@ export class ExecutiveSummaryComponent implements OnInit {
 
   useModification() {
     this.reportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+  }
+
+  getPayback(modCost: number, baselineCost: number, implementationCost: number) {
+    if (implementationCost) {
+      let paybackMonths = (implementationCost / (baselineCost - modCost)) * 12 * 1000;
+      if (isNaN(paybackMonths) === false) {
+        return paybackMonths;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
   }
 
 }

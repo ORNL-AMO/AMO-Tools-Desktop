@@ -1,0 +1,142 @@
+<div class="d-flex flex-column">
+    <div class="d-flex justify-content-end">
+        <div class="mr-1">
+            <div class="btn-group" role="group">
+                <button class="btn btn-secondary action-btn pull-right" (click)="toggleSortDropdown()"
+                    [ngClass]="{'active': sortByDropdown == true}">
+                    Sort By: {{sortByLabel}}
+                </button>
+                <button class="btn btn-secondary action-btn pull-right" (click)="toggleSortDirection()">
+                    <span class="fa fa-arrow-up" *ngIf="sortBy.direction == 'asc'"></span>
+                    <span class="fa fa-arrow-down" *ngIf="sortBy.direction == 'desc'"></span>
+                </button>
+            </div>
+
+            <div class="dropdown-menu p-0" [ngClass]="{'show': sortByDropdown == true}">
+                <div class="list-group">
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setSortBy('modifiedDate')" [ngClass]="{'active': sortBy.value == 'modifiedDate'}">
+                        <label class="pl-1">Last Updated Date
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setSortBy('createdDate')" [ngClass]="{'active': sortBy.value == 'createdDate'}">
+                        <label class="pl-1">Created Date
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setSortBy('name')" [ngClass]="{'active': sortBy.value == 'name'}">
+                        <label class="pl-1">Name
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setSortBy('type')" [ngClass]="{'active': sortBy.value == 'type'}">
+                        <label class="pl-1">Type
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mr-1">
+            <button class="btn btn-secondary action-btn" (click)="toggleFilterDropdown()"
+                [ngClass]="{'active': filterDropdown == true}">
+                <span class="fa fa-filter"></span> Filter
+            </button>
+            <div class="dropdown-menu p-0 filter-dropdown" [ngClass]="{'show': filterDropdown == true}">
+                <div class="list-group">
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setShowAll()" [ngClass]="{'active': filterDashboardBy.showAll == true}">
+                        <label class="pl-1">Display All
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterPump()"
+                        [ngClass]="{'active': filterDashboardBy.showPumps == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Pumps
+                        </label>
+                    </div>
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterFans()"
+                        [ngClass]="{'active': filterDashboardBy.showFans == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Fans
+                        </label>
+                    </div>
+
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterProcessHeating()"
+                        [ngClass]="{'active': filterDashboardBy.showPhast == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Process Heating
+                        </label>
+                    </div>
+
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterSteam()"
+                        [ngClass]="{'active': filterDashboardBy.showSteam == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Steam
+                        </label>
+                    </div>
+
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterTreasureHunt()"
+                        [ngClass]="{'active': filterDashboardBy.showTreasureHunt == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Treasure Hunt
+                        </label>
+                    </div>
+                    <!-- <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterSubFolders()"
+                        [ngClass]="{'active': filterDashboardBy.showSubFolders == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Sub-Folders
+                        </label>
+                    </div> -->
+                    <div class="d-flex list-group-item list-group-item-action align-items-center"
+                        (click)="setFilterPreAssessments()"
+                        [ngClass]="{'active': filterDashboardBy.showPreAssessments == true && filterDashboardBy.showAll == false}">
+                        <label class="pl-1">Pre-Assessment
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn-group" role="group">
+            <button class="btn btn-secondary action-btn" (click)="setView('list')"
+                [ngClass]="{'active': dashboardView == 'list'}">
+                <i class="fa fa-list"></i>
+            </button>
+            <button class="btn btn-secondary action-btn" (click)="setView('grid')"
+                [ngClass]="{'active': dashboardView == 'grid'}">
+                <i class="fa fa-th"></i>
+            </button>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end mt-1" *ngIf="filterDashboardBy.showAll == false">
+        <button *ngIf="filterDashboardBy.showPumps == true" class="btn btn-secondary action-btn"
+            (click)="setFilterPump()">
+            <span class="fa fa-close"></span> Pumps
+        </button>
+        <button *ngIf="filterDashboardBy.showFans == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterFans()">
+            <span class="fa fa-close"></span> Fans
+        </button>
+        <button *ngIf="filterDashboardBy.showPhast == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterProcessHeating()">
+            <span class="fa fa-close"></span> Process Heating
+        </button>
+        <button *ngIf="filterDashboardBy.showSteam == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterSteam()">
+            <span class="fa fa-close"></span> Steam
+        </button>
+        <button *ngIf="filterDashboardBy.showTreasureHunt == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterTreasureHunt()">
+            <span class="fa fa-close"></span> Treasure Hunt
+        </button>
+        <!-- <button *ngIf="filterDashboardBy.showSubFolders == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterSubFolders()">
+            <span class="fa fa-close"></span> Sub-Folders
+        </button> -->
+        <button *ngIf="filterDashboardBy.showPreAssessments == true" class="btn btn-secondary action-btn ml-1"
+            (click)="setFilterPreAssessments()">
+            <span class="fa fa-close"></span> Pre-Assessments
+        </button>
+    </div>
+</div>
