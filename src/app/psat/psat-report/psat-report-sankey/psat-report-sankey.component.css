@@ -23,3 +23,7 @@
 .td-value {
     width: 70%;
 }
+
+.form-control{
+    width: 100% !important;
+}

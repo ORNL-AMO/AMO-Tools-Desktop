@@ -1,10 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { PSAT, PsatOutputs, PsatInputs, Modification } from '../../../shared/models/psat';
-import { Assessment } from '../../../shared/models/assessment';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { PSAT, PsatOutputs, Modification } from '../../../shared/models/psat';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { PsatService } from '../../psat.service';
 
 @Component({
   selector: 'app-psat-report-graphs',
@@ -16,8 +13,6 @@ export class PsatReportGraphsComponent implements OnInit {
   settings: Settings;
   @Input()
   psat: PSAT;
-  @Input()
-  assessment: Assessment;
   @Input()
   printView: boolean;
   @Input()
@@ -45,7 +40,7 @@ export class PsatReportGraphsComponent implements OnInit {
     barChartValues: Array<number>
   };
   barChartYAxisLabel: string;
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.setAllChartData();
@@ -54,13 +49,11 @@ export class PsatReportGraphsComponent implements OnInit {
 
   setAllChartData() {
     this.allChartData = new Array();
-    let baselineResults: PsatOutputs = this.getPsatBaselineData(this.psat);
-    this.addChartData(baselineResults, this.psat.name);
+    this.addChartData(JSON.parse(JSON.stringify(this.psat.outputs)), this.psat.name);
     this.selectedBaselineData = this.allChartData[0];
     if (this.psat.modifications && this.psat.modifications.length != 0) {
       this.psat.modifications.forEach(modification => {
-        let modificationResults: PsatOutputs = this.getPsatModificationData(modification.psat);
-        this.addChartData(modificationResults, modification.psat.name, modification);
+        this.addChartData(JSON.parse(JSON.stringify(modification.psat.outputs)), modification.psat.name, modification);
       });
       this.selectedModificationData = this.allChartData[1];
     }
@@ -86,28 +79,6 @@ export class PsatReportGraphsComponent implements OnInit {
     return [data.motorLoss, data.driveLoss, data.pumpLoss, data.usefulOutput];
   }
 
-  // sets loss data and percentages for selected psats
-  getPsatModificationData(psat: PSAT): PsatOutputs {
-    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
-    let isPsatValid: boolean = this.psatService.isPsatValid(psatInputs, false);
-    if (isPsatValid) {
-      return this.psatService.resultsModified(psatInputs, this.settings);
-    }
-    else {
-      return this.psatService.emptyResults();
-    }
-  }
-
-  getPsatBaselineData(psat: PSAT): PsatOutputs {
-    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
-    let isPsatValid: boolean = this.psatService.isPsatValid(psatInputs, false);
-    if (isPsatValid) {
-      return this.psatService.resultsExisting(psatInputs, this.settings);
-    }
-    else {
-      return this.psatService.emptyResults();
-    }
-  }
 
   getGraphData(results: PsatOutputs): PsatGraphData {
     let motorShaftPower: number = results.motor_shaft_power;

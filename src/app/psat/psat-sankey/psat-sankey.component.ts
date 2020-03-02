@@ -119,17 +119,21 @@ export class PsatSankeyComponent implements OnInit {
 
 
   getResults() {
-    //create copies of inputs to use for calcs
     this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let isPsatValid: boolean = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
-    if (isPsatValid) {
-      if (this.isBaseline) {
-        this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
+    if (!this.psat.outputs) {
+      //create copies of inputs to use for calcs
+      let isPsatValid: boolean = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
+      if (isPsatValid) {
+        if (this.isBaseline) {
+          this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
+        } else {
+          this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings);
+        }
       } else {
-        this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings);
+        this.selectedResults = this.psatService.emptyResults();
       }
     } else {
-      this.selectedResults = this.psatService.emptyResults();
+      this.selectedResults = this.psat.outputs;
     }
   }
 
