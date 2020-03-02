@@ -37,7 +37,6 @@
     <div class="col-9" [ngClass]="{ 'right-panel': !printView }">
       <app-psat-sankey
         [psat]="psat1.psat"
-        [location]="'baseline'"
         [assessmentName]="assessmentName"
         [settings]="settings"
         [isBaseline]="true"
@@ -88,7 +87,6 @@
         [baseline]="psat"
         [psat]="psat2.psat"
         [assessmentName]="assessmentName"
-        [location]="'modification'"
         [settings]="settings"
         [isBaseline]="false"
       ></app-psat-sankey>

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
+import { PsatSankeyComponent } from './psat-sankey.component';
 
 
 

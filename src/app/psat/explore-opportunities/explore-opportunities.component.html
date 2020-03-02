@@ -40,12 +40,10 @@
 				  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Modified'" [ngClass]="{'active': sankeyView == 'Modified'}">Modification</button>
 				</div>
 				<app-psat-sankey *ngIf="sankeyView === 'Baseline'"
-					  [location]="'baseline'"
 					  [settings]="settings"
 					  [baselineResults]="baselineResults"
 					  [isBaseline]="true"></app-psat-sankey>
 				<app-psat-sankey *ngIf="sankeyView === 'Modified'"
-				  [location]="'baseline'"
 				  [settings]="settings"
 				  [modResults]="modificationResults"
 				  [isBaseline]="false"></app-psat-sankey>

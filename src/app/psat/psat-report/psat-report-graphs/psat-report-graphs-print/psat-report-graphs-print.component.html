@@ -69,7 +69,7 @@
             </div>
             <div class="row show-print">
               <div class="col-12">
-                <app-psat-sankey [settings]="settings" [psat]="baselinePsat.psat" [location]="assessmentName + '-psat-baseline-print-sankey-' + i"
+                <app-psat-sankey [settings]="settings" [psat]="baselinePsat.psat"
                   [printView]="true" [modIndex]="i" [isBaseline]="true"></app-psat-sankey>
               </div>
             </div>
@@ -80,7 +80,7 @@
             </div>
             <div class="row show-print" *ngIf="modExists">
               <div class="col-12">
-                <app-psat-sankey [settings]="settings" [psat]="psatOption.psat" [location]="assessmentName + '-psat-modification-print-sankey-' + i"
+                <app-psat-sankey [settings]="settings" [psat]="psatOption.psat"
                   [printView]="true" [modIndex]="i" [isBaseline]="false" [baseline]="baselinePsat.psat"></app-psat-sankey>
               </div>
             </div>
