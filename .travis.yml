@@ -63,4 +63,5 @@ deploy:
   on:
     repo: ORNL-AMO/AMO-Tools-Desktop
     branch: 3505-test
+    condition: type = push AND branch = 3505-test
     #tags: false
