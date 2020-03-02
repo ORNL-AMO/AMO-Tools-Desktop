@@ -56,7 +56,7 @@ export class PsatSankeyComponent implements OnInit {
   pump: number;
 
   // gradientStartColor: string = '#1C20DB'; 
-  gradientStartColor: string = '#1F1EDC'; 
+  gradientStartColor: string = '#1F1EDC';
   gradientEndColor: string = '#3390DE';
   nodeStartColor: string = 'rgba(31, 30, 220, .9)';
   nodeArrowColor: string = 'rgba(51, 144, 222, .9)';
@@ -70,7 +70,7 @@ export class PsatSankeyComponent implements OnInit {
     private _dom: ElementRef,
     private renderer: Renderer2,
     private decimalPipe: DecimalPipe
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (!this.baseline && !this.isBaseline) {
@@ -124,7 +124,7 @@ export class PsatSankeyComponent implements OnInit {
   }
 
   sankey(results: PsatOutputs) {
-    const links: Array<{source: number, target: number}> = [];
+    const links: Array<{ source: number, target: number }> = [];
     let nodes: Array<PsatSankeyNode> = [];
 
     this.closeSankey();
@@ -132,8 +132,8 @@ export class PsatSankeyComponent implements OnInit {
     nodes = this.buildNodes(results);
 
     links.push(
-      { source: 0, target: 1},
-      { source: 0, target: 2},
+      { source: 0, target: 1 },
+      { source: 0, target: 2 },
       { source: 1, target: 2 },
       { source: 1, target: 3 },
     );
@@ -143,18 +143,19 @@ export class PsatSankeyComponent implements OnInit {
         { source: 2, target: 5 },
         { source: 5, target: 6 },
         { source: 5, target: 7 }
-      ); 
+      );
     } else {
       links.push(
         { source: 2, target: 4 },
         { source: 2, target: 5 }
-      )   
+      )
     }
-      
+
     const sankeyLink = {
       value: nodes.map(node => node.value),
       source: links.map(link => link.source),
       target: links.map(link => link.target),
+      hoverinfo: 'none',
       line: {
         color: this.nodeStartColor,
         width: 0
@@ -164,7 +165,6 @@ export class PsatSankeyComponent implements OnInit {
     const testHover = 'adsfdhfjdsahfjk';
     const sankeyData = {
       type: "sankey",
-      // hoverinfo: 'none',
       orientation: "h",
       valuesuffix: "kW",
       ids: nodes.map(node => node.id),
@@ -182,20 +182,19 @@ export class PsatSankeyComponent implements OnInit {
         label: nodes.map(node => node.name),
         x: nodes.map(node => node.x),
         y: nodes.map(node => node.y),
-        lossPercent: nodes.map(node => node.lossPercent),
         color: nodes.map(node => node.nodeColor),
-        // hoverinfo: 'none',
-        customdata: ['TEESSSSTTTTTTTTT'],
-        hovertemplate: 'Loss Percentage: %{lossPercent}, %{customData}',
-        hoverlabel: {
-          bgcolor: 'rgba(255,255,255,.6)',
-          bordercolor: 'rgba(0,0,0,0)',
-          font: {
-            size: 14,
-            color: 'rgba(0,0,0,.5)'
-          },
-          align: 'auto',
-        }
+        hoverinfo: 'all',
+        // customdata: ['TEESSSSTTTTTTTTT'],
+        hovertemplate: '%{value}<extra></extra>',
+        // hoverlabel: {
+        //   bgcolor: 'rgba(255,255,255,.6)',
+        //   bordercolor: 'rgba(0,0,0,0)',
+        //   font: {
+        //     size: 14,
+        //     color: 'rgba(0,0,0,.5)'
+        //   },
+        //   align: 'auto',
+        // }
       },
       link: sankeyLink
     };
@@ -228,12 +227,13 @@ export class PsatSankeyComponent implements OnInit {
 
     Plotly.react(this.ngChart.nativeElement, [sankeyData], layout, config);
     this.buildSvgArrows();
-    
+
     this.ngChart.nativeElement.on('plotly_afterplot', event => {
       this.setGradients();
     });
 
     this.ngChart.nativeElement.on('plotly_hover', event => {
+      console.log(event);
       this.setGradients();
     });
   }
@@ -244,24 +244,24 @@ export class PsatSankeyComponent implements OnInit {
     let driveConnectorValue: number = 0;
     let usefulOutput: number = 0;
 
-    if (this.drive > 0 ) {
+    if (this.drive > 0) {
       driveConnectorValue = motorConnectorValue - this.drive;
-      this.connectingLinkPaths = [0,1,4];
-      this.connectingNodes = [0,1,2,5];
+      this.connectingLinkPaths = [0, 1, 4];
+      this.connectingNodes = [0, 1, 2, 5];
       usefulOutput = driveConnectorValue - this.pump;
     } else {
-      this.connectingLinkPaths = [0,1,5];
-      this.connectingNodes = [0,1,2,];
+      this.connectingLinkPaths = [0, 1, 5];
+      this.connectingNodes = [0, 1, 2,];
       usefulOutput = motorConnectorValue - this.pump;
     }
-    
+
     nodes.push(
       {
         name: "Energy Input " + this.decimalPipe.transform(results.motor_power, '1.0-0') + " kW",
         value: results.motor_power,
         lossPercent: 0,
         x: .1,
-        y: .6, 
+        y: .6,
         nodeColor: this.nodeStartColor,
         id: 'OriginConnector'
       },
@@ -270,7 +270,7 @@ export class PsatSankeyComponent implements OnInit {
         value: 0,
         lossPercent: 0,
         x: .25,
-        y: .6, 
+        y: .6,
         nodeColor: this.nodeStartColor,
         id: 'InputConnector'
       },
@@ -279,7 +279,7 @@ export class PsatSankeyComponent implements OnInit {
         value: motorConnectorValue,
         lossPercent: 0,
         x: .5,
-        y: .6, 
+        y: .6,
         nodeColor: this.nodeStartColor,
         id: 'motorConnector'
       },
@@ -288,7 +288,7 @@ export class PsatSankeyComponent implements OnInit {
         value: this.motor,
         lossPercent: (this.motor / results.motor_power) * 100,
         x: .5,
-        y: .10, 
+        y: .10,
         nodeColor: this.nodeArrowColor,
         id: 'motorLosses'
       },
@@ -296,7 +296,7 @@ export class PsatSankeyComponent implements OnInit {
     if (this.drive > 0) {
       nodes.push(
         {
-          name: "Drive Losses " + this.decimalPipe.transform(this.drive, '1.0-0') +  "kW",
+          name: "Drive Losses " + this.decimalPipe.transform(this.drive, '1.0-0') + "kW",
           value: this.drive,
           lossPercent: (this.drive / results.motor_power) * 100,
           x: .6,
@@ -309,7 +309,7 @@ export class PsatSankeyComponent implements OnInit {
           value: driveConnectorValue,
           lossPercent: 0,
           x: .7,
-          y: .6, 
+          y: .6,
           nodeColor: this.nodeStartColor,
           id: 'driveConnector'
         },
@@ -321,7 +321,7 @@ export class PsatSankeyComponent implements OnInit {
         value: this.pump,
         lossPercent: (this.pump / results.motor_power) * 100,
         x: .8,
-        y: .15, 
+        y: .15,
         nodeColor: this.nodeArrowColor,
         id: 'pumpLosses'
       },
@@ -330,7 +330,7 @@ export class PsatSankeyComponent implements OnInit {
         value: usefulOutput,
         lossPercent: (usefulOutput / results.motor_power) * 100,
         x: .85,
-        y: .65, 
+        y: .65,
         nodeColor: this.nodeArrowColor,
         id: 'usefulOutput'
       }
@@ -345,18 +345,18 @@ export class PsatSankeyComponent implements OnInit {
     const arrowOpacity = '0.9';
     const arrowShape = 'polygon(100% 50%, 0 0, 0 100%)'
 
-    for (let i = 0; i < rects.length; i++) {  
-       if (this.connectingNodes.includes(i)) {
-         rects[i].setAttribute('style', `stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientStartColor}; fill-opacity: 0.9;`);
-       } 
-       else {
-         const height = rects[i].getAttribute('height');
-         const defaultY = rects[i].getAttribute('y');
+    for (let i = 0; i < rects.length; i++) {
+      if (this.connectingNodes.includes(i)) {
+        rects[i].setAttribute('style', `stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientStartColor}; fill-opacity: 0.9;`);
+      }
+      else {
+        const height = rects[i].getAttribute('height');
+        const defaultY = rects[i].getAttribute('y');
 
-         rects[i].setAttribute('y', `${defaultY - (height / 2.75)}`);
-         rects[i].setAttribute('style', `width: ${height}px; height: ${height * 1.75}px; clip-path:  ${arrowShape}; 
+        rects[i].setAttribute('y', `${defaultY - (height / 2.75)}`);
+        rects[i].setAttribute('style', `width: ${height}px; height: ${height * 1.75}px; clip-path:  ${arrowShape}; 
          stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientEndColor}; fill-opacity: ${arrowOpacity};`);
-        }
+      }
     }
   }
 
@@ -374,7 +374,7 @@ export class PsatSankeyComponent implements OnInit {
     // Insert our gradient Def
     this.renderer.appendChild(mainSVG, svgDefs);
 
-    for(let i = 0; i < linkPaths.length; i++) {
+    for (let i = 0; i < linkPaths.length; i++) {
       if (this.connectingLinkPaths.includes(i)) {
         linkPaths[i].setAttribute('fill', this.gradientStartColor);
         linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: ${this.gradientStartColor}; fill-opacity: 0.9; stroke-width: 0.25; opacity: 1;`);
