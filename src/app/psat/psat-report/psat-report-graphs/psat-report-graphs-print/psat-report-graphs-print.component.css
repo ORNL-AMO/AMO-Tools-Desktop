@@ -41,7 +41,7 @@
     } */
 
     .print-pie-width{
-        width: 550px;
+        width: 500px;
     }
     .print-page-title {
         font-size: 40px !important;
@@ -65,7 +65,7 @@
     .print-graphs-container {
         page-break-before: always;
         page-break-inside: avoid;
-        width: 1100px;
+        width: 1000px;
     }
 /* 
     .print-conserve-paper {

@@ -44,7 +44,7 @@ export class PsatReportGraphsComponent implements OnInit {
 
   ngOnInit() {
     this.setAllChartData();
-    this.barChartYAxisLabel = 'Power (' + this.settings.powerMeasurement + ')';
+    this.barChartYAxisLabel = 'Power (kW)';
   }
 
   setAllChartData() {

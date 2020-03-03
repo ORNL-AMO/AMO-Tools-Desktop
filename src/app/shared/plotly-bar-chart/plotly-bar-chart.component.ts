@@ -28,6 +28,7 @@ export class PlotlyBarChartComponent implements OnInit {
 
   ngOnChanges() {
     if (this.barChart) {
+      Plotly.purge(this.barChart.nativeElement);
       this.drawChart();
     }
   }
@@ -50,6 +51,9 @@ export class PlotlyBarChartComponent implements OnInit {
       barmode: 'group',
       showlegend: true,
       legend: { "orientation": "h" },
+      font: {
+        size: 16,
+      },
       yaxis: {
         hoverformat: '.3r',
         title: {

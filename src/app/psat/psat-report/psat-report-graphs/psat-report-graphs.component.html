@@ -8,7 +8,7 @@
     </div>
     <div class="p-2 pie-chart-container">
       <app-plotly-pie-chart [values]="selectedBaselineData.pieChartValues"
-        [labels]="selectedBaselineData.pieChartLabels" [valuesUnit]="settings.powerMeasurement">
+        [labels]="selectedBaselineData.pieChartLabels" [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
     </div>
   </div>
@@ -21,13 +21,13 @@
     </div>
     <div class="p-2 pie-chart-container">
       <app-plotly-pie-chart [values]="selectedModificationData.pieChartValues"
-        [labels]="selectedModificationData.pieChartLabels" [valuesUnit]="settings.powerMeasurement">
+        [labels]="selectedModificationData.pieChartLabels" [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
     </div>
   </div>
   <div *ngIf="selectedModificationData" class="w-100">
     <app-plotly-bar-chart [barChartDataArray]="[selectedBaselineData, selectedModificationData]"
-      [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="settings.powerMeasurement">
+      [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="'kW'">
     </app-plotly-bar-chart>
   </div>
 </div>

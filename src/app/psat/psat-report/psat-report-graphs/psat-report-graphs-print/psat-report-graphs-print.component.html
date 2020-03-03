@@ -103,14 +103,14 @@
     <div class="print-pie-width">
       <div class="h4">Baseline</div>
       <app-plotly-pie-chart [values]="scenarioSummary.baselineGraphData.pieChartValues"
-        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="settings.powerMeasurement"
+        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="'kW'"
         [isPrint]="true">
       </app-plotly-pie-chart>
     </div>
     <div class="print-pie-width">
       <div class="h4">{{scenarioSummary.modificationGraphData.name}}</div>
       <app-plotly-pie-chart [values]="scenarioSummary.modificationGraphData.pieChartValues"
-        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="settings.powerMeasurement"
+        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="'kW'"
         [isPrint]="true">
       </app-plotly-pie-chart>
     </div>
