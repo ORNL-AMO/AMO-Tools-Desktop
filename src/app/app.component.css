@@ -367,10 +367,10 @@ select.form-control:not([size]):not([multiple]) {
 
 @media print {
   @page {
-    margin-top: 10mm;
-    margin-bottom: 10mm;
-    margin-left: 5mm;
-    margin-right: 5mm;
+    margin-top: 5mm;
+    margin-bottom: 5mm;
+    margin-left: 2mm;
+    margin-right: 2mm;
   }
 
   .indicate-report-field-different{

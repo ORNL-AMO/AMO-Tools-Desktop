@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input, HostListener } from '@angular/core';
 import * as Plotly from 'plotly.js';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 
@@ -16,8 +16,16 @@ export class PlotlyPieChartComponent implements OnInit {
   valuesUnit: string;
   @Input()
   title: string;
+  @Input()
+  isPrint: boolean;
 
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.drawPlot();
+  }
+
 
   constructor() { }
 
@@ -25,16 +33,26 @@ export class PlotlyPieChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.drawPlot();
+    if (!this.isPrint) {
+      this.drawPlot();
+    } else {
+      this.drawPrintPlot();
+    }
   }
 
   ngOnChanges() {
     if (this.plotlyPieChart) {
-      this.drawPlot();
+      // Plotly.purge(this.plotlyPieChart.nativeElement);
+      if (!this.isPrint) {
+        this.drawPlot();
+      } else {
+        this.drawPrintPlot();
+      }
     }
   }
 
   drawPlot() {
+    Plotly.purge(this.plotlyPieChart.nativeElement)
     var data = [{
       values: this.values,
       labels: this.labels,
@@ -43,6 +61,7 @@ export class PlotlyPieChartComponent implements OnInit {
       },
       type: 'pie',
       textposition: 'auto',
+      insidetextorientation: "horizontal",
       automargin: true,
       textinfo: 'label+percent',
       hoverformat: '.2r',
@@ -51,20 +70,42 @@ export class PlotlyPieChartComponent implements OnInit {
     }];
 
     var layout = {
-      // title: {
-      //   text: this.title,
-      //   font: {
-      //     size: 24,
-      //     xanchor: "center",
-      //     yanchor: "bottom"
-      //   }
-      // },
+      // width: this.plotlyPieChart.nativeElement.clientWidth,
       font: {
-        size: 14,
+        size: 16,
       },
-      margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
+      showlegend: false,
+      // margin: {t: 10, b: 10, l: 30, r: 30}
+    };
+    Plotly.react(this.plotlyPieChart.nativeElement, data, layout);
+  }
+
+  drawPrintPlot() {
+
+    var data = [{
+      values: this.values,
+      labels: this.labels,
+      marker: {
+        colors: graphColors
+      },
+      type: 'pie',
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      automargin: true,
+      textinfo: 'label+percent',
+      hoverformat: '.2r',
+      text: this.values.map(y => { return (y).toFixed(2) + ' ' + this.valuesUnit; }),
+      hoverinfo: 'text'
+    }];
+
+    var layout = {
+      width: this.plotlyPieChart.nativeElement.clientWidth,
+      font: {
+        size: 16,
+      },
       showlegend: false
     };
-    Plotly.react(this.plotlyPieChart.nativeElement, data, layout, { responsive: true });
+    console.log(layout.width)
+    Plotly.react(this.plotlyPieChart.nativeElement, data, layout);
   }
 }

@@ -117,7 +117,7 @@ export class PrintOptionsMenuComponent implements OnInit {
     this.printMenuModal.hide();
     this.printMenuModal.onHidden.subscribe(() => {
       this.printOptionsMenuService.showPrintView.next(true);
-      let tmpPrintBuildTime: number = 100;
+      let tmpPrintBuildTime: number = 2000;
       // if (this.reportRollupService.numSsmt > 0) {
       //   tmpPrintBuildTime += (500 * this.reportRollupService.numSsmt);
       // }

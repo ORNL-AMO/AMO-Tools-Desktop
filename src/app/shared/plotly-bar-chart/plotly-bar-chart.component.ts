@@ -46,6 +46,7 @@ export class PlotlyBarChartComponent implements OnInit {
       })
     });
     let layout = {
+      width: this.barChart.nativeElement.clientWidth,
       barmode: 'group',
       showlegend: true,
       legend: { "orientation": "h" },
@@ -60,7 +61,8 @@ export class PlotlyBarChartComponent implements OnInit {
         }
       }
     };
-    Plotly.newPlot(this.barChart.nativeElement, traces, layout, { responsive: true });
+    console.log('bar ' + layout.width);
+    Plotly.react(this.barChart.nativeElement, traces, layout, { responsive: true });
   }
 
 }

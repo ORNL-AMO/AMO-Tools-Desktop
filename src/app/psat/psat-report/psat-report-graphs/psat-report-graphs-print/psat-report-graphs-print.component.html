@@ -92,7 +92,7 @@
 </div> -->
 
 <div class="print-graphs-container" *ngFor="let scenarioSummary of scenarioSummaries">
-  <div class="print-page-title print-center-title mb-3">
+  <div class="print-page-title mb-3">
     Scenario: {{scenarioSummary.modificationGraphData.name}}
   </div>
   <div class="d-block print-mod-notes" *ngFor="let note of scenarioSummary.notes">
@@ -100,21 +100,23 @@
     <br>
   </div>
   <div class="row no-gutters">
-    <div class="col-6">
+    <div class="print-pie-width">
       <div class="h4">Baseline</div>
       <app-plotly-pie-chart [values]="scenarioSummary.baselineGraphData.pieChartValues"
-        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="settings.powerMeasurement">
+        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="settings.powerMeasurement"
+        [isPrint]="true">
       </app-plotly-pie-chart>
     </div>
-    <div class="col-6">
+    <div class="print-pie-width">
       <div class="h4">{{scenarioSummary.modificationGraphData.name}}</div>
       <app-plotly-pie-chart [values]="scenarioSummary.modificationGraphData.pieChartValues"
-        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="settings.powerMeasurement">
+        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="settings.powerMeasurement"
+        [isPrint]="true">
       </app-plotly-pie-chart>
     </div>
   </div>
-  <div class="w-100">
-    <app-plotly-bar-chart
+  <div class="row no-gutters w-100">
+    <app-plotly-bar-chart class="w-100"
       [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
       [yAxisLabel]="'Power (kW)'"></app-plotly-bar-chart>
   </div>
