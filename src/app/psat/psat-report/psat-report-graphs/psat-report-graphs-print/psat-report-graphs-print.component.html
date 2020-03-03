@@ -99,20 +99,23 @@
     {{note}}
     <br>
   </div>
-  <div class="d-flex">
-    <div class="w-50">
+  <div class="row no-gutters">
+    <div class="col-6">
+      <div class="h4">Baseline</div>
       <app-plotly-pie-chart [values]="scenarioSummary.baselineGraphData.pieChartValues"
         [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="settings.powerMeasurement">
       </app-plotly-pie-chart>
     </div>
-    <div class="w-50">
+    <div class="col-6">
+      <div class="h4">{{scenarioSummary.modificationGraphData.name}}</div>
       <app-plotly-pie-chart [values]="scenarioSummary.modificationGraphData.pieChartValues"
         [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="settings.powerMeasurement">
       </app-plotly-pie-chart>
     </div>
   </div>
   <div class="w-100">
-    <app-plotly-bar-chart [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
+    <app-plotly-bar-chart
+      [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
       [yAxisLabel]="'Power (kW)'"></app-plotly-bar-chart>
   </div>
 </div>

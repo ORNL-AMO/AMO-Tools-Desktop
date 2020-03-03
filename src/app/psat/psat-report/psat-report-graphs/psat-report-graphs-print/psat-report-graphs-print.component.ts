@@ -42,6 +42,7 @@ export class PsatReportGraphsPrintComponent implements OnInit {
         let modificationScenarioSummary: ScenarioSummary = this.getScenarioSummary(this.allChartData[i]);
         this.scenarioSummaries.push(modificationScenarioSummary);
       }
+      console.log(this.scenarioSummaries);
     } else {
       //no modifications
     }

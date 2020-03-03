@@ -14,6 +14,8 @@ export class PlotlyPieChartComponent implements OnInit {
   labels: Array<string>;
   @Input()
   valuesUnit: string;
+  @Input()
+  title: string;
 
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
 
@@ -49,6 +51,17 @@ export class PlotlyPieChartComponent implements OnInit {
     }];
 
     var layout = {
+      // title: {
+      //   text: this.title,
+      //   font: {
+      //     size: 24,
+      //     xanchor: "center",
+      //     yanchor: "bottom"
+      //   }
+      // },
+      font: {
+        size: 14,
+      },
       margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
       showlegend: false
     };
