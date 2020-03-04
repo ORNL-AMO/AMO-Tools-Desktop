@@ -69,7 +69,8 @@
   <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100"
     [ngStyle]="{'height.px': containerHeight}">
     <div class="sankey-padding w-100">
-      <app-ssmt-sankey></app-ssmt-sankey>
+      <app-ssmt-sankey [ssmt]="_ssmt" [settings]="settings" [assessment]="assessment"
+      [isBaseline]="_ssmt.name == 'Baseline'"></app-ssmt-sankey>
     </div>
   </div>
 
