@@ -1,83 +1,38 @@
-<div class="output-summary">
-  <div class="row justify-content-center align-items-center hide-print">
-    <div class="col-6">
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <select name="selectedPsat1" class="form-control mx-auto" id="selectedPsat1" [(ngModel)]="selectedPsat1" (ngModelChange)="selectNewPsat(1)">
-              <option *ngFor="let psat of psatOptions" [ngValue]="psat">{{psat.name}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
+<div class="d-flex flex-wrap" *ngIf="!printView">
+  <div class="d-flex w-50 flex-column">
+    <div class="pl-2 pr-2">
+      <select name="selectedBaselineData" class="form-control mx-auto" id="selectedBaselineData"
+        [(ngModel)]="selectedBaselineData">
+        <option *ngFor="let dataOption of allChartData" [ngValue]="dataOption">{{dataOption.name}}</option>
+      </select>
     </div>
-    <div class="col-6" *ngIf="modExists">
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <select name="selectedPsat2" class="form-control mx-auto" id="selectedPsat2" [(ngModel)]="selectedPsat2" (ngModelChange)="selectNewPsat(2)">
-              <option *ngFor="let psat of psatOptions" [ngValue]="psat">{{psat.name}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
+    <div class="p-2 pie-chart-container">
+      <app-plotly-pie-chart [values]="selectedBaselineData.pieChartValues"
+        [labels]="selectedBaselineData.pieChartLabels" [valuesUnit]="'kW'">
+      </app-plotly-pie-chart>
     </div>
   </div>
-
-  <!-- if no mod, only 1 pie chart -->
-  <div class="row justify-content-center align-items-center hide-print" *ngIf="!modExists">
-    <div class="col-12">
-      <div class="row">
-        <div class="col-6">
-          {{selectedPsat1.name}}
-        </div>
-      </div>
-      <div class="row print-solo">
-        <div #pieChartContainer class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="selectedPsat1PieLabels"
-            [values]="selectedPsat1PieValues" [exportName]="selectedPsat1ExportName"></app-pie-chart>
-        </div>
-      </div>
+  <div *ngIf="selectedModificationData" class="d-flex w-50 flex-column">
+    <div class="pl-2 pr-2">
+      <select name="selectedModificationData" class="form-control mx-auto" id="selectedModificationData"
+        [(ngModel)]="selectedModificationData">
+        <option *ngFor="let dataOption of allChartData" [ngValue]="dataOption">{{dataOption.name}}</option>
+      </select>
+    </div>
+    <div class="p-2 pie-chart-container">
+      <app-plotly-pie-chart [values]="selectedModificationData.pieChartValues"
+        [labels]="selectedModificationData.pieChartLabels" [valuesUnit]="'kW'">
+      </app-plotly-pie-chart>
     </div>
   </div>
-
-  <!-- if there is a mod, show 2 pie charts -->
-  <div *ngIf="modExists">
-    <div class="row justify-content-center align-items-center hide-print">
-      <div class="col-12">
-        <div class="row">
-          <div #pieChartContainer class="col-6">
-            <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="selectedPsat1PieLabels"
-              [values]="selectedPsat1PieValues" [exportName]="selectedPsat1ExportName"></app-pie-chart>
-          </div>
-          <div class="col-6">
-            <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="selectedPsat2PieLabels"
-              [values]="selectedPsat2PieValues" [exportName]="selectedPsat2ExportName"></app-pie-chart>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div *ngIf="selectedModificationData" class="w-100">
+    <app-plotly-bar-chart [barChartDataArray]="[selectedBaselineData, selectedModificationData]"
+      [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="'kW'">
+    </app-plotly-bar-chart>
   </div>
+</div>
 
-
-  <!-- if there is a mod, show bar chart -->
-  <div class="row align-items-center hide-print medium-padding-top" *ngIf="modExists">
-    <div #barChartContainer class="col-10 mx-auto">
-      <app-psat-bar-chart [settings]="settings" [printView]="false" [graphColors]="graphColors" [labels]="allChartData.barLabels"
-        [psat1Name]="selectedPsat1.name" [psat2Name]="selectedPsat2.name" [psat1Values]="selectedPsat1BarValues" [psat2Values]="selectedPsat2BarValues"
-        [chartContainerWidth]="getBarWidth()"></app-psat-bar-chart>
-    </div>
-  </div>
-
-
-  <!-- if show print then content will init -->
-  <div *ngIf="printView" class="row show-print print-component">
-    <!-- contains pie and bar chart print views -->
-    <div class="col-12">
-      <app-psat-report-graphs-print [settings]="settings" [graphColors]="graphColors" [psatOptions]="psatOptions" [pieChartWidth]="getPieWidth()"
-        [printView]="true" [modExists]="modExists" [printSankey]="printSankey" [printGraphs]="printGraphs" [allChartData]="allChartData" [assessmentName]="assessment.name"></app-psat-report-graphs-print>
-    </div>
-  </div>
-
-
+<div *ngIf="printView">
+  <app-psat-report-graphs-print [allChartData]="allChartData" [settings]="settings" [printSankey]="printSankey"
+    [printGraphs]="printGraphs"></app-psat-report-graphs-print>
 </div>

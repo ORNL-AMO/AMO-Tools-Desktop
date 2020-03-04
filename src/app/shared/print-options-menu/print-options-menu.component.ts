@@ -81,7 +81,7 @@ export class PrintOptionsMenuComponent implements OnInit {
     this.printMenuModal.hide();
     this.printMenuModal.onHidden.subscribe(() => {
       this.printOptionsMenuService.showPrintView.next(true);
-      let tmpPrintBuildTime: number = 100;
+      let tmpPrintBuildTime: number = 2000;
       // if (this.reportRollupService.numSsmt > 0) {
       //   tmpPrintBuildTime += (500 * this.reportRollupService.numSsmt);
       // }
@@ -100,6 +100,6 @@ export class PrintOptionsMenuComponent implements OnInit {
       //after printing hide content again
       this.printOptionsMenuService.showPrintView.next(false);
       this.printOptionsMenuService.showPrintMenu.next(false);
-    }, 5000);
+    }, 200);
   }
 }

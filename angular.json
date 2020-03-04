@@ -60,9 +60,7 @@
               "src/assets/styles/directory-dashboard.css",
               "src/assets/styles/sidebar.css"
             ],
-            "scripts": [
-
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -108,9 +106,7 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [
-
-            ],
+            "scripts": [],
             "styles": [
               "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.css",
@@ -154,5 +150,8 @@
     "@schematics/angular:directive": {
       "prefix": "app"
     }
+  },
+  "cli": {
+    "analytics": "c7c821ee-29e2-4918-ab71-1e94bd66b1fb"
   }
 }
