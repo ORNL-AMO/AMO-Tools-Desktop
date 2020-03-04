@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PrintOptionsMenuService } from './print-options-menu.service';
 import { PrintOptions } from '../models/printing';
@@ -11,49 +11,6 @@ import { ReportRollupService } from '../../report-rollup/report-rollup.service';
   styleUrls: ['./print-options-menu.component.css']
 })
 export class PrintOptionsMenuComponent implements OnInit {
-
-  // @Input()
-  // selectAll: boolean;
-  // @Input()
-  // printReportGraphs: boolean;
-  // @Input()
-  // printReportSankey: boolean;
-  // @Input()
-  // printResults: boolean;
-  // @Input()
-  // printInputData: boolean;
-  // @Input()
-  // printPsatRollup: boolean;
-  // @Input()
-  // printFsatRollup: boolean;
-  // @Input()
-  // printPhastRollup: boolean;
-  // @Input()
-  // printSsmtRollup: boolean;
-
-  // @Input()
-  // printEnergySummary: boolean;
-  // @Input()
-  // printLossesSummary: boolean;
-  // @Input()
-  // printReportDiagram: boolean;
-
-  // //---- phast-specific options --------
-  // @Input()
-  // printEnergyUsed: boolean;
-  // //---- end phast-specific options ----
-
-  // //phast and treasure hunt
-  // @Input()
-  // printExecutiveSummary: boolean;
-
-  // //---- treasure hunt specific options ----
-  // @Input()
-  // printReportOpportunitySummary: boolean;
-  // @Input()
-  // printReportOpportunityPayback: boolean;
-  // //---- end treasure hunt specific options ---
-
 
   @ViewChild('printMenuModal', { static: false }) public printMenuModal: ModalDirective;
 
@@ -111,6 +68,13 @@ export class PrintOptionsMenuComponent implements OnInit {
 
   showPrintModal(): void {
     this.printMenuModal.show();
+  }
+
+  closePrintModal() {
+    this.printMenuModal.hide();
+    this.printMenuModal.onHidden.subscribe(() => {
+      this.printOptionsMenuService.showPrintMenu.next(false);
+    });
   }
 
   setPrintViewThenPrint() {
