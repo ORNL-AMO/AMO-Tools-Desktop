@@ -1,22 +1,27 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { PrintOptions } from '../models/printing';
 
 @Injectable()
-export class RollupPrintService {
+export class PrintOptionsMenuService {
 
-  rollupPrintOptions: BehaviorSubject<RollupPrintOptions>;
+  printOptions: BehaviorSubject<PrintOptions>;
   showPrintView: BehaviorSubject<boolean>;
   showPrintOptionsModal: BehaviorSubject<boolean>;
+  printContext: BehaviorSubject<string>;
+  showPrintMenu: BehaviorSubject<boolean>;
   constructor() {
-    let initPrintOptions: RollupPrintOptions = this.setAll(true);
-    this.rollupPrintOptions = new BehaviorSubject<RollupPrintOptions>(initPrintOptions);
+    let initPrintOptions: PrintOptions = this.setAll(true);
+    this.printOptions = new BehaviorSubject<PrintOptions>(initPrintOptions);
     this.showPrintView = new BehaviorSubject<boolean>(false);
     this.showPrintOptionsModal = new BehaviorSubject<boolean>(false);
+    this.printContext = new BehaviorSubject<string>(undefined);
+    this.showPrintMenu = new BehaviorSubject<boolean>(false);
   }
 
 
   toggleSection(section: string): void {
-    let currentPrintOptions: RollupPrintOptions = this.rollupPrintOptions.getValue();
+    let currentPrintOptions: PrintOptions = this.printOptions.getValue();
     switch (section) {
       case "selectAll": {
         currentPrintOptions.selectAll = !currentPrintOptions.selectAll;
@@ -85,10 +90,10 @@ export class RollupPrintService {
         break;
       }
     }
-    this.rollupPrintOptions.next(currentPrintOptions);
+    this.printOptions.next(currentPrintOptions);
   }
 
-  setAll(bool: boolean): RollupPrintOptions {
+  setAll(bool: boolean): PrintOptions {
     return {
       printPsatRollup: bool,
       printPhastRollup: bool,
@@ -109,25 +114,4 @@ export class RollupPrintService {
       selectAll: bool
     }
   }
-}
-
-
-export interface RollupPrintOptions {
-  printPsatRollup: boolean;
-  printPhastRollup: boolean;
-  printFsatRollup: boolean;
-  // this.printTreasureHuntRollup: boolean;
-  // this.printSsmtRollup: boolean;
-  printReportGraphs: boolean;
-  printReportSankey: boolean;
-  printResults: boolean;
-  printInputData: boolean;
-  printExecutiveSummary: boolean;
-  printEnergyUsed: boolean;
-  printEnergySummary: boolean;
-  printLossesSummary: boolean;
-  printReportOpportunityPayback: boolean;
-  printReportOpportunitySummary: boolean;
-  printSsmtRollup: boolean;
-  selectAll: boolean;
 }
