@@ -95,23 +95,24 @@
   <div class="print-page-title mb-3">
     Scenario: {{scenarioSummary.modificationGraphData.name}}
   </div>
-  <div class="d-block print-mod-notes" *ngFor="let note of scenarioSummary.notes">
-    {{note}}
-    <br>
+  <div class="d-block print-mod-notes mb-4" *ngIf="scenarioSummary.notes.length != 0">
+    <div class="h3">Scenario Notes:</div>
+    <ul>
+      <li *ngFor="let note of scenarioSummary.notes">{{note}}</li>
+    </ul>
   </div>
-  <div class="row no-gutters">
+
+  <div class="row no-gutters mt-2">
     <div class="print-pie-width">
-      <div class="h4">Baseline</div>
+      <div class="h3 mb-0">Baseline</div>
       <app-plotly-pie-chart [values]="scenarioSummary.baselineGraphData.pieChartValues"
-        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="'kW'"
-        [isPrint]="true">
+        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
       </app-plotly-pie-chart>
     </div>
     <div class="print-pie-width">
-      <div class="h4">{{scenarioSummary.modificationGraphData.name}}</div>
+      <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
       <app-plotly-pie-chart [values]="scenarioSummary.modificationGraphData.pieChartValues"
-        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="'kW'"
-        [isPrint]="true">
+        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
       </app-plotly-pie-chart>
     </div>
   </div>

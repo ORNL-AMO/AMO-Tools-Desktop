@@ -70,6 +70,7 @@ export class PlotlyPieChartComponent implements OnInit {
     }];
 
     var layout = {
+      updatemenus: [],
       // width: this.plotlyPieChart.nativeElement.clientWidth,
       font: {
         size: 16,
@@ -77,7 +78,13 @@ export class PlotlyPieChartComponent implements OnInit {
       showlegend: false,
       // margin: {t: 10, b: 10, l: 30, r: 30}
     };
-    Plotly.react(this.plotlyPieChart.nativeElement, data, layout);
+
+    var modebarBtns = {
+      modeBarButtonsToRemove: ['hoverClosestPie'],
+      displaylogo: false,
+      displayModeBar: true
+    };
+    Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
   }
 
   drawPrintPlot() {
@@ -103,9 +110,13 @@ export class PlotlyPieChartComponent implements OnInit {
       font: {
         size: 16,
       },
-      showlegend: false
+      showlegend: false,
+      margin: {t: 0, b: 0}
     };
-    console.log(layout.width)
-    Plotly.react(this.plotlyPieChart.nativeElement, data, layout);
+    var modebarBtns = {
+      displaylogo: false,
+      displayModeBar: false
+    };
+    Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
   }
 }

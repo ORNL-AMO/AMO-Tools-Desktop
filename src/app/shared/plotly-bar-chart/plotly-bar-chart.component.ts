@@ -63,10 +63,17 @@ export class PlotlyBarChartComponent implements OnInit {
             size: 16
           }
         }
-      }
+      },
+      margin: {t: 0}
     };
-    console.log('bar ' + layout.width);
-    Plotly.react(this.barChart.nativeElement, traces, layout, { responsive: true });
+
+    var configOptions = {
+      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      displaylogo: false,
+      displayModeBar: true,
+      responsive: true
+    };
+    Plotly.react(this.barChart.nativeElement, traces, layout, configOptions);
   }
 
 }
