@@ -96,7 +96,7 @@
         </div>
         <div class="results scroll-item print-height" *ngIf="currentTab == 'reportSankey' && !showPrintView"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-fsat-report-sankey [fsat]="assessment.fsat" [settings]="settings" [assessment]="assessment">
+            <app-fsat-report-sankey [settings]="settings" [assessment]="assessment">
             </app-fsat-report-sankey>
         </div>
 
