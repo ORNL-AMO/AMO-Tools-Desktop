@@ -1,14 +1,12 @@
-<div class="assessment-report report-in-fsat fsat" *ngIf="fsat && settings"
+<div class="assessment-report report-in-fsat fsat"
     [ngClass]="{'assessment-report-padding': inFsat, 'report-in-rollup': inRollup}">
-
-
     <div *ngIf="inFsat" class="report-cover">
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
         <div class="report-title">
             <h4>Fan Efficiency Report:</h4>
             <h4>{{assessment.name}}</h4>
-            <h5>{{createdDate| date:'medium'}}</h5>
+            <h5>{{createdDate| date:'short'}}</h5>
         </div>
 
         <p class="report-notes">{{reportNotes}}</p>
@@ -20,10 +18,7 @@
             <button class="btn btn-secondary" (click)="print()">Print</button>
             <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
         </div>
-        <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
-
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
-
         <div *ngIf="assessment" class="row assessment-name">
             <div class="col-12">
                 <h2 class="assessment-title">
@@ -36,13 +31,9 @@
             </div>
             <div class="col-12">
                 <h2 class="date-modified">
-                    <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+                    <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
                 </h2>
             </div>
-
-            <!--<button *ngIf="inFsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
-            <!-- <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span> -->
-
         </div>
     </div>
     <!-- End .report-header -->
@@ -60,29 +51,21 @@
         </div>
     </div>
 
-    <div class="report-data" *ngIf="fsat.setupDone">
+    <div class="report-data" *ngIf="assessment.fsat.setupDone">
 
         <ul #reportBtns class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
                 <a>Result Data</a>
             </li>
-            <!--
-          -->
             <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
                 <a>Report Graphs</a>
             </li>
-            <!--
-          -->
             <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
                 <a>Sankey</a>
             </li>
-            <!--
-          -->
             <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
                 <a>Input Summary</a>
             </li>
-            <!--
-          -->
             <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
                 <a>Facility Info</a>
             </li>
@@ -95,32 +78,32 @@
         <div class="input-data results scroll-item print-height"
             *ngIf="currentTab == 'inputData' || (showPrintView && printOptions.printInputData)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-input-summary [fsat]="fsat" [settings]="settings" [printView]="showPrintView"></app-input-summary>
+            <app-input-summary [fsat]="assessment.fsat" [settings]="settings" [printView]="showPrintView">
+            </app-input-summary>
         </div>
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'results' || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-results-summary [fsat]="fsat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment"
-                (selectModification)="useModification($event)">
+            <app-results-summary [settings]="settings" [inRollup]="inRollup" [assessment]="assessment">
             </app-results-summary>
         </div>
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-fsat-report-graphs [fsat]="fsat" [settings]="settings" [assessment]="assessment"
+            <app-fsat-report-graphs [fsat]="assessment.fsat" [settings]="settings" [assessment]="assessment"
                 [printView]="showPrintView" [printSankey]="printOptions.printReportSankey"
                 [printGraphs]="printOptions.printReportGraphs"></app-fsat-report-graphs>
         </div>
         <div class="results scroll-item print-height" *ngIf="currentTab == 'reportSankey' && !showPrintView"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-fsat-report-sankey [fsat]="fsat" [settings]="settings" [assessment]="assessment">
+            <app-fsat-report-sankey [fsat]="assessment.fsat" [settings]="settings" [assessment]="assessment">
             </app-fsat-report-sankey>
         </div>
 
     </div>
     <!-- End .report-data -->
 
-    <div *ngIf="!fsat.setupDone">
+    <div *ngIf="!assessment.fsat.setupDone">
         <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
             see the resulting data.</p>
     </div>

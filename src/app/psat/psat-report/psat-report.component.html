@@ -1,7 +1,5 @@
-<div class="assessment-report report-in-psat psat" *ngIf="assessment.psat && settings"
+<div class="assessment-report report-in-psat psat"
     [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': inRollup}">
-
-
     <div *ngIf="inPsat" class="report-cover">
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
@@ -79,7 +77,8 @@
             <app-input-summary [psat]="assessment.psat" [settings]="settings">
             </app-input-summary>
         </div>
-        <div class="results scroll-item print-height" *ngIf="currentTab == 'results' || (showPrintView && printOptions.printResults)"
+        <div class="results scroll-item print-height"
+            *ngIf="currentTab == 'results' || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-output-summary [settings]="settings" [inRollup]="inRollup" [assessment]="assessment">
             </app-output-summary>
@@ -87,8 +86,8 @@
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-psat-report-graphs [settings]="settings" [psat]="assessment.psat"
-                [printView]="showPrintView" [printSankey]="printOptions.printReportSankey" [printGraphs]="printOptions.printReportGraphs">
+            <app-psat-report-graphs [settings]="settings" [psat]="assessment.psat" [printView]="showPrintView"
+                [printSankey]="printOptions.printReportSankey" [printGraphs]="printOptions.printReportGraphs">
             </app-psat-report-graphs>
         </div>
         <div class="results scroll-item print-height" *ngIf="currentTab == 'reportSankey' && !showPrintView"

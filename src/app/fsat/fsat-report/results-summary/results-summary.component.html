@@ -7,7 +7,8 @@
       <tr>
         <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"></th>
         <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}">Baseline</th>
-        <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}" *ngFor="let modification of fsat.modifications; let index = index;"
+        <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"
+          *ngFor="let modification of fsat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.name}}</th>
       </tr>
     </thead>
@@ -17,120 +18,129 @@
         <td>
           &mdash; &mdash;
         </td>
-        <td class="percent-graph" *ngFor="let modification of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <div class="hide-print" *ngIf="modification.percentSavings">
-            <app-percent-graph [value]="modification.percentSavings"></app-percent-graph>
+        <td class="percent-graph" *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <div class="hide-print" *ngIf="modification.fsat.outputs.percentSavings">
+            <app-percent-graph [value]="modification.fsat.outputs.percentSavings"></app-percent-graph>
           </div>
-          <div class="show-print text-center" *ngIf="modification.percentSavings">
-            {{getSavingsPercentage(baselineResults, modification) | number:'1.0'}} %
+          <div class="show-print text-center" *ngIf="modification.fsat.outputs.percentSavings">
+            {{modification.fsat.outputs.percentSavings | number:'1.0'}} %
           </div>
-          <div *ngIf="!modification.percentSavings" class="mx-auto">&mdash; &mdash;</div>
+          <div *ngIf="!modification.fsat.outputs.percentSavings" class="mx-auto">&mdash; &mdash;</div>
         </td>
       </tr>
       <tr>
         <td>Fan Energy Index</td>
-        <td>{{baselineResults.fanEnergyIndex | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.fanEnergyIndex
-          | number:'2.0-1'}}</td>
+        <td>{{fsat.outputs.fanEnergyIndex | number:'1.0-1'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          {{modification.fsat.outputs.fanEnergyIndex | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Fan efficiency (%)</td>
-        <td>{{baselineResults.fanEfficiency | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.fanEfficiency
-          | number:'2.0-1'}}</td>
+        <td>{{fsat.outputs.fanEfficiency | number:'1.0-1'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.fanEfficiency
+          | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Motor rated power ({{settings.fanPowerMeasurement}})</td>
-        <td>{{baselineResults.motorRatedPower | number:'2.0-0'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.motorRatedPower
+        <td>{{fsat.outputs.motorRatedPower | number:'1.0-0'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.motorRatedPower
           | number:'2.0-0'}}</td>
       </tr>
       <tr>
         <td>Motor shaft power ({{settings.fanPowerMeasurement}})</td>
-        <td>{{baselineResults.motorShaftPower | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.motorShaftPower
-          | number:'2.0-1'}}</td>
+        <td>{{fsat.outputs.motorShaftPower | number:'1.0-1'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.motorShaftPower
+          | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Fan shaft power ({{settings.fanPowerMeasurement}})</td>
-        <td>{{baselineResults.fanShaftPower | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.fanShaftPower
-          | number:'2.0-1'}}</td>
+        <td>{{fsat.outputs.fanShaftPower | number:'1.0-1'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.fanShaftPower
+          | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Motor efficiency (%)</td>
-        <td>{{baselineResults.motorEfficiency | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.motorEfficiency
-          | number:'2.0-1'}}</td>
-        <!-- <td *ngIf="!modificationResults.motorEfficiency">&mdash;</td> -->
+        <td>{{fsat.outputs.motorEfficiency | number:'1.0-1'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.motorEfficiency
+          | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Motor power factor (%)</td>
-        <td>{{baselineResults.motorPowerFactor | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.motorPowerFactor
-          | number:'2.0-1'}}</td>
-        <!-- <td *ngIf="!modificationResults.motorPowerFactor">&mdash;</td> -->
+        <td>{{fsat.outputs.motorPowerFactor | number:'1.0-1'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.motorPowerFactor
+          | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Percent Loaded (%)</td>
-        <td>{{baselineResults.loadFactor*100 | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.loadFactor*100
-          | number:'2.0-1'}}</td>
+        <td>{{fsat.outputs.loadFactor*100 | number:'1.0-1'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.loadFactor*100
+          | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Drive efficiency (%)</td>
-        <td>{{baselineResults.driveEfficiency | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.driveEfficiency
-          | number:'2.0-1'}}</td>
+        <td>{{fsat.outputs.driveEfficiency | number:'1.0-1'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.driveEfficiency
+          | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Motor current (amps)</td>
-        <td>{{baselineResults.motorCurrent | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.motorCurrent
-          | number:'2.0-1'}}</td>
-        <!-- <td *ngIf="!modificationResults.motorCurrent">&mdash;</td> -->
+        <td>{{fsat.outputs.motorCurrent | number:'1.0-1'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.motorCurrent
+          | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Motor power (kW)</td>
-        <td>{{baselineResults.motorPower | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.motorPower
-          | number:'2.0-1'}}</td>
-        <!-- <td *ngIf="!modificationResults.motorPower">&mdash;</td> -->
+        <td>{{fsat.outputs.motorPower | number:'1.0-1'}}</td>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.motorPower
+          | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <th>Annual Energy (MWh)</th>
-        <th>{{baselineResults.annualEnergy | number:'2.0-0'}}</th>
-        <th *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.annualEnergy
-          | number:'2.0-0'}}</th>
-        <!-- <td *ngIf="!modificationResults.annualEnergy">&mdash;</td> -->
+        <th>{{fsat.outputs.annualEnergy | number:'1.0-0'}}</th>
+        <th *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.annualEnergy
+          | number:'1.0-0'}}</th>
       </tr>
       <tr>
         <th>Annual Energy Savings (MWh)</th>
         <th>&mdash;</th>
-        <th *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'positive-savings': modResults.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">{{modResults.energySavings
-          | number:'2.0-0'}}</th>
-        <!-- <td *ngIf="!getDiff(baselineResults.annualEnergy, modificationResults.annualEnergy)">&mdash;</td> -->
+        <th *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.energySavings
+          | number:'1.0-0'}}</th>
       </tr>
       <tr>
         <th>Annual Cost</th>
-        <th>{{baselineResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</th>
-        <th *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'positive-savings': modResults.percentSavings > 10,'selected-modification': index == selectedModificationIndex}">{{modResults.annualCost
-          | currency:'USD':'symbol':'2.0-0'}}</th>
-        <!-- <td *ngIf="!modificationResults.annualCost">&mdash;</td> -->
+        <th>{{fsat.outputs.annualCost | currency:'USD':'symbol':'1.0-0'}}</th>
+        <th *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10,'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.annualCost
+          | currency:'USD':'symbol':'1.0-0'}}</th>
       </tr>
       <tr>
         <th>Annual Savings</th>
         <th>&mdash;</th>
-        <th *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'positive-savings': modResults.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">
-          {{modResults.annualSavings | currency:'USD':'symbol':'2.0-0'}}
+        <th *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">
+          {{modification.fsat.outputs.annualSavings | currency:'USD':'symbol':'1.0-0'}}
         </th>
-        <!-- <td *ngIf="!annualSavings">&mdash;</td> -->
       </tr>
       <tr>
         <td></td>
         <td></td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.fsat.fanMotor.optimize" class="text-muted">*Optimized</span>
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modification.fsat.fanSetup.fanType != 12" class="text-muted">*Optimized</span>
         </td>
       </tr>
       <tr class="hide-print" *ngIf="inRollup">
@@ -139,18 +149,12 @@
           <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="-1"
             [(ngModel)]="selectedModificationIndex">
         </td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index"
             [(ngModel)]="selectedModificationIndex">
         </td>
       </tr>
     </tbody>
   </table>
-
 </div>
-
-<!-- <div class="no-data" *ngIf="fsat.modifications.length == 0">
-  <h3>
-    Add a modification to compare results.
-  </h3>
-</div> -->

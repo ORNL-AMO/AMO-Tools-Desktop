@@ -13,6 +13,7 @@ export interface FSAT {
   setupDone?: boolean;
   isVFD?: boolean;
   operatingHours?: OperatingHours;
+  outputs?: FsatOutput;
 }
 
 export interface Modification {
