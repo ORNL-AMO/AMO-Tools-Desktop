@@ -17,8 +17,6 @@ import { FsatService } from '../fsat.service';
   styleUrls: ['./fsat-report.component.css']
 })
 export class FsatReportComponent implements OnInit {
-  // @Input()
-  // fsat: FSAT;
   @Output('closeReport')
   closeReport = new EventEmitter();
   @Input()
@@ -49,8 +47,6 @@ export class FsatReportComponent implements OnInit {
   selectAll: boolean = false;
 
   assessmentDirectories: Directory[];
-  isFirstChange: boolean = true;
-  numMods: number = 0;
   currentTab: string = 'results';
   createdDate: Date;
   reportContainerHeight: number;
