@@ -1,0 +1,55 @@
+/* FSAT sankey overrides */
+/* =========================== */
+
+/*  Starting link color */
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link {
+    fill: #D4B904 !important;
+    fill-opacity: .9 !important;
+}
+
+
+/*  Motor loss link color */
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(3) {
+    fill: url(#fsatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+/* Fan loss link color */
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(4) {
+    fill: url(#fsatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+/*  Ending Links color */
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-last-child(-n+2) {
+    fill: url(#fsatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}

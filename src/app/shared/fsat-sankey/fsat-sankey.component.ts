@@ -217,19 +217,14 @@ export class FsatSankeyComponent implements OnInit {
     };
 
     const config = {
+      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
       responsive: true
     };
 
     Plotly.react(this.ngChart.nativeElement, [sankeyData], layout, config);
+    this.addGradientElement();
     this.buildSvgArrows();
-    
-    this.ngChart.nativeElement.on('plotly_afterplot', event => {
-      this.setGradients();
-    });
 
-    this.ngChart.nativeElement.on('plotly_hover', event => {
-      this.setGradients();
-    });
   }
 
   buildNodes(): Array<FsatSankeyNode> {
@@ -332,10 +327,7 @@ export class FsatSankeyComponent implements OnInit {
     const arrowShape = 'polygon(100% 50%, 0 0, 0 100%)'
 
     for (let i = 0; i < rects.length; i++) {  
-       if (this.connectingNodes.includes(i)) {
-         rects[i].setAttribute('style', `stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientStartColor}; fill-opacity: 1;`);
-       } 
-       else {
+       if (!this.connectingNodes.includes(i)) {
          const height = rects[i].getAttribute('height');
          const defaultY = rects[i].getAttribute('y');
 
@@ -346,29 +338,18 @@ export class FsatSankeyComponent implements OnInit {
     }
   }
 
-  setGradients() {
-    const linkPaths = this._dom.nativeElement.querySelectorAll('.sankey-link');
+  addGradientElement() {
     const mainSVG = this._dom.nativeElement.querySelector('.main-svg')
     const svgDefs = this._dom.nativeElement.querySelector('defs')
 
     svgDefs.innerHTML = `
-    <linearGradient id="linkGradient">
+    <linearGradient id="fsatLinkGradient">
       <stop offset="10%" stop-color="${this.gradientStartColor}" />
       <stop offset="100%" stop-color="${this.gradientEndColor}" />
     </linearGradient>
     `
     // Insert our gradient Def
     this.renderer.appendChild(mainSVG, svgDefs);
-
-    for(let i = 0; i < linkPaths.length; i++) {
-      if (this.connectingLinkPaths.includes(i)) {
-        linkPaths[i].setAttribute('fill', this.gradientStartColor);
-        linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: ${this.gradientStartColor}; fill-opacity: 1; stroke-width: 0.25; opacity: 1;`);
-      } else {
-        linkPaths[i].setAttribute('fill', 'url("#linkGradient")');
-        linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: url("#linkGradient") !important; fill-opacity: 1; stroke-width: 0.25; opacity: 1;`);
-      }
-    }
   }
 
 }
