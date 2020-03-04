@@ -90,9 +90,9 @@
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-fsat-report-graphs [fsat]="assessment.fsat" [settings]="settings" [assessment]="assessment"
-                [printView]="showPrintView" [printSankey]="printOptions.printReportSankey"
-                [printGraphs]="printOptions.printReportGraphs"></app-fsat-report-graphs>
+            <app-fsat-report-graphs [fsat]="assessment.fsat" [settings]="settings" [printView]="showPrintView"
+                [printSankey]="printOptions.printReportSankey" [printGraphs]="printOptions.printReportGraphs">
+            </app-fsat-report-graphs>
         </div>
         <div class="results scroll-item print-height" *ngIf="currentTab == 'reportSankey' && !showPrintView"
             [ngStyle]="{'height.px':reportContainerHeight}">

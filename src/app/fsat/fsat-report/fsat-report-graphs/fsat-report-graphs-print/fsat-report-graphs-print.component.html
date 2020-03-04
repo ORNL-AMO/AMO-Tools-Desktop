@@ -1,92 +1,31 @@
-<div *ngFor="let fsatOption of fsatOptions; let i = index">
+<div class="print-graphs-container" *ngFor="let scenarioSummary of scenarioSummaries">
+  <div class="print-page-title mb-3" *ngIf="scenarioSummary.modificationGraphData">
+    Scenario: {{scenarioSummary.modificationGraphData.name}}
+  </div>
+  <div class="d-block print-mod-notes mb-4" *ngIf="scenarioSummary.notes.length != 0">
+    <div class="h3">Scenario Notes:</div>
+    <ul>
+      <li *ngFor="let note of scenarioSummary.notes">{{note}}</li>
+    </ul>
+  </div>
 
-  <div *ngIf="!modExists || i > 0">
-    <div class="row justify-content-center align-items-center print-graphs-container show-print">
-
-      <!-- page title -->
-      <div *ngIf="modExists" align="center" class="print-page-title print-center-title">
-        Scenario: {{fsatOption.name}}
-      </div>
-      <div *ngIf="!modExists" align="center" class="print-page-title print-center-title">
-        Baseline
-      </div>
-
-      <div class="col-12">
-        <!-- notes -->
-        <div class="row" *ngIf="modExists">
-          <div class="col-12 print-notes-padding">
-            <div class="row" *ngFor="let note of allNotes[i - 1]">
-              <div class="col-12 print-mod-notes">
-                {{note}}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- pie chart titles -->
-        <div class="row print-pad-graph-title" *ngIf="printGraphs">
-          <div class="text-center print-graph-sub-title" [ngClass]="modExists ? 'col-6' : 'col-12'">
-            Baseline
-          </div>
-          <div class="col-6 print-graph-sub-title text-center" *ngIf="modExists">
-            {{fsatOption.name}}
-          </div>
-        </div>
-
-        <!-- pie charts -->
-        <div class="row" *ngIf="printGraphs">
-          <div class="col-6 print-pie-chart">
-            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth"
-              [labels]="allChartData.pieLabels[0]" [values]="allChartData.pieValues[0]"></app-pie-chart>
-          </div>
-          <div class="col-6 print-pie-chart" *ngIf="modExists">
-            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth"
-              [labels]="allChartData.pieLabels[i]" [values]="allChartData.pieValues[i]"></app-pie-chart>
-          </div>
-        </div>
-
-        <!-- bar chart title -->
-        <div class="row show-print print-bar-chart-title print-pad-graph-title" *ngIf="modExists && printGraphs">
-          <div align="center" class="print-center-title">
-            FSAT Power ({{settings.powerMeasurement}})
-          </div>
-        </div>
-        <!-- bar chart -->
-        <div class="row show-print justify-content-center align-items-center" *ngIf="modExists && printGraphs">
-          <div class="col-12">
-            <app-fsat-bar-chart [settings]="settings" [printView]="true" [graphColors]="graphColors" [labels]="allChartData.barLabels"
-              [fsat1Name]="baselineFsat.name" [fsat2Name]="fsatOption.name" [fsat1Values]="allChartData.barValues[0]" [fsat2Values]="allChartData.barValues[i]"></app-fsat-bar-chart>
-          </div>
-        </div>
-
-        <!-- sankey -->
-        <div class="row" *ngIf='printSankey' [ngClass]="{'print-sankey': modExists && printGraphs, 'print-only-sankey': modExists && !printGraphs }">
-          <div class="col-12">
-            <div class="row show-print">
-              <div align="center" class="print-graph-title print-center-title">
-                Baseline
-              </div>
-            </div>
-            <div class="row show-print">
-              <div class="col-12">
-                <app-fsat-sankey [settings]="settings" [fsat]="baselineFsat.fsat" [location]="assessmentName + '-fsat-baseline-print-sankey-' + i" [printView]="true"
-                  [modIndex]="i" [isBaseline]="true"></app-fsat-sankey>
-              </div>
-            </div>
-            <div class="row show-print print-pad-graph-title" *ngIf="modExists">
-              <div align="center" class="print-graph-title print-center-title">
-                Scenario: {{fsatOption.name}}
-              </div>
-            </div>
-            <div class="row show-print" *ngIf="modExists">
-              <div class="col-12">
-                <app-fsat-sankey [settings]="settings" [fsat]="fsatOption.fsat" [location]="assessmentName + '-fsat-modification-print-sankey-' + i" [printView]="true"
-                  [modIndex]="i" [isBaseline]="false"></app-fsat-sankey>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="row no-gutters mt-2">
+    <div class="print-pie-width">
+      <div class="h3 mb-0">Baseline</div>
+      <app-plotly-pie-chart [values]="scenarioSummary.baselineGraphData.pieChartValues"
+        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
+      </app-plotly-pie-chart>
     </div>
+    <div class="print-pie-width" *ngIf="scenarioSummary.modificationGraphData">
+      <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
+      <app-plotly-pie-chart [values]="scenarioSummary.modificationGraphData.pieChartValues"
+        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
+      </app-plotly-pie-chart>
+    </div>
+  </div>
+  <div class="row no-gutters w-100" *ngIf="scenarioSummary.modificationGraphData">
+    <app-plotly-bar-chart class="w-100"
+      [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
+      [yAxisLabel]="'Power (kW)'"></app-plotly-bar-chart>
   </div>
 </div>
