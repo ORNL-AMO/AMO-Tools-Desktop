@@ -36,49 +36,4 @@ export class PsatReportSankeyComponent implements OnInit {
   setPsat2Savings() {
     this.psat2CostSavings = this.assessment.psat.outputs.annual_cost - this.psat2.outputs.annual_cost;
   }
-
-  // prepPsatOptions() {
-  //   this.psatOptions = new Array<{name, psat}>();
-  //   this.psatOptions.push({name: 'Baseline', psat: this.psat});
-  //   this.psat1 = this.psatOptions[0];
-
-  //   if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
-  //     this.modExists = true;
-  //     this.psat.modifications.forEach(mod => {
-  //       this.psatOptions.push({name: mod.psat.name, psat: mod.psat});
-  //     });
-  //     this.psat2 = this.psatOptions[1];
-  //   }
-  // }
-
-  // getPsat1Savings() {
-  //   if (!this.psat1 || !this.psat1.psat.outputs || this.psat1.psat.outputs === null) {
-  //     return;
-  //   }
-  //   let isMod;
-  //   if (this.psat1.name == this.psat.name) {
-  //     isMod = false;
-  //   }
-  //   else {
-  //     isMod = true;
-  //   }
-  //   let annualSavingsPotential = this.psat.outputs.annual_cost - this.psat1.psat.outputs.annual_cost;
-  //   this.psat1CostSavings = annualSavingsPotential;
-  // }
-
-  // getPsat2Savings() {
-  //   if (!this.psat2 || !this.psat2.psat.outputs || this.psat2.psat.outputs === null) {
-  //     return;
-  //   }
-  //   let isMod;
-  //   if (this.psat2.name == this.psat.name) {
-  //     isMod = false;
-  //   }
-  //   else {
-  //     isMod = true;
-  //   }
-  //   let annualSavingsPotential = this.psat.outputs.annual_cost - this.psat2.psat.outputs.annual_cost;
-  //   this.psat2CostSavings = annualSavingsPotential;
-  // }
-
 }

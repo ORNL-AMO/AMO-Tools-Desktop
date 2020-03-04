@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Modification } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 import { Assessment } from '../../../../shared/models/assessment';
+import { ScenarioSummary } from '../../../../shared/models/reports';
 
 @Component({
   selector: 'app-psat-report-graphs-print',
@@ -103,23 +104,4 @@ export class PsatReportGraphsPrintComponent implements OnInit {
       barChartValues: this.allChartData[0].barChartValues
     }
   }
-}
-
-
-export interface ScenarioSummary {
-  baselineGraphData: {
-    name: string,
-    pieChartLabels: Array<string>,
-    pieChartValues: Array<number>,
-    barChartLabels: Array<string>,
-    barChartValues: Array<number>
-  },
-  modificationGraphData: {
-    name: string,
-    pieChartLabels: Array<string>,
-    pieChartValues: Array<number>,
-    barChartLabels: Array<string>,
-    barChartValues: Array<number>
-  },
-  notes: Array<string>
 }

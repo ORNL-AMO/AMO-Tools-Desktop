@@ -1,88 +1,41 @@
 <div class="output-summary">
-  <div class="row justify-content-center hide-print">
-    <div class="col-3 hide-print savings-panel" *ngIf="!printView">
-      <div class="form-group">
-        <select
-          name="fsatSelect"
-          class="form-control mx-auto"
-          id="fsatSelect"
-          (change)="getFsat1Savings()"
-          [(ngModel)]="fsat1"
-        >
-          <option *ngFor="let fsat of fsatOptions" [ngValue]="fsat">{{
-            fsat.name
-          }}</option>
+  <div class="d-flex flex-column">
+    <div class="d-flex">
+      <div class="d-flex flex-column w-25 align-items-center justify-content-center">
+        <select name="fsatSelect" class="form-control mx-auto" id="fsatSelect" (change)="setPsat1Savings()"
+          [(ngModel)]="fsat1">
+          <option [ngValue]="assessment.fsat">Baseline</option>
+          <option *ngFor="let modification of assessment.fsat.modifications" [ngValue]="modification.fsat">
+            {{modification.fsat.name}}</option>
         </select>
+        <div class="p-2" [ngClass]="{
+          'negative-savings': fsat1CostSavings < 0,
+          'positive-savings': fsat1CostSavings > 0
+        }">Cost Savings: {{ fsat1CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
       </div>
-      <table class="table-savings">
-        <tr>
-          <td class="td-title">Cost Savings:</td>
-          <td
-            class="td-value"
-            [ngClass]="{
-              'negative-savings': fsat1CostSavings < 0,
-              'positive-savings': fsat1CostSavings > 0
-            }"
-          >
-            {{ fsat1CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr
-          </td>
-        </tr>
-      </table>
+      <div class="w-75">
+        <app-fsat-sankey [fsat]="fsat1" [location]="'baseline'" [assessmentName]="assessmentName" [settings]="settings"
+          [isBaseline]="true"></app-fsat-sankey>
+      </div>
     </div>
-
-    <div class="col-9" [ngClass]="{ 'right-panel': !printView }">
-      <app-fsat-sankey
-        [fsat]="fsat1.fsat"
-        [location]="'baseline'"
-        [assessmentName]="assessmentName"
-        [settings]="settings"
-        [isBaseline]="true"
-      ></app-fsat-sankey>
-    </div>
-  </div>
-
-  <div
-    class="row justify-content-center hide-print"
-    *ngIf="fsat.setupDone && modExists"
-  >
-    <div class="col-3 hide-print savings-panel" *ngIf="!printView">
-      <div class="form-group">
-        <select
-          name="fsatSelect"
-          class="form-control mx-auto"
-          id="fsatSelect"
-          (change)="getFsat2Savings()"
-          [(ngModel)]="fsat2"
-        >
-          <option *ngFor="let fsat of fsatOptions" [ngValue]="fsat">{{
-            fsat.name
-          }}</option>
+    <hr>
+    <div class="d-flex" *ngIf="fsat2">
+      <div class="d-flex flex-column w-25 align-items-center justify-content-center">
+        <select name="fsatSelect" class="form-control mx-auto" id="fsatSelect2" (change)="setPsat2Savings()"
+          [(ngModel)]="fsat2">
+          <option [ngValue]="assessment.fsat">Baseline</option>
+          <option *ngFor="let modification of assessment.fsat.modifications" [ngValue]="modification.fsat">
+            {{modification.fsat.name}}</option>
         </select>
+        <div class="p-2" [ngClass]="{
+          'negative-savings': fsat2CostSavings < 0,
+          'positive-savings': fsat2CostSavings > 0
+        }">Cost Savings: {{ fsat2CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
       </div>
-      <table class="table-savings">
-        <tr>
-          <td class="td-title">Cost Savings:</td>
-          <td
-            class="td-value"
-            [ngClass]="{
-              'negative-savings': fsat2CostSavings < 0,
-              'positive-savings': fsat2CostSavings > 0
-            }"
-          >
-            {{ fsat2CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="col-9" [ngClass]="{ 'right-panel': !printView }">
-      <app-fsat-sankey
-        [fsat]="fsat2.fsat"
-        [assessmentName]="assessmentName"
-        [location]="'modification'"
-        [settings]="settings"
-        [isBaseline]="false"
-      ></app-fsat-sankey>
+      <div class="w-75">
+        <app-fsat-sankey [fsat]="fsat2" [location]="'modification'" [assessmentName]="assessmentName"
+          [settings]="settings" [isBaseline]="false"></app-fsat-sankey>
+      </div>
     </div>
   </div>
 </div>

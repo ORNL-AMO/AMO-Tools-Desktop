@@ -6,10 +6,10 @@ import { Directory } from '../../shared/models/directory';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsService } from '../../settings/settings.service';
-import * as d3 from 'd3';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { Subscription } from 'rxjs';
 import { PrintOptions } from '../../shared/models/printing';
+import { FsatService } from '../fsat.service';
 
 @Component({
   selector: 'app-fsat-report',
@@ -17,8 +17,6 @@ import { PrintOptions } from '../../shared/models/printing';
   styleUrls: ['./fsat-report.component.css']
 })
 export class FsatReportComponent implements OnInit {
-  @Input()
-  fsat: FSAT;
   @Output('closeReport')
   closeReport = new EventEmitter();
   @Input()
@@ -49,21 +47,16 @@ export class FsatReportComponent implements OnInit {
   selectAll: boolean = false;
 
   assessmentDirectories: Directory[];
-  isFirstChange: boolean = true;
-  numMods: number = 0;
   currentTab: string = 'results';
   createdDate: Date;
   reportContainerHeight: number;
   printOptions: PrintOptions;
-  constructor(private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService) { }
+  constructor(private fsatService: FsatService, private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService) { }
 
   ngOnInit() {
+    console.log(this.assessment);
     this.createdDate = new Date();
-    if (this.assessment.fsat && this.settings && !this.fsat) {
-      this.fsat = this.assessment.fsat;
-    }
-    else if (this.assessment.fsat && !this.settings) {
-      this.fsat = this.assessment.fsat;
+    if (!this.settings) {
       //find settings
       this.getSettings();
     }
@@ -72,11 +65,10 @@ export class FsatReportComponent implements OnInit {
       this.getDirectoryList(this.assessment.directoryId);
     }
 
-    if (this.fsat.modifications) {
-      this.numMods = this.fsat.modifications.length;
-    } else {
-      this.fsat.modifications = new Array();
+    if (!this.assessment.fsat.modifications) {
+      this.assessment.fsat.modifications = new Array();
     }
+
     if (!this.inRollup) {
       this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
         this.showPrintMenu = val;
@@ -94,7 +86,8 @@ export class FsatReportComponent implements OnInit {
       } else {
         this.showPrintView = val;
       }
-    })
+    });
+    this.setOutputs();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -124,9 +117,6 @@ export class FsatReportComponent implements OnInit {
 
   setTab(str: string) {
     this.currentTab = str;
-    setTimeout(() => {
-      d3.selectAll('.tick text').style('display', 'initial');
-    }, 50);
   }
 
   getSettings() {
@@ -164,5 +154,22 @@ export class FsatReportComponent implements OnInit {
   print() {
     this.printOptionsMenuService.printContext.next('fsat');
     this.printOptionsMenuService.showPrintMenu.next(true);
+  }
+
+  setOutputs() {
+    this.assessment.fsat.outputs = this.fsatService.getResults(this.assessment.fsat, true, this.settings);
+    this.assessment.fsat.modifications.forEach(modification => {
+      // mod.fsat.fanSetup.fanEfficiency = this.baselineResults.fanEfficiency;
+      modification.fsat.outputs = this.fsatService.getResults(modification.fsat, false, this.settings);
+      modification.fsat.outputs.percentSavings = this.fsatService.getSavingsPercentage(this.assessment.fsat.outputs.annualCost, modification.fsat.outputs.annualCost);
+      modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;
+      modification.fsat.outputs.annualSavings = this.assessment.fsat.outputs.annualCost - modification.fsat.outputs.annualCost;
+      // this.modificationResults.push(modResult);
+    });
+  }
+
+  getSavingsPercentage(baseline: FSAT, modification: FSAT): number {
+    let tmpSavingsPercent: number = Number(Math.round(((((baseline.outputs.annualCost - modification.outputs.annualCost) * 100) / baseline.outputs.annualCost) * 100) / 100).toFixed(0));
+    return tmpSavingsPercent;
   }
 }
