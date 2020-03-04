@@ -136,6 +136,6 @@ export class PrintOptionsMenuComponent implements OnInit {
       //after printing hide content again
       this.printOptionsMenuService.showPrintView.next(false);
       this.printOptionsMenuService.showPrintMenu.next(false);
-    }, 5000);
+    }, 200);
   }
 }
