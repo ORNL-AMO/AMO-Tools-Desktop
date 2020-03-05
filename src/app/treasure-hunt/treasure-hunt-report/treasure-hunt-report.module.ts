@@ -20,6 +20,7 @@ import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-op
 import { SortSummariesPipe } from './opportunity-summary/sort-summaries.pipe';
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { TreasureChestMenuModule } from '../treasure-chest/treasure-chest-menu/treasure-chest-menu.module';
+import { UtilityBarChartComponent } from './executive-summary/utility-bar-chart/utility-bar-chart.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { TreasureChestMenuModule } from '../treasure-chest/treasure-chest-menu/t
     CostPieChartComponent,
     UtilityDonutChartComponent,
     CostSummaryChartComponent,
-    SortSummariesPipe
+    SortSummariesPipe,
+    UtilityBarChartComponent
   ],
   exports: [TreasureHuntReportComponent],
   providers: [OpportunityPaybackService, OpportunitySummaryService, CostSummaryChartService]

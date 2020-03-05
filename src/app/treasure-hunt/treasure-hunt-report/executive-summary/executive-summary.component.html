@@ -360,9 +360,10 @@
   </div>
 
   <div class="d-flex flex-column hide-print" *ngIf="title == 'Cost Summary'">
-    <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles"
+    <!-- <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles"
       [data]="data" [chartContainerWidth]="barChartWidth" [chartContainerHeight]="barChartHeight">
-    </app-cost-summary-chart>
+    </app-cost-summary-chart> -->
+    <app-utility-bar-chart [treasureHuntResults]="treasureHuntResults"></app-utility-bar-chart>
   </div>
 
   <div *ngIf="title == 'Team Summary' && teamData.length > 0" class="d-flex flex-column output-summary pb-5"
