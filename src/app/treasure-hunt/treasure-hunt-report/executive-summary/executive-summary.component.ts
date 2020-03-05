@@ -137,6 +137,7 @@ export class ExecutiveSummaryComponent implements OnInit {
         paybackPeriod: paybackPeriod
       });
     });
+    this.teamData = _.orderBy(this.teamData, 'costSavings', 'desc');
   }
 
   // setChartHeightAndWidth() {

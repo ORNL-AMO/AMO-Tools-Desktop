@@ -15,7 +15,6 @@ export class UtilityBarChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-
   }
 
   ngAfterViewInit() {
@@ -35,7 +34,7 @@ export class UtilityBarChartComponent implements OnInit {
       x: chartData.labels,
       y: chartData.projectedCosts,
       hoverinfo: 'all',
-      hovertemplate: '%{y:$,.2f}<extra></extra>',
+      hovertemplate: '%{y:$,.0f}<extra></extra>',
       // text: chartData.projectedCosts.map(cost => {return '$ ' + cost.toString()}),
       name: "Projected Costs",
       type: "bar",
@@ -49,7 +48,7 @@ export class UtilityBarChartComponent implements OnInit {
       x: chartData.labels,
       y: chartData.costSavings,
       hoverinfo: 'all',
-      hovertemplate: '%{y:$,.2f}<extra></extra>',
+      hovertemplate: '%{y:$,.0f}<extra></extra>',
       // text: chartData.costSavings.map(savings => {return '$ ' + savings.toString()}),
       name: "Cost Savings",
       type: "bar",
@@ -66,7 +65,7 @@ export class UtilityBarChartComponent implements OnInit {
       // height: this.utilityBarChart.nativeElement.clientHeight,
       barmode: 'stack',
       showlegend: true,
-      legend: { "orientation": "h" },
+      // legend: { "orientation": "h" },
       font: {
         size: 16,
       },

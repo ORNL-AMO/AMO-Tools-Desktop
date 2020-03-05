@@ -23,6 +23,7 @@ import { TreasureChestMenuModule } from '../treasure-chest/treasure-chest-menu/t
 import { UtilityBarChartComponent } from './executive-summary/utility-bar-chart/utility-bar-chart.component';
 import { ExecutiveSummaryTableComponent } from './executive-summary/executive-summary-table/executive-summary-table.component';
 import { TeamSummaryTableComponent } from './executive-summary/team-summary-table/team-summary-table.component';
+import { TeamSummaryPieChartComponent } from './executive-summary/team-summary-pie-chart/team-summary-pie-chart.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { TeamSummaryTableComponent } from './executive-summary/team-summary-tabl
     SortSummariesPipe,
     UtilityBarChartComponent,
     ExecutiveSummaryTableComponent,
-    TeamSummaryTableComponent
+    TeamSummaryTableComponent,
+    TeamSummaryPieChartComponent
   ],
   exports: [TreasureHuntReportComponent],
   providers: [OpportunityPaybackService, OpportunitySummaryService, CostSummaryChartService]
