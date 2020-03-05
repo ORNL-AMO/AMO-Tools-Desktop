@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import * as Plotly from 'plotly.js';
 import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
+import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 @Component({
   selector: 'app-utility-bar-chart',
   templateUrl: './utility-bar-chart.component.html',
@@ -24,26 +25,48 @@ export class UtilityBarChartComponent implements OnInit {
 
   createBarChart() {
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
-    let projectCostTrace: { x: Array<string>, y: Array<number>, name: string, type: string } = {
+    let projectCostTrace: { x: Array<string>, y: Array<number>, name: string, type: string, marker: any } = {
       x: chartData.labels,
       y: chartData.projectedCosts,
       name: "Projected Costs",
-      type: "bar"
+      type: "bar",
+      marker: {
+        colors: graphColors
+      }
     };
-    let costSavingsTrace: { x: Array<string>, y: Array<number>, name: string, type: string } = {
+    let costSavingsTrace: { x: Array<string>, y: Array<number>, name: string, type: string, marker: any } = {
       x: chartData.labels,
       y: chartData.costSavings,
       name: "Cost Savings",
-      type: "bar"
+      type: "bar",
+      marker: {
+        colors: graphColors
+      },
     }
 
     var data = [projectCostTrace, costSavingsTrace];
-
-    var layout = { 
-      barmode: 'stack' 
+    console.log(this.utilityBarChart.nativeElement.clientHeight);
+    var layout = {
+      height: this.utilityBarChart.nativeElement.clientHeight,
+      barmode: 'stack',
+      showlegend: true,
+      legend: { "orientation": "h" },
+      font: {
+        size: 16,
+      },
+      yaxis: {
+        hoverformat: '.3r',
+      },
+      // margin: { t: 0, b: 0, l: 0, r: 0 }
+    };
+    var configOptions = {
+      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      displaylogo: false,
+      displayModeBar: true,
+      responsive: true
     };
 
-    Plotly.newPlot(this.utilityBarChart.nativeElement, data, layout);
+    Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);
   }
 
   getChartData(): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
