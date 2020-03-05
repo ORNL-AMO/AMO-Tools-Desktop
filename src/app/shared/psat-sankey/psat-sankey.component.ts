@@ -128,27 +128,9 @@ export class PsatSankeyComponent implements OnInit {
 
     this.closeSankey();
     this.calcLosses(results);
-    nodes = this.buildNodes(results);
 
-    links.push(
-      { source: 0, target: 1 },
-      { source: 0, target: 2 },
-      { source: 1, target: 2 },
-      { source: 1, target: 3 },
-    );
-    if (this.drive > 0) {
-      links.push(
-        { source: 2, target: 4 },
-        { source: 2, target: 5 },
-        { source: 5, target: 6 },
-        { source: 5, target: 7 }
-      );
-    } else {
-      links.push(
-        { source: 2, target: 4 },
-        { source: 2, target: 5 }
-      )
-    }
+    this.buildNodes(results, nodes);
+    this.buildLinks(nodes, links);
 
     const sankeyLink = {
       value: nodes.map(node => node.value),
@@ -222,20 +204,15 @@ export class PsatSankeyComponent implements OnInit {
     this.buildSvgArrows();
   }
 
-  buildNodes(results: PsatOutputs): Array<PsatSankeyNode> {
-    let nodes: Array<PsatSankeyNode> = [];
+  buildNodes(results: PsatOutputs, nodes): Array<PsatSankeyNode> {
     const motorConnectorValue: number = results.motor_power - this.motor;
     let driveConnectorValue: number = 0;
     let usefulOutput: number = 0;
 
     if (this.drive > 0) {
       driveConnectorValue = motorConnectorValue - this.drive;
-      this.connectingLinkPaths = [0, 1, 4];
-      this.connectingNodes = [0, 1, 2, 5];
       usefulOutput = driveConnectorValue - this.pump;
     } else {
-      this.connectingLinkPaths = [0, 1, 5];
-      this.connectingNodes = [0, 1, 2,];
       usefulOutput = motorConnectorValue - this.pump;
     }
 
@@ -245,22 +222,31 @@ export class PsatSankeyComponent implements OnInit {
         value: 100,
         x: .1,
         y: .6,
+        source: 0,
+        target: [1,2],
+        isConnector: true,
         nodeColor: this.nodeStartColor,
-        id: 'OriginConnector'
+        id: 'originConnector'
       },
       {
         name: "",
         value: 0,
         x: .25,
         y: .6,
+        source: 1,
+        target: [2, 3],
+        isConnector: true,
         nodeColor: this.nodeStartColor,
-        id: 'InputConnector'
+        id: 'inputConnector'
       },
       {
         name: "",
         value: (motorConnectorValue / results.motor_power) * 100,
         x: .5,
         y: .6,
+        source: 2,
+        target: [4, 5],
+        isConnector: true,
         nodeColor: this.nodeStartColor,
         id: 'motorConnector'
       },
@@ -269,6 +255,9 @@ export class PsatSankeyComponent implements OnInit {
         value: (this.motor / results.motor_power) * 100,
         x: .5,
         y: .10,
+        source: 3,
+        target: [],
+        isConnector: false,
         nodeColor: this.nodeArrowColor,
         id: 'motorLosses'
       },
@@ -280,6 +269,9 @@ export class PsatSankeyComponent implements OnInit {
           value: (this.drive / results.motor_power) * 100,
           x: .6,
           y: .25,
+          source: 4,
+          target: [],
+          isConnector: false,
           nodeColor: this.nodeArrowColor,
           id: 'driveLosses'
         },
@@ -288,6 +280,9 @@ export class PsatSankeyComponent implements OnInit {
           value: (driveConnectorValue / results.motor_power) * 100,
           x: .7,
           y: .6,
+          source: 5,
+          target: [6,7],
+          isConnector: true,
           nodeColor: this.nodeStartColor,
           id: 'driveConnector'
         },
@@ -299,6 +294,9 @@ export class PsatSankeyComponent implements OnInit {
         value: (this.pump / results.motor_power) * 100,
         x: .8,
         y: .15,
+        source: this.drive > 0 ? 6 : 4,
+        target: [],
+        isConnector: false,
         nodeColor: this.nodeArrowColor,
         id: 'pumpLosses'
       },
@@ -307,13 +305,36 @@ export class PsatSankeyComponent implements OnInit {
         value: (usefulOutput / results.motor_power) * 100,
         x: .85,
         y: .65,
+        source: this.drive > 0 ? 7 : 5,
+        target: [],
+        isConnector: false,
         nodeColor: this.nodeArrowColor,
         id: 'usefulOutput'
       }
     );
 
-    
     return nodes;
+  }
+
+  buildLinks(nodes, links) {
+    this.connectingLinkPaths.push(0);
+    
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].isConnector) {
+          this.connectingNodes.push(i); 
+          if (i !== 0 && i-1 !== 0) {
+            this.connectingLinkPaths.push(i - 1);
+          }
+      }
+      for (let j = 0; j < nodes[i].target.length; j++) {
+          links.push(
+            {
+              source: nodes[i].source,
+              target: nodes[i].target[j]
+            }
+          )
+        }
+    }
   }
 
   buildSvgArrows() {
