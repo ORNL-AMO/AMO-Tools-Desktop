@@ -17,21 +17,17 @@ export class ExecutiveSummaryComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  showFullSummary: boolean;
-  @Input()
-  title: string;
-  @Input()
   showPrint: boolean;
   @Input()
   opportunityCardsData: Array<OpportunityCardData>;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setChartHeightAndWidth();
-  }
+  // @HostListener('window:resize', ['$event'])
+  // onResize(event) {
+  //   this.setChartHeightAndWidth();
+  // }
 
-  @ViewChild('costSummaryChartContainer', { static: false }) costSummaryChartContainer: ElementRef;
-  @ViewChild('teamSummaryChartContainer', { static: false }) teamSummaryChartContainer: ElementRef;
+  // @ViewChild('costSummaryChartContainer', { static: false }) costSummaryChartContainer: ElementRef;
+  // @ViewChild('teamSummaryChartContainer', { static: false }) teamSummaryChartContainer: ElementRef;
 
   //data set titles describe the different sections of each bar, i.e. the legend titles
   dataSetTitles: Array<string> = ['Projected Cost', 'Savings'];
@@ -47,17 +43,17 @@ export class ExecutiveSummaryComponent implements OnInit {
 
   pieChartLabels: Array<string>;
   pieChartValues: Array<number>;
-  graphColors: Array<string>;
+  // graphColors: Array<string>;
 
-  barChartHeight: number;
-  barChartWidth: number;
-  pieChartHeight: number;
-  pieChartWidth: number;
+  // barChartHeight: number;
+  // barChartWidth: number;
+  // pieChartHeight: number;
+  // pieChartWidth: number;
 
   constructor(private treasureChestMenuService: TreasureChestMenuService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.graphColors = graphColors;
+    // this.graphColors = graphColors;
   }
 
   ngOnChanges() {
@@ -68,9 +64,9 @@ export class ExecutiveSummaryComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    this.setChartHeightAndWidth();
-  }
+  // ngAfterViewInit() {
+  //   this.setChartHeightAndWidth();
+  // }
 
   prepChartData(): void {
     let dataTitles = new Array<string>();
@@ -143,17 +139,17 @@ export class ExecutiveSummaryComponent implements OnInit {
     });
   }
 
-  setChartHeightAndWidth() {
-    if (this.teamSummaryChartContainer) {
-      this.pieChartHeight = this.teamSummaryChartContainer.nativeElement.clientHeight;
-      this.pieChartWidth = this.teamSummaryChartContainer.nativeElement.clientWidth;
-    }
-    if (this.costSummaryChartContainer) {
-      this.barChartHeight = this.costSummaryChartContainer.nativeElement.clientHeight;
-      this.barChartWidth = this.costSummaryChartContainer.nativeElement.clientWidth + 170;
-    }
-    this.cd.detectChanges();
-  }
+  // setChartHeightAndWidth() {
+  //   if (this.teamSummaryChartContainer) {
+  //     this.pieChartHeight = this.teamSummaryChartContainer.nativeElement.clientHeight;
+  //     this.pieChartWidth = this.teamSummaryChartContainer.nativeElement.clientWidth;
+  //   }
+  //   if (this.costSummaryChartContainer) {
+  //     this.barChartHeight = this.costSummaryChartContainer.nativeElement.clientHeight;
+  //     this.barChartWidth = this.costSummaryChartContainer.nativeElement.clientWidth + 170;
+  //   }
+  //   this.cd.detectChanges();
+  // }
 
 
 }

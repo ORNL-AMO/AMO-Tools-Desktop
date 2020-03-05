@@ -22,32 +22,48 @@ export class UtilityBarChartComponent implements OnInit {
     this.createBarChart();
   }
 
+  ngOnChanges() {
+    if (this.utilityBarChart) {
+      this.createBarChart();
+    }
+  }
+
 
   createBarChart() {
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
-    let projectCostTrace: { x: Array<string>, y: Array<number>, name: string, type: string, marker: any } = {
+    let projectCostTrace = {
       x: chartData.labels,
       y: chartData.projectedCosts,
+      hoverinfo: 'all',
+      hovertemplate: '%{y:$,.2f}<extra></extra>',
+      // text: chartData.projectedCosts.map(cost => {return '$ ' + cost.toString()}),
       name: "Projected Costs",
       type: "bar",
       marker: {
-        colors: graphColors
-      }
+        color: graphColors[0],
+        width: .8
+      },
+      // width: chartData.projectedCosts.map(val => {return .8})
     };
-    let costSavingsTrace: { x: Array<string>, y: Array<number>, name: string, type: string, marker: any } = {
+    let costSavingsTrace = {
       x: chartData.labels,
       y: chartData.costSavings,
+      hoverinfo: 'all',
+      hovertemplate: '%{y:$,.2f}<extra></extra>',
+      // text: chartData.costSavings.map(savings => {return '$ ' + savings.toString()}),
       name: "Cost Savings",
       type: "bar",
       marker: {
-        colors: graphColors
+        color: graphColors[1],
+        width: .8
       },
+      // width: chartData.projectedCosts.map(val => {return .8})
     }
 
     var data = [projectCostTrace, costSavingsTrace];
-    console.log(this.utilityBarChart.nativeElement.clientHeight);
+    // console.log(this.utilityBarChart.nativeElement.clientHeight);
     var layout = {
-      height: this.utilityBarChart.nativeElement.clientHeight,
+      // height: this.utilityBarChart.nativeElement.clientHeight,
       barmode: 'stack',
       showlegend: true,
       legend: { "orientation": "h" },
@@ -56,8 +72,15 @@ export class UtilityBarChartComponent implements OnInit {
       },
       yaxis: {
         hoverformat: '.3r',
+        // automargin: true,
+        tickformat: '$.2s',
+        fixedrange: true
       },
-      // margin: { t: 0, b: 0, l: 0, r: 0 }
+      xaxis: {
+        automargin: true,
+        fixedrange: true
+      },
+      margin: { t: 0, b: 50 }
     };
     var configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
