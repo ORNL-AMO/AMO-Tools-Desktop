@@ -18,7 +18,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
   //   this.drawPlot();
   // }
 
-
+  chartHeight: number;
   constructor() { }
 
   ngOnInit(): void {
@@ -26,10 +26,20 @@ export class TeamSummaryPieChartComponent implements OnInit {
 
   ngAfterViewInit() {
     // if (!this.isPrint) {
+    this.setHeight();
     this.drawPlot();
     // } else {
     //   this.drawPrintPlot();
     // }
+  }
+
+  setHeight() {
+    //height will match team summary table or set to 300
+    this.chartHeight = this.plotlyPieChart.nativeElement.clientHeight + 100;
+    // console.log(this.chartHeight);
+    if (this.chartHeight < 300) {
+      this.chartHeight = 300;
+    }
   }
 
   ngOnChanges() {
@@ -44,7 +54,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
   }
 
   getValuesAndLabels(): { values: Array<number>, labels: Array<string> } {
-    console.log(this.teamData);
     let teamData = _.orderBy(this.teamData, 'costSavings', 'asc');
     let values: Array<number> = new Array();
     let labels: Array<string> = new Array();
@@ -58,7 +67,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
   drawPlot() {
 
     let valuesAndLabels = this.getValuesAndLabels();
-    console.log(valuesAndLabels)
     Plotly.purge(this.plotlyPieChart.nativeElement)
     var data = [{
       values: valuesAndLabels.values,
@@ -75,27 +83,33 @@ export class TeamSummaryPieChartComponent implements OnInit {
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
       // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
       hoverinfo: 'label+percent',
-      // direction: "clockwise",
-      // rotation: 180
+      direction: "clockwise",
+      rotation: 135
     }];
     // console.log();
-    let marginVal: number = 10 * this.teamData.length;
-    console.log(marginVal);
+
+    let marginVal: number = 50;
+    let fontSize: number = 10;
+    // if(this.teamData.length > 4){
+    //   // marginVal = 150;
+    //   fontSize = 10;
+    // }
+
     var layout = {
       updatemenus: [],
-      height: this.plotlyPieChart.nativeElement.clientHeight + 100,
+      // height: this.chartHeight,
       font: {
-        size: 12,
+        size: fontSize,
       },
       showlegend: false,
-      margin: {t: 30, b: marginVal, l: marginVal, r: marginVal},
+      margin: { t: 30, b: 30, l: 135, r: 135 },
     };
 
     var modebarBtns = {
       modeBarButtonsToRemove: ['hoverClosestPie'],
       displaylogo: false,
       displayModeBar: true,
-      // responsive: true
+      responsive: true
     };
     Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
   }

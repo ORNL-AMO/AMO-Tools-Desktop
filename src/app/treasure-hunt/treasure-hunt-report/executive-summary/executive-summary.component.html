@@ -1,12 +1,10 @@
 <div class="row no-gutters mb-4">
-  <div class="col-6 pb-5">
-    <div class="d-flex w-100 justify-content-end">
-      <app-executive-summary-table [treasureHuntResults]="treasureHuntResults" [showFullSummary]="false"
-        [settings]="settings" [title]="'Cost Summary'">
-      </app-executive-summary-table>
-    </div>
+  <div class="col-md-6 col-sm-12 pb-5">
+    <app-executive-summary-table [treasureHuntResults]="treasureHuntResults" [showFullSummary]="false"
+      [settings]="settings" [title]="'Cost Summary'">
+    </app-executive-summary-table>
   </div>
-  <div class="col-6">
+  <div class="col-lg-6 col-md-6 col-sm-12">
     <app-utility-bar-chart [treasureHuntResults]="treasureHuntResults"></app-utility-bar-chart>
   </div>
   <div class="col-12" *ngIf="treasureHuntResults.hasMixed == true">
@@ -17,18 +15,14 @@
     </div>
   </div>
   <div class="col-12">
-    <div class="d-flex w-100 justify-content-center">
-      <app-executive-summary-table [treasureHuntResults]="treasureHuntResults" [showFullSummary]="true"
-        [settings]="settings" [title]="'Detailed Summary'">
-      </app-executive-summary-table>
-    </div>
+    <app-executive-summary-table [treasureHuntResults]="treasureHuntResults" [showFullSummary]="true"
+      [settings]="settings" [title]="'Detailed Summary'">
+    </app-executive-summary-table>
   </div>
-  <div class="col-6" *ngIf="teamData.length > 0">
-    <div class="d-flex h-100 w-100 justify-content-end">
-      <app-team-summary-table [teamData]="teamData"></app-team-summary-table>
-    </div>
+  <div class="col-lg-6 col-sm-12" *ngIf="teamData.length > 0">
+    <app-team-summary-table [teamData]="teamData"></app-team-summary-table>
   </div>
-  <div class="col" *ngIf="teamData.length > 0">
+  <div class="col-md-12 col-lg-6 pie-chart" *ngIf="teamData.length > 0">
     <!-- <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels"
     [printView]="showPrint" [exportName]="'treasure-hunt-team-savings'" [chartContainerWidth]="pieChartWidth"
     [chartContainerHeight]="pieChartHeight" [sideBySide]="false"></app-pie-chart> -->

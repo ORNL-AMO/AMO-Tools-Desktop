@@ -184,6 +184,7 @@ export class TreasureHuntComponent implements OnInit {
   }
 
   getContainerHeight() {
+    console.log('get container height')
     if (this.content) {
       setTimeout(() => {
         let contentHeight = this.content.nativeElement.clientHeight;
@@ -193,6 +194,7 @@ export class TreasureHuntComponent implements OnInit {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
+        console.log(this.containerHeight);
       }, 100);
     }
   }
