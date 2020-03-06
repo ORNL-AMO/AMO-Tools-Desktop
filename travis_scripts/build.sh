@@ -8,7 +8,6 @@ if [[ $TRAVIS_BRANCH == 'master' ]]; then
   ls;
   ls ../output/;
 else
-  cd missing_folder
   npm run build;
 fi
 
