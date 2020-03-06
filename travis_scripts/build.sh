@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eV
+set -ev
 
 if [[ $TRAVIS_BRANCH == 'master' ]]; then
   travis_wait 30 npm run ng-high-memory;
