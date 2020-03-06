@@ -30,6 +30,7 @@ script:
       ls;
       ls ../output/;
     else
+      bash travis_scripts/pre-install.sh
       npm run build;
     fi
   
