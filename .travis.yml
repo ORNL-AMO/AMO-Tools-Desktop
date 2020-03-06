@@ -31,7 +31,6 @@ script:
       ls ../output/;
     else
       npm run build;
-      sdff;
     fi
   
 before_deploy:
