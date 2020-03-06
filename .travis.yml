@@ -30,6 +30,7 @@ script:
       ls;
       ls ../output/;
     else
+      cd hello_folder;
       npm run build;
     fi
   
