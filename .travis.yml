@@ -16,7 +16,7 @@ matrix:
       os: windows
     
 before_install:
-  - if [ [$TRAVIS_OS_NAME == 'linux'] OR [$TRAVIS_OS_NAME == 'windows'] ]; then travis_retry npm i -g npm@6.4.0; fi
+  - if [ [$TRAVIS_OS_NAME == 'linux'] OR [$TRAVIS_OS_NAME == 'osx'] ]; then travis_retry npm i -g npm@6.4.0; fi
   - bash travis_scripts/get_os.sh
   - echo "$OS_FLAG"
 install:
@@ -30,7 +30,6 @@ script:
       ls;
       ls ../output/;
     else
-      cd hello_folder;
       npm run build;
     fi
   
