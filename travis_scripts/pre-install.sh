@@ -1,3 +1,3 @@
 #!/bin/bash
 
-exit 1
+cd hello_folder
