@@ -43,10 +43,9 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit {
   
   losses: SSMTLosses;
 
-
   gradientStartColor: string = '#c77f0a';
   gradientEndColor: string = '#f6b141';
-  nodeStartColor: string = 'rgba(223,142,11, .9)';
+  nodeStartColor: string = 'rgba(199,127,10, .9)';
   nodeArrowColor: string = 'rgba(246,177,65, .9)';
   connectingNodes: Array<number> = [];
   connectingLinkPaths: Array<number> = [];
@@ -75,6 +74,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit {
       this.baselineInputData = resultData.inputData;
       this.losses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputData, this.settings, this.assessment.ssmt);
       
+      console.log('losses', this.losses);
+      console.log('baselineOutput', this.baselineOutput);
       this.buildSankey();
     }
 
@@ -105,22 +106,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit {
     let nodes: Array<SSMTSankeyNode> = [];
 
     this.closeSankey();
-    nodes = this.buildNodes();
-
-    links.push(
-      { source: 0, target: 1 },
-      { source: 0, target: 1 },
-      { source: 1, target: 2 },
-      { source: 1, target: 3 },
-      { source: 1, target: 4 },
-      { source: 1, target: 5 },
-      { source: 5, target: 6 },
-      { source: 5, target: 7 },
-      { source: 5, target: 8 },
-      // { source: 0, target: 9 },
-      // { source: 5, target: 9 },
-      // { source: 9, target: 0 },
-    );
+    this.buildNodes(nodes);
+    this.buildLinks(nodes, links);
 
     const sankeyLink = {
       value: nodes.map(node => node.value),
@@ -185,27 +172,20 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit {
     };
 
     const config = {
+      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
       responsive: true
     };
 
+    console.log(links);
+
+    console.log('sankeyData', sankeyData);
+
     Plotly.react(this.ngChart.nativeElement, [sankeyData], layout, config);
-    // this.buildSvgArrows();
-
-    this.ngChart.nativeElement.on('plotly_afterplot', event => {
-      this.setGradients();
-    });
-
-    this.ngChart.nativeElement.on('plotly_hover', event => {
-      this.setGradients();
-    });
+    this.addGradientElement();
+    this.buildSvgArrows();
   }
 
-  buildNodes(): Array<SSMTSankeyNode> {
-    let nodes: Array<SSMTSankeyNode> = [];
-
-    this.connectingLinkPaths = [0, 4];
-    this.connectingNodes = [0, 5];
-    
+  buildNodes(nodes): Array<SSMTSankeyNode> {
     // if (this.drive > 0) {
     //     driveConnectorValue = motorConnectorValue - this.drive;
     //     this.connectingLinkPaths = [0, 1, 4];
@@ -220,128 +200,332 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit {
     const energyInput = this.losses.fuelEnergy + this.losses.makeupWaterEnergy;
     const stackLosses = this.losses.stack + this.losses.blowdown;
     const otherLosses = this.losses.highPressureHeader + this.losses.mediumPressureHeader + this.losses.lowPressureHeader 
-    + this.losses.condensateLosses + this.losses.deaeratorVentLoss + this.losses.condensateFlashTankLoss + this.losses.lowPressureVentLoss;
+                        + this.losses.condensateLosses + this.losses.deaeratorVentLoss + this.losses.condensateFlashTankLoss + this.losses.lowPressureVentLoss;
     const turbineLosses = this.losses.condensingTurbineEfficiencyLoss + this.losses.highToMediumTurbineEfficiencyLoss
-    + this.losses.highToLowTurbineEfficiencyLoss + this.losses.mediumToLowTurbineEfficiencyLoss + this.losses.condensingLosses
+                        + this.losses.highToLowTurbineEfficiencyLoss + this.losses.mediumToLowTurbineEfficiencyLoss + this.losses.condensingLosses
     const turbineGeneration = this.losses.condensingTurbineUsefulEnergy + this.losses.highToLowTurbineUsefulEnergy 
-    + this.losses.highToMediumTurbineUsefulEnergy + this.losses.mediumToLowTurbineUsefulEnergy;
+                        + this.losses.highToMediumTurbineUsefulEnergy + this.losses.mediumToLowTurbineUsefulEnergy;
     const processUsage = this.losses.highPressureProcessUsage + this.losses.mediumPressureProcessUsage + this.losses.lowPressureProcessUsage;
     const unreturnedCondensate = this.losses.lowPressureProcessLoss + this.losses.highPressureProcessLoss + this.losses.mediumPressureProcessLoss;
     
-    // mass flow * enthalpy (from lowest pressure into deaerator)
-    // const returnedCondensate = this.losses
-    // initialLossPercent for use without connecting node
+
     const initialLossPercent = ((energyInput - (stackLosses + otherLosses + turbineLosses)) / energyInput) * 100;
-    
     const turbineLossValue = (turbineLosses / energyInput) * 100;
-    // const usefulConnectorValue = (energyInput - (otherLosses + stackLosses)) / 100 
-    
+    const stackLossValue = (stackLosses / energyInput) * 100;
+    const otherLossValue = (otherLosses / energyInput) * 100;
     const turbineGenerationValue = (turbineGeneration / energyInput) * 100;
     const unreturnedCondensateValue = (unreturnedCondensate / energyInput) * 100;
     const processUsageValue = (processUsage / energyInput) * 100;
+    const returnedCondensateValue = (this.baselineOutput.returnCondensate.energyFlow / energyInput) / 100;
 
-    let usefulOutput: number = 0;
+    console.log('initialLossPercent', initialLossPercent)
+    console.log('turbineLossValue', turbineLossValue);
+    console.log('stackLossValue', stackLossValue);
+    console.log('otherLossValue', otherLossValue);
+    console.log('turbineGenerationValue', turbineGenerationValue);
+    console.log('unreturnedCondensateValue', unreturnedCondensateValue);
+    console.log('processUsageValue', processUsageValue);
+    console.log('returnedCondensateValue', returnedCondensateValue);
 
-    console.log('initial loss perc', initialLossPercent);
-    console.log('turbinegenerationvalue', turbineGenerationValue)
-    console.log('unreturnedcv', unreturnedCondensateValue);
-    console.log('puv', processUsageValue);
-        
+
     nodes.push(
       {
-        name: "Energy Input " + this.decimalPipe.transform(energyInput, '1.0-0') + " units",
+        name: "Energy Input " + this.decimalPipe.transform(energyInput, '1.0-0') + " MJ/hr",
         value: 100,
         x: .05,
         y: .6,
+        source: 0,
+        target: [1],
+        isConnector: true,
+        isConnectingPath: false,
         nodeColor: this.nodeStartColor,
         id: 'originConnector'
       },
       {
-        name: "",
+        name: "i == 1",
         value: 0,
-        x: .175,
+        x: .125,
         y: .6,
+        source: 1,
+        target: [2,2],
+        isConnector: true,
+        isConnectingPath: true,
         nodeColor: this.nodeStartColor,
         id: 'inputConnector'
       },
       {
-        name: "Stack Loss " + this.decimalPipe.transform(stackLosses, '1.0-0') + " units",
-        value: (stackLosses / energyInput) * 100,
-        x: .25,
-        y: .2,
+        name: "i == 2",
+        value: 0,
+        x: .175,
+        y: .6,
+        source: 2,
+        target: [3,4,5,6],
+        isConnector: true,
+        isConnectingPath: true,
         nodeColor: this.nodeStartColor,
+        id: 'inputConnector'
+      },
+      {
+        name: "Stack Loss " + this.decimalPipe.transform(stackLosses, '1.0-0') + " MJ/hr",
+        value: stackLossValue,
+        x: .25,
+        y: .1,
+        source: 3,
+        target: [],
+        isConnector: false,
+        isConnectingPath: false,
+        nodeColor: this.nodeArrowColor,
         id: 'stackLoss'
       },
       {
-        name: "Other Losses " + this.decimalPipe.transform(otherLosses, '1.0-0') + " units",
-        value: (otherLosses / energyInput) * 100,
-        x: .35,
+        name: "Other Losses " + this.decimalPipe.transform(otherLosses, '1.0-0') + " MJ/hr",
+        value: otherLossValue,
+        x: .3,
         y: .3,
+        source: 4,
+        target: [],
+        isConnector: false,
+        isConnectingPath: false,
         nodeColor: this.nodeArrowColor,
         id: 'otherLosses'
       },
       {
-        name: "Turbine Losses " + this.decimalPipe.transform(turbineLosses, '1.0-0') + " units",
+        name: "Turbine Losses " + this.decimalPipe.transform(turbineLosses, '1.0-0') + " MJ/hr",
         value: turbineLossValue,
-        x: .5,
-        y: .3,
+        x: .4,
+        y: .2,
+        source: 5,
+        target: [],
+        isConnector: false,
+        isConnectingPath: false,
         nodeColor: this.nodeArrowColor,
-        id: 'otherLosses'
+        id: 'turbineLosses'
       },
       {
         name: "",
         value: initialLossPercent,
-        x: .6,
+        x: .5,
         y: .65,
+        source: 6,
+        target: [7,8,9, 10],
+        isConnector: true,
+        isConnectingPath: true,
         nodeColor: this.nodeStartColor,
         id: 'turbineConnector'
       },
       {
-        name: "Turbine Generation " + this.decimalPipe.transform(turbineGeneration, '1.0-0') + " units",
+        name: "Turbine Generation " + this.decimalPipe.transform(turbineGeneration, '1.0-0') + " MJ/hr",
         value: turbineGenerationValue,
-        x: .8,
-        y: .3,
+        x: .95,
+        y: .1,
+        source: 7,
+        target: [],
+        isConnector: false,
+        isConnectingPath: false,
         nodeColor: this.nodeArrowColor,
         id: 'otherLosses'
       },
       {
-        name: "Unreturned Condensate " + this.decimalPipe.transform(unreturnedCondensate, '1.0-0') + " units",
+        name: "Unreturned Condensate " + this.decimalPipe.transform(unreturnedCondensate, '1.0-0') + " MJ/hr",
         value: unreturnedCondensateValue,
-        x: .8,
-        y: .8,
+        x: .7,
+        y: .85,
+        source: 8,
+        target: [],
+        isConnector: false,
+        isConnectingPath: false,
         nodeColor: this.nodeArrowColor,
         id: 'otherLosses'
       },
       {
-        name: "Process Usage  " + this.decimalPipe.transform(processUsage, '1.0-0') + " units",
+        name: "Process Usage  " + this.decimalPipe.transform(processUsage, '1.0-0') + " MJ/hr",
         value: processUsageValue,
-        x: .9,
+        x: .8,
         y: .6,
-        nodeColor: this.nodeStartColor,
+        source: 9,
+        target: [],
+        isConnector: false,
+        isConnectingPath: false,
+        nodeColor: this.nodeArrowColor,
         id: 'usefulConnector1'
       },
-      //  {
-      //   name: "useful connector 1",
-      //   // value: (usefulConnectorValue / energyInput) * 100,
-      //   value: initialLossPercent,
-      //   x: .6,
-      //   y: .6,
-      //   nodeColor: this.nodeStartColor,
-      //   id: 'usefulConnector1'
-      // },
-      // {
-      //   name: "Test val Returned Condensate " + this.decimalPipe.transform(16, '1.0-0') + " units",
-      //   value: 16,
-      //   x: .9,
-      //   y: .8,
-      //   nodeColor: this.nodeArrowColor,
-      //   id: 'otherLosses'
-      // },
-      );
-    
+      {
+        name: "Returned Condensate " + this.decimalPipe.transform(this.baselineOutput.returnCondensate.energyFlow, '1.0-0') + " MJ/hr",
+        value: returnedCondensateValue,
+        x: .9,
+        y: .8,
+        source: 10,
+        target: [0],
+        isCircularFlow: true,
+        isConnector: true,
+        isConnectingPath: true,
+        nodeColor: this.nodeArrowColor,
+        id: 'returnedCondensate'
+      },
+    );
+
+    // nodes.push(
+    //   {
+    //     name: "Energy Input " + this.decimalPipe.transform(energyInput, '1.0-0') + " MJ/hr",
+    //     value: 100,
+    //     x: .05,
+    //     y: .6,
+    //     source: 0,
+    //     target: [1, 1],
+    //     isConnector: true,
+    //     isConnectingPath: false,
+    //     nodeColor: this.nodeStartColor,
+    //     id: 'originConnector'
+    //   },
+    //   {
+    //     name: "",
+    //     value: 0,
+    //     x: .175,
+    //     y: .6,
+    //     source: 1,
+    //     target: [2,3,4,5],
+    //     isConnector: true,
+    //     isConnectingPath: true,
+    //     nodeColor: this.nodeStartColor,
+    //     id: 'inputConnector'
+    //   },
+    //   {
+    //     name: "Stack Loss " + this.decimalPipe.transform(stackLosses, '1.0-0') + " MJ/hr",
+    //     value: stackLossValue,
+    //     x: .25,
+    //     y: .1,
+    //     source: 2,
+    //     target: [],
+    //     isConnector: false,
+    //     isConnectingPath: false,
+    //     nodeColor: this.nodeArrowColor,
+    //     id: 'stackLoss'
+    //   },
+    //   {
+    //     name: "Other Losses " + this.decimalPipe.transform(otherLosses, '1.0-0') + " MJ/hr",
+    //     value: otherLossValue,
+    //     x: .3,
+    //     y: .3,
+    //     source: 3,
+    //     target: [],
+    //     isConnector: false,
+    //     isConnectingPath: false,
+    //     nodeColor: this.nodeArrowColor,
+    //     id: 'otherLosses'
+    //   },
+    //   {
+    //     name: "Turbine Losses " + this.decimalPipe.transform(turbineLosses, '1.0-0') + " MJ/hr",
+    //     value: turbineLossValue,
+    //     x: .4,
+    //     y: .2,
+    //     source: 4,
+    //     target: [],
+    //     isConnector: false,
+    //     isConnectingPath: false,
+    //     nodeColor: this.nodeArrowColor,
+    //     id: 'turbineLosses'
+    //   },
+    //   {
+    //     name: "",
+    //     value: initialLossPercent,
+    //     x: .5,
+    //     y: .65,
+    //     source: 5,
+    //     target: [6,7,8,9],
+    //     isConnector: true,
+    //     isConnectingPath: true,
+    //     nodeColor: this.nodeStartColor,
+    //     id: 'turbineConnector'
+    //   },
+    //   {
+    //     name: "Turbine Generation " + this.decimalPipe.transform(turbineGeneration, '1.0-0') + " MJ/hr",
+    //     value: turbineGenerationValue,
+    //     x: .95,
+    //     y: .1,
+    //     source: 6,
+    //     target: [],
+    //     isConnector: false,
+    //     isConnectingPath: false,
+    //     nodeColor: this.nodeArrowColor,
+    //     id: 'otherLosses'
+    //   },
+    //   {
+    //     name: "Unreturned Condensate " + this.decimalPipe.transform(unreturnedCondensate, '1.0-0') + " MJ/hr",
+    //     value: unreturnedCondensateValue,
+    //     x: .7,
+    //     y: .85,
+    //     source: 7,
+    //     target: [],
+    //     isConnector: false,
+    //     isConnectingPath: false,
+    //     nodeColor: this.nodeArrowColor,
+    //     id: 'otherLosses'
+    //   },
+    //   {
+    //     name: "Process Usage  " + this.decimalPipe.transform(processUsage, '1.0-0') + " MJ/hr",
+    //     value: processUsageValue,
+    //     x: .8,
+    //     y: .6,
+    //     source: 8,
+    //     target: [],
+    //     isConnector: false,
+    //     isConnectingPath: false,
+    //     nodeColor: this.nodeArrowColor,
+    //     id: 'usefulConnector1'
+    //   },
+    //   {
+    //     name: "Returned Condensate " + this.decimalPipe.transform(this.baselineOutput.returnCondensate.energyFlow, '1.0-0') + " MJ/hr",
+    //     value: returnedCondensateValue,
+    //     x: .9,
+    //     y: .8,
+    //     source: 9,
+    //     target: [0],
+    //     isCircularFlow: true,
+    //     isConnector: true,
+    //     isConnectingPath: true,
+    //     nodeColor: this.nodeArrowColor,
+    //     id: 'returnedCondensate'
+    //   },
+    // );
     return nodes;
   }
 
+  buildLinks(nodes, links) {
+    this.connectingLinkPaths.push(0);
+    
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].isConnector) {
+          this.connectingNodes.push(i); 
+      }
+      if (nodes[i].isConnectingPath) {
+        this.connectingLinkPaths.push(i); 
+      }
+
+      for (let j = 0; j < nodes[i].target.length; j++) {
+          links.push(
+            {
+              source: nodes[i].source,
+              target: nodes[i].target[j]
+            }
+          )
+        }
+
+      }
+  }
+
+  addGradientElement(): void {
+    const mainSVG = this._dom.nativeElement.querySelector('.main-svg')
+    const svgDefs = this._dom.nativeElement.querySelector('defs')
+
+    svgDefs.innerHTML = `
+    <linearGradient id="ssmtLinkGradient">
+      <stop offset="10%" stop-color="${this.gradientStartColor}" />
+      <stop offset="100%" stop-color="${this.gradientEndColor}" />
+    </linearGradient>
+    `
+    // Insert our gradient Def
+    this.renderer.appendChild(mainSVG, svgDefs);
+  }
 
   buildSvgArrows() {
     const rects = this._dom.nativeElement.querySelectorAll('.node-rect');
@@ -349,10 +533,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit {
     const arrowShape = 'polygon(100% 50%, 0 0, 0 100%)'
 
     for (let i = 0; i < rects.length; i++) {
-      if (this.connectingNodes.includes(i)) {
-        rects[i].setAttribute('style', `stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${this.gradientStartColor}; fill-opacity: 1;`);
-      }
-      else {
+      if (!this.connectingNodes.includes(i)) {
         const height = rects[i].getAttribute('height');
         const defaultY = rects[i].getAttribute('y');
 
@@ -362,31 +543,5 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit {
       }
     }
   }
-
-  setGradients() {
-    const linkPaths = this._dom.nativeElement.querySelectorAll('.sankey-link');
-    const mainSVG = this._dom.nativeElement.querySelector('.main-svg')
-    const svgDefs = this._dom.nativeElement.querySelector('defs')
-
-    svgDefs.innerHTML = `
-    <linearGradient id="linkGradient">
-      <stop offset="10%" stop-color="${this.gradientStartColor}" />
-      <stop offset="100%" stop-color="${this.gradientEndColor}" />
-    </linearGradient>
-    `
-    // Insert our gradient Def
-    this.renderer.appendChild(mainSVG, svgDefs);
-
-    for (let i = 0; i < linkPaths.length; i++) {
-      if (this.connectingLinkPaths.includes(i)) {
-        linkPaths[i].setAttribute('fill', this.gradientStartColor);
-        linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: ${this.gradientStartColor}; fill-opacity: 1; stroke-width: 0.25; opacity: 1;`);
-      } else {
-        linkPaths[i].setAttribute('fill', 'url("#linkGradient")');
-        linkPaths[i].setAttribute('style', `stroke: rgb(255, 255, 255); stroke-opacity: 1; fill: url("#linkGradient") !important; fill-opacity: 1; stroke-width: 0.25; opacity: 1;`);
-      }
-    }
-  }
-
 
 }

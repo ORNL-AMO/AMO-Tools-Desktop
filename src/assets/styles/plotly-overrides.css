@@ -1,0 +1,89 @@
+/* SSMT sankey overrides */
+/* =========================== */
+
+/*  Starting link color */
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link {
+    fill: #c77f0a !important;
+    fill-opacity: .9 !important;
+}
+
+
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(2) {
+    fill: url(#ssmtLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(3) {
+    fill: url(#ssmtLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(4) {
+    fill: url(#ssmtLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(6) {
+    fill: url(#ssmtLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(7) {
+    fill: url(#ssmtLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(8) {
+    fill: url(#ssmtLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
