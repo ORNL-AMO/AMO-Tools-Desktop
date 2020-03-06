@@ -16,6 +16,7 @@ matrix:
       os: windows
     
 before_install:
+  - chown -R $(whoami) travis_scripts
   - chmod 777 -R travis_scripts
   - ./travis_scripts/before_install.sh
   - ./travis_scripts/get_os.sh
