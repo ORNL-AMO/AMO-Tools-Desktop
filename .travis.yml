@@ -31,6 +31,7 @@ script:
       ls ../output/ || travis_terminate 1;
     else
       npm run build || travis_terminate 1;
+      cd missing_folder || travis_terminates 1;
     fi
   
 before_deploy:
