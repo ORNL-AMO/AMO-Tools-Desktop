@@ -57,7 +57,7 @@ deploy:
   #tag_name: "release_draft"
   on:
     repo: ORNL-AMO/AMO-Tools-Desktop
-    branch: issue-3505
+    branch: master
     #condition: type = push AND branch = master
     #tags: false
 
