@@ -54,7 +54,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
   }
 
   getValuesAndLabels(): { values: Array<number>, labels: Array<string> } {
-    let teamData = _.orderBy(this.teamData, 'costSavings', 'asc');
+    let teamData = _.orderBy(this.teamData, 'costSavings', 'desc');
     let values: Array<number> = new Array();
     let labels: Array<string> = new Array();
     teamData.forEach(team => {

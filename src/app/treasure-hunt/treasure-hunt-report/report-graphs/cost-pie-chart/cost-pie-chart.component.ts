@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { TreasureHuntResults, UtilityUsageData } from '../../../../shared/models/treasure-hunt';
-// import * as c3 from 'c3';
 import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
@@ -17,20 +16,14 @@ export class CostPieChartComponent implements OnInit {
   @Input()
   showPrint: boolean;
 
-  // chart: any;
   @ViewChild('costPieChart', { static: false }) costPieChart: ElementRef;
-
-  // columnData: Array<any>;
-
   constructor() { }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    // this.initChart();
     this.createChart();
-
   }
 
   ngOnChanges(){
@@ -42,7 +35,6 @@ export class CostPieChartComponent implements OnInit {
   ngOnDestroy() { }
 
   createChart(){
-    // let data = this.getLabelsAndValues();
     let valuesAndLabels = this.getLabelsAndValues();
     Plotly.purge(this.costPieChart.nativeElement)
     var data = [{
@@ -96,11 +88,9 @@ export class CostPieChartComponent implements OnInit {
 
   addItem(values: Array<number>, labels: Array<string>, data: UtilityUsageData, isBaseline: boolean, label: string){
     if (isBaseline && data.baselineEnergyCost) {
-      // this.columnData.push([label, value.baselineEnergyCost]);
       labels.push(label);
       values.push(data.baselineEnergyCost);
     } else if (!isBaseline && data.modifiedEnergyCost) {
-      // this.columnData.push([label, value.modifiedEnergyCost]);
       labels.push(label);
       values.push(data.modifiedEnergyCost);
     }

@@ -76,7 +76,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       xaxis: {
         fixedrange: true
       },
-      margin: { t: 0, b: 100 }
+      margin: { t: 20, b: 100 }
     };
 
     var configOptions = {
