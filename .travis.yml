@@ -26,6 +26,7 @@ install:
 script:
   - ls ./node_modules/@angular/cli/bin/
   - travis_wait 30 ./travis_scripts/build.sh
+  - export TRAVIS_TAG="release_draft"
   
 before_deploy:
   function keep_alive() {
@@ -35,7 +36,7 @@ before_deploy:
     done
   }
   keep_alive &
-  - export TRAVIS_TAG="release_draft"
+  #- export TRAVIS_TAG="release_draft"
 deploy:
   provider: releases
   api_key:
