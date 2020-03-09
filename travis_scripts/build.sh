@@ -2,7 +2,7 @@
 
 set -ev
 
-if [[ $TRAVIS_BRANCH == 'issue-3505' ]]; then
+if [[ $TRAVIS_BRANCH == 'master' ]]; then
   npm run ng-high-memory;
   ./node_modules/.bin/build -"$OS_FLAG" --x64 --publish="never";
   ls;
