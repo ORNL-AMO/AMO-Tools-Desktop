@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
@@ -10,7 +10,8 @@ import * as _ from 'lodash';
 export class TeamSummaryPieChartComponent implements OnInit {
   @Input()
   teamData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
-
+  @Input()
+  showPrintView: boolean;
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
 
   // @HostListener('window:resize', ['$event'])
@@ -25,12 +26,12 @@ export class TeamSummaryPieChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    // if (!this.isPrint) {
-    this.setHeight();
-    this.drawPlot();
-    // } else {
-    //   this.drawPrintPlot();
-    // }
+    if (!this.showPrintView) {
+      this.setHeight();
+      this.drawPlot();
+    } else {
+      this.drawPrintPlot();
+    }
   }
 
   setHeight() {
@@ -42,14 +43,14 @@ export class TeamSummaryPieChartComponent implements OnInit {
     }
   }
 
-  ngOnChanges() {
-    if (this.plotlyPieChart) {
-      // Plotly.purge(this.plotlyPieChart.nativeElement);
-      // if (!this.isPrint) {
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.plotlyPieChart && !this.showPrintView) {
+      this.setHeight();
       this.drawPlot();
-      // } else {
-      //   this.drawPrintPlot();
-      // }
+    }
+
+    if (changes.showPrintView && !changes.showPrintView.firstChange && this.showPrintView) {
+      this.drawPrintPlot();
     }
   }
 
@@ -65,7 +66,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
   }
 
   drawPlot() {
-
     let valuesAndLabels = this.getValuesAndLabels();
     Plotly.purge(this.plotlyPieChart.nativeElement)
     var data = [{
@@ -81,25 +81,14 @@ export class TeamSummaryPieChartComponent implements OnInit {
       // textinfo: 'label+value',
       hoverformat: '.2r',
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
-      // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
       hoverinfo: 'label+percent',
       direction: "clockwise",
       rotation: 135
     }];
-    // console.log();
-
-    let marginVal: number = 50;
-    let fontSize: number = 10;
-    // if(this.teamData.length > 4){
-    //   // marginVal = 150;
-    //   fontSize = 10;
-    // }
 
     var layout = {
-      updatemenus: [],
-      // height: this.chartHeight,
       font: {
-        size: fontSize,
+        size: 10,
       },
       showlegend: false,
       margin: { t: 30, b: 30, l: 135, r: 135 },
@@ -114,36 +103,37 @@ export class TeamSummaryPieChartComponent implements OnInit {
     Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
   }
 
-  // drawPrintPlot() {
-  //   let valuesAndLabels = this.getValuesAndLabels();
-  //   var data = [{
-  //     values: valuesAndLabels.values,
-  //     labels: valuesAndLabels.labels,
-  //     marker: {
-  //       colors: graphColors
-  //     },
-  //     type: 'pie',
-  //     textposition: 'auto',
-  //     insidetextorientation: "horizontal",
-  //     // automargin: true,
-  //     textinfo: 'label+percent',
-  //     hoverformat: '.2r',
-  //     text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
-  //     hoverinfo: 'text'
-  //   }];
-
-  //   var layout = {
-  //     width: this.plotlyPieChart.nativeElement.clientWidth,
-  //     font: {
-  //       size: 16,
-  //     },
-  //     showlegend: false,
-  //     margin: { t: 0, b: 0 }
-  //   };
-  //   var modebarBtns = {
-  //     displaylogo: false,
-  //     displayModeBar: false
-  //   };
-  //   Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
-  // }
+  drawPrintPlot() {
+    let valuesAndLabels = this.getValuesAndLabels();
+    var data = [{
+      values: valuesAndLabels.values,
+      labels: valuesAndLabels.labels,
+      marker: {
+        colors: graphColors
+      },
+      type: 'pie',
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      // automargin: true,
+      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      hoverformat: '.2r',
+      direction: "clockwise",
+      rotation: 135
+    }];
+    var layout = {
+      height: 800,
+      width: 1000,
+      font: {
+        size: 16,
+      },
+      showlegend: false,
+      margin: { t: 150, b: 150, l: 150, r: 150 }
+    };
+    var modebarBtns = {
+      displaylogo: false,
+      displayModeBar: false,
+      responsive: true
+    };
+    Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+  }
 }

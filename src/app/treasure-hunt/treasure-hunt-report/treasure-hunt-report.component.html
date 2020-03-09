@@ -14,7 +14,7 @@
   </div>
 
   <div #reportHeader class="report-header" [ngClass]="{'hide-print': inTHunt}">
-    <app-treasure-chest-menu [settings]="settings" [inReport]="true" *ngIf="!inRollup">
+    <app-treasure-chest-menu [settings]="settings" [inReport]="true" *ngIf="!inRollup && !showPrintView">
     </app-treasure-chest-menu>
     <div *ngIf="!inRollup" class="btn-group hide-print">
       <button class="btn btn-secondary" (click)="print()">Print</button>
@@ -88,7 +88,7 @@
       <h4 class="show-print">Executive Summary</h4>
       <div class="d-flex justify-content-center">
         <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"
-          [showPrint]="showPrintView && printOptions.printExecutiveSummary"
+          [showPrintView]="showPrintView && printOptions.printExecutiveSummary"
           [opportunityCardsData]="opportunityCardsData">
         </app-executive-summary>
       </div>

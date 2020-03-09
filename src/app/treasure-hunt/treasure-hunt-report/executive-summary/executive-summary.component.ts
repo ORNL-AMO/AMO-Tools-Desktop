@@ -17,7 +17,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  showPrint: boolean;
+  showPrintView: boolean;
   @Input()
   opportunityCardsData: Array<OpportunityCardData>;
 

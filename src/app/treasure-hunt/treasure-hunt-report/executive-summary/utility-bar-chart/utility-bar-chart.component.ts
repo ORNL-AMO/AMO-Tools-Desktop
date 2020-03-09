@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, SimpleChanges } from '@angular/core';
 import * as Plotly from 'plotly.js';
 import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
@@ -10,6 +10,8 @@ import { graphColors } from '../../../../phast/phast-report/report-graphs/graphC
 export class UtilityBarChartComponent implements OnInit {
   @Input()
   treasureHuntResults: TreasureHuntResults;
+  @Input()
+  showPrintView: boolean;
   @ViewChild('utilityBarChart', { static: false }) utilityBarChart: ElementRef;
 
   constructor() { }
@@ -18,13 +20,20 @@ export class UtilityBarChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.createBarChart();
-  }
-
-  ngOnChanges() {
-    if (this.utilityBarChart) {
+    if (!this.showPrintView) {
       this.createBarChart();
     }
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.utilityBarChart && !this.showPrintView) {
+      this.createBarChart();
+    }
+    if (changes.showPrintView && !changes.showPrintView.firstChange && this.showPrintView) {
+      this.createPrintBarChart();
+    }
+
   }
 
 
@@ -59,7 +68,7 @@ export class UtilityBarChartComponent implements OnInit {
       barmode: 'stack',
       showlegend: true,
       legend: {
-        x: .25, 
+        x: .25,
         y: 1.5,
         orientation: "h"
       },
@@ -76,7 +85,69 @@ export class UtilityBarChartComponent implements OnInit {
         automargin: true,
         fixedrange: true
       },
-      margin: { t: 30, b: 10 }
+      margin: { t: 25, b: 10 }
+    };
+    var configOptions = {
+      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      displaylogo: false,
+      displayModeBar: true,
+      responsive: true
+    };
+
+    Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);
+  }
+
+  createPrintBarChart() {
+    console.log('PRINT BAR CHART')
+    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
+    let projectCostTrace = {
+      x: chartData.labels,
+      y: chartData.projectedCosts,
+      hoverinfo: 'all',
+      hovertemplate: '%{y:$,.0f}<extra></extra>',
+      name: "Projected Costs",
+      type: "bar",
+      marker: {
+        color: graphColors[0],
+        width: .8
+      },
+    };
+    let costSavingsTrace = {
+      x: chartData.labels,
+      y: chartData.costSavings,
+      hoverinfo: 'all',
+      hovertemplate: '%{y:$,.0f}<extra></extra>',
+      name: "Cost Savings",
+      type: "bar",
+      marker: {
+        color: graphColors[1]
+      },
+    }
+
+    var data = [projectCostTrace, costSavingsTrace];
+    var layout = {
+      width: 575,
+      barmode: 'stack',
+      showlegend: true,
+      legend: {
+        x: 0,
+        y: 1.5,
+        orientation: "h"
+      },
+      font: {
+        size: 14,
+      },
+      yaxis: {
+        hoverformat: '.3r',
+        // automargin: true,
+        tickformat: '$.2s',
+        fixedrange: true
+      },
+      xaxis: {
+        // automargin: true,
+        fixedrange: true
+      },
+      margin: { t: 30, b: 30 }
     };
     var configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],

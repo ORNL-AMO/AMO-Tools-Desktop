@@ -5,7 +5,8 @@
     </app-executive-summary-table>
   </div>
   <div class="col-lg-6 col-md-6 col-sm-12">
-    <app-utility-bar-chart [treasureHuntResults]="treasureHuntResults"></app-utility-bar-chart>
+    <app-utility-bar-chart [treasureHuntResults]="treasureHuntResults" [showPrintView]="showPrintView">
+    </app-utility-bar-chart>
   </div>
   <div class="col-12" *ngIf="treasureHuntResults.hasMixed == true">
     <div class="alert-warning small mb-2">
@@ -22,25 +23,7 @@
   <div class="col-lg-6 col-sm-12" *ngIf="teamData.length > 0">
     <app-team-summary-table [teamData]="teamData"></app-team-summary-table>
   </div>
-  <div class="col-md-12 col-lg-6 pie-chart" *ngIf="teamData.length > 0">
-    <!-- <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels"
-    [printView]="showPrint" [exportName]="'treasure-hunt-team-savings'" [chartContainerWidth]="pieChartWidth"
-    [chartContainerHeight]="pieChartHeight" [sideBySide]="false"></app-pie-chart> -->
-    <app-team-summary-pie-chart [teamData]="teamData"></app-team-summary-pie-chart>
+  <div class="col-lg-6 col-sm-12 pie-chart" *ngIf="teamData.length > 0" [ngClass]="{'col-12': showPrintView}">
+    <app-team-summary-pie-chart [teamData]="teamData" [showPrintView]="showPrintView"></app-team-summary-pie-chart>
   </div>
 </div>
-
-<!-- print version of the chart -->
-<!-- <div class="d-flex flex-row show-print print-bottom-padding" *ngIf="showPrint">
-  <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles" [data]="data"
-    [chartContainerWidth]="barChartWidth" [chartContainerHeight]="barChartHeight">
-  </app-cost-summary-chart>
-</div>
-
-
-<div class="d-flex flex-row show-print print-bottom-padding"
-  *ngIf="showPrint && teamData.length > 0">
-  <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels" [printView]="showPrint"
-    [exportName]="treasure-hunt-team-savings" [chartContainerWidth]="pieChartWidth"
-    [chartContainerHeight]="pieChartHeight"></app-pie-chart>
-</div> -->
