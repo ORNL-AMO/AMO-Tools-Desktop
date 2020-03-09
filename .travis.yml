@@ -28,7 +28,7 @@ script:
   - travis_wait 30 ./travis_scripts/build.sh
   - export TRAVIS_TAG="release_draft"
   
-before_deploy:
+before_deploy: |
   function keep_alive() {
     while true; do
       echo -en "\a"
