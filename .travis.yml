@@ -28,7 +28,6 @@ script:
   - travis_wait 30 ./travis_scripts/build.sh
   
 before_deploy:
-  - export TRAVIS_TAG="release_draft"
   function keep_alive() {
     while true; do
       echo -en "\a"
@@ -36,7 +35,7 @@ before_deploy:
     done
   }
   keep_alive &
-  #- export TRAVIS_TAG="release_draft"
+  - export TRAVIS_TAG="release_draft"
 deploy:
   provider: releases
   api_key:
