@@ -16,22 +16,18 @@ matrix:
       os: windows
     
 before_install:
-  - if [ [$TRAVIS_OS_NAME == 'linux'] OR [$TRAVIS_OS_NAME == 'osx'] ]; then travis_retry npm i -g npm@6.4.0; fi
-  - bash travis_scripts/get_os.sh
+  - chmod 777 travis_scripts/*
+  - travis_retry ./travis_scripts/before_install.sh
+  - ./travis_scripts/get_os.sh
   - echo "$OS_FLAG"
 install:
   - travis_retry npm install
   - npm update
 script:
   - ls ./node_modules/@angular/cli/bin/
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then
-      travis_wait 30 npm run ng-high-memory;
-      ./node_modules/.bin/build -"$OS_FLAG" --x64 --publish="never";
-      ls;
-      ls ../output/;
-    else
-      npm run build;
-    fi
+  - travis_wait 40 ./travis_scripts/build.sh
+  - echo "Build complete"
+  #- export TRAVIS_TAG="release_draft"
   
 before_deploy:
   #function keep_alive() {
