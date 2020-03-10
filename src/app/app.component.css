@@ -118,6 +118,54 @@ Buttons
   background-color: #F5B7B1;
 }
 
+/*
+Explore-opps
+=============================================== */
+.exploreOppsItem {
+  display: flex;
+  justify-content: space-around;
+}
+
+.exploreOppsItem__form {
+  width: 50%;
+}
+
+.baselineValueGroup {
+  text-align: center;
+}
+
+div.form-group.exploreOppsItem__formGroup >
+.baselineValueGroup__label {
+  width: 100%;
+}
+
+.baselineValueGroup__value {
+  font-size: .75em;
+}
+
+.form-group.exploreOppsItem__formGroup {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+div.form-group.exploreOppsItem__formGroup >
+label.modValueGroup__label {
+  width: 100%;
+  padding-bottom: 4px;
+  align-self: center;
+}
+
+div.form-group.exploreOppsItem__formGroup >
+select.modValueGroup__value {
+  width: 100%;
+  align-self: center;
+}
+
+div.form-group.exploreOppsItem__formGroup >
+div.modValueGroup__inputGroup {
+  align-self: center;
+}
 
 /*
 Badges
@@ -217,7 +265,9 @@ select.form-control:not([size]):not([multiple]) {
   }
 
 
-
+  .inheritWidth {
+    width: inherit;
+  }
 
 
 
