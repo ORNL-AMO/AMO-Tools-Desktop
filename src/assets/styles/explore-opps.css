@@ -1,0 +1,49 @@
+/*
+Explore-opps form overrides
+=============================================== */
+.exploreOppsItem {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .exploreOppsHeader {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 8px;
+  }
+  
+  .exploreOppsItem__form {
+    width: 50%;
+  }
+  
+  div.form-group.exploreOppsItem__formGroup >
+  .baselineValueGroup__label {
+    width: 100%;
+  }
+  
+  .baselineValueGroup__value {
+    font-size: .75em;
+  }
+  
+  .form-group.exploreOppsItem__formGroup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  div.form-group.exploreOppsItem__formGroup >
+  label.modValueGroup__label {
+    width: 100%;
+    padding-bottom: 4px;
+    align-self: center;
+  }
+  
+  div.form-group.exploreOppsItem__formGroup >
+  select.modValueGroup__value {
+    width: 100%;
+  }
+
+  hr.vfd-rule {
+      margin-top: 0;
+  }

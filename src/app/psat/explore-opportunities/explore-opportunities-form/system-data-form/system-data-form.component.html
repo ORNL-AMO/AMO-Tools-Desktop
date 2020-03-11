@@ -5,7 +5,7 @@
     </label>
 </div>
 <li *ngIf="!isVFD && showFlowRate" class="exploreOppsItem">
-    <form [formGroup]="baselineForm">
+    <form [formGroup]="baselineForm" class="exploreOppsItem__form">
         <div class="form-group exploreOppsItem__formGroup"
             [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid, 'error': baselineWarnings.flowError !== null}">
                 <label for="baselineFlowRate" class="baselineValueGroup__label">Baseline Flow Rate</label>
@@ -59,7 +59,7 @@
 </div>
 
 <li *ngIf="!isVFD && showHead" class="exploreOppsItem">
-    <form [formGroup]="baselineForm" class="inheritWidth">
+    <form [formGroup]="baselineForm" class="exploreOppsItem__form">
         <div class="form-group exploreOppsItem__formGroup" [ngClass]="{'invalid': baselineForm.controls.head.invalid}">
             <label for="baselineHead" class="baselineValueGroup__label">Baseline Head</label>
             <div class="text-muted baselineValueGroup__value">{{ baselineForm.controls.head.value }} {{ settings.distanceMeasurement | settingsLabel }}</div>
@@ -108,7 +108,7 @@
 </div>
 
 <li *ngIf="showSystemData" class="exploreOppsItem">
-    <form [formGroup]="baselineForm">
+    <form [formGroup]="baselineForm" class="exploreOppsItem__form">
         <div class="form-group exploreOppsItem__formGroup" [ngClass]="{'invalid': baselineForm.controls.costKwHr.invalid}">
             <label for="baselineCost" class="baselineValueGroup__label">Baseline Cost</label>
             <div class="text-muted baselineValueGroup__value">{{ baselineForm.controls.costKwHr.value }} $/kWh</div>

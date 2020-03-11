@@ -1,5 +1,10 @@
+<li class="exploreOppsHeader">
+  <h5 class="text-muted">Baseline</h5>
+  <h5 class="text-muted">Modifications</h5>
+</li>
+<hr class="vfd-rule">
 <li class="exploreOppsItem">
-  <form [formGroup]="baselineFieldDataForm" class="inheritWidth">
+  <form [formGroup]="baselineFieldDataForm" class="exploreOppsItem__form">
     <div
       class="form-group exploreOppsItem__formGroup"
       [ngClass]="{
@@ -111,7 +116,7 @@
   </form>
 </li>
 <li class="exploreOppsItem">
-  <form [formGroup]="baselineFieldDataForm" class="inheritWidth">
+  <form [formGroup]="baselineFieldDataForm" class="exploreOppsItem__form">
     <div
       class="form-group exploreOppsItem__formGroup"
       [ngClass]="{ invalid: baselineFieldDataForm.controls.head.invalid }"
