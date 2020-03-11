@@ -5,11 +5,11 @@
     </label>
 </div>
 <li *ngIf="!isVFD && showFlowRate" class="exploreOppsItem">
-    <form [formGroup]="baselineForm" class="exploreOppsItem__form">
-        <div class="form-group exploreOppsItem__formGroup"
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
             [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid, 'error': baselineWarnings.flowError !== null}">
-                <label for="baselineFlowRate" class="baselineValueGroup__label">Baseline Flow Rate</label>
-                <div class="text-muted baselineValueGroup__value">{{ baselineForm.controls.flowRate.value }} {{ settings.flowMeasurement | settingsLabel }}</div>
+                <label for="baselineFlowRate" class="baseline-value-label">Baseline Flow Rate</label>
+                <div class="text-muted baseline-value-input">{{ baselineForm.controls.flowRate.value }} {{ settings.flowMeasurement | settingsLabel }}</div>
 
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">
@@ -26,10 +26,10 @@
 
         </div>
     </form>
-    <form [formGroup]="modificationForm" class="exploreOppsItem__form">
-        <div class="form-group exploreOppsItem__formGroup"
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
             [ngClass]="{'invalid': modificationForm.controls.flowRate.invalid, 'error': modificationWarnings.flowError !== null}">
-            <label for="modificationFlowRate" class="modValueGroup__label">Modification Flow Rate</label>
+            <label for="modificationFlowRate" class="mod-value-label">Modification Flow Rate</label>
             <div class="input-group modValueGroup__inputGroup">
                 <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate"
                     class="form-control" (focus)="focusField('flowRate')" formControlName="flowRate"
@@ -59,10 +59,10 @@
 </div>
 
 <li *ngIf="!isVFD && showHead" class="exploreOppsItem">
-    <form [formGroup]="baselineForm" class="exploreOppsItem__form">
-        <div class="form-group exploreOppsItem__formGroup" [ngClass]="{'invalid': baselineForm.controls.head.invalid}">
-            <label for="baselineHead" class="baselineValueGroup__label">Baseline Head</label>
-            <div class="text-muted baselineValueGroup__value">{{ baselineForm.controls.head.value }} {{ settings.distanceMeasurement | settingsLabel }}</div>
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.head.invalid}">
+            <label for="baselineHead" class="baseline-value-label">Baseline Head</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.head.value }} {{ settings.distanceMeasurement | settingsLabel }}</div>
 
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.head.invalid && !baselineForm.controls.head.pristine">
@@ -76,9 +76,9 @@
             </span>
         </div>
     </form>
-    <form [formGroup]="modificationForm" class="exploreOppsItem__form">
-        <div class="form-group exploreOppsItem__formGroup" [ngClass]="{'invalid': modificationForm.controls.head.invalid}">
-            <label for="modificationHead" class="modValueGroup__label">Modification Head
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.head.invalid}">
+            <label for="modificationHead" class="mod-value-label">Modification Head
                 <a class="form-text small click-link" (click)="showHeadToolModal()">Calculate
                     Head</a>
             </label>
@@ -108,10 +108,10 @@
 </div>
 
 <li *ngIf="showSystemData" class="exploreOppsItem">
-    <form [formGroup]="baselineForm" class="exploreOppsItem__form">
-        <div class="form-group exploreOppsItem__formGroup" [ngClass]="{'invalid': baselineForm.controls.costKwHr.invalid}">
-            <label for="baselineCost" class="baselineValueGroup__label">Baseline Cost</label>
-            <div class="text-muted baselineValueGroup__value">{{ baselineForm.controls.costKwHr.value }} $/kWh</div>
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.costKwHr.invalid}">
+            <label for="baselineCost" class="baseline-value-label">Baseline Cost</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.costKwHr.value }} $/kWh</div>
           
 
             <span class="alert-danger pull-right small"
@@ -124,9 +124,9 @@
             </span>
         </div>
     </form>
-    <form [formGroup]="modificationForm" class="exploreOppsItem__form">
-        <div class="form-group exploreOppsItem__formGroup" [ngClass]="{'invalid': modificationForm.controls.costKwHr.invalid}">
-            <label for="modificationCost" class="modValueGroup__label">Modification Cost</label>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.costKwHr.invalid}">
+            <label for="modificationCost" class="mod-value-label">Modification Cost</label>
             <div class="input-group modValueGroup__inputGroup">
                 <input name="modificationCost" type="number" step="0.01" min="0" id="modificationCost"
                     class="form-control" (focus)="focusField('modifyCost')" formControlName="costKwHr"
@@ -145,10 +145,10 @@
     </form>
 </li>
 <li *ngIf="showSystemData" class="exploreOppsItem">
-    <form [formGroup]="baselineForm" class="exploreOppsItem__form">
-        <div class="form-group exploreOppsItem__formGroup" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
-            <label for="baselineCost" class="baselineValueGroup__label">Baseline Operating Hours</label>
-            <div class="text-muted baselineValueGroup__value">{{ baselineForm.controls.operatingHours.value }} hrs/yr</div>
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
+            <label for="baselineCost" class="baseline-value-label">Baseline Operating Hours</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.operatingHours.value }} hrs/yr</div>
           
     
             <span class="alert-danger pull-right small"
@@ -161,9 +161,9 @@
             </span>
         </div>
     </form>
-    <form [formGroup]="modificationForm" class="exploreOppsItem__form">
-        <div class="form-group exploreOppsItem__formGroup" [ngClass]="{'invalid': modificationForm.controls.operatingHours.invalid}">
-            <label for="modificationOperatingHours" class="modValueGroup__label">Modification Operating Hours</label>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.operatingHours.invalid}">
+            <label for="modificationOperatingHours" class="mod-value-label">Modification Operating Hours</label>
             <div class="input-group">
                 <span class="input-group-addon op-hour-addon units">
                     <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>

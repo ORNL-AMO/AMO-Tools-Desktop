@@ -13,14 +13,14 @@
 <!--Motor Drive-->
 <li *ngIf="showMotorDrive || isVFD" class="exploreOppsItem">
   <!--Baseline Motor Drive-->
-  <form [formGroup]="baselineForm" class="exploreOppsItem__form">
+  <form [formGroup]="baselineForm" class="explore-opps-form">
     <!--drive-->
     <div class="text-center">
       <label for="baselineMotorDrive">
         <span *ngIf="!isVFD">
           Baseline 
         </span> Motor Drive</label>
-      <div class="text-muted text-center baselineValueGroup__value">{{ drives[baselineForm.value.drive].display}}</div>
+      <div class="text-muted text-center baseline-value-input">{{ drives[baselineForm.value.drive].display}}</div>
     </div>
     <!--specifiedDriveEfficiency-->
     <div
@@ -74,13 +74,13 @@
     </div>
   </form>
   <!--Modification Motor Drive-->
-  <form [formGroup]="modificationForm" class="exploreOppsItem__form">
+  <form [formGroup]="modificationForm" class="explore-opps-form">
     <!--drive-->
-    <div class="form-group exploreOppsItem__formGroup" *ngIf="!isVFD">
+    <div class="form-group explore-opps-formgroup" *ngIf="!isVFD">
       <label for="modificationMotorDrive" 
-        class="modValueGroup__label">Modification Motor Drive</label>
+        class="mod-value-label">Modification Motor Drive</label>
       <select
-        class="form-control modValueGroup__value"
+        class="form-control mod-value-input"
         name="modificationMotorDrive"
         id="modificationMotorDrive"
         (change)="setMotorDrive()"
@@ -94,13 +94,13 @@
     </div>
     <!--specifiedDriveEfficiency-->
     <div
-      class="form-group exploreOppsItem__formGroup"
+      class="form-group explore-opps-formgroup"
       *ngIf="modificationForm.controls.drive.value == 4"
       [ngClass]="{
         invalid: modificationForm.controls.specifiedDriveEfficiency.invalid
       }"
     >
-      <label for="modificationSpecifiedDriveEfficiency" class="modValueGroup__label"
+      <label for="modificationSpecifiedDriveEfficiency" class="mod-value-label"
         >
         <span *ngIf="!isVFD">
           Modification
@@ -169,27 +169,27 @@
 <!--Pump Type-->
 <li *ngIf="showPumpType || isVFD" class="exploreOppsItem">
   <!--Baseline Pump Type (cannot be specified)-->
-  <form [formGroup]="baselineForm" class="exploreOppsItem__form">
+  <form [formGroup]="baselineForm" class="explore-opps-form">
     <div class="text-center">
       <label for="baselinePumpType">
         <span *ngIf="!isVFD">
           Baseline 
         </span>
         Pump Type</label>
-      <div class="text-muted baselineValueGroup__value">{{ pumpTypes[baselineForm.value.pumpType].display}}</div>
+      <div class="text-muted baseline-value-input">{{ pumpTypes[baselineForm.value.pumpType].display}}</div>
     </div>
   </form>
   <!--Modification Pump Type-->
-  <form [formGroup]="modificationForm" class="exploreOppsItem__form">
+  <form [formGroup]="modificationForm" class="explore-opps-form">
     <!--pumpType-->
     <div
-      class="form-group exploreOppsItem__formGroup"
+      class="form-group explore-opps-formgroup"
       *ngIf="modificationForm.controls.pumpType.value != 11"
     >
       <label for="modificationPumpType" 
-        class="modValueGroup__label">Modification Pump Type</label>
+        class="mod-value-label">Modification Pump Type</label>
       <select
-        class="form-control modValueGroup__value"
+        class="form-control mod-value-input"
         name="modificationPumpType"
         id="modificationPumpType"
         (change)="setPumpTypes()"
@@ -203,13 +203,13 @@
     </div>
     <!--specifiedPumpEfficiency-->
     <div
-      class="form-group exploreOppsItem__formGroup"
+      class="form-group explore-opps-formgroup"
       [ngClass]="{
         invalid: modificationForm.controls.specifiedPumpEfficiency.invalid
       }"
     >
     <div>
-      <label id="pumpTypeHelp" class="modValueGroup__label" for="modificationPumpSpecifiedEfficiency"
+      <label id="pumpTypeHelp" class="mod-value-label" for="modificationPumpSpecifiedEfficiency"
       >
       <span *ngIf="!isVFD">
         Modification

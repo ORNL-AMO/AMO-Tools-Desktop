@@ -6,41 +6,46 @@ Explore-opps form overrides
     justify-content: space-between;
   }
   
-  .exploreOppsHeader {
+  .explore-opps-header {
     display: flex;
     justify-content: space-around;
     padding-top: 8px;
   }
+
+  .explore-opps-title {
+    width: 50%;
+    text-align: center;
+  }
   
-  .exploreOppsItem__form {
+  .explore-opps-form {
     width: 50%;
   }
   
-  div.form-group.exploreOppsItem__formGroup >
-  .baselineValueGroup__label {
+  div.form-group.explore-opps-formgroup >
+  .baseline-value-label {
     width: 100%;
   }
   
-  .baselineValueGroup__value {
+  .baseline-value-input {
     font-size: .75em;
   }
   
-  .form-group.exploreOppsItem__formGroup {
+  .form-group.explore-opps-formgroup {
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
   }
   
-  div.form-group.exploreOppsItem__formGroup >
-  label.modValueGroup__label {
+  div.form-group.explore-opps-formgroup >
+  label.mod-value-label {
     width: 100%;
     padding-bottom: 4px;
     align-self: center;
   }
   
-  div.form-group.exploreOppsItem__formGroup >
-  select.modValueGroup__value {
+  div.form-group.explore-opps-formgroup >
+  select.mod-value-input {
     width: 100%;
   }
 

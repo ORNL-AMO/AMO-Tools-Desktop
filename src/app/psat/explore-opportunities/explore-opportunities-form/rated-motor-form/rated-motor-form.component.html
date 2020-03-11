@@ -5,11 +5,11 @@
 </div>
 <!--Motor Efficiency Class-->
 <li *ngIf="showRatedMotorData" class="exploreOppsItem">
-  <form [formGroup]="baselineForm" class="exploreOppsItem__form">
+  <form [formGroup]="baselineForm" class="explore-opps-form">
     <!--efficiencyClass-->
-    <div class="form-group exploreOppsItem__formGroup">
-        <label for="baselineMotorDrive" class="baselineValueGroup__label">Baseline Efficiency Class</label>
-        <div class="text-muted baselineValueGroup__value">{{ efficiencyClasses[baselineForm.value.efficiencyClass].display}}</div>
+    <div class="form-group explore-opps-formgroup">
+        <label for="baselineMotorDrive" class="baseline-value-label">Baseline Efficiency Class</label>
+        <div class="text-muted baseline-value-input">{{ efficiencyClasses[baselineForm.value.efficiencyClass].display}}</div>
     
     </div>
     <!--efficiency-->
@@ -30,11 +30,11 @@
     </div>
   </form>
   <!--Modification Efficiency Class-->
-  <form [formGroup]="modificationForm" class="exploreOppsItem__form">
+  <form [formGroup]="modificationForm" class="explore-opps-form">
     <!--efficiencyClass-->
-    <div class="form-group exploreOppsItem__formGroup">
-      <label for="modificationEfficiencyClass" class="modValueGroup__label">Modification Efficiency Class</label>
-      <select name="modificationEfficiencyClass" class="form-control modValueGroup__value select-input-field" id="modificationEfficiencyClass"
+    <div class="form-group explore-opps-formgroup">
+      <label for="modificationEfficiencyClass" class="mod-value-label">Modification Efficiency Class</label>
+      <select name="modificationEfficiencyClass" class="form-control mod-value-input select-input-field" id="modificationEfficiencyClass"
         (change)="changeModificationEfficiencyClass()" (focus)="focusField('efficiencyClass')" formControlName="efficiencyClass">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
       </select>
