@@ -22,12 +22,18 @@ export class UtilityDonutChartComponent implements OnInit {
   ngOnInit() { }
 
   ngAfterViewInit() {
-    this.createChart();
+    if (!this.showPrint) {
+      this.createChart();
+    } else {
+      this.createPrintChart();
+    }
   }
 
   ngOnChanges() {
-    if (this.utilityDonutChart) {
+    if (this.utilityDonutChart && !this.showPrint) {
       this.createChart();
+    } else if (this.utilityDonutChart && this.showPrint) {
+      this.createPrintChart();
     }
   }
 
@@ -39,7 +45,7 @@ export class UtilityDonutChartComponent implements OnInit {
     Plotly.purge(this.utilityDonutChart.nativeElement);
     var data = [{
       width: this.utilityDonutChart.nativeElement.clientWidth,
-      values: [ this.savings, this.newCost],
+      values: [this.savings, this.newCost],
       labels: ['Utility Savings', 'Projected Cost'],
       marker: {
         // colors: JSON.parse(JSON.stringify(graphColors)).reverse()
@@ -52,15 +58,15 @@ export class UtilityDonutChartComponent implements OnInit {
       hoverformat: '.2r',
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
       hoverinfo: 'label+percent',
-      // direction: "clockwise",
-      // rotation: 20
+      direction: "clockwise",
+      rotation: 20
     }];
     var layout = {
       font: {
         size: 12,
       },
       showlegend: false,
-      margin: { t: 45, b: 25, l: 25, r: 25 },
+      margin: { t: 15, b: 25, l: 25, r: 25 },
     };
 
     var modebarBtns = {
@@ -71,58 +77,43 @@ export class UtilityDonutChartComponent implements OnInit {
     };
     Plotly.react(this.utilityDonutChart.nativeElement, data, layout, modebarBtns);
   }
-  // initChart() {
 
-  //   if (this.showPrint) {
-  //     this.chart = c3.generate({
-  //       bindto: this.donutChartElement.nativeElement,
-  //       data: {
-  //         type: 'donut',
-  //         columns: [
-  //           ['Utility Savings ', this.savings],
-  //           ['Projected Cost ', this.newCost]
-  //         ]
-  //       },
-  //       size: {
-  //         width: 250,
-  //         height: 250
-  //       }
-  //       // legend: {
-  //       //   show: false
-  //       // },
-  //       // color: {
-  //       //   pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
-  //       //   threshold: {
-  //       //     values: [25, 50]
-  //       //   }
-  //       // },
-  //       // tooltip: {
-  //       //   show: false
-  //       // },
-  //     });
-  //   } else {
-  //     this.chart = c3.generate({
-  //       bindto: this.donutChartElement.nativeElement,
-  //       data: {
-  //         type: 'donut',
-  //         columns: [
-  //           ['Utility Savings ', this.savings],
-  //           ['Projected Cost ', this.newCost]
-  //         ]
-  //       },
-  //       // legend: {
-  //       //   show: false
-  //       // },
-  //       // color: {
-  //       //   pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
-  //       //   threshold: {
-  //       //     values: [25, 50]
-  //       //   }
-  //       // },
-  //       // tooltip: {
-  //       //   show: false
-  //       // },
-  //     });
-  //   }
-  // }
+  createPrintChart() {
+    // let valuesAndLabels = this.getValuesAndLabels();
+    console.log('PRINT UTILITY')
+    Plotly.purge(this.utilityDonutChart.nativeElement);
+    var data = [{
+      width: this.utilityDonutChart.nativeElement.clientWidth,
+      values: [this.savings, this.newCost],
+      labels: ['Utility Savings', 'Projected Cost'],
+      marker: {
+        // colors: JSON.parse(JSON.stringify(graphColors)).reverse()
+        colors: graphColors
+      },
+      type: 'pie',
+      hole: .6,
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      hoverformat: '.2r',
+      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      hoverinfo: 'label+percent',
+      direction: "clockwise",
+      rotation: 20
+    }];
+    var layout = {
+      width: 300,
+      font: {
+        size: 12,
+      },
+      showlegend: false,
+      margin: { t: 15, b: 25, l: 35, r: 35 },
+    };
+
+    var modebarBtns = {
+      modeBarButtonsToRemove: ['hoverClosestPie'],
+      displaylogo: false,
+      displayModeBar: true
+    };
+    Plotly.react(this.utilityDonutChart.nativeElement, data, layout, modebarBtns);
+  }
 }

@@ -23,18 +23,24 @@ export class CostPieChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.createChart();
+    if (!this.showPrint) {
+      this.createChart();
+    } else {
+      this.createPrintChart();
+    }
   }
 
-  ngOnChanges(){
-    if(this.costPieChart){
+  ngOnChanges() {
+    if (this.costPieChart && !this.showPrint) {
       this.createChart();
+    } else if (this.costPieChart && this.showPrint) {
+      this.createPrintChart();
     }
   }
 
   ngOnDestroy() { }
 
-  createChart(){
+  createChart() {
     let valuesAndLabels = this.getLabelsAndValues();
     Plotly.purge(this.costPieChart.nativeElement)
     var data = [{
@@ -72,21 +78,61 @@ export class CostPieChartComponent implements OnInit {
     Plotly.react(this.costPieChart.nativeElement, data, layout, modebarBtns);
   }
 
-  getLabelsAndValues(): {values: Array<number>, labels: Array<string>}{
-    let values: Array<number> = new Array();
-    let labels: Array<string> = new Array();
-    this.addItem(values, labels, this.treasureHuntResults.electricity, this.isBaseline,'Electricity');
-    this.addItem(values, labels, this.treasureHuntResults.naturalGas, this.isBaseline, 'Natural Gas');
-    this.addItem(values, labels, this.treasureHuntResults.water, this.isBaseline,'Water');
-    this.addItem(values, labels, this.treasureHuntResults.wasteWater, this.isBaseline,'Waste Water');
-    this.addItem(values, labels, this.treasureHuntResults.otherFuel, this.isBaseline,'Other Fuel');
-    this.addItem(values, labels, this.treasureHuntResults.compressedAir, this.isBaseline,'Compressed Air');
-    this.addItem(values, labels, this.treasureHuntResults.steam, this.isBaseline,'Steam');
-    this.addItem(values, labels, this.treasureHuntResults.other, this.isBaseline,'Other');
-    return {values: values, labels: labels};
+
+  createPrintChart() {
+    let valuesAndLabels = this.getLabelsAndValues();
+    Plotly.purge(this.costPieChart.nativeElement)
+    var data = [{
+      values: valuesAndLabels.values,
+      labels: valuesAndLabels.labels,
+      marker: {
+        colors: graphColors
+      },
+      type: 'pie',
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      // automargin: true,
+      // textinfo: 'label+value',
+      hoverformat: '.2r',
+      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
+      hoverinfo: 'label+percent',
+      // direction: "clockwise",
+      // rotation: 135
+    }];
+    var layout = {
+      width: 450,
+      font: {
+        size: 16,
+      },
+      showlegend: false,
+      margin: { t: 5, b: 5, l: 85, r: 85 },
+    };
+
+    var modebarBtns = {
+      modeBarButtonsToRemove: ['hoverClosestPie'],
+      displaylogo: false,
+      displayModeBar: true,
+    };
+    Plotly.react(this.costPieChart.nativeElement, data, layout, modebarBtns);
   }
 
-  addItem(values: Array<number>, labels: Array<string>, data: UtilityUsageData, isBaseline: boolean, label: string){
+
+  getLabelsAndValues(): { values: Array<number>, labels: Array<string> } {
+    let values: Array<number> = new Array();
+    let labels: Array<string> = new Array();
+    this.addItem(values, labels, this.treasureHuntResults.electricity, this.isBaseline, 'Electricity');
+    this.addItem(values, labels, this.treasureHuntResults.naturalGas, this.isBaseline, 'Natural Gas');
+    this.addItem(values, labels, this.treasureHuntResults.water, this.isBaseline, 'Water');
+    this.addItem(values, labels, this.treasureHuntResults.wasteWater, this.isBaseline, 'Waste Water');
+    this.addItem(values, labels, this.treasureHuntResults.otherFuel, this.isBaseline, 'Other Fuel');
+    this.addItem(values, labels, this.treasureHuntResults.compressedAir, this.isBaseline, 'Compressed Air');
+    this.addItem(values, labels, this.treasureHuntResults.steam, this.isBaseline, 'Steam');
+    this.addItem(values, labels, this.treasureHuntResults.other, this.isBaseline, 'Other');
+    return { values: values, labels: labels };
+  }
+
+  addItem(values: Array<number>, labels: Array<string>, data: UtilityUsageData, isBaseline: boolean, label: string) {
     if (isBaseline && data.baselineEnergyCost) {
       labels.push(label);
       values.push(data.baselineEnergyCost);

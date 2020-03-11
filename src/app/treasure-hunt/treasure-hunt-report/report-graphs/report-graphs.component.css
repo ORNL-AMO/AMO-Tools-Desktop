@@ -1,18 +1,18 @@
 @media print {
     .print-avoid-break {
-        padding-bottom: 70px;
+        /* padding-bottom: 70px; */
         page-break-inside: avoid;
     }
     .print-break-before {
         break-before: always;
     }
-    .print-donut-chart-container {
+    /* .print-donut-chart-container {
         width: 450px !important;
         display: inline-block;
         padding: 10px;
         text-align: left;
         left: 0 !important;
-    }
+    } */
 }
 
 .group-label{
