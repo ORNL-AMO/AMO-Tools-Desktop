@@ -19,7 +19,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
   //   this.drawPlot();
   // }
 
-  chartHeight: number;
+  // chartHeight: number;
   constructor() { }
 
   ngOnInit(): void {
@@ -27,25 +27,16 @@ export class TeamSummaryPieChartComponent implements OnInit {
 
   ngAfterViewInit() {
     if (!this.showPrintView) {
-      this.setHeight();
+      // this.setHeight();
       this.drawPlot();
     } else {
       this.drawPrintPlot();
     }
   }
 
-  setHeight() {
-    //height will match team summary table or set to 300
-    this.chartHeight = this.plotlyPieChart.nativeElement.clientHeight + 100;
-    // console.log(this.chartHeight);
-    if (this.chartHeight < 300) {
-      this.chartHeight = 300;
-    }
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (this.plotlyPieChart && !this.showPrintView) {
-      this.setHeight();
+      // this.setHeight();
       this.drawPlot();
     }
 
@@ -83,7 +74,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
       hoverinfo: 'label+percent',
       direction: "clockwise",
-      rotation: 135
+      rotation: 125
     }];
 
     var layout = {
@@ -91,7 +82,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
         size: 10,
       },
       showlegend: false,
-      margin: { t: 30, b: 30, l: 135, r: 135 },
+      margin: { t: 30, b: 40, l: 135, r: 135 },
     };
 
     var modebarBtns = {
@@ -118,7 +109,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
       hoverformat: '.2r',
       direction: "clockwise",
-      rotation: 135
+      rotation: 125
     }];
     var layout = {
       height: 800,

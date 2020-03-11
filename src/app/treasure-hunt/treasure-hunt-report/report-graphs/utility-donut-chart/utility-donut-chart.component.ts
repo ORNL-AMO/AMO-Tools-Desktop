@@ -40,7 +40,6 @@ export class UtilityDonutChartComponent implements OnInit {
   ngOnDestroy() { }
 
   createChart() {
-    // let valuesAndLabels = this.getValuesAndLabels();
     let rotationAmount: number = (this.savings / (this.savings + this.newCost)) / 2 * 360;
     Plotly.purge(this.utilityDonutChart.nativeElement);
     var data = [{
@@ -48,7 +47,6 @@ export class UtilityDonutChartComponent implements OnInit {
       values: [this.savings, this.newCost],
       labels: ['Utility Savings', 'Projected Cost'],
       marker: {
-        // colors: JSON.parse(JSON.stringify(graphColors)).reverse()
         colors: graphColors
       },
       type: 'pie',
@@ -79,8 +77,6 @@ export class UtilityDonutChartComponent implements OnInit {
   }
 
   createPrintChart() {
-    // let valuesAndLabels = this.getValuesAndLabels();
-    console.log('PRINT UTILITY')
     Plotly.purge(this.utilityDonutChart.nativeElement);
     let rotationAmount: number = (this.savings / (this.savings + this.newCost)) / 2 * 360;
     var data = [{
@@ -88,7 +84,6 @@ export class UtilityDonutChartComponent implements OnInit {
       values: [this.savings, this.newCost],
       labels: ['Utility Savings', 'Projected Cost'],
       marker: {
-        // colors: JSON.parse(JSON.stringify(graphColors)).reverse()
         colors: graphColors
       },
       type: 'pie',

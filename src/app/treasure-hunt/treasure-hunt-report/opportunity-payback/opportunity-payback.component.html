@@ -5,28 +5,13 @@
   </div>
 </div>
 
-<div class="row" *ngIf="!showPrint">
-  <div class="col-6">
-    <app-opportunity-payback-bar-chart [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
+<div class="row">
+  <div class="d-flex justify-content-center" [ngClass]="{'col-6': !showPrint, 'col-12': showPrint}">
+    <app-opportunity-payback-bar-chart [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [showPrint]="showPrint">
     </app-opportunity-payback-bar-chart>
   </div>
-  <div class="col-6">
-    <app-opportunity-payback-donut [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
+  <div class="d-flex justify-content-center" [ngClass]="{'col-6': !showPrint, 'col-12': showPrint}">
+    <app-opportunity-payback-donut [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [showPrint]="showPrint">
     </app-opportunity-payback-donut>
   </div>
 </div>
-
-<!-- <div class="row" *ngIf="showPrint">
-  <div class="print-graph-container">
-    <app-opportunity-payback-bar-chart [showPrint]="showPrint"
-      [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
-    </app-opportunity-payback-bar-chart>
-  </div>
-</div>
-
-<div class="row" *ngIf="showPrint">
-  <div class="print-graph-container">
-    <app-opportunity-payback-donut [showPrint]="showPrint" [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
-    </app-opportunity-payback-donut>
-  </div>
-</div> -->

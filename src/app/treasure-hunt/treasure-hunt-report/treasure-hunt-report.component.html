@@ -92,23 +92,10 @@
           [opportunityCardsData]="opportunityCardsData">
         </app-executive-summary>
       </div>
-      <!-- <div class="d-flex justify-content-center">
-        <app-executive-summary [treasureHuntResults]="treasureHuntResults" [opportunityCardsData]="opportunityCardsData"
-          [settings]="settings" [showFullSummary]="true" [title]="'Detailed Summary'"
-          [showPrint]="showPrintView && printOptions.printExecutiveSummary">
-        </app-executive-summary>
-      </div>
-      <div class="d-flex justify-content-center">
-        <app-executive-summary [treasureHuntResults]="treasureHuntResults" [opportunityCardsData]="opportunityCardsData"
-          [settings]="settings" [showFullSummary]="false" [title]="'Team Summary'"
-          [showPrint]="showPrintView && printOptions.printExecutiveSummary">
-        </app-executive-summary>
-      </div> -->
     </div>
     <div class="results scroll-item print-height print-break-before"
       *ngIf="((currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <h4 class="show-print">Report Graphs</h4>
       <app-report-graphs [treasureHuntResults]="treasureHuntResults"
         [showPrint]="showPrintView && printOptions.printReportGraphs">
       </app-report-graphs>

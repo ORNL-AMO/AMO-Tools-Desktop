@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-// import * as c3 from 'c3';
 import { OpportunitiesPaybackDetails } from '../../../../shared/models/treasure-hunt';
 import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
@@ -20,12 +19,18 @@ export class OpportunityPaybackDonutComponent implements OnInit {
   ngOnInit() { }
 
   ngAfterViewInit() {
-    this.createChart();
+    if (!this.showPrint) {
+      this.createChart();
+    } else if (this.showPrint) {
+      this.createPrintChart();
+    }
   }
 
   ngOnChanges() {
-    if (this.paybackDonutChart) {
+    if (this.paybackDonutChart && !this.showPrint) {
       this.createChart();
+    } else if (this.paybackDonutChart && this.showPrint) {
+      this.createPrintChart();
     }
   }
 
@@ -48,7 +53,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
     }];
     var layout = {
       showlegend: false,
-      margin: { t: 30, b: 30 },
+      margin: { t: 30, b: 30, l: 40, r: 40 },
     };
 
     var modebarBtns = {
@@ -59,6 +64,41 @@ export class OpportunityPaybackDonutComponent implements OnInit {
     };
     Plotly.react(this.paybackDonutChart.nativeElement, data, layout, modebarBtns);
   }
+
+  createPrintChart(){
+    let valuesAndLabels = this.getValuesAndLabels();
+    Plotly.purge(this.paybackDonutChart.nativeElement)
+    var data = [{
+      values: valuesAndLabels.values,
+      labels: valuesAndLabels.labels,
+      marker: {
+        colors: graphColors
+      },
+      type: 'pie',
+      hole: .5,
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      hoverformat: '.2r',
+      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      hoverinfo: 'label+percent',
+    }];
+    var layout = {
+      width: 900,
+      font: {
+        size: 16,
+      },
+      showlegend: false,
+      margin: { t: 70, b: 110, l: 130, r: 130 },
+    };
+
+    var modebarBtns = {
+      modeBarButtonsToRemove: ['hoverClosestPie'],
+      displaylogo: false,
+      displayModeBar: true
+    };
+    Plotly.react(this.paybackDonutChart.nativeElement, data, layout, modebarBtns);
+  }
+
 
   getValuesAndLabels(): { values: Array<number>, labels: Array<string> } {
     return {
