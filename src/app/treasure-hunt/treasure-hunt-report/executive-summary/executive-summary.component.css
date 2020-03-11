@@ -1,3 +1,8 @@
 .pie-chart{
     min-height: 300px;
 }
+
+.print-avoid-break {
+    /* padding-bottom: 70px; */
+    page-break-inside: avoid;
+}

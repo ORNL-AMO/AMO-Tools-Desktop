@@ -1,4 +1,4 @@
-<div class="row no-gutters mb-4">
+<div class="row no-gutters">
   <div class="col-md-6 col-sm-12 pb-5">
     <app-executive-summary-table [treasureHuntResults]="treasureHuntResults" [showFullSummary]="false"
       [settings]="settings" [title]="'Cost Summary'">
@@ -20,10 +20,12 @@
       [settings]="settings" [title]="'Detailed Summary'">
     </app-executive-summary-table>
   </div>
-  <div class="col-lg-6 col-sm-12" *ngIf="teamData.length > 0">
+</div>
+<div class="row no-gutters mb-4 print-avoid-break" *ngIf="teamData.length > 0">
+  <div class="col-lg-6 col-sm-12">
     <app-team-summary-table [teamData]="teamData"></app-team-summary-table>
   </div>
-  <div class="col-lg-6 col-sm-12 pie-chart" *ngIf="teamData.length > 0" [ngClass]="{'col-12': showPrintView}">
+  <div class="col-lg-6 col-sm-12 pie-chart" [ngClass]="{'col-12': showPrintView}">
     <app-team-summary-pie-chart [teamData]="teamData" [showPrintView]="showPrintView"></app-team-summary-pie-chart>
   </div>
 </div>

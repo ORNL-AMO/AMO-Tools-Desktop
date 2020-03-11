@@ -59,14 +59,14 @@ export class CostPieChartComponent implements OnInit {
       // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
       hoverinfo: 'label+percent',
       direction: "clockwise",
-      rotation: 135
+      rotation: 90
     }];
     var layout = {
       font: {
         size: 16,
       },
       showlegend: false,
-      margin: { t: 15, b: 15, l: 15, r: 15 },
+      margin: { t: 50, b: 110, l: 110, r: 110 },
     };
 
     var modebarBtns = {
@@ -97,8 +97,8 @@ export class CostPieChartComponent implements OnInit {
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
       // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
       hoverinfo: 'label+percent',
-      // direction: "clockwise",
-      // rotation: 135
+      direction: "clockwise",
+      rotation: 90
     }];
     var layout = {
       width: 450,
@@ -106,7 +106,7 @@ export class CostPieChartComponent implements OnInit {
         size: 16,
       },
       showlegend: false,
-      margin: { t: 5, b: 5, l: 85, r: 85 },
+      margin: { t: 50, b: 110, l: 50, r: 110 },
     };
 
     var modebarBtns = {
@@ -133,6 +133,9 @@ export class CostPieChartComponent implements OnInit {
   }
 
   addItem(values: Array<number>, labels: Array<string>, data: UtilityUsageData, isBaseline: boolean, label: string) {
+    if (this.showPrint && label == 'Compressed Air') {
+      label = 'Comp. Air';
+    }
     if (isBaseline && data.baselineEnergyCost) {
       labels.push(label);
       values.push(data.baselineEnergyCost);

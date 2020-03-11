@@ -41,7 +41,7 @@ export class UtilityDonutChartComponent implements OnInit {
 
   createChart() {
     // let valuesAndLabels = this.getValuesAndLabels();
-
+    let rotationAmount: number = (this.savings / (this.savings + this.newCost)) / 2 * 360;
     Plotly.purge(this.utilityDonutChart.nativeElement);
     var data = [{
       width: this.utilityDonutChart.nativeElement.clientWidth,
@@ -52,21 +52,21 @@ export class UtilityDonutChartComponent implements OnInit {
         colors: graphColors
       },
       type: 'pie',
-      hole: .6,
+      hole: .5,
       textposition: 'auto',
       insidetextorientation: "horizontal",
       hoverformat: '.2r',
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
       hoverinfo: 'label+percent',
       direction: "clockwise",
-      rotation: 20
+      rotation: rotationAmount
     }];
     var layout = {
       font: {
         size: 12,
       },
       showlegend: false,
-      margin: { t: 15, b: 25, l: 25, r: 25 },
+      margin: { t: 15, b: 5, l: 25, r: 25 },
     };
 
     var modebarBtns = {
@@ -82,6 +82,7 @@ export class UtilityDonutChartComponent implements OnInit {
     // let valuesAndLabels = this.getValuesAndLabels();
     console.log('PRINT UTILITY')
     Plotly.purge(this.utilityDonutChart.nativeElement);
+    let rotationAmount: number = (this.savings / (this.savings + this.newCost)) / 2 * 360;
     var data = [{
       width: this.utilityDonutChart.nativeElement.clientWidth,
       values: [this.savings, this.newCost],
@@ -91,22 +92,22 @@ export class UtilityDonutChartComponent implements OnInit {
         colors: graphColors
       },
       type: 'pie',
-      hole: .6,
+      hole: .5,
       textposition: 'auto',
       insidetextorientation: "horizontal",
       hoverformat: '.2r',
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
       hoverinfo: 'label+percent',
       direction: "clockwise",
-      rotation: 20
+      rotation: rotationAmount
     }];
     var layout = {
       width: 300,
       font: {
-        size: 12,
+        size: 14,
       },
       showlegend: false,
-      margin: { t: 15, b: 25, l: 35, r: 35 },
+      margin: { t: 15, b: 5, l: 35, r: 35 },
     };
 
     var modebarBtns = {
