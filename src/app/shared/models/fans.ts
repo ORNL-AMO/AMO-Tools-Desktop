@@ -20,28 +20,20 @@ export interface Modification {
   notes?: Notes;
   fsat?: FSAT;
   exploreOpportunities?: boolean;
-  vfd?: SavingsOpportunity,
-  exploreOppsShowMotorDrive?: SavingsOpportunity,
+  exploreOppsShowVfd?: SavingsOpportunity,
+  exploreOppsShowDrive?: SavingsOpportunity,
   exploreOppsShowFanType?: SavingsOpportunity,
-  motor?: SavingsOpportunity,
-  flowRate?: SavingsOpportunity,
-  reducePressure?: SavingsOpportunity,
-  opData?: SavingsOpportunity
-  // hasVfd?: boolean,
-  // hasDrive?: boolean,
-  // hasFan?: boolean,
-  // hasMotor?: boolean,
-  // hasFlowRate?: boolean,
-  // hasReducePressure?: boolean,
-  // hasOpData?: boolean
+  exploreOppsShowMotor?: SavingsOpportunity,
+  exploreOppsShowMotorEff?: SavingsOpportunity,
+  exploreOppsShowFlowRate?: SavingsOpportunity,
+  exploreOppsShowReducePressure?: SavingsOpportunity,
+  exploreOppsShowOpData?: SavingsOpportunity
 }
 
 export interface SavingsOpportunity {
   hasOpportunity: boolean,
   display: string
 }
-
-
 
 export interface Notes {
   fieldDataNotes?: string;

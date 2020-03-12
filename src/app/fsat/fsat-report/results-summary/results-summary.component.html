@@ -147,12 +147,22 @@
         <th>Modifications</th>
         <th>&mdash;</th>
         <th *ngFor="let modification of fsat.modifications; let index = index;">
-          <span *ngIf="modification.exploreOppsShowMotorDrive && modification.exploreOppsShowMotorDrive.hasOpportunity">{{ modification.exploreOppsShowMotorDrive.display }}</span>
-          <!-- otherwise method to get map bools to string on component.ts -->
-          <!-- {{ getSavingsOpps(modification) }} -->
+          <span style="display: block;" *ngIf="modification.exploreOppsShowDrive && modification.exploreOppsShowDrive.hasOpportunity"
+          >{{ modification.exploreOppsShowDrive.display }}</span>
+          <span style="display: block;" *ngIf="modification.exploreOppsShowFanType && modification.exploreOppsShowFanType.hasOpportunity"
+          >{{ modification.exploreOppsShowFanType.display }}</span>
+          <span style="display: block;" *ngIf="modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity"
+          >{{ modification.exploreOppsShowVfd.display }}</span>
+          <span style="display: block;" *ngIf="modification.exploreOppsShowMotor && modification.exploreOppsShowMotor.hasOpportunity"
+          >{{ modification.exploreOppsShowMotor.display }}</span>
+          <span style="display: block;" *ngIf="modification.exploreOppsShowFlowRate && modification.exploreOppsShowFlowRate.hasOpportunity"
+          >{{ modification.exploreOppsShowFlowRate.display }}</span>
+          <span style="display: block;" *ngIf="modification.exploreOppsShowReducePressure && modification.exploreOppsShowReducePressure.hasOpportunity"
+          >{{ modification.exploreOppsShowReducePressure.display }}</span>
+          <span style="display: block;" *ngIf="modification.exploreOppsShowOpData && modification.exploreOppsShowOpData.hasOpportunity"
+          >{{ modification.exploreOppsShowOpData.display }}</span>
         </th>
       </tr>
-      <!--  -->
       <tr>
         <td></td>
         <td></td>

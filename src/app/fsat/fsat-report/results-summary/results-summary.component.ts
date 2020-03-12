@@ -41,6 +41,4 @@ export class ResultsSummaryComponent implements OnInit {
     this.reportRollupService.updateSelectedFsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
-  // getSavingsOpps(modification: Modification) {
-  // }
 }

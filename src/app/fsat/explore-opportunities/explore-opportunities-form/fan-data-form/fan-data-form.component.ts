@@ -43,7 +43,6 @@ export class FanDataFormComponent implements OnInit {
     this.drives = Drives;
     this.fanTypes = FanTypes;
     this.init();
-    console.log('fsat', this.fsat);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -70,37 +69,39 @@ export class FanDataFormComponent implements OnInit {
       if (this.modificationForm.controls.fanEfficiency.value !== this.baselineFanEfficiency) {
         // this.showFanType = true;
         this.fsat.modifications[this.exploreModIndex].exploreOppsShowFanType = { hasOpportunity: true, display: 'Install More Efficient Fan' };
-      }
+      } 
+      // TODO
+      // else {
+      //   this.fsat.modifications[this.exploreModIndex].exploreOppsShowFanType = { hasOpportunity: false, display: 'Install More Efficient Fan' };
+      // }
     } else {
       // this.showFanType = true;
-      this.fsat.modifications[this.exploreModIndex].exploreOppsShowFanType = { hasOpportunity: false, display: 'Install More Efficient Fan' };
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowFanType = { hasOpportunity: true, display: 'Install More Efficient Fan' };
     }
   }
 
   initMotorDrive() {
     if (this.baselineForm.controls.drive.value !== this.modificationForm.controls.drive.value) {
-      this.fsat.modifications[this.exploreModIndex].exploreOppsShowMotorDrive = { hasOpportunity: true, display: 'Install More Efficient Drive Type' };
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowDrive = { hasOpportunity: true, display: 'Install More Efficient Drive Type' };
       // this.showMotorDrive = true;
     } else {
       // this.showMotorDrive = false;
-      this.fsat.modifications[this.exploreModIndex].exploreOppsShowMotorDrive = { hasOpportunity: false, display: 'Install More Efficient Drive Type' };
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowDrive = { hasOpportunity: false, display: 'Install More Efficient Drive Type' };
     }
   }
 
 
   toggleFanType() {
-    console.log('toggle fan');
     if (this.fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity === false) {
       this.disableFanType();
     }
   }
 
   toggleMotorDrive() {
-    console.log('toggle motor drive');
     // this.fsat.modifications[this.exploreModIndex].drive = {hasOpportunity: true, display: 'Install More Efficient Drive type'};
     // if (this.showMotorDrive === false) {
 
-    if (this.fsat.modifications[this.exploreModIndex].exploreOppsShowMotorDrive.hasOpportunity === false) {
+    if (this.fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.hasOpportunity === false) {
       this.modificationForm.controls.drive.patchValue(this.baselineForm.controls.drive.value);
       // this.fsat.modifications[this.exploreModIndex].drive.hasOpportunity = false;
       this.calculate();

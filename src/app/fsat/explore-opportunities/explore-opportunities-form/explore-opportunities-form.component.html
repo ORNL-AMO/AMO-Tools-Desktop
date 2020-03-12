@@ -29,7 +29,7 @@
       [baselineFanEfficiency]="baselineFanEfficiency" [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD">
     </app-fan-data-form>
 
-    <app-rated-motor-form (emitCalculate)="save()" [settings]="settings" [exploreModIndex]="exploreModIndex"
+    <app-rated-motor-form (emitCalculate)="save()" [(fsat)]="fsat" [settings]="settings" [exploreModIndex]="exploreModIndex"
       [baselineForm]="baselineMotorForm" [modificationForm]="modificationMotorForm"></app-rated-motor-form>
 
     <app-system-data-form [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD" (emitCalculate)="save()"

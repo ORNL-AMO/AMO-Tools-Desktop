@@ -3,11 +3,11 @@
   <label class="group-label" for="modifyMotorDrive">
     <input name="modifyMotorDrive" type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')"
       (change)="toggleMotorDrive()"
-      [(ngModel)]="fsat.modifications[this.exploreModIndex].exploreOppsShowMotorDrive.hasOpportunity" />
-    {{fsat.modifications[this.exploreModIndex].exploreOppsShowMotorDrive.display}}
+      [(ngModel)]="fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.hasOpportunity" />
+    {{fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.display}}
   </label>
 </div>
-<li *ngIf="fsat.modifications[this.exploreModIndex].exploreOppsShowMotorDrive.hasOpportunity || isVFD">
+<li *ngIf="fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.hasOpportunity || isVFD">
   <form [formGroup]="baselineForm">
     <div class="form-group">
       <label for="baselineMotorDrive">Baseline Motor Drive</label>

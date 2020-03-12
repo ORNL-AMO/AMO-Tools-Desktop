@@ -1,9 +1,11 @@
 <div class="checkbox">
   <label class="group-label" for="modifyEfficiencyClass"><input type="checkbox" id="modifyEfficiencyClass" (focus)="focusField('efficiencyClass')"
-      (change)="toggleEfficiencyClass()" [(ngModel)]="showEfficiencyClass" /> Install More Efficient Motor
+      (change)="toggleEfficiencyClass()" 
+      [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowMotor.hasOpportunity" /> 
+      {{fsat.modifications[exploreModIndex].exploreOppsShowMotor.display}}
   </label>
 </div>
-<li *ngIf="showEfficiencyClass">
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowMotor.hasOpportunity">
   <form [formGroup]="baselineForm">
     <div class="form-group">
       <label for="oldEfficiencyClass">Baseline Efficiency Class</label>
@@ -13,7 +15,7 @@
       </select>
     </div>
   </form>
-  <form [formGroup]="modificationForm" *ngIf="showEfficiencyClass">
+  <form [formGroup]="modificationForm" *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowMotor.hasOpportunity">
     <div class="form-group">
       <label for="modificationEfficiencyClass">Modification Efficiency Class</label>
       <select name="modificationEfficiencyClass" class="form-control" id="modificationEfficiencyClass" (change)="setEfficiencyClasses()"
@@ -26,11 +28,12 @@
 <li *ngIf="(baselineForm.controls.efficiencyClass.value == 3 || modificationForm.controls.efficiencyClass.value == 3) && showEfficiencyClass">
   <div class="checkbox">
     <label for="modifyMotorEfficiency"><input type="checkbox" id="modifyMotorEfficiency" value="true" (change)="toggleMotorEfficiency()"
-        (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency" /> Modify Motor Specified
+        (focus)="focusField('motorEfficiency')" 
+        [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowMotorEff.hasOpportunity" /> Modify Motor Specified
       Efficiency
     </label>
   </div>
-  <form [formGroup]="baselineForm" *ngIf="showMotorEfficiency">
+  <form [formGroup]="baselineForm" *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowMotorEff.hasOpportunity">
     <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.specifiedEfficiency.invalid}">
       <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
       <div class="input-group">
@@ -47,7 +50,7 @@
       </span>
     </div>
   </form>
-  <form [formGroup]="modificationForm" *ngIf="showMotorEfficiency">
+  <form [formGroup]="modificationForm" *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowMotorEff.hasOpportunity">
     <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.specifiedEfficiency.invalid}">
       <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
       <div class="input-group">
