@@ -4,7 +4,7 @@
             (change)="toggleFlowRate()" [(ngModel)]="showFlowRate" /> Reduce System Flow Rate
     </label>
 </div>
-<li *ngIf="!isVFD && showFlowRate" class="exploreOppsItem">
+<li *ngIf="!isVFD && showFlowRate" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup"
             [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid, 'error': baselineWarnings.flowError !== null}">
@@ -58,7 +58,7 @@
     </label>
 </div>
 
-<li *ngIf="!isVFD && showHead" class="exploreOppsItem">
+<li *ngIf="!isVFD && showHead" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.head.invalid}">
             <label for="baselineHead" class="baseline-value-label">Baseline Head</label>
@@ -107,7 +107,7 @@
     </label>
 </div>
 
-<li *ngIf="showSystemData" class="exploreOppsItem">
+<li *ngIf="showSystemData" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.costKwHr.invalid}">
             <label for="baselineCost" class="baseline-value-label">Baseline Cost</label>
@@ -144,7 +144,7 @@
         </div>
     </form>
 </li>
-<li *ngIf="showSystemData" class="exploreOppsItem">
+<li *ngIf="showSystemData" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
             <label for="baselineCost" class="baseline-value-label">Baseline Operating Hours</label>

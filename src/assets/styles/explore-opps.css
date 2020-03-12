@@ -1,7 +1,7 @@
 /*
 Explore-opps form overrides
 =============================================== */
-.exploreOppsItem {
+.explore-opps-item {
     display: flex;
     justify-content: space-between;
   }
