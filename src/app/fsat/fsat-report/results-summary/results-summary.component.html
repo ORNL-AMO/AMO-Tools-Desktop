@@ -147,7 +147,7 @@
         <th>Modifications</th>
         <th>&mdash;</th>
         <th *ngFor="let modification of fsat.modifications; let index = index;">
-          <span *ngIf="modification.drive && modification.drive.hasOpportunity">{{ modification.drive.display }}</span>
+          <span *ngIf="modification.exploreOppsShowMotorDrive && modification.exploreOppsShowMotorDrive.hasOpportunity">{{ modification.exploreOppsShowMotorDrive.display }}</span>
           <!-- otherwise method to get map bools to string on component.ts -->
           <!-- {{ getSavingsOpps(modification) }} -->
         </th>

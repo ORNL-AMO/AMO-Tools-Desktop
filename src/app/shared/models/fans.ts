@@ -21,8 +21,8 @@ export interface Modification {
   fsat?: FSAT;
   exploreOpportunities?: boolean;
   vfd?: SavingsOpportunity,
-  drive?: SavingsOpportunity,
-  fan?: SavingsOpportunity,
+  exploreOppsShowMotorDrive?: SavingsOpportunity,
+  exploreOppsShowFanType?: SavingsOpportunity,
   motor?: SavingsOpportunity,
   flowRate?: SavingsOpportunity,
   reducePressure?: SavingsOpportunity,
