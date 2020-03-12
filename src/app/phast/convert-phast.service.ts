@@ -18,6 +18,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { Settings } from '../shared/models/settings';
 import { DesignedEnergy } from '../shared/models/phast/designedEnergy';
 import { MeteredEnergy } from '../shared/models/phast/meteredEnergy';
+import { OperatingCosts } from '../shared/models/operations';
 
 @Injectable()
 export class ConvertPhastService {
@@ -494,5 +495,14 @@ export class ConvertPhastService {
       loss.surfaceArea = this.convertVal(loss.surfaceArea, 'ft2', 'm2');
     }
     return loss;
+  }
+
+  //operating costs
+  convertOperatingCosts(operatingCosts: OperatingCosts, oldSettings: Settings, newSettings: Settings): OperatingCosts {
+    //electricity always kWh
+    let conversionHelper: number = this.convertUnitsService.value(1).from(oldSettings.energyResultUnit).to(newSettings.energyResultUnit);
+    operatingCosts.fuelCost = this.roundVal(operatingCosts.fuelCost / conversionHelper, 3);
+    operatingCosts.steamCost = this.roundVal(operatingCosts.steamCost / conversionHelper, 3);
+    return operatingCosts;
   }
 }
