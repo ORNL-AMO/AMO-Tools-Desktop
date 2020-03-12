@@ -53,11 +53,12 @@
 <div class="col-12 text-center pt-2">
   <a class="click-link small" (click)="addOtherCost()">+Add Other Cost</a>
 </div>
+<!--Rebates / One-time Savings-->
 <div class="col-12 text-center pt-2" *ngIf="!opportunityCost.additionalSavings">
-  <a class="click-link small" (click)="addAdditionalSavings()">+Add Other Savings</a>
+  <a class="click-link small" (click)="addAdditionalSavings()">+Add Rebates / One-time Savings</a>
 </div>
 <div class="col-12" *ngIf="opportunityCost.additionalSavings">
-  <label class="group-label">Addtional Savings</label>
+  <label class="group-label">Rebates / One-time Savings</label>
 </div>
 <div class="col-12" *ngIf="opportunityCost.additionalSavings">
   <div class="form-group d-flex">
@@ -76,6 +77,34 @@
     </div>
   </div>
 </div>
+
+<!--Annual Savings-->
+<div class="col-12 text-center pt-2" *ngIf="!opportunityCost.additionalAnnualSavings">
+  <a class="click-link small" (click)="addAdditionalAnnualSavings()">+Add Additional Annual Savings</a>
+</div>
+<div class="col-12" *ngIf="opportunityCost.additionalAnnualSavings">
+  <label class="group-label">Additional Annual Savings</label>
+</div>
+<div class="col-12" *ngIf="opportunityCost.additionalAnnualSavings">
+  <div class="form-group d-flex">
+    <div class="w-50 input-group pr-2">
+      <input type="text" class="form-control" [(ngModel)]="opportunityCost.additionalAnnualSavings.description"
+        name="additionalAnnualSavingsDescription" id="additionalAnnualSavingsDescription"
+        (focus)="focusField('additionalAnnualSavingsDescription')">
+      <span class="input-group-addon units remove-item" (click)="removeAdditionalAnnualSavings()">
+        <span class="fa fa-times"></span>
+      </span>
+    </div>
+    <div class="w-50 input-group">
+      <input class="form-control" type="number" [(ngModel)]="opportunityCost.additionalAnnualSavings.cost"
+        name="additionalAnnualSavingsCost" id="additionalAnnualSavingsCost" (focus)="focusField('additionalAnnualSavingsCost')">
+      <span class="input-group-addon units">$</span>
+    </div>
+  </div>
+</div>
+
+
+
 <div class="col-12">
   <label class="group-label" for="costDescription">Opportunity Notes</label>
   <textarea class="form-control w-100" rows="6" [(ngModel)]="opportunityCost.costDescription" name="costDescription"
