@@ -54,6 +54,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { ReportRollupModalsComponent } from './report-rollup-modals/report-rollup-modals.component';
 import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessment-print.component';
+import { TreasureHuntRollupComponent } from './treasure-hunt-rollup/treasure-hunt-rollup.component';
 
 @NgModule({
   imports: [
@@ -112,6 +113,7 @@ import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessme
     SidebarComponent,
     ReportRollupModalsComponent,
     PreAssessmentPrintComponent,
+    TreasureHuntRollupComponent,
 
   ],
   providers: [ReportRollupService],

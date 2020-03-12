@@ -79,6 +79,8 @@ export class ReportRollupModalsComponent implements OnInit {
       this.assessmentModalLabel = 'Steam Assessment Rollup';
     } else if (this.assessmentModalType == 'unitsModal') {
       this.assessmentModalLabel = 'Report Units';
+    } else if (this.assessmentModalType == 'treasureHunt') {
+      this.assessmentModalLabel = 'Treasure Hunt Rollup';
     }
   }
 

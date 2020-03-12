@@ -40,6 +40,8 @@
                 <app-report-rollup-units *ngIf="assessmentModalType == 'unitsModal'" [settings]="settings"
                     (closeUnitModal)="hideAssessmentRollupModal()">
                 </app-report-rollup-units>
+                <app-treasure-hunt-rollup *ngIf="assessmentModalType == 'treasureHunt'" [settings]="settings">
+                </app-treasure-hunt-rollup>
             </div>
         </div>
     </div>
