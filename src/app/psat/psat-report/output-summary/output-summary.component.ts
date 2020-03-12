@@ -23,6 +23,7 @@ export class OutputSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.psat = this.assessment.psat;
+    console.log(this.psat);
     if (this.inRollup) {
       this.reportRollupService.selectedPsats.forEach(val => {
         if (val) {

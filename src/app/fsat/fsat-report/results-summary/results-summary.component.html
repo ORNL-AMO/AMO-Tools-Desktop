@@ -135,6 +135,24 @@
           {{modification.fsat.outputs.annualSavings | currency:'USD':'symbol':'1.0-0'}}
         </th>
       </tr>
+      <!--  -->
+      <tr>
+        <th>Selected Energy Projects</th>
+        <th>&mdash;</th>
+        <th *ngFor="let modification of fsat.modifications; let index = index;">
+          {{ modification.fsat.name }}
+        </th>
+      </tr>
+      <tr>
+        <th>Modifications</th>
+        <th>&mdash;</th>
+        <th *ngFor="let modification of fsat.modifications; let index = index;">
+          <span *ngIf="modification.drive && modification.drive.hasOpportunity">{{ modification.drive.display }}</span>
+          <!-- otherwise method to get map bools to string on component.ts -->
+          <!-- {{ getSavingsOpps(modification) }} -->
+        </th>
+      </tr>
+      <!--  -->
       <tr>
         <td></td>
         <td></td>

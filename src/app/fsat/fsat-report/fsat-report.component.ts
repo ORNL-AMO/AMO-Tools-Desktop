@@ -54,7 +54,6 @@ export class FsatReportComponent implements OnInit {
   constructor(private fsatService: FsatService, private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService) { }
 
   ngOnInit() {
-    console.log(this.assessment);
     this.createdDate = new Date();
     if (!this.settings) {
       //find settings

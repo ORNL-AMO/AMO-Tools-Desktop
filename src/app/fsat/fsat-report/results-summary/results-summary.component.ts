@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { FSAT } from '../../../shared/models/fans';
+import { FSAT, Modification } from '../../../shared/models/fans';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 
 @Component({
@@ -24,6 +24,7 @@ export class ResultsSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.fsat = this.assessment.fsat;
+    console.log('fsat', this.fsat);
     if (this.inRollup) {
       this.reportRollupService.selectedFsats.forEach(val => {
         if (val) {
@@ -39,4 +40,7 @@ export class ResultsSummaryComponent implements OnInit {
   useModification() {
     this.reportRollupService.updateSelectedFsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
+
+  // getSavingsOpps(modification: Modification) {
+  // }
 }

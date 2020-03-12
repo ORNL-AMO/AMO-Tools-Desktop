@@ -43,6 +43,7 @@ export class FanDataFormComponent implements OnInit {
     this.drives = Drives;
     this.fanTypes = FanTypes;
     this.init();
+    console.log('fsat', this.fsat);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -84,14 +85,18 @@ export class FanDataFormComponent implements OnInit {
 
 
   toggleFanType() {
+    console.log('toggle fan');
     if (this.showFanType === false) {
       this.disableFanType();
     }
   }
 
   toggleMotorDrive() {
+    console.log('toggle motor drive');
+    this.fsat.modifications[this.exploreModIndex].drive = {hasOpportunity: true, display: 'Install More Efficient Drive type'};
     if (this.showMotorDrive === false) {
       this.modificationForm.controls.drive.patchValue(this.baselineForm.controls.drive.value);
+      this.fsat.modifications[this.exploreModIndex].drive.hasOpportunity = false;
       this.calculate();
     }
   }
