@@ -29,7 +29,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body panel-container scroll-item">
+            <div class="modal-body scroll-item">
                 <app-psat-rollup *ngIf="assessmentModalType == 'psat'" [settings]="settings"
                     [calculators]="selectedCalculators"></app-psat-rollup>
                 <app-phast-rollup *ngIf="assessmentModalType == 'phast'" [settings]="settings"

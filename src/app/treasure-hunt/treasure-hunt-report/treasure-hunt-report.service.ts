@@ -44,7 +44,7 @@ export class TreasureHuntReportService {
     let otherFuelSummaries: Array<OpportunitySummary> = opportunitySummaries.filter(summary => { return summary.utilityType == 'Other Fuel' && summary.selected == true });
     let otherFuelUtilityUsage: UtilityUsageData = this.getUtilityUsageData(otherFuelSummaries, 'Other Fuel', currentEnergyUsage.otherFuelUsage, currentEnergyUsage.otherFuelCosts, mixedSummaries)
 
-    let utilityArr: Array<UtilityUsageData> = [electricityUtilityUsage, compressedAirUtilityUsage, naturalGasUtilityUsage, waterUtilityUsage, steamUtilityUsage, otherFuelUtilityUsage];
+    let utilityArr: Array<UtilityUsageData> = [electricityUtilityUsage, compressedAirUtilityUsage, naturalGasUtilityUsage, waterUtilityUsage, wasteWaterUtilityUsage, steamUtilityUsage, otherFuelUtilityUsage];
     let totalImplementationCost: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.implementationCost }) + otherUtilityUsage.implementationCost;
     let totalCostSavings: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.costSavings });
 

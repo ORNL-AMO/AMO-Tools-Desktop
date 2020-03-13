@@ -126,16 +126,13 @@ export class CostPieChartComponent implements OnInit {
     this.addItem(values, labels, this.treasureHuntResults.water, this.isBaseline, 'Water');
     this.addItem(values, labels, this.treasureHuntResults.wasteWater, this.isBaseline, 'Waste Water');
     this.addItem(values, labels, this.treasureHuntResults.otherFuel, this.isBaseline, 'Other Fuel');
-    this.addItem(values, labels, this.treasureHuntResults.compressedAir, this.isBaseline, 'Compressed Air');
+    this.addItem(values, labels, this.treasureHuntResults.compressedAir, this.isBaseline, 'Comp. Air');
     this.addItem(values, labels, this.treasureHuntResults.steam, this.isBaseline, 'Steam');
     this.addItem(values, labels, this.treasureHuntResults.other, this.isBaseline, 'Other');
     return { values: values, labels: labels };
   }
 
   addItem(values: Array<number>, labels: Array<string>, data: UtilityUsageData, isBaseline: boolean, label: string) {
-    if (this.showPrint && label == 'Compressed Air') {
-      label = 'Comp. Air';
-    }
     if (isBaseline && data.baselineEnergyCost) {
       labels.push(label);
       values.push(data.baselineEnergyCost);
