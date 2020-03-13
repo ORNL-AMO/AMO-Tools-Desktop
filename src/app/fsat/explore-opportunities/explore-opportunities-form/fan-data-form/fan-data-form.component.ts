@@ -34,8 +34,6 @@ export class FanDataFormComponent implements OnInit {
 
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
-  // showFanType: boolean = false;
-  // showMotorDrive: boolean = false;
 
   constructor(private convertUnitsService: ConvertUnitsService, private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService, private helpPanelService: HelpPanelService, private fanSetupService: FanSetupService) { }
 
@@ -67,15 +65,12 @@ export class FanDataFormComponent implements OnInit {
   initFanType() {
     if (this.modificationForm.controls.fanType.value === 12) {
       if (this.modificationForm.controls.fanEfficiency.value !== this.baselineFanEfficiency) {
-        // this.showFanType = true;
         this.fsat.modifications[this.exploreModIndex].exploreOppsShowFanType = { hasOpportunity: true, display: 'Install More Efficient Fan' };
       } 
-      // TODO
-      // else {
-      //   this.fsat.modifications[this.exploreModIndex].exploreOppsShowFanType = { hasOpportunity: false, display: 'Install More Efficient Fan' };
-      // }
+      else {
+        this.fsat.modifications[this.exploreModIndex].exploreOppsShowFanType = { hasOpportunity: false, display: 'Install More Efficient Fan' };
+      }
     } else {
-      // this.showFanType = true;
       this.fsat.modifications[this.exploreModIndex].exploreOppsShowFanType = { hasOpportunity: true, display: 'Install More Efficient Fan' };
     }
   }
@@ -83,9 +78,7 @@ export class FanDataFormComponent implements OnInit {
   initMotorDrive() {
     if (this.baselineForm.controls.drive.value !== this.modificationForm.controls.drive.value) {
       this.fsat.modifications[this.exploreModIndex].exploreOppsShowDrive = { hasOpportunity: true, display: 'Install More Efficient Drive Type' };
-      // this.showMotorDrive = true;
     } else {
-      // this.showMotorDrive = false;
       this.fsat.modifications[this.exploreModIndex].exploreOppsShowDrive = { hasOpportunity: false, display: 'Install More Efficient Drive Type' };
     }
   }
@@ -98,12 +91,8 @@ export class FanDataFormComponent implements OnInit {
   }
 
   toggleMotorDrive() {
-    // this.fsat.modifications[this.exploreModIndex].drive = {hasOpportunity: true, display: 'Install More Efficient Drive type'};
-    // if (this.showMotorDrive === false) {
-
     if (this.fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.hasOpportunity === false) {
       this.modificationForm.controls.drive.patchValue(this.baselineForm.controls.drive.value);
-      // this.fsat.modifications[this.exploreModIndex].drive.hasOpportunity = false;
       this.calculate();
     }
   }

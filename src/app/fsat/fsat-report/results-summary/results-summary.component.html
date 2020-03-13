@@ -140,19 +140,12 @@
         <th>Selected Energy Projects</th>
         <th>&mdash;</th>
         <th *ngFor="let modification of fsat.modifications; let index = index;">
-          {{ modification.fsat.name }}
-        </th>
-      </tr>
-      <tr>
-        <th>Modifications</th>
-        <th>&mdash;</th>
-        <th *ngFor="let modification of fsat.modifications; let index = index;">
+          <span style="display: block;" *ngIf="modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity"
+          >{{ modification.exploreOppsShowVfd.display }}</span>
           <span style="display: block;" *ngIf="modification.exploreOppsShowDrive && modification.exploreOppsShowDrive.hasOpportunity"
           >{{ modification.exploreOppsShowDrive.display }}</span>
           <span style="display: block;" *ngIf="modification.exploreOppsShowFanType && modification.exploreOppsShowFanType.hasOpportunity"
           >{{ modification.exploreOppsShowFanType.display }}</span>
-          <span style="display: block;" *ngIf="modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity"
-          >{{ modification.exploreOppsShowVfd.display }}</span>
           <span style="display: block;" *ngIf="modification.exploreOppsShowMotor && modification.exploreOppsShowMotor.hasOpportunity"
           >{{ modification.exploreOppsShowMotor.display }}</span>
           <span style="display: block;" *ngIf="modification.exploreOppsShowFlowRate && modification.exploreOppsShowFlowRate.hasOpportunity"
@@ -162,6 +155,25 @@
           <span style="display: block;" *ngIf="modification.exploreOppsShowOpData && modification.exploreOppsShowOpData.hasOpportunity"
           >{{ modification.exploreOppsShowOpData.display }}</span>
         </th>
+      </tr>
+      <tr>
+        <th>Modifications</th>
+        <th>&mdash;</th>
+        <!-- <th *ngFor="let modification of fsat.modifications; let index = index;">
+          {{ getModifications(modification.fsat)}}
+          <span class="generated-block" *ngIf="isFluidDifferent"
+          > Fluid </span>
+          <span class="generated-block" *ngIf="isFanDifferent"
+          > Fan </span>
+          <span class="generated-block" *ngIf="isMotorDifferent"
+          > Motor </span>
+          <span class="generated-block" *ngIf="isFieldDataDifferent"
+          > Field Data </span>
+        </th> -->
+          <th *ngFor="let modification of fsat.modifications; let index = index;">
+            {{ getModifications(modification.fsat)}}
+            <div [innerHTML]="modificationsList"></div>
+          </th>
       </tr>
       <tr>
         <td></td>

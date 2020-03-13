@@ -15,6 +15,10 @@ tr > th:not(:first-child){
     text-align: center;
 }
 
+.generated-block {
+    display: block !important;
+}
+
 .output-summary .table tr.callout td {
     font-weight: bold;
 }

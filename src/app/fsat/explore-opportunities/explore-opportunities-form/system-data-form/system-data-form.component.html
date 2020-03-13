@@ -1,11 +1,11 @@
 <div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyFlowRate">
         <input type="checkbox" id="modifyFlowRate" (focus)="focusField('flowRate')" (change)="toggleFlowRate()"
-            [(ngModel)]="showFlowRate" />
-        Reduce System Flow Rate
+            [(ngModel)]="this.fsat.modifications[this.exploreModIndex].exploreOppsShowFlowRate.hasOpportunity" />
+        {{ this.fsat.modifications[this.exploreModIndex].exploreOppsShowFlowRate.display}}
     </label>
 </div>
-<li *ngIf="showFlowRate && !isVFD">
+<li *ngIf="this.fsat.modifications[this.exploreModIndex].exploreOppsShowFlowRate.hasOpportunity && !isVFD">
     <form [formGroup]="baselineForm">
         <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid}">
             <label for="baselineFlowRate">Baseline Flow Rate</label>
@@ -51,11 +51,11 @@
 <div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyPressure">
         <input type="checkbox" id="modifyPressure" (focus)="focusField('inletPressure')" (change)="togglePressure()"
-            [(ngModel)]="showPressure" />
-        Reduce System Pressure
+            [(ngModel)]="this.fsat.modifications[this.exploreModIndex].exploreOppsShowReducePressure.hasOpportunity" />
+        {{this.fsat.modifications[this.exploreModIndex].exploreOppsShowReducePressure.display}}
     </label>
 </div>
-<li *ngIf="showPressure && !isVFD">
+<li *ngIf="this.fsat.modifications[this.exploreModIndex].exploreOppsShowReducePressure.hasOpportunity && !isVFD">
     <form [formGroup]="baselineForm">
         <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.inletPressure.invalid}">
             <label for="baselinePressure">Baseline Inlet Pressure</label>
@@ -139,11 +139,11 @@
 <div class="checkbox" #formElement>
     <label class="group-label" for="showSystemData">
         <input type="checkbox" id="showSystemData" (focus)="focusField('cost')" (change)="toggleSystemData()"
-            [(ngModel)]="showSystemData" />
+            [(ngModel)]="this.fsat.modifications[this.exploreModIndex].exploreOppsShowOpData.hasOpportunity" />
         Adjust Operational Data
     </label>
 </div>
-<li *ngIf="showSystemData">
+<li *ngIf="this.fsat.modifications[this.exploreModIndex].exploreOppsShowOpData.hasOpportunity">
     <form [formGroup]="baselineForm">
         <div class="form-group"
             [ngClass]="{'error': baselineWarnings.costError !== null, 'invalid':baselineForm.controls.cost.invalid}">

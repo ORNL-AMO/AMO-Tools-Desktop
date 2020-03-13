@@ -95,18 +95,18 @@ export class SystemDataFormComponent implements OnInit {
 
     initFlowRate() {
         if (this.baselineForm.controls.flowRate.value !== this.modificationForm.controls.flowRate.value) {
-            this.showFlowRate = true;
+            this.fsat.modifications[this.exploreModIndex].exploreOppsShowFlowRate = { hasOpportunity: true, display: 'Reduce System Flow Rate' };
         } else {
-            this.showFlowRate = false;
+            this.fsat.modifications[this.exploreModIndex].exploreOppsShowFlowRate = { hasOpportunity: false, display: 'Reduce System Flow Rate' };
         }
     }
 
     initPressure() {
         if (this.baselineForm.controls.inletPressure.value !== this.modificationForm.controls.inletPressure.value ||
             this.baselineForm.controls.outletPressure.value !== this.modificationForm.controls.outletPressure.value) {
-            this.showPressure = true;
+            this.fsat.modifications[this.exploreModIndex].exploreOppsShowReducePressure = { hasOpportunity: true, display: 'Reduce System Pressure' };
         } else {
-            this.showPressure = false;
+            this.fsat.modifications[this.exploreModIndex].exploreOppsShowReducePressure = { hasOpportunity: false, display: 'Reduce System Pressure' };
         }
     }
 
@@ -120,14 +120,14 @@ export class SystemDataFormComponent implements OnInit {
 
     initSystemData() {
         if (this.showCost || this.showOperatingHours) {
-            this.showSystemData = true;
+            this.fsat.modifications[this.exploreModIndex].exploreOppsShowOpData = { hasOpportunity: true, display: 'Adjust Operational Data' };
         } else {
-            this.showSystemData = false;
+            this.fsat.modifications[this.exploreModIndex].exploreOppsShowOpData = { hasOpportunity: false, display: 'Adjust Operational Data' };
         }
     }
 
     toggleSystemData() {
-        if (this.showSystemData === false) {
+        if (this.fsat.modifications[this.exploreModIndex].exploreOppsShowOpData.hasOpportunity === false) {
             this.showCost = false;
             this.showOperatingHours = false;
             this.toggleCost();
@@ -143,7 +143,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     togglePressure() {
-        if (this.showPressure === false) {
+        if (this.fsat.modifications[this.exploreModIndex].exploreOppsShowReducePressure.hasOpportunity === false) {
             this.modificationForm.controls.inletPressure.patchValue(this.baselineForm.controls.inletPressure.value);
             this.modificationForm.controls.outletPressure.patchValue(this.baselineForm.controls.outletPressure.value);
             this.calculate();
@@ -158,7 +158,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     toggleFlowRate() {
-        if (this.showFlowRate === false) {
+        if (this.fsat.modifications[this.exploreModIndex].exploreOppsShowFlowRate.hasOpportunity === false) {
             this.modificationForm.controls.flowRate.patchValue(this.baselineForm.controls.flowRate.value);
             this.calculate();
         }
