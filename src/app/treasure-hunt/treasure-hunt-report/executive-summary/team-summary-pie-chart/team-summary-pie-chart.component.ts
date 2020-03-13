@@ -12,14 +12,9 @@ export class TeamSummaryPieChartComponent implements OnInit {
   teamData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
   @Input()
   showPrintView: boolean;
+
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
 
-  // @HostListener('window:resize', ['$event'])
-  // onResize(event) {
-  //   this.drawPlot();
-  // }
-
-  // chartHeight: number;
   constructor() { }
 
   ngOnInit(): void {
@@ -27,7 +22,6 @@ export class TeamSummaryPieChartComponent implements OnInit {
 
   ngAfterViewInit() {
     if (!this.showPrintView) {
-      // this.setHeight();
       this.drawPlot();
     } else {
       this.drawPrintPlot();
@@ -74,7 +68,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
       hoverinfo: 'label+percent',
       direction: "clockwise",
-      rotation: 125
+      rotation: 115
     }];
 
     var layout = {
@@ -82,7 +76,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
         size: 10,
       },
       showlegend: false,
-      margin: { t: 30, b: 40, l: 135, r: 135 },
+      margin: { t: 60, b: 120, l: 135, r: 135 },
     };
 
     var modebarBtns = {

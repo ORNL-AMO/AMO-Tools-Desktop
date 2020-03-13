@@ -50,7 +50,7 @@ import { TeamSummaryPieChartComponent } from './executive-summary/team-summary-p
     TeamSummaryTableComponent,
     TeamSummaryPieChartComponent
   ],
-  exports: [TreasureHuntReportComponent, CostPieChartComponent, UtilityBarChartComponent, ExecutiveSummaryTableComponent],
+  exports: [TreasureHuntReportComponent, CostPieChartComponent, UtilityBarChartComponent, ExecutiveSummaryTableComponent, TeamSummaryPieChartComponent, OpportunityPaybackBarChartComponent],
   providers: [OpportunityPaybackService, OpportunitySummaryService]
 })
 export class TreasureHuntReportModule { }

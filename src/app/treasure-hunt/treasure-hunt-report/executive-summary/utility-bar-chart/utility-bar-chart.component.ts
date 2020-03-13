@@ -62,7 +62,6 @@ export class UtilityBarChartComponent implements OnInit {
     }
 
     var data = [projectCostTrace, costSavingsTrace];
-    console.log(this.utilityBarChart.nativeElement.clientHeight);
     var layout = {
       barmode: 'stack',
       showlegend: true,
@@ -84,7 +83,7 @@ export class UtilityBarChartComponent implements OnInit {
         automargin: true,
         fixedrange: true
       },
-      margin: { t: 25, b: 10 }
+      margin: { t: 15, b: 10 }
     };
     var configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
