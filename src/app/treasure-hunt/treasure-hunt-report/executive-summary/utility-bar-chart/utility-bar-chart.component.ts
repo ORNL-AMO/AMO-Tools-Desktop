@@ -62,6 +62,7 @@ export class UtilityBarChartComponent implements OnInit {
     }
 
     var data = [projectCostTrace, costSavingsTrace];
+    console.log(this.utilityBarChart.nativeElement.clientHeight);
     var layout = {
       barmode: 'stack',
       showlegend: true,
