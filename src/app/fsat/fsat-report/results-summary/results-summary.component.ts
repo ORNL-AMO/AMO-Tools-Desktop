@@ -52,11 +52,11 @@ export class ResultsSummaryComponent implements OnInit {
     const isFanDifferent = this.compareService.checkFanSetupDifferent(this.settings, this.fsat, modifiedFsat);
     const isMotorDifferent = this.compareService.checkFanMotorDifferent(this.fsat, modifiedFsat);
     const isFieldDataDifferent = this.compareService.checkFanFieldDataDifferent(this.fsat, modifiedFsat);
-    
-    const modifications = `${isFluidDifferent? '<span style="display: block"> Fluid </span>' : ''}
-    ${isFanDifferent? '<span style="display: block"> Fan </span>' : ''}
-    ${isMotorDifferent? '<span style="display: block"> Motor </span>' : ''}
-    ${isFieldDataDifferent? '<span style="display: block"> Field Data </span>' : ''}`;
+
+    const modifications = `${isFluidDifferent ? '<span style="display: block"> Fluid </span>' : ''}
+    ${isFanDifferent ? '<span style="display: block"> Fan </span>' : ''}
+    ${isMotorDifferent ? '<span style="display: block"> Motor </span>' : ''}
+    ${isFieldDataDifferent ? '<span style="display: block"> Field Data </span>' : ''}`;
     // console.log(modifications);
 
     // Sanitize for angular to trust styles
@@ -69,6 +69,29 @@ export class ResultsSummaryComponent implements OnInit {
   //   this.isMotorDifferent = this.compareService.checkFanMotorDifferent(this.fsat, modifiedFsat);
   //   this.isFieldDataDifferent = this.compareService.checkFanFieldDataDifferent(this.fsat, modifiedFsat);
   // }
+
+
+
+  getModificationsMadeList(modifiedFsat: FSAT): Array<string> {
+    let modificationsMadeList: Array<string> = new Array();
+    let isFluidDifferent: boolean = this.compareService.checkFluidDifferent(this.fsat, modifiedFsat);
+    if(isFluidDifferent == true){
+      modificationsMadeList.push('Fluid');
+    }
+    let isFanDifferent: boolean = this.compareService.checkFanSetupDifferent(this.settings, this.fsat, modifiedFsat);
+    if(isFanDifferent == true){
+      modificationsMadeList.push('Fan');
+    }
+    let isMotorDifferent: boolean = this.compareService.checkFanMotorDifferent(this.fsat, modifiedFsat);
+    if(isMotorDifferent == true){
+      modificationsMadeList.push('Motor');
+    }
+    let isFieldDataDifferent: boolean = this.compareService.checkFanFieldDataDifferent(this.fsat, modifiedFsat);
+    if(isFieldDataDifferent == true){
+      modificationsMadeList.push('Field Data');
+    }
+    return modificationsMadeList;
+  }
 
   useModification() {
     this.reportRollupService.updateSelectedFsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
