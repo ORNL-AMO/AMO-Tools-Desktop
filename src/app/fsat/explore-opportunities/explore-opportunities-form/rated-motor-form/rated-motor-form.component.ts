@@ -28,9 +28,6 @@ export class RatedMotorFormComponent implements OnInit {
   @Input()
   modificationForm: FormGroup;
 
-  showEfficiencyClass: boolean = false;
-  showMotorEfficiency: boolean = false;
-
   efficiencyClasses: Array<{ value: number, display: string }>;
   constructor(
     private convertUnitsService: ConvertUnitsService,

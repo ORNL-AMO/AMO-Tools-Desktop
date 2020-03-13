@@ -43,11 +43,8 @@ export class SystemDataFormComponent implements OnInit {
     formWidth: number;
     showOperatingHoursModal: boolean = false;
 
-    showSystemData: boolean = false;
     showCost: boolean = false;
-    showFlowRate: boolean = false;
     showOperatingHours: boolean = false;
-    showPressure: boolean = false;
 
     constructor(
         private helpPanelService: HelpPanelService,

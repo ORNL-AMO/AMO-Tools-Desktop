@@ -140,19 +140,19 @@
         <th>Selected Energy Projects</th>
         <th>&mdash;</th>
         <th *ngFor="let modification of fsat.modifications; let index = index;">
-          <span style="display: block;"
+          <span class="generated-cell-item"
             *ngIf="modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity">{{ modification.exploreOppsShowVfd.display }}</span>
-          <span style="display: block;"
+          <span class="generated-cell-item"
             *ngIf="modification.exploreOppsShowDrive && modification.exploreOppsShowDrive.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity">{{ modification.exploreOppsShowDrive.display }}</span>
-          <span style="display: block;"
+          <span class="generated-cell-item"
             *ngIf="modification.exploreOppsShowFanType && modification.exploreOppsShowFanType.hasOpportunity">{{ modification.exploreOppsShowFanType.display }}</span>
-          <span style="display: block;"
+          <span class="generated-cell-item"
             *ngIf="modification.exploreOppsShowMotor && modification.exploreOppsShowMotor.hasOpportunity">{{ modification.exploreOppsShowMotor.display }}</span>
-          <span style="display: block;"
+          <span class="generated-cell-item"
             *ngIf="modification.exploreOppsShowFlowRate && modification.exploreOppsShowFlowRate.hasOpportunity">{{ modification.exploreOppsShowFlowRate.display }}</span>
-          <span style="display: block;"
+          <span class="generated-cell-item"
             *ngIf="modification.exploreOppsShowReducePressure && modification.exploreOppsShowReducePressure.hasOpportunity">{{ modification.exploreOppsShowReducePressure.display }}</span>
-          <span style="display: block;"
+          <span class="generated-cell-item"
             *ngIf="modification.exploreOppsShowOpData && modification.exploreOppsShowOpData.hasOpportunity">{{ modification.exploreOppsShowOpData.display }}</span>
         </th>
       </tr>

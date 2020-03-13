@@ -25,7 +25,7 @@
     </div>
   </form>
 </li>
-<li *ngIf="(baselineForm.controls.efficiencyClass.value == 3 || modificationForm.controls.efficiencyClass.value == 3) && showEfficiencyClass">
+<li *ngIf="(baselineForm.controls.efficiencyClass.value == 3 || modificationForm.controls.efficiencyClass.value == 3) && fsat.modifications[exploreModIndex].exploreOppsShowMotor.hasOpportunity">
   <div class="checkbox">
     <label for="modifyMotorEfficiency"><input type="checkbox" id="modifyMotorEfficiency" value="true" (change)="toggleMotorEfficiency()"
         (focus)="focusField('motorEfficiency')" 

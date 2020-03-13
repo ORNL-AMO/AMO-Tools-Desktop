@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { FSAT } from '../../../shared/models/fans';
