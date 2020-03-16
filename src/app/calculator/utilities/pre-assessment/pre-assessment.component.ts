@@ -10,6 +10,7 @@ import { PreAssessmentService } from './pre-assessment.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { DirectoryDashboardService } from '../../../dashboard/directory-dashboard/directory-dashboard.service';
 
 @Component({
   selector: 'app-pre-assessment',
@@ -57,12 +58,20 @@ export class PreAssessmentComponent implements OnInit {
   calcExists: boolean;
   saving: boolean;
   constructor(private preAssessmentService: PreAssessmentService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService,
-    private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
+    private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private directoryDashboardService: DirectoryDashboardService) { }
 
   ngOnInit() {
     if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-      this.initAssessments();
+      if (this.inModal) {
+        let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
+        if (directoryId) {
+          this.settings = this.settingsDbService.getByDirectoryId(directoryId);
+          this.initAssessments();
+        }
+      } else {
+        this.settings = this.settingsDbService.globalSettings;
+        this.initAssessments();
+      }
     } else {
       this.initAssessments();
     }
