@@ -1,0 +1,64 @@
+/*
+Explore-opps form overrides
+=============================================== */
+.explore-opps-item {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .explore-opps-header {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 8px;
+  }
+
+  .explore-opps-title {
+    width: 50%;
+    text-align: center;
+  }
+  
+  .explore-opps-form {
+    width: 50%;
+  }
+  
+  div.form-group.explore-opps-formgroup >
+  .baseline-value-label,
+  form >
+  div >
+  .baseline-value-label {
+    width: 100%;
+    padding-bottom: 4px;
+  }
+  
+  .baseline-value-input {
+    font-size: .75em;
+  }
+  
+  .form-group.explore-opps-formgroup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  div.form-group.explore-opps-formgroup >
+  label.mod-value-label {
+    width: 100%;
+    padding-bottom: 4px;
+    align-self: center;
+  }
+  
+  div.form-group.explore-opps-formgroup >
+  select.mod-value-input {
+    width: 100%;
+  }
+
+  hr.form-break-rule {
+      margin-top: 0;
+  }
+
+  div.form-break-divider {
+    display: block; 
+    width: 100%; 
+    padding-left: 2rem; 
+  }
