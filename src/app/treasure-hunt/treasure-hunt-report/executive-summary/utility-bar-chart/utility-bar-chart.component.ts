@@ -22,8 +22,9 @@ export class UtilityBarChartComponent implements OnInit {
   ngAfterViewInit() {
     if (!this.showPrintView) {
       this.createBarChart();
+    } else if (this.showPrintView) {
+      this.createPrintBarChart();
     }
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -33,10 +34,7 @@ export class UtilityBarChartComponent implements OnInit {
     if (changes.showPrintView && !changes.showPrintView.firstChange && this.showPrintView) {
       this.createPrintBarChart();
     }
-
   }
-
-
   createBarChart() {
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
     let projectCostTrace = {
@@ -85,7 +83,7 @@ export class UtilityBarChartComponent implements OnInit {
         automargin: true,
         fixedrange: true
       },
-      margin: { t: 25, b: 10 }
+      margin: { t: 15, b: 10 }
     };
     var configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
@@ -209,7 +207,7 @@ export class UtilityBarChartComponent implements OnInit {
       // data.push([this.treasureHuntResults.steam.modifiedEnergyCost, this.treasureHuntResults.steam.costSavings]);
     }
     if (this.treasureHuntResults.compressedAir.costSavings > 0) {
-      labels.push('Compressed Air');
+      labels.push('Comp. Air');
       projectedCosts.push(this.treasureHuntResults.compressedAir.modifiedEnergyCost);
       costSavings.push(this.treasureHuntResults.compressedAir.costSavings);
       // data.push([this.treasureHuntResults.compressedAir.modifiedEnergyCost, this.treasureHuntResults.compressedAir.costSavings > 0 ? this.treasureHuntResults.compressedAir.costSavings : 0]);
