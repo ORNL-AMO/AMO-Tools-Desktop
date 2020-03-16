@@ -1,22 +1,3 @@
-<!-- <app-print-options-menu *ngIf="showPrintMenu" [showRollupReportOptions]="true"
-    [showPsatReportOptions]="showPsatReportOptions" [showFsatReportOptions]="showFsatReportOptions"
-    [showPhastReportOptions]="showPhastReportOptions" [showTHReportOptions]="showTHReportOptions"
-    [showSsmtReportOptions]="showSsmtReportOptions" [selectAll]="rollupPrintOptions.selectAll"
-    [printReportGraphs]="rollupPrintOptions.printReportGraphs"
-    [printReportSankey]="rollupPrintOptions.printReportSankey" [printResults]="rollupPrintOptions.printResults"
-    [printInputData]="rollupPrintOptions.printInputData" [printEnergyUsed]="rollupPrintOptions.printEnergyUsed"
-    [printExecutiveSummary]="rollupPrintOptions.printExecutiveSummary"
-    [printEnergySummary]="rollupPrintOptions.printEnergySummary"
-    [printLossesSummary]="rollupPrintOptions.printLossesSummary" [printPsatRollup]="rollupPrintOptions.printPsatRollup"
-    [printFsatRollup]="rollupPrintOptions.printFsatRollup" [printPhastRollup]="rollupPrintOptions.printPhastRollup"
-    [printReportOpportunityPayback]="rollupPrintOptions.printReportOpportunityPayback"
-    [printReportOpportunitySummary]="rollupPrintOptions.printReportOpportunitySummary"
-    [printSsmtRollup]="rollupPrintOptions.printSsmtRollup" (emitClosePrintMenu)="closePrintModal($event)"
-    (emitTogglePrint)="togglePrint($event)" (emitPrint)="setPrintViewThenPrint()">
-</app-print-options-menu> -->
-
-
-<!--psat rollup modal -->
 <div bsModal #assessmentRollupModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
     aria-labelledby="assessmentRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}"
     [ngClass]="assessmentModalType">
@@ -29,7 +10,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body panel-container scroll-item">
+            <div class="modal-body scroll-item" *ngIf="displayModalContent">
                 <app-psat-rollup *ngIf="assessmentModalType == 'psat'" [settings]="settings"
                     [calculators]="selectedCalculators"></app-psat-rollup>
                 <app-phast-rollup *ngIf="assessmentModalType == 'phast'" [settings]="settings"
@@ -40,6 +21,8 @@
                 <app-report-rollup-units *ngIf="assessmentModalType == 'unitsModal'" [settings]="settings"
                     (closeUnitModal)="hideAssessmentRollupModal()">
                 </app-report-rollup-units>
+                <app-treasure-hunt-rollup *ngIf="assessmentModalType == 'treasureHunt'" [settings]="settings">
+                </app-treasure-hunt-rollup>
             </div>
         </div>
     </div>
