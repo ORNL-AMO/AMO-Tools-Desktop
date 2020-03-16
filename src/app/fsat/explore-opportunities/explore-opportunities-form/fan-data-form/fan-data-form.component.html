@@ -92,23 +92,25 @@
       </select>
     </div>
     <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.fanEfficiency.invalid}">
-      <label for="modificationFanSpecified" class="mod-value-label">
-        <span *ngIf="!isVFD">
-          Modification 
-        </span> Fan Efficiency
-        <!-- <a class="form-text small click-link" id="pumpTypeHelp" (click)="enableFanType()" *ngIf="modificationForm.controls.fanType.value == 12">Optimize Fan</a> -->
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disableFanType()" *ngIf="modificationForm.controls.fanType.value != 12">Known Efficiency</a>
-      </label>
-      <div class="input-group" *ngIf="modificationForm.controls.fanType.value == 12">
-        <input name="modificationFanSpecified" type="number" step="any" id="modificationFanSpecified" class="form-control"
+      <div>
+        <label for="modificationFanSpecified" class="mod-value-label">
+          <span *ngIf="!isVFD">
+            Modification 
+          </span> Fan Efficiency
+          <!-- <a class="form-text small click-link" id="pumpTypeHelp" (click)="enableFanType()" *ngIf="modificationForm.controls.fanType.value == 12">Optimize Fan</a> -->
+          <a class="form-text small click-link" id="pumpTypeHelp" (click)="disableFanType()" *ngIf="modificationForm.controls.fanType.value != 12">Known Efficiency</a>
+        </label>
+        <div class="input-group" *ngIf="modificationForm.controls.fanType.value == 12">
+          <input name="modificationFanSpecified" type="number" step="any" id="modificationFanSpecified" class="form-control mod-value-input"
           (focus)="focusField('fanEfficiency')" (input)="calculate()" formControlName="fanEfficiency" />
-        <span class="input-group-addon units">%</span>
+          <span class="input-group-addon units">%</span>
+        </div>
+        <div class="small text-center" *ngIf="modificationForm.controls.fanType.value != 12">
+          {{modificationForm.controls.fanEfficiency.value | number:'1.0-2'}} %
+        </div>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enableFanType()" *ngIf="modificationForm.controls.fanType.value == 12">Optimize Fan</a>
       </div>
-      <a class="form-text small click-link" id="pumpTypeHelp" (click)="enableFanType()" *ngIf="modificationForm.controls.fanType.value == 12">Optimize Fan</a>
 
-      <div class="small text-center" *ngIf="modificationForm.controls.fanType.value != 12">
-        {{modificationForm.controls.fanEfficiency.value | number:'1.0-2'}} %
-      </div>
       <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.fanEfficiency.invalid && !modificationForm.controls.fanEfficiency.pristine">
         <span *ngIf="modificationForm.controls.fanEfficiency.errors.required">Value Required</span>
         <span *ngIf="modificationForm.controls.fanEfficiency.errors.max">Value can't be greater than
