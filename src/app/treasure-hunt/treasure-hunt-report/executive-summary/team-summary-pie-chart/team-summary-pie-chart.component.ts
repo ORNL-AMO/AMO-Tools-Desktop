@@ -65,7 +65,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
       // automargin: true,
       // textinfo: 'label+value',
       hoverformat: '.2r',
-      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      texttemplate: '<b>%{label}: </b>%{value:$,.0f}',
       hoverinfo: 'label+percent',
       direction: "clockwise",
       rotation: 115
@@ -100,7 +100,7 @@ export class TeamSummaryPieChartComponent implements OnInit {
       textposition: 'auto',
       insidetextorientation: "horizontal",
       // automargin: true,
-      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      texttemplate: '<b>%{label}: </b>%{value:$,.0f}',
       hoverformat: '.2r',
       direction: "clockwise",
       rotation: 125
