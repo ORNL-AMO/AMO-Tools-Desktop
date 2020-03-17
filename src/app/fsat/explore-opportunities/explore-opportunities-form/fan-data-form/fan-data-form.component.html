@@ -1,28 +1,31 @@
 <!--driveType and specifiedDriveEfficiency-->
 <div class="checkbox" *ngIf="!isVFD">
   <label class="group-label" for="modifyMotorDrive">
-    <input name="modifyMotorDrive" type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')" (change)="toggleMotorDrive()"
-      [(ngModel)]="showMotorDrive" />
-    Install More Efficient Drive Type
+    <input name="modifyMotorDrive" type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')"
+      (change)="toggleMotorDrive()"
+      [(ngModel)]="fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.hasOpportunity" />
+    {{fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.display}}
   </label>
 </div>
-<li *ngIf="showMotorDrive || isVFD" class="explore-opps-item">
+<li *ngIf="fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.hasOpportunity || isVFD" class="explore-opps-item">
   <form [formGroup]="baselineForm" class="explore-opps-form">
     <div class="text-center">
       <label for="baselineMotorDrive" class="baseline-value-label">
-        <span *ngIf="!isVFD">
+        <span *ngIf="!fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.hasOpportunity || !isVFD">
           Baseline 
         </span> Motor Drive</label>
       <div class="text-muted text-center baseline-value-input">{{ drives[baselineForm.value.drive].display}}</div>
     </div>
-    <div class="form-group explore-opps-formgroup" *ngIf="baselineForm.controls.drive.value == 4" [ngClass]="{'invalid': baselineForm.controls.specifiedDriveEfficiency.invalid}">
+    <div class="form-group explore-opps-formgroup" *ngIf="baselineForm.controls.drive.value == 4" 
+      [ngClass]="{'invalid': baselineForm.controls.specifiedDriveEfficiency.invalid}">
       <label for="baselineSpecifiedDriveEfficiency" class="modv">Baseline Drive Efficiency</label>
       <div class="input-group baseline-value-input">
         <input type="number" name="baselineSpecifiedDriveEfficiency" step="any" class="form-control" formControlName="specifiedDriveEfficiency"
           id="baselineSpecifiedDriveEfficiency" (input)="changeDriveType()" (focus)="focusField('specifiedDriveEfficiency')">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.specifiedDriveEfficiency.invalid && !baselineForm.controls.specifiedDriveEfficiency.pristine">
+      <span class="alert-danger pull-right small"
+        *ngIf="baselineForm.controls.specifiedDriveEfficiency.invalid && !baselineForm.controls.specifiedDriveEfficiency.pristine">
         <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
         <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
           {{baselineForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
@@ -40,7 +43,8 @@
       </select>
     </div>
 
-    <div class="form-group explore-opps-formgroup" *ngIf="modificationForm.controls.drive.value == 4" [ngClass]="{'invalid': modificationForm.controls.specifiedDriveEfficiency.invalid}">
+    <div class="form-group explore-opps-formgroup" *ngIf="modificationForm.controls.drive.value == 4" 
+    [ngClass]="{'invalid': modificationForm.controls.specifiedDriveEfficiency.invalid}">
       <label for="modificationSpecifiedDriveEfficiency" class="mod-value-label">
         <span *ngIf="!isVFD">
           Modification 
@@ -51,7 +55,8 @@
           (focus)="focusField('specifiedDriveEfficiency')">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.specifiedDriveEfficiency.invalid && !modificationForm.controls.specifiedDriveEfficiency.pristine">
+      <span class="alert-danger pull-right small"
+        *ngIf="modificationForm.controls.specifiedDriveEfficiency.invalid && !modificationForm.controls.specifiedDriveEfficiency.pristine">
         <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
         <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
           {{modificationForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
@@ -65,16 +70,17 @@
 <!--fanType and fanEfficiency-->
 <div class="checkbox" *ngIf="!isVFD">
   <label class="group-label" for="showFanType">
-    <input name="showFanType" type="checkbox" id="showFanType" (focus)="focusField('fanType')" (change)="toggleFanType()"
-      [(ngModel)]="showFanType" />
-    Install More Efficient Fan
+    <input name="showFanType" type="checkbox" id="showFanType" (focus)="focusField('fanType')"
+      (change)="toggleFanType()"
+      [(ngModel)]="fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity" />
+    {{fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.display}}
   </label>
 </div>
-<li *ngIf="showFanType || isVFD" class="explore-opps-item">
+<li *ngIf="fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity || isVFD" class="explore-opps-item">
   <form [formGroup]="baselineForm" class="explore-opps-form">
     <div class="text-center">
       <label for="baselineFanType" class="baseline-value-label">
-        <span *ngIf="!isVFD">
+        <span *ngIf="!fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity || !isVFD">
           Baseline 
         </span> Fan Type</label>
       <div class="text-muted text-center baseline-value-input">{{ fanTypes[baselineForm.value.fanType].display}}</div>
@@ -83,7 +89,7 @@
   <form [formGroup]="modificationForm" class="explore-opps-form">
     <div class="form-group explore-opps-formgroup" *ngIf="modificationForm.controls.fanType.value != 12">
       <label for="modificationFanType" class="mod-value-label">
-        <span *ngIf="!isVFD">
+        <span *ngIf="!fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity || !isVFD">
           Modification 
         </span> Fan Type</label>
       <select class="form-control w-100" name="modificationFanType" id="modificationFanType" (change)="getFanEfficiency()" (focus)="focusField('fanType')"
@@ -94,7 +100,7 @@
     <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.fanEfficiency.invalid}">
       <div>
         <label for="modificationFanSpecified" class="mod-value-label">
-          <span *ngIf="!isVFD">
+          <span *ngIf="!fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity || !isVFD">
             Modification 
           </span> Fan Efficiency
           <!-- <a class="form-text small click-link" id="pumpTypeHelp" (click)="enableFanType()" *ngIf="modificationForm.controls.fanType.value == 12">Optimize Fan</a> -->

@@ -11,11 +11,11 @@
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
         <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')"
-          (change)="setVFD()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.isVFD" />
-        Install VFD
+          (change)="setVFD()" [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity" />
+        {{ this.fsat.modifications[this.exploreModIndex].exploreOppsShowVfd.display }}
       </label>
     </div>
-    <app-variable-frequency-drive-form *ngIf="fsat.modifications[exploreModIndex].fsat.isVFD"
+    <app-variable-frequency-drive-form *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity"
       [baselineMotorForm]="baselineMotorForm" [modificationMotorForm]="modificationMotorForm"
       [baselineFanSetupForm]="baselineFanSetupForm" [modificationFanSetupForm]="modificationFanSetupForm"
       [baselineFanEfficiency]="baselineFanEfficiency" [baselineFieldDataForm]="baselineFieldDataForm"
@@ -26,13 +26,13 @@
 
     <app-fan-data-form (emitCalculate)="save()" [settings]="settings" [exploreModIndex]="exploreModIndex"
       [(fsat)]="fsat" [baselineForm]="baselineFanSetupForm" [modificationForm]="modificationFanSetupForm"
-      [baselineFanEfficiency]="baselineFanEfficiency" [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD">
+      [baselineFanEfficiency]="baselineFanEfficiency" [isVFD]="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity">
     </app-fan-data-form>
 
-    <app-rated-motor-form (emitCalculate)="save()" [settings]="settings" [exploreModIndex]="exploreModIndex"
+    <app-rated-motor-form (emitCalculate)="save()" [(fsat)]="fsat" [settings]="settings" [exploreModIndex]="exploreModIndex"
       [baselineForm]="baselineMotorForm" [modificationForm]="modificationMotorForm"></app-rated-motor-form>
 
-    <app-system-data-form [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD" (emitCalculate)="save()"
+    <app-system-data-form [isVFD]="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity" (emitCalculate)="save()"
       [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselineFieldDataForm"
       [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFanFieldDataWarnings"
       [modificationWarnings]="modificationFanFieldDataWarnings" (showPressureModal)="openPressureModal($event)"

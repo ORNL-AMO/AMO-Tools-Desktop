@@ -20,6 +20,19 @@ export interface Modification {
   notes?: Notes;
   fsat?: FSAT;
   exploreOpportunities?: boolean;
+  exploreOppsShowVfd?: SavingsOpportunity,
+  exploreOppsShowDrive?: SavingsOpportunity,
+  exploreOppsShowFanType?: SavingsOpportunity,
+  exploreOppsShowMotor?: SavingsOpportunity,
+  exploreOppsShowMotorEff?: SavingsOpportunity,
+  exploreOppsShowFlowRate?: SavingsOpportunity,
+  exploreOppsShowReducePressure?: SavingsOpportunity,
+  exploreOppsShowOpData?: SavingsOpportunity
+}
+
+export interface SavingsOpportunity {
+  hasOpportunity: boolean,
+  display: string
 }
 
 export interface Notes {
