@@ -9,7 +9,9 @@
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid}">
             <label for="baselineFlowRate" class="baseline-value-label">Baseline Flow Rate</label>
-            <div class="text-muted baseline-value-input">{{ baselineForm.controls.flowRate.value }} {{settings.fanFlowRate || settingsLabel }}</div>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.flowRate.value | number: '1.0-0' }} 
+                <span [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+            </div>
         </div>
     </form>
     <form [formGroup]="modificationForm" class="explore-opps-form">
@@ -47,7 +49,10 @@
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.inletPressure.invalid}">
             <label for="baselinePressure" class="baseline-value-label">Baseline Inlet Pressure</label>
-            <div class="text-muted baseline-value-input">{{ baselineForm.controls.inletPressure.value }} {{ settings.fanPressureMeasurement || settingsLabel }}</div>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.inletPressure.value }} 
+                <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+            </div>
+            
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.inletPressure.invalid && !baselineForm.controls.inletPressure.pristine">
                 <span *ngIf="baselineForm.controls.inletPressure.errors.required">Value Required</span>
@@ -80,7 +85,10 @@
         <div class="form-group explore-opps-formgroup"
             [ngClass]="{'error': baselineWarnings.outletPressureError !== null, 'invalid': baselineForm.controls.outletPressure.invalid}">
             <label for="baselineOutletPressure" class="baseline-value-label">Baseline Outlet Pressure</label>
-            <div class="text-muted baseline-value-input">{{ baselineForm.controls.outletPressure.value }} {{ settings.fanPressureMeasurement || settingsLabel }}</div>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.outletPressure.value }} 
+                <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+            </div>
+
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.outletPressure.invalid && !baselineForm.controls.outletPressure.pristine">
                 <span *ngIf="baselineForm.controls.outletPressure.errors.required">Value Required</span>
@@ -171,7 +179,7 @@
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
             <label for="baselineOperatingHours" class="baseline-value-label">Baseline Operating Hours</label>
-            <div class="text-muted baseline-value-input">{{ baselineForm.controls.operatingHours.value }} hrs/yr</div>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.operatingHours.value | number: '1.0-0' }} hrs/yr</div>
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.operatingHours.invalid && !baselineForm.controls.operatingHours.pristine">
                 <span *ngIf="baselineForm.controls.operatingHours.errors.required">Value Required</span>

@@ -34,7 +34,7 @@
   <form [formGroup]="modificationForm" class="explore-opps-form">
     <div class="form-group explore-opps-formgroup" *ngIf="!isVFD">
       <label for="modificationMotorDrive" class="mod-value-label">Modification Motor Drive</label>
-      <select class="form-control mod-value-input" name="drive2" id="drive2" (change)="changeDriveType()" (focus)="focusField('drive')"
+      <select class="form-control w-100" name="drive2" id="drive2" (change)="changeDriveType()" (focus)="focusField('drive')"
         formControlName="drive">
         <option *ngFor="let drive2 of drives" [ngValue]="drive2.value">{{drive2.display}}</option>
       </select>
@@ -45,7 +45,7 @@
         <span *ngIf="!isVFD">
           Modification 
         </span> Drive Efficiency</label>
-      <div class="input-group mod-value-input">
+      <div class="input-group w-100">
         <input type="number" name="modificationSpecifiedDriveEfficiency" step="any" class="form-control"
           formControlName="specifiedDriveEfficiency" id="modificationSpecifiedDriveEfficiency" (input)="calculate()"
           (focus)="focusField('specifiedDriveEfficiency')">
@@ -86,7 +86,7 @@
         <span *ngIf="!isVFD">
           Modification 
         </span> Fan Type</label>
-      <select class="form-control mod-value-input" name="modificationFanType" id="modificationFanType" (change)="getFanEfficiency()" (focus)="focusField('fanType')"
+      <select class="form-control w-100" name="modificationFanType" id="modificationFanType" (change)="getFanEfficiency()" (focus)="focusField('fanType')"
         formControlName="fanType">
         <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
       </select>
@@ -101,7 +101,7 @@
           <a class="form-text small click-link" id="pumpTypeHelp" (click)="disableFanType()" *ngIf="modificationForm.controls.fanType.value != 12">Known Efficiency</a>
         </label>
         <div class="input-group" *ngIf="modificationForm.controls.fanType.value == 12">
-          <input name="modificationFanSpecified" type="number" step="any" id="modificationFanSpecified" class="form-control mod-value-input"
+          <input name="modificationFanSpecified" type="number" step="any" id="modificationFanSpecified" class="form-control"
           (focus)="focusField('fanEfficiency')" (input)="calculate()" formControlName="fanEfficiency" />
           <span class="input-group-addon units">%</span>
         </div>

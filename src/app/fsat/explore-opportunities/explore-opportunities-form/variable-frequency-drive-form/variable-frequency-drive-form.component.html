@@ -8,7 +8,9 @@
   <form [formGroup]="baselineFieldDataForm" class="explore-opps-form">
     <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineFieldDataForm.controls.flowRate.invalid}">
       <label for="baselineFlowRate" class="baseline-value-label">Flow Rate</label>
-      <div class="text-muted baseline-value-input">{{ baselineFieldDataForm.controls.flowRate.value }} {{settings.fanFlowRate || settingsLabel }}</div>
+      <div class="text-muted baseline-value-input">{{ baselineFieldDataForm.controls.flowRate.value | number: '1.0-0'}} 
+        <span [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+    </div>
       <span class="alert-danger pull-right small" *ngIf="baselineFieldDataForm.controls.flowRate.invalid && !baselineFieldDataForm.controls.flowRate.pristine">
         <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.required">Value Required</span>
         <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.min">Value can't be less than
@@ -20,7 +22,7 @@
     <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':modificationFieldDataForm.controls.flowRate.invalid }">
       <label for="modificationFlowRate" class="mod-value-label">Flow Rate</label>
       <div class="input-group">
-        <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control mod-value-input"
+        <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control "
           (focus)="focusField('flowRate')" formControlName="flowRate" (input)="calculate()" />
         <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
         <!--<span class="input-group-addon units">{{settings.fanFlowRate}}</span>-->
@@ -38,7 +40,9 @@
   <form [formGroup]="baselineFieldDataForm" class="explore-opps-form">
     <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineFieldDataForm.controls.inletPressure.invalid}">
       <label for="baselinePressure" class="baseline-value-label">Inlet Pressure</label>
-      <div class="text-muted baseline-value-input">{{ baselineFieldDataForm.controls.inletPressure.value }} {{settings.fanPressureMeasurement || settingsLabel }}</div>
+      <div class="text-muted baseline-value-input">{{ baselineFieldDataForm.controls.inletPressure.value}} 
+        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+    </div>
       <span class="alert-danger pull-right small" *ngIf="baselineFieldDataForm.controls.inletPressure.invalid && !baselineFieldDataForm.controls.inletPressure.pristine">
         <span *ngIf="baselineFieldDataForm.controls.inletPressure.errors.required">Value Required</span>
       </span>
@@ -49,7 +53,7 @@
       <label for="modificationInletPressure" class="baseline-value-label">Inlet Pressure
       </label>
       <div class="input-group">
-        <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure" class="form-control mod-value-input"
+        <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure" class="form-control "
           (focus)="focusField('inletPressure')" (input)="calculate()" formControlName="inletPressure" />
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
@@ -66,7 +70,9 @@
   <form [formGroup]="baselineFieldDataForm" class="explore-opps-form">
     <div class="form-group explore-opps-formgroup" [ngClass]="{'error': baselineWarnings.outletPressureError !== null, 'invalid': baselineFieldDataForm.controls.outletPressure.invalid}">
       <label for="baselineOutletPressure" class="baseline-value-label">Outlet Pressure</label>
-      <div class="text-muted baseline-value-input">{{ baselineFieldDataForm.controls.outletPressure.value }} {{settings.fanPressureMeasurement || settingsLabel }}</div>
+      <div class="text-muted baseline-value-input">{{ baselineFieldDataForm.controls.outletPressure.value}} 
+        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+    </div>
       <span class="alert-danger pull-right small" *ngIf="baselineFieldDataForm.controls.outletPressure.invalid && !baselineFieldDataForm.controls.outletPressure.pristine">
         <span *ngIf="baselineFieldDataForm.controls.outletPressure.errors.required">Value Required</span>
       </span>
@@ -80,7 +86,7 @@
       <label for="modificationOutletPressure" class="mod-value-label">Outlet Pressure
       </label>
       <div class="input-group">
-        <input name="modificationOutletPressure" type="number" step="any" id="modificationOutletPressure" class="form-control mod-value-input"
+        <input name="modificationOutletPressure" type="number" step="any" id="modificationOutletPressure" class="form-control "
           (focus)="focusField('outletPressure')" (input)="calculate()" formControlName="outletPressure" />
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
