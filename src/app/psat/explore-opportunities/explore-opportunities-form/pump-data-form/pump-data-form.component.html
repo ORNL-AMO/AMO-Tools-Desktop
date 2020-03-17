@@ -1,130 +1,314 @@
 <div *ngIf="!isVFD" class="checkbox">
   <label class="group-label" for="modifyMotorDrive">
-    <input type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')" (change)="toggleMotorDrive()"
-      [(ngModel)]="showMotorDrive" />
+    <input
+      type="checkbox"
+      id="modifyMotorDrive"
+      (focus)="focusField('drive')"
+      (change)="toggleMotorDrive()"
+      [(ngModel)]="showMotorDrive"
+    />
     Install More Efficient Drive Type
   </label>
 </div>
 <!--Motor Drive-->
-<li *ngIf="showMotorDrive || isVFD">
+<li *ngIf="showMotorDrive || isVFD" class="explore-opps-item">
   <!--Baseline Motor Drive-->
-  <form [formGroup]="baselineForm">
+  <form [formGroup]="baselineForm" class="explore-opps-form">
     <!--drive-->
-    <div class="form-group">
-      <label for="baselineMotorDrive">Baseline Motor Drive</label>
-      <select class="form-control" name="baselineMotorDrive" id="baselineMotorDrive" (change)="setMotorDrive()" (focus)="focusField('drive')"
-        formControlName="drive">
-        <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
-      </select>
+    <div class="text-center">
+      <label for="baselineMotorDrive" class="baseline-value-label">
+        <span *ngIf="!isVFD">
+          Baseline 
+        </span> Motor Drive</label>
+      <div class="text-muted text-center baseline-value-input">{{ drives[baselineForm.value.drive].display}}</div>
     </div>
     <!--specifiedDriveEfficiency-->
-    <div class="form-group" *ngIf="baselineForm.controls.drive.value == 4" [ngClass]="{'invalid':baselineForm.controls.specifiedDriveEfficiency.invalid}">
-      <label for="baselineSpecifiedDriveEfficiency">Baseline Drive Efficiency</label>
+    <div
+      class="form-group"
+      *ngIf="baselineForm.controls.drive.value == 4"
+      [ngClass]="{
+        invalid: baselineForm.controls.specifiedDriveEfficiency.invalid
+      }"
+    >
+      <label for="baselineSpecifiedDriveEfficiency"
+        >Baseline Drive Efficiency</label
+      >
       <div class="input-group">
-        <input type="number" name="baselineSpecifiedDriveEfficiency" step="any" class="form-control" formControlName="specifiedDriveEfficiency"
-          (input)="calculate()" (focus)="focusField('specifiedDriveEfficiency')">
+        <input
+          type="number"
+          name="baselineSpecifiedDriveEfficiency"
+          step="any"
+          class="form-control"
+          formControlName="specifiedDriveEfficiency"
+          (input)="calculate()"
+          (focus)="focusField('specifiedDriveEfficiency')"
+        />
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.specifiedDriveEfficiency.invalid && !baselineForm.controls.specifiedDriveEfficiency.pristine">
-        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
-        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
-          {{baselineForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
-        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.min">Value can't be less than
-          {{baselineForm.controls.specifiedDriveEfficiency.errors.min.min}} %.</span>
+      <span
+        class="alert-danger pull-right small"
+        *ngIf="
+          baselineForm.controls.specifiedDriveEfficiency.invalid &&
+          !baselineForm.controls.specifiedDriveEfficiency.pristine
+        "
+      >
+        <span
+          *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.required"
+          >Value Required</span
+        >
+        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.max"
+          >Value can't be greater than
+          {{
+            baselineForm.controls.specifiedDriveEfficiency.errors.max.max
+          }}
+          %.</span
+        >
+        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.min"
+          >Value can't be less than
+          {{
+            baselineForm.controls.specifiedDriveEfficiency.errors.min.min
+          }}
+          %.</span
+        >
       </span>
     </div>
   </form>
   <!--Modification Motor Drive-->
-  <form [formGroup]="modificationForm">
+  <form [formGroup]="modificationForm" class="explore-opps-form">
     <!--drive-->
-    <div class="form-group" *ngIf="!isVFD">
-      <label for="modificationMotorDrive">Modification Motor Drive</label>
-      <select class="form-control" name="modificationMotorDrive" id="modificationMotorDrive" (change)="setMotorDrive()"
-        (focus)="focusField('drive')" formControlName="drive">
-        <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
+    <div class="form-group explore-opps-formgroup" *ngIf="!isVFD">
+      <label for="modificationMotorDrive" 
+        class="mod-value-label">Modification Motor Drive</label>
+      <select
+        class="form-control w-100"
+        name="modificationMotorDrive"
+        id="modificationMotorDrive"
+        (change)="setMotorDrive()"
+        (focus)="focusField('drive')"
+        formControlName="drive"
+      >
+        <option *ngFor="let drive of drives" [ngValue]="drive.value">{{
+          drive.display
+        }}</option>
       </select>
     </div>
     <!--specifiedDriveEfficiency-->
-    <div class="form-group" *ngIf="modificationForm.controls.drive.value == 4" [ngClass]="{'invalid':modificationForm.controls.specifiedDriveEfficiency.invalid}">
-      <label for="modificationSpecifiedDriveEfficiency">Modification Drive Efficiency</label>
+    <div
+      class="form-group explore-opps-formgroup"
+      *ngIf="modificationForm.controls.drive.value == 4"
+      [ngClass]="{
+        invalid: modificationForm.controls.specifiedDriveEfficiency.invalid
+      }"
+    >
+      <label for="modificationSpecifiedDriveEfficiency" class="mod-value-label"
+        >
+        <span *ngIf="!isVFD">
+          Modification
+        </span> 
+        Drive Efficiency</label
+      >
       <div class="input-group">
-        <input type="number" name="modificationSpecifiedDriveEfficiency" step="any" class="form-control"
-          formControlName="specifiedDriveEfficiency" id="modificationSpecifiedDriveEfficiency" (input)="calculate()"
-          (focus)="focusField('specifiedDriveEfficiency')">
+        <input
+          type="number"
+          name="modificationSpecifiedDriveEfficiency"
+          step="any"
+          class="form-control"
+          formControlName="specifiedDriveEfficiency"
+          id="modificationSpecifiedDriveEfficiency"
+          (input)="calculate()"
+          (focus)="focusField('specifiedDriveEfficiency')"
+        />
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.specifiedDriveEfficiency.invalid && !modificationForm.controls.specifiedDriveEfficiency.pristine">
-        <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
-        <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
-          {{modificationForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
-        <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.min">Value can't be less than
-          {{modificationForm.controls.specifiedDriveEfficiency.errors.min.min}} %.</span>
+      <span
+        class="alert-danger pull-right small"
+        *ngIf="
+          modificationForm.controls.specifiedDriveEfficiency.invalid &&
+          !modificationForm.controls.specifiedDriveEfficiency.pristine
+        "
+      >
+        <span
+          *ngIf="
+            modificationForm.controls.specifiedDriveEfficiency.errors.required
+          "
+          >Value Required</span
+        >
+        <span
+          *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.max"
+          >Value can't be greater than
+          {{
+            modificationForm.controls.specifiedDriveEfficiency.errors.max.max
+          }}
+          %.</span
+        >
+        <span
+          *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.min"
+          >Value can't be less than
+          {{
+            modificationForm.controls.specifiedDriveEfficiency.errors.min.min
+          }}
+          %.</span
+        >
       </span>
     </div>
   </form>
 </li>
 <div class="checkbox" *ngIf="!isVFD">
   <label class="group-label" for="modifyPumpType">
-    <input type="checkbox" id="modifyPumpType" (focus)="focusField('pumpType')" (change)="togglePumpType()" [(ngModel)]="showPumpType" />
+    <input
+      type="checkbox"
+      id="modifyPumpType"
+      (focus)="focusField('pumpType')"
+      (change)="togglePumpType()"
+      [(ngModel)]="showPumpType"
+    />
     Install More Efficient Pump
   </label>
 </div>
 <!-- <ul> -->
 <!--Pump Type-->
-<li *ngIf="showPumpType || isVFD">
+<li *ngIf="showPumpType || isVFD" class="explore-opps-item">
   <!--Baseline Pump Type (cannot be specified)-->
-  <form [formGroup]="baselineForm">
-    <div class="form-group">
-      <label for="baselinePumpType">Baseline Pump Type</label>
-      <select class="form-control" name="baselinePumpType" id="baselinePumpType" (change)="setPumpTypes()" (focus)="focusField('pumpType')"
-        formControlName="pumpType">
-        <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType.value">{{pumpType.display}}</option>
-      </select>
+  <form [formGroup]="baselineForm" class="explore-opps-form">
+    <div class="text-center">
+      <label for="baselinePumpType">
+        <span *ngIf="!isVFD">
+          Baseline 
+        </span>
+        Pump Type</label>
+      <div class="text-muted baseline-value-input">{{ pumpTypes[baselineForm.value.pumpType].display}}</div>
     </div>
   </form>
   <!--Modification Pump Type-->
-  <form [formGroup]="modificationForm">
+  <form [formGroup]="modificationForm" class="explore-opps-form">
     <!--pumpType-->
-    <div class="form-group" *ngIf="modificationForm.controls.pumpType.value != 11">
-      <label for="modificationPumpType">Modification Pump Type</label>
-      <select class="form-control" name="modificationPumpType" id="modificationPumpType" (change)="setPumpTypes()"
-        (focus)="focusField('pumpType')" formControlName="pumpType">
-        <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType.value">{{pumpType.display}}</option>
+    <div
+      class="form-group explore-opps-formgroup"
+      *ngIf="modificationForm.controls.pumpType.value != 11"
+    >
+      <label for="modificationPumpType" 
+        class="mod-value-label">Modification Pump Type</label>
+      <select
+        class="form-control w-100"
+        name="modificationPumpType"
+        id="modificationPumpType"
+        (change)="setPumpTypes()"
+        (focus)="focusField('pumpType')"
+        formControlName="pumpType"
+      >
+        <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType.value">{{
+          pumpType.display
+        }}</option>
       </select>
     </div>
     <!--specifiedPumpEfficiency-->
-    <div class="form-group" [ngClass]="{'invalid':modificationForm.controls.specifiedPumpEfficiency.invalid}">
-      <label id="pumpTypeHelp" for="modificationPumpSpecifiedEfficiency">Modification Pump Efficiency
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enablePumpType()" *ngIf="modificationForm.controls.pumpType.value == 11">Optimize
-          Pump</a>
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disablePumpType()" *ngIf="modificationForm.controls.pumpType.value != 11">Known
-          Efficiency</a>
-      </label>
-      <div class="input-group" *ngIf="modificationForm.controls.pumpType.value == 11">
-        <input name="modificationPumpSpecifiedEfficiency" type="number" step="any" id="modificationPumpSpecifiedEfficiency"
-          class="form-control" (focus)="focusField('pumpSpecified')" (input)="calculate()" formControlName="specifiedPumpEfficiency" />
-        <span class="input-group-addon units">%</span>
-      </div>
-      <div class="small text-center" *ngIf="modificationForm.controls.pumpType.value != 11">
-        {{modificationForm.controls.specifiedPumpEfficiency.value | number:'1.0-2'}} %
-      </div>
-      <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.specifiedPumpEfficiency.invalid && !modificationForm.controls.specifiedPumpEfficiency.pristine">
-        <span *ngIf="modificationForm.controls.specifiedPumpEfficiency.errors.required">Value Required</span>
-        <span *ngIf="modificationForm.controls.specifiedPumpEfficiency.errors.max">Value can't be greater than
-          {{modificationForm.controls.specifiedPumpEfficiency.errors.max.max}} %.</span>
-        <span *ngIf="modificationForm.controls.specifiedPumpEfficiency.errors.min">Value can't be less than
-          {{modificationForm.controls.specifiedPumpEfficiency.errors.min.min}} %.</span>
+    <div
+      class="form-group explore-opps-formgroup"
+      [ngClass]="{
+        invalid: modificationForm.controls.specifiedPumpEfficiency.invalid
+      }"
+    >
+    <div>
+      <label id="pumpTypeHelp" class="mod-value-label" for="modificationPumpSpecifiedEfficiency"
+      >
+      <span *ngIf="!isVFD">
+        Modification
+      </span> 
+      Pump Efficiency
+      <a
+      class="form-text small click-link"
+      id="pumpTypeHelp"
+      (click)="enablePumpType()"
+      *ngIf="modificationForm.controls.pumpType.value == 11"
+      >Optimize Pump</a
+      >
+      <a
+      class="form-text small click-link"
+      id="pumpTypeHelp"
+      (click)="disablePumpType()"
+      *ngIf="modificationForm.controls.pumpType.value != 11"
+      >Known Efficiency</a
+      >
+    </label>
+      <div
+      class="input-group"
+      *ngIf="modificationForm.controls.pumpType.value == 11"
+      >
+      <input
+      name="modificationPumpSpecifiedEfficiency"
+      type="number"
+      step="any"
+      id="modificationPumpSpecifiedEfficiency"
+      class="form-control"
+      (focus)="focusField('pumpSpecified')"
+      (input)="calculate()"
+      formControlName="specifiedPumpEfficiency"
+      />
+    <span class="input-group-addon units">%</span>
+  </div>
+      <div
+      class="small text-center"
+      *ngIf="modificationForm.controls.pumpType.value != 11"
+      >
+      {{
+        modificationForm.controls.specifiedPumpEfficiency.value
+        | number: "1.0-2"
+      }}
+      %
+    </div>
+  </div>
+      <span
+        class="alert-danger pull-right small"
+        *ngIf="
+          modificationForm.controls.specifiedPumpEfficiency.invalid &&
+          !modificationForm.controls.specifiedPumpEfficiency.pristine
+        "
+      >
+        <span
+          *ngIf="
+            modificationForm.controls.specifiedPumpEfficiency.errors.required
+          "
+          >Value Required</span
+        >
+        <span
+          *ngIf="modificationForm.controls.specifiedPumpEfficiency.errors.max"
+          >Value can't be greater than
+          {{
+            modificationForm.controls.specifiedPumpEfficiency.errors.max.max
+          }}
+          %.</span
+        >
+        <span
+          *ngIf="modificationForm.controls.specifiedPumpEfficiency.errors.min"
+          >Value can't be less than
+          {{
+            modificationForm.controls.specifiedPumpEfficiency.errors.min.min
+          }}
+          %.</span
+        >
       </span>
     </div>
-    <div class="text-center small help-text" *ngIf="modificationForm.controls.pumpType.value == 11">
-      The efficiency of your pump has been calculated based on your system setup. Either directly modify your
-      efficiency or click <strong>"Optimize Pump"</strong> to estimate your pump efficiency based on a different pump
-      type.
-    </div>
-    <div class="text-center small help-text" *ngIf="modificationForm.controls.pumpType.value != 11">
-      The efficiency of your pump has been calculated based on your <strong>flow rate</strong> and selected <strong>pump
-        type</strong>. Click <strong>"Known Efficiency"</strong>
-      to use the efficiency calculated by your system setup.
-    </div>
+
   </form>
 </li>
+<div *ngIf="showPumpType || isVFD">
+  <div
+    class="text-center small help-text mt-2"
+    *ngIf="modificationForm.controls.pumpType.value == 11"
+    >
+    The efficiency of your pump has been calculated based on your system
+    setup. Either directly modify your efficiency or click
+    <strong>"Optimize Pump"</strong> to estimate your pump efficiency based on
+    a different pump type.
+  </div>
+  <div
+  class="text-center small help-text mt-2"
+  *ngIf="modificationForm.controls.pumpType.value != 11"
+  >
+  The efficiency of your pump has been calculated based on your
+  <strong>flow rate</strong> and selected <strong>pump type</strong>. Click
+  <strong>"Known Efficiency"</strong>
+  to use the efficiency calculated by your system setup.
+  </div>
+</div>
+

@@ -4,15 +4,13 @@
   </label>
 </div>
 <!--Motor Efficiency Class-->
-<li *ngIf="showRatedMotorData">
-  <form [formGroup]="baselineForm">
+<li *ngIf="showRatedMotorData" class="explore-opps-item">
+  <form [formGroup]="baselineForm" class="explore-opps-form">
     <!--efficiencyClass-->
-    <div class="form-group">
-      <label for="baselineEfficiencyClass">Baseline Efficiency Class</label>
-      <select name="baselineEfficiencyClass" class="form-control select-input-field" (change)="changeBaselineEfficiencyClass()"
-        id="baselineEfficiencyClass" (focus)="focusField('efficiencyClass')" formControlName="efficiencyClass">
-        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
-      </select>
+    <div class="form-group explore-opps-formgroup">
+        <label for="baselineMotorDrive" class="baseline-value-label">Baseline Efficiency Class</label>
+        <div class="text-muted baseline-value-input">{{ efficiencyClasses[baselineForm.value.efficiencyClass].display}}</div>
+    
     </div>
     <!--efficiency-->
     <div class="form-group" *ngIf="baselineForm.controls.efficiencyClass.value == 3" [ngClass]="{'invalid':baselineForm.controls.efficiency.invalid}">
@@ -32,11 +30,11 @@
     </div>
   </form>
   <!--Modification Efficiency Class-->
-  <form [formGroup]="modificationForm">
+  <form [formGroup]="modificationForm" class="explore-opps-form">
     <!--efficiencyClass-->
-    <div class="form-group">
-      <label for="modificationEfficiencyClass">Modification Efficiency Class</label>
-      <select name="modificationEfficiencyClass" class="form-control select-input-field" id="modificationEfficiencyClass"
+    <div class="form-group explore-opps-formgroup">
+      <label for="modificationEfficiencyClass" class="mod-value-label">Modification Efficiency Class</label>
+      <select name="modificationEfficiencyClass" class="form-control w-100 select-input-field" id="modificationEfficiencyClass"
         (change)="changeModificationEfficiencyClass()" (focus)="focusField('efficiencyClass')" formControlName="efficiencyClass">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
       </select>

@@ -1,76 +1,216 @@
-<li>
-  <form [formGroup]="baselineFieldDataForm">
-    <div class="form-group" [ngClass]="{'invalid': baselineFieldDataForm.controls.flowRate.invalid, 'error': baselineFieldDataWarnings.flowError !== null}">
-      <label for="baselineFlowRate">Baseline Flow Rate</label>
-      <div class="input-group">
-        <input name="baselineFlowRate" type="number" step="any" id="baselineFlowRate" class="form-control" (focus)="focusField('flowRate')"
-          (input)="calculate()" formControlName="flowRate" />
-        <span class="input-group-addon units" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
+<li class="explore-opps-header">
+  <span class="h6 text-muted explore-opps-title">Baseline</span>
+  <span class="h6 text-muted explore-opps-title">Modifications</span>
+</li>
+<hr class="form-break-rule">
+<li class="explore-opps-item">
+  <form [formGroup]="baselineFieldDataForm" class="explore-opps-form">
+    <div
+      class="form-group explore-opps-formgroup"
+      [ngClass]="{
+        invalid: baselineFieldDataForm.controls.flowRate.invalid,
+        error: baselineFieldDataWarnings.flowError !== null
+      }"
+    >
+      <label for="baselineFlowRate" class="baseline-value-label"
+        >Flow Rate</label
+      >
+      <div class="text-muted baseline-value-input">
+        {{ baselineFieldDataForm.controls.flowRate.value | number: '1.0-0' }}
+        <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="baselineFieldDataForm.controls.flowRate.invalid && !baselineFieldDataForm.controls.flowRate.pristine">
-        <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.required">Value Required</span>
-        <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.max">Value can't be greater than
-          {{baselineFieldDataForm.controls.flowRate.errors.max.max}} <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
-        <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.min">Value can't be less than
-          {{baselineFieldDataForm.controls.flowRate.errors.min.min}} <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
+ 
+      <span
+        class="alert-danger pull-right small"
+        *ngIf="
+          baselineFieldDataForm.controls.flowRate.invalid &&
+          !baselineFieldDataForm.controls.flowRate.pristine
+        "
+      >
+        <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.required"
+          >Value Required</span
+        >
+        <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.max"
+          >Value can't be greater than
+          {{ baselineFieldDataForm.controls.flowRate.errors.max.max }}
+          <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span
+          >.</span
+        >
+        <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.min"
+          >Value can't be less than
+          {{ baselineFieldDataForm.controls.flowRate.errors.min.min }}
+          <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span
+          >.</span
+        >
       </span>
-      <span class="alert-warning pull-right small" *ngIf="baselineFieldDataWarnings.flowError !== null && !baselineFieldDataForm.controls.flowRate.invalid && !baselineFieldDataForm.controls.flowRate.pristine">{{baselineFieldDataWarnings.flowError}}</span>
+      <span
+        class="alert-warning pull-right small"
+        *ngIf="
+          baselineFieldDataWarnings.flowError !== null &&
+          !baselineFieldDataForm.controls.flowRate.invalid &&
+          !baselineFieldDataForm.controls.flowRate.pristine
+        "
+        >{{ baselineFieldDataWarnings.flowError }}</span>
     </div>
   </form>
-  <form [formGroup]="modificationFieldDataForm">
-    <div class="form-group" [ngClass]="{'invalid': modificationFieldDataForm.controls.flowRate.invalid, 'error': modificationFieldDataWarnings.flowError !== null}">
-      <label for="modificationFlowRate">Modification Flow Rate</label>
+  <form [formGroup]="modificationFieldDataForm" class="explore-opps-form">
+    <div
+      class="form-group explore-opps-formgroup"
+      [ngClass]="{
+        invalid: modificationFieldDataForm.controls.flowRate.invalid,
+        error: modificationFieldDataWarnings.flowError !== null
+      }"
+    >
+      <label for="modificationFlowRate" class="mod-value-label">
+        Flow Rate</label>
       <div class="input-group">
-        <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control"
-          (focus)="focusField('flowRate')" formControlName="flowRate" (input)="calculate()" />
-        <span class="input-group-addon units" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
+        <input
+          name="modificationFlowRate"
+          type="number"
+          step="any"
+          id="modificationFlowRate"
+          class="form-control"
+          (focus)="focusField('flowRate')"
+          formControlName="flowRate"
+          (input)="calculate()"
+        />
+        <span
+          class="input-group-addon units"
+          [innerHTML]="settings.flowMeasurement | settingsLabel"
+        ></span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="modificationFieldDataForm.controls.flowRate.invalid && !modificationFieldDataForm.controls.flowRate.pristine">
-        <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.required">Value Required</span>
-        <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.max">Value can't be greater than
-          {{modificationFieldDataForm.controls.flowRate.errors.max.max}} <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
-        <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.min">Value can't be less than
-          {{modificationFieldDataForm.controls.flowRate.errors.min.min}} <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
+      <span
+        class="alert-danger pull-right small"
+        *ngIf="
+          modificationFieldDataForm.controls.flowRate.invalid &&
+          !modificationFieldDataForm.controls.flowRate.pristine
+        "
+      >
+        <span
+          *ngIf="modificationFieldDataForm.controls.flowRate.errors.required"
+          >Value Required</span
+        >
+        <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.max"
+          >Value can't be greater than
+          {{ modificationFieldDataForm.controls.flowRate.errors.max.max }}
+          <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span
+          >.</span
+        >
+        <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.min"
+          >Value can't be less than
+          {{ modificationFieldDataForm.controls.flowRate.errors.min.min }}
+          <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span
+          >.</span
+        >
       </span>
-      <span class="alert-warning pull-right small" *ngIf="modificationFieldDataWarnings.flowError !== null && !modificationFieldDataForm.controls.flowRate.invalid && !modificationFieldDataForm.controls.flowRate.pristine">{{modificationFieldDataWarnings.flowError}}</span>
+      <span
+        class="alert-warning pull-right small"
+        *ngIf="
+          modificationFieldDataWarnings.flowError !== null &&
+          !modificationFieldDataForm.controls.flowRate.invalid &&
+          !modificationFieldDataForm.controls.flowRate.pristine
+        "
+        >{{ modificationFieldDataWarnings.flowError }}</span
+      >
     </div>
   </form>
 </li>
-<li>
-  <form [formGroup]="baselineFieldDataForm">
-    <div class="form-group" [ngClass]="{'invalid': baselineFieldDataForm.controls.head.invalid}">
-      <label for="baselineHead">Baseline Head</label>
-      <div class="input-group">
-        <input name="baselineHead" type="number" step="any" id="baselineHead" class="form-control" (focus)="focusField('head')"
-          (input)="calculate()" formControlName="head" />
-        <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
-      </div>
-      <span class="alert-danger pull-right small" *ngIf="baselineFieldDataForm.controls.head.invalid && !baselineFieldDataForm.controls.head.pristine">
-        <span *ngIf="baselineFieldDataForm.controls.head.errors.required">Value Required</span>
-        <span *ngIf="baselineFieldDataForm.controls.head.errors.max">Value can't be greater than
-          {{baselineFieldDataForm.controls.head.errors.max.max}} <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
-        <span *ngIf="baselineFieldDataForm.controls.head.errors.min">Value can't be less than
-          {{baselineFieldDataForm.controls.head.errors.min.min}} <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
-      </span>
+<li class="explore-opps-item">
+  <form [formGroup]="baselineFieldDataForm" class="explore-opps-form">
+    <div
+      class="form-group explore-opps-formgroup"
+      [ngClass]="{ invalid: baselineFieldDataForm.controls.head.invalid }"
+    >
+    <label for="baselineFlowRate" class="baseline-value-label"
+    >Head</label>
+    <div class="text-muted baseline-value-input">
+      {{ baselineFieldDataForm.controls.head.value | number: '1.0-0'}}
+      <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
     </div>
+
+      </div>
+      <span
+        class="alert-danger pull-right small"
+        *ngIf="
+          baselineFieldDataForm.controls.head.invalid &&
+          !baselineFieldDataForm.controls.head.pristine
+        "
+      >
+        <span *ngIf="baselineFieldDataForm.controls.head.errors.required"
+          >Value Required</span
+        >
+        <span *ngIf="baselineFieldDataForm.controls.head.errors.max"
+          >Value can't be greater than
+          {{ baselineFieldDataForm.controls.head.errors.max.max }}
+          <span
+            [innerHTML]="settings.distanceMeasurement | settingsLabel"
+          ></span
+          >.</span
+        >
+        <span *ngIf="baselineFieldDataForm.controls.head.errors.min"
+          >Value can't be less than
+          {{ baselineFieldDataForm.controls.head.errors.min.min }}
+          <span
+            [innerHTML]="settings.distanceMeasurement | settingsLabel"
+          ></span
+          >.</span
+        >
+      </span>
+    <!-- </div> -->
   </form>
-  <form [formGroup]="modificationFieldDataForm">
-    <div class="form-group" [ngClass]="{'invalid': modificationFieldDataForm.controls.head.invalid}">
-      <label for="modificationHead">Modification Head
-        <a class="form-text small click-link" (click)="showHeadToolModal()">Calculate
-          Head</a>
+  <form [formGroup]="modificationFieldDataForm" class="explore-opps-form">
+    <div
+      class="form-group explore-opps-formgroup"
+      [ngClass]="{ invalid: modificationFieldDataForm.controls.head.invalid }"
+    >
+      <label for="modificationHead" class="mod-value-label"
+        >Head
+        <a class="form-text small click-link" (click)="showHeadToolModal()"
+          >Calculate Head</a
+        >
       </label>
       <div class="input-group">
-        <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control" (focus)="focusField('head')"
-          (input)="calculate()" formControlName="head" />
-        <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
+        <input
+          name="modificationHead"
+          type="number"
+          step="any"
+          id="modificationHead"
+          class="form-control"
+          (focus)="focusField('head')"
+          (input)="calculate()"
+          formControlName="head"
+        />
+        <span
+          class="input-group-addon units"
+          [innerHTML]="settings.distanceMeasurement | settingsLabel"
+        ></span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="modificationFieldDataForm.controls.head.invalid && !modificationFieldDataForm.controls.head.pristine">
-        <span *ngIf="modificationFieldDataForm.controls.head.errors.required">Value Required</span>
-        <span *ngIf="modificationFieldDataForm.controls.head.errors.max">Value can't be greater than
-          {{modificationFieldDataForm.controls.head.errors.max.max}} <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
-        <span *ngIf="modificationFieldDataForm.controls.head.errors.min">Value can't be less than
-          {{modificationFieldDataForm.controls.head.errors.min.min}} <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
+      <span
+        class="alert-danger pull-right small"
+        *ngIf="
+          modificationFieldDataForm.controls.head.invalid &&
+          !modificationFieldDataForm.controls.head.pristine
+        "
+      >
+        <span *ngIf="modificationFieldDataForm.controls.head.errors.required"
+          >Value Required</span
+        >
+        <span *ngIf="modificationFieldDataForm.controls.head.errors.max"
+          >Value can't be greater than
+          {{ modificationFieldDataForm.controls.head.errors.max.max }}
+          <span
+            [innerHTML]="settings.distanceMeasurement | settingsLabel"
+          ></span
+          >.</span
+        >
+        <span *ngIf="modificationFieldDataForm.controls.head.errors.min"
+          >Value can't be less than
+          {{ modificationFieldDataForm.controls.head.errors.min.min }}
+          <span
+            [innerHTML]="settings.distanceMeasurement | settingsLabel"
+          ></span
+          >.</span
+        >
       </span>
     </div>
   </form>

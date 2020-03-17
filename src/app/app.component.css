@@ -118,7 +118,6 @@ Buttons
   background-color: #F5B7B1;
 }
 
-
 /*
 Badges
 =============================================== */
@@ -217,7 +216,9 @@ select.form-control:not([size]):not([multiple]) {
   }
 
 
-
+  .inheritWidth {
+    width: inherit;
+  }
 
 
 
