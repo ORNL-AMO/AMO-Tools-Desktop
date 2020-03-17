@@ -53,6 +53,7 @@ export class BoilerFormComponent implements OnInit {
   ngOnInit() {
     this.init();
     this.setFuelTypes();
+    console.log(this.baselineForm);
   }
 
   ngOnChanges(changes: SimpleChanges) {
