@@ -13,6 +13,23 @@ export class ReportGraphsService {
 
   constructor() { }
 
+  getProcessUsageValuesAndLabels(ssmt: SSMT): Array<{ value: number, label: string }> {
+    let processUsageData = new Array<{ value: number, label: string }>();
+    if (ssmt.outputData) {
+      if (ssmt.outputData.highPressureProcessSteamUsage.processUsage) {
+        processUsageData.push({ value: ssmt.outputData.highPressureProcessSteamUsage.processUsage, label: 'HP' });
+      }
+      if (ssmt.outputData.mediumPressureProcessSteamUsage.processUsage) {
+        processUsageData.push({ value: ssmt.outputData.mediumPressureProcessSteamUsage.processUsage, label: 'MP' });
+      }
+      if (ssmt.outputData.lowPressureProcessSteamUsage.processUsage) {
+        processUsageData.push({ value: ssmt.outputData.lowPressureProcessSteamUsage.processUsage, label: 'LP' });
+      }
+    }
+    return processUsageData;
+  }
+
+
   getProcessUsageData(ssmt: SSMT): Array<number> {
     let processUsageData = new Array<number>();
     if (ssmt.headerInput) {
@@ -48,6 +65,25 @@ export class ReportGraphsService {
       processUsageLabels.push('LP: ' + this.format(processUsageData[2]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
     }
     return processUsageLabels;
+  }
+
+  getGenerationValuesAndLabels(ssmt: SSMT): Array<{ value: number, label: string }> {
+    let valuesAndLabels = new Array<{ value: number, label: string }>();
+    if (ssmt.turbineInput) {
+      if (ssmt.turbineInput.condensingTurbine.useTurbine) {
+        valuesAndLabels.push({ value: ssmt.outputData.condensingTurbine.powerOut, label: 'Condensing' });
+      }
+      if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
+        valuesAndLabels.push({ value: ssmt.outputData.highPressureToLowPressureTurbine.powerOut, label: 'HP to LP' });
+      }
+      if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
+        valuesAndLabels.push({ value: ssmt.outputData.highPressureToMediumPressureTurbine.powerOut, label: 'HP to MP' });
+      }
+      if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
+        valuesAndLabels.push({ value: ssmt.outputData.mediumPressureToLowPressureTurbine.powerOut, label: 'MP to LP' });
+      }
+    }
+    return valuesAndLabels;
   }
 
   getGenerationData(ssmt: SSMT): Array<number> {
@@ -133,7 +169,7 @@ export class ReportGraphsService {
       isNetValue: false
     };
     let stackLossNode: WaterfallItem = {
-      value: tmpLosses.stack, 
+      value: tmpLosses.stack,
       label: 'Stack Losses',
       isStartValue: false,
       isNetValue: false

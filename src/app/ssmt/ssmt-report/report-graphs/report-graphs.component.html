@@ -1,4 +1,4 @@
-<div class="output-summary">
+<!-- <div class="output-summary">
   <div class="row justify-content-center align-items-center hide-print">
 
     <div class="col-6">
@@ -26,10 +26,37 @@
         </div>
       </div>
     </div>
+  </div> -->
+
+
+<div class="row w-100 justify-content-center">
+  <div class="col-6 d-flex flex-column">
+    <select name="selectedSsmt1" class="form-control w-100" id="selectedSsmt1" [(ngModel)]="selectedSsmt1">
+      <option [ngValue]="ssmt">Baseline</option>
+      <option *ngFor="let modification of ssmt.modifications" [ngValue]="modification.ssmt">{{modification.ssmt.name}}
+      </option>
+      <!-- <option *ngFor="let ssmt of ssmtOptions" [ngValue]="ssmt">{{ssmt.name}}</option> -->
+    </select>
+    <label class="group-label">{{selectedSsmt1.name}} Process Usage</label>
+    <app-ssmt-pie-chart [ssmt]="selectedSsmt1" [graphType]="'processUsage'"></app-ssmt-pie-chart>
+    <label class="group-label">{{selectedSsmt1.name}} Generation</label>
+    <app-ssmt-pie-chart [ssmt]="selectedSsmt1" [graphType]="'powerGeneration'"></app-ssmt-pie-chart>
   </div>
+  <div class="col-6 d-flex flex-column">
+    <select name="selectedSsmt2" class="form-control w-100" id="selectedSsmt2" [(ngModel)]="selectedSsmt2">
+      <option [ngValue]="ssmt">Baseline</option>
+      <option *ngFor="let modification of ssmt.modifications" [ngValue]="modification.ssmt">{{modification.ssmt.name}}
+      </option>
+      <!-- <option *ngFor="let ssmt of ssmtOptions" [ngValue]="ssmt">{{ssmt.name}}</option> -->
+    </select>
+    <label class="group-label">{{selectedSsmt2.name}} Process Usage</label>
+    <app-ssmt-pie-chart [ssmt]="selectedSsmt2" [graphType]="'processUsage'"></app-ssmt-pie-chart>
+    <label class="group-label">{{selectedSsmt2.name}} Generation</label>
+    <app-ssmt-pie-chart [ssmt]="selectedSsmt2" [graphType]="'powerGeneration'"></app-ssmt-pie-chart>
+  </div>
+</div>
 
-
-  <!-- if no mod, only 2 pie charts -->
+<!-- if no mod, only 2 pie charts --
   <div class="row justify-content-center align-items-center hide-print" *ngIf="!modExists">
     <div class="col-12">
       <div class="row justify-content-center">
@@ -37,7 +64,7 @@
           {{selectedSsmt1.name}} Process Usage
         </div>
       </div>
-      <!-- Process graph -->
+      <!-- Process graph --
       <div class="row print-solo">
         <div #pieChartContainer class="col-12">
           <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="pieWidth"
@@ -51,7 +78,7 @@
           {{selectedSsmt1.name}} Generation
         </div>
       </div>
-      <!-- generation graph -->
+      <!-- generation graph --
       <div class="row print-solo">
         <div *ngIf="!ssmt1GenerationNoData" class="col-12">
           <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="pieWidth"
@@ -67,7 +94,7 @@
     </div>
   </div>
 
-  <!-- mod exists, show 4 pie charts -->
+  <!-- mod exists, show 4 pie charts --
   <div class="row justify-content-center align-items-center hide-print" *ngIf="modExists">
     <div class="col-6">
       <div class="row justify-content-center">
@@ -75,7 +102,7 @@
           {{selectedSsmt1.name}} Process Usage
         </div>
       </div>
-      <!-- Process graph -->
+      <!-- Process graph --
       <div class="row print-solo">
         <div #pieChartContainer class="col-12">
           <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="pieWidth"
@@ -108,7 +135,7 @@
           {{selectedSsmt2.name}} Process Usage
         </div>
       </div>
-      <!-- Process graph -->
+      <!-- Process graph --
       <div class="row print-solo">
         <div #pieChartContainer class="col-12">
           <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="pieWidth"
@@ -157,4 +184,4 @@
     </div>
   </div>
 
-</div>
+</div> -->
