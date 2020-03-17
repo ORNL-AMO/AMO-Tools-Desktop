@@ -1,10 +1,11 @@
 .phast .modal-dialog,
 .psat .modal-dialog,
 .fsat .modal-dialog,
-.ssmt .modal-dialog{
+.ssmt .modal-dialog,
+.treasureHunt .modal-dialog {
     top: 0px;
-    max-width: none;
     margin: 10px;
+    max-width: none;
 }
 
 .phast .modal-header{
@@ -27,9 +28,16 @@
     color: #fff;
 }
 
-.phast .modal-body,
-.psat .modal-body,
-.fsat .modal-body,
-.ssmt .modal-body{
-    height: 85vh;
+.treasureHunt .modal-header {
+    background-color: #2E4053;
+    color: white;
+}
+
+.phast .modal-content,
+.psat .modal-content,
+.fsat .modal-content,
+.ssmt .modal-content,
+.treasureHunt .modal-content {
+    height: 95vh;
+    width: 98vw;
 }

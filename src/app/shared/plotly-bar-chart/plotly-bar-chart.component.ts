@@ -62,7 +62,11 @@ export class PlotlyBarChartComponent implements OnInit {
             family: 'Arial',
             size: 16
           }
-        }
+        },
+        fixedrange: true
+      },
+      xaxis: {
+        fixedrange: true
       },
       margin: {t: 0}
     };

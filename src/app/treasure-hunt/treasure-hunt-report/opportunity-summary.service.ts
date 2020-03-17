@@ -56,6 +56,9 @@ export class OpportunitySummaryService {
 
   getNewOpportunitySummary(opportunityName: string, utilityType: string, costSavings: number, totalEnergySavings: number, opportunityCost: OpportunityCost, baselineCost: number, modificationCost: number, mixedIndividualResults?: Array<OpportunitySummary>): OpportunitySummary {
     let totalCost: number = this.opportunitySheetService.getOppSheetImplementationCost(opportunityCost)
+    if (opportunityCost && opportunityCost.additionalAnnualSavings) {
+      costSavings = costSavings + opportunityCost.additionalAnnualSavings.cost;
+    }
     return {
       opportunityName: opportunityName,
       utilityType: utilityType,

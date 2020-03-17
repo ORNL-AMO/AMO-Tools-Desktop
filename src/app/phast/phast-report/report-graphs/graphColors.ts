@@ -33,9 +33,8 @@ export const graphColors: Array<any> = [
   '#DE762D',
   '#948A54',
   '#A9D58B',
-  '#DD7164',
   '#FFE166',
-  '#c3ff9e',
+  '#DD7164',
   '#3f4a7d'
 ];
 
@@ -52,8 +51,7 @@ export const phastGraphColors: Array<any> = [
   '#DE762D',
   '#1E7640',
   '#1E7640',
-  '#DD7164',
   '#FFE166',
-  '#c3ff9e',
+  '#DD7164',
   '#3f4a7d'
 ];

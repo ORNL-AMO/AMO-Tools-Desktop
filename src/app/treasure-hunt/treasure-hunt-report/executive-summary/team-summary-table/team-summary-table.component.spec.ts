@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CostSummaryChartComponent } from './cost-summary-chart.component';
+import { TeamSummaryTableComponent } from './team-summary-table.component';
 
-describe('CostSummaryChartComponent', () => {
-  let component: CostSummaryChartComponent;
-  let fixture: ComponentFixture<CostSummaryChartComponent>;
+describe('TeamSummaryTableComponent', () => {
+  let component: TeamSummaryTableComponent;
+  let fixture: ComponentFixture<TeamSummaryTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CostSummaryChartComponent ]
+      declarations: [ TeamSummaryTableComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CostSummaryChartComponent);
+    fixture = TestBed.createComponent(TeamSummaryTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

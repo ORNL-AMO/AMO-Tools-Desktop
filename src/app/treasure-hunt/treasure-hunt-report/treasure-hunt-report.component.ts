@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
@@ -53,7 +53,7 @@ export class TreasureHuntReportComponent implements OnInit {
   constructor(private printOptionsMenuService: PrintOptionsMenuService, private treasureHuntReportService: TreasureHuntReportService,
     private opportunityPaybackService: OpportunityPaybackService,
     private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
-    private sortCardsService: SortCardsService, private directoryDbService: DirectoryDbService) { }
+    private sortCardsService: SortCardsService, private directoryDbService: DirectoryDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     if (this.assessment) {
@@ -101,6 +101,10 @@ export class TreasureHuntReportComponent implements OnInit {
     })
   }
 
+  ngAfterViewInit(){
+    this.getContainerHeight();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
       this.getContainerHeight();
@@ -121,6 +125,7 @@ export class TreasureHuntReportComponent implements OnInit {
     let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
     let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
     this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    this.cd.detectChanges();
   }
 
   setTab(str: string) {
