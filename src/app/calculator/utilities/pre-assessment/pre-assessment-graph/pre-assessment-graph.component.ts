@@ -1,10 +1,8 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, OnChanges, ChangeDetectorRef } from '@angular/core';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnChanges } from '@angular/core';
 import { PreAssessment } from '../pre-assessment';
 import { PreAssessmentService } from '../pre-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
-import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import * as Plotly from 'plotly.js';
 
 @Component({
@@ -23,6 +21,8 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   inRollup: boolean;
   @Input()
   resultType: string;
+  @Input()
+  toggleCalculate: boolean;
 
   @ViewChild('preAssessmentPieChart', { static: false }) preAssessmentPieChart: ElementRef;
 
@@ -72,7 +72,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
         values: values,
         labels: valuesAndLabels.map(val => { return val.name }),
         marker: {
-          color: valuesAndLabels.map(val => { return val.color })
+          colors: valuesAndLabels.map(val => { return val.color })
         },
         type: 'pie',
         textposition: 'auto',
@@ -91,7 +91,9 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
           size: 10,
         },
         showlegend: false,
-        margin: { t: 30, b: 40, l: 135, r: 135 }
+        margin: { t: 30, b: 40, l: 40, r: 40 },
+        // paper_bgcolor: 'rgba(0,0,0,0)',
+        // plot_bgcolor: 'rgba(0,0,0,0)',
       };
 
       var modebarBtns = {
@@ -105,7 +107,6 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   }
 
   getValuesAndLabels(): Array<{ name: string, percent: number, value: number, color: string, energyCost: number }> {
-    console.log(this.resultType);
     let valuesAndLabels: Array<{ name: string, percent: number, value: number, color: string, energyCost: number }> = new Array();
     if (this.preAssessments) {
       valuesAndLabels = this.preAssessmentService.getResults(this.preAssessments, this.settings, this.resultType);
