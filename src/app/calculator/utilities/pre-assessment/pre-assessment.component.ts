@@ -50,7 +50,6 @@ export class PreAssessmentComponent implements OnInit {
   results: Array<any>;
   currentAssessmentType: string = 'Metered';
   nameIndex: number = 1;
-  assessmentGraphColors: Array<string>;
   showAdd: boolean = true;
   toggleCalculate: boolean = false;
   contentHeight: number = 0;
@@ -66,15 +65,12 @@ export class PreAssessmentComponent implements OnInit {
         let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
         if (directoryId) {
           this.settings = this.settingsDbService.getByDirectoryId(directoryId);
-          this.initAssessments();
         }
       } else {
         this.settings = this.settingsDbService.globalSettings;
-        this.initAssessments();
       }
-    } else {
-      this.initAssessments();
-    }
+    } 
+    this.initAssessments();
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -114,7 +110,6 @@ export class PreAssessmentComponent implements OnInit {
     if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
     }
-    this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     if (!this.calculator) {
       this.preAssessments = this.preAssessmentService.generateExample(this.settings, graphColors);
@@ -125,7 +120,6 @@ export class PreAssessmentComponent implements OnInit {
     if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
     }
-    this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     if (!this.calculator) {
       if (!this.inModal && !this.inAssessment && this.preAssessmentService.standaloneInputData && !isReset) {
@@ -187,13 +181,6 @@ export class PreAssessmentComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  setUnitsOfMeasure(str: string) {
-    if (this.settings.unitsOfMeasure !== str) {
-      this.convertData();
-      this.settings.unitsOfMeasure = str;
-    }
-  }
-
   calculate() {
     if (this.calculator) {
       this.calculator.preAssessments = this.preAssessments;
@@ -214,7 +201,7 @@ export class PreAssessmentComponent implements OnInit {
       settings: tmpSettings,
       collapsed: false,
       collapsedState: 'open',
-      borderColor: this.assessmentGraphColors[this.preAssessments.length],
+      borderColor: graphColors[this.preAssessments.length],
       electric: true
     });
 
@@ -227,7 +214,6 @@ export class PreAssessmentComponent implements OnInit {
 
 
   deletePreAssessment(assessment: PreAssessment, index: number) {
-    this.assessmentGraphColors.push(assessment.borderColor);
     this.preAssessments.splice(index, 1);
     this.calculate();
   }
@@ -239,30 +225,6 @@ export class PreAssessmentComponent implements OnInit {
     } else {
       assessment.collapsedState = 'open';
     }
-  }
-
-  convertData() {
-    this.preAssessments.forEach(assessment => {
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        let oldSettings: Settings = {
-          unitsOfMeasure: 'Imperial'
-        };
-        if (assessment.type === 'Metered') {
-          assessment.meteredEnergy = this.convertPhastService.convertMeteredEnergy(assessment.meteredEnergy, oldSettings, this.settings);
-        } else if (assessment.type === 'Designed') {
-          assessment.designedEnergy = this.convertPhastService.convertDesignedEnergy(assessment.designedEnergy, oldSettings, this.settings);
-        }
-      } else if (this.settings.unitsOfMeasure === 'Imperial') {
-        let oldSettings: Settings = {
-          unitsOfMeasure: 'Metric'
-        };
-        if (assessment.type === 'Metered') {
-          assessment.meteredEnergy = this.convertPhastService.convertMeteredEnergy(assessment.meteredEnergy, oldSettings, this.settings);
-        } else if (assessment.type === 'Designed') {
-          assessment.designedEnergy = this.convertPhastService.convertDesignedEnergy(assessment.designedEnergy, oldSettings, this.settings);
-        }
-      }
-    });
   }
 
   setName() {

@@ -11,6 +11,7 @@ import { DesignedZone } from '../../../shared/models/phast/designedEnergy';
 export class PreAssessmentService {
 
   standaloneInputData: Array<PreAssessment>;
+  resultType: string = 'value';
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService) { }
 
 
