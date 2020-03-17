@@ -55,7 +55,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       tracesIndex++;
     })
     let layout = {
-      width: this.paybackBarChart.nativeElement.clientWidth * .95,
+      // width: this.paybackBarChart.nativeElement.clientWidth * .95,
       showlegend: false,
       legend: { "orientation": "h" },
       font: {
@@ -76,7 +76,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       xaxis: {
         fixedrange: true
       },
-      margin: { t: 20, b: 100, l: 20, r: 20 }
+      margin: { t: 20, b: 100, l: 80, r: 30 }
     };
 
     var configOptions = {

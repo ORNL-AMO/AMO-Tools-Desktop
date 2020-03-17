@@ -48,6 +48,17 @@ Explore-opps form overrides
     align-self: center;
   }
 
+  div.form-group.explore-opps-formgroup >
+  select.mod-value-input {
+    width: 100%;
+  }
+
   hr.form-break-rule {
       margin-top: 0;
+  }
+
+  div.form-break-divider {
+    display: block; 
+    width: 100%; 
+    padding-left: 2rem; 
   }
