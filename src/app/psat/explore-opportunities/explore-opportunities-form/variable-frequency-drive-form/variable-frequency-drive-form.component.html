@@ -2,7 +2,7 @@
   <span class="h6 text-muted explore-opps-title">Baseline</span>
   <span class="h6 text-muted explore-opps-title">Modifications</span>
 </li>
-<hr class="vfd-rule">
+<hr class="form-break-rule">
 <li class="explore-opps-item">
   <form [formGroup]="baselineFieldDataForm" class="explore-opps-form">
     <div
@@ -16,8 +16,8 @@
         >Flow Rate</label
       >
       <div class="text-muted baseline-value-input">
-        {{ baselineFieldDataForm.controls.flowRate.value }}
-        {{ settings.flowMeasurement | settingsLabel }}
+        {{ baselineFieldDataForm.controls.flowRate.value | number: '1.0-0' }}
+        <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
       </div>
  
       <span
@@ -124,8 +124,8 @@
     <label for="baselineFlowRate" class="baseline-value-label"
     >Head</label>
     <div class="text-muted baseline-value-input">
-      {{ baselineFieldDataForm.controls.head.value }}
-      {{ settings.distanceMeasurement | settingsLabel }}
+      {{ baselineFieldDataForm.controls.head.value | number: '1.0-0'}}
+      <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
     </div>
 
       </div>

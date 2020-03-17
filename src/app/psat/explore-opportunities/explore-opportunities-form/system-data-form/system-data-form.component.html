@@ -9,7 +9,9 @@
         <div class="form-group explore-opps-formgroup"
             [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid, 'error': baselineWarnings.flowError !== null}">
                 <label for="baselineFlowRate" class="baseline-value-label">Baseline Flow Rate</label>
-                <div class="text-muted baseline-value-input">{{ baselineForm.controls.flowRate.value }} {{ settings.flowMeasurement | settingsLabel }}</div>
+                <div class="text-muted baseline-value-input">{{ baselineForm.controls.flowRate.value | number: '1.0-0' }}
+                    <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
+                </div>
 
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">
@@ -62,8 +64,9 @@
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.head.invalid}">
             <label for="baselineHead" class="baseline-value-label">Baseline Head</label>
-            <div class="text-muted baseline-value-input">{{ baselineForm.controls.head.value }} {{ settings.distanceMeasurement | settingsLabel }}</div>
-
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.head.value | number: '1.0-0' }}
+                <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
+            </div>
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.head.invalid && !baselineForm.controls.head.pristine">
                 <span *ngIf="baselineForm.controls.head.errors.required">Value Required</span>
@@ -79,14 +82,14 @@
     <form [formGroup]="modificationForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.head.invalid}">
             <label for="modificationHead" class="mod-value-label">Modification Head
-                <a class="form-text small click-link" (click)="showHeadToolModal()">Calculate
-                    Head</a>
             </label>
             <div class="input-group modValueGroup__inputGroup">
                 <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control"
-                    (focus)="focusField('head')" (input)="calculate()" formControlName="head" />
+                (focus)="focusField('head')" (input)="calculate()" formControlName="head" />
                 <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
             </div>
+            <a class="form-text small click-link" (click)="showHeadToolModal()">Calculate
+                Head</a>
             <span class="alert-danger pull-right small"
                 *ngIf="modificationForm.controls.head.invalid && !modificationForm.controls.head.pristine">
                 <span *ngIf="modificationForm.controls.head.errors.required">Value Required</span>
@@ -148,9 +151,8 @@
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
             <label for="baselineCost" class="baseline-value-label">Baseline Operating Hours</label>
-            <div class="text-muted baseline-value-input">{{ baselineForm.controls.operatingHours.value }} hrs/yr</div>
-          
-    
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.operatingHours.value | number: '1.0-0'}} hrs/yr</div>
+            
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.operatingHours.invalid && !baselineForm.controls.operatingHours.pristine">
                 <span *ngIf="baselineForm.controls.operatingHours.errors.required">Value Required</span>

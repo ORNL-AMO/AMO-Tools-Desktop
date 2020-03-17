@@ -34,7 +34,7 @@
     <!--efficiencyClass-->
     <div class="form-group explore-opps-formgroup">
       <label for="modificationEfficiencyClass" class="mod-value-label">Modification Efficiency Class</label>
-      <select name="modificationEfficiencyClass" class="form-control mod-value-input select-input-field" id="modificationEfficiencyClass"
+      <select name="modificationEfficiencyClass" class="form-control w-100 select-input-field" id="modificationEfficiencyClass"
         (change)="changeModificationEfficiencyClass()" (focus)="focusField('efficiencyClass')" formControlName="efficiencyClass">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
       </select>
