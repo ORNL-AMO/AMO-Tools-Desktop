@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
 import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedZone } from '../../../../../shared/models/phast/designedEnergy';
 
