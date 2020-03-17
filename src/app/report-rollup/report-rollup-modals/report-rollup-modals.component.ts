@@ -31,6 +31,7 @@ export class ReportRollupModalsComponent implements OnInit {
   assessmentModalType: string;
   assessmentModalLabel: string;
   selectedCalculators: Array<Calculator>;
+  displayModalContent: boolean = false;
   constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit(): void {
@@ -52,6 +53,7 @@ export class ReportRollupModalsComponent implements OnInit {
         this.showAssessmentRollupModal();
       }
     });
+
   }
 
   ngOnDestroy() {
@@ -62,10 +64,17 @@ export class ReportRollupModalsComponent implements OnInit {
 
   showAssessmentRollupModal() {
     this.assessmentRollupModal.show();
+    this.assessmentRollupModal.onShown.subscribe(val => {
+      this.displayModalContent = val;
+    });
+
   }
 
   hideAssessmentRollupModal() {
     this.assessmentRollupModal.hide();
+    this.assessmentRollupModal.onHidden.subscribe(val => {
+      this.displayModalContent = false;
+    });
   }
 
   setAssessmentModalLabel() {
@@ -79,6 +88,8 @@ export class ReportRollupModalsComponent implements OnInit {
       this.assessmentModalLabel = 'Steam Assessment Rollup';
     } else if (this.assessmentModalType == 'unitsModal') {
       this.assessmentModalLabel = 'Report Units';
+    } else if (this.assessmentModalType == 'treasureHunt') {
+      this.assessmentModalLabel = 'Treasure Hunt Rollup';
     }
   }
 
