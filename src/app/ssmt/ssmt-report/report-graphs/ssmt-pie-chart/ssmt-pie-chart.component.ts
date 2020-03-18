@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { SSMT } from '../../../../shared/models/steam/ssmt';
 import { ReportGraphsService } from '../report-graphs.service';
 import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-ssmt-pie-chart',
@@ -14,10 +15,12 @@ export class SsmtPieChartComponent implements OnInit {
   ssmt: SSMT;
   @Input()
   graphType: string;
+  @Input()
+  settings: Settings;
 
   @ViewChild('ssmtPieChart', { static: false }) ssmtPieChart: ElementRef;
-
-  constructor(private reportGraphsService: ReportGraphsService) { }
+  noData: boolean;
+  constructor(private reportGraphsService: ReportGraphsService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
   }
@@ -38,46 +41,57 @@ export class SsmtPieChartComponent implements OnInit {
   }
 
   createChart() {
-    let valuesAndLabels
-    if(this.graphType == 'processUsage'){
-      valuesAndLabels  = this.reportGraphsService.getProcessUsageValuesAndLabels(this.ssmt);
-    }else if(this.graphType == 'powerGeneration'){
-      valuesAndLabels  = this.reportGraphsService.getGenerationValuesAndLabels(this.ssmt);
+    let valuesAndLabels: Array<{ value: number, label: string }>;
+    let texttemplate: string;
+    if (this.graphType == 'processUsage') {
+      valuesAndLabels = this.reportGraphsService.getProcessUsageValuesAndLabels(this.ssmt);
+      texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamEnergyMeasurement + '/hr';
+
+    } else if (this.graphType == 'powerGeneration') {
+      valuesAndLabels = this.reportGraphsService.getGenerationValuesAndLabels(this.ssmt);
+      texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamPowerMeasurement;
     }
     Plotly.purge(this.ssmtPieChart.nativeElement);
-    var data = [{
-      values: valuesAndLabels.map(val => { return val.value }),
-      labels: valuesAndLabels.map(val => { return val.label }),
-      marker: {
-        colors: graphColors
-      },
-      type: 'pie',
-      textposition: 'auto',
-      insidetextorientation: "horizontal",
-      // automargin: true,
-      // textinfo: 'label+value',
-      hoverformat: '.2r',
-      texttemplate: '<b>%{label}:</b> %{value:,.0f}',
-      // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
-      hoverinfo: 'label+percent',
-      // direction: "clockwise",
-      // rotation: 90
-    }];
-    var layout = {
-      font: {
-        size: 16,
-      },
-      showlegend: false,
-      margin: { t: 50, b: 50, l: 50, r: 50 },
-    };
+    if (valuesAndLabels.length != 0) {
+      this.noData = false;
+      this.cd.detectChanges();
+      var data = [{
+        values: valuesAndLabels.map(val => { return val.value }),
+        labels: valuesAndLabels.map(val => { return val.label }),
+        marker: {
+          colors: graphColors
+        },
+        type: 'pie',
+        textposition: 'auto',
+        insidetextorientation: "horizontal",
+        // automargin: true,
+        // textinfo: 'label+value',
+        hoverformat: '.2r',
+        texttemplate: texttemplate,
+        // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
+        hoverinfo: 'label+percent',
+        // direction: "clockwise",
+        // rotation: 90
+      }];
+      var layout = {
+        font: {
+          size: 14,
+        },
+        showlegend: false,
+        margin: { t: 15, b: 15, l: 100, r: 100 },
+      };
 
-    var modebarBtns = {
-      modeBarButtonsToRemove: ['hoverClosestPie'],
-      displaylogo: false,
-      displayModeBar: true,
-      responsive: true
-    };
-    Plotly.react(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
+      var modebarBtns = {
+        modeBarButtonsToRemove: ['hoverClosestPie'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true
+      };
+      Plotly.react(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
+    } else {
+      this.noData = true;
+      this.cd.detectChanges();
+    }
   }
 
 
