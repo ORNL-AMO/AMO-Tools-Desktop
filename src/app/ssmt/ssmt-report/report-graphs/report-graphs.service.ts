@@ -198,4 +198,73 @@ export class ReportGraphsService {
     };
     return waterfallData;
   }
+
+
+  getWaterfallLabelsAndValues(losses: SSMTLosses): Array<{ value: number, label: string, stackTraceValue: number, color: string }> {
+    let labelsAndValues: Array<{ value: number, label: string, stackTraceValue: number, color: string }> = new Array();
+    let stackTraceValue: number = 0;
+    let inputEnergy: number = losses.fuelEnergy + losses.makeupWaterEnergy;
+    //input energy
+    labelsAndValues.push({
+      value: inputEnergy,
+      label: 'Input Energy',
+      stackTraceValue: stackTraceValue,
+      color: '#229954'
+    });
+    //turbine generation
+    let turbineGeneration: number = losses.highToLowTurbineUsefulEnergy + losses.highToMediumTurbineUsefulEnergy + losses.mediumToLowTurbineUsefulEnergy + losses.condensingTurbineUsefulEnergy;
+    stackTraceValue = inputEnergy - turbineGeneration;
+    labelsAndValues.push({
+      value: turbineGeneration,
+      label: 'Turbine Generation',
+      stackTraceValue: stackTraceValue,
+      color: '#E67E22'
+    });
+    //turbine losses
+    let turbineLosses: number = losses.highToLowTurbineEfficiencyLoss + losses.highToMediumTurbineEfficiencyLoss + losses.mediumToLowTurbineEfficiencyLoss + losses.condensingTurbineEfficiencyLoss + losses.condensingLosses;
+    stackTraceValue = stackTraceValue - turbineLosses;
+    labelsAndValues.push({
+      value: turbineLosses,
+      label: 'Turbine Losses',
+      stackTraceValue: stackTraceValue,
+      color: '#E74C3C'
+    });
+    //process use
+    let processUse: number = losses.allProcessUsageUsefulEnergy;
+    stackTraceValue = stackTraceValue - processUse;
+    labelsAndValues.push({
+      value: processUse,
+      label: 'Process Use',
+      stackTraceValue: stackTraceValue,
+      color: '#E67E22'
+    });
+    //unreturned condensate
+    let unreturnedCondensate: number = losses.highPressureProcessLoss + losses.mediumPressureProcessLoss + losses.lowPressureProcessLoss;
+    stackTraceValue = stackTraceValue - unreturnedCondensate;
+    labelsAndValues.push({
+      value: unreturnedCondensate,
+      label: 'Unreturned Condensate',
+      stackTraceValue: stackTraceValue,
+      color: '#E74C3C'
+    });
+    //stack losses
+    let stackLoss: number = losses.stack;
+    stackTraceValue = stackTraceValue - stackLoss;
+    labelsAndValues.push({
+      value: stackLoss,
+      label: 'Stack Losses',
+      stackTraceValue: stackTraceValue,
+      color: '#E74C3C'
+    });
+    //other losses
+    let otherLosses: number = losses.blowdown + losses.highPressureHeader + losses.mediumPressureHeader + losses.lowPressureHeader + losses.condensateLosses + losses.deaeratorVentLoss + losses.lowPressureVentLoss + losses.condensateFlashTankLoss;
+    stackTraceValue = stackTraceValue - otherLosses;
+    labelsAndValues.push({
+      value: otherLosses,
+      label: 'Other Losses',
+      stackTraceValue: stackTraceValue,
+      color: '#E74C3C'
+    });
+    return labelsAndValues.reverse();
+  }
 }

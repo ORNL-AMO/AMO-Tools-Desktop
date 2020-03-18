@@ -65,6 +65,16 @@
       </app-ssmt-pie-chart>
     </div>
   </div>
+  <div class="col-12">
+    <label class="group-label">{{selectedSsmt1.name}} Energy Usage</label>
+    <app-ssmt-waterfall [ssmt]="selectedSsmt1" [baselineLosses]="baselineLosses"
+      [modificationLosses]="modificationLosses" [settings]="settings" [xAxisRange]="waterfallXAxisRange"></app-ssmt-waterfall>
+  </div>
+  <div class="col-12" *ngIf="selectedSsmt2">
+    <label class="group-label">{{selectedSsmt2.name}} Energy Usage</label>
+    <app-ssmt-waterfall [ssmt]="selectedSsmt2" [baselineLosses]="baselineLosses"
+      [modificationLosses]="modificationLosses" [settings]="settings" [xAxisRange]="waterfallXAxisRange"></app-ssmt-waterfall>
+  </div>
 </div>
 
 <!-- if no mod, only 2 pie charts --
