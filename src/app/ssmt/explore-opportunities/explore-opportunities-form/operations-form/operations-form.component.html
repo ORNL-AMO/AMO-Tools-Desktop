@@ -19,7 +19,7 @@
     <form class="explore-opps-form">
         <div class="text-center">
           <label for="baselineOperatingHours" class="baseline-value-label">Baseline Operating Hours</label>
-          <div class="text-muted text-center baseline-value-input">{{ ssmt.operatingHours.hoursPerYear | number: '1.0-0' }} hrs/yr</div>
+          <div class="text-muted text-center baseline-value-input mt-1">{{ ssmt.operatingHours.hoursPerYear | number: '1.0-0' }} hrs/yr</div>
         </div>
     </form>
     <form class="explore-opps-form">
@@ -52,7 +52,7 @@
       <form class="explore-opps-form">
         <div class="text-center">
           <label for="baselineMakeupWaterTemp" class="baseline-value-label">Baseline Make-up Water Temperature</label>
-          <div class="text-muted text-center baseline-value-input">{{ ssmt.generalSteamOperations.makeUpWaterTemperature | number: '1.0-0' }} 
+          <div class="text-muted text-center baseline-value-input mt-1">{{ ssmt.generalSteamOperations.makeUpWaterTemperature }} 
             <span
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
           </div>
@@ -95,7 +95,7 @@
     <form class="explore-opps-form">
       <div class="text-center">
         <label for="baselineElectricityCost" class="baseline-value-label">Baseline Electricity Unit Cost</label>
-        <div class="text-muted text-center baseline-value-input">{{ ssmt.operatingCosts.electricityCost }}$/kWh
+        <div class="text-muted text-center baseline-value-input mt-1">{{ ssmt.operatingCosts.electricityCost }} $/kWh
         </div>
       </div>
     </form>
@@ -125,7 +125,7 @@
       <form class="explore-opps-form">
         <div class="text-center">
           <label for="baselineFuelCost" class="baseline-value-label">Baseline Fuel Cost</label>
-          <div class="text-muted text-center baseline-value-input">{{ ssmt.operatingCosts.fuelCost }} $/ {{settings.steamEnergyMeasurement}}
+          <div class="text-muted text-center baseline-value-input mt-1">{{ ssmt.operatingCosts.fuelCost }} $/{{settings.steamEnergyMeasurement}}
           </div>
         </div>
       </form>
@@ -156,7 +156,7 @@
     <form class="explore-opps-form">
       <div class="text-center">
         <label for="baselineMakeupWaterCost" class="baseline-value-label">Baseline Make-up Water Cost</label>
-        <div class="text-muted text-center baseline-value-input">{{ ssmt.operatingCosts.makeUpWaterCost }} $/ {{settings.steamEnergyMeasurement}}</div>
+        <div class="text-muted text-center baseline-value-input mt-1">{{ ssmt.operatingCosts.makeUpWaterCost }} $/{{settings.steamEnergyMeasurement}}</div>
       </div>
     </form>
     <form class="explore-opps-form">
