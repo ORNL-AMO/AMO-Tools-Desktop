@@ -29,7 +29,7 @@
     </div>
   </form>
 </li>
-<hr *ngIf="this.showUseTurbine || !this.showBaseline">
+<hr *ngIf="showUseTurbine || !showBaseline && (turbineType != 'condensingTurbine' && turbineType != 'mediumToLowTurbine')">
 
 <!--isentropicEfficiency-->
 <li class="explore-opps-item" >
