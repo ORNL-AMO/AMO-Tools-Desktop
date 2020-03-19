@@ -72,8 +72,8 @@ export class SsmtWaterfallComponent implements OnInit {
     let energyTraces = {
       x: labelsAndValues.map(val => { return val.value }),
       y: labelsAndValues.map(val => { return val.label }),
-      hoverinfo: 'all',
-      hovertemplate: '%{x:,.0f}<extra></extra>',
+      hoverinfo: 'none',
+      // hovertemplate: '%{x:,.0f}<extra></extra>',
       textposition: 'auto',
       insidetextorientation: "horizontal",
       texttemplate: texttemplate,
@@ -97,10 +97,10 @@ export class SsmtWaterfallComponent implements OnInit {
         fixedrange: true
       },
       xaxis: {
-        range: [0, this.xAxisRange + 75],
+        range: [0, this.xAxisRange + 50],
         automargin: true
       },
-      margin: { t: 30, b: 40, r: 150, l: 150 },
+      margin: { t: 30, b: 40, r: 50, l: 150 },
       clickmode: 'none',
       dragmode: false
     };
@@ -146,8 +146,8 @@ export class SsmtWaterfallComponent implements OnInit {
     let energyTraces = {
       x: labelsAndValues.map(val => { return val.value }),
       y: labelsAndValues.map(val => { return val.label }),
-      hoverinfo: 'all',
-      hovertemplate: '%{x:,.0f}<extra></extra>',
+      hoverinfo: 'none',
+      // hovertemplate: '%{x:,.0f}<extra></extra>',
       textposition: 'auto',
       insidetextorientation: "horizontal",
       texttemplate: texttemplate,
@@ -162,7 +162,7 @@ export class SsmtWaterfallComponent implements OnInit {
 
     var data = [stackTraces, energyTraces];
     var layout = {
-      width: 1000,
+      width: 1100,
       barmode: 'stack',
       showlegend: false,
       font: {
@@ -172,10 +172,10 @@ export class SsmtWaterfallComponent implements OnInit {
         fixedrange: true
       },
       xaxis: {
-        range: [0, this.xAxisRange + 100],
+        range: [0, this.xAxisRange + 50],
         automargin: true
       },
-      margin: { t: 30, b: 40, r: 250, l: 150 },
+      margin: { t: 30, b: 40, r: 50, l: 150 },
       clickmode: 'none',
       dragmode: false
     };

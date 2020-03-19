@@ -211,9 +211,18 @@ export class ReportGraphsService {
       stackTraceValue: stackTraceValue,
       color: '#229954'
     });
+    //process use
+    let processUse: number = losses.allProcessUsageUsefulEnergy;
+    stackTraceValue = inputEnergy - processUse;
+    labelsAndValues.push({
+      value: processUse,
+      label: 'Process Use',
+      stackTraceValue: stackTraceValue,
+      color: '#E67E22'
+    });
     //turbine generation
     let turbineGeneration: number = losses.highToLowTurbineUsefulEnergy + losses.highToMediumTurbineUsefulEnergy + losses.mediumToLowTurbineUsefulEnergy + losses.condensingTurbineUsefulEnergy;
-    stackTraceValue = inputEnergy - turbineGeneration;
+    stackTraceValue = stackTraceValue - turbineGeneration;
     labelsAndValues.push({
       value: turbineGeneration,
       label: 'Turbine Generation',
@@ -228,15 +237,6 @@ export class ReportGraphsService {
       label: 'Turbine Losses',
       stackTraceValue: stackTraceValue,
       color: '#E74C3C'
-    });
-    //process use
-    let processUse: number = losses.allProcessUsageUsefulEnergy;
-    stackTraceValue = stackTraceValue - processUse;
-    labelsAndValues.push({
-      value: processUse,
-      label: 'Process Use',
-      stackTraceValue: stackTraceValue,
-      color: '#E67E22'
     });
     //unreturned condensate
     let unreturnedCondensate: number = losses.highPressureProcessLoss + losses.mediumPressureProcessLoss + losses.lowPressureProcessLoss;
