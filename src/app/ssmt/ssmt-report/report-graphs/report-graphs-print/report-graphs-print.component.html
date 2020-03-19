@@ -1,5 +1,5 @@
-<div class="page-break-before w-100">
-  <div class="row w-100 justify-content-center" *ngFor="let modification of ssmt.modifications">
+<div *ngFor="let modification of ssmt.modifications">
+  <div class="row w-100 justify-content-center page-break-before">
     <div class="print-page-title w-100 text-center">
       Scenario: {{modification.ssmt.name}}
     </div>
@@ -27,7 +27,9 @@
         </app-ssmt-pie-chart>
       </div>
     </div>
-    <div class="page-break-before w-100">
+  </div>
+  <div class="row w-100 justify-content-center page-break-before">
+    <div class="d-flex flex-column w-100">
       <label class="group-label">Baseline Energy Usage</label>
       <app-ssmt-waterfall [ssmt]="ssmt" [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses"
         [settings]="settings" [xAxisRange]="waterfallXAxisRange">
@@ -36,101 +38,6 @@
       <app-ssmt-waterfall [ssmt]="modification.ssmt" [baselineLosses]="baselineLosses"
         [modificationLosses]="modificationLosses" [settings]="settings" [xAxisRange]="waterfallXAxisRange">
       </app-ssmt-waterfall>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-<div *ngFor="let ssmtOption of ssmtOptions; let i = index">
-
-  <div *ngIf="!modExists || i > 0">
-    <div class="row justify-content-center align-items-center print-graphs-container show-print">
-
-      <div *ngIf="modExists" align="center" class="print-page-title print-center-title">
-        Scenario: {{ssmtOption.name}}
-      </div>
-      <div *ngIf="!modExists" align="center" class="print-page-title print-center-title">
-        Baseline
-      </div>
-
-      <div class="col-12">
-        <!-- notes -->
-        <!-- <div class="row" *ngIf="modExists">
-          <div class="col-12 print-notes-padding">
-            <div class="row" *ngFor="let note of allNotes[i - 1]">
-              <div class="col-12 print-mod-notes">
-                {{note}}
-              </div>
-            </div>
-          </div>
-        </div> -->
-
-        <!-- pie chart titles -->
-        <div class="row print-pad-graph-title" *ngIf="printGraphs">
-          <div class="text-center print-graph-sub-title" [ngClass]="modExists ? 'col-6' : 'col-12'">
-            Baseline Process Usage
-          </div>
-          <div class="col-6 print-graph-sub-title text-center" *ngIf="modExists">
-            {{ssmtOption.name}} Process Usage
-          </div>
-        </div>
-
-        <div class="row" *ngIf="printGraphs">
-          <div class="col-6 print-pie-chart">
-            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true"
-              [chartContainerWidth]="pieChartWidth" [labels]="baselinePieProcessUsageLabels"
-              [values]="baselinePieProcessUsageData"></app-pie-chart>
-          </div>
-          <div class="col-6 print-pie-chart" *ngIf="modExists">
-            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true"
-              [chartContainerWidth]="pieChartWidth" [labels]="modificationPieProcessUsageLabels[i-1]"
-              [values]="modificationPieProcessUsageData[i-1]"></app-pie-chart>
-          </div>
-        </div>
-
-        <div class="row print-pad-graph-title" *ngIf="printGraphs">
-          <div class="text-center print-graph-sub-title" [ngClass]="modExists ? 'col-6' : 'col-12'">
-            Baseline Generation
-          </div>
-          <div class="col-6 print-graph-sub-title text-center" *ngIf="modExists">
-            {{ssmtOption.name}} Generation
-          </div>
-        </div>
-
-        <div class="row" *ngIf="printGraphs">
-          <div class="col-6 print-pie-chart">
-            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true"
-              [chartContainerWidth]="pieChartWidth" [labels]="baselinePieGenerationLabels"
-              [values]="baselinePieGenerationData"></app-pie-chart>
-          </div>
-          <div class="col-6 print-pie-chart" *ngIf="modExists">
-            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true"
-              [chartContainerWidth]="pieChartWidth" [labels]="modificationPieGenerationLabels[i-1]"
-              [values]="modificationPieGenerationData[i-1]"></app-pie-chart>
-          </div>
-        </div>
-
-
-        <div class="row print-only-waterfall" *ngIf="printGraphs">
-          <div class="col-12">
-            <app-waterfall-graph *ngIf="!modExists" [waterfallInput1]="baselineWaterfallInput" [modExists]="modExists"
-              [containerWidth]="1000" [containerHeight]="500">
-            </app-waterfall-graph>
-            <app-waterfall-graph *ngIf="modExists" [waterfallInput1]="baselineWaterfallInput"
-              [waterfallInput2]="modificationWaterfallInputs[i-1]" [modExists]="modExists" [containerWidth]="1000"
-              [containerHeight]="500">
-            </app-waterfall-graph>
-          </div>
-        </div>
-
-
-      </div>
     </div>
   </div>
 </div>
