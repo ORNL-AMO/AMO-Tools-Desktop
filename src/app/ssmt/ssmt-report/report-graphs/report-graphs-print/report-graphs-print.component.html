@@ -18,12 +18,14 @@
     <div class="w-50 d-flex flex-column">
       <div class="pt-2">
         <label class="group-label">{{modification.ssmt.name}} Process Usage</label>
-        <app-ssmt-pie-chart [ssmt]="modification.ssmt" [graphType]="'processUsage'" [settings]="settings" [printView]="true">
+        <app-ssmt-pie-chart [ssmt]="modification.ssmt" [graphType]="'processUsage'" [settings]="settings"
+          [printView]="true">
         </app-ssmt-pie-chart>
       </div>
       <div class="p-0">
         <label class="group-label">{{modification.ssmt.name}} Generation</label>
-        <app-ssmt-pie-chart [ssmt]="modification.ssmt" [graphType]="'powerGeneration'" [settings]="settings" [printView]="true">
+        <app-ssmt-pie-chart [ssmt]="modification.ssmt" [graphType]="'powerGeneration'" [settings]="settings"
+          [printView]="true">
         </app-ssmt-pie-chart>
       </div>
     </div>
@@ -37,6 +39,36 @@
       <label class="group-label">{{modification.ssmt.name}} Energy Usage</label>
       <app-ssmt-waterfall [ssmt]="modification.ssmt" [baselineLosses]="baselineLosses"
         [modificationLosses]="modificationLosses" [settings]="settings" [xAxisRange]="xAxisRange" [printView]="true">
+      </app-ssmt-waterfall>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="ssmt.modifications.length == 0">
+  <div class="row w-100 justify-content-center page-break-before">
+    <div class="print-page-title w-100 text-center">
+      Baseline
+    </div>
+    <div class="d-flex w-50 flex-column">
+      <div class="pt-2">
+        <label class="group-label">Process Usage</label>
+        <app-ssmt-pie-chart [ssmt]="ssmt" [graphType]="'processUsage'" [settings]="settings" [printView]="true">
+        </app-ssmt-pie-chart>
+      </div>
+    </div>
+    <div class="w-50 d-flex flex-column">
+      <div class="pt-2">
+        <label class="group-label">Generation</label>
+        <app-ssmt-pie-chart [ssmt]="ssmt" [graphType]="'powerGeneration'" [settings]="settings" [printView]="true">
+        </app-ssmt-pie-chart>
+      </div>
+    </div>
+  </div>
+  <div class="row w-100 justify-content-center">
+    <div class="d-flex flex-column w-100">
+      <label class="group-label">Energy Usage</label>
+      <app-ssmt-waterfall [ssmt]="ssmt" [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses"
+        [settings]="settings" [xAxisRange]="xAxisRange" [printView]="true">
       </app-ssmt-waterfall>
     </div>
   </div>

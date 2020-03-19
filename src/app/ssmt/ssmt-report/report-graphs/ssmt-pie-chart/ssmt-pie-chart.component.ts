@@ -135,7 +135,7 @@ export class SsmtPieChartComponent implements OnInit {
           size: 14,
         },
         showlegend: false,
-        margin: { t: 50, b: 110, l: 110, r: 110 },
+        margin: { t: 50, b: 110, l: 125, r: 125 },
       };
 
       var modebarBtns = {
