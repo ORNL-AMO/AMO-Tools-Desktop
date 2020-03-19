@@ -44,13 +44,14 @@ export class SsmtRollupGraphsComponent implements OnInit {
   ngOnInit() {
     this.graphColors = graphColors;
     this.resultsSub = this.reportRollupService.ssmtResults.subscribe((ssmt: Array<SsmtResultsData>) => {
-      if (ssmt.length !== 0) {
-        this.totalEnergyUse = _.sumBy(ssmt, (ssmt) => { return ssmt.baselineResults.operationsOutput.boilerFuelUsage; });
-        this.totalCost = _.sumBy(ssmt, (ssmt) => { return ssmt.baselineResults.operationsOutput.totalOperatingCost; });
-        this.resultData = ssmt;
-        this.getResults(this.resultData);
-        this.getData();
-      }
+      console.log(ssmt)
+      // if (ssmt.length !== 0) {
+      //   this.totalEnergyUse = _.sumBy(ssmt, (ssmt) => { return ssmt.baselineResults.operationsOutput.boilerFuelUsage; });
+      //   this.totalCost = _.sumBy(ssmt, (ssmt) => { return ssmt.baselineResults.operationsOutput.totalOperatingCost; });
+      //   this.resultData = ssmt;
+      //   this.getResults(this.resultData);
+      //   this.getData();
+      // }
     });
 
     if (this.printView) {

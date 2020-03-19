@@ -56,6 +56,7 @@ import { ReportRollupModalsComponent } from './report-rollup-modals/report-rollu
 import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessment-print.component';
 import { TreasureHuntRollupComponent } from './treasure-hunt-rollup/treasure-hunt-rollup.component';
 import { CostStatusComponent } from './treasure-hunt-rollup/cost-status/cost-status.component';
+import { SsmtEnergyUsePieComponent } from './ssmt-rollup/ssmt-rollup-graphs/ssmt-energy-use-pie/ssmt-energy-use-pie.component';
 
 @NgModule({
   imports: [
@@ -116,6 +117,7 @@ import { CostStatusComponent } from './treasure-hunt-rollup/cost-status/cost-sta
     PreAssessmentPrintComponent,
     TreasureHuntRollupComponent,
     CostStatusComponent,
+    SsmtEnergyUsePieComponent,
 
   ],
   providers: [ReportRollupService],

@@ -52,7 +52,7 @@
         <td *ngIf="data.modName">{{data.modificationResults.operationsOutput.totalOperatingCost | currency:'USD':'symbol':'1.0-0'}}</td>
         <td *ngIf="!data.modName">&mdash;</td>
         <!-- savings -->
-        <td *ngIf="data.modName">{{getSavings(data.modificationResults.operationsOutput.totalOperatingCost, data.baselineResults.operationsOutput.totalOperatingCost) | currency:'USD':'symbol':'1.0-0'}}</td>
+        <td *ngIf="data.modName">{{data.baselineResults.operationsOutput.totalOperatingCost - data.modificationResults.operationsOutput.totalOperatingCost | currency:'USD':'symbol':'1.0-0'}}</td>
         <td *ngIf="!data.modName">&mdash;</td>
         <!-- implementation costs -->
         <td *ngIf="data.modName">
