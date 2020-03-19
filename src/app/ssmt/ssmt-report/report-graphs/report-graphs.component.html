@@ -1,35 +1,4 @@
-<!-- <div class="output-summary">
-  <div class="row justify-content-center align-items-center hide-print">
-
-    <div class="col-6">
-      <div class="row justify-content-center">
-        <div class="d-flex justify-content-center pr-3">
-          <div class="form-group">
-            <select name="selectedSsmt1" class="form-control mx-auto" id="selectedSsmt1" [(ngModel)]="selectedSsmt1"
-              (ngModelChange)="selectNewSsmt(1)">
-              <option *ngFor="let ssmt of ssmtOptions" [ngValue]="ssmt">{{ssmt.name}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-6" *ngIf="modExists">
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <select name="selectedSsmt2" class="form-control mx-auto" id="selectedSsmt2" [(ngModel)]="selectedSsmt2"
-              (ngModelChange)="selectNewSsmt(2)">
-              <option *ngFor="let ssmt of ssmtOptions" [ngValue]="ssmt">{{ssmt.name}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-
-<div class="row w-100 justify-content-center">
+<div class="row w-100 justify-content-center" *ngIf="!printView">
   <div class="d-flex" [ngClass]="{'col-6 flex-column': selectedSsmt2, 'col-12': !selectedSsmt2}">
     <select *ngIf="selectedSsmt2" name="selectedSsmt1" class="form-control w-100" id="selectedSsmt1"
       [(ngModel)]="selectedSsmt1">
@@ -68,141 +37,17 @@
   <div class="col-12">
     <label class="group-label">{{selectedSsmt1.name}} Energy Usage</label>
     <app-ssmt-waterfall [ssmt]="selectedSsmt1" [baselineLosses]="baselineLosses"
-      [modificationLosses]="modificationLosses" [settings]="settings" [xAxisRange]="waterfallXAxisRange"></app-ssmt-waterfall>
+      [modificationLosses]="modificationLosses" [settings]="settings" [xAxisRange]="waterfallXAxisRange">
+    </app-ssmt-waterfall>
   </div>
   <div class="col-12" *ngIf="selectedSsmt2">
     <label class="group-label">{{selectedSsmt2.name}} Energy Usage</label>
     <app-ssmt-waterfall [ssmt]="selectedSsmt2" [baselineLosses]="baselineLosses"
-      [modificationLosses]="modificationLosses" [settings]="settings" [xAxisRange]="waterfallXAxisRange"></app-ssmt-waterfall>
+      [modificationLosses]="modificationLosses" [settings]="settings" [xAxisRange]="waterfallXAxisRange">
+    </app-ssmt-waterfall>
   </div>
 </div>
 
-<!-- if no mod, only 2 pie charts --
-  <div class="row justify-content-center align-items-center hide-print" *ngIf="!modExists">
-    <div class="col-12">
-      <div class="row justify-content-center">
-        <div class="d-flex justify-content-center pr-3">
-          {{selectedSsmt1.name}} Process Usage
-        </div>
-      </div>
-      <!-- Process graph --
-      <div class="row print-solo">
-        <div #pieChartContainer class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="pieWidth"
-            [labels]="ssmt1ProcessPieLabels" [values]="ssmt1ProcessPieValues" [exportName]="ssmt1ProcessExportName">
-          </app-pie-chart>
-        </div>
-      </div>
-
-      <div class="row justify-content-center mt-2">
-        <div class="d-flex justify-content-center pr-3">
-          {{selectedSsmt1.name}} Generation
-        </div>
-      </div>
-      <!-- generation graph --
-      <div class="row print-solo">
-        <div *ngIf="!ssmt1GenerationNoData" class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="pieWidth"
-            [labels]="ssmt1GenerationPieLabels" [values]="ssmt1GenerationPieValues"
-            [exportName]="ssmt1GenerationExportName">
-          </app-pie-chart>
-        </div>
-        <div *ngIf="ssmt1GenerationNoData" class="col-12 text-center py-2">
-          No Turbine Data
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- mod exists, show 4 pie charts --
-  <div class="row justify-content-center align-items-center hide-print" *ngIf="modExists">
-    <div class="col-6">
-      <div class="row justify-content-center">
-        <div class="d-flex justify-content-center pr-3">
-          {{selectedSsmt1.name}} Process Usage
-        </div>
-      </div>
-      <!-- Process graph --
-      <div class="row print-solo">
-        <div #pieChartContainer class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="pieWidth"
-            [labels]="ssmt1ProcessPieLabels" [values]="ssmt1ProcessPieValues" [exportName]="ssmt1ProcessExportName">
-          </app-pie-chart>
-        </div>
-      </div>
-
-      <div class="row justify-content-center mt-2">
-        <div class="d-flex justify-content-center pr-3">
-          {{selectedSsmt1.name}} Generation
-        </div>
-      </div>
-      <div class="row print-solo">
-        <div *ngIf="!ssmt1GenerationNoData" class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="pieWidth"
-            [labels]="ssmt1GenerationPieLabels" [values]="ssmt1GenerationPieValues"
-            [exportName]="ssmt1GenerationExportName">
-          </app-pie-chart>
-        </div>
-        <div *ngIf="ssmt1GenerationNoData" class="col-12 text-center py-2">
-          No Turbine Data
-        </div>
-      </div>
-    </div>
-
-    <div class="col-6">
-      <div class="row justify-content-center">
-        <div class="d-flex justify-content-center pr-3">
-          {{selectedSsmt2.name}} Process Usage
-        </div>
-      </div>
-      <!-- Process graph --
-      <div class="row print-solo">
-        <div #pieChartContainer class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="pieWidth"
-            [labels]="ssmt2ProcessPieLabels" [values]="ssmt2ProcessPieValues" [exportName]="ssmt2ProcessExportName">
-          </app-pie-chart>
-        </div>
-      </div>
-
-      <div class="row justify-content-center mt-2">
-        <div class="d-flex justify-content-center pr-3">
-          {{selectedSsmt2.name}} Generation
-        </div>
-      </div>
-      <div class="row print-solo">
-        <div *ngIf="!ssmt2GenerationNoData" class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="pieWidth"
-            [labels]="ssmt2GenerationPieLabels" [values]="ssmt2GenerationPieValues"
-            [exportName]="ssmt2GenerationExportName">
-          </app-pie-chart>
-        </div>
-        <div *ngIf="ssmt2GenerationNoData" class="col-12 text-center py-2">
-          No Turbine Data
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row justify-content-center mt-5 hide-print">
-    <div class="col-12" #waterfallChartContainer>
-      <app-waterfall-graph *ngIf="!modExists && !ssmt1WaterfallNoData" [waterfallInput1]="ssmt1WaterfallData"
-        [modExists]="modExists" [containerWidth]="waterFallWidth" [containerHeight]="500">
-      </app-waterfall-graph>
-      <app-waterfall-graph *ngIf="modExists && (!ssmt1WaterfallNoData || !ssmt2WaterfallNoData)"
-        [waterfallInput1]="ssmt1WaterfallData" [waterfallInput2]="ssmt2WaterfallData"
-        [changeWaterfall]="changeWaterfall" [modExists]="modExists" [containerWidth]="waterFallWidth"
-        [containerHeight]="500"></app-waterfall-graph>
-    </div>
-  </div>
-
-  <div *ngIf="printView" class="row justify-content-center show-print">
-    <div class="col-12">
-      <app-report-graphs-print [ssmtOptions]="ssmtOptions" [baselineLosses]="baselineLosses"
-        [modificationLosses]="modificationLosses" [settings]="settings" [modExists]="modExists"
-        [printGraphs]="printGraphs">
-      </app-report-graphs-print>
-    </div>
-  </div>
-
-</div> -->
+<app-report-graphs-print *ngIf="printView && printGraphs" [ssmt]="ssmt" [settings]="settings"
+  [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses" [xAxisRange]="waterfallXAxisRange">
+</app-report-graphs-print>

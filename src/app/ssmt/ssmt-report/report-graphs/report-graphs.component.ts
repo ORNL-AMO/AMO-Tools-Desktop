@@ -1,11 +1,7 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
-import { Assessment } from '../../../shared/models/assessment';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-import { WaterfallInput } from '../../../shared/waterfall-graph/waterfall-graph.service';
 import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
-import { ReportGraphsService } from './report-graphs.service';
 import * as _ from 'lodash';
 @Component({
   selector: 'app-report-graphs',
