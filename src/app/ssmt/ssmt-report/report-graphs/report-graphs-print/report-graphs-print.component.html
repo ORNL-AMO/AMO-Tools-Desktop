@@ -6,24 +6,24 @@
     <div class="d-flex w-50 flex-column">
       <div class="pt-2">
         <label class="group-label">Baseline Process Usage</label>
-        <app-ssmt-pie-chart [ssmt]="ssmt" [graphType]="'processUsage'" [settings]="settings">
+        <app-ssmt-pie-chart [ssmt]="ssmt" [graphType]="'processUsage'" [settings]="settings" [printView]="true">
         </app-ssmt-pie-chart>
       </div>
       <div class="p-0">
         <label class="group-label">Baseline Generation</label>
-        <app-ssmt-pie-chart [ssmt]="ssmt" [graphType]="'powerGeneration'" [settings]="settings">
+        <app-ssmt-pie-chart [ssmt]="ssmt" [graphType]="'powerGeneration'" [settings]="settings" [printView]="true">
         </app-ssmt-pie-chart>
       </div>
     </div>
     <div class="w-50 d-flex flex-column">
       <div class="pt-2">
         <label class="group-label">{{modification.ssmt.name}} Process Usage</label>
-        <app-ssmt-pie-chart [ssmt]="modification.ssmt" [graphType]="'processUsage'" [settings]="settings">
+        <app-ssmt-pie-chart [ssmt]="modification.ssmt" [graphType]="'processUsage'" [settings]="settings" [printView]="true">
         </app-ssmt-pie-chart>
       </div>
       <div class="p-0">
         <label class="group-label">{{modification.ssmt.name}} Generation</label>
-        <app-ssmt-pie-chart [ssmt]="modification.ssmt" [graphType]="'powerGeneration'" [settings]="settings">
+        <app-ssmt-pie-chart [ssmt]="modification.ssmt" [graphType]="'powerGeneration'" [settings]="settings" [printView]="true">
         </app-ssmt-pie-chart>
       </div>
     </div>
@@ -32,11 +32,11 @@
     <div class="d-flex flex-column w-100">
       <label class="group-label">Baseline Energy Usage</label>
       <app-ssmt-waterfall [ssmt]="ssmt" [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses"
-        [settings]="settings" [xAxisRange]="waterfallXAxisRange">
+        [settings]="settings" [xAxisRange]="xAxisRange" [printView]="true">
       </app-ssmt-waterfall>
       <label class="group-label">{{modification.ssmt.name}} Energy Usage</label>
       <app-ssmt-waterfall [ssmt]="modification.ssmt" [baselineLosses]="baselineLosses"
-        [modificationLosses]="modificationLosses" [settings]="settings" [xAxisRange]="waterfallXAxisRange">
+        [modificationLosses]="modificationLosses" [settings]="settings" [xAxisRange]="xAxisRange" [printView]="true">
       </app-ssmt-waterfall>
     </div>
   </div>

@@ -17,6 +17,8 @@ export class SsmtPieChartComponent implements OnInit {
   graphType: string;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
   @ViewChild('ssmtPieChart', { static: false }) ssmtPieChart: ElementRef;
   noData: boolean;
@@ -25,18 +27,18 @@ export class SsmtPieChartComponent implements OnInit {
   ngOnInit(): void {
   }
   ngAfterViewInit() {
-    // if (!this.showPrint) {
-    this.createChart();
-    // } else {
-    //   this.createPrintChart();
-    // }
+    if (!this.printView) {
+      this.createChart();
+    } else {
+      this.createPrintChart();
+    }
   }
 
   ngOnChanges() {
-    if (this.ssmtPieChart) {
+    if (this.ssmtPieChart && !this.printView) {
       this.createChart();
-      // } else if (this.costPieChart && this.showPrint) {
-      //   this.createPrintChart();
+    } else if (this.ssmtPieChart && this.printView) {
+      this.createPrintChart();
     }
   }
 
@@ -94,5 +96,58 @@ export class SsmtPieChartComponent implements OnInit {
     }
   }
 
+  createPrintChart(){
+    let valuesAndLabels: Array<{ value: number, label: string }>;
+    let texttemplate: string;
+    if (this.graphType == 'processUsage') {
+      valuesAndLabels = this.reportGraphsService.getProcessUsageValuesAndLabels(this.ssmt);
+      texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamEnergyMeasurement + '/hr';
+
+    } else if (this.graphType == 'powerGeneration') {
+      valuesAndLabels = this.reportGraphsService.getGenerationValuesAndLabels(this.ssmt);
+      texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamPowerMeasurement;
+    }
+    Plotly.purge(this.ssmtPieChart.nativeElement);
+    if (valuesAndLabels.length != 0) {
+      this.noData = false;
+      this.cd.detectChanges();
+      var data = [{
+        values: valuesAndLabels.map(val => { return val.value }),
+        labels: valuesAndLabels.map(val => { return val.label }),
+        marker: {
+          colors: graphColors
+        },
+        type: 'pie',
+        textposition: 'auto',
+        insidetextorientation: "horizontal",
+        // automargin: true,
+        // textinfo: 'label+value',
+        hoverformat: '.2r',
+        texttemplate: texttemplate,
+        // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
+        hoverinfo: 'label+percent',
+        // direction: "clockwise",
+        // rotation: 90
+      }];
+      var layout = {
+        width: 500,
+        font: {
+          size: 14,
+        },
+        showlegend: false,
+        margin: { t: 50, b: 110, l: 110, r: 110 },
+      };
+
+      var modebarBtns = {
+        modeBarButtonsToRemove: ['hoverClosestPie'],
+        displaylogo: false,
+        displayModeBar: true
+      };
+      Plotly.react(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
+    } else {
+      this.noData = true;
+      this.cd.detectChanges();
+    }
+  }
 
 }

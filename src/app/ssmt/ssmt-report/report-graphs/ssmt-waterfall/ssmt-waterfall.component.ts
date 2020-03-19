@@ -24,6 +24,8 @@ export class SsmtWaterfallComponent implements OnInit {
   settings: Settings;
   @Input()
   xAxisRange: number;
+  @Input()
+  printView: boolean;
 
   @ViewChild('ssmtWaterfall', { static: false }) ssmtWaterfall: ElementRef;
 
@@ -34,12 +36,18 @@ export class SsmtWaterfallComponent implements OnInit {
 
 
   ngAfterViewInit() {
-    this.createChart();
+    if (!this.printView) {
+      this.createChart();
+    } else {
+      this.createPrintChart();
+    }
   }
 
   ngOnChanges() {
-    if (this.ssmtWaterfall) {
+    if (this.ssmtWaterfall && !this.printView) {
       this.createChart();
+    } else if (this.ssmtWaterfall && this.printView) {
+      this.createPrintChart();
     }
   }
 
@@ -106,37 +114,6 @@ export class SsmtWaterfallComponent implements OnInit {
     Plotly.react(this.ssmtWaterfall.nativeElement, data, layout, configOptions);
   }
 
-  // addData(data: Array<any>, ssmt: SSMT): Array<any> {
-  //   let labelsAndValues: Array<{ value: number, label: string, measure: string, color: string }> = this.getSsmtWatefallData(ssmt);
-  //   data.push(
-  //     {
-  //       // height: 6,
-  //       type: "waterfall",
-  //       orientation: "h",
-  //       measure: labelsAndValues.map(val => { return val.measure }),
-  //       y: labelsAndValues.map(val => { return val.label }),
-  //       x: labelsAndValues.map(val => { return val.value }),
-  //       marker: {
-  //         colors: labelsAndValues.map(val => { return val.color })
-  //       },
-  //       textposition: 'outside',
-  //       hoverinfo: 'all',
-  //       texttemplate: '<b>%{label}:</b> %{value:,.2f}',
-  //       hovertemplate: 'Energy: %{x:.3r}<extra></extra>'
-  //       // connector: {
-  //       //   mode: "between",
-  //       //   line: {
-  //       //     width: 4,
-  //       //     color: "rgb(0, 0, 0)",
-  //       //     dash: 0
-  //       //   }
-  //       // }
-  //     }
-  //   );
-  //   return data;
-  // }
-
-
   getSsmtWatefallData(ssmt: SSMT): Array<{ value: number, label: string, stackTraceValue: number, color: string }> {
     let ssmtLosses: SSMTLosses;
     if (ssmt.name == 'Baseline') {
@@ -148,65 +125,67 @@ export class SsmtWaterfallComponent implements OnInit {
     return labelsAndValues
   }
 
+  createPrintChart() {
+    Plotly.purge(this.ssmtWaterfall.nativeElement);
+    let labelsAndValues: Array<{ value: number, label: string, stackTraceValue: number, color: string }> = this.getSsmtWatefallData(this.ssmt);
+    let stackTraces = {
+      x: labelsAndValues.map(val => { return val.stackTraceValue }),
+      y: labelsAndValues.map(val => { return val.label }),
+      hoverinfo: 'none',
+      // hovertemplate: '%{y:$,.0f}<extra></extra>',
+      // name: "Projected Costs",
+      type: "bar",
+      marker: {
+        color: 'rgba(0,0,0,0)',
+        width: .8
+      },
+      orientation: 'h'
+    };
 
-  // createBarChart() {
-  //   let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
-  //   let projectCostTrace = {
-  //     x: chartData.labels,
-  //     y: chartData.projectedCosts,
-  //     hoverinfo: 'all',
-  //     hovertemplate: '%{y:$,.0f}<extra></extra>',
-  //     name: "Projected Costs",
-  //     type: "bar",
-  //     marker: {
-  //       color: graphColors[0],
-  //       width: .8
-  //     },
-  //   };
-  //   let costSavingsTrace = {
-  //     x: chartData.labels,
-  //     y: chartData.costSavings,
-  //     hoverinfo: 'all',
-  //     hovertemplate: '%{y:$,.0f}<extra></extra>',
-  //     name: "Cost Savings",
-  //     type: "bar",
-  //     marker: {
-  //       color: graphColors[1]
-  //     },
-  //   }
+    let texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamEnergyMeasurement + '/hr';
+    let energyTraces = {
+      x: labelsAndValues.map(val => { return val.value }),
+      y: labelsAndValues.map(val => { return val.label }),
+      hoverinfo: 'all',
+      hovertemplate: '%{x:,.0f}<extra></extra>',
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      texttemplate: texttemplate,
+      name: "Energy Usage",
+      type: "bar",
+      marker: {
+        color: labelsAndValues.map(val => { return val.color }),
+        width: .8
+      },
+      orientation: 'h'
+    };
 
-  //   var data = [projectCostTrace, costSavingsTrace];
-  //   var layout = {
-  //     barmode: 'stack',
-  //     showlegend: true,
-  //     legend: {
-  //       x: .25,
-  //       y: 1.5,
-  //       orientation: "h"
-  //     },
-  //     font: {
-  //       size: 14,
-  //     },
-  //     yaxis: {
-  //       hoverformat: '.3r',
-  //       // automargin: true,
-  //       tickformat: '$.2s',
-  //       fixedrange: true
-  //     },
-  //     xaxis: {
-  //       automargin: true,
-  //       fixedrange: true
-  //     },
-  //     margin: { t: 15, b: 10 }
-  //   };
-  //   var configOptions = {
-  //     modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
-  //     displaylogo: false,
-  //     displayModeBar: true,
-  //     responsive: true
-  //   };
+    var data = [stackTraces, energyTraces];
+    var layout = {
+      width: 1000,
+      barmode: 'stack',
+      showlegend: false,
+      font: {
+        size: 12,
+      },
+      yaxis: {
+        fixedrange: true
+      },
+      xaxis: {
+        range: [0, this.xAxisRange + 100],
+        automargin: true
+      },
+      margin: { t: 30, b: 40, r: 250, l: 150 },
+      clickmode: 'none',
+      dragmode: false
+    };
+    var configOptions = {
+      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      displaylogo: false,
+      displayModeBar: false
+    };
 
-  //   Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);
-  // }
+    Plotly.react(this.ssmtWaterfall.nativeElement, data, layout, configOptions);
+  }
 
 }
