@@ -47,10 +47,10 @@ export class SsmtRollupBarChartComponent implements OnInit {
     let valuesAndLabels = this.getValuesAndLabels();
     let hovertemplate: string;
     if (this.dataOption == 'energy') {
-      hovertemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamEnergyMeasurement + '/hr';
+      hovertemplate = '%{value:,.2f}' + ' ' + this.settings.steamEnergyMeasurement + '/hr <extra></extra>';
 
     } else if (this.dataOption == 'cost') {
-      hovertemplate = '<b>%{label}:</b><br> %{value:$,.2f}';
+      hovertemplate = '%{value:$,.2f}/yr <extra></extra>';
     }
 
     traces = [{
@@ -61,10 +61,6 @@ export class SsmtRollupBarChartComponent implements OnInit {
       hovertemplate: hovertemplate,
       name: 'Baseline',
       type: 'bar',
-      // marker: {
-      //   color: graphColors[0],
-      //   width: .8
-      // }
     },
     {
       x: valuesAndLabels.labels,
@@ -74,27 +70,13 @@ export class SsmtRollupBarChartComponent implements OnInit {
       hovertemplate: hovertemplate,
       name: 'Modification',
       type: 'bar',
-      // marker: {
-      //   color: graphColors[1],
-      //   width: .8
-      // }
     }]
 
-    // valuesAndLabels.forEach(valueAndLabel => {
-    //   traces.push({
-    //     x: [valueAndLabel.baselineLabel, valueAndLabel.modificationLabel],
-    //     y: [valueAndLabel.baselineValue, valueAndLabel.modificationValue],
-    //     text: '%{y:.3r}',
-    //     textposition: 'auto',
-    //     hovertemplate: hovertemplate,
-    //     name: valueAndLabel.name,
-    //     type: 'bar',
-    //   })
-    // });
-
-    let yAxisLabel: string = 'Annual Energy Cost';
+    let yAxisLabel: string = 'Annual Energy Cost ($/yr)';
+    let tickFormat: string = '$.2s';
     if(this.dataOption == 'energy'){
-      yAxisLabel = 'Annual Energy Usage';
+      yAxisLabel = 'Annual Energy Usage (' + this.settings.steamEnergyMeasurement + '/hr)';
+      tickFormat = '.2s'
     }
     let layout = {
       width: this.ssmtRollupBarChart.nativeElement.clientWidth,
@@ -108,7 +90,7 @@ export class SsmtRollupBarChartComponent implements OnInit {
       },
       yaxis: {
         hoverformat: '.3r',
-        tickformat: '$.2s',
+        tickformat: tickFormat,
         title: {
           text: yAxisLabel,
           font: {
@@ -121,7 +103,7 @@ export class SsmtRollupBarChartComponent implements OnInit {
       xaxis: {
         fixedrange: true
       },
-      margin: { t: 30, l: 30, r: 30, b: 50 }
+      margin: { t: 30, l: 100, r: 30, b: 50 }
     };
 
     var configOptions = {
