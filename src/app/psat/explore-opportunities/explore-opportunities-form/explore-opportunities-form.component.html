@@ -10,29 +10,30 @@
     </div>
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
-        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.isVFD"
-          (change)="setVFD()" /> Install VFD
+        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="psat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity"
+          (change)="setVFD()" /> {{ psat.modifications[exploreModIndex].exploreOppsShowVfd.display }}
       </label>
     </div>
-    <app-variable-frequency-drive-form *ngIf="psat.modifications[exploreModIndex].psat.inputs.isVFD" (changeField)="focusField($event)"
+    <app-variable-frequency-drive-form *ngIf="psat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity" (changeField)="focusField($event)"
       (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [baselinePumpFluidForm]="baselinePumpFluidForm"
       [modificationPumpFluidForm]="modificationPumpFluidForm" [baselineFieldDataForm]="baselineFieldDataForm"
       [modificationFieldDataForm]="modificationFieldDataForm" [baselineFieldDataWarnings]="baselineFieldDataWarnings"
       [modificationFieldDataWarnings]="modificationFieldDataWarnings" (openHeadToolModal)="showHeadToolModal()"></app-variable-frequency-drive-form>
 
-    <app-pump-data-form [isVFD]="psat.modifications[exploreModIndex].psat.inputs.isVFD" (changeField)="focusField($event)"
+    <app-pump-data-form [isVFD]="psat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity" (changeField)="focusField($event)"
       (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselinePumpFluidForm"
       [modificationForm]="modificationPumpFluidForm" [psat]="psat"></app-pump-data-form>
 
-    <app-system-data-form [isVFD]="psat.modifications[exploreModIndex].psat.inputs.isVFD" (changeField)="focusField($event)"
+    <app-system-data-form [isVFD]="psat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity" (changeField)="focusField($event)"
       (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselineFieldDataForm"
       [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFieldDataWarnings"
       [modificationWarnings]="modificationFieldDataWarnings" (openHeadToolModal)="showHeadToolModal()"
-      [modificationPsat]="psat.modifications[exploreModIndex].psat"></app-system-data-form>
+      [modificationPsat]="psat.modifications[exploreModIndex].psat"
+      [currentModification]="psat.modifications[exploreModIndex]"></app-system-data-form>
 
     <app-rated-motor-form (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
       [exploreModIndex]="exploreModIndex" [baselineForm]="baselineMotorForm" [modificationForm]="modificationMotorForm"
-      [baselineWarnings]="baselineMotorWarnings" [modificationWarnings]="modificationMotorWarnings"></app-rated-motor-form>
+      [baselineWarnings]="baselineMotorWarnings" [modificationWarnings]="modificationMotorWarnings" [currentModification]="psat.modifications[exploreModIndex]"></app-rated-motor-form>
   </div>
 </div>
 
@@ -49,7 +50,7 @@
         </button>
       </div>
       <div class="modal-body p-0" *ngIf="showHeadTool">
-        <app-head-tool [headToolResults]="headToolResults" [psat]="psat.modifications[this.exploreModIndex].psat"
+        <app-head-tool [headToolResults]="headToolResults" [psat]="psat.modifications[exploreModIndex].psat"
           [settings]="settings" (close)="hideHeadToolModal()" [inAssessment]="true" [assessmentId]="assessmentId"></app-head-tool>
       </div>
     </div>

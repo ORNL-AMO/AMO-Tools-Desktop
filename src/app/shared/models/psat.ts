@@ -95,6 +95,18 @@ export interface Modification {
   notes?: Notes;
   psat?: PSAT;
   exploreOpportunities?: boolean;
+  exploreOppsShowVfd?: SavingsOpportunity,
+  exploreOppsShowMotorDrive?: SavingsOpportunity;
+  exploreOppsShowPumpType?: SavingsOpportunity;
+  exploreOppsShowRatedMotorData?: SavingsOpportunity;
+  exploreOppsShowSystemData?: SavingsOpportunity;
+  exploreOppsShowFlowRate?: SavingsOpportunity;
+  exploreOppsShowHead?: SavingsOpportunity;
+}
+
+export interface SavingsOpportunity {
+  hasOpportunity: boolean,
+  display: string
 }
 
 export interface Notes {

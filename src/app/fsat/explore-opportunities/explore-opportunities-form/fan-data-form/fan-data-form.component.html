@@ -3,15 +3,15 @@
   <label class="group-label" for="modifyMotorDrive">
     <input name="modifyMotorDrive" type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')"
       (change)="toggleMotorDrive()"
-      [(ngModel)]="fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.hasOpportunity" />
-    {{fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.display}}
+      [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowDrive.hasOpportunity" />
+    {{fsat.modifications[exploreModIndex].exploreOppsShowDrive.display}}
   </label>
 </div>
-<li *ngIf="fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.hasOpportunity || isVFD" class="explore-opps-item">
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowDrive.hasOpportunity || isVFD" class="explore-opps-item">
   <form [formGroup]="baselineForm" class="explore-opps-form">
     <div class="text-center">
       <label for="baselineMotorDrive" class="baseline-value-label">
-        <span *ngIf="!fsat.modifications[this.exploreModIndex].exploreOppsShowDrive.hasOpportunity || !isVFD">
+        <span *ngIf="!fsat.modifications[exploreModIndex].exploreOppsShowDrive.hasOpportunity || !isVFD">
           Baseline 
         </span> Motor Drive</label>
       <div class="text-muted text-center baseline-value-input">{{ drives[baselineForm.value.drive].display}}</div>
@@ -72,15 +72,15 @@
   <label class="group-label" for="showFanType">
     <input name="showFanType" type="checkbox" id="showFanType" (focus)="focusField('fanType')"
       (change)="toggleFanType()"
-      [(ngModel)]="fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity" />
-    {{fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.display}}
+      [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowFanType.hasOpportunity" />
+    {{fsat.modifications[exploreModIndex].exploreOppsShowFanType.display}}
   </label>
 </div>
-<li *ngIf="fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity || isVFD" class="explore-opps-item">
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowFanType.hasOpportunity || isVFD" class="explore-opps-item">
   <form [formGroup]="baselineForm" class="explore-opps-form">
     <div class="text-center">
       <label for="baselineFanType" class="baseline-value-label">
-        <span *ngIf="!fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity || !isVFD">
+        <span *ngIf="!fsat.modifications[exploreModIndex].exploreOppsShowFanType.hasOpportunity || !isVFD">
           Baseline 
         </span> Fan Type</label>
       <div class="text-muted text-center baseline-value-input">{{ fanTypes[baselineForm.value.fanType].display}}</div>
@@ -89,7 +89,7 @@
   <form [formGroup]="modificationForm" class="explore-opps-form">
     <div class="form-group explore-opps-formgroup" *ngIf="modificationForm.controls.fanType.value != 12">
       <label for="modificationFanType" class="mod-value-label">
-        <span *ngIf="!fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity || !isVFD">
+        <span *ngIf="!fsat.modifications[exploreModIndex].exploreOppsShowFanType.hasOpportunity || !isVFD">
           Modification 
         </span> Fan Type</label>
       <select class="form-control w-100" name="modificationFanType" id="modificationFanType" (change)="getFanEfficiency()" (focus)="focusField('fanType')"
@@ -100,7 +100,7 @@
     <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.fanEfficiency.invalid}">
       <div>
         <label for="modificationFanSpecified" class="mod-value-label">
-          <span *ngIf="!fsat.modifications[this.exploreModIndex].exploreOppsShowFanType.hasOpportunity || !isVFD">
+          <span *ngIf="!fsat.modifications[exploreModIndex].exploreOppsShowFanType.hasOpportunity || !isVFD">
             Modification 
           </span> Fan Efficiency
           <!-- <a class="form-text small click-link" id="pumpTypeHelp" (click)="enableFanType()" *ngIf="modificationForm.controls.fanType.value == 12">Optimize Fan</a> -->
@@ -127,7 +127,7 @@
     </div>
   </form>
 </li>
-<li *ngIf="showFanType || isVFD">
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowFanType || isVFD">
   <div class="text-center small help-text" *ngIf="modificationForm.controls.fanType.value == 12">
     The efficiency of your fan has been calculated based on your system setup. Either directly modify your
     efficiency or click <strong>"Optimize Fan"</strong> to estimate your pump efficiency based on a different pump type.

@@ -193,6 +193,36 @@
           <span *ngIf="modification.psat.inputs.pumpType != 11" class="text-muted">*Optimized</span>
         </td>
       </tr>
+      <tr>
+        <th>Selected Energy Projects</th>
+        <th>&mdash;</th>
+        <th *ngFor="let modification of psat.modifications; let index = index;">
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity">{{ modification.exploreOppsShowVfd.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowMotorDrive && modification.exploreOppsShowMotorDrive.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity">
+            {{ modification.exploreOppsShowMotorDrive.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowPumpType && modification.exploreOppsShowPumpType.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity">{{ modification.exploreOppsShowPumpType.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowRatedMotorData && modification.exploreOppsShowRatedMotorData.hasOpportunity">{{ modification.exploreOppsShowRatedMotorData.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowSystemData && modification.exploreOppsShowSystemData.hasOpportunity">{{ modification.exploreOppsShowSystemData.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowFlowRate && modification.exploreOppsShowFlowRate.hasOpportunity">{{ modification.exploreOppsShowFlowRate.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowHead && modification.exploreOppsShowHead.hasOpportunity">{{ modification.exploreOppsShowHead.display }}</span>
+        </th>
+      </tr>
+      <tr>
+        <th>Modifications</th>
+        <th>&mdash;</th>
+        <th *ngFor="let modification of psat.modifications; let index = index;">
+          <div *ngFor="let modificationMade of getModificationsMadeList(modification.psat)">
+            {{modificationMade}}<br>
+          </div>
+        </th>
+      </tr>
       <tr class="hide-print" *ngIf="inRollup">
         <td>Use for Summary</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">

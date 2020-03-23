@@ -82,6 +82,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   initForms() {
+    if (!this.psat.inputs.isVFD && !this.psat.modifications[this.exploreModIndex].exploreOppsShowVfd) {
+      this.psat.modifications[this.exploreModIndex].exploreOppsShowVfd = {hasOpportunity: false, display: "Install VFD"};
+    }
     this.baselineMotorForm = this.motorService.getFormFromObj(this.psat.inputs);
     this.baselineMotorForm.disable();
     this.modificationMotorForm = this.motorService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
@@ -128,7 +131,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   setVFD(){
-    if(this.psat.modifications[this.exploreModIndex].psat.inputs.isVFD){
+    if(this.psat.modifications[this.exploreModIndex].exploreOppsShowVfd.hasOpportunity){
       this.modificationPumpFluidForm.controls.drive.patchValue(4);
       this.modificationPumpFluidForm.controls.specifiedDriveEfficiency.patchValue(95);
     }else{

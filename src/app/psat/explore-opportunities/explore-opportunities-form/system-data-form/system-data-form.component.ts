@@ -3,7 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { FieldDataWarnings } from '../../../psat-warning.service';
 import { FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { PSAT } from '../../../../shared/models/psat';
+import { PSAT, Modification } from '../../../../shared/models/psat';
 @Component({
     selector: 'app-system-data-form',
     templateUrl: './system-data-form.component.html',
@@ -32,10 +32,8 @@ export class SystemDataFormComponent implements OnInit {
     openHeadToolModal = new EventEmitter<boolean>();
     @Input()
     modificationPsat: PSAT;
-
-    showSystemData: boolean = false;
-    showFlowRate: boolean = false;
-    showHead: boolean = false;
+    @Input()
+    currentModification: Modification;
 
     @ViewChild('formElement', { static: false }) formElement: ElementRef;
     @HostListener('window:resize', ['$event'])
@@ -74,35 +72,37 @@ export class SystemDataFormComponent implements OnInit {
         this.initFlowRate();
         this.initHead();
         this.initSystemData();
+        this.calculate();
     }
 
     initFlowRate() {
         if (this.baselineForm.controls.flowRate.value != this.modificationForm.controls.flowRate.value) {
-            this.showFlowRate = true;
+            this.currentModification.exploreOppsShowFlowRate = { hasOpportunity: true, display: 'Reduce System Flow Rate' }; 
+
         } else {
-            this.showFlowRate = false;
+            this.currentModification.exploreOppsShowFlowRate = { hasOpportunity: false, display: 'Reduce System Flow Rate' }; 
         }
     }
 
     initHead() {
         if (this.baselineForm.controls.head.value != this.modificationForm.controls.head.value) {
-            this.showHead = true;
+            this.currentModification.exploreOppsShowHead = { hasOpportunity: true, display: 'Reduce System Head Requirement' }; 
         } else {
-            this.showHead = false;
+            this.currentModification.exploreOppsShowHead = { hasOpportunity: false, display: 'Reduce System Head Requirement' }; 
         }
     }
 
     initSystemData() {
         if (this.baselineForm.controls.costKwHr.value != this.modificationForm.controls.costKwHr.value
             || this.baselineForm.controls.operatingHours.value != this.modificationForm.controls.operatingHours.value) {
-            this.showSystemData = true;
+            this.currentModification.exploreOppsShowSystemData = { hasOpportunity: true, display: 'Adjust Operational Data' }; 
         } else {
-            this.showSystemData = false;
+            this.currentModification.exploreOppsShowSystemData = { hasOpportunity: false, display: 'Adjust Operational Data' }; 
         }
     }
 
     toggleSystemData() {
-        if (this.showSystemData == false) {
+        if (this.currentModification.exploreOppsShowSystemData.hasOpportunity == false) {
             this.modificationForm.controls.operatingHours.patchValue(this.baselineForm.controls.operatingHours.value);
             this.modificationForm.controls.costKwHr.patchValue(this.baselineForm.controls.costKwHr.value);
             this.calculate();
@@ -110,14 +110,14 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     toggleHead() {
-        if (this.showHead == false) {
+        if (this.currentModification.exploreOppsShowHead.hasOpportunity == false) {
             this.modificationForm.controls.head.patchValue(this.baselineForm.controls.head.value);
             this.calculate();
         }
     }
 
     toggleFlowRate() {
-        if (this.showFlowRate == false) {
+        if (this.currentModification.exploreOppsShowFlowRate.hasOpportunity == false) {
             this.modificationForm.controls.flowRate.patchValue(this.baselineForm.controls.flowRate.value);
             this.calculate();
         }
