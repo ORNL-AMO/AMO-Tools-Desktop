@@ -2,14 +2,29 @@
   <div class="col-12">
     <div class="d-flex flex-column">
       <label class="group-label">Energy Use</label>
-      <app-ssmt-rollup-graphs [printView]="false" [settings]="settings"></app-ssmt-rollup-graphs>
+      <div class="row">
+        <div class="col-5">
+          <div class="d-flex flex-column w-100 pt-2">
+            <div class="btn-group btn-group-sm align-self-center pb-2">
+              <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('cost')"
+                [ngClass]="{'active': dataOption == 'cost'}">Energy Cost</button>
+              <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('energy')"
+                [ngClass]="{'active': dataOption == 'energy'}">Energy Used</button>
+            </div>
+            <app-ssmt-energy-use-pie [dataOption]="dataOption" [settings]="settings"></app-ssmt-energy-use-pie>
+          </div>
+        </div>
+        <div class="col-7">
+          <app-ssmt-rollup-energy-table [settings]="settings"></app-ssmt-rollup-energy-table>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- <div class="col-12">
+  <div class="col-12">
     <div class="d-flex flex-column">
       <label class="group-label">Steam Systems Summary</label>
-      <app-ssmt-rollup-steam-summary [printView]="false" [settings]="settings"></app-ssmt-rollup-steam-summary>
+      <app-ssmt-rollup-bar-chart [settings]="settings" [dataOption]="dataOption"></app-ssmt-rollup-bar-chart>
     </div>
-  </div> -->
+  </div>
 </div>

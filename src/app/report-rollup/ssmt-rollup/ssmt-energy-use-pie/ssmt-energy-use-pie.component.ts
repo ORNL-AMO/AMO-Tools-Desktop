@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { ReportRollupService } from '../../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import * as Plotly from 'plotly.js';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { SsmtResultsData } from '../../../report-rollup-models';
-import { Settings } from '../../../../shared/models/settings';
+import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { Settings } from '../../../shared/models/settings';
+import { SsmtResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-ssmt-energy-use-pie',
