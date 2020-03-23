@@ -29,7 +29,7 @@ export class SsmtRollupBarChartComponent implements OnInit {
     if (!this.printView) {
       this.createChart();
     } else {
-      // this.createPrintChart();
+      this.createPrintChart();
     }
   }
 
@@ -37,7 +37,7 @@ export class SsmtRollupBarChartComponent implements OnInit {
     if (this.ssmtRollupBarChart && !this.printView) {
       this.createChart();
     } else if (this.ssmtRollupBarChart && this.printView) {
-      // this.createPrintChart();
+      this.createPrintChart();
     }
   }
 
@@ -182,4 +182,79 @@ export class SsmtRollupBarChartComponent implements OnInit {
       modificationValues: modificationValues
     };
   }
+
+  createPrintChart() {
+    let traces = new Array();
+    let valuesAndLabels = this.getValuesAndLabels();
+    // let hovertemplate: string;
+    // if (this.dataOption == 'energy') {
+    //   hovertemplate = '%{value:,.2f}' + ' ' + this.settings.steamEnergyMeasurement + '/hr <extra></extra>';
+
+    // } else if (this.dataOption == 'cost') {
+    //   hovertemplate = '%{value:$,.2f}/yr <extra></extra>';
+    // }
+
+    traces = [{
+      x: valuesAndLabels.labels,
+      y: valuesAndLabels.baselineValues,
+      text: '',
+      textposition: 'auto',
+      // hovertemplate: hovertemplate,
+      name: 'Baseline',
+      type: 'bar',
+    },
+    {
+      x: valuesAndLabels.labels,
+      y: valuesAndLabels.modificationValues,
+      text: '',
+      textposition: 'auto',
+      // hovertemplate: hovertemplate,
+      name: 'Modification',
+      type: 'bar',
+    }]
+
+    let yAxisLabel: string = 'Annual Energy Cost ($/yr)';
+    let tickFormat: string = '$.2s';
+    if(this.dataOption == 'energy'){
+      yAxisLabel = 'Annual Energy Usage (' + this.settings.steamEnergyMeasurement + '/hr)';
+      tickFormat = '.2s'
+    }
+    let layout = {
+      // width: this.ssmtRollupBarChart.nativeElement.clientWidth,
+      barmode: 'group',
+      showlegend: true,
+      legend: {
+        orientation: "h"
+      },
+      font: {
+        size: 16,
+      },
+      yaxis: {
+        hoverformat: '.3r',
+        tickformat: tickFormat,
+        title: {
+          text: yAxisLabel,
+          font: {
+            family: 'Arial',
+            size: 16
+          }
+        },
+        fixedrange: true
+      },
+      xaxis: {
+        fixedrange: true
+      },
+      
+      width: 1000,
+      margin: { t: 20, l: 100, r: 30, b: 40 }
+    };
+
+    var configOptions = {
+      // modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      displaylogo: false,
+      displayModeBar: false,
+    };
+    Plotly.react(this.ssmtRollupBarChart.nativeElement, traces, layout, configOptions);
+  }
+
 }

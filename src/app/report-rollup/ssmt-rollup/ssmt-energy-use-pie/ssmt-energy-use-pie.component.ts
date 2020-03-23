@@ -29,7 +29,7 @@ export class SsmtEnergyUsePieComponent implements OnInit {
     if (!this.printView) {
       this.createChart();
     } else {
-      // this.createPrintChart();
+      this.createPrintChart();
     }
   }
 
@@ -37,7 +37,7 @@ export class SsmtEnergyUsePieComponent implements OnInit {
     if (this.ssmtEnergyPie && !this.printView) {
       this.createChart();
     } else if (this.ssmtEnergyPie && this.printView) {
-      // this.createPrintChart();
+      this.createPrintChart();
     }
   }
 
@@ -105,5 +105,45 @@ export class SsmtEnergyUsePieComponent implements OnInit {
       })
     }
     return valuesAndLabels;
+  }
+
+  createPrintChart(){
+    let valuesAndLabels: Array<{ value: number, label: string }> = this.getValuesAndLabels();
+    let texttemplate: string;
+    if (this.dataOption == 'energy') {
+      texttemplate = '<b>%{label}:</b><br> %{value:,.2f}' + ' ' + this.settings.steamEnergyMeasurement + '/hr';
+
+    } else if (this.dataOption == 'cost') {
+      texttemplate = '<b>%{label}:</b><br> %{value:$,.2f}';
+    }
+    Plotly.purge(this.ssmtEnergyPie.nativeElement);
+    var data = [{
+      values: valuesAndLabels.map(val => { return val.value }),
+      labels: valuesAndLabels.map(val => { return val.label }),
+      marker: {
+        colors: graphColors
+      },
+      type: 'pie',
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      hoverformat: '.2r',
+      texttemplate: texttemplate,
+      hoverinfo: 'label+percent'
+    }];
+    var layout = {
+      width: 500,
+      font: {
+        size: 14,
+      },
+      showlegend: false,
+      margin: { t: 50, b: 110, l: 125, r: 125 },
+    };
+
+    var modebarBtns = {
+      modeBarButtonsToRemove: ['hoverClosestPie'],
+      displaylogo: false,
+      displayModeBar: true
+    };
+    Plotly.react(this.ssmtEnergyPie.nativeElement, data, layout, modebarBtns);
   }
 }

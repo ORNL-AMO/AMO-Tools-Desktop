@@ -111,11 +111,12 @@ export class ReportRollupModalsComponent implements OnInit {
   }
 
   showPrintModal() {
-    this.showPsatReportOptions = this.reportRollupService.numPsats != 0;
-    this.showFsatReportOptions = this.reportRollupService.numFsats != 0;
-    this.showSsmtReportOptions = this.reportRollupService.numSsmt != 0;
-    this.showPhastReportOptions = this.reportRollupService.numPhasts != 0;
-    this.showTHReportOptions = this.reportRollupService.numTreasureHunt != 0;
+    // this.showPsatReportOptions = this.reportRollupService.numPsats != 0;
+    // this.showFsatReportOptions = this.reportRollupService.numFsats != 0;
+    // this.showSsmtReportOptions = this.reportRollupService.numSsmt != 0;
+    // this.showPhastReportOptions = this.reportRollupService.numPhasts != 0;
+    // this.showTHReportOptions = this.reportRollupService.numTreasureHunt != 0;
+    this.printOptionsMenuService.printContext.next('reportRollup');
     this.showPrintMenu = true;
   }
 
