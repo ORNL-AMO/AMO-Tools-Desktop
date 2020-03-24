@@ -24,7 +24,7 @@ export class PsatReportSankeyComponent implements OnInit {
     this.psat1 = this.assessment.psat;
     this.setPsat1Savings();
     if (this.assessment.psat.modifications.length != 0) {
-      this.psat2 = this.assessment.psat.modifications[0].psat;
+      this.psat2 = this.assessment.psat.modifications.find(modification => {return modification.psat.valid.isValid == true}).psat;
       this.setPsat2Savings();
     }
   }

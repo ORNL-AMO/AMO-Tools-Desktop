@@ -10,7 +10,15 @@ export interface PSAT {
   optimizationRating?: number;
   setupDone?: boolean;
   operatingHours?: OperatingHours;
+  valid?: PsatValid;
 }
+
+export interface PsatValid {
+  isValid: boolean,
+  pumpFluidValid: boolean,
+  motorValid: boolean,
+  fieldDataValid: boolean
+};
 
 export interface PsatInputs {
   pump_style?: number;
