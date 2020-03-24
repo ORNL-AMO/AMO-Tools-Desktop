@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { PSAT, PsatOutputs, PsatInputs } from '../../shared/models/psat';
+import { PSAT, PsatOutputs, PsatInputs, PsatValid } from '../../shared/models/psat';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
@@ -122,8 +122,8 @@ export class PsatSankeyComponent implements OnInit {
     this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
     if (!this.psat.outputs) {
       //create copies of inputs to use for calcs
-      let isPsatValid: boolean = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
-      if (isPsatValid) {
+      let isPsatValid: PsatValid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
+      if (isPsatValid.isValid) {
         if (this.isBaseline) {
           this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
         } else {

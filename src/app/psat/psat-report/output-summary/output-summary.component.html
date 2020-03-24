@@ -6,8 +6,10 @@
     <thead>
       <tr>
         <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}"></th>
-        <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
-        <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}" *ngFor="let modification of psat.modifications; let index = index;"
+        <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
+        <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}"
+          *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.name}}
         </th>
       </tr>
@@ -18,18 +20,24 @@
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash; &mdash;
         </td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <div class="hide-print" *ngIf="modification.psat.isValid && modification.psat.outputs.percent_annual_savings">
-              <app-percent-graph [value]="modification.psat.outputs.percent_annual_savings"></app-percent-graph>
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <div class="hide-print"
+            *ngIf="modification.psat.valid.isValid && modification.psat.outputs.percent_annual_savings">
+            <app-percent-graph [value]="modification.psat.outputs.percent_annual_savings"></app-percent-graph>
           </div>
-          <div class="show-print text-center" *ngIf="modification.psat.isValid && modification.psat.outputs.percent_annual_savings">
+          <div class="show-print text-center"
+            *ngIf="modification.psat.valid.isValid && modification.psat.outputs.percent_annual_savings">
             {{modification.psat.outputs.percent_annual_savings | number:'1.0'}} %
           </div>
-          <div *ngIf="modification.psat.isValid && !modification.psat.outputs.percent_annual_savings">
+          <div *ngIf="modification.psat.valid.isValid && !modification.psat.outputs.percent_annual_savings">
             &mdash; &mdash;
           </div>
-          <div class="alert-danger" *ngIf="!modification.psat.isValid">
-            Invalid System Setup
+          <div class="alert-danger" *ngIf="!modification.psat.valid.isValid">
+            Invalid System Setup:<br>
+            <span *ngIf="!modification.psat.valid.pumpFluidValid">Errors found in Pump Fluid Data<br></span>
+            <span *ngIf="!modification.psat.valid.motorValid">Errors found in Motor Data<br></span>
+            <span *ngIf="!modification.psat.valid.fieldDataValid">Errors found in Field Data<br></span>
           </div>
         </td>
       </tr>
@@ -37,35 +45,40 @@
         <td>Pump efficiency (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.pump_efficiency |
           number:'1.0-1'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.outputs.pump_efficiency
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.outputs.pump_efficiency
           | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Motor rated power ({{settings.powerMeasurement}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.motor_rated_power |
           number:'2.0-0'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.outputs.motor_rated_power
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.outputs.motor_rated_power
           | number:'2.0-0'}}</td>
       </tr>
       <tr>
         <td>Motor shaft power ({{settings.powerMeasurement}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.motor_shaft_power |
           number:'1.0-1'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.outputs.motor_shaft_power
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.outputs.motor_shaft_power
           | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Pump shaft power ({{settings.powerMeasurement}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.pump_shaft_power |
           number:'1.0-1'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.outputs.pump_shaft_power
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.outputs.pump_shaft_power
           | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td>Motor efficiency (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.motor_efficiency |
           number:'1.0-1'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.motor_efficiency">{{modification.psat.outputs.motor_efficiency |
             number:'1.0-1'}}</span>
           <span *ngIf="!modification.psat.outputs.motor_efficiency">&mdash;</span>
@@ -75,7 +88,8 @@
         <td>Motor power factor (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.motor_power_factor |
           number:'1.0-1'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.motor_power_factor">{{modification.psat.outputs.motor_power_factor |
             number:'1.0-1'}}</span>
           <span *ngIf="!modification.psat.outputs.motor_power_factor">&mdash;</span>
@@ -85,7 +99,8 @@
         <td>Percent Loaded (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.load_factor*100 |
           number:'1.0-1'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.load_factor">{{modification.psat.outputs.load_factor * 100 |
             number:'1.0-1'}}</span>
           <span *ngIf="!modification.psat.outputs.load_factor">&mdash;</span>
@@ -95,7 +110,8 @@
         <td>Drive efficiency (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.drive_efficiency |
           number:'1.0-1'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.drive_efficiency">{{modification.psat.outputs.drive_efficiency |
             number:'1.0-1'}}</span>
           <span *ngIf="!modification.psat.outputs.drive_efficiency">&mdash;</span>
@@ -105,7 +121,8 @@
         <td>Motor current (amps)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.motor_current |
           number:'1.0-1'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.motor_current">{{modification.psat.outputs.motor_current |
             number:'1.0-1'}}</span>
           <span *ngIf="!modification.psat.outputs.motor_current">&mdash;</span>
@@ -115,7 +132,8 @@
         <td>Motor power (kW)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.motor_power |
           number:'1.0-1'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.motor_power">{{modification.psat.outputs.motor_power |
             number:'1.0-1'}}</span>
           <span *ngIf="!modification.psat.outputs.motor_power">&mdash;</span>
@@ -125,7 +143,8 @@
         <td>Annual Energy (MWh)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.annual_energy |
           number:'2.0-0'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.annual_energy">{{modification.psat.outputs.annual_energy |
             number:'2.0-0'}}</span>
           <span *ngIf="!modification.psat.outputs.annual_energy">&mdash;</span>
@@ -134,7 +153,8 @@
       <tr class="callout">
         <td>Annual Energy Savings (MWh)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="getDiff(psat.outputs.annual_energy, modification.psat.outputs.annual_energy)">{{getDiff(psat.outputs.annual_energy,
             modification.psat.outputs.annual_energy) | sigFigs:'3'}}</span>
           <span *ngIf="!getDiff(psat.outputs.annual_energy, modification.psat.outputs.annual_energy)">&mdash;</span>
@@ -144,7 +164,8 @@
         <td>Annual Cost ($)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.annual_cost |
           currency:'USD':'symbol':'2.0-0'}}</td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.annual_cost">{{modification.psat.outputs.annual_cost |
             currency:'USD':'symbol':'2.0-0'}}</span>
           <span *ngIf="!modification.psat.outputs.annual_cost">&mdash;</span>
@@ -157,7 +178,8 @@
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash;
         </td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'positive-savings': modification.psat.outputs.percent_annual_savings > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="getDiff(psat.outputs.annual_cost, modification.psat.outputs.annual_cost)">{{getDiff(psat.outputs.annual_cost,
             modification.psat.outputs.annual_cost)| currency:'USD':'symbol':'2.0-0'}}</span>
           <span *ngIf="!getDiff(psat.outputs.annual_cost, modification.psat.outputs.annual_cost)">&mdash;</span>
@@ -170,7 +192,8 @@
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash;
         </td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.inputs.implementationCosts">{{modification.psat.inputs.implementationCosts|
             currency:'USD':'symbol':'2.0-0'}}</span>
           <span *ngIf="!modification.psat.inputs.implementationCosts">&mdash;</span>
@@ -183,7 +206,8 @@
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash;
         </td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.inputs.implementationCosts">{{getPaybackPeriod(modification.psat) |
             sigFigs:'5'}}</span>
           <span *ngIf="!modification.psat.inputs.implementationCosts">&mdash;</span>
@@ -192,7 +216,8 @@
       <tr>
         <td></td>
         <td></td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.inputs.pumpType != 11" class="text-muted">*Optimized</span>
         </td>
       </tr>
@@ -202,7 +227,8 @@
           <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="-1"
             [(ngModel)]="selectedModificationIndex">
         </td>
-        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        <td *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index"
             [(ngModel)]="selectedModificationIndex">
         </td>

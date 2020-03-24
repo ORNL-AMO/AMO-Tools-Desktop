@@ -53,9 +53,13 @@ export class PsatReportGraphsComponent implements OnInit {
     this.selectedBaselineData = this.allChartData[0];
     if (this.psat.modifications && this.psat.modifications.length != 0) {
       this.psat.modifications.forEach(modification => {
-        this.addChartData(JSON.parse(JSON.stringify(modification.psat.outputs)), modification.psat.name, modification);
+        if (modification.psat.valid.isValid) {
+          this.addChartData(JSON.parse(JSON.stringify(modification.psat.outputs)), modification.psat.name, modification);
+        }
       });
-      this.selectedModificationData = this.allChartData[1];
+      if (this.allChartData.length > 1) {
+        this.selectedModificationData = this.allChartData[1];
+      }
     }
   }
 

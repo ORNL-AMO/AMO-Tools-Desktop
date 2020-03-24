@@ -8,14 +8,15 @@
           <option *ngFor="let modification of assessment.psat.modifications" [ngValue]="modification.psat">
             {{modification.psat.name}}</option>
         </select>
-        <div class="p-2" [ngClass]="{
+        <div *ngIf="psat1.valid.isValid" class="p-2" [ngClass]="{
           'negative-savings': psat1CostSavings < 0,
           'positive-savings': psat1CostSavings > 0
         }">Cost Savings: {{ psat1CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
       </div>
       <div class="w-75">
-        <app-psat-sankey [psat]="psat1" [location]="'baseline'" [assessmentName]="assessmentName" [settings]="settings"
-          [isBaseline]="true"></app-psat-sankey>
+        <app-psat-sankey *ngIf="psat1.valid.isValid" [psat]="psat1" [location]="'baseline'" [assessmentName]="assessmentName"
+          [settings]="settings" [isBaseline]="true"></app-psat-sankey>
+        <div *ngIf="psat1.valid.isValid == false" class="alert-danger">Invalid System Setup</div>
       </div>
     </div>
     <hr>
@@ -27,14 +28,15 @@
           <option *ngFor="let modification of assessment.psat.modifications" [ngValue]="modification.psat">
             {{modification.psat.name}}</option>
         </select>
-        <div class="p-2" [ngClass]="{
+        <div *ngIf="psat2.valid.isValid" class="p-2" [ngClass]="{
           'negative-savings': psat2CostSavings < 0,
           'positive-savings': psat2CostSavings > 0
         }">Cost Savings: {{ psat2CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
       </div>
       <div class="w-75">
-        <app-psat-sankey [psat]="psat2" [location]="'modification'" [assessmentName]="assessmentName"
-          [settings]="settings" [isBaseline]="false"></app-psat-sankey>
+        <app-psat-sankey *ngIf="psat2.valid.isValid" [psat]="psat2" [location]="'modification'"
+          [assessmentName]="assessmentName" [settings]="settings" [isBaseline]="false"></app-psat-sankey>
+        <div *ngIf="psat2.valid.isValid == false" class="alert-danger">Invalid System Setup</div>
       </div>
     </div>
   </div>

@@ -96,12 +96,7 @@ export class PsatReportGraphsPrintComponent implements OnInit {
     barChartLabels: Array<string>,
     barChartValues: Array<number>
   } {
-    return {
-      name: 'Baseline',
-      pieChartLabels: this.allChartData[0].pieChartLabels,
-      pieChartValues: this.allChartData[0].pieChartValues,
-      barChartLabels: this.allChartData[0].barChartLabels,
-      barChartValues: this.allChartData[0].barChartValues
-    }
+    let baselineGraphData = this.allChartData.find(dataItem => { return dataItem.name == 'Baseline' });
+    return baselineGraphData;
   }
 }
