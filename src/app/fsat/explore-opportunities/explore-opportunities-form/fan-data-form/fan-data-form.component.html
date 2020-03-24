@@ -127,7 +127,7 @@
     </div>
   </form>
 </li>
-<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowFanType || isVFD">
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowFanType.hasOpportunity || isVFD">
   <div class="text-center small help-text" *ngIf="modificationForm.controls.fanType.value == 12">
     The efficiency of your fan has been calculated based on your system setup. Either directly modify your
     efficiency or click <strong>"Optimize Fan"</strong> to estimate your pump efficiency based on a different pump type.

@@ -82,7 +82,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   initForms() {
-    if (!this.psat.inputs.isVFD && !this.psat.modifications[this.exploreModIndex].exploreOppsShowVfd) {
+    if (this.psat.modifications[this.exploreModIndex].psat.inputs.isVFD) {
+      this.psat.modifications[this.exploreModIndex].exploreOppsShowVfd = {hasOpportunity: true, display: "Install VFD"};
+      delete this.psat.modifications[this.exploreModIndex].psat.inputs.isVFD;
+    } else if (!this.psat.modifications[this.exploreModIndex].exploreOppsShowVfd) {
       this.psat.modifications[this.exploreModIndex].exploreOppsShowVfd = {hasOpportunity: false, display: "Install VFD"};
     }
     this.baselineMotorForm = this.motorService.getFormFromObj(this.psat.inputs);

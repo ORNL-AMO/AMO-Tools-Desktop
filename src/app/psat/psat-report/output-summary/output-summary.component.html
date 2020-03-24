@@ -205,13 +205,13 @@
           <span class="d-block"
             *ngIf="modification.exploreOppsShowPumpType && modification.exploreOppsShowPumpType.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity">{{ modification.exploreOppsShowPumpType.display }}</span>
           <span class="d-block"
-            *ngIf="modification.exploreOppsShowRatedMotorData && modification.exploreOppsShowRatedMotorData.hasOpportunity">{{ modification.exploreOppsShowRatedMotorData.display }}</span>
+            *ngIf="modification.exploreOppsShowRatedMotorData && modification.exploreOppsShowRatedMotorData.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity">{{ modification.exploreOppsShowRatedMotorData.display }}</span>
           <span class="d-block"
             *ngIf="modification.exploreOppsShowSystemData && modification.exploreOppsShowSystemData.hasOpportunity">{{ modification.exploreOppsShowSystemData.display }}</span>
           <span class="d-block"
-            *ngIf="modification.exploreOppsShowFlowRate && modification.exploreOppsShowFlowRate.hasOpportunity">{{ modification.exploreOppsShowFlowRate.display }}</span>
+            *ngIf="modification.exploreOppsShowFlowRate && modification.exploreOppsShowFlowRate.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity">{{ modification.exploreOppsShowFlowRate.display }}</span>
           <span class="d-block"
-            *ngIf="modification.exploreOppsShowHead && modification.exploreOppsShowHead.hasOpportunity">{{ modification.exploreOppsShowHead.display }}</span>
+            *ngIf="modification.exploreOppsShowHead && modification.exploreOppsShowHead.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity">{{ modification.exploreOppsShowHead.display }}</span>
         </th>
       </tr>
       <tr>
