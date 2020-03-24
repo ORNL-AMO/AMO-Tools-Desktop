@@ -149,9 +149,7 @@ export class UtilityBarChartComponent implements OnInit {
     };
     var configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
-      displaylogo: false,
-      displayModeBar: true,
-      responsive: true
+      displaylogo: false
     };
 
     Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);

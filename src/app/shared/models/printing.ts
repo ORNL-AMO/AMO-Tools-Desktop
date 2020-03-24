@@ -3,7 +3,7 @@ export interface PrintOptions {
     printPsatRollup: boolean;
     printPhastRollup: boolean;
     printFsatRollup: boolean;
-    // this.printTreasureHuntRollup: boolean;
+    printTreasureHuntRollup: boolean;
     // this.printSsmtRollup: boolean;
     printReportGraphs: boolean;
     printReportSankey: boolean;

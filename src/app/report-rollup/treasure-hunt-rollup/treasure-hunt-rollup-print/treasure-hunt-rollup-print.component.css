@@ -1,3 +1,7 @@
+.group-label{
+    font-size: 22px;
+}
+
 @media print {
     .page-break-before{
         page-break-before: always;
@@ -7,8 +11,4 @@
         font-size: 40px !important;
         font-weight: bold;
     }
-}
-
-.group-label{
-    font-size: 22px;
 }
