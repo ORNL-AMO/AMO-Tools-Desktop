@@ -229,7 +229,7 @@
         </td>
         <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <input *ngIf="modification.valid.isValid" name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index"
+          <input *ngIf="modification.psat.valid.isValid" name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index"
             [(ngModel)]="selectedModificationIndex">
         </td>
       </tr>

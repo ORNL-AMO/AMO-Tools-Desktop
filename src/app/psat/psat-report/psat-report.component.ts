@@ -158,7 +158,6 @@ export class PsatReportComponent implements OnInit {
       modification.psat.outputs = this.getResults(modification.psat, this.settings, false);
       modification.psat.outputs.percent_annual_savings = this.getSavingsPercentage(this.assessment.psat, modification.psat);
     });
-    console.log(this.assessment);
   }
 
   getResults(psat: PSAT, settings: Settings, isBaseline: boolean): PsatOutputs {
