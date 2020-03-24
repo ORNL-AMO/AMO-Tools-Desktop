@@ -5,13 +5,13 @@
       id="modifyMotorDrive"
       (focus)="focusField('drive')"
       (change)="toggleMotorDrive()"
-      [(ngModel)]="showMotorDrive"
+      [(ngModel)]="psat.modifications[exploreModIndex].exploreOppsShowMotorDrive.hasOpportunity"
     />
-    Install More Efficient Drive Type
+    {{psat.modifications[exploreModIndex].exploreOppsShowMotorDrive.display}}
   </label>
 </div>
 <!--Motor Drive-->
-<li *ngIf="showMotorDrive || isVFD" class="explore-opps-item">
+<li *ngIf="psat.modifications[exploreModIndex].exploreOppsShowMotorDrive.hasOpportunity || isVFD" class="explore-opps-item">
   <!--Baseline Motor Drive-->
   <form [formGroup]="baselineForm" class="explore-opps-form">
     <!--drive-->
@@ -160,14 +160,14 @@
       id="modifyPumpType"
       (focus)="focusField('pumpType')"
       (change)="togglePumpType()"
-      [(ngModel)]="showPumpType"
+      [(ngModel)]="psat.modifications[exploreModIndex].exploreOppsShowPumpType.hasOpportunity"
     />
-    Install More Efficient Pump
+    {{psat.modifications[exploreModIndex].exploreOppsShowPumpType.display}}
   </label>
 </div>
 <!-- <ul> -->
 <!--Pump Type-->
-<li *ngIf="showPumpType || isVFD" class="explore-opps-item">
+<li *ngIf="psat.modifications[exploreModIndex].exploreOppsShowPumpType.hasOpportunity || isVFD" class="explore-opps-item">
   <!--Baseline Pump Type (cannot be specified)-->
   <form [formGroup]="baselineForm" class="explore-opps-form">
     <div class="text-center">
@@ -187,7 +187,10 @@
       *ngIf="modificationForm.controls.pumpType.value != 11"
     >
       <label for="modificationPumpType" 
-        class="mod-value-label">Modification Pump Type</label>
+        class="mod-value-label">
+        <span *ngIf="!isVFD">
+          Modification
+        </span> Pump Type</label>
       <select
         class="form-control w-100"
         name="modificationPumpType"
@@ -291,7 +294,7 @@
 
   </form>
 </li>
-<div *ngIf="showPumpType || isVFD">
+<div *ngIf="psat.modifications[exploreModIndex].exploreOppsShowPumpType.hasOpportunity || isVFD">
   <div
     class="text-center small help-text mt-2"
     *ngIf="modificationForm.controls.pumpType.value == 11"

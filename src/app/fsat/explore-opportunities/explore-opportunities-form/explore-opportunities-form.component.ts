@@ -110,7 +110,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   initForms() {
-    if (!this.fsat.isVFD || !this.fsat.modifications[this.exploreModIndex].exploreOppsShowVfd) {
+    if (this.fsat.modifications[this.exploreModIndex].fsat.isVFD) {
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowVfd = {hasOpportunity: true, display: "Install VFD"};
+      delete this.fsat.modifications[this.exploreModIndex].fsat.isVFD;
+    } else if (!this.fsat.modifications[this.exploreModIndex].exploreOppsShowVfd) {
       this.fsat.modifications[this.exploreModIndex].exploreOppsShowVfd = {hasOpportunity: false, display: "Install VFD"};
     }
     this.baselineFieldDataForm = this.fanFieldDataService.getFormFromObj(this.fsat.fieldData);
