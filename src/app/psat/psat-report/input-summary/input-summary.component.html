@@ -17,8 +17,9 @@
         <th class="section-header">Pump &amp; Fluid</th>
         <th></th>
         <th *ngFor="let modification of psat.modifications">
-          <div class="alert-danger" *ngIf="!modification.psat.valid.isValid">
-            <span *ngIf="!modification.psat.valid.pumpFluidValid">Errors found in setup</span>
+          <div class="alert-danger m-0"
+            *ngIf="!modification.psat.valid.isValid && !modification.psat.valid.pumpFluidValid">
+            Errors found Pump Fluid in setup
           </div>
         </th>
       </tr>
@@ -84,8 +85,8 @@
         <th class="section-header">Motor</th>
         <th></th>
         <th *ngFor="let modification of psat.modifications">
-          <div class="alert-danger" *ngIf="!modification.psat.valid.isValid">
-            <span *ngIf="!modification.psat.valid.motorValid">Errors found in setup<br></span>
+          <div class="alert-danger m-0" *ngIf="!modification.psat.valid.isValid && !modification.psat.valid.motorValid">
+            Errors found in Motor setup
           </div>
         </th>
       </tr>
@@ -160,8 +161,8 @@
         <th class="section-header">Field Data</th>
         <th></th>
         <th *ngFor="let modification of psat.modifications">
-          <div class="alert-danger" *ngIf="!modification.psat.valid.isValid">
-            <span *ngIf="!modification.psat.valid.fieldDataValid">Errors found in setup</span>
+          <div class="alert-danger m-0" *ngIf="!modification.psat.valid.isValid && !modification.psat.valid.fieldDataValid">
+            Errors found in Field Data setup
           </div>
         </th>
       </tr>

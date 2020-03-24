@@ -89,11 +89,13 @@ export class PsatSankeyComponent implements OnInit {
     this.location = this.location.replace(/ /g, "");
     this.location = this.location.replace(/[\])}[{(]/g, '');
     this.location = this.location.replace(/#/g, "");
+    this.getResults();
   }
 
   ngAfterViewInit() {
-    this.getResults();
-    this.sankey(this.selectedResults);
+    if (this.psat.valid.isValid) {
+      this.sankey(this.selectedResults);
+    }
   }
 
 
@@ -112,7 +114,9 @@ export class PsatSankeyComponent implements OnInit {
           this.location = this.location.replace(/#/g, "");
         }
         this.getResults();
-        this.sankey(this.selectedResults);
+        if (this.psat.valid.isValid) {
+          this.sankey(this.selectedResults);
+        }
       }
     }
   }
@@ -120,10 +124,10 @@ export class PsatSankeyComponent implements OnInit {
 
   getResults() {
     this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+    this.psat.valid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
     if (!this.psat.outputs) {
       //create copies of inputs to use for calcs
-      let isPsatValid: PsatValid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
-      if (isPsatValid.isValid) {
+      if (this.psat.valid.isValid) {
         if (this.isBaseline) {
           this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
         } else {
