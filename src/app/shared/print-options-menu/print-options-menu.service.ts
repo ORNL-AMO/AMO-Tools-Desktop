@@ -7,14 +7,12 @@ export class PrintOptionsMenuService {
 
   printOptions: BehaviorSubject<PrintOptions>;
   showPrintView: BehaviorSubject<boolean>;
-  showPrintOptionsModal: BehaviorSubject<boolean>;
   printContext: BehaviorSubject<string>;
   showPrintMenu: BehaviorSubject<boolean>;
   constructor() {
     let initPrintOptions: PrintOptions = this.setAll(true);
     this.printOptions = new BehaviorSubject<PrintOptions>(initPrintOptions);
     this.showPrintView = new BehaviorSubject<boolean>(false);
-    this.showPrintOptionsModal = new BehaviorSubject<boolean>(false);
     this.printContext = new BehaviorSubject<string>(undefined);
     this.showPrintMenu = new BehaviorSubject<boolean>(false);
   }
@@ -99,7 +97,6 @@ export class PrintOptionsMenuService {
       printPhastRollup: bool,
       printFsatRollup: bool,
       // this.printTreasureHuntRollup: boolean;
-      // this.printSsmtRollup: boolean;
       printReportGraphs: bool,
       printReportSankey: bool,
       printResults: bool,
