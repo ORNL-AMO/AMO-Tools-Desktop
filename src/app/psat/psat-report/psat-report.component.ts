@@ -108,9 +108,11 @@ export class PsatReportComponent implements OnInit {
   }
 
   getContainerHeight() {
-    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
-    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    if (this.reportBtns && this.reportHeader) {
+      let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+      let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    }
   }
 
   setTab(str: string) {
