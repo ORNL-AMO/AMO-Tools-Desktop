@@ -164,12 +164,14 @@ export class PsatReportComponent implements OnInit {
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
     let isPsatValid: boolean = this.psatService.isPsatValid(psatInputs, isBaseline);
     if (isPsatValid) {
+      psat.isValid = true;
       if (isBaseline) {
         return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
       } else {
         return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings);
       }
     } else {
+      psat.isValid = false;
       return this.psatService.emptyResults();
     }
   }

@@ -10,6 +10,7 @@ export interface PSAT {
   optimizationRating?: number;
   setupDone?: boolean;
   operatingHours?: OperatingHours;
+  isValid?: boolean;
 }
 
 export interface PsatInputs {
