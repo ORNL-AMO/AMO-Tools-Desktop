@@ -115,65 +115,23 @@ export class SsmtRollupBarChartComponent implements OnInit {
     Plotly.react(this.ssmtRollupBarChart.nativeElement, traces, layout, configOptions);
   }
 
-  // getValuesAndLabels(): Array<{ baselineValue: number, baselineLabel: string, modificationValue: number, modificationLabel: string, name: string }> {
-  //   let ssmtResults: Array<SsmtResultsData> = this.reportRollupService.ssmtResults.getValue();
-  //   let valuesAndLabels: Array<{ baselineValue: number, baselineLabel: string, modificationValue: number, modificationLabel: string, name: string }> = new Array();
-  //   if (this.dataOption == 'cost') {
-  //     ssmtResults.forEach(result => {
-  //       valuesAndLabels.push({
-  //         name: result.name,
-  //         baselineValue: result.baselineResults.operationsOutput.totalOperatingCost,
-  //         baselineLabel: 'Baseline',
-  //         modificationLabel: result.modName,
-  //         modificationValue: result.modificationResults.operationsOutput.totalOperatingCost
-  //       });
-  //     })
-  //   } else if (this.dataOption == 'energy') {
-  //     ssmtResults.forEach(result => {
-  //       valuesAndLabels.push({
-  //         name: result.name,
-  //         baselineValue: result.baselineResults.operationsOutput.boilerFuelUsage,
-  //         baselineLabel: 'Baseline',
-  //         modificationLabel: result.modName,
-  //         modificationValue: result.modificationResults.operationsOutput.boilerFuelUsage
-  //       });
-  //     })
-  //   }
-  //   return valuesAndLabels;
-  // }
-
   getValuesAndLabels(): { labels: Array<string>, baselineValues: Array<number>, modificationValues: Array<number> } {
     let ssmtResults: Array<SsmtResultsData> = this.reportRollupService.ssmtResults.getValue();
     let labels: Array<string> = new Array();
     let baselineValues: Array<number> = new Array();
     let modificationValues: Array<number> = new Array();
 
-    // let valuesAndLabels: Array<{ baselineValue: number, baselineLabel: string, modificationValue: number, modificationLabel: string, name: string }> = new Array();
     if (this.dataOption == 'cost') {
       ssmtResults.forEach(result => {
         labels.push(result.name);
         baselineValues.push(result.baselineResults.operationsOutput.totalOperatingCost);
         modificationValues.push(result.modificationResults.operationsOutput.totalOperatingCost);
-        // valuesAndLabels.push({
-        //   name: result.name,
-        //   baselineValue: result.baselineResults.operationsOutput.totalOperatingCost,
-        //   baselineLabel: 'Baseline',
-        //   modificationLabel: result.modName,
-        //   modificationValue: result.modificationResults.operationsOutput.totalOperatingCost
-        // });
       })
     } else if (this.dataOption == 'energy') {
       ssmtResults.forEach(result => {
         labels.push(result.name);
         baselineValues.push(result.baselineResults.operationsOutput.boilerFuelUsage);
         modificationValues.push(result.modificationResults.operationsOutput.boilerFuelUsage);
-        // valuesAndLabels.push({
-        //   name: result.name,
-        //   baselineValue: result.baselineResults.operationsOutput.boilerFuelUsage,
-        //   baselineLabel: 'Baseline',
-        //   modificationLabel: result.modName,
-        //   modificationValue: result.modificationResults.operationsOutput.boilerFuelUsage
-        // });
       })
     }
     return {
@@ -186,13 +144,6 @@ export class SsmtRollupBarChartComponent implements OnInit {
   createPrintChart() {
     let traces = new Array();
     let valuesAndLabels = this.getValuesAndLabels();
-    // let hovertemplate: string;
-    // if (this.dataOption == 'energy') {
-    //   hovertemplate = '%{value:,.2f}' + ' ' + this.settings.steamEnergyMeasurement + '/hr <extra></extra>';
-
-    // } else if (this.dataOption == 'cost') {
-    //   hovertemplate = '%{value:$,.2f}/yr <extra></extra>';
-    // }
 
     traces = [{
       x: valuesAndLabels.labels,
@@ -220,7 +171,6 @@ export class SsmtRollupBarChartComponent implements OnInit {
       tickFormat = '.2s'
     }
     let layout = {
-      // width: this.ssmtRollupBarChart.nativeElement.clientWidth,
       barmode: 'group',
       showlegend: true,
       legend: {
@@ -250,7 +200,6 @@ export class SsmtRollupBarChartComponent implements OnInit {
     };
 
     var configOptions = {
-      // modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       displaylogo: false,
       displayModeBar: false,
     };
