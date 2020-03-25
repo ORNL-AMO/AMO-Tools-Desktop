@@ -1,4 +1,4 @@
-.output-summary .table {
+/* .output-summary .table {
     font-size: small;
 }
 
@@ -18,18 +18,40 @@ tr>td {
 
 .table-header {
     font-weight: bold;
+} */
+
+.table {
+    font-size: small;
+    width: 100%;
+}
+.table th {
+    border: none;
+    padding: 0px 10px;
+}
+.table td {
+    padding: 2px 8px;
+    vertical-align: middle;
 }
 
-.table-header td:hover {
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}
+
+.table-header-row{
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+.table-header-row td:hover {
     cursor: pointer;
     text-decoration: underline;
 }
 
-.table-header td.active {
+.table-header-row td.active {
     text-decoration: underline;
 }
 
-@media print {
+/* @media print {
     .output-summary.table {
         height: 100%;
         width: 100%;
@@ -46,24 +68,8 @@ tr>td {
     .break-table {
         page-break-after: always;
     }
-}
+} */
 
-.show-print {
-    display: none;
-}
-
-.positive-savings {
-    color: #27AE60;
-}
-
-.selected-modification {
-    z-index: 2;
-    background: #e5efe9;
-}
-
-thead td {
-    width: 10%;
-}
 
 .selected-opportunity {
     z-index: 2;

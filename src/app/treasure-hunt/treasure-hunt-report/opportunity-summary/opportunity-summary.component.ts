@@ -25,34 +25,17 @@ export class OpportunitySummaryComponent implements OnInit {
 
   sortBy: string = 'utilityType';
   sortByDirection: string = 'asc';
-
-  printOpportunitySummaries: Array<Array<OpportunitySummary>>;
-
-  rowsPerPrintedPage: number = 10;
-
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    this.prepOpportunitySummariesPrintArray();
   }
 
-  prepOpportunitySummariesPrintArray() {
-    this.printOpportunitySummaries = new Array<Array<OpportunitySummary>>();
-    let tmpArray = new Array<OpportunitySummary>();
-    for (let i = 0; i < this.opportunitySummaries.length; i++) {
-      tmpArray.push(this.opportunitySummaries[i]);
-      if (i % this.rowsPerPrintedPage == 0 && i != 0) {
-        this.printOpportunitySummaries.push(tmpArray);
-        tmpArray = new Array<OpportunitySummary>();
-      }
-    }
-  }
 
   updateOpportunities() {
     this.emitUpdateOpportunities.emit(this.opportunitySummaries);
-    if (this.inRollup) {
-      this.reportRollupService.updateTreasureHuntResults(this.opportunitySummaries, this.assessment.id);
-    }
+    // if (this.inRollup) {
+    //   this.reportRollupService.updateTreasureHuntResults(this.opportunitySummaries, this.assessment.id);
+    // }
   }
 
   getMaterialCost(oppCost: OpportunityCost): number {
