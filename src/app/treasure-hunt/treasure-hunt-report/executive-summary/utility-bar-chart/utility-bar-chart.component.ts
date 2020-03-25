@@ -12,6 +12,9 @@ export class UtilityBarChartComponent implements OnInit {
   treasureHuntResults: TreasureHuntResults;
   @Input()
   showPrintView: boolean;
+  @Input()
+  inRollupPrintView: boolean;
+
   @ViewChild('utilityBarChart', { static: false }) utilityBarChart: ElementRef;
 
   constructor() { }
@@ -20,19 +23,22 @@ export class UtilityBarChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (!this.showPrintView) {
+    if (!this.showPrintView && !this.inRollupPrintView) {
       this.createBarChart();
-    } else if (this.showPrintView) {
+    } else if (this.showPrintView && !this.inRollupPrintView) {
       this.createPrintBarChart();
+    } else if(this.inRollupPrintView){
+      this.createRollupPrintBarChart();
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.utilityBarChart && !this.showPrintView) {
+  ngOnChanges() {
+    if (this.utilityBarChart && !this.showPrintView && !this.inRollupPrintView) {
       this.createBarChart();
-    }
-    if (changes.showPrintView && !changes.showPrintView.firstChange && this.showPrintView) {
+    }else if (this.utilityBarChart && this.showPrintView && !this.inRollupPrintView) {
       this.createPrintBarChart();
+    }else if (this.utilityBarChart && this.inRollupPrintView){
+      this.createRollupPrintBarChart();
     }
   }
 
@@ -43,7 +49,7 @@ export class UtilityBarChartComponent implements OnInit {
       showlegend: true,
       legend: {
         x: .25,
-        y: 1.5,
+        y: 1.3,
         orientation: "h"
       },
       font: {
@@ -79,7 +85,7 @@ export class UtilityBarChartComponent implements OnInit {
       showlegend: true,
       legend: {
         x: 0,
-        y: 1.5,
+        y: 1.3,
         orientation: "h"
       },
       font: {
@@ -99,7 +105,43 @@ export class UtilityBarChartComponent implements OnInit {
     };
     var configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
-      displaylogo: false
+      displaylogo: false,
+      displayModeBar: false
+    };
+
+    Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);
+  }
+
+  createRollupPrintBarChart() {
+    var data = this.getDataObject();
+    var layout = {
+      width: 800,
+      barmode: 'stack',
+      showlegend: true,
+      legend: {
+        x: 0,
+        y: 1,
+        orientation: "h"
+      },
+      font: {
+        size: 14,
+      },
+      yaxis: {
+        hoverformat: '.3r',
+        // automargin: true,
+        tickformat: '$.2s',
+        // fixedrange: true
+      },
+      xaxis: {
+        // automargin: true,
+        // fixedrange: true
+      },
+      margin: { t: 30, b: 30 }
+    };
+    var configOptions = {
+      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      displaylogo: false,
+      displayModeBar: false
     };
 
     Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);

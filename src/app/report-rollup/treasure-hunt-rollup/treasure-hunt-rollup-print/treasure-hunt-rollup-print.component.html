@@ -28,8 +28,11 @@
             </app-executive-summary-table>
         </div>
         <div class="col-12">
-            <app-utility-bar-chart class="h-100" [treasureHuntResults]="combinedTreasureHuntResults" [showPrintView]="true">
-            </app-utility-bar-chart>
+            <div class="d-flex justify-content-center">
+                <app-utility-bar-chart class="h-100" [treasureHuntResults]="combinedTreasureHuntResults"
+                    [inRollupPrintView]="true">
+                </app-utility-bar-chart>
+            </div>
         </div>
         <div class="col-12" *ngIf="combinedTreasureHuntResults.hasMixed == true">
             <div class="alert-warning small mb-2">
@@ -43,9 +46,11 @@
     <div class="row page-break-before">
         <div class="col-12">
             <label class="group-label w-100">Opportunity Payback</label>
-            <app-opportunity-payback-bar-chart [opportunitiesPaybackDetails]="opportunitiesPaybackDetails"
-                [showPrint]="true">
-            </app-opportunity-payback-bar-chart>
+            <div class="d-flex justify-content-center">
+                <app-opportunity-payback-bar-chart [opportunitiesPaybackDetails]="opportunitiesPaybackDetails"
+                    [showPrint]="true">
+                </app-opportunity-payback-bar-chart>
+            </div>
         </div>
     </div>
     <div class="row">
