@@ -7,26 +7,39 @@
 <ul *ngIf="showCondensateHandling">
   <!--CONDENSATE RECOVERY RATE-->
   <li class="explore-opps-item">
-    <div class="checkbox">
-      <label for="modifyHighPressureCondensateRecovery">
+    <div class="checkbox mt-2">
+      <label for="modifyHighPressureCondensateRecovery" class="steam-check-label">
         <input type="checkbox" id="modifyHighPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')"
           (change)="toggleHighPressureCondensateRecovery()" [(ngModel)]="showHighPressureCondensateRecovery" /> Adjust
         High Pressure Condensate Recovery Rate
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
 
-    <li class="explore-opps-item" *ngIf="showHighPressureCondensateRecovery">
+<div *ngIf="showHighPressureCondensateRecovery">
+  <li class="explore-opps-header">
+    <span class=" explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+    <li class="explore-opps-item mb-4">
     <form class="explore-opps-form" [formGroup]="baselineHighPressureForm">
       <div class="text-center">
-        <label for="baselineHPCondensateRecovery" class="baseline-value-label">Baseline Condensate Recovery Rate</label>
-        <div class="text-muted text-center baseline-value-input mt-1">{{ baselineHighPressureForm.controls.condensationRecoveryRate.value }}%</div>
-
+        <label for="baselineHPCondensateRecovery" class="baseline-value-label"> Condensate Recovery Rate</label>
+        <div class="text-muted text-center baseline-value-input">{{ baselineHighPressureForm.controls.condensationRecoveryRate.value }}%</div>
+        <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.condensationRecoveryRate.invalid && !baselineHighPressureForm.controls.condensationRecoveryRate.pristine">
+          <span *ngIf="baselineHighPressureForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
+          <span *ngIf="baselineHighPressureForm.controls.condensationRecoveryRate.errors.max">Value can't be greater
+            than
+            {{baselineHighPressureForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
+          <span *ngIf="baselineHighPressureForm.controls.condensationRecoveryRate.errors.min">Value can't be less than
+            {{baselineHighPressureForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
+        </span>
       </div>
     </form>
     <form class="explore-opps-form" [formGroup]="modificationHighPressureForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationHPCondensateRecovery" class="mod-value-label">Modification Condensate Recovery Rate</label>
+        <label for="modificationHPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
         <div class="input-group">
           <input name="modificationHPCondensateRecovery" type="number" step="any" id="modificationHPCondensateRecovery"
             class="form-control" (focus)="focusField('condensationRecoveryRate')" (input)="save()" formControlName="condensationRecoveryRate" />
@@ -44,30 +57,43 @@
       </div>
     </form>
   </li>
-  <hr *ngIf="showHighPressureCondensateRecovery">
-
+</div>
 
   <li class="explore-opps-item" *ngIf="ssmt.headerInput.numberOfHeaders == 3">
-    <div class="checkbox">
-      <label for="modifyMediumPressureCondensateRecovery">
+    <div class="checkbox mt-2">
+      <label for="modifyMediumPressureCondensateRecovery" class="steam-check-label">
         <input type="checkbox" id="modifyMediumPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')"
           (change)="toggleMediumPressureCondensateRecovery()" [(ngModel)]="showMediumPressureCondensateRecovery" />
         Adjust Medium Pressure Condensate Recovery Rate
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
 
-  <li class="explore-opps-item" *ngIf="showMediumPressureCondensateRecovery">
+<div *ngIf="showMediumPressureCondensateRecovery">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+  <li class="explore-opps-item mb-4">
     <form class="explore-opps-form" [formGroup]="baselineMediumPressureForm">
       <div class="text-center">
-        <label for="baselineMPCondensateRecovery" class="baseline-value-label">Baseline Condensate Recovery Rate</label>
-        <div class="text-muted text-center baseline-value-input mt-1">{{ baselineMediumPressureForm.controls.condensationRecoveryRate.value }}%</div>
-
+        <label for="baselineMPCondensateRecovery" class="baseline-value-label"> Condensate Recovery Rate</label>
+        <div class="text-muted text-center baseline-value-input">{{ baselineMediumPressureForm.controls.condensationRecoveryRate.value }}%</div>
+        <span class="alert-danger pull-right small" *ngIf="baselineMediumPressureForm.controls.condensationRecoveryRate.invalid && !baselineMediumPressureForm.controls.condensationRecoveryRate.pristine">
+          <span *ngIf="baselineMediumPressureForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
+          <span *ngIf="baselineMediumPressureForm.controls.condensationRecoveryRate.errors.max">Value can't be greater
+            than
+            {{baselineMediumPressureForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
+          <span *ngIf="baselineMediumPressureForm.controls.condensationRecoveryRate.errors.min">Value can't be less
+            than
+            {{baselineMediumPressureForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
+        </span>
       </div>
     </form>
     <form class="explore-opps-form" [formGroup]="modificationMediumPressureForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationMPCondensateRecovery" class="mod-value-label">Modification Condensate Recovery Rate</label>
+        <label for="modificationMPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
         <div class="input-group">
           <input name="modificationMPCondensateRecovery" type="number" step="any" id="modificationMPCondensateRecovery"
             class="form-control" (focus)="focusField('condensationRecoveryRate')" (input)="save()" formControlName="condensationRecoveryRate" />
@@ -84,29 +110,42 @@
       </div>
     </form>
   </li>
-  <hr *ngIf="showMediumPressureCondensateRecovery">
+</div>
 
   <li class="explore-opps-item" *ngIf="ssmt.headerInput.numberOfHeaders != 1">
-    <div class="checkbox">
-      <label for="modifyLowPressureCondensateRecovery">
+    <div class="checkbox mt-2">
+      <label for="modifyLowPressureCondensateRecovery" class="steam-check-label">
         <input type="checkbox" id="modifyLowPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')"
           (change)="toggleLowPressureCondensateRecovery()" [(ngModel)]="showLowPressureCondensateRecovery" /> Adjust
         Low Pressure Condensate Recovery Rate
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
 
-  <li class="explore-opps-item" *ngIf="showLowPressureCondensateRecovery">
+<div *ngIf="showLowPressureCondensateRecovery">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+  <li class="explore-opps-item mb-4">
     <form class="explore-opps-form" [formGroup]="baselineLowPressureForm">
       <div class="text-center">
-        <label for="baselineLPCondensateRecovery" class="baseline-value-label">Baseline Condensate Recovery Rate</label>
-        <div class="text-muted text-center baseline-value-input mt-1">{{ baselineLowPressureForm.controls.condensationRecoveryRate.value }}%</div>
-
+        <label for="baselineLPCondensateRecovery" class="baseline-value-label"> Condensate Recovery Rate</label>
+        <div class="text-muted text-center baseline-value-input">{{ baselineLowPressureForm.controls.condensationRecoveryRate.value }}%</div>
+        <span class="alert-danger pull-right small" *ngIf="baselineLowPressureForm.controls.condensationRecoveryRate.invalid && !baselineLowPressureForm.controls.condensationRecoveryRate.pristine">
+          <span *ngIf="baselineLowPressureForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
+          <span *ngIf="baselineLowPressureForm.controls.condensationRecoveryRate.errors.max">Value can't be greater
+            than
+            {{baselineLowPressureForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
+          <span *ngIf="baselineLowPressureForm.controls.condensationRecoveryRate.errors.min">Value can't be less than
+            {{baselineLowPressureForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
+        </span>
       </div>
     </form>
     <form class="explore-opps-form" [formGroup]="modificationLowPressureForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationLPCondensateRecovery" class="mod-value-label">Modification Condensate Recovery Rate</label>
+        <label for="modificationLPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
         <div class="input-group">
           <input name="modificationLPCondensateRecovery" type="number" step="any" id="modificationLPCondensateRecovery"
             class="form-control" (focus)="focusField('condensationRecoveryRate')" (input)="save()" formControlName="condensationRecoveryRate" />
@@ -124,23 +163,28 @@
       </div>
     </form>
   </li>
-  <hr *ngIf="showLowPressureCondensateRecovery">
-
+</div>
   <!--FLASH CONDENSATE-->
   <li class="explore-opps-item">
-    <div class="checkbox" *ngIf="ssmt.headerInput.numberOfHeaders == 3">
-      <label for="adjustFlashCondensateMediumPressure">
+    <div class="checkbox mt-2" *ngIf="ssmt.headerInput.numberOfHeaders == 3">
+      <label for="adjustFlashCondensateMediumPressure" class="steam-check-label">
         <input type="checkbox" id="adjustFlashCondensateMediumPressure" (focus)="focusField('default')" (change)="toggleFlashCondensateMediumPressure()"
           [(ngModel)]="showFlashCondensateMediumPressure" /> Flash Condensate to Medium Pressure
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
 
-  <li class="explore-opps-item" *ngIf="showFlashCondensateMediumPressure">
+<div *ngIf="showFlashCondensateMediumPressure">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+  <li class="explore-opps-item mb-4">
     <form class="explore-opps-form" [formGroup]="baselineMediumPressureForm">
       <div class="text-center">
-        <label for="baselineFlashCondensateMediumPressure" class="baseline-value-label">Baseline Flash Condensate to Medium Pressure</label>
-        <div class="text-muted text-center baseline-value-input mt-1">
+        <label for="baselineFlashCondensateMediumPressure" class="baseline-value-label"> Flash Condensate to Medium Pressure</label>
+        <div class="text-muted text-center baseline-value-input">
           <span *ngIf="baselineMediumPressureForm.value.flashCondensateIntoHeader == true">Yes</span>
           <span *ngIf="baselineMediumPressureForm.value.flashCondensateIntoHeader == false">No</span>
         </div>
@@ -148,7 +192,7 @@
     </form>
     <form class='explore-opps-form' [formGroup]="modificationMediumPressureForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationFlashCondensateMediumPressure" class="mod-value-label">Modification Flash Condensate to Medium Pressure</label>
+        <label for="modificationFlashCondensateMediumPressure" class="mod-value-label"> Flash Condensate to Medium Pressure</label>
         <select name="modificationFlashCondensateMediumPressure" class="form-control w-100" id="modificationFlashCondensateMediumPressure"
           (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" formControlName="flashCondensateIntoHeader">
           <option [ngValue]=true>Yes</option>
@@ -157,22 +201,29 @@
       </div>
     </form>
   </li>
-  <hr *ngIf="showFlashCondensateMediumPressure">
+</div>
 
   <li class="explore-opps-item">
-    <div class="checkbox" *ngIf="ssmt.headerInput.numberOfHeaders != 1">
-      <label for="adjustFlashCondensateLowPressure">
+    <div class="checkbox mt-2" *ngIf="ssmt.headerInput.numberOfHeaders != 1">
+      <label for="adjustFlashCondensateLowPressure" class="steam-check-label">
         <input type="checkbox" id="adjustFlashCondensateLowPressure" (focus)="focusField('default')" (change)="toggleFlashCondensateLowPressure()"
           [(ngModel)]="showFlashCondensateLowPressure" /> Flash Condensate to Low Pressure
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
 
-  <li class="explore-opps-item" *ngIf="showFlashCondensateLowPressure">
+<div *ngIf="showFlashCondensateLowPressure">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+
+  <li class="explore-opps-item mb-4">
     <form class="explore-opps-form" [formGroup]="baselineLowPressureForm">
       <div class="text-center">
-        <label for="baselineFlashCondensateLowPressure" class="baseline-value-label">Baseline Flash Condensate to Low Pressure</label>
-        <div class="text-muted text-center baseline-value-input mt-1">
+        <label for="baselineFlashCondensateLowPressure" class="baseline-value-label"> Flash Condensate to Low Pressure</label>
+        <div class="text-muted text-center baseline-value-input">
           <span *ngIf="baselineLowPressureForm.value.flashCondensateIntoHeader == true">Yes</span>
           <span *ngIf="baselineLowPressureForm.value.flashCondensateIntoHeader == false">No</span>
         </div>
@@ -180,7 +231,7 @@
     </form>
     <form class="explore-opps-form" [formGroup]="modificationLowPressureForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationFlashCondensateLowPressure" class="mod-value-label">Modification Flash Condensate to Low Pressure</label>
+        <label for="modificationFlashCondensateLowPressure" class="mod-value-label"> Flash Condensate to Low Pressure</label>
         <select name="modificationFlashCondensateLowPressure" class="form-control w-100" id="modificationFlashCondensateLowPressure"
           (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" formControlName="flashCondensateIntoHeader">
           <option [ngValue]=true>Yes</option>
@@ -189,30 +240,48 @@
       </div>
     </form>
   </li>
-  <hr *ngIf="showFlashCondensateLowPressure">
+</div>
 
   <!--RETURN TEMPERATURE-->
   <li class="explore-opps-item">
-    <div class="checkbox">
-      <label for="adjustReturnTemperature">
+    <div class="checkbox mt-2">
+      <label for="adjustReturnTemperature" class="steam-check-label">
         <input type="checkbox" id="adjustReturnTemperature" (focus)="focusField('default')" (change)="toggleReturnTemperature()"
           [(ngModel)]="showReturnTemperature" /> Modify Condensate Return Temperature
       </label>
     </div>
+  </li>
+  <hr class="mt-0 mb-0">
+  
+<div *ngIf="showReturnTemperature">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
 
-  <li class="explore-opps-item" *ngIf="showReturnTemperature"> 
+  <li class="explore-opps-item mb-4"> 
     <form class="explore-opps-form" [formGroup]="baselineHighPressureForm">
       <div class="text-center">
-        <label for="baselineCondensateReturnTemperature" class="baseline-value-label"> Baseline Return Temperature</label>
-        <div class="text-muted baseline-value-input mt-1">{{ baselineHighPressureForm.controls.condensateReturnTemperature.value}} 
+        <label for="baselineCondensateReturnTemperature" class="baseline-value-label"> Return Temperature</label>
+        <div class="text-muted baseline-value-input">{{ baselineHighPressureForm.controls.condensateReturnTemperature.value}} 
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </div>
-
+      <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.invalid && !baselineHighPressureForm.controls.condensateReturnTemperature.pristine">
+        <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
+        <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.max">Value can't be greater
+          than
+          {{baselineHighPressureForm.controls.condensateReturnTemperature.errors.max.max}}
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+        <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.min">Value can't be less
+          than
+          {{baselineHighPressureForm.controls.condensateReturnTemperature.errors.min.min}}
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+      </span>
       </div>
     </form>
     <form class="explore-opps-form" [formGroup]="modificationHighPressureForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationCondensateReturnTemperature" class="mod-value-label">Modification Return Temperature</label>
+        <label for="modificationCondensateReturnTemperature" class="mod-value-label"> Return Temperature</label>
         <div class="input-group">
           <input name="modificationCondensateReturnTemperature" type="number" step="any" id="modificationCondensateReturnTemperature"
             class="form-control" (focus)="focusField('condensateReturnTemperature')" (input)="save()" formControlName="condensateReturnTemperature" />
@@ -233,4 +302,5 @@
       </div>
     </form>
   </li>
+</div>
 </ul>

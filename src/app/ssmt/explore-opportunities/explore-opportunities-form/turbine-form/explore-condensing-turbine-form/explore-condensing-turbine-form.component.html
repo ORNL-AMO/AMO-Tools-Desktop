@@ -1,24 +1,41 @@
 <li class="explore-opps-item">
-  <div class="checkbox" *ngIf="showBaseline">
-    <label for="condensingTurbineModifyCondenserPressure">
+  <div class="checkbox mt-2" *ngIf="showBaseline">
+    <label for="condensingTurbineModifyCondenserPressure" class="steam-check-label">
       <input type="checkbox" id="condensingTurbineModifyCondenserPressure" (focus)="focusField('condenserPressure')"
         (change)="toggleCondenserPressure()" [(ngModel)]="showCondenserPressure" /> Modify Condenser Pressure
     </label>
   </div>
 </li>
+<hr class="mt-0 mb-0" *ngIf="showBaseline">
 
-<li class="d-flex justify-content-end" [ngClass]="{'justify-content-between': showCondenserPressure && showBaseline}">
+
+<div *ngIf="showCondenserPressure && showBaseline">
+<li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+</li>
+
+<li class="mb-4 d-flex justify-content-end" [ngClass]="{'justify-content-between': showCondenserPressure && showBaseline}">
   <form class="explore-opps-form" [formGroup]="baselineForm" *ngIf="showCondenserPressure && showBaseline">
     <div class="text-center">
-      <label for="condensingTurbineBaselineCondenserPressure" class="baseline-value-label">Baseline Condenser Pressure</label>
-      <div class="text-muted baseline-value-input mt-1">{{ baselineForm.value.condenserPressure }} 
+      <label for="condensingTurbineBaselineCondenserPressure" class="baseline-value-label">Condenser Pressure</label>
+      <div class="text-muted baseline-value-input">{{ baselineForm.value.condenserPressure }} 
         <span [innerHTML]="settings.steamVacuumPressure | settingsLabel"></span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.condenserPressure.invalid && !baselineForm.controls.condenserPressure.pristine">
+      <span *ngIf="baselineForm.controls.condenserPressure.errors.required">Value Required</span>
+      <span *ngIf="baselineForm.controls.condenserPressure.errors.max">Value can't be greater than
+        {{baselineForm.controls.condenserPressure.errors.max.max}}
+        <span [innerHTML]="settings.steamVacuumPressure | settingsLabel"></span>.</span>
+      <span *ngIf="baselineForm.controls.condenserPressure.errors.min">Value can't be less than
+        {{baselineForm.controls.condenserPressure.errors.min.min}}
+        <span [innerHTML]="settings.steamVacuumPressure | settingsLabel"></span>.</span>
+    </span>
     </div>
   </form>
   <form class="explore-opps-form" [formGroup]="modificationForm" *ngIf="showCondenserPressure || !showBaseline">
     <div class="form-group explore-opps-formgroup">
-      <label for="condensingTurbineModificationCondenserPressure" class="mod-value-label">Modification Condenser Pressure</label>
+      <label for="condensingTurbineModificationCondenserPressure" class="mod-value-label">Condenser Pressure</label>
       <div class="input-group">
         <input name="condensingTurbineModificationCondenserPressure" type="number" step="any" id="condensingTurbineModificationCondenserPressure"
           class="form-control" (focus)="focusField('condenserPressure')" (input)="save()" formControlName="condenserPressure" />
@@ -36,23 +53,31 @@
     </span>
   </form>
 </li>
+</div>
 
 <li class="explore-opps-item">
-  <div class="checkbox" *ngIf="showBaseline">
-    <label for="condensingTurbineModifyOperationType">
+  <div class="checkbox mt-2" *ngIf="showBaseline">
+    <label for="condensingTurbineModifyOperationType" class="steam-check-label">
       <input type="checkbox" id="condensingTurbineModifyOperationType" (focus)="focusField('operationType')" (change)="toggleOperationType()"
         [(ngModel)]="showOperation" /> Modify Operation Type
     </label>
   </div>
 </li>
-
-<li class="d-flex justify-content-end" [ngClass]="{'justify-content-between': showOperation && showBaseline}">
+<hr class="mt-0 mb-0" *ngIf="showBaseline">
+  
+<li class="explore-opps-header" *ngIf="showOperation">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+</li>
+<li class="mb-4 d-flex justify-content-end" [ngClass]="{'justify-content-between': showOperation && showBaseline}">
   <form class="explore-opps-form" [formGroup]="baselineForm" *ngIf="showOperation && showBaseline">
     <div class="text-center">
-      <label for="condensingTurbineBaselineOperationType" class="baseline-value-label">Baseline Operation Type</label>
-      <div class="text-muted text-center baseline-value-input mt-1 mb-1">{{ turbineOptionTypes[baselineForm.value.operationType].display }}</div>
+      <label for="condensingTurbineBaselineOperationType" class="baseline-value-label">Operation Type</label>
+      <div class="text-muted text-center baseline-value-input">
+        {{ baselineForm.value.operationType | optionDisplayValue : turbineOptionTypes : 'value' : 'display'}}
+      </div>
     </div>
-    <div class="form-group text-center">
+    <div class="form-group text-center mt-2">
       <label for="condensingTurbineBaselineOperationValue">
         <span *ngIf="baselineForm.controls.operationType.value == 0">Fixed Flow</span>
         <span *ngIf="baselineForm.controls.operationType.value == 1">Fixed Power</span>
@@ -65,12 +90,25 @@
           <span *ngIf="baselineForm.controls.operationType.value == 1">kW</span>
         </span>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.operationValue.invalid && !baselineForm.controls.operationValue.pristine">
+        <span *ngIf="baselineForm.controls.operationValue.errors.required">Value Required</span>
+        <span *ngIf="baselineForm.controls.operationValue.errors.max">Value can't be greater than
+          {{baselineForm.controls.operationValue.errors.max.max}}
+          <span *ngIf="baselineForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+          <span *ngIf="baselineForm.controls.operationType.value == 1">kW</span>.
+        </span>
+        <span *ngIf="baselineForm.controls.operationValue.errors.min">Value can't be less than
+          {{baselineForm.controls.operationValue.errors.min.min}}
+          <span *ngIf="baselineForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+          <span *ngIf="baselineForm.controls.operationType.value == 1">kW</span>.
+        </span>
+      </span>
     </div>
   </form>
 
   <form class="explore-opps-form" [formGroup]="modificationForm" *ngIf="showOperation || !showBaseline">
     <div class="form-group explore-opps-formgroup">
-        <label for="condensingTurbineModificationOperationType" class="mod-value-label">Modification Operation Type</label>
+        <label for="condensingTurbineModificationOperationType" class="mod-value-label">Operation Type</label>
         <select name="condensingTurbineModificationOperationType" class="form-control w-100" id="condensingTurbineModificationOperationType"
           (change)="changeModificationOperationValidators()" (focus)="focusField('operationType')" formControlName="operationType">
           <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>

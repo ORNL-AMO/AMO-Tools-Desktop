@@ -1,18 +1,25 @@
 <!--useTurbine-->
 <li class="explore-opps-item">
-  <div class="checkbox" *ngIf="showBaseline">
-    <label for="{{turbineType+'modifyUseTurbine'}}">
+  <div class="checkbox mt-2" *ngIf="showBaseline">
+    <label for="{{turbineType+'modifyUseTurbine'}}" class="steam-check-label">
       <input type="checkbox" id="{{turbineType+'modifyUseTurbine'}}" (focus)="focusField('useTurbine')"
         (change)="toggleTurbineStatus()" [(ngModel)]="showUseTurbine" /> Change Initial Turbine Status
     </label>
   </div>
 </li>
+<hr class="mt-0 mb-0" *ngIf="showBaseline">
 
-<li class="explore-opps-item" *ngIf="showUseTurbine || !showBaseline">
+<div *ngIf="showUseTurbine || !showBaseline">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+
+<li class="explore-opps-item mb-4">
   <form class="explore-opps-form" [formGroup]="baselineForm">
     <div class="text-center">
-      <label for="{{turbineType+'baselineUseTurbine'}}" class="baseline-value-label">Baseline Status</label>
-      <div class="text-muted text-center baseline-value-input mt-1">
+      <label for="{{turbineType+'baselineUseTurbine'}}" class="baseline-value-label"> Turbine Status</label>
+      <div class="text-muted text-center baseline-value-input ">
         <span *ngIf="baselineForm.value.useTurbine == true">On</span>
         <span *ngIf="baselineForm.value.useTurbine == false">Off</span>
       </div>
@@ -20,7 +27,7 @@
   </form>
   <form class="explore-opps-form" [formGroup]="modificationForm">
     <div class="form-group explore-opps-formgroup">
-      <label for="{{turbineType+'modificationUseTurbine'}}" class="mod-value-label">Modification Status</label>
+      <label for="{{turbineType+'modificationUseTurbine'}}" class="mod-value-label"> Turbine Status</label>
       <select name="{{turbineType+'modificationUseTurbine'}}" id="{{turbineType+'modificationUseTurbine'}}"
         class="form-control w-100" (focus)="focusField('useTurbine')" (change)="save()" formControlName="useTurbine">
         <option [ngValue]="true">On</option>
@@ -29,86 +36,115 @@
     </div>
   </form>
 </li>
-<hr *ngIf="showUseTurbine || !showBaseline && (turbineType != 'condensingTurbine' && turbineType != 'mediumToLowTurbine')">
+</div>
 
 <!--isentropicEfficiency-->
-<li class="explore-opps-item" >
-  <div class="checkbox" *ngIf="showBaseline">
-    <label for="{{turbineType+'modifyIsentropicEfficiency'}}">
-      <input type="checkbox" id="{{turbineType+'modifyIsentropicEfficiency'}}"
-        (focus)="focusField('isentropicEfficiency')" (change)="toggleIsentropicEfficiency()"
-        [(ngModel)]="showIsentropicEfficiency" /> Adjust Isentropic Efficiency
-    </label>
-  </div>
-</li>
-
-<li class="explore-opps-item" *ngIf="showIsentropicEfficiency && showBaseline">
-  <form class='explore-opps-form' [formGroup]="baselineForm" >
-    <div class="text-center">
-      <label for="{{turbineType+'baselineIsentropicEfficiency'}}" class="baseline-value-label">Baseline Isentropic Efficiency</label>
-      <div class="text-muted text-center baseline-value-input mt-1">{{baselineForm.value.isentropicEfficiency }}% </div>
-
+<div *ngIf="modificationForm.controls.useTurbine.value == true">
+  <li class="explore-opps-item">
+    <div class="checkbox mt-2" *ngIf="showBaseline">
+      <label for="{{turbineType+'modifyIsentropicEfficiency'}}" class="steam-check-label">
+        <input type="checkbox" id="{{turbineType+'modifyIsentropicEfficiency'}}"
+          (focus)="focusField('isentropicEfficiency')" (change)="toggleIsentropicEfficiency()"
+          [(ngModel)]="showIsentropicEfficiency" /> Adjust Isentropic Efficiency
+      </label>
     </div>
-  </form>
-  <form class="explore-opps-form" [formGroup]="modificationForm">
-    <div class="form-group explore-opps-formgroup">
-      <label for="{{turbineType+'modificationIsentropicEfficiency'}}" class="mod-value-label">Modification Isentropic Efficiency</label>
-      <div class="input-group">
-        <input name="{{turbineType+'modificationIsentropicEfficiency'}}" type="number" step="any"
-          id="{{turbineType+'modificationIsentropicEfficiency'}}" class="form-control"
-          (focus)="focusField('isentropicEfficiency')" (input)="save()" formControlName="isentropicEfficiency" />
-        <span class="input-group-addon units">%</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="modificationForm.controls.isentropicEfficiency.invalid && !modificationForm.controls.isentropicEfficiency.pristine">
-        <span *ngIf="modificationForm.controls.isentropicEfficiency.errors.required">Value Required</span>
-        <span *ngIf="modificationForm.controls.isentropicEfficiency.errors.max">Value can't be greater than
-          {{modificationForm.controls.isentropicEfficiency.errors.max.max}} %.</span>
-        <span *ngIf="modificationForm.controls.isentropicEfficiency.errors.min">Value can't be less than
-          {{modificationForm.controls.isentropicEfficiency.errors.min.min}} %.</span>
+  </li>
+  <hr class="mt-0 mb-0" *ngIf="showBaseline">
+
+<div *ngIf="showIsentropicEfficiency && showBaseline">
+    <li class="explore-opps-header">
+      <span class="explore-opps-title text-muted">Baseline</span>
+      <span class="explore-opps-title text-muted">Modifications</span>
+    </li>
+
+  <li class="explore-opps-item mb-4">
+    <form class='explore-opps-form' [formGroup]="baselineForm">
+      <div class="text-center">
+        <label for="{{turbineType+'baselineIsentropicEfficiency'}}" class="baseline-value-label">Isentropic Efficiency</label>
+        <div class="text-muted text-center baseline-value-input ">{{baselineForm.value.isentropicEfficiency }}% </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="baselineForm.controls.isentropicEfficiency.invalid && !baselineForm.controls.isentropicEfficiency.pristine">
+        <span *ngIf="baselineForm.controls.isentropicEfficiency.errors.required">Value Required</span>
+        <span *ngIf="baselineForm.controls.isentropicEfficiency.errors.max">Value can't be greater than
+          {{baselineForm.controls.isentropicEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="baselineForm.controls.isentropicEfficiency.errors.min">Value can't be less than
+          {{baselineForm.controls.isentropicEfficiency.errors.min.min}} %.</span>
       </span>
-    </div>
-  </form>
-</li>
-<hr *ngIf="showIsentropicEfficiency && showBaseline">
+      </div>
+    </form>
+    <form class="explore-opps-form" [formGroup]="modificationForm">
+      <div class="form-group explore-opps-formgroup">
+        <label for="{{turbineType+'modificationIsentropicEfficiency'}}" class="mod-value-label">Isentropic Efficiency</label>
+        <div class="input-group">
+          <input name="{{turbineType+'modificationIsentropicEfficiency'}}" type="number" step="any"
+            id="{{turbineType+'modificationIsentropicEfficiency'}}" class="form-control"
+            (focus)="focusField('isentropicEfficiency')" (input)="save()" formControlName="isentropicEfficiency" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="modificationForm.controls.isentropicEfficiency.invalid && !modificationForm.controls.isentropicEfficiency.pristine">
+          <span *ngIf="modificationForm.controls.isentropicEfficiency.errors.required">Value Required</span>
+          <span *ngIf="modificationForm.controls.isentropicEfficiency.errors.max">Value can't be greater than
+            {{modificationForm.controls.isentropicEfficiency.errors.max.max}} %.</span>
+          <span *ngIf="modificationForm.controls.isentropicEfficiency.errors.min">Value can't be less than
+            {{modificationForm.controls.isentropicEfficiency.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+  </div>
+</div>
 
 <!--generationEfficiency-->
 <li class="explore-opps-item">
-  <div class="checkbox" *ngIf="showBaseline">
-    <label for="{{turbineType+'modifyGenerationEfficiency'}}">
+  <div class="checkbox mt-2" *ngIf="showBaseline">
+    <label for="{{turbineType+'modifyGenerationEfficiency'}}" class="steam-check-label">
       <input type="checkbox" id="{{turbineType+'modifyGenerationEfficiency'}}"
         (focus)="focusField('generationEfficiency')" (change)="toggleGenerationEfficiency()"
         [(ngModel)]="showGenerationEfficiency" /> Adjust Generator Efficiency
     </label>
   </div>
 </li>
+<hr class="mt-0 mb-0" *ngIf="showBaseline">
 
-<li class="explore-opps-item" *ngIf="showGenerationEfficiency && showBaseline">
-  <form class="explore-opps-form" [formGroup]="baselineForm" >
+<div *ngIf="showGenerationEfficiency && showBaseline">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+  <li class="explore-opps-item mb-4">
+    <form class="explore-opps-form" [formGroup]="baselineForm" >
     <div class="text-center">
-      <label for="{{turbineType+'baselineGenerationEfficiency'}}" class='baseline-value-label'>Baseline Generator Efficiency</label>
-      <div class="text-muted text-center baseline-value-input mt-1">{{baselineForm.value.generationEfficiency }}% </div>
-
-    </div>
-  </form>
-  <form class="explore-opps-form" [formGroup]="modificationForm">
-    <div class="form-group explore-opps-formgroup">
-      <label for="{{turbineType+'modificationGenerationEfficiency'}}" class="mod-value-label">Modification Generator Efficiency</label>
-      <div class="input-group">
-        <input name="{{turbineType+'modificationGenerationEfficiency'}}" type="number" step="any"
+      <label for="{{turbineType+'baselineGenerationEfficiency'}}" class='baseline-value-label'>Generator Efficiency</label>
+      <div class="text-muted text-center baseline-value-input ">{{baselineForm.value.generationEfficiency }}% </div>
+      <span class="alert-danger pull-right small"
+      *ngIf="baselineForm.controls.generationEfficiency.invalid && !baselineForm.controls.generationEfficiency.pristine">
+      <span *ngIf="baselineForm.controls.generationEfficiency.errors.required">Value Required</span>
+      <span *ngIf="baselineForm.controls.generationEfficiency.errors.max">Value can't be greater than
+        {{baselineForm.controls.generationEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="baselineForm.controls.generationEfficiency.errors.min">Value can't be less than
+          {{baselineForm.controls.generationEfficiency.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+    <form class="explore-opps-form" [formGroup]="modificationForm">
+      <div class="form-group explore-opps-formgroup">
+        <label for="{{turbineType+'modificationGenerationEfficiency'}}" class="mod-value-label">Generator Efficiency</label>
+        <div class="input-group">
+          <input name="{{turbineType+'modificationGenerationEfficiency'}}" type="number" step="any"
           id="{{turbineType+'modificationGenerationEfficiency'}}" class="form-control"
           (focus)="focusField('generationEfficiency')" (input)="save()" formControlName="generationEfficiency" />
-        <span class="input-group-addon units">%</span>
-      </div>
-      <span class="alert-danger pull-right small"
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
         *ngIf="modificationForm.controls.generationEfficiency.invalid && !modificationForm.controls.generationEfficiency.pristine">
         <span *ngIf="modificationForm.controls.generationEfficiency.errors.required">Value Required</span>
         <span *ngIf="modificationForm.controls.generationEfficiency.errors.max">Value can't be greater than
           {{modificationForm.controls.generationEfficiency.errors.max.max}} %.</span>
-        <span *ngIf="modificationForm.controls.generationEfficiency.errors.min">Value can't be less than
-          {{modificationForm.controls.generationEfficiency.errors.min.min}} %.</span>
-      </span>
-    </div>
-  </form>
-</li>
-<hr *ngIf="showGenerationEfficiency && showBaseline">
+          <span *ngIf="modificationForm.controls.generationEfficiency.errors.min">Value can't be less than
+            {{modificationForm.controls.generationEfficiency.errors.min.min}} %.</span>
+          </span>
+        </div>
+      </form>
+    </li>
+  </div>

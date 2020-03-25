@@ -12,6 +12,13 @@
             <div class="text-muted baseline-value-input">{{ baselineForm.controls.flowRate.value | number: '1.0-0' }} 
                 <span [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
             </div>
+            <span class="alert-danger pull-right small"
+            *ngIf="baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">
+            <span *ngIf="baselineForm.controls.flowRate.errors.required">Value Required</span>
+            <span *ngIf="baselineForm.controls.flowRate.errors.min">Value can't be less than
+                {{baselineForm.controls.flowRate.errors.min.min}} <span
+                    [innerHTML]="settings.fanFlowRate | settingsLabel"></span></span>
+        </span>
         </div>
     </form>
     <form [formGroup]="modificationForm" class="explore-opps-form">

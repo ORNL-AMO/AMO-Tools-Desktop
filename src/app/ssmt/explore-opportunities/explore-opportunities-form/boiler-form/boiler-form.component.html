@@ -7,20 +7,27 @@
 <ul *ngIf="showBoilerData">
 
   <li class="explore-opps-item">
-    <div class="checkbox">
-      <label for="modifyCombustionEfficiency">
+    <div class="checkbox mt-2">
+      <label for="modifyCombustionEfficiency" class="steam-check-label">
         <input type="checkbox" id="modifyCombustionEfficiency" (focus)="focusField('combustionEfficiency')"
           (change)="toggleCombustionEfficiency()" [(ngModel)]="showCombustionEfficiency" /> Adjust Boiler Combustion
         Efficiency
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
 
-  <li *ngIf="showCombustionEfficiency" class="explore-opps-item">
+  <div *ngIf="showCombustionEfficiency">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+
+  <li class="explore-opps-item mb-4">
     <form [formGroup]="baselineForm" class="explore-opps-form">
       <div class="text-center">
-        <label for="baselineCombustionEfficiency" class="baseline-value-label">Baseline Combustion Efficiency</label>
-        <div class="text-muted text-center baseline-value-input mt-1">{{ baselineForm.controls.combustionEfficiency.value }}%</div>
+        <label for="baselineCombustionEfficiency" class="baseline-value-label"> Combustion Efficiency</label>
+        <div class="text-muted text-center baseline-value-input">{{ baselineForm.controls.combustionEfficiency.value }}%</div>
         <span class="alert-danger pull-right small"
         *ngIf="baselineForm.controls.combustionEfficiency.invalid && !baselineForm.controls.combustionEfficiency.pristine">
         <span *ngIf="baselineForm.controls.combustionEfficiency.errors.required">Value Required</span>
@@ -33,7 +40,7 @@
       </form>
       <form [formGroup]="modificationForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
-          <label for="modificationCombustionEfficiency" class="mod-value-label">Modification Combustion Efficiency</label>
+          <label for="modificationCombustionEfficiency" class="mod-value-label">Combustion Efficiency</label>
           <div class="input-group">
             <input name="modificationCombustionEfficiency" type="number" step="any" id="modificationCombustionEfficiency"
             class="form-control" (focus)="focusField('combustionEfficiency')" (input)="save()"
@@ -51,23 +58,30 @@
           </div>
         </form>
   </li>
-  <hr *ngIf="showCombustionEfficiency">
+</div>
 
   <li class="explore-opps-item">
-    <div class="checkbox">
-      <label for="modifyFuelType">
+    <div class="checkbox mt-2">
+      <label for="modifyFuelType" class="steam-check-label">
         <input type="checkbox" id="modifyFuelType" (focus)="focusField('fuel')" (change)="toggleFuelType()"
           [(ngModel)]="showFuelType" />
         Change Fuel Type
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
+  
+<div *ngIf="showFuelType">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
 
-  <li *ngIf="showFuelType" class="explore-opps-item">
+  <li class="explore-opps-item mb-4">
     <form [formGroup]="baselineForm" class="explore-opps-form">
       <div class="text-center">
-        <label for="baselineFuelType" class="baseline-value-label">Baseline Fuel Type</label>
-        <div class="text-muted text-center baseline-value-input mt-1">
+        <label for="baselineFuelType" class="baseline-value-label"> Fuel Type</label>
+        <div class="text-muted text-center baseline-value-input">
           <span *ngIf="baselineForm.value.fuelType == 0">Solid/Liquid</span>
           <span *ngIf="baselineForm.value.fuelType == 1">Gas</span>
         </div>
@@ -75,7 +89,7 @@
   </form>
   <form [formGroup]="modificationForm" class="explore-opps-form">
     <div class="form-group explore-opps-formgroup">
-      <label for="modificationFuelType" class="mod-value-label">Modification Fuel Type</label>
+      <label for="modificationFuelType" class="mod-value-label">Fuel Type</label>
       <select name="modificationFuelType" id="modificationFuelType" class="form-control w-100"
       (focus)="focusField('fuelType')" (change)="setFuelTypes(true)" formControlName="fuelType">
       <option [ngValue]="0">Solid/Liquid</option>
@@ -84,17 +98,18 @@
         </div>
     </form>
   </li>
-
-  <li *ngIf="showFuelType" class="explore-opps-item">
+  <li class="explore-opps-item mb-4">
     <form [formGroup]="baselineForm" class="explore-opps-form">
       <div class="text-center">
-        <label for="baselineFuel" class="baseline-value-label">Baseline Fuel</label>
-        <div class="text-muted text-center baseline-value-input mt-1">{{baselineFuelOptions[baselineForm.value.fuel].substance }}</div>
+        <label for="baselineFuel" class="baseline-value-label"> Fuel</label>
+        <div class="text-muted text-center baseline-value-input">
+          {{ baselineForm.value.fuel | optionDisplayValue : baselineFuelOptions : 'id' : 'substance'}}
+        </div>
     </div>
     </form>
     <form [formGroup]="modificationForm" class="explore-opps-form">
           <div class="form-group explore-opps-formgroup">
-            <label for="modificationFuel" class="mod-value-label">Modification Fuel</label>
+            <label for="modificationFuel" class="mod-value-label">Fuel</label>
             <select name="modificationFuel" id="modificationFuel" class="form-control w-100" (focus)="focusField('fuel')"
             (change)="save()" formControlName="fuel">
             <option *ngFor="let option of modificationFuelOptions" [ngValue]="option.id">{{option.substance}}</option>
@@ -102,30 +117,43 @@
         </div>
       </form>
   </li>
-  <hr *ngIf="showFuelType">
+</div>
 
   <li class="explore-opps-item">
-    <div class="checkbox">
-      <label for="modifyBlowdownRate">
+    <div class="checkbox mt-2">
+      <label for="modifyBlowdownRate" class="steam-check-label">
         <input type="checkbox" id="modifyBlowdownRate" (focus)="focusField('blowdownRate')"
           (change)="toggleBlowdownRate()" [(ngModel)]="showBlowdownRate" /> Adjust Blowdown Rate
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
 
-  <li *ngIf="showBlowdownRate" class="explore-opps-item">
+  <div *ngIf="showBlowdownRate">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+  <li class="explore-opps-item mb-4">
     <form [formGroup]="baselineForm" class="explore-opps-form">
       <div class="text-center">
-        <label for="baselineBlowdownRate" class="baseline-value-label">Baseline Blowdown Rate
+        <label for="baselineBlowdownRate" class="baseline-value-label"> Blowdown Rate
           <!-- <span class="form-text small">Calculate Blowdown Rate</span> -->
         </label>
-        <div class="text-muted text-center baseline-value-input mt-1">{{baselineForm.value.blowdownRate }}% </div>
-
+        <div class="text-muted text-center baseline-value-input">{{baselineForm.value.blowdownRate }}% </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="baselineForm.controls.blowdownRate.invalid && !baselineForm.controls.blowdownRate.pristine">
+        <span *ngIf="baselineForm.controls.blowdownRate.errors.required">Value Required</span>
+        <span *ngIf="baselineForm.controls.blowdownRate.errors.max">Value can't be greater than
+          {{baselineForm.controls.blowdownRate.errors.max.max}} %.</span>
+        <span *ngIf="baselineForm.controls.blowdownRate.errors.min">Value can't be less than
+          {{baselineForm.controls.blowdownRate.errors.min.min}} %.</span>
+      </span>
         </div>
       </form>
       <form class="explore-opps-form" [formGroup]="modificationForm">
         <div class="form-group explore-opps-formgroup">
-          <label for="modificationBlowdownRate" class="mod-value-label">Modification Blowdown Rate
+          <label for="modificationBlowdownRate" class="mod-value-label">Blowdown Rate
           </label>
           <div class="input-group">
             <input name="modificationBlowdownRate" type="number" step="any" id="modificationBlowdownRate"
@@ -133,34 +161,48 @@
             <span class="input-group-addon units">%</span>
           </div>
           <a class="form-text small click-link" (click)="openBlowdownRateModal()">Calculate Blowdown Rate</a>
-
           </div>
+          <span class="alert-danger pull-right small"
+          *ngIf="modificationForm.controls.blowdownRate.invalid && !modificationForm.controls.blowdownRate.pristine">
+          <span *ngIf="modificationForm.controls.blowdownRate.errors.required">Value Required</span>
+          <span *ngIf="modificationForm.controls.blowdownRate.errors.max">Value can't be greater than
+            {{modificationForm.controls.blowdownRate.errors.max.max}} %.</span>
+          <span *ngIf="modificationForm.controls.blowdownRate.errors.min">Value can't be less than
+            {{modificationForm.controls.blowdownRate.errors.min.min}} %.</span>
+        </span>
         </form>
       </li>
-  <hr *ngIf="showBlowdownRate">
+    </div>
 
   <li class="explore-opps-item">
-    <div class="checkbox">
-      <label for="modifyBlowdownFlashed">
+    <div class="checkbox mt-2">
+      <label for="modifyBlowdownFlashed" class="steam-check-label">
         <input type="checkbox" id="modifyBlowdownFlashed" (focus)="focusField('blowdownFlashed')"
           (change)="toggleBlowdownFlashed()" [(ngModel)]="showBlowdownFlashed" /> Blowdown Flash to Low Pressure
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
 
-  <li class="explore-opps-item">
-      <form class="explore-opps-form" [formGroup]="baselineForm" *ngIf="showBlowdownFlashed">
+<div *ngIf="showBlowdownFlashed">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+
+  <li class="explore-opps-item mb-4">
+      <form class="explore-opps-form" [formGroup]="baselineForm">
         <div class="text-center">
-          <label for="baselineBlowdownFlashed" class="baseline-value-label">Baseline Blowdown Flashed</label>
-          <div class="text-muted text-center baseline-value-input mt-1">
+          <label for="baselineBlowdownFlashed" class="baseline-value-label"> Blowdown Flashed</label>
+          <div class="text-muted text-center baseline-value-input">
             <span *ngIf="baselineForm.value.blowdownFlashed == true">Yes</span>
             <span *ngIf="baselineForm.value.blowdownFlashed == false">No</span>
           </div>
       </div>
     </form>
-    <form class="explore-opps-form" [formGroup]="modificationForm" *ngIf="showBlowdownFlashed">
+    <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationBlowdownFlashed" class="mod-value-label">Modification Blowdown Flashed</label>
+        <label for="modificationBlowdownFlashed" class="mod-value-label">Blowdown Flashed</label>
         <select name="modificationBlowdownFlashed" id="modificationBlowdownFlashed" class="form-control w-100"
         (focus)="focusField('blowdownFlashed')" (change)="save()" formControlName="blowdownFlashed">
         <option [ngValue]="true">Yes</option>
@@ -169,24 +211,30 @@
     </div>
   </form>
   </li>
-  <hr *ngIf="showBlowdownFlashed">
-
+</div>
 
   <li class="explore-opps-item">
-    <div class="checkbox">
-      <label for="modifyPreheatMakeupWater">
+    <div class="checkbox mt-2">
+      <label for="modifyPreheatMakeupWater" class="steam-check-label">
         <input type="checkbox" id="modifyPreheatMakeupWater" (focus)="focusField('preheatMakeupWater')"
           (change)="togglePreheatBlowdownWater()" [(ngModel)]="showPreheatBlowdownWater" /> Preheat Makeup Water with
         Blowdown
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
 
-  <li class="explore-opps-item" *ngIf="showPreheatBlowdownWater">
+<div *ngIf="showPreheatBlowdownWater">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+
+  <li class="explore-opps-item mb-4">
     <form class="explore-opps-form" [formGroup]="baselineForm">
       <div class="text-center">
-        <label for="baselinePreheatBlowdownWater" class="baseline-value-label">Baseline Preheat Make-up Water</label>
-        <div class="text-muted text-center baseline-value-input mt-1">
+        <label for="baselinePreheatBlowdownWater" class="baseline-value-label"> Preheat Make-up Water</label>
+        <div class="text-muted text-center baseline-value-input">
           <span *ngIf="baselineForm.value.preheatMakeupWater == true">Yes</span>
           <span *ngIf="baselineForm.value.preheatMakeupWater == false">No</span>
         </div>
@@ -194,7 +242,7 @@
     </form>
     <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationPreheatBlowdownWater" class="baseline-value-label">Modification Preheat Make-up Water</label>
+        <label for="modificationPreheatBlowdownWater" class="baseline-value-label">Preheat Make-up Water</label>
         <select name="modificationPreheatBlowdownWater" id="modificationPreheatBlowdownWater" class="form-control w-100"
           (focus)="focusField('preheatMakeupWater')" (change)="save()" formControlName="preheatMakeupWater">
           <option [ngValue]="true">Yes</option>
@@ -204,19 +252,24 @@
     </form>
     </li>
 
-    <li class="d-flex justify-content-end" [ngClass]="{'justify-content-between': baselineForm.controls.approachTemperature.value}" *ngIf="showPreheatBlowdownWater">
+    <li class="d-flex justify-content-end" [ngClass]="{'justify-content-between': baselineForm.controls.approachTemperature.value}">
     <form *ngIf="baselineForm.controls.approachTemperature.value" class="explore-opps-form" [formGroup]="baselineForm">
       <div class="text-center">
-        <label for="baselineApproachTemperature" class="baseline-value-label">Baseline Approach Temperature</label>
-        <div class="text-muted baseline-value-input mt-1">{{ baselineForm.controls.approachTemperature.value}} 
+        <label for="baselineApproachTemperature" class="baseline-value-label"> Approach Temperature</label>
+        <div class="text-muted baseline-value-input">{{ baselineForm.controls.approachTemperature.value}} 
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </div>
-
+      <span class="alert-danger pull-right small"
+      *ngIf="baselineForm.controls.approachTemperature.invalid && !baselineForm.controls.approachTemperature.pristine">
+      <span *ngIf="baselineForm.controls.approachTemperature.errors.min">Value can't be less than
+        {{baselineForm.controls.approachTemperature.errors.min.min}}
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+    </span>
       </div>
     </form>
     <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationApproachTemperature" class="mod-value-label">Modification Approach Temperature</label>
+        <label for="modificationApproachTemperature" class="mod-value-label">Approach Temperature</label>
         <div class="input-group">
           <input name="modificationApproachTemperature" type="number" step="any" id="modificationApproachTemperature"
             class="form-control" (focus)="focusField('approachTemperature')" (input)="save()"
@@ -233,32 +286,46 @@
       </div>
     </form>
   </li>
-  <hr *ngIf="showPreheatBlowdownWater">
+</div>
 
 
   <li class="explore-opps-item">
-    <div class="checkbox">
-      <label for="modifySteamTemperature">
+    <div class="checkbox mt-2">
+      <label for="modifySteamTemperature" class="steam-check-label">
         <input type="checkbox" id="modifySteamTemperature" (focus)="focusField('steamTemperature')"
           (change)="toggleInitialSteamTemperature()" [(ngModel)]="showInitialSteampTemperature" /> Change Steam
         Generation Conditions
       </label>
     </div>
   </li>
-
-  <li class="explore-opps-item" *ngIf="showInitialSteampTemperature">
+  <hr class="mt-0 mb-0">
+<div *ngIf="showInitialSteampTemperature">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+  <li class="explore-opps-item mb-4">
     <form [formGroup]="baselineForm" class='explore-opps-form'>
       <div class="text-center">
-        <label for="baselineSteamTemperature" class="baseline-value-label">Baseline Initial Steam Temperature</label>
-        <div class="text-muted baseline-value-input mt-1">{{ baselineForm.controls.steamTemperature.value}} 
+        <label for="baselineSteamTemperature" class="baseline-value-label"> Initial Steam Temperature</label>
+        <div class="text-muted baseline-value-input">{{ baselineForm.controls.steamTemperature.value}} 
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </div>
-
+      <span class="alert-danger pull-right small"
+          *ngIf="baselineForm.controls.steamTemperature.invalid && !baselineForm.controls.steamTemperature.pristine">
+          <span *ngIf="boilerForm.controls.steamTemperature.errors.required">Value Required</span>
+          <span *ngIf="boilerForm.controls.steamTemperature.errors.max">Value can't be greater than
+            {{baselineForm.controls.steamTemperature.errors.max.max}}
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+          <span *ngIf="baselineForm.controls.steamTemperature.errors.min">Value can't be less than
+            {{baselineForm.controls.steamTemperature.errors.min.min}}
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+        </span>
       </div>
     </form>
     <form [formGroup]="modificationForm" class="explore-opps-form">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationSteamTemperature" class="mod-value-label">Modification Initial Steam Temperature</label>
+        <label for="modificationSteamTemperature" class="mod-value-label">Initial Steam Temperature</label>
         <div class="input-group">
           <input name="modificationSteamTemperature" type="number" step="any" id="modificationSteamTemperature"
             class="form-control" (focus)="focusField('steamTemperature')" (input)="save()"
@@ -279,32 +346,47 @@
       </div>
     </form>
   </li>
-  <hr *ngIf="showInitialSteampTemperature">
-
+</div>
 
   <li class="explore-opps-item">
-    <div class="checkbox">
-      <label for="modifyDeaeratorConditions">
+    <div class="checkbox mt-2">
+      <label for="modifyDeaeratorConditions" class="steam-check-label">
         <input type="checkbox" id="modifyDeaeratorConditions" (focus)="focusField('deaeratorPressure')"
           (change)="toggleDeaeratorConditions()" [(ngModel)]="showDeaeratorConditions" /> Change Deaerator Operating
         Conditions
       </label>
     </div>
   </li>
+  <hr class="mt-0 mb-0">
 
-  <li class="explore-opps-item" *ngIf="showDeaeratorConditions">
+<div *ngIf="showDeaeratorConditions">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+  
+  <li class="explore-opps-item mb-4">
     <form class="explore-opps-form" [formGroup]="baselineForm">
       <div class="text-center">
-        <label for="baselineDeaeratorPressure" class="baseline-value-label">Baseline Deaerator Pressure</label>
-        <div class="text-muted baseline-value-input mt-1">{{ baselineForm.controls.deaeratorPressure.value | number: '1.0-0'}} 
+        <label for="baselineDeaeratorPressure" class="baseline-value-label"> Deaerator Pressure</label>
+        <div class="text-muted baseline-value-input">{{ baselineForm.controls.deaeratorPressure.value | number: '1.0-0'}} 
           <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
       </div>
-
+      <span class="alert-danger pull-right small"
+      *ngIf="baselineForm.controls.deaeratorPressure.invalid && !baselineForm.controls.deaeratorPressure.pristine">
+      <span *ngIf="baselineForm.controls.deaeratorPressure.errors.required">Value Required</span>
+      <span *ngIf="baselineForm.controls.deaeratorPressure.errors.max">Value can't be greater than
+        {{baselineForm.controls.deaeratorPressure.errors.max.max}}
+        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+      <span *ngIf="baselineForm.controls.deaeratorPressure.errors.min">Value can't be less than
+        {{baselineForm.controls.deaeratorPressure.errors.min.min}}
+        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+    </span>
       </div>
     </form>
     <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationDeaeratorPressure" class="mod-value-label">Modification Deaerator Pressure</label>
+        <label for="modificationDeaeratorPressure" class="mod-value-label">Deaerator Pressure</label>
         <div class="input-group">
           <input name="modificationDeaeratorPressure" type="number" step="any" id="modificationDeaeratorPressure"
             class="form-control" (focus)="focusField('deaeratorPressure')" (input)="save()"
@@ -325,17 +407,24 @@
     </form>
   </li>
 
-  <li class="explore-opps-item" *ngIf="showDeaeratorConditions">
+  <li class="explore-opps-item mb-4">
     <form class="explore-opps-form" [formGroup]="baselineForm">
       <div class="text-center">
-        <label for="baselineDeaeratorVentRate" class="baseline-value-label">Baseline Deaerator Vent Rate</label>
-        <div class="text-muted text-center baseline-value-input mt-1">{{ baselineForm.controls.deaeratorVentRate.value }}%</div>
-
+        <label for="baselineDeaeratorVentRate" class="baseline-value-label"> Deaerator Vent Rate</label>
+        <div class="text-muted text-center baseline-value-input">{{ baselineForm.controls.deaeratorVentRate.value }}%</div>
+        <span class="alert-danger pull-right small"
+        *ngIf="baselineForm.controls.deaeratorVentRate.invalid && !baselineForm.controls.deaeratorVentRate.pristine">
+        <span *ngIf="baselineForm.controls.deaeratorVentRate.errors.required">Value Required</span>
+        <span *ngIf="baselineForm.controls.deaeratorVentRate.errors.max">Value can't be greater than
+          {{baselineForm.controls.deaeratorVentRate.errors.max.max}} %.</span>
+        <span *ngIf="baselineForm.controls.deaeratorVentRate.errors.min">Value can't be less than
+          {{baselineForm.controls.deaeratorVentRate.errors.min.min}} %.</span>
+      </span>
       </div>
     </form>
     <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationDeaeratorVentRate" class="mod-value-label">Modification Deaerator Vent Rate</label>
+        <label for="modificationDeaeratorVentRate" class="mod-value-label"> Deaerator Vent Rate</label>
         <div class="input-group">
           <input name="modificationDeaeratorVentRate" type="number" step="any" id="modificationDeaeratorVentRate"
             class="form-control" (focus)="focusField('deaeratorVentRate')" (input)="save()"
@@ -353,6 +442,7 @@
       </span>
     </form>
   </li>
+</div>
 </ul>
 
 <app-blowdown-rate-modal *ngIf="showBlowdownRateModal" (emitClose)="closeBlowdownRateModal()" [width]="formWidth"

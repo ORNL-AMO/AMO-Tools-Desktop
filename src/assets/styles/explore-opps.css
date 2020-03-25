@@ -14,6 +14,7 @@ Explore-opps form overrides
 
   .explore-opps-title {
     width: 50%;
+    font-size: 16px;
     text-align: center;
   }
   
@@ -61,4 +62,9 @@ Explore-opps form overrides
     display: block; 
     width: 100%; 
     padding-left: 2rem; 
+  }
+
+  .steam-check-label {
+    font-size: 16px;
+    color: #A66908;
   }
