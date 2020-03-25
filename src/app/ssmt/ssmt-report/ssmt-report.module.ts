@@ -24,6 +24,8 @@ import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.mod
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { WaterfallGraphModule } from '../../shared/waterfall-graph/waterfall-graph.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { SsmtPieChartComponent } from './report-graphs/ssmt-pie-chart/ssmt-pie-chart.component';
+import { SsmtWaterfallComponent } from './report-graphs/ssmt-waterfall/ssmt-waterfall.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -51,7 +53,9 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     BoilerSummaryComponent,
     HeaderInputTableComponent,
     TurbineInputTableComponent,
-    ReportGraphsPrintComponent
+    ReportGraphsPrintComponent,
+    SsmtPieChartComponent,
+    SsmtWaterfallComponent
   ],
   exports: [
     SsmtReportComponent

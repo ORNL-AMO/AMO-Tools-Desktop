@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { ReportRollupService } from '../report-rollup.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
@@ -26,23 +25,22 @@ export class ReportRollupModalsComponent implements OnInit {
   showSsmtReportOptions: boolean;
   showPhastReportOptions: boolean;
   showTHReportOptions: boolean;
-  showPrintOptionsModalSub: Subscription;
+  showPrintMenuSub: Subscription;
   showSummaryModalSub: Subscription;
   assessmentModalType: string;
   assessmentModalLabel: string;
   selectedCalculators: Array<Calculator>;
   displayModalContent: boolean = false;
-  constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private reportRollupService: ReportRollupService) { }
+  constructor(private printOptionsMenuService: PrintOptionsMenuService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit(): void {
     this.rollupPrintOptionsSub = this.printOptionsMenuService.printOptions.subscribe(val => {
       this.rollupPrintOptions = val;
     });
 
-    this.showPrintOptionsModalSub = this.printOptionsMenuService.showPrintOptionsModal.subscribe(val => {
-      if (val == true) {
-        this.showPrintModal();
-      }
+    this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
+      this.printOptionsMenuService.printContext.next('reportRollup');
+      this.showPrintMenu = val;
     });
 
     this.showSummaryModalSub = this.reportRollupService.showSummaryModal.subscribe(val => {
@@ -58,7 +56,7 @@ export class ReportRollupModalsComponent implements OnInit {
 
   ngOnDestroy() {
     this.rollupPrintOptionsSub.unsubscribe();
-    this.showPrintOptionsModalSub.unsubscribe();
+    this.showPrintMenuSub.unsubscribe();
     this.showSummaryModalSub.unsubscribe();
   }
 
@@ -108,45 +106,5 @@ export class ReportRollupModalsComponent implements OnInit {
     } else {
       this.selectedCalculators = [];
     }
-  }
-
-  showPrintModal() {
-    this.showPsatReportOptions = this.reportRollupService.numPsats != 0;
-    this.showFsatReportOptions = this.reportRollupService.numFsats != 0;
-    this.showSsmtReportOptions = this.reportRollupService.numSsmt != 0;
-    this.showPhastReportOptions = this.reportRollupService.numPhasts != 0;
-    this.showTHReportOptions = this.reportRollupService.numTreasureHunt != 0;
-    this.showPrintMenu = true;
-  }
-
-  closePrintModal() {
-    this.showPrintMenu = false;
-    this.printOptionsMenuService.showPrintOptionsModal.next(false);
-  }
-
-  togglePrint(section: string): void {
-    this.printOptionsMenuService.toggleSection(section);
-  }
-
-  setPrintViewThenPrint() {
-    this.printOptionsMenuService.showPrintView.next(true);
-    let tmpPrintBuildTime = 100;
-    if (this.reportRollupService.numSsmt > 0) {
-      tmpPrintBuildTime += (500 * this.reportRollupService.numSsmt);
-    }
-    setTimeout(() => {
-      this.print();
-    }, tmpPrintBuildTime);
-  }
-
-  print() {
-    this.showPrintMenu = false;
-    //set timeout for delay to print call. May want to do this differently later but for now should work
-    setTimeout(() => {
-      let win = this.windowRefService.nativeWindow;
-      win.print();
-      //after printing hide content again
-      this.printOptionsMenuService.showPrintView.next(false);
-    }, 5000);
   }
 }

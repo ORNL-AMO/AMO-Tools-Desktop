@@ -38,8 +38,6 @@ export class SsmtReportComponent implements OnInit {
   showPrintMenu: boolean = false;
   showPrintMenuSub: Subscription;
   showPrintDiv: boolean = false;
-  selectAll: boolean = false;
-  printGraphs = false;
 
   baselineOutput: SSMTOutput;
   baselineInputData: SSMTInputs;
@@ -106,7 +104,7 @@ export class SsmtReportComponent implements OnInit {
         this.showPrintView = val;
       }
     })
- 
+
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
@@ -121,8 +119,8 @@ export class SsmtReportComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if(this.showPrintMenuSub){
-            this.showPrintMenuSub.unsubscribe();
+    if (this.showPrintMenuSub) {
+      this.showPrintMenuSub.unsubscribe();
     }
     this.showPrintViewSub.unsubscribe();
   }
@@ -155,7 +153,7 @@ export class SsmtReportComponent implements OnInit {
   print() {
     this.printOptionsMenuService.printContext.next('ssmt');
     this.printOptionsMenuService.showPrintMenu.next(true);
-  }  
+  }
 
   calculateResultsWithMarginalCosts(ssmt: SSMT, outputData: SSMTOutput, baselineResults?: SSMTOutput): SSMTOutput {
     let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number };

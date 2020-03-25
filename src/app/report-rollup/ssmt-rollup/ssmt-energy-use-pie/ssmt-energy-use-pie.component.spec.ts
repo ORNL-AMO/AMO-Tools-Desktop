@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SsmtRollupGraphsComponent } from './ssmt-rollup-graphs.component';
+import { SsmtEnergyUsePieComponent } from './ssmt-energy-use-pie.component';
 
-describe('SsmtRollupGraphsComponent', () => {
-  let component: SsmtRollupGraphsComponent;
-  let fixture: ComponentFixture<SsmtRollupGraphsComponent>;
+describe('SsmtEnergyUsePieComponent', () => {
+  let component: SsmtEnergyUsePieComponent;
+  let fixture: ComponentFixture<SsmtEnergyUsePieComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SsmtRollupGraphsComponent ]
+      declarations: [ SsmtEnergyUsePieComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SsmtRollupGraphsComponent);
+    fixture = TestBed.createComponent(SsmtEnergyUsePieComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
