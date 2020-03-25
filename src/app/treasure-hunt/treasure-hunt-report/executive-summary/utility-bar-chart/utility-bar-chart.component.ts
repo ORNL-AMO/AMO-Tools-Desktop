@@ -35,33 +35,9 @@ export class UtilityBarChartComponent implements OnInit {
       this.createPrintBarChart();
     }
   }
-  createBarChart() {
-    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
-    let projectCostTrace = {
-      x: chartData.labels,
-      y: chartData.projectedCosts,
-      hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
-      name: "Projected Costs",
-      type: "bar",
-      marker: {
-        color: graphColors[0],
-        width: .8
-      },
-    };
-    let costSavingsTrace = {
-      x: chartData.labels,
-      y: chartData.costSavings,
-      hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
-      name: "Cost Savings",
-      type: "bar",
-      marker: {
-        color: graphColors[1]
-      },
-    }
 
-    var data = [projectCostTrace, costSavingsTrace];
+  createBarChart() {
+    var data = this.getDataObject();
     var layout = {
       barmode: 'stack',
       showlegend: true,
@@ -96,33 +72,7 @@ export class UtilityBarChartComponent implements OnInit {
   }
 
   createPrintBarChart() {
-    console.log('PRINT BAR CHART')
-    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
-    let projectCostTrace = {
-      x: chartData.labels,
-      y: chartData.projectedCosts,
-      hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
-      name: "Projected Costs",
-      type: "bar",
-      marker: {
-        color: graphColors[0],
-        width: .8
-      },
-    };
-    let costSavingsTrace = {
-      x: chartData.labels,
-      y: chartData.costSavings,
-      hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
-      name: "Cost Savings",
-      type: "bar",
-      marker: {
-        color: graphColors[1]
-      },
-    }
-
-    var data = [projectCostTrace, costSavingsTrace];
+    var data = this.getDataObject();
     var layout = {
       width: 575,
       barmode: 'stack',
@@ -153,6 +103,36 @@ export class UtilityBarChartComponent implements OnInit {
     };
 
     Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);
+  }
+
+  getDataObject(){
+    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
+    let projectCostTrace = {
+      x: chartData.labels,
+      y: chartData.projectedCosts,
+      hoverinfo: 'all',
+      hovertemplate: '%{y:$,.0f}<extra></extra>',
+      name: "Modification Costs",
+      type: "bar",
+      marker: {
+        color: graphColors[0],
+        width: .8
+      },
+    };
+    let costSavingsTrace = {
+      x: chartData.labels,
+      y: chartData.costSavings,
+      hoverinfo: 'all',
+      hovertemplate: '%{y:$,.0f}<extra></extra>',
+      name: "Savings From Baseline",
+      type: "bar",
+      marker: {
+        color: graphColors[1]
+      },
+    }
+
+    var data = [projectCostTrace, costSavingsTrace];
+    return data;
   }
 
   getChartData(): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
