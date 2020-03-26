@@ -27,7 +27,7 @@ export class SsmtRollupBarChartComponent implements OnInit {
   }
   ngAfterViewInit() {
     if (!this.printView) {
-      this.createChart();
+      this.createBarChart();
     } else {
       this.createPrintChart();
     }
@@ -35,13 +35,106 @@ export class SsmtRollupBarChartComponent implements OnInit {
 
   ngOnChanges() {
     if (this.ssmtRollupBarChart && !this.printView) {
-      this.createChart();
+      this.createBarChart();
     } else if (this.ssmtRollupBarChart && this.printView) {
       this.createPrintChart();
     }
   }
 
+  createBarChart() {
+    var data = this.getDataObject();
+    var layout = {
+      barmode: 'stack',
+      showlegend: true,
+      legend: {
+        x: .25,
+        y: 1.3,
+        orientation: "h"
+      },
+      font: {
+        size: 14,
+      },
+      yaxis: {
+        hoverformat: '.3r',
+        // automargin: true,
+        tickformat: '$.2s',
+        fixedrange: true
+      },
+      xaxis: {
+        automargin: true,
+        fixedrange: true
+      },
+      margin: { t: 15, b: 10 }
+    };
+    var configOptions = {
+      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      displaylogo: false,
+      displayModeBar: true,
+      responsive: true
+    };
 
+    Plotly.react(this.ssmtRollupBarChart.nativeElement, data, layout, configOptions);
+  }
+
+  getDataObject() {
+    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
+    let projectCostTrace = {
+      x: chartData.labels,
+      y: chartData.projectedCosts,
+      hoverinfo: 'all',
+      hovertemplate: '%{y:$,.0f}<extra></extra>',
+      name: "Modification Costs",
+      type: "bar",
+      marker: {
+        color: graphColors[0],
+        width: .8
+      },
+    };
+    let costSavingsTrace = {
+      x: chartData.labels,
+      y: chartData.costSavings,
+      hoverinfo: 'all',
+      hovertemplate: '%{y:$,.0f}<extra></extra>',
+      name: "Savings From Baseline",
+      type: "bar",
+      marker: {
+        color: graphColors[1]
+      },
+    }
+
+    var data = [projectCostTrace, costSavingsTrace];
+    return data;
+  }
+
+  getChartData(): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
+    let ssmtResults: Array<SsmtResultsData> = this.reportRollupService.ssmtResults.getValue();
+    let projectedCosts: Array<number> = new Array();
+    let labels: Array<string> = new Array();
+    let costSavings: Array<number> = new Array();
+    if (this.dataOption == 'cost') {
+      ssmtResults.forEach(result => {
+        labels.push(result.name);
+        costSavings.push(result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost);
+        projectedCosts.push(result.modificationResults.operationsOutput.totalOperatingCost);
+      })
+    } else if (this.dataOption == 'energy') {
+      ssmtResults.forEach(result => {
+        labels.push(result.name);
+        costSavings.push(result.baselineResults.operationsOutput.boilerFuelUsage - result.modificationResults.operationsOutput.boilerFuelUsage);
+        projectedCosts.push(result.modificationResults.operationsOutput.boilerFuelUsage);
+      })
+    }
+    return {
+      projectedCosts: projectedCosts,
+      labels: labels,
+      costSavings: costSavings
+    }
+  }
+
+
+
+
+  //
   createChart() {
     let traces = new Array();
     let valuesAndLabels = this.getValuesAndLabels();
@@ -74,7 +167,7 @@ export class SsmtRollupBarChartComponent implements OnInit {
 
     let yAxisLabel: string = 'Annual Energy Cost ($/yr)';
     let tickFormat: string = '$.2s';
-    if(this.dataOption == 'energy'){
+    if (this.dataOption == 'energy') {
       yAxisLabel = 'Annual Energy Usage (' + this.settings.steamEnergyMeasurement + '/hr)';
       tickFormat = '.2s'
     }
@@ -215,7 +308,7 @@ export class SsmtRollupBarChartComponent implements OnInit {
 
     let yAxisLabel: string = 'Annual Energy Cost ($/yr)';
     let tickFormat: string = '$.2s';
-    if(this.dataOption == 'energy'){
+    if (this.dataOption == 'energy') {
       yAxisLabel = 'Annual Energy Usage (' + this.settings.steamEnergyMeasurement + '/hr)';
       tickFormat = '.2s'
     }
@@ -244,7 +337,7 @@ export class SsmtRollupBarChartComponent implements OnInit {
       xaxis: {
         fixedrange: true
       },
-      
+
       width: 1000,
       margin: { t: 20, l: 100, r: 30, b: 40 }
     };
