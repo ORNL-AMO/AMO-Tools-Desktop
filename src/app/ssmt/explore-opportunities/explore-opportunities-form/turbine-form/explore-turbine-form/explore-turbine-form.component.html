@@ -15,50 +15,75 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-<li class="explore-opps-item mb-4">
-  <form class="explore-opps-form" [formGroup]="baselineForm">
-    <div class="text-center">
-      <label for="{{turbineType+'baselineUseTurbine'}}" class="baseline-value-label"> Turbine Status</label>
-      <div class="text-muted text-center baseline-value-input ">
-        <span *ngIf="baselineForm.value.useTurbine == true">On</span>
-        <span *ngIf="baselineForm.value.useTurbine == false">Off</span>
+  <li class="explore-opps-item mb-4">
+    <form class="explore-opps-form" [formGroup]="baselineForm">
+      <div class="text-center">
+        <label for="{{turbineType+'baselineUseTurbine'}}" class="baseline-value-label"> Turbine Status</label>
+        <div class="text-muted text-center baseline-value-input ">
+          <span *ngIf="baselineForm.value.useTurbine == true">On</span>
+          <span *ngIf="baselineForm.value.useTurbine == false">Off</span>
+        </div>
       </div>
-    </div>
-  </form>
-  <form class="explore-opps-form" [formGroup]="modificationForm">
-    <div class="form-group explore-opps-formgroup">
-      <label for="{{turbineType+'modificationUseTurbine'}}" class="mod-value-label"> Turbine Status</label>
-      <select name="{{turbineType+'modificationUseTurbine'}}" id="{{turbineType+'modificationUseTurbine'}}"
-        class="form-control w-100" (focus)="focusField('useTurbine')" (change)="save()" formControlName="useTurbine">
-        <option [ngValue]="true">On</option>
-        <option [ngValue]="false">Off</option>
-      </select>
-    </div>
-  </form>
-</li>
-</div>
+    </form>
+    <form class="explore-opps-form" [formGroup]="modificationForm">
+      <div class="form-group explore-opps-formgroup">
+        <label for="{{turbineType+'modificationUseTurbine'}}" class="mod-value-label"> Turbine Status</label>
+        <select name="{{turbineType+'modificationUseTurbine'}}" id="{{turbineType+'modificationUseTurbine'}}"
+          class="form-control w-100" (focus)="focusField('useTurbine')" (change)="save()" formControlName="useTurbine">
+          <option [ngValue]="true">On</option>
+          <option [ngValue]="false">Off</option>
+        </select>
+      </div>
+    </form>
+  </li>
+  </div>
 
 <!--isentropicEfficiency-->
-<div *ngIf="modificationForm.controls.useTurbine.value == true">
+<!-- Testing with 3 header example 
+High Pressure to Low Pressure
+Isentropic Efficiency
+65
+%
+Generator Efficiency
+100
+%
+Operation Type balance header
+
+High Pressure to Medium Pressure
+Isentropic Efficiency
+65
+%
+Generator Efficiency
+100
+%
+Operation Type balance header
+-->
+<div *ngIf="modificationForm.controls.useTurbine.value == true || showIsentropicEfficiency">
   <li class="explore-opps-item">
-    <div class="checkbox mt-2" *ngIf="showBaseline">
+    <div class="checkbox mt-2">
       <label for="{{turbineType+'modifyIsentropicEfficiency'}}" class="steam-check-label">
-        <input type="checkbox" id="{{turbineType+'modifyIsentropicEfficiency'}}"
+        <!-- We want to hide the checkbox when Turbine Status is on (modificationForm.controls.useTurbine.value == true) 
+              since it's not actively changing ui during that time -->
+        <input *ngIf="modificationForm.controls.useTurbine.value == false" type="checkbox" id="{{turbineType+'modifyIsentropicEfficiency'}}"
           (focus)="focusField('isentropicEfficiency')" (change)="toggleIsentropicEfficiency()"
           [(ngModel)]="showIsentropicEfficiency" /> Adjust Isentropic Efficiency
       </label>
     </div>
   </li>
-  <hr class="mt-0 mb-0" *ngIf="showBaseline">
+  <hr class="mt-0 mb-0">
 
-<div *ngIf="showIsentropicEfficiency && showBaseline">
-    <li class="explore-opps-header">
-      <span class="explore-opps-title text-muted">Baseline</span>
-      <span class="explore-opps-title text-muted">Modifications</span>
-    </li>
+  <li class="explore-opps-header d-flex" 
+  *ngIf="showIsentropicEfficiency || !showBaseline"
+  [ngClass]="{'justify-content-between': showIsentropicEfficiency && showBaseline,
+                                  'justify-content-end': showIsentropicEfficiency || !showBaseline}" >
+    <span *ngIf="showBaseline" class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
 
-  <li class="explore-opps-item mb-4">
-    <form class='explore-opps-form' [formGroup]="baselineForm">
+  <li class="mb-4 d-flex" *ngIf="showIsentropicEfficiency || !showBaseline"
+        [ngClass]="{'justify-content-between': showIsentropicEfficiency && showBaseline,
+                    'justify-content-end': showIsentropicEfficiency || !showBaseline}">
+    <form class='explore-opps-form' [formGroup]="baselineForm" *ngIf="showIsentropicEfficiency && showBaseline">
       <div class="text-center">
         <label for="{{turbineType+'baselineIsentropicEfficiency'}}" class="baseline-value-label">Isentropic Efficiency</label>
         <div class="text-muted text-center baseline-value-input ">{{baselineForm.value.isentropicEfficiency }}% </div>
@@ -72,7 +97,7 @@
       </span>
       </div>
     </form>
-    <form class="explore-opps-form" [formGroup]="modificationForm">
+    <form class="explore-opps-form" [formGroup]="modificationForm" *ngIf="showIsentropicEfficiency || !showBaseline">
       <div class="form-group explore-opps-formgroup">
         <label for="{{turbineType+'modificationIsentropicEfficiency'}}" class="mod-value-label">Isentropic Efficiency</label>
         <div class="input-group">
@@ -92,10 +117,10 @@
       </div>
     </form>
   </li>
-  </div>
 </div>
 
 <!--generationEfficiency-->
+<div *ngIf="modificationForm.controls.useTurbine.value == true">
 <li class="explore-opps-item">
   <div class="checkbox mt-2" *ngIf="showBaseline">
     <label for="{{turbineType+'modifyGenerationEfficiency'}}" class="steam-check-label">
@@ -107,13 +132,14 @@
 </li>
 <hr class="mt-0 mb-0" *ngIf="showBaseline">
 
-<div *ngIf="showGenerationEfficiency && showBaseline">
-  <li class="explore-opps-header">
+  <li class="explore-opps-header" *ngIf="showGenerationEfficiency">
     <span class="explore-opps-title text-muted">Baseline</span>
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
-  <li class="explore-opps-item mb-4">
-    <form class="explore-opps-form" [formGroup]="baselineForm" >
+  <li *ngIf="showGenerationEfficiency || !showBaseline" class="mb-4 d-flex" 
+  [ngClass]="{'justify-content-between': showGenerationEfficiency && showBaseline,
+              'justify-content-end': showGenerationEfficiency || !showBaseline}">
+    <form class="explore-opps-form" [formGroup]="baselineForm" *ngIf="showGenerationEfficiency && showBaseline">
     <div class="text-center">
       <label for="{{turbineType+'baselineGenerationEfficiency'}}" class='baseline-value-label'>Generator Efficiency</label>
       <div class="text-muted text-center baseline-value-input ">{{baselineForm.value.generationEfficiency }}% </div>
@@ -127,7 +153,7 @@
         </span>
       </div>
     </form>
-    <form class="explore-opps-form" [formGroup]="modificationForm">
+    <form class="explore-opps-form" [formGroup]="modificationForm" *ngIf="showGenerationEfficiency || !showBaseline">
       <div class="form-group explore-opps-formgroup">
         <label for="{{turbineType+'modificationGenerationEfficiency'}}" class="mod-value-label">Generator Efficiency</label>
         <div class="input-group">

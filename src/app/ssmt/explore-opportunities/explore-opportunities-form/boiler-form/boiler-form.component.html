@@ -5,7 +5,6 @@
   </label>
 </div>
 <ul *ngIf="showBoilerData">
-
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
       <label for="modifyCombustionEfficiency" class="steam-check-label">
@@ -242,7 +241,7 @@
     </form>
     <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
-        <label for="modificationPreheatBlowdownWater" class="baseline-value-label">Preheat Make-up Water</label>
+        <label for="modificationPreheatBlowdownWater" class="mod-value-label">Preheat Make-up Water</label>
         <select name="modificationPreheatBlowdownWater" id="modificationPreheatBlowdownWater" class="form-control w-100"
           (focus)="focusField('preheatMakeupWater')" (change)="save()" formControlName="preheatMakeupWater">
           <option [ngValue]="true">Yes</option>
@@ -252,8 +251,10 @@
     </form>
     </li>
 
-    <li class="d-flex justify-content-end" [ngClass]="{'justify-content-between': baselineForm.controls.approachTemperature.value}">
-    <form *ngIf="baselineForm.controls.approachTemperature.value" class="explore-opps-form" [formGroup]="baselineForm">
+    <li class="mb-4 d-flex" 
+      [ngClass]="{'justify-content-between': !modificationForm.controls.preheatMakeupWater.value,
+                  'justify-content-end': modificationForm.controls.preheatMakeupWater.value}">
+    <form *ngIf="baselineForm.value.preheatMakeupWater" class="explore-opps-form" [formGroup]="baselineForm">
       <div class="text-center">
         <label for="baselineApproachTemperature" class="baseline-value-label"> Approach Temperature</label>
         <div class="text-muted baseline-value-input">{{ baselineForm.controls.approachTemperature.value}} 
@@ -267,7 +268,8 @@
     </span>
       </div>
     </form>
-    <form class="explore-opps-form" [formGroup]="modificationForm">
+
+    <form *ngIf="modificationForm.controls.preheatMakeupWater.value" class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationApproachTemperature" class="mod-value-label">Approach Temperature</label>
         <div class="input-group">

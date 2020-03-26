@@ -6,8 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class OptionDisplayValuePipe implements PipeTransform {
 
-  transform(formValue: number, optionList: string[], matchProperty: string, displayKey: string) : string {
-    return optionList.filter(option => option[matchProperty] === formValue)[0][displayKey];
+  transform(formValue: number, optionList: any[], matchProperty: string, displayKey: string) : string {
+    const selectedOption = optionList.find(option => {return option[matchProperty] === formValue});
+    if (selectedOption) {
+      return selectedOption[displayKey]
+    }
   }
-
 }

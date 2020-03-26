@@ -64,6 +64,9 @@ export class ExploreTurbineFormComponent implements OnInit {
       this.emitShowTurbine.emit(true);
     }
     this.showBaseline = this.baselineForm.controls.useTurbine.value;
+    console.log('baseline', this.showBaseline);
+    console.log('isentroopic', this.showIsentropicEfficiency);
+    console.log('useTurbine value == true', this.modificationForm.controls.useTurbine.value == true);
   }
 
   initTurbineStatus() {
