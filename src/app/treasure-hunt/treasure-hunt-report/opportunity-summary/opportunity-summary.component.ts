@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OpportunitySummary, OpportunityCost } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
-import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
 
 @Component({
