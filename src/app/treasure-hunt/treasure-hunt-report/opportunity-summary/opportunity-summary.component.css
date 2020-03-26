@@ -24,10 +24,7 @@ tr>td {
     font-size: small;
     width: 100%;
 }
-.table th {
-    border: none;
-    padding: 0px 10px;
-}
+
 .table td {
     padding: 2px 8px;
     vertical-align: middle;

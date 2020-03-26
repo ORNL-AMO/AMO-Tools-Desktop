@@ -1,0 +1,27 @@
+
+.table {
+    font-size: small;
+    width: 100%;
+}
+.table td {
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}
+
+.table-header-row{
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+.table-header-row td:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.table-header-row td.active {
+    text-decoration: underline;
+}

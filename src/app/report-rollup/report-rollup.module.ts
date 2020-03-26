@@ -57,6 +57,7 @@ import { SsmtEnergyUsePieComponent } from './ssmt-rollup/ssmt-energy-use-pie/ssm
 import { SsmtRollupBarChartComponent } from './ssmt-rollup/ssmt-rollup-bar-chart/ssmt-rollup-bar-chart.component';
 import { SsmtRollupPrintComponent } from './ssmt-rollup/ssmt-rollup-print/ssmt-rollup-print.component';
 import { TreasureHuntRollupPrintComponent } from './treasure-hunt-rollup/treasure-hunt-rollup-print/treasure-hunt-rollup-print.component';
+import { SsmtRollupSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-summary-table/ssmt-rollup-summary-table.component';
 
 @NgModule({
   imports: [
@@ -118,6 +119,7 @@ import { TreasureHuntRollupPrintComponent } from './treasure-hunt-rollup/treasur
     SsmtRollupBarChartComponent,
     SsmtRollupPrintComponent,
     TreasureHuntRollupPrintComponent,
+    SsmtRollupSummaryTableComponent,
 
   ],
   providers: [ReportRollupService],
