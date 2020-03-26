@@ -4,32 +4,42 @@
     /> Add / Improve Wall Insulation
   </label>
 </div>
+
 <div *ngIf="showWall">
   <ul *ngFor="let loss of phast.losses.wallLosses; let index = index">
-    <li>
+    <li class="explore-opps-item">
       <div class="checkbox form-group">
-        <label for="{{'modifySurfaceTemp_'+index}}">
+        <label for="{{'modifySurfaceTemp_'+index}}" class="w-100 phast-check-label">
           <input type="checkbox" id="{{'modifySurfaceTemp_'+index}}" (focus)="focusField('avgSurfaceTemp')" (change)="toggleSurfaceTemp(index, loss.surfaceTemperature)"
-            [(ngModel)]="showSurfaceTemp[index]" /> Modify Average Surface Temperature
-        </label>
-        <label>
-          {{loss.name}}
-        </label>
+            [(ngModel)]="showSurfaceTemp[index]" /> Modify Average Surface Temperature:
+            <span class="text-muted">
+              {{ loss.name}}
+            </span>
+          </label>
       </div>
-      <form *ngIf="showSurfaceTemp[index]">
-        <div class="form-group">
-          <label class="small" for="{{'avgSurfaceTemp_'+lossIndex}}">Baseline Surface Temperature</label>
-          <div class="input-group">
-            <input name="{{'avgSurfaceTemp_'+lossIndex}}" disabled="true" type="number" step="any" class="form-control" [(ngModel)]="loss.surfaceTemperature"
-              id="{{'avgSurfaceTemp_'+lossIndex}}" onfocus="this.select();" (input)="checkBaselineWarnings(index)" (focus)="focusField('avgSurfaceTemp')"
-              (blur)="focusOut()">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+      <li>
+    <hr class="mt-0 mb-0">
+        
+  <div *ngIf="showSurfaceTemp[index]">
+    <li class="explore-opps-header">
+      <span class="explore-opps-title text-muted">Baseline</span>
+      <span class="explore-opps-title text-muted">Modifications</span>
+    </li>
+    <li class="explore-opps-item">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label class="small" for="{{'avgSurfaceTemp_'+lossIndex}}" class="baseline-value-label">Surface Temperature</label>
+          <div class="text-muted text-center baseline-value-input ">{{ loss.surfaceTemperature }}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].surfaceTempWarning !== null">{{baselineWarnings[index].surfaceTempWarning}}</span>
         </div>
-        <div class="form-group">
-          <label class="small" for="{{'avgSurfaceTempMod_'+lossIndex}}">Modification Surface Temperature</label>
+        <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].surfaceTempWarning !== null">{{baselineWarnings[index].surfaceTempWarning}}</span>
+
+      </form>
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label class="small mod-value-label" for="{{'avgSurfaceTempMod_'+lossIndex}}">Surface Temperature</label>
           <div class="input-group">
             <input name="{{'avgSurfaceTempMod_'+lossIndex}}" type="number" step="any" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature"
               id="{{'avgSurfaceTempMod_'+lossIndex}}" onfocus="this.select();" (input)="checkModificationWarnings(index)" (focus)="focusField('avgSurfaceTemp')"
@@ -41,5 +51,6 @@
         </div>
       </form>
     </li>
+  </div>
   </ul>
 </div>
