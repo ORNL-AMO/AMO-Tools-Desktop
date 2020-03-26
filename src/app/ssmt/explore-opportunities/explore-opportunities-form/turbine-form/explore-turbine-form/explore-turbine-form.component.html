@@ -38,45 +38,20 @@
   </li>
   </div>
 
-<!--isentropicEfficiency-->
-<!-- Testing with 3 header example 
-High Pressure to Low Pressure
-Isentropic Efficiency
-65
-%
-Generator Efficiency
-100
-%
-Operation Type balance header
-
-High Pressure to Medium Pressure
-Isentropic Efficiency
-65
-%
-Generator Efficiency
-100
-%
-Operation Type balance header
--->
-<div *ngIf="modificationForm.controls.useTurbine.value == true || showIsentropicEfficiency">
+<div *ngIf="modificationForm.controls.useTurbine.value == true">
   <li class="explore-opps-item">
-    <div class="checkbox mt-2">
+    <div class="checkbox mt-2" *ngIf="showBaseline">
       <label for="{{turbineType+'modifyIsentropicEfficiency'}}" class="steam-check-label">
-        <!-- We want to hide the checkbox when Turbine Status is on (modificationForm.controls.useTurbine.value == true) 
-              since it's not actively changing ui during that time -->
-        <input *ngIf="modificationForm.controls.useTurbine.value == false" type="checkbox" id="{{turbineType+'modifyIsentropicEfficiency'}}"
+        <input type="checkbox" id="{{turbineType+'modifyIsentropicEfficiency'}}"
           (focus)="focusField('isentropicEfficiency')" (change)="toggleIsentropicEfficiency()"
           [(ngModel)]="showIsentropicEfficiency" /> Adjust Isentropic Efficiency
       </label>
     </div>
   </li>
-  <hr class="mt-0 mb-0">
+  <hr class="mt-0 mb-0" *ngIf="showBaseline">
 
-  <li class="explore-opps-header d-flex" 
-  *ngIf="showIsentropicEfficiency || !showBaseline"
-  [ngClass]="{'justify-content-between': showIsentropicEfficiency && showBaseline,
-                                  'justify-content-end': showIsentropicEfficiency || !showBaseline}" >
-    <span *ngIf="showBaseline" class="explore-opps-title text-muted">Baseline</span>
+  <li *ngIf="showIsentropicEfficiency">
+    <span class="explore-opps-title text-muted">Baseline</span>
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
