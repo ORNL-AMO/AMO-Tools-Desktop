@@ -87,9 +87,6 @@ export class TreasureHuntReportComponent implements OnInit {
         this.opportunityCardsData = assessmentResult.opportunityCardsData;
         this.opportunitiesPaybackDetails = assessmentResult.opportunitiesPaybackDetails;
       });
-      // this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.assessment.treasureHunt, this.settings);
-      // this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.assessment.treasureHunt, this.settings);
-      // this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
     }
 
     this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
