@@ -25,7 +25,7 @@ export class OpportunitySummaryComponent implements OnInit {
 
   sortBy: string = 'utilityType';
   sortByDirection: string = 'asc';
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor() { }
 
   ngOnInit() {
   }
@@ -33,9 +33,6 @@ export class OpportunitySummaryComponent implements OnInit {
 
   updateOpportunities() {
     this.emitUpdateOpportunities.emit(this.opportunitySummaries);
-    // if (this.inRollup) {
-    //   this.reportRollupService.updateTreasureHuntResults(this.opportunitySummaries, this.assessment.id);
-    // }
   }
 
   getMaterialCost(oppCost: OpportunityCost): number {
