@@ -53,7 +53,7 @@
         </div>
     </div>
 
-    <div class="report-data" *ngIf="assessment.fsat.setupDone">
+    <div class="report-data" *ngIf="assessment.fsat.setupDone && assessment.fsat.valid.isValid">
 
         <ul #reportBtns class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
@@ -105,7 +105,7 @@
     </div>
     <!-- End .report-data -->
 
-    <div *ngIf="!assessment.fsat.setupDone">
+    <div *ngIf="!assessment.fsat.setupDone || !assessment.fsat.valid.isValid">
         <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
             see the resulting data.</p>
     </div>

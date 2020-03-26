@@ -347,7 +347,7 @@ export class FsatComponent implements OnInit {
   }
 
   checkSetupDone(fsat: FSAT): boolean {
-    return this.fsatService.checkValid(fsat, true);
+    return this.fsatService.checkValid(fsat, true).isValid;
   }
 
   selectModificationModal() {
