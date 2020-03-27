@@ -8,11 +8,11 @@
 </li>
 <hr class="mt-0 mb-0" *ngIf="showBaseline">
 
-<li class="explore-opps-header" *ngIf="showOperation && showBaseline">
+<li class="explore-opps-header" *ngIf="showOperation">
   <span class="explore-opps-title text-muted">Baseline</span>
   <span class="explore-opps-title text-muted">Modifications</span>
 </li>
-  <li *ngIf="showOperation || !showBaseline" class="mb-4 d-flex justify-content-end" [ngClass]="{'justify-content-between': showOperation && showBaseline}">
+  <li *ngIf="showOperation || !showBaseline" class="mb-2 d-flex justify-content-end" [ngClass]="{'justify-content-between': showOperation && showBaseline}">
     <!--baseline-->
     <form class="explore-opps-form" [formGroup]="baselineForm" *ngIf="showOperation && showBaseline">
       <div class="text-center">
@@ -21,14 +21,14 @@
           {{ baselineForm.value.operationType | optionDisplayValue : turbineTypeOptions : 'value' : 'display'}}
           </div>
       </div>
-      <div class="form-group text-center" *ngIf="baselineForm.controls.operationType.value != 2">
-          <label for="{{turbineType+'baselineOperationValue1'}}">
+      <div class="form-group explore-opps-formgroup text-center" *ngIf="baselineForm.controls.operationType.value != 2">
+          <label for="{{turbineType+'baselineOperationValue1'}}" class="baseline-value-label">
             <span *ngIf="baselineForm.controls.operationType.value == 0">Fixed Flow</span>
             <span *ngIf="baselineForm.controls.operationType.value == 1">Fixed Power</span>
             <span *ngIf="baselineForm.controls.operationType.value == 3">Minimum Power</span>
             <span *ngIf="baselineForm.controls.operationType.value == 4">Minimum Flow</span>
           </label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{turbineType+'baselineOperationValue1'}}" type="number" step="any" class="form-control" id="{{turbineType+'baselineOperationValue1'}}"
               (input)="save()" formControlName="operationValue1" (focus)="focusOperation(baselineForm.controls.operationType.value, 'operationValue1')">
             <span class="units input-group-addon">
@@ -38,51 +38,51 @@
             </span>
           </div>
       </div>
-      <div class="form-group text-center" *ngIf="baselineForm.controls.operationType.value == 4 || baselineForm.controls.operationType.value == 3">
-        <label for="operationValue2">
+      <div class="form-group explore-opps-formgroup text-center" *ngIf="baselineForm.controls.operationType.value == 4 || baselineForm.controls.operationType.value == 3">
+        <label for="operationValue2" class="baseline-value-label mt-2">
           <span *ngIf="baselineForm.controls.operationType.value == 4">Maximum Flow</span>
           <span *ngIf="baselineForm.controls.operationType.value == 3">Maximum Power</span>
         </label>
-        <div class="text-muted baseline-value-input ">
+        <div class="text-muted baseline-value-input mod-max-width">
           {{ baselineForm.controls.operationValue2.value }} 
             <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4">
               <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
             </span>
             <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>
+            <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.operationValue1.invalid && !baselineForm.controls.operationValue1.pristine">
+              <span *ngIf="baselineForm.controls.operationValue1.errors.required">Value Required</span>
+              <span *ngIf="baselineForm.controls.operationValue1.errors.max">Value can't be greater than
+                {{baselineForm.controls.operationValue1.errors.max.max}}
+                <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4"><span
+                    [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+                <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>
+                .</span>
+              <span *ngIf="baselineForm.controls.operationValue1.errors.min">Value can't be less than
+                {{baselineForm.controls.operationValue1.errors.min.min}}
+                <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4"><span
+                    [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+                <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>.</span>
+            </span>
         </div>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.operationValue1.invalid && !baselineForm.controls.operationValue1.pristine">
-        <span *ngIf="baselineForm.controls.operationValue1.errors.required">Value Required</span>
-        <span *ngIf="baselineForm.controls.operationValue1.errors.max">Value can't be greater than
-          {{baselineForm.controls.operationValue1.errors.max.max}}
-          <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-          <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>
-          .</span>
-        <span *ngIf="baselineForm.controls.operationValue1.errors.min">Value can't be less than
-          {{baselineForm.controls.operationValue1.errors.min.min}}
-          <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-          <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>.</span>
-      </span>
     </form>
 
     <!--Modification-->
     <form class="explore-opps-form" [formGroup]="modificationForm" *ngIf="showOperation || !showBaseline">
       <div class="form-group explore-opps-formgroup">
           <label for="{{turbineType+'modificationOperationType'}}" class="mod-value-label">Operation Type</label>
-          <select name="{{turbineType+'modificationOperationType'}}" class="form-control w-100" id="{{turbineType+'modificationOperationType'}}"
+          <select name="{{turbineType+'modificationOperationType'}}" class="form-control mod-max-width" id="{{turbineType+'modificationOperationType'}}"
             (change)="changeModificationOperationValidators()" (focus)="focusField('operationType')" formControlName="operationType">
             <option *ngFor="let type of turbineTypeOptions" [ngValue]="type.value">{{type.display}}</option>
           </select>
-        <div class="form-group" *ngIf="modificationForm.controls.operationType.value != 2">
-          <label for="{{turbineType+'modificationOperationValue1'}}" class="align-self-center">
+        <div class="form-group explore-opps-formgroup" *ngIf="modificationForm.controls.operationType.value != 2">
+          <label for="{{turbineType+'modificationOperationValue1'}}" class="align-self-center mod-value-label">
             <span *ngIf="modificationForm.controls.operationType.value == 0">Fixed Flow</span>
             <span *ngIf="modificationForm.controls.operationType.value == 1">Fixed Power</span>
             <span *ngIf="modificationForm.controls.operationType.value == 3">Minimum Power</span>
             <span *ngIf="modificationForm.controls.operationType.value == 4">Minimum Flow</span>
           </label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{turbineType+'modificationOperationValue1'}}" type="number" step="any" class="form-control" id="{{turbineType+'modificationOperationValue1'}}"
               (input)="save()" formControlName="operationValue1" (focus)="focusOperation(modificationForm.controls.operationType.value, 'operationValue1')">
             <span class="units input-group-addon">
@@ -90,28 +90,28 @@
                   [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
               <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>
             </span>
+            <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.operationValue1.invalid && !modificationForm.controls.operationValue1.pristine">
+              <span *ngIf="modificationForm.controls.operationValue1.errors.required">Value Required</span>
+              <span *ngIf="modificationForm.controls.operationValue1.errors.max">Value can't be greater than
+                {{modificationForm.controls.operationValue1.errors.max.max}}
+                <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
+                    [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+                <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
+              <span *ngIf="modificationForm.controls.operationValue1.errors.min">Value can't be less than
+                {{modificationForm.controls.operationValue1.errors.min.min}}
+                <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
+                    [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+                <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
+            </span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.operationValue1.invalid && !modificationForm.controls.operationValue1.pristine">
-            <span *ngIf="modificationForm.controls.operationValue1.errors.required">Value Required</span>
-            <span *ngIf="modificationForm.controls.operationValue1.errors.max">Value can't be greater than
-              {{modificationForm.controls.operationValue1.errors.max.max}}
-              <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
-                  [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-              <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
-            <span *ngIf="modificationForm.controls.operationValue1.errors.min">Value can't be less than
-              {{modificationForm.controls.operationValue1.errors.min.min}}
-              <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
-                  [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-              <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
-          </span>
         </div>
       </div>
       <div class="form-group explore-opps-formgroup" *ngIf="modificationForm.controls.operationType.value == 4 || modificationForm.controls.operationType.value == 3">
-        <label for="operationValue2" class="align-self-center">
+        <label for="operationValue2" class="align-self-center mod-value-label">
           <span *ngIf="modificationForm.controls.operationType.value == 4">Maximum Flow</span>
           <span *ngIf="modificationForm.controls.operationType.value == 3">Maximum Power</span>
         </label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="{{turbineType+'modificationOperationValue2'}}" type="number" step="any" class="form-control" id="{{turbineType+'modificationOperationValue2'}}"
             (input)="save()" formControlName="operationValue2" (focus)="focusOperation(modificationForm.controls.operationType.value, 'operationValue2')">
           <span class="units input-group-addon">
@@ -119,20 +119,20 @@
                 [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
             <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>
           </span>
+              <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.operationValue2.invalid && !modificationForm.controls.operationValue2.pristine">
+                <span *ngIf="modificationForm.controls.operationValue2.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.operationValue2.errors.max">Value can't be greater than
+                  {{modificationForm.controls.operationValue2.errors.max.max}}
+                  <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
+                      [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+                  <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
+                <span *ngIf="modificationForm.controls.operationValue2.errors.min">Value can't be less than
+                  {{modificationForm.controls.operationValue2.errors.min.min}}
+                  <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
+                      [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+                  <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
+              </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.operationValue2.invalid && !modificationForm.controls.operationValue2.pristine">
-          <span *ngIf="modificationForm.controls.operationValue2.errors.required">Value Required</span>
-          <span *ngIf="modificationForm.controls.operationValue2.errors.max">Value can't be greater than
-            {{modificationForm.controls.operationValue2.errors.max.max}}
-            <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
-                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-            <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
-          <span *ngIf="modificationForm.controls.operationValue2.errors.min">Value can't be less than
-            {{modificationForm.controls.operationValue2.errors.min.min}}
-            <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
-                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-            <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
-        </span>
       </div>
     </form>
   </li>

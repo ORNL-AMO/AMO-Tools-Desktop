@@ -50,6 +50,18 @@ Explore-opps form overrides
   }
 
   div.form-group.explore-opps-formgroup >
+  div.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
+  div.form-group.explore-opps-formgroup >
+  select.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
+  div.form-group.explore-opps-formgroup >
   select.mod-value-input {
     width: 100%;
   }

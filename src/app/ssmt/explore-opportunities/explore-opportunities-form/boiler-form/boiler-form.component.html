@@ -22,7 +22,7 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form [formGroup]="baselineForm" class="explore-opps-form">
       <div class="text-center">
         <label for="baselineCombustionEfficiency" class="baseline-value-label"> Combustion Efficiency</label>
@@ -40,20 +40,20 @@
       <form [formGroup]="modificationForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label for="modificationCombustionEfficiency" class="mod-value-label">Combustion Efficiency</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="modificationCombustionEfficiency" type="number" step="any" id="modificationCombustionEfficiency"
             class="form-control" (focus)="focusField('combustionEfficiency')" (input)="save()"
             formControlName="combustionEfficiency" />
             <span class="input-group-addon units">%</span>
+            <span class="alert-danger pull-right small"
+            *ngIf="modificationForm.controls.combustionEfficiency.invalid && !modificationForm.controls.combustionEfficiency.pristine">
+            <span *ngIf="modificationForm.controls.combustionEfficiency.errors.required">Value Required</span>
+            <span *ngIf="modificationForm.controls.combustionEfficiency.errors.max">Value can't be greater than
+              {{modificationForm.controls.combustionEfficiency.errors.max.max}} %.</span>
+              <span *ngIf="modificationForm.controls.combustionEfficiency.errors.min">Value can't be less than
+                {{modificationForm.controls.combustionEfficiency.errors.min.min}} %.</span>
+              </span>
           </div>
-          <span class="alert-danger pull-right small"
-          *ngIf="modificationForm.controls.combustionEfficiency.invalid && !modificationForm.controls.combustionEfficiency.pristine">
-          <span *ngIf="modificationForm.controls.combustionEfficiency.errors.required">Value Required</span>
-          <span *ngIf="modificationForm.controls.combustionEfficiency.errors.max">Value can't be greater than
-            {{modificationForm.controls.combustionEfficiency.errors.max.max}} %.</span>
-            <span *ngIf="modificationForm.controls.combustionEfficiency.errors.min">Value can't be less than
-              {{modificationForm.controls.combustionEfficiency.errors.min.min}} %.</span>
-            </span>
           </div>
         </form>
   </li>
@@ -76,7 +76,7 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form [formGroup]="baselineForm" class="explore-opps-form">
       <div class="text-center">
         <label for="baselineFuelType" class="baseline-value-label"> Fuel Type</label>
@@ -89,7 +89,7 @@
   <form [formGroup]="modificationForm" class="explore-opps-form">
     <div class="form-group explore-opps-formgroup">
       <label for="modificationFuelType" class="mod-value-label">Fuel Type</label>
-      <select name="modificationFuelType" id="modificationFuelType" class="form-control w-100"
+      <select name="modificationFuelType" id="modificationFuelType" class="form-control mod-max-width"
       (focus)="focusField('fuelType')" (change)="setFuelTypes(true)" formControlName="fuelType">
       <option [ngValue]="0">Solid/Liquid</option>
             <option [ngValue]="1">Gas</option>
@@ -97,7 +97,7 @@
         </div>
     </form>
   </li>
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form [formGroup]="baselineForm" class="explore-opps-form">
       <div class="text-center">
         <label for="baselineFuel" class="baseline-value-label"> Fuel</label>
@@ -109,7 +109,7 @@
     <form [formGroup]="modificationForm" class="explore-opps-form">
           <div class="form-group explore-opps-formgroup">
             <label for="modificationFuel" class="mod-value-label">Fuel</label>
-            <select name="modificationFuel" id="modificationFuel" class="form-control w-100" (focus)="focusField('fuel')"
+            <select name="modificationFuel" id="modificationFuel" class="form-control mod-max-width" (focus)="focusField('fuel')"
             (change)="save()" formControlName="fuel">
             <option *ngFor="let option of modificationFuelOptions" [ngValue]="option.id">{{option.substance}}</option>
           </select>
@@ -133,7 +133,7 @@
     <span class="explore-opps-title text-muted">Baseline</span>
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form [formGroup]="baselineForm" class="explore-opps-form">
       <div class="text-center">
         <label for="baselineBlowdownRate" class="baseline-value-label"> Blowdown Rate
@@ -154,21 +154,21 @@
         <div class="form-group explore-opps-formgroup">
           <label for="modificationBlowdownRate" class="mod-value-label">Blowdown Rate
           </label>
-          <div class="input-group">
+          <div class="input-group mod-max-width ">
             <input name="modificationBlowdownRate" type="number" step="any" id="modificationBlowdownRate"
             class="form-control" (focus)="focusField('blowdownRate')" (input)="save()" formControlName="blowdownRate" />
             <span class="input-group-addon units">%</span>
+            <span class="alert-danger pull-right small"
+            *ngIf="modificationForm.controls.blowdownRate.invalid && !modificationForm.controls.blowdownRate.pristine">
+            <span *ngIf="modificationForm.controls.blowdownRate.errors.required">Value Required</span>
+            <span *ngIf="modificationForm.controls.blowdownRate.errors.max">Value can't be greater than
+              {{modificationForm.controls.blowdownRate.errors.max.max}} %.</span>
+            <span *ngIf="modificationForm.controls.blowdownRate.errors.min">Value can't be less than
+              {{modificationForm.controls.blowdownRate.errors.min.min}} %.</span>
+          </span>
           </div>
           <a class="form-text small click-link" (click)="openBlowdownRateModal()">Calculate Blowdown Rate</a>
           </div>
-          <span class="alert-danger pull-right small"
-          *ngIf="modificationForm.controls.blowdownRate.invalid && !modificationForm.controls.blowdownRate.pristine">
-          <span *ngIf="modificationForm.controls.blowdownRate.errors.required">Value Required</span>
-          <span *ngIf="modificationForm.controls.blowdownRate.errors.max">Value can't be greater than
-            {{modificationForm.controls.blowdownRate.errors.max.max}} %.</span>
-          <span *ngIf="modificationForm.controls.blowdownRate.errors.min">Value can't be less than
-            {{modificationForm.controls.blowdownRate.errors.min.min}} %.</span>
-        </span>
         </form>
       </li>
     </div>
@@ -189,7 +189,7 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
       <form class="explore-opps-form" [formGroup]="baselineForm">
         <div class="text-center">
           <label for="baselineBlowdownFlashed" class="baseline-value-label"> Blowdown Flashed</label>
@@ -202,7 +202,7 @@
     <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationBlowdownFlashed" class="mod-value-label">Blowdown Flashed</label>
-        <select name="modificationBlowdownFlashed" id="modificationBlowdownFlashed" class="form-control w-100"
+        <select name="modificationBlowdownFlashed" id="modificationBlowdownFlashed" class="form-control mod-max-width"
         (focus)="focusField('blowdownFlashed')" (change)="save()" formControlName="blowdownFlashed">
         <option [ngValue]="true">Yes</option>
         <option [ngValue]="false">No</option>
@@ -229,7 +229,7 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form class="explore-opps-form" [formGroup]="baselineForm">
       <div class="text-center">
         <label for="baselinePreheatBlowdownWater" class="baseline-value-label"> Preheat Make-up Water</label>
@@ -242,7 +242,7 @@
     <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationPreheatBlowdownWater" class="mod-value-label">Preheat Make-up Water</label>
-        <select name="modificationPreheatBlowdownWater" id="modificationPreheatBlowdownWater" class="form-control w-100"
+        <select name="modificationPreheatBlowdownWater" id="modificationPreheatBlowdownWater" class="form-control mod-max-width"
           (focus)="focusField('preheatMakeupWater')" (change)="save()" formControlName="preheatMakeupWater">
           <option [ngValue]="true">Yes</option>
           <option [ngValue]="false">No</option>
@@ -251,7 +251,7 @@
     </form>
     </li>
 
-    <li class="mb-4 d-flex" 
+    <li class="mb-2 d-flex" 
       [ngClass]="{'justify-content-between': !modificationForm.controls.preheatMakeupWater.value,
                   'justify-content-end': modificationForm.controls.preheatMakeupWater.value}">
     <form *ngIf="baselineForm.value.preheatMakeupWater" class="explore-opps-form" [formGroup]="baselineForm">
@@ -259,32 +259,32 @@
         <label for="baselineApproachTemperature" class="baseline-value-label"> Approach Temperature</label>
         <div class="text-muted baseline-value-input">{{ baselineForm.controls.approachTemperature.value}} 
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          <span class="alert-danger pull-right small"
+          *ngIf="baselineForm.controls.approachTemperature.invalid && !baselineForm.controls.approachTemperature.pristine">
+          <span *ngIf="baselineForm.controls.approachTemperature.errors.min">Value can't be less than
+            {{baselineForm.controls.approachTemperature.errors.min.min}}
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+        </span>
       </div>
-      <span class="alert-danger pull-right small"
-      *ngIf="baselineForm.controls.approachTemperature.invalid && !baselineForm.controls.approachTemperature.pristine">
-      <span *ngIf="baselineForm.controls.approachTemperature.errors.min">Value can't be less than
-        {{baselineForm.controls.approachTemperature.errors.min.min}}
-        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-    </span>
       </div>
     </form>
 
     <form *ngIf="modificationForm.controls.preheatMakeupWater.value" class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationApproachTemperature" class="mod-value-label">Approach Temperature</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="modificationApproachTemperature" type="number" step="any" id="modificationApproachTemperature"
             class="form-control" (focus)="focusField('approachTemperature')" (input)="save()"
             formControlName="approachTemperature" />
           <span class="units input-group-addon"
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+            <span class="alert-danger pull-right small"
+            *ngIf="modificationForm.controls.approachTemperature.invalid && !modificationForm.controls.approachTemperature.pristine">
+            <span *ngIf="modificationForm.controls.approachTemperature.errors.min">Value can't be less than
+              {{modificationForm.controls.approachTemperature.errors.min.min}}
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+          </span>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="modificationForm.controls.approachTemperature.invalid && !modificationForm.controls.approachTemperature.pristine">
-          <span *ngIf="modificationForm.controls.approachTemperature.errors.min">Value can't be less than
-            {{modificationForm.controls.approachTemperature.errors.min.min}}
-            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-        </span>
       </div>
     </form>
   </li>
@@ -306,45 +306,45 @@
     <span class="explore-opps-title text-muted">Baseline</span>
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form [formGroup]="baselineForm" class='explore-opps-form'>
       <div class="text-center">
         <label for="baselineSteamTemperature" class="baseline-value-label"> Initial Steam Temperature</label>
         <div class="text-muted baseline-value-input">{{ baselineForm.controls.steamTemperature.value}} 
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          <span class="alert-danger pull-right small"
+              *ngIf="baselineForm.controls.steamTemperature.invalid && !baselineForm.controls.steamTemperature.pristine">
+              <span *ngIf="boilerForm.controls.steamTemperature.errors.required">Value Required</span>
+              <span *ngIf="boilerForm.controls.steamTemperature.errors.max">Value can't be greater than
+                {{baselineForm.controls.steamTemperature.errors.max.max}}
+                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+              <span *ngIf="baselineForm.controls.steamTemperature.errors.min">Value can't be less than
+                {{baselineForm.controls.steamTemperature.errors.min.min}}
+                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+            </span>
       </div>
-      <span class="alert-danger pull-right small"
-          *ngIf="baselineForm.controls.steamTemperature.invalid && !baselineForm.controls.steamTemperature.pristine">
-          <span *ngIf="boilerForm.controls.steamTemperature.errors.required">Value Required</span>
-          <span *ngIf="boilerForm.controls.steamTemperature.errors.max">Value can't be greater than
-            {{baselineForm.controls.steamTemperature.errors.max.max}}
-            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-          <span *ngIf="baselineForm.controls.steamTemperature.errors.min">Value can't be less than
-            {{baselineForm.controls.steamTemperature.errors.min.min}}
-            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-        </span>
       </div>
     </form>
     <form [formGroup]="modificationForm" class="explore-opps-form">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationSteamTemperature" class="mod-value-label">Initial Steam Temperature</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="modificationSteamTemperature" type="number" step="any" id="modificationSteamTemperature"
             class="form-control" (focus)="focusField('steamTemperature')" (input)="save()"
             formControlName="steamTemperature" />
           <span class="units input-group-addon"
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+            <span class="alert-danger pull-right small"
+              *ngIf="modificationForm.controls.steamTemperature.invalid && !modificationForm.controls.steamTemperature.pristine">
+              <span *ngIf="modificationForm.controls.steamTemperature.errors.required">Value Required</span>
+              <span *ngIf="modificationForm.controls.steamTemperature.errors.max">Value can't be greater than
+                {{modificationForm.controls.steamTemperature.errors.max.max}}
+                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+              <span *ngIf="modificationForm.controls.steamTemperature.errors.min">Value can't be less than
+                {{modificationForm.controls.steamTemperature.errors.min.min}}
+                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+            </span>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="modificationForm.controls.steamTemperature.invalid && !modificationForm.controls.steamTemperature.pristine">
-          <span *ngIf="modificationForm.controls.steamTemperature.errors.required">Value Required</span>
-          <span *ngIf="modificationForm.controls.steamTemperature.errors.max">Value can't be greater than
-            {{modificationForm.controls.steamTemperature.errors.max.max}}
-            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-          <span *ngIf="modificationForm.controls.steamTemperature.errors.min">Value can't be less than
-            {{modificationForm.controls.steamTemperature.errors.min.min}}
-            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-        </span>
       </div>
     </form>
   </li>
@@ -367,49 +367,49 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
   
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form class="explore-opps-form" [formGroup]="baselineForm">
       <div class="text-center">
         <label for="baselineDeaeratorPressure" class="baseline-value-label"> Deaerator Pressure</label>
         <div class="text-muted baseline-value-input">{{ baselineForm.controls.deaeratorPressure.value | number: '1.0-0'}} 
           <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+          <span class="alert-danger pull-right small"
+          *ngIf="baselineForm.controls.deaeratorPressure.invalid && !baselineForm.controls.deaeratorPressure.pristine">
+          <span *ngIf="baselineForm.controls.deaeratorPressure.errors.required">Value Required</span>
+          <span *ngIf="baselineForm.controls.deaeratorPressure.errors.max">Value can't be greater than
+            {{baselineForm.controls.deaeratorPressure.errors.max.max}}
+            <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+          <span *ngIf="baselineForm.controls.deaeratorPressure.errors.min">Value can't be less than
+            {{baselineForm.controls.deaeratorPressure.errors.min.min}}
+            <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        </span>
       </div>
-      <span class="alert-danger pull-right small"
-      *ngIf="baselineForm.controls.deaeratorPressure.invalid && !baselineForm.controls.deaeratorPressure.pristine">
-      <span *ngIf="baselineForm.controls.deaeratorPressure.errors.required">Value Required</span>
-      <span *ngIf="baselineForm.controls.deaeratorPressure.errors.max">Value can't be greater than
-        {{baselineForm.controls.deaeratorPressure.errors.max.max}}
-        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="baselineForm.controls.deaeratorPressure.errors.min">Value can't be less than
-        {{baselineForm.controls.deaeratorPressure.errors.min.min}}
-        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-    </span>
       </div>
     </form>
     <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationDeaeratorPressure" class="mod-value-label">Deaerator Pressure</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="modificationDeaeratorPressure" type="number" step="any" id="modificationDeaeratorPressure"
             class="form-control" (focus)="focusField('deaeratorPressure')" (input)="save()"
             formControlName="deaeratorPressure" />
           <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+          <span class="alert-danger pull-right small"
+            *ngIf="modificationForm.controls.deaeratorPressure.invalid && !modificationForm.controls.deaeratorPressure.pristine">
+            <span *ngIf="modificationForm.controls.deaeratorPressure.errors.required">Value Required</span>
+            <span *ngIf="modificationForm.controls.deaeratorPressure.errors.max">Value can't be greater than
+              {{modificationForm.controls.deaeratorPressure.errors.max.max}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+            <span *ngIf="modificationForm.controls.deaeratorPressure.errors.min">Value can't be less than
+              {{modificationForm.controls.deaeratorPressure.errors.min.min}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+          </span>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="modificationForm.controls.deaeratorPressure.invalid && !modificationForm.controls.deaeratorPressure.pristine">
-          <span *ngIf="modificationForm.controls.deaeratorPressure.errors.required">Value Required</span>
-          <span *ngIf="modificationForm.controls.deaeratorPressure.errors.max">Value can't be greater than
-            {{modificationForm.controls.deaeratorPressure.errors.max.max}} <span
-              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-          <span *ngIf="modificationForm.controls.deaeratorPressure.errors.min">Value can't be less than
-            {{modificationForm.controls.deaeratorPressure.errors.min.min}} <span
-              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-        </span>
       </div>
     </form>
   </li>
 
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form class="explore-opps-form" [formGroup]="baselineForm">
       <div class="text-center">
         <label for="baselineDeaeratorVentRate" class="baseline-value-label"> Deaerator Vent Rate</label>
@@ -427,21 +427,21 @@
     <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationDeaeratorVentRate" class="mod-value-label"> Deaerator Vent Rate</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="modificationDeaeratorVentRate" type="number" step="any" id="modificationDeaeratorVentRate"
             class="form-control" (focus)="focusField('deaeratorVentRate')" (input)="save()"
             formControlName="deaeratorVentRate" />
           <span class="units input-group-addon">%</span>
+          <span class="alert-danger pull-right small"
+            *ngIf="modificationForm.controls.deaeratorVentRate.invalid && !modificationForm.controls.deaeratorVentRate.pristine">
+            <span *ngIf="modificationForm.controls.deaeratorVentRate.errors.required">Value Required</span>
+            <span *ngIf="modificationForm.controls.deaeratorVentRate.errors.max">Value can't be greater than
+              {{modificationForm.controls.deaeratorVentRate.errors.max.max}} %.</span>
+            <span *ngIf="modificationForm.controls.deaeratorVentRate.errors.min">Value can't be less than
+              {{modificationForm.controls.deaeratorVentRate.errors.min.min}} %.</span>
+          </span>
         </div>
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="modificationForm.controls.deaeratorVentRate.invalid && !modificationForm.controls.deaeratorVentRate.pristine">
-        <span *ngIf="modificationForm.controls.deaeratorVentRate.errors.required">Value Required</span>
-        <span *ngIf="modificationForm.controls.deaeratorVentRate.errors.max">Value can't be greater than
-          {{modificationForm.controls.deaeratorVentRate.errors.max.max}} %.</span>
-        <span *ngIf="modificationForm.controls.deaeratorVentRate.errors.min">Value can't be less than
-          {{modificationForm.controls.deaeratorVentRate.errors.min.min}} %.</span>
-      </span>
     </form>
   </li>
 </div>

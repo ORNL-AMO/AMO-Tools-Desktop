@@ -27,7 +27,7 @@
     <span class="explore-opps-title text-muted">Baseline</span>
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form class="explore-opps-form" [formGroup]="baselineHighPressureForm">
       <div class="text-center">
         <label for="baselineHPHeatLoss" class="baseline-value-label">Heat Loss</label>
@@ -44,18 +44,18 @@
     <form class="explore-opps-form" [formGroup]="modificationHighPressureForm">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationHPHeatLoss" class="mod-value-label">Heat Loss</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="modificationHPHeatLoss" type="number" step="any" id="modificationHPHeatLoss" class="form-control"
             (focus)="focusField('heatLoss')" (input)="save()" formControlName="heatLoss" />
           <span class="input-group-addon units">%</span>
+          <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.heatLoss.invalid && !modificationHighPressureForm.controls.heatLoss.pristine">
+            <span *ngIf="modificationHighPressureForm.controls.heatLoss.errors.required">Value Required</span>
+            <span *ngIf="modificationHighPressureForm.controls.heatLoss.errors.max">Value can't be greater than
+              {{modificationHighPressureForm.controls.heatLoss.errors.max.max}} %.</span>
+            <span *ngIf="modificationHighPressureForm.controls.heatLoss.errors.min">Value can't be less than
+              {{modificationHighPressureForm.controls.heatLoss.errors.min.min}} %.</span>
+          </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.heatLoss.invalid && !modificationHighPressureForm.controls.heatLoss.pristine">
-          <span *ngIf="modificationHighPressureForm.controls.heatLoss.errors.required">Value Required</span>
-          <span *ngIf="modificationHighPressureForm.controls.heatLoss.errors.max">Value can't be greater than
-            {{modificationHighPressureForm.controls.heatLoss.errors.max.max}} %.</span>
-          <span *ngIf="modificationHighPressureForm.controls.heatLoss.errors.min">Value can't be less than
-            {{modificationHighPressureForm.controls.heatLoss.errors.min.min}} %.</span>
-        </span>
       </div>
     </form>
   </li>
@@ -78,7 +78,7 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form" [formGroup]="baselineMediumPressureForm">
         <div class="text-center">
           <label for="baselineMPHeatLoss" class="baseline-value-label">Heat Loss</label>
@@ -95,18 +95,18 @@
       <form class="explore-opps-form" [formGroup]="modificationMediumPressureForm">
         <div class="form-group explore explore-opps-formgroup">
           <label for="modificationMPHeatLoss" class="mod-value-label">Heat Loss</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="modificationMPHeatLoss" type="number" step="any" id="modificationMPHeatLoss" class="form-control"
               (focus)="focusField('heatLoss')" (input)="save()" formControlName="heatLoss" />
             <span class="input-group-addon units">%</span>
+            <span class="alert-danger pull-right small" *ngIf="modificationMediumPressureForm.controls.heatLoss.invalid && !modificationMediumPressureForm.controls.heatLoss.pristine">
+              <span *ngIf="modificationMediumPressureForm.controls.heatLoss.errors.required">Value Required</span>
+              <span *ngIf="modificationMediumPressureForm.controls.heatLoss.errors.max">Value can't be greater than
+                {{modificationMediumPressureForm.controls.heatLoss.errors.max.max}} %.</span>
+              <span *ngIf="modificationMediumPressureForm.controls.heatLoss.errors.min">Value can't be less than
+                {{modificationMediumPressureForm.controls.heatLoss.errors.min.min}} %.</span>
+            </span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="modificationMediumPressureForm.controls.heatLoss.invalid && !modificationMediumPressureForm.controls.heatLoss.pristine">
-            <span *ngIf="modificationMediumPressureForm.controls.heatLoss.errors.required">Value Required</span>
-            <span *ngIf="modificationMediumPressureForm.controls.heatLoss.errors.max">Value can't be greater than
-              {{modificationMediumPressureForm.controls.heatLoss.errors.max.max}} %.</span>
-            <span *ngIf="modificationMediumPressureForm.controls.heatLoss.errors.min">Value can't be less than
-              {{modificationMediumPressureForm.controls.heatLoss.errors.min.min}} %.</span>
-          </span>
         </div>
       </form>
     </li>
@@ -130,7 +130,7 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form" [formGroup]="baselineLowPressureForm">
         <div class="text-center">
           <label for="baselineLPHeatLoss" class="baseline-value-label">Heat Loss</label>
@@ -147,18 +147,18 @@
       <form class="explore-opps-form" [formGroup]="modificationLowPressureForm">
         <div class="form-group explore-opps-formgroup">
           <label for="modificationLPHeatLoss" class="mod-value-label">Heat Loss</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="modificationLPHeatLoss" type="number" step="any" id="modificationLPHeatLoss" class="form-control"
               (focus)="focusField('heatLoss')" (input)="save()" formControlName="heatLoss" />
             <span class="input-group-addon units">%</span>
+            <span class="alert-danger pull-right small" *ngIf="modificationLowPressureForm.controls.heatLoss.invalid && !modificationLowPressureForm.controls.heatLoss.pristine">
+              <span *ngIf="modificationLowPressureForm.controls.heatLoss.errors.required">Value Required</span>
+              <span *ngIf="modificationLowPressureForm.controls.heatLoss.errors.max">Value can't be greater than
+                {{modificationLowPressureForm.controls.heatLoss.errors.max.max}} %.</span>
+              <span *ngIf="modificationLowPressureForm.controls.heatLoss.errors.min">Value can't be less than
+                {{modificationLowPressureForm.controls.heatLoss.errors.min.min}} %.</span>
+            </span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="modificationLowPressureForm.controls.heatLoss.invalid && !modificationLowPressureForm.controls.heatLoss.pristine">
-            <span *ngIf="modificationLowPressureForm.controls.heatLoss.errors.required">Value Required</span>
-            <span *ngIf="modificationLowPressureForm.controls.heatLoss.errors.max">Value can't be greater than
-              {{modificationLowPressureForm.controls.heatLoss.errors.max.max}} %.</span>
-            <span *ngIf="modificationLowPressureForm.controls.heatLoss.errors.min">Value can't be less than
-              {{modificationLowPressureForm.controls.heatLoss.errors.min.min}} %.</span>
-          </span>
         </div>
       </form>
     </li>
@@ -190,39 +190,39 @@
     <span class=" explore-opps-title text-muted">Baseline</span>
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form class="explore-opps-form" [formGroup]="baselineHighPressureForm">
       <div class="text-center">
         <label for="baselineHPSteamUsage" class="baseline-value-label">Steam Usage</label>
         <div class="text-muted baseline-value-input">{{ baselineHighPressureForm.value.processSteamUsage }} 
           <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+          <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.processSteamUsage.invalid && !baselineHighPressureForm.controls.processSteamUsage.pristine">
+            <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+            <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
+              {{baselineHighPressureForm.controls.processSteamUsage.errors.max.max}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+            <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+              {{baselineHighPressureForm.controls.processSteamUsage.errors.min.min}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+          </span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.processSteamUsage.invalid && !baselineHighPressureForm.controls.processSteamUsage.pristine">
-        <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
-        <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
-          {{baselineHighPressureForm.controls.processSteamUsage.errors.max.max}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-        <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
-          {{baselineHighPressureForm.controls.processSteamUsage.errors.min.min}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-      </span>
       </div>
     </form>
     <form class="explore-opps-form" [formGroup]="modificationHighPressureForm">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationHPSteamUsage" class="mod-value-label">Steam Usage</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="modificationHPSteamUsage" type="number" step="any" id="modificationHPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
           <span class="units input-group-addon" [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+          <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.processSteamUsage.invalid && !modificationHighPressureForm.controls.processSteamUsage.pristine">
+            <span *ngIf="modificationHighPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+            <span *ngIf="modificationHighPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
+              {{modificationHighPressureForm.controls.processSteamUsage.errors.max.max}}
+              <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>.</span>
+            <span *ngIf="modificationHighPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+              {{modificationHighPressureForm.controls.processSteamUsage.errors.min.min}}
+              <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>.</span>
+          </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.processSteamUsage.invalid && !modificationHighPressureForm.controls.processSteamUsage.pristine">
-          <span *ngIf="modificationHighPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
-          <span *ngIf="modificationHighPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
-            {{modificationHighPressureForm.controls.processSteamUsage.errors.max.max}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>.</span>
-          <span *ngIf="modificationHighPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
-            {{modificationHighPressureForm.controls.processSteamUsage.errors.min.min}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>.</span>
-        </span>
       </div>
     </form>
   </li>
@@ -245,42 +245,42 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form" [formGroup]="baselineMediumPressureForm">
         <div class="text-center">
           <label for="baselineMPSteamUsage" class="baseline-value-label">Steam Usage</label>
           <div class="text-muted baseline-value-input">{{ baselineMediumPressureForm.value.processSteamUsage }} 
             <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+            <span class="alert-danger pull-right small" *ngIf="baselineMediumPressureForm.controls.processSteamUsage.invalid && !baselineMediumPressureForm.controls.processSteamUsage.pristine">
+              <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+              <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
+                {{baselineMediumPressureForm.controls.processSteamUsage.errors.max.max}}
+                <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+              <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+                {{baselineMediumPressureForm.controls.processSteamUsage.errors.min.min}}
+                <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+            </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="baselineMediumPressureForm.controls.processSteamUsage.invalid && !baselineMediumPressureForm.controls.processSteamUsage.pristine">
-          <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
-          <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
-            {{baselineMediumPressureForm.controls.processSteamUsage.errors.max.max}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-          <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
-            {{baselineMediumPressureForm.controls.processSteamUsage.errors.min.min}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-        </span>
         </div>
       </form>
       <form class="explore-opps-form" [formGroup]="modificationMediumPressureForm">
         <div class="form-group explore-opps-formgroup">
           <label for="modificationMPSteamUsage" class="mod-value-label">Steam Usage</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="modificationMPSteamUsage" type="number" step="any" id="modificationMPSteamUsage" class="form-control"
               (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
             <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+            <span class="alert-danger pull-right small" *ngIf="modificationMediumPressureForm.controls.processSteamUsage.invalid && !modificationMediumPressureForm.controls.processSteamUsage.pristine">
+              <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+              <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.max">Value can't be greater
+                than
+                {{modificationMediumPressureForm.controls.processSteamUsage.errors.max.max}}
+                <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+              <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+                {{modificationMediumPressureForm.controls.processSteamUsage.errors.min.min}}
+                <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+            </span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="modificationMediumPressureForm.controls.processSteamUsage.invalid && !modificationMediumPressureForm.controls.processSteamUsage.pristine">
-            <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
-            <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.max">Value can't be greater
-              than
-              {{modificationMediumPressureForm.controls.processSteamUsage.errors.max.max}}
-              <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-            <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
-              {{modificationMediumPressureForm.controls.processSteamUsage.errors.min.min}}
-              <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-          </span>
         </div>
       </form>
     </li>
@@ -303,41 +303,41 @@
       <span class=" explore-opps-title text-muted">Baseline</span>
       <span class="explore-opps-title text-muted">Modifications</span>
     </li>
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form" [formGroup]="baselineLowPressureForm">
         <div class="text-center">
           <label for="baselineLPSteamUsage" class="baseline-value-label">Steam Usage</label>
           <div class="text-muted baseline-value-input">{{ baselineLowPressureForm.value.processSteamUsage }} 
             <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+            <span class="alert-danger pull-right small" *ngIf="baselineLowPressureForm.controls.processSteamUsage.invalid && !baselineLowPressureForm.controls.processSteamUsage.pristine">
+              <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+              <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
+                {{baselineLowPressureForm.controls.processSteamUsage.errors.max.max}}
+                <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+              <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+                {{baselineLowPressureForm.controls.processSteamUsage.errors.min.min}}
+                <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+            </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="baselineLowPressureForm.controls.processSteamUsage.invalid && !baselineLowPressureForm.controls.processSteamUsage.pristine">
-          <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
-          <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
-            {{baselineLowPressureForm.controls.processSteamUsage.errors.max.max}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-          <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
-            {{baselineLowPressureForm.controls.processSteamUsage.errors.min.min}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-        </span>
         </div>
       </form>
       <form class="explore-opps-form" [formGroup]="modificationLowPressureForm">
         <div class="form-group explore-opps-formgroup">
           <label for="modificationLPSteamUsage" class="mod-value-label">Steam Usage</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="modificationLPSteamUsage" type="number" step="any" id="modificationLPSteamUsage" class="form-control"
               (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
             <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+            <span class="alert-danger pull-right small" *ngIf="modificationLowPressureForm.controls.processSteamUsage.invalid && !modificationLowPressureForm.controls.processSteamUsage.pristine">
+              <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+              <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
+                {{modificationLowPressureForm.controls.processSteamUsage.errors.max.max}}
+                <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+              <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+                {{modificationLowPressureForm.controls.processSteamUsage.errors.min.min}}
+                <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
+            </span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="modificationLowPressureForm.controls.processSteamUsage.invalid && !modificationLowPressureForm.controls.processSteamUsage.pristine">
-            <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
-            <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
-              {{modificationLowPressureForm.controls.processSteamUsage.errors.max.max}}
-              <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-            <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
-              {{modificationLowPressureForm.controls.processSteamUsage.errors.min.min}}
-              <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
-          </span>
         </div>
       </form>
     </li>

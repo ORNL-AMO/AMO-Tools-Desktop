@@ -21,7 +21,7 @@
     <span class="explore-opps-title text-muted">Baseline</span>
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form class="explore-opps-form">
         <div class="text-center">
           <label for="baselineOperatingHours" class="baseline-value-label">Operating Hours</label>
@@ -31,7 +31,7 @@
     <form class="explore-opps-form">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationOperatingHours" class="mod-value-label">Operating Hours</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <span class="input-group-addon op-hour-addon units">
             <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
           </span>
@@ -61,7 +61,7 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
       <form class="explore-opps-form">
         <div class="text-center">
           <label for="baselineMakeupWaterTemp" class="baseline-value-label">Make-up Water Temperature</label>
@@ -74,7 +74,7 @@
       <form class='explore-opps-form'>
         <div class="form-group explore-opps-formgroup">
           <label for="modificationMakeupWaterTemp" class="mod-value-label">Make-up Water Temperature</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="modificationMakeupWaterTemp" type="number" step="any" id="modificationMakeupWaterTemp"
             class="form-control" (focus)="focusField('makeUpWaterTemperature')" (input)="save()"
             [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.generalSteamOperations.makeUpWaterTemperature" />
@@ -112,7 +112,7 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
   
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form class="explore-opps-form">
       <div class="text-center">
         <label for="baselineElectricityCost" class="baseline-value-label">Electricity Unit Cost</label>
@@ -123,7 +123,7 @@
     <form class="explore-opps-form">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationElectricityCost" class="mod-value-label">Electricity Unit Cost</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="modificationElectricityCost" type="number" step="any" id="modificationElectricityCost"
             class="form-control" (focus)="focusField('electricityCost')" (input)="save()"
             [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingCosts.electricityCost" />
@@ -150,7 +150,7 @@
       <span class="explore-opps-title text-muted">Modifications</span>
     </li>
 
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form">
         <div class="text-center">
           <label for="baselineFuelCost" class="baseline-value-label">Fuel Cost</label>
@@ -161,7 +161,7 @@
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label for="modificationFuelCost" class="baseline-value-label">Fuel Cost</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="modificationFuelCost" type="number" step="any" id="modificationFuelCost" class="form-control"
             (focus)="focusField('fuelCost')" (input)="save()"
             [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingCosts.fuelCost" />
@@ -188,7 +188,7 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-  <li class="explore-opps-item mb-4">
+  <li class="explore-opps-item mb-2">
     <form class="explore-opps-form">
       <div class="text-center">
         <label for="baselineMakeupWaterCost" class="baseline-value-label">Make-up Water Cost</label>
@@ -198,7 +198,7 @@
     <form class="explore-opps-form">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationMakeupWaterCost" class="mod-value-label">Make-up Water Cost</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="modificationMakeupWaterCost" type="number" step="any" id="modificationMakeupWaterCost"
           class="form-control" (focus)="focusField('makeUpWaterTemperature')" (input)="save()"
           [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingCosts.makeUpWaterCost" />

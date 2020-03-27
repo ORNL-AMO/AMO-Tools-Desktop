@@ -22,7 +22,7 @@
     <span class=" explore-opps-title text-muted">Baseline</span>
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
     <form class="explore-opps-form" [formGroup]="baselineHighPressureForm">
       <div class="text-center">
         <label for="baselineHPCondensateRecovery" class="baseline-value-label"> Condensate Recovery Rate</label>
@@ -40,20 +40,20 @@
     <form class="explore-opps-form" [formGroup]="modificationHighPressureForm">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationHPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="modificationHPCondensateRecovery" type="number" step="any" id="modificationHPCondensateRecovery"
             class="form-control" (focus)="focusField('condensationRecoveryRate')" (input)="save()" formControlName="condensationRecoveryRate" />
           <span class="input-group-addon units">%</span>
+          <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.condensationRecoveryRate.invalid && !modificationHighPressureForm.controls.condensationRecoveryRate.pristine">
+            <span *ngIf="modificationHighPressureForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
+            <span *ngIf="modificationHighPressureForm.controls.condensationRecoveryRate.errors.max">Value can't be
+              greater than
+              {{modificationHighPressureForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
+            <span *ngIf="modificationHighPressureForm.controls.condensationRecoveryRate.errors.min">Value can't be less
+              than
+              {{modificationHighPressureForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
+          </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.condensationRecoveryRate.invalid && !modificationHighPressureForm.controls.condensationRecoveryRate.pristine">
-          <span *ngIf="modificationHighPressureForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
-          <span *ngIf="modificationHighPressureForm.controls.condensationRecoveryRate.errors.max">Value can't be
-            greater than
-            {{modificationHighPressureForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
-          <span *ngIf="modificationHighPressureForm.controls.condensationRecoveryRate.errors.min">Value can't be less
-            than
-            {{modificationHighPressureForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
-        </span>
       </div>
     </form>
   </li>
@@ -76,7 +76,7 @@
       <span class="explore-opps-title text-muted">Baseline</span>
       <span class="explore-opps-title text-muted">Modifications</span>
     </li>
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form" [formGroup]="baselineMediumPressureForm">
         <div class="text-center">
           <label for="baselineMPCondensateRecovery" class="baseline-value-label"> Condensate Recovery Rate</label>
@@ -95,19 +95,19 @@
       <form class="explore-opps-form" [formGroup]="modificationMediumPressureForm">
         <div class="form-group explore-opps-formgroup">
           <label for="modificationMPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="modificationMPCondensateRecovery" type="number" step="any" id="modificationMPCondensateRecovery"
               class="form-control" (focus)="focusField('condensationRecoveryRate')" (input)="save()" formControlName="condensationRecoveryRate" />
             <span class="input-group-addon units">%</span>
+            <span class="alert-danger pull-right small" *ngIf="modificationMediumPressureForm.controls.condensationRecoveryRate.invalid && !modificationMediumPressureForm.controls.condensationRecoveryRate.pristine">
+              <span *ngIf="modificationMediumPressureForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
+              <span *ngIf="modificationMediumPressureForm.controls.condensationRecoveryRate.errors.max">Value can't be
+                greater than
+                {{modificationMediumPressureForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
+              <span *ngIf="modificationMediumPressureForm.controls.condensationRecoveryRate.errors.min">Value can't be less than
+                {{modificationMediumPressureForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
+            </span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="modificationMediumPressureForm.controls.condensationRecoveryRate.invalid && !modificationMediumPressureForm.controls.condensationRecoveryRate.pristine">
-            <span *ngIf="modificationMediumPressureForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
-            <span *ngIf="modificationMediumPressureForm.controls.condensationRecoveryRate.errors.max">Value can't be
-              greater than
-              {{modificationMediumPressureForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
-            <span *ngIf="headerForm.controls.condensationRecoveryRate.errors.min">Value can't be less than
-              {{modificationMediumPressureForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
-          </span>
         </div>
       </form>
     </li>
@@ -131,7 +131,7 @@
       <span class="explore-opps-title text-muted">Baseline</span>
       <span class="explore-opps-title text-muted">Modifications</span>
     </li>
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form" [formGroup]="baselineLowPressureForm">
         <div class="text-center">
           <label for="baselineLPCondensateRecovery" class="baseline-value-label"> Condensate Recovery Rate</label>
@@ -149,20 +149,20 @@
       <form class="explore-opps-form" [formGroup]="modificationLowPressureForm">
         <div class="form-group explore-opps-formgroup">
           <label for="modificationLPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="modificationLPCondensateRecovery" type="number" step="any" id="modificationLPCondensateRecovery"
               class="form-control" (focus)="focusField('condensationRecoveryRate')" (input)="save()" formControlName="condensationRecoveryRate" />
             <span class="input-group-addon units">%</span>
+            <span class="alert-danger pull-right small" *ngIf="modificationLowPressureForm.controls.condensationRecoveryRate.invalid && !modificationLowPressureForm.controls.condensationRecoveryRate.pristine">
+              <span *ngIf="modificationLowPressureForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
+              <span *ngIf="modificationLowPressureForm.controls.condensationRecoveryRate.errors.max">Value can't be greater
+                than
+                {{modificationLowPressureForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
+              <span *ngIf="modificationLowPressureForm.controls.condensationRecoveryRate.errors.min">Value can't be less
+                than
+                {{modificationLowPressureForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
+            </span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="modificationLowPressureForm.controls.condensationRecoveryRate.invalid && !modificationLowPressureForm.controls.condensationRecoveryRate.pristine">
-            <span *ngIf="modificationLowPressureForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
-            <span *ngIf="modificationLowPressureForm.controls.condensationRecoveryRate.errors.max">Value can't be greater
-              than
-              {{modificationLowPressureForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
-            <span *ngIf="modificationLowPressureForm.controls.condensationRecoveryRate.errors.min">Value can't be less
-              than
-              {{modificationLowPressureForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
-          </span>
         </div>
       </form>
     </li>
@@ -185,7 +185,7 @@
       <span class="explore-opps-title text-muted">Baseline</span>
       <span class="explore-opps-title text-muted">Modifications</span>
     </li>
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form" [formGroup]="baselineMediumPressureForm">
         <div class="text-center">
           <label for="baselineFlashCondensateMediumPressure" class="baseline-value-label"> Flash Condensate to Medium Pressure</label>
@@ -198,7 +198,7 @@
       <form class='explore-opps-form' [formGroup]="modificationMediumPressureForm">
         <div class="form-group explore-opps-formgroup">
           <label for="modificationFlashCondensateMediumPressure" class="mod-value-label"> Flash Condensate to Medium Pressure</label>
-          <select name="modificationFlashCondensateMediumPressure" class="form-control w-100" id="modificationFlashCondensateMediumPressure"
+          <select name="modificationFlashCondensateMediumPressure" class="form-control mod-max-width" id="modificationFlashCondensateMediumPressure"
             (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" formControlName="flashCondensateIntoHeader">
             <option [ngValue]=true>Yes</option>
             <option [ngValue]=false>No</option>
@@ -226,7 +226,7 @@
       <span class="explore-opps-title text-muted">Modifications</span>
     </li>
 
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form" [formGroup]="baselineLowPressureForm">
         <div class="text-center">
           <label for="baselineFlashCondensateLowPressure" class="baseline-value-label"> Flash Condensate to Low Pressure</label>
@@ -239,7 +239,7 @@
       <form class="explore-opps-form" [formGroup]="modificationLowPressureForm">
         <div class="form-group explore-opps-formgroup">
           <label for="modificationFlashCondensateLowPressure" class="mod-value-label"> Flash Condensate to Low Pressure</label>
-          <select name="modificationFlashCondensateLowPressure" class="form-control w-100" id="modificationFlashCondensateLowPressure"
+          <select name="modificationFlashCondensateLowPressure" class="form-control mod-max-width" id="modificationFlashCondensateLowPressure"
             (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" formControlName="flashCondensateIntoHeader">
             <option [ngValue]=true>Yes</option>
             <option [ngValue]=false>No</option>
@@ -267,46 +267,46 @@
     <span class="explore-opps-title text-muted">Modifications</span>
   </li>
 
-  <li class="explore-opps-item mb-4"> 
+  <li class="explore-opps-item mb-2"> 
     <form class="explore-opps-form" [formGroup]="baselineHighPressureForm">
       <div class="text-center">
         <label for="baselineCondensateReturnTemperature" class="baseline-value-label"> Return Temperature</label>
         <div class="text-muted baseline-value-input">{{ baselineHighPressureForm.controls.condensateReturnTemperature.value}} 
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.invalid && !baselineHighPressureForm.controls.condensateReturnTemperature.pristine">
+            <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
+            <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.max">Value can't be greater
+              than
+              {{baselineHighPressureForm.controls.condensateReturnTemperature.errors.max.max}}
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+            <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.min">Value can't be less
+              than
+              {{baselineHighPressureForm.controls.condensateReturnTemperature.errors.min.min}}
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+          </span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.invalid && !baselineHighPressureForm.controls.condensateReturnTemperature.pristine">
-        <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
-        <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.max">Value can't be greater
-          than
-          {{baselineHighPressureForm.controls.condensateReturnTemperature.errors.max.max}}
-          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-        <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.min">Value can't be less
-          than
-          {{baselineHighPressureForm.controls.condensateReturnTemperature.errors.min.min}}
-          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-      </span>
       </div>
     </form>
     <form class="explore-opps-form" [formGroup]="modificationHighPressureForm">
       <div class="form-group explore-opps-formgroup">
         <label for="modificationCondensateReturnTemperature" class="mod-value-label"> Return Temperature</label>
-        <div class="input-group">
+        <div class="input-group mod-max-width">
           <input name="modificationCondensateReturnTemperature" type="number" step="any" id="modificationCondensateReturnTemperature"
             class="form-control" (focus)="focusField('condensateReturnTemperature')" (input)="save()" formControlName="condensateReturnTemperature" />
           <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.invalid && !modificationHighPressureForm.controls.condensateReturnTemperature.pristine">
+            <span *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.errors.required">Value
+              Required</span>
+            <span *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.errors.max">Value can't be
+              greater than
+              {{modificationHighPressureForm.controls.condensateReturnTemperature.errors.max.max}}
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+            <span *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.errors.min">Value can't be
+              less than
+              {{modificationHighPressureForm.controls.condensateReturnTemperature.errors.min.min}}
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+          </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.invalid && !modificationHighPressureForm.controls.condensateReturnTemperature.pristine">
-          <span *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.errors.required">Value
-            Required</span>
-          <span *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.errors.max">Value can't be
-            greater than
-            {{modificationHighPressureForm.controls.condensateReturnTemperature.errors.max.max}}
-            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-          <span *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.errors.min">Value can't be
-            less than
-            {{modificationHighPressureForm.controls.condensateReturnTemperature.errors.min.min}}
-            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-        </span>
       </div>
     </form>
   </li>
