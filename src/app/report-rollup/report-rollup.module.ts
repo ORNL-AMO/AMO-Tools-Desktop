@@ -40,7 +40,6 @@ import { FsatRollupPrintComponent } from './fsat-rollup/fsat-rollup-print/fsat-r
 import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
 import { SsmtSummaryComponent } from './report-summary/ssmt-summary/ssmt-summary.component';
 import { SsmtRollupComponent } from './ssmt-rollup/ssmt-rollup.component';
-import { SsmtRollupEnergyTableComponent } from './ssmt-rollup/ssmt-rollup-energy-table/ssmt-rollup-energy-table.component';
 import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
 import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-summary/treasure-hunt-summary.component';
 import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
@@ -53,7 +52,6 @@ import { ReportRollupModalsComponent } from './report-rollup-modals/report-rollu
 import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessment-print.component';
 import { TreasureHuntRollupComponent } from './treasure-hunt-rollup/treasure-hunt-rollup.component';
 import { CostStatusComponent } from './treasure-hunt-rollup/cost-status/cost-status.component';
-import { SsmtEnergyUsePieComponent } from './ssmt-rollup/ssmt-energy-use-pie/ssmt-energy-use-pie.component';
 import { SsmtRollupBarChartComponent } from './ssmt-rollup/ssmt-rollup-bar-chart/ssmt-rollup-bar-chart.component';
 import { SsmtRollupPrintComponent } from './ssmt-rollup/ssmt-rollup-print/ssmt-rollup-print.component';
 import { TreasureHuntRollupPrintComponent } from './treasure-hunt-rollup/treasure-hunt-rollup-print/treasure-hunt-rollup-print.component';
@@ -107,7 +105,6 @@ import { SsmtRollupSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-summa
     FsatRollupPrintComponent,
     SsmtSummaryComponent,
     SsmtRollupComponent,
-    SsmtRollupEnergyTableComponent,
     TreasureHuntSummaryComponent,
     AssessmentReportsComponent,
     SidebarComponent,
@@ -115,7 +112,6 @@ import { SsmtRollupSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-summa
     PreAssessmentPrintComponent,
     TreasureHuntRollupComponent,
     CostStatusComponent,
-    SsmtEnergyUsePieComponent,
     SsmtRollupBarChartComponent,
     SsmtRollupPrintComponent,
     TreasureHuntRollupPrintComponent,

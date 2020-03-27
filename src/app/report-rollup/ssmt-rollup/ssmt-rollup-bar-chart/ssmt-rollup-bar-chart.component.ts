@@ -65,7 +65,12 @@ export class SsmtRollupBarChartComponent implements OnInit {
         // automargin: true,
         tickformat: tickFormat,
         fixedrange: true,
-        text: yAxisLabel
+        title: {
+          text: yAxisLabel,
+          font: {
+            size: 14,
+          }
+        }
       },
       xaxis: {
         automargin: true,
@@ -84,16 +89,20 @@ export class SsmtRollupBarChartComponent implements OnInit {
   }
 
   getDataObject() {
+    let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
+    if (this.dataOption == 'energy') {
+      hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.steamEnergyMeasurement + '/hr';
+    }
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
     let projectCostTrace = {
       x: chartData.labels,
       y: chartData.projectedCosts,
       hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
+      hovertemplate: hoverTemplate,
       name: "Modification Costs",
       type: "bar",
       marker: {
-        color: graphColors[0],
+        color: graphColors[1],
         width: .8
       },
     };
@@ -101,11 +110,11 @@ export class SsmtRollupBarChartComponent implements OnInit {
       x: chartData.labels,
       y: chartData.costSavings,
       hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
+      hovertemplate: hoverTemplate,
       name: "Savings From Baseline",
       type: "bar",
       marker: {
-        color: graphColors[1]
+        color: graphColors[0]
       },
     }
 

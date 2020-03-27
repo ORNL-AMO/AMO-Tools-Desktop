@@ -80,9 +80,11 @@ export class PrintOptionsMenuService {
       }
       case "opportunityPayback": {
         currentPrintOptions.printReportOpportunityPayback = !currentPrintOptions.printReportOpportunityPayback;
+        break;
       }
       case "opportunitySummary": {
         currentPrintOptions.printReportOpportunitySummary = !currentPrintOptions.printReportOpportunitySummary;
+        break;
       }
       default: {
         break;

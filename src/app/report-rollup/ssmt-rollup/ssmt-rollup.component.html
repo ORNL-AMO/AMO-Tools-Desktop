@@ -1,6 +1,12 @@
+<div class="row">
+  <div class="col-12 pt-2">
+    <label class="group-label">Steam Systems Summary</label>
+    <app-ssmt-rollup-summary-table [settings]="settings"></app-ssmt-rollup-summary-table>
+  </div>
+</div>
 <div class="row justify-content-center">
   <div class="col">
-    <div class="btn-group btn-group-sm align-self-center pt-2 pb-2">
+    <div class="btn-group btn-group-sm pt-2 pb-2 mx-auto">
       <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('cost')"
         [ngClass]="{'active': dataOption == 'cost'}">Energy Cost</button>
       <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('energy')"
@@ -10,12 +16,6 @@
 </div>
 <div class="row">
   <div class="col-12">
-    <label class="group-label">Steam Systems Summary</label>
     <app-ssmt-rollup-bar-chart [settings]="settings" [dataOption]="dataOption"></app-ssmt-rollup-bar-chart>
-  </div>
-</div>
-<div class="row">
-  <div class="col-12 pt-2">
-    <app-ssmt-rollup-summary-table [settings]="settings"></app-ssmt-rollup-summary-table>
   </div>
 </div>
