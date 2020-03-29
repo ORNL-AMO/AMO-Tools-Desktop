@@ -16,6 +16,8 @@
 </div>
 <div class="row">
   <div class="col-12">
-    <app-ssmt-rollup-bar-chart [settings]="settings" [dataOption]="dataOption"></app-ssmt-rollup-bar-chart>
+    <!-- <app-ssmt-rollup-bar-chart [settings]="settings" [dataOption]="dataOption"></app-ssmt-rollup-bar-chart> -->
+    <app-rollup-summary-bar-chart [barChartData]="barChartData" [yAxisLabel]="yAxisLabel" [tickFormat]="tickFormat">
+    </app-rollup-summary-bar-chart>
   </div>
 </div>

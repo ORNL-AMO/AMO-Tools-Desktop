@@ -56,6 +56,7 @@ import { SsmtRollupBarChartComponent } from './ssmt-rollup/ssmt-rollup-bar-chart
 import { SsmtRollupPrintComponent } from './ssmt-rollup/ssmt-rollup-print/ssmt-rollup-print.component';
 import { TreasureHuntRollupPrintComponent } from './treasure-hunt-rollup/treasure-hunt-rollup-print/treasure-hunt-rollup-print.component';
 import { SsmtRollupSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-summary-table/ssmt-rollup-summary-table.component';
+import { RollupSummaryBarChartComponent } from './rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 
 @NgModule({
   imports: [
@@ -116,6 +117,7 @@ import { SsmtRollupSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-summa
     SsmtRollupPrintComponent,
     TreasureHuntRollupPrintComponent,
     SsmtRollupSummaryTableComponent,
+    RollupSummaryBarChartComponent,
 
   ],
   providers: [ReportRollupService],

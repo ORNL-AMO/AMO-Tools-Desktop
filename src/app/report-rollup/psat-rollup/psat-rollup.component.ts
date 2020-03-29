@@ -12,6 +12,7 @@ export class PsatRollupComponent implements OnInit {
   settings: Settings;
   @Input()
   calculators: Array<Calculator>;
+  
   showPreAssessment: boolean = true;
   constructor() { }
 
