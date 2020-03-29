@@ -92,13 +92,13 @@ export class ExploreTurbineFormComponent implements OnInit {
 
   toggleIsentropicEfficiency() {
     if (this.showIsentropicEfficiency === false) {
-      this.modificationForm.controls.isentropicEfficiency.patchValue(this.baselineForm.controls.isentropicEfficiency);
+      this.modificationForm.controls.isentropicEfficiency.patchValue(this.baselineForm.controls.isentropicEfficiency.value);
     }
   }
 
   toggleGenerationEfficiency() {
     if (this.showGenerationEfficiency === false) {
-      this.modificationForm.controls.generationEfficiency.patchValue(this.baselineForm.controls.generationEfficiency);
+      this.modificationForm.controls.generationEfficiency.patchValue(this.baselineForm.controls.generationEfficiency.value);
     }
   }
 
