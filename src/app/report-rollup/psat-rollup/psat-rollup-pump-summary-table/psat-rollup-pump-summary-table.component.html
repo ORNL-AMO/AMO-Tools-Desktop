@@ -30,41 +30,41 @@
       </th>
     </tr>
   </thead>
-  <tbody *ngIf="resultData">
-    <tr *ngFor="let data of resultData">
+  <tbody>
+    <tr *ngFor="let data of tableData">
       <!-- name -->
-      <td>{{data.name}}</td>
-      <td *ngIf="data.modName">{{data.modName}}</td>
-      <td *ngIf="!data.modName">&mdash;</td>
+      <td>{{data.pumpName}}</td>
+      <td *ngIf="data.modificationName">{{data.modificationName}}</td>
+      <td *ngIf="!data.modificationName">&mdash;</td>
       <!-- energy use -->
-      <td>{{data.baselineResults.annual_energy | sigFigs:'5'}}</td>
-      <td *ngIf="data.modName">{{data.modificationResults.annual_energy | sigFigs:'5'}}</td>
-      <td *ngIf="!data.modName">&mdash;</td>
+      <td>{{data.baselineEnergyUse | sigFigs:'5'}}</td>
+      <td *ngIf="data.modificationName">{{data.modificationEnergyUse | sigFigs:'5'}}</td>
+      <td *ngIf="!data.modificationName">&mdash;</td>
       <!-- annual cost -->
-      <td>{{data.baselineResults.annual_cost | currency:'USD':'symbol':'1.0-0'}}</td>
-      <td *ngIf="data.modName">{{data.modificationResults.annual_cost | currency:'USD':'symbol':'1.0-0'}}</td>
-      <td *ngIf="!data.modName">&mdash;</td>
+      <td>{{data.baselineCost | currency:'USD':'symbol':'1.0-0'}}</td>
+      <td *ngIf="data.modificationName">{{data.modificationCost | currency:'USD':'symbol':'1.0-0'}}</td>
+      <td *ngIf="!data.modificationName">&mdash;</td>
       <!-- savings -->
-      <td *ngIf="data.modName">{{getSavings(data.modificationResults.annual_cost, data.baselineResults.annual_cost) | currency:'USD':'symbol':'1.0-0'}}</td>
-      <td *ngIf="!data.modName">&mdash;</td>
+      <td *ngIf="data.modificationName">{{data.costSavings | currency:'USD':'symbol':'1.0-0'}}</td>
+      <td *ngIf="!data.modificationName">&mdash;</td>
       <!-- implementation costs -->
-      <td *ngIf="data.modName">
-        <span *ngIf="data.modification.inputs.implementationCosts">
-          {{data.modification.inputs.implementationCosts | currency:'USD':'symbol':'1.0-0'}}
+      <td *ngIf="data.modificationName">
+        <span *ngIf="data.implementationCosts">
+          {{data.implementationCosts | currency:'USD':'symbol':'1.0-0'}}
         </span>
-        <span *ngIf="!data.modification.inputs.implementationCosts">&mdash;</span>
+        <span *ngIf="!data.implementationCosts">&mdash;</span>
       </td>
-      <td *ngIf="!data.modName">&mdash;</td>
+      <td *ngIf="!data.modificationName">&mdash;</td>
       <!-- simple patback -->
-      <td *ngIf="data.modName">
-        <span *ngIf="getPayback(data.modificationResults.annual_cost, data.baselineResults.annual_cost, data.modification.inputs.implementationCosts)">
-          {{getPayback(data.modificationResults.annual_cost, data.baselineResults.annual_cost, data.modification.inputs.implementationCosts) | sigFigs:'3'}}
+      <td *ngIf="data.modificationName">
+        <span *ngIf="data.payBackPeriod">
+          {{data.payBackPeriod | sigFigs:'3'}}
         </span>
-        <span *ngIf="!getPayback(data.modificationResults.annual_cost, data.baselineResults.annual_cost, data.modification.inputs.implementationCosts)">
+        <span *ngIf="!data.payBackPeriod">
           &mdash;
         </span>
       </td>
-      <td *ngIf="!data.modName">&mdash;</td>
+      <td *ngIf="!data.modificationName">&mdash;</td>
     </tr>
   </tbody>
 </table>

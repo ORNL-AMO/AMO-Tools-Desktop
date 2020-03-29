@@ -40,8 +40,10 @@ export class SsmtRollupComponent implements OnInit {
 
   getDataObject(): Array<BarChartDataItem> {
     let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
+    let traceName: string = "Modification Costs";
     if (this.dataOption == 'energy') {
       hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.steamEnergyMeasurement + '/hr';
+      traceName = "Modification Energy Use";
     }
     let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
     let projectCostTrace: BarChartDataItem = {
@@ -49,7 +51,7 @@ export class SsmtRollupComponent implements OnInit {
       y: chartData.projectedCosts,
       hoverinfo: 'all',
       hovertemplate: hoverTemplate,
-      name: "Modification Costs",
+      name: traceName,
       type: "bar",
       marker: {
         color: graphColors[1]
