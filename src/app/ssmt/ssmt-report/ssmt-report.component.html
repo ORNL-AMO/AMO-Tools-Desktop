@@ -1,19 +1,19 @@
 <div class="assessment-report report-in-ssmt ssmt" *ngIf="assessment && settings"
-  [ngClass]="{'assessment-report-padding': inSSMT, 'report-in-rollup': inRollup}">
+  [ngClass]="{'assessment-report-padding': !inRollup, 'report-in-rollup': inRollup}">
 
-  <div *ngIf="inSSMT" class="report-cover">
+  <div *ngIf="!inRollup" class="report-cover">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
     <div class="report-title">
       <h4>Steam System Efficiency Report:</h4>
       <h4>{{assessment.name}}</h4>
-      <h5>{{settings.createdDate| date:'medium'}}</h5>
+      <h5>{{settings.createdDate| date:'short'}}</h5>
     </div>
 
     <!-- <p class="report-notes">{{reportNotes}}</p> -->
   </div>
 
-  <div #reportHeader class="report-header" [ngClass]="{'hide-print': inSSMT}">
+  <div #reportHeader class="report-header" [ngClass]="{'hide-print': !inRollup}">
 
     <div *ngIf="!inRollup" class="btn-group hide-print">
       <button class="btn btn-secondary" (click)="print()" [disabled]="false">Print</button>
@@ -25,16 +25,18 @@
     <div *ngIf="assessment" class="row assessment-name">
       <div class="col-12">
         <h2 class="assessment-title">
-          <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
-            {{directory.name}} /
-          </span>
+          <div class="d-flex">
+            <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+              {{directory.name}} /
+            </span>
+          </div>
           {{assessment.name}}
 
         </h2>
       </div>
       <div class="col-12">
         <h2 class="date-modified">
-          <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+          <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
         </h2>
       </div>
     </div>
@@ -69,23 +71,15 @@
       <li (click)="setTab('diagram')" [ngClass]="{'active': currentTab == 'diagram'}">
         <a>Diagram</a>
       </li>
-      <!--
-        -->
       <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
         <a>Report Graphs</a>
       </li>
-      <!--
-        -->
       <!-- <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
         <a>Sankey</a>
       </li> -->
-      <!--
-        -->
       <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
         <a>Input Summary</a>
       </li>
-      <!--
-        -->
       <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
         <a>Facility Info</a>
       </li>
@@ -97,7 +91,7 @@
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)) && dataCalculated"
+      *ngIf="((currentTab == 'executiveSummary') || (showPrintView && printOptions.printExecutiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
@@ -105,14 +99,14 @@
       </app-executive-summary>
     </div>
     <div class="results scroll-item print-height"
-      *ngIf="((currentTab == 'energySummary' && !showPrintView) || (showPrintView && printOptions.printEnergySummary)) && dataCalculated"
+      *ngIf="((currentTab == 'energySummary') || (showPrintView && printOptions.printEnergySummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
         [assessment]="assessment"></app-energy-summary>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'losses' && !showPrintView) || (showPrintView && printOptions.printLossesSummary)) && dataCalculated"
+      *ngIf="((currentTab == 'losses') || (showPrintView && printOptions.printLossesSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses"
         [settings]="settings" [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"
@@ -125,14 +119,15 @@
       </app-report-diagram>
     </div>
     <div class="results scroll-item print-height"
-      *ngIf="((currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)) && dataCalculated"
+      *ngIf="((currentTab == 'reportGraphs') || (showPrintView && printOptions.printReportGraphs)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-report-graphs [settings]="settings" [assessment]="assessment" [baselineLosses]="baselineLosses"
-        [modificationLosses]="modificationLosses" [printView]="showPrintView" [printGraphs]="printReportGraphs">
+      <app-report-graphs [settings]="settings" [ssmt]="assessment.ssmt" [baselineLosses]="baselineLosses"
+        [modificationLosses]="modificationLosses" [printView]="showPrintView"
+        [printGraphs]="printOptions.printReportGraphs">
       </app-report-graphs>
     </div>
     <div class="results scroll-item input-data print-height print-break-before"
-      *ngIf="((currentTab == 'inputData' && !showPrintView) || (showPrintView && printOptions.printInputData)) && dataCalculated"
+      *ngIf="((currentTab == 'inputData') || (showPrintView && printOptions.printInputData)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData"
         [modificationInputData]="modificationInputData" [printView]="printOptions.printInputData"

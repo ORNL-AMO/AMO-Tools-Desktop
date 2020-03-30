@@ -22,9 +22,11 @@
         <div *ngIf="assessment" class="row assessment-name">
             <div class="col-12">
                 <h2 class="assessment-title">
-                    <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
-                        {{directory.name}} /
-                    </span>
+                    <div class="d-flex">
+                        <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+                            {{directory.name}} /
+                        </span>
+                    </div>
                     {{assessment.name}}
 
                 </h2>

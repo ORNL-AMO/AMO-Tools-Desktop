@@ -50,6 +50,18 @@ Explore-opps form overrides
   }
 
   div.form-group.explore-opps-formgroup >
+  div.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
+  div.form-group.explore-opps-formgroup >
+  select.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
+  div.form-group.explore-opps-formgroup >
   select.mod-value-input {
     width: 100%;
   }
@@ -78,8 +90,11 @@ Explore-opps form overrides
 
   .phast-check-label {
     font-size: 16px;
-    /* color: #BF3D00; */
-    /* higher contrast */
     color: #9E3200;
 
+  }
+  
+  .steam-check-label {
+    font-size: 16px;
+    color: #A66908;
   }

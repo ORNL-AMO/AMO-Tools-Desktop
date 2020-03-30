@@ -1,17 +1,24 @@
 <div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyFlowRate">
         <input type="checkbox" id="modifyFlowRate" (focus)="focusField('flowRate')" (change)="toggleFlowRate()"
-            [(ngModel)]="this.fsat.modifications[this.exploreModIndex].exploreOppsShowFlowRate.hasOpportunity" />
-        {{ this.fsat.modifications[this.exploreModIndex].exploreOppsShowFlowRate.display}}
+            [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowFlowRate.hasOpportunity" />
+        {{ fsat.modifications[exploreModIndex].exploreOppsShowFlowRate.display}}
     </label>
 </div>
-<li *ngIf="this.fsat.modifications[this.exploreModIndex].exploreOppsShowFlowRate.hasOpportunity && !isVFD" class="explore-opps-item">
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowFlowRate.hasOpportunity && !isVFD" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid}">
             <label for="baselineFlowRate" class="baseline-value-label">Baseline Flow Rate</label>
             <div class="text-muted baseline-value-input">{{ baselineForm.controls.flowRate.value | number: '1.0-0' }} 
                 <span [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
             </div>
+            <span class="alert-danger pull-right small"
+            *ngIf="baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">
+            <span *ngIf="baselineForm.controls.flowRate.errors.required">Value Required</span>
+            <span *ngIf="baselineForm.controls.flowRate.errors.min">Value can't be less than
+                {{baselineForm.controls.flowRate.errors.min.min}} <span
+                    [innerHTML]="settings.fanFlowRate | settingsLabel"></span></span>
+        </span>
         </div>
     </form>
     <form [formGroup]="modificationForm" class="explore-opps-form">
@@ -41,11 +48,11 @@
 <div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyPressure">
         <input type="checkbox" id="modifyPressure" (focus)="focusField('inletPressure')" (change)="togglePressure()"
-            [(ngModel)]="this.fsat.modifications[this.exploreModIndex].exploreOppsShowReducePressure.hasOpportunity" />
-        {{this.fsat.modifications[this.exploreModIndex].exploreOppsShowReducePressure.display}}
+            [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.hasOpportunity" />
+        {{fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.display}}
     </label>
 </div>
-<li *ngIf="this.fsat.modifications[this.exploreModIndex].exploreOppsShowReducePressure.hasOpportunity && !isVFD" class="explore-opps-item">
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.hasOpportunity && !isVFD" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.inletPressure.invalid}">
             <label for="baselinePressure" class="baseline-value-label">Baseline Inlet Pressure</label>
@@ -133,11 +140,11 @@
 <div class="checkbox" #formElement>
     <label class="group-label" for="showSystemData">
         <input type="checkbox" id="showSystemData" (focus)="focusField('cost')" (change)="toggleSystemData()"
-            [(ngModel)]="this.fsat.modifications[this.exploreModIndex].exploreOppsShowOpData.hasOpportunity" />
+            [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowOpData.hasOpportunity" />
         Adjust Operational Data
     </label>
 </div>
-<li *ngIf="this.fsat.modifications[this.exploreModIndex].exploreOppsShowOpData.hasOpportunity" class="explore-opps-item">
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowOpData.hasOpportunity" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup"
             [ngClass]="{'error': baselineWarnings.costError !== null, 'invalid':baselineForm.controls.cost.invalid}">

@@ -10,7 +10,15 @@ export interface PSAT {
   optimizationRating?: number;
   setupDone?: boolean;
   operatingHours?: OperatingHours;
+  valid?: PsatValid;
 }
+
+export interface PsatValid {
+  isValid: boolean,
+  pumpFluidValid: boolean,
+  motorValid: boolean,
+  fieldDataValid: boolean
+};
 
 export interface PsatInputs {
   pump_style?: number;
@@ -95,6 +103,18 @@ export interface Modification {
   notes?: Notes;
   psat?: PSAT;
   exploreOpportunities?: boolean;
+  exploreOppsShowVfd?: SavingsOpportunity,
+  exploreOppsShowMotorDrive?: SavingsOpportunity;
+  exploreOppsShowPumpType?: SavingsOpportunity;
+  exploreOppsShowRatedMotorData?: SavingsOpportunity;
+  exploreOppsShowSystemData?: SavingsOpportunity;
+  exploreOppsShowFlowRate?: SavingsOpportunity;
+  exploreOppsShowHead?: SavingsOpportunity;
+}
+
+export interface SavingsOpportunity {
+  hasOpportunity: boolean,
+  display: string
 }
 
 export interface Notes {

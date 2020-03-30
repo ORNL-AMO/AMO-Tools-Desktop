@@ -12,7 +12,7 @@
       <label class="group-label" for="modifyCalculationMethod">
         <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')"
           (change)="setVFD()" [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity" />
-        {{ this.fsat.modifications[this.exploreModIndex].exploreOppsShowVfd.display }}
+        {{ fsat.modifications[exploreModIndex].exploreOppsShowVfd.display }}
       </label>
     </div>
     <app-variable-frequency-drive-form *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowVfd.hasOpportunity"

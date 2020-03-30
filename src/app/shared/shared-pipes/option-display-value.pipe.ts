@@ -12,5 +12,4 @@ export class OptionDisplayValuePipe implements PipeTransform {
       return selectedOption[displayKey]
     }
   }
-
 }

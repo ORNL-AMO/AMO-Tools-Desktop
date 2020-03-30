@@ -1,10 +1,10 @@
 <div *ngIf="!isVFD" class="checkbox">
     <label class="group-label" for="modifyFlowRate">
         <input type="checkbox" id="modifyFlowRate" value="true" (focus)="focusField('flowRate')"
-            (change)="toggleFlowRate()" [(ngModel)]="showFlowRate" /> Reduce System Flow Rate
+            (change)="toggleFlowRate()" [(ngModel)]="currentModification.exploreOppsShowFlowRate.hasOpportunity" /> {{ currentModification.exploreOppsShowFlowRate.display}}
     </label>
 </div>
-<li *ngIf="!isVFD && showFlowRate" class="explore-opps-item">
+<li *ngIf="!isVFD && currentModification.exploreOppsShowFlowRate.hasOpportunity" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup"
             [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid, 'error': baselineWarnings.flowError !== null}">
@@ -56,11 +56,11 @@
 <div *ngIf="!isVFD" class="checkbox">
     <label class="group-label" for="modifyHead">
         <input type="checkbox" id="modifyHead" value="true" (focus)="focusField('head')" (change)="toggleHead()"
-            [(ngModel)]="showHead" /> Reduce System Head Requirement
+            [(ngModel)]="currentModification.exploreOppsShowHead.hasOpportunity" /> {{ currentModification.exploreOppsShowHead.display}}
     </label>
 </div>
 
-<li *ngIf="!isVFD && showHead" class="explore-opps-item">
+<li *ngIf="!isVFD && currentModification.exploreOppsShowHead.hasOpportunity" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.head.invalid}">
             <label for="baselineHead" class="baseline-value-label">Baseline Head</label>
@@ -106,11 +106,11 @@
 <div class="checkbox" #formElement>
     <label class="group-label" for="general">
         <input type="checkbox" id="general" value="true" (focus)="focusField('systemData')"
-            (change)="toggleSystemData()" [(ngModel)]="showSystemData" /> Adjust Operational Data
+            (change)="toggleSystemData()" [(ngModel)]="currentModification.exploreOppsShowSystemData.hasOpportunity" /> {{currentModification.exploreOppsShowSystemData.display}}
     </label>
 </div>
 
-<li *ngIf="showSystemData" class="explore-opps-item">
+<li *ngIf="currentModification.exploreOppsShowSystemData.hasOpportunity" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.costKwHr.invalid}">
             <label for="baselineCost" class="baseline-value-label">Baseline Cost</label>
@@ -147,7 +147,7 @@
         </div>
     </form>
 </li>
-<li *ngIf="showSystemData" class="explore-opps-item">
+<li *ngIf="currentModification.exploreOppsShowSystemData.hasOpportunity" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
             <label for="baselineCost" class="baseline-value-label">Baseline Operating Hours</label>

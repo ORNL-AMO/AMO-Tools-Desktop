@@ -19,9 +19,11 @@
         <div *ngIf="assessment" class="row assessment-name">
             <div class="col-12">
                 <h2 class="assessment-title">
-                    <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
-                        {{directory.name}} /
-                    </span>
+                    <div class="d-flex">
+                        <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+                            {{directory.name}} /
+                        </span>
+                    </div>
                     {{assessment.name}}
 
                 </h2>
@@ -48,7 +50,7 @@
         </div>
     </div>
 
-    <div class="report-data" *ngIf="assessment.psat.setupDone">
+    <div class="report-data" *ngIf="assessment.psat.setupDone && assessment.psat.valid.isValid">
         <ul #reportBtns class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
                 <a>Result Data</a>
@@ -98,7 +100,7 @@
     </div>
     <!-- End .report-data -->
 
-    <div *ngIf="!assessment.psat.setupDone">
+    <div *ngIf="!assessment.psat.setupDone || !assessment.psat.valid.isValid">
         <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
             see the resulting data.</p>
     </div>

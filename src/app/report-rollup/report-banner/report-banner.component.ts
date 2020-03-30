@@ -26,7 +26,7 @@ export class ReportBannerComponent implements OnInit {
   }
 
   showPrintModal() {
-    this.printOptionsMenuService.showPrintOptionsModal.next(true);
+    this.printOptionsMenuService.showPrintMenu.next(true);
   }
 
   showUnitsModal() {

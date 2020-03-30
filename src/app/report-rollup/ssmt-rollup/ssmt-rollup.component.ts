@@ -10,9 +10,14 @@ export class SsmtRollupComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  dataOption: string = 'cost';
   constructor() { }
 
   ngOnInit() {
+  }
+
+  setDataOption(str: string){
+    this.dataOption = str;
   }
 
 }
