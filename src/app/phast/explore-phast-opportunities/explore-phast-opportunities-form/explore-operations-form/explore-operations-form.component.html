@@ -4,31 +4,37 @@
       (change)="toggleOperations()" [(ngModel)]="showOperations" /> Adjust Operational Data
   </label>
 </div>
+
 <div *ngIf="showOperations">
   <ul>
-    <li>
-      <div class="checkbox">
-        <label for="{{'modifyOpHours_'+index}}">
+    <li class="explore-opps-item">
+      <div class="checkbox mt-2">
+        <label for="{{'modifyOpHours_'+index}}" class="phast-check-label">
           <input type="checkbox" id="{{'modifyOpHours_'+index}}" (focus)="focusField('operatingHours')"
             (change)="toggleOpHours()" [(ngModel)]="showOpHours" /> Modify Operating Hours
         </label>
       </div>
-      <form *ngIf="showOpHours">
-        <div class="form-group">
-          <label for="baselineHours">Baseline Operating Hours</label>
-          <div class="input-group">
-            <span class="input-group-addon op-hour-addon units">
-              <span class="fa fa-calculator"></span>
-            </span>
-            <input name="baseOpHours" disabled="true" type="number" step="any" min="0" class="form-control"
-              [(ngModel)]="phast.operatingHours.hoursPerYear" id="baseOpHours" onfocus="this.select();"
-              (input)="calculate()" (focus)="focusField('operatingHours')" (blur)="focusOut()">
-            <span class="input-group-addon units">hrs/yr</span>
+    </li>
+    <hr class="mt-0 mb-0">
+
+    <div *ngIf="showOpHours">
+      <li class="explore-opps-header">
+        <span class="explore-opps-title text-muted">Baseline</span>
+        <span class="explore-opps-title text-muted">Modifications</span>
+      </li>
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baselineHours" class="baseline-value-label">Operating Hours</label>
+          <div class="text-muted text-center baseline-value-input">{{ phast.operatingHours.hoursPerYear | number: '1.0-0' }}
+            <span>hrs/yr</span>
           </div>
         </div>
-        <div class="form-group">
-          <label for="modOpHours">Modification Operating Hours</label>
-          <div class="input-group">
+      </form>
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="modOpHours" class="mod-value-label">Operating Hours</label>
+          <div class="input-group mod-max-width">
             <span class="input-group-addon op-hour-addon units">
               <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
             </span>
@@ -40,27 +46,37 @@
         </div>
       </form>
     </li>
-    <li>
-      <div class="checkbox">
-        <label for="{{'modifyFuelCosts_'+index}}">
+</div>
+
+    <li class="explore-opps-item">
+      <div class="checkbox mt-2">
+        <label for="{{'modifyFuelCosts_'+index}}" class="phast-check-label">
           <input type="checkbox" id="{{'modifyFuelCosts_'+index}}" (focus)="focusField('operatingCosts')"
             (change)="toggleFuelCosts()" [(ngModel)]="showFuelCosts" /> Modify Fuel Costs
         </label>
       </div>
-      <form *ngIf="showFuelCosts">
-        <div class="form-group">
-          <label for="baselineFuelCosts">Baseline Fuel Costs</label>
-          <div class="input-group">
-            <input name="baselineFuelCosts" disabled="true" type="number" step="any" class="form-control"
-              id="baselineFuelCosts" (input)="calculate()" [(ngModel)]="phast.operatingCosts.fuelCost"
-              (focus)="focusField('operatingCosts')">
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
+    </li>
+    <hr class="mt-0 mb-0">
+
+    <div *ngIf="showFuelCosts">
+      <li class="explore-opps-header">
+        <span class="explore-opps-title text-muted">Baseline</span>
+        <span class="explore-opps-title text-muted">Modifications</span>
+      </li>
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baselineFuelCosts" class="baseline-value-label"> Fuel Costs</label>
+          <div class="text-muted text-center baseline-value-input">{{ phast.operatingCosts.fuelCost }}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
           </div>
         </div>
-        <div class="form-group">
-          <label for="modFuelCosts">Modification Fuel Costs</label>
-          <div class="input-group">
+      </form>
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="modFuelCosts" class="mod-value-label"> Fuel Costs</label>
+          <div class="input-group mod-max-width">
             <input name="modFuelCosts" type="number" step="any" class="form-control" id="modFuelCosts"
               (input)="calculate()" (focus)="focusField('operatingCosts')"
               [(ngModel)]="phast.modifications[exploreModIndex].phast.operatingCosts.fuelCost">
@@ -70,27 +86,37 @@
         </div>
       </form>
     </li>
-    <li>
-      <div class="checkbox">
-        <label for="{{'modifySteamCosts_'+index}}">
+    </div>
+
+    <li class="explore-opps-item">
+      <div class="checkbox mt-2">
+        <label for="{{'modifySteamCosts_'+index}}" class="phast-check-label">
           <input type="checkbox" id="{{'modifySteamCosts_'+index}}" (focus)="focusField('operatingCosts')"
             (change)="toggleSteamCosts()" [(ngModel)]="showSteamCosts" /> Modify Steam Costs
         </label>
       </div>
-      <form *ngIf="showSteamCosts">
-        <div class="form-group">
-          <label for="baselineSteamCosts">Baseline Steam Costs</label>
-          <div class="input-group">
-            <input name="baselineSteamCosts" disabled="true" type="number" step="any" class="form-control"
-              id="baselineSteamCosts" (input)="calculate()" [(ngModel)]="phast.operatingCosts.steamCost"
-              (focus)="focusField('operatingCosts')">
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
+    </li>
+    <hr class="mt-0 mb-0">
+
+    <div *ngIf="showSteamCosts">
+      <li class="explore-opps-header">
+        <span class="explore-opps-title text-muted">Baseline</span>
+        <span class="explore-opps-title text-muted">Modifications</span>
+      </li>
+    <li  class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baselineSteamCosts" class="baseline-value-label"> Steam Costs</label>
+          <div class="text-muted text-center baseline-value-input">{{ phast.operatingCosts.steamCost }}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
           </div>
         </div>
-        <div class="form-group">
-          <label for="modSteamCosts">Modification Fuel Costs</label>
-          <div class="input-group">
+      </form>
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="modSteamCosts" class="mod-value-label">Steam Costs</label>
+          <div class="input-group mod-max-width">
             <input name="modSteamCosts" type="number" step="any" class="form-control" id="modSteamCosts"
               (input)="calculate()" (focus)="focusField('operatingCosts')"
               [(ngModel)]="phast.modifications[exploreModIndex].phast.operatingCosts.steamCost">
@@ -100,26 +126,36 @@
         </div>
       </form>
     </li>
-    <li>
-      <div class="checkbox">
-        <label for="{{'modifyElectricityCosts_'+index}}">
+    </div>
+
+    <li class="explore-opps-item">
+      <div class="checkbox mt-2">
+        <label for="{{'modifyElectricityCosts_'+index}}" class="phast-check-label">
           <input type="checkbox" id="{{'modifyElectricityCosts_'+index}}" (focus)="focusField('operatingCosts')"
             (change)="toggleElectricityCosts()" [(ngModel)]="showElectricityCosts" /> Modify Electricity Costs
         </label>
       </div>
-      <form *ngIf="showElectricityCosts">
-        <div class="form-group">
-          <label for="baselineElectricityCosts">Baseline Electricity Costs</label>
-          <div class="input-group">
-            <input name="baselineElectricityCosts" disabled="true" type="number" step="any" class="form-control"
-              id="baselineElectricityCosts" (input)="calculate()" [(ngModel)]="phast.operatingCosts.electricityCost"
-              (focus)="focusField('operatingCosts')">
-            <span class="units input-group-addon">$/kWh</span>
+    </li>
+  <hr class="mt-0 mb-0">
+
+    <div *ngIf="showElectricityCosts">
+      <li class="explore-opps-header">
+        <span class="explore-opps-title text-muted">Baseline</span>
+        <span class="explore-opps-title text-muted">Modifications</span>
+      </li>
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baselineElectricityCosts" class="baseline-value-label"> Electricity Costs</label>
+          <div class="text-muted text-center baseline-value-input">{{ phast.operatingCosts.electricityCost }}
+            <span>$/kWh</span>
           </div>
         </div>
-        <div class="form-group">
-          <label for="modElectricityCosts">Modification Fuel Costs</label>
-          <div class="input-group">
+      </form>
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="modElectricityCosts" class="mod-value-label"> Electricity Costs</label>
+          <div class="input-group mod-max-width">
             <input name="modElectricityCosts" type="number" step="any" class="form-control" id="modElectricityCosts"
               (input)="calculate()"
               [(ngModel)]="phast.modifications[exploreModIndex].phast.operatingCosts.electricityCost"
@@ -129,6 +165,7 @@
         </div>
       </form>
     </li>
+    </div>
   </ul>
 </div>
 

@@ -4,34 +4,45 @@
     /> Control and Optimize Furnace Pressure
   </label>
 </div>
+
 <div *ngIf="showLeakage">
   <ul *ngFor="let loss of phast.losses.leakageLosses; let index = index">
-    <li>
-      <div class="checkbox form-group">
-        <label for="{{'modifyPressure_'+index}}">
+    <li class="explore-opps-item">
+      <div class="checkbox form-group mt-2">
+        <label for="{{'modifyPressure_'+index}}" class="w-100 phast-check-label">
           <input type="checkbox" id="{{'modifyPressure_'+index}}" (focus)="focusField('draftPressure')" (change)="togglePressure(index, loss.draftPressure)"
-            [(ngModel)]="showPressure[index]" /> Modify Furnace Draft Pressure
-        </label>
-        <label>
-          {{loss.name}}
+            [(ngModel)]="showPressure[index]" /> Modify Furnace Draft Pressure:
+            <span class="text-muted">
+              {{ loss.name}}
+            </span>
         </label>
       </div>
-      <form *ngIf="showPressure[index]">
-        <div class="form-group">
-          <label class="small" for="draftPressure">Baseline Draft Pressure</label>
-          <div class="input-group">
-            <input name="{{'draftPressure_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.draftPressure"
-              id="draftPressure" onfocus="this.select();" (input)="checkBaselineWarnings(index)" (focus)="focusField('draftPressure')"
-              (blur)="focusOut()">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in. H
+    </li>
+    <hr class="mt-0 mb-0">
+
+  <div *ngIf="showPressure[index]">
+    <li class="explore-opps-header">
+      <span class="explore-opps-title text-muted">Baseline</span>
+      <span class="explore-opps-title text-muted">Modifications</span>
+    </li>
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label class="small" for="draftPressure" class="baseline-value-label">Draft Pressure</label>
+          <div class="text-muted text-center baseline-value-input ">{{ loss.draftPressure }}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">in. H
               <sub>2</sub>O</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Pa</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].draftPressureWarning !== null">{{baselineWarnings[index].draftPressureWarning}}</span>
-        </div>
-        <div class="form-group">
-          <label class="small" for="{{'draftPressureMod_'+index}}">Modification Draft Pressure</label>
-          <div class="input-group">
+       </div>
+        <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].draftPressureWarning !== null">{{baselineWarnings[index].draftPressureWarning}}</span>
+
+        </form>
+
+        <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label class="small" for="{{'draftPressureMod_'+index}}" class="mod-value-label">Draft Pressure</label>
+          <div class="input-group mod-max-width">
             <input name="{{'draftPressureMod_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].draftPressure"
               id="{{'draftPressureMod_'+index}}" onfocus="this.select();" (input)="checkModificationWarnings(index)"
               (focus)="focusField('draftPressure')" (blur)="focusOut()">
@@ -43,39 +54,51 @@
         </div>
       </form>
     </li>
-    <li>
-      <div class="checkbox form-group">
-        <label for="{{'modifyLeakage_'+index}}">
+  </div>
+
+    <li class="explore-opps-item">
+      <div class="checkbox form-group mt-2">
+        <label for="{{'modifyLeakage_'+index}}" class="w-100 phast-check-label">
           <input type="checkbox" id="{{'modifyLeakage_'+index}}" (focus)="focusField('openingArea')" (change)="toggleOpening(index, loss.openingArea)"
-            [(ngModel)]="showOpening[index]" /> Modify Opening Area
-        </label>
-        <label>
-          {{loss.name}}
-        </label>
+            [(ngModel)]="showOpening[index]" /> Modify Opening Area: 
+            <span class="text-muted">
+              {{ loss.name}}
+            </span>
+          </label>
       </div>
-      <form *ngIf="showOpening[index]">
-        <div class="form-group">
-          <label class="small" for="{{'openingArea_'+index}}">Baseline Opening Area</label>
-          <div class="input-group">
-            <input name="{{'openingArea_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.openingArea"
-              id="{{'openingArea_'+index}}" onfocus="this.select();" (input)="checkBaselineWarnings(index)" (focus)="focusField('openingArea')"
-              (blur)="focusOut()">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
+    </li>
+    <hr class="mt-0 mb-0">
+    
+    <div *ngIf="showOpening[index]">
+      <li class="explore-opps-header">
+        <span class="explore-opps-title text-muted">Baseline</span>
+        <span class="explore-opps-title text-muted">Modifications</span>
+      </li>
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label class="small" for="{{'openingArea_'+index}}" class="baseline-value-label">Opening Area</label>
+          <div class="text-muted text-center baseline-value-input ">{{ loss.openingArea }}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
               <span>ft
                 <sup>2</sup>
               </span>
             </span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">
               <span>m
                 <sup>2</sup>
               </span>
             </span>
           </div>
           <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].openingAreaWarning !== null">{{baselineWarnings[index].openingAreaWarning}}</span>
+
         </div>
-        <div class="form-group">
-          <label class="small" for="{{'openingAreaMod_'+index}}">Modification Opening Area</label>
-          <div class="input-group">
+        </form>
+
+        <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label class="small" for="{{'openingAreaMod_'+index}}" class="mod-value-label">Opening Area</label>
+          <div class="input-group mod-max-width">
             <input name="{{'openingAreaMod_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].openingArea"
               id="{{'openingAreaMod_'+index}}" onfocus="this.select();" (input)="checkModificationWarnings(index)"
               (focus)="focusField('openingArea')" (blur)="focusOut()">
@@ -94,5 +117,7 @@
         </div>
       </form>
     </li>
+  </div>
+
   </ul>
 </div>
