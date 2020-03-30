@@ -35,7 +35,6 @@ export class BoilerFormComponent implements OnInit {
   baselineFuelOptions: any;
   modificationFuelOptions: any;
 
-  showBoilerData: boolean = false;
   showCombustionEfficiency: boolean = false;
   showFuelType: boolean = false;
   showBlowdownRate: boolean = false;
@@ -58,7 +57,6 @@ export class BoilerFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showBoilerData = false;
         this.showCombustionEfficiency = false;
         this.showFuelType = false;
         this.showBlowdownRate = false;
@@ -105,8 +103,11 @@ export class BoilerFormComponent implements OnInit {
     this.initPreheatMakeupWater();
     this.initInitialSteamTemperature();
     this.initDeaeratorConditions();
+
     if (this.showCombustionEfficiency || this.showFuelType || this.showBlowdownRate || this.showBlowdownFlashed || this.showPreheatBlowdownWater || this.showInitialSteamTemperature || this.showDeaeratorConditions) {
-      this.showBoilerData = true;
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowBoilerData = {hasOpportunity: true, display: "Adjust Boiler Operations"};      
+    } else {
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowBoilerData = {hasOpportunity: false, display: "Adjust Boiler Operations"};      
     }
   }
 
@@ -156,7 +157,7 @@ export class BoilerFormComponent implements OnInit {
   }
 
   toggleBoilerData() {
-    if (this.showBoilerData === false) {
+    if (this.ssmt.modifications[this.exploreModIndex].exploreOppsShowBoilerData.hasOpportunity === false) {
       this.showCombustionEfficiency = false;
       this.showFuelType = false;
       this.showBlowdownRate = false;

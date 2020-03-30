@@ -24,11 +24,9 @@ export class HeaderFormComponent implements OnInit {
   showHighPressureHeatLoss: boolean = false;
   showMediumPressureHeatLoss: boolean = false;
   showLowPressureHeatLoss: boolean = false;
-  showHeatLoss: boolean = false;
   showHighPressureSteamUsage: boolean = false;
   showMediumPressureSteamUsage: boolean = false;
   showLowPressureSteamUsage: boolean = false;
-  showSteamUsage: boolean = false;
 
   baselineHighPressureForm: FormGroup;
   modificationHighPressureForm: FormGroup;
@@ -54,11 +52,9 @@ export class HeaderFormComponent implements OnInit {
         this.showHighPressureHeatLoss = false;
         this.showMediumPressureHeatLoss = false;
         this.showLowPressureHeatLoss = false;
-        this.showHeatLoss = false;
         this.showHighPressureSteamUsage = false;
         this.showMediumPressureSteamUsage = false;
         this.showLowPressureSteamUsage = false;
-        this.showSteamUsage = false;
         this.initHeatLoss();
         this.initSteamUsage();
       }
@@ -126,7 +122,9 @@ export class HeaderFormComponent implements OnInit {
       this.initLowPressureHeatLoss();
     }
     if (this.showHighPressureHeatLoss || this.showMediumPressureHeatLoss || this.showLowPressureHeatLoss) {
-      this.showHeatLoss = true;
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowHeatLoss = {hasOpportunity: true, display: "Adjust Heat Loss Percentages"};
+    } else {
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowHeatLoss = {hasOpportunity: false, display: "Adjust Heat Loss Percentages"};
     }
   }
 
@@ -189,7 +187,9 @@ export class HeaderFormComponent implements OnInit {
       this.initLowPressureSteamUsage();
     }
     if (this.showHighPressureSteamUsage || this.showMediumPressureSteamUsage || this.showLowPressureSteamUsage) {
-      this.showSteamUsage = true;
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowSteamUsage = {hasOpportunity: true, display: "Adjust Steam Demand/Usage"};
+    } else {
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowSteamUsage = {hasOpportunity: false, display: "Adjust Steam Demand/Usage"};
     }
   }
 

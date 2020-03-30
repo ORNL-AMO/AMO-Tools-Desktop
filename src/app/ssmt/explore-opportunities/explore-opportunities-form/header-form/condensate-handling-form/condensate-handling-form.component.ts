@@ -33,7 +33,6 @@ export class CondensateHandlingFormComponent implements OnInit {
   modificationMediumPressureForm: FormGroup;
 
 
-  showCondensateHandling: boolean = false;
   showHighPressureCondensateRecovery: boolean = false;
   showMediumPressureCondensateRecovery: boolean = false;
   showLowPressureCondensateRecovery: boolean = false;
@@ -49,7 +48,6 @@ export class CondensateHandlingFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showCondensateHandling = false;
         this.showHighPressureCondensateRecovery = false;
         this.showMediumPressureCondensateRecovery = false;
         this.showLowPressureCondensateRecovery = false;
@@ -73,7 +71,9 @@ export class CondensateHandlingFormComponent implements OnInit {
       this.initFlashCondensateLowPressure();
     }
     if (this.showHighPressureCondensateRecovery || this.showMediumPressureCondensateRecovery || this.showLowPressureCondensateRecovery || this.showReturnTemperature || this.showFlashCondensateLowPressure || this.showFlashCondensateMediumPressure) {
-      this.showCondensateHandling = true;
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowCondensateHandling = {hasOpportunity: true, display: "Adjust Condensate Handling"};
+    } else {
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowCondensateHandling = {hasOpportunity: false, display: "Adjust Condensate Handling"};
     }
   }
 

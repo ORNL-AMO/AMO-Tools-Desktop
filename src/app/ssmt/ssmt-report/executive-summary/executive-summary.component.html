@@ -380,6 +380,41 @@
           >
         </td>
       </tr>
+      <tr class="bold">
+        <td>Selected Energy Projects</td>
+        <td>&mdash;</td>
+        <td *ngFor="let modification of ssmt.modifications; let index = index;">
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowOperationsData && modification.exploreOppsShowOperationsData.hasOpportunity">{{ modification.exploreOppsShowOperationsData.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowUnitCosts && modification.exploreOppsShowUnitCosts.hasOpportunity">{{ modification.exploreOppsShowUnitCosts.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowBoilerData && modification.exploreOppsShowBoilerData.hasOpportunity">{{ modification.exploreOppsShowBoilerData.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowCondensateHandling && modification.exploreOppsShowCondensateHandling.hasOpportunity">{{ modification.exploreOppsShowCondensateHandling.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowHeatLoss && modification.exploreOppsShowHeatLoss.hasOpportunity">{{ modification.exploreOppsShowHeatLoss.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowSteamUsage && modification.exploreOppsShowSteamUsage.hasOpportunity">{{ modification.exploreOppsShowSteamUsage.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowCondensingTurbine && modification.exploreOppsShowCondensingTurbine.hasOpportunity">{{ modification.exploreOppsShowCondensingTurbine.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowHighToLowPressureTurbine && modification.exploreOppsShowHighToLowPressureTurbine.hasOpportunity">{{ modification.exploreOppsShowHighToLowPressureTurbine.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowHighToMediumPressureTurbine && modification.exploreOppsShowHighToMediumPressureTurbine.hasOpportunity">{{ modification.exploreOppsShowHighToMediumPressureTurbine.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowMediumToLowPressureTurbine && modification.exploreOppsShowMediumToLowPressureTurbine.hasOpportunity">{{ modification.exploreOppsShowMediumToLowPressureTurbine.display }}</span>
+          </td>
+      </tr>
+      <tr class="bold">
+        <td>Modifications</td>
+        <td>&mdash;</td>
+        <td *ngFor="let modification of ssmt.modifications; let index = index;">
+          <div *ngFor="let modificationMade of getModificationsMadeList(modification.ssmt)">
+            {{modificationMade}}<br>
+          </div>
+        </td>
+      </tr>
       <tr class="hide-print" *ngIf="inRollup">
         <td>Use for Summary</td>
         <td

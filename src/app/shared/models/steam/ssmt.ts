@@ -105,6 +105,21 @@ export interface GeneralSteamOperations {
 export interface Modification {
     ssmt?: SSMT;
     exploreOpportunities?: boolean;
+    exploreOppsShowOperationsData?: SavingsOpportunity,
+    exploreOppsShowUnitCosts?: SavingsOpportunity,
+    exploreOppsShowBoilerData?: SavingsOpportunity,
+    exploreOppsShowCondensateHandling?: SavingsOpportunity,
+    exploreOppsShowHeatLoss?: SavingsOpportunity,
+    exploreOppsShowSteamUsage?: SavingsOpportunity,
+    exploreOppsShowCondensingTurbine?: SavingsOpportunity,
+    exploreOppsShowHighToLowPressureTurbine?: SavingsOpportunity
+    exploreOppsShowHighToMediumPressureTurbine?: SavingsOpportunity
+    exploreOppsShowMediumToLowPressureTurbine?: SavingsOpportunity
+}
+
+export interface SavingsOpportunity {
+    hasOpportunity: boolean,
+    display: string
 }
 
 export interface Notes {
