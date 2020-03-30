@@ -54,6 +54,18 @@ Explore-opps form overrides
     width: 100%;
   }
 
+  div.form-group.explore-opps-formgroup >
+  div.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
+  div.form-group.explore-opps-formgroup >
+  select.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
   hr.form-break-rule {
       margin-top: 0;
   }

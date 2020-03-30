@@ -27,7 +27,7 @@
         <span class="small">({{loss.openingType}})</span>
       </span> 
       <span class="h6 text-muted text-center explore-opps-title">
-        Modification
+        Modifications
         <span class="small">({{phast.modifications[exploreModIndex].phast.losses.openingLosses[index].openingType}})</span>
       </span> 
     </li>
@@ -39,7 +39,7 @@
           <label class="baseline-value-label" for="numberOfOpenings" aria-describedby="numberOfOpeningsHelp">Number of Openings
             <small id="numberOfOpeningsHelp" class="form-text text-muted text-help">Same Size and Shape</small>
           </label>
-          <div class="text-muted text-center baseline-value-input">{{ loss.numberOfOpenings }}
+          <div class="text-muted text-center baseline-value-input mt-1">{{ loss.numberOfOpenings }}
           <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].numOpeningsWarning !== null">{{baselineWarnings[index].numOpeningsWarning}}</span>
         </div>
         </div>
@@ -49,10 +49,12 @@
           <label class="mod-value-label" for="{{'numberOfOpeningsMod_'+lossIndex}}" aria-describedby="numberOfOpeningsHelp">Number of Openings
             <small id="numberOfOpeningsHelp" class="form-text text-muted text-help">Same Size and Shape</small>
           </label>
-          <input name="{{'numberOfOpeningsMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control w-100" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].numberOfOpenings"
+          <div class="input-group justify-content-center mod-max-width">
+          <input name="{{'numberOfOpeningsMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].numberOfOpenings"
             id="{{'numberOfOpeningsMod_'+lossIndex}}" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
             (focus)="focusField('numberOfOpenings')" (blur)="focusOut()">
           <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].numOpeningsWarning !== null">{{modificationWarnings[index].numOpeningsWarning}}</span>
+          </div>
         </div>
       </form>
     </li>
@@ -71,7 +73,7 @@
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label for="wallThickness" class="mod-value-label">Furnace Wall Thickness</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'wallThicknessMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].thickness"
             id="{{'wallThicknessMod_'+lossIndex}}" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
             (focus)="focusField('wallThickness')" (blur)="focusOut()">
@@ -101,14 +103,14 @@
           <label *ngIf="loss.openingType == 'Round'" class="small mod-value-label" for="{{'lengthOfOpeningMod_'+lossIndex}}">Diameter of
             Openings
           </label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'lengthOfOpeningMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].lengthOfOpening"
               id="lengthOfOpening" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
               (focus)="focusField('lengthOfOpening')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
+            <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].lengthWarning !== null">{{modificationWarnings[index].lengthWarning}}</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].lengthWarning !== null">{{modificationWarnings[index].lengthWarning}}</span>
         </div>
       </form>
     </li>
@@ -127,7 +129,7 @@
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" *ngIf="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].openingType != 'Round'">
           <label class="mod-value-label" for="{{'heightOfOpeningMod_'+lossIndex}}">Height of Openings</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'heightOfOpeningMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].heightOfOpening"
               id="{{'heightOfOpeningMod_'+lossIndex}}" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
               (focus)="focusField('heightOfOpening')" (blur)="focusOut()">
@@ -143,7 +145,7 @@
       <form class="explore-opps-form">
         <div class="text-center">
           <label class="baseline-value-label">Total Opening Area</label>
-          <div class="text-center small">
+          <div class="text-center text-muted small">
             {{loss.openingTotalArea | number:'2.2-2'}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft
               <sup>2</sup>
@@ -156,7 +158,7 @@
       </form>
       <form class="explore-opps-form">
         <div class="text-center">
-          <label class="mod-value-label">Total Opening Area</label>
+          <label class="mod-value-label mb-1">Total Opening Area</label>
           <div class="text-center small">
             {{phast.modifications[exploreModIndex].phast.losses.openingLosses[index].openingTotalArea | number:'2.2-2'}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft
@@ -197,15 +199,17 @@
       </form>
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
-          <label class="mod-value-label" for="viewFactor" aria-describedby="viewFactorHelp">Modification View Factor
+          <label class="mod-value-label" for="viewFactor" aria-describedby="viewFactorHelp">View Factor
           </label>
-          <input name="{{'viewFactor2_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control w-100" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].viewFactor"
-          id="viewFactor2" onfocus="this.select();" (input)="checkModificationWarnings(index)" (focus)="focusField('viewFactor')">
-          <span>
-            <a id="{{'viewFactor2_'+lossIndex}}" class="click-link small" (click)="calculateViewFactor(phast.modifications[exploreModIndex].phast.losses.openingLosses[index])">Calculate
-              View Factor</a>
-          </span>
-          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].viewFactorWarning  !== null">{{modificationWarnings[index].viewFactorWarning}}</span>
+          <div class="input-group justify-content-center mod-max-width">
+            <input name="{{'viewFactor2_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control mb-1" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].viewFactor"
+            id="viewFactor2" onfocus="this.select();" (input)="checkModificationWarnings(index)" (focus)="focusField('viewFactor')">
+            <span>
+              <a id="{{'viewFactor2_'+lossIndex}}" class="click-link small" (click)="calculateViewFactor(phast.modifications[exploreModIndex].phast.losses.openingLosses[index])">Calculate
+                View Factor</a>
+              </span>
+              <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].viewFactorWarning  !== null">{{modificationWarnings[index].viewFactorWarning}}</span>
+            </div>
         </div>
       </form>
     </li>
@@ -242,7 +246,7 @@
         <span class="explore-opps-title text-muted">Baseline</span>
         <span class="explore-opps-title text-muted">Modifications</span>
       </li>
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form">
         <div class="text-center">
           <label class="baseline-value-label" for="emissivity">Emissivity</label>
@@ -253,10 +257,12 @@
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label class="mod-value-label">Emissivity</label>
+          <div class="input-group justify-content-center mod-max-width">
           <input name="{{'emissivity2_'+lossIndex}}" type="number" step="any" min="0" class="form-control w-100" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].emissivity"
             id="emissivity2" onfocus="this.select();" (input)="checkModificationWarnings(index)" (focus)="focusField('emissivity')"
             (blur)="focusOut()">
           <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].emissivityWarning !== null">{{modificationWarnings[index].emissivityWarning}}</span>
+          </div>
         </div>
       </form>
     </li>
@@ -294,7 +300,7 @@
         <span class="explore-opps-title text-muted">Modifications</span>
       </li>
 
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form">
         <div class="text-center">
           <label class="baseline-value-label" for="timeOpen">Time Open</label>
@@ -306,7 +312,7 @@
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label class="mod-value-label">Time Open</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'timeOpen2_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen"
               id="timeOpen2" onfocus="this.select();" (input)="checkModificationWarnings(index)" (focus)="focusField('percentTimeOpen')"
               (blur)="focusOut()">

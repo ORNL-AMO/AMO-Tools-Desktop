@@ -35,19 +35,18 @@
           </div>
         </div>
         <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].surfaceTempWarning !== null">{{baselineWarnings[index].surfaceTempWarning}}</span>
-
       </form>
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label class="small mod-value-label" for="{{'avgSurfaceTempMod_'+lossIndex}}">Surface Temperature</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'avgSurfaceTempMod_'+lossIndex}}" type="number" step="any" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature"
               id="{{'avgSurfaceTempMod_'+lossIndex}}" onfocus="this.select();" (input)="checkModificationWarnings(index)" (focus)="focusField('avgSurfaceTemp')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+            <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].surfaceTempWarning !== null">{{modificationWarnings[index].surfaceTempWarning}}</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].surfaceTempWarning !== null">{{modificationWarnings[index].surfaceTempWarning}}</span>
         </div>
       </form>
     </li>

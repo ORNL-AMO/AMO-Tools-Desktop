@@ -10,7 +10,7 @@
       <span class="explore-opps-title text-muted">Baseline</span>
       <span class="explore-opps-title text-muted">Modifications</span>
     </li>
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form">
           <div class="text-center">
             <label for="oxygenCalculationMethod1" class="baseline-value-label"> Oxygen Calculation Method</label>
@@ -20,7 +20,7 @@
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label for="oxygenCalculationMethod2" class="mod-value-label"> Oxygen Calculation Method</label>
-          <select name="oxygenCalculationMethod2" class="form-control w-100" (change)="changeMethod(2)" [(ngModel)]="modifiedFlueGas.oxygenCalculationMethod"
+          <select name="oxygenCalculationMethod2" class="form-control mod-max-width" (change)="changeMethod(2)" [(ngModel)]="modifiedFlueGas.oxygenCalculationMethod"
             id="oxygenCalculationMethod2" (focus)="focusField('oxygenCalculationMethod')" (blur)="focusOut()">
             <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
           </select>
@@ -28,7 +28,7 @@
       </form>
     </li>
 
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form">
           <div class="text-center">
             <label for="baselineO2" class="baseline-value-label"> Oxygen in Flue Gas</label>
@@ -42,16 +42,16 @@
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label for="modifiedO2" class="mod-value-label"> Oxygen in Flue Gas</label>
-          <div class="input-group" *ngIf="modifiedFlueGas.oxygenCalculationMethod == 'Oxygen in Flue Gas'">
+          <div class="input-group mod-max-width" *ngIf="modifiedFlueGas.oxygenCalculationMethod == 'Oxygen in Flue Gas'">
             <input name="modifiedO2" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.o2InFlueGas"
               id="modifiedO2" onfocus="this.select();" (input)="calculateExcessAir(modifiedFlueGas,2)" (focus)="focusField('o2InFlueGas')"
               (blur)="focusOut()">
             <span class="input-group-addon units">%</span>
+            <span class="alert-warning pull-right small" *ngIf="modificationWarnings.o2Warning !== null">{{modificationWarnings.o2Warning}}</span>
           </div>
           <div class="text-center small" *ngIf="modifiedFlueGas.oxygenCalculationMethod != 'Oxygen in Flue Gas'">
             {{modifiedFlueGas.o2InFlueGas | number:'2.2-2'}} %
           </div>
-          <span class="alert-warning pull-right small" *ngIf="modificationWarnings.o2Warning !== null">{{modificationWarnings.o2Warning}}</span>
         </div>
       </form>
     </li>
@@ -71,7 +71,7 @@
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label for="modifiedExcessAir" class="mod-value-label"> Excess Air in Flue Gas</label>
-          <div class="input-group" *ngIf="modifiedFlueGas.oxygenCalculationMethod == 'Excess Air'">
+          <div class="input-group mod-max-width" *ngIf="modifiedFlueGas.oxygenCalculationMethod == 'Excess Air'">
             <input name="modifiedExcessAir" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.excessAirPercentage"
               id="modifiedExcessAir" onfocus="this.select();" (input)="calculateO2(modifiedFlueGas,2)" (focus)="focusField('excessAirPercentage')"
               (blur)="focusOut()">
@@ -110,7 +110,7 @@
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label for="modifiedAirTemp" class="mod-value-label"> Combustion Air Temperature</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="modifiedAirTemp" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.combustionAirTemperature"
               id="modifiedAirTemp" onfocus="this.select();" (input)="checkModificationWarnings(modifiedFlueGas)" (focus)="focusField('combustionAirTemperature')"
               (blur)="focusOut()">

@@ -25,7 +25,7 @@
       <span class="explore-opps-title text-muted">Baseline</span>
       <span class="explore-opps-title text-muted">Modifications</span>
     </li>
-    <li class="explore-opps-item mb-4" *ngIf="showFlowRate[index]">
+    <li class="explore-opps-item mb-2" *ngIf="showFlowRate[index]">
       <!--baseline liquidFlow-->
       <form class="explore-opps-form" *ngIf="obj.type == 'Liquid'">
         <div class="text-center">
@@ -41,7 +41,7 @@
       <form class="explore-opps-form" *ngIf="modifiedLosses[index].type == 'Liquid'">
         <div class="form-group explore-opps-formgroup">
           <label for="modifiedLiquidFlow" class="mod-value-label">Liquid Flow</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'liquidFlowMod_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedLosses[index].loss.flowRate"
               id="{{'liquidFlowMod_'+index}}" onfocus="this.select();" (input)="checkModificationWarning(modifiedLosses[index], index)"
               (focus)="focusField('liquidFlow')" (blur)="focusOut()">
@@ -69,7 +69,7 @@
         <!--modified gasFlow-->
         <div class="form-group explore-opps-formgroup">
           <label for="modifiedGasFlow" class="mod-value-label">Modified Gas Flow</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'gasFlowMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'gasFlowMod_'+index}}"
               onfocus="this.select();" (input)="checkModificationWarning(modifiedLosses[index], index)" (focus)="focusField('gasFlow')"
               (blur)="focusOut()" [(ngModel)]="modifiedLosses[index].loss.flowRate">
@@ -114,7 +114,7 @@
       <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label for="modifiedInletTemp" class="mod-value-label">Inlet Temperature</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'inletTempMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'inletTempMod_'+index}}"
             onfocus="this.select();" (input)="checkModificationWarning(modifiedLosses[index], index)" (focus)="focusField('initialTemperature')"
             (blur)="focusOut()" [(ngModel)]="modifiedLosses[index].loss.initialTemperature">
@@ -149,27 +149,27 @@
       <form class="explore-opps-form" *ngIf="obj.type == 'Gas'">
         <div class="form-group explore-opps-formgroup">
           <label for="modifiedOutletTemp" class="mod-value-label">Outlet Temperature</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'outletTempMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'outletTempMod_'+index}}"
               onfocus="this.select();" (input)="checkModificationWarning(modifiedLosses[index], index)" (focus)="focusField('outletTemperature')"
               (blur)="focusOut()" [(ngModel)]="modifiedLosses[index].loss.outletTemperature">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+            <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].tempWarning !== null">{{modificationWarnings[index].tempWarning}}</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].tempWarning !== null">{{modificationWarnings[index].tempWarning}}</span>
         </div>
         </form>
         <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" *ngIf="obj.type == 'Liquid'">
           <label for="modifiedOutletTemp" class="mod-value-label"> Outlet Temperature</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'outletTempMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'outletTempMod_'+index}}"
               onfocus="this.select();" (input)="checkModificationWarning(modifiedLosses[index], index)" (focus)="focusField('outletTemperature')"
               (blur)="focusOut()" [(ngModel)]="modifiedLosses[index].loss.outletTemperature">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+            <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].tempWarning !== null">{{modificationWarnings[index].tempWarning}}</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].tempWarning !== null">{{modificationWarnings[index].tempWarning}}</span>
         </div>
       </form>
     </li>

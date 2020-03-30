@@ -25,7 +25,7 @@
       <span class="explore-opps-title text-muted">Baseline</span>
       <span class="explore-opps-title text-muted">Modifications</span>
     </li>
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form">
         <div class="text-center">
           <label class="small" for="draftPressure" class="baseline-value-label">Draft Pressure</label>
@@ -42,7 +42,7 @@
         <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label class="small" for="{{'draftPressureMod_'+index}}" class="mod-value-label">Draft Pressure</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'draftPressureMod_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].draftPressure"
               id="{{'draftPressureMod_'+index}}" onfocus="this.select();" (input)="checkModificationWarnings(index)"
               (focus)="focusField('draftPressure')" (blur)="focusOut()">
@@ -74,7 +74,7 @@
         <span class="explore-opps-title text-muted">Baseline</span>
         <span class="explore-opps-title text-muted">Modifications</span>
       </li>
-    <li class="explore-opps-item mb-4">
+    <li class="explore-opps-item mb-2">
       <form class="explore-opps-form">
         <div class="text-center">
           <label class="small" for="{{'openingArea_'+index}}" class="baseline-value-label">Opening Area</label>
@@ -98,7 +98,7 @@
         <form class="explore-opps-form">
         <div class="form-group explore-opps-formgroup">
           <label class="small" for="{{'openingAreaMod_'+index}}" class="mod-value-label">Opening Area</label>
-          <div class="input-group">
+          <div class="input-group mod-max-width">
             <input name="{{'openingAreaMod_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].openingArea"
               id="{{'openingAreaMod_'+index}}" onfocus="this.select();" (input)="checkModificationWarnings(index)"
               (focus)="focusField('openingArea')" (blur)="focusOut()">
