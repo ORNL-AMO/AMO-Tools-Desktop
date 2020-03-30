@@ -34,7 +34,8 @@
 <div class="print-container" *ngIf="printView">
     <div *ngIf="_psatAssessments.length > 0 && rollupPrintOptions.printPsatRollup" class="row print-break-before">
         <div class="col-12">
-            <app-psat-rollup-print [settings]="settings" [calculators]="selectedPsatCalcs"></app-psat-rollup-print>
+            <app-psat-rollup [settings]="settings" [calculators]="selectedPsatCalcs" [inPrintView]="true">
+            </app-psat-rollup>
         </div>
     </div>
     <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
@@ -67,8 +68,8 @@
     </div>
     <div class="assessment-item row" *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}">
         <div class="col-12">
-            <app-fsat-report *ngIf="item.assessment.fsat" [assessment]="item.assessment"
-                [settings]="item.settings" [inRollup]="true"></app-fsat-report>
+            <app-fsat-report *ngIf="item.assessment.fsat" [assessment]="item.assessment" [settings]="item.settings"
+                [inRollup]="true"></app-fsat-report>
         </div>
     </div>
 

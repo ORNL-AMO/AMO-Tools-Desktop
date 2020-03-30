@@ -19,11 +19,15 @@ export class PsatRollupComponent implements OnInit {
   settings: Settings;
   @Input()
   calculators: Array<Calculator>;
+  @Input()
+  inPrintView: boolean;
 
   showPreAssessment: boolean = true;
   pieChartDataOption: string = 'energy';
-  barChartDataOption: string = 'energy';
+  barChartDataOption: string;
   barChartData: Array<BarChartDataItem>;
+  energyBarChartData: Array<BarChartDataItem>;
+  costBarChartData: Array<BarChartDataItem>;
   tickFormat: string;
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
@@ -33,38 +37,40 @@ export class PsatRollupComponent implements OnInit {
   ngOnInit() {
     this.setTableData();
     this.setBarChartData();
+    this.setBarChartOption('energy');
     this.setPieChartData();
   }
 
   setPieChartOption(str: string) {
     this.pieChartDataOption = str;
-    this.setPieChartData();
   }
 
   setBarChartOption(str: string) {
     this.barChartDataOption = str;
-    this.setBarChartData();
-
-  }
-
-  setBarChartData() {
-    this.barChartData = this.getDataObject();
-    this.yAxisLabel = 'Annual Energy Cost ($/yr)';
-    this.tickFormat = '$.2s';
     if (this.barChartDataOption == 'energy') {
       this.yAxisLabel = 'Annual Energy Usage (' + this.settings.powerMeasurement + ')';
       this.tickFormat = '.2s'
+      this.barChartData = this.energyBarChartData;
+    } else {
+      this.yAxisLabel = 'Annual Energy Cost ($/yr)';
+      this.tickFormat = '$.2s';
+      this.barChartData = this.costBarChartData;
     }
   }
 
-  getDataObject(): Array<BarChartDataItem> {
+  setBarChartData() {
+    this.costBarChartData = this.getDataObject('cost');
+    this.energyBarChartData = this.getDataObject('energy');
+  }
+
+  getDataObject(dataOption: string): Array<BarChartDataItem> {
     let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
     let traceName: string = "Modification Costs";
-    if (this.barChartDataOption == 'energy') {
+    if (dataOption == 'energy') {
       hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.powerMeasurement;
       traceName = "Modification Energy Use";
     }
-    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
+    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData(dataOption);
     let projectCostTrace: BarChartDataItem = {
       x: chartData.labels,
       y: chartData.projectedCosts,
@@ -91,18 +97,18 @@ export class PsatRollupComponent implements OnInit {
     return data;
   }
 
-  getChartData(): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
+  getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
     let psatResults: Array<PsatResultsData> = this.reportRollupService.psatResults.getValue();
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
-    if (this.barChartDataOption == 'cost') {
+    if (dataOption == 'cost') {
       psatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annual_cost - result.modificationResults.annual_cost);
         projectedCosts.push(result.modificationResults.annual_cost);
       })
-    } else if (this.barChartDataOption == 'energy') {
+    } else if (dataOption == 'energy') {
       psatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annual_energy - result.modificationResults.annual_energy);
@@ -136,7 +142,7 @@ export class PsatRollupComponent implements OnInit {
     });
   }
 
-  setTableData(){
+  setTableData() {
     this.rollupSummaryTableData = new Array();
     let psatResultData: Array<PsatResultsData> = this.reportRollupService.psatResults.getValue();
     psatResultData.forEach(dataItem => {

@@ -10,7 +10,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
   @Input()
   pieChartData: Array<PieChartDataItem>;
   @Input()
-  showPrintView: boolean;
+  printView: boolean;
   @Input()
   dataOption: string;
   @Input()
@@ -24,7 +24,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (!this.showPrintView) {
+    if (!this.printView) {
       this.drawPlot();
     } else {
       this.drawPrintPlot();
@@ -32,10 +32,10 @@ export class RollupSummaryPieChartComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.rollupSummaryPieChart && !this.showPrintView) {
+    if (this.rollupSummaryPieChart && !this.printView) {
       // this.setHeight();
       this.drawPlot();
-    } else if (this.rollupSummaryPieChart && this.showPrintView) {
+    } else if (this.rollupSummaryPieChart && this.printView) {
       this.drawPrintPlot();
     }
   }
@@ -108,20 +108,20 @@ export class RollupSummaryPieChartComponent implements OnInit {
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      // automargin: true,
-      texttemplate: '<b>%{label}: </b>%{value:$,.0f}',
+      automargin: true,
+      texttemplate: '<b>%{label}:</b><br>%{value:$,.0f}',
       hoverformat: '.2r',
       // direction: "clockwise",
       // rotation: 125
     }];
     var layout = {
-      height: 800,
-      width: 1000,
+      // height: 800,
+      width: this.rollupSummaryPieChart.nativeElement.clientWidth,
       font: {
-        size: 16,
+        size: 14,
       },
       showlegend: false,
-      margin: { t: 150, b: 150, l: 150, r: 150 }
+      // margin: { t: 150, b: 150, l: 150, r: 150 }
     };
     var modebarBtns = {
       displaylogo: false,

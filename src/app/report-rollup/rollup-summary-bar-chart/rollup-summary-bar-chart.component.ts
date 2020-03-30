@@ -97,7 +97,6 @@ export class RollupSummaryBarChartComponent implements OnInit {
         text: this.yAxisLabel
       },
       xaxis: {
-        automargin: true,
         fixedrange: true
       },
 

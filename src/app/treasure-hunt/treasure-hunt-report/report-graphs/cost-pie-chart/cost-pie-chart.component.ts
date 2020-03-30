@@ -112,7 +112,7 @@ export class CostPieChartComponent implements OnInit {
     var modebarBtns = {
       modeBarButtonsToRemove: ['hoverClosestPie'],
       displaylogo: false,
-      displayModeBar: true,
+      displayModeBar: false,
     };
     Plotly.react(this.costPieChart.nativeElement, data, layout, modebarBtns);
   }

@@ -43,6 +43,7 @@ export class AssessmentReportsComponent implements OnInit {
   ngOnInit(): void {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.settings = this.settingsDbService.getByDirectoryId(directoryId);
+    console.log(this.settings);
     this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
       if (items) {
         this._psatAssessments = items;
