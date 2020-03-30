@@ -16,16 +16,12 @@ import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-ene
 import { ReportRollupUnitsComponent } from './report-rollup-units/report-rollup-units.component';
 import { FormsModule } from '@angular/forms';
 import { PsatRollupComponent } from './psat-rollup/psat-rollup.component';
-import { PsatRollupEnergyTableComponent } from './psat-rollup/psat-rollup-energy-table/psat-rollup-energy-table.component';
-import { PsatRollupGraphsComponent } from './psat-rollup/psat-rollup-graphs/psat-rollup-graphs.component';
-import { PsatRollupPumpSummaryComponent } from './psat-rollup/psat-rollup-pump-summary/psat-rollup-pump-summary.component';
 import { PhastRollupFurnaceSummaryComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary.component';
 import { PhastRollupPrintComponent } from './phast-rollup/phast-rollup-print/phast-rollup-print.component';
 import { RollupPieChartComponent } from './rollup-pie-chart/rollup-pie-chart.component';
 import { RollupBarChartComponent } from './rollup-bar-chart/rollup-bar-chart.component';
 import { PhastRollupEnergyUseTableComponent } from './phast-rollup/phast-rollup-energy-use-table/phast-rollup-energy-use-table.component';
 import { PsatRollupPrintComponent } from './psat-rollup/psat-rollup-print/psat-rollup-print.component';
-import { PsatRollupPumpSummaryTableComponent } from './psat-rollup/psat-rollup-pump-summary-table/psat-rollup-pump-summary-table.component';
 import { PhastRollupFurnaceSummaryTableComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary-table/phast-rollup-furnace-summary-table.component';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessment-table.component';
@@ -87,17 +83,13 @@ import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table
     PhastRollupGraphsComponent, 
     PhastRollupEnergyTableComponent, 
     ReportRollupUnitsComponent, 
-    PsatRollupComponent, 
-    PsatRollupEnergyTableComponent, 
-    PsatRollupGraphsComponent, 
-    PsatRollupPumpSummaryComponent,
+    PsatRollupComponent,
     PhastRollupFurnaceSummaryComponent,
     PhastRollupPrintComponent,
     RollupPieChartComponent,
     RollupBarChartComponent,
     PhastRollupEnergyUseTableComponent,
     PsatRollupPrintComponent,
-    PsatRollupPumpSummaryTableComponent,
     PhastRollupFurnaceSummaryTableComponent,
     PreAssessmentTableComponent,
     FsatSummaryComponent,

@@ -7,6 +7,7 @@ import { graphColors } from '../../phast/phast-report/report-graphs/graphColors'
 import * as _ from 'lodash';
 import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
+import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
 
 @Component({
   selector: 'app-psat-rollup',
@@ -26,10 +27,11 @@ export class PsatRollupComponent implements OnInit {
   tickFormat: string;
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
+  rollupSummaryTableData: Array<RollupSummaryTableData>;
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    console.log(this.calculators);
+    this.setTableData();
     this.setBarChartData();
     this.setPieChartData();
   }
@@ -132,5 +134,35 @@ export class PsatRollupComponent implements OnInit {
       });
       colorIndex++;
     });
+  }
+
+  setTableData(){
+    this.rollupSummaryTableData = new Array();
+    let psatResultData: Array<PsatResultsData> = this.reportRollupService.psatResults.getValue();
+    psatResultData.forEach(dataItem => {
+      this.rollupSummaryTableData.push({
+        equipmentName: dataItem.name,
+        modificationName: dataItem.modName,
+        baselineEnergyUse: dataItem.baselineResults.annual_energy,
+        modificationCost: dataItem.modificationResults.annual_cost,
+        modificationEnergyUse: dataItem.baselineResults.annual_energy,
+        baselineCost: dataItem.baselineResults.annual_cost,
+        costSavings: dataItem.baselineResults.annual_cost - dataItem.modificationResults.annual_cost,
+        implementationCosts: dataItem.modification.inputs.implementationCosts,
+        payBackPeriod: this.getPayback(dataItem.modificationResults.annual_cost, dataItem.baselineResults.annual_cost, dataItem.modification.inputs.implementationCosts)
+      })
+    })
+  }
+  getPayback(modCost: number, baselineCost: number, implementationCost: number) {
+    if (implementationCost) {
+      let val = (implementationCost / (baselineCost - modCost)) * 12;
+      if (isNaN(val) === false) {
+        return val;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
   }
 }

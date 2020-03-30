@@ -51,6 +51,7 @@
 </div>
 <div class="row pt-2">
   <div class="col-12">
-    <app-psat-rollup-pump-summary-table [printView]="false" [settings]="settings"></app-psat-rollup-pump-summary-table>
+    <app-rollup-summary-table [tableData]="rollupSummaryTableData" [equipmentType]="'Pump'" [energyUnit]="settings.powerMeasurement">
+    </app-rollup-summary-table>
   </div>
 </div>
