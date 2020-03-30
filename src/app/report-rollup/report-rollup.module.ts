@@ -28,10 +28,6 @@ import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessme
 import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
 import { FsatSummaryComponent } from './report-summary/fsat-summary/fsat-summary.component';
 import { FsatRollupComponent } from './fsat-rollup/fsat-rollup.component';
-import { FsatRollupEnergyTableComponent } from './fsat-rollup/fsat-rollup-energy-table/fsat-rollup-energy-table.component';
-import { FsatRollupFanSummaryComponent } from './fsat-rollup/fsat-rollup-fan-summary/fsat-rollup-fan-summary.component';
-import { FsatRollupFanSummaryTableComponent } from './fsat-rollup/fsat-rollup-fan-summary-table/fsat-rollup-fan-summary-table.component';
-import { FsatRollupGraphsComponent } from './fsat-rollup/fsat-rollup-graphs/fsat-rollup-graphs.component';
 import { FsatRollupPrintComponent } from './fsat-rollup/fsat-rollup-print/fsat-rollup-print.component';
 import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
 import { SsmtSummaryComponent } from './report-summary/ssmt-summary/ssmt-summary.component';
@@ -94,10 +90,6 @@ import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table
     PreAssessmentTableComponent,
     FsatSummaryComponent,
     FsatRollupComponent,
-    FsatRollupEnergyTableComponent,
-    FsatRollupFanSummaryComponent,
-    FsatRollupFanSummaryTableComponent,
-    FsatRollupGraphsComponent,
     FsatRollupPrintComponent,
     SsmtSummaryComponent,
     SsmtRollupComponent,

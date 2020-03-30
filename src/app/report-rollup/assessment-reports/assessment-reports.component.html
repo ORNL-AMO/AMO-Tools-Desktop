@@ -63,7 +63,7 @@
     <div *ngIf="_fsatAssessments.length > 0 && rollupPrintOptions.printFsatRollup" class="row print-break-before">
         <div class="col-12">
             <!--fsat print-->
-            <app-fsat-rollup-print [settings]="settings" [calculators]="selectedFsatCalcs"></app-fsat-rollup-print>
+            <app-fsat-rollup [settings]="settings" [calculators]="selectedFsatCalcs" [inPrintView]="true"></app-fsat-rollup>
         </div>
     </div>
     <div class="assessment-item row" *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}">
