@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import * as Plotly from 'plotly.js';
 
 @Component({
@@ -47,13 +47,13 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.energyUsed
       });
-      textTemplate = '<b>%{label}: </b>%{value:,.0f} ' + this.energyUnit;
+      textTemplate = '<b>%{label}:</b><br>%{value:,.0f} ' + this.energyUnit;
     }
     else if (this.dataOption == 'cost') {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.annualCost
       });
-      textTemplate = '<b>%{label}: </b>%{value:$,.0f}';
+      textTemplate = '<b>%{label}:</b><br>%{value:$,.0f}';
     }
     var data = [{
       values: valuesArr,
@@ -69,8 +69,8 @@ export class RollupSummaryPieChartComponent implements OnInit {
       hoverformat: '.2r',
       texttemplate: textTemplate,
       hoverinfo: 'label+percent',
-      direction: "clockwise",
-      rotation: 115
+      // direction: "clockwise",
+      // rotation: 115
     }];
 
     var layout = {
@@ -111,8 +111,8 @@ export class RollupSummaryPieChartComponent implements OnInit {
       // automargin: true,
       texttemplate: '<b>%{label}: </b>%{value:$,.0f}',
       hoverformat: '.2r',
-      direction: "clockwise",
-      rotation: 125
+      // direction: "clockwise",
+      // rotation: 125
     }];
     var layout = {
       height: 800,

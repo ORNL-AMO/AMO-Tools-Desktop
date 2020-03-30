@@ -20,7 +20,8 @@ export class PsatRollupComponent implements OnInit {
   calculators: Array<Calculator>;
 
   showPreAssessment: boolean = true;
-  dataOption: string = 'cost';
+  pieChartDataOption: string = 'energy';
+  barChartDataOption: string = 'energy';
   barChartData: Array<BarChartDataItem>;
   tickFormat: string;
   yAxisLabel: string;
@@ -28,27 +29,27 @@ export class PsatRollupComponent implements OnInit {
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    if (!this.calculators || this.calculators.length === 0) {
-      this.showPreAssessment = false;
-    }
-    else {
-      this.showPreAssessment = true;
-    }
+    console.log(this.calculators);
     this.setBarChartData();
     this.setPieChartData();
   }
 
-  setDataOption(str: string) {
-    this.dataOption = str;
-    this.setBarChartData();
+  setPieChartOption(str: string) {
+    this.pieChartDataOption = str;
     this.setPieChartData();
+  }
+
+  setBarChartOption(str: string) {
+    this.barChartDataOption = str;
+    this.setBarChartData();
+
   }
 
   setBarChartData() {
     this.barChartData = this.getDataObject();
     this.yAxisLabel = 'Annual Energy Cost ($/yr)';
     this.tickFormat = '$.2s';
-    if (this.dataOption == 'energy') {
+    if (this.barChartDataOption == 'energy') {
       this.yAxisLabel = 'Annual Energy Usage (' + this.settings.powerMeasurement + ')';
       this.tickFormat = '.2s'
     }
@@ -57,7 +58,7 @@ export class PsatRollupComponent implements OnInit {
   getDataObject(): Array<BarChartDataItem> {
     let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
     let traceName: string = "Modification Costs";
-    if (this.dataOption == 'energy') {
+    if (this.barChartDataOption == 'energy') {
       hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.powerMeasurement;
       traceName = "Modification Energy Use";
     }
@@ -93,13 +94,13 @@ export class PsatRollupComponent implements OnInit {
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
-    if (this.dataOption == 'cost') {
+    if (this.barChartDataOption == 'cost') {
       psatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annual_cost - result.modificationResults.annual_cost);
         projectedCosts.push(result.modificationResults.annual_cost);
       })
-    } else if (this.dataOption == 'energy') {
+    } else if (this.barChartDataOption == 'energy') {
       psatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annual_energy - result.modificationResults.annual_energy);
@@ -125,8 +126,8 @@ export class PsatRollupComponent implements OnInit {
         equipmentName: result.name,
         energyUsed: result.baselineResults.annual_energy,
         annualCost: result.baselineResults.annual_cost,
-        percentCost: result.baselineResults.annual_cost / totalCost,
-        percentEnergy: result.baselineResults.annual_energy / totalEnergyUse,
+        percentCost: result.baselineResults.annual_cost / totalCost * 100,
+        percentEnergy: result.baselineResults.annual_energy / totalEnergyUse * 100,
         color: graphColors[colorIndex]
       });
       colorIndex++;

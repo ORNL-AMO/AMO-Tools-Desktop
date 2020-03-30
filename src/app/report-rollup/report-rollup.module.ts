@@ -59,6 +59,7 @@ import { SsmtRollupSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-summa
 import { RollupSummaryBarChartComponent } from './rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { RollupSummaryTableComponent } from './rollup-summary-table/rollup-summary-table.component';
 import { RollupSummaryPieChartComponent } from './rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table/rollup-summary-energy-table.component';
 
 @NgModule({
   imports: [
@@ -122,6 +123,7 @@ import { RollupSummaryPieChartComponent } from './rollup-summary-pie-chart/rollu
     RollupSummaryBarChartComponent,
     RollupSummaryTableComponent,
     RollupSummaryPieChartComponent,
+    RollupSummaryEnergyTableComponent,
 
   ],
   providers: [ReportRollupService],
