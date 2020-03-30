@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { PsatResultsData } from '../../report-rollup-models';
 import { ReportRollupService } from '../../report-rollup.service';
+import { RollupSummaryTableData } from '../../rollup-summary-table/rollup-summary-table.component';
 
 @Component({
   selector: 'app-psat-rollup-pump-summary-table',
@@ -15,17 +16,7 @@ export class PsatRollupPumpSummaryTableComponent implements OnInit {
   printView: boolean;
 
 
-  tableData: Array<{
-    pumpName: string,
-    modificationName: string,
-    baselineEnergyUse: number,
-    modificationEnergyUse: number,
-    baselineCost: number,
-    modificationCost: number,
-    costSavings: number,
-    implementationCosts: number,
-    payBackPeriod: number
-  }>;
+  tableData: Array<RollupSummaryTableData>;
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -33,7 +24,7 @@ export class PsatRollupPumpSummaryTableComponent implements OnInit {
     let psatResultData: Array<PsatResultsData> = this.reportRollupService.psatResults.getValue();
     psatResultData.forEach(dataItem => {
       this.tableData.push({
-        pumpName: dataItem.name,
+        equipmentName: dataItem.name,
         modificationName: dataItem.modName,
         baselineEnergyUse: dataItem.baselineResults.annual_energy,
         modificationCost: dataItem.modificationResults.annual_cost,
@@ -44,11 +35,7 @@ export class PsatRollupPumpSummaryTableComponent implements OnInit {
         payBackPeriod: this.getPayback(dataItem.modificationResults.annual_cost, dataItem.baselineResults.annual_cost, dataItem.modification.inputs.implementationCosts)
       })
     })
-
-
   }
-
-
 
   getPayback(modCost: number, baselineCost: number, implementationCost: number) {
     if (implementationCost) {

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { BarChartDataItem } from '../rollup-summary-bar-chart/bar-chart-data';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 import { SsmtResultsData } from '../report-rollup-models';
 import { ReportRollupService } from '../report-rollup.service';
+import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 
 @Component({
   selector: 'app-ssmt-rollup',

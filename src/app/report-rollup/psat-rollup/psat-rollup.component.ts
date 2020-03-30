@@ -2,9 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
 import { ReportRollupService } from '../report-rollup.service';
-import { BarChartDataItem } from '../rollup-summary-bar-chart/bar-chart-data';
 import { PsatResultsData } from '../report-rollup-models';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
+import * as _ from 'lodash';
+import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 
 @Component({
   selector: 'app-psat-rollup',
@@ -16,12 +18,13 @@ export class PsatRollupComponent implements OnInit {
   settings: Settings;
   @Input()
   calculators: Array<Calculator>;
-  
+
   showPreAssessment: boolean = true;
   dataOption: string = 'cost';
   barChartData: Array<BarChartDataItem>;
   tickFormat: string;
   yAxisLabel: string;
+  pieChartData: Array<PieChartDataItem>;
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -32,19 +35,21 @@ export class PsatRollupComponent implements OnInit {
       this.showPreAssessment = true;
     }
     this.setBarChartData();
+    this.setPieChartData();
   }
 
   setDataOption(str: string) {
     this.dataOption = str;
     this.setBarChartData();
+    this.setPieChartData();
   }
 
-  setBarChartData(){
+  setBarChartData() {
     this.barChartData = this.getDataObject();
     this.yAxisLabel = 'Annual Energy Cost ($/yr)';
     this.tickFormat = '$.2s';
     if (this.dataOption == 'energy') {
-      this.yAxisLabel = 'Annual Energy Usage (' + this.settings.steamEnergyMeasurement + '/hr)';
+      this.yAxisLabel = 'Annual Energy Usage (' + this.settings.powerMeasurement + ')';
       this.tickFormat = '.2s'
     }
   }
@@ -106,5 +111,25 @@ export class PsatRollupComponent implements OnInit {
       labels: labels,
       costSavings: costSavings
     }
+  }
+
+  setPieChartData() {
+    let psatResults: Array<PsatResultsData> = this.reportRollupService.psatResults.getValue();
+    this.pieChartData = new Array();
+    let totalEnergyUse: number = _.sumBy(psatResults, (result) => { return result.baselineResults.annual_energy; });
+    let totalCost: number = _.sumBy(psatResults, (result) => { return result.baselineResults.annual_cost; });
+    //starting with 2, summary table uses 0 and 1
+    let colorIndex: number = 2;
+    psatResults.forEach(result => {
+      this.pieChartData.push({
+        equipmentName: result.name,
+        energyUsed: result.baselineResults.annual_energy,
+        annualCost: result.baselineResults.annual_cost,
+        percentCost: result.baselineResults.annual_cost / totalCost,
+        percentEnergy: result.baselineResults.annual_energy / totalEnergyUse,
+        color: graphColors[colorIndex]
+      });
+      colorIndex++;
+    });
   }
 }

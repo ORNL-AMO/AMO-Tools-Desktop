@@ -1,6 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 import * as Plotly from 'plotly.js';
-import { BarChartDataItem } from './bar-chart-data';
 
 @Component({
   selector: 'app-rollup-summary-bar-chart',
@@ -113,5 +112,16 @@ export class RollupSummaryBarChartComponent implements OnInit {
     };
     Plotly.react(this.rollupBarChart.nativeElement, this.barChartData, layout, configOptions);
   }
+}
 
+export interface BarChartDataItem {
+  x: Array<string>,
+  y: Array<number>,
+  hoverinfo: string,
+  hovertemplate: string,
+  name: string,
+  type: string,
+  marker: {
+      color: string
+  }
 }
