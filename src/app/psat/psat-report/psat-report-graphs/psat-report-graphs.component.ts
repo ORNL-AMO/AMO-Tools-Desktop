@@ -26,7 +26,8 @@ export class PsatReportGraphsComponent implements OnInit {
     pieChartValues: Array<number>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
-    modification?: Modification
+    modification?: Modification,
+    isValid: boolean
   }>;
 
   selectedBaselineData: {
@@ -53,9 +54,7 @@ export class PsatReportGraphsComponent implements OnInit {
     this.selectedBaselineData = this.allChartData[0];
     if (this.psat.modifications && this.psat.modifications.length != 0) {
       this.psat.modifications.forEach(modification => {
-        if (modification.psat.valid.isValid) {
-          this.addChartData(JSON.parse(JSON.stringify(modification.psat.outputs)), modification.psat.name, modification);
-        }
+        this.addChartData(JSON.parse(JSON.stringify(modification.psat.outputs)), modification.psat.name, modification);
       });
       if (this.allChartData.length > 1) {
         this.selectedModificationData = this.allChartData[1];
@@ -69,13 +68,19 @@ export class PsatReportGraphsComponent implements OnInit {
     let pieChartValues: Array<number> = [baselineChartData.motorLoss, baselineChartData.driveLoss, baselineChartData.pumpLoss, baselineChartData.usefulOutput];
     let barChartLabels: Array<string> = ['Energy Input', 'Motor Losses', 'Drive Losses', 'Pump Losses', 'Useful Output'];
     let barChartValues: Array<number> = [baselineChartData.energyInput, baselineChartData.motorLoss, baselineChartData.driveLoss, baselineChartData.pumpLoss, baselineChartData.usefulOutput];
+    let isValid: boolean = true;
+    if (modification) {
+      isValid = modification.psat.valid.isValid;
+    }
+
     this.allChartData.push({
       name: name,
       pieChartLabels: pieChartLabels,
       pieChartValues: pieChartValues,
       barChartLabels: barChartLabels,
       barChartValues: barChartValues,
-      modification: modification
+      modification: modification,
+      isValid: isValid
     })
   }
 
