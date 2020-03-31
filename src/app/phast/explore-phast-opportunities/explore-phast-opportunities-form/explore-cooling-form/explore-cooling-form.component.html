@@ -1,11 +1,12 @@
 <div class="checkbox">
   <label class="group-label" for="exploreCooling">
-    <input type="checkbox" id="exploreCooling" value="true" (focus)="focusField('flowRate')" (change)="toggleCooling()" [(ngModel)]="showCooling"
-    /> Optimize or Improve Furnace Cooling System
+    <input type="checkbox" id="exploreCooling" value="true" (focus)="focusField('flowRate')" (change)="toggleCooling()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowCooling.hasOpportunity"
+    /> {{phast.modifications[exploreModIndex].exploreOppsShowCooling.display}}
   </label>
 </div>
 
-<div *ngIf="showCooling">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowCooling.hasOpportunity">
   <ul *ngFor="let obj of baselineLosses; let index = index">
     <!--flow rate-->
     <li>
@@ -85,8 +86,8 @@
     <!--inlet temp-->
     <li class="explore-opps-item">
       <div class="checkbox form-group">
-        <label for="{{'modifyInletTemp_'+index}}" class="w-100 phast-check-label">
-          <input type="checkbox" id="{{'modifyInletTemp_'+index}}" (focus)="focusField('inletTemp')" (change)="toggleTemp(index, obj)"
+        <label for="{{'modifyCoolingInletTemp_'+index}}" class="w-100 phast-check-label">
+          <input type="checkbox" id="{{'modifyCoolingInletTemp_'+index}}" (focus)="focusField('inletTemp')" (change)="toggleTemp(index, obj)"
             [(ngModel)]="showTemp[index]" /> Modify Temperature: 
             <span class="text-muted">
               {{ obj.name}}

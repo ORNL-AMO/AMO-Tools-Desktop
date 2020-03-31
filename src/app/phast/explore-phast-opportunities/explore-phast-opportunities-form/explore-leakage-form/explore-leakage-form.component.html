@@ -1,11 +1,13 @@
 <div class="checkbox">
   <label class="group-label" for="exploreLeakage">
-    <input type="checkbox" id="exploreLeakage" value="true" (focus)="focusField('openingArea')" (change)="toggleLeakage()" [(ngModel)]="showLeakage"
-    /> Control and Optimize Furnace Pressure
+    <input type="checkbox" id="exploreLeakage" value="true" (focus)="focusField('openingArea')" (change)="toggleLeakage()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowLeakage.hasOpportunity"
+    /> 
+    {{phast.modifications[exploreModIndex].exploreOppsShowLeakage.display}}
   </label>
 </div>
 
-<div *ngIf="showLeakage">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowLeakage.hasOpportunity">
   <ul *ngFor="let loss of phast.losses.leakageLosses; let index = index">
     <li class="explore-opps-item">
       <div class="checkbox form-group mt-2">

@@ -1,11 +1,12 @@
 <div class="checkbox">
   <label class="group-label" for="exploreMaterials">
     <input type="checkbox" id="exploreMaterials" value="true" (focus)="focusField('initialTemperature')" (change)="toggleMaterials()"
-      [(ngModel)]="showMaterial" /> Preheat Charge Material
+      [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowMaterial.hasOpportunity" /> 
+      {{phast.modifications[exploreModIndex].exploreOppsShowMaterial.display}}
   </label>
 </div>
 
-<div *ngIf="showMaterial">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowMaterial.hasOpportunity">
   <ul *ngFor="let material of materials; let index = index">
 
     <li class="explore-opps-item">

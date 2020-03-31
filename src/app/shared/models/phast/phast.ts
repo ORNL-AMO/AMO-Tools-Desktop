@@ -63,6 +63,26 @@ export interface Modification {
   phast?: PHAST;
   notes?: Notes;
   exploreOpportunities?: boolean;
+  exploreOppsShowFlueGas?: SavingsOpportunity;
+  exploreOppsShowAirTemp?: SavingsOpportunity;
+  exploreOppsShowMaterial?: SavingsOpportunity;
+  exploreOppsShowAllTimeOpen?: SavingsOpportunity;
+  exploreOppsShowOpening?: SavingsOpportunity;
+  exploreOppsShowAllEmissivity?: SavingsOpportunity;
+  exploreOppsShowCooling?: SavingsOpportunity;
+  exploreOppsShowAtmosphere?: SavingsOpportunity;
+  exploreOppsShowOperations?: SavingsOpportunity;
+  exploreOppsShowLeakage?: SavingsOpportunity;
+  exploreOppsShowSlag?: SavingsOpportunity;
+  exploreOppsShowEfficiencyData?: SavingsOpportunity;
+  exploreOppsShowWall?: SavingsOpportunity;
+  exploreOppsShowAllTemp?: SavingsOpportunity;
+  exploreOppsShowFixtures?: SavingsOpportunity;
+}
+
+export interface SavingsOpportunity {
+  hasOpportunity: boolean,
+  display: string
 }
 
 export interface Notes {

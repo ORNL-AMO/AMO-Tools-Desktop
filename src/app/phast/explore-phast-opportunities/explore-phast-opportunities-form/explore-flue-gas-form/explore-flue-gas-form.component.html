@@ -1,11 +1,12 @@
 <div class="checkbox">
   <label class="group-label" for="exploreFlueGas">
     <input type="checkbox" id="exploreFlueGas" value="true" (focus)="focusField('flueGasTemperature')" (change)="toggleFlueGas()"
-      [(ngModel)]="showFlueGas" /> Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas
+      [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowFlueGas.hasOpportunity" /> 
+      <span class="ml-1" [innerHTML]="phast.modifications[exploreModIndex].exploreOppsShowFlueGas.display"></span>
   </label>
 </div>
 
-  <ul *ngIf="showFlueGas">
+  <ul *ngIf="phast.modifications[exploreModIndex].exploreOppsShowFlueGas.hasOpportunity">
     <li class="explore-opps-header mb-2">
       <span class="explore-opps-title text-muted">Baseline</span>
       <span class="explore-opps-title text-muted">Modifications</span>
@@ -89,10 +90,11 @@
 <div class="checkbox">
   <label class="group-label" for="exploreAirTemp">
     <input type="checkbox" id="exploreAirTemp" value="true" (focus)="focusField('combustionAirTemperature')" (change)="toggleAirTemp()"
-      [(ngModel)]="showAirTemp" /> Preheat Combustion Air
+      [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowAirTemp.hasOpportunity" /> 
+      {{phast.modifications[exploreModIndex].exploreOppsShowAirTemp.display}}
   </label>
 </div>
-  <ul *ngIf="showAirTemp">
+  <ul *ngIf="phast.modifications[exploreModIndex].exploreOppsShowAirTemp.hasOpportunity">
     <li class="explore-opps-header mb-2">
       <span class="explore-opps-title text-muted">Baseline</span>
       <span class="explore-opps-title text-muted">Modifications</span>

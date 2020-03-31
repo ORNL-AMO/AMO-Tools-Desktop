@@ -1,10 +1,11 @@
 <div class="checkbox">
   <label class="group-label" for="exploreSysEffeciency">
-    <input type="checkbox" id="exploreSysEffeciency" value="true" (focus)="focusField('efficiency')" (change)="toggleEfficiency()" [(ngModel)]="showEfficiencyData"
-    /> Improve Furnace Efficiency
+    <input type="checkbox" id="exploreSysEffeciency" value="true" (focus)="focusField('efficiency')" (change)="toggleEfficiency()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowEfficiencyData.hasOpportunity"
+    /> {{ phast.modifications[exploreModIndex].exploreOppsShowEfficiencyData.display }}
   </label>
 </div>
-<div *ngIf="showEfficiencyData">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowEfficiencyData.hasOpportunity">
   <ul>
       <li class="explore-opps-header mb-2">
         <span class="explore-opps-title text-muted">Baseline</span>

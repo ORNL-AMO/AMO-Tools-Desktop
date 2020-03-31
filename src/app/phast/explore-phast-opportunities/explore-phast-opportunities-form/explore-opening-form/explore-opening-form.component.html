@@ -1,11 +1,12 @@
 <div class="checkbox">
   <label class="group-label" for="exploreOpening">
     <input type="checkbox" id="exploreOpening" value="true" (focus)="focusField('numberOfOpenings')" (change)="toggleOpening()"
-      [(ngModel)]="showOpening" /> Minimize Opening Size or Install Tunnel-like Extensions
+      [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowOpening.hasOpportunity" /> 
+      {{phast.modifications[exploreModIndex].exploreOppsShowOpening.display}}
   </label>
 </div>
 
-<div *ngIf="showOpening">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowOpening.hasOpportunity">
   <ul *ngFor="let loss of phast.losses.openingLosses; let index = index">
 
     <li class="explore-opps-item">
@@ -221,11 +222,12 @@
 <div class="checkbox">
   <label class="group-label" for="exploreEmissivity">
     <input type="checkbox" id="exploreEmissivity" value="true" (focus)="focusField('emissivity')" (change)="toggleAllEmissivity()"
-    [(ngModel)]="showAllEmissivity" /> Install curtains or radiation shields to reduce opening losses
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowAllEmissivity.hasOpportunity" /> 
+    {{phast.modifications[exploreModIndex].exploreOppsShowAllEmissivity.display}}
   </label>
 </div>
 
-<div *ngIf="showAllEmissivity">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowAllEmissivity.hasOpportunity">
   <ul *ngFor="let loss of phast.losses.openingLosses; let index = index" class="mb-0">
 
     <li class="explore-opps-item">
@@ -274,11 +276,12 @@
 <div class="checkbox">
   <label class="group-label" for="exploreTimeOpen">
     <input type="checkbox" id="exploreTimeOpen" value="true" (focus)="focusField('percentTimeOpen')" (change)="toggleAllTimeOpen()"
-      [(ngModel)]="showAllTimeOpen" /> Minimize the Time Furnace Doors are Open
+      [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowAllTimeOpen.hasOpportunity" /> 
+      {{phast.modifications[exploreModIndex].exploreOppsShowAllTimeOpen.display}}
   </label>
 </div>
 
-<div *ngIf="showAllTimeOpen">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowAllTimeOpen.hasOpportunity">
   <ul *ngFor="let loss of phast.losses.openingLosses; let index = index" class="mb-0">
 
     <li class="explore-opps-item">
