@@ -18,7 +18,7 @@
   <div class="row">
     <div class="col-12 pt-2">
       <label class="group-label">Summary of Energy Sources Used</label>
-      <app-phast-rollup-energy-table [printView]="false" [settings]="settings"></app-phast-rollup-energy-table>
+      <app-phast-rollup-energy-table class="pt-2" [printView]="false" [settings]="settings"></app-phast-rollup-energy-table>
     </div>
   </div>
   <!--energy use pie and table-->
@@ -59,7 +59,11 @@
       <app-rollup-summary-bar-chart [barChartData]="barChartData" [yAxisLabel]="yAxisLabel" [tickFormat]="tickFormat">
       </app-rollup-summary-bar-chart>
     </div>
+    <div class="col-12 pt-2">
+      <app-phast-rollup-furnace-summary-table [settings]="settings"></app-phast-rollup-furnace-summary-table>
+    </div>
   </div>
+</div>
   <!--
       <div class="card">
       <div class="header">

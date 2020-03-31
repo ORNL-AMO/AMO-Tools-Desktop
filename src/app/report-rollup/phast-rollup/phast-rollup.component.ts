@@ -169,8 +169,8 @@ export class PhastRollupComponent implements OnInit {
       })
     } else if (dataOption == 'availableHeat') {
       phastResultsCpy.forEach(result => {
-        let baselineAvailableHeat: number = this.getAvailableHeat(result.baselineResultData, result.settings);
-        let modificatonAvailableHeat: number = this.getAvailableHeat(result.modificationResultData, result.settings);
+        let baselineAvailableHeat: number = this.phastResultsService.getAvailableHeat(result.baselineResultData, result.settings);
+        let modificatonAvailableHeat: number = this.phastResultsService.getAvailableHeat(result.modificationResultData, result.settings);
         labels.push(result.name);
         costSavings.push(modificatonAvailableHeat - baselineAvailableHeat);
         projectedCosts.push(baselineAvailableHeat);
@@ -191,24 +191,7 @@ export class PhastRollupComponent implements OnInit {
     }
   }
 
-  getAvailableHeat(data: PhastResults, settings: Settings): number {
-    let resultCategories: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
-    if (resultCategories.showFlueGas) {
-      return data.flueGasAvailableHeat;
-    }
 
-    if (resultCategories.showSystemEff) {
-      return data.heatingSystemEfficiency;
-    }
-
-    if (resultCategories.showEnInput2) {
-      return data.availableHeatPercent;
-    }
-
-    if (resultCategories.showExGas) {
-      return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100;
-    }
-  }
 
   setPieChartData() {
     this.pieChartData = new Array();
@@ -236,40 +219,6 @@ export class PhastRollupComponent implements OnInit {
       colorIndex++;
     });
   }
-
-  setEnergyUseTableData() {
-
-  }
-
-  // setTableData() {
-  //   this.rollupSummaryTableData = new Array();
-  //   let fsatResults: Array<FsatResultsData> = this.reportRollupService.fsatResults.getValue();
-  //   fsatResults.forEach(dataItem => {
-  //     this.rollupSummaryTableData.push({
-  //       equipmentName: dataItem.name,
-  //       modificationName: dataItem.modName,
-  //       baselineEnergyUse: dataItem.baselineResults.annualEnergy,
-  //       modificationCost: dataItem.modificationResults.annualCost,
-  //       modificationEnergyUse: dataItem.baselineResults.annualEnergy,
-  //       baselineCost: dataItem.baselineResults.annualCost,
-  //       costSavings: dataItem.baselineResults.annualCost - dataItem.modificationResults.annualCost,
-  //       implementationCosts: dataItem.modification.implementationCosts,
-  //       payBackPeriod: this.getPayback(dataItem.modificationResults.annualCost, dataItem.baselineResults.annualCost, dataItem.modification.implementationCosts)
-  //     })
-  //   })
-  // }
-  // getPayback(modCost: number, baselineCost: number, implementationCost: number) {
-  //   if (implementationCost) {
-  //     let val = (implementationCost / (baselineCost - modCost)) * 12;
-  //     if (isNaN(val) === false) {
-  //       return val;
-  //     } else {
-  //       return 0;
-  //     }
-  //   } else {
-  //     return 0;
-  //   }
-  // }
 
   getConvertedEnergyValue(val: number, settings: Settings) {
     return this.convertUnitsService.value(val).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
