@@ -21,7 +21,6 @@ export class FsatRollupComponent implements OnInit {
   @Input()
   inPrintView: boolean;
 
-  showPreAssessment: boolean = true;
   pieChartDataOption: string = 'energy';
   barChartDataOption: string;
   barChartData: Array<BarChartDataItem>;

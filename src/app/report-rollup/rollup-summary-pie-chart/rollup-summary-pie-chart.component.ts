@@ -137,5 +137,6 @@ export interface PieChartDataItem {
   annualCost: number,
   percentCost: number,
   percentEnergy: number,
-  color: string
+  color: string,
+  furnaceType?: string
 }

@@ -1,29 +1,22 @@
-tr > td,
-tr > th{
-    text-align: center;
+.table {
+    font-size: small;
+    width: 100%;
 }
-
-tr > td {
+.table th {
+    border: none;
+    padding: 0px 10px;
+}
+.table td {
+    padding: 2px 8px;
     vertical-align: middle;
 }
 
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}
 
 .name{
     border-left: solid 10px;
     padding-left: 4px;
-}
-
-th{
-    width:9%;
-}
-
-.btn-toggle{
-    padding-bottom: 10px;
-}
-
-@media print {
-    tr > td,
-    tr > th {
-        font-size: 18px !important;
-    }
 }
