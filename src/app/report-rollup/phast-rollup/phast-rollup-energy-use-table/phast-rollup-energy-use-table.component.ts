@@ -1,8 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ReportRollupService } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
-import { PhastResultsData } from '../../report-rollup-models';
 import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import * as _ from 'lodash';
 
