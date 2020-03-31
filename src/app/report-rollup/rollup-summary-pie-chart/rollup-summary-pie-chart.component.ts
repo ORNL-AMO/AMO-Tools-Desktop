@@ -69,8 +69,8 @@ export class RollupSummaryPieChartComponent implements OnInit {
       hoverformat: '.2r',
       texttemplate: textTemplate,
       hoverinfo: 'label+percent',
-      // direction: "clockwise",
-      // rotation: 115
+      direction: "clockwise",
+      rotation: 115
     }];
 
     var layout = {
@@ -91,14 +91,20 @@ export class RollupSummaryPieChartComponent implements OnInit {
   }
 
   drawPrintPlot() {
-    let valuesArr: Array<number> = this.pieChartData.map(dataItem => {
-      if (this.dataOption == 'energy') {
+    let valuesArr: Array<number>;
+    let textTemplate: string;
+    if (this.dataOption == 'energy') {
+      valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.energyUsed
-      }
-      else if (this.dataOption == 'cost') {
+      });
+      textTemplate = '<b>%{label}:</b><br>%{value:,.0f} ' + this.energyUnit;
+    }
+    else if (this.dataOption == 'cost') {
+      valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.annualCost
-      }
-    });
+      });
+      textTemplate = '<b>%{label}:</b><br>%{value:$,.0f}';
+    }
     var data = [{
       values: valuesArr,
       labels: this.pieChartData.map(dataItem => { return dataItem.equipmentName }),
@@ -109,10 +115,10 @@ export class RollupSummaryPieChartComponent implements OnInit {
       textposition: 'auto',
       insidetextorientation: "horizontal",
       automargin: true,
-      texttemplate: '<b>%{label}:</b><br>%{value:$,.0f}',
+      texttemplate: textTemplate,
       hoverformat: '.2r',
-      // direction: "clockwise",
-      // rotation: 125
+      direction: "clockwise",
+      rotation: 125
     }];
     var layout = {
       // height: 800,

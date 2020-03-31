@@ -11,18 +11,16 @@ import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PhastSummaryComponent } from './report-summary/phast-summary/phast-summary.component';
 import { PhastRollupComponent } from './phast-rollup/phast-rollup.component';
 import { ModalModule } from 'ngx-bootstrap';
-import { PhastRollupGraphsComponent } from './phast-rollup/phast-rollup-graphs/phast-rollup-graphs.component';
 import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-energy-table/phast-rollup-energy-table.component';
 import { ReportRollupUnitsComponent } from './report-rollup-units/report-rollup-units.component';
 import { FormsModule } from '@angular/forms';
 import { PsatRollupComponent } from './psat-rollup/psat-rollup.component';
-import { PhastRollupFurnaceSummaryComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary.component';
 import { PhastRollupPrintComponent } from './phast-rollup/phast-rollup-print/phast-rollup-print.component';
 import { RollupPieChartComponent } from './rollup-pie-chart/rollup-pie-chart.component';
 import { RollupBarChartComponent } from './rollup-bar-chart/rollup-bar-chart.component';
 import { PhastRollupEnergyUseTableComponent } from './phast-rollup/phast-rollup-energy-use-table/phast-rollup-energy-use-table.component';
 import { PsatRollupPrintComponent } from './psat-rollup/psat-rollup-print/psat-rollup-print.component';
-import { PhastRollupFurnaceSummaryTableComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary-table/phast-rollup-furnace-summary-table.component';
+import { PhastRollupFurnaceSummaryTableComponent } from './phast-rollup/phast-rollup-furnace-summary-table/phast-rollup-furnace-summary-table.component';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessment-table.component';
 import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
@@ -76,11 +74,9 @@ import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table
     PsatSummaryComponent, 
     PhastSummaryComponent, 
     PhastRollupComponent, 
-    PhastRollupGraphsComponent, 
     PhastRollupEnergyTableComponent, 
     ReportRollupUnitsComponent, 
     PsatRollupComponent,
-    PhastRollupFurnaceSummaryComponent,
     PhastRollupPrintComponent,
     RollupPieChartComponent,
     RollupBarChartComponent,

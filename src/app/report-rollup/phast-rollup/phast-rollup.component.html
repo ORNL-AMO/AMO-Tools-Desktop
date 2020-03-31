@@ -18,7 +18,8 @@
   <div class="row">
     <div class="col-12 pt-2">
       <label class="group-label">Summary of Energy Sources Used</label>
-      <app-phast-rollup-energy-table class="pt-2" [printView]="false" [settings]="settings"></app-phast-rollup-energy-table>
+      <app-phast-rollup-energy-table class="pt-2" [printView]="false" [settings]="settings">
+      </app-phast-rollup-energy-table>
     </div>
   </div>
   <!--energy use pie and table-->
@@ -64,23 +65,9 @@
     </div>
   </div>
 </div>
-  <!--
-      <div class="card">
-      <div class="header">
-        <h3>Energy Use Graph</h3>
-      </div>
-      <div class="card-body">
-        <app-phast-rollup-graphs [printView]="false" [settings]="settings"></app-phast-rollup-graphs>
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="header">
-        <h3>Scenario Summary</h3>
-      </div>
-      <div class="card-body">
-        <app-phast-rollup-furnace-summary [printView]="false" [settings]="settings"></app-phast-rollup-furnace-summary>
-      </div>
-    </div>
-  </div>
-</div>-->
+<app-phast-rollup-print *ngIf="inPrintView" [settings]="settings" [calculators]="calculators"
+  [energyBarChartData]="energyBarChartData" [costBarChartData]="costBarChartData"
+  [energyIntensityBarChartData]="energyIntensityBarChartData" [availableHeatBarChartData]="availableHeatBarChartData"
+  [pieChartData]="pieChartData">
+</app-phast-rollup-print>

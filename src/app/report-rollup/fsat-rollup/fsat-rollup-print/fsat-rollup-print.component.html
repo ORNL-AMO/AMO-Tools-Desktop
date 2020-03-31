@@ -1,5 +1,12 @@
+<div class="row">
+    <div class="col-12">
+        <div class="print-page-title">
+            Fan Systems Rollup Summary
+        </div>
+    </div>
+</div>
 <!--pre assessments-->
-<div class="row page-break-avoid" *ngFor="let calculator of calculators">
+<div class="row print-avoid-break" *ngFor="let calculator of calculators">
     <div class="col-12 pt-2">
         <label class="group-label">{{calculator.name}} Pre Assessment Summary</label>
     </div>
@@ -14,7 +21,7 @@
 </div>
 
 <!--energy use pie and table-->
-<div class="row page-break-before">
+<div class="row print-avoid-break">
     <div class="print-pie-width">
         <label class="group-label">Fan Systems Energy Use</label>
         <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'energy'"
@@ -31,7 +38,7 @@
     </div>
 </div>
 <!--system summary bar chart-->
-<div class="row page-break-before">
+<div class="row print-avoid-break">
     <div class="col-12 pt-2">
         <label class="group-label">Fan System Energy Modification Summary</label>
         <app-rollup-summary-bar-chart [barChartData]="energyBarChartData" [yAxisLabel]="energyYAxisLabel"

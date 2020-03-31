@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Settings } from '../../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { PhastResultsService } from '../../../../phast/phast-results.service';
-import { PhastResultsData } from '../../../report-rollup-models';
-import { ReportRollupService } from '../../../report-rollup.service';
+import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PhastResultsService } from '../../../phast/phast-results.service';
+import { PhastResultsData } from '../../report-rollup-models';
+import { ReportRollupService } from '../../report-rollup.service';
 
 @Component({
   selector: 'app-phast-rollup-furnace-summary-table',

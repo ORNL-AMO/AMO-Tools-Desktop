@@ -8,7 +8,6 @@ import { graphColors } from '../../phast/phast-report/report-graphs/graphColors'
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
-import { PhastResults, ShowResultsCategories } from '../../shared/models/phast/phast';
 import { PhastResultsService } from '../../phast/phast-results.service';
 @Component({
   selector: 'app-phast-rollup',
@@ -22,6 +21,8 @@ export class PhastRollupComponent implements OnInit {
   phastResults: Array<PhastResultsData>;
   @Input()
   calculators: Array<Calculator>;
+  @Input()
+  inPrintView: boolean;
 
   pieChartDataOption: string = 'energy';
   barChartDataOption: string;

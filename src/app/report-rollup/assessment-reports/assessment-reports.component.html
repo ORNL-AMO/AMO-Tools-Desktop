@@ -48,8 +48,8 @@
 
     <div *ngIf="_phastAssessments.length > 0 && rollupPrintOptions.printPhastRollup" class="row print-break-before">
         <div class="col-12">
-            <app-phast-rollup-print [settings]="settings" [calculators]="selectedPhastCalcs">
-            </app-phast-rollup-print>
+            <app-phast-rollup [settings]="settings" [calculators]="selectedPhastCalcs" [inPrintView]="true">
+            </app-phast-rollup>
         </div>
     </div>
     <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
