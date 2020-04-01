@@ -73,7 +73,6 @@ export class PrintOptionsMenuComponent implements OnInit {
   closePrintModal() {
     this.printMenuModal.hide();
     this.printMenuModal.onHidden.subscribe(() => {
-      console.log('HIDDEN')
       this.printOptionsMenuService.showPrintMenu.next(false);
     });
   }

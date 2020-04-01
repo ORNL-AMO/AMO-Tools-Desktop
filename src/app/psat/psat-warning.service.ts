@@ -204,7 +204,7 @@ export class PsatWarningService {
 
     let min: number = 5;
     let max: number = 10000;
-    let isModificationValid: boolean;
+    // let isModificationValid: boolean;
     if (psat.inputs.motor_rated_power < this.convertUnitsService.value(min).from('hp').to(settings.powerMeasurement)) {
       return 'Rated motor power is too small.';
     } else if (psat.inputs.motor_rated_power > this.convertUnitsService.value(max).from('hp').to(settings.powerMeasurement)) {
@@ -216,8 +216,8 @@ export class PsatWarningService {
         if (settings.powerMeasurement == 'hp') {
           val = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(settings.powerMeasurement).to('kW');
           if (isModification) {
-            isModificationValid = this.psatService.isPsatValid(psat.inputs, false);
-            if (isModificationValid) {
+            psat.valid = this.psatService.isPsatValid(psat.inputs, false);
+            if (psat.valid.isValid) {
               let modificationResults: PsatOutputs = this.psatService.resultsModified(psat.inputs, settings);
               compare = modificationResults.motor_power;
             } else {
@@ -230,8 +230,8 @@ export class PsatWarningService {
         } else {
           val = psat.inputs.motor_rated_power;
           if (isModification) {
-            isModificationValid = this.psatService.isPsatValid(psat.inputs, false);
-            if (isModificationValid) {
+            psat.valid = this.psatService.isPsatValid(psat.inputs, false);
+            if (psat.valid.isValid) {
               let modificationResults: PsatOutputs = this.psatService.resultsModified(psat.inputs, settings);
               compare = modificationResults.motor_power;
             } else {

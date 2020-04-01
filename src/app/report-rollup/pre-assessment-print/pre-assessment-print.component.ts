@@ -16,7 +16,6 @@ export class PreAssessmentPrintComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('INIT!');
   }
 
 }

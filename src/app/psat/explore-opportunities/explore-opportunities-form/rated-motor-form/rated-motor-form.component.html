@@ -1,10 +1,10 @@
 <div class="checkbox">
   <label class="group-label" for="general2"><input type="checkbox" id="general2" value="true" (focus)="focusField('motorRatedData')"
-      (change)="toggleRatedMotorData()" [(ngModel)]="showRatedMotorData" /> Install More Efficient Motor
+      (change)="toggleRatedMotorData()" [(ngModel)]="currentModification.exploreOppsShowRatedMotorData.hasOpportunity" /> {{currentModification.exploreOppsShowRatedMotorData.display}}
   </label>
 </div>
 <!--Motor Efficiency Class-->
-<li *ngIf="showRatedMotorData" class="explore-opps-item">
+<li *ngIf="currentModification.exploreOppsShowRatedMotorData.hasOpportunity" class="explore-opps-item">
   <form [formGroup]="baselineForm" class="explore-opps-form">
     <!--efficiencyClass-->
     <div class="form-group explore-opps-formgroup">

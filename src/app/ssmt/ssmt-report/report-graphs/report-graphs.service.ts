@@ -29,44 +29,6 @@ export class ReportGraphsService {
     return processUsageData;
   }
 
-
-  // getProcessUsageData(ssmt: SSMT): Array<number> {
-  //   let processUsageData = new Array<number>();
-  //   if (ssmt.headerInput) {
-  //     if (ssmt.headerInput.highPressureHeader) {
-  //       processUsageData.push(ssmt.headerInput.highPressureHeader.processSteamUsage);
-  //     }
-  //     if (ssmt.headerInput.mediumPressureHeader) {
-  //       processUsageData.push(ssmt.headerInput.mediumPressureHeader.processSteamUsage);
-  //     }
-  //     if (ssmt.headerInput.lowPressureHeader) {
-  //       processUsageData.push(ssmt.headerInput.lowPressureHeader.processSteamUsage);
-  //     }
-  //   }
-  //   else {
-  //     processUsageData = [0, 0, 0];
-  //   }
-  //   return processUsageData;
-  // }
-
-  // getProcessUsageLabels(processUsageData: Array<number>, settings: Settings) {
-  //   let l = processUsageData.length;
-  //   let processUsageLabels = new Array<string>();
-  //   if (l === 1) {
-  //     processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
-  //   }
-  //   else if (l === 2) {
-  //     processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
-  //     processUsageLabels.push('LP: ' + this.format(processUsageData[1]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
-  //   }
-  //   else if (l === 3) {
-  //     processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
-  //     processUsageLabels.push('MP: ' + this.format(processUsageData[1]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
-  //     processUsageLabels.push('LP: ' + this.format(processUsageData[2]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
-  //   }
-  //   return processUsageLabels;
-  // }
-
   getGenerationValuesAndLabels(ssmt: SSMT): Array<{ value: number, label: string }> {
     let valuesAndLabels = new Array<{ value: number, label: string }>();
     if (ssmt.turbineInput) {
@@ -85,52 +47,6 @@ export class ReportGraphsService {
     }
     return valuesAndLabels;
   }
-
-  // getGenerationData(ssmt: SSMT): Array<number> {
-  //   let generationData = new Array<number>();
-  //   if (ssmt.turbineInput) {
-  //     if (ssmt.turbineInput.condensingTurbine.useTurbine) {
-  //       generationData.push(ssmt.outputData.condensingTurbine.powerOut);
-  //     }
-  //     if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
-  //       generationData.push(ssmt.outputData.highPressureToLowPressureTurbine.powerOut);
-  //     }
-  //     if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
-  //       generationData.push(ssmt.outputData.highPressureToMediumPressureTurbine.powerOut);
-  //     }
-  //     if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
-  //       generationData.push(ssmt.outputData.mediumPressureToLowPressureTurbine.powerOut);
-  //     }
-  //   }
-  //   else {
-  //     generationData = [0, 0, 0, 0];
-  //   }
-  //   return generationData;
-  // }
-
-  // getGenerationLabels(generationData: Array<number>, ssmt: SSMT, settings: Settings) {
-  //   let l = generationData.length;
-  //   let generationLabels = new Array<string>();
-  //   let i = 0;
-  //   if (ssmt.turbineInput) {
-  //     if (ssmt.turbineInput.condensingTurbine.useTurbine) {
-  //       generationLabels.push('Condensing Turbine: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
-  //       i++;
-  //     }
-  //     if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
-  //       generationLabels.push('HP to LP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
-  //       i++;
-  //     }
-  //     if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
-  //       generationLabels.push('HP to MP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
-  //       i++;
-  //     }
-  //     if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
-  //       generationLabels.push('MP to LP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
-  //     }
-  //   }
-  //   return generationLabels;
-  // }
 
   getWaterfallData(selectedSsmt: { name: string, ssmt: SSMT, index: number }, units: string, startColor: string, lossColor: string, netColor: string, baselineLosses: SSMTLosses, modificationLosses: SSMTLosses) {
     let tmpLosses: SSMTLosses;

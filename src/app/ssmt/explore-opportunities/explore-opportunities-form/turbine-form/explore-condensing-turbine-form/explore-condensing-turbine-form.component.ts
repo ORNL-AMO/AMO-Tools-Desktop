@@ -37,7 +37,6 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   ngOnInit() {
     this.turbineOptionTypes = CondensingTurbineOperationTypes;
     this.initForm();
-
   }
 
   ngOnChanges(changes: SimpleChanges) {

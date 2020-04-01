@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OpportunitySummary, OpportunityCost } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
-import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
 
 @Component({
@@ -25,7 +24,7 @@ export class OpportunitySummaryComponent implements OnInit {
 
   sortBy: string = 'utilityType';
   sortByDirection: string = 'asc';
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor() { }
 
   ngOnInit() {
   }
@@ -33,9 +32,6 @@ export class OpportunitySummaryComponent implements OnInit {
 
   updateOpportunities() {
     this.emitUpdateOpportunities.emit(this.opportunitySummaries);
-    // if (this.inRollup) {
-    //   this.reportRollupService.updateTreasureHuntResults(this.opportunitySummaries, this.assessment.id);
-    // }
   }
 
   getMaterialCost(oppCost: OpportunityCost): number {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { PSAT, PsatInputs, PsatOutputs } from '../../shared/models/psat';
+import { PSAT, PsatInputs, PsatOutputs, PsatValid } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { Directory } from '../../shared/models/directory';
@@ -108,9 +108,11 @@ export class PsatReportComponent implements OnInit {
   }
 
   getContainerHeight() {
-    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
-    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    if (this.reportBtns && this.reportHeader) {
+      let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+      let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    }
   }
 
   setTab(str: string) {
@@ -162,8 +164,8 @@ export class PsatReportComponent implements OnInit {
 
   getResults(psat: PSAT, settings: Settings, isBaseline: boolean): PsatOutputs {
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
-    let isPsatValid: boolean = this.psatService.isPsatValid(psatInputs, isBaseline);
-    if (isPsatValid) {
+    psat.valid = this.psatService.isPsatValid(psatInputs, isBaseline)
+    if (psat.valid.isValid) {
       if (isBaseline) {
         return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
       } else {

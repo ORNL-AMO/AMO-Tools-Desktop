@@ -3,6 +3,7 @@ import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
+import { CompareService } from '../../compare.service';
 
 @Component({
   selector: 'app-output-summary',
@@ -19,7 +20,7 @@ export class OutputSummaryComponent implements OnInit {
 
   selectedModificationIndex: number;
   psat: PSAT;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(private reportRollupService: ReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
     this.psat = this.assessment.psat;
@@ -34,6 +35,24 @@ export class OutputSummaryComponent implements OnInit {
         }
       })
     }
+  }
+
+  getModificationsMadeList(modifiedPsat: PSAT): Array<string> {
+    let modificationsMadeList: Array<string> = new Array();
+
+    let isPumpAndFluidDifferent: boolean = this.compareService.checkPumpDifferent(this.settings, this.psat, modifiedPsat);
+    if(isPumpAndFluidDifferent == true){
+      modificationsMadeList.push('Pump and Fluid');
+    }
+    let isMotorDifferent: boolean = this.compareService.checkMotorDifferent(this.psat, modifiedPsat);
+    if(isMotorDifferent == true){
+      modificationsMadeList.push('Motor');
+    }
+    let isFieldDataDifferent: boolean = this.compareService.checkFieldDataDifferent(this.psat, modifiedPsat);
+    if(isFieldDataDifferent == true){
+      modificationsMadeList.push('Field Data');
+    }
+    return modificationsMadeList;
   }
 
   useModification() {

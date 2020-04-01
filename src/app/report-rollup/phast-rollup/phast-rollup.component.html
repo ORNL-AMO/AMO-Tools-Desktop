@@ -1,7 +1,7 @@
 <!--not print view-->
 <div *ngIf="!inPrintView">
   <!--Pre Assessment calcs-->
-  <!-- <div class="row" *ngFor="let calculator of calculators">
+  <div class="row" *ngFor="let calculator of calculators">
     <div class="col-12 pt-2">
       <label class="group-label">{{calculator.name}} Pre Assessment Summary</label>
     </div>
@@ -13,7 +13,7 @@
       <app-pre-assessment-table [printView]="false" [settings]="settings" [calculator]="calculator">
       </app-pre-assessment-table>
     </div>
-  </div> -->
+  </div>
   <!--rollup energy table-->
   <div class="row">
     <div class="col-12 pt-2">
