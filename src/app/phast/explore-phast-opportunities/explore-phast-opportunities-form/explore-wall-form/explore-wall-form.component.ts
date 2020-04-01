@@ -24,7 +24,6 @@ export class ExploreWallFormComponent implements OnInit {
   changeTab = new EventEmitter<LossTab>();
 
   showSurfaceTemp: Array<boolean>;
-  showWall: boolean = false;
   baselineWarnings: Array<WallLossWarnings>;
   modificationWarnings: Array<WallLossWarnings>;
   constructor(private wallLossesService: WallLossesService) { }
@@ -35,21 +34,22 @@ export class ExploreWallFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showWall = false;
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowWall = { hasOpportunity: false, display: 'Add / Improve Wall Insulation' };
         this.initData();
       }
     }
   }
-
+  
   initData() {
     this.showSurfaceTemp = new Array();
     this.baselineWarnings = new Array<WallLossWarnings>();
     this.modificationWarnings = new Array<WallLossWarnings>();
+    
     let index: number = 0;
     this.phast.losses.wallLosses.forEach(loss => {
       let check: boolean = this.initSurfaceTemp(loss.surfaceTemperature, this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature);
-      if (!this.showWall && check) {
-        this.showWall = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowWall.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowWall = { hasOpportunity: check, display: 'Add / Improve Wall Insulation' };
       }
       this.showSurfaceTemp.push(check);
       let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(loss);
@@ -70,7 +70,7 @@ export class ExploreWallFormComponent implements OnInit {
   }
 
   toggleWall() {
-    if (this.showWall === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowWall.hasOpportunity === false) {
       let index: number = 0;
       this.phast.losses.wallLosses.forEach(loss => {
         let baselineTemp: number = loss.surfaceTemperature;

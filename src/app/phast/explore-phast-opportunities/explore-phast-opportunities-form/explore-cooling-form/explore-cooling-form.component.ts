@@ -25,7 +25,6 @@ export class ExploreCoolingFormComponent implements OnInit {
 
   baselineLosses: Array<{ loss: LiquidCoolingLoss | GasCoolingLoss, type: string, name: string }>;
   modifiedLosses: Array<{ loss: LiquidCoolingLoss | GasCoolingLoss, type: string, name: string }>;
-  showCooling: boolean = false;
   showFlowRate: Array<boolean>;
   showTemp: Array<boolean>;
   baselineWarnings: Array<{ flowWarning: string, tempWarning: string }>;
@@ -39,7 +38,7 @@ export class ExploreCoolingFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showCooling = false;
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowCooling = { hasOpportunity: false, display: 'Optimize or Improve Furnace Cooling System' }; 
         this.initData();
       }
     }
@@ -53,6 +52,7 @@ export class ExploreCoolingFormComponent implements OnInit {
     this.baselineWarnings = new Array<{ flowWarning: string, tempWarning: string }>();
     this.modificationWarnings = new Array<{ flowWarning: string, tempWarning: string }>();
     this.showTemp = new Array<boolean>();
+
 
     let index = 0;
     this.phast.losses.coolingLosses.forEach(loss => {
@@ -75,8 +75,8 @@ export class ExploreCoolingFormComponent implements OnInit {
         this.modificationWarnings.push(tmpWarnings);
       }
       let check: boolean = (this.baselineLosses[index].loss.flowRate !== this.modifiedLosses[index].loss.flowRate);
-      if (!this.showCooling && check) {
-        this.showCooling = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowCooling.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowCooling = { hasOpportunity: check, display: 'Optimize or Improve Furnace Cooling System' }; 
       }
 
       this.showFlowRate.push(check);
@@ -88,8 +88,8 @@ export class ExploreCoolingFormComponent implements OnInit {
           check = (this.baselineLosses[index].loss.outletTemperature !== this.modifiedLosses[index].loss.outletTemperature);
         }
       }
-      if (!this.showCooling && check) {
-        this.showCooling = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowCooling.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowCooling = { hasOpportunity: check, display: 'Optimize or Improve Furnace Cooling System' }; 
       }
       this.showTemp.push(check);
       index++;
@@ -107,7 +107,7 @@ export class ExploreCoolingFormComponent implements OnInit {
   }
 
   toggleCooling() {
-    if (this.showCooling === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowCooling.hasOpportunity === false) {
       let index = 0;
       this.baselineLosses.forEach(loss => {
         if (loss.type === this.modifiedLosses[index].type) {

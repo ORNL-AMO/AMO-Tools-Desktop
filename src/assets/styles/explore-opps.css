@@ -66,6 +66,18 @@ Explore-opps form overrides
     width: 100%;
   }
 
+  div.form-group.explore-opps-formgroup >
+  div.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
+  div.form-group.explore-opps-formgroup >
+  select.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
   hr.form-break-rule {
       margin-top: 0;
   }
@@ -76,6 +88,12 @@ Explore-opps form overrides
     padding-left: 2rem; 
   }
 
+  .phast-check-label {
+    font-size: 16px;
+    color: #9E3200;
+
+  }
+  
   .steam-check-label {
     font-size: 16px;
     color: #A66908;

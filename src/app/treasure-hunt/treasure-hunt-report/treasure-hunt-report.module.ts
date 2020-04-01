@@ -23,7 +23,6 @@ import { ExecutiveSummaryTableComponent } from './executive-summary/executive-su
 import { TeamSummaryTableComponent } from './executive-summary/team-summary-table/team-summary-table.component';
 import { TeamSummaryPieChartComponent } from './executive-summary/team-summary-pie-chart/team-summary-pie-chart.component';
 
-
 @NgModule({
   imports: [
     CommonModule,
