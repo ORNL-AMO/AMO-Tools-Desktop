@@ -7,8 +7,7 @@
       </select>
     </div>
     <div class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [values]="selectedBaselineData.pieChartValues"
-        [labels]="selectedBaselineData.pieChartLabels" [valuesUnit]="'kW'">
+      <app-plotly-pie-chart [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
     </div>
   </div>
@@ -20,8 +19,7 @@
       </select>
     </div>
     <div class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [values]="selectedModificationData.pieChartValues"
-        [labels]="selectedModificationData.pieChartLabels" [valuesUnit]="'kW'">
+      <app-plotly-pie-chart [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
     </div>
   </div>

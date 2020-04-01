@@ -1,7 +1,7 @@
 <div class="row w-100 justify-content-center" *ngIf="!printView">
   <div class="d-flex col-6 flex-column">
     <select *ngIf="selectedPhast2" name="selectedPhast1" class="form-control w-100" id="selectedPhast1"
-      [(ngModel)]="selectedPhast1">
+      [(ngModel)]="selectedPhast1" (change)="setSelectedPhast1()">
       <option [ngValue]="phast">Baseline</option>
       <option *ngFor="let modification of phast.modifications" [ngValue]="modification.phast">
         {{modification.phast.name}}
@@ -9,12 +9,14 @@
     </select>
     <div class="p-0">
       <!-- <label class="group-label">{{selectedSsmt1.name}} Generation</label> -->
-      <app-phast-pie-chart [phast]="selectedPhast1" [settings]="settings">
-      </app-phast-pie-chart>
+      <!-- <app-phast-pie-chart [phast]="selectedPhast1" [settings]="settings">
+      </app-phast-pie-chart> -->
+      <app-plotly-pie-chart [valuesAndLabels]="selectedPhast1PieData" [valuesUnit]="lossUnit"></app-plotly-pie-chart>
     </div>
   </div>
   <div class="col-6 d-flex flex-column" *ngIf="selectedPhast2">
-    <select name="selectedPhast2" class="form-control w-100" id="selectedPhast2" [(ngModel)]="selectedPhast2">
+    <select name="selectedPhast2" class="form-control w-100" id="selectedPhast2" [(ngModel)]="selectedPhast2"
+      (change)="setSelectedPhast2()">
       <option [ngValue]="phast">Baseline</option>
       <option *ngFor="let modification of phast.modifications" [ngValue]="modification.phast">
         {{modification.phast.name}}
@@ -22,8 +24,9 @@
     </select>
     <div class="pt-2">
       <!-- <label class="group-label">{{selectedSsmt2.name}} Process Usage</label> -->
-      <app-phast-pie-chart [phast]="selectedPhast2" [settings]="settings">
-      </app-phast-pie-chart>
+      <!-- <app-phast-pie-chart [phast]="selectedPhast2" [settings]="settings">
+      </app-phast-pie-chart> -->
+      <app-plotly-pie-chart [valuesAndLabels]="selectedPhast2PieData" [valuesUnit]="lossUnit"></app-plotly-pie-chart>
     </div>
   </div>
 </div>

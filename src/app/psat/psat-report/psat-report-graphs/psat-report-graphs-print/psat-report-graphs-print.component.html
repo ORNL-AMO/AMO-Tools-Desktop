@@ -12,14 +12,14 @@
   <div class="row no-gutters mt-2">
     <div class="print-pie-width">
       <div class="h3 mb-0">Baseline</div>
-      <app-plotly-pie-chart [values]="scenarioSummary.baselineGraphData.pieChartValues"
-        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
+      <app-plotly-pie-chart [valuesAndLabels]="scenarioSummary.baselineGraphData.valuesAndLabels" [valuesUnit]="'kW'"
+        [isPrint]="true">
       </app-plotly-pie-chart>
     </div>
     <div class="print-pie-width" *ngIf="scenarioSummary.modificationGraphData">
       <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
-      <app-plotly-pie-chart [values]="scenarioSummary.modificationGraphData.pieChartValues"
-        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
+      <app-plotly-pie-chart [valuesAndLabels]="scenarioSummary.modificationGraphData.valuesAndLabels"
+        [valuesUnit]="'kW'" [isPrint]="true">
       </app-plotly-pie-chart>
     </div>
   </div>

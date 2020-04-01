@@ -19,8 +19,7 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   @Input()
   allChartData: Array<{
     name: string,
-    pieChartLabels: Array<string>,
-    pieChartValues: Array<number>,
+    valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
     modification?: Modification
@@ -58,8 +57,7 @@ export class PsatReportGraphsPrintComponent implements OnInit {
 
   getScenarioSummary(chartDataObj: {
     name: string,
-    pieChartLabels: Array<string>,
-    pieChartValues: Array<number>,
+    valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
     modification?: Modification
@@ -91,15 +89,13 @@ export class PsatReportGraphsPrintComponent implements OnInit {
 
   baselineGraphData(): {
     name: string,
-    pieChartLabels: Array<string>,
-    pieChartValues: Array<number>,
+    valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>
   } {
     return {
       name: 'Baseline',
-      pieChartLabels: this.allChartData[0].pieChartLabels,
-      pieChartValues: this.allChartData[0].pieChartValues,
+      valuesAndLabels: this.allChartData[0].valuesAndLabels,
       barChartLabels: this.allChartData[0].barChartLabels,
       barChartValues: this.allChartData[0].barChartValues
     }
