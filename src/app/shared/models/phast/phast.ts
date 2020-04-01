@@ -17,6 +17,8 @@ import { MeteredEnergy } from './meteredEnergy';
 import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
 import { OperatingHours, OperatingCosts } from '../operations';
+import { SavingsOpportunity } from '../explore-opps';
+
 export interface PHAST {
   name?: string;
   //phastInputs?: PhastInputs,
@@ -78,11 +80,6 @@ export interface Modification {
   exploreOppsShowWall?: SavingsOpportunity;
   exploreOppsShowAllTemp?: SavingsOpportunity;
   exploreOppsShowFixtures?: SavingsOpportunity;
-}
-
-export interface SavingsOpportunity {
-  hasOpportunity: boolean,
-  display: string
 }
 
 export interface Notes {
