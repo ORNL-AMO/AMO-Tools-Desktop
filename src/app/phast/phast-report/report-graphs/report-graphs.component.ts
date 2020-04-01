@@ -1,9 +1,7 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { PHAST, PhastResults, ShowResultsCategories } from '../../../shared/models/phast/phast';
+import { Component, OnInit, Input } from '@angular/core';
+import { PHAST, PhastResults, ShowResultsCategories, Modification } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
-import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
-import { phastGraphColors } from './graphColors';
 
 @Component({
   selector: 'app-report-graphs',
@@ -17,8 +15,6 @@ export class ReportGraphsComponent implements OnInit {
   phast: PHAST;
   @Input()
   inPhast: boolean;
-  // @Input()
-  // assessment: Assessment;
   @Input()
   showPrint: boolean;
   @Input()
@@ -26,39 +22,65 @@ export class ReportGraphsComponent implements OnInit {
   @Input()
   printGraphs: boolean;
 
-  selectedPhast1: PHAST;
-  selectedPhast1PieData: Array<{ value: number, label: string }>;
-  selectedPhast2: PHAST;
-  selectedPhast2PieData: Array<{ value: number, label: string }>;
+  allChartData: Array<{
+    name: string,
+    valuesAndLabels: Array<{ value: number, label: string }>,
+    barChartLabels: Array<string>,
+    barChartValues: Array<number>,
+    modification?: Modification
+  }>;
 
+  selectedBaselineData: {
+    name: string,
+    valuesAndLabels: Array<{ value: number, label: string }>,
+    barChartLabels: Array<string>,
+    barChartValues: Array<number>
+  };
+  selectedModificationData: {
+    name: string,
+    valuesAndLabels: Array<{ value: number, label: string }>,
+    barChartLabels: Array<string>,
+    barChartValues: Array<number>
+  };
 
   lossUnit: string;
+  barChartYAxisLabel: string;
   constructor(private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
-    this.selectedPhast1 = this.phast;
-    this.setSelectedPhast1();
-    if (this.phast.modifications && this.phast.modifications.length != 0) {
-      this.selectedPhast2 = this.phast.modifications[0].phast;
-      this.setSelectedPhast2();
-    }
-
+    this.setAllChartData();
     if (this.settings.unitsOfMeasure === "Metric") {
       this.lossUnit = "GJ/hr";
+      this.barChartYAxisLabel = "Heat Loss (GJ/hr)";
     }
     else if (this.settings.unitsOfMeasure === "Imperial") {
       this.lossUnit = "MMBtu/hr";
+      this.barChartYAxisLabel = "Heat Loss (MMBtu/hr)";
     }
   }
 
-  setSelectedPhast1() {
-    this.selectedPhast1PieData = this.getValuesAndLabels(this.selectedPhast1);
-  }
-  setSelectedPhast2() {
-    this.selectedPhast2PieData = this.getValuesAndLabels(this.selectedPhast2)
+  setAllChartData(){
+    this.allChartData = new Array();
+    this.addChartData(JSON.parse(JSON.stringify(this.phast)), 'Baseline');
+    this.selectedBaselineData = this.allChartData[0];
+    if (this.phast.modifications && this.phast.modifications.length != 0) {
+      this.phast.modifications.forEach(modification => {
+        this.addChartData(JSON.parse(JSON.stringify(modification.phast)), modification.phast.name, modification);
+      });
+      this.selectedModificationData = this.allChartData[1];
+    }
   }
 
-
+  addChartData(phast: PHAST, name: string, modification?: Modification) {
+    let valuesAndLabels: Array<{ value: number, label: string }> = this.getValuesAndLabels(phast);
+    this.allChartData.push({
+      name: name,
+      valuesAndLabels: valuesAndLabels,
+      barChartLabels: valuesAndLabels.map(valueItem => {return valueItem.label}),
+      barChartValues: valuesAndLabels.map(valueItem => {return valueItem.value}),
+      modification: modification
+    })
+  }
 
   getValuesAndLabels(phast: PHAST): Array<{ value: number, label: string }> {
     let results: PhastResults = this.phastResultsService.getResults(phast, this.settings);

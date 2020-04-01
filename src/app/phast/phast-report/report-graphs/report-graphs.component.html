@@ -1,121 +1,36 @@
-<div class="row w-100 justify-content-center" *ngIf="!printView">
-  <div class="d-flex col-6 flex-column">
-    <select *ngIf="selectedPhast2" name="selectedPhast1" class="form-control w-100" id="selectedPhast1"
-      [(ngModel)]="selectedPhast1" (change)="setSelectedPhast1()">
-      <option [ngValue]="phast">Baseline</option>
-      <option *ngFor="let modification of phast.modifications" [ngValue]="modification.phast">
-        {{modification.phast.name}}
-      </option>
-    </select>
-    <div class="p-0">
-      <!-- <label class="group-label">{{selectedSsmt1.name}} Generation</label> -->
-      <!-- <app-phast-pie-chart [phast]="selectedPhast1" [settings]="settings">
-      </app-phast-pie-chart> -->
-      <app-plotly-pie-chart [valuesAndLabels]="selectedPhast1PieData" [valuesUnit]="lossUnit"></app-plotly-pie-chart>
+<div class="d-flex flex-wrap" *ngIf="!showPrint">
+  <div class="d-flex w-50 flex-column">
+    <div class="pl-2 pr-2">
+      <select name="selectedBaselineData" class="form-control mx-auto" id="selectedBaselineData"
+        [(ngModel)]="selectedBaselineData">
+        <option *ngFor="let dataOption of allChartData" [ngValue]="dataOption">{{dataOption.name}}</option>
+      </select>
+    </div>
+    <div class="p-2 pie-chart-container">
+      <app-plotly-pie-chart [valuesAndLabels]="selectedBaselineData.valuesAndLabels" [valuesUnit]="lossUnit">
+      </app-plotly-pie-chart>
     </div>
   </div>
-  <div class="col-6 d-flex flex-column" *ngIf="selectedPhast2">
-    <select name="selectedPhast2" class="form-control w-100" id="selectedPhast2" [(ngModel)]="selectedPhast2"
-      (change)="setSelectedPhast2()">
-      <option [ngValue]="phast">Baseline</option>
-      <option *ngFor="let modification of phast.modifications" [ngValue]="modification.phast">
-        {{modification.phast.name}}
-      </option>
-    </select>
-    <div class="pt-2">
-      <!-- <label class="group-label">{{selectedSsmt2.name}} Process Usage</label> -->
-      <!-- <app-phast-pie-chart [phast]="selectedPhast2" [settings]="settings">
-      </app-phast-pie-chart> -->
-      <app-plotly-pie-chart [valuesAndLabels]="selectedPhast2PieData" [valuesUnit]="lossUnit"></app-plotly-pie-chart>
+  <div *ngIf="selectedModificationData" class="d-flex w-50 flex-column">
+    <div class="pl-2 pr-2">
+      <select name="selectedModificationData" class="form-control mx-auto" id="selectedModificationData"
+        [(ngModel)]="selectedModificationData">
+        <option *ngFor="let dataOption of allChartData" [ngValue]="dataOption">{{dataOption.name}}</option>
+      </select>
     </div>
+    <div class="p-2 pie-chart-container">
+      <app-plotly-pie-chart [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="lossUnit">
+      </app-plotly-pie-chart>
+    </div>
+  </div>
+  <div *ngIf="selectedModificationData" class="w-100">
+    <app-plotly-bar-chart [barChartDataArray]="[selectedBaselineData, selectedModificationData]"
+      [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="lossUnit" [hoverLabel]="'Heat Loss'">
+    </app-plotly-bar-chart>
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-<!-- <div class="output-summary">
-  <div class="row justify-content-center align-items-center hide-print">
-    <div class="col-6">
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <select name="selectedPhast1" class="form-control mx-auto" id="selectedPhast1" [(ngModel)]="selectedPhast1" (ngModelChange)="selectNewPhast(1)">
-              <option *ngFor="let result of resultsArray" [ngValue]="result">{{result.name}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-6" *ngIf="modExists">
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <select name="selectedPhast2" class="form-control mx-auto" id="selectedPhast1" [(ngModel)]="selectedPhast2" (ngModelChange)="selectNewPhast(2)">
-              <option *ngFor="let result of resultsArray" [ngValue]="result">{{result.name}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- if no mod, only 1 pie chart --
-  <div class="row justify-content-center align-items-center hide-print" *ngIf="!modExists">
-    <div class="col-12">
-      <div class="row show-print">
-        <div class="col-6">
-          {{selectedPhast1.name}}
-        </div>
-      </div>
-      <div class="row print-solo">
-        <div #pieChartContainer class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
-            [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-pie-chart>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- if there is a mod, show 2 pie charts --
-  <div *ngIf="modExists">
-    <div class="row justify-content-center align-items-center hide-print">
-      <div class="col-12">
-        <div class="row">
-          <div #pieChartContainer class="col-6">
-              <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
-              [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-pie-chart>
-          </div>
-          <div class="col-6">
-            <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
-              [labels]="selectedPhast2PieLabels" [values]="selectedPhast2PieValues" [exportName]="selectedPhast2ExportName"></app-pie-chart>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- if there is a mod, show bar chart --
-  <div class="row align-items-center hide-print medium-padding-top" *ngIf="modExists">
-    <div #barChartContainer class="col-10 mx-auto">
-      <app-phast-bar-chart [printView]="false" [chartContainerWidth]="chartContainerWidth" [resultCats]="showResultsCats" [phast1Name]="selectedPhast1.name"
-        [phast2Name]="selectedPhast2.name" [modResults]="selectedPhast2.data" [results]="selectedPhast1.data" [settings]="settings"></app-phast-bar-chart>
-    </div>
-  </div>
-
-
-  <!-- if show print then content will init --
-  <div *ngIf="showPrint" class="row show-print print-component">
-    <!-- contains pie and bar chart print views --
-    <div class="col-12">
-      <app-report-graphs-print [resultsArray]="resultsArray" [showResultsCats]="showResultsCats" [graphColors]="graphColors" [pieChartWidth]="pieChartContainerWidth"
-        [pieChartHeight]="pieChartContainerHeight" [printGraphs]="printGraphs" [printSankey]="printSankey" [phast]="phast" [assessment]="assessment" [settings]="settings"
-        [modExists]="modExists" [allPieLabels]="allPieLabels" [allPieValues]="allPieValues" [baselinePhast]="baselinePhast"></app-report-graphs-print>
-    </div>
-  </div>
-</div> -->
+<div *ngIf="showPrint">
+  <app-report-graphs-print [allChartData]="allChartData" [settings]="settings" [printSankey]="printSankey"
+    [printGraphs]="printGraphs" [barChartYAxisLabel]="barChartYAxisLabel"></app-report-graphs-print>
+</div>

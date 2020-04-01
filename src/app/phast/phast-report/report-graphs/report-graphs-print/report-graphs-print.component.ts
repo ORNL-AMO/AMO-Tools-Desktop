@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PHAST, PhastResults, ShowResultsCategories, Modification } from '../../../../shared/models/phast/phast';
+import { Modification } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
-import { Assessment } from '../../../../shared/models/assessment';
+import { ScenarioSummary } from '../../../../shared/models/reports';
 
 @Component({
     selector: 'app-report-graphs-print',
@@ -10,130 +10,134 @@ import { Assessment } from '../../../../shared/models/assessment';
 })
 export class ReportGraphsPrintComponent implements OnInit {
     @Input()
-    resultsArray: Array<{ name: string, data: PhastResults }>;
-    @Input()
-    showResultsCats: ShowResultsCategories;
-    @Input()
-    graphColors: Array<string>;
-    @Input()
-    pieChartWidth: number;
-    @Input()
-    pieChartHeight: number;
-    @Input()
-    printView: boolean;
-    @Input()
-    phast: PHAST;
-    @Input()
-    assessment: Assessment;
-    @Input()
     settings: Settings;
-    @Input()
-    modExists: boolean;
-    @Input()
-    allPieLabels: Array<Array<string>>;
-    @Input()
-    allPieValues: Array<Array<number>>;
-    @Input()
-    baselinePhast: any;
     @Input()
     printSankey: boolean;
     @Input()
     printGraphs: boolean;
-
-    sankeyBaseline: PHAST;
-    modification: PHAST;
-    sankeyPhastOptions: Array<any>;
-    assessmentName: string;
-    energyUnit: string;
-    _modifications: Array<Modification>;
-    allNotes: Array<Array<string>>;
-    equipmentNotes: string;
-
+    @Input()
+    allChartData: Array<{
+      name: string,
+      valuesAndLabels: Array<{ value: number, label: string }>,
+      barChartLabels: Array<string>,
+      barChartValues: Array<number>,
+      modification?: Modification
+    }>;
+    @Input()
+    barChartYAxisLabel: string;
+    @Input()
+    lossUnit: string
+  
+    scenarioSummaries: Array<ScenarioSummary>;
+  
+  
     constructor() { }
-
+  
     ngOnInit() {
-        this._modifications = new Array<Modification>();
-        this.assessmentName = this.assessment.name.replace(/\s/g, '');
-        this.sankeyPhastOptions = new Array<any>();
-        this.sankeyPhastOptions.push({ name: 'Baseline', phast: this.phast });
-        this.sankeyBaseline = this.sankeyPhastOptions[0];
-        if (this.phast.modifications) {
-            this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
-            if (this.phast.modifications.length > 0) {
-                this.modExists = true;
-            }
-            this.phast.modifications.forEach(mod => {
-                this.sankeyPhastOptions.push({ name: mod.phast.name, phast: mod.phast });
-            });
-        }
-        this.energyUnit = this.settings.energyResultUnit;
-        if (this.modExists) {
-            this.getAllNotes();
-        }
-
-        if (this.phast.equipmentNotes) {
-            this.equipmentNotes = "Equipment Notes - " + this.phast.equipmentNotes;
-        }
+      this.setScenarioSummaries();
     }
-
-
-    getAllNotes() {
-        this.allNotes = new Array<Array<string>>();
-
-        for (let i = 0; i < this._modifications.length; i++) {
-            let notes = new Array<string>();
-
-            if (this._modifications[i].notes) {
-                if (this._modifications[i].notes.chargeNotes) {
-                    notes.push("Charge Material - " + this._modifications[i].notes.chargeNotes);
-                }
-                if (this._modifications[i].notes.wallNotes) {
-                    notes.push("Wall Loss - " + this._modifications[i].notes.wallNotes);
-                }
-                if (this._modifications[i].notes.atmosphereNotes) {
-                    notes.push("Atmosphere Loss - " + this._modifications[i].notes.atmosphereNotes);
-                }
-                if (this._modifications[i].notes.fixtureNotes) {
-                    notes.push("Fixture Loss - " + this._modifications[i].notes.fixtureNotes);
-                }
-                if (this._modifications[i].notes.openingNotes) {
-                    notes.push("Opening Loss - " + this._modifications[i].notes.openingNotes);
-                }
-                if (this._modifications[i].notes.coolingNotes) {
-                    notes.push("Cooling Loss - " + this._modifications[i].notes.coolingNotes);
-                }
-                if (this._modifications[i].notes.flueGasNotes) {
-                    notes.push("Flue Gas Loss - " + this._modifications[i].notes.flueGasNotes);
-                }
-                if (this._modifications[i].notes.otherNotes) {
-                    notes.push("Other Loss - " + this._modifications[i].notes.otherNotes);
-                }
-                if (this._modifications[i].notes.leakageNotes) {
-                    notes.push("Leakage Loss - " + this._modifications[i].notes.leakageNotes);
-                }
-                if (this._modifications[i].notes.extendedNotes) {
-                    notes.push("Extended Surface Loss - " + this._modifications[i].notes.extendedNotes);
-                }
-                if (this._modifications[i].notes.slagNotes) {
-                    notes.push("Slag Loss - " + this._modifications[i].notes.slagNotes);
-                }
-                if (this._modifications[i].notes.auxiliaryPowerNotes) {
-                    notes.push("Auxiliary Power - " + this._modifications[i].notes.auxiliaryPowerNotes);
-                }
-                if (this._modifications[i].notes.exhaustGasNotes) {
-                    notes.push("Exhaust Loss - " + this._modifications[i].notes.exhaustGasNotes);
-                }
-                if (this._modifications[i].notes.energyInputExhaustGasNotes) {
-                    notes.push("EAF Loss - " + this._modifications[i].notes.energyInputExhaustGasNotes);
-                }
-                if (this._modifications[i].notes.heatSystemEfficiencyNotes) {
-                    notes.push("System Heat Efficiency - " + this._modifications[i].notes.heatSystemEfficiencyNotes);
-                }
-                if (this._modifications[i].notes.operationsNotes) {
-                    notes.push("Operations - " + this._modifications[i].notes.operationsNotes);
-                }
-            }
-            this.allNotes.push(notes);
+  
+    setScenarioSummaries() {
+      this.scenarioSummaries = new Array();
+      if (this.allChartData.length > 1) {
+        //modificaitons exist
+        for (let i = 1; i < this.allChartData.length; i++) {
+          let modificationScenarioSummary: ScenarioSummary = this.getScenarioSummary(this.allChartData[i]);
+          this.scenarioSummaries.push(modificationScenarioSummary);
         }
+      } else {
+        //no modifications
+        let baselineGraphData = this.baselineGraphData();
+        this.scenarioSummaries = [
+          {
+            notes: new Array(),
+            baselineGraphData: baselineGraphData,
+            modificationGraphData: undefined
+          }
+        ]
+      }
+    }
+  
+    getScenarioSummary(chartDataObj: {
+      name: string,
+      valuesAndLabels: Array<{ value: number, label: string }>,
+      barChartLabels: Array<string>,
+      barChartValues: Array<number>,
+      modification?: Modification
+    }): ScenarioSummary {
+      let notes: Array<string> = this.getModificationNotes(chartDataObj.modification);
+      let baselineGraphData = this.baselineGraphData();
+      return {
+        notes: notes,
+        baselineGraphData: baselineGraphData,
+        modificationGraphData: chartDataObj
+      }
+    }
+  
+    getModificationNotes(modification: Modification): Array<string> {
+      let notes: Array<string> = new Array();
+      if (modification.notes.chargeNotes) {
+        notes.push("Charge Material - " + modification.notes.chargeNotes);
+    }
+    if (modification.notes.wallNotes) {
+        notes.push("Wall Loss - " + modification.notes.wallNotes);
+    }
+    if (modification.notes.atmosphereNotes) {
+        notes.push("Atmosphere Loss - " + modification.notes.atmosphereNotes);
+    }
+    if (modification.notes.fixtureNotes) {
+        notes.push("Fixture Loss - " + modification.notes.fixtureNotes);
+    }
+    if (modification.notes.openingNotes) {
+        notes.push("Opening Loss - " + modification.notes.openingNotes);
+    }
+    if (modification.notes.coolingNotes) {
+        notes.push("Cooling Loss - " + modification.notes.coolingNotes);
+    }
+    if (modification.notes.flueGasNotes) {
+        notes.push("Flue Gas Loss - " + modification.notes.flueGasNotes);
+    }
+    if (modification.notes.otherNotes) {
+        notes.push("Other Loss - " + modification.notes.otherNotes);
+    }
+    if (modification.notes.leakageNotes) {
+        notes.push("Leakage Loss - " + modification.notes.leakageNotes);
+    }
+    if (modification.notes.extendedNotes) {
+        notes.push("Extended Surface Loss - " + modification.notes.extendedNotes);
+    }
+    if (modification.notes.slagNotes) {
+        notes.push("Slag Loss - " + modification.notes.slagNotes);
+    }
+    if (modification.notes.auxiliaryPowerNotes) {
+        notes.push("Auxiliary Power - " + modification.notes.auxiliaryPowerNotes);
+    }
+    if (modification.notes.exhaustGasNotes) {
+        notes.push("Exhaust Loss - " + modification.notes.exhaustGasNotes);
+    }
+    if (modification.notes.energyInputExhaustGasNotes) {
+        notes.push("EAF Loss - " + modification.notes.energyInputExhaustGasNotes);
+    }
+    if (modification.notes.heatSystemEfficiencyNotes) {
+        notes.push("System Heat Efficiency - " + modification.notes.heatSystemEfficiencyNotes);
+    }
+    if (modification.notes.operationsNotes) {
+        notes.push("Operations - " + modification.notes.operationsNotes);
+    }
+      return notes;
+    }
+  
+    baselineGraphData(): {
+      name: string,
+      valuesAndLabels: Array<{ value: number, label: string }>,
+      barChartLabels: Array<string>,
+      barChartValues: Array<number>
+    } {
+      return {
+        name: 'Baseline',
+        valuesAndLabels: this.allChartData[0].valuesAndLabels,
+        barChartLabels: this.allChartData[0].barChartLabels,
+        barChartValues: this.allChartData[0].barChartValues
+      }
     }
 }

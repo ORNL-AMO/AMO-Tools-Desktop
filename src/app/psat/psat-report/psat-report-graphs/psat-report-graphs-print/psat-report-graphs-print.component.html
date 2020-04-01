@@ -26,6 +26,6 @@
   <div class="row no-gutters w-100" *ngIf="scenarioSummary.modificationGraphData">
     <app-plotly-bar-chart class="w-100"
       [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
-      [yAxisLabel]="'Power (kW)'"></app-plotly-bar-chart>
+      [yAxisLabel]="'Power (kW)'" [hoverLabel]="'Power'" [isPrint]="true"></app-plotly-bar-chart>
   </div>
 </div>

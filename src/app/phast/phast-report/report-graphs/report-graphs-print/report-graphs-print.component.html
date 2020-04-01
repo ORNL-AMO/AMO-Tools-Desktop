@@ -1,94 +1,31 @@
-<div *ngFor="let result of resultsArray; let i = index">
+<div class="print-graphs-container" *ngFor="let scenarioSummary of scenarioSummaries">
+    <div class="print-page-title mb-3" *ngIf="scenarioSummary.modificationGraphData">
+        Scenario: {{scenarioSummary.modificationGraphData.name}}
+    </div>
+    <div class="d-block print-mod-notes mb-4" *ngIf="scenarioSummary.notes.length != 0">
+        <div class="h3">Scenario Notes:</div>
+        <ul>
+            <li *ngFor="let note of scenarioSummary.notes">{{note}}</li>
+        </ul>
+    </div>
 
-    <div *ngIf="!modExists || i > 0">
-        <div class="row justify-content-center align-items-center print-graphs-container show-print">
-
-            <!-- page title -->
-            <div *ngIf="modExists" align="center" class="print-page-title print-center-title">
-                Scenario: {{result.name}}
-            </div>
-            <div *ngIf="!modExists" align="center" class="print-page-title print-center-title">
-                Baseline
-            </div>
-
-            <div class="col-12">
-                <!-- notes -->
-                <div class="row" *ngIf="modExists">
-                    <div class="col-12 print-notes-padding">
-                        <div class="row" *ngFor="let note of allNotes[i - 1]">
-                            <div class="col-12 print-mod-notes">
-                                {{note}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- pie chart titles -->
-                <div class="row print-pad-graph-title" *ngIf="printGraphs">
-                    <div class="text-center print-graph-sub-title" [ngClass]="modExists ? 'col-6' : 'col-12'">
-                        Baseline
-                    </div>
-                    <div class="col-6 print-graph-sub-title text-center" *ngIf="modExists">
-                        {{result.name}}
-                    </div>
-                </div>
-
-                <!-- pie charts -->
-                <div class="row" *ngIf="printGraphs">
-                    <div class="col-6 print-pie-chart">
-                        <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth"
-                            [chartContainerHeight]="pieChartHeight" [labels]="allPieLabels[0]" [values]="allPieValues[0]"></app-pie-chart>
-                    </div>
-                    <div class="col-6" *ngIf="modExists">
-                        <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth"
-                            [chartContainerHeight]="pieChartHeight" [labels]="allPieLabels[i]" [values]="allPieValues[i]"></app-pie-chart>
-
-                    </div>
-                </div>
-
-                <!-- bar chart title -->
-                <div class="row show-print print-bar-chart-title print-pad-graph-title" *ngIf="modExists && printGraphs">
-                    <div align="center" class="print-center-title">
-                        Heat Loss ({{energyUnit}}/hr)
-                    </div>
-                </div>
-                <!-- bar chart -->
-                <div class="row show-print justify-content-center align-items-center" *ngIf="modExists && printGraphs">
-                    <div class="col-12">
-                        <app-phast-bar-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [resultCats]="showResultsCats"
-                            [phast1Name]="baselinePhast.name" [phast2Name]="result.name" [modResults]="result.data" [results]="baselinePhast.data"
-                            [settings]="settings"></app-phast-bar-chart>
-                    </div>
-                </div>
-
-                <!-- sankey -->
-                <div class="row" *ngIf='printSankey' [ngClass]="{'print-sankey': modExists && printGraphs, 'print-only-sankey': modExists && !printGraphs }">
-                    <div class="col-12">
-                        <div class="row show-print">
-                            <div align="center" class="print-graph-title print-center-title">
-                                Baseline
-                            </div>
-                        </div>
-                        <div class="row show-print">
-                            <div class="col-12">
-                                <app-sankey [settings]="settings" [phast]="sankeyBaseline.phast" [location]="'baseline'" [assessmentName]="assessmentName"
-                                    [printView]="true" [modIndex]="i"></app-sankey>
-                            </div>
-                        </div>
-                        <div class="row show-print print-pad-graph-title" *ngIf="modExists">
-                            <div align="center" class="print-graph-title print-center-title">
-                                Scenario: {{result.name}}
-                            </div>
-                        </div>
-                        <div class="row show-print" *ngIf="modExists">
-                            <div class="col-12">
-                                <app-sankey [settings]="settings" [phast]="sankeyPhastOptions[i].phast" [location]="'modification'" [assessmentName]="assessmentName"
-                                    [printView]="true" [modIndex]="i"></app-sankey>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="row no-gutters mt-2">
+        <div class="print-pie-width">
+            <div class="h3 mb-0">Baseline</div>
+            <app-plotly-pie-chart [valuesAndLabels]="scenarioSummary.baselineGraphData.valuesAndLabels"
+                [valuesUnit]="lossUnit" [isPrint]="true">
+            </app-plotly-pie-chart>
         </div>
+        <div class="print-pie-width" *ngIf="scenarioSummary.modificationGraphData">
+            <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
+            <app-plotly-pie-chart [valuesAndLabels]="scenarioSummary.modificationGraphData.valuesAndLabels"
+                [valuesUnit]="lossUnit" [isPrint]="true">
+            </app-plotly-pie-chart>
+        </div>
+    </div>
+    <div class="row no-gutters w-100" *ngIf="scenarioSummary.modificationGraphData">
+        <app-plotly-bar-chart class="w-100"
+            [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
+            [yValueUnit]="lossUnit" [hoverLabel]="'Heat Loss'" [yAxisLabel]="barChartYAxisLabel" [isPrint]="true"></app-plotly-bar-chart>
     </div>
 </div>

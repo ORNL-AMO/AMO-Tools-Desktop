@@ -25,7 +25,7 @@
   </div>
   <div *ngIf="selectedModificationData" class="w-100">
     <app-plotly-bar-chart [barChartDataArray]="[selectedBaselineData, selectedModificationData]"
-      [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="'kW'">
+      [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="'kW'" [hoverLabel]="'Power'">
     </app-plotly-bar-chart>
   </div>
 </div>
