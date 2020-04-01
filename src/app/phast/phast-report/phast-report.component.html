@@ -66,33 +66,21 @@
             <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
                 <a>Energy Used</a>
             </li>
-            <!--
-                    -->
             <li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
                 <a>Executive Summary</a>
             </li>
-            <!--
-                    -->
             <li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
                 <a>Result Data</a>
             </li>
-            <!--
-                    -->
             <li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
                 <a>Report Graphs</a>
             </li>
-            <!--
-                    -->
             <li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
                 <a>Sankey</a>
             </li>
-            <!--
-                    -->
             <li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
                 <a>Input Summary</a>
             </li>
-            <!--
-                    -->
             <li (click)="setTab('facility-info')" [ngClass]="{'active': currentTab == 'facility-info'}">
                 <a>Facility Info</a>
             </li>
@@ -137,9 +125,8 @@
         </div>
         <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"
             *ngIf="currentTab == 'report-graphs' || ((printOptions.printReportGraphs || printOptions.printReportSankey) && showPrintView)">
-            <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment"
-                [showPrint]="showPrintView" [printGraphs]="printOptions.printReportGraphs"
-                [printSankey]="printOptions.printReportSankey">
+            <app-report-graphs [phast]="phast" [settings]="settings" [showPrint]="showPrintView"
+                [printGraphs]="printOptions.printReportGraphs" [printSankey]="printOptions.printReportSankey">
             </app-report-graphs>
         </div>
         <div [ngStyle]="{'height.px':reportContainerHeight}" class="results scroll-item print-height"

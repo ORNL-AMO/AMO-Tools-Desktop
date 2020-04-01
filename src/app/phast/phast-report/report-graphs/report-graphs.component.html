@@ -1,4 +1,42 @@
-<div class="output-summary">
+<div class="row w-100 justify-content-center" *ngIf="!printView">
+  <div class="d-flex col-6 flex-column">
+    <select *ngIf="selectedPhast2" name="selectedPhast1" class="form-control w-100" id="selectedPhast1"
+      [(ngModel)]="selectedPhast1">
+      <option [ngValue]="phast">Baseline</option>
+      <option *ngFor="let modification of phast.modifications" [ngValue]="modification.phast">
+        {{modification.phast.name}}
+      </option>
+    </select>
+    <div class="p-0">
+      <!-- <label class="group-label">{{selectedSsmt1.name}} Generation</label> -->
+      <app-phast-pie-chart [phast]="selectedPhast1" [settings]="settings">
+      </app-phast-pie-chart>
+    </div>
+  </div>
+  <div class="col-6 d-flex flex-column" *ngIf="selectedPhast2">
+    <select name="selectedPhast2" class="form-control w-100" id="selectedPhast2" [(ngModel)]="selectedPhast2">
+      <option [ngValue]="phast">Baseline</option>
+      <option *ngFor="let modification of phast.modifications" [ngValue]="modification.phast">
+        {{modification.phast.name}}
+      </option>
+    </select>
+    <div class="pt-2">
+      <!-- <label class="group-label">{{selectedSsmt2.name}} Process Usage</label> -->
+      <app-phast-pie-chart [phast]="selectedPhast2" [settings]="settings">
+      </app-phast-pie-chart>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- <div class="output-summary">
   <div class="row justify-content-center align-items-center hide-print">
     <div class="col-6">
       <div class="row">
@@ -24,7 +62,7 @@
     </div>
   </div>
 
-  <!-- if no mod, only 1 pie chart -->
+  <!-- if no mod, only 1 pie chart --
   <div class="row justify-content-center align-items-center hide-print" *ngIf="!modExists">
     <div class="col-12">
       <div class="row show-print">
@@ -41,7 +79,7 @@
     </div>
   </div>
 
-  <!-- if there is a mod, show 2 pie charts -->
+  <!-- if there is a mod, show 2 pie charts --
   <div *ngIf="modExists">
     <div class="row justify-content-center align-items-center hide-print">
       <div class="col-12">
@@ -59,7 +97,7 @@
     </div>
   </div>
 
-  <!-- if there is a mod, show bar chart -->
+  <!-- if there is a mod, show bar chart --
   <div class="row align-items-center hide-print medium-padding-top" *ngIf="modExists">
     <div #barChartContainer class="col-10 mx-auto">
       <app-phast-bar-chart [printView]="false" [chartContainerWidth]="chartContainerWidth" [resultCats]="showResultsCats" [phast1Name]="selectedPhast1.name"
@@ -68,13 +106,13 @@
   </div>
 
 
-  <!-- if show print then content will init -->
+  <!-- if show print then content will init --
   <div *ngIf="showPrint" class="row show-print print-component">
-    <!-- contains pie and bar chart print views -->
+    <!-- contains pie and bar chart print views --
     <div class="col-12">
       <app-report-graphs-print [resultsArray]="resultsArray" [showResultsCats]="showResultsCats" [graphColors]="graphColors" [pieChartWidth]="pieChartContainerWidth"
         [pieChartHeight]="pieChartContainerHeight" [printGraphs]="printGraphs" [printSankey]="printSankey" [phast]="phast" [assessment]="assessment" [settings]="settings"
         [modExists]="modExists" [allPieLabels]="allPieLabels" [allPieValues]="allPieValues" [baselinePhast]="baselinePhast"></app-report-graphs-print>
     </div>
   </div>
-</div>
+</div> -->
