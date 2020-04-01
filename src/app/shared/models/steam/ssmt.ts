@@ -1,6 +1,7 @@
 import { OperatingHours, OperatingCosts } from "../operations";
 import { SSMTOutput } from "./steam-outputs";
 import { StackLossInput } from "./steam-inputs";
+import { SavingsOpportunity } from "../explore-opps";
 
 export interface SSMT {
     name?: string;
@@ -115,11 +116,6 @@ export interface Modification {
     exploreOppsShowHighToLowPressureTurbine?: SavingsOpportunity
     exploreOppsShowHighToMediumPressureTurbine?: SavingsOpportunity
     exploreOppsShowMediumToLowPressureTurbine?: SavingsOpportunity
-}
-
-export interface SavingsOpportunity {
-    hasOpportunity: boolean,
-    display: string
 }
 
 export interface Notes {
