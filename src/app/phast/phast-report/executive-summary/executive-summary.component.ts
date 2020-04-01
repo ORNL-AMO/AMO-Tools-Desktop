@@ -5,6 +5,8 @@ import { Assessment } from '../../../shared/models/assessment';
 import { ExecutiveSummaryService, SummaryNote } from '../executive-summary.service';
 import * as _ from 'lodash';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
+import { PhastCompareService } from '../../phast-compare.service';
+
 @Component({
   selector: 'app-executive-summary',
   templateUrl: './executive-summary.component.html',
@@ -33,7 +35,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   //percent graph variables
   unit: string;
   titlePlacement: string;
-  constructor(private executiveSummaryService: ExecutiveSummaryService, private reportRollupService: ReportRollupService) { }
+  constructor(private executiveSummaryService: ExecutiveSummaryService, private reportRollupService: ReportRollupService, private compareService: PhastCompareService) { }
 
   ngOnInit() {
     this.unit = '%';
@@ -77,6 +79,12 @@ export class ExecutiveSummaryComponent implements OnInit {
     if (this.phast.modifications) {
       this.numMods = this.phast.modifications.length;
     }
+  }
+
+  getModificationsMadeList(modifiedPhast: PHAST): Array<string> {
+    let modificationsMadeList: Array<string> = new Array();
+    modificationsMadeList = this.compareService.getBadges(this.phast, modifiedPhast).map(mod => mod.modName);
+    return modificationsMadeList;
   }
 
   useModification() {

@@ -1,11 +1,12 @@
 <div class="checkbox">
   <label class="group-label" for="exploreWall">
-    <input type="checkbox" id="exploreWall" value="true" (focus)="focusField('avgSurfaceTemp')" (change)="toggleWall()" [(ngModel)]="showWall"
-    /> Add / Improve Wall Insulation
+    <input type="checkbox" id="exploreWall" value="true" (focus)="focusField('avgSurfaceTemp')" (change)="toggleWall()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowWall.hasOpportunity"
+    /> {{phast.modifications[exploreModIndex].exploreOppsShowWall.display}}
   </label>
 </div>
 
-<div *ngIf="showWall">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowWall.hasOpportunity">
   <ul *ngFor="let loss of phast.losses.wallLosses; let index = index">
     <li class="explore-opps-item">
       <div class="checkbox form-group">

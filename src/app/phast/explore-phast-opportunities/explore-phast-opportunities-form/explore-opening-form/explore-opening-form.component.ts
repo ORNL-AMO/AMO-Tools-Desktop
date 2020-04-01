@@ -31,12 +31,9 @@ export class ExploreOpeningFormComponent implements OnInit {
   modificationWarnings: Array<OpeningLossWarnings>;
 
   showTimeOpen: Array<boolean>;
-  showAllTimeOpen: boolean = false;
   showEmissivity: Array<boolean>;
   showViewFactor: Array<boolean>;
   showSize: Array<boolean>;
-  showAllEmissivity: boolean = false;
-  showOpening: boolean = false;
   constructor(private convertUnitsService: ConvertUnitsService, private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -46,9 +43,10 @@ export class ExploreOpeningFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showAllEmissivity = false;
-        this.showAllTimeOpen = false;
-        this.showOpening = false;
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: false, display: 'Minimize the Time Furnace Doors are Open' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: false, display: 'Install curtains or radiation shields to reduce opening losses' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: false, display: 'Minimize Opening Size or Install Tunnel-like Extensions' }; 
+        
         this.initData();
       }
     }
@@ -64,8 +62,8 @@ export class ExploreOpeningFormComponent implements OnInit {
     let index: number = 0;
     this.phast.losses.openingLosses.forEach(loss => {
       let check: boolean = this.initSize(loss, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
-      if (!this.showOpening && check) {
-        this.showOpening = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: check, display: 'Minimize Opening Size or Install Tunnel-like Extensions' }; 
       }
       this.showSize.push(check);
       this.getArea(2, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], index);
@@ -74,14 +72,14 @@ export class ExploreOpeningFormComponent implements OnInit {
       check = (loss.viewFactor === this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].viewFactor);
       this.showViewFactor.push(!check);
       check = (loss.emissivity !== this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity);
-      if (!this.showAllEmissivity && check) {
-        this.showAllEmissivity = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: check, display: 'Install curtains or radiation shields to reduce opening losses' }; 
       }
       this.showEmissivity.push(check);
       check = (loss.percentTimeOpen !== this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen);
       this.showTimeOpen.push(check);
-      if (!this.showAllTimeOpen && check) {
-        this.showAllTimeOpen = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: check, display: 'Minimize the Time Furnace Doors are Open' }; 
       }
 
       let tmpWarnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(loss);
@@ -125,7 +123,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   toggleOpening() {
-    if (this.showOpening === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening.hasOpportunity === false) {
       let index = 0;
       this.phast.losses.openingLosses.forEach(loss => {
         this.setToBaseline(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], loss);
@@ -182,7 +180,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   toggleAllEmissivity() {
-    if (this.showAllEmissivity === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity.hasOpportunity === false) {
       let index = 0;
       this.phast.losses.openingLosses.forEach(loss => {
         this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity = loss.emissivity;
@@ -215,7 +213,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   toggleAllTimeOpen() {
-    if (this.showAllTimeOpen === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen.hasOpportunity === false) {
       let index = 0;
       this.phast.losses.openingLosses.forEach(loss => {
         this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen = loss.percentTimeOpen;

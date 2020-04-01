@@ -1,11 +1,12 @@
 <div class="checkbox">
   <label class="group-label" for="exploreAtmosphere">
     <input type="checkbox" id="exploreAtmosphere" (focus)="focusField('flowRate')" (change)="toggleAtmosphere()"
-      [(ngModel)]="showAtmosphere" /> Optimize Furnace Atmosphere Makeup System:
+      [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowAtmosphere.hasOpportunity" /> 
+      {{phast.modifications[exploreModIndex].exploreOppsShowAtmosphere.display}}
   </label>
 </div>
 
-<div *ngIf="showAtmosphere">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowAtmosphere.hasOpportunity">
   <ul *ngFor="let loss of phast.losses.atmosphereLosses; let index = index">
     <!--flow rate-->
     <li class="explore-opps-item">
@@ -60,8 +61,8 @@
     <!--inlet temp-->
     <li class="explore-opps-item">
       <div class="checkbox w-100 mt-2 form-group">
-        <label for="{{'modifyInletTemp_'+index}}" class="phast-check-label">
-          <input type="checkbox" id="{{'modifyInletTemp_'+index}}" (focus)="focusField('inletTemperature')" (change)="toggleInletTemp(index, loss)"
+        <label for="{{'modifyMakeupInletTemp_'+index}}" class="phast-check-label w-100">
+          <input type="checkbox" id="{{'modifyMakeupInletTemp_'+index}}" (focus)="focusField('inletTemperature')" (change)="toggleInletTemp(index, loss)"
             [(ngModel)]="showInletTemp[index]" /> Modify Inlet / Outlet Temperature:
             <span class="text-muted">
               {{loss.name}}

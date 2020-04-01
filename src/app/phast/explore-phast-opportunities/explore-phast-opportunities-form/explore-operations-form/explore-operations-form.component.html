@@ -1,11 +1,13 @@
 <div class="checkbox" #formElement>
   <label class="group-label" for="exploreOperatoins">
     <input type="checkbox" id="exploreOperatoins" value="true" (focus)="focusField('operatingHours')"
-      (change)="toggleOperations()" [(ngModel)]="showOperations" /> Adjust Operational Data
+      (change)="toggleOperations()" 
+      [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowOperations.hasOpportunity" /> 
+      {{phast.modifications[exploreModIndex].exploreOppsShowOperations.display}}
   </label>
 </div>
 
-<div *ngIf="showOperations">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowOperations.hasOpportunity">
   <ul>
     <li class="explore-opps-item">
       <div class="checkbox mt-2">

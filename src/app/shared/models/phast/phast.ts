@@ -17,6 +17,8 @@ import { MeteredEnergy } from './meteredEnergy';
 import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
 import { OperatingHours, OperatingCosts } from '../operations';
+import { SavingsOpportunity } from '../explore-opps';
+
 export interface PHAST {
   name?: string;
   //phastInputs?: PhastInputs,
@@ -63,6 +65,21 @@ export interface Modification {
   phast?: PHAST;
   notes?: Notes;
   exploreOpportunities?: boolean;
+  exploreOppsShowFlueGas?: SavingsOpportunity;
+  exploreOppsShowAirTemp?: SavingsOpportunity;
+  exploreOppsShowMaterial?: SavingsOpportunity;
+  exploreOppsShowAllTimeOpen?: SavingsOpportunity;
+  exploreOppsShowOpening?: SavingsOpportunity;
+  exploreOppsShowAllEmissivity?: SavingsOpportunity;
+  exploreOppsShowCooling?: SavingsOpportunity;
+  exploreOppsShowAtmosphere?: SavingsOpportunity;
+  exploreOppsShowOperations?: SavingsOpportunity;
+  exploreOppsShowLeakage?: SavingsOpportunity;
+  exploreOppsShowSlag?: SavingsOpportunity;
+  exploreOppsShowEfficiencyData?: SavingsOpportunity;
+  exploreOppsShowWall?: SavingsOpportunity;
+  exploreOppsShowAllTemp?: SavingsOpportunity;
+  exploreOppsShowFixtures?: SavingsOpportunity;
 }
 
 export interface Notes {

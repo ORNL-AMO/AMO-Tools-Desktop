@@ -1,10 +1,12 @@
 <div class="checkbox">
   <label class="group-label" for="exploreSlag">
-    <input type="checkbox" id="exploreSlag" (focus)="focusField('weight')" (change)="toggleSlag()" [(ngModel)]="showSlag" /> Reduce Slag
+    <input type="checkbox" id="exploreSlag" (focus)="focusField('weight')" (change)="toggleSlag()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowSlag.hasOpportunity" /> 
+    {{phast.modifications[exploreModIndex].exploreOppsShowSlag.display}}
   </label>
 </div>
 
-<div *ngIf="showSlag">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowSlag.hasOpportunity">
   <ul>
     <li class="explore-opps-header mb-2">
       <span class="explore-opps-title text-muted">Baseline</span>
