@@ -533,7 +533,6 @@ export class ReportRollupService {
   updateTreasureHuntResults(thuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>, opportunitiesPaybackDetails: OpportunitiesPaybackDetails, assessmentId: number) {
     let currentResults: Array<TreasureHuntResultsData> = this.allTreasureHuntResults.value;
     let resultToBeUpdated: TreasureHuntResultsData = currentResults.find(result => { return result.assessment.id == assessmentId });
-    // let updatedResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, resultToBeUpdated.assessment.treasureHunt.currentEnergyUsage);
     resultToBeUpdated.treasureHuntResults = thuntResults;
     resultToBeUpdated.opportunityCardsData = opportunityCardsData;
     resultToBeUpdated.opportunitiesPaybackDetails = opportunitiesPaybackDetails;
