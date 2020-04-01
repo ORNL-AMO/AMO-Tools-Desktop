@@ -1,4 +1,4 @@
-<div class="treasure-hunt">
+<div class="treasure-hunt" *ngIf="!printView">
     <div class="row">
         <div class="col-6">
             <label class="group-label w-100">Current Cost Status</label>
@@ -45,3 +45,8 @@
         </div>
     </div>
 </div>
+
+<app-treasure-hunt-rollup-print *ngIf="printView" [settings]="settings"
+    [combinedTreasureHuntResults]="combinedTreasureHuntResults"
+    [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [allTeamsData]="allTeamsData">
+</app-treasure-hunt-rollup-print>

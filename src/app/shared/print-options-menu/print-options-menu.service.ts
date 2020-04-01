@@ -38,10 +38,10 @@ export class PrintOptionsMenuService {
         currentPrintOptions.printFsatRollup = !currentPrintOptions.printFsatRollup;
         break;
       }
-      // case "treasureHuntRollup": {
-      //   this.printTreasureHuntRollup = !this.printTreasureHuntRollup;
-      //   break;
-      // }
+      case "treasureHuntRollup": {
+        currentPrintOptions.printTreasureHuntRollup = !currentPrintOptions.printTreasureHuntRollup;
+        break;
+      }
       case "ssmtRollup": {
         currentPrintOptions.printSsmtRollup = !currentPrintOptions.printSsmtRollup;
         break;
@@ -96,7 +96,7 @@ export class PrintOptionsMenuService {
       printPsatRollup: bool,
       printPhastRollup: bool,
       printFsatRollup: bool,
-      // this.printTreasureHuntRollup: boolean;
+      printTreasureHuntRollup: bool,
       printReportGraphs: bool,
       printReportSankey: bool,
       printResults: bool,

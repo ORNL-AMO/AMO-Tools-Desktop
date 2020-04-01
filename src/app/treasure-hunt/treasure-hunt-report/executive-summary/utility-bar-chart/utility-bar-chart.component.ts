@@ -12,6 +12,9 @@ export class UtilityBarChartComponent implements OnInit {
   treasureHuntResults: TreasureHuntResults;
   @Input()
   showPrintView: boolean;
+  @Input()
+  inRollupPrintView: boolean;
+
   @ViewChild('utilityBarChart', { static: false }) utilityBarChart: ElementRef;
 
   constructor() { }
@@ -20,54 +23,33 @@ export class UtilityBarChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (!this.showPrintView) {
+    if (!this.showPrintView && !this.inRollupPrintView) {
       this.createBarChart();
-    } else if (this.showPrintView) {
+    } else if (this.showPrintView && !this.inRollupPrintView) {
       this.createPrintBarChart();
+    } else if(this.inRollupPrintView){
+      this.createRollupPrintBarChart();
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.utilityBarChart && !this.showPrintView) {
+  ngOnChanges() {
+    if (this.utilityBarChart && !this.showPrintView && !this.inRollupPrintView) {
       this.createBarChart();
-    }
-    if (changes.showPrintView && !changes.showPrintView.firstChange && this.showPrintView) {
+    }else if (this.utilityBarChart && this.showPrintView && !this.inRollupPrintView) {
       this.createPrintBarChart();
+    }else if (this.utilityBarChart && this.inRollupPrintView){
+      this.createRollupPrintBarChart();
     }
   }
+
   createBarChart() {
-    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
-    let projectCostTrace = {
-      x: chartData.labels,
-      y: chartData.projectedCosts,
-      hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
-      name: "Projected Costs",
-      type: "bar",
-      marker: {
-        color: graphColors[0],
-        width: .8
-      },
-    };
-    let costSavingsTrace = {
-      x: chartData.labels,
-      y: chartData.costSavings,
-      hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
-      name: "Cost Savings",
-      type: "bar",
-      marker: {
-        color: graphColors[1]
-      },
-    }
-
-    var data = [projectCostTrace, costSavingsTrace];
+    var data = this.getDataObject();
     var layout = {
       barmode: 'stack',
       showlegend: true,
       legend: {
         x: .25,
-        y: 1.5,
+        y: 1.3,
         orientation: "h"
       },
       font: {
@@ -96,40 +78,14 @@ export class UtilityBarChartComponent implements OnInit {
   }
 
   createPrintBarChart() {
-    console.log('PRINT BAR CHART')
-    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
-    let projectCostTrace = {
-      x: chartData.labels,
-      y: chartData.projectedCosts,
-      hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
-      name: "Projected Costs",
-      type: "bar",
-      marker: {
-        color: graphColors[0],
-        width: .8
-      },
-    };
-    let costSavingsTrace = {
-      x: chartData.labels,
-      y: chartData.costSavings,
-      hoverinfo: 'all',
-      hovertemplate: '%{y:$,.0f}<extra></extra>',
-      name: "Cost Savings",
-      type: "bar",
-      marker: {
-        color: graphColors[1]
-      },
-    }
-
-    var data = [projectCostTrace, costSavingsTrace];
+    var data = this.getDataObject();
     var layout = {
       width: 575,
       barmode: 'stack',
       showlegend: true,
       legend: {
         x: 0,
-        y: 1.5,
+        y: 1.3,
         orientation: "h"
       },
       font: {
@@ -150,11 +106,75 @@ export class UtilityBarChartComponent implements OnInit {
     var configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       displaylogo: false,
-      displayModeBar: true,
-      responsive: true
+      displayModeBar: false
     };
 
     Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);
+  }
+
+  createRollupPrintBarChart() {
+    var data = this.getDataObject();
+    var layout = {
+      width: 800,
+      barmode: 'stack',
+      showlegend: true,
+      legend: {
+        x: 0,
+        y: 1,
+        orientation: "h"
+      },
+      font: {
+        size: 14,
+      },
+      yaxis: {
+        hoverformat: '.3r',
+        // automargin: true,
+        tickformat: '$.2s',
+        // fixedrange: true
+      },
+      xaxis: {
+        // automargin: true,
+        // fixedrange: true
+      },
+      margin: { t: 30, b: 30 }
+    };
+    var configOptions = {
+      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      displaylogo: false,
+      displayModeBar: false
+    };
+
+    Plotly.react(this.utilityBarChart.nativeElement, data, layout, configOptions);
+  }
+
+  getDataObject(){
+    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
+    let projectCostTrace = {
+      x: chartData.labels,
+      y: chartData.projectedCosts,
+      hoverinfo: 'all',
+      hovertemplate: '%{y:$,.0f}<extra></extra>',
+      name: "Modification Costs",
+      type: "bar",
+      marker: {
+        color: graphColors[0],
+        width: .8
+      },
+    };
+    let costSavingsTrace = {
+      x: chartData.labels,
+      y: chartData.costSavings,
+      hoverinfo: 'all',
+      hovertemplate: '%{y:$,.0f}<extra></extra>',
+      name: "Savings From Baseline",
+      type: "bar",
+      marker: {
+        color: graphColors[1]
+      },
+    }
+
+    var data = [projectCostTrace, costSavingsTrace];
+    return data;
   }
 
   getChartData(): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {

@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { UtilityUsageData, OpportunitySummary, TreasureHuntResults, OpportunitiesPaybackDetails } from '../../shared/models/treasure-hunt';
 import { TreasureHuntResultsData, ReportItem } from '../report-rollup-models';
-import { Subscription } from 'rxjs';
 import { ReportRollupService } from '../report-rollup.service';
 import * as _ from 'lodash';
 import { OpportunityCardData, OpportunityCardsService } from '../../treasure-hunt/treasure-chest/opportunity-cards/opportunity-cards.service';
@@ -17,30 +16,22 @@ import { OpportunityPaybackService } from '../../treasure-hunt/treasure-hunt-rep
 export class TreasureHuntRollupComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
-  allTreasureHuntResultsSub: Subscription;
-  treasureHuntAssessmentsSub: Subscription;
   combinedTreasureHuntResults: TreasureHuntResults;
   allOpportunityCardsData: Array<OpportunityCardData>
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
   allTeamsData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
-  constructor(private reportRollupService: ReportRollupService, private opportunityCardsService: OpportunityCardsService, private treasureHuntReportService: TreasureHuntReportService, 
+  constructor(private reportRollupService: ReportRollupService, private opportunityCardsService: OpportunityCardsService, private treasureHuntReportService: TreasureHuntReportService,
     private opportunityPaybackService: OpportunityPaybackService) { }
 
   ngOnInit(): void {
-    this.allTreasureHuntResultsSub = this.reportRollupService.allTreasureHuntResults.subscribe((resultsData: Array<TreasureHuntResultsData>) => {
-      this.combinedTreasureHuntResults = this.getCombinedTreasureHuntResults(resultsData);
-      this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.combinedTreasureHuntResults.opportunitySummaries);
-    });
-
-    this.treasureHuntAssessmentsSub = this.reportRollupService.treasureHuntAssessments.subscribe(treasureHuntAssessments => {
-      this.setAllOpporutnityCardsData(treasureHuntAssessments);
-    })
-  }
-
-  ngOnDestroy() {
-    this.allTreasureHuntResultsSub.unsubscribe();
-    this.treasureHuntAssessmentsSub.unsubscribe();
+    let allTreasureHuntResults: Array<TreasureHuntResultsData> = this.reportRollupService.allTreasureHuntResults.getValue();
+    this.combinedTreasureHuntResults = this.getCombinedTreasureHuntResults(allTreasureHuntResults);
+    this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.combinedTreasureHuntResults.opportunitySummaries);
+    let treasureHuntAssessments: Array<ReportItem> = this.reportRollupService.treasureHuntAssessments.getValue();
+    this.setAllOpporutnityCardsData(treasureHuntAssessments);
   }
 
   setAllOpporutnityCardsData(treasureHuntAssessments: Array<ReportItem>) {
