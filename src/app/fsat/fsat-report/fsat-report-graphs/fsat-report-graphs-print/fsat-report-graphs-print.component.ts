@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { Modification } from '../../../../shared/models/fans';
+import { Modification, FSAT } from '../../../../shared/models/fans';
 import { ScenarioSummary } from '../../../../shared/models/reports';
 
 @Component({
@@ -23,6 +23,8 @@ export class FsatReportGraphsPrintComponent implements OnInit {
     barChartValues: Array<number>,
     modification?: Modification
   }>;
+  @Input()
+  fsat: FSAT;
 
   scenarioSummaries: Array<ScenarioSummary>;
 

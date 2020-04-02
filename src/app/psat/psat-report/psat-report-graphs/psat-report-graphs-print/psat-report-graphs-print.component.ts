@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Modification } from '../../../../shared/models/psat';
+import { Modification, PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
-import { Assessment } from '../../../../shared/models/assessment';
 import { ScenarioSummary } from '../../../../shared/models/reports';
 
 @Component({
@@ -24,6 +23,8 @@ export class PsatReportGraphsPrintComponent implements OnInit {
     barChartValues: Array<number>,
     modification?: Modification
   }>;
+  @Input()
+  psat: PSAT;
 
   scenarioSummaries: Array<ScenarioSummary>;
 
@@ -32,6 +33,7 @@ export class PsatReportGraphsPrintComponent implements OnInit {
 
   ngOnInit() {
     this.setScenarioSummaries();
+    console.log(this.scenarioSummaries);
   }
 
   setScenarioSummaries() {

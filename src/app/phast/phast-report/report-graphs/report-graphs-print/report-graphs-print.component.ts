@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Modification } from '../../../../shared/models/phast/phast';
+import { Modification, PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { ScenarioSummary } from '../../../../shared/models/reports';
 
@@ -27,6 +27,8 @@ export class ReportGraphsPrintComponent implements OnInit {
     barChartYAxisLabel: string;
     @Input()
     lossUnit: string
+    @Input()
+    phast: PHAST;
   
     scenarioSummaries: Array<ScenarioSummary>;
   

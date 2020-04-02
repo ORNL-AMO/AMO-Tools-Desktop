@@ -123,7 +123,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
     }];
     var layout = {
       font: {
-        size: 14,
+        size: 12,
       },
       showlegend: false,
       margin: { t: 0, b: 0}
