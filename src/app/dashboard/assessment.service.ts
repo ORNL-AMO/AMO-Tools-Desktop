@@ -163,7 +163,7 @@ export class AssessmentService {
         motorPower: null,
         cost: null,
         compressibilityFactor: 0.988,
-        specificHeatRatio: 1.4,
+        specificHeatRatio: .24,
         measuredVoltage: 460
       },
       fanMotor: {

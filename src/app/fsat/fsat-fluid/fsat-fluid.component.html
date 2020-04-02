@@ -61,17 +61,28 @@
         </div>
       </div>
 
-      <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'"
-        [ngClass]="{'indicate-different': isStaticPressureDifferent()}">
-        <label for="{{'staticPressure_'+idString}}">Static Pressure (P
-          <sub>so</sub>)</label>
-        <div class="input-group">
-          <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure"
-            id="{{'staticPressure_'+idString}}" (input)="getDensity()" (focus)="focusField('staticPressure')"
-            onfocus="this.select();" [readonly]="!selected">
-          <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>
-        </div>
+  <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'"
+      [ngClass]="{'indicate-different': isStaticPressureDifferent()}">
+      <label for="{{'staticPressure_'+idString}}">Static Pressure (P
+        <sub>so</sub>)</label>
+      <div class="input-group">
+        <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure"
+          id="{{'staticPressure_'+idString}}" (input)="getDensity()" (focus)="focusField('staticPressure')"
+          onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>
       </div>
+    </div>
+
+  <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'"
+    [ngClass]="{'indicate-different': isSpecificGravityDifferent()}">
+    <label for="{{'specificGravity_'+idString}}">Gas Relative Density (G)</label>
+    <div class="input-group">
+      <input name="specificGravity" type="number" step="any" class="form-control" formControlName="specificGravity"
+        id="{{'specificGravity_'+idString}}" (input)="getDensity()" (focus)="focusField('specificGravity')"
+        onfocus="this.select();" [readonly]="!selected">
+    </div>
+  </div>
+
 
       <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'"
         [ngClass]="{'indicate-different': isSpecificGravityDifferent()}">
