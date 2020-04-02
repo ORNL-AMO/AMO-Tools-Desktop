@@ -47,13 +47,13 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.energyUsed
       });
-      textTemplate = '<b>%{label}:</b><br>%{value:,.0f} ' + this.energyUnit;
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + this.energyUnit;
     }
     else if (this.dataOption == 'cost') {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.annualCost
       });
-      textTemplate = '<b>%{label}:</b><br>%{value:$,.0f}';
+      textTemplate = '%{label}:<br>%{value:$,.0f}';
     }
     var data = [{
       values: valuesArr,
@@ -70,7 +70,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       texttemplate: textTemplate,
       hoverinfo: 'label+percent',
       direction: "clockwise",
-      rotation: 115
+      rotation: 90
     }];
 
     var layout = {
@@ -78,7 +78,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
         size: 14,
       },
       showlegend: false,
-      margin: { t: 60, b: 120, l: 135, r: 135 },
+      // margin: {t: 10, b: 10, l: 30, r: 30}
     };
 
     var modebarBtns = {
@@ -97,13 +97,13 @@ export class RollupSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.energyUsed
       });
-      textTemplate = '<b>%{label}:</b><br>%{value:,.0f} ' + this.energyUnit;
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + this.energyUnit;
     }
     else if (this.dataOption == 'cost') {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.annualCost
       });
-      textTemplate = '<b>%{label}:</b><br>%{value:$,.0f}';
+      textTemplate = '%{label}:<br>%{value:$,.0f}';
     }
     var data = [{
       values: valuesArr,
@@ -115,19 +115,18 @@ export class RollupSummaryPieChartComponent implements OnInit {
       textposition: 'auto',
       insidetextorientation: "horizontal",
       automargin: true,
+      // textinfo: 'label+value',
       texttemplate: textTemplate,
       hoverformat: '.2r',
       direction: "clockwise",
-      rotation: 125
+      rotation: 90
     }];
     var layout = {
-      // height: 800,
-      width: this.rollupSummaryPieChart.nativeElement.clientWidth,
       font: {
         size: 14,
       },
       showlegend: false,
-      // margin: { t: 150, b: 150, l: 150, r: 150 }
+      margin: { t: 0, b: 0}
     };
     var modebarBtns = {
       displaylogo: false,

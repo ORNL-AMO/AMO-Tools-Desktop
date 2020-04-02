@@ -6,19 +6,15 @@
   </div>
 </div>
 <!--pre assessments-->
-<!-- <div class="row print-avoid-break" *ngFor="let calculator of calculators">
+<div class="row print-avoid-break" *ngFor="let calculator of calculators">
   <div class="col-12 pt-2">
-      <label class="group-label">{{calculator.name}} Pre Assessment Summary</label>
+    <label class="group-label large">Pre Assessment Summary ({{calculator.name}})</label>
   </div>
   <div class="col-12">
-      <app-pre-assessment-graph [printView]="true" [settings]="settings" [preAssessments]="calculator.preAssessments"
-          [directoryId]="calculator.directoryId" [inRollup]="true"></app-pre-assessment-graph>
+    <app-pre-assessment-print [settings]="settings" [calculator]="calculator">
+    </app-pre-assessment-print>
   </div>
-  <div class="col-12">
-      <app-pre-assessment-table [printView]="true" [settings]="settings" [calculator]="calculator">
-      </app-pre-assessment-table>
-  </div>
-</div> -->
+</div>
 
 <!--energy use pie and table-->
 <div class="row print-avoid-break">

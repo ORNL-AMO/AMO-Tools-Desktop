@@ -1,3 +1,26 @@
 .assessment-item{
     margin-bottom: 2rem;
 }
+
+@media print {
+    .page-break-before{
+        page-break-before: always;
+    }
+
+    .print-page-title {
+        font-size: 40px !important;
+        font-weight: bold;
+    }
+
+    .print-avoid-break{
+        page-break-inside: avoid;
+    }
+}
+
+/* .group-label{
+    font-size: 22px;
+}
+
+.print-pie-width{
+    width: 500px;
+} */

@@ -16,6 +16,8 @@ export class PlotlyPieChartComponent implements OnInit {
   title: string;
   @Input()
   isPrint: boolean;
+  @Input()
+  textTemplate: string;
 
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
 
@@ -53,6 +55,7 @@ export class PlotlyPieChartComponent implements OnInit {
       textposition: 'auto',
       insidetextorientation: "horizontal",
       textinfo: 'label+percent',
+      texttemplate: this.textTemplate,
       hoverinfo: 'label+value',
       direction: "clockwise",
       rotation: 90,
@@ -60,7 +63,7 @@ export class PlotlyPieChartComponent implements OnInit {
     }];
     var layout = {
       font: {
-        size: 16,
+        size: 14,
       },
       showlegend: false,
       // margin: {t: 10, b: 10, l: 30, r: 30}
@@ -87,6 +90,7 @@ export class PlotlyPieChartComponent implements OnInit {
       insidetextorientation: "horizontal",
       automargin: true,
       textinfo: 'label+percent',
+      texttemplate: this.textTemplate,
       hoverinfo: 'label+value',
       direction: "clockwise",
       rotation: 90,
@@ -95,7 +99,7 @@ export class PlotlyPieChartComponent implements OnInit {
 
     var layout = {
       font: {
-        size: 16,
+        size: 12,
       },
       showlegend: false,
       margin: { t: 0, b: 0}

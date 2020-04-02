@@ -17,6 +17,10 @@
     font-size: 22px;
 }
 
+.group-label.large{
+    font-size: 26px;
+}
+
 .print-pie-width{
     width: 500px;
 }

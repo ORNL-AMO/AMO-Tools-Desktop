@@ -22,7 +22,7 @@ import { PhastRollupEnergyUseTableComponent } from './phast-rollup/phast-rollup-
 import { PsatRollupPrintComponent } from './psat-rollup/psat-rollup-print/psat-rollup-print.component';
 import { PhastRollupFurnaceSummaryTableComponent } from './phast-rollup/phast-rollup-furnace-summary-table/phast-rollup-furnace-summary-table.component';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
-import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessment-table.component';
+import { PreAssessmentTableComponent } from './pre-assessment-print/pre-assessment-table/pre-assessment-table.component';
 import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
 import { FsatSummaryComponent } from './report-summary/fsat-summary/fsat-summary.component';
 import { FsatRollupComponent } from './fsat-rollup/fsat-rollup.component';

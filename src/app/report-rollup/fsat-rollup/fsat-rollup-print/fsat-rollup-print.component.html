@@ -8,15 +8,10 @@
 <!--pre assessments-->
 <div class="row print-avoid-break" *ngFor="let calculator of calculators">
     <div class="col-12 pt-2">
-        <label class="group-label">{{calculator.name}} Pre Assessment Summary</label>
+        <label class="group-label large">Pre Assessment Summary ({{calculator.name}})</label>
     </div>
     <div class="col-12">
-        <app-pre-assessment-graph [printView]="true" [settings]="settings" [preAssessments]="calculator.preAssessments"
-            [directoryId]="calculator.directoryId" [inRollup]="true"></app-pre-assessment-graph>
-    </div>
-    <div class="col-12">
-        <app-pre-assessment-table [printView]="true" [settings]="settings" [calculator]="calculator">
-        </app-pre-assessment-table>
+        <app-pre-assessment-print [printView]="true" [settings]="settings" [calculator]="calculator"></app-pre-assessment-print>
     </div>
 </div>
 
@@ -32,7 +27,7 @@
         <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'cost'"
             [energyUnit]="settings.powerMeasurement" [printView]="true"></app-rollup-summary-pie-chart>
     </div>
-    <div class="col-8">
+    <div class="col-12">
         <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="settings.powerMeasurement"
             [equipmentType]="'Fan'"></app-rollup-summary-energy-table>
     </div>
