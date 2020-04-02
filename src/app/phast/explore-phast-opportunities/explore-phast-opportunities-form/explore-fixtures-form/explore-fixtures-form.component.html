@@ -1,10 +1,12 @@
 <div class="checkbox">
   <label class="group-label" for="exploreFixtures">
-    <input type="checkbox" id="exploreFixtures" value="true" (focus)="focusField('feedRate')" (change)="toggleFixtures()" [(ngModel)]="showFixtures"
-    /> Improve Materials Handling
+    <input type="checkbox" id="exploreFixtures" value="true" (focus)="focusField('feedRate')" (change)="toggleFixtures()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowFixtures.hasOpportunity"
+    /> 
+    {{phast.modifications[exploreModIndex].exploreOppsShowFixtures.display}}
   </label>
 </div>
-<div *ngIf="showFixtures">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowFixtures.hasOpportunity">
   <ul *ngFor="let loss of phast.losses.fixtureLosses; let index = index">
 
     <li class="explore-opps-item">
@@ -98,11 +100,12 @@
 
 <div class="checkbox">
   <label class="group-label" for="expoloreTemp">
-    <input type="checkbox" id="expoloreTemp" value="true" (focus)="focusField('initialTemp')" (change)="toggleAllTemp()" [(ngModel)]="showAllTemp"
-    /> Avoid Fixture Cooling
+    <input type="checkbox" id="expoloreTemp" value="true" (focus)="focusField('initialTemp')" (change)="toggleAllTemp()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowAllTemp.hasOpportunity"
+    /> {{phast.modifications[exploreModIndex].exploreOppsShowAllTemp.display}}
   </label>
 </div>
-<div *ngIf="showAllTemp">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowAllTemp.hasOpportunity">
   <ul *ngFor="let loss of phast.losses.fixtureLosses; let index = index">
     <li class="explore-opps-item">
       <div class="checkbox mt-2 form-group">
