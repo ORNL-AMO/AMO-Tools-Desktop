@@ -117,18 +117,6 @@
             </tr>
 
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
-                Specific Heat Ratio
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
-                {{fieldData.baseline.specificHeatRatio}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.specificHeatRatio, mod.specificHeatRatio, 'specificHeatRatioDiff', 0)}">
-                {{mod.specificHeatRatio}}
-              </td>
-            </tr>
-
-            <tr>
               <td [ngClass]="{'indicate-report-field-different':compressibilityFactorDiff[0] == true}">
                 Compressibility Factor
               </td>
