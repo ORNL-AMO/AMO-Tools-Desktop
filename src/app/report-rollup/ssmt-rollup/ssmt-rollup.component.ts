@@ -4,6 +4,7 @@ import { graphColors } from '../../phast/phast-report/report-graphs/graphColors'
 import { SsmtResultsData } from '../report-rollup-models';
 import { ReportRollupService } from '../report-rollup.service';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
+import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
 
 @Component({
   selector: 'app-ssmt-rollup',
@@ -13,39 +14,52 @@ import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar
 export class SsmtRollupComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
   dataOption: string = 'cost';
   barChartData: Array<BarChartDataItem>;
+  costChartData: Array<BarChartDataItem>;
+  energyChartData: Array<BarChartDataItem>;
   tickFormat: string;
   yAxisLabel: string;
+  rollupSummaryTableData: Array<RollupSummaryTableData>;
+  energyUnit: string;
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.energyUnit = this.settings.steamEnergyMeasurement + '/hr';
+    this.setTableData();
     this.setBarChartData();
+    this.setBarChartOption('energy');
   }
 
-  setDataOption(str: string) {
-    this.dataOption = str;
-    this.setBarChartData();
-  }
   setBarChartData() {
-    this.barChartData = this.getDataObject();
-    this.yAxisLabel = 'Annual Energy Cost ($/yr)';
-    this.tickFormat = '$.2s';
+    this.costChartData = this.getDataObject('cost');
+    this.energyChartData = this.getDataObject('energy');
+  }
+
+  setBarChartOption(str: string) {
+    this.dataOption = str;
     if (this.dataOption == 'energy') {
       this.yAxisLabel = 'Annual Energy Usage (' + this.settings.steamEnergyMeasurement + '/hr)';
       this.tickFormat = '.2s'
+      this.barChartData = this.energyChartData;
+    } else {
+      this.yAxisLabel = 'Annual Energy Cost ($/yr)';
+      this.tickFormat = '$.2s';
+      this.barChartData = this.costChartData;
     }
   }
 
-  getDataObject(): Array<BarChartDataItem> {
+  getDataObject(dataOption: string): Array<BarChartDataItem> {
     let hoverTemplate: string = '%{y:$,.0f}<extra></extra>';
     let traceName: string = "Modification Costs";
-    if (this.dataOption == 'energy') {
+    if (dataOption == 'energy') {
       hoverTemplate = '%{y:,.0f}<extra></extra> ' + this.settings.steamEnergyMeasurement + '/hr';
       traceName = "Modification Energy Use";
     }
-    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData();
+    let chartData: { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } = this.getChartData(dataOption);
     let projectCostTrace: BarChartDataItem = {
       x: chartData.labels,
       y: chartData.projectedCosts,
@@ -73,18 +87,18 @@ export class SsmtRollupComponent implements OnInit {
     return data;
   }
 
-  getChartData(): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
+  getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
     let ssmtResults: Array<SsmtResultsData> = this.reportRollupService.ssmtResults.getValue();
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
-    if (this.dataOption == 'cost') {
+    if (dataOption == 'cost') {
       ssmtResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost);
         projectedCosts.push(result.modificationResults.operationsOutput.totalOperatingCost);
       })
-    } else if (this.dataOption == 'energy') {
+    } else if (dataOption == 'energy') {
       ssmtResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.operationsOutput.boilerFuelUsage - result.modificationResults.operationsOutput.boilerFuelUsage);
@@ -98,4 +112,36 @@ export class SsmtRollupComponent implements OnInit {
     }
   }
 
+  setTableData() {
+    let ssmtResults: Array<SsmtResultsData> = this.reportRollupService.ssmtResults.getValue();
+    this.rollupSummaryTableData = new Array();
+    ssmtResults.forEach(resultItem => {
+      let paybackPeriod: number = this.getPayback(resultItem.modificationResults.operationsOutput.totalOperatingCost, resultItem.baselineResults.operationsOutput.totalOperatingCost, resultItem.modification.operatingCosts.implementationCosts);
+      this.rollupSummaryTableData.push({
+        equipmentName: resultItem.name,
+        modificationName: resultItem.modName,
+        baselineEnergyUse: resultItem.baselineResults.operationsOutput.boilerFuelUsage,
+        baselineCost: resultItem.baselineResults.operationsOutput.totalOperatingCost,
+        modificationEnergyUse: resultItem.modificationResults.operationsOutput.boilerFuelUsage,
+        modificationCost: resultItem.modificationResults.operationsOutput.totalOperatingCost,
+        costSavings: resultItem.baselineResults.operationsOutput.totalOperatingCost - resultItem.modificationResults.operationsOutput.totalOperatingCost,
+        implementationCosts: resultItem.modification.operatingCosts.implementationCosts,
+        payBackPeriod: paybackPeriod
+      })
+    });
+  }
+
+
+  getPayback(modCost: number, baselineCost: number, implementationCost: number) {
+    if (implementationCost) {
+      let paybackMonths = (implementationCost / (baselineCost - modCost)) * 12 * 1000;
+      if (isNaN(paybackMonths) === false) {
+        return paybackMonths;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
 }

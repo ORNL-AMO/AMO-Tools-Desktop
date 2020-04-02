@@ -42,10 +42,8 @@ import { ReportRollupModalsComponent } from './report-rollup-modals/report-rollu
 import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessment-print.component';
 import { TreasureHuntRollupComponent } from './treasure-hunt-rollup/treasure-hunt-rollup.component';
 import { CostStatusComponent } from './treasure-hunt-rollup/cost-status/cost-status.component';
-import { SsmtRollupBarChartComponent } from './ssmt-rollup/ssmt-rollup-bar-chart/ssmt-rollup-bar-chart.component';
 import { SsmtRollupPrintComponent } from './ssmt-rollup/ssmt-rollup-print/ssmt-rollup-print.component';
 import { TreasureHuntRollupPrintComponent } from './treasure-hunt-rollup/treasure-hunt-rollup-print/treasure-hunt-rollup-print.component';
-import { SsmtRollupSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-summary-table/ssmt-rollup-summary-table.component';
 import { RollupSummaryBarChartComponent } from './rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { RollupSummaryTableComponent } from './rollup-summary-table/rollup-summary-table.component';
 import { RollupSummaryPieChartComponent } from './rollup-summary-pie-chart/rollup-summary-pie-chart.component';
@@ -96,10 +94,8 @@ import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table
     PreAssessmentPrintComponent,
     TreasureHuntRollupComponent,
     CostStatusComponent,
-    SsmtRollupBarChartComponent,
     SsmtRollupPrintComponent,
     TreasureHuntRollupPrintComponent,
-    SsmtRollupSummaryTableComponent,
     RollupSummaryBarChartComponent,
     RollupSummaryTableComponent,
     RollupSummaryPieChartComponent,

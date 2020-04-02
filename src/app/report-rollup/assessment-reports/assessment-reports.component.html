@@ -78,7 +78,7 @@
     <div *ngIf="_ssmtAssessments.length > 0 && rollupPrintOptions.printSsmtRollup" class="row"
         [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0 || _fsatAssessments.length != 0}">
         <div class="col-12">
-            <app-ssmt-rollup-print [settings]="settings"></app-ssmt-rollup-print>
+            <app-ssmt-rollup [settings]="settings" [printView]="true"></app-ssmt-rollup>
         </div>
     </div>
     <div class="assessment-item row" *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}">
