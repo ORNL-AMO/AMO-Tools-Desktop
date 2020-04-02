@@ -108,22 +108,6 @@
         </div>
       </div>
 
-      <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'"
-        [ngClass]="{'indicate-different': isSpecificHeatGasDifferent(), 'invalid': gasDensityForm.controls.specificHeatGas.invalid}">
-        <label for="{{'specificHeatGas_'+idString}}">Specific Heat Gas</label>
-        <div class="input-group">
-          <input name="specificHeatGas" type="number" step="any" class="form-control" formControlName="specificHeatGas"
-            id="{{'specificHeatGas_'+idString}}" (input)="calcDensityWetBulb()" (focus)="focusField('specificHeatGas')"
-            onfocus="this.select();" [readonly]="!selected">
-          <span class="input-group-addon units" [innerHTML]="settings.fanSpecificHeatGas|settingsLabel"></span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="gasDensityForm.controls.specificHeatGas.invalid && !gasDensityForm.controls.specificHeatGas.pristine">
-          <span *ngIf="gasDensityForm.controls.specificHeatGas.errors.min">Value must be greater than 0
-            <span [innerHTML]="settings.fanSpecificHeatGas|settingsLabel"></span>.</span>
-        </span>
-      </div>
-
       <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'relativeHumidity'"
         [ngClass]="{'indicate-different': isRelativeHumidityDifferent(), 'invalid':gasDensityForm.controls.relativeHumidity.invalid}">
         <label for="{{'relativeHumidity_'+idString}}">Relative Humidity</label>

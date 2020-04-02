@@ -167,6 +167,21 @@
 
     <!--min-->
     <div class="form-group"
+      [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent(), 'invalid':fieldDataForm.controls.specificHeatRatio.invalid}">
+      <label for="{{'specificHeatRatio_'+idString}}">Specific Heat Ratio (&gamma;)</label>
+      <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control"
+        formControlName="specificHeatRatio" id="{{'specificHeatRatio_'+idString}}" (input)="save()"
+        (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected">
+      <span class="alert-danger pull-right small"
+        *ngIf="fieldDataForm.controls.specificHeatRatio.invalid && !fieldDataForm.controls.specificHeatRatio.pristine">
+        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.required">Value Required</span>
+        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.min">Value can't be less than
+          {{fieldDataForm.controls.specificHeatRatio.errors.min.min}}.</span>
+      </span>
+    </div>
+
+    <!--min-->
+    <div class="form-group"
       [ngClass]="{'indicate-different': isCompressibilityFactorDifferent(), 'invalid': fieldDataForm.controls.compressibilityFactor.invalid}">
       <label for="{{'compressibilityFactor_'+idString}}">Compressibility Factor
         <a class="form-text small click-link" *ngIf="baseline" (click)="calculateCompressibility()"
