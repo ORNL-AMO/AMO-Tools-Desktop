@@ -20,7 +20,6 @@ export class RollupSummaryEnergyTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.pieChartData);
     this.totalEnergyUse = _.sumBy(this.pieChartData, 'energyUsed');
     this.totalCost = _.sumBy(this.pieChartData, 'annualCost');
   }

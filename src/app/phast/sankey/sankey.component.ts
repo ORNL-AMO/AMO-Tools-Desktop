@@ -90,9 +90,6 @@ export class SankeyComponent implements OnInit {
       this.location = this.location.replace(/[\])}[{(]/g, '');
       this.location = this.location.replace(/#/g, "");
     }
-    console.log(this.modIndex);
-    console.log(this.location);
-
   }
 
   ngAfterViewInit() {
