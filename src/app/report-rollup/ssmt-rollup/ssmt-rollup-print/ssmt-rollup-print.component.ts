@@ -17,7 +17,9 @@ export class SsmtRollupPrintComponent implements OnInit {
   energyChartData: Array<BarChartDataItem>;
   @Input()
   rollupSummaryTableData: Array<RollupSummaryTableData>;
-
+  @Input()
+  energyUnit: string;
+  
   energyYAxisLabel: string;
   energyTickFormat: string;
   costYAxisLabel: string;

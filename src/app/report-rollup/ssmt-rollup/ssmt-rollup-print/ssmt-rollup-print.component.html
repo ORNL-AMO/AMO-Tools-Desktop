@@ -10,12 +10,12 @@
         <div class="col-12">
             <div class="d-flex flex-column">
                 <label class="group-label">Steam Systems Cost</label>
-                <app-rollup-summary-bar-chart [barChartData]="costChartData" [yAxisLabel]="yAxisLabel"
-                    [tickFormat]="tickFormat" [printView]="true">
+                <app-rollup-summary-bar-chart [barChartData]="costChartData" [yAxisLabel]="costYAxisLabel"
+                    [tickFormat]="costTickFormat" [printView]="true">
                 </app-rollup-summary-bar-chart>
                 <label class="group-label">Steam Systems Energy Usage</label>
-                <app-rollup-summary-bar-chart [barChartData]="energyChartData" [yAxisLabel]="yAxisLabel"
-                    [tickFormat]="tickFormat" [printView]="true">
+                <app-rollup-summary-bar-chart [barChartData]="energyChartData" [yAxisLabel]="energyYAxisLabel"
+                    [tickFormat]="energyTickFormat" [printView]="true">
                 </app-rollup-summary-bar-chart>
             </div>
         </div>
