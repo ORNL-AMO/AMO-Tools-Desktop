@@ -38,8 +38,16 @@
 
 		<div *ngIf="tabSelect == 'sankey' && modificationExists" class="scroll-item"
 			[ngStyle]="{'height.px': helpHeight}">
-			<app-explore-opportunities-sankey [assessmentName]="assessment.name" [baselineSankey]="baselineSankey"
+			<app-explore-opportunities-sankey *ngIf="modificationSankey.valid.isValid"
+				[assessmentName]="assessment.name" [baselineSankey]="baselineSankey"
 				[modificationSankey]="modificationSankey" [settings]="settings"></app-explore-opportunities-sankey>
+			<div class="alert-danger small" *ngIf="!modificationSankey.valid.isValid">
+				Invalid modification<br>
+				<span *ngIf="!modificationSankey.valid.fluidValid">Errors found in Fluid<br></span>
+				<span *ngIf="!modificationSankey.valid.fieldDataValid">Errors found in Field Data<br></span>
+				<span *ngIf="!modificationSankey.valid.fanValid">Errors found in Fan Setup<br></span>
+				<span *ngIf="!modificationSankey.valid.motorValid">Errors found in Motor<br></span>
+			</div>
 		</div>
 
 		<div class="scroll-item" *ngIf="modificationExists && tabSelect == 'results'"

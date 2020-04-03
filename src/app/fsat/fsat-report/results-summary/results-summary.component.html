@@ -22,12 +22,12 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <div class="hide-print" *ngIf="modification.fsat.outputs.percentSavings">
             <app-percent-graph *ngIf="modification.fsat.valid.isValid" [value]="modification.fsat.outputs.percentSavings"></app-percent-graph>
-            <div class="alert-danger" *ngIf="!modification.fsat.valid.isValid">
+            <div class="alert-danger small" *ngIf="!modification.fsat.valid.isValid">
               Invalid modification<br>
-              <span *ngIf="!modification.fsat.valid.fsatFluidValid">Errors found in Fluid</span>
-              <span *ngIf="!modification.fsat.valid.fieldDataValid">Errprs found in Field Data</span>
-              <span *ngIf="!modification.fsat.valid.fanSetupValid">Errors found in Fan Setup</span>
-              <span *ngIf="!modification.fsat.valid.fanMotorValid">Errors found in Motor</span>
+              <span *ngIf="!modification.fsat.valid.fluidValid">Errors found in Fluid<br></span>
+              <span *ngIf="!modification.fsat.valid.fieldDataValid">Errors found in Field Data<br></span>
+              <span *ngIf="!modification.fsat.valid.fanValid">Errors found in Fan Setup<br></span>
+              <span *ngIf="!modification.fsat.valid.motorValid">Errors found in Motor<br></span>
             </div>
           </div>
           <div class="show-print text-center" *ngIf="modification.fsat.outputs.percentSavings">

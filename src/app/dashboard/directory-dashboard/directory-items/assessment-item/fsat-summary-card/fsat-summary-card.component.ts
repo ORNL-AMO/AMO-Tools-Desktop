@@ -36,12 +36,14 @@ export class FsatSummaryCardComponent implements OnInit {
       if (this.assessment.fsat.modifications) {
         this.numMods = this.assessment.fsat.modifications.length;
         this.assessment.fsat.modifications.forEach(mod => {
-          let modOutputs: FsatOutput = this.getResults(JSON.parse(JSON.stringify(mod.fsat)), this.settings, true);
-          let tmpSavingCalc = this.fsatResults.annualCost - modOutputs.annualCost;
-          let tmpSavingEnergy = this.fsatResults.annualEnergy - modOutputs.annualEnergy;
-          if (tmpSavingCalc > this.maxCostSavings) {
-            this.maxCostSavings = tmpSavingCalc;
-            this.maxEnergySavings = tmpSavingEnergy;
+          let modOutputs: FsatOutput = this.getResults(mod.fsat, this.settings, true);
+          if (mod.fsat.valid.isValid) {
+            let tmpSavingCalc = this.fsatResults.annualCost - modOutputs.annualCost;
+            let tmpSavingEnergy = this.fsatResults.annualEnergy - modOutputs.annualEnergy;
+            if (tmpSavingCalc > this.maxCostSavings) {
+              this.maxCostSavings = tmpSavingCalc;
+              this.maxEnergySavings = tmpSavingEnergy;
+            }
           }
         });
       }

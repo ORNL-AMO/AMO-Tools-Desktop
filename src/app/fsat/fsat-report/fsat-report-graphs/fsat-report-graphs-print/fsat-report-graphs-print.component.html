@@ -18,12 +18,21 @@
     </div>
     <div class="print-pie-width" *ngIf="scenarioSummary.modificationGraphData">
       <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
-      <app-plotly-pie-chart [values]="scenarioSummary.modificationGraphData.pieChartValues"
+      <app-plotly-pie-chart *ngIf="scenarioSummary.modificationGraphData.valid.isValid"
+        [values]="scenarioSummary.modificationGraphData.pieChartValues"
         [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
       </app-plotly-pie-chart>
+      <div class="alert-danger small" *ngIf="!scenarioSummary.modificationGraphData.valid.isValid">
+        Invalid modification<br>
+        <span *ngIf="!scenarioSummary.modificationGraphData.valid.fluidValid">Errors found in Fluid<br></span>
+        <span *ngIf="!scenarioSummary.modificationGraphData.valid.fieldDataValid">Errors found in Field Data<br></span>
+        <span *ngIf="!scenarioSummary.modificationGraphData.valid.fanValid">Errors found in Fan Setup<br></span>
+        <span *ngIf="!scenarioSummary.modificationGraphData.valid.motorValid">Errors found in Motor<br></span>
+      </div>
     </div>
   </div>
-  <div class="row no-gutters w-100" *ngIf="scenarioSummary.modificationGraphData">
+  <div class="row no-gutters w-100"
+    *ngIf="scenarioSummary.modificationGraphData && scenarioSummary.modificationGraphData.valid.isValid">
     <app-plotly-bar-chart class="w-100"
       [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
       [yAxisLabel]="'Power (kW)'"></app-plotly-bar-chart>
