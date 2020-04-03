@@ -72,6 +72,10 @@ Explore-opps form overrides
     margin: auto;
   }
 
+  label#pumpTypeHelp[for="modificationPumpSpecifiedEfficiency"] {
+    width: unset;
+  }
+
   div.form-group.explore-opps-formgroup >
   select.mod-max-width {
     max-width: 225px;

@@ -34,15 +34,15 @@
     <!--efficiencyClass-->
     <div class="form-group explore-opps-formgroup">
       <label for="modificationEfficiencyClass" class="mod-value-label">Modification Efficiency Class</label>
-      <select name="modificationEfficiencyClass" class="form-control w-100 select-input-field" id="modificationEfficiencyClass"
+      <select name="modificationEfficiencyClass" class="form-control w-100 select-input-field mod-max-width" id="modificationEfficiencyClass"
         (change)="changeModificationEfficiencyClass()" (focus)="focusField('efficiencyClass')" formControlName="efficiencyClass">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
       </select>
     </div>
     <!--efficiency-->
-    <div class="form-group" *ngIf="modificationForm.controls.efficiencyClass.value == 3" [ngClass]="{'invalid':modificationForm.controls.efficiency.invalid}">
-      <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
-      <div class="input-group">
+    <div class="form-group explore-opps-formgroup" *ngIf="modificationForm.controls.efficiencyClass.value == 3" [ngClass]="{'invalid':modificationForm.controls.efficiency.invalid}">
+      <label for="modificationMotorEfficiency" class="mod-value-label">Modification Motor Efficiency</label>
+      <div class="input-group mod-max-width">
         <input name="modificationMotorEfficiency" type="number" step="any" id="modificationMotorEfficiency" class="form-control"
           (focus)="focusField('motorEfficiency')" formControlName="efficiency" (input)="getModificationFLA()" />
         <span class="input-group-addon units">%</span>
