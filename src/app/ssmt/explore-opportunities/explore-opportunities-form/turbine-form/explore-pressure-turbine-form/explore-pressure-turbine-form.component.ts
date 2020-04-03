@@ -48,7 +48,6 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
       }
     }
     if (changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()) {
-      this.showOperation = false;
       this.initOperationType();
     }
   }
@@ -64,6 +63,8 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
         this.showOperation = true;
         this.emitShowTurbine.emit(true);
       }
+    } else {
+      this.showOperation = false;
     }
     this.showBaseline = this.baselineForm.controls.useTurbine.value;
   }

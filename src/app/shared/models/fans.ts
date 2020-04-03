@@ -1,4 +1,5 @@
 import { OperatingHours } from "./operations";
+import { SavingsOpportunity } from "./explore-opps";
 
 export interface FSAT {
   name?: string;
@@ -28,11 +29,6 @@ export interface Modification {
   exploreOppsShowFlowRate?: SavingsOpportunity,
   exploreOppsShowReducePressure?: SavingsOpportunity,
   exploreOppsShowOpData?: SavingsOpportunity
-}
-
-export interface SavingsOpportunity {
-  hasOpportunity: boolean,
-  display: string
 }
 
 export interface Notes {

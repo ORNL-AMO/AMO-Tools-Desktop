@@ -7,11 +7,12 @@
 <div class="checkbox">
   <label class="group-label" for="adjustHeatLossPrecentages">
     <input type="checkbox" id="adjustHeatLossPrecentages" (focus)="focusField('default')" (change)="toggleHeatLoss()"
-      [(ngModel)]="showHeatLoss" /> Adjust Heat Loss Percentages
+      [(ngModel)]="ssmt.modifications[exploreModIndex].exploreOppsShowHeatLoss.hasOpportunity" /> 
+      {{ssmt.modifications[exploreModIndex].exploreOppsShowHeatLoss.display}}
   </label>
 </div>
 
-<ul *ngIf="showHeatLoss">
+<ul *ngIf="ssmt.modifications[exploreModIndex].exploreOppsShowHeatLoss.hasOpportunity">
   <li class="explore-opps-item" >
     <div class="checkbox mt-2">
       <label for="modifyHighPressureHeatLoss" class="steam-check-label">
@@ -170,10 +171,11 @@
 <div class="checkbox">
   <label class="group-label" for="adjustSteamUsage">
     <input type="checkbox" id="adjustSteamUsage" (focus)="focusField('default')" (change)="toggleSteamUsage()"
-      [(ngModel)]="showSteamUsage" /> Adjust Steam Demand/Usage
+      [(ngModel)]="ssmt.modifications[exploreModIndex].exploreOppsShowSteamUsage.hasOpportunity" />
+       {{ssmt.modifications[exploreModIndex].exploreOppsShowSteamUsage.display}}
   </label>
 </div>
-<ul *ngIf="showSteamUsage">
+<ul *ngIf="ssmt.modifications[exploreModIndex].exploreOppsShowSteamUsage.hasOpportunity">
 
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
