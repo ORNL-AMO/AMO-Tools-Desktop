@@ -92,6 +92,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
   getResults() {
     let psatResults: { baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number };
+    this.psat.valid = this.psatService.isPsatValid(this.psat.inputs, false);
     if (this.modificationExists) {
       this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, false);
       psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings, this.psat.modifications[this.modificationIndex].psat.inputs)
