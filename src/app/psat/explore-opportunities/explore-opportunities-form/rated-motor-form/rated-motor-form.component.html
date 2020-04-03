@@ -26,7 +26,7 @@
       </form>
   </li>
   <li class="explore-opps-item">
-    <form class="explore-opps-form">
+    <form class="explore-opps-form" [formGroup]="baselineForm">
       <!--efficiency-->
       <div class="form-group explore-opps-formgroup" *ngIf="baselineForm.controls.efficiencyClass.value == 3" [ngClass]="{'invalid':baselineForm.controls.efficiency.invalid}">
         <label for="baselineMotorEfficiency" class="baseline-value-label">Baseline Motor Efficiency</label>
@@ -43,7 +43,7 @@
       </div>
     </form>
       <!--efficiency-->
-    <form class="explore-opps-form">
+    <form class="explore-opps-form" [formGroup]="modificationForm">
       <div class="form-group explore-opps-formgroup" *ngIf="modificationForm.controls.efficiencyClass.value == 3" [ngClass]="{'invalid':modificationForm.controls.efficiency.invalid}">
         <label for="modificationMotorEfficiency" class="mod-value-label">Modification Motor Efficiency</label>
         <div class="input-group mod-max-width">
