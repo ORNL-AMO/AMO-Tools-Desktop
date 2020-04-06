@@ -38,12 +38,11 @@ export class ExploreCoolingFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowCooling = { hasOpportunity: false, display: 'Optimize or Improve Furnace Cooling System' }; 
         this.initData();
       }
     }
   }
-
+  
   initData() {
     this.baselineWarnings;
     this.baselineLosses = new Array();
@@ -52,7 +51,7 @@ export class ExploreCoolingFormComponent implements OnInit {
     this.baselineWarnings = new Array<{ flowWarning: string, tempWarning: string }>();
     this.modificationWarnings = new Array<{ flowWarning: string, tempWarning: string }>();
     this.showTemp = new Array<boolean>();
-
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowCooling = { hasOpportunity: false, display: 'Optimize or Improve Furnace Cooling System' }; 
 
     let index = 0;
     this.phast.losses.coolingLosses.forEach(loss => {

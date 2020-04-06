@@ -43,15 +43,11 @@ export class ExploreOpeningFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: false, display: 'Minimize the Time Furnace Doors are Open' }; 
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: false, display: 'Install curtains or radiation shields to reduce opening losses' }; 
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: false, display: 'Minimize Opening Size or Install Tunnel-like Extensions' }; 
-        
         this.initData();
       }
     }
   }
-
+  
   initData() {
     this.showViewFactor = new Array();
     this.showSize = new Array();
@@ -59,6 +55,10 @@ export class ExploreOpeningFormComponent implements OnInit {
     this.showTimeOpen = new Array<boolean>();
     this.baselineWarnings = new Array<OpeningLossWarnings>();
     this.modificationWarnings = new Array<OpeningLossWarnings>();
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: false, display: 'Minimize the Time Furnace Doors are Open' }; 
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllEmissivity = { hasOpportunity: false, display: 'Install curtains or radiation shields to reduce opening losses' }; 
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowOpening = { hasOpportunity: false, display: 'Minimize Opening Size or Install Tunnel-like Extensions' }; 
+    
     let index: number = 0;
     this.phast.losses.openingLosses.forEach(loss => {
       let check: boolean = this.initSize(loss, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);

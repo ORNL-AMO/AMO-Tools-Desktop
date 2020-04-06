@@ -37,7 +37,6 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowMaterial = { hasOpportunity: false, display: 'Preheat Charge Material' }; 
         this.initData();
       }
     }
@@ -47,6 +46,7 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
     this.materials = new Array<ExploreMaterial>();
     this.baselineWarnings = new Array<string>();
     this.modificationWarnings = new Array<string>();
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowMaterial = { hasOpportunity: false, display: 'Preheat Charge Material' }; 
     let index = 0;
     this.phast.losses.chargeMaterials.forEach(material => {
       this.baselineWarnings.push(null);
