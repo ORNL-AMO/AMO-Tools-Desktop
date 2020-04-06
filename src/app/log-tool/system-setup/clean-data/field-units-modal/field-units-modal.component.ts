@@ -60,6 +60,7 @@ export class FieldUnitsModalComponent implements OnInit {
         };
         this.unitOptions.push(tmpPossibility);
       });
+      this.editFieldUnit = this.unitOptions[0].unit;
     }
   }
 
