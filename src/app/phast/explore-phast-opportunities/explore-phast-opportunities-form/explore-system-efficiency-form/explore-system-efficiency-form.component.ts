@@ -22,8 +22,6 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
   @Output('changeTab')
   changeTab = new EventEmitter<LossTab>();
 
-  showEfficiencyData: boolean = false;
-
   constructor() { }
 
   ngOnInit() {
@@ -38,14 +36,14 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
   }
   initEfficiency() {
     if (this.phast.systemEfficiency !== this.phast.modifications[this.exploreModIndex].phast.systemEfficiency) {
-      this.showEfficiencyData = true;
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowEfficiencyData = { hasOpportunity: true, display: 'Improve Furnace Efficiency' };
     } else {
-      this.showEfficiencyData = false;
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowEfficiencyData = { hasOpportunity: false, display: 'Improve Furnace Efficiency' };
     }
   }
 
   toggleEfficiency() {
-    if (this.showEfficiencyData === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowEfficiencyData.hasOpportunity === false) {
       this.phast.modifications[this.exploreModIndex].phast.systemEfficiency = this.phast.systemEfficiency;
       this.calculate();
     }

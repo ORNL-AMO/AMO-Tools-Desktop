@@ -110,6 +110,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   initForms() {
+    if (this.fsat.modifications[this.exploreModIndex].fsat.isVFD) {
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowVfd = {hasOpportunity: true, display: "Install VFD"};
+      delete this.fsat.modifications[this.exploreModIndex].fsat.isVFD;
+    } else if (!this.fsat.modifications[this.exploreModIndex].exploreOppsShowVfd) {
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowVfd = {hasOpportunity: false, display: "Install VFD"};
+    }
     this.baselineFieldDataForm = this.fanFieldDataService.getFormFromObj(this.fsat.fieldData);
     this.baselineFieldDataForm.disable();
     this.modificationFieldDataForm = this.fanFieldDataService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fieldData);
@@ -142,7 +148,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   setVFD() {
-    if (this.fsat.modifications[this.exploreModIndex].fsat.isVFD) {
+    if (this.fsat.modifications[this.exploreModIndex].exploreOppsShowVfd.hasOpportunity) {
       this.modificationFanSetupForm.controls.drive.patchValue(4);
       this.modificationFanSetupForm.controls.specifiedDriveEfficiency.patchValue(95);
     }else {

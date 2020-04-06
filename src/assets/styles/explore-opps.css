@@ -1,0 +1,114 @@
+/*
+Explore-opps form overrides
+=============================================== */
+.explore-opps-item {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .explore-opps-header {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 8px;
+  }
+
+  .explore-opps-title {
+    width: 50%;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .explore-opps-form {
+    width: 50%;
+  }
+  
+  div.form-group.explore-opps-formgroup >
+  .baseline-value-label,
+  form >
+  div >
+  .baseline-value-label {
+    width: 100%;
+    padding-bottom: 4px;
+  }
+  
+  .baseline-value-input {
+    font-size: .75em;
+  }
+  
+  .form-group.explore-opps-formgroup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  div.form-group.explore-opps-formgroup >
+  label.mod-value-label {
+    width: 100%;
+    padding-bottom: 4px;
+    align-self: center;
+  }
+
+  div.form-group.explore-opps-formgroup >
+  div.d-flex.mod-max-width >
+  div >
+  label.mod-eff-label {
+    width: unset;
+    padding-bottom: 4px;
+    align-self: center;
+  }
+
+
+  div.form-group.explore-opps-formgroup >
+  div.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
+  div.form-group.explore-opps-formgroup >
+  select.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
+  div.form-group.explore-opps-formgroup >
+  select.mod-value-input {
+    width: 100%;
+  }
+
+  div.form-group.explore-opps-formgroup >
+  div.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
+  label#pumpTypeHelp[for="modificationPumpSpecifiedEfficiency"] {
+    width: unset;
+  }
+
+  div.form-group.explore-opps-formgroup >
+  select.mod-max-width {
+    max-width: 225px;
+    margin: auto;
+  }
+
+  hr.form-break-rule {
+      margin-top: 0;
+  }
+
+  div.form-break-divider {
+    display: block; 
+    width: 100%; 
+    padding-left: 2rem; 
+  }
+
+  .phast-check-label {
+    font-size: 16px;
+    color: #9E3200;
+
+  }
+  
+  .steam-check-label {
+    font-size: 16px;
+    color: #A66908;
+  }

@@ -1,35 +1,30 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { FSAT, FsatOutput } from '../../../shared/models/fans';
-import { FsatService } from '../../fsat.service';
+import { FSAT } from '../../../shared/models/fans';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
+import { CompareService } from '../../compare.service';
 
 @Component({
   selector: 'app-results-summary',
   templateUrl: './results-summary.component.html',
-  styleUrls: ['./results-summary.component.css']
+  styleUrls: ['./results-summary.component.css'],
 })
 export class ResultsSummaryComponent implements OnInit {
-  @Input()
-  fsat: FSAT;
+
   @Input()
   settings: Settings;
   @Input()
   inRollup: boolean;
-  @Output('selectModification')
-  selectModification = new EventEmitter<any>();
   @Input()
   assessment: Assessment;
 
-  baselineResults: FsatOutput;
-  modificationResults: Array<FsatOutput>;
   selectedModificationIndex: number;
-  constructor(private fsatService: FsatService, private reportRollupService: ReportRollupService) { }
+  fsat: FSAT;
+  constructor(private reportRollupService: ReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
-    this.modificationResults = new Array<FsatOutput>();
-    this.getResults();
+    this.fsat = this.assessment.fsat;
     if (this.inRollup) {
       this.reportRollupService.selectedFsats.forEach(val => {
         if (val) {
@@ -43,27 +38,29 @@ export class ResultsSummaryComponent implements OnInit {
     }
   }
 
-  getSavingsPercentage(baseline: FsatOutput, modification: FsatOutput): number {
-    return this.fsatService.getSavingsPercentage(this.baselineResults.annualCost, modification.annualCost);
-  }
-
-  getResults() {
-    this.baselineResults = this.fsatService.getResults(this.fsat, true, this.settings);
-    if (this.fsat.modifications && this.fsat.modifications.length !== 0) {
-      this.fsat.modifications.forEach(mod => {
-        // mod.fsat.fanSetup.fanEfficiency = this.baselineResults.fanEfficiency;
-        let modResult: FsatOutput = this.fsatService.getResults(mod.fsat, false, this.settings);
-        modResult.percentSavings = this.fsatService.getSavingsPercentage(this.baselineResults.annualCost, modResult.annualCost);
-        modResult.energySavings = this.baselineResults.annualEnergy - modResult.annualEnergy;
-        modResult.annualSavings = this.baselineResults.annualCost - modResult.annualCost;
-        this.modificationResults.push(modResult);
-      });
-    }  
+  getModificationsMadeList(modifiedFsat: FSAT): Array<string> {
+    let modificationsMadeList: Array<string> = new Array();
+    let isFluidDifferent: boolean = this.compareService.checkFluidDifferent(this.fsat, modifiedFsat);
+    if(isFluidDifferent == true){
+      modificationsMadeList.push('Fluid');
+    }
+    let isFanDifferent: boolean = this.compareService.checkFanSetupDifferent(this.settings, this.fsat, modifiedFsat);
+    if(isFanDifferent == true){
+      modificationsMadeList.push('Fan');
+    }
+    let isMotorDifferent: boolean = this.compareService.checkFanMotorDifferent(this.fsat, modifiedFsat);
+    if(isMotorDifferent == true){
+      modificationsMadeList.push('Motor');
+    }
+    let isFieldDataDifferent: boolean = this.compareService.checkFanFieldDataDifferent(this.fsat, modifiedFsat);
+    if(isFieldDataDifferent == true){
+      modificationsMadeList.push('Field Data');
+    }
+    return modificationsMadeList;
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedFsats({assessment: this.assessment, settings: this.settings}, this.selectedModificationIndex);
+    this.reportRollupService.updateSelectedFsats({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
-
 
 }

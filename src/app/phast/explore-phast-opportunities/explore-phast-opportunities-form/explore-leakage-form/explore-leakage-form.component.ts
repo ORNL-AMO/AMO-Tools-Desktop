@@ -38,7 +38,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showLeakage = false;
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowLeakage = { hasOpportunity: false, display: 'Control and Optimize Furnace Pressure' }; 
         this.initData();
       }
     }
@@ -48,16 +48,17 @@ export class ExploreLeakageFormComponent implements OnInit {
     this.baselineWarnings = new Array<LeakageWarnings>();
     this.modificationWarnings = new Array<LeakageWarnings>();
     this.showPressure = new Array();
+    
     let index: number = 0;
     this.phast.losses.leakageLosses.forEach(loss => {
       let check: boolean = this.initOpening(loss.openingArea, this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea);
-      if (!this.showLeakage && check) {
-        this.showLeakage = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowLeakage.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowLeakage = { hasOpportunity: check, display: 'Control and Optimize Furnace Pressure' }; 
       }
       this.showOpening.push(check);
       check = this.initOpening(loss.draftPressure, this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].draftPressure);
-      if (!this.showLeakage && check) {
-        this.showLeakage = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowLeakage.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowLeakage = { hasOpportunity: check, display: 'Control and Optimize Furnace Pressure' }; 
       }
       this.showPressure.push(check);
       let tmpWarnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(loss);
@@ -78,7 +79,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   }
 
   toggleLeakage() {
-    if (this.showLeakage === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowLeakage.hasOpportunity === false) {
       let index: number = 0;
       this.phast.losses.leakageLosses.forEach(loss => {
         let baselineArea: number = loss.openingArea;

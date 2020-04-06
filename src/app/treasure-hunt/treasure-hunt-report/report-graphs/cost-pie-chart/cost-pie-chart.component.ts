@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { TreasureHuntResults, UtilityUsageData } from '../../../../shared/models/treasure-hunt';
-import * as c3 from 'c3';
+import * as Plotly from 'plotly.js';
+import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
 @Component({
   selector: 'app-cost-pie-chart',
@@ -15,104 +16,129 @@ export class CostPieChartComponent implements OnInit {
   @Input()
   showPrint: boolean;
 
-  chart: any;
-  @ViewChild('pieChartElement', { static: false }) pieChartElement: ElementRef;
-
-  columnData: Array<any>;
-
+  @ViewChild('costPieChart', { static: false }) costPieChart: ElementRef;
   constructor() { }
 
   ngOnInit() {
-    this.getColumnData();
   }
 
   ngAfterViewInit() {
-    this.initChart();
+    if (!this.showPrint) {
+      this.createChart();
+    } else {
+      this.createPrintChart();
+    }
   }
 
-  ngOnChanges(){
-    if(this.chart){
-      this.getColumnData();
-      this.initChart();
+  ngOnChanges() {
+    if (this.costPieChart && !this.showPrint) {
+      this.createChart();
+    } else if (this.costPieChart && this.showPrint) {
+      this.createPrintChart();
     }
   }
 
   ngOnDestroy() { }
 
-  getColumnData() {
-    this.columnData = new Array();
-    this.addColumnItem('Electricity ', this.treasureHuntResults.electricity, this.isBaseline);
-    this.addColumnItem('Natural Gas ', this.treasureHuntResults.naturalGas, this.isBaseline);
-    this.addColumnItem('Water ', this.treasureHuntResults.water, this.isBaseline);
-    this.addColumnItem('Waste Water ', this.treasureHuntResults.wasteWater, this.isBaseline);
-    this.addColumnItem('Other Fuel ', this.treasureHuntResults.otherFuel, this.isBaseline);
-    this.addColumnItem('Compressed Air ', this.treasureHuntResults.compressedAir, this.isBaseline);
-    this.addColumnItem('Steam ', this.treasureHuntResults.steam, this.isBaseline);
-    this.addColumnItem('Other ', this.treasureHuntResults.other, this.isBaseline);
+  createChart() {
+    let valuesAndLabels = this.getLabelsAndValues();
+    Plotly.purge(this.costPieChart.nativeElement)
+    var data = [{
+      values: valuesAndLabels.values,
+      labels: valuesAndLabels.labels,
+      marker: {
+        colors: graphColors
+      },
+      type: 'pie',
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      // automargin: true,
+      // textinfo: 'label+value',
+      hoverformat: '.2r',
+      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
+      hoverinfo: 'label+percent',
+      direction: "clockwise",
+      rotation: 90
+    }];
+    var layout = {
+      font: {
+        size: 16,
+      },
+      showlegend: false,
+      margin: { t: 50, b: 110, l: 110, r: 110 },
+    };
+
+    var modebarBtns = {
+      modeBarButtonsToRemove: ['hoverClosestPie'],
+      displaylogo: false,
+      displayModeBar: true,
+      responsive: true
+    };
+    Plotly.react(this.costPieChart.nativeElement, data, layout, modebarBtns);
   }
 
-  addColumnItem(label: string, value: UtilityUsageData, isBaseline: boolean) {
-    if (isBaseline && value.baselineEnergyCost) {
-      this.columnData.push([label, value.baselineEnergyCost]);
-    } else if (!isBaseline && value.modifiedEnergyCost) {
-      this.columnData.push([label, value.modifiedEnergyCost]);
+
+  createPrintChart() {
+    let valuesAndLabels = this.getLabelsAndValues();
+    Plotly.purge(this.costPieChart.nativeElement)
+    var data = [{
+      values: valuesAndLabels.values,
+      labels: valuesAndLabels.labels,
+      marker: {
+        colors: graphColors
+      },
+      type: 'pie',
+      textposition: 'auto',
+      insidetextorientation: "horizontal",
+      // automargin: true,
+      // textinfo: 'label+value',
+      hoverformat: '.2r',
+      texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
+      // text: valuesAndLabels.values.map(y => { return (y).toFixed(2) }),
+      hoverinfo: 'label+percent',
+      direction: "clockwise",
+      rotation: 90
+    }];
+    var layout = {
+      width: 450,
+      font: {
+        size: 16,
+      },
+      showlegend: false,
+      margin: { t: 50, b: 110, l: 50, r: 110 },
+    };
+
+    var modebarBtns = {
+      modeBarButtonsToRemove: ['hoverClosestPie'],
+      displaylogo: false,
+      displayModeBar: true,
+    };
+    Plotly.react(this.costPieChart.nativeElement, data, layout, modebarBtns);
+  }
+
+
+  getLabelsAndValues(): { values: Array<number>, labels: Array<string> } {
+    let values: Array<number> = new Array();
+    let labels: Array<string> = new Array();
+    this.addItem(values, labels, this.treasureHuntResults.electricity, this.isBaseline, 'Electricity');
+    this.addItem(values, labels, this.treasureHuntResults.naturalGas, this.isBaseline, 'Natural Gas');
+    this.addItem(values, labels, this.treasureHuntResults.water, this.isBaseline, 'Water');
+    this.addItem(values, labels, this.treasureHuntResults.wasteWater, this.isBaseline, 'Waste Water');
+    this.addItem(values, labels, this.treasureHuntResults.otherFuel, this.isBaseline, 'Other Fuel');
+    this.addItem(values, labels, this.treasureHuntResults.compressedAir, this.isBaseline, 'Comp. Air');
+    this.addItem(values, labels, this.treasureHuntResults.steam, this.isBaseline, 'Steam');
+    this.addItem(values, labels, this.treasureHuntResults.other, this.isBaseline, 'Other');
+    return { values: values, labels: labels };
+  }
+
+  addItem(values: Array<number>, labels: Array<string>, data: UtilityUsageData, isBaseline: boolean, label: string) {
+    if (isBaseline && data.baselineEnergyCost) {
+      labels.push(label);
+      values.push(data.baselineEnergyCost);
+    } else if (!isBaseline && data.modifiedEnergyCost) {
+      labels.push(label);
+      values.push(data.modifiedEnergyCost);
     }
   }
-
-  initChart() {
-
-    if (this.showPrint) {
-      this.chart = c3.generate({
-        bindto: this.pieChartElement.nativeElement,
-        data: {
-          type: 'pie',
-          columns: this.columnData
-        },
-        legend: {
-          position: 'right'
-        },
-        size: {
-          height: 300,
-          width: 450
-        }
-        // legend: {
-        //   show: false
-        // },
-        // color: {
-        //   pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
-        //   threshold: {
-        //     values: [25, 50]
-        //   }
-        // },
-        // tooltip: {
-        //   show: false
-        // },
-      });
-    } else {
-      this.chart = c3.generate({
-        bindto: this.pieChartElement.nativeElement,
-        data: {
-          type: 'pie',
-          columns: this.columnData
-        },
-        legend: {
-          position: 'right'
-        }
-        // legend: {
-        //   show: false
-        // },
-        // color: {
-        //   pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
-        //   threshold: {
-        //     values: [25, 50]
-        //   }
-        // },
-        // tooltip: {
-        //   show: false
-        // },
-      });
-    }
-  }
-
-
 }

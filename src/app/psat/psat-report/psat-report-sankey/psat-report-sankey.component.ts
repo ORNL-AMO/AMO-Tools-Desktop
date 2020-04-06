@@ -10,76 +10,30 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class PsatReportSankeyComponent implements OnInit {
   @Input()
-  psat: PSAT;
-  @Input()
   settings: Settings;
   @Input()
   assessment: Assessment;
-  @Input()
-  printView: boolean;
 
-  
-  modifications: Array<{name, psat}>;
-  assessmentName: string;
-  psat1: {name, psat};
-  psat2: {name, psat};
-  modExists: boolean = false;
-  psatOptions: Array<{name, psat}>;
   psat1CostSavings: number;
   psat2CostSavings: number;
-
+  psat1: PSAT;
+  psat2: PSAT;
   constructor() { }
 
   ngOnInit() {
-    this.prepPsatOptions();
-    if (this.modExists) {
-      this.getPsat1Savings();
-      this.getPsat2Savings();
+    this.psat1 = this.assessment.psat;
+    this.setPsat1Savings();
+    if (this.assessment.psat.modifications.length != 0) {
+      this.psat2 = this.assessment.psat.modifications.find(modification => {return modification.psat.valid.isValid == true}).psat;
+      this.setPsat2Savings();
     }
   }
 
-  prepPsatOptions() {
-    this.psatOptions = new Array<{name, psat}>();
-    this.psatOptions.push({name: 'Baseline', psat: this.psat});
-    this.psat1 = this.psatOptions[0];
-
-    if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
-      this.modExists = true;
-      this.psat.modifications.forEach(mod => {
-        this.psatOptions.push({name: mod.psat.name, psat: mod.psat});
-      });
-      this.psat2 = this.psatOptions[1];
-    }
+  setPsat1Savings() {
+    this.psat1CostSavings = this.assessment.psat.outputs.annual_cost - this.psat1.outputs.annual_cost;
   }
 
-  getPsat1Savings() {
-    if (!this.psat1 || !this.psat1.psat.outputs || this.psat1.psat.outputs === null) {
-      return;
-    }
-    let isMod;
-    if (this.psat1.name == this.psat.name) {
-      isMod = false;
-    }
-    else {
-      isMod = true;
-    }
-    let annualSavingsPotential = this.psat.outputs.annual_cost - this.psat1.psat.outputs.annual_cost;
-    this.psat1CostSavings = annualSavingsPotential;
+  setPsat2Savings() {
+    this.psat2CostSavings = this.assessment.psat.outputs.annual_cost - this.psat2.outputs.annual_cost;
   }
-
-  getPsat2Savings() {
-    if (!this.psat2 || !this.psat2.psat.outputs || this.psat2.psat.outputs === null) {
-      return;
-    }
-    let isMod;
-    if (this.psat2.name == this.psat.name) {
-      isMod = false;
-    }
-    else {
-      isMod = true;
-    }
-    let annualSavingsPotential = this.psat.outputs.annual_cost - this.psat2.psat.outputs.annual_cost;
-    this.psat2CostSavings = annualSavingsPotential;
-  }
-
 }

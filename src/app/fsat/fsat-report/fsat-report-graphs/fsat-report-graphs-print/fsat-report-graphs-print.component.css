@@ -1,94 +1,14 @@
-@media print {
-    .print-pie-chart {
-        left: -10px;
-    }
-    .custom-row {
-        display: block;
-    }
-    .print-pad-graph-title {
-        padding-top: 50px;
-    }
-    .print-center-title {
-        text-align: center;
-    }
-    .print-bar-chart-title {
-        font-size: 28px;
-    }
-    .print-notes-padding {
-        padding-top: 10px;
-    }
-    .print-padding-top {
-        padding-top: 50px;
-    }
-    .print-sankey {
-        page-break-before: always;
-        page-break-inside: avoid;
-    }
-    .print-only-sankey {
-        page-break-inside: avoid;
-    }
-    .print-page-title {
-        font-size: 40px !important;
-        font-weight: bold;
-    }
-    .print-graph-title {
-        font-size: 35px !important;
-        font-weight: bold;
-    }
-    .print-graph-sub-title {
-        font-size: 28px !important;
-    }
-    .print-mod-notes {
-        font-size: 15px;
-    }
-    .print-graphs-container {
-        page-break-before: always;
-        page-break-inside: avoid;
-    }
-    .print-conserve-paper {
-        page-break-before: avoid;
-        page-break-inside: avoid;
-    }
-    .print-solo {
-        page-break-inside: avoid;
-        position: relative;
-        top: 0;
-        left: -400px;
-    }
-    .print-duo-title-top {
-        position: absolute;
-        display: inline-block;
-        top: 0;
-        left: auto;
-        font-weight: bold;
-    }
-    .print-duo-title-bottom {
-        position: absolute;
-        display: inline-block;
-        top: 60%;
-        left: 0px;
-        font-weight: bold;
-    }
-    .print-duo-top {
-        page-break-inside: avoid;
-        position: relative;
-        display: block;
-        width: 100%;
-        top: 15px;
-        left: -300px;
-    }
-    .print-duo-bottom {
-        page-break-inside: avoid;
-        position: relative;
-        display: block;
-        width: 100%;
-        top: 100px;
-        left: -300px;
-    }
-    .print-bar-chart {
-        page-break-inside: avoid;
-        position: relative;
-        top: 150px;
-        left: -200px;
-    }
+.print-pie-width{
+    width: 500px;
+}
+.print-page-title {
+    font-size: 40px !important;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: underline;
+}
+.print-graphs-container {
+    page-break-before: always;
+    page-break-inside: avoid;
+    width: 1000px;
 }

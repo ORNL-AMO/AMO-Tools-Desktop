@@ -28,13 +28,11 @@ export class ExploreFixturesFormComponent implements OnInit {
   changeTab = new EventEmitter<LossTab>();
   
   showFeedRate: Array<boolean>;
-  showFixtures: boolean = false;
   showMaterial: Array<boolean>;
   materials: Array<SolidLoadChargeMaterial>;
 
   baselineWarnings: Array<{ specificHeatWarning: string, feedRateWarning: string }>;
   modificationWarnings: Array<{ specificHeatWarning: string, feedRateWarning: string }>;
-  showAllTemp: boolean = false;
   showInitialTemp: Array<boolean>;
   constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private fixtureLossesService: FixtureLossesService) { }
 
@@ -47,25 +45,25 @@ export class ExploreFixturesFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showFixtures = false;
-        this.showAllTemp = false;
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: false, display: 'Improve Materials Handling' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp = { hasOpportunity: false, display: 'Avoid Fixture Cooling' }; 
         this.initData();
         this.initTempData();
       }
     }
   }
-
+  
   initData() {
     this.showFeedRate = new Array();
     this.modificationWarnings = new Array<{ specificHeatWarning: string, feedRateWarning: string }>();
     this.baselineWarnings = new Array<{ specificHeatWarning: string, feedRateWarning: string }>();
-
     this.showMaterial = new Array<boolean>();
     let index: number = 0;
+
     this.phast.losses.fixtureLosses.forEach(loss => {
       let check: boolean = this.initFeedRate(loss.feedRate, this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].feedRate);
-      if (!this.showFixtures && check) {
-        this.showFixtures = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: check, display: 'Improve Materials Handling' }; 
       }
       this.showFeedRate.push(check);
       let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
@@ -73,8 +71,8 @@ export class ExploreFixturesFormComponent implements OnInit {
       tmpWarnings = this.fixtureLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index]);
       this.modificationWarnings.push(tmpWarnings);
       check = (loss.materialName !== this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].materialName);
-      if (!this.showFixtures && check) {
-        this.showFixtures = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: check, display: 'Improve Materials Handling' }; 
       }
       this.showMaterial.push(check);
       index++;
@@ -94,8 +92,8 @@ export class ExploreFixturesFormComponent implements OnInit {
     let index: number = 0;
     this.phast.losses.fixtureLosses.forEach(loss => {
       let check = (loss.initialTemperature !== this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].initialTemperature);
-      if (!this.showAllTemp && check) {
-        this.showAllTemp = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp = { hasOpportunity: check, display: 'Avoid Fixture Cooling' }; 
       }
       this.showInitialTemp.push(check);
       index++;
@@ -104,7 +102,7 @@ export class ExploreFixturesFormComponent implements OnInit {
 
 
   toggleFixtures() {
-    if (this.showFixtures === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures.hasOpportunity === false) {
       let index: number = 0;
       this.phast.losses.fixtureLosses.forEach(loss => {
         let baselineFeedRate: number = loss.feedRate;
@@ -135,7 +133,7 @@ export class ExploreFixturesFormComponent implements OnInit {
   }
 
   toggleAllTemp() {
-    if (this.showAllTemp === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp.hasOpportunity === false) {
       let index: number = 0;
       this.phast.losses.fixtureLosses.forEach(loss => {
         this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].initialTemperature = loss.initialTemperature;

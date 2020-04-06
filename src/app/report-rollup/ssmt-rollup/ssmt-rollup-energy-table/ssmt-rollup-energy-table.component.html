@@ -1,57 +1,59 @@
-<table class="table table-hover table-striped">
-  <thead>
-    <tr>
-      <th>
-        Fan Name
-      </th>
-      <th>
-        Energy Used
-        <br>(<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)
-      </th>
-      <th>
-        Cost
-        <br>($/yr)
-      </th>
-      <th>
-        % of Total Cost
-      </th>
-      <th>
-        % of Total Energy Used
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of resultData; let i=index;">
-      <td class="name" [ngStyle]="{'border-left-color': graphColors[i]}">
-        {{data.name}}
-      </td>
-      <td>
-        {{data.baselineResults.operationsOutput.boilerFuelUsage | number:'2.0-0'}}
-      </td>
-      <td>
-        {{data.baselineResults.operationsOutput.totalOperatingCost | currency}}
-      </td>
-      <td>
-        {{getTotalCostPercent(data.baselineResults.operationsOutput.totalOperatingCost)}}
-      </td>
-      <td>
-        {{getTotalEnergyPercent(data.baselineResults.operationsOutput.boilerFuelUsage) | number:'2.0-0'}}
-      </td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td>
-        Totals
-      </td>
-      <td>
-        {{totalEnergyUse | number:'2.0-0'}}
-      </td>
-      <td>
-        {{totalCost | currency}}
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tfoot>
-</table>
+<div class="output-summary">
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>
+          Steam System Name
+        </th>
+        <th>
+          Energy Used
+          <br>(<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)
+        </th>
+        <th>
+          Cost
+          <br>($/yr)
+        </th>
+        <th>
+          % of Total Cost
+        </th>
+        <th>
+          % of Total Energy Used
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let dataItem of energyTableData; let i=index;">
+        <td class="name" [ngStyle]="{'border-left-color': dataItem.pieColor}">
+          {{dataItem.name}}
+        </td>
+        <td>
+          {{dataItem.energyUse | number:'2.0-0'}}
+        </td>
+        <td>
+          {{dataItem.cost | currency}}
+        </td>
+        <td>
+          {{dataItem.costPercent | number:'2.0-0'}}
+        </td>
+        <td>
+          {{dataItem.energyUsePercent | number:'2.0-0'}}
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>
+          Totals
+        </td>
+        <td>
+          {{totalEnergyUse | number:'2.0-0'}}
+        </td>
+        <td>
+          {{totalCost | currency}}
+        </td>
+        <td>&mdash;</td>
+        <td>&mdash;</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

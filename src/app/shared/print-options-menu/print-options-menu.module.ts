@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PrintOptionsMenuComponent } from './print-options-menu.component';
 import { AnimatedCheckmarkModule } from '../animated-checkmark/animated-checkmark.module';
 import { ModalModule } from 'ngx-bootstrap';
+import { PrintOptionsMenuService } from './print-options-menu.service';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,9 @@ import { ModalModule } from 'ngx-bootstrap';
   ],
   exports: [
     PrintOptionsMenuComponent
+  ],
+  providers: [
+    PrintOptionsMenuService
   ]
 })
 export class PrintOptionsMenuModule { }

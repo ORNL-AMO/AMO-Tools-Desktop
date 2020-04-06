@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PsatInputs, PsatOutputs } from '../shared/models/psat';
+import { PsatInputs, PsatOutputs, PsatValid } from '../shared/models/psat';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 declare var psatAddon: any;
@@ -309,7 +309,7 @@ export class PsatService {
     efficiency: number,
     motorVoltage: number,
     settings: Settings
-  ){
+  ) {
     if (settings.fanPowerMeasurement != 'hp') {
       // horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
@@ -477,14 +477,14 @@ export class PsatService {
 
     //create copies of inputs to use for calcs
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(baselinePsatInputs));
-    let isPsatValid: boolean = this.isPsatValid(psatInputs, true);
-    if (isPsatValid) {
+    let isPsatValid: PsatValid = this.isPsatValid(psatInputs, true);
+    if (isPsatValid.isValid) {
       baselineResults = this.resultsExisting(psatInputs, settings);
     }
     if (modificationPsatInputs) {
       let modInputs: PsatInputs = JSON.parse(JSON.stringify(modificationPsatInputs));
       isPsatValid = this.isPsatValid(modInputs, false);
-      if (isPsatValid) {
+      if (isPsatValid.isValid) {
         modificationResults = this.resultsModified(modInputs, settings);
       }
     }
@@ -515,10 +515,15 @@ export class PsatService {
   }
 
 
-  isPsatValid(psatInputs: PsatInputs, isBaseline: boolean): boolean {
+  isPsatValid(psatInputs: PsatInputs, isBaseline: boolean): PsatValid {
     let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(psatInputs);
     let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(psatInputs);
     let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(psatInputs, isBaseline);
-    return tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid
+    return {
+      isValid: tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid,
+      pumpFluidValid: tmpPumpFluidForm.valid,
+      motorValid: tmpMotorForm.valid,
+      fieldDataValid: tmpFieldDataForm.valid
+    }
   }
 }

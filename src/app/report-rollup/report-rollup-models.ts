@@ -6,7 +6,8 @@ import { FSAT, FsatOutput } from '../shared/models/fans';
 import { Assessment } from '../shared/models/assessment';
 import { SSMT } from '../shared/models/steam/ssmt';
 import { SSMTOutput } from '../shared/models/steam/steam-outputs';
-import { TreasureHunt, TreasureHuntResults, OpportunitySummary } from '../shared/models/treasure-hunt';
+import { TreasureHunt, TreasureHuntResults, OpportunitySummary, OpportunitiesPaybackDetails } from '../shared/models/treasure-hunt';
+import { OpportunityCardData } from '../treasure-hunt/treasure-chest/opportunity-cards/opportunity-cards.service';
 
 export interface ReportItem {
     assessment: Assessment;
@@ -140,4 +141,6 @@ export interface AllSsmtResultsData {
 export interface TreasureHuntResultsData{
     assessment: Assessment;
     treasureHuntResults: TreasureHuntResults;
+    opportunityCardsData: Array<OpportunityCardData>;
+    opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
 }

@@ -1,98 +1,105 @@
-import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
+import { PrintOptionsMenuService } from './print-options-menu.service';
+import { PrintOptions } from '../models/printing';
+import { Subscription } from 'rxjs';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { ReportRollupService } from '../../report-rollup/report-rollup.service';
 @Component({
   selector: 'app-print-options-menu',
   templateUrl: './print-options-menu.component.html',
   styleUrls: ['./print-options-menu.component.css']
 })
 export class PrintOptionsMenuComponent implements OnInit {
-  @Input()
-  showRollupReportOptions: boolean;
-  @Input()
-  showPsatReportOptions: boolean;
-  @Input()
-  showFsatReportOptions: boolean;
-  @Input()
-  showPhastReportOptions: boolean;
-  @Input()
-  showSsmtReportOptions: boolean;
-  @Input()
-  showTHReportOptions: boolean;
-  @Input()
-  selectAll: boolean;
-  @Input()
-  printReportGraphs: boolean;
-  @Input()
-  printReportSankey: boolean;
-  @Input()
-  printResults: boolean;
-  @Input()
-  printInputData: boolean;
-  @Input()
-  printPsatRollup: boolean;
-  @Input()
-  printFsatRollup: boolean;
-  @Input()
-  printPhastRollup: boolean;
-  @Input()
-  printSsmtRollup: boolean;
-
-  @Input()
-  printEnergySummary: boolean;
-  @Input()
-  printLossesSummary: boolean;
-  @Input()
-  printReportDiagram: boolean;
-
-  //---- phast-specific options --------
-  @Input()
-  printEnergyUsed: boolean;
-  //---- end phast-specific options ----
-
-  //phast and treasure hunt
-  @Input()
-  printExecutiveSummary: boolean;
-
-  //---- treasure hunt specific options ----
-  @Input()
-  printReportOpportunitySummary: boolean;
-  @Input()
-  printReportOpportunityPayback: boolean;
-  //---- end treasure hunt specific options ---
-
-  @Output('emitTogglePrint')
-  emitTogglePrint = new EventEmitter<string>();
-  @Output('emitClosePrintMenu')
-  emitClosePrintMenu = new EventEmitter<boolean>();
-  @Output('emitPrint')
-  emitPrint = new EventEmitter<void>();
 
   @ViewChild('printMenuModal', { static: false }) public printMenuModal: ModalDirective;
 
-  constructor() { }
+  printOptions: PrintOptions;
+  printOptionsSub: Subscription;
+  showRollupReportOptions: boolean = false;
+  showPsatReportOptions: boolean = false;
+  showFsatReportOptions: boolean = false;
+  showPhastReportOptions: boolean = false;
+  showSsmtReportOptions: boolean = false;
+  showTHReportOptions: boolean = false;
+
+  constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.setContext();
+    this.printOptionsSub = this.printOptionsMenuService.printOptions.subscribe(val => {
+      this.printOptions = val;
+    });
   }
 
   ngAfterViewInit() {
     this.showPrintModal();
   }
 
+  ngOnDestroy() {
+    this.printOptionsSub.unsubscribe();
+  }
+
+  setContext() {
+    let printContext: string = this.printOptionsMenuService.printContext.getValue();
+    if (printContext == 'psat') {
+      this.showPsatReportOptions = true;
+    } else if (printContext == 'fsat') {
+      this.showFsatReportOptions = true;
+    } else if (printContext == 'ssmt') {
+      this.showSsmtReportOptions = true;
+    } else if (printContext == 'phast') {
+      this.showPhastReportOptions = true;
+    } else if (printContext == 'treasureHunt') {
+      this.showTHReportOptions = true;
+    } else if (printContext == 'reportRollup') {
+      this.showRollupReportOptions = true;
+      this.showPsatReportOptions = (this.reportRollupService.numPsats != 0);
+      this.showFsatReportOptions = (this.reportRollupService.numFsats != 0);
+      this.showPhastReportOptions = (this.reportRollupService.numPhasts != 0);
+      this.showSsmtReportOptions = (this.reportRollupService.numSsmt != 0);
+      this.showTHReportOptions = (this.reportRollupService.numTreasureHunt != 0);
+    }
+  }
+
   togglePrint(option: string) {
-    this.emitTogglePrint.emit(option);
+    this.printOptionsMenuService.toggleSection(option);
   }
 
   showPrintModal(): void {
     this.printMenuModal.show();
   }
 
-  closePrintModal(reset: boolean): void {
+  closePrintModal() {
     this.printMenuModal.hide();
-    this.emitClosePrintMenu.emit(reset);
+    this.printMenuModal.onHidden.subscribe(() => {
+      this.printOptionsMenuService.showPrintMenu.next(false);
+    });
   }
 
-  print(): void {
-    this.emitPrint.emit();
-    this.closePrintModal(false);
+  setPrintViewThenPrint() {
+    this.printMenuModal.hide();
+    this.printMenuModal.onHidden.subscribe(() => {
+      this.printOptionsMenuService.showPrintView.next(true);
+      let tmpPrintBuildTime: number = 2000;
+      // if (this.reportRollupService.numSsmt > 0) {
+      //   tmpPrintBuildTime += (500 * this.reportRollupService.numSsmt);
+      // }
+      setTimeout(() => {
+        this.print();
+      }, tmpPrintBuildTime);
+    });
+  }
+
+  print() {
+    // this.showPrintMenu = false;
+    //set timeout for delay to print call. May want to do this differently later but for now should work
+    setTimeout(() => {
+      let win = this.windowRefService.nativeWindow;
+      win.print();
+      //after printing hide content again
+      this.printOptionsMenuService.showPrintView.next(false);
+      this.printOptionsMenuService.showPrintMenu.next(false);
+    }, 200);
   }
 }
