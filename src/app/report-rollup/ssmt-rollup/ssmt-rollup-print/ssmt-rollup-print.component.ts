@@ -19,7 +19,7 @@ export class SsmtRollupPrintComponent implements OnInit {
   rollupSummaryTableData: Array<RollupSummaryTableData>;
   @Input()
   energyUnit: string;
-  
+
   energyYAxisLabel: string;
   energyTickFormat: string;
   costYAxisLabel: string;
@@ -32,5 +32,4 @@ export class SsmtRollupPrintComponent implements OnInit {
     this.costYAxisLabel = 'Annual Energy Cost ($/yr)';
     this.costTickFormat = '$.2s';
   }
-
 }
