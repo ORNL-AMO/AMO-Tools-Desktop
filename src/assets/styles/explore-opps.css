@@ -50,6 +50,16 @@ Explore-opps form overrides
   }
 
   div.form-group.explore-opps-formgroup >
+  div.d-flex.mod-max-width >
+  div >
+  label.mod-eff-label {
+    width: unset;
+    padding-bottom: 4px;
+    align-self: center;
+  }
+
+
+  div.form-group.explore-opps-formgroup >
   div.mod-max-width {
     max-width: 225px;
     margin: auto;
@@ -70,6 +80,10 @@ Explore-opps form overrides
   div.mod-max-width {
     max-width: 225px;
     margin: auto;
+  }
+
+  label#pumpTypeHelp[for="modificationPumpSpecifiedEfficiency"] {
+    width: unset;
   }
 
   div.form-group.explore-opps-formgroup >
