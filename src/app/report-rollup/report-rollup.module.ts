@@ -40,10 +40,7 @@ import { FsatRollupPrintComponent } from './fsat-rollup/fsat-rollup-print/fsat-r
 import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
 import { SsmtSummaryComponent } from './report-summary/ssmt-summary/ssmt-summary.component';
 import { SsmtRollupComponent } from './ssmt-rollup/ssmt-rollup.component';
-import { SsmtRollupGraphsComponent } from './ssmt-rollup/ssmt-rollup-graphs/ssmt-rollup-graphs.component';
-import { SsmtRollupSteamSummaryComponent } from './ssmt-rollup/ssmt-rollup-steam-summary/ssmt-rollup-steam-summary.component';
 import { SsmtRollupEnergyTableComponent } from './ssmt-rollup/ssmt-rollup-energy-table/ssmt-rollup-energy-table.component';
-import { SsmtRollupSteamSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-steam-summary-table/ssmt-rollup-steam-summary-table.component';
 import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
 import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-summary/treasure-hunt-summary.component';
 import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
@@ -52,9 +49,14 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { AssessmentReportsComponent } from './assessment-reports/assessment-reports.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
-import { RollupPrintService } from './rollup-print.service';
 import { ReportRollupModalsComponent } from './report-rollup-modals/report-rollup-modals.component';
 import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessment-print.component';
+import { TreasureHuntRollupComponent } from './treasure-hunt-rollup/treasure-hunt-rollup.component';
+import { CostStatusComponent } from './treasure-hunt-rollup/cost-status/cost-status.component';
+import { SsmtEnergyUsePieComponent } from './ssmt-rollup/ssmt-energy-use-pie/ssmt-energy-use-pie.component';
+import { SsmtRollupBarChartComponent } from './ssmt-rollup/ssmt-rollup-bar-chart/ssmt-rollup-bar-chart.component';
+import { SsmtRollupPrintComponent } from './ssmt-rollup/ssmt-rollup-print/ssmt-rollup-print.component';
+import { TreasureHuntRollupPrintComponent } from './treasure-hunt-rollup/treasure-hunt-rollup-print/treasure-hunt-rollup-print.component';
 
 @NgModule({
   imports: [
@@ -104,18 +106,21 @@ import { PreAssessmentPrintComponent } from './pre-assessment-print/pre-assessme
     FsatRollupPrintComponent,
     SsmtSummaryComponent,
     SsmtRollupComponent,
-    SsmtRollupGraphsComponent,
-    SsmtRollupSteamSummaryComponent,
     SsmtRollupEnergyTableComponent,
-    SsmtRollupSteamSummaryTableComponent,
     TreasureHuntSummaryComponent,
     AssessmentReportsComponent,
     SidebarComponent,
     ReportRollupModalsComponent,
     PreAssessmentPrintComponent,
+    TreasureHuntRollupComponent,
+    CostStatusComponent,
+    SsmtEnergyUsePieComponent,
+    SsmtRollupBarChartComponent,
+    SsmtRollupPrintComponent,
+    TreasureHuntRollupPrintComponent,
 
   ],
-  providers: [ReportRollupService, RollupPrintService],
+  providers: [ReportRollupService],
   exports: [ReportRollupComponent]
 })
 export class ReportRollupModule { }

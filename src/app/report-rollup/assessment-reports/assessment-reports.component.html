@@ -40,9 +40,7 @@
     <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
         <div class="col-12">
             <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
-                [printView]="printView" [settings]="item.settings" [printInputData]="printInputData"
-                [printReportGraphs]="rollupPrintOptions.printReportGraphs" [printReportSankey]="printReportSankey"
-                [printResults]="rollupPrintOptions.printResults">
+                [settings]="item.settings">
             </app-psat-report>
         </div>
     </div>
@@ -56,13 +54,7 @@
     <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
         <div class="col-12">
             <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast"
-                [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings" [printView]="printView"
-                [printInputSummary]="rollupPrintOptions.printInputData"
-                [printResultsData]="rollupPrintOptions.printResults"
-                [printReportGraphs]="rollupPrintOptions.printReportGraphs"
-                [printReportSankey]="rollupPrintOptions.printReportSankey"
-                [printEnergyUsed]="rollupPrintOptions.printEnergyUsed"
-                [printExecutiveSummary]="rollupPrintOptions.printExecutiveSummary">
+                [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings">
             </app-phast-report>
         </div>
     </div>
@@ -75,29 +67,20 @@
     </div>
     <div class="assessment-item row" *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}">
         <div class="col-12">
-            <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat" [assessment]="item.assessment"
-                [settings]="item.settings" [inRollup]="true" [printView]="printView"
-                [printInputData]="rollupPrintOptions.printInputData"
-                [printReportGraphs]="rollupPrintOptions.printReportGraphs"
-                [printReportSankey]="rollupPrintOptions.printReportSankey"
-                [printResults]="rollupPrintOptions.printResults"></app-fsat-report>
+            <app-fsat-report *ngIf="item.assessment.fsat" [assessment]="item.assessment"
+                [settings]="item.settings" [inRollup]="true"></app-fsat-report>
         </div>
     </div>
 
-    <!-- <div *ngIf="_ssmtAssessments.length > 0 && rollupPrintOptions.printSsmtRollup" class="row print-break-before">
+    <div *ngIf="_ssmtAssessments.length > 0 && rollupPrintOptions.printSsmtRollup" class="row print-break-before">
         <div class="col-12">
             <app-ssmt-rollup-print [settings]="settings"></app-ssmt-rollup-print>
         </div>
-    </div> -->
+    </div>
     <div class="assessment-item row" *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}">
         <div class="col-12">
             <app-ssmt-report *ngIf="item.assessment.ssmt" [assessment]="item.assessment" [settings]="item.settings"
-                [inRollup]="true" [printView]="printView"
-                [printExecutiveSummary]="rollupPrintOptions.printExecutiveSummary"
-                [printEnergySummary]="rollupPrintOptions.printEnergySummary"
-                [printLossesSummary]="rollupPrintOptions.printLossesSummary"
-                [printInputData]="rollupPrintOptions.printInputData"
-                [printReportGraphs]="rollupPrintOptions.printReportGraphs"></app-ssmt-report>
+                [inRollup]="true"></app-ssmt-report>
         </div>
     </div>
 
@@ -105,19 +88,14 @@
         class="row print-break-before">
         <div class="col-12">
             <!--treasure hunt print-->
-            <!-- <app-treasure-hunt-rollup-print [settings]="settings"></app-treasure-hunt-rollup-print> -->
+            <app-treasure-hunt-rollup [settings]="settings" [printView]="true"></app-treasure-hunt-rollup>
         </div>
     </div>
     <div class="assessment-item row" *ngFor="let item of _treasureHuntAssessments"
         id="{{'assessment_'+item.assessment.id}}">
         <div class="col-12">
             <app-treasure-hunt-report *ngIf="item.assessment.treasureHunt" [assessment]="item.assessment"
-                [settings]="item.settings" [inRollup]="true" [printView]="printView"
-                [printReportGraphs]="rollupPrintOptions.printReportGraphs"
-                [printExecutiveSummary]="rollupPrintOptions.printExecutiveSummary"
-                [printReportOpportunityPayback]="rollupPrintOptions.printReportOpportunityPayback"
-                [printReportOpportunitySummary]="rollupPrintOptions.printReportOpportunitySummary">
-            </app-treasure-hunt-report>
+                [settings]="item.settings" [inRollup]="true"></app-treasure-hunt-report>
         </div>
     </div>
 </div>

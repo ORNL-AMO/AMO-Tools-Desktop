@@ -70,7 +70,8 @@ export interface OpportunityCost {
     labor?: number
     otherCosts?: Array<OtherCostItem>,
     costDescription?: string
-    additionalSavings?: OtherCostItem
+    additionalSavings?: OtherCostItem,
+    additionalAnnualSavings?: OtherCostItem
 }
 
 export interface OtherCostItem {

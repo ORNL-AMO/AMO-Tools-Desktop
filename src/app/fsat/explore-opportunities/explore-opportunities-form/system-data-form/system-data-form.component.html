@@ -1,32 +1,29 @@
 <div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyFlowRate">
         <input type="checkbox" id="modifyFlowRate" (focus)="focusField('flowRate')" (change)="toggleFlowRate()"
-            [(ngModel)]="showFlowRate" />
-        Reduce System Flow Rate
+            [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowFlowRate.hasOpportunity" />
+        {{ fsat.modifications[exploreModIndex].exploreOppsShowFlowRate.display}}
     </label>
 </div>
-<li *ngIf="showFlowRate && !isVFD">
-    <form [formGroup]="baselineForm">
-        <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid}">
-            <label for="baselineFlowRate">Baseline Flow Rate</label>
-            <div class="input-group">
-                <input name="baselineFlowRate" type="number" step="any" id="baselineFlowRate" class="form-control"
-                    (focus)="focusField('flowRate')" (input)="calculate()" formControlName="flowRate" />
-                <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
-                <!--<span class="input-group-addon units">{{settings.fanFlowRate}}</span>-->
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowFlowRate.hasOpportunity && !isVFD" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid}">
+            <label for="baselineFlowRate" class="baseline-value-label">Baseline Flow Rate</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.flowRate.value | number: '1.0-0' }} 
+                <span [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
             </div>
             <span class="alert-danger pull-right small"
-                *ngIf="baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">
-                <span *ngIf="baselineForm.controls.flowRate.errors.required">Value Required</span>
-                <span *ngIf="baselineForm.controls.flowRate.errors.min">Value can't be less than
-                    {{baselineForm.controls.flowRate.errors.min.min}} <span
-                        [innerHTML]="settings.fanFlowRate | settingsLabel"></span></span>
-            </span>
+            *ngIf="baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">
+            <span *ngIf="baselineForm.controls.flowRate.errors.required">Value Required</span>
+            <span *ngIf="baselineForm.controls.flowRate.errors.min">Value can't be less than
+                {{baselineForm.controls.flowRate.errors.min.min}} <span
+                    [innerHTML]="settings.fanFlowRate | settingsLabel"></span></span>
+        </span>
         </div>
     </form>
-    <form [formGroup]="modificationForm">
-        <div class="form-group" [ngClass]="{'invalid':modificationForm.controls.flowRate.invalid }">
-            <label for="modificationFlowRate">Modification Flow Rate
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':modificationForm.controls.flowRate.invalid }">
+            <label for="modificationFlowRate" class="mod-value-label">Modification Flow Rate
                 <!-- <a class="form-text small click-link" (click)="showAmcaModal()">Calculate
                     Flow Rate and Pressures</a> -->
             </label>
@@ -51,35 +48,54 @@
 <div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyPressure">
         <input type="checkbox" id="modifyPressure" (focus)="focusField('inletPressure')" (change)="togglePressure()"
-            [(ngModel)]="showPressure" />
-        Reduce System Pressure
+            [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.hasOpportunity" />
+        {{fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.display}}
     </label>
 </div>
-<li *ngIf="showPressure && !isVFD">
-    <form [formGroup]="baselineForm">
-        <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.inletPressure.invalid}">
-            <label for="baselinePressure">Baseline Inlet Pressure</label>
-            <div class="input-group">
-                <input name="baselinePressure" type="number" step="any" id="baselinePressure" class="form-control"
-                    (focus)="focusField('inletPressure')" (input)="calculate()" formControlName="inletPressure" />
-                <span class="input-group-addon units"
-                    [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.hasOpportunity && !isVFD" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.inletPressure.invalid}">
+            <label for="baselinePressure" class="baseline-value-label">Baseline Inlet Pressure</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.inletPressure.value }} 
+                <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
             </div>
+            
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.inletPressure.invalid && !baselineForm.controls.inletPressure.pristine">
                 <span *ngIf="baselineForm.controls.inletPressure.errors.required">Value Required</span>
             </span>
         </div>
-        <div class="form-group"
-            [ngClass]="{'error': baselineWarnings.outletPressureError !== null, 'invalid': baselineForm.controls.outletPressure.invalid}">
-            <label for="baselineOutletPressure">Baseline Outlet Pressure</label>
+
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.inletPressure.invalid}">
+            <label for="modificationInletPressure" class="mod-value-label">Modification Inlet Pressure
+            </label>
             <div class="input-group">
-                <input name="baselineOutletPressure" type="number" step="any" id="baselineOutletPressure"
-                    class="form-control" (focus)="focusField('outletPressure')" (input)="calculate()"
-                    formControlName="outletPressure" />
+                <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure"
+                class="form-control mod-value-input" (focus)="focusField('inletPressure')" (input)="calculate()"
+                formControlName="inletPressure" />
                 <span class="input-group-addon units"
-                    [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+                [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
             </div>
+            <a class="form-text small click-link" (click)="showInletPressureModal()">Estimate
+                Inlet Pressure</a>
+            <span class="alert-danger pull-right small"
+                *ngIf="modificationForm.controls.inletPressure.invalid && !modificationForm.controls.inletPressure.pristine">
+                <span *ngIf="modificationForm.controls.inletPressure.errors.required">Value Required</span>
+            </span>
+        </div>
+    </form>
+</li>
+<li *ngIf="showPressure && !isVFD" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'error': baselineWarnings.outletPressureError !== null, 'invalid': baselineForm.controls.outletPressure.invalid}">
+            <label for="baselineOutletPressure" class="baseline-value-label">Baseline Outlet Pressure</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.outletPressure.value }} 
+                <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+            </div>
+
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.outletPressure.invalid && !baselineForm.controls.outletPressure.pristine">
                 <span *ngIf="baselineForm.controls.outletPressure.errors.required">Value Required</span>
@@ -91,37 +107,20 @@
             </span>
         </div>
     </form>
-    <form [formGroup]="modificationForm">
-        <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.inletPressure.invalid}">
-            <label for="modificationInletPressure">Modification Inlet Pressure
-                <a class="form-text small click-link" (click)="showInletPressureModal()">Estimate
-                    Inlet Pressure</a>
-            </label>
-            <div class="input-group">
-                <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure"
-                    class="form-control" (focus)="focusField('inletPressure')" (input)="calculate()"
-                    formControlName="inletPressure" />
-                <span class="input-group-addon units"
-                    [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
-            </div>
-            <span class="alert-danger pull-right small"
-                *ngIf="modificationForm.controls.inletPressure.invalid && !modificationForm.controls.inletPressure.pristine">
-                <span *ngIf="modificationForm.controls.inletPressure.errors.required">Value Required</span>
-            </span>
-        </div>
-        <div class="form-group"
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
             [ngClass]="{'error': modificationWarnings.outletPressureError !== null, 'invalid': modificationForm.controls.outletPressure.invalid}">
-            <label for="modificationOutletPressure">Modification Outlet Pressure
-                <a class="form-text small click-link" (click)="showOutletPressureModal()">Estimate
-                    Outlet Pressure</a>
+            <label for="modificationOutletPressure" class="mod-value-label">Modification Outlet Pressure
             </label>
             <div class="input-group">
                 <input name="modificationOutletPressure" type="number" step="any" id="modificationOutletPressure"
-                    class="form-control" (focus)="focusField('outletPressure')" (input)="calculate()"
+                    class="form-control mod-value-input" (focus)="focusField('outletPressure')" (input)="calculate()"
                     formControlName="outletPressure" />
                 <span class="input-group-addon units"
                     [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
             </div>
+            <a class="form-text small click-link" (click)="showOutletPressureModal()">Estimate
+                Outlet Pressure</a>
             <span class="alert-danger pull-right small"
                 *ngIf="modificationForm.controls.outletPressure.invalid && !modificationForm.controls.outletPressure.pristine">
                 <span *ngIf="modificationForm.controls.outletPressure.errors.required">Value Required</span>
@@ -136,23 +135,21 @@
 </li>
 
 
+
+
 <div class="checkbox" #formElement>
     <label class="group-label" for="showSystemData">
         <input type="checkbox" id="showSystemData" (focus)="focusField('cost')" (change)="toggleSystemData()"
-            [(ngModel)]="showSystemData" />
+            [(ngModel)]="fsat.modifications[exploreModIndex].exploreOppsShowOpData.hasOpportunity" />
         Adjust Operational Data
     </label>
 </div>
-<li *ngIf="showSystemData">
-    <form [formGroup]="baselineForm">
-        <div class="form-group"
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowOpData.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
             [ngClass]="{'error': baselineWarnings.costError !== null, 'invalid':baselineForm.controls.cost.invalid}">
-            <label for="baselineCost">Baseline Cost</label>
-            <div class="input-group">
-                <input name="baselineCost" type="number" step="any" id="baselineCost" class="form-control"
-                    (focus)="focusField('cost')" (input)="calculate()" formControlName="cost" />
-                <span class="input-group-addon units">$/kWH</span>
-            </div>
+            <label for="baselineCost" class="baseline-value-label">Baseline Cost</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.cost.value }}</div>
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.cost.invalid && !baselineForm.controls.cost.pristine">
                 <span *ngIf="baselineForm.controls.cost.errors.required">Value Required</span>
@@ -164,13 +161,13 @@
                 {{baselineWarnings.costError}} $/kWh.</span>
         </div>
     </form>
-    <form [formGroup]="modificationForm">
-        <div class="form-group"
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
             [ngClass]="{'error': modificationWarnings.costError !== null, 'invalid':modificationForm.controls.cost.invalid }">
-            <label for="modificationCost">Modification Cost</label>
+            <label for="modificationCost" class="mod-value-label">Modification Cost</label>
             <div class="input-group">
                 <input name="modificationCost" type="number" step="0.01" min="0" id="modificationCost"
-                    class="form-control" (focus)="focusField('cost')" formControlName="cost" (input)="calculate()" />
+                    class="form-control mod-value-input" (focus)="focusField('cost')" formControlName="cost" (input)="calculate()" />
                 <span class="input-group-addon units">$/kWh</span>
             </div>
             <span class="alert-danger pull-right small"
@@ -185,19 +182,11 @@
         </div>
     </form>
 </li>
-<li *ngIf="showSystemData">
-    <form [formGroup]="baselineForm">
-        <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
-            <label for="baselineOperatingHours">Baseline Operating Hours</label>
-            <div class="input-group">
-                <span class="input-group-addon op-hour-addon units">
-                    <span class="fa fa-calculator"></span>
-                </span>
-                <input name="baselineOperatingHours" type="number" step="any" id="baselineOperatingHours"
-                    class="form-control" (focus)="focusField('operatingHours')" (input)="calculate()"
-                    formControlName="operatingHours" />
-                <span class="input-group-addon units">hrs/yr</span>
-            </div>
+<li *ngIf="showSystemData" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
+            <label for="baselineOperatingHours" class="baseline-value-label">Baseline Operating Hours</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.operatingHours.value | number: '1.0-0' }} hrs/yr</div>
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.operatingHours.invalid && !baselineForm.controls.operatingHours.pristine">
                 <span *ngIf="baselineForm.controls.operatingHours.errors.required">Value Required</span>
@@ -208,15 +197,15 @@
             </span>
         </div>
     </form>
-    <form [formGroup]="modificationForm">
-        <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.operatingHours.invalid}">
-            <label for="modificationOperatingHours">Modification Operating Hours</label>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationForm.controls.operatingHours.invalid}">
+            <label for="modificationOperatingHours" class="mod-value-label">Modification Operating Hours</label>
             <div class="input-group">
                 <span class="input-group-addon op-hour-addon units">
                     <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
                 </span>
                 <input name="modificationOperatingHours" type="number" step="1" min="0" max="8760"
-                    id="modificationOperatingHours" class="form-control" (focus)="focusField('operatingHours')"
+                    id="modificationOperatingHours" class="form-control mod-value-input" (focus)="focusField('operatingHours')"
                     (input)="calculate()" formControlName="operatingHours" />
                 <span class="input-group-addon units">hrs/yr</span>
             </div>

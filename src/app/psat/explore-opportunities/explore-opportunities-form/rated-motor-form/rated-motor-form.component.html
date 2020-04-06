@@ -1,61 +1,64 @@
 <div class="checkbox">
   <label class="group-label" for="general2"><input type="checkbox" id="general2" value="true" (focus)="focusField('motorRatedData')"
-      (change)="toggleRatedMotorData()" [(ngModel)]="showRatedMotorData" /> Install More Efficient Motor
+      (change)="toggleRatedMotorData()" [(ngModel)]="currentModification.exploreOppsShowRatedMotorData.hasOpportunity" /> {{currentModification.exploreOppsShowRatedMotorData.display}}
   </label>
 </div>
 <!--Motor Efficiency Class-->
-<li *ngIf="showRatedMotorData">
-  <form [formGroup]="baselineForm">
-    <!--efficiencyClass-->
-    <div class="form-group">
-      <label for="baselineEfficiencyClass">Baseline Efficiency Class</label>
-      <select name="baselineEfficiencyClass" class="form-control select-input-field" (change)="changeBaselineEfficiencyClass()"
-        id="baselineEfficiencyClass" (focus)="focusField('efficiencyClass')" formControlName="efficiencyClass">
-        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
-      </select>
-    </div>
-    <!--efficiency-->
-    <div class="form-group" *ngIf="baselineForm.controls.efficiencyClass.value == 3" [ngClass]="{'invalid':baselineForm.controls.efficiency.invalid}">
-      <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
-      <div class="input-group">
-        <input name="baselineMotorEfficiency" type="number" step="any" id="baselineMotorEfficiency" class="form-control"
-          (focus)="focusField('motorEfficiency')" (input)="calculate()" formControlName="efficiency" />
-        <span class="input-group-addon units">%</span>
+<div *ngIf="currentModification.exploreOppsShowRatedMotorData.hasOpportunity">
+  <li class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+      <!--efficiencyClass-->
+      <div class="form-group explore-opps-formgroup">
+          <label for="baselineMotorDrive" class="baseline-value-label">Baseline Efficiency Class</label>
+          <div class="text-muted baseline-value-input">{{ efficiencyClasses[baselineForm.value.efficiencyClass].display}}</div>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.efficiency.invalid && !baselineForm.controls.efficiency.pristine">
-        <span *ngIf="baselineForm.controls.efficiency.errors.required">Value Required</span>
-        <span *ngIf="baselineForm.controls.efficiency.errors.max">Value can't be greater than
-          {{baselineForm.controls.efficiency.errors.max.max}} %.</span>
-        <span *ngIf="baselineForm.controls.efficiency.errors.min">Value can't be less than
-          {{baselineForm.controls.efficiency.errors.min.min}} %.</span>
-      </span>
-    </div>
-  </form>
-  <!--Modification Efficiency Class-->
-  <form [formGroup]="modificationForm">
-    <!--efficiencyClass-->
-    <div class="form-group">
-      <label for="modificationEfficiencyClass">Modification Efficiency Class</label>
-      <select name="modificationEfficiencyClass" class="form-control select-input-field" id="modificationEfficiencyClass"
-        (change)="changeModificationEfficiencyClass()" (focus)="focusField('efficiencyClass')" formControlName="efficiencyClass">
-        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
-      </select>
-    </div>
-    <!--efficiency-->
-    <div class="form-group" *ngIf="modificationForm.controls.efficiencyClass.value == 3" [ngClass]="{'invalid':modificationForm.controls.efficiency.invalid}">
-      <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
-      <div class="input-group">
-        <input name="modificationMotorEfficiency" type="number" step="any" id="modificationMotorEfficiency" class="form-control"
-          (focus)="focusField('motorEfficiency')" formControlName="efficiency" (input)="getModificationFLA()" />
-        <span class="input-group-addon units">%</span>
+      </form>
+      <!--Modification Efficiency Class-->
+      <form [formGroup]="modificationForm" class="explore-opps-form">
+        <!--efficiencyClass-->
+        <div class="form-group explore-opps-formgroup">
+          <label for="modificationEfficiencyClass" class="mod-value-label">Modification Efficiency Class</label>
+          <select name="modificationEfficiencyClass" class="form-control w-100 select-input-field mod-max-width" id="modificationEfficiencyClass"
+            (change)="changeModificationEfficiencyClass()" (focus)="focusField('efficiencyClass')" formControlName="efficiencyClass">
+            <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
+          </select>
+        </div>
+      </form>
+  </li>
+  <li class="explore-opps-item">
+    <form class="explore-opps-form" [formGroup]="baselineForm">
+      <!--efficiency-->
+      <div class="form-group explore-opps-formgroup" *ngIf="baselineForm.controls.efficiencyClass.value == 3" [ngClass]="{'invalid':baselineForm.controls.efficiency.invalid}">
+        <label for="baselineMotorEfficiency" class="baseline-value-label">Baseline Motor Efficiency</label>
+        <div class="text-muted baseline-value-input">{{ baselineForm.value.efficiency}}
+          <span>%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.efficiency.invalid && !baselineForm.controls.efficiency.pristine">
+          <span *ngIf="baselineForm.controls.efficiency.errors.required">Value Required</span>
+          <span *ngIf="baselineForm.controls.efficiency.errors.max">Value can't be greater than
+            {{baselineForm.controls.efficiency.errors.max.max}} %.</span>
+          <span *ngIf="baselineForm.controls.efficiency.errors.min">Value can't be less than
+            {{baselineForm.controls.efficiency.errors.min.min}} %.</span>
+        </span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.efficiency.invalid && !modificationForm.controls.efficiency.pristine">
-        <span *ngIf="modificationForm.controls.efficiency.errors.required">Value Required</span>
-        <span *ngIf="modificationForm.controls.efficiency.errors.max">Value can't be greater than
-          {{modificationForm.controls.efficiency.errors.max.max}} %.</span>
-        <span *ngIf="modificationForm.controls.efficiency.errors.min">Value can't be less than
-          {{modificationForm.controls.efficiency.errors.min.min}} %.</span>
-      </span>
-    </div>
-  </form>
-</li>
+    </form>
+      <!--efficiency-->
+    <form class="explore-opps-form" [formGroup]="modificationForm">
+      <div class="form-group explore-opps-formgroup" *ngIf="modificationForm.controls.efficiencyClass.value == 3" [ngClass]="{'invalid':modificationForm.controls.efficiency.invalid}">
+        <label for="modificationMotorEfficiency" class="mod-value-label">Modification Motor Efficiency</label>
+        <div class="input-group mod-max-width">
+          <input name="modificationMotorEfficiency" type="number" step="any" id="modificationMotorEfficiency" class="form-control"
+            (focus)="focusField('motorEfficiency')" formControlName="efficiency" (input)="getModificationFLA()" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.efficiency.invalid && !modificationForm.controls.efficiency.pristine">
+          <span *ngIf="modificationForm.controls.efficiency.errors.required">Value Required</span>
+          <span *ngIf="modificationForm.controls.efficiency.errors.max">Value can't be greater than
+            {{modificationForm.controls.efficiency.errors.max.max}} %.</span>
+          <span *ngIf="modificationForm.controls.efficiency.errors.min">Value can't be less than
+            {{modificationForm.controls.efficiency.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+</div>

@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { RollupPrintService, RollupPrintOptions } from '../rollup-print.service';
 import { Subscription } from 'rxjs';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { ReportRollupService } from '../report-rollup.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
+import { PrintOptions } from '../../shared/models/printing';
+import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 
 @Component({
   selector: 'app-report-rollup-modals',
@@ -18,29 +18,29 @@ export class ReportRollupModalsComponent implements OnInit {
 
   @ViewChild('assessmentRollupModal', { static: false }) public assessmentRollupModal: ModalDirective;
   showPrintMenu: boolean = false;
-  rollupPrintOptions: RollupPrintOptions;
+  rollupPrintOptions: PrintOptions;
   rollupPrintOptionsSub: Subscription;
   showPsatReportOptions: boolean;
   showFsatReportOptions: boolean;
   showSsmtReportOptions: boolean;
   showPhastReportOptions: boolean;
   showTHReportOptions: boolean;
-  showPrintOptionsModalSub: Subscription;
+  showPrintMenuSub: Subscription;
   showSummaryModalSub: Subscription;
   assessmentModalType: string;
   assessmentModalLabel: string;
   selectedCalculators: Array<Calculator>;
-  constructor(private rollupPrintService: RollupPrintService, private windowRefService: WindowRefService, private reportRollupService: ReportRollupService) { }
+  displayModalContent: boolean = false;
+  constructor(private printOptionsMenuService: PrintOptionsMenuService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit(): void {
-    this.rollupPrintOptionsSub = this.rollupPrintService.rollupPrintOptions.subscribe(val => {
+    this.rollupPrintOptionsSub = this.printOptionsMenuService.printOptions.subscribe(val => {
       this.rollupPrintOptions = val;
     });
 
-    this.showPrintOptionsModalSub = this.rollupPrintService.showPrintOptionsModal.subscribe(val => {
-      if (val == true) {
-        this.showPrintModal();
-      }
+    this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
+      this.printOptionsMenuService.printContext.next('reportRollup');
+      this.showPrintMenu = val;
     });
 
     this.showSummaryModalSub = this.reportRollupService.showSummaryModal.subscribe(val => {
@@ -51,20 +51,28 @@ export class ReportRollupModalsComponent implements OnInit {
         this.showAssessmentRollupModal();
       }
     });
+
   }
 
   ngOnDestroy() {
     this.rollupPrintOptionsSub.unsubscribe();
-    this.showPrintOptionsModalSub.unsubscribe();
+    this.showPrintMenuSub.unsubscribe();
     this.showSummaryModalSub.unsubscribe();
   }
 
   showAssessmentRollupModal() {
     this.assessmentRollupModal.show();
+    this.assessmentRollupModal.onShown.subscribe(val => {
+      this.displayModalContent = val;
+    });
+
   }
 
   hideAssessmentRollupModal() {
     this.assessmentRollupModal.hide();
+    this.assessmentRollupModal.onHidden.subscribe(val => {
+      this.displayModalContent = false;
+    });
   }
 
   setAssessmentModalLabel() {
@@ -78,6 +86,8 @@ export class ReportRollupModalsComponent implements OnInit {
       this.assessmentModalLabel = 'Steam Assessment Rollup';
     } else if (this.assessmentModalType == 'unitsModal') {
       this.assessmentModalLabel = 'Report Units';
+    } else if (this.assessmentModalType == 'treasureHunt') {
+      this.assessmentModalLabel = 'Treasure Hunt Rollup';
     }
   }
 
@@ -96,45 +106,5 @@ export class ReportRollupModalsComponent implements OnInit {
     } else {
       this.selectedCalculators = [];
     }
-  }
-
-  showPrintModal() {
-    this.showPsatReportOptions = this.reportRollupService.numPsats != 0;
-    this.showFsatReportOptions = this.reportRollupService.numFsats != 0;
-    this.showSsmtReportOptions = this.reportRollupService.numSsmt != 0;
-    this.showPhastReportOptions = this.reportRollupService.numPhasts != 0;
-    this.showTHReportOptions = this.reportRollupService.numTreasureHunt != 0;
-    this.showPrintMenu = true;
-  }
-
-  closePrintModal() {
-    this.showPrintMenu = false;
-    this.rollupPrintService.showPrintOptionsModal.next(false);
-  }
-
-  togglePrint(section: string): void {
-    this.rollupPrintService.toggleSection(section);
-  }
-
-  setPrintViewThenPrint() {
-    this.rollupPrintService.showPrintView.next(true);
-    let tmpPrintBuildTime = 100;
-    if (this.reportRollupService.numSsmt > 0) {
-      tmpPrintBuildTime += (500 * this.reportRollupService.numSsmt);
-    }
-    setTimeout(() => {
-      this.print();
-    }, tmpPrintBuildTime);
-  }
-
-  print() {
-    this.showPrintMenu = false;
-    //set timeout for delay to print call. May want to do this differently later but for now should work
-    setTimeout(() => {
-      let win = this.windowRefService.nativeWindow;
-      win.print();
-      //after printing hide content again
-      this.rollupPrintService.showPrintView.next(false);
-    }, 5000);
   }
 }

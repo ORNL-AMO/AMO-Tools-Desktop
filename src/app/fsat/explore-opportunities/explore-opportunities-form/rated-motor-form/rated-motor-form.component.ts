@@ -28,9 +28,6 @@ export class RatedMotorFormComponent implements OnInit {
   @Input()
   modificationForm: FormGroup;
 
-  showEfficiencyClass: boolean = false;
-  showMotorEfficiency: boolean = false;
-
   efficiencyClasses: Array<{ value: number, display: string }>;
   constructor(
     private convertUnitsService: ConvertUnitsService,
@@ -59,28 +56,29 @@ export class RatedMotorFormComponent implements OnInit {
 
   initEfficiencyClass() {
     if (this.baselineForm.controls.efficiencyClass.value !== this.modificationForm.controls.efficiencyClass.value) {
-      this.showEfficiencyClass = true;
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowMotor = {hasOpportunity: true, display: "Install More Efficient Motor"};
     } else {
-      this.showEfficiencyClass = false;
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowMotor = {hasOpportunity: false, display: "Install More Efficient Motor"};
     }
   }
 
   initMotorEfficiency() {
     if (this.modificationForm.controls.efficiencyClass.value === 3) {
-      this.showMotorEfficiency = true;
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowMotorEff = {hasOpportunity: true, display: "Modified Motor Efficiency"};
       this.modificationForm.controls.specifiedEfficiency.enable();
     } else {
       this.modificationForm.controls.specifiedEfficiency.patchValue(90);
       this.modificationForm.controls.specifiedEfficiency.disable();
     }
     if (this.baselineForm.controls.efficiencyClass.value === 3) {
-      this.showMotorEfficiency = true;
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowMotorEff = {hasOpportunity: true, display: "Modified Motor Efficiency"};
     } else {
       this.baselineForm.controls.specifiedEfficiency.patchValue(90);
+
     }
 
     if (this.baselineForm.controls.efficiencyClass.value !== 3 && this.modificationForm.controls.efficiencyClass.value !== 3) {
-      this.showMotorEfficiency = false;
+      this.fsat.modifications[this.exploreModIndex].exploreOppsShowMotorEff = {hasOpportunity: false, display: "Modified Motor Efficiency"};
     }
   }
 
@@ -116,13 +114,13 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   toggleEfficiencyClass() {
-    if (this.showEfficiencyClass === false) {
+    if (this.fsat.modifications[this.exploreModIndex].exploreOppsShowMotor.hasOpportunity === false) {
       this.modificationForm.controls.efficiencyClass.patchValue(this.baselineForm.controls.efficiencyClass.value);
       this.calculate();
     }
   }
   toggleMotorEfficiency() {
-    if (this.showMotorEfficiency === false) {
+    if (this.fsat.modifications[this.exploreModIndex].exploreOppsShowMotorEff.hasOpportunity === false) {
       this.modificationForm.controls.specifiedEfficiency.patchValue(this.baselineForm.controls.specifiedEfficiency.value);
       this.calculate();
     }

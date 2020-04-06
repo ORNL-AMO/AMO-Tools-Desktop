@@ -1,4 +1,5 @@
 import { OperatingHours } from "./operations";
+import { SavingsOpportunity } from "./explore-opps";
 
 export interface FSAT {
   name?: string;
@@ -13,12 +14,21 @@ export interface FSAT {
   setupDone?: boolean;
   isVFD?: boolean;
   operatingHours?: OperatingHours;
+  outputs?: FsatOutput;
 }
 
 export interface Modification {
   notes?: Notes;
   fsat?: FSAT;
   exploreOpportunities?: boolean;
+  exploreOppsShowVfd?: SavingsOpportunity,
+  exploreOppsShowDrive?: SavingsOpportunity,
+  exploreOppsShowFanType?: SavingsOpportunity,
+  exploreOppsShowMotor?: SavingsOpportunity,
+  exploreOppsShowMotorEff?: SavingsOpportunity,
+  exploreOppsShowFlowRate?: SavingsOpportunity,
+  exploreOppsShowReducePressure?: SavingsOpportunity,
+  exploreOppsShowOpData?: SavingsOpportunity
 }
 
 export interface Notes {

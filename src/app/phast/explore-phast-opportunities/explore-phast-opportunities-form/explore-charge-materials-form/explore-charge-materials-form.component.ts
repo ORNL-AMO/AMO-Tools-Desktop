@@ -25,7 +25,6 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
   changeTab = new EventEmitter<LossTab>();
 
   materials: Array<ExploreMaterial>;
-  showMaterial: boolean = false;
   showTemp: Array<boolean>;
   baselineWarnings: Array<string>;
   modificationWarnings: Array<string>;
@@ -38,7 +37,7 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showMaterial = false;
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowMaterial = { hasOpportunity: false, display: 'Preheat Charge Material' }; 
         this.initData();
       }
     }
@@ -49,7 +48,6 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
     this.baselineWarnings = new Array<string>();
     this.modificationWarnings = new Array<string>();
     let index = 0;
-    this.showMaterial = false;
     this.phast.losses.chargeMaterials.forEach(material => {
       this.baselineWarnings.push(null);
       this.modificationWarnings.push(null);
@@ -73,8 +71,8 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
       this.checkBaselineWarnings(tmpBaseline, index);
       this.checkModificationWarning(tmpModified, index);
       let testVal = checkTemp;
-      if (!this.showMaterial && testVal) {
-        this.showMaterial = true;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowMaterial.hasOpportunity && testVal) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowMaterial = { hasOpportunity: true, display: 'Preheat Charge Material' }; 
       }
       this.showTemp.push(checkTemp);
       this.materials;
@@ -115,7 +113,7 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
   }
 
   toggleMaterials() {
-    if (this.showMaterial === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowMaterial.hasOpportunity === false) {
       let index = 0;
       this.materials.forEach(material => {
         this.showTemp[index] = false;

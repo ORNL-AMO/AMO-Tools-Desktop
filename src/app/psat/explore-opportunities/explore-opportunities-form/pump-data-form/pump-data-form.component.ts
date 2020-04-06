@@ -29,9 +29,6 @@ export class PumpDataFormComponent implements OnInit {
   @Input()
   psat: PSAT;
 
-  showPumpType: boolean = false;
-  showMotorDrive: boolean = false;
-
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
   baselinePumpEfficiency: number;
@@ -61,7 +58,7 @@ export class PumpDataFormComponent implements OnInit {
         this.setMotorDrive();
       } else {
         this.modificationForm.controls.drive.patchValue(this.baselineForm.controls.drive.value);
-        this.showMotorDrive = false;
+        this.psat.modifications[this.exploreModIndex].exploreOppsShowMotorDrive = { hasOpportunity: false, display: 'Install More Efficient Drive' };
         this.setMotorDrive();
         this.init();
       }
@@ -71,38 +68,39 @@ export class PumpDataFormComponent implements OnInit {
   init() {
     this.initMotorDrive();
     this.initPumpType();
+    this.calculate();
   }
 
   initPumpType() {
     if (this.modificationForm.controls.pumpType.value == 11) {
       if (this.modificationForm.controls.specifiedPumpEfficiency.value != this.baselinePumpEfficiency) {
-        this.showPumpType = true;
+        this.psat.modifications[this.exploreModIndex].exploreOppsShowPumpType = { hasOpportunity: true, display: 'Install More Efficient Pump' };
       } else {
-        this.showPumpType = false;
+        this.psat.modifications[this.exploreModIndex].exploreOppsShowPumpType = { hasOpportunity: false, display: 'Install More Efficient Pump' };
       }
       this.cd.detectChanges();
     } else {
-      this.showPumpType = true;
+      this.psat.modifications[this.exploreModIndex].exploreOppsShowPumpType = { hasOpportunity: true, display: 'Install More Efficient Pump' };
       this.cd.detectChanges();
     }
   }
 
   initMotorDrive() {
     if (this.baselineForm.controls.drive.value != this.modificationForm.controls.drive.value) {
-      this.showMotorDrive = true;
+      this.psat.modifications[this.exploreModIndex].exploreOppsShowMotorDrive = { hasOpportunity: true, display: 'Install More Efficient Drive' };
     } else {
-      this.showMotorDrive = false;
+      this.psat.modifications[this.exploreModIndex].exploreOppsShowMotorDrive = { hasOpportunity: false, display: 'Install More Efficient Drive' };
     }
   }
 
   togglePumpType() {
-    if (this.showPumpType == false) {
+    if (this.psat.modifications[this.exploreModIndex].exploreOppsShowPumpType.hasOpportunity === false) {
       this.disablePumpType();
       this.calculate();
     }
   }
   toggleMotorDrive() {
-    if (this.showMotorDrive === false) {
+    if (this.psat.modifications[this.exploreModIndex].exploreOppsShowMotorDrive.hasOpportunity === false) {
       this.modificationForm.controls.drive.patchValue(this.baselineForm.controls.drive.value);
       this.calculate();
     }

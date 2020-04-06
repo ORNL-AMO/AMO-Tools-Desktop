@@ -1,15 +1,13 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
-import { Assessment } from '../shared/models/assessment';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ReportRollupService } from './report-rollup.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
-import { Calculator } from '../shared/models/calculators';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ReportItem } from './report-rollup-models';
 import { ViewportScroller } from '@angular/common';
 import { DirectoryDashboardService } from '../dashboard/directory-dashboard/directory-dashboard.service';
-import { RollupPrintService } from './rollup-print.service';
+import { PrintOptionsMenuService } from '../shared/print-options-menu/print-options-menu.service';
 
 @Component({
   selector: 'app-report-rollup',
@@ -45,7 +43,7 @@ export class ReportRollupComponent implements OnInit {
   gatheringAssessments: boolean = true;
   constructor(private viewportScroller: ViewportScroller, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService,
     private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef, private directoryDashboardService: DirectoryDashboardService,
-    private rollupPrintService: RollupPrintService) { }
+    private printOptionsMenuService: PrintOptionsMenuService) { }
 
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();
@@ -70,7 +68,7 @@ export class ReportRollupComponent implements OnInit {
 
     this.createdDate = new Date();
 
-    this.showPrintSub = this.rollupPrintService.showPrintView.subscribe(val => {
+    this.showPrintSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
       this.printView = val;
     });
 

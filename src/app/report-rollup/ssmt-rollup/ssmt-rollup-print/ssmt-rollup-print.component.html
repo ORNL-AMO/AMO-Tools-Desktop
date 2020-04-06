@@ -1,0 +1,40 @@
+<div class="ssmt">
+    <div class="row">
+        <div class="col-12">
+            <div class="print-page-title">
+                Steam System Rollup Summary
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="d-flex flex-column w-100 pt-2">
+                <label class="group-label">Annual Cost</label>
+                <app-ssmt-energy-use-pie [dataOption]="'cost'" [settings]="settings" [printView]="true">
+                </app-ssmt-energy-use-pie>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="d-flex flex-column w-100 pt-2">
+                <label class="group-label">Energy Use</label>
+                <app-ssmt-energy-use-pie [dataOption]="'energy'" [settings]="settings" [printView]="true">
+                </app-ssmt-energy-use-pie>
+            </div>
+        </div>
+        <div class="col-12">
+            <app-ssmt-rollup-energy-table [settings]="settings"></app-ssmt-rollup-energy-table>
+        </div>
+    </div>
+    <div class="row page-break-before">
+        <div class="col-12">
+            <div class="d-flex flex-column">
+                <label class="group-label">Steam Systems Cost</label>
+                <app-ssmt-rollup-bar-chart [settings]="settings" [dataOption]="'cost'" [printView]="true">
+                </app-ssmt-rollup-bar-chart>
+                <label class="group-label">Steam Systems Energy Usage</label>
+                <app-ssmt-rollup-bar-chart [settings]="settings" [dataOption]="'energy'" [printView]="true">
+                </app-ssmt-rollup-bar-chart>
+            </div>
+        </div>
+    </div>
+</div>

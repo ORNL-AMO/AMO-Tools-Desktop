@@ -23,6 +23,7 @@ export class PreAssessmentModalComponent implements OnInit {
   directory: Directory;
   directorySettings: Settings;
   preAssessmentCalculator: Calculator;
+  modalShown: boolean;
   constructor(private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService, private settingsDbService: SettingsDbService,
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService) { }
 
@@ -50,6 +51,9 @@ export class PreAssessmentModalComponent implements OnInit {
 
   showPreAssessmentModal() {
     this.preAssessmentModal.show();
+    this.preAssessmentModal.onShown.subscribe(val => {
+      this.modalShown = val;
+    })
   }
 
   hidePreAssessmentModal() {
