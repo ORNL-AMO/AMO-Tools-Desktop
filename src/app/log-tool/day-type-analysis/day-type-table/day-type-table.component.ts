@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { DayTypeSummary, LogToolField, DayType, LogToolDay } from '../../log-tool-models';
 import { Subscription } from 'rxjs';
@@ -9,6 +9,12 @@ import * as _ from 'lodash';
   styleUrls: ['./day-type-table.component.css']
 })
 export class DayTypeTableComponent implements OnInit {
+
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
+  table0String: any;
+  @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
+  table1String: any;
+
 
   dayTypeSummaries: Array<DayTypeSummary>;
   dayTypeSummariesSub: Subscription;
@@ -43,5 +49,13 @@ export class DayTypeTableComponent implements OnInit {
 
   getAverageValue(averages: Array<{ value: number, field: LogToolField }>): number {
     return _.find(averages, (average) => { return average.field.fieldName == this.selectedDataField.fieldName }).value;
+  }
+
+  updateTable0String() {
+    this.table0String = this.copyTable0.nativeElement.innerText;
+  }
+
+  updateTable1String() {
+    this.table1String = this.copyTable1.nativeElement.innerText;
   }
 }
