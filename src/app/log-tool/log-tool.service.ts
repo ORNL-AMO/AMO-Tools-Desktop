@@ -80,7 +80,7 @@ export class LogToolService {
     this.setFields(this.combinedDataFromCsv.meta.fields);
     this.numberOfDataPoints = this.combinedDataFromCsv.data.length;
     if (this.noDayTypeAnalysis.getValue() == false) {
-      this.combinedDataFromCsv.data = _.orderBy(this.combinedDataFromCsv.data, (data) => {
+      this.combinedDataFromCsv.data = _.sortBy(this.combinedDataFromCsv.data, (data) => {
         let date: Date;
         this.dateFields.forEach(field => {
           if (data[field]) {
@@ -88,7 +88,8 @@ export class LogToolService {
           }
         })
         return date;
-      }, ['asc']);
+      }, ['desc']);
+
       let startDateItem = _.minBy(this.combinedDataFromCsv.data, (dataItem) => {
         let date: Date;
         this.dateFields.forEach(field => {

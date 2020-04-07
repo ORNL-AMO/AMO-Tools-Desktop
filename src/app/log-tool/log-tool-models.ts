@@ -24,9 +24,9 @@ export interface GraphDataObj {
     graphType: { label: string, value: string },
     scatterPlotMode: string,
     selectedXDataField: LogToolField,
-    xData: Array<number>,
+    xData: Array<number | Date>,
     selectedYDataField: LogToolField,
-    yData: Array<number>,
+    yData: Array<number | Date>,
     graphName: string,
     graphId: string;
     useStandardDeviation: boolean;

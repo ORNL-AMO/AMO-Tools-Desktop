@@ -4,6 +4,7 @@ import { LogToolService } from '../log-tool.service';
 import { LogToolDataService } from '../log-tool-data.service';
 import * as _ from 'lodash';
 import { GraphDataObj, LogToolField } from '../log-tool-models';
+
 @Injectable()
 export class VisualizeService {
 
@@ -42,8 +43,8 @@ export class VisualizeService {
       selectedYDataField = fields[0];
       selectedXDataField = fields.find((field) => { return field.fieldName != selectedYDataField.fieldName });
     }
-    let yData: Array<number> = this.logToolDataService.getAllFieldData(selectedYDataField.fieldName);
-    let xData: Array<number> = this.logToolDataService.getAllFieldData(selectedXDataField.fieldName);
+    let yData: Array<number | Date> = this.logToolDataService.getAllFieldData(selectedYDataField.fieldName);
+    let xData: Array<number | Date> = this.logToolDataService.getAllFieldData(selectedXDataField.fieldName);
     let histogramData: { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } = this.getStandardDevBarChartData(selectedYDataField);
     return {
       graphType: { label: 'Scatter Plot', value: 'scattergl' },

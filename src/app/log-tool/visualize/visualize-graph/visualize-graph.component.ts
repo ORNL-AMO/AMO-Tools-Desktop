@@ -10,6 +10,7 @@ import * as Plotly from 'plotly.js';
 })
 export class VisualizeGraphComponent implements OnInit {
 
+
   graph = {
     data: [],
     layout: {
@@ -17,18 +18,19 @@ export class VisualizeGraphComponent implements OnInit {
       hovermode: "closest",
       xaxis: {
         autorange: true,
-        type: 'linear',
+        // type: 'linear',
         title: {
           text: 'x axis'
         }
       },
       yaxis: {
-        autorange: true,
-        type: 'linear',
+        // autorange: true,
+        // type: 'linear',
         title: {
           text: 'y axis'
         }
-      }
+      },
+      margin: { t: 50, b: 200 }
     }
   };
   selectedGraphDataSubscription: Subscription;
@@ -40,15 +42,26 @@ export class VisualizeGraphComponent implements OnInit {
         this.graph.layout.title = 'Number of ' + graphData.histogramDataField.alias + ' Data Points';
         this.graph.layout.xaxis.title.text = graphData.histogramDataField.alias;
         this.graph.layout.yaxis.title.text = 'Number of Data Points';
-        this.graph.data = [{ x: graphData.histogramData.xLabels, y: graphData.histogramData.yValues, type: graphData.graphType.value, mode: graphData.scatterPlotMode, name: graphData.graphName }];
+        this.graph.data = [{
+          x: graphData.histogramData.xLabels,
+          y: graphData.histogramData.yValues,
+          type: graphData.graphType.value,
+          mode: graphData.scatterPlotMode,
+          name: graphData.graphName
+        }];
       } else {
         this.graph.layout.title = graphData.selectedXDataField.alias + ' vs ' + graphData.selectedYDataField.alias;
         this.graph.layout.xaxis.title.text = graphData.selectedXDataField.alias;
         this.graph.layout.yaxis.title.text = graphData.selectedYDataField.alias;
-        this.graph.data = [{ x: graphData.xData, y: graphData.yData, type: graphData.graphType.value, mode: graphData.scatterPlotMode, name: graphData.graphName }];
+        this.graph.data = [{
+          x: graphData.xData,
+          y: graphData.yData,
+          type: graphData.graphType.value,
+          mode: graphData.scatterPlotMode,
+          name: graphData.graphName
+        }];
       }
-      console.log(this.graph.data);
-      Plotly.newPlot('plotlyDiv', this.graph.data, this.graph.layout, { responsive: true });
+      Plotly.react('plotlyDiv', this.graph.data, this.graph.layout, { responsive: true });
     });
   }
 
