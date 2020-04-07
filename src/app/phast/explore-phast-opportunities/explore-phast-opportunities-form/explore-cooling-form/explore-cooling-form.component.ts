@@ -42,7 +42,6 @@ export class ExploreCoolingFormComponent implements OnInit {
       }
     }
   }
-  
   initData() {
     this.baselineWarnings;
     this.baselineLosses = new Array();
