@@ -29,6 +29,7 @@ import { DayTypeMenuComponent } from './day-type-analysis/day-type-menu/day-type
 import { DataTableComponent } from './system-setup/setup-data/data-table/data-table.component';
 import { FieldUnitsModalComponent } from './system-setup/clean-data/field-units-modal/field-units-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { ModalModule } from 'ngx-bootstrap';
     RouterModule,
     FormsModule,
     NgbDatepickerModule,
-    ModalModule
+    ModalModule,
+    ExportableResultsTableModule
   ],
   providers: [
     LogToolService,

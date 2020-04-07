@@ -1,8 +1,8 @@
 <div class="p-2">
-    <div class="card">
+    <div class="card day-type-table">
         <div class="card-body p-0">
             <div class="scroll-item">
-                <table class="table table-bordered mb-0">
+                <table #copyTable0 class="table table-bordered mb-0">
                     <tbody>
                         <tr>
                             <td class="bold">
@@ -25,14 +25,20 @@
                 </table>
             </div>
         </div>
+        <div class="card-footer p-0">
+            <div class="d-flex justify-content-end">
+                <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+                </app-exportable-results-table>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="p-2">
-    <div class="card">
+    <div class="card day-type-table">
         <div class="card-body p-0">
             <div class="scroll-item">
-                <table class="table table-bordered mb-0">
+                <table #copyTable1 class="table table-bordered mb-0">
                     <tbody *ngFor="let dayType of dayTypes; let index = index;">
                         <tr *ngIf="index == 0">
                             <td class="bold">
@@ -60,6 +66,12 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="card-footer p-0">
+            <div class="d-flex justify-content-end">
+                <app-exportable-results-table [tableString]="table1String" (updateTableString)="updateTable1String()">
+                </app-exportable-results-table>
             </div>
         </div>
     </div>

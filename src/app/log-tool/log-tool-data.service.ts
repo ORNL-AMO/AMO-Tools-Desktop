@@ -127,7 +127,17 @@ export class LogToolDataService {
       if (foundData) {
         data = _.concat(data, individualDataItem.data.data);
       }
-    })
+    });
+    //need to order data by date before returning
+    data = _.sortBy(data, (data) => {
+      let date: Date;
+      this.logToolService.dateFields.forEach(field => {
+        if (data[field]) {
+          date = new Date(data[field]);
+        }
+      })
+      return date;
+    }, ['desc']);
     return data;
   };
 }
