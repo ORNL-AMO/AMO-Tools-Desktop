@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js';
-
+import * as moment from 'moment';
+import { LogToolService } from '../../log-tool.service';
 @Component({
   selector: 'app-visualize-graph',
   templateUrl: './visualize-graph.component.html',
@@ -18,6 +19,7 @@ export class VisualizeGraphComponent implements OnInit {
       hovermode: "closest",
       xaxis: {
         autorange: true,
+        type: 'date',
         // type: 'linear',
         title: {
           text: 'x axis'
@@ -30,7 +32,7 @@ export class VisualizeGraphComponent implements OnInit {
           text: 'y axis'
         }
       },
-      margin: { t: 50, b: 200 }
+      margin: { t: 50, b: 75 }
     }
   };
   selectedGraphDataSubscription: Subscription;
@@ -60,6 +62,7 @@ export class VisualizeGraphComponent implements OnInit {
           mode: graphData.scatterPlotMode,
           name: graphData.graphName
         }];
+        console.log(this.graph.data);
       }
       Plotly.react('plotlyDiv', this.graph.data, this.graph.layout, { responsive: true });
     });

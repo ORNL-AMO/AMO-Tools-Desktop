@@ -31,7 +31,7 @@ export class SetupDataComponent implements OnInit {
   disableImportFile: boolean = false;
   noDayTypeAnalysis: boolean;
   noDayTypeAnalysisSub: Subscription;
-  individualDataFromCsv: Array<{data: CsvImportData, csvName: string, isDateValid: boolean}>
+  individualDataFromCsv: Array<{ data: CsvImportData, csvName: string, isDateValid: boolean }>
   constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
     private logToolDataService: LogToolDataService, private router: Router) { }
@@ -89,6 +89,11 @@ export class SetupDataComponent implements OnInit {
       this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
       let foundDate: string = this.testForDate();
       if (foundDate != undefined) {
+        this.importDataFromCsv.data.forEach(dataItem => {
+          this.logToolService.dateFields.forEach(dateField => {
+            dataItem[dateField] = moment(dataItem[dateField]).format('YYYY-MM-DD HH:mm:ss');
+          })
+        })
         this.validDate = true;
         this.logToolService.invalidDateDataFromCsv = undefined;
         this.logToolService.setImportDataFromCsv(this.importDataFromCsv, this.fileReference.name, this.validDate);

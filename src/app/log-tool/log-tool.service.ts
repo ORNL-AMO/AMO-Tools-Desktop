@@ -89,7 +89,7 @@ export class LogToolService {
         })
         return date;
       }, ['desc']);
-
+      
       let startDateItem = _.minBy(this.combinedDataFromCsv.data, (dataItem) => {
         let date: Date;
         this.dateFields.forEach(field => {
