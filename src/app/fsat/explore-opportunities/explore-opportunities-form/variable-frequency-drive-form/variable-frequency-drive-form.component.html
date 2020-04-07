@@ -21,7 +21,7 @@
   <form [formGroup]="modificationFieldDataForm" class="explore-opps-form">
     <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':modificationFieldDataForm.controls.flowRate.invalid }">
       <label for="modificationFlowRate" class="mod-value-label">Flow Rate</label>
-      <div class="input-group">
+      <div class="input-group mod-max-width">
         <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control "
           (focus)="focusField('flowRate')" formControlName="flowRate" (input)="calculate()" />
         <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
@@ -52,7 +52,7 @@
     <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationFieldDataForm.controls.inletPressure.invalid}">
       <label for="modificationInletPressure" class="baseline-value-label">Inlet Pressure
       </label>
-      <div class="input-group">
+      <div class="input-group mod-max-width">
         <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure" class="form-control "
           (focus)="focusField('inletPressure')" (input)="calculate()" formControlName="inletPressure" />
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
@@ -85,7 +85,7 @@
     <div class="form-group explore-opps-formgroup" [ngClass]="{'error': modificationWarnings.outletPressureError !== null, 'invalid': modificationFieldDataForm.controls.outletPressure.invalid}">
       <label for="modificationOutletPressure" class="mod-value-label">Outlet Pressure
       </label>
-      <div class="input-group">
+      <div class="input-group mod-max-width">
         <input name="modificationOutletPressure" type="number" step="any" id="modificationOutletPressure" class="form-control "
           (focus)="focusField('outletPressure')" (input)="calculate()" formControlName="outletPressure" />
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
