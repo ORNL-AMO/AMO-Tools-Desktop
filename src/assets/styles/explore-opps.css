@@ -58,6 +58,7 @@ Explore-opps form overrides
     align-self: center;
   }
 
+  
   div.form-group.explore-opps-formgroup >
   div.mod-max-width {
     max-width: 225px;
@@ -79,6 +80,10 @@ Explore-opps form overrides
   div.mod-max-width {
     max-width: 225px;
     margin: auto;
+  }
+
+  label#pumpTypeHelp[for="modificationPumpSpecifiedEfficiency"] {
+    width: unset;
   }
 
   div.form-group.explore-opps-formgroup >

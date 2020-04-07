@@ -1,10 +1,11 @@
 <div class="checkbox">
   <label class="group-label" for="adjustCondensateHandling">
     <input type="checkbox" id="adjustCondensateHandling" (focus)="focusField('default')" (change)="toggleCondensate()"
-      [(ngModel)]="showCondensateHandling" /> Adjust Condensate Handling
-  </label>
+      [(ngModel)]="ssmt.modifications[exploreModIndex].exploreOppsShowCondensateHandling.hasOpportunity" /> 
+    {{ ssmt.modifications[exploreModIndex].exploreOppsShowCondensateHandling.display}}
+    </label>
 </div>
-<ul *ngIf="showCondensateHandling">
+<ul *ngIf="ssmt.modifications[exploreModIndex].exploreOppsShowCondensateHandling.hasOpportunity">
   <!--CONDENSATE RECOVERY RATE-->
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
