@@ -4,6 +4,7 @@ import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Assessment } from '../../../shared/models/assessment';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { SSMT } from '../../../shared/models/steam/ssmt';
+import { CompareService } from '../../compare.service';
 
 @Component({
   selector: 'app-executive-summary',
@@ -29,7 +30,8 @@ export class ExecutiveSummaryComponent implements OnInit {
   ssmt: SSMT;
 
   selectedModificationIndex: number;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(private reportRollupService: ReportRollupService,
+    private compareService: CompareService) { }
 
   ngOnInit() {
     if (this.inRollup) {
@@ -52,6 +54,27 @@ export class ExecutiveSummaryComponent implements OnInit {
 
   useModification() {
     this.reportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+  }
+
+  getModificationsMadeList(modifiedSsmt: SSMT): Array<string> {
+    let modificationsMadeList: Array<string> = new Array();
+    let isOperationsDifferent: boolean = this.compareService.checkOperationsDifferent(this.ssmt, modifiedSsmt);
+    if(isOperationsDifferent == true){
+      modificationsMadeList.push('Operations');
+    }
+    let isBoilerDifferent: boolean = this.compareService.checkBoilerDifferent(this.ssmt, modifiedSsmt);
+    if(isBoilerDifferent == true){
+      modificationsMadeList.push('Boiler');
+    }
+    let isHeaderDifferent: boolean = this.compareService.checkHeaderDifferent(this.ssmt, modifiedSsmt);
+    if(isHeaderDifferent == true){
+      modificationsMadeList.push('Header');
+    }
+    let isTurbineDifferent: boolean = this.compareService.checkTurbinesDifferent(this.ssmt, modifiedSsmt);
+    if(isTurbineDifferent == true){
+      modificationsMadeList.push('Turbine');
+    }
+    return modificationsMadeList;
   }
 
   getPayback(modCost: number, baselineCost: number, implementationCost: number) {

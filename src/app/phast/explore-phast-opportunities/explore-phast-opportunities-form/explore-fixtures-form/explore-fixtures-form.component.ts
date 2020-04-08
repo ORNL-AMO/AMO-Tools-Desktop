@@ -45,8 +45,6 @@ export class ExploreFixturesFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: false, display: 'Improve Materials Handling' }; 
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp = { hasOpportunity: false, display: 'Avoid Fixture Cooling' }; 
         this.initData();
         this.initTempData();
       }
@@ -58,8 +56,10 @@ export class ExploreFixturesFormComponent implements OnInit {
     this.modificationWarnings = new Array<{ specificHeatWarning: string, feedRateWarning: string }>();
     this.baselineWarnings = new Array<{ specificHeatWarning: string, feedRateWarning: string }>();
     this.showMaterial = new Array<boolean>();
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: false, display: 'Improve Materials Handling' }; 
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp = { hasOpportunity: false, display: 'Avoid Fixture Cooling' }; 
+    
     let index: number = 0;
-
     this.phast.losses.fixtureLosses.forEach(loss => {
       let check: boolean = this.initFeedRate(loss.feedRate, this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].feedRate);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures.hasOpportunity && check) {

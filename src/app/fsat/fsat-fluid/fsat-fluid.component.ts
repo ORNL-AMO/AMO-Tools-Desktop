@@ -38,7 +38,7 @@ export class FsatFluidComponent implements OnInit {
     { display: 'Relative Humidity %', value: 'relativeHumidity' },
     { display: 'Wet Bulb Temperature', value: 'wetBulb' },
     { display: 'Gas Dew Point', value: 'dewPoint' },
-    { display: 'Use Custom Density', value: 'custom' },
+    { display: 'Use Known Density', value: 'custom' },
   ];
 
   gasTypes: Array<{ display: string, value: string }> = [
@@ -101,7 +101,18 @@ export class FsatFluidComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
-  getDensity() {
+  changeGasType() {
+    if (this.gasDensityForm.controls.gasType.value === 'OTHER') {
+      this.gasDensityForm.patchValue({
+        inputType: 'custom'
+      });
+     this.changeMethod();
+    } else {
+      this.getDensity();
+    }
+  }
+
+  getDensity() {    
     if (this.gasDensityForm.controls.inputType.value === 'relativeHumidity') {
       this.calcDensityRelativeHumidity();
     } else if (this.gasDensityForm.controls.inputType.value === 'wetBulb') {
@@ -226,13 +237,6 @@ export class FsatFluidComponent implements OnInit {
   isWetBulbTempDifferent() {
     if (this.canCompare()) {
       return this.compareService.isWetBulbTempDifferent();
-    } else {
-      return false;
-    }
-  }
-  isSpecificHeatGasDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isSpecificHeatGasDifferent();
     } else {
       return false;
     }

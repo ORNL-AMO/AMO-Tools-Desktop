@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FSAT, FsatOutput, Modification } from '../../../shared/models/fans';
+import { FSAT, FsatOutput, Modification, FsatValid } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
@@ -24,20 +24,23 @@ export class FsatReportGraphsComponent implements OnInit {
     valuesAndLabels: Array<{value: number, label: string}>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
-    modification?: Modification
+    modification?: Modification,
+    valid: FsatValid
   }>;
 
   selectedBaselineData: {
     name: string,
     valuesAndLabels: Array<{value: number, label: string}>,
     barChartLabels: Array<string>,
-    barChartValues: Array<number>
+    barChartValues: Array<number>,
+    valid: FsatValid
   };
   selectedModificationData: {
     name: string,
     valuesAndLabels: Array<{value: number, label: string}>,
     barChartLabels: Array<string>,
-    barChartValues: Array<number>
+    barChartValues: Array<number>,
+    valid: FsatValid
   };
   barChartYAxisLabel: string;
   constructor(private convertUnitsService: ConvertUnitsService) { }
@@ -49,17 +52,17 @@ export class FsatReportGraphsComponent implements OnInit {
 
   setAllChartData() {
     this.allChartData = new Array();
-    this.addChartData(JSON.parse(JSON.stringify(this.fsat.outputs)), this.fsat.name);
+    this.addChartData(JSON.parse(JSON.stringify(this.fsat.outputs)), this.fsat.name, this.fsat.valid);
     this.selectedBaselineData = this.allChartData[0];
     if (this.fsat.modifications && this.fsat.modifications.length != 0) {
       this.fsat.modifications.forEach(modification => {
-        this.addChartData(JSON.parse(JSON.stringify(modification.fsat.outputs)), modification.fsat.name, modification);
+        this.addChartData(JSON.parse(JSON.stringify(modification.fsat.outputs)), modification.fsat.name, modification.fsat.valid, modification);
       });
       this.selectedModificationData = this.allChartData[1];
     }
   }
 
-  addChartData(results: FsatOutput, name: string, modification?: Modification) {
+  addChartData(results: FsatOutput, name: string, isValid: FsatValid, modification?: Modification) {
     let baselineChartData: FsatGraphData = this.getGraphData(results);
     let barChartLabels: Array<string> = ['Energy Input', 'Motor Losses', 'Drive Losses', 'Fan Losses', 'Useful Output'];
     let barChartValues: Array<number> = [baselineChartData.energyInput, baselineChartData.motorLoss, baselineChartData.driveLoss, baselineChartData.fanLoss, baselineChartData.usefulOutput];
@@ -85,7 +88,8 @@ export class FsatReportGraphsComponent implements OnInit {
       ],
       barChartLabels: barChartLabels,
       barChartValues: barChartValues,
-      modification: modification
+      modification: modification,
+      valid: isValid
     })
   }
 

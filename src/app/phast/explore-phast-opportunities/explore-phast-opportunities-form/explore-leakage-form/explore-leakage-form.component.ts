@@ -38,7 +38,6 @@ export class ExploreLeakageFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowLeakage = { hasOpportunity: false, display: 'Control and Optimize Furnace Pressure' }; 
         this.initData();
       }
     }
@@ -48,6 +47,7 @@ export class ExploreLeakageFormComponent implements OnInit {
     this.baselineWarnings = new Array<LeakageWarnings>();
     this.modificationWarnings = new Array<LeakageWarnings>();
     this.showPressure = new Array();
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowLeakage = { hasOpportunity: false, display: 'Control and Optimize Furnace Pressure' }; 
     
     let index: number = 0;
     this.phast.losses.leakageLosses.forEach(loss => {

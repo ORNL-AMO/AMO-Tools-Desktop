@@ -349,6 +349,7 @@ export class FanFieldDataComponent implements OnInit {
   //     return false;
   //   }
   // }
+  
   isSpecificHeatRatioDifferent() {
     if (this.canCompare()) {
       return this.compareService.isSpecificHeatRatioDifferent();

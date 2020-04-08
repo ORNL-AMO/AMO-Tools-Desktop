@@ -1,6 +1,7 @@
 import { OperatingHours, OperatingCosts } from "../operations";
 import { SSMTOutput } from "./steam-outputs";
 import { StackLossInput } from "./steam-inputs";
+import { SavingsOpportunity } from "../explore-opps";
 
 export interface SSMT {
     name?: string;
@@ -105,6 +106,16 @@ export interface GeneralSteamOperations {
 export interface Modification {
     ssmt?: SSMT;
     exploreOpportunities?: boolean;
+    exploreOppsShowOperationsData?: SavingsOpportunity,
+    exploreOppsShowUnitCosts?: SavingsOpportunity,
+    exploreOppsShowBoilerData?: SavingsOpportunity,
+    exploreOppsShowCondensateHandling?: SavingsOpportunity,
+    exploreOppsShowHeatLoss?: SavingsOpportunity,
+    exploreOppsShowSteamUsage?: SavingsOpportunity,
+    exploreOppsShowCondensingTurbine?: SavingsOpportunity,
+    exploreOppsShowHighToLowPressureTurbine?: SavingsOpportunity
+    exploreOppsShowHighToMediumPressureTurbine?: SavingsOpportunity
+    exploreOppsShowMediumToLowPressureTurbine?: SavingsOpportunity
 }
 
 export interface Notes {

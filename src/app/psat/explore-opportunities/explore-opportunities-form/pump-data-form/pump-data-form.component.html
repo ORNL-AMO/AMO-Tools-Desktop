@@ -80,7 +80,7 @@
       <label for="modificationMotorDrive" 
         class="mod-value-label">Modification Motor Drive</label>
       <select
-        class="form-control w-100"
+        class="form-control w-100 mod-max-width"
         name="modificationMotorDrive"
         id="modificationMotorDrive"
         (change)="setMotorDrive()"
@@ -107,7 +107,7 @@
         </span> 
         Drive Efficiency</label
       >
-      <div class="input-group">
+      <div class="input-group mod-max-width">
         <input
           type="number"
           name="modificationSpecifiedDriveEfficiency"
@@ -192,7 +192,7 @@
           Modification
         </span> Pump Type</label>
       <select
-        class="form-control w-100"
+        class="form-control w-75 ml-auto mr-auto"
         name="modificationPumpType"
         id="modificationPumpType"
         (change)="setPumpTypes()"
@@ -211,48 +211,43 @@
         invalid: modificationForm.controls.specifiedPumpEfficiency.invalid
       }"
     >
-    <div>
-      <label id="pumpTypeHelp" class="mod-value-label" for="modificationPumpSpecifiedEfficiency"
-      >
-      <span *ngIf="!isVFD">
-        Modification
-      </span> 
-      Pump Efficiency
-      <a
-      class="form-text small click-link"
-      id="pumpTypeHelp"
-      (click)="enablePumpType()"
-      *ngIf="modificationForm.controls.pumpType.value == 11"
-      >Optimize Pump</a
-      >
-      <a
-      class="form-text small click-link"
-      id="pumpTypeHelp"
-      (click)="disablePumpType()"
-      *ngIf="modificationForm.controls.pumpType.value != 11"
-      >Known Efficiency</a
-      >
-    </label>
-      <div
-      class="input-group"
-      *ngIf="modificationForm.controls.pumpType.value == 11"
-      >
-      <input
-      name="modificationPumpSpecifiedEfficiency"
-      type="number"
-      step="any"
-      id="modificationPumpSpecifiedEfficiency"
-      class="form-control"
-      (focus)="focusField('pumpSpecified')"
-      (input)="calculate()"
-      formControlName="specifiedPumpEfficiency"
-      />
-    <span class="input-group-addon units">%</span>
-  </div>
-      <div
-      class="small text-center"
-      *ngIf="modificationForm.controls.pumpType.value != 11"
-      >
+    <div class="d-flex mod-max-width" [ngClass]="{'flex-wrap justify-content-center': modificationForm.controls.pumpType.value == 11}">
+      <div>
+        <label id="pumpTypeHelp" class="d-flex flex-column mod-eff-label" for="modificationPumpSpecifiedEfficiency">
+          <span *ngIf="!isVFD">
+            Modification
+          </span> 
+          Pump Efficiency
+          <a
+          class="form-text small click-link"
+          id="pumpTypeHelp"
+          (click)="enablePumpType()"
+          *ngIf="modificationForm.controls.pumpType.value == 11"
+          >Optimize Pump</a
+          >
+          <a
+          class="form-text small click-link"
+          id="pumpTypeHelp"
+          (click)="disablePumpType()"
+          *ngIf="modificationForm.controls.pumpType.value != 11"
+          >Known Efficiency</a
+          >
+        </label>
+      </div>
+    <div class="input-group mt-1 pl-1 pr-1" *ngIf="modificationForm.controls.pumpType.value == 11">
+        <input
+        name="modificationPumpSpecifiedEfficiency"
+        type="number"
+        step="any"
+        id="modificationPumpSpecifiedEfficiency"
+        class="form-control"
+        (focus)="focusField('pumpSpecified')"
+        (input)="calculate()"
+        formControlName="specifiedPumpEfficiency"
+        />
+        <span class="input-group-addon units">%</span>
+    </div>
+    <div class="small text-center pl-4 flex-shrink-0" *ngIf="modificationForm.controls.pumpType.value != 11">
       {{
         modificationForm.controls.specifiedPumpEfficiency.value
         | number: "1.0-2"

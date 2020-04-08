@@ -1,4 +1,5 @@
 import { OperatingHours } from "./operations";
+import { SavingsOpportunity } from "./explore-opps";
 
 export interface PSAT {
   inputs?: PsatInputs;
@@ -112,10 +113,6 @@ export interface Modification {
   exploreOppsShowHead?: SavingsOpportunity;
 }
 
-export interface SavingsOpportunity {
-  hasOpportunity: boolean,
-  display: string
-}
 
 export interface Notes {
   systemBasicsNotes?: string;

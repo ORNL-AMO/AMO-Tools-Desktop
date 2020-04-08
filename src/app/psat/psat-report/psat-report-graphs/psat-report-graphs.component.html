@@ -6,9 +6,13 @@
         <option *ngFor="let dataOption of allChartData" [ngValue]="dataOption">{{dataOption.name}}</option>
       </select>
     </div>
-    <div class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="'kW'">
+    <div *ngIf="selectedBaselineData.isValid" class="p-2 pie-chart-container">
+      <app-plotly-pie-chart [values]="selectedBaselineData.pieChartValues"
+        [labels]="selectedBaselineData.pieChartLabels" [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
+    </div>
+    <div *ngIf="!selectedBaselineData.isValid" class="alert-danger">
+      Invalid System Setup
     </div>
   </div>
   <div *ngIf="selectedModificationData" class="d-flex w-50 flex-column">
@@ -18,12 +22,17 @@
         <option *ngFor="let dataOption of allChartData" [ngValue]="dataOption">{{dataOption.name}}</option>
       </select>
     </div>
-    <div class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="'kW'">
+    <div *ngIf="selectedModificationData.isValid" class="p-2 pie-chart-container">
+      <app-plotly-pie-chart [values]="selectedModificationData.pieChartValues"
+        [labels]="selectedModificationData.pieChartLabels" [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
     </div>
+
+    <div *ngIf="!selectedModificationData.isValid" class="alert-danger">
+      Invalid System Setup
+    </div>
   </div>
-  <div *ngIf="selectedModificationData" class="w-100">
+  <div *ngIf="selectedModificationData && selectedModificationData.isValid" class="w-100">
     <app-plotly-bar-chart [barChartDataArray]="[selectedBaselineData, selectedModificationData]"
       [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="'kW'" [hoverLabel]="'Power'">
     </app-plotly-bar-chart>

@@ -47,8 +47,6 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
       }
     }
     if (changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()) {
-      this.showOperation = false;
-      this.showCondenserPressure = false;
       this.initForm();
     }
   }
@@ -89,6 +87,8 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   initCondenserPressure() {
     if (this.baselineForm.controls.condenserPressure.value !== this.modificationForm.controls.condenserPressure.value) {
       this.showCondenserPressure = true;
+    } else {
+      this.showCondenserPressure = false;
     }
   }
 
@@ -96,6 +96,8 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
     if (this.baselineForm.controls.operationType.value !== this.modificationForm.controls.operationType.value ||
       this.baselineForm.controls.operationValue.value !== this.modificationForm.controls.operationValue.value) {
       this.showOperation = true;
+    } else {
+      this.showOperation = false;
     }
   }
 

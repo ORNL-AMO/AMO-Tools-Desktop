@@ -100,7 +100,7 @@ export class FsatWarningService {
         if (settings.fanPowerMeasurement === 'hp') {
           val = this.convertUnitsService.value(tmpVal).from(settings.fanPowerMeasurement).to('kW');
           if (isModification) {
-            let isModValid: boolean = this.fsatService.checkValid(fsat, isModification);
+            let isModValid: boolean = this.fsatService.checkValid(fsat, isModification).isValid;
             if (isModValid) {
               let fsatInput: FsatInput = this.fsatService.getInput(fsat, settings);
               let fsatOutput: FsatOutput = this.fsatService.fanResultsModified(fsatInput);
@@ -116,7 +116,7 @@ export class FsatWarningService {
         } else {
           val = tmpVal;
           if (isModification) {
-            let isModValid: boolean = this.fsatService.checkValid(fsat, isModification);
+            let isModValid: boolean = this.fsatService.checkValid(fsat, isModification).isValid;
             if (isModValid) {
               let fsatInput: FsatInput = this.fsatService.getInput(fsat, settings);
               let fsatOutput: FsatOutput = this.fsatService.fanResultsModified(fsatInput);

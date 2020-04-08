@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor } from '../shared/models/fans';
+import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
@@ -137,7 +137,8 @@ export class FsatService {
 
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
-    if (this.checkValid(fsat, isBaseline)) {
+    let fsatValid: FsatValid = this.checkValid(fsat, isBaseline)
+    if (fsatValid.isValid) {
       if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
         fsat.fieldData.operatingHours = fsat.fieldData.operatingFraction * 8760;
       }
@@ -200,12 +201,19 @@ export class FsatService {
     return tmpSavingsPercent;
   }
 
-  checkValid(fsat: FSAT, isBaseline: boolean): boolean {
+  checkValid(fsat: FSAT, isBaseline: boolean): FsatValid {
     let fsatFluidValid: boolean = this.checkFsatFluidValid(fsat);
     let fieldDataValid: boolean = this.checkFieldDataValid(fsat);
     let fanSetupValid: boolean = this.checkFanSetupValid(fsat, isBaseline);
     let fanMotorValid: boolean = this.checkFanMotorValid(fsat);
-    return (fieldDataValid && fanSetupValid && fanMotorValid && fsatFluidValid);
+    return {
+      isValid: fieldDataValid && fanSetupValid && fanMotorValid && fsatFluidValid,
+      fluidValid: fsatFluidValid,
+      fanValid: fanSetupValid,
+      motorValid: fanMotorValid,
+      fieldDataValid: fieldDataValid
+
+    };
   }
 
   checkFieldDataValid(fsat: FSAT): boolean {
