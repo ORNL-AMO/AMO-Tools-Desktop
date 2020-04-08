@@ -34,7 +34,6 @@ export class ExploreWallFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowWall = { hasOpportunity: false, display: 'Add / Improve Wall Insulation' };
         this.initData();
       }
     }
@@ -44,6 +43,7 @@ export class ExploreWallFormComponent implements OnInit {
     this.showSurfaceTemp = new Array();
     this.baselineWarnings = new Array<WallLossWarnings>();
     this.modificationWarnings = new Array<WallLossWarnings>();
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowWall = { hasOpportunity: false, display: 'Add / Improve Wall Insulation' };
     
     let index: number = 0;
     this.phast.losses.wallLosses.forEach(loss => {
