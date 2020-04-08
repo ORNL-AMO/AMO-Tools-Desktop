@@ -20,14 +20,23 @@
       </select>
     </div>
     <div class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [values]="selectedModificationData.pieChartValues"
-        [labels]="selectedModificationData.pieChartLabels" [valuesUnit]="'kW'">
+      <app-plotly-pie-chart *ngIf="selectedModificationData.valid.isValid"
+        [values]="selectedModificationData.pieChartValues" [labels]="selectedModificationData.pieChartLabels"
+        [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
+      <div class="alert-danger small" *ngIf="!selectedModificationData.valid.isValid">
+        Invalid modification<br>
+        <span *ngIf="!selectedModificationData.valid.fluidValid">Errors found in Fluid<br></span>
+        <span *ngIf="!selectedModificationData.valid.fieldDataValid">Errors found in Field Data<br></span>
+        <span *ngIf="!selectedModificationData.valid.fanValid">Errors found in Fan Setup<br></span>
+        <span *ngIf="!selectedModificationData.valid.motorValid">Errors found in Motor<br></span>
+      </div>
     </div>
   </div>
   <div *ngIf="selectedModificationData" class="w-100">
-    <app-plotly-bar-chart [barChartDataArray]="[selectedBaselineData, selectedModificationData]"
-      [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="'kW'">
+    <app-plotly-bar-chart *ngIf="selectedModificationData.valid.isValid"
+      [barChartDataArray]="[selectedBaselineData, selectedModificationData]" [yAxisLabel]="barChartYAxisLabel"
+      [yValueUnit]="'kW'">
     </app-plotly-bar-chart>
   </div>
 </div>

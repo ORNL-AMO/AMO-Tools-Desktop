@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { FSAT } from '../../shared/models/fans';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
@@ -59,7 +59,7 @@ export class FsatSankeyComponent implements OnInit {
   fanLosses: number;
   usefulOutput: number;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private fsatService: FsatService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private fsatService: FsatService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
 
@@ -77,10 +77,10 @@ export class FsatSankeyComponent implements OnInit {
     this.location = this.location.replace(/[\])}[{(]/g, '');
     this.location = this.location.replace(/#/g, "");
 
+    this.getResults();
   }
 
   ngAfterViewInit() {
-    this.getResults();
     this.sankey();
   }
 
@@ -113,7 +113,7 @@ export class FsatSankeyComponent implements OnInit {
 
   getResults() {
     let energyInput: number, motorLoss: number, driveLoss: number, fanLoss: number, usefulOutput: number;
-  //  let motorShaftPower: number, fanShaftPower: number;
+    //  let motorShaftPower: number, fanShaftPower: number;
     let isBaseline: boolean;
 
     if (this.fsat.name === undefined || this.fsat.name === null || this.fsat.name === 'Baseline') {
@@ -123,11 +123,11 @@ export class FsatSankeyComponent implements OnInit {
       isBaseline = true;
     }
 
+    this.fsat.valid = this.fsatService.checkValid(this.fsat, isBaseline);
+    this.cd.detectChanges();
     let tmpOutput = this.fsatService.getResults(this.fsat, isBaseline, this.settings);
 
     if (this.settings.fanPowerMeasurement === 'hp') {
-      // motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
-      // fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
       energyInput = tmpOutput.motorPower;
       motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
       driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');
@@ -135,8 +135,6 @@ export class FsatSankeyComponent implements OnInit {
       usefulOutput = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (tmpOutput.fanEfficiency / 100);
     }
     else {
-      // motorShaftPower = tmpOutput.motorShaftPower;
-      // fanShaftPower = tmpOutput.fanShaftPower;
       energyInput = tmpOutput.motorPower;
       motorLoss = tmpOutput.motorPower - tmpOutput.motorShaftPower;
       driveLoss = tmpOutput.motorShaftPower - tmpOutput.fanShaftPower;
@@ -161,9 +159,12 @@ export class FsatSankeyComponent implements OnInit {
     if (this.usefulOutput === undefined || this.energyInput === null) {
       return;
     }
-
-    d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
-
+    if (this.ngChart) {
+      d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
+    }
+    if (!this.fsat.valid.isValid) {
+      return;
+    }
     if (this.location === 'explore-opportunities-sankey') {
       labelFontSize = 8,
         labelPadding = 10,

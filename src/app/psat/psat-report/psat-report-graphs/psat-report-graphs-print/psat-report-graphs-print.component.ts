@@ -23,7 +23,8 @@ export class PsatReportGraphsPrintComponent implements OnInit {
     pieChartValues: Array<number>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
-    modification?: Modification
+    modification?: Modification,
+    isValid: boolean
   }>;
 
   scenarioSummaries: Array<ScenarioSummary>;
@@ -62,7 +63,8 @@ export class PsatReportGraphsPrintComponent implements OnInit {
     pieChartValues: Array<number>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
-    modification?: Modification
+    modification?: Modification,
+    isValid: boolean
   }): ScenarioSummary {
     let notes: Array<string> = this.getModificationNotes(chartDataObj.modification);
     let baselineGraphData = this.baselineGraphData();
