@@ -11,10 +11,10 @@ export class VisualizeComponent implements OnInit {
   constructor(private visualizeService: VisualizeService) { }
 
   ngOnInit() {
-    if(this.visualizeService.visualizeDataInitialized == false){
-      this.visualizeService.addNewGraphDataObj();
-      this.visualizeService.visualizeDataInitialized = true;
-    }
+    // if(this.visualizeService.visualizeDataInitialized == false){
+    //   this.visualizeService.addNewGraphDataObj();
+    //   this.visualizeService.visualizeDataInitialized = true;
+    // }
   }
 
 }

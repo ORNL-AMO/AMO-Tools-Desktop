@@ -50,3 +50,10 @@ a.list-group-item.active:hover{
 .btn-group .btn{
     border-radius: 0px;
 }
+
+
+.sidebar{
+    height: 100%;
+    background: white;
+    padding: .5rem;
+}

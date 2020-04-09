@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { LogToolService } from '../log-tool.service';
 import { LogToolDataService } from '../log-tool-data.service';
 import * as _ from 'lodash';
-import { GraphDataObj, LogToolField } from '../log-tool-models';
+import { GraphDataObj, LogToolField, GraphObj } from '../log-tool-models';
 
 @Injectable()
 export class VisualizeService {
@@ -12,10 +12,87 @@ export class VisualizeService {
   graphData: BehaviorSubject<Array<GraphDataObj>>;
   selectedGraphData: BehaviorSubject<GraphDataObj>;
   visualizeDataInitialized: boolean = false;
+
+  selectedGraphObj: BehaviorSubject<GraphObj>;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
     this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
     this.graphData = new BehaviorSubject(new Array());
+    let initGraphObj = this.initGraphObj();
+    console.log(initGraphObj);
+    this.selectedGraphObj = new BehaviorSubject<GraphObj>(initGraphObj);
   }
+
+
+  initGraphObj(): GraphObj {
+    return {
+      name: 'Graph',
+      data: [{
+        x: [],
+        y: [],
+        name: '',
+        type: 'scattergl',
+        mode: 'markers',
+        yaxis: undefined
+      }],
+      layout: {
+        xaxis: {
+          autorange: true,
+          type: undefined,
+          title: {
+            text: undefined
+          },
+          side: undefined,
+          overlaying: undefined,
+          titlefont: {
+            color: undefined
+          },
+          tickfont: {
+            color: undefined
+          }
+        },
+        yaxis: {
+          autorange: true,
+          type: undefined,
+          title: {
+            text: undefined
+          },
+          side: undefined,
+          overlaying: undefined,
+          titlefont: {
+            color: undefined
+          },
+          tickfont: {
+            color: undefined
+          }
+        },
+        yaxis2: {
+          autorange: true,
+          type: undefined,
+          title: {
+            text: undefined
+          },
+          side: undefined,
+          overlaying: undefined,
+          titlefont: {
+            color: undefined
+          },
+          tickfont: {
+            color: undefined
+          }
+        },
+        margin: {
+          t: 50,
+          b: 50,
+          l: 50,
+          r: 50
+        }
+      },
+      isTimeSeries: false,
+      selectedXAxisDataOption: { dataField: undefined, data: [] },
+      selectedYAxisDataOption: { dataField: undefined, data: [] }
+    }
+  }
+
 
   resetData() {
     this.graphData.next(new Array());

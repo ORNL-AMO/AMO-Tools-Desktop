@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
-import { GraphDataObj, LogToolField } from '../../log-tool-models';
+import { GraphDataObj, LogToolField, GraphObj } from '../../log-tool-models';
+import { measurementOptions } from '../../system-setup/clean-data/field-units-modal/field-unit-options';
 
 @Component({
   selector: 'app-visualize-menu',
@@ -12,7 +13,7 @@ import { GraphDataObj, LogToolField } from '../../log-tool-models';
 export class VisualizeMenuComponent implements OnInit {
 
   graphDataSubscription: Subscription;
-  graphData: Array<GraphDataObj>;
+  // graphData: Array<GraphDataObj>;
   selectedGraphDataSub: Subscription;
   selectedGraphData: GraphDataObj;
   xDataFieldDropdown: boolean = false;
@@ -21,25 +22,77 @@ export class VisualizeMenuComponent implements OnInit {
   histogramDataFieldDropdown: boolean = false;
   dataFields: Array<LogToolField>;
 
-  graphTypes: Array<{ label: string, value: string }> = [{ value: 'scattergl', label: 'Scatter Plot' }, { value: 'bar', label: 'Histogram' }]
+  graphTypes: Array<{ label: string, value: string }> = [
+    { value: 'scattergl', label: 'Scatter Plot' },
+    { value: 'bar', label: 'Histogram' }
+  ]
   showScatterLines: boolean = false;
   showScatterMarkers: boolean = true;
+  measurementOptions: Array<{ measure: string, display: string }>;
+  unitOptions: Array<{ unit: any, display: string, displayUnit: string }>;
+  selectedGraphObj: GraphObj;
+
+  xAxisDataOptions: Array<{
+    dataField: LogToolField,
+    data: Array<number | string>
+  }>;
+  yAxisDataOptions: Array<{
+    dataField: LogToolField,
+    data: Array<number>
+  }>
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
 
   ngOnInit() {
-    this.dataFields = this.logToolDataService.getDataFieldOptionsWithDate();
-    this.graphDataSubscription = this.visualizeService.graphData.subscribe(graphData => {
-      this.graphData = graphData;
-    });
-    this.selectedGraphDataSub = this.visualizeService.selectedGraphData.subscribe(selectedGraphData => {
-      this.selectedGraphData = selectedGraphData;
-    });
+    this.measurementOptions = measurementOptions;
+    this.unitOptions = new Array();
+    this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
+    console.log(this.selectedGraphObj);
+    this.setXAxisDataOptions();
+    this.setYAxisDataOptions();
   }
 
   ngOnDestroy() {
-    this.selectedGraphDataSub.unsubscribe()
-    this.graphDataSubscription.unsubscribe();
+    // this.selectedGraphDataSub.unsubscribe()
+    // this.graphDataSubscription.unsubscribe();
+  }
+
+  setXAxisDataOptions() {
+    let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptionsWithDate();
+    this.xAxisDataOptions = new Array();
+    dataFields.forEach(field => {
+      let data = this.logToolDataService.getAllFieldData(field.fieldName);
+      this.xAxisDataOptions.push({
+        data: data,
+        dataField: field
+      })
+    });
+    this.selectedGraphObj.selectedXAxisDataOption = this.xAxisDataOptions[0];
+    this.setXAxisDataOption();
+  }
+
+  setXAxisDataOption() {
+    this.selectedGraphObj.data[0].x = this.selectedGraphObj.selectedXAxisDataOption.data;
+    this.saveChanges();
+  }
+
+  setYAxisDataOptions() {
+    let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
+    this.yAxisDataOptions = new Array();
+    dataFields.forEach(field => {
+      let data = this.logToolDataService.getAllFieldData(field.fieldName);
+      this.yAxisDataOptions.push({
+        data: data,
+        dataField: field
+      })
+    });
+    this.selectedGraphObj.selectedYAxisDataOption = this.yAxisDataOptions[0];
+    this.setYAxisDataOption();
+  }
+
+  setYAxisDataOption() {
+    this.selectedGraphObj.data[0].y = this.selectedGraphObj.selectedYAxisDataOption.data;
+    this.saveChanges();
   }
 
   toggleXDataFieldDropdown() {
@@ -60,9 +113,16 @@ export class VisualizeMenuComponent implements OnInit {
     this.yDataFieldDropdown = false;
   }
 
-  setGraphType(newGraphType: { label: string, value: string }) {
-    this.visualizeService.updateGraphType(newGraphType);
-    this.graphTypeDropdown = false;
+  // setGraphType(newGraphType: { label: string, value: string }) {
+  //   this.visualizeService.updateGraphType(newGraphType);
+  //   this.graphTypeDropdown = false;
+  // }
+
+  setTimeSeries() {
+    if (this.selectedGraphObj.isTimeSeries) {
+      //set x axis to time
+    }
+    this.saveChanges();
   }
 
   toggleGraphType() {
@@ -102,5 +162,9 @@ export class VisualizeMenuComponent implements OnInit {
   setHistogramDataField(dataField: LogToolField) {
     this.visualizeService.updateSelectedHistogramDataField(dataField);
     this.histogramDataFieldDropdown = false;
+  }
+
+  saveChanges() {
+    this.visualizeService.selectedGraphObj.next(this.selectedGraphObj);
   }
 }

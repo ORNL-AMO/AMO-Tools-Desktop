@@ -1,4 +1,4 @@
-<nav class="navbar no-gutters" #navbar>
+<!-- <nav class="navbar no-gutters" #navbar>
     <div class="col-3">
         <div class="form-group">
             <input class="form-control w-100" type="text" name="graphName" [(ngModel)]="selectedGraphData.graphName">
@@ -77,4 +77,90 @@
             </div>
         </div>
     </div>
-</nav>
+</nav> -->
+
+<div class="sidebar">
+    <form class="h-100">
+        <div class="group-label">Graph Basics</div>
+        <div class="form-group">
+            <input class="form-control w-100" type="text" name="graphName" [(ngModel)]="selectedGraphObj.name"
+                (input)="saveChanges()">
+        </div>
+        <div class="form-group pt-2">
+            <!-- <label>Graph Type</label> -->
+            <select class="form-control w-100" name="graphType" [(ngModel)]="selectedGraphObj.data[0].type"
+                (change)="saveChanges()">
+                <option *ngFor="let graphType of graphTypes" [ngValue]="graphType.value">{{graphType.label}}</option>
+            </select>
+        </div>
+        <div class="form-group pt-2" *ngIf="selectedGraphObj.data[0].type == 'scattergl'">
+            <label>
+                <input type="checkbox" [(ngModel)]="selectedGraphObj.isTimeSeries" name="isTimeSeries"
+                    (change)="setTimeSeries()" />
+                <a>Time Series</a>
+            </label>
+        </div>
+        <hr>
+        <div class="group-label">X-Axis</div>
+        <div class="form-group">
+            <label>Data</label>
+            <select class="form-control" name="xDatafield" [(ngModel)]="selectedGraphObj.selectedXAxisDataOption"
+                (change)="setXAxisDataOption()" [disabled]="selectedGraphObj.isTimeSeries">
+                <option *ngFor="let xAxisDataOption of xAxisDataOptions" [ngValue]="xAxisDataOption">
+                    {{xAxisDataOption.dataField.alias}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Label</label>
+            <input class="form-control" type="text" name="xAxisLabel"
+                [(ngModel)]="selectedGraphObj.layout.xaxis.title.text" (input)="saveChanges()">
+        </div>
+        <div class="form-group" *ngIf="!selectedGraphObj.isTimeSeries">
+            <label>Measurement</label>
+            <select class="form-control" id="type" [(ngModel)]="selectedXMeasure" (change)="setUnitOptions()"
+                name="selectedXMeasure">
+                <option *ngFor="let option of measurementOptions" [ngValue]="option.measure">
+                    {{option.display}}</option>
+            </select>
+        </div>
+        <div class="form-group" *ngIf="!selectedGraphObj.isTimeSeries">
+            <label>Unit</label>
+            <select class="form-control" id="xUnit" [(ngModel)]="xUnit" name="xUnit" (change)="saveChanges()">
+                <option *ngFor="let unitOption of unitOptions" [value]="unitOption.unit">{{unitOption.display}}
+                    <span [innerHTML]="unitOption.displayUnit"></span>
+                </option>
+            </select>
+        </div>
+        <hr>
+        <div class="group-label">Y-Axis</div>
+        <div class="form-group">
+            <label>Data</label>
+            <select class="form-control" name="yDatafield" [(ngModel)]="selectedGraphObj.selectedYAxisDataOption"
+                (change)="setYAxisDataOption()">
+                <option *ngFor="let yAxisDataOption of yAxisDataOptions" [ngValue]="yAxisDataOption">
+                    {{yAxisDataOption.dataField.alias}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Label</label>
+            <input class="form-control" type="text" name="yAxisLabel"
+                [(ngModel)]="selectedGraphObj.layout.yaxis.title.text" (input)="saveChanges()">
+        </div>
+        <div class="form-group">
+            <label>Measurement</label>
+            <select class="form-control" id="type" [(ngModel)]="selectedYMeasure" (change)="setUnitOptions()"
+                name="selectedYMeasure" (change)="saveChanges()">
+                <option *ngFor="let option of measurementOptions" [ngValue]="option.measure">
+                    {{option.display}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Unit</label>
+            <select class="form-control" id="yUnit" [(ngModel)]="yUnit" name="yUnit" (change)="saveChanges()">
+                <option *ngFor="let unitOption of unitOptions" [value]="unitOption.unit">{{unitOption.display}}
+                    <span [innerHTML]="unitOption.displayUnit"></span>
+                </option>
+            </select>
+        </div>
+    </form>
+</div>

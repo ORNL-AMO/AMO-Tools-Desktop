@@ -87,3 +87,45 @@ export interface DayTypeGraphItem {
     date?: Date,
     dayType?: DayType
 }
+
+export interface GraphObj {
+    name: string,
+    data: [{
+        x: Array<number | string>,
+        y: Array<number>,
+        name: string,
+        type: string,
+        mode: string,
+        yaxis: string
+    }],
+    layout: {
+        xaxis: AxisObj,
+        yaxis: AxisObj,
+        yaxis2: AxisObj,
+        margin: {
+            t: number,
+            b: number,
+            l: number,
+            r: number
+        }
+    },
+    isTimeSeries: boolean,
+    selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
+    selectedYAxisDataOption: { dataField: LogToolField, data: Array<number> }
+}
+
+export interface AxisObj {
+    autorange: boolean,
+    type: string,
+    title: {
+        text: string
+    },
+    side: string,
+    overlaying: string,
+    titlefont: {
+        color: string
+    },
+    tickfont: {
+        color: string
+    }
+}
