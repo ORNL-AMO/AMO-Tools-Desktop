@@ -87,7 +87,7 @@
         </div>
     </form>
 </li>
-<li *ngIf="showPressure && !isVFD" class="explore-opps-item">
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowReducePressure.hasOpportunity && !isVFD" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup"
             [ngClass]="{'error': baselineWarnings.outletPressureError !== null, 'invalid': baselineForm.controls.outletPressure.invalid}">
@@ -182,7 +182,7 @@
         </div>
     </form>
 </li>
-<li *ngIf="showSystemData" class="explore-opps-item">
+<li *ngIf="fsat.modifications[exploreModIndex].exploreOppsShowOpData.hasOpportunity" class="explore-opps-item">
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
             <label for="baselineOperatingHours" class="baseline-value-label">Baseline Operating Hours</label>
