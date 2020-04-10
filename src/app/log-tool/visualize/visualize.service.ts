@@ -32,9 +32,15 @@ export class VisualizeService {
         name: '',
         type: 'scattergl',
         mode: 'markers',
-        yaxis: undefined
+        yaxis: undefined,
+        marker: {
+          color: undefined
+        }
       }],
       layout: {
+        title: {
+          text: ''
+        },
         xaxis: {
           autorange: true,
           type: undefined,
@@ -71,8 +77,8 @@ export class VisualizeService {
           title: {
             text: undefined
           },
-          side: undefined,
-          overlaying: undefined,
+          side: 'right',
+          overlaying: 'y',
           titlefont: {
             color: undefined
           },
@@ -81,15 +87,16 @@ export class VisualizeService {
           }
         },
         margin: {
-          t: 50,
-          b: 50,
-          l: 50,
-          r: 50
+          t: 75,
+          b: 100,
+          l: 100,
+          r: 100
         }
       },
       isTimeSeries: false,
       selectedXAxisDataOption: { dataField: undefined, data: [] },
-      selectedYAxisDataOption: { dataField: undefined, data: [] }
+      selectedYAxisDataOptions: [{ dataField: undefined, data: [] }],
+      hasSecondYAxis: false
     }
   }
 

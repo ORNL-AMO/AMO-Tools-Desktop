@@ -57,3 +57,8 @@ a.list-group-item.active:hover{
     background: white;
     padding: .5rem;
 }
+
+.y-axis-data{
+    padding-top: 8px;
+    border-top: groove;
+}

@@ -129,15 +129,15 @@ export class LogToolDataService {
       }
     });
     //need to order data by date before returning
-    data = _.sortBy(data, (data) => {
-      let date: Date;
-      this.logToolService.dateFields.forEach(field => {
-        if (data[field]) {
-          date = new Date(data[field]);
-        }
-      })
-      return date;
-    }, ['desc']);
+    // data = _.sortBy(data, (data) => {
+    //   let date: Date;
+    //   this.logToolService.dateFields.forEach(field => {
+    //     if (data[field]) {
+    //       date = new Date(data[field]);
+    //     }
+    //   })
+    //   return date;
+    // }, ['desc']);
     return data;
   };
 }

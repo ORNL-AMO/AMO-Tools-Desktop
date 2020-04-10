@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { GraphDataObj, LogToolField, GraphObj } from '../../log-tool-models';
 import { measurementOptions } from '../../system-setup/clean-data/field-units-modal/field-unit-options';
+import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 
 @Component({
   selector: 'app-visualize-menu',
@@ -12,22 +13,10 @@ import { measurementOptions } from '../../system-setup/clean-data/field-units-mo
 })
 export class VisualizeMenuComponent implements OnInit {
 
-  graphDataSubscription: Subscription;
-  // graphData: Array<GraphDataObj>;
-  selectedGraphDataSub: Subscription;
-  selectedGraphData: GraphDataObj;
-  xDataFieldDropdown: boolean = false;
-  yDataFieldDropdown: boolean = false;
-  graphTypeDropdown: boolean = false;
-  histogramDataFieldDropdown: boolean = false;
-  dataFields: Array<LogToolField>;
-
   graphTypes: Array<{ label: string, value: string }> = [
     { value: 'scattergl', label: 'Scatter Plot' },
     { value: 'bar', label: 'Histogram' }
   ]
-  showScatterLines: boolean = false;
-  showScatterMarkers: boolean = true;
   measurementOptions: Array<{ measure: string, display: string }>;
   unitOptions: Array<{ unit: any, display: string, displayUnit: string }>;
   selectedGraphObj: GraphObj;
@@ -40,6 +29,19 @@ export class VisualizeMenuComponent implements OnInit {
     dataField: LogToolField,
     data: Array<number>
   }>
+
+  selectedYAxisDataOptions: Array<{
+    index: number,
+    dataOption: {
+      dataField: LogToolField,
+      data: Array<number>
+    },
+    seriesColor: string,
+    seriesName: string,
+    yaxis: string
+  }>
+
+  yAxisOptions: Array<{ axis: string, label: string }> = [{ axis: 'y', label: 'Left' }, { axis: 'y2', label: 'Right' }];
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
 
@@ -47,14 +49,12 @@ export class VisualizeMenuComponent implements OnInit {
     this.measurementOptions = measurementOptions;
     this.unitOptions = new Array();
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
-    console.log(this.selectedGraphObj);
+    // console.time('set x axis')
     this.setXAxisDataOptions();
+    // console.timeEnd('set x axis')
+    // console.time('set y axis');
     this.setYAxisDataOptions();
-  }
-
-  ngOnDestroy() {
-    // this.selectedGraphDataSub.unsubscribe()
-    // this.graphDataSubscription.unsubscribe();
+    // console.timeEnd('set y axis');
   }
 
   setXAxisDataOptions() {
@@ -86,37 +86,21 @@ export class VisualizeMenuComponent implements OnInit {
         dataField: field
       })
     });
-    this.selectedGraphObj.selectedYAxisDataOption = this.yAxisDataOptions[0];
-    this.setYAxisDataOption();
+    this.selectedYAxisDataOptions = [{ index: 0, dataOption: this.yAxisDataOptions[0], seriesColor: graphColors[0], seriesName: 'Series 1', yaxis: 'y' }];
+    this.setYAxisData();
   }
 
-  setYAxisDataOption() {
-    this.selectedGraphObj.data[0].y = this.selectedGraphObj.selectedYAxisDataOption.data;
+  setYAxisData() {
+    let index: number = 0;
+    this.selectedYAxisDataOptions.forEach(selectedDataOption => {
+      this.selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
+      this.selectedGraphObj.data[index].name = selectedDataOption.seriesName;
+      this.selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
+      this.selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis
+      index++;
+    })
     this.saveChanges();
   }
-
-  toggleXDataFieldDropdown() {
-    this.xDataFieldDropdown = !this.xDataFieldDropdown;
-  }
-
-  toggleYDataFieldDropdown() {
-    this.yDataFieldDropdown = !this.yDataFieldDropdown;
-  }
-
-  setXDataField(dataField: LogToolField) {
-    this.visualizeService.updateSelectedXDataField(dataField);
-    this.xDataFieldDropdown = false;
-  }
-
-  setYDataField(dataField: LogToolField) {
-    this.visualizeService.updateSelectedYDataField(dataField);
-    this.yDataFieldDropdown = false;
-  }
-
-  // setGraphType(newGraphType: { label: string, value: string }) {
-  //   this.visualizeService.updateGraphType(newGraphType);
-  //   this.graphTypeDropdown = false;
-  // }
 
   setTimeSeries() {
     if (this.selectedGraphObj.isTimeSeries) {
@@ -125,46 +109,24 @@ export class VisualizeMenuComponent implements OnInit {
     this.saveChanges();
   }
 
-  toggleGraphType() {
-    this.graphTypeDropdown = !this.graphTypeDropdown;
-  }
-
-  setUseStandardDeviation() {
-    if (this.selectedGraphData.useStandardDeviation == false) {
-      this.visualizeService.updateUseStandardDeviation(true);
-    }
-  }
-
-  setUseBins() {
-    if (this.selectedGraphData.useStandardDeviation == true) {
-      this.visualizeService.updateUseStandardDeviation(false);
-    }
-  }
-
-  decreaseNumberOfBins() {
-    this.selectedGraphData.numberOfBins--;
-    this.updateNumberOfBins();
-  }
-
-  increaseNumberOfBins() {
-    this.selectedGraphData.numberOfBins++;
-    this.updateNumberOfBins();
-  }
-
-  updateNumberOfBins() {
-    this.visualizeService.updateNumberOfBins(this.selectedGraphData.numberOfBins);
-  }
-
-  toggleHistogramDataFieldDropdown() {
-    this.histogramDataFieldDropdown = !this.histogramDataFieldDropdown;
-  }
-
-  setHistogramDataField(dataField: LogToolField) {
-    this.visualizeService.updateSelectedHistogramDataField(dataField);
-    this.histogramDataFieldDropdown = false;
-  }
-
   saveChanges() {
     this.visualizeService.selectedGraphObj.next(this.selectedGraphObj);
+  }
+
+  addData() {
+    this.selectedYAxisDataOptions.push({
+      index: this.selectedYAxisDataOptions.length,
+      dataOption: JSON.parse(JSON.stringify(this.selectedYAxisDataOptions[0].dataOption)),
+      seriesName: 'Series ' + (this.selectedYAxisDataOptions.length + 1),
+      seriesColor: graphColors[this.selectedYAxisDataOptions.length],
+      yaxis: 'y'
+    });
+    this.selectedGraphObj.selectedYAxisDataOptions.push(JSON.parse(JSON.stringify(this.selectedGraphObj.selectedYAxisDataOptions[0])));
+    this.selectedGraphObj.data.push(JSON.parse(JSON.stringify(this.selectedGraphObj.data[0])));
+    this.setYAxisData();
+  }
+
+  addAxis() {
+    this.selectedGraphObj.hasSecondYAxis = true;
   }
 }

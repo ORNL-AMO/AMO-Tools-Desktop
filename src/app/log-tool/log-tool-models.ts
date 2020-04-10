@@ -96,9 +96,15 @@ export interface GraphObj {
         name: string,
         type: string,
         mode: string,
-        yaxis: string
+        yaxis: string,
+        marker: {
+            color: string
+        },
     }],
     layout: {
+        title: {
+            text: string
+        },
         xaxis: AxisObj,
         yaxis: AxisObj,
         yaxis2: AxisObj,
@@ -111,7 +117,8 @@ export interface GraphObj {
     },
     isTimeSeries: boolean,
     selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
-    selectedYAxisDataOption: { dataField: LogToolField, data: Array<number> }
+    selectedYAxisDataOptions: Array<{ dataField: LogToolField, data: Array<number> }>,
+    hasSecondYAxis: boolean
 }
 
 export interface AxisObj {
