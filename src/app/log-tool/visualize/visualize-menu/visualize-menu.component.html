@@ -20,15 +20,15 @@
             </label>
         </div>
         <div class="btn-group pt-2 small w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
-            <button type="button" class="btn btn-secondary w-50" (click)="setHistogramMethod('stdDeviation')"
-                [ngClass]="{'active': histogramMethod == 'stdDeviation'}">Std. Deviation</button>
-            <button type="button" class="btn btn-secondary w-50" (click)="setHistogramMethod('bins')"
-                [ngClass]="{'active': histogramMethod == 'bins'}">Bins</button>
+            <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(true)"
+                [ngClass]="{'active': selectedGraphObj.useStandardDeviation == true}">Std. Deviation</button>
+            <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(false)"
+                [ngClass]="{'active': selectedGraphObj.useStandardDeviation == false}">Bins</button>
         </div>
-        <div class="form-group pt-2" *ngIf="selectedGraphObj.data[0].type == 'bar' && histogramMethod == 'bins'">
+        <div class="form-group pt-2" *ngIf="selectedGraphObj.data[0].type == 'bar' && !selectedGraphObj.useStandardDeviation">
             <label>Number of Bins</label>
-            <input class="form-control" type="number" name="xAxisLabel" [(ngModel)]="numberOfBins"
-                (input)="saveChanges()">
+            <input class="form-control" type="number" name="numberOfBins" [(ngModel)]="selectedGraphObj.numberOfBins"
+                (input)="setBarHistogramData()">
         </div>
         <hr>
         <div class="group-label">X-Axis</div>

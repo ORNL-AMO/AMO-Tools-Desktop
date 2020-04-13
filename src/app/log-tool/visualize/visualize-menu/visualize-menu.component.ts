@@ -17,10 +17,8 @@ export class VisualizeMenuComponent implements OnInit {
     { value: 'scattergl', label: 'Scatter Plot' },
     { value: 'bar', label: 'Histogram' }
   ]
-  measurementOptions: Array<{ measure: string, display: string }>;
-  unitOptions: Array<{ unit: any, display: string, displayUnit: string }>;
-  selectedGraphObj: GraphObj;
 
+  selectedGraphObj: GraphObj;
   xAxisDataOptions: Array<{
     dataField: LogToolField,
     data: Array<number | string>
@@ -47,20 +45,33 @@ export class VisualizeMenuComponent implements OnInit {
 
 
   ngOnInit() {
-    this.measurementOptions = measurementOptions;
-    this.unitOptions = new Array();
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
-    // console.time('set x axis')
-    this.setXAxisDataOptions('scattergl');
-    // console.timeEnd('set x axis')
-    // console.time('set y axis');
-    this.setYAxisDataOptions();
-    // console.timeEnd('set y axis');
+    this.setGraphType();
   }
 
-  setXAxisDataOptions(graphType: string) {
+  setGraphType() {
+    if (this.selectedGraphObj.data[0].type == 'scattergl') {
+      this.setXAxisDataOptions();
+      this.selectedGraphObj.selectedXAxisDataOption = this.xAxisDataOptions[0];
+      this.setXAxisDataOption();
+
+      this.setYAxisDataOptions();
+      this.selectedYAxisDataOptions = [{ index: 0, dataOption: this.yAxisDataOptions[0], seriesColor: graphColors[0], seriesName: 'Series 1', yaxis: 'y' }];
+      this.setYAxisData();
+
+    } else if (this.selectedGraphObj.data[0].type == 'bar') {
+      this.selectedGraphObj.layout.xaxis.type = 'category';
+      this.selectedGraphObj.layout.yaxis.title.text = 'Number of Data Points';
+      //start with only one (purge additional data series) 
+      this.setXAxisDataOptions();
+      this.selectedGraphObj.selectedXAxisDataOption = this.xAxisDataOptions[0];
+      this.setBarHistogramData();
+    }
+  }
+
+  setXAxisDataOptions() {
     let dataFields: Array<LogToolField>;
-    if (graphType == 'bar') {
+    if (this.selectedGraphObj.data[0].type == 'bar') {
       //no date
       dataFields = this.logToolDataService.getDataFieldOptions();
     } else {
@@ -75,13 +86,20 @@ export class VisualizeMenuComponent implements OnInit {
         dataField: field
       })
     });
-    this.selectedGraphObj.selectedXAxisDataOption = this.xAxisDataOptions[0];
-    this.setXAxisDataOption();
   }
 
   setXAxisDataOption() {
-    this.selectedGraphObj.data[0].x = this.selectedGraphObj.selectedXAxisDataOption.data;
-    this.saveChanges();
+    if (this.selectedGraphObj.selectedXAxisDataOption.dataField.isDateField) {
+      this.selectedGraphObj.layout.xaxis.type = 'date';
+    } else {
+      this.selectedGraphObj.layout.xaxis.type = 'category';
+    }
+    if (this.selectedGraphObj.data[0].type == 'bar') {
+      this.setBarHistogramData();
+    } else {
+      this.selectedGraphObj.data[0].x = this.selectedGraphObj.selectedXAxisDataOption.data;
+      this.saveChanges();
+    }
   }
 
   setYAxisDataOptions() {
@@ -94,8 +112,6 @@ export class VisualizeMenuComponent implements OnInit {
         dataField: field
       })
     });
-    this.selectedYAxisDataOptions = [{ index: 0, dataOption: this.yAxisDataOptions[0], seriesColor: graphColors[0], seriesName: 'Series 1', yaxis: 'y' }];
-    this.setYAxisData();
   }
 
   setYAxisData() {
@@ -138,26 +154,26 @@ export class VisualizeMenuComponent implements OnInit {
     this.selectedGraphObj.hasSecondYAxis = true;
   }
 
-  setGraphType() {
-    if (this.selectedGraphObj.data[0].type == 'scattergl') {
 
-    } else if (this.selectedGraphObj.data[0].type == 'bar') {
-      let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
-      //get std deviation data for first field (non date)
-      let stdDeviationBarData = this.visualizeService.getStandardDevBarChartData(dataFields[0]);
+
+  setHistogramStdDeviation(bool: boolean) {
+    this.selectedGraphObj.useStandardDeviation = bool;
+    this.setBarHistogramData();
+  }
+
+  setBarHistogramData() {
+    if (this.selectedGraphObj.useStandardDeviation == true) {
+      //get std deviation
+      let stdDeviationBarData = this.visualizeService.getStandardDevBarChartData(this.selectedGraphObj.selectedXAxisDataOption.dataField);
       //set data
       this.selectedGraphObj.data[0].x = stdDeviationBarData.xLabels;
       this.selectedGraphObj.data[0].y = stdDeviationBarData.yValues;
-      this.selectedGraphObj.data = [this.selectedGraphObj.data[0]];
-      this.selectedGraphObj.layout.xaxis.type = 'category';
-      this.selectedGraphObj.layout.yaxis.title.text = 'Number of Data Points';
-      this.saveChanges();
-      console.log(this.selectedGraphObj);
-
+    } else {
+      //get num bins data
+      let binsData = this.visualizeService.getNumberOfBinsBarChartData(this.selectedGraphObj.selectedXAxisDataOption.dataField, this.selectedGraphObj.numberOfBins);
+      this.selectedGraphObj.data[0].x = binsData.xLabels;
+      this.selectedGraphObj.data[0].y = binsData.yValues;
     }
-  }
-
-  setHistogramMethod(str: string) {
-    this.histogramMethod = str;
+    this.saveChanges();
   }
 }
