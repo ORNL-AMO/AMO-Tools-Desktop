@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Print Report</h3>
-                <button class="close" (click)="closePrintModal(true)">
+                <button class="close" (click)="closePrintModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -187,7 +187,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-primary" (click)="setPrintViewThenPrint()"
                     data-dismiss="modal">Print</button>
-                <button type="button" class="btn btn-default btn-secondary" (click)="closePrintModal(true)"
+                <button type="button" class="btn btn-default btn-secondary" (click)="closePrintModal()"
                     data-dismiss="modal">Cancel</button>
             </div>
         </div>
