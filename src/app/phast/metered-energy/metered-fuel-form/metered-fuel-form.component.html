@@ -38,7 +38,7 @@
       <div class="input-group">
         <input id="fuelFlowRateInput" name="fuelFlowRateInput" type="number" step="any" class="form-control" (focus)="changeField('fuelFlowRateInput')"
           [(ngModel)]="inputs.fuelFlowRateInput" (input)="calculate()" onfocus="this.select();">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scf</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scf/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
           <sup>3</sup>/hr</span>
       </div>
