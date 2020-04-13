@@ -27,6 +27,15 @@ export class SystemCapacityService {
       four: 0,
       five: 0,
       six: 0,
+      eight: 0,
+      ten: 0,
+      twelve: 0,
+      fourteen: 0,
+      sixteen: 0,
+      eighteen: 0,
+      twenty: 0,
+      twentyFour: 0,
+
     };
   }
 
@@ -46,6 +55,14 @@ export class SystemCapacityService {
       four: 1000,
       five: 0,
       six: 0,
+      eight: 0,
+      ten: 0,
+      twelve: 0,
+      fourteen: 0,
+      sixteen: 0,
+      eighteen: 0,
+      twenty: 0,
+      twentyFour: 0,
     };
   }
 
