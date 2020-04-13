@@ -17,9 +17,7 @@ export class VisualizeService {
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
     this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
     this.graphData = new BehaviorSubject(new Array());
-    let initGraphObj = this.initGraphObj();
-    console.log(initGraphObj);
-    this.selectedGraphObj = new BehaviorSubject<GraphObj>(initGraphObj);
+    this.selectedGraphObj = new BehaviorSubject<GraphObj>(this.initGraphObj());
   }
 
 
@@ -96,7 +94,9 @@ export class VisualizeService {
       isTimeSeries: false,
       selectedXAxisDataOption: { dataField: undefined, data: [] },
       selectedYAxisDataOptions: [{ dataField: undefined, data: [] }],
-      hasSecondYAxis: false
+      hasSecondYAxis: false,
+      numberOfBins: 5,
+      useStandardDeviation: true
     }
   }
 

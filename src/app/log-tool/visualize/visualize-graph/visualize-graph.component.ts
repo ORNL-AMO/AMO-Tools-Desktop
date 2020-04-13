@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js';
-import * as moment from 'moment';
-import { LogToolService } from '../../log-tool.service';
+
 @Component({
   selector: 'app-visualize-graph',
   templateUrl: './visualize-graph.component.html',
@@ -11,69 +10,12 @@ import { LogToolService } from '../../log-tool.service';
 })
 export class VisualizeGraphComponent implements OnInit {
 
-
-  // graph = {
-  //   data: [],
-  //   layout: {
-  //     title: undefined,
-  //     hovermode: "closest",
-  //     xaxis: {
-  //       autorange: true,
-  //       type: 'date',
-  //       // type: 'linear',
-  //       title: {
-  //         text: 'x axis'
-  //       }
-  //     },
-  //     yaxis: {
-  //       // autorange: true,
-  //       // type: 'linear',
-  //       title: {
-  //         text: 'y axis'
-  //       }
-  //     },
-  //     margin: { t: 50, b: 75 }
-  //   }
-  // };
   selectedGraphDataSubscription: Subscription;
   constructor(private visualizeService: VisualizeService) { }
 
   ngOnInit() {
-    // this.selectedGraphDataSubscription = this.visualizeService.selectedGraphData.subscribe(graphData => {
-    //   if (graphData.graphType.value == 'bar') {
-    //     this.graph.layout.title = 'Number of ' + graphData.histogramDataField.alias + ' Data Points';
-    //     this.graph.layout.xaxis.title.text = graphData.histogramDataField.alias;
-    //     this.graph.layout.xaxis.type = 'category';
-    //     this.graph.layout.yaxis.title.text = 'Number of Data Points';
-    //     this.graph.data = [{
-    //       x: graphData.histogramData.xLabels,
-    //       y: graphData.histogramData.yValues,
-    //       type: graphData.graphType.value,
-    //       mode: graphData.scatterPlotMode,
-    //       name: graphData.graphName
-    //     }];
-    //   } else {
-    //     this.graph.layout.title = graphData.selectedXDataField.alias + ' vs ' + graphData.selectedYDataField.alias;
-    //     this.graph.layout.xaxis.title.text = graphData.selectedXDataField.alias;
-    //     if (graphData.selectedXDataField.isDateField) {
-    //       this.graph.layout.xaxis.type = 'date';
-    //     } else {
-    //       this.graph.layout.xaxis.type = 'linear';
-    //     }
-    //     this.graph.layout.yaxis.title.text = graphData.selectedYDataField.alias;
-    //     this.graph.data = [{
-    //       x: graphData.xData,
-    //       y: graphData.yData,
-    //       type: graphData.graphType.value,
-    //       mode: graphData.scatterPlotMode,
-    //       name: graphData.graphName
-    //     }];
-    //   }
-    //   console.log(this.graph.data);
-    //   Plotly.react('plotlyDiv', this.graph.data, this.graph.layout, { responsive: true });
-    // });
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
-      console.log(graphObj);
+      // console.log(graphObj);
       Plotly.react('plotlyDiv', graphObj.data, graphObj.layout, { responsive: true });
     })
   }

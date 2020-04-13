@@ -42,6 +42,7 @@ export class VisualizeMenuComponent implements OnInit {
   }>
 
   yAxisOptions: Array<{ axis: string, label: string }> = [{ axis: 'y', label: 'Left' }, { axis: 'y2', label: 'Right' }];
+  histogramMethod: string = 'stdDeviation';
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
 
@@ -50,15 +51,22 @@ export class VisualizeMenuComponent implements OnInit {
     this.unitOptions = new Array();
     this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
     // console.time('set x axis')
-    this.setXAxisDataOptions();
+    this.setXAxisDataOptions('scattergl');
     // console.timeEnd('set x axis')
     // console.time('set y axis');
     this.setYAxisDataOptions();
     // console.timeEnd('set y axis');
   }
 
-  setXAxisDataOptions() {
-    let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptionsWithDate();
+  setXAxisDataOptions(graphType: string) {
+    let dataFields: Array<LogToolField>;
+    if (graphType == 'bar') {
+      //no date
+      dataFields = this.logToolDataService.getDataFieldOptions();
+    } else {
+      //includes dates
+      dataFields = this.logToolDataService.getDataFieldOptionsWithDate();
+    }
     this.xAxisDataOptions = new Array();
     dataFields.forEach(field => {
       let data = this.logToolDataService.getAllFieldData(field.fieldName);
@@ -128,5 +136,28 @@ export class VisualizeMenuComponent implements OnInit {
 
   addAxis() {
     this.selectedGraphObj.hasSecondYAxis = true;
+  }
+
+  setGraphType() {
+    if (this.selectedGraphObj.data[0].type == 'scattergl') {
+
+    } else if (this.selectedGraphObj.data[0].type == 'bar') {
+      let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
+      //get std deviation data for first field (non date)
+      let stdDeviationBarData = this.visualizeService.getStandardDevBarChartData(dataFields[0]);
+      //set data
+      this.selectedGraphObj.data[0].x = stdDeviationBarData.xLabels;
+      this.selectedGraphObj.data[0].y = stdDeviationBarData.yValues;
+      this.selectedGraphObj.data = [this.selectedGraphObj.data[0]];
+      this.selectedGraphObj.layout.xaxis.type = 'category';
+      this.selectedGraphObj.layout.yaxis.title.text = 'Number of Data Points';
+      this.saveChanges();
+      console.log(this.selectedGraphObj);
+
+    }
+  }
+
+  setHistogramMethod(str: string) {
+    this.histogramMethod = str;
   }
 }
