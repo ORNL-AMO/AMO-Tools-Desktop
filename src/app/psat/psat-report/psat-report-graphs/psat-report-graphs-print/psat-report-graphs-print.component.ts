@@ -34,7 +34,6 @@ export class PsatReportGraphsPrintComponent implements OnInit {
 
   ngOnInit() {
     this.setScenarioSummaries();
-    console.log(this.scenarioSummaries);
   }
 
   setScenarioSummaries() {

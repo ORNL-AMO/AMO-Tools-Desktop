@@ -72,7 +72,6 @@ export class PsatSankeyComponent implements OnInit {
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService) { }
 
   ngOnInit() {
-    console.log('PSAT SANKEY!');
     if (!this.baseline && !this.isBaseline) {
       this.baseline = this.compareService.baselinePSAT;
     }
