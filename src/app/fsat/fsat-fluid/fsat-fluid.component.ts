@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FsatService } from '../fsat.service';
 import { FormGroup } from '@angular/forms';
-import { BaseGasDensity, FSAT } from '../../shared/models/fans';
+import { FSAT, BaseGasDensity, CalculatedGasDensity } from '../../shared/models/fans';
 import { FsatFluidService } from './fsat-fluid.service';
 import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { CompareService } from '../compare.service';
+import { GasDensityFormService } from '../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 
 @Component({
   selector: 'app-fsat-fluid',
@@ -33,6 +34,7 @@ export class FsatFluidComponent implements OnInit {
   fsat: FSAT;
 
   gasDensityForm: FormGroup;
+  calculatedGasDensity: CalculatedGasDensity;
 
   methods: Array<{ display: string, value: string }> = [
     { display: 'Relative Humidity %', value: 'relativeHumidity' },
@@ -47,7 +49,11 @@ export class FsatFluidComponent implements OnInit {
   ];
 
   idString: string;
-  constructor(private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
+  constructor(private compareService: CompareService, 
+              private fsatService: FsatService,
+              private fsatFluidService: FsatFluidService, 
+              private helpPanelService: HelpPanelService,
+              private gasDensityFormService: GasDensityFormService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -60,6 +66,7 @@ export class FsatFluidComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
+    this.getDensity();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -122,34 +129,61 @@ export class FsatFluidComponent implements OnInit {
     } else {
       this.save();
     }
+
+    if (this.gasDensityForm.controls.inputType.value != 'custom') {
+      if (!this.baseline) {
+        this.gasDensityFormService.modUpdatedGasDensity.next(this.calculatedGasDensity);
+      } else {
+        this.gasDensityFormService.baselineUpdatedGasDensity.next(this.calculatedGasDensity);
+      }
+    }
   }
 
   calcDensityWetBulb() {
     let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityWetBulb(tmpObj, this.settings);
-    this.gasDensityForm.patchValue({
-      gasDensity: newDensity
-    });
+    this.calculatedGasDensity = this.fsatService.getBaseGasDensityWetBulb(tmpObj, this.settings);
+    if (isNaN(this.calculatedGasDensity.gasDensity) === false) {
+      this.gasDensityForm.patchValue({
+        gasDensity: this.calculatedGasDensity.gasDensity
+      });
+    } else {
+      this.gasDensityForm.patchValue({
+        gasDensity: undefined
+      });
+    }
     this.save();
   }
 
   calcDensityRelativeHumidity() {
     let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj, this.settings);
-    this.gasDensityForm.patchValue({
-      gasDensity: newDensity
-    });
+    this.calculatedGasDensity = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj, this.settings);
+    if (isNaN(this.calculatedGasDensity.gasDensity) === false) {
+      this.gasDensityForm.patchValue({
+        gasDensity: this.calculatedGasDensity.gasDensity
+      });
+    } else {
+      this.gasDensityForm.patchValue({
+        gasDensity: undefined
+      });
+    }
     this.save();
   }
 
   calcDensityDewPoint() {
     let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityDewPoint(tmpObj, this.settings);
-    this.gasDensityForm.patchValue({
-      gasDensity: newDensity
-    });
+    this.calculatedGasDensity = this.fsatService.getBaseGasDensityDewPoint(tmpObj, this.settings);
+    if (isNaN(this.calculatedGasDensity.gasDensity) === false) {
+      this.gasDensityForm.patchValue({
+        gasDensity: this.calculatedGasDensity.gasDensity
+      });
+    } else {
+      this.gasDensityForm.patchValue({
+        gasDensity: undefined
+      });
+    }
     this.save();
   }
+
 
   changeMethod() {
     this.gasDensityForm = this.fsatFluidService.updateGasDensityForm(this.gasDensityForm);

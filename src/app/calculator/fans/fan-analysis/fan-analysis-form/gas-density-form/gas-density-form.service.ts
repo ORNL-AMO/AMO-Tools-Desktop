@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BaseGasDensity } from '../../../../../shared/models/fans';
+import { BaseGasDensity, CalculatedGasDensity } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class GasDensityFormService {
 
+  baselineUpdatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
+  modUpdatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
+  customDensityInputType = new BehaviorSubject<boolean>(true);
   constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
 
   getGasDensityFormFromObj(obj: BaseGasDensity, settings: Settings): FormGroup {

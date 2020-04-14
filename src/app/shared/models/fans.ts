@@ -153,6 +153,19 @@ export interface BaseGasDensity {
   specificHeatGas?: number; //used with wetBulb
 }
 
+export interface CalculatedGasDensity {
+  gasDensity: number;
+  absolutePressure: number;
+  saturatedHumidity: number;
+  saturationDegree: number;
+  humidityRatio: number;
+  specificVolume: number;
+  enthalpy: number;
+  dewPoint: number;
+  relativeHumidity: number;
+  saturationPressure: number;
+}
+
 export interface FanShaftPower {
   isMethodOne: boolean;
   voltage: number;
