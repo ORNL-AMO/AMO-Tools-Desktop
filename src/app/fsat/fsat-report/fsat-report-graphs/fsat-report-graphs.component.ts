@@ -21,8 +21,7 @@ export class FsatReportGraphsComponent implements OnInit {
 
   allChartData: Array<{
     name: string,
-    pieChartLabels: Array<string>,
-    pieChartValues: Array<number>,
+    valuesAndLabels: Array<{value: number, label: string}>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
     modification?: Modification,
@@ -30,13 +29,15 @@ export class FsatReportGraphsComponent implements OnInit {
   }>;
 
   selectedBaselineData: {
-    name: string, pieChartLabels: Array<string>, pieChartValues: Array<number>,
+    name: string,
+    valuesAndLabels: Array<{value: number, label: string}>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
     valid: FsatValid
   };
   selectedModificationData: {
-    name: string, pieChartLabels: Array<string>, pieChartValues: Array<number>,
+    name: string,
+    valuesAndLabels: Array<{value: number, label: string}>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
     valid: FsatValid
@@ -63,14 +64,28 @@ export class FsatReportGraphsComponent implements OnInit {
 
   addChartData(results: FsatOutput, name: string, isValid: FsatValid, modification?: Modification) {
     let baselineChartData: FsatGraphData = this.getGraphData(results);
-    let pieChartLabels: Array<string> = ['Motor Losses', 'Drive Losses', 'Fan Losses', 'Useful Output'];
-    let pieChartValues: Array<number> = [baselineChartData.motorLoss, baselineChartData.driveLoss, baselineChartData.fanLoss, baselineChartData.usefulOutput];
     let barChartLabels: Array<string> = ['Energy Input', 'Motor Losses', 'Drive Losses', 'Fan Losses', 'Useful Output'];
     let barChartValues: Array<number> = [baselineChartData.energyInput, baselineChartData.motorLoss, baselineChartData.driveLoss, baselineChartData.fanLoss, baselineChartData.usefulOutput];
     this.allChartData.push({
       name: name,
-      pieChartLabels: pieChartLabels,
-      pieChartValues: pieChartValues,
+      valuesAndLabels : [
+        {
+          value: baselineChartData.motorLoss,
+          label: 'Motor Losses'
+        },
+        {
+          value: baselineChartData.driveLoss,
+          label: 'Drive Losses'
+        },
+        {
+          value: baselineChartData.fanLoss,
+          label: 'Fan Losses'
+        },
+        {
+          value: baselineChartData.usefulOutput,
+          label:  'Useful Output'
+        },
+      ],
       barChartLabels: barChartLabels,
       barChartValues: barChartValues,
       modification: modification,
@@ -84,37 +99,6 @@ export class FsatReportGraphsComponent implements OnInit {
 
 
   getGraphData(results: FsatOutput): FsatGraphData {
-    // if (this.settings.fanPowerMeasurement === 'hp') {
-
-    //         motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
-    //         fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
-    
-    //         energyInput = tmpOutput.motorPower;
-    //         motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
-    //         driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');
-    //         fanLoss = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (1 - (tmpOutput.fanEfficiency / 100));
-    //         usefulOutput = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (tmpOutput.fanEfficiency / 100);
-            
-    //       }
-    //       else {
-    //         motorShaftPower = tmpOutput.motorShaftPower;
-    //         fanShaftPower = tmpOutput.fanShaftPower;
-    
-    //         energyInput = tmpOutput.motorPower;
-    //         motorLoss = tmpOutput.motorPower - tmpOutput.motorShaftPower;
-    //         driveLoss = tmpOutput.motorShaftPower - tmpOutput.fanShaftPower;
-    //         fanLoss = tmpOutput.fanShaftPower * (1 - (tmpOutput.fanEfficiency / 100));
-    //         usefulOutput = tmpOutput.fanShaftPower * (tmpOutput.fanEfficiency / 100);
-    //       }
-    
-    //       tmpPieLabels.push('Motor Loss: ' + (100 * motorLoss / energyInput).toFixed(2).toString() + "%");
-    //       tmpPieValues.push(motorLoss);
-    //       tmpPieLabels.push('Drive Loss: ' + (100 * driveLoss / energyInput).toFixed(2).toString() + "%");
-    //       tmpPieValues.push(driveLoss);
-    //       tmpPieLabels.push('Fan Loss: ' + (100 * fanLoss / energyInput).toFixed(2).toString() + "%");
-    //       tmpPieValues.push(fanLoss);
-    //       tmpPieLabels.push('Useful Output: ' + (100 * usefulOutput / energyInput).toFixed(2).toString() + "%");
-    //       tmpPieValues.push(usefulOutput);
     let motorShaftPower: number = results.motorShaftPower;
     let fanShaftPower: number = results.fanShaftPower;
     if (this.settings.powerMeasurement === 'hp') {

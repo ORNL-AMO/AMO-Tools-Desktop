@@ -1,4 +1,4 @@
-<div class="print-graphs-container" *ngFor="let scenarioSummary of scenarioSummaries">
+<div class="print-graphs-container" *ngFor="let scenarioSummary of scenarioSummaries; let index = index;">
   <div class="print-page-title mb-3" *ngIf="scenarioSummary.modificationGraphData">
     Scenario: {{scenarioSummary.modificationGraphData.name}}
   </div>
@@ -12,8 +12,8 @@
   <div class="row no-gutters mt-2">
     <div class="print-pie-width">
       <div class="h3 mb-0">Baseline</div>
-      <app-plotly-pie-chart [values]="scenarioSummary.baselineGraphData.pieChartValues"
-        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
+      <app-plotly-pie-chart [valuesAndLabels]="scenarioSummary.baselineGraphData.valuesAndLabels" [valuesUnit]="'kW'"
+        [isPrint]="true">
       </app-plotly-pie-chart>
     </div>
     <div class="print-pie-width" *ngIf="scenarioSummary.modificationGraphData">
@@ -35,6 +35,21 @@
     *ngIf="scenarioSummary.modificationGraphData && scenarioSummary.modificationGraphData.valid.isValid">
     <app-plotly-bar-chart class="w-100"
       [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
-      [yAxisLabel]="'Power (kW)'"></app-plotly-bar-chart>
+      [yAxisLabel]="'Power (kW)'" [hoverLabel]="'Power'" [isPrint]="true"></app-plotly-bar-chart>
+  </div>
+  <div class="row print-avoid-break" *ngIf="printSankey">
+    <div class="col-12">
+      <div class="h3 mb-0">Baseline</div>
+      <app-fsat-sankey [fsat]="fsat" [location]="'baseline'" [assessmentName]="'Baseline'" [settings]="settings"
+        [isBaseline]="true" [modIndex]="index" [printView]="true"></app-fsat-sankey>
+    </div>
+    <div class="col-12" *ngIf="scenarioSummary.modificationGraphData">
+      <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
+      <app-fsat-sankey [fsat]="scenarioSummary.modificationGraphData.modification.fsat"
+        [location]="scenarioSummary.modificationGraphData.name"
+        [assessmentName]="scenarioSummary.modificationGraphData.name" [settings]="settings" [isBaseline]="false"
+        [modIndex]="index" [printView]="true">
+      </app-fsat-sankey>
+    </div>
   </div>
 </div>

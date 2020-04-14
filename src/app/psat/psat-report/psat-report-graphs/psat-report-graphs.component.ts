@@ -22,8 +22,7 @@ export class PsatReportGraphsComponent implements OnInit {
 
   allChartData: Array<{
     name: string,
-    pieChartLabels: Array<string>,
-    pieChartValues: Array<number>,
+    valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
     modification?: Modification,
@@ -31,12 +30,14 @@ export class PsatReportGraphsComponent implements OnInit {
   }>;
 
   selectedBaselineData: {
-    name: string, pieChartLabels: Array<string>, pieChartValues: Array<number>,
+    name: string,
+    valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>
   };
   selectedModificationData: {
-    name: string, pieChartLabels: Array<string>, pieChartValues: Array<number>,
+    name: string,
+    valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>
   };
@@ -64,8 +65,6 @@ export class PsatReportGraphsComponent implements OnInit {
 
   addChartData(results: PsatOutputs, name: string, modification?: Modification) {
     let baselineChartData: PsatGraphData = this.getGraphData(results);
-    let pieChartLabels: Array<string> = ['Motor Losses', 'Drive Losses', 'Pump Losses', 'Useful Output'];
-    let pieChartValues: Array<number> = [baselineChartData.motorLoss, baselineChartData.driveLoss, baselineChartData.pumpLoss, baselineChartData.usefulOutput];
     let barChartLabels: Array<string> = ['Energy Input', 'Motor Losses', 'Drive Losses', 'Pump Losses', 'Useful Output'];
     let barChartValues: Array<number> = [baselineChartData.energyInput, baselineChartData.motorLoss, baselineChartData.driveLoss, baselineChartData.pumpLoss, baselineChartData.usefulOutput];
     let isValid: boolean = true;
@@ -75,8 +74,24 @@ export class PsatReportGraphsComponent implements OnInit {
 
     this.allChartData.push({
       name: name,
-      pieChartLabels: pieChartLabels,
-      pieChartValues: pieChartValues,
+      valuesAndLabels: [
+        {
+          value: baselineChartData.motorLoss,
+          label: 'Motor Losses'
+        },
+        {
+          value: baselineChartData.driveLoss,
+          label: 'Drive Losses'
+        },
+        {
+          value: baselineChartData.pumpLoss,
+          label: 'Pump Losses'
+        },
+        {
+          value: baselineChartData.usefulOutput,
+          label: 'Useful Output'
+        },
+      ],
       barChartLabels: barChartLabels,
       barChartValues: barChartValues,
       modification: modification,

@@ -1,15 +1,13 @@
 export interface ScenarioSummary {
     baselineGraphData: {
       name: string,
-      pieChartLabels: Array<string>,
-      pieChartValues: Array<number>,
+      valuesAndLabels: Array<{value: number, label: string}>
       barChartLabels: Array<string>,
       barChartValues: Array<number>
     },
     modificationGraphData: {
       name: string,
-      pieChartLabels: Array<string>,
-      pieChartValues: Array<number>,
+      valuesAndLabels: Array<{value: number, label: string}>
       barChartLabels: Array<string>,
       barChartValues: Array<number>
     },

@@ -26,7 +26,7 @@
                 {{data.cost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}
               </td>
             </tr>
-            <tr *ngIf="electricitySummary">
+            <tr *ngIf="electricitySummary.energyUsed != 0">
               <td>
                 {{electricitySummary.name}}
               </td>

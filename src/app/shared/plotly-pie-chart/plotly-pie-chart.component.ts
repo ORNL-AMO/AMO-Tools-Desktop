@@ -9,23 +9,17 @@ import { graphColors } from '../../phast/phast-report/report-graphs/graphColors'
 })
 export class PlotlyPieChartComponent implements OnInit {
   @Input()
-  values: Array<number>;
-  @Input()
-  labels: Array<string>;
+  valuesAndLabels: Array<{ value: number, label: string }>;
   @Input()
   valuesUnit: string;
   @Input()
   title: string;
   @Input()
   isPrint: boolean;
+  @Input()
+  textTemplate: string;
 
   @ViewChild('plotlyPieChart', { static: false }) plotlyPieChart: ElementRef;
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.drawPlot();
-  }
-
 
   constructor() { }
 
@@ -34,7 +28,7 @@ export class PlotlyPieChartComponent implements OnInit {
 
   ngAfterViewInit() {
     if (!this.isPrint) {
-      this.drawPlot();
+      this.createChart();
     } else {
       this.drawPrintPlot();
     }
@@ -42,38 +36,34 @@ export class PlotlyPieChartComponent implements OnInit {
 
   ngOnChanges() {
     if (this.plotlyPieChart) {
-      // Plotly.purge(this.plotlyPieChart.nativeElement);
       if (!this.isPrint) {
-        this.drawPlot();
+        this.createChart();
       } else {
         this.drawPrintPlot();
       }
     }
   }
 
-  drawPlot() {
-    Plotly.purge(this.plotlyPieChart.nativeElement)
+  createChart() {
     var data = [{
-      values: this.values,
-      labels: this.labels,
+      values: this.valuesAndLabels.map(val => { return val.value }),
+      labels: this.valuesAndLabels.map(val => { return val.label }),
       marker: {
         colors: graphColors
       },
       type: 'pie',
       textposition: 'auto',
       insidetextorientation: "horizontal",
-      automargin: true,
       textinfo: 'label+percent',
-      hoverformat: '.2r',
-      text: this.values.map(y => { return (y).toFixed(2) + ' ' + this.valuesUnit; }),
-      hoverinfo: 'text'
+      texttemplate: this.textTemplate,
+      hoverinfo: 'label+value',
+      direction: "clockwise",
+      rotation: 90,
+      hovertemplate: '%{value:,.2f} ' + this.valuesUnit + ' <extra></extra>'
     }];
-
     var layout = {
-      updatemenus: [],
-      // width: this.plotlyPieChart.nativeElement.clientWidth,
       font: {
-        size: 16,
+        size: 14,
       },
       showlegend: false,
       // margin: {t: 10, b: 10, l: 30, r: 30}
@@ -82,16 +72,16 @@ export class PlotlyPieChartComponent implements OnInit {
     var modebarBtns = {
       modeBarButtonsToRemove: ['hoverClosestPie'],
       displaylogo: false,
-      displayModeBar: true
+      displayModeBar: true,
+      responsive: true
     };
     Plotly.react(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
   }
 
   drawPrintPlot() {
-
     var data = [{
-      values: this.values,
-      labels: this.labels,
+      values: this.valuesAndLabels.map(val => { return val.value }),
+      labels: this.valuesAndLabels.map(val => { return val.label }),
       marker: {
         colors: graphColors
       },
@@ -100,18 +90,19 @@ export class PlotlyPieChartComponent implements OnInit {
       insidetextorientation: "horizontal",
       automargin: true,
       textinfo: 'label+percent',
-      hoverformat: '.2r',
-      text: this.values.map(y => { return (y).toFixed(2) + ' ' + this.valuesUnit; }),
-      hoverinfo: 'text'
+      texttemplate: this.textTemplate,
+      hoverinfo: 'label+value',
+      direction: "clockwise",
+      rotation: 90,
+      hovertemplate: '%{value:,.2f} ' + this.valuesUnit + ' <extra></extra>'
     }];
 
     var layout = {
-      width: this.plotlyPieChart.nativeElement.clientWidth,
       font: {
-        size: 16,
+        size: 12,
       },
       showlegend: false,
-      margin: {t: 0, b: 0}
+      margin: { t: 0, b: 0}
     };
     var modebarBtns = {
       displaylogo: false,

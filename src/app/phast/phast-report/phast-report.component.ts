@@ -99,28 +99,6 @@ export class PhastReportComponent implements OnInit {
       }
     })
 
-
-
-
-    // if (this.inRollup) {
-    //   this.showPrint = this.printView;
-    // }
-    // else {
-    //   //subscribe to print event
-    //   this.phastReportService.showPrint.subscribe(printVal => {
-    //     //shows loading print view
-    //     this.showPrintDiv = printVal;
-    //     if (printVal === true) {
-    //       //use delay to show loading before print payload starts
-    //       setTimeout(() => {
-    //         this.showPrint = printVal;
-    //       }, 20);
-    //     } else {
-    //       this.showPrint = printVal;
-    //     }
-    //   });
-    // }
-
   }
 
 
@@ -137,23 +115,22 @@ export class PhastReportComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if(this.showPrintMenuSub){
-            this.showPrintMenuSub.unsubscribe();
+    if (this.showPrintMenuSub) {
+      this.showPrintMenuSub.unsubscribe();
     }
     this.showPrintViewSub.unsubscribe();
   }
 
   getContainerHeight() {
-    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
-    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    if (this.reportBtns && this.reportHeader) {
+      let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+      let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    }
   }
 
   setTab(str: string): void {
     this.currentTab = str;
-    setTimeout(() => {
-      d3.selectAll('.tick text').style('display', 'initial');
-    }, 50);
   }
 
 
@@ -164,23 +141,6 @@ export class PhastReportComponent implements OnInit {
         tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);
       }
       this.settings = tmpSettings;
-    } else {
-      this.getParentDirectorySettings(this.assessment.directoryId);
-    }
-  }
-
-
-  getParentDirectorySettings(dirId: number): void {
-    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(dirId);
-    if (tmpSettings) {
-      if (!tmpSettings.energyResultUnit) {
-        tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);
-      }
-      this.settings = tmpSettings;
-    } else {
-      let parentDirectory = this.directoryDbService.getById(dirId);
-      //get parent directory settings
-      this.getParentDirectorySettings(parentDirectory.parentDirectoryId);
     }
   }
 

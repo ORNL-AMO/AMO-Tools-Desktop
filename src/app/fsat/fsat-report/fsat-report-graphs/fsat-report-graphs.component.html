@@ -7,8 +7,7 @@
       </select>
     </div>
     <div class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [values]="selectedBaselineData.pieChartValues"
-        [labels]="selectedBaselineData.pieChartLabels" [valuesUnit]="'kW'">
+      <app-plotly-pie-chart [valuesAndLabels]="selectedBaselineData.valuesAndLabels" [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
     </div>
   </div>
@@ -43,5 +42,5 @@
 
 <div *ngIf="printView">
   <app-fsat-report-graphs-print [allChartData]="allChartData" [settings]="settings" [printSankey]="printSankey"
-    [printGraphs]="printGraphs"></app-fsat-report-graphs-print>
+    [printGraphs]="printGraphs" [fsat]="fsat"></app-fsat-report-graphs-print>
 </div>

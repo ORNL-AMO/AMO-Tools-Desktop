@@ -141,7 +141,7 @@ export class SsmtPieChartComponent implements OnInit {
       var modebarBtns = {
         modeBarButtonsToRemove: ['hoverClosestPie'],
         displaylogo: false,
-        displayModeBar: true
+        displayModeBar: false
       };
       Plotly.react(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
     } else {
