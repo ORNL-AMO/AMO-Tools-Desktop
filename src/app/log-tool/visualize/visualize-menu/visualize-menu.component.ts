@@ -210,6 +210,14 @@ export class VisualizeMenuComponent implements OnInit {
     this.selectedGraphObj.hasSecondYAxis = true;
   }
 
+  removeAxis(){
+    this.selectedGraphObj.hasSecondYAxis = false;
+    this.selectedGraphObj.selectedYAxisDataOptions.forEach(option => {
+      option.yaxis = 'y';
+    });
+    this.setYAxisData();
+  }
+
   setHistogramStdDeviation(bool: boolean) {
     this.selectedGraphObj.useStandardDeviation = bool;
     this.setBarHistogramData();
