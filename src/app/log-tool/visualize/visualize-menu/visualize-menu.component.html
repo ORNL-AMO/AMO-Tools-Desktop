@@ -58,11 +58,11 @@
             </div>
             <div class="form-group" *ngIf="selectedGraphObj.hasSecondYAxis">
                 <label>Right Axis Label</label>
-                <input class="form-control" type="text" name="yAxisLabel"
+                <input class="form-control" type="text" name="yAxisLabel2"
                     [(ngModel)]="selectedGraphObj.layout.yaxis2.title.text" (input)="saveChanges()">
             </div>
 
-            <div class="y-axis-data" *ngFor="let selectedDataOption of selectedYAxisDataOptions">
+            <div class="y-axis-data" *ngFor="let selectedDataOption of selectedGraphObj.selectedYAxisDataOptions">
                 <div class="form-group">
                     <input class="form-control w-100" type="text" name="{{'seriesName'+selectedDataOption.index}}"
                         [(ngModel)]="selectedDataOption.seriesName" (input)="setYAxisData()">

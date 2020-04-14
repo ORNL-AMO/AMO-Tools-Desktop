@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
-import { GraphDataObj } from '../../log-tool-models';
+import { GraphDataObj, GraphObj } from '../../log-tool-models';
 
 @Component({
   selector: 'app-visualize-tabs',
@@ -11,17 +11,17 @@ import { GraphDataObj } from '../../log-tool-models';
 export class VisualizeTabsComponent implements OnInit {
 
   graphDataSubscription: Subscription;
-  graphData: Array<GraphDataObj>;
+  graphData: Array<GraphObj>;
   selectedGraphDataSub: Subscription;
-  selectedGraphData: GraphDataObj;
+  selectedGraphData: GraphObj;
   constructor(private visualizeService: VisualizeService) { }
 
 
   ngOnInit() {
-    this.graphDataSubscription = this.visualizeService.graphData.subscribe(graphData => {
+    this.graphDataSubscription = this.visualizeService.graphObjects.subscribe(graphData => {
       this.graphData = graphData;
     });
-    this.selectedGraphDataSub = this.visualizeService.selectedGraphData.subscribe(selectedGraphData => {
+    this.selectedGraphDataSub = this.visualizeService.selectedGraphObj.subscribe(selectedGraphData => {
       this.selectedGraphData = selectedGraphData;
     });
   }
@@ -35,7 +35,7 @@ export class VisualizeTabsComponent implements OnInit {
     this.visualizeService.addNewGraphDataObj();
   }
 
-  selectGraph(graphDataObj: GraphDataObj) {
-    this.visualizeService.selectedGraphData.next(graphDataObj);
+  selectGraph(graphObj: GraphObj) {
+    this.visualizeService.selectedGraphObj.next(graphObj);
   }
 }

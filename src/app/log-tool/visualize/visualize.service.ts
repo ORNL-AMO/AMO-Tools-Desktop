@@ -13,17 +13,19 @@ export class VisualizeService {
   selectedGraphData: BehaviorSubject<GraphDataObj>;
   visualizeDataInitialized: boolean = false;
 
+  graphObjects: BehaviorSubject<Array<GraphObj>>;
   selectedGraphObj: BehaviorSubject<GraphObj>;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
     this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
     this.graphData = new BehaviorSubject(new Array());
-    this.selectedGraphObj = new BehaviorSubject<GraphObj>(this.initGraphObj());
+    let initData = this.initGraphObj();
+    this.graphObjects = new BehaviorSubject([initData]);
+    this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
   }
-
 
   initGraphObj(): GraphObj {
     return {
-      name: 'Graph',
+      name: 'Data Visualization',
       data: [{
         x: [],
         y: [],
@@ -37,13 +39,13 @@ export class VisualizeService {
       }],
       layout: {
         title: {
-          text: ''
+          text: 'Data Visualization 1'
         },
         xaxis: {
           autorange: true,
           type: undefined,
           title: {
-            text: undefined
+            text: 'X Axis Label'
           },
           side: undefined,
           overlaying: undefined,
@@ -58,7 +60,7 @@ export class VisualizeService {
           autorange: true,
           type: undefined,
           title: {
-            text: undefined
+            text: 'Y Axis Label'
           },
           side: undefined,
           overlaying: undefined,
@@ -73,7 +75,7 @@ export class VisualizeService {
           autorange: true,
           type: undefined,
           title: {
-            text: undefined
+            text: 'Y Axis 2 Label'
           },
           side: 'right',
           overlaying: 'y',
@@ -93,10 +95,11 @@ export class VisualizeService {
       },
       isTimeSeries: false,
       selectedXAxisDataOption: { dataField: undefined, data: [] },
-      selectedYAxisDataOptions: [{ dataField: undefined, data: [] }],
+      selectedYAxisDataOptions: [],
       hasSecondYAxis: false,
       numberOfBins: 5,
-      useStandardDeviation: true
+      useStandardDeviation: true,
+      graphId: Math.random().toString(36).substr(2, 9)
     }
   }
 
@@ -108,11 +111,13 @@ export class VisualizeService {
   }
 
   addNewGraphDataObj() {
-    let currentGraphData: Array<GraphDataObj> = this.graphData.getValue();
-    let newGraphDataObj: GraphDataObj = this.getNewGraphDataObject();
+    let currentGraphData: Array<GraphObj> = this.graphObjects.getValue();
+    let newGraphDataObj: GraphObj = JSON.parse(JSON.stringify(this.selectedGraphObj.getValue()));
+    newGraphDataObj.graphId = Math.random().toString(36).substr(2, 9);
+    newGraphDataObj.layout.title.text = 'Data Visualization ' + (currentGraphData.length + 1);
     currentGraphData.push(newGraphDataObj);
-    this.graphData.next(currentGraphData);
-    this.selectedGraphData.next(newGraphDataObj);
+    this.selectedGraphObj.next(newGraphDataObj);
+    this.graphObjects.next(currentGraphData);
   }
 
   getNewGraphDataObject(): GraphDataObj {

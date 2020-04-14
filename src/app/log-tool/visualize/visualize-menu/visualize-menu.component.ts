@@ -28,45 +28,101 @@ export class VisualizeMenuComponent implements OnInit {
     data: Array<number>
   }>
 
-  selectedYAxisDataOptions: Array<{
-    index: number,
-    dataOption: {
-      dataField: LogToolField,
-      data: Array<number>
-    },
-    seriesColor: string,
-    seriesName: string,
-    yaxis: string
-  }>
+  // selectedYAxisDataOptions: Array<{
+  //   index: number,
+  //   dataOption: {
+  //     dataField: LogToolField,
+  //     data: Array<number>
+  //   },
+  //   seriesColor: string,
+  //   seriesName: string,
+  //   yaxis: string
+  // }>
 
   yAxisOptions: Array<{ axis: string, label: string }> = [{ axis: 'y', label: 'Left' }, { axis: 'y2', label: 'Right' }];
   histogramMethod: string = 'stdDeviation';
+  selectedGraphObjSub: Subscription;
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
 
   ngOnInit() {
-    this.selectedGraphObj = this.visualizeService.selectedGraphObj.getValue();
-    this.setGraphType();
+    this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
+      if (this.selectedGraphObj == undefined || val.graphId != this.selectedGraphObj.graphId) {
+        this.selectedGraphObj = val;
+        this.setGraphType();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.selectedGraphObjSub.unsubscribe();
   }
 
   setGraphType() {
     if (this.selectedGraphObj.data[0].type == 'scattergl') {
-      this.setXAxisDataOptions();
-      this.selectedGraphObj.selectedXAxisDataOption = this.xAxisDataOptions[0];
-      this.setXAxisDataOption();
-
-      this.setYAxisDataOptions();
-      this.selectedYAxisDataOptions = [{ index: 0, dataOption: this.yAxisDataOptions[0], seriesColor: graphColors[0], seriesName: 'Series 1', yaxis: 'y' }];
-      this.setYAxisData();
-
+      this.setScatterPlotType();
     } else if (this.selectedGraphObj.data[0].type == 'bar') {
-      this.selectedGraphObj.layout.xaxis.type = 'category';
-      this.selectedGraphObj.layout.yaxis.title.text = 'Number of Data Points';
-      //start with only one (purge additional data series) 
-      this.setXAxisDataOptions();
-      this.selectedGraphObj.selectedXAxisDataOption = this.xAxisDataOptions[0];
-      this.setBarHistogramData();
+      this.setBarChartType();
     }
+  }
+
+  setScatterPlotType() {
+    // this.selectedGraphObj.layout.yaxis.title.text = 'Y Axis Label';
+    this.setXAxisDataOptions();
+    if (this.selectedGraphObj.selectedXAxisDataOption && this.selectedGraphObj.selectedXAxisDataOption.dataField) {
+      //check still exists after updating x axis options
+      let testOptionExists = this.xAxisDataOptions.find(option => { return this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == option.dataField.fieldName });
+      if (testOptionExists) {
+        this.selectedGraphObj.selectedXAxisDataOption = testOptionExists;
+      } else {
+        this.selectedGraphObj.selectedXAxisDataOption = this.xAxisDataOptions[0];
+      }
+    } else {
+      this.selectedGraphObj.selectedXAxisDataOption = this.xAxisDataOptions[0];
+    }
+    this.setXAxisDataOption();
+    this.setYAxisDataOptions();
+    let tmpSelectedYAxisDataOptions = new Array();
+    this.selectedGraphObj.selectedYAxisDataOptions.forEach(option => {
+      if (option.dataOption) {
+        //check still exists after updating y axis options
+        let testOptionExists = this.yAxisDataOptions.find(yAxisOption => { return yAxisOption.dataField.fieldName == option.dataOption.dataField.fieldName });
+        if (testOptionExists) {
+          //set to current option value for data binding
+          option.dataOption = testOptionExists;
+          tmpSelectedYAxisDataOptions.push(option);
+        }
+      }
+    });
+    if (tmpSelectedYAxisDataOptions.length != 0) {
+      this.selectedGraphObj.selectedYAxisDataOptions = tmpSelectedYAxisDataOptions;
+    } else {
+      this.setDefaultYAxisDataOptions();
+    }
+    this.setYAxisData();
+  }
+
+  setDefaultYAxisDataOptions() {
+    this.selectedGraphObj.selectedYAxisDataOptions = [{ index: 0, dataOption: this.yAxisDataOptions[0], seriesColor: graphColors[0], seriesName: 'Series 1', yaxis: 'y' }];
+  }
+
+  setBarChartType() {
+    this.selectedGraphObj.layout.xaxis.type = 'category';
+    // this.selectedGraphObj.layout.yaxis.title.text = 'Number of Data Points';
+    //start with only one (purge additional data series) 
+    this.setXAxisDataOptions();
+    if (this.selectedGraphObj.selectedXAxisDataOption && this.selectedGraphObj.selectedXAxisDataOption.dataField) {
+      //check still exists
+      let testExists = this.xAxisDataOptions.find(option => { return this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == option.dataField.fieldName });
+      if (testExists) {
+        this.selectedGraphObj.selectedXAxisDataOption = testExists;
+      } else {
+        this.selectedGraphObj.selectedXAxisDataOption = this.xAxisDataOptions[0];
+      }
+    } else {
+      this.selectedGraphObj.selectedXAxisDataOption = this.xAxisDataOptions[0];
+    }
+    this.setBarHistogramData();
   }
 
   setXAxisDataOptions() {
@@ -116,7 +172,7 @@ export class VisualizeMenuComponent implements OnInit {
 
   setYAxisData() {
     let index: number = 0;
-    this.selectedYAxisDataOptions.forEach(selectedDataOption => {
+    this.selectedGraphObj.selectedYAxisDataOptions.forEach(selectedDataOption => {
       this.selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
       this.selectedGraphObj.data[index].name = selectedDataOption.seriesName;
       this.selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
@@ -138,14 +194,14 @@ export class VisualizeMenuComponent implements OnInit {
   }
 
   addData() {
-    this.selectedYAxisDataOptions.push({
-      index: this.selectedYAxisDataOptions.length,
-      dataOption: JSON.parse(JSON.stringify(this.selectedYAxisDataOptions[0].dataOption)),
-      seriesName: 'Series ' + (this.selectedYAxisDataOptions.length + 1),
-      seriesColor: graphColors[this.selectedYAxisDataOptions.length],
+    let dataOption = this.yAxisDataOptions.find(dataOption => { return dataOption.dataField.fieldName == this.selectedGraphObj.selectedYAxisDataOptions[0].dataOption.dataField.fieldName });
+    this.selectedGraphObj.selectedYAxisDataOptions.push({
+      index: this.selectedGraphObj.selectedYAxisDataOptions.length,
+      dataOption: dataOption,
+      seriesName: 'Series ' + (this.selectedGraphObj.selectedYAxisDataOptions.length + 1),
+      seriesColor: graphColors[this.selectedGraphObj.selectedYAxisDataOptions.length],
       yaxis: 'y'
     });
-    this.selectedGraphObj.selectedYAxisDataOptions.push(JSON.parse(JSON.stringify(this.selectedGraphObj.selectedYAxisDataOptions[0])));
     this.selectedGraphObj.data.push(JSON.parse(JSON.stringify(this.selectedGraphObj.data[0])));
     this.setYAxisData();
   }
@@ -153,8 +209,6 @@ export class VisualizeMenuComponent implements OnInit {
   addAxis() {
     this.selectedGraphObj.hasSecondYAxis = true;
   }
-
-
 
   setHistogramStdDeviation(bool: boolean) {
     this.selectedGraphObj.useStandardDeviation = bool;
@@ -174,6 +228,9 @@ export class VisualizeMenuComponent implements OnInit {
       this.selectedGraphObj.data[0].x = binsData.xLabels;
       this.selectedGraphObj.data[0].y = binsData.yValues;
     }
+    //set to first value for bar charts
+    this.selectedGraphObj.data = [this.selectedGraphObj.data[0]];
+    this.selectedGraphObj.selectedYAxisDataOptions = [this.selectedGraphObj.selectedYAxisDataOptions[0]];
     this.saveChanges();
   }
 }

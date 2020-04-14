@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { VisualizeService } from './visualize.service';
+import { GraphObj } from '../log-tool-models';
 
 @Component({
   selector: 'app-visualize',
@@ -8,13 +9,9 @@ import { VisualizeService } from './visualize.service';
 })
 export class VisualizeComponent implements OnInit {
 
-  constructor(private visualizeService: VisualizeService) { }
+  constructor() { }
 
   ngOnInit() {
-    // if(this.visualizeService.visualizeDataInitialized == false){
-    //   this.visualizeService.addNewGraphDataObj();
-    //   this.visualizeService.visualizeDataInitialized = true;
-    // }
   }
 
 }

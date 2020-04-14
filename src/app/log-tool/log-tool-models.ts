@@ -117,10 +117,11 @@ export interface GraphObj {
     },
     isTimeSeries: boolean,
     selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
-    selectedYAxisDataOptions: Array<{ dataField: LogToolField, data: Array<number> }>,
+    selectedYAxisDataOptions: Array<{ index: number, dataOption: { dataField: LogToolField, data: Array<number> }, seriesColor: string, seriesName: string, yaxis: string }>,
     hasSecondYAxis: boolean,
     numberOfBins: number,
-    useStandardDeviation: boolean
+    useStandardDeviation: boolean,
+    graphId: string
 }
 
 export interface AxisObj {
