@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CalculatedGasDensity, FSAT } from '../models/fans';
+import { CalculatedGasDensity } from '../models/fans';
 import { Subscription } from 'rxjs';
 import { Settings } from '../models/settings';
 import { GasDensityFormService } from '../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
