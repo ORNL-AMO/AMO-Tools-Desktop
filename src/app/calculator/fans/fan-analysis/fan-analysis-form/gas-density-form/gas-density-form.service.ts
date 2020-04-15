@@ -8,10 +8,16 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class GasDensityFormService {
 
-  baselineUpdatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
-  modUpdatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
-  customDensityInputType = new BehaviorSubject<boolean>(true);
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
+  baselineCalculatedGasDensity: BehaviorSubject<CalculatedGasDensity>;
+  modificationCalculatedGasDensity: BehaviorSubject<CalculatedGasDensity>;
+  baselineCalculationType: BehaviorSubject<string>;
+  modificationCalculationType: BehaviorSubject<string>;
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
+    this.baselineCalculatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
+    this.modificationCalculatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
+    this.baselineCalculationType = new BehaviorSubject<string>(undefined);
+    this.modificationCalculationType = new BehaviorSubject<string>(undefined)
+  }
 
   getGasDensityFormFromObj(obj: BaseGasDensity, settings: Settings): FormGroup {
     let ranges: GasDensityRanges = this.getGasDensityRanges(settings);

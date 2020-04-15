@@ -1,181 +1,416 @@
-<div class="mt-3" *ngIf="(inAnalysis && !customDensityInputType) 
+<div class="mt-3">
+  <label class="group-label mb-2">Psycometric Data</label>
+  <table class="table table-hover table-striped" *ngIf="!isBaselineTypeCustom || modificationName">
+    <tbody [ngClass]="{'mod-exists': modificationName}">
+      <tr *ngIf="inSetup || modificationName" class="bold">
+        <td>&nbsp;</td>
+        <td class="text-center bold">Baseline</td>
+        <td class="text-center bold" *ngIf="modificationName">{{modificationName}}</td>
+      </tr>
+      <!--gas density-->
+      <tr>
+        <td>Gas Density (<span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>)</td>
+        <td>
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.gasDensity | sigFigs: '4'}}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.gasDensity | sigFigs: '4'}}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--absolute pressure-->
+      <tr>
+        <td>Absolute Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)</td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.absolutePressure | number:'1.0-2' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.absolutePressure | number:'1.0-2' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--saturated humidity ratio-->
+      <tr>
+        <td>Saturated Humidity Ratio</td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.saturatedHumidity | number:'1.0-3' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.saturatedHumidity | number:'1.0-3' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--degree of saturation-->
+      <tr>
+        <td>Degree of Saturation</td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.saturationDegree | number:'1.0-3' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.saturationDegree | number:'1.0-3' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--humidity ratio-->
+      <tr>
+        <td>Humidity Ratio</td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.humidityRatio | number:'1.0-4' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.humidityRatio | number:'1.0-4'}}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--specific volume-->
+      <tr>
+        <td>Specific Volume
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">(m<sup>3</sup>/kg)</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(ft<sup>3</sup>/lb)</span>
+        </td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.specificVolume | number:'1.0-2' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.specificVolume | number:'1.0-2' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--enthalpy-->
+      <tr>
+        <td>Enthalpy (btu/lb)</td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.enthalpy | number:'1.0-1' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.enthalpy | number:'1.0-1' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--dew point-->
+      <tr>
+        <td>Dew Point (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.dewPoint | number:'1.0-1' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.dewPoint | number:'1.0-1'}}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--relative humidity-->
+      <tr>
+        <td>Relative Humdiity</td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.relativeHumidity | number:'1.0-3' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.relativeHumidity | number:'1.0-3' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--saturation pressure-->
+      <tr>
+        <td>Saturation Pressure (<span [innerHTML]="settings.fanBarometricPressure|settingsLabel"></span>)</td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.saturationPressure | number:'1.0-3' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName">
+          <span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.saturationPressure | number:'1.0-3' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="isBaselineTypeCustom && !modificationName">
+  <div class="d-flex p-2 w-75 ml-auto mr-auto">
+    <div class="alert-warning small w-100">
+      Gas density known. To view Calculated Gas Density results, please select a different Method to Establish Gas
+      Density.
+    </div>
+  </div>
+</div>
+
+<div *ngIf="modificationName && (isBaselineTypeCustom || isModificationTypeCustom)"
+  class="d-flex flex-column p-2 w-75 ml-auto mr-auto">
+  <div *ngIf="isBaselineTypeCustom" class="alert-warning small w-100">
+    Baseline gas density is Known. To view Calculated Gas Density results, please select a different Method to
+    Establish Gas Density.
+  </div>
+  <hr *ngIf="isModificationTypeCustom && isBaselineTypeCustom">
+  <div *ngIf="isModificationTypeCustom" class="alert-warning small w-100">
+    Gas density for modification "{{ modificationName }}" is Known. To view Calculated Gas Density results, please
+    select a different Method to Establish Gas Density.
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+
+
+<div class="mt-3"
+  *ngIf="(inAnalysis && !customDensityInputType) 
 || (inSetup && fsat.baseGasDensity.inputType != 'custom') 
 || (inModifyAll && (fsat.baseGasDensity.inputType != 'custom' || fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom'))">
-  <label class="group-label mb-4">Psycometric Data</label>    
+  <label class="group-label mb-4">Psycometric Data</label>
   <table class="table table-hover table-striped mx-auto">
-      <tbody>
-        <tr *ngIf="!inSetup && !fsat">
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr *ngIf="inSetup && fsat" class="bold">
-          <td></td>
-          <td class="text-center bold">Baseline</td>
-        </tr>
-        <tr *ngIf="inModifyAll">
-          <td class=""></td>
-          <td class="text-center bold">Baseline</td>
-          <td class="text-center bold">{{modificationName}}</td>
-        </tr>
+    <tbody>
+      <tr *ngIf="!inSetup && !fsat">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr *ngIf="inSetup && fsat" class="bold">
+        <td></td>
+        <td class="text-center bold">Baseline</td>
+      </tr>
+      <tr *ngIf="inModifyAll">
+        <td class=""></td>
+        <td class="text-center bold">Baseline</td>
+        <td class="text-center bold">{{modificationName}}</td>
+      </tr>
 
-        <tr>
-          <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Gas Density (lb/ft <sup>3</sup>)</td>
-          <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.gasDensity && 
-                    (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center" [ngClass]="inModifyAll? 'w-25' : 'w-50'">
-            {{ baselineCalculatedGasDensity.gasDensity | sigFigs: '4'}}</td>
-          <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.gasDensity 
+      <tr>
+        <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Gas Density (lb/ft <sup>3</sup>)</td>
+        <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.gasDensity && 
+                    (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center"
+          [ngClass]="inModifyAll? 'w-25' : 'w-50'">
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.gasDensity | sigFigs: '4'}}
+        </td>
+        <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.gasDensity 
                     || fsat && fsat.baseGasDensity.inputType == 'custom'" class="text-center w-25">
-                    &mdash;</td>
-          <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.gasDensity 
-                    && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')" class="text-center w-25">
-            {{ modCalculatedGasDensity.gasDensity | sigFigs: '4'}} </td>
-          <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.gasDensity
-                    || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')" class="text-center w-25">
-                    &mdash;</td>
-        </tr>
-        <tr>
-          <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Absolute Pressure (in Hg)</td>
-          <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.absolutePressure && 
-          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center" [ngClass]="inModifyAll? 'w-25' : 'w-50'">
-            {{ baselineCalculatedGasDensity.absolutePressure | number:'1.0-2' }}</td>
-          <td  *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.absolutePressure 
+          &mdash;</td>
+        <td
+          *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.gasDensity 
+                    && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')"
+          class="text-center w-25">
+          <span *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.gasDensity | sigFigs: '4'}} </td>
+        <td
+          *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.gasDensity
+                    || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')"
+          class="text-center w-25">
+          &mdash;</td>
+      </tr>
+      <tr>
+        <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Absolute Pressure (in Hg)</td>
+        <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.absolutePressure && 
+          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center"
+          [ngClass]="inModifyAll? 'w-25' : 'w-50'">
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.absolutePressure | number:'1.0-2' }}
+        </td>
+        <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.absolutePressure 
           || fsat && fsat.baseGasDensity.inputType == 'custom'" class="text-center w-25">&mdash;</td>
-          <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.absolutePressure 
-          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')" class="text-center w-25">
-            {{ modCalculatedGasDensity.absolutePressure | number:'1.0-2' }} </td>
-          <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.absolutePressure 
-          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')" class="text-center w-25">&mdash;</td>
-        </tr>
-        <tr>
-          <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Saturated Humidity Ratio</td>
-          <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.saturatedHumidity && 
-          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center" [ngClass]="inModifyAll? 'w-25' : 'w-50'">
-            {{ baselineCalculatedGasDensity.saturatedHumidity | number:'1.0-3' }}</td>
-          <td  *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.saturatedHumidity 
+        <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.absolutePressure 
+          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')"
+          class="text-center w-25">
+          <span *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.absolutePressure | number:'1.0-2' }} </td>
+        <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.absolutePressure 
+          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')"
+          class="text-center w-25">&mdash;</td>
+      </tr>
+      <tr>
+        <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Saturated Humidity Ratio</td>
+        <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.saturatedHumidity && 
+          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center"
+          [ngClass]="inModifyAll? 'w-25' : 'w-50'">
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.saturatedHumidity | number:'1.0-3' }}
+        </td>
+        <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.saturatedHumidity 
           || fsat && fsat.baseGasDensity.inputType == 'custom'" class="text-center w-25">&mdash;</td>
-          <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.saturatedHumidity 
-          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')" class="text-center w-25">
-            {{ modCalculatedGasDensity.saturatedHumidity | number:'1.0-3' }} </td>
-          <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.saturatedHumidity 
-          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')" class="text-center w-25">&mdash;</td>
-        </tr>
-        <tr>
-          <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Degree of Saturation</td>
-          <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.saturationDegree && 
-          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center" [ngClass]="inModifyAll? 'w-25' : 'w-50'">
-            {{ baselineCalculatedGasDensity.saturationDegree | number:'1.0-3' }}</td>
-          <td  *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.saturationDegree 
+        <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.saturatedHumidity 
+          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')"
+          class="text-center w-25">
+          <span *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.saturatedHumidity | number:'1.0-3' }} </td>
+        <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.saturatedHumidity 
+          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')"
+          class="text-center w-25">&mdash;</td>
+      </tr>
+      <tr>
+        <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Degree of Saturation</td>
+        <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.saturationDegree && 
+          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center"
+          [ngClass]="inModifyAll? 'w-25' : 'w-50'">
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.saturationDegree | number:'1.0-3' }}
+        </td>
+        <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.saturationDegree 
           || fsat && fsat.baseGasDensity.inputType == 'custom'" class="text-center w-25">&mdash;</td>
-          <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.saturationDegree 
-          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')" class="text-center w-25">
-            {{ modCalculatedGasDensity.saturationDegree | number:'1.0-3' }} </td>
-          <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.saturationDegree 
-          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')" class="text-center w-25">&mdash;</td>
-        </tr>
-        <tr>
-          <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Humidity Ratio</td>
-          <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.humidityRatio && 
-          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center" [ngClass]="inModifyAll? 'w-25' : 'w-50'">
-            {{ baselineCalculatedGasDensity.humidityRatio | number:'1.0-4' }}</td>
-          <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.humidityRatio 
+        <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.saturationDegree 
+          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')"
+          class="text-center w-25">
+          <span *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.saturationDegree | number:'1.0-3' }} </td>
+        <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.saturationDegree 
+          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')"
+          class="text-center w-25">&mdash;</td>
+      </tr>
+      <tr>
+        <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Humidity Ratio</td>
+        <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.humidityRatio && 
+          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center"
+          [ngClass]="inModifyAll? 'w-25' : 'w-50'">
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.humidityRatio | number:'1.0-4' }}
+        </td>
+        <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.humidityRatio 
                       || fsat && fsat.baseGasDensity.inputType == 'custom'" class="text-center w-25">&mdash;</td>
-          <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.humidityRatio 
-          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')" class="text-center w-25">
-            {{ modCalculatedGasDensity.humidityRatio | number:'1.0-4'}} </td>
-          <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.humidityRatio 
-          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')" class="text-center w-25">&mdash;</td>
-        </tr>
-        <tr>
-          <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Specific Volume (lb/ft <sup>3</sup>)</td>
-          <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.specificVolume && 
-          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center" [ngClass]="inModifyAll? 'w-25' : 'w-50'">
-            {{ baselineCalculatedGasDensity.specificVolume | number:'1.0-2' }}</td>
-          <td  *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.specificVolume 
+        <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.humidityRatio 
+          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')"
+          class="text-center w-25">
+          <span *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.humidityRatio | number:'1.0-4'}} </td>
+        <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.humidityRatio 
+          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')"
+          class="text-center w-25">&mdash;</td>
+      </tr>
+      <tr>
+        <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'">Specific Volume (lb/ft <sup>3</sup>)</td>
+        <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.specificVolume && 
+          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center"
+          [ngClass]="inModifyAll? 'w-25' : 'w-50'">
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.specificVolume | number:'1.0-2' }}
+        </td>
+        <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.specificVolume 
           || fsat && fsat.baseGasDensity.inputType == 'custom'" class="text-center w-25">&mdash;</td>
-          <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.specificVolume 
-          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')" class="text-center w-25">
-            {{ modCalculatedGasDensity.specificVolume | number:'1.0-2' }} </td>
-          <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.specificVolume 
-          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')" class="text-center w-25">&mdash;</td>
-        </tr>
-        <tr>
-          <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'"> Enthalpy (btu/lb)</td>
-          <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.enthalpy && 
-          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center" [ngClass]="inModifyAll? 'w-25' : 'w-50'">
-            {{ baselineCalculatedGasDensity.enthalpy | number:'1.0-1' }}</td>
-          <td  *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.enthalpy 
+        <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.specificVolume 
+          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')"
+          class="text-center w-25">
+          <span *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.specificVolume | number:'1.0-2' }} </td>
+        <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.specificVolume 
+          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')"
+          class="text-center w-25">&mdash;</td>
+      </tr>
+      <tr>
+        <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'"> Enthalpy (btu/lb)</td>
+        <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.enthalpy && 
+          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center"
+          [ngClass]="inModifyAll? 'w-25' : 'w-50'">
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.enthalpy | number:'1.0-1' }}
+        </td>
+        <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.enthalpy 
           || fsat && fsat.baseGasDensity.inputType == 'custom'" class="text-center w-25">&mdash;</td>
-          <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.enthalpy 
-          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')" class="text-center w-25">
-            {{ modCalculatedGasDensity.enthalpy | number:'1.0-1' }} </td>
-          <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.enthalpy 
-          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')" class="text-center w-25">&mdash;</td>
-        </tr>
-        <tr>
-          <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'"> Dew Point (&#8457;)</td>
-          <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.dewPoint && 
-          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center" [ngClass]="inModifyAll? 'w-25' : 'w-50'">
-            {{ baselineCalculatedGasDensity.dewPoint | number:'1.0-1' }}</td>
-          <td  *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.dewPoint 
+        <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.enthalpy 
+          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')"
+          class="text-center w-25">
+          <span *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.enthalpy | number:'1.0-1' }} </td>
+        <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.enthalpy 
+          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')"
+          class="text-center w-25">&mdash;</td>
+      </tr>
+      <tr>
+        <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'"> Dew Point (&#8457;)</td>
+        <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.dewPoint && 
+          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center"
+          [ngClass]="inModifyAll? 'w-25' : 'w-50'">
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.dewPoint | number:'1.0-1' }}
+        </td>
+        <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.dewPoint 
           || fsat && fsat.baseGasDensity.inputType == 'custom'" class="text-center w-25">&mdash;</td>
-          <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.dewPoint 
-          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')" class="text-center w-25">
-            {{ modCalculatedGasDensity.dewPoint | number:'1.0-1'}}  </td>
-          <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.dewPoint 
-          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')" class="text-center w-25">&mdash;</td>
-        </tr>
-        <tr>
-          <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'"> Relative Humdiity</td>
-          <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.relativeHumidity && 
-          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center" [ngClass]="inModifyAll? 'w-25' : 'w-50'">
-            {{ baselineCalculatedGasDensity.relativeHumidity | number:'1.0-3' }} </td>
-          <td  *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.relativeHumidity 
+        <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.dewPoint 
+          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')"
+          class="text-center w-25">
+          <span *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.dewPoint | number:'1.0-1'}} </td>
+        <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.dewPoint 
+          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')"
+          class="text-center w-25">&mdash;</td>
+      </tr>
+      <tr>
+        <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'"> Relative Humdiity</td>
+        <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.relativeHumidity && 
+          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center"
+          [ngClass]="inModifyAll? 'w-25' : 'w-50'">
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.relativeHumidity | number:'1.0-3' }}
+        </td>
+        <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.relativeHumidity 
           || fsat && fsat.baseGasDensity.inputType == 'custom'" class="text-center w-25">&mdash;</td>
-          <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.relativeHumidity 
-          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')" class="text-center w-25">
-            {{ modCalculatedGasDensity.relativeHumidity | number:'1.0-3' }}  </td>
-          <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.relativeHumidity 
-          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')" class="text-center w-25">&mdash;</td>
-        </tr>
-        <tr>
-          <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'"> Saturation Pressure (in Hg)</td>
-          <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.saturationPressure && 
-          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center" [ngClass]="inModifyAll? 'w-25' : 'w-50'">
-            {{ baselineCalculatedGasDensity.saturationPressure | number:'1.0-3' }}</td>
-          <td  *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.saturationPressure 
+        <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.relativeHumidity 
+          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')"
+          class="text-center w-25">
+          <span *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.relativeHumidity | number:'1.0-3' }} </td>
+        <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.relativeHumidity 
+          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')"
+          class="text-center w-25">&mdash;</td>
+      </tr>
+      <tr>
+        <td class="pl-1" [ngClass]="inModifyAll? 'w-25' : 'w-50'"> Saturation Pressure (in Hg)</td>
+        <td *ngIf="baselineCalculatedGasDensity && baselineCalculatedGasDensity.saturationPressure && 
+          (fsat && fsat.baseGasDensity.inputType != 'custom') || inAnalysis" class="text-center"
+          [ngClass]="inModifyAll? 'w-25' : 'w-50'">
+          <span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.saturationPressure | number:'1.0-3' }}
+        </td>
+        <td *ngIf="baselineCalculatedGasDensity && !baselineCalculatedGasDensity.saturationPressure 
           || fsat && fsat.baseGasDensity.inputType == 'custom'" class="text-center w-25">&mdash;</td>
-          <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.saturationPressure 
-          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')" class="text-center w-25">
-            {{ modCalculatedGasDensity.saturationPressure | number:'1.0-3' }} </td>
-          <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.saturationPressure 
-          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')" class="text-center w-25">&mdash;</td>
-        </tr>
+        <td *ngIf="modCalculatedGasDensity && modCalculatedGasDensity.saturationPressure 
+          && (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType != 'custom')"
+          class="text-center w-25">
+          <span *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.saturationPressure | number:'1.0-3' }} </td>
+        <td *ngIf="modCalculatedGasDensity && !modCalculatedGasDensity.saturationPressure 
+          || (inModifyAll && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')"
+          class="text-center w-25">&mdash;</td>
+      </tr>
 
-      </tbody>
-    </table>
-    
-    <div *ngIf="fsat" class="d-flex my-table-item p-2 w-75 ml-auto mr-auto">
-      <div *ngIf="fsat.baseGasDensity.inputType == 'custom'"  
-        class="alert-warning small d-flex justify-content-center col-12 align-items-center mt-5">
-        Baseline gas density is Known. To view Calculated Gas Density results, please select a different Method to Establish Gas Density.
-      </div>
-        <div *ngIf="!inSetup && fsat.modifications[modificationIndex] && fsat.modifications[this.modificationIndex].fsat.baseGasDensity.inputType == 'custom'"
-          class="alert-warning small d-flex justify-content-center col-12 align-items-center mt-5">
-        Gas density for modification "{{ modificationName }}" is Known. To view Calculated Gas Density results, please select a different Method to Establish Gas Density.
-        </div>
+    </tbody>
+  </table>
+
+  <div *ngIf="fsat" class="d-flex my-table-item p-2 w-75 ml-auto mr-auto">
+    <div *ngIf="fsat.baseGasDensity.inputType == 'custom'"
+      class="alert-warning small d-flex justify-content-center col-12 align-items-center mt-5">
+      Baseline gas density is Known. To view Calculated Gas Density results, please select a different Method to
+      Establish Gas Density.
     </div>
-
+    <div
+      *ngIf="!inSetup && fsat.modifications[modificationIndex] && fsat.modifications[this.modificationIndex].fsat.baseGasDensity.inputType == 'custom'"
+      class="alert-warning small d-flex justify-content-center col-12 align-items-center mt-5">
+      Gas density for modification "{{ modificationName }}" is Known. To view Calculated Gas Density results, please
+      select a different Method to Establish Gas Density.
+    </div>
   </div>
 
+</div>
 
 
 
-<div *ngIf="(inAnalysis && customDensityInputType) 
+
+<div
+  *ngIf="(inAnalysis && customDensityInputType) 
 || (inSetup && fsat.baseGasDensity.inputType == 'custom')
 || (fsat && fsat.baseGasDensity.inputType == 'custom' && fsat.modifications[modificationIndex].fsat.baseGasDensity.inputType == 'custom')">
-    <div class="d-flex p-2 w-75 ml-auto mr-auto">
-      <div class="alert-warning small d-flex justify-content-center col-12 align-items-center mt-5">
-        Gas density known. To view Calculated Gas Density results, please select a different Method to Establish Gas Density.
-      </div>
+  <div class="d-flex p-2 w-75 ml-auto mr-auto">
+    <div class="alert-warning small d-flex justify-content-center col-12 align-items-center mt-5">
+      Gas density known. To view Calculated Gas Density results, please select a different Method to Establish Gas
+      Density.
     </div>
-</div>
+  </div>
+</div> -->

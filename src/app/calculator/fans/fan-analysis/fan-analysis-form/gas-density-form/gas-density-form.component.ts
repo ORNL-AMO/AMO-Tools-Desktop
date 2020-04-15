@@ -32,7 +32,6 @@ export class GasDensityFormComponent implements OnInit {
   ];
 
   gasDensity: number;
-  calculatedGasDensity: CalculatedGasDensity;
   resetFormSubscription: Subscription;
   constructor(private convertUnitsService: ConvertUnitsService, private gasDensityFormService: GasDensityFormService, private fsatService: FsatService,
     private fanAnalysisService: FanAnalysisService) { }
@@ -47,9 +46,11 @@ export class GasDensityFormComponent implements OnInit {
       }
     })
   }
-  
+
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
+    this.gasDensityFormService.baselineCalculatedGasDensity.next(undefined);
+    this.gasDensityFormService.baselineCalculationType.next(undefined);
   }
 
   resetData() {
@@ -67,67 +68,84 @@ export class GasDensityFormComponent implements OnInit {
   }
 
   getDensity() {
+    let calculatedGasDensity: CalculatedGasDensity;
     if (this.gasDensityForm.controls.inputType.value === 'relativeHumidity') {
-      this.calcDensityRelativeHumidity();
+      calculatedGasDensity = this.calcDensityRelativeHumidity();
     } else if (this.gasDensityForm.controls.inputType.value === 'wetBulb') {
-      this.calcDensityWetBulb();
+      calculatedGasDensity = this.calcDensityWetBulb();
     } else if (this.gasDensityForm.controls.inputType.value === 'dewPoint') {
-      this.calcDensityDewPoint();
-    } else {
-      this.save();
+      calculatedGasDensity = this.calcDensityDewPoint();
     }
 
     if (this.gasDensityForm.controls.inputType.value != 'custom') {
-        this.gasDensityFormService.baselineUpdatedGasDensity.next(this.calculatedGasDensity);
-        this.gasDensityFormService.customDensityInputType.next(false);
-    } else {
-      this.gasDensityFormService.customDensityInputType.next(true);
+      if (calculatedGasDensity && isNaN(calculatedGasDensity.gasDensity) === false) {
+        this.gasDensityForm.patchValue({
+          gasDensity: calculatedGasDensity.gasDensity
+        });
+      } else {
+        this.gasDensityForm.patchValue({
+          gasDensity: undefined
+        });
+      }
     }
-  }
 
-  calcDensityWetBulb() {
-    let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
-    this.calculatedGasDensity = this.fsatService.getBaseGasDensityWetBulb(tmpObj, this.settings);
-    if (isNaN(this.calculatedGasDensity.gasDensity) === false) {
-      this.gasDensityForm.patchValue({
-        gasDensity: this.calculatedGasDensity.gasDensity
-      });
-    } else {
-      this.gasDensityForm.patchValue({
-        gasDensity: undefined
-      });
-    }
+    this.gasDensityFormService.baselineCalculatedGasDensity.next(calculatedGasDensity);
+    this.gasDensityFormService.baselineCalculationType.next(this.gasDensityForm.controls.inputType.value);
     this.save();
   }
 
-  calcDensityRelativeHumidity() {
-    let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
-    this.calculatedGasDensity = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj, this.settings);
-    if (isNaN(this.calculatedGasDensity.gasDensity) === false) {
-      this.gasDensityForm.patchValue({
-        gasDensity: this.calculatedGasDensity.gasDensity
-      });
-    } else {
-      this.gasDensityForm.patchValue({
-        gasDensity: undefined
-      });
+  calcDensityWetBulb(): CalculatedGasDensity {
+    let calculatedGasDensity: CalculatedGasDensity;
+    if (this.isWetBulbValid()) {
+      let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
+      calculatedGasDensity = this.fsatService.getBaseGasDensityWetBulb(tmpObj, this.settings);
     }
-    this.save();
+    return calculatedGasDensity;
   }
 
-  calcDensityDewPoint() {
-    let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
-    this.calculatedGasDensity = this.fsatService.getBaseGasDensityDewPoint(tmpObj, this.settings);
-    if (isNaN(this.calculatedGasDensity.gasDensity) === false) {
-      this.gasDensityForm.patchValue({
-        gasDensity: this.calculatedGasDensity.gasDensity
-      });
-    } else {
-      this.gasDensityForm.patchValue({
-        gasDensity: undefined
-      });
+  isWetBulbValid(): boolean {
+    //dry bulb
+    //static pressure
+    //specific gravity
+    //wet bulb temp
+    return (this.gasDensityForm.controls.dryBulbTemp.valid && this.gasDensityForm.controls.staticPressure.valid
+      && this.gasDensityForm.controls.specificGravity.valid && this.gasDensityForm.controls.wetBulbTemp.valid);
+  }
+
+  calcDensityRelativeHumidity(): CalculatedGasDensity {
+    let calculatedGasDensity: CalculatedGasDensity;
+    if (this.isRelativeHumidityValid()) {
+      let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
+      calculatedGasDensity = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj, this.settings);
     }
-    this.save();
+    return calculatedGasDensity;
+  }
+
+  isRelativeHumidityValid(): boolean {
+    //dry bulb
+    //static pressure
+    //specific gravity
+    //relativeHumidity
+    return (this.gasDensityForm.controls.dryBulbTemp.valid && this.gasDensityForm.controls.staticPressure.valid
+      && this.gasDensityForm.controls.specificGravity.valid && this.gasDensityForm.controls.relativeHumidity.valid);
+  }
+
+  calcDensityDewPoint(): CalculatedGasDensity {
+    let calculatedGasDensity: CalculatedGasDensity;
+    if (this.isDewPointValid()) {
+      let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
+      calculatedGasDensity = this.fsatService.getBaseGasDensityDewPoint(tmpObj, this.settings);
+    }
+    return calculatedGasDensity;
+  }
+
+  isDewPointValid() {
+    //dry bulb
+    //static pressure
+    //specific gravity
+    //dewPoint
+    return (this.gasDensityForm.controls.dryBulbTemp.valid && this.gasDensityForm.controls.staticPressure.valid
+      && this.gasDensityForm.controls.specificGravity.valid && this.gasDensityForm.controls.dewPoint.valid);
   }
 
   getDisplayUnit(unit: any) {

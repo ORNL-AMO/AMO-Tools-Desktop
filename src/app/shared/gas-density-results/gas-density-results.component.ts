@@ -3,6 +3,7 @@ import { CalculatedGasDensity, FSAT } from '../models/fans';
 import { Subscription } from 'rxjs';
 import { Settings } from '../models/settings';
 import { GasDensityFormService } from '../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
+import { CompareService } from '../../fsat/compare.service';
 
 
 @Component({
@@ -13,67 +14,51 @@ import { GasDensityFormService } from '../../calculator/fans/fan-analysis/fan-an
 export class GasDensityResultsComponent implements OnInit {
   @Input() inSetup: boolean;
   @Input() settings: Settings;
-  @Input() fsat: FSAT;
-  @Input() modificationIndex: number;
 
-  baselineUpdatedGasDensitySubscription: Subscription;
-  modUpdatedGasDensitySubscription: Subscription;
-  updateDataSubscription: Subscription;
-  customDensityInputTypeSubscription: Subscription;
+  baselineGasDensitySubscription: Subscription;
+  modificationGasDensitySubscription: Subscription;
+  modificationCalculationTypeSubscription: Subscription;
+  baselineCalculationTypeSubscription: Subscription;
+  selectedModificationSubscription: Subscription;
 
   baselineCalculatedGasDensity: CalculatedGasDensity;
   modCalculatedGasDensity: CalculatedGasDensity;
-  customDensityInputType: boolean;
-  modificationName: string;
-  inAnalysis: boolean;
-  inModifyAll: boolean;
-  // showBaselineResult: boolean;
-  // showModificationResult: boolean;
+  isBaselineTypeCustom: boolean;
+  isModificationTypeCustom: boolean;
 
+  modificationName: string;
   constructor(
-    private gasDensityFormService: GasDensityFormService) { }
+    private gasDensityFormService: GasDensityFormService, private compareService: CompareService) { }
 
   ngOnInit(): void {
-    this.getDensityResults();
-    if (!this.inSetup && !this.fsat) {
-      this.inAnalysis = true;
-    } else if (!this.inSetup && this.fsat) {
-      this.inModifyAll = true;
-      this.modificationName = this.fsat.modifications[this.modificationIndex].fsat.name;
-    }
-  }
-
-  // Pull display logic out of template
-  // updateView() {
-  //   if (!this.inSetup && !this.fsat) {
-  //     this.inAnalysis = true;
-  //   } else if (!this.inSetup && this.fsat) {
-  //     this.inModifyAll = true;
-  //     this.modificationName = this.fsat.modifications[this.modificationIndex].fsat.name;
-  //     this.showModificationResult = this.modCalculatedGasDensity && this.fsat.modifications[this.modificationIndex].fsat.baseGasDensity.inputType != 'custom'
-  //     this.showBaselineResult = this.baselineCalculatedGasDensity && this.fsat.baseGasDensity.inputType != 'custom';
-  //   } else {
-  //     this.showBaselineResult = this.baselineCalculatedGasDensity && this.fsat.baseGasDensity.inputType != 'custom';
-  //     this.showModificationResult = false;
-  //   }
-  // }
-
-  getDensityResults() {
-    this.baselineUpdatedGasDensitySubscription = this.gasDensityFormService.baselineUpdatedGasDensity.subscribe(updatedValue => {
-        this.baselineCalculatedGasDensity = updatedValue;
+    this.modificationGasDensitySubscription = this.gasDensityFormService.modificationCalculatedGasDensity.subscribe(val => {
+      this.modCalculatedGasDensity = val;
     });
-    this.modUpdatedGasDensitySubscription = this.gasDensityFormService.modUpdatedGasDensity.subscribe(updatedValue => {
-        this.modCalculatedGasDensity = updatedValue;
+    this.modificationCalculationTypeSubscription = this.gasDensityFormService.modificationCalculationType.subscribe(val => {
+      this.isModificationTypeCustom = (val === 'custom');
     });
-    this.customDensityInputTypeSubscription = this.gasDensityFormService.customDensityInputType.subscribe(isCustomMethod => {
-      this.customDensityInputType = isCustomMethod;
+
+    this.baselineGasDensitySubscription = this.gasDensityFormService.baselineCalculatedGasDensity.subscribe(val => {
+      this.baselineCalculatedGasDensity = val;
+    });
+    this.baselineCalculationTypeSubscription = this.gasDensityFormService.baselineCalculationType.subscribe(val => {
+      this.isBaselineTypeCustom = (val === 'custom');
+    });
+
+    this.selectedModificationSubscription = this.compareService.selectedModification.subscribe(val => {
+      if (val && !this.inSetup) {
+        this.modificationName = val.name;
+      } else {
+        this.modificationName = undefined;
+      }
     });
   }
 
   ngOnDestroy() {
-    this.baselineUpdatedGasDensitySubscription.unsubscribe();
-    this.modUpdatedGasDensitySubscription.unsubscribe();
-    this.customDensityInputTypeSubscription.unsubscribe();
+    this.baselineGasDensitySubscription.unsubscribe();
+    this.modificationGasDensitySubscription.unsubscribe();
+    this.modificationCalculationTypeSubscription.unsubscribe();
+    this.baselineCalculationTypeSubscription.unsubscribe();
+    this.selectedModificationSubscription.unsubscribe();
   }
-
 }

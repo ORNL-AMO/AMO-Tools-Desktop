@@ -21,7 +21,7 @@ export class FsatFluidService {
       wetBulbTemp: [obj.wetBulbTemp, gasDensityValidators.wetBulbTempValidators],
       relativeHumidity: [obj.relativeHumidity, gasDensityValidators.relativeHumidityValidators],
       dewPoint: [obj.dewPoint, gasDensityValidators.dewPointValidators],
-      gasDensity: [obj.gasDensity, [Validators.min(0.01), Validators.required]],
+      gasDensity: [obj.gasDensity, [GreaterThanValidator.greaterThan(0), Validators.required]],
       specificHeatGas: [obj.specificHeatGas, gasDensityValidators.specificHeatGasValidators]
     });
     for (let key in form.controls) {
@@ -49,7 +49,7 @@ export class FsatFluidService {
     if (obj.inputType === 'wetBulb') {
       wetBulbTempValidators = [Validators.required];
       // Not sure if specificHeatGas is necessary since it has been removed from user input in fans
-      specificHeatGasValidators = [GreaterThanValidator.greaterThan(0.01), Validators.required];
+      specificHeatGasValidators = [GreaterThanValidator.greaterThan(0), Validators.required];
     }
     if (obj.inputType === 'relativeHumidity') {
       relativeHumidityValidators = [GreaterThanValidator.greaterThan(0), Validators.max(100), Validators.required];
