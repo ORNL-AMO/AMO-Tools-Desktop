@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Fan203Inputs, FanRatedInfo, BaseGasDensity, Plane, PlaneData, Fan203Results, PlaneResults, PlaneResult } from '../../../shared/models/fans';
+import { Fan203Inputs, FanRatedInfo, BaseGasDensity, Plane, PlaneData, Fan203Results, PlaneResults, PlaneResult, CalculatedGasDensity } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 declare var fanAddon: any;
@@ -233,6 +233,20 @@ export class ConvertFanAnalysisService {
     }
     input.dryBulbTemp = this.convertNum(input.dryBulbTemp, 'F', settings.fanTemperatureMeasurement);
     input.staticPressure = this.convertNum(input.staticPressure, 'inH2o', settings.fanPressureMeasurement);
+    return input;
+  }
+
+  convertCalculatedGasDensity(input: CalculatedGasDensity, settings: Settings): CalculatedGasDensity {
+    input.gasDensity = this.convertNum(input.gasDensity, 'lbscf', settings.densityMeasurement);
+    input.absolutePressure = this.convertNum(input.absolutePressure, 'inH2o', settings.fanPressureMeasurement);
+    //metric/imperial
+    if(settings.unitsOfMeasure == 'Metric'){
+      input.specificVolume = this.convertNum(input.specificVolume, 'ft3lb', 'm3kg');
+      input.enthalpy = this.convertNum(input.enthalpy, 'btuLb', 'kJkg');  
+    }
+    
+    input.dewPoint = this.convertNum(input.dewPoint, 'F', settings.fanTemperatureMeasurement);
+    input.saturationPressure = this.convertNum(input.saturationPressure, 'inHg', settings.fanBarometricPressure);
     return input;
   }
 

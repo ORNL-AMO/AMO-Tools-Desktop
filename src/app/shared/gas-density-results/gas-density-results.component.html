@@ -85,7 +85,9 @@
       </tr>
       <!--enthalpy-->
       <tr>
-        <td>Enthalpy (btu/lb)</td>
+        <td>Enthalpy
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">(kJ/kg)</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(btu/lb)</span> </td>
         <td><span
             *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.enthalpy | number:'1.0-1' }}</span>
           <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>

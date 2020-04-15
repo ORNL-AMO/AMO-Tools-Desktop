@@ -58,28 +58,22 @@ export class FsatService {
 
   getBaseGasDensityDewPoint(inputs: BaseGasDensity, settings: Settings): CalculatedGasDensity {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
-    const calculatedGasDensity: CalculatedGasDensity = fanAddon.getBaseGasDensityDewPoint(inputs);
-    if (settings.densityMeasurement !== 'lbscf') {
-      calculatedGasDensity.gasDensity = this.convertUnitsService.value(calculatedGasDensity.gasDensity).from('lbscf').to(settings.densityMeasurement);
-    }
+    let calculatedGasDensity: CalculatedGasDensity = fanAddon.getBaseGasDensityDewPoint(inputs);
+    calculatedGasDensity = this.convertFanAnalysisService.convertCalculatedGasDensity(calculatedGasDensity, settings);
     return calculatedGasDensity;
   }
 
   getBaseGasDensityRelativeHumidity(inputs: BaseGasDensity, settings: Settings): CalculatedGasDensity {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
     let calculatedGasDensity: CalculatedGasDensity = fanAddon.getBaseGasDensityRelativeHumidity(inputs);
-    if (settings.densityMeasurement !== 'lbscf') {
-      calculatedGasDensity.gasDensity = this.convertUnitsService.value(calculatedGasDensity.gasDensity).from('lbscf').to(settings.densityMeasurement);
-    }
+    calculatedGasDensity = this.convertFanAnalysisService.convertCalculatedGasDensity(calculatedGasDensity, settings);
     return calculatedGasDensity;
   }
 
   getBaseGasDensityWetBulb(inputs: BaseGasDensity, settings: Settings): CalculatedGasDensity {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
     let calculatedGasDensity: CalculatedGasDensity = fanAddon.getBaseGasDensityWetBulb(inputs);
-    if (settings.densityMeasurement !== 'lbscf') {
-      calculatedGasDensity.gasDensity = this.convertUnitsService.value(calculatedGasDensity.gasDensity).from('lbscf').to(settings.densityMeasurement);
-    }
+    calculatedGasDensity = this.convertFanAnalysisService.convertCalculatedGasDensity(calculatedGasDensity, settings);
     return calculatedGasDensity;
   }
 
