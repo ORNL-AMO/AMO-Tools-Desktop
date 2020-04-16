@@ -19,8 +19,7 @@
     <div class="print-pie-width" *ngIf="scenarioSummary.modificationGraphData">
       <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
       <app-plotly-pie-chart *ngIf="scenarioSummary.modificationGraphData.valid.isValid"
-        [values]="scenarioSummary.modificationGraphData.pieChartValues"
-        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
+        [valuesAndLabels]="scenarioSummary.modificationGraphData.valuesAndLabels" [valuesUnit]="'kW'" [isPrint]="true">
       </app-plotly-pie-chart>
       <div class="alert-danger small" *ngIf="!scenarioSummary.modificationGraphData.valid.isValid">
         Invalid modification<br>

@@ -20,8 +20,7 @@
     </div>
     <div class="p-2 pie-chart-container">
       <app-plotly-pie-chart *ngIf="selectedModificationData.valid.isValid"
-        [values]="selectedModificationData.pieChartValues" [labels]="selectedModificationData.pieChartLabels"
-        [valuesUnit]="'kW'">
+        [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
       <div class="alert-danger small" *ngIf="!selectedModificationData.valid.isValid">
         Invalid modification<br>
@@ -35,7 +34,7 @@
   <div *ngIf="selectedModificationData" class="w-100">
     <app-plotly-bar-chart *ngIf="selectedModificationData.valid.isValid"
       [barChartDataArray]="[selectedBaselineData, selectedModificationData]" [yAxisLabel]="barChartYAxisLabel"
-      [yValueUnit]="'kW'">
+      [yValueUnit]="'kW'" [hoverLabel]="'Power'">
     </app-plotly-bar-chart>
   </div>
 </div>
