@@ -15,9 +15,8 @@ export class VisualizeGraphComponent implements OnInit {
 
   ngOnInit() {
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
-      // console.log(graphObj);
       Plotly.react('plotlyDiv', graphObj.data, graphObj.layout, { responsive: true });
-    })
+    });
   }
 
   ngOnDestroy() {

@@ -9,15 +9,15 @@ import { GraphDataObj, LogToolField, GraphObj } from '../log-tool-models';
 export class VisualizeService {
 
 
-  graphData: BehaviorSubject<Array<GraphDataObj>>;
-  selectedGraphData: BehaviorSubject<GraphDataObj>;
+  // graphData: BehaviorSubject<Array<GraphDataObj>>;
+  // selectedGraphData: BehaviorSubject<GraphDataObj>;
   visualizeDataInitialized: boolean = false;
 
   graphObjects: BehaviorSubject<Array<GraphObj>>;
   selectedGraphObj: BehaviorSubject<GraphObj>;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
-    this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
-    this.graphData = new BehaviorSubject(new Array());
+    // this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
+    // this.graphData = new BehaviorSubject(new Array());
     let initData = this.initGraphObj();
     this.graphObjects = new BehaviorSubject([initData]);
     this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
@@ -105,8 +105,8 @@ export class VisualizeService {
 
 
   resetData() {
-    this.graphData.next(new Array());
-    this.selectedGraphData.next(undefined);
+    // this.graphData.next(new Array());
+    // this.selectedGraphData.next(undefined);
     this.visualizeDataInitialized = false;
   }
 
@@ -152,87 +152,10 @@ export class VisualizeService {
   }
 
   removeGraphDataObj(removeIndex: number) {
-    let currentGraphData: Array<GraphDataObj> = this.graphData.getValue();
+    let currentGraphData: Array<GraphObj> = this.graphObjects.getValue();
     currentGraphData.splice(removeIndex, 1);
-    this.graphData.next(currentGraphData);
+    this.graphObjects.next(currentGraphData);
   }
-
-  updateSelectedYDataField(dataField: LogToolField) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    let yData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
-    currentSelectedGraphData.yData = yData;
-    currentSelectedGraphData.selectedYDataField = dataField;
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  updateSelectedXDataField(dataField: LogToolField) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    let xData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
-    currentSelectedGraphData.xData = xData;
-    currentSelectedGraphData.selectedXDataField = dataField;
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  updateGraphType(newGraphType: { label: string, value: string }) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    currentSelectedGraphData.graphType = newGraphType;
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  updateAllGraphItems(currentSelectedGraphData: GraphDataObj) {
-    let currentAllGraphData: Array<GraphDataObj> = this.graphData.getValue();
-    let updatedGraphDataIndex: number = currentAllGraphData.findIndex(dataObj => { return dataObj.graphId == currentSelectedGraphData.graphId });
-    currentAllGraphData[updatedGraphDataIndex] = currentSelectedGraphData;
-    this.graphData.next(currentAllGraphData);
-  }
-
-  updateGraphScatterPlotMode(str: string) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    currentSelectedGraphData.scatterPlotMode = str;
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-
-  //HISTOGRAM
-  updateSelectedHistogramDataField(dataField: LogToolField) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    currentSelectedGraphData.histogramDataField = dataField;
-    currentSelectedGraphData.histogramData = this.getHistogramData();
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  updateUseStandardDeviation(useStandardDeviation: boolean) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    currentSelectedGraphData.useStandardDeviation = useStandardDeviation;
-    currentSelectedGraphData.histogramData = this.getHistogramData();
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  updateNumberOfBins(numberOfBins: number) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    currentSelectedGraphData.numberOfBins = numberOfBins;
-    currentSelectedGraphData.histogramData = this.getHistogramData();
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  getHistogramData(): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    if (currentSelectedGraphData.useStandardDeviation == true) {
-      //get bin data using standard deviation
-      return this.getStandardDevBarChartData(currentSelectedGraphData.histogramDataField);
-    } else {
-      //get bin data using number of bins
-      return this.getNumberOfBinsBarChartData(currentSelectedGraphData.histogramDataField, currentSelectedGraphData.numberOfBins);
-    }
-  }
-
 
   getNumberOfBinsBarChartData(dataField: LogToolField, numberOfBins: number): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
     let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
@@ -260,8 +183,6 @@ export class VisualizeService {
     }
     return { xLabels: xLabels, yValues: yValues, standardDeviation: 0, average: mean };
   }
-
-
 
   getStandardDevBarChartData(dataField: LogToolField): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
     let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);

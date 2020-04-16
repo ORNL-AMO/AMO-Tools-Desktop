@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
-import { GraphDataObj, LogToolField, GraphObj } from '../../log-tool-models';
-import { measurementOptions } from '../../system-setup/clean-data/field-units-modal/field-unit-options';
+import { LogToolField, GraphObj } from '../../log-tool-models';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 
 @Component({
@@ -27,17 +26,6 @@ export class VisualizeMenuComponent implements OnInit {
     dataField: LogToolField,
     data: Array<number>
   }>
-
-  // selectedYAxisDataOptions: Array<{
-  //   index: number,
-  //   dataOption: {
-  //     dataField: LogToolField,
-  //     data: Array<number>
-  //   },
-  //   seriesColor: string,
-  //   seriesName: string,
-  //   yaxis: string
-  // }>
 
   yAxisOptions: Array<{ axis: string, label: string }> = [{ axis: 'y', label: 'Left' }, { axis: 'y2', label: 'Right' }];
   histogramMethod: string = 'stdDeviation';
