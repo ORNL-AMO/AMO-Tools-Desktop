@@ -239,6 +239,7 @@ export class ConvertFanAnalysisService {
   convertCalculatedGasDensity(input: CalculatedGasDensity, settings: Settings): CalculatedGasDensity {
     input.gasDensity = this.convertNum(input.gasDensity, 'lbscf', settings.densityMeasurement);
     input.absolutePressure = this.convertNum(input.absolutePressure, 'inH2o', settings.fanPressureMeasurement);
+    input.relativeHumidity = input.relativeHumidity * 100;
     //metric/imperial
     if(settings.unitsOfMeasure == 'Metric'){
       input.specificVolume = this.convertNum(input.specificVolume, 'ft3lb', 'm3kg');

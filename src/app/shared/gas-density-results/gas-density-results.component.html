@@ -111,13 +111,13 @@
       </tr>
       <!--relative humidity-->
       <tr>
-        <td>Relative Humdiity</td>
+        <td>Relative Humidity (%)</td>
         <td><span
-            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.relativeHumidity | number:'1.0-3' }}</span>
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.relativeHumidity | number:'1.0-1' }}</span>
           <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
         </td>
         <td *ngIf="modificationName"><span
-            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.relativeHumidity | number:'1.0-3' }}</span>
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.relativeHumidity | number:'1.0-1' }}</span>
           <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
         </td>
       </tr>
