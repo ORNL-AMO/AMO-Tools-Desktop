@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid } from '../shared/models/fans';
+import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, CalculatedGasDensity } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
@@ -56,31 +56,25 @@ export class FsatService {
     return results;
   }
 
-  getBaseGasDensityDewPoint(inputs: BaseGasDensity, settings: Settings): number {
+  getBaseGasDensityDewPoint(inputs: BaseGasDensity, settings: Settings): CalculatedGasDensity {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
-    let result: number = fanAddon.getBaseGasDensityDewPoint(inputs);
-    if (settings.densityMeasurement !== 'lbscf') {
-      result = this.convertUnitsService.value(result).from('lbscf').to(settings.densityMeasurement);
-    }
-    return result;
+    let calculatedGasDensity: CalculatedGasDensity = fanAddon.getBaseGasDensityDewPoint(inputs);
+    calculatedGasDensity = this.convertFanAnalysisService.convertCalculatedGasDensity(calculatedGasDensity, settings);
+    return calculatedGasDensity;
   }
 
-  getBaseGasDensityRelativeHumidity(inputs: BaseGasDensity, settings: Settings): number {
+  getBaseGasDensityRelativeHumidity(inputs: BaseGasDensity, settings: Settings): CalculatedGasDensity {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
-    let result: number = fanAddon.getBaseGasDensityRelativeHumidity(inputs);
-    if (settings.densityMeasurement !== 'lbscf') {
-      result = this.convertUnitsService.value(result).from('lbscf').to(settings.densityMeasurement);
-    }
-    return result;
+    let calculatedGasDensity: CalculatedGasDensity = fanAddon.getBaseGasDensityRelativeHumidity(inputs);
+    calculatedGasDensity = this.convertFanAnalysisService.convertCalculatedGasDensity(calculatedGasDensity, settings);
+    return calculatedGasDensity;
   }
 
-  getBaseGasDensityWetBulb(inputs: BaseGasDensity, settings: Settings): number {
+  getBaseGasDensityWetBulb(inputs: BaseGasDensity, settings: Settings): CalculatedGasDensity {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
-    let result: number = fanAddon.getBaseGasDensityWetBulb(inputs);
-    if (settings.densityMeasurement !== 'lbscf') {
-      result = this.convertUnitsService.value(result).from('lbscf').to(settings.densityMeasurement);
-    }
-    return result;
+    let calculatedGasDensity: CalculatedGasDensity = fanAddon.getBaseGasDensityWetBulb(inputs);
+    calculatedGasDensity = this.convertFanAnalysisService.convertCalculatedGasDensity(calculatedGasDensity, settings);
+    return calculatedGasDensity;
   }
 
   getVelocityPressureData(inputs: Plane, settings: Settings): { pv3: number, percent75Rule: number } {

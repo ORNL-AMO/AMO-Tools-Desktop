@@ -1,13 +1,23 @@
 import { Injectable } from '@angular/core';
-import { BaseGasDensity } from '../../../../../shared/models/fans';
+import { BaseGasDensity, CalculatedGasDensity } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class GasDensityFormService {
 
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
+  baselineCalculatedGasDensity: BehaviorSubject<CalculatedGasDensity>;
+  modificationCalculatedGasDensity: BehaviorSubject<CalculatedGasDensity>;
+  baselineCalculationType: BehaviorSubject<string>;
+  modificationCalculationType: BehaviorSubject<string>;
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
+    this.baselineCalculatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
+    this.modificationCalculatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
+    this.baselineCalculationType = new BehaviorSubject<string>(undefined);
+    this.modificationCalculationType = new BehaviorSubject<string>(undefined)
+  }
 
   getGasDensityFormFromObj(obj: BaseGasDensity, settings: Settings): FormGroup {
     let ranges: GasDensityRanges = this.getGasDensityRanges(settings);

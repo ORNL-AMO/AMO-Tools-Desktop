@@ -96,7 +96,7 @@
       <label for="wetBulbTemp">Wet Bulb Temp (T<sub>wo</sub>)</label>
       <div class="input-group">
         <input name="wetBulbTemp" type="number" step="any" class="form-control" formControlName="wetBulbTemp"
-          id="wetBulbTemp" (input)="calcDensityWetBulb()" (focus)="focusField('wetBulbTemp')" onfocus="this.select();">
+          id="wetBulbTemp" (input)="getDensity()" (focus)="focusField('wetBulbTemp')" onfocus="this.select();">
         <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.fanTemperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
         <span *ngIf="settings.fanTemperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
@@ -116,7 +116,7 @@
       <label for="relativeHumidity">Relative Humidity</label>
       <div class="input-group">
         <input name="relativeHumidity" type="number" step="any" class="form-control" formControlName="relativeHumidity"
-          id="relativeHumidity" (input)="calcDensityRelativeHumidity()" (focus)="focusField('relativeHumidity')"
+          id="relativeHumidity" (input)="getDensity()" (focus)="focusField('relativeHumidity')"
           onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
@@ -133,7 +133,7 @@
       <label for="dewPoint">Gas Dew Point (T<sub>dp</sub>)</label>
       <div class="input-group">
         <input name="dewPoint" type="number" step="any" class="form-control" formControlName="dewPoint" id="dewPoint"
-          (input)="calcDensityDewPoint()" (focus)="focusField('dewPoint')" onfocus="this.select();">
+          (input)="getDensity()" (focus)="focusField('dewPoint')" onfocus="this.select();">
         <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.fanTemperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
         <span *ngIf="settings.fanTemperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
