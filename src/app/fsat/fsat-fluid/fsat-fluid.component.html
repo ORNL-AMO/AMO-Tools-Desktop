@@ -40,7 +40,7 @@
     <div *ngIf="gasDensityForm.controls.gasType.value != 'OTHER'">
 
       <div class="form-group" [ngClass]="{'indicate-different': isInputTypeDifferent()}">
-        <label for="{{'inputType_'+idString}}">Method to Establish Gas Density</label>
+        <label for="{{'inputType_'+idString}}">Method to Establish Air Density</label>
         <select class="form-control" name="inputType" formControlName="inputType" id="{{'inputType_'+idString}}"
           (change)="changeMethod()" (focus)="focusField('inputType')">
           <option *ngFor="let method of methods" [ngValue]="method.value">{{method.display}}</option>
@@ -85,7 +85,7 @@
 
       <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'"
         [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':gasDensityForm.controls.specificGravity.invalid}">
-        <label for="{{'specificGravity_'+idString}}">Gas Relative Density (G)</label>
+        <label for="{{'specificGravity_'+idString}}">Air Relative Density (G)</label>
         <div class="input-group">
           <input name="specificGravity" type="number" step="any" class="form-control" formControlName="specificGravity"
             id="{{'specificGravity_'+idString}}" (input)="getDensity()" (focus)="focusField('specificGravity')"
@@ -140,7 +140,7 @@
 
       <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'dewPoint'"
         [ngClass]="{'indicate-different': isDewPointDifferent(), 'invalid':gasDensityForm.controls.dewPoint.invalid}">
-        <label for="{{'dewPoint_'+idString}}">Gas Dew Point (T
+        <label for="{{'dewPoint_'+idString}}">Air Dew Point (T
           <sub>dp</sub>)</label>
         <div class="input-group">
           <input name="dewPoint" type="number" step="any" class="form-control" formControlName="dewPoint"
@@ -161,7 +161,10 @@
 
     <div class="form-group"
       [ngClass]="{'indicate-different': isGasDensityDifferent(), 'invalid':gasDensityForm.controls.gasDensity.invalid}">
-      <label for="{{'gasDensity_'+idString}}">Gas Density (&rho;
+      <label for="{{'gasDensity_'+idString}}">
+        <span *ngIf="gasDensityForm.controls.gasType.value == 'OTHER'">Gas</span>
+        <span *ngIf="gasDensityForm.controls.gasType.value == 'AIR'">Air</span>
+        Density (&rho;
         <sub>0</sub>)</label>
       <div class="small text-center" *ngIf="gasDensityForm.controls.inputType.value != 'custom'"
         [ngClass]="{'indicate-different': isGasDensityDifferent()}">
