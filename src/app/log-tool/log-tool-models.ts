@@ -92,7 +92,7 @@ export interface GraphObj {
     name: string,
     data: [{
         x: Array<number | string>,
-        y: Array<number>,
+        y: Array<number | string>,
         name: string,
         type: string,
         mode: string,
@@ -117,7 +117,7 @@ export interface GraphObj {
     },
     isTimeSeries: boolean,
     selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
-    selectedYAxisDataOptions: Array<{ index: number, dataOption: { dataField: LogToolField, data: Array<number> }, seriesColor: string, seriesName: string, yaxis: string }>,
+    selectedYAxisDataOptions: Array<{ index: number, dataOption: { dataField: LogToolField, data: Array<number | string> }, seriesColor: string, seriesName: string, yaxis: string }>,
     hasSecondYAxis: boolean,
     numberOfBins: number,
     useStandardDeviation: boolean,

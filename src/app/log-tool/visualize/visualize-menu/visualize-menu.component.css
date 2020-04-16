@@ -62,3 +62,7 @@ a.list-group-item.active:hover{
     padding-top: 8px;
     border-top: groove;
 }
+
+.danger.click-link{
+    color: red;
+}

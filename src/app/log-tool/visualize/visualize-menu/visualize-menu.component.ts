@@ -24,7 +24,7 @@ export class VisualizeMenuComponent implements OnInit {
   }>;
   yAxisDataOptions: Array<{
     dataField: LogToolField,
-    data: Array<number>
+    data: Array<number | string>
   }>
 
   yAxisOptions: Array<{ axis: string, label: string }> = [{ axis: 'y', label: 'Left' }, { axis: 'y2', label: 'Right' }];
@@ -124,7 +124,7 @@ export class VisualizeMenuComponent implements OnInit {
     }
     this.xAxisDataOptions = new Array();
     dataFields.forEach(field => {
-      let data = this.logToolDataService.getAllFieldData(field.fieldName);
+      let data = this.visualizeService.getVisualizeData(field.fieldName);
       this.xAxisDataOptions.push({
         data: data,
         dataField: field
@@ -150,7 +150,7 @@ export class VisualizeMenuComponent implements OnInit {
     let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
     this.yAxisDataOptions = new Array();
     dataFields.forEach(field => {
-      let data = this.logToolDataService.getAllFieldData(field.fieldName);
+      let data = this.visualizeService.getVisualizeData(field.fieldName);
       this.yAxisDataOptions.push({
         data: data,
         dataField: field
@@ -198,7 +198,7 @@ export class VisualizeMenuComponent implements OnInit {
     this.selectedGraphObj.hasSecondYAxis = true;
   }
 
-  removeAxis(){
+  removeAxis() {
     this.selectedGraphObj.hasSecondYAxis = false;
     this.selectedGraphObj.selectedYAxisDataOptions.forEach(option => {
       option.yaxis = 'y';
@@ -228,5 +228,14 @@ export class VisualizeMenuComponent implements OnInit {
     this.selectedGraphObj.data = [this.selectedGraphObj.data[0]];
     this.selectedGraphObj.selectedYAxisDataOptions = [this.selectedGraphObj.selectedYAxisDataOptions[0]];
     this.saveChanges();
+  }
+
+  removeYAxisData(index: number) {
+    this.selectedGraphObj.selectedYAxisDataOptions.splice(index, 1);
+    this.selectedGraphObj.data.splice(index, 1);
+    if (this.selectedGraphObj.data.length == 1 && this.selectedGraphObj.hasSecondYAxis == true) {
+      this.selectedGraphObj.hasSecondYAxis = false;
+    }
+    this.setYAxisData();
   }
 }

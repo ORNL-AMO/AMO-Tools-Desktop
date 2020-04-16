@@ -15,12 +15,19 @@ export class VisualizeService {
 
   graphObjects: BehaviorSubject<Array<GraphObj>>;
   selectedGraphObj: BehaviorSubject<GraphObj>;
+
+  visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
     // this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
     // this.graphData = new BehaviorSubject(new Array());
     let initData = this.initGraphObj();
     this.graphObjects = new BehaviorSubject([initData]);
     this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
+  }
+
+  getVisualizeData(fieldName: string) {
+    let data: Array<number | string> = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.fieldName == fieldName }).data;
+    return data;
   }
 
   initGraphObj(): GraphObj {
