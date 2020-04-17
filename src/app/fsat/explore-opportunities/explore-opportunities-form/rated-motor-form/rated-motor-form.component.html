@@ -27,7 +27,7 @@
 </li>
 
 <li class="explore-opps-item" 
-*ngIf="(baselineForm.controls.efficiencyClass.value == 3 || modificationForm.controls.efficiencyClass.value == 3) && fsat.modifications[exploreModIndex].exploreOppsShowMotorEff.hasOpportunity"
+*ngIf="(baselineForm.controls.efficiencyClass.value == 3 || modificationForm.controls.efficiencyClass.value == 3) && fsat.modifications[exploreModIndex].exploreOppsShowMotorEff.hasOpportunity && fsat.modifications[exploreModIndex].exploreOppsShowMotor.hasOpportunity"
 class="mb-2 d-flex" [ngClass]="{'justify-content-between': baselineForm.controls.efficiencyClass.value == 3 && modificationForm.controls.efficiencyClass.value == 3,
                                 'justify-content-start': baselineForm.controls.efficiencyClass.value == 3 && modificationForm.controls.efficiencyClass.value != 3,
                                 'justify-content-end': baselineForm.controls.efficiencyClass.value != 3 && modificationForm.controls.efficiencyClass.value == 3}"
