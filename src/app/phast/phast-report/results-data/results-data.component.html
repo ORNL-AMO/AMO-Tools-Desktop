@@ -6,9 +6,18 @@
         <th>Energy Loss/Use</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline
         </th>
-        <th *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}
+        <th *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <app-invalid-phast *ngIf="!mod.phast.valid.isValid" [phastValid]="mod.phast.valid"></app-invalid-phast>
+          <div>
+            {{mod.phast.name}}
+          </div>
         </th>
-        <th *ngIf="!inSetup && modification != undefined">{{modification.phast.name}}</th>
+        <th *ngIf="!inSetup && modification != undefined">
+          <app-invalid-phast *ngIf="!modification.phast.valid.isValid" [phastValid]="modification.phast.valid"></app-invalid-phast>
+          <div>
+            {{modification.phast.name}}
+          </div>
+        </th>
       </tr>
       <tr>
         <th></th>

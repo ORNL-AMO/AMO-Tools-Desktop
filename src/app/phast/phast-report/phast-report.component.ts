@@ -3,16 +3,13 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SettingsService } from '../../settings/settings.service';
-import { PhastReportService } from './phast-report.service';
-import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import * as d3 from 'd3';
 import { Subscription } from 'rxjs';
 import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
+import { PhastValidService } from '../phast-valid.service';
 
 @Component({
   selector: 'app-phast-report',
@@ -52,7 +49,11 @@ export class PhastReportComponent implements OnInit {
   showPrintMenuSub: Subscription;
   printOptions: PrintOptions;
   showPrintViewSub: Subscription;
-  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private printOptionsMenuService: PrintOptionsMenuService, private settingsService: SettingsService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+              private directoryDbService: DirectoryDbService, 
+              private printOptionsMenuService: PrintOptionsMenuService, 
+              private phastValidService: PhastValidService,
+              private settingsService: SettingsService) { }
 
   ngOnInit() {
     // this.initPrintLogic();
@@ -79,6 +80,8 @@ export class PhastReportComponent implements OnInit {
     if (!this.phast.operatingHours.hoursPerYear) {
       this.phast.operatingHours.hoursPerYear = 8760;
     }
+
+    this.setPhastValidity();
 
     if (!this.inRollup) {
       this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
@@ -131,6 +134,13 @@ export class PhastReportComponent implements OnInit {
 
   setTab(str: string): void {
     this.currentTab = str;
+  }
+
+  setPhastValidity() {
+    this.phast.valid = this.phastValidService.checkValid(this.phast);
+    this.phast.modifications.forEach(modification => {
+      modification.phast.valid = this.phastValidService.checkValid(modification.phast);
+    });
   }
 
 

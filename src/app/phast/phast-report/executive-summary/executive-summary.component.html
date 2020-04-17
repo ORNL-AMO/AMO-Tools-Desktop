@@ -13,16 +13,14 @@
         <td class="percent-savings">Percent Savings (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-
-          <div class="hide-print" *ngIf="mod.percentSavings">
-            
+          <app-invalid-phast *ngIf="!phast.modifications[index].phast.valid.isValid" [phastValid]="phast.modifications[index].phast.valid"></app-invalid-phast>
+          <div class="hide-print" *ngIf="mod.percentSavings && phast.modifications[index].phast.valid.isValid">
               <app-percent-graph [value]="mod.percentSavings"></app-percent-graph>
-            
           </div>
-          <div class="show-print text-center" *ngIf="mod.percentSavings">
+          <div class="show-print text-center" *ngIf="mod.percentSavings && phast.modifications[index].phast.valid.isValid">
             {{mod.percentSavings | number:'1.0'}} %
           </div>
-          <div *ngIf="!mod.percentSavings">
+          <div *ngIf="!mod.percentSavings && phast.modifications[index].phast.valid.isValid">
             &mdash; &mdash;
           </div>
 

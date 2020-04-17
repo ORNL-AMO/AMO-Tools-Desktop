@@ -18,6 +18,7 @@ import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.mod
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { InvalidPhastModule } from '../invalid-phast/invalid-phast.module';
 
 @NgModule({
   imports: [
@@ -30,9 +31,18 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     PercentGraphModule,
     PieChartModule,
     SimpleTooltipModule,
-    SharedPipesModule
+    SharedPipesModule,
+    InvalidPhastModule
   ],
-  declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, ReportGraphsPrintComponent],
+  declarations: [
+    PhastReportComponent, 
+    EnergyUsedComponent, 
+    ExecutiveSummaryComponent, 
+    ResultsDataComponent, 
+    ReportGraphsComponent, 
+    ReportSankeyComponent, 
+    ReportGraphsPrintComponent, 
+  ],
   exports: [PhastReportComponent, ResultsDataComponent],
   providers: [PhastReportService, ExecutiveSummaryService]
 })
