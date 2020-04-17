@@ -36,6 +36,7 @@ export class ExploreAtmosphereFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere = { hasOpportunity: false, display: 'Optimize Furnace Atmosphere Makeup System' }; 
         this.initData();
       }
     }
@@ -46,7 +47,6 @@ export class ExploreAtmosphereFormComponent implements OnInit {
     this.baselineWarnings = new Array<AtmosphereLossWarnings>();
     this.modificationWarnings = new Array<AtmosphereLossWarnings>();
     this.showInletTemp = new Array<boolean>();
-    this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere = { hasOpportunity: false, display: 'Optimize Furnace Atmosphere Makeup System' }; 
     
     let index: number = 0;
     this.phast.losses.atmosphereLosses.forEach(loss => {
