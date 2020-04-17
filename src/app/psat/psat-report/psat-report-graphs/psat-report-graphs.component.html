@@ -7,8 +7,7 @@
       </select>
     </div>
     <div *ngIf="selectedBaselineData.isValid" class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [values]="selectedBaselineData.pieChartValues"
-        [labels]="selectedBaselineData.pieChartLabels" [valuesUnit]="'kW'">
+      <app-plotly-pie-chart [valuesAndLabels]="selectedBaselineData.valuesAndLabels" [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
     </div>
     <div *ngIf="!selectedBaselineData.isValid" class="alert-danger">
@@ -23,8 +22,7 @@
       </select>
     </div>
     <div *ngIf="selectedModificationData.isValid" class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [values]="selectedModificationData.pieChartValues"
-        [labels]="selectedModificationData.pieChartLabels" [valuesUnit]="'kW'">
+      <app-plotly-pie-chart [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="'kW'">
       </app-plotly-pie-chart>
     </div>
 
