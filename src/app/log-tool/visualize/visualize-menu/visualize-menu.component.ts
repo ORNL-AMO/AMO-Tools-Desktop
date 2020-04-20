@@ -30,6 +30,8 @@ export class VisualizeMenuComponent implements OnInit {
   yAxisOptions: Array<{ axis: string, label: string }> = [{ axis: 'y', label: 'Left' }, { axis: 'y2', label: 'Right' }];
   histogramMethod: string = 'stdDeviation';
   selectedGraphObjSub: Subscription;
+  graphObjsSub: Subscription;
+  numberOfGraphs: number;
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
 
@@ -40,10 +42,15 @@ export class VisualizeMenuComponent implements OnInit {
         this.setGraphType();
       }
     });
+
+    this.graphObjsSub = this.visualizeService.graphObjects.subscribe(val => {
+      this.numberOfGraphs = val.length;
+    });
   }
 
   ngOnDestroy() {
     this.selectedGraphObjSub.unsubscribe();
+    this.graphObjsSub.unsubscribe();
   }
 
   setGraphType() {
@@ -238,4 +245,9 @@ export class VisualizeMenuComponent implements OnInit {
     }
     this.setYAxisData();
   }
+
+  deleteGraph(){
+    this.visualizeService.removeGraphDataObj(this.selectedGraphObj.graphId); 
+  }
 }
+

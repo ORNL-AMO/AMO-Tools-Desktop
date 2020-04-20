@@ -1,7 +1,9 @@
 <div class="sidebar scroll-item">
     <form class="h-100">
         <!--graph setup-->
-        <div class="group-label">Graph Basics</div>
+        <div class="group-label">Graph Basics
+            <a class="danger click-link small pull-right" (click)="deleteGraph()" *ngIf="numberOfGraphs != 1">Delete</a>
+        </div>
         <div class="form-group">
             <input class="form-control w-100" type="text" name="graphName"
                 [(ngModel)]="selectedGraphObj.layout.title.text" (input)="saveChanges()">
@@ -105,7 +107,8 @@
                     </select>
                 </div>
                 <div *ngIf="selectedGraphObj.selectedYAxisDataOptions.length != 1">
-                    <a (click)="removeYAxisData(selectedDataOption.index)" class="danger click-link small pull-right">Remove Data</a>
+                    <a (click)="removeYAxisData(selectedDataOption.index)"
+                        class="danger click-link small pull-right">Remove Data</a>
                 </div>
             </div>
             <hr>

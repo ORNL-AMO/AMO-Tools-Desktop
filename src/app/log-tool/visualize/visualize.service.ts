@@ -158,10 +158,12 @@ export class VisualizeService {
     }
   }
 
-  removeGraphDataObj(removeIndex: number) {
+  removeGraphDataObj(graphId: string) {
     let currentGraphData: Array<GraphObj> = this.graphObjects.getValue();
-    currentGraphData.splice(removeIndex, 1);
+    // currentGraphData.splice(removeIndex, 1);
+    _.remove(currentGraphData, (graphDataObj) => { return graphDataObj.graphId == graphId });
     this.graphObjects.next(currentGraphData);
+    this.selectedGraphObj.next(currentGraphData[0]);
   }
 
   getNumberOfBinsBarChartData(dataField: LogToolField, numberOfBins: number): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {

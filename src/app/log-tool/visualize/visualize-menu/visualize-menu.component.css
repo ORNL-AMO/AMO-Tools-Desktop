@@ -63,6 +63,6 @@ a.list-group-item.active:hover{
     border-top: groove;
 }
 
-.danger.click-link{
+a:not([href]):not([tabindex]).danger.click-link{
     color: red;
 }
