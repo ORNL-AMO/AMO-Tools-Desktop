@@ -4,6 +4,13 @@
     <thead>
       <tr>
         <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+        <th [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></th>
+        <th *ngFor="let mod of phast.modifications; let index = index;" [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <app-invalid-phast *ngIf="!mod.phast.valid.isValid" [phastValid]="mod.phast.valid"></app-invalid-phast>
+          </th>
+      </tr>
+      <tr>
+        <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
         <th [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
         <th *ngFor="let mod of phast.modifications; let index = index;" [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}</th>
       </tr>
@@ -13,7 +20,6 @@
         <td class="percent-savings">Percent Savings (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <app-invalid-phast *ngIf="!phast.modifications[index].phast.valid.isValid" [phastValid]="phast.modifications[index].phast.valid"></app-invalid-phast>
           <div class="hide-print" *ngIf="mod.percentSavings && phast.modifications[index].phast.valid.isValid">
               <app-percent-graph [value]="mod.percentSavings"></app-percent-graph>
           </div>
