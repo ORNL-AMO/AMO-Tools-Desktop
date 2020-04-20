@@ -3,6 +3,7 @@ import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
+import { SsmtValid } from '../../../shared/models/steam/ssmt';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class LossesSummaryComponent implements OnInit {
   @Input()
   baselineLosses: SSMTLosses;
   @Input()
-  modificationLosses: Array<{ outputData: SSMTLosses, name: string }>;
+  modificationLosses: Array<{ outputData: SSMTLosses, name: string, valid: SsmtValid }>;
   @Input()
   numberOfHeaders: number;
   @Input()

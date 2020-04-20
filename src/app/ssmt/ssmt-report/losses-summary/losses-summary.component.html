@@ -5,6 +5,20 @@
   <table class="table table-hover table-striped" *ngIf="baselineLosses">
     <thead>
       <tr>
+        <td [ngStyle]="{'width.%': 15}" class="border-0"></td>
+        <td [ngStyle]="{'width.%': tableCellWidth}" class="border-0"></td>
+        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}" class="text-center border-0 bold">
+          <div class="alert-danger" *ngIf="!modification.valid.isValid">
+            Invalid Modification<br>
+            <span *ngIf="!modification.valid.boilerValid">Errors found in Boiler<br></span>
+            <span *ngIf="!modification.valid.headerValid">Errors found in Header<br></span>
+            <span *ngIf="!modification.valid.turbineValid">Errors found in Turbine<br></span>
+            <span *ngIf="!modification.valid.operationsValid">Errors found in Operations<br></span>
+          </div>
+        </td>
+      </tr>
+      <tr>
         <td [ngStyle]="{'width.%': 15}" class="bold">(<span
             [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"

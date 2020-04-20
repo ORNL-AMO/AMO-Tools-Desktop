@@ -1,32 +1,23 @@
 import { Injectable } from '@angular/core';
 import { SSMTLosses, SSMTOutput, TurbineOutput, SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, BoilerOutput } from '../shared/models/steam/steam-outputs';
-import { SSMTInputs, SSMT } from '../shared/models/steam/ssmt';
+import { SSMTInputs, SSMT, SsmtValid } from '../shared/models/steam/ssmt';
 import { SteamService } from '../calculator/steam/steam.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { BoilerService } from './boiler/boiler.service';
-import { HeaderService } from './header/header.service';
-import { TurbineService } from './turbine/turbine.service';
-import { OperationsService } from './operations/operations.service';
+import { SsmtService } from './ssmt.service';
 
 @Injectable()
 export class CalculateLossesService {
 
-  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService,
-    private boilerService: BoilerService, private headerService: HeaderService, private turbineService: TurbineService,
-    private operationsService: OperationsService) { }
+  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService, private ssmtService: SsmtService) { }
 
   calculateLosses(ssmtResults: SSMTOutput, inputData: SSMTInputs, settings: Settings, ssmt: SSMT): SSMTLosses {
     let inputCpy: SSMTInputs = JSON.parse(JSON.stringify(inputData));
     let resultsCpy: SSMTOutput = JSON.parse(JSON.stringify(ssmtResults));
     let ssmtCpy: SSMT = JSON.parse(JSON.stringify(ssmt));
     let ssmtLosses: SSMTLosses = this.initLosses();
-    let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCpy.boilerInput, settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCpy.headerInput, settings, ssmtCpy.boilerInput);
-    let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCpy.turbineInput, ssmtCpy.headerInput, settings);
-    let operationsValid: boolean = this.operationsService.getForm(ssmtCpy, settings).valid;
-
-    if (boilerValid && headerValid && turbineValid && operationsValid) {
+    let ssmtValid: SsmtValid = this.ssmtService.checkValid(ssmtCpy, settings);
+    if (ssmtValid.isValid) {
       ssmtLosses.stack = this.calculateStack(resultsCpy);
       ssmtLosses.blowdown = this.calculateBlowdown(resultsCpy.boilerOutput, settings);
       ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(resultsCpy.deaeratorOutput, settings);
