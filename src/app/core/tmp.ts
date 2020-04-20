@@ -1,7 +1,7 @@
-import { Assessment } from "../shared/models/assessment";
-import { Settings } from "../shared/models/settings";
+import { Assessment } from "../shared/models/assessment"
+import { Settings } from "../shared/models/settings"
 
-export const MockTreasureHunt: Assessment = {
+export const treasureHunt: Assessment = {
     "name": "Treasure Hunt Example 1",
     "type": "TreasureHunt",
     "isExample": true,
@@ -1287,7 +1287,8 @@ export const MockTreasureHunt: Assessment = {
     "selected": false,
 }
 
-export const MockTreasureHuntSettings: Settings = {
+
+export const settings: Settings = {
     "language": "English",
     "currency": "$ - US Dollar",
     "unitsOfMeasure": "Imperial",
@@ -1346,5 +1347,5 @@ export const MockTreasureHuntSettings: Settings = {
     "compressedAirCost": 0.0005,
     "otherFuelCost": 0,
     "waterCost": 0.0025,
-    "waterWasteCost": 0.005
+    "waterWasteCost": 0.005,
 }
