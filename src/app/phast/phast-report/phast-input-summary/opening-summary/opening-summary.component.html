@@ -5,6 +5,26 @@
     </h5>
   </div>
   <div *ngIf="!collapse || printView">
+
+    <div class="output-summary pt-2" *ngIf="lossData.length > 1">
+      <table class="table mb-0">
+        <thead>
+          <tr>
+            <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+            </th>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+              <div class="alert-danger" *ngIf="!mod.phast.valid.openingValid">
+                One or more losses in this modification are invalid.<br>
+                <span>Errors found in Opening<br></span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+
     <div class="card-body" *ngFor="let data of lossData; let index = index;">
       <div class="output-summary">
         <table class="table table-hover table-striped">
@@ -16,6 +36,10 @@
                 Baseline
               </th>
               <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+                <div class="alert-danger" *ngIf="!mod.phast.valid.openingValid && lossData.length == 1">
+                  Invalid Modification<br>
+                  <span>Errors found in Opening<br></span>
+                </div>
                 {{mod.phast.name}}
               </th>
             </tr>

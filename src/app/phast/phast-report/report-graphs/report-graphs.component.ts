@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PHAST, PhastResults, ShowResultsCategories, Modification } from '../../../shared/models/phast/phast';
+import { PHAST, PhastResults, ShowResultsCategories, Modification, PhastValid } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { PhastResultsService } from '../../phast-results.service';
 
@@ -27,20 +27,23 @@ export class ReportGraphsComponent implements OnInit {
     valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
-    modification?: Modification
+    modification?: Modification,
+    valid: PhastValid
   }>;
 
   selectedBaselineData: {
     name: string,
     valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
-    barChartValues: Array<number>
+    barChartValues: Array<number>,
+    valid: PhastValid
   };
   selectedModificationData: {
     name: string,
     valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
-    barChartValues: Array<number>
+    barChartValues: Array<number>,
+    valid: PhastValid
   };
 
   lossUnit: string;
@@ -61,24 +64,25 @@ export class ReportGraphsComponent implements OnInit {
 
   setAllChartData(){
     this.allChartData = new Array();
-    this.addChartData(JSON.parse(JSON.stringify(this.phast)), 'Baseline');
+    this.addChartData(JSON.parse(JSON.stringify(this.phast)), 'Baseline', this.phast.valid);
     this.selectedBaselineData = this.allChartData[0];
     if (this.phast.modifications && this.phast.modifications.length != 0) {
       this.phast.modifications.forEach(modification => {
-        this.addChartData(JSON.parse(JSON.stringify(modification.phast)), modification.phast.name, modification);
+        this.addChartData(JSON.parse(JSON.stringify(modification.phast)), modification.phast.name, modification.phast.valid, modification);
       });
       this.selectedModificationData = this.allChartData[1];
     }
   }
 
-  addChartData(phast: PHAST, name: string, modification?: Modification) {
+  addChartData(phast: PHAST, name: string, isValid: PhastValid,  modification?: Modification) {
     let valuesAndLabels: Array<{ value: number, label: string }> = this.getValuesAndLabels(phast);
     this.allChartData.push({
       name: name,
       valuesAndLabels: valuesAndLabels,
       barChartLabels: valuesAndLabels.map(valueItem => {return valueItem.label}),
       barChartValues: valuesAndLabels.map(valueItem => {return valueItem.value}),
-      modification: modification
+      modification: modification,
+      valid: isValid
     })
   }
 
