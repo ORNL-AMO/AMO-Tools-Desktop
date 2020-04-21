@@ -30,6 +30,7 @@ import { DataTableComponent } from './system-setup/setup-data/data-table/data-ta
 import { FieldUnitsModalComponent } from './system-setup/clean-data/field-units-modal/field-units-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
+import { AnnotateGraphComponent } from './visualize/annotate-graph/annotate-graph.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { ExportableResultsTableModule } from '../shared/exportable-results-table
     DayTypeTableComponent,
     DayTypeMenuComponent,
     DataTableComponent,
-    FieldUnitsModalComponent
+    FieldUnitsModalComponent,
+    AnnotateGraphComponent
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js';
@@ -10,12 +10,31 @@ import * as Plotly from 'plotly.js';
 })
 export class VisualizeGraphComponent implements OnInit {
 
+  @ViewChild('visualizeChart', { static: false }) visualizeChart: ElementRef;
+
   selectedGraphDataSubscription: Subscription;
-  constructor(private visualizeService: VisualizeService) { }
+  clickEventListening: boolean = false;
+  constructor(private visualizeService: VisualizeService, _renderer: Renderer2, elementRef: ElementRef) {
+    _renderer.listen(elementRef.nativeElement, 'plotly_click', (event) => {
+      console.log(event);
+    })
+  }
 
   ngOnInit() {
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
-      Plotly.react('plotlyDiv', graphObj.data, graphObj.layout, { responsive: true });
+      console.log(graphObj);
+      //render chart
+      Plotly.react('plotlyDiv', graphObj.data, graphObj.layout, { responsive: true }).then(chart => {
+        if (!this.clickEventListening) {
+          //subscribe to click event for annotations
+          chart.on('plotly_click', (data) => {
+            console.log(data);
+            //send data point for annotations
+            this.visualizeService.annotateDataPoint.next({ x: data.points[0].x, y: data.points[0].y, annotation: '' })
+          });
+          this.clickEventListening = true;
+        }
+      });
     });
   }
 

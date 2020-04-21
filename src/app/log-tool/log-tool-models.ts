@@ -113,7 +113,30 @@ export interface GraphObj {
             b: number,
             l: number,
             r: number
-        }
+        },
+        annotations: [{
+            x: number | string,
+            y: number | string,
+            text: string,
+            showarrow: boolean,
+            font: {
+                // family: string,
+                size: number,
+                color: string
+            },
+            // align: string,
+            // arrowhead: number,
+            // arrowsize: number,
+            // arrowwidth: number,
+            // arrowcolor: number,
+            ax: number,
+            ay: number,
+            // bordercolor: string,
+            // borderwidth: number,
+            // borderpad: number,
+            // bgcolor: string,
+            // opacity: number
+        }]
     },
     isTimeSeries: boolean,
     selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }

@@ -32,8 +32,8 @@ export class VisualizeMenuComponent implements OnInit {
   selectedGraphObjSub: Subscription;
   graphObjsSub: Subscription;
   numberOfGraphs: number;
+  tabSelect: string = 'graphBasics';
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
-
 
   ngOnInit() {
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
@@ -246,8 +246,12 @@ export class VisualizeMenuComponent implements OnInit {
     this.setYAxisData();
   }
 
-  deleteGraph(){
-    this.visualizeService.removeGraphDataObj(this.selectedGraphObj.graphId); 
+  deleteGraph() {
+    this.visualizeService.removeGraphDataObj(this.selectedGraphObj.graphId);
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
   }
 }
 

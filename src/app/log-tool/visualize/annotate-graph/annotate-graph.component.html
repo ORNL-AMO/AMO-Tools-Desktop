@@ -1,0 +1,34 @@
+<form>
+    <div class="form-group">
+        <label>Selected X Point:</label>
+        <div class="small">{{annotateDataPoint.x}}</div>
+    </div>
+    <div class="form-group">
+        <label>Selected Y Point:</label>
+        <div class="small">{{annotateDataPoint.y}}</div>
+    </div>
+    <div class="form-group">
+        <label class="w-100">Annotation</label>
+        <textarea rows="6" class="form-control w-100" [(ngModel)]="annotateDataPoint.text" name="annotation"
+            id="annotaion" (input)="setAnnotation()"></textarea>
+    </div>
+    <!-- <div class="form-group">
+    <button class="btn btn-primary btn-sm pull-right" (click)="addAnnotation()">Submit</button>
+</div> -->
+    <div class="form-group">
+        <label>Font Size</label>
+        <select class="form-control" [(ngModel)]="annotateDataPoint.font.size" name="fontSize"
+            (change)="setAnnotation()">
+            <option *ngFor="let fontSize of fontSizes" [ngValue]="fontSize">{{fontSize}}</option>
+        </select>
+    </div>
+
+    <div class="pt-2">
+        <div class="btn-group small w-100">
+            <button class="btn btn-sm" (click)="moveLeft()"><span class="fa fa-chevron-left"></span></button>
+            <button class="btn btn-sm" (click)="moveUp()"><span class="fa fa-chevron-up"></span></button>
+            <button class="btn btn-sm" (click)="moveDown()"><span class="fa fa-chevron-down"></span></button>
+            <button class="btn btn-sm" (click)="moveRight()"><span class="fa fa-chevron-right"></span></button>
+        </div>
+    </div>
+</form>

@@ -1,125 +1,146 @@
-<div class="sidebar scroll-item">
-    <form class="h-100">
-        <!--graph setup-->
-        <div class="group-label">Graph Basics
+<div class="sidebar scroll-item h-100">
+    <div class="d-flex flex-wrap tabs primary mx-2">
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'graphBasics'}">
+            <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                (click)="setTab('graphBasics')">
+                <div>Graph Basics</div>
+            </a>
+        </div>
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'annotations'}">
+            <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                (click)="setTab('annotations')">
+                <div>Annotations</div>
+            </a>
+        </div>
+    </div>
+    <div class="mx-2">
+        <app-annotate-graph *ngIf="tabSelect == 'annotations'"></app-annotate-graph>
+    </div>
+    <div class="mx-2" *ngIf="tabSelect == 'graphBasics'">
+        <form>
+            <!--graph setup-->
+            <!-- <div class="group-label">Graph Basics -->
             <a class="danger click-link small pull-right" (click)="deleteGraph()" *ngIf="numberOfGraphs != 1">Delete</a>
-        </div>
-        <div class="form-group">
-            <input class="form-control w-100" type="text" name="graphName"
-                [(ngModel)]="selectedGraphObj.layout.title.text" (input)="saveChanges()">
-        </div>
-        <div class="form-group pt-2">
-            <select class="form-control w-100" name="graphType" [(ngModel)]="selectedGraphObj.data[0].type"
-                (change)="setGraphType()">
-                <option *ngFor="let graphType of graphTypes" [ngValue]="graphType.value">{{graphType.label}}</option>
-            </select>
-        </div>
-        <div class="form-group pt-2" *ngIf="selectedGraphObj.data[0].type == 'scattergl'">
-            <label>
-                <input type="checkbox" [(ngModel)]="selectedGraphObj.isTimeSeries" name="isTimeSeries"
-                    (change)="setTimeSeries()" />
-                <a>Time Series</a>
-            </label>
-        </div>
-        <div class="btn-group pt-2 small w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
-            <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(true)"
-                [ngClass]="{'active': selectedGraphObj.useStandardDeviation == true}">Std. Deviation</button>
-            <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(false)"
-                [ngClass]="{'active': selectedGraphObj.useStandardDeviation == false}">Bins</button>
-        </div>
-        <div class="form-group pt-2"
-            *ngIf="selectedGraphObj.data[0].type == 'bar' && !selectedGraphObj.useStandardDeviation">
-            <label>Number of Bins</label>
-            <input class="form-control" type="number" name="numberOfBins" [(ngModel)]="selectedGraphObj.numberOfBins"
-                (input)="setBarHistogramData()">
-        </div>
-        <hr>
-        <!--x axis options-->
-        <div class="group-label">X-Axis</div>
-        <div class="form-group">
-            <label>Axis Label</label>
-            <input class="form-control" type="text" name="xAxisLabel"
-                [(ngModel)]="selectedGraphObj.layout.xaxis.title.text" (input)="saveChanges()">
-        </div>
-        <div class="form-group">
-            <label>Data</label>
-            <select class="form-control" name="xDatafield" [(ngModel)]="selectedGraphObj.selectedXAxisDataOption"
-                (change)="setXAxisDataOption()" [disabled]="selectedGraphObj.isTimeSeries">
-                <option *ngFor="let xAxisDataOption of xAxisDataOptions" [ngValue]="xAxisDataOption">
-                    {{xAxisDataOption.dataField.alias}}</option>
-            </select>
-        </div>
-        <hr>
-        <!--y axis data-->
-        <div *ngIf="selectedGraphObj.data[0].type == 'scattergl'">
-            <!--y axis options-->
-            <div class="group-label">Y-Axis
-                <a class="click-link small pull-right" (click)="addAxis()"
-                    *ngIf="!selectedGraphObj.hasSecondYAxis && selectedGraphObj.selectedYAxisDataOptions.length != 1">+Add
-                    Axis</a>
-
-            </div>
+            <!-- </div> -->
             <div class="form-group">
-                <label><span *ngIf="selectedGraphObj.hasSecondYAxis">Left </span>Axis Label</label>
-                <input class="form-control" type="text" name="yAxisLabel"
-                    [(ngModel)]="selectedGraphObj.layout.yaxis.title.text" (input)="saveChanges()">
+                <input class="form-control w-100" type="text" name="graphName"
+                    [(ngModel)]="selectedGraphObj.layout.title.text" (input)="saveChanges()">
             </div>
-            <div class="form-group" *ngIf="selectedGraphObj.hasSecondYAxis">
-                <label>Right Axis Label
-                    <a *ngIf="selectedGraphObj.hasSecondYAxis" class="form-text click-link small"
-                        (click)="removeAxis()">Remove Axis</a>
+            <div class="form-group pt-2">
+                <select class="form-control w-100" name="graphType" [(ngModel)]="selectedGraphObj.data[0].type"
+                    (change)="setGraphType()">
+                    <option *ngFor="let graphType of graphTypes" [ngValue]="graphType.value">{{graphType.label}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group pt-2" *ngIf="selectedGraphObj.data[0].type == 'scattergl'">
+                <label>
+                    <input type="checkbox" [(ngModel)]="selectedGraphObj.isTimeSeries" name="isTimeSeries"
+                        (change)="setTimeSeries()" />
+                    <a>Time Series</a>
                 </label>
-                <input class="form-control" type="text" name="yAxisLabel2"
-                    [(ngModel)]="selectedGraphObj.layout.yaxis2.title.text" (input)="saveChanges()">
             </div>
-
-            <!--y axis data options-->
-            <div class="y-axis-data d-flex flex-column"
-                *ngFor="let selectedDataOption of selectedGraphObj.selectedYAxisDataOptions;">
-                <div class="form-group">
-                    <input class="form-control w-100" type="text" name="{{'seriesName'+selectedDataOption.index}}"
-                        [(ngModel)]="selectedDataOption.seriesName" (input)="setYAxisData()">
-                </div>
-                <div class="form-group">
-                    <label>Data</label>
-                    <select class="form-control" name="{{'yDatafield'+selectedDataOption.index}}"
-                        [(ngModel)]="selectedDataOption.dataOption" (change)="setYAxisData()">
-                        <option *ngFor="let yAxisDataOption of yAxisDataOptions" [ngValue]="yAxisDataOption">
-                            {{yAxisDataOption.dataField.alias}}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>
-                        Series Color
-                    </label>
-                    <input class="w-50 form-control color-picker" type="color"
-                        name="{{'seriesColor'+selectedDataOption.index}}" [(ngModel)]="selectedDataOption.seriesColor"
-                        [ngStyle]="{'background-color': selectedDataOption.seriesColor}" (input)="setYAxisData()">
-                </div>
-                <div class="form-group" *ngIf="selectedGraphObj.hasSecondYAxis">
-                    <label>
-                        Use Axis
-                    </label>
-                    <select class="form-control" name="{{'axisOption'+selectedDataOption.index}}"
-                        [(ngModel)]="selectedDataOption.yaxis" (change)="setYAxisData()">
-                        <option *ngFor="let axisOption of yAxisOptions" [ngValue]="axisOption.axis">
-                            {{axisOption.label}}</option>
-                    </select>
-                </div>
-                <div *ngIf="selectedGraphObj.selectedYAxisDataOptions.length != 1">
-                    <a (click)="removeYAxisData(selectedDataOption.index)"
-                        class="danger click-link small pull-right">Remove Data</a>
-                </div>
+            <div class="btn-group pt-2 small w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
+                <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(true)"
+                    [ngClass]="{'active': selectedGraphObj.useStandardDeviation == true}">Std. Deviation</button>
+                <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(false)"
+                    [ngClass]="{'active': selectedGraphObj.useStandardDeviation == false}">Bins</button>
+            </div>
+            <div class="form-group pt-2"
+                *ngIf="selectedGraphObj.data[0].type == 'bar' && !selectedGraphObj.useStandardDeviation">
+                <label>Number of Bins</label>
+                <input class="form-control" type="number" name="numberOfBins"
+                    [(ngModel)]="selectedGraphObj.numberOfBins" (input)="setBarHistogramData()">
             </div>
             <hr>
-            <a class="click-link pull-right pt-2" (click)="addData()">Add Data</a>
-        </div>
-        <div *ngIf="selectedGraphObj.data[0].type == 'bar'">
+            <!--x axis options-->
+            <div class="group-label">X-Axis</div>
             <div class="form-group">
-                <label>Y Axis Label</label>
-                <input class="form-control" type="text" name="yAxisLabel"
-                    [(ngModel)]="selectedGraphObj.layout.yaxis.title.text" (input)="saveChanges()">
+                <label>Axis Label</label>
+                <input class="form-control" type="text" name="xAxisLabel"
+                    [(ngModel)]="selectedGraphObj.layout.xaxis.title.text" (input)="saveChanges()">
             </div>
-        </div>
-    </form>
+            <div class="form-group">
+                <label>Data</label>
+                <select class="form-control" name="xDatafield" [(ngModel)]="selectedGraphObj.selectedXAxisDataOption"
+                    (change)="setXAxisDataOption()" [disabled]="selectedGraphObj.isTimeSeries">
+                    <option *ngFor="let xAxisDataOption of xAxisDataOptions" [ngValue]="xAxisDataOption">
+                        {{xAxisDataOption.dataField.alias}}</option>
+                </select>
+            </div>
+            <hr>
+            <!--y axis data-->
+            <div *ngIf="selectedGraphObj.data[0].type == 'scattergl'">
+                <!--y axis options-->
+                <div class="group-label">Y-Axis
+                    <a class="click-link small pull-right" (click)="addAxis()"
+                        *ngIf="!selectedGraphObj.hasSecondYAxis && selectedGraphObj.selectedYAxisDataOptions.length != 1">+Add
+                        Axis</a>
+
+                </div>
+                <div class="form-group">
+                    <label><span *ngIf="selectedGraphObj.hasSecondYAxis">Left </span>Axis Label</label>
+                    <input class="form-control" type="text" name="yAxisLabel"
+                        [(ngModel)]="selectedGraphObj.layout.yaxis.title.text" (input)="saveChanges()">
+                </div>
+                <div class="form-group" *ngIf="selectedGraphObj.hasSecondYAxis">
+                    <label>Right Axis Label
+                        <a *ngIf="selectedGraphObj.hasSecondYAxis" class="form-text click-link small"
+                            (click)="removeAxis()">Remove Axis</a>
+                    </label>
+                    <input class="form-control" type="text" name="yAxisLabel2"
+                        [(ngModel)]="selectedGraphObj.layout.yaxis2.title.text" (input)="saveChanges()">
+                </div>
+
+                <!--y axis data options-->
+                <div class="y-axis-data d-flex flex-column"
+                    *ngFor="let selectedDataOption of selectedGraphObj.selectedYAxisDataOptions;">
+                    <div class="form-group">
+                        <input class="form-control w-100" type="text" name="{{'seriesName'+selectedDataOption.index}}"
+                            [(ngModel)]="selectedDataOption.seriesName" (input)="setYAxisData()">
+                    </div>
+                    <div class="form-group">
+                        <label>Data</label>
+                        <select class="form-control" name="{{'yDatafield'+selectedDataOption.index}}"
+                            [(ngModel)]="selectedDataOption.dataOption" (change)="setYAxisData()">
+                            <option *ngFor="let yAxisDataOption of yAxisDataOptions" [ngValue]="yAxisDataOption">
+                                {{yAxisDataOption.dataField.alias}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Series Color
+                        </label>
+                        <input class="w-50 form-control color-picker" type="color"
+                            name="{{'seriesColor'+selectedDataOption.index}}"
+                            [(ngModel)]="selectedDataOption.seriesColor"
+                            [ngStyle]="{'background-color': selectedDataOption.seriesColor}" (input)="setYAxisData()">
+                    </div>
+                    <div class="form-group" *ngIf="selectedGraphObj.hasSecondYAxis">
+                        <label>
+                            Use Axis
+                        </label>
+                        <select class="form-control" name="{{'axisOption'+selectedDataOption.index}}"
+                            [(ngModel)]="selectedDataOption.yaxis" (change)="setYAxisData()">
+                            <option *ngFor="let axisOption of yAxisOptions" [ngValue]="axisOption.axis">
+                                {{axisOption.label}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="selectedGraphObj.selectedYAxisDataOptions.length != 1">
+                        <a (click)="removeYAxisData(selectedDataOption.index)"
+                            class="danger click-link small pull-right">Remove Data</a>
+                    </div>
+                </div>
+                <hr>
+                <a class="click-link pull-right pt-2" (click)="addData()">Add Data</a>
+            </div>
+            <div *ngIf="selectedGraphObj.data[0].type == 'bar'">
+                <div class="form-group">
+                    <label>Y Axis Label</label>
+                    <input class="form-control" type="text" name="yAxisLabel"
+                        [(ngModel)]="selectedGraphObj.layout.yaxis.title.text" (input)="saveChanges()">
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

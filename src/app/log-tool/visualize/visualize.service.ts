@@ -17,12 +17,19 @@ export class VisualizeService {
   selectedGraphObj: BehaviorSubject<GraphObj>;
 
   visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
+
+  annotateDataPoint: BehaviorSubject<{x: number | string, y: number | string, annotation: string }>;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
     // this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
     // this.graphData = new BehaviorSubject(new Array());
     let initData = this.initGraphObj();
     this.graphObjects = new BehaviorSubject([initData]);
     this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
+    this.annotateDataPoint = new BehaviorSubject<{x: number | string, y: number | string, annotation: string }>({
+      x: undefined,
+      y: undefined,
+      annotation: ''
+    });
   }
 
   getVisualizeData(fieldName: string) {
@@ -38,7 +45,7 @@ export class VisualizeService {
         y: [],
         name: '',
         type: 'scattergl',
-        mode: 'markers',
+        mode: 'line+markers',
         yaxis: undefined,
         marker: {
           color: undefined
@@ -48,6 +55,7 @@ export class VisualizeService {
         title: {
           text: 'Data Visualization 1'
         },
+        annotations: undefined,
         xaxis: {
           autorange: true,
           type: undefined,
