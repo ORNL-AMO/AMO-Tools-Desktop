@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { LogToolService } from '../log-tool.service';
 import { LogToolDataService } from '../log-tool-data.service';
 import * as _ from 'lodash';
-import { GraphDataObj, LogToolField, GraphObj } from '../log-tool-models';
+import { GraphDataObj, LogToolField, GraphObj, AnnotationData } from '../log-tool-models';
 
 @Injectable()
 export class VisualizeService {
@@ -18,18 +18,14 @@ export class VisualizeService {
 
   visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
 
-  annotateDataPoint: BehaviorSubject<{x: number | string, y: number | string, annotation: string }>;
+  annotateDataPoint: BehaviorSubject<AnnotationData>;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
     // this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
     // this.graphData = new BehaviorSubject(new Array());
     let initData = this.initGraphObj();
     this.graphObjects = new BehaviorSubject([initData]);
     this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
-    this.annotateDataPoint = new BehaviorSubject<{x: number | string, y: number | string, annotation: string }>({
-      x: undefined,
-      y: undefined,
-      annotation: ''
-    });
+    this.annotateDataPoint = new BehaviorSubject<AnnotationData>(undefined);
   }
 
   getVisualizeData(fieldName: string) {
@@ -55,7 +51,7 @@ export class VisualizeService {
         title: {
           text: 'Data Visualization 1'
         },
-        annotations: undefined,
+        annotations: [],
         xaxis: {
           autorange: true,
           type: undefined,
@@ -238,5 +234,33 @@ export class VisualizeService {
     let averageSquareDiff: number = _.mean(squareDiffs);
     let squareRootOfAverageSquareDiff: number = Math.sqrt(averageSquareDiff);
     return squareRootOfAverageSquareDiff;
+  }
+
+  getAnnotationPoint(x: number | string, y: number | string): AnnotationData {
+    return {
+      x: x,
+      y: y,
+      text: '',
+      showarrow: true,
+      font: {
+        // family: string,
+        size: 16,
+        color: undefined
+      },
+      // align: string,
+      // arrowhead: number,
+      // arrowsize: number,
+      // arrowwidth: number,
+      // arrowcolor: number,
+      ax: 0,
+      ay: -100,
+      // bordercolor: string,
+      // borderwidth: number,
+      // borderpad: number,
+      // bgcolor: string,
+      // opacity: number
+      annotationId: Math.random().toString(36).substr(2, 9)
+
+    }
   }
 }

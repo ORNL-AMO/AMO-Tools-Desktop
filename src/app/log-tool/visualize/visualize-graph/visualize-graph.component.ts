@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/co
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js';
+import { AnnotationData } from '../../log-tool-models';
 
 @Component({
   selector: 'app-visualize-graph',
@@ -30,7 +31,8 @@ export class VisualizeGraphComponent implements OnInit {
           chart.on('plotly_click', (data) => {
             console.log(data);
             //send data point for annotations
-            this.visualizeService.annotateDataPoint.next({ x: data.points[0].x, y: data.points[0].y, annotation: '' })
+            let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y);
+            this.visualizeService.annotateDataPoint.next(newAnnotation);
           });
           this.clickEventListening = true;
         }
@@ -41,4 +43,6 @@ export class VisualizeGraphComponent implements OnInit {
   ngOnDestroy() {
     this.selectedGraphDataSubscription.unsubscribe();
   }
+
+
 }

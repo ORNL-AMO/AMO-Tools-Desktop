@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { VisualizeService } from '../visualize.service';
-import { GraphObj } from '../../log-tool-models';
+import { GraphObj, AnnotationData } from '../../log-tool-models';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-annotate-graph',
@@ -11,44 +12,22 @@ import { GraphObj } from '../../log-tool-models';
 export class AnnotateGraphComponent implements OnInit {
 
   annotateDataPointSub: Subscription;
-  annotateDataPoint: {
-    x: number | string,
-    y: number | string,
-    text: string,
-    showarrow: boolean,
-    font: {
-      //  family: undefined,
-      size: number,
-      color: string
-    },
-    ax: number,
-    ay: number,
-  };
+  annotateDataPoint: AnnotationData;
   selectedGraphObjSub: Subscription;
   selectedGraphObj: GraphObj;
   fontSizes: Array<number> = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
   constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.annotateDataPointSub = this.visualizeService.annotateDataPoint.subscribe(point => {
-      this.annotateDataPoint = {
-        x: point.x,
-        y: point.y,
-        text: point.annotation,
-        showarrow: true,
-        font: {
-          // family: undefined,
-          size: 18,
-          color: undefined
-        },
-        ax: 0,
-        ay: -100,
-      };
-      this.cd.detectChanges();
-    });
 
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
       this.selectedGraphObj = val;
+      this.cd.detectChanges();
+    });
+
+    this.annotateDataPointSub = this.visualizeService.annotateDataPoint.subscribe(point => {
+      this.annotateDataPoint = point;
+      this.cd.detectChanges();
     });
   }
 
@@ -59,24 +38,16 @@ export class AnnotateGraphComponent implements OnInit {
 
 
   setAnnotation() {
-    // let newAnnotation = {
-    //   x: this.annotateDataPoint.x,
-    //   y: this.annotateDataPoint.y,
-    //   text: this.annotateDataPoint.te,
-    //   showarrow: true,
-    //   font: {
-    //     // family: undefined,
-    //     size: 18,
-    //     color: undefined
-    //   },
-    //   ax: 0,
-    //   ay: -100,
-    // }
-    // if (!this.selectedGraphObj.layout.annotations) {
-    this.selectedGraphObj.layout.annotations = [this.annotateDataPoint];
-    // } else {
-    //   this.selectedGraphObj.layout.annotations.push(newAnnotation);
-    // }
+    if (!this.selectedGraphObj.layout.annotations) {
+      this.selectedGraphObj.layout.annotations = [this.annotateDataPoint];
+    } else {
+      let testExistIndex: number = this.selectedGraphObj.layout.annotations.findIndex(annotation => { return annotation.annotationId == this.annotateDataPoint.annotationId });
+      if (testExistIndex != -1) {
+        this.selectedGraphObj.layout.annotations[testExistIndex] = this.annotateDataPoint;
+      } else {
+        this.selectedGraphObj.layout.annotations.push(this.annotateDataPoint);
+      }
+    }
     this.visualizeService.selectedGraphObj.next(this.selectedGraphObj);
   }
 
@@ -98,5 +69,14 @@ export class AnnotateGraphComponent implements OnInit {
   moveUp() {
     this.annotateDataPoint.ay = this.annotateDataPoint.ay - 8;
     this.setAnnotation();
+  }
+
+  selectAnnotation(annotation: AnnotationData) {
+    this.visualizeService.annotateDataPoint.next(annotation);
+  }
+
+  deleteAnnotation(annotation: AnnotationData) {
+    _.remove(this.selectedGraphObj.layout.annotations, (currentAnnotation) => { return currentAnnotation.annotationId == annotation.annotationId });
+    this.visualizeService.selectedGraphObj.next(this.selectedGraphObj);
   }
 }

@@ -114,29 +114,7 @@ export interface GraphObj {
             l: number,
             r: number
         },
-        annotations: [{
-            x: number | string,
-            y: number | string,
-            text: string,
-            showarrow: boolean,
-            font: {
-                // family: string,
-                size: number,
-                color: string
-            },
-            // align: string,
-            // arrowhead: number,
-            // arrowsize: number,
-            // arrowwidth: number,
-            // arrowcolor: number,
-            ax: number,
-            ay: number,
-            // bordercolor: string,
-            // borderwidth: number,
-            // borderpad: number,
-            // bgcolor: string,
-            // opacity: number
-        }]
+        annotations: Array<AnnotationData>
     },
     isTimeSeries: boolean,
     selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
@@ -161,4 +139,30 @@ export interface AxisObj {
     tickfont: {
         color: string
     }
+}
+
+export interface AnnotationData {
+    x: number | string,
+    y: number | string,
+    text: string,
+    showarrow: boolean,
+    font: {
+        // family: string,
+        size: number,
+        color: string
+    },
+    // align: string,
+    // arrowhead: number,
+    // arrowsize: number,
+    // arrowwidth: number,
+    // arrowcolor: number,
+    ax: number,
+    ay: number,
+    // bordercolor: string,
+    // borderwidth: number,
+    // borderpad: number,
+    // bgcolor: string,
+    // opacity: number
+    annotationId: string
+
 }

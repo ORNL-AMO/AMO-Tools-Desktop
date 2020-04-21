@@ -1,4 +1,4 @@
-<form>
+<form *ngIf="annotateDataPoint">
     <div class="form-group">
         <label>Selected X Point:</label>
         <div class="small">{{annotateDataPoint.x}}</div>
@@ -32,3 +32,19 @@
         </div>
     </div>
 </form>
+
+<div class="small p-2 alert alert-warning" *ngIf="!annotateDataPoint">
+    Click on a data point to annotate.
+</div>
+
+<div class="pt-4" *ngIf="selectedGraphObj.layout.annotations && selectedGraphObj.layout.annotations.length != 0">
+    <div class="group-label">
+        Existing Annotations
+    </div>
+    <ul class="annotation">
+        <li *ngFor="let annotation of selectedGraphObj.layout.annotations">
+            <a class="click-link small" (click)="selectAnnotation(annotation)">{{annotation.text}}</a>
+            <span class="fa fa-times-circle pull-right" (click)="deleteAnnotation(annotation)"></span>
+        </li>
+    </ul>
+</div>
