@@ -1,178 +1,61 @@
 <div class="tab-content">
   <form>
-    <div class="form-section">
-      <div class="form-group">
-        <label class="bold">Pipe Size 
-          (in.)</label>
-        <label class="bold text-center">Pipe Length 
-          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span><span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.)</label>
-      </div>
-      <div class="form-group">
-        <label for="oneHalf">
-          <sup>1</sup>&frasl;
-          <sub>2</sub>
-        </label>
-        <div class="input-group">
-          <input name="oneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneHalf" id="oneHalf" (input)="emitChange()"
-            onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="threeFourths">
-          <sup>3</sup>&frasl;
-          <sub>4</sub>
-        </label>
-        <div class="input-group">
-          <input name="threeFourths" class="form-control" type="number" step="any" [(ngModel)]="inputs.threeFourths" id="threeFourths"
-            (input)="emitChange()" onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="one">1</label>
-        <div class="input-group">
-          <input name="one" class="form-control" type="number" step="any" [(ngModel)]="inputs.one" id="one" (input)="emitChange()"
-            onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="oneAndOneFourth">1
-          <sup>1</sup>&frasl;
-          <sub>4</sub>
-        </label>
-        <div class="input-group">
-          <input name="oneAndOneFourth" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneAndOneFourth" id="oneAndOneFourth"
-            (input)="emitChange()" onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="oneAndOneHalf">1
-          <sup>1</sup>&frasl;
-          <sub>2</sub>
-        </label>
-        <div class="input-group">
-          <input name="oneAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneAndOneHalf" id="oneAndOneHalf"
-            (input)="emitChange()" onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="two">2</label>
-        <div class="input-group">
-          <input name="two" class="form-control" type="number" step="any" [(ngModel)]="inputs.two" id="two" (input)="emitChange()"
-            onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="twoAndOneHalf">2
-          <sup>1</sup>&frasl;
-          <sub>2</sub>
-        </label>
-        <div class="input-group">
-          <input name="twoAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.twoAndOneHalf" id="twoAndOneHalf"
-            (input)="emitChange()" onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="three">3</label>
-        <div class="input-group">
-          <input name="three" class="form-control" type="number" step="any" [(ngModel)]="inputs.three" id="three" (input)="emitChange()"
-            onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="oneHalf">3
-          <sup>1</sup>&frasl;
-          <sub>2</sub>
-        </label>
-        <div class="input-group">
-          <input name="threeAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.threeAndOneHalf" id="threeAndOneHalf"
-            (input)="emitChange()" onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="four">4</label>
-        <div class="input-group">
-          <input name="four" class="form-control" type="number" step="any" [(ngModel)]="inputs.four" id="four" (input)="emitChange()"
-            onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="five">5</label>
-        <div class="input-group">
-          <input name="five" class="form-control" type="number" step="any" [(ngModel)]="inputs.five" id="five" (input)="emitChange()"
-            onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="six">6</label>
-        <div class="input-group">
-          <input name="six" class="form-control" type="number" step="any" [(ngModel)]="inputs.six" id="six" (input)="emitChange()"
-            onfocus="this.select();" (focus)="changeField('pipeSize')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-        </div>
-      </div>
-    </div>
 
     <div class="form-section pt-1">
-      <label class="bold">Custom Pipes</label>
-      <div class="custom-pipe-form-container" *ngFor="let customPipe of inputs.customPipes; let i = index">
+      <label class="bold">Add Pipes</label>
+      <div *ngFor="let pipe of pipes; let i = index">
+        <div class="btn-delete-field pull-right" (click)="deletePipe(i)"> &times;</div>
+          <div class="d-flex justify-content-between pl-5">
+            <div class="form-group text-center d-flex flex-column justify-content-center ml-3 mr-3 w-50">
+              <label class="w-100 mb-2" for="{{'pipe_size_' + i}}">Pipe {{i + 1}} Size (in.)
+            </label>
+            <div class="input-group w-100 ">
+              <select name="{{'pipe_size_' + i}}" class="form-control" id="{{'pipe_size_' + i}}" 
+              [(ngModel)]="pipes[i].pipeSize"
+                autofocus (focus)="changeField('pipeSize')">
+                <option *ngFor="let pipeSize of pipeSizeOptions" [ngValue]="pipeSize.size">
+                  {{pipeSize.display}} 
+                </option>
+              </select>
+            </div>
+            <!-- <div *ngIf="pipes[i].pipeSize == 'CUSTOM'" class="input-group w-100">
+              <input name="{{'custom_pipe_size_' + i}}" class="form-control" type="number" step="any" 
+              [(ngModel)]="pipes[i].customPipeSize" id="{{'custom_pipe_size_' + i}}" 
+              (input)="changeCustomPipeSize(i)" onfocus="this.select();" (focus)="changeField('customPipeSize')">
+              <span class="input-group-addon units">in</span>
+            </div> -->
+          </div>
+          <div class="form-group text-center d-flex flex-column justify-content-center ml-3 mr-3 w-50">
+            <label class="w-100 mb-2" for="{{'standard_pipe_length_' + i}}">Pipe {{i + 1}} Length (ft.)
+            </label>
+            <div class="input-group w-100 ">
+              <input name="{{'pipe_length_' + i}}" class="form-control" type="number" step="any" [(ngModel)]="pipes[i].pipeLength"
+              id="{{'pipe_length_' + i}}" 
+              (input)="changePipeLength(i)"
+              onfocus="this.select();" (focus)="changeField('standardPipeLength')">
+              <span class="input-group-addon units">ft</span>
+            </div>
+          </div>
+        </div>
 
-        <div class="form-group">
-          <label for="{{'pipe_size_' + i}}">Pipe {{i + 1}} Size 
-            (<span *ngIf="settings.unitsOfMeasure != 'Metric'">in</span><span *ngIf="settings.unitsOfMeasure == 'Metric'">cm</span>.)</label>
-          <div class="input-group">
-            <input name="{{'pipe_size_' + i}}" class="form-control" type="number" step="any" [(ngModel)]="inputs.customPipes[i].pipeSize"
-              id="{{'pipe_size_' + i}}" (input)="emitChange()" onfocus="this.select();" (focus)="changeField('customPipes')">
-            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
-            <span class="input-group-addon">
-              <div class="btn-delete-field" (click)="deleteCustomPipe(i)"> &times;</div>
-            </span>
-          </div>
+        <div *ngIf="pipes[i].pipeSize == 'CUSTOM'" 
+            class="form-group text-center d-flex flex-column justify-content-start ml-3 mr-3 pl-5 pt-2 w-50">
+            <div class="input-group w-100">
+              <input name="{{'custom_pipe_size_' + i}}" class="form-control" type="number" step="any" 
+              [(ngModel)]="pipes[i].customPipeSize" id="{{'custom_pipe_size_' + i}}" 
+              (input)="changeCustomPipeSize(i)" onfocus="this.select();" (focus)="changeField('customPipeSize')">
+              <span class="input-group-addon units">in</span>
+            </div>
         </div>
-        <div class="form-group">
-          <label for="{{'pipe_length_' + i}}">Pipe {{i + 1}} Length 
-            (<span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span><span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.)</label>
-          <div class="input-group">
-            <input name="{{'pipe_length_' + i}}" class="form-control" type="number" step="any" [(ngModel)]="inputs.customPipes[i].pipeLength"
-              id="{{'pipe_length_' + i}}" (input)="emitChange()" onfocus="this.select();" (focus)="changeField('customPipes')">
-            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
-            <span class="input-group-addon">
-              <div class="btn-delete-field" (click)="deleteCustomPipe(i)"> &times;</div>
-            </span>
-          </div>
-        </div>
+        <hr>
+
       </div>
-
+      
       <div class="row">
         <div class="col-md-auto mx-auto">
-          <a class="click-link small" (click)="addCustomPipe()" (focus)="changeField('customPipes')">Add Custom Pipe</a>
+          <a class="click-link small" (click)="addPipe()" (focus)="changeField('standardPipe')">Add Pipe</a>
         </div>
       </div>
-
     </div>
 
     <div class="form-section pt-1">

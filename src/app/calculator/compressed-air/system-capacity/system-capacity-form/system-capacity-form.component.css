@@ -7,10 +7,6 @@ label {
     border-bottom: 1px dashed;
 }
 
-.custom-pipe-form-container {
-    padding-bottom: 10px;
-}
-
 .btn-delete-field {
     color: #dc3545;
     margin-left: 5px;

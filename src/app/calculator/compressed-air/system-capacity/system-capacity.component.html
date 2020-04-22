@@ -59,6 +59,17 @@
           </h6>
         </div>
 
+        <div class="my-2" *ngIf="currentField == 'standardPipeSize'">
+          <h6>
+            Schedule 40 Size pipe.
+            <br>
+            <small class="text-muted">
+              For a quicker estimation, ignore all pipe sizes 2" or less (they do not add significant system capacity).
+              <hr>
+            </small>
+          </h6>
+        </div>
+
         <div class="my-2" *ngIf="currentField == 'receiverTanks'">
           <h6>
             Receiver Tanks
