@@ -15,6 +15,7 @@ export class SystemCapacityService {
     return {
       receiverCapacities: [0],
       customPipes: [],
+      allPipes: [{ pipeSize: 'oneHalf', customPipeSize: 0, pipeLength: 0 }],
       oneHalf: 0,
       threeFourths: 0,
       one: 0,
@@ -43,16 +44,58 @@ export class SystemCapacityService {
     return {
       receiverCapacities: [400, 500, 660, 1060],
       customPipes: [],
-      oneHalf: 2000,
-      threeFourths: 2000,
-      one: 1000,
-      oneAndOneFourth: 200,
-      oneAndOneHalf: 100,
-      two: 500,
+      allPipes: [
+        { 
+          pipeSize: 'oneHalf', 
+          customPipeSize: 0, 
+          pipeLength: 2000 
+        },
+        { 
+          pipeSize: 'threeFourths', 
+          customPipeSize: 0, 
+          pipeLength: 2000 
+        },
+        { 
+          pipeSize: 'one', 
+          customPipeSize: 0, 
+          pipeLength: 1000 
+        },
+        { 
+          pipeSize: 'oneAndOneFourth', 
+          customPipeSize: 0, 
+          pipeLength: 200 
+        },
+        { 
+          pipeSize: 'oneAndOneHalf', 
+          customPipeSize: 0, 
+          pipeLength: 100 
+        },
+        { 
+          pipeSize: 'two', 
+          customPipeSize: 0, 
+          pipeLength: 500 
+        },
+        { 
+          pipeSize: 'three', 
+          customPipeSize: 0, 
+          pipeLength: 300 
+        },
+        { 
+          pipeSize: 'four', 
+          customPipeSize: 0, 
+          pipeLength: 1000 
+        }
+      ],
+      oneHalf: 0,
+      threeFourths: 0,
+      one: 0,
+      oneAndOneFourth: 0,
+      oneAndOneHalf: 0,
+      two: 0,
       twoAndOneHalf: 0,
-      three: 300,
+      three: 0,
       threeAndOneHalf: 0,
-      four: 1000,
+      four: 0,
       five: 0,
       six: 0,
       eight: 0,

@@ -1,5 +1,6 @@
 // @ts-ignore
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 declare var standaloneAddon: any;
 declare var calculatorAddon: any;
 import {
@@ -145,6 +146,7 @@ export class StandaloneService {
 
   airSystemCapacity(input: AirSystemCapacityInput, settings: Settings): AirSystemCapacityOutput {
     let inputCpy: AirSystemCapacityInput = JSON.parse(JSON.stringify(input));
+    inputCpy = this.sumPipeInputs(inputCpy);
     if (settings.unitsOfMeasure === 'Metric') {
       //convert input data
       for (let key in inputCpy) {
@@ -189,6 +191,25 @@ export class StandaloneService {
       return outputs;
     }
   }
+
+  sumPipeInputs(inputCpy: AirSystemCapacityInput): AirSystemCapacityInput {
+    inputCpy.customPipes = new Array();
+    inputCpy.allPipes.forEach(pipe => {
+      //if custom add to custom array
+      if (pipe.pipeSize == 'CUSTOM') {
+        inputCpy.customPipes.push({
+          pipeLength: pipe.pipeLength,
+          pipeSize: pipe.customPipeSize
+        });
+      } else {
+        //otherwise sum pipe size
+        inputCpy[pipe.pipeSize] += pipe.pipeLength;
+      }
+    });
+    return inputCpy;
+  }
+
+
   //imperial: (diameter: inches, length: ft)
   calculatePipeVolume(diameter: number, length: number): number {
     let volume: number = Math.pow((diameter / 24), 2) * Math.PI * length;

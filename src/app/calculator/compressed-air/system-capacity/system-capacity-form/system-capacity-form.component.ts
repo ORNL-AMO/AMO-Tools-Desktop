@@ -21,12 +21,16 @@ export class SystemCapacityFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   pipeSizeOptions: Array<{ display: string, size: string }>;
-  pipes: Array<{ pipeSize: string, customPipeSize: number, pipeLength: number }>;
+  // pipes: Array<{ pipeSize: string, customPipeSize: number, pipeLength: number }>;
 
   constructor() { }
 
   ngOnInit() {
     this.pipeSizeOptions = JSON.parse(JSON.stringify(pipeSizesConstant));
+    //start with pipe
+    if(!this.inputs.allPipes){
+      this.addPipe();
+    }
   }
 
   emitChange() {
@@ -51,17 +55,17 @@ export class SystemCapacityFormComponent implements OnInit {
   addPipe() {
     let newPipe = {
       pipeSize: this.pipeSizeOptions[1].size,
-      customPipeSize: undefined,
+      customPipeSize: 0,
       pipeLength: 0,
     };
-    if (!this.pipes) {
-      this.pipes = new Array<{ pipeSize: string, customPipeSize: number, pipeLength: number }>();
+    if (!this.inputs.allPipes) {
+      this.inputs.allPipes = new Array<{ pipeSize: string, customPipeSize: number, pipeLength: number }>();
     }
-    this.pipes.push(newPipe);
+    this.inputs.allPipes.push(newPipe);
   }
 
   deletePipe(i: number) {
-    this.pipes.splice(i, 1);
+    this.inputs.allPipes.splice(i, 1);
     this.emitChange();
   }
   
@@ -69,25 +73,25 @@ export class SystemCapacityFormComponent implements OnInit {
     this.emitChangeField.emit(str);
   }
 
-  changeCustomPipeSize(pipeIndex: number) {
-    // console.log('changing standard pipe size', this.pipes[pipeIndex]);
-  }
+  // changeCustomPipeSize(pipeIndex: number) {
+  //   // console.log('changing standard pipe size', this.pipes[pipeIndex]);
+  // }
 
-  changePipeLength(pipeIndex: number) {
-    const pipe = this.pipes[pipeIndex];
-    if (pipe.pipeSize == 'CUSTOM') {
-      // How to handle changes to pipe once pushed to the array?
-      const customPipe = {
-        pipeSize: pipe.customPipeSize,
-        pipeLength: pipe.pipeLength
-      };
-      this.inputs.customPipes.push(customPipe);
-    } else {
-      // Handling on (input) vs ... taking (blur) (keyup.enter) which differs from the other forms
-      // If existing value increment, else assign
-      this.inputs[pipe.pipeSize] = pipe.pipeLength;
-    }
-    this.emitChange();
-    console.log('inputs on change', this.inputs);
-  }
+  // changePipeLength(pipeIndex: number) {
+  //   const pipe = this.pipes[pipeIndex];
+  //   if (pipe.pipeSize == 'CUSTOM') {
+  //     // How to handle changes to pipe once pushed to the array?
+  //     const customPipe = {
+  //       pipeSize: pipe.customPipeSize,
+  //       pipeLength: pipe.pipeLength
+  //     };
+  //     this.inputs.customPipes.push(customPipe);
+  //   } else {
+  //     // Handling on (input) vs ... taking (blur) (keyup.enter) which differs from the other forms
+  //     // If existing value increment, else assign
+  //     this.inputs[pipe.pipeSize] = pipe.pipeLength;
+  //   }
+  //   this.emitChange();
+  //   console.log('inputs on change', this.inputs);
+  // }
 }
