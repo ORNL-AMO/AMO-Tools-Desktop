@@ -105,6 +105,7 @@ export interface GraphObj {
         title: {
             text: string
         },
+        hovermode: string,
         xaxis: AxisObj,
         yaxis: AxisObj,
         yaxis2: AxisObj,
@@ -153,16 +154,18 @@ export interface AnnotationData {
     },
     // align: string,
     // arrowhead: number,
-    // arrowsize: number,
+    arrowsize: number,
     // arrowwidth: number,
-    // arrowcolor: number,
+    arrowcolor: string,
     ax: number,
     ay: number,
     // bordercolor: string,
     // borderwidth: number,
     // borderpad: number,
-    // bgcolor: string,
+    bgcolor: string,
     // opacity: number
-    annotationId: string
+    annotationId: string,
+    yref: string,
+    seriesName: string
 
 }

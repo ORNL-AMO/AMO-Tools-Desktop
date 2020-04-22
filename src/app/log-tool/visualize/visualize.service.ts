@@ -51,6 +51,7 @@ export class VisualizeService {
         title: {
           text: 'Data Visualization 1'
         },
+        hovermode: 'closest',
         annotations: [],
         xaxis: {
           autorange: true,
@@ -236,7 +237,7 @@ export class VisualizeService {
     return squareRootOfAverageSquareDiff;
   }
 
-  getAnnotationPoint(x: number | string, y: number | string): AnnotationData {
+  getAnnotationPoint(x: number | string, y: number | string, yref: string, fontColor: string, seriesName: string): AnnotationData {
     return {
       x: x,
       y: y,
@@ -245,21 +246,23 @@ export class VisualizeService {
       font: {
         // family: string,
         size: 16,
-        color: undefined
+        color: '#000000'
       },
       // align: string,
       // arrowhead: number,
-      // arrowsize: number,
+      arrowsize: 1,
       // arrowwidth: number,
-      // arrowcolor: number,
+      arrowcolor: '#000000',
       ax: 0,
       ay: -100,
       // bordercolor: string,
       // borderwidth: number,
       // borderpad: number,
-      // bgcolor: string,
+      bgcolor: '#ffffff',
       // opacity: number
-      annotationId: Math.random().toString(36).substr(2, 9)
+      annotationId: Math.random().toString(36).substr(2, 9),
+      yref: yref,
+      seriesName: seriesName
 
     }
   }

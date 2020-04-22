@@ -16,6 +16,7 @@ export class AnnotateGraphComponent implements OnInit {
   selectedGraphObjSub: Subscription;
   selectedGraphObj: GraphObj;
   fontSizes: Array<number> = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
+  arrowSizes: Array<number> = [.5, 1, 1.5, 2, 2.5];
   constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -38,13 +39,18 @@ export class AnnotateGraphComponent implements OnInit {
 
 
   setAnnotation() {
-    if (!this.selectedGraphObj.layout.annotations) {
+    console.log(this.annotateDataPoint);
+    if (!this.selectedGraphObj.layout.annotations && this.annotateDataPoint.text) {
       this.selectedGraphObj.layout.annotations = [this.annotateDataPoint];
     } else {
       let testExistIndex: number = this.selectedGraphObj.layout.annotations.findIndex(annotation => { return annotation.annotationId == this.annotateDataPoint.annotationId });
       if (testExistIndex != -1) {
-        this.selectedGraphObj.layout.annotations[testExistIndex] = this.annotateDataPoint;
-      } else {
+        if (this.annotateDataPoint.text) {
+          this.selectedGraphObj.layout.annotations[testExistIndex] = this.annotateDataPoint;
+        } else {
+          this.deleteAnnotation(this.annotateDataPoint);
+        }
+      } else if (this.annotateDataPoint.text) {
         this.selectedGraphObj.layout.annotations.push(this.annotateDataPoint);
       }
     }

@@ -1,5 +1,9 @@
 <form *ngIf="annotateDataPoint">
     <div class="form-group">
+        <label>Selected Series</label>
+        <div class="small">{{annotateDataPoint.seriesName}}</div>
+    </div>
+    <div class="form-group">
         <label>Selected X Point:</label>
         <div class="small">{{annotateDataPoint.x}}</div>
     </div>
@@ -9,7 +13,7 @@
     </div>
     <div class="form-group">
         <label class="w-100">Annotation</label>
-        <textarea rows="6" class="form-control w-100" [(ngModel)]="annotateDataPoint.text" name="annotation"
+        <textarea rows="3" class="form-control w-100" [(ngModel)]="annotateDataPoint.text" name="annotation"
             id="annotaion" (input)="setAnnotation()"></textarea>
     </div>
     <!-- <div class="form-group">
@@ -20,6 +24,34 @@
         <select class="form-control" [(ngModel)]="annotateDataPoint.font.size" name="fontSize"
             (change)="setAnnotation()">
             <option *ngFor="let fontSize of fontSizes" [ngValue]="fontSize">{{fontSize}}</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Font Color</label>
+        <input class="w-50 form-control color-picker" type="color" name="{{'fontColor'}}"
+            [(ngModel)]="annotateDataPoint.font.color" [ngStyle]="{'background-color': annotateDataPoint.font.color}"
+            (input)="setAnnotation()">
+    </div>
+
+    <div class="form-group">
+        <label>Background Color</label>
+        <input class="w-50 form-control color-picker" type="color" name="backgroundColor"
+            [(ngModel)]="annotateDataPoint.bgcolor" [ngStyle]="{'background-color': annotateDataPoint.bgcolor}"
+            (input)="setAnnotation()">
+    </div>
+    <div class="form-group">
+        <label>Arrow Color</label>
+        <input class="w-50 form-control color-picker" type="color" name="arrowColor"
+            [(ngModel)]="annotateDataPoint.arrowcolor" [ngStyle]="{'background-color': annotateDataPoint.arrowcolor}"
+            (input)="setAnnotation()">
+    </div>
+
+    <div class="form-group">
+        <label>Arrow Size</label>
+        <select class="form-control" [(ngModel)]="annotateDataPoint.arrowsize" name="arrowsize"
+            (change)="setAnnotation()">
+            <option *ngFor="let arrowSize of arrowSizes" [ngValue]="arrowSize">{{arrowSize}}</option>
         </select>
     </div>
 
