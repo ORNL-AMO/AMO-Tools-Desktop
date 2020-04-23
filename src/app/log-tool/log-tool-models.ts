@@ -169,7 +169,7 @@ export interface AnnotationData {
     ay: number,
     // bordercolor: string,
     // borderwidth: number,
-    // borderpad: number,
+    borderpad: number,
     bgcolor: string,
     // opacity: number
     annotationId: string,

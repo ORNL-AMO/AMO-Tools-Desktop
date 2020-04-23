@@ -83,9 +83,13 @@ export class VisualizeMenuService {
   setXAxisDataOption(selectedGraphObj: GraphObj) {
     if (selectedGraphObj.selectedXAxisDataOption.dataField.isDateField) {
       selectedGraphObj.layout.xaxis.type = 'date';
-    } else {
+    } else if (selectedGraphObj.data[0].type == 'bar') {
       selectedGraphObj.layout.xaxis.type = 'category';
+    } else {
+      selectedGraphObj.layout.xaxis.type = 'linear';
+      console.log('set linear');
     }
+
     if (selectedGraphObj.data[0].type == 'bar') {
       this.setBarHistogramData(selectedGraphObj);
     } else {
@@ -184,9 +188,10 @@ export class VisualizeMenuService {
     selectedGraphObj.selectedYAxisDataOptions.splice(index, 1);
     selectedGraphObj.data.splice(index, 1);
     if (selectedGraphObj.data.length == 1 && selectedGraphObj.hasSecondYAxis == true) {
-      selectedGraphObj.hasSecondYAxis = false;
+      this.removeAxis(selectedGraphObj);
+    } else {
+      this.setYAxisData(selectedGraphObj);
     }
-    this.setYAxisData(selectedGraphObj);
   }
 
   setAnnotation(annotateDataPoint: AnnotationData, selectedGraphObj: GraphObj) {
@@ -204,7 +209,7 @@ export class VisualizeMenuService {
       } else if (annotateDataPoint.text) {
         selectedGraphObj.layout.annotations.push(annotateDataPoint);
       }
-    } 
+    }
     this.save(selectedGraphObj);
   }
 

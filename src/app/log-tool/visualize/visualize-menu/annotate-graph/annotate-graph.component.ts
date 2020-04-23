@@ -23,6 +23,9 @@ export class AnnotateGraphComponent implements OnInit {
   ngOnInit(): void {
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
       this.selectedGraphObj = val;
+      if(this.selectedGraphObj.layout.annotations.length == 0 && this.annotateDataPoint){
+        this.annotateDataPoint = undefined;
+      }
       this.cd.detectChanges();
     });
 

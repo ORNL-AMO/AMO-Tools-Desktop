@@ -239,33 +239,38 @@ export class VisualizeService {
     return squareRootOfAverageSquareDiff;
   }
 
-  getAnnotationPoint(x: number | string, y: number | string, yref: string, fontColor: string, seriesName: string): AnnotationData {
-    return {
-      x: x,
-      y: y,
-      text: '',
-      showarrow: true,
-      font: {
-        // family: string,
-        size: 16,
-        color: '#000000'
-      },
-      // align: string,
-      // arrowhead: number,
-      arrowsize: 1,
-      // arrowwidth: number,
-      arrowcolor: '#000000',
-      ax: 0,
-      ay: -100,
-      // bordercolor: string,
-      // borderwidth: number,
-      // borderpad: number,
-      bgcolor: '#ffffff',
-      // opacity: number
-      annotationId: Math.random().toString(36).substr(2, 9),
-      yref: yref,
-      seriesName: seriesName
-
+  getAnnotationPoint(x: number | string, y: number | string, yref: string, seriesName: string): AnnotationData {
+    let selectedGraphObj: GraphObj = this.selectedGraphObj.getValue();
+    let findAnnotation: AnnotationData = selectedGraphObj.layout.annotations.find(annotation => { return (annotation.x == x && annotation.y == y) });
+    if (findAnnotation) {
+      return findAnnotation;
+    } else {
+      return {
+        x: x,
+        y: y,
+        text: '',
+        showarrow: true,
+        font: {
+          // family: string,
+          size: 16,
+          color: '#000000'
+        },
+        // align: string,
+        // arrowhead: number,
+        arrowsize: 1,
+        // arrowwidth: number,
+        arrowcolor: '#000000',
+        ax: 0,
+        ay: -100,
+        // bordercolor: string,
+        // borderwidth: number,
+        borderpad: 10,
+        bgcolor: '#ffffff',
+        // opacity: number
+        annotationId: Math.random().toString(36).substr(2, 9),
+        yref: yref,
+        seriesName: seriesName
+      }
     }
   }
 }

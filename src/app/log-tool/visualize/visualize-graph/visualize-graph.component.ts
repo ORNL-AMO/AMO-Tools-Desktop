@@ -37,8 +37,7 @@ export class VisualizeGraphComponent implements OnInit {
           chart.on('plotly_click', (data) => {
             console.log(data);
             //send data point for annotations
-            let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.marker.color,
-              data.points[0].fullData.name);
+            let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
             this.visualizeService.annotateDataPoint.next(newAnnotation);
           });
           this.clickEventListening = true;

@@ -14,13 +14,13 @@
             </option>
         </select>
     </div>
-    <div class="form-group pt-2" *ngIf="selectedGraphObj.data[0].type == 'scattergl'">
+    <!-- <div class="form-group pt-2" *ngIf="selectedGraphObj.data[0].type == 'scattergl'">
         <label>
             <input type="checkbox" [(ngModel)]="selectedGraphObj.isTimeSeries" name="isTimeSeries"
                 (change)="setTimeSeries()" />
             <a>Time Series</a>
         </label>
-    </div>
+    </div> -->
     <div class="btn-group pt-2 pb-2 w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
         <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(true)"
             [ngClass]="{'active': selectedGraphObj.useStandardDeviation == true}">Std. Deviation</button>
