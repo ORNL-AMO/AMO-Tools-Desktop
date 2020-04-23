@@ -21,7 +21,7 @@
             <a>Time Series</a>
         </label>
     </div>
-    <div class="btn-group pt-2 small w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
+    <div class="btn-group pt-2 pb-2 w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
         <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(true)"
             [ngClass]="{'active': selectedGraphObj.useStandardDeviation == true}">Std. Deviation</button>
         <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(false)" 

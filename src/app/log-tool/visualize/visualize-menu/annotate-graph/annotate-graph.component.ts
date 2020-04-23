@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { VisualizeService } from '../../visualize.service';
 import { GraphObj, AnnotationData } from '../../../log-tool-models';
 import * as _ from 'lodash';
+import { VisualizeMenuService } from '../visualize-menu.service';
 
 @Component({
   selector: 'app-annotate-graph',
@@ -17,10 +18,9 @@ export class AnnotateGraphComponent implements OnInit {
   selectedGraphObj: GraphObj;
   fontSizes: Array<number> = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
   arrowSizes: Array<number> = [.5, 1, 1.5, 2, 2.5];
-  constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef) { }
+  constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef, private visualizeMenuService: VisualizeMenuService) { }
 
   ngOnInit(): void {
-
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
       this.selectedGraphObj = val;
       this.cd.detectChanges();
@@ -37,24 +37,8 @@ export class AnnotateGraphComponent implements OnInit {
     this.selectedGraphObjSub.unsubscribe();
   }
 
-
   setAnnotation() {
-    console.log(this.annotateDataPoint);
-    if (!this.selectedGraphObj.layout.annotations && this.annotateDataPoint.text) {
-      this.selectedGraphObj.layout.annotations = [this.annotateDataPoint];
-    } else {
-      let testExistIndex: number = this.selectedGraphObj.layout.annotations.findIndex(annotation => { return annotation.annotationId == this.annotateDataPoint.annotationId });
-      if (testExistIndex != -1) {
-        if (this.annotateDataPoint.text) {
-          this.selectedGraphObj.layout.annotations[testExistIndex] = this.annotateDataPoint;
-        } else {
-          this.deleteAnnotation(this.annotateDataPoint);
-        }
-      } else if (this.annotateDataPoint.text) {
-        this.selectedGraphObj.layout.annotations.push(this.annotateDataPoint);
-      }
-    }
-    this.visualizeService.selectedGraphObj.next(this.selectedGraphObj);
+    this.visualizeMenuService.setAnnotation(this.annotateDataPoint, this.selectedGraphObj);
   }
 
   moveLeft() {
@@ -82,7 +66,6 @@ export class AnnotateGraphComponent implements OnInit {
   }
 
   deleteAnnotation(annotation: AnnotationData) {
-    _.remove(this.selectedGraphObj.layout.annotations, (currentAnnotation) => { return currentAnnotation.annotationId == annotation.annotationId });
-    this.visualizeService.selectedGraphObj.next(this.selectedGraphObj);
+    this.visualizeMenuService.deleteAnnotation(annotation, this.selectedGraphObj);
   }
 }

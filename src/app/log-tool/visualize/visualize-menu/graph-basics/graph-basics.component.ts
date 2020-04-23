@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GraphObj } from '../../../log-tool-models';
 import { Subscription } from 'rxjs';
 import { VisualizeService } from '../../visualize.service';
+import { VisualizeMenuService } from '../visualize-menu.service';
 
 @Component({
   selector: 'app-graph-basics',
@@ -17,23 +18,41 @@ export class GraphBasicsComponent implements OnInit {
   selectedGraphObj: GraphObj;
   selectedGraphObjSub: Subscription;
 
-  constructor(private visualizeService: VisualizeService) { }
+  constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService) { }
 
   ngOnInit(): void {
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
       if (this.selectedGraphObj == undefined || val.graphId != this.selectedGraphObj.graphId) {
         this.selectedGraphObj = val;
         this.setGraphType();
+      }else{
+        this.selectedGraphObj = val;
       }
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectedGraphObjSub.unsubscribe();
   }
 
-  setGraphType(){
-    
+  saveChanges() {
+    this.visualizeMenuService.save(this.selectedGraphObj);
   }
 
+  setGraphType() {
+    this.visualizeMenuService.setGraphType(this.selectedGraphObj);
+  }
+
+  setTimeSeries() {
+
+  }
+
+  setHistogramStdDeviation(bool: boolean) {
+    this.selectedGraphObj.useStandardDeviation = bool;
+    this.setBarHistogramData();
+  }
+
+  setBarHistogramData() {
+    this.visualizeMenuService.setBarHistogramData(this.selectedGraphObj);
+  }
 }

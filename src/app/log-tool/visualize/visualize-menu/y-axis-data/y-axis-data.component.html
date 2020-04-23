@@ -1,14 +1,11 @@
 <form>
     <div *ngIf="selectedGraphObj.data[0].type == 'scattergl'">
-        <!--y axis options-->
-        <div class="group-label">Y-Axis
-            <a class="click-link small pull-right" (click)="addAxis()"
-                *ngIf="!selectedGraphObj.hasSecondYAxis && selectedGraphObj.selectedYAxisDataOptions.length != 1">+Add
-                Axis</a>
-
-        </div>
         <div class="form-group">
-            <label><span *ngIf="selectedGraphObj.hasSecondYAxis">Left </span>Axis Label</label>
+            <label><span *ngIf="selectedGraphObj.hasSecondYAxis">Left </span>Axis Label
+                <a class="form-text click-link small" (click)="addAxis()"
+                    *ngIf="!selectedGraphObj.hasSecondYAxis && selectedGraphObj.selectedYAxisDataOptions.length != 1">+Add
+                    Axis</a>
+            </label>
             <input class="form-control" type="text" name="yAxisLabel"
                 [(ngModel)]="selectedGraphObj.layout.yaxis.title.text" (input)="saveChanges()">
         </div>
@@ -33,7 +30,8 @@
                 <label>Data</label>
                 <select class="form-control" name="{{'yDatafield'+selectedDataOption.index}}"
                     [(ngModel)]="selectedDataOption.dataOption" (change)="setYAxisData()">
-                    <option *ngFor="let yAxisDataOption of yAxisDataOptions" [ngValue]="yAxisDataOption">
+                    <option *ngFor="let yAxisDataOption of selectedGraphObj.yAxisDataOptions"
+                        [ngValue]="yAxisDataOption">
                         {{yAxisDataOption.dataField.alias}}</option>
                 </select>
             </div>
@@ -61,7 +59,7 @@
             </div>
         </div>
         <hr>
-        <a class="click-link pull-right pt-2" (click)="addData()">Add Data</a>
+        <a class="click-link pull-right small" (click)="addData()">+Add Another Data Series</a>
     </div>
     <div *ngIf="selectedGraphObj.data[0].type == 'bar'">
         <div class="form-group">

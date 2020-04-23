@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { GraphObj } from '../../../log-tool-models';
+import { Subscription } from 'rxjs';
+import { VisualizeService } from '../../visualize.service';
+import { VisualizeMenuService } from '../visualize-menu.service';
 
 @Component({
   selector: 'app-x-axis-data',
@@ -7,9 +11,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class XAxisDataComponent implements OnInit {
 
-  constructor() { }
+  selectedGraphObj: GraphObj;
+  selectedGraphObjSub: Subscription;
 
+  constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService) { }
   ngOnInit(): void {
+    this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
+      this.selectedGraphObj = val;
+    });
+  }
+
+  ngOnDestroy() {
+    this.selectedGraphObjSub.unsubscribe();
+  }
+
+  saveChanges() {
+    this.visualizeMenuService.save(this.selectedGraphObj);
+  }
+
+  setXAxisDataOption() {
+    this.visualizeMenuService.setXAxisDataOption(this.selectedGraphObj);
   }
 
 }

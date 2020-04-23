@@ -1,65 +1,17 @@
-.nav-item .dropdown-toggle{
-    color: white;
-    background: #117A65;
-}
-
-.navbar-nav .dropdown-menu{
-    position: absolute;
-    font-size: small;
-}
-
-.navbar{
-    background: white;
-    border-bottom: solid 4px #117A65;
-    font-size: small;
-}
-
-
-.nav-link, .btn{
-    padding: 4px;
-}
-
-.list-group-item{
-    padding: 8px;
-    font-size: small;
-}
-
-.list-group-item.active, .btn.active{
-    color: white;
-    background: #117A65;
-}
-
-
-.dropdown-menu.filter-menu{
-    right: 0px;
-    left: inherit;
-}
-
-a.list-group-item:hover, .nav-link{
-    cursor: pointer;
-}
-
-a.list-group-item.active:hover{
-    color: white;
-}
-
-.nav-link.dropdown-toggle:hover, .nav-btn:hover{
-    background-color: #808B96;
-}
-
-.btn-group .btn{
-    border-radius: 0px;
-}
-
 
 .sidebar{
     height: 100%;
     background: white;
+    padding: .5rem;
 }
 
-.y-axis-data{
-    padding-top: 8px;
-    border-top: groove;
+label.group-label{
+    font-size: 18px;
+}
+
+label.group-label:hover{
+    cursor: pointer;
+    background-color: #D5D8DC;
 }
 
 a:not([href]):not([tabindex]).danger.click-link{

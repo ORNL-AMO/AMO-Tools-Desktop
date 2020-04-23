@@ -111,7 +111,9 @@ export class VisualizeService {
       hasSecondYAxis: false,
       numberOfBins: 5,
       useStandardDeviation: true,
-      graphId: Math.random().toString(36).substr(2, 9)
+      graphId: Math.random().toString(36).substr(2, 9),
+      xAxisDataOptions: [],
+      yAxisDataOptions: []
     }
   }
 

@@ -123,7 +123,15 @@ export interface GraphObj {
     hasSecondYAxis: boolean,
     numberOfBins: number,
     useStandardDeviation: boolean,
-    graphId: string
+    graphId: string,
+    xAxisDataOptions: Array<{
+        dataField: LogToolField,
+        data: Array<number | string>
+    }>;
+    yAxisDataOptions: Array<{
+        dataField: LogToolField,
+        data: Array<number | string>
+    }>
 }
 
 export interface AxisObj {
