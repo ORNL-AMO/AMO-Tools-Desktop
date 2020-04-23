@@ -33,6 +33,11 @@ export class VisualizeMenuComponent implements OnInit {
   graphObjsSub: Subscription;
   numberOfGraphs: number;
   tabSelect: string = 'graphBasics';
+
+  showGraphBasics: boolean = true;
+  showXAxisOptions: boolean = false;
+  showYAxisOptions: boolean = false;
+  showAnnotateGraph: boolean = false;
   constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
@@ -252,6 +257,22 @@ export class VisualizeMenuComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  toggleGraphBasics() {
+    this.showGraphBasics = !this.showGraphBasics;
+  }
+  
+  toggleXAxisOptions() {
+    this.showXAxisOptions = !this.showXAxisOptions;
+  }
+  
+  toggleYAxisOptions() {
+    this.showYAxisOptions = !this.showYAxisOptions;
+  }
+
+  toggleAnnotateGraph() {
+    this.showAnnotateGraph = !this.showAnnotateGraph;
   }
 }
 

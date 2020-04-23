@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { VisualizeService } from '../visualize.service';
-import { GraphObj, AnnotationData } from '../../log-tool-models';
+import { VisualizeService } from '../../visualize.service';
+import { GraphObj, AnnotationData } from '../../../log-tool-models';
 import * as _ from 'lodash';
 
 @Component({

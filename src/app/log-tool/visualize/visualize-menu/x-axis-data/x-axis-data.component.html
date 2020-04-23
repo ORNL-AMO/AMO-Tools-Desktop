@@ -1,0 +1,17 @@
+<form>
+    <!--x axis options-->
+    <div class="group-label">X-Axis</div>
+    <div class="form-group">
+        <label>Axis Label</label>
+        <input class="form-control" type="text" name="xAxisLabel" [(ngModel)]="selectedGraphObj.layout.xaxis.title.text"
+            (input)="saveChanges()">
+    </div>
+    <div class="form-group">
+        <label>Data</label>
+        <select class="form-control" name="xDatafield" [(ngModel)]="selectedGraphObj.selectedXAxisDataOption"
+            (change)="setXAxisDataOption()" [disabled]="selectedGraphObj.isTimeSeries">
+            <option *ngFor="let xAxisDataOption of xAxisDataOptions" [ngValue]="xAxisDataOption">
+                {{xAxisDataOption.dataField.alias}}</option>
+        </select>
+    </div>
+</form>
