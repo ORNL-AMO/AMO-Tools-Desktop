@@ -4,6 +4,25 @@
   <table class="table table-striped table-hover">
     <thead>
       <tr>
+        <td [ngStyle]="{ 'width.%': 15 }" class="border-0"></td>
+        <td [ngClass]="{
+                  'selected-modification': selectedModificationIndex == -1
+                }" [ngStyle]="{ 'width.%': tableCellWidth }" class="border-0">
+        </td>
+        <td [ngStyle]="{ 'width.%': tableCellWidth }" *ngFor="let modification of modificationOutputs; let index = index"
+          [ngClass]="{
+                  'selected-modification': index == selectedModificationIndex
+                }" class="bold text-center border-0">
+            <div class="alert-danger" *ngIf="!modification.valid.isValid">
+              Invalid Modification<br>
+              <span *ngIf="!modification.valid.boilerValid">Errors found in Boiler<br></span>
+              <span *ngIf="!modification.valid.headerValid">Errors found in Header<br></span>
+              <span *ngIf="!modification.valid.turbineValid">Errors found in Turbine<br></span>
+              <span *ngIf="!modification.valid.operationsValid">Errors found in Operations<br></span>
+            </div>
+        </td>
+      </tr>
+      <tr>
         <td [ngStyle]="{ 'width.%': 15 }" class="bold">($/yr)</td>
         <td
           [ngClass]="{
@@ -36,59 +55,42 @@
         >
           &mdash;
         </td>
-        <td
-          class="percent-graph"
-          *ngFor="let modResults of modificationOutputs; let index = index"
-          [ngClass]="{
-            'selected-modification': index == selectedModificationIndex
-          }"
-        >
-          <div
-            class="hide-print"
-            *ngIf="
-              modResults.outputData.boilerOutput &&
-              getSavingsPercentage(
-                baselineOutput.operationsOutput.totalOperatingCost,
-                modResults.outputData.operationsOutput.totalOperatingCost
-              )
-            "
-          >
-            <app-percent-graph
-              [value]="
-                getSavingsPercentage(
-                  baselineOutput.operationsOutput.totalOperatingCost,
-                  modResults.outputData.operationsOutput.totalOperatingCost
-                )
-              "
-            >
+        <td class="percent-graph" *ngFor="let modResults of modificationOutputs; let index = index" [ngClass]="{
+                    'selected-modification': index == selectedModificationIndex
+                  }">
+          <div class="hide-print" *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput &&
+                                getSavingsPercentage(
+                                  baselineOutput.operationsOutput.totalOperatingCost,
+                                  modResults.outputData.operationsOutput.totalOperatingCost
+                                )">
+            <app-percent-graph *ngIf="modResults.valid.isValid" [value]="
+                                  getSavingsPercentage(
+                                    baselineOutput.operationsOutput.totalOperatingCost,
+                                    modResults.outputData.operationsOutput.totalOperatingCost
+                                  )
+                                ">
             </app-percent-graph>
           </div>
-          <div
-            class="show-print text-center"
-            *ngIf="
-              getSavingsPercentage(
-                baselineOutput.operationsOutput.totalOperatingCost,
-                modResults.outputData.operationsOutput.totalOperatingCost
-              )
-            "
-          >
+          <div class="show-print text-center" *ngIf="modResults.valid.isValid &&
+                      getSavingsPercentage(
+                        baselineOutput.operationsOutput.totalOperatingCost,
+                        modResults.outputData.operationsOutput.totalOperatingCost
+                      )
+                    ">
             {{
-              getSavingsPercentage(baselineResults, modification)
-                | number: "1.0"
-            }}
+                      getSavingsPercentage(baselineResults, modification)
+                        | number: "1.0"
+                    }}
             %
           </div>
-          <div
-            *ngIf="
-              !modResults.outputData.boilerOutput ||
-              !getSavingsPercentage(
-                baselineOutput.operationsOutput.totalOperatingCost,
-                modResults.outputData.operationsOutput.totalOperatingCost
-              )
-            "
-            class="mx-auto"
-          >
-            &mdash; &mdash;
+          <div *ngIf="!modResults.valid.isValid || (
+                      !modResults.outputData.boilerOutput ||
+                      !getSavingsPercentage(
+                        baselineOutput.operationsOutput.totalOperatingCost,
+                        modResults.outputData.operationsOutput.totalOperatingCost
+                      ))
+                    " class="mx-auto">
+            &mdash;
           </div>
         </td>
       </tr>
@@ -113,13 +115,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.powerGenerationCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -137,13 +139,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               (baselineOutput.operationsOutput.powerGenerationCost -
                 modResults.outputData.operationsOutput.powerGenerationCost) | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -169,13 +171,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.boilerFuelCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -193,13 +195,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               (baselineOutput.operationsOutput.boilerFuelCost -
                 modResults.outputData.operationsOutput.boilerFuelCost) | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -225,13 +227,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.makeupWaterCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -249,13 +251,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               (baselineOutput.operationsOutput.makeupWaterCost -
                 modResults.outputData.operationsOutput.makeupWaterCost) | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr class="bold">
@@ -279,20 +281,20 @@
           *ngFor="let modResults of modificationOutputs; let index = index"
           [ngClass]="{
             'selected-modification': index == selectedModificationIndex,
-            'positive-savings':
+            'positive-savings': modResults.valid.isValid &&
               getSavingsPercentage(
                 baselineOutput.operationsOutput.totalOperatingCost,
                 modResults.outputData.operationsOutput.totalOperatingCost
               ) > 10
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.totalOperatingCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr class="bold">
@@ -308,20 +310,20 @@
           *ngFor="let modResults of modificationOutputs; let index = index"
           [ngClass]="{
             'selected-modification': index == selectedModificationIndex,
-            'positive-savings':
+            'positive-savings': modResults.valid.isValid &&
               getSavingsPercentage(
                 baselineOutput.operationsOutput.totalOperatingCost,
                 modResults.outputData.operationsOutput.totalOperatingCost
               ) > 10
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               (baselineOutput.operationsOutput.totalOperatingCost -
                 modResults.outputData.operationsOutput.totalOperatingCost) | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
