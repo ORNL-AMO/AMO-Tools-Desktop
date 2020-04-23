@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
-import { SSMTInputs, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../../../../shared/models/steam/ssmt';
+import { SSMTInputs, HeaderWithHighestPressure, HeaderNotHighestPressure, SsmtValid } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
 import { SSMTOutput } from '../../../../../shared/models/steam/steam-outputs';
 
@@ -20,7 +20,7 @@ export class HeaderInputTableComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  modificationOutputs: Array<SSMTOutput>;
+  modificationOutputs: Array<{ name: string, outputData: SSMTOutput, valid: SsmtValid }>;
 
   pressureDiff: Array<boolean>;
   processSteamUsageDiff: Array<boolean>;
@@ -52,7 +52,7 @@ export class HeaderInputTableComponent implements OnInit {
     }
 
     this.modifications = new Array<HeaderWithHighestPressure | HeaderNotHighestPressure>();
-
+    
     this.pressureDiff = new Array<boolean>();
     this.processSteamUsageDiff = new Array<boolean>();
     this.condensationRecoveryRateDiff = new Array<boolean>();

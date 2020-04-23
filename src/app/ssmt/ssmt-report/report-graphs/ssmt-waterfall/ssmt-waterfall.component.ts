@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-import { SSMT } from '../../../../shared/models/steam/ssmt';
+import { SSMT, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { SSMTLosses } from '../../../../shared/models/steam/steam-outputs';
 import * as Plotly from 'plotly.js';
 import { ReportGraphsService } from '../report-graphs.service';
@@ -19,7 +19,7 @@ export class SsmtWaterfallComponent implements OnInit {
   @Input()
   baselineLosses: SSMTLosses;
   @Input()
-  modificationLosses: Array<{ outputData: SSMTLosses, name: string }>;
+  modificationLosses: Array<{ outputData: SSMTLosses, name: string, valid: SsmtValid }>;
   @Input()
   settings: Settings;
   @Input()
@@ -36,18 +36,22 @@ export class SsmtWaterfallComponent implements OnInit {
 
 
   ngAfterViewInit() {
-    if (!this.printView) {
-      this.createChart();
-    } else {
-      this.createPrintChart();
+    if (this.ssmt.valid.isValid) {
+      if (!this.printView) {
+        this.createChart();
+      } else {
+        this.createPrintChart();
+      }
     }
   }
 
   ngOnChanges() {
-    if (this.ssmtWaterfall && !this.printView) {
-      this.createChart();
-    } else if (this.ssmtWaterfall && this.printView) {
-      this.createPrintChart();
+    if (this.ssmt.valid.isValid) {
+      if (this.ssmtWaterfall && !this.printView) {
+        this.createChart();
+      } else if (this.ssmtWaterfall && this.printView) {
+        this.createPrintChart();
+      }
     }
   }
 

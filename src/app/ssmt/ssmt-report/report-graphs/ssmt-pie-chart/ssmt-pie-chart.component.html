@@ -1,5 +1,5 @@
 <div #ssmtPieChart [ngStyle]="{'display': ssmt.valid.isValid? 'block' : 'none'}"></div>
-<div class="w-100 text-center" *ngIf="noData">
+<div class="w-100 text-center" *ngIf="noData && ssmt.valid.isValid">
     No Data for Scenario
 </div>
 <div class="w-100 text-center alert-danger" [ngStyle]="{'display': !ssmt.valid.isValid? 'block' : 'none'}">

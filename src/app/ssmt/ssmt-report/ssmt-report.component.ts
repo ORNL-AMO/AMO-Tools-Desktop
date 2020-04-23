@@ -69,12 +69,18 @@ export class SsmtReportComponent implements OnInit {
           this.assessment.ssmt.modifications.forEach(modification => {
               modification.ssmt.valid = this.ssmtService.checkValid(modification.ssmt, this.settings);
               let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModificationModel(modification.ssmt, this.settings, this.baselineOutput);
-              resultData.outputData = this.calculateResultsWithMarginalCosts(modification.ssmt, resultData.outputData, this.baselineOutput);
-              modification.ssmt.outputData = resultData.outputData;
-              this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData, valid: modification.ssmt.valid});
-              this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData, valid: modification.ssmt.valid });
-              let modLosses: SSMTLosses = this.calculateLossesService.calculateLosses(resultData.outputData, resultData.inputData, this.settings, modification.ssmt);
-              this.modificationLosses.push({ outputData: modLosses, name: modification.ssmt.name, valid: modification.ssmt.valid });
+              if (modification.ssmt.valid.isValid) {
+                resultData.outputData = this.calculateResultsWithMarginalCosts(modification.ssmt, resultData.outputData, this.baselineOutput);
+                modification.ssmt.outputData = resultData.outputData;
+                this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData, valid: modification.ssmt.valid});
+                this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData, valid: modification.ssmt.valid });
+                let modLosses: SSMTLosses = this.calculateLossesService.calculateLosses(resultData.outputData, resultData.inputData, this.settings, modification.ssmt);
+                this.modificationLosses.push({ outputData: modLosses, name: modification.ssmt.name, valid: modification.ssmt.valid });
+              } else {
+                this.modificationOutputs.push({ name: modification.ssmt.name, outputData: undefined,valid: modification.ssmt.valid});
+                this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData, valid: modification.ssmt.valid });
+                this.modificationLosses.push({ outputData: undefined, name: modification.ssmt.name, valid: modification.ssmt.valid });
+              }
           });
         }
         this.getTableCellWidth();
@@ -159,16 +165,8 @@ export class SsmtReportComponent implements OnInit {
 
   calculateResultsWithMarginalCosts(ssmt: SSMT, outputData: SSMTOutput, baselineResults?: SSMTOutput): SSMTOutput {
     let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number };
-
     if (ssmt.name == 'Baseline') {
       marginalCosts = this.ssmtService.calculateBaselineMarginalCosts(ssmt, outputData, this.settings);
-    } else if (!ssmt.valid.isValid) {
-        outputData = baselineResults;
-        marginalCosts = {
-          marginalHPCost: 0,
-          marginalMPCost: 0,
-          marginalLPCost: 0
-        };
     } else {
         marginalCosts = this.ssmtService.calculateModificationMarginalCosts(ssmt, outputData, baselineResults, this.settings);
     }

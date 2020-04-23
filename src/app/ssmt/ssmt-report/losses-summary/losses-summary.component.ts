@@ -59,13 +59,15 @@ export class LossesSummaryComponent implements OnInit {
     this.checkLowPressureVentedSteam(this.baselineLosses);
     if(this.modificationLosses){
       this.modificationLosses.forEach(loss => {
-        this.checkCondensingTurbine(loss.outputData);
-        this.checkHighToLowTurbine(loss.outputData);
-        this.checkHighToMediumTurbine(loss.outputData);
-        this.checkMediumtoLowTurbine(loss.outputData);
-        this.checkCondensateFlashTank(loss.outputData);
-        this.checkCondensingLoss(loss.outputData);
-        this.checkLowPressureVentedSteam(loss.outputData);
+        if (loss.valid.isValid) {
+          this.checkCondensingTurbine(loss.outputData);
+          this.checkHighToLowTurbine(loss.outputData);
+          this.checkHighToMediumTurbine(loss.outputData);
+          this.checkMediumtoLowTurbine(loss.outputData);
+          this.checkCondensateFlashTank(loss.outputData);
+          this.checkCondensingLoss(loss.outputData);
+          this.checkLowPressureVentedSteam(loss.outputData);
+        }
       })
     }
 

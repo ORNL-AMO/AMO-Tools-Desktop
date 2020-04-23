@@ -31,9 +31,12 @@
         [ngClass]="{'indicate-report-field-different': checkDiff(baseline.processSteamUsage, mod.processSteamUsage, 'processSteamUsageDiff', 0)}">
         <span *ngIf="mod.useBaselineProcessSteamUsage != true">{{mod.processSteamUsage}}</span>
         <span
-          *ngIf="mod.useBaselineProcessSteamUsage == true && headerLevel == 'low'">*{{modificationOutputs[index].outputData.lowPressureProcessSteamUsage.massFlow | number:'1.0-2'}}</span>
+          *ngIf="modificationOutputs && modificationOutputs[index].valid.isValid
+          && mod.useBaselineProcessSteamUsage == true && headerLevel == 'low'">*{{modificationOutputs[index].outputData.lowPressureProcessSteamUsage.massFlow | number:'1.0-2'}}</span>
         <span
-          *ngIf="mod.useBaselineProcessSteamUsage == true && headerLevel == 'medium'">*{{modificationOutputs[index].outputData.mediumPressureProcessSteamUsage.massFlow | number:'1.0-2'}}</span>
+          *ngIf="modificationOutputs && modificationOutputs[index].valid.isValid 
+          && mod.useBaselineProcessSteamUsage == true && headerLevel == 'medium'">*{{modificationOutputs[index].outputData.mediumPressureProcessSteamUsage.massFlow | number:'1.0-2'}}</span>
+        <span *ngIf="!modificationOutputs && mod.useBaselineProcessSteamUsage == true">&mdash;</span>
       </td>
     </tr>
 
