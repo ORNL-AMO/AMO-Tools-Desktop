@@ -49,7 +49,10 @@ export class VisualizeService {
       }],
       layout: {
         title: {
-          text: 'Data Visualization 1'
+          text: 'Data Visualization 1',
+          font: {
+            size: 22
+          }
         },
         hovermode: 'closest',
         annotations: [],

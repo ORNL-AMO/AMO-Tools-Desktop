@@ -1,50 +1,32 @@
-<!-- <div class="sidebar scroll-item h-100">
-    <div class="d-flex flex-wrap tabs primary mx-2">
-        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'graphBasics'}">
-            <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-                (click)="setTab('graphBasics')">
-                <div>Graph Basics</div>
-            </a>
-        </div>
-        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'annotations'}">
-            <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-                (click)="setTab('annotations')">
-                <div>Annotations</div>
-            </a>
-        </div>
-    </div>
-    <div class="mx-2">
-        <app-annotate-graph *ngIf="tabSelect == 'annotations'"></app-annotate-graph>
-    </div> -->
-<!-- <div class="mx-2" *ngIf="tabSelect == 'graphBasics'"> -->
 <div class="sidebar scroll-item h-100 pt-2">
     <div class="mx-2">
+        <!--Basics-->
         <label class="group-label w-100 fa-chevron" (click)="toggleGraphBasics()">
             <span class="fa"
                 [ngClass]="{'fa-chevron-right': !showGraphBasics, 'fa-chevron-down': showGraphBasics}"></span>
             Graph Basics</label>
         <app-graph-basics *ngIf="showGraphBasics"></app-graph-basics>
-        <!-- <hr> -->
-        <label class="group-label w-100" (click)="toggleXAxisOptions()">
+        <!-- X Axis -->
+        <label class="group-label w-100 mt-3" (click)="toggleXAxisOptions()">
             <span class="fa"
                 [ngClass]="{'fa-chevron-right': !showXAxisOptions, 'fa-chevron-down': showXAxisOptions}"></span>
             X Axis</label>
         <app-x-axis-data *ngIf="showXAxisOptions"></app-x-axis-data>
-        <!-- <hr> -->
-        <label class="group-label w-100" (click)="toggleYAxisOptions()">
+        <!-- Y Axis -->
+        <label class="group-label w-100 mt-3" (click)="toggleYAxisOptions()">
             <span class="fa"
                 [ngClass]="{'fa-chevron-right': !showYAxisOptions, 'fa-chevron-down': showYAxisOptions}"></span>
             Y Axis</label>
         <app-y-axis-data *ngIf="showYAxisOptions"></app-y-axis-data>
-        <!-- <hr> -->
-        <label class="group-label w-100" (click)="toggleAnnotateGraph()">
+        <!--Annotations-->
+        <label class="group-label w-100 mt-3" (click)="toggleAnnotateGraph()">
             <span class="fa"
                 [ngClass]="{'fa-chevron-right': !showAnnotateGraph, 'fa-chevron-down': showAnnotateGraph}"></span>
             Annotations</label>
         <app-annotate-graph *ngIf="showAnnotateGraph"></app-annotate-graph>
         <hr>
-        <a class="danger click-link small pull-right" (click)="deleteGraph()" *ngIf="numberOfGraphs != 1">Delete Graph</a>
+        <!--delete-->
+        <a class="danger click-link small pull-right" (click)="deleteGraph()" *ngIf="numberOfGraphs != 1">Delete
+            Graph</a>
     </div>
 </div>
-<!-- </div>
-</div> -->

@@ -103,7 +103,10 @@ export interface GraphObj {
     }],
     layout: {
         title: {
-            text: string
+            text: string,
+            font: {
+              size: number
+            }
         },
         hovermode: string,
         xaxis: AxisObj,
