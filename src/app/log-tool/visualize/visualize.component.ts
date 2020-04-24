@@ -12,11 +12,9 @@ export class VisualizeComponent implements OnInit {
   constructor(private logToolDataService: LogToolDataService, private visualizeService: VisualizeService) { }
 
   ngOnInit() {
-    console.log('init');
-    console.time('init');
+    this.visualizeService.visualizeDataInitialized = true;
     this.visualizeService.visualizeData = new Array();
     let dataFields = this.logToolDataService.getDataFieldOptionsWithDate();
-    // this.xAxisDataOptions = new Array();
     dataFields.forEach(field => {
       let data = this.logToolDataService.getAllFieldData(field.fieldName);
       this.visualizeService.visualizeData.push({
@@ -24,7 +22,6 @@ export class VisualizeComponent implements OnInit {
         dataField: field
       });
     });
-    console.timeEnd('init');
   }
 
 }

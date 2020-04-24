@@ -2,7 +2,8 @@
     <div class="d-flex flex-column">
         <div class="header mr-2 ml-2">
             <h3>Import Logger Data from .csv file</h3>
-            <a class="click-link pull-right" (click)="resetData()" *ngIf="individualDataFromCsv.length != 0">Start Over</a>
+            <a class="click-link pull-right" (click)="resetData()" *ngIf="individualDataFromCsv.length != 0">Start
+                Over</a>
         </div>
         <div class="p-2">
             <div>
@@ -74,8 +75,8 @@
             </div>
             <div class="pt-2" *ngIf="dataExists == true">
                 <div class="alert-info p-2">
-                    Your log tool data is setup and graphs have been created. If you would like to start over, click the
-                    button below. This cannot be undone.
+                    Your log tool data is setup and graphs have been created. If you would like to start over, click
+                    "Start Over" above. This cannot be undone.
                 </div>
                 <hr>
                 <!-- <button class="btn btn-danger pull-right" (click)="resetData()">Start Over</button> -->
@@ -84,7 +85,7 @@
             <div class="p-2" *ngIf="noDayTypeAnalysis == true && dataExists == false">
                 <div class="alert-danger p-2">
                     One or more of your imported .csv files does not have a corresponding date field. Day Type Analysis
-                    has been turned off. 
+                    has been turned off.
                 </div>
                 <hr>
                 <!-- <button class="btn btn-danger pull-right" (click)="resetData()">Start Over</button> -->

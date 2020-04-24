@@ -8,20 +8,16 @@ import { GraphDataObj, LogToolField, GraphObj, AnnotationData } from '../log-too
 @Injectable()
 export class VisualizeService {
 
-
-  // graphData: BehaviorSubject<Array<GraphDataObj>>;
-  // selectedGraphData: BehaviorSubject<GraphDataObj>;
   visualizeDataInitialized: boolean = false;
-
   graphObjects: BehaviorSubject<Array<GraphObj>>;
   selectedGraphObj: BehaviorSubject<GraphObj>;
-
   visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
-
   annotateDataPoint: BehaviorSubject<AnnotationData>;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
-    // this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
-    // this.graphData = new BehaviorSubject(new Array());
+    this.initializeService();
+  }
+
+  initializeService(){
     let initData = this.initGraphObj();
     this.graphObjects = new BehaviorSubject([initData]);
     this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
@@ -122,8 +118,7 @@ export class VisualizeService {
 
 
   resetData() {
-    // this.graphData.next(new Array());
-    // this.selectedGraphData.next(undefined);
+    this.initializeService();
     this.visualizeDataInitialized = false;
   }
 
