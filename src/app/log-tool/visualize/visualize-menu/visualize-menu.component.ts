@@ -19,11 +19,13 @@ export class VisualizeMenuComponent implements OnInit {
   showXAxisOptions: boolean = true;
   showYAxisOptions: boolean = true;
   showAnnotateGraph: boolean = false;
+
+  showSidebar: boolean = true;
   constructor(private visualizeService: VisualizeService) { }
 
   ngOnInit() {
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
-        this.selectedGraphObj = val;
+      this.selectedGraphObj = val;
     });
 
     this.graphObjsSub = this.visualizeService.graphObjects.subscribe(val => {
@@ -43,17 +45,23 @@ export class VisualizeMenuComponent implements OnInit {
   toggleGraphBasics() {
     this.showGraphBasics = !this.showGraphBasics;
   }
-  
+
   toggleXAxisOptions() {
     this.showXAxisOptions = !this.showXAxisOptions;
   }
-  
+
   toggleYAxisOptions() {
     this.showYAxisOptions = !this.showYAxisOptions;
   }
 
   toggleAnnotateGraph() {
     this.showAnnotateGraph = !this.showAnnotateGraph;
+  }
+
+  toggleSidebar() {
+    this.showSidebar = !this.showSidebar;
+    //need to call resize so that responsive graph resizes properly.
+    window.dispatchEvent(new Event('resize'));
   }
 }
 
