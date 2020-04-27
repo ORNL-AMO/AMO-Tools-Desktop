@@ -168,13 +168,9 @@ export class StandaloneService {
           );
         });
       inputCpy.receiverCapacities = tmpCapacities;
-      //add custom volumes to calculated result
       let outputs: AirSystemCapacityOutput = standaloneAddon.airSystemCapacity(inputCpy);
-
       outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
       outputs.totalPipeVolume += customPipeVolume;
-      //outputs.totalReceiverVolume += customReceiverVolume;
-      //convert result
       outputs.totalReceiverVolume = this.convertUnitsService.value(outputs.totalReceiverVolume).from('ft3').to('m3');
       outputs.totalPipeVolume = this.convertUnitsService.value(outputs.totalPipeVolume).from('ft3').to('m3');
       outputs.totalCapacityOfCompressedAirSystem = this.convertUnitsService.value(outputs.totalCapacityOfCompressedAirSystem).from('ft3').to('m3');
@@ -184,7 +180,6 @@ export class StandaloneService {
       inputCpy.customPipes.forEach((pipe: { pipeSize: number, pipeLength: number }) => {
         customPipeVolume += this.calculatePipeVolume(pipe.pipeSize, pipe.pipeLength);
       });
-      //add custom volumes to calculated result
       let outputs: AirSystemCapacityOutput = standaloneAddon.airSystemCapacity(inputCpy);
       outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
       outputs.totalPipeVolume += customPipeVolume;

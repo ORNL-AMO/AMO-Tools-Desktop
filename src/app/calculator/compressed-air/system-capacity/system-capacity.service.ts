@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AirSystemCapacityInput } from '../../../shared/models/standalone';
+import { AirSystemCapacityInput, AirSystemCapacityOutput } from '../../../shared/models/standalone';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
@@ -37,6 +37,35 @@ export class SystemCapacityService {
       twenty: 0,
       twentyFour: 0,
 
+    };
+  }
+
+  getDefaultEmptyOutput(): AirSystemCapacityOutput {
+    return {
+      oneHalf: 0,
+      threeFourths: 0,
+      one: 0,
+      oneAndOneFourth: 0,
+      oneAndOneHalf: 0,
+      two: 0,
+      twoAndOneHalf: 0,
+      three: 0,
+      threeAndOneHalf: 0,
+      four: 0,
+      five: 0,
+      six: 0,
+      eight: 0,
+      ten: 0,
+      twelve: 0,
+      fourteen: 0,
+      sixteen: 0,
+      eighteen: 0,
+      twenty: 0,
+      twentyFour: 0,
+      totalPipeVolume: 0,
+      totalReceiverVolume: 0,
+      totalCapacityOfCompressedAirSystem: 0,
+      receiverCapacities: [0],
     };
   }
 

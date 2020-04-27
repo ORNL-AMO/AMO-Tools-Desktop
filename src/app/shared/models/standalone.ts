@@ -111,7 +111,7 @@ export interface AirSystemCapacityInput extends PipeSizes {
   allPipes: Array<{ pipeSize: string, customPipeSize: number, pipeLength: number }>;
 }
 
-export interface AirSystemCapacityOutput {
+export interface AirSystemCapacityOutput extends PipeSizes {
   totalPipeVolume: number;
   totalReceiverVolume: number;
   totalCapacityOfCompressedAirSystem: number;
