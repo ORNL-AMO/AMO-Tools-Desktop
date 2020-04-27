@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LogToolDataService } from '../log-tool-data.service';
 import { VisualizeService } from './visualize.service';
 
 @Component({
@@ -8,13 +9,19 @@ import { VisualizeService } from './visualize.service';
 })
 export class VisualizeComponent implements OnInit {
 
-  constructor(private visualizeService: VisualizeService) { }
+  constructor(private logToolDataService: LogToolDataService, private visualizeService: VisualizeService) { }
 
   ngOnInit() {
-    if(this.visualizeService.visualizeDataInitialized == false){
-      this.visualizeService.addNewGraphDataObj();
-      this.visualizeService.visualizeDataInitialized = true;
-    }
+    this.visualizeService.visualizeDataInitialized = true;
+    this.visualizeService.visualizeData = new Array();
+    let dataFields = this.logToolDataService.getDataFieldOptionsWithDate();
+    dataFields.forEach(field => {
+      let data = this.logToolDataService.getAllFieldData(field.fieldName);
+      this.visualizeService.visualizeData.push({
+        data: data,
+        dataField: field
+      });
+    });
   }
 
 }

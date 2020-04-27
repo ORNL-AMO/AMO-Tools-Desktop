@@ -30,6 +30,11 @@ import { DataTableComponent } from './system-setup/setup-data/data-table/data-ta
 import { FieldUnitsModalComponent } from './system-setup/clean-data/field-units-modal/field-units-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
+import { AnnotateGraphComponent } from './visualize/visualize-menu/annotate-graph/annotate-graph.component';
+import { GraphBasicsComponent } from './visualize/visualize-menu/graph-basics/graph-basics.component';
+import { XAxisDataComponent } from './visualize/visualize-menu/x-axis-data/x-axis-data.component';
+import { YAxisDataComponent } from './visualize/visualize-menu/y-axis-data/y-axis-data.component';
+import { VisualizeMenuService } from './visualize/visualize-menu/visualize-menu.service';
 
 @NgModule({
   declarations: [
@@ -52,7 +57,11 @@ import { ExportableResultsTableModule } from '../shared/exportable-results-table
     DayTypeTableComponent,
     DayTypeMenuComponent,
     DataTableComponent,
-    FieldUnitsModalComponent
+    FieldUnitsModalComponent,
+    AnnotateGraphComponent,
+    GraphBasicsComponent,
+    XAxisDataComponent,
+    YAxisDataComponent
   ],
   imports: [
     CommonModule,
@@ -67,7 +76,8 @@ import { ExportableResultsTableModule } from '../shared/exportable-results-table
     DayTypeAnalysisService,
     DayTypeGraphService,
     VisualizeService,
-    LogToolDataService
+    LogToolDataService,
+    VisualizeMenuService
   ]
 })
 export class LogToolModule { }

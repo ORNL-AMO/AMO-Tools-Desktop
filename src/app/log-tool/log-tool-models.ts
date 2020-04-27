@@ -87,3 +87,96 @@ export interface DayTypeGraphItem {
     date?: Date,
     dayType?: DayType
 }
+
+export interface GraphObj {
+    name: string,
+    data: [{
+        x: Array<number | string>,
+        y: Array<number | string>,
+        name: string,
+        type: string,
+        mode: string,
+        yaxis: string,
+        marker: {
+            color: string
+        },
+    }],
+    layout: {
+        title: {
+            text: string,
+            font: {
+              size: number
+            }
+        },
+        hovermode: string,
+        xaxis: AxisObj,
+        yaxis: AxisObj,
+        yaxis2: AxisObj,
+        margin: {
+            t: number,
+            b: number,
+            l: number,
+            r: number
+        },
+        annotations: Array<AnnotationData>
+    },
+    isTimeSeries: boolean,
+    selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
+    selectedYAxisDataOptions: Array<{ index: number, dataOption: { dataField: LogToolField, data: Array<number | string> }, seriesColor: string, seriesName: string, yaxis: string }>,
+    hasSecondYAxis: boolean,
+    numberOfBins: number,
+    useStandardDeviation: boolean,
+    graphId: string,
+    xAxisDataOptions: Array<{
+        dataField: LogToolField,
+        data: Array<number | string>
+    }>;
+    yAxisDataOptions: Array<{
+        dataField: LogToolField,
+        data: Array<number | string>
+    }>
+}
+
+export interface AxisObj {
+    autorange: boolean,
+    type: string,
+    title: {
+        text: string
+    },
+    side: string,
+    overlaying: string,
+    titlefont: {
+        color: string
+    },
+    tickfont: {
+        color: string
+    }
+}
+
+export interface AnnotationData {
+    x: number | string,
+    y: number | string,
+    text: string,
+    showarrow: boolean,
+    font: {
+        // family: string,
+        size: number,
+        color: string
+    },
+    // align: string,
+    // arrowhead: number,
+    arrowsize: number,
+    // arrowwidth: number,
+    arrowcolor: string,
+    ax: number,
+    ay: number,
+    // bordercolor: string,
+    // borderwidth: number,
+    borderpad: number,
+    bgcolor: string,
+    // opacity: number
+    annotationId: string,
+    yref: string,
+    seriesName: string
+
+}

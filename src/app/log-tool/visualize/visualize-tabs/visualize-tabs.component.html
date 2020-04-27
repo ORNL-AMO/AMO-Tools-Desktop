@@ -1,24 +1,8 @@
-<!-- <nav class="navbar w-100 p-0">
-    <ul class="tabs subtabs log-tool w-100">
-        <li *ngFor="let graphDataObj of graphData" (click)="selectGraph(graphDataObj)"
-            [ngClass]="{'active': graphDataObj.graphName == selectedGraphData.graphName}">
-            <a>{{graphDataObj.graphName}}</a>
-        </li>
-        <li class="active" (click)="addNewGraphDataObj()">
-            <a><span class="fa fa-plus"></span> Add Graph</a>
-        </li>
-    </ul>
-
-
-
-</nav> -->
-
-
 <nav class="navbar assessment-bar p-0">
-    <div class="d-flex tabs subtabs log-tool mr-auto w-100">
+    <div class="d-flex tabs subtabs log-tool mr-auto w-100 flex-wrap">
         <div class="assessment-tab" *ngFor="let graphDataObj of graphData" (click)="selectGraph(graphDataObj)"
             [ngClass]="{'active': graphDataObj.graphId == selectedGraphData.graphId}">
-            <a>{{graphDataObj.graphName}}</a>
+            <a>{{graphDataObj.layout.title.text}}</a>
         </div>
         <div class="assessment-tab pull-right" (click)="addNewGraphDataObj()">
             <a><span class="fa fa-plus"></span> Add Graph</a>

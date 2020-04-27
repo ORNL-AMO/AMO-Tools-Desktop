@@ -3,32 +3,133 @@ import { BehaviorSubject } from 'rxjs';
 import { LogToolService } from '../log-tool.service';
 import { LogToolDataService } from '../log-tool-data.service';
 import * as _ from 'lodash';
-import { GraphDataObj, LogToolField } from '../log-tool-models';
+import { GraphDataObj, LogToolField, GraphObj, AnnotationData } from '../log-tool-models';
 
 @Injectable()
 export class VisualizeService {
 
-
-  graphData: BehaviorSubject<Array<GraphDataObj>>;
-  selectedGraphData: BehaviorSubject<GraphDataObj>;
   visualizeDataInitialized: boolean = false;
+  graphObjects: BehaviorSubject<Array<GraphObj>>;
+  selectedGraphObj: BehaviorSubject<GraphObj>;
+  visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
+  annotateDataPoint: BehaviorSubject<AnnotationData>;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
-    this.selectedGraphData = new BehaviorSubject<GraphDataObj>(undefined);
-    this.graphData = new BehaviorSubject(new Array());
+    this.initializeService();
   }
 
+  initializeService(){
+    let initData = this.initGraphObj();
+    this.graphObjects = new BehaviorSubject([initData]);
+    this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
+    this.annotateDataPoint = new BehaviorSubject<AnnotationData>(undefined);
+  }
+
+  getVisualizeData(fieldName: string) {
+    let data: Array<number | string> = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.fieldName == fieldName }).data;
+    return data;
+  }
+
+  initGraphObj(): GraphObj {
+    return {
+      name: 'Data Visualization',
+      data: [{
+        x: [],
+        y: [],
+        name: '',
+        type: 'scattergl',
+        mode: 'line+markers',
+        yaxis: undefined,
+        marker: {
+          color: undefined
+        }
+      }],
+      layout: {
+        title: {
+          text: 'Data Visualization 1',
+          font: {
+            size: 22
+          }
+        },
+        hovermode: 'closest',
+        annotations: [],
+        xaxis: {
+          autorange: true,
+          type: undefined,
+          title: {
+            text: 'X Axis Label'
+          },
+          side: undefined,
+          overlaying: undefined,
+          titlefont: {
+            color: undefined
+          },
+          tickfont: {
+            color: undefined
+          }
+        },
+        yaxis: {
+          autorange: true,
+          type: undefined,
+          title: {
+            text: 'Y Axis Label'
+          },
+          side: undefined,
+          overlaying: undefined,
+          titlefont: {
+            color: undefined
+          },
+          tickfont: {
+            color: undefined
+          }
+        },
+        yaxis2: {
+          autorange: true,
+          type: undefined,
+          title: {
+            text: 'Y Axis 2 Label'
+          },
+          side: 'right',
+          overlaying: 'y',
+          titlefont: {
+            color: undefined
+          },
+          tickfont: {
+            color: undefined
+          }
+        },
+        margin: {
+          t: 75,
+          b: 100,
+          l: 100,
+          r: 100
+        }
+      },
+      isTimeSeries: false,
+      selectedXAxisDataOption: { dataField: undefined, data: [] },
+      selectedYAxisDataOptions: [],
+      hasSecondYAxis: false,
+      numberOfBins: 5,
+      useStandardDeviation: true,
+      graphId: Math.random().toString(36).substr(2, 9),
+      xAxisDataOptions: [],
+      yAxisDataOptions: []
+    }
+  }
+
+
   resetData() {
-    this.graphData.next(new Array());
-    this.selectedGraphData.next(undefined);
+    this.initializeService();
     this.visualizeDataInitialized = false;
   }
 
   addNewGraphDataObj() {
-    let currentGraphData: Array<GraphDataObj> = this.graphData.getValue();
-    let newGraphDataObj: GraphDataObj = this.getNewGraphDataObject();
+    let currentGraphData: Array<GraphObj> = this.graphObjects.getValue();
+    let newGraphDataObj: GraphObj = JSON.parse(JSON.stringify(this.selectedGraphObj.getValue()));
+    newGraphDataObj.graphId = Math.random().toString(36).substr(2, 9);
+    newGraphDataObj.layout.title.text = 'Data Visualization ' + (currentGraphData.length + 1);
     currentGraphData.push(newGraphDataObj);
-    this.graphData.next(currentGraphData);
-    this.selectedGraphData.next(newGraphDataObj);
+    this.selectedGraphObj.next(newGraphDataObj);
+    this.graphObjects.next(currentGraphData);
   }
 
   getNewGraphDataObject(): GraphDataObj {
@@ -62,88 +163,13 @@ export class VisualizeService {
     }
   }
 
-  removeGraphDataObj(removeIndex: number) {
-    let currentGraphData: Array<GraphDataObj> = this.graphData.getValue();
-    currentGraphData.splice(removeIndex, 1);
-    this.graphData.next(currentGraphData);
+  removeGraphDataObj(graphId: string) {
+    let currentGraphData: Array<GraphObj> = this.graphObjects.getValue();
+    // currentGraphData.splice(removeIndex, 1);
+    _.remove(currentGraphData, (graphDataObj) => { return graphDataObj.graphId == graphId });
+    this.graphObjects.next(currentGraphData);
+    this.selectedGraphObj.next(currentGraphData[0]);
   }
-
-  updateSelectedYDataField(dataField: LogToolField) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    let yData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
-    currentSelectedGraphData.yData = yData;
-    currentSelectedGraphData.selectedYDataField = dataField;
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  updateSelectedXDataField(dataField: LogToolField) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    let xData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
-    currentSelectedGraphData.xData = xData;
-    currentSelectedGraphData.selectedXDataField = dataField;
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  updateGraphType(newGraphType: { label: string, value: string }) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    currentSelectedGraphData.graphType = newGraphType;
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  updateAllGraphItems(currentSelectedGraphData: GraphDataObj) {
-    let currentAllGraphData: Array<GraphDataObj> = this.graphData.getValue();
-    let updatedGraphDataIndex: number = currentAllGraphData.findIndex(dataObj => { return dataObj.graphId == currentSelectedGraphData.graphId });
-    currentAllGraphData[updatedGraphDataIndex] = currentSelectedGraphData;
-    this.graphData.next(currentAllGraphData);
-  }
-
-  updateGraphScatterPlotMode(str: string) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    currentSelectedGraphData.scatterPlotMode = str;
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-
-  //HISTOGRAM
-  updateSelectedHistogramDataField(dataField: LogToolField) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    currentSelectedGraphData.histogramDataField = dataField;
-    currentSelectedGraphData.histogramData = this.getHistogramData();
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  updateUseStandardDeviation(useStandardDeviation: boolean) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    currentSelectedGraphData.useStandardDeviation = useStandardDeviation;
-    currentSelectedGraphData.histogramData = this.getHistogramData();
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  updateNumberOfBins(numberOfBins: number) {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    currentSelectedGraphData.numberOfBins = numberOfBins;
-    currentSelectedGraphData.histogramData = this.getHistogramData();
-    this.selectedGraphData.next(currentSelectedGraphData);
-    this.updateAllGraphItems(currentSelectedGraphData);
-  }
-
-  getHistogramData(): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
-    let currentSelectedGraphData: GraphDataObj = this.selectedGraphData.getValue();
-    if (currentSelectedGraphData.useStandardDeviation == true) {
-      //get bin data using standard deviation
-      return this.getStandardDevBarChartData(currentSelectedGraphData.histogramDataField);
-    } else {
-      //get bin data using number of bins
-      return this.getNumberOfBinsBarChartData(currentSelectedGraphData.histogramDataField, currentSelectedGraphData.numberOfBins);
-    }
-  }
-
 
   getNumberOfBinsBarChartData(dataField: LogToolField, numberOfBins: number): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
     let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
@@ -171,8 +197,6 @@ export class VisualizeService {
     }
     return { xLabels: xLabels, yValues: yValues, standardDeviation: 0, average: mean };
   }
-
-
 
   getStandardDevBarChartData(dataField: LogToolField): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
     let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
@@ -211,5 +235,40 @@ export class VisualizeService {
     let averageSquareDiff: number = _.mean(squareDiffs);
     let squareRootOfAverageSquareDiff: number = Math.sqrt(averageSquareDiff);
     return squareRootOfAverageSquareDiff;
+  }
+
+  getAnnotationPoint(x: number | string, y: number | string, yref: string, seriesName: string): AnnotationData {
+    let selectedGraphObj: GraphObj = this.selectedGraphObj.getValue();
+    let findAnnotation: AnnotationData = selectedGraphObj.layout.annotations.find(annotation => { return (annotation.x == x && annotation.y == y) });
+    if (findAnnotation) {
+      return findAnnotation;
+    } else {
+      return {
+        x: x,
+        y: y,
+        text: '',
+        showarrow: true,
+        font: {
+          // family: string,
+          size: 16,
+          color: '#000000'
+        },
+        // align: string,
+        // arrowhead: number,
+        arrowsize: 1,
+        // arrowwidth: number,
+        arrowcolor: '#000000',
+        ax: 0,
+        ay: -100,
+        // bordercolor: string,
+        // borderwidth: number,
+        borderpad: 10,
+        bgcolor: '#ffffff',
+        // opacity: number
+        annotationId: Math.random().toString(36).substr(2, 9),
+        yref: yref,
+        seriesName: seriesName
+      }
+    }
   }
 }

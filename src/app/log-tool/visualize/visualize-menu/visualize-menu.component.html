@@ -1,80 +1,32 @@
-<nav class="navbar no-gutters" #navbar>
-    <div class="col-3">
-        <div class="form-group">
-            <input class="form-control w-100" type="text" name="graphName" [(ngModel)]="selectedGraphData.graphName">
-        </div>
+<div class="sidebar scroll-item h-100 pt-2">
+    <div class="mx-2">
+        <!--Basics-->
+        <label class="group-label w-100 fa-chevron" (click)="toggleGraphBasics()">
+            <span class="fa"
+                [ngClass]="{'fa-chevron-right': !showGraphBasics, 'fa-chevron-down': showGraphBasics}"></span>
+            Graph Basics</label>
+        <app-graph-basics *ngIf="showGraphBasics"></app-graph-basics>
+        <!-- X Axis -->
+        <label class="group-label w-100 mt-3" (click)="toggleXAxisOptions()">
+            <span class="fa"
+                [ngClass]="{'fa-chevron-right': !showXAxisOptions, 'fa-chevron-down': showXAxisOptions}"></span>
+            X Axis</label>
+        <app-x-axis-data *ngIf="showXAxisOptions"></app-x-axis-data>
+        <!-- Y Axis -->
+        <label class="group-label w-100 mt-3" (click)="toggleYAxisOptions()">
+            <span class="fa"
+                [ngClass]="{'fa-chevron-right': !showYAxisOptions, 'fa-chevron-down': showYAxisOptions}"></span>
+            Y Axis</label>
+        <app-y-axis-data *ngIf="showYAxisOptions"></app-y-axis-data>
+        <!--Annotations-->
+        <label class="group-label w-100 mt-3" (click)="toggleAnnotateGraph()">
+            <span class="fa"
+                [ngClass]="{'fa-chevron-right': !showAnnotateGraph, 'fa-chevron-down': showAnnotateGraph}"></span>
+            Annotations</label>
+        <app-annotate-graph *ngIf="showAnnotateGraph"></app-annotate-graph>
+        <hr>
+        <!--delete-->
+        <a class="danger click-link small pull-right" (click)="deleteGraph()" *ngIf="numberOfGraphs != 1">Delete
+            Graph</a>
     </div>
-    <div class="col-9 d-flex justify-content-end">
-        <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" (click)="toggleGraphType()">
-                Graph Type: {{selectedGraphData.graphType.label}}
-            </a>
-            <div class="dropdown-menu p-0" [ngClass]="{'show': graphTypeDropdown == true}">
-                <div class="list-group">
-                    <a *ngFor="let graphType of graphTypes" class="list-group-item list-group-item-action"
-                        (click)="setGraphType(graphType)"
-                        [ngClass]="{'active': graphType.value == selectedGraphData.graphType.value}">{{graphType.label}}</a>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'scattergl'">
-            <a class="nav-link dropdown-toggle" (click)="toggleXDataFieldDropdown()">
-                X Axis: {{selectedGraphData.selectedXDataField.alias}}
-            </a>
-            <div class="dropdown-menu p-0" [ngClass]="{'show': xDataFieldDropdown == true}">
-                <div class="list-group">
-                    <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
-                        (click)="setXDataField(dataField)"
-                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedXDataField.fieldName}">{{dataField.alias}}</a>
-                </div>
-            </div>
-        </div>
-        <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'scattergl'">
-            <a class="nav-link dropdown-toggle" (click)="toggleYDataFieldDropdown()">
-                Y Axis: {{selectedGraphData.selectedYDataField.alias}}
-            </a>
-            <div class="dropdown-menu p-0" [ngClass]="{'show': yDataFieldDropdown == true}">
-                <div class="list-group">
-                    <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
-                        (click)="setYDataField(dataField)"
-                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.selectedYDataField.fieldName}">{{dataField.alias}}</a>
-                </div>
-            </div>
-        </div>
-        <div class="nav-item dropdown ml-2" *ngIf="selectedGraphData.graphType.value == 'bar'">
-            <a class="nav-link dropdown-toggle" (click)="toggleHistogramDataFieldDropdown()">
-                Histogram Data: {{selectedGraphData.histogramDataField.alias}}
-            </a>
-            <div class="dropdown-menu p-0" [ngClass]="{'show': histogramDataFieldDropdown == true}">
-                <div class="list-group">
-                    <a *ngFor="let dataField of dataFields" class="list-group-item list-group-item-action"
-                        (click)="setHistogramDataField(dataField)"
-                        [ngClass]="{'active': dataField.fieldName == selectedGraphData.histogramDataField.fieldName}">{{dataField.alias}}</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="nav-item ml-2" *ngIf="selectedGraphData.graphType.value == 'bar'">
-            <div class="btn-group">
-                <button class="btn btn-sm" [ngClass]="{'active': selectedGraphData.useStandardDeviation == true}"
-                    (click)="setUseStandardDeviation()">SD</button>
-                <button class="btn btn-sm" [ngClass]="{'active': selectedGraphData.useStandardDeviation == false}"
-                    (click)="setUseBins()">Bins</button>
-            </div>
-        </div>
-
-        <div class="nav-item ml-2"
-            *ngIf="selectedGraphData.graphType.value == 'bar' && selectedGraphData.useStandardDeviation == false">
-            <div class="input-group">
-                <button class="btn btn-sm input-group-prepend" (click)="decreaseNumberOfBins()"><span
-                        class="fa fa-minus"></span></button>
-                <input type="number" name="numberOfBins" [(ngModel)]="selectedGraphData.numberOfBins"
-                    (input)="updateNumberOfBins()">
-                <button class="btn btn-sm input-group-append" (click)="increaseNumberOfBins()"><span
-                        class="fa fa-plus"></span></button>
-            </div>
-        </div>
-    </div>
-</nav>
+</div>

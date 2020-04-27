@@ -1,52 +1,19 @@
-.nav-item .dropdown-toggle{
-    color: white;
-    background: #117A65;
-}
 
-.navbar-nav .dropdown-menu{
-    position: absolute;
-    font-size: small;
-}
-
-.navbar{
+.sidebar{
+    height: 100%;
     background: white;
-    border-bottom: solid 4px #117A65;
-    font-size: small;
+    padding: .5rem;
 }
 
-
-.nav-link, .btn{
-    padding: 4px;
+label.group-label{
+    font-size: 18px;
 }
 
-.list-group-item{
-    padding: 8px;
-    font-size: small;
-}
-
-.list-group-item.active, .btn.active{
-    color: white;
-    background: #117A65;
-}
-
-
-.dropdown-menu.filter-menu{
-    right: 0px;
-    left: inherit;
-}
-
-a.list-group-item:hover, .nav-link{
+label.group-label:hover{
     cursor: pointer;
+    background-color: #D5D8DC;
 }
 
-a.list-group-item.active:hover{
-    color: white;
-}
-
-.nav-link.dropdown-toggle:hover, .nav-btn:hover{
-    background-color: #808B96;
-}
-
-.btn-group .btn{
-    border-radius: 0px;
+a:not([href]):not([tabindex]).danger.click-link{
+    color: red;
 }

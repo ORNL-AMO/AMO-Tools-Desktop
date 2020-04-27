@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
-import { LogToolDataService } from '../../log-tool-data.service';
-import { GraphDataObj, LogToolField } from '../../log-tool-models';
+import { GraphObj } from '../../log-tool-models';
 
 @Component({
   selector: 'app-visualize-menu',
@@ -11,96 +10,50 @@ import { GraphDataObj, LogToolField } from '../../log-tool-models';
 })
 export class VisualizeMenuComponent implements OnInit {
 
-  graphDataSubscription: Subscription;
-  graphData: Array<GraphDataObj>;
-  selectedGraphDataSub: Subscription;
-  selectedGraphData: GraphDataObj;
-  xDataFieldDropdown: boolean = false;
-  yDataFieldDropdown: boolean = false;
-  graphTypeDropdown: boolean = false;
-  histogramDataFieldDropdown: boolean = false;
-  dataFields: Array<LogToolField>;
+  selectedGraphObj: GraphObj;
+  selectedGraphObjSub: Subscription;
+  graphObjsSub: Subscription;
+  numberOfGraphs: number;
 
-  graphTypes: Array<{ label: string, value: string }> = [{ value: 'scattergl', label: 'Scatter Plot' }, { value: 'bar', label: 'Histogram' }]
-  showScatterLines: boolean = false;
-  showScatterMarkers: boolean = true;
-  constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
-
+  showGraphBasics: boolean = true;
+  showXAxisOptions: boolean = true;
+  showYAxisOptions: boolean = true;
+  showAnnotateGraph: boolean = false;
+  constructor(private visualizeService: VisualizeService) { }
 
   ngOnInit() {
-    this.dataFields = this.logToolDataService.getDataFieldOptionsWithDate();
-    this.graphDataSubscription = this.visualizeService.graphData.subscribe(graphData => {
-      this.graphData = graphData;
+    this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
+        this.selectedGraphObj = val;
     });
-    this.selectedGraphDataSub = this.visualizeService.selectedGraphData.subscribe(selectedGraphData => {
-      this.selectedGraphData = selectedGraphData;
+
+    this.graphObjsSub = this.visualizeService.graphObjects.subscribe(val => {
+      this.numberOfGraphs = val.length;
     });
   }
 
   ngOnDestroy() {
-    this.selectedGraphDataSub.unsubscribe()
-    this.graphDataSubscription.unsubscribe();
+    this.selectedGraphObjSub.unsubscribe();
+    this.graphObjsSub.unsubscribe();
   }
 
-  toggleXDataFieldDropdown() {
-    this.xDataFieldDropdown = !this.xDataFieldDropdown;
+  deleteGraph() {
+    this.visualizeService.removeGraphDataObj(this.selectedGraphObj.graphId);
   }
 
-  toggleYDataFieldDropdown() {
-    this.yDataFieldDropdown = !this.yDataFieldDropdown;
+  toggleGraphBasics() {
+    this.showGraphBasics = !this.showGraphBasics;
+  }
+  
+  toggleXAxisOptions() {
+    this.showXAxisOptions = !this.showXAxisOptions;
+  }
+  
+  toggleYAxisOptions() {
+    this.showYAxisOptions = !this.showYAxisOptions;
   }
 
-  setXDataField(dataField: LogToolField) {
-    this.visualizeService.updateSelectedXDataField(dataField);
-    this.xDataFieldDropdown = false;
-  }
-
-  setYDataField(dataField: LogToolField) {
-    this.visualizeService.updateSelectedYDataField(dataField);
-    this.yDataFieldDropdown = false;
-  }
-
-  setGraphType(newGraphType: { label: string, value: string }) {
-    this.visualizeService.updateGraphType(newGraphType);
-    this.graphTypeDropdown = false;
-  }
-
-  toggleGraphType() {
-    this.graphTypeDropdown = !this.graphTypeDropdown;
-  }
-
-  setUseStandardDeviation() {
-    if (this.selectedGraphData.useStandardDeviation == false) {
-      this.visualizeService.updateUseStandardDeviation(true);
-    }
-  }
-
-  setUseBins() {
-    if (this.selectedGraphData.useStandardDeviation == true) {
-      this.visualizeService.updateUseStandardDeviation(false);
-    }
-  }
-
-  decreaseNumberOfBins() {
-    this.selectedGraphData.numberOfBins--;
-    this.updateNumberOfBins();
-  }
-
-  increaseNumberOfBins() {
-    this.selectedGraphData.numberOfBins++;
-    this.updateNumberOfBins();
-  }
-
-  updateNumberOfBins() {
-    this.visualizeService.updateNumberOfBins(this.selectedGraphData.numberOfBins);
-  }
-
-  toggleHistogramDataFieldDropdown() {
-    this.histogramDataFieldDropdown = !this.histogramDataFieldDropdown;
-  }
-
-  setHistogramDataField(dataField: LogToolField) {
-    this.visualizeService.updateSelectedHistogramDataField(dataField);
-    this.histogramDataFieldDropdown = false;
+  toggleAnnotateGraph() {
+    this.showAnnotateGraph = !this.showAnnotateGraph;
   }
 }
+
