@@ -61,7 +61,10 @@ export class VisualizeMenuComponent implements OnInit {
   toggleSidebar() {
     this.showSidebar = !this.showSidebar;
     //need to call resize so that responsive graph resizes properly.
-    window.dispatchEvent(new Event('resize'));
+    setTimeout(()=> {
+      window.dispatchEvent(new Event('resize'));
+      console.log('resize')
+    }, 100)
   }
 }
 
