@@ -24,6 +24,7 @@ export class VisualizeMenuComponent implements OnInit {
   constructor(private visualizeService: VisualizeService) { }
 
   ngOnInit() {
+    this.visualizeService.focusedPanel.next('graphBasics');
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
       this.selectedGraphObj = val;
     });
@@ -44,24 +45,28 @@ export class VisualizeMenuComponent implements OnInit {
 
   toggleGraphBasics() {
     this.showGraphBasics = !this.showGraphBasics;
+    this.visualizeService.focusedPanel.next('graphBasics');
   }
 
   toggleXAxisOptions() {
     this.showXAxisOptions = !this.showXAxisOptions;
+    this.visualizeService.focusedPanel.next('xAxis');
   }
 
   toggleYAxisOptions() {
     this.showYAxisOptions = !this.showYAxisOptions;
+    this.visualizeService.focusedPanel.next('yAxis');
   }
 
   toggleAnnotateGraph() {
     this.showAnnotateGraph = !this.showAnnotateGraph;
+    this.visualizeService.focusedPanel.next('annotation');
   }
 
   toggleSidebar() {
     this.showSidebar = !this.showSidebar;
     //need to call resize so that responsive graph resizes properly.
-    setTimeout(()=> {
+    setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
       console.log('resize')
     }, 100)

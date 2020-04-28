@@ -71,4 +71,8 @@ export class AnnotateGraphComponent implements OnInit {
   deleteAnnotation(annotation: AnnotationData) {
     this.visualizeMenuService.deleteAnnotation(annotation, this.selectedGraphObj);
   }
+
+  focusField(){
+    this.visualizeService.focusedPanel.next('annotation');
+  }
 }

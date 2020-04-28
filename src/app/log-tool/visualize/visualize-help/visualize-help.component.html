@@ -1,1 +1,105 @@
-<p>visualize-help works!</p>
+<div class="mr-2 ml-2 d-flex flex-column help-info">
+    <div class="header">
+        <h3>
+            Help
+        </h3>
+    </div>
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'graphBasics'">
+        <h6>
+            Graph Basics
+            <br>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">Set chart title and plot type.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                For Histogram plot's select if data should use a standard deviation or a specific number of bins.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                To create a time series use a scatter plot and select a date field for the x-axis.
+            </small>
+        </h6>
+    </div>
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'xAxis'">
+        <h6>
+            X Axis
+            <br>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">Set x-axis label
+                <br>
+                Add &lt;br&gt; to create a new line
+                <br>
+                Wrap your text in &lt;b&gt;&lt;/b&gt; to <b>bold</b> it.
+                <br>
+                Wrap your text in &lt;i&gt;&lt;/i&gt; to <i>italisize</i> it.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                Choose the data you wish to use for the x-axis.
+            </small>
+        </h6>
+    </div>
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'yAxis'">
+        <h6>
+            Y-Axis
+            <br>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">Set y-axis label
+                <br>
+                Add &lt;br&gt; to create a new line
+                <br>
+                Wrap your text in &lt;b&gt;&lt;/b&gt; to <b>bold</b> it.
+                <br>
+                Wrap your text in &lt;i&gt;&lt;/i&gt; to <i>italisize</i> it.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">Use the text box to set a name for the corresponding data
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                Choose the data you wish to use for the x-axis.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                Click "+Add Another Data Series" to add additional y-axis data
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                When additional data is added, a second y-axis with a different scale can be used on the right hand side
+                of the plot
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                Click the series color box to choose what color you want the corresponding data to appear on the plot
+            </small>
+
+        </h6>
+    </div>
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'annotation'">
+        <h6>
+            Annotations
+            <br>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">Click the chart to select the data you want to annotate
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">Fill the text box with the desired annotation
+                <br>
+                Add &lt;br&gt; to create a new line
+                <br>
+                Wrap your text in &lt;b&gt;&lt;/b&gt; to <b>bold</b> it.
+                <br>
+                Wrap your text in &lt;i&gt;&lt;/i&gt; to <i>italisize</i> it.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                You can customize the font size, font color, background color, arrow color and arrow size
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                Use the arrow buttons to move the location of the annotation
+            </small>
+        </h6>
+    </div>
+</div>

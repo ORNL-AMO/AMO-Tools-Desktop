@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { VisualizeService } from '../visualize.service';
 
 @Component({
   selector: 'app-visualize-help',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VisualizeHelpComponent implements OnInit {
 
-  constructor() { }
+  focusedPanel: string;
+  focusedPanelSub: Subscription;
+  constructor(private visualizeService: VisualizeService) { }
 
   ngOnInit(): void {
+    this.focusedPanelSub = this.visualizeService.focusedPanel.subscribe(val => {
+      this.focusedPanel = val;
+    });
+  }
+
+  ngOnDestroy() {
+    this.focusedPanelSub.unsubscribe();
   }
 
 }

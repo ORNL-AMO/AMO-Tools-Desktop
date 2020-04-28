@@ -50,4 +50,8 @@ export class YAxisDataComponent implements OnInit {
   addData(){
     this.visualizeMenuService.addData(this.selectedGraphObj);
   }
+
+  focusField(){
+    this.visualizeService.focusedPanel.next('yAxis');
+  }
 }

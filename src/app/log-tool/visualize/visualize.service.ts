@@ -13,11 +13,13 @@ export class VisualizeService {
   selectedGraphObj: BehaviorSubject<GraphObj>;
   visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
   annotateDataPoint: BehaviorSubject<AnnotationData>;
+  focusedPanel: BehaviorSubject<string>;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
     this.initializeService();
   }
 
   initializeService(){
+    this.focusedPanel = new BehaviorSubject<string>(undefined);
     let initData = this.initGraphObj();
     this.graphObjects = new BehaviorSubject([initData]);
     this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
