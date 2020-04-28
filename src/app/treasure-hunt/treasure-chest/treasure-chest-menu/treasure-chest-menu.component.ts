@@ -101,24 +101,6 @@ export class TreasureChestMenuComponent implements OnInit {
 
   }
 
-  // getCurrentFilters() {
-  //    let filterOptions = [
-  //     this.sortCardsData.utilityTypes,
-  //     this.sortCardsData.calculatorTypes,
-  //     this.sortCardsData.teams,
-  //     this.sortCardsData.equipments
-  //   ];
-  //   let flattenedFilters = [];
-  //   filterOptions.forEach((options) => {
-  //     if (options[0].value != 'All') {
-  //       let selectedFilters: Array<string> = _.map(options, (option) => { return option.display });
-  //       flattenedFilters.push(selectedFilters);
-  //     }
-  //   })
-  //   this.currentFilters = [].concat(...flattenedFilters);
-  //   return this.currentFilters;
-  // }
-
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
     this.opportunityCardsSub.unsubscribe();
@@ -182,7 +164,6 @@ export class TreasureChestMenuComponent implements OnInit {
       });
     });
     this.teams.unshift({ display: 'All', value: 'All', selected: false, numCalcs: oppData.length })
-    // this.sortCardsData.teams = [{ display: 'All', value: 'All' }];
   }
 
   setSelectedTeam(selectedTeam: FilterOption) {
@@ -211,7 +192,6 @@ export class TreasureChestMenuComponent implements OnInit {
       }
     });
     this.equipments.unshift({ display: 'All', value: 'All', selected: false, numCalcs: oppData.length })
-    // this.sortCardsData.equipments = [{ display: 'All', value: 'All' }];
   }
 
   setSelectedEquipment(option: FilterOption) {
@@ -239,14 +219,12 @@ export class TreasureChestMenuComponent implements OnInit {
           selected.push({ display: option.display, value: option.value });
         }
       });
-      //if non selected select all
+      //if none selected select all
       if (selected.length == 0) {
         let allOption: FilterOption = optionList.find(option => { return option.value == 'All' });
         allOption.selected = true;
-        // selected = [{ display: 'All', value: 'All' }];
       }
     } else {
-      //
       optionList.forEach(option => {
         if (option.value == 'All') {
           option.selected = true;
@@ -254,12 +232,9 @@ export class TreasureChestMenuComponent implements OnInit {
           option.selected = false
         }
       });
-      // selected = [{ display: 'All', value: 'All' }];
     }
     return selected;
   }
-
-
 
   removeTeam(teamName: string, index: number) {
     this.sortCardsData.teams.splice(index, 1);
@@ -268,6 +243,10 @@ export class TreasureChestMenuComponent implements OnInit {
         team.selected = false;
       }
     });
+    if (this.sortCardsData.teams.length == 0) {
+      let allOption: FilterOption = this.teams.find(option => { return option.value == 'All' });
+      allOption.selected = true;
+    }
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
@@ -278,8 +257,41 @@ export class TreasureChestMenuComponent implements OnInit {
         equipment.selected = false;
       }
     });
+    if (this.sortCardsData.equipments.length == 0) {
+      let allOption: FilterOption = this.equipments.find(option => { return option.value == 'All' });
+      allOption.selected = true;
+    }
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
+
+  removeCalculator(calculatorItem: { display: string, value: string }, index: number) {
+    this.sortCardsData.calculatorTypes.splice(index, 1);
+    this.calculatorTypeOptions.forEach(calculator => {
+      if (calculator.value == calculatorItem.value) {
+        calculator.selected = false;
+      }
+    });
+    if (this.sortCardsData.calculatorTypes.length == 0) {
+      let allOption: FilterOption = this.calculatorTypeOptions.find(option => { return option.value == 'All' });
+      allOption.selected = true;
+    }
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
+
+  removeUtilityType(utilityItem: { display: string, value: string }, index: number) {
+    this.sortCardsData.utilityTypes.splice(index, 1);
+    this.utilityTypeOptions.forEach(utility => {
+      if (utility.value == utilityItem.value) {
+        utility.selected = false;
+      }
+    });
+    if (this.sortCardsData.utilityTypes.length == 0) {
+      let allOption: FilterOption = this.utilityTypeOptions.find(option => { return option.value == 'All' });
+      allOption.selected = true;
+    }
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
+
 
   setSortBy(str: string) {
     this.sortCardsData.sortBy = str;
@@ -351,7 +363,7 @@ export class TreasureChestMenuComponent implements OnInit {
     }
   }
 
-  setUtilityType(utilityOption: FilterOption) {
+  setSelectedUtilityType(utilityOption: FilterOption) {
     let selectedFilters = this.getSelectedOptions(utilityOption, this.utilityTypeOptions);
     this.sortCardsData.utilityTypes = selectedFilters;
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
@@ -373,25 +385,6 @@ export class TreasureChestMenuComponent implements OnInit {
     this.addUtilityOption('Compressed Air', oppData, this.utilityTypeOptions);
     let checkIsSelected: boolean = this.sortCardsData.utilityTypes.length == 0;
     this.utilityTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: oppData.length, selected: checkIsSelected });
-
-    // let numSteam: number = this.getFilteredCalcsByUtility(oppData, 'Steam').length;
-    // let numNaturalGas: number = this.getFilteredCalcsByUtility(oppData, 'Natural Gas').length;
-    // let numWater: number = this.getFilteredCalcsByUtility(oppData, 'Water').length;
-    // let numWasteWater: number = this.getFilteredCalcsByUtility(oppData, 'Waste Water').length;
-    // let numOtherFuel: number = this.getFilteredCalcsByUtility(oppData, 'Other Fuel').length;
-    // let numCompressedAir: number = this.getFilteredCalcsByUtility(oppData, 'Compressed Air').length;
-
-    // let numElectricity: number = this.getFilteredCalcsByUtility(oppData, 'Electricity').length;
-    // if(numElectricity != 0){
-    //   this.utilityTypeOptions.push({display: 'Electricity', value: 'Electricity', numCalcs: numElectricity, selected: false });
-    // }
-    // this.utilityTypeOptions.push({display: 'Natural Gas', value: 'Natural Gas', numCalcs: numNaturalGas, selected: false });
-    // this.utilityTypeOptions.push({display: 'Water', value: 'Water', numCalcs: numWater, selected: false });
-    // this.utilityTypeOptions.push({display: 'Waste Water', value: 'Waste Water', numCalcs: numWasteWater, selected: false });
-    // this.utilityTypeOptions.push({display: 'Other Fuel', value: 'Other Fuel', numCalcs: numOtherFuel, selected: false });
-    // this.utilityTypeOptions.push({display: 'Compressed Air', value: 'Compressed Air', numCalcs: numCompressedAir, selected: false });
-    // this.utilityTypeOptions.push({display: 'Steam', value: 'Steam', numCalcs: numSteam, selected: false });
-    // this.utilityTypeOptions.unshift({display: 'All', value: 'All', numCalcs: oppData.length, selected: false });
   }
 
   addUtilityOption(utilityStr: string, oppData: Array<OpportunityCardData>, utilityTypeOptions: Array<FilterOption>) {
@@ -403,7 +396,7 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
 
-  setCalculatorType(calcOption: FilterOption) {
+  setSelectedCalculator(calcOption: FilterOption) {
     let selectedFilters = this.getSelectedOptions(calcOption, this.calculatorTypeOptions);
     this.sortCardsData.calculatorTypes = selectedFilters;
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
@@ -414,26 +407,6 @@ export class TreasureChestMenuComponent implements OnInit {
 
   setCalculatorOptions(oppData: Array<OpportunityCardData>) {
     this.calculatorTypeOptions = new Array();
-    // let filteredCalcs: Array<OpportunityCardData> = oppData;
-    // if (this.sortCardsData.utilityTypes.length != 0) {
-    //   let utilityValues: Array<string> = _.map(this.sortCardsData.utilityTypes, (utilType) => { return utilType.value });
-    //   utilityValues.forEach(util => {
-    //     filteredCalcs.concat(this.getFilteredCalcsByUtility(oppData, util));
-    //   })
-    // }
-
-    // let numLighting: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'lighting-replacement').length;
-    // let numOppSheets: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'opportunity-sheet').length;
-    // let numReplaceExisting: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'replace-existing').length;
-    // let numMotorDrives: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'motor-drive').length;
-    // let numNgReductions: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'natural-gas-reduction').length;
-    // let electricityReductions: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'electricity-reduction').length;
-    // let compressedAirReductions: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'compressed-air-reduction').length;
-    // let compressedAirPressureReductions: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'compressed-air-pressure-reduction').length;
-    // let waterReductions: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'water-reduction').length;
-    // let steamReductions: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'steam-reduction').length;
-    // let pipeInsulationReduction: number = this.getFilteredCalcsByCalculator(filteredCalcs, 'pipe-insulation-reduction').length;
-
     this.addCalculatorOption({ display: 'Lighting Replacement', value: 'lighting-replacement' }, oppData, this.calculatorTypeOptions);
     this.addCalculatorOption({ display: 'Opportunity Sheet', value: 'opportunity-sheet' }, oppData, this.calculatorTypeOptions);
     this.addCalculatorOption({ display: 'Replace Existing Motor', value: 'replace-existing' }, oppData, this.calculatorTypeOptions);
@@ -445,10 +418,8 @@ export class TreasureChestMenuComponent implements OnInit {
     this.addCalculatorOption({ display: 'Water Reduction', value: 'water-reduction' }, oppData, this.calculatorTypeOptions);
     this.addCalculatorOption({ display: 'Steam Reduction', value: 'steam-reduction' }, oppData, this.calculatorTypeOptions);
     this.addCalculatorOption({ display: 'Pipe Insulation Reduction', value: 'pipe-insulation-reduction' }, oppData, this.calculatorTypeOptions);
-
     let checkIsSelected: boolean = this.sortCardsData.calculatorTypes.length == 0;
     this.calculatorTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: oppData.length, selected: checkIsSelected });
-    // this.calculatorTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: filteredCalcs.length, selected: false });
   }
 
   addCalculatorOption(calcOption: { display: string, value: string }, oppData: Array<OpportunityCardData>, calculatorTypeOptions: Array<FilterOption>) {
@@ -519,7 +490,6 @@ export class TreasureChestMenuComponent implements OnInit {
         calcOption.selected = false;
       }
     });
-
   }
 
   openImportModal() {
