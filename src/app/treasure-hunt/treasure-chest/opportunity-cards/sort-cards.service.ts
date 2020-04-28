@@ -48,7 +48,6 @@ export class SortCardsService {
   }
 
   sortTreasureHunt(treasureHunt: TreasureHunt, sortBy: SortCardsData, settings: Settings): TreasureHunt {
-    // debugger
     let calculatorTypes: Array<string> = _.map(sortBy.calculatorTypes, (calc) => { return calc.value });
 
     let allCalcTypes = calculatorTypes.length == 0;
@@ -154,17 +153,11 @@ export class SortCardsService {
 
   checkCardItemIncluded(cardItem: OpportunityCardData, sortBy: SortCardsData): boolean {
     let isUtilityType: boolean = true;
-    // if (sortBy.utilityTypes[0].value != 'All') {
     let utilityValues: Array<string> = _.map(sortBy.utilityTypes, (utility) => { return utility.value });
     if (sortBy.utilityTypes.length != 0) {
       let intersection = _.intersection(utilityValues, cardItem.utilityType);
-      // isUtilityType = _.isEmpty(_.xor(intersection, utilityValues))
       isUtilityType = intersection.length != 0;
     }
-    //else {
-    //   isUtilityType = _.includes(utilityValues, cardItem.utilityType[0]);
-    // }
-    // }
     let isCalcTypeIncluded: boolean = true;
     if (sortBy.calculatorTypes.length != 0) {
       let calcValues: Array<string> = _.map(sortBy.calculatorTypes, (calc) => { return calc.value });

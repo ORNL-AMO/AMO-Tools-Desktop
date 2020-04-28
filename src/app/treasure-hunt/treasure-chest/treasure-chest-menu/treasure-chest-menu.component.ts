@@ -346,9 +346,6 @@ export class TreasureChestMenuComponent implements OnInit {
     let selectedFilters = this.getSelectedOptions(utilityOption, this.utilityTypeOptions);
     this.sortCardsData.utilityTypes = selectedFilters;
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-    // this.updateCalculatorOptions();
-    // this.updateTeamOptions();
-    // this.updateEquipmentOptions();
   }
 
 
@@ -379,9 +376,6 @@ export class TreasureChestMenuComponent implements OnInit {
     let selectedFilters = this.getSelectedOptions(calcOption, this.calculatorTypeOptions);
     this.sortCardsData.calculatorTypes = selectedFilters;
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-    // this.updateUtilityOptions();
-    // this.updateTeamOptions();
-    // this.updateEquipmentOptions();
   }
 
   setCalculatorOptions(oppData: Array<OpportunityCardData>) {
