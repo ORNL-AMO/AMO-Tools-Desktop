@@ -65,10 +65,12 @@
     </div>
   </div>
 
+  <!--additional features when not in report-->
   <div *ngIf="!inReport" class="nav-item dropdown">
     <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
   </div>
 
+  <!--teams. use dropdown in report-->
   <div *ngIf="inReport" class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" (click)="toggleTeams()">
       Teams
@@ -85,6 +87,7 @@
     </div>
   </div>
 
+  <!--equipment. use dropdown in report-->
   <div *ngIf="inReport" class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" (click)="toggleEquipment()">
       Equipment
@@ -102,6 +105,7 @@
   </div>
 
 </nav>
+<!--displays selected filter options-->
 <nav class="navbar second-nav"
   *ngIf="(sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0 || sortCardsData.calculatorTypes.length != 0 || sortCardsData.utilityTypes.length != 0) && !inReport">
   <div class="nav-item" *ngFor="let team of sortCardsData.teams; let index = index;">

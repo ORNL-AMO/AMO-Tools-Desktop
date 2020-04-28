@@ -48,9 +48,10 @@ export class SortCardsService {
   }
 
   sortTreasureHunt(treasureHunt: TreasureHunt, sortBy: SortCardsData, settings: Settings): TreasureHunt {
+    // debugger
     let calculatorTypes: Array<string> = _.map(sortBy.calculatorTypes, (calc) => { return calc.value });
 
-    let allCalcTypes = calculatorTypes.length != 0;
+    let allCalcTypes = calculatorTypes.length == 0;
     let hasLightingReplacement = calculatorTypes.includes('lighting-replacement');
     let hasOppSheet: boolean = calculatorTypes.includes('opportunity-sheet');
     let hasReplaceExisting: boolean = calculatorTypes.includes('replace-existing');

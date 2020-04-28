@@ -44,7 +44,6 @@ export class TreasureChestMenuComponent implements OnInit {
   calculatorTypeOptions: Array<FilterOption> = [];
   teams: Array<FilterOption>;
   equipments: Array<FilterOption>;
-  treasureHuntSub: Subscription;
 
   displayUtilityTypeDropdown: boolean = false;
   displayCalculatorTypeDropdown: boolean = false;
@@ -58,9 +57,6 @@ export class TreasureChestMenuComponent implements OnInit {
   sortByLabel: string;
   opportunityCardsSub: Subscription;
   opportunityCardsData: Array<OpportunityCardData>;
-  allTeamNames: string[];
-  allEquipmentNames: string[];
-  currentFilters: string[];
 
   showImportModal: boolean;
   showImportModalSub: Subscription;
@@ -84,11 +80,6 @@ export class TreasureChestMenuComponent implements OnInit {
 
     this.opportunityCardsSub = this.opportuntityCardsService.opportunityCards.subscribe(val => {
       this.opportunityCardsData = val;
-      // Update numCalcs on ANY filter change
-      // this.updateEquipmentOptions();
-      // this.updateCalculatorOptions();
-      // this.updateTeamOptions();
-      // this.updateUtilityOptions();
     });
 
     this.showImportModalSub = this.treasureChestMenuService.showImportModal.subscribe(val => {
@@ -151,56 +142,48 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   setTeams(oppData: Array<OpportunityCardData>) {
-    if (!this.allTeamNames) {
-      this.allTeamNames = this.treasureChestMenuService.getAllTeams(oppData);
-    }
+    let allTeamNames: Array<string> = this.treasureChestMenuService.getAllTeams(oppData);
     this.teams = new Array();
-    this.allTeamNames.forEach(teamName => {
+    allTeamNames.forEach(teamName => {
       this.teams.push({
         display: teamName,
         value: teamName,
-        selected: false,
+        selected: this.sortCardsData.teams.find(team => { return teamName == team.value }) != undefined,
         numCalcs: this.getFilteredCalcsByTeam(oppData, teamName).length
       });
     });
-    this.teams.unshift({ display: 'All', value: 'All', selected: false, numCalcs: oppData.length })
+    let checkIsSelected: boolean = this.sortCardsData.teams.length == 0;
+    this.teams.unshift({ display: 'All', value: 'All', numCalcs: oppData.length, selected: checkIsSelected });
   }
 
   setSelectedTeam(selectedTeam: FilterOption) {
     let selectedFilters = this.getSelectedOptions(selectedTeam, this.teams);
     this.sortCardsData.teams = selectedFilters;
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-    // this.updateUtilityOptions();
-    // this.updateCalculatorOptions();
-    // this.updateEquipmentOptions();
   }
 
   setEquipments(oppData: Array<OpportunityCardData>) {
-    if (!this.allEquipmentNames) {
-      this.allEquipmentNames = this.treasureChestMenuService.getAllEquipment(oppData);
-    }
+    let allEquipmentNames: Array<string> = this.treasureChestMenuService.getAllEquipment(oppData);
     this.equipments = new Array();
-    this.allEquipmentNames.forEach(equipment => {
+    allEquipmentNames.forEach(equipment => {
       let equipmentVal: { value: string, display: string } = processEquipmentOptions.find(option => { return option.value == equipment });
       if (equipmentVal) {
         this.equipments.push({
           display: equipmentVal.display,
           value: equipmentVal.value,
-          selected: false,
+          selected: this.sortCardsData.equipments.find(equipment => { return equipmentVal.value == equipment.value }) != undefined,
           numCalcs: this.getFilteredCalcsByEquipment(oppData, equipmentVal.value).length
         });
       }
     });
-    this.equipments.unshift({ display: 'All', value: 'All', selected: false, numCalcs: oppData.length })
+    let checkIsSelected: boolean = this.sortCardsData.equipments.length == 0;
+    this.equipments.unshift({ display: 'All', value: 'All', numCalcs: oppData.length, selected: checkIsSelected });
   }
 
   setSelectedEquipment(option: FilterOption) {
     let selectedFilters = this.getSelectedOptions(option, this.equipments)
     this.sortCardsData.equipments = selectedFilters;
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-    // this.updateUtilityOptions();
-    // this.updateTeamOptions();
-    // this.updateCalculatorOptions();
   }
 
   //pass clicked option (selectedOption) and corresponding list to get all selected options
@@ -347,10 +330,6 @@ export class TreasureChestMenuComponent implements OnInit {
         option.selected = true;
       }
     })
-    // this.updateCalculatorOptions(true);
-    // this.updateEquipmentOptions(true);
-    // this.updateTeamOptions(true);
-    // this.updateUtilityOptions(true);
     this.treasureChestMenuService.showImportModal.next(false);
     this.treasureChestMenuService.showExportModal.next(false);
   }
