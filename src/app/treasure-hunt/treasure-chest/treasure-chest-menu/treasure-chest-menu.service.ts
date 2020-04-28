@@ -24,10 +24,10 @@ export class TreasureChestMenuService {
   getDefaultSortByData(): SortCardsData {
     let sortCardsData: SortCardsData = {
       sortBy: 'annualCostSavings',
-      teams: [],
-      equipments: [],
-      utilityType: 'All',
-      calculatorType: 'All'
+      teams: [{display: 'Reset', value: 'All'}],
+      equipments: [{display: 'Reset', value: 'All'}],
+      utilityTypes: [{display: 'Reset', value: 'All'}],
+      calculatorTypes: [{display: 'Reset', value: 'All'}]
     };
     return sortCardsData;
   }

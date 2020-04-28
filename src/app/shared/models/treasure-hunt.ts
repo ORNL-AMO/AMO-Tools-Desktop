@@ -21,6 +21,13 @@ export interface TreasureHunt {
     setupDone: boolean;
 }
 
+export interface FilterOption {
+    value: string,
+    selected: boolean, 
+    numCalcs: number, 
+    display: string 
+}
+
 export interface EnergyUsage {
     electricityUsage: number,
     electricityCosts: number,

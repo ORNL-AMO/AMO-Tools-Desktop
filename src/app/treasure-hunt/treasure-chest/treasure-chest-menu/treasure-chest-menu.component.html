@@ -24,14 +24,18 @@
 
   <div class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" (click)="toggleUtilityType()">
-      Utility Type ({{sortCardsData.utilityType}})
+      Utility Type
     </a>
     <div class="dropdown-menu p-0" [ngClass]="{'show': displayUtilityTypeDropdown == true}">
       <div class="list-group">
-        <a class="list-group-item list-group-item-action" *ngFor="let option of energyTypeOptions"
-          [ngClass]="{'active': option.value == sortCardsData.utilityType}"
-          (click)="setEnergyType(option.value)">{{option.value}}
-          <span class="badge badge-pill pull-right">
+        <a class="list-group-item list-group-item-action" *ngFor="let option of utilityTypeOptions"
+        [ngClass]="{'active': option.selected, 
+                    'disabled': (option.numCalcs == 0 && !option.selected)&& option.value != 'All', 
+                    'text-danger font-weight-bold': option.value == 'All'}"
+          (click)="setUtilityType(option)">{{option.display || option.value}}
+          <span *ngIf="option.value != 'All'" 
+          class="pull-right pl-2 pr-2"
+          [ngClass]="{'badge badge-pill': option.numCalcs > 0}">
             {{option.numCalcs}}
           </span>
         </a>
@@ -39,15 +43,23 @@
     </div>
   </div>
   <div class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" (click)="toggleCalculatorType()">
+    <!-- <a class="nav-link dropdown-toggle" (click)="toggleCalculatorType()">
       Calculator Type ({{displayCalculatorType}})
+    </a> -->
+    <a class="nav-link dropdown-toggle" (click)="toggleCalculatorType()">
+      Calculator Type
     </a>
     <div class="dropdown-menu p-0" [ngClass]="{'show': displayCalculatorTypeDropdown == true}">
       <div class="list-group calc-width">
         <a class="list-group-item list-group-item-action" *ngFor="let option of calculatorTypeOptions"
-          [ngClass]="{'active': option.value == sortCardsData.calculatorType}"
-          (click)="setCalculatorType(option)">{{option.display}}
-          <span class="badge badge-pill pull-right">
+          [ngClass]="{'active': option.selected, 
+                      'disabled': option.numCalcs == 0 && option.value != 'All',
+                      'text-danger font-weight-bold': option.value == 'All'}"
+          (click)="setCalculatorType(option)">
+            {{option.display}}
+          <span *ngIf="option.value != 'All'" 
+            class="pull-right pl-2 pr-2"
+            [ngClass]="{'badge badge-pill': option.numCalcs > 0}">
             {{option.numCalcs}}
           </span>
         </a>
@@ -75,7 +87,15 @@
     <div class="dropdown-menu p-0 teams-dropdown" [ngClass]="{'show': displayTeamDropdown == true}">
       <div class="list-group">
         <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
-          [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">{{team.name}}
+        [ngClass]="{'active': team.selected, 
+                    'disabled': team.numCalcs == 0 && team.value != 'All', 
+                    'text-danger font-weight-bold': team.value == 'All'}"
+          (click)="setSelectedTeam(team)">{{team.display || team.value}}
+          <span *ngIf="team.value != 'All'"
+          class="pull-right pl-2 pr-2"
+          [ngClass]="{'badge badge-pill': team.numCalcs > 0}">
+            {{team.numCalcs}} 
+          </span>
         </a>
       </div>
     </div>
@@ -87,8 +107,16 @@
     </a>
     <div class="dropdown-menu p-0 teams-dropdown" [ngClass]="{'show': displayEquipment == true}">
       <div class="list-group">
-        <a class="list-group-item list-group-item-action" *ngFor="let equipment of equipments"
-          [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.display}}
+        <a class="list-group-item list-group-item-action" *ngFor="let option of equipments"
+        [ngClass]="{'active': option.selected, 
+                    'disabled': option.numCalcs == 0 && option.value != 'All', 
+                    'text-danger font-weight-bold': option.value == 'All'}"
+          (click)="setSelectedEquipment(option)">{{option.display}}
+          <span *ngIf="option.value != 'All'"
+          class="pull-right pl-2 pr-2"
+          [ngClass]="{'badge badge-pill': option.numCalcs > 0}">
+            {{option.numCalcs}}
+          </span>
         </a>
       </div>
     </div>
@@ -138,6 +166,19 @@
     <button class="nav-btn pull-right" (click)="toggleAdditionalFilters()">Close</button>
   </div>
 </div>
+
+<div class="row mt-2">
+  <div class="h6 col-9">
+    Filtering by:
+    <span class="small" *ngFor="let filter of getCurrentFilters(); let index = index">
+      {{ filter }}<span *ngIf="index != currentFilters.length - 1">,</span>
+    </span>
+  </div>
+  <div class="col-3">
+    <button class="mt-0 py-1 px-3 btn btn-outline-danger pull-right" (click)="clearAllFilters()">Clear Filters</button>
+  </div>
+</div>
+<hr class="mt-1 mb-0">
 
 <app-import-opportunities *ngIf="showImportModal"></app-import-opportunities>
 <app-export-opportunities *ngIf="showExportModal"></app-export-opportunities>
