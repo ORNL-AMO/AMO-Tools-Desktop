@@ -14,22 +14,22 @@ export class SortCardsService {
   constructor(private opportunityCardsService: OpportunityCardsService) { }
 
   sortCards(value: Array<OpportunityCardData>, sortByData: SortCardsData): Array<OpportunityCardData> {
-    if (sortByData.utilityTypes[0].value != 'All') {
+    if (sortByData.utilityTypes.length != 0) {
       let utilityValues: Array<string> = _.map(sortByData.utilityTypes, (utility) => { return utility.value });
-      value = _.filter(value, (item: OpportunityCardData) => { 
+      value = _.filter(value, (item: OpportunityCardData) => {
         let intersection = _.intersection(utilityValues, item.utilityType);
-        return _.isEmpty(_.xor(intersection, utilityValues))
+        return intersection.length != 0;
       });
     }
-    if (sortByData.calculatorTypes[0].value != 'All') {
+    if (sortByData.calculatorTypes.length != 0) {
       let calcValues: Array<string> = _.map(sortByData.calculatorTypes, (calc) => { return calc.value });
       value = _.filter(value, (item: OpportunityCardData) => { return _.includes(calcValues, item.opportunityType) });
     }
-    if (sortByData.teams[0].value != 'All') {
+    if (sortByData.teams.length != 0) {
       let teamValues: Array<string> = _.map(sortByData.teams, (team) => { return team.value });
       value = _.filter(value, (item: OpportunityCardData) => { return _.includes(teamValues, item.teamName) });
     }
-    if (sortByData.equipments[0].value != 'All') {
+    if (sortByData.equipments.length != 0) {
       value = _.filter(value, (item: OpportunityCardData) => {
         if (item.opportunitySheet) {
           let equipmentValues: Array<string> = _.map(sortByData.equipments, (equipment) => { return equipment.value });
@@ -50,20 +50,20 @@ export class SortCardsService {
   sortTreasureHunt(treasureHunt: TreasureHunt, sortBy: SortCardsData, settings: Settings): TreasureHunt {
     let calculatorTypes: Array<string> = _.map(sortBy.calculatorTypes, (calc) => { return calc.value });
 
-    let allCalcTypes = calculatorTypes.includes('All')
+    let allCalcTypes = calculatorTypes.length != 0;
     let hasLightingReplacement = calculatorTypes.includes('lighting-replacement');
-    let hasOppSheet: boolean =  calculatorTypes.includes('opportunity-sheet');
-    let hasReplaceExisting: boolean =  calculatorTypes.includes('replace-existing');
-    let hasMotorDrive: boolean =  calculatorTypes.includes('motor-drive');
-    let hasNaturalGasReduction: boolean =  calculatorTypes.includes('natural-gas-reduction');
-    let hasElectricityReduction: boolean =  calculatorTypes.includes('electricity-reduction');
+    let hasOppSheet: boolean = calculatorTypes.includes('opportunity-sheet');
+    let hasReplaceExisting: boolean = calculatorTypes.includes('replace-existing');
+    let hasMotorDrive: boolean = calculatorTypes.includes('motor-drive');
+    let hasNaturalGasReduction: boolean = calculatorTypes.includes('natural-gas-reduction');
+    let hasElectricityReduction: boolean = calculatorTypes.includes('electricity-reduction');
     let hasCompAirReduction: boolean = calculatorTypes.includes('compressed-air-reduction');
     let hasCompAirPressureReduction: boolean = calculatorTypes.includes('compressed-air-pressure-reduction');
-    let hasWaterReduction: boolean =  calculatorTypes.includes('water-reduction');
-    let hasSteamReduction: boolean =  calculatorTypes.includes('steam-reduction');
-    let hasPipeInsulationReduction: boolean =  calculatorTypes.includes('pipe-insulation-reduction');
-    
-    
+    let hasWaterReduction: boolean = calculatorTypes.includes('water-reduction');
+    let hasSteamReduction: boolean = calculatorTypes.includes('steam-reduction');
+    let hasPipeInsulationReduction: boolean = calculatorTypes.includes('pipe-insulation-reduction');
+
+
     let lightingReplacements: Array<LightingReplacementTreasureHunt> = [];
     if (allCalcTypes || hasLightingReplacement) {
       if (treasureHunt.lightingReplacements && treasureHunt.lightingReplacements.length != 0) {
@@ -153,27 +153,29 @@ export class SortCardsService {
 
   checkCardItemIncluded(cardItem: OpportunityCardData, sortBy: SortCardsData): boolean {
     let isUtilityType: boolean = true;
-    if (sortBy.utilityTypes[0].value != 'All') {
-      let utilityValues: Array<string> = _.map(sortBy.utilityTypes, (utility) => { return utility.value });
-      if (sortBy.utilityTypes.length > 1) {
-        let intersection = _.intersection(utilityValues, cardItem.utilityType);
-        isUtilityType = _.isEmpty(_.xor(intersection, utilityValues))
-      } else {
-        isUtilityType = _.includes(utilityValues, cardItem.utilityType[0]);
-      }
+    // if (sortBy.utilityTypes[0].value != 'All') {
+    let utilityValues: Array<string> = _.map(sortBy.utilityTypes, (utility) => { return utility.value });
+    if (sortBy.utilityTypes.length != 0) {
+      let intersection = _.intersection(utilityValues, cardItem.utilityType);
+      // isUtilityType = _.isEmpty(_.xor(intersection, utilityValues))
+      isUtilityType = intersection.length != 0;
     }
+    //else {
+    //   isUtilityType = _.includes(utilityValues, cardItem.utilityType[0]);
+    // }
+    // }
     let isCalcTypeIncluded: boolean = true;
-    if (sortBy.calculatorTypes[0].value != 'All') {
+    if (sortBy.calculatorTypes.length != 0) {
       let calcValues: Array<string> = _.map(sortBy.calculatorTypes, (calc) => { return calc.value });
       isCalcTypeIncluded = _.includes(calcValues, cardItem.opportunityType);
     }
     let isTeamIncluded: boolean = true;
-    if (sortBy.teams[0].value != 'All') {    
+    if (sortBy.teams.length != 0) {
       let teamValues: Array<string> = _.map(sortBy.teams, (team) => { return team.value });
       isTeamIncluded = _.includes(teamValues, cardItem.teamName);
     }
     let isEquipmentIncluded: boolean = true;
-    if (sortBy.equipments[0].value != 'All') {
+    if (sortBy.equipments.length != 0) {
       if (cardItem.opportunitySheet) {
         let equipmentValues: Array<string> = _.map(sortBy.equipments, (equipment) => { return equipment.value });
         isEquipmentIncluded = _.includes(equipmentValues, cardItem.opportunitySheet.equipment);
