@@ -96,7 +96,7 @@ a.list-group-item.active:hover{
   }
 
   .list-group.calc-width{
-      min-width: 250px;
+      min-width: 265px;
   }
 
   .badge-pill{
