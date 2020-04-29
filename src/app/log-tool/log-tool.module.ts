@@ -36,6 +36,7 @@ import { XAxisDataComponent } from './visualize/visualize-menu/x-axis-data/x-axi
 import { YAxisDataComponent } from './visualize/visualize-menu/y-axis-data/y-axis-data.component';
 import { VisualizeMenuService } from './visualize/visualize-menu/visualize-menu.service';
 import { VisualizeHelpComponent } from './visualize/visualize-help/visualize-help.component';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { VisualizeHelpComponent } from './visualize/visualize-help/visualize-hel
     FormsModule,
     NgbDatepickerModule,
     ModalModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SharedPipesModule
   ],
   providers: [
     LogToolService,

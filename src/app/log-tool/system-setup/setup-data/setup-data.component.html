@@ -9,17 +9,16 @@
             <div>
                 <app-data-table></app-data-table>
             </div>
-            <div class="form-group" *ngIf="disableImportFile == false && dataExists == false">
+            <div class="form-group">
                 <label>
                     Log File
                 </label>
-                <input type="file" class="form-control" (change)="setImportFile($event)"
-                    [disabled]="dataExists == true || disableImportFile == true">
+                <input type="file" class="form-control" (change)="setImportFile($event)">
                 <span class="alert-danger small w-100 text-center" *ngIf="validFile == false">Invalid File Type - Must
                     have a .csv file extension</span>
             </div>
 
-            <div class="form-group" *ngIf="(validDate == false || disableImportFile == false) && dataExists == false">
+            <!-- <div class="form-group" *ngIf="(validDate == false || disableImportFile == false) && dataExists == false">
                 <label>
                     File Date Format
                     <a class="form-text small">"-" and "/" are interchangeable</a>
@@ -28,12 +27,11 @@
                     [disabled]="dataExists == true || validDate == true">
                     <option *ngFor="let format of dateFormats" [ngValue]="format.value">{{format.display}}</option>
                 </select>
-            </div>
+            </div> -->
             <div class="d-flex w-100 justify-content-end" *ngIf="dataExists == false">
                 <button class="btn btn-primary pull-right" role="button" (click)="parseImportData()"
-                    [disabled]="importData == undefined"
-                    *ngIf="addingAdditionalData == false && disableImportFile == false">Parse CSV Data</button>
-                <button class="btn btn-primary pull-right" role="button" (click)="parseAdditionalImportData()"
+                    [disabled]="importData == undefined">Parse CSV Data</button>
+                <!-- <button class="btn btn-primary pull-right" role="button" (click)="parseAdditionalImportData()"
                     [disabled]="importData == undefined"
                     *ngIf="addingAdditionalData == true && disableImportFile == false">Add Aditional .csv
                     Data</button>
@@ -44,15 +42,15 @@
                 <button class="btn btn-primary pull-right" role="button" (click)="parseAdditionalImportData()"
                     [disabled]="importData == undefined"
                     *ngIf="addingAdditionalData == true && disableImportFile == true && validDate == false">Change Date
-                    Format</button>
+                    Format</button> -->
             </div>
 
-            <div class="text-center pt-2" *ngIf="validDate == true && dataExists == false">
+            <div class="text-center pt-2" *ngIf="importSuccesful">
                 <div class="alert-success router-link" [routerLink]="['/log-tool/system-setup/clean-data']">
-                    Data parsing successful! Click here or the tab for Step 2: "Clean Data" to continue.
+                    Data parsing successful! Add additional csv data or click here or the tab for Step 2: "Clean Data" to continue.
                 </div>
             </div>
-            <div class="text-center pt-2" *ngIf="validDate == false && dataExists == false">
+            <!-- <div class="text-center pt-2" *ngIf="validDate == false && dataExists == false">
                 <div class="alert-danger p-2">The current data file you are trying to import has an invalid date format
                     selected. Change the date format to match a column in the corresponding table or click the "Continue
                     Without Day Type Analysis"</div>
@@ -64,7 +62,7 @@
             <div class="d-flex w-100 justify-content-end pt-2" *ngIf="validDate == true && dataExists == false">
                 <button class="btn btn-secondary" (click)="addAdditionalCsvData()">Add Additional .csv
                     Data</button>
-            </div>
+            </div> -->
             <div class="d-flex flex-column align-items-center w-100 h-100" *ngIf="importingData == true">
                 <div class="spinner">
                     <div class="bounce1"></div>

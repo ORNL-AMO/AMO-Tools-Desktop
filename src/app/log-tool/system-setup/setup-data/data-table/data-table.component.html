@@ -6,11 +6,11 @@
         <table class="table table-striped mb-2">
             <tbody>
                 <tr>
-                    <td class="bold" *ngFor="let field of csvDataItem.data.meta.fields">{{field}}</td>
+                    <td class="bold" *ngFor="let field of csvDataItem.csvImportData.meta.fields">{{field}}</td>
                 </tr>
                 <tr>
-                    <td *ngFor="let field of csvDataItem.data.meta.fields">
-                        {{csvDataItem.data.data[0][field]}}
+                    <td *ngFor="let field of csvDataItem.csvImportData.meta.fields">
+                        {{csvDataItem.csvImportData.data[0][field]}}
                     </td>
                 </tr>
             </tbody>

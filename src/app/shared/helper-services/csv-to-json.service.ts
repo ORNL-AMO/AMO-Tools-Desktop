@@ -11,6 +11,8 @@ export class CsvToJsonService {
       header: true,
       dynamicTyping: true
     });
+    //last item ends up as null
+    results.data.pop();
     return results;
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { LogToolService } from './log-tool.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import { LogToolDay, LogToolField } from './log-tool-models';
+import { LogToolDay, LogToolField, IndividualDataFromCsv } from './log-tool-models';
 @Injectable()
 export class LogToolDataService {
 
@@ -35,23 +35,23 @@ export class LogToolDataService {
 
   //seperate log tool data into days
   setLogToolDays() {
-    let csvDataCopy: Array<any> = JSON.parse(JSON.stringify(this.logToolService.combinedDataFromCsv.data));
-    this.logToolDays = new Array();
-    let startDate: Date = new Date(this.logToolService.startDate);
-    let endDate: Date = new Date(this.logToolService.endDate);
-    endDate.setDate(endDate.getDate() + 1);
-    //iterate thru days from start day to end day
-    for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
-      let filteredDayData: Array<any> = this.getDataForDay(tmpDate, csvDataCopy);
-      if (filteredDayData.length != 0) {
-        let hourlyAverages = this.getHourlyAverages(filteredDayData);
-        this.logToolDays.push({
-          date: new Date(tmpDate),
-          data: filteredDayData,
-          hourlyAverages: hourlyAverages
-        });
-      }
-    }
+    // let csvDataCopy: Array<any> = JSON.parse(JSON.stringify(this.logToolService.combinedDataFromCsv.data));
+    // this.logToolDays = new Array();
+    // let startDate: Date = new Date(this.logToolService.startDate);
+    // let endDate: Date = new Date(this.logToolService.endDate);
+    // endDate.setDate(endDate.getDate() + 1);
+    // //iterate thru days from start day to end day
+    // for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
+    //   let filteredDayData: Array<any> = this.getDataForDay(tmpDate, csvDataCopy);
+    //   if (filteredDayData.length != 0) {
+    //     let hourlyAverages = this.getHourlyAverages(filteredDayData);
+    //     this.logToolDays.push({
+    //       date: new Date(tmpDate),
+    //       data: filteredDayData,
+    //       hourlyAverages: hourlyAverages
+    //     });
+    //   }
+    // }
   }
 
   getHourlyAverages(dayData: Array<any>): Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> {
@@ -59,12 +59,12 @@ export class LogToolDataService {
     let fields: Array<LogToolField> = this.getDataFieldOptions();
     for (let i = 0; i < 24; i++) {
       let filteredDaysByHour = _.filter(dayData, (dayItem) => {
-        let dateField: string = this.logToolService.dateFields.find(field => { return dayItem[field] != undefined });
-        if (dayItem[dateField]) {
-          let date = new Date(dayItem[dateField]);
-          let dateVal = date.getHours();
-          return i == dateVal;
-        };
+        // let dateField: string = this.logToolService.dateFields.find(field => { return dayItem[field] != undefined });
+        // if (dayItem[dateField]) {
+        //   let date = new Date(dayItem[dateField]);
+        //   let dateVal = date.getHours();
+        //   return i == dateVal;
+        // };
       });
       let averages: Array<{ value: number, field: LogToolField }> = new Array();
       fields.forEach(field => {
@@ -89,11 +89,11 @@ export class LogToolDataService {
     //filter matching day items from all day data and return array
     let filteredDayData: Array<any> = _.filter(data, (dataItem) => {
       let isSameDay: boolean = false;
-      let dateField: string = this.logToolService.dateFields.find(field => { return dataItem[field] != undefined });
-      if (dataItem[dateField] != undefined) {
-        let dataItemDate: Date = new Date(dataItem[dateField]);
-        isSameDay = this.checkSameDay(date, dataItemDate);
-      }
+      // let dateField: string = this.logToolService.dateFields.find(field => { return dataItem[field] != undefined });
+      // if (dataItem[dateField] != undefined) {
+      //   let dataItemDate: Date = new Date(dataItem[dateField]);
+      //   isSameDay = this.checkSameDay(date, dataItemDate);
+      // }
       return isSameDay;
     });
     return filteredDayData;
@@ -123,9 +123,9 @@ export class LogToolDataService {
   getData(fieldName: string): Array<any> {
     let data: Array<any> = new Array();
     this.logToolService.individualDataFromCsv.forEach(individualDataItem => {
-      let foundData = individualDataItem.data.meta.fields.find(field => { return field == fieldName });
+      let foundData = individualDataItem.csvImportData.meta.fields.find(field => { return field == fieldName });
       if (foundData) {
-        data = _.concat(data, individualDataItem.data.data);
+        data = _.concat(data, individualDataItem.csvImportData.data);
       }
     });
     //need to order data by date before returning
@@ -140,5 +140,35 @@ export class LogToolDataService {
     // }, ['desc']);
     return data;
   };
+
+
+
+  submitIndividualCsvData(individualDataFromCsv: Array<IndividualDataFromCsv>) {
+    individualDataFromCsv.forEach(csvData => {
+      let dateField: LogToolField = csvData.fields.find(field => {
+        return field.isDateField == true;
+      });
+      if (dateField == undefined) {
+        csvData.hasDateField = false;
+        csvData.startDate = undefined;
+        csvData.endDate = undefined;
+      } else {
+        csvData.hasDateField = true;
+        //update date field format
+        csvData.csvImportData.data.map(dataItem => { dataItem[dateField.fieldName] = moment(dataItem[dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
+        //order by date descending
+        csvData.csvImportData.data = _.sortBy(csvData.csvImportData.data, (dataItem) => {
+          return dataItem[dateField.fieldName];
+        }, ['desc']);
+        //set start date
+        csvData.startDate = csvData.csvImportData.data[0][dateField.fieldName];
+        //find end date
+        debugger
+        csvData.endDate = csvData.csvImportData.data[csvData.csvImportData.data.length - 1][dateField.fieldName];
+        //find number of points per column
+        csvData.dataPointsPerColumn
+      }
+    });
+  }
 }
 

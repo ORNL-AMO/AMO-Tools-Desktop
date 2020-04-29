@@ -261,13 +261,13 @@ export class DayTypeAnalysisService {
   }
 
   setStartDateAndNumberOfMonths() {
-    this.calendarStartDate = {
-      year: this.logToolService.startDate.getFullYear(),
-      month: this.logToolService.startDate.getMonth() + 1,
-      day: this.logToolService.startDate.getDate()
-    };
-    let startMonth: number = this.logToolService.startDate.getMonth();
-    let endMonth: number = this.logToolService.endDate.getMonth();
-    this.numberOfMonths = endMonth - startMonth + 1;
+    // this.calendarStartDate = {
+    //   year: this.logToolService.startDate.getFullYear(),
+    //   month: this.logToolService.startDate.getMonth() + 1,
+    //   day: this.logToolService.startDate.getDate()
+    // };
+    // let startMonth: number = this.logToolService.startDate.getMonth();
+    // let endMonth: number = this.logToolService.endDate.getMonth();
+    // this.numberOfMonths = endMonth - startMonth + 1;
   }
 }

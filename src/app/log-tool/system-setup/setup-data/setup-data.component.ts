@@ -9,6 +9,7 @@ import { VisualizeService } from '../../visualize/visualize.service';
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { LogToolField, IndividualDataFromCsv } from '../../log-tool-models';
 @Component({
   selector: 'app-setup-data',
   templateUrl: './setup-data.component.html',
@@ -22,39 +23,40 @@ export class SetupDataComponent implements OnInit {
   importData: any = null;
   importDataFromCsv: CsvImportData;
   endDate: Date;
-  dateFormat: Array<string>;
-  dateFormats: Array<{ display: string, value: Array<string> }> = _dateFormats;
-  validDate: boolean;
+  // dateFormat: Array<string>;
+  // dateFormats: Array<{ display: string, value: Array<string> }> = _dateFormats;
+  // validDate: boolean;
   importingData: boolean = false;
   dataExists: boolean = false;
   addingAdditionalData: boolean = false;
   disableImportFile: boolean = false;
-  noDayTypeAnalysis: boolean;
-  noDayTypeAnalysisSub: Subscription;
-  individualDataFromCsv: Array<{ data: CsvImportData, csvName: string, isDateValid: boolean }>
+  importSuccesful: boolean = false;
+  // noDayTypeAnalysis: boolean;
+  // noDayTypeAnalysisSub: Subscription;
+  individualDataFromCsv: Array<IndividualDataFromCsv>
   constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
     private logToolDataService: LogToolDataService, private router: Router) { }
 
   ngOnInit() {
     this.individualDataFromCsv = this.logToolService.individualDataFromCsv;
-    this.dateFormat = this.logToolService.dateFormat;
+    // this.dateFormat = this.logToolService.dateFormat;
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
     }
-    if (this.logToolService.combinedDataFromCsv != undefined) {
-      this.validDate = true;
-      this.disableImportFile = true;
-    }
-    this.noDayTypeAnalysisSub = this.logToolService.noDayTypeAnalysis.subscribe(val => {
-      this.noDayTypeAnalysis = val;
-    });
+    // if (this.logToolService.combinedDataFromCsv != undefined) {
+    //   this.validDate = true;
+    //   this.disableImportFile = true;
+    // }
+    // this.noDayTypeAnalysisSub = this.logToolService.noDayTypeAnalysis.subscribe(val => {
+    //   this.noDayTypeAnalysis = val;
+    // });
 
 
   }
 
   ngOnDestroy() {
-    this.noDayTypeAnalysisSub.unsubscribe();
+    // this.noDayTypeAnalysisSub.unsubscribe();
   }
 
   setImportFile($event) {
@@ -82,49 +84,51 @@ export class SetupDataComponent implements OnInit {
 
   parseImportData() {
     this.disableImportFile = true;
-    this.validDate = undefined;
+    // this.validDate = undefined;
     this.importingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
       this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
-      let foundDate: string = this.testForDate();
-      if (foundDate != undefined) {
-        this.importDataFromCsv.data.forEach(dataItem => {
-          this.logToolService.dateFields.forEach(dateField => {
-            dataItem[dateField] = moment(dataItem[dateField]).format('YYYY-MM-DD HH:mm:ss');
-          })
-        })
-        this.validDate = true;
-        this.logToolService.invalidDateDataFromCsv = undefined;
-        this.logToolService.setImportDataFromCsv(this.importDataFromCsv, this.fileReference.name, this.validDate);
-        this.logToolService.parseImportData();
-      } else {
-        this.logToolService.invalidDateDataFromCsv = this.importDataFromCsv;
-        this.validDate = false;
-      }
+      // let foundDate: string = this.testForDate();
+      // if (foundDate != undefined) {
+      // this.importDataFromCsv.data.forEach(dataItem => {
+      //   this.logToolService.dateFields.forEach(dateField => {
+      //     dataItem[dateField] = moment(dataItem[dateField]).format('YYYY-MM-DD HH:mm:ss');
+      //   })
+      // })
+      // this.validDate = true;
+      this.logToolService.invalidDateDataFromCsv = undefined;
+      this.logToolService.addCsvData(this.importDataFromCsv, this.fileReference.name);
+      // this.logToolService.parseImportData();
+      // } else {
+      //   this.logToolService.invalidDateDataFromCsv = this.importDataFromCsv;
+      //   // this.validDate = false;
+      // }
+      this.importSuccesful = true;
+      this.importData = undefined;
       this.importingData = false;
       this.logToolService.dataSubmitted.next(true);
       this.cd.detectChanges();
     }, 500);
   }
 
-  testForDate(): string {
-    if (this.dateFormat != undefined) {
-      for (var key in this.importDataFromCsv.data[0]) {
-        let value = this.importDataFromCsv.data[0][key];
-        let test = moment(value, this.dateFormat, true);
-        if (test.isValid() == true) {
-          this.logToolService.addDateField(key);
-          return value;
-        }
-      }
-    }
-    return undefined;
-  }
+  // testForDate(): string {
+  //   if (this.dateFormat != undefined) {
+  //     for (var key in this.importDataFromCsv.data[0]) {
+  //       let value = this.importDataFromCsv.data[0][key];
+  //       let test = moment(value, this.dateFormat, true);
+  //       if (test.isValid() == true) {
+  //         this.logToolService.addDateField(key);
+  //         return value;
+  //       }
+  //     }
+  //   }
+  //   return undefined;
+  // }
 
-  setDateFormat() {
-    this.logToolService.dateFormat = this.dateFormat;
-  }
+  // setDateFormat() {
+  //   this.logToolService.dateFormat = this.dateFormat;
+  // }
 
   resetData() {
     this.dayTypeAnalysisService.resetData();
@@ -135,32 +139,34 @@ export class SetupDataComponent implements OnInit {
     this.dataExists = false;
     this.disableImportFile = false;
     this.addingAdditionalData = false;
-    this.validDate = undefined;
-    this.individualDataFromCsv = this.logToolService.individualDataFromCsv;
+    // this.validDate = undefined;
+    // this.individualDataFromCsv = this.logToolService.individualDataFromCsv;
   }
 
   continueWithoutDayType() {
     this.importingData = true;
     this.logToolService.invalidDateDataFromCsv = undefined;
-    this.validDate = undefined;
+    // this.validDate = undefined;
     this.cd.detectChanges();
     setTimeout(() => {
-      this.logToolService.noDayTypeAnalysis.next(true);
-      if (this.addingAdditionalData == true) {
-        this.logToolService.addAdditionalCsvData(this.importDataFromCsv, this.fileReference.name, false);
-      } else {
-        this.logToolService.setImportDataFromCsv(this.importDataFromCsv, this.fileReference.name, false);
-      }
-      this.logToolService.parseImportData();
+      // this.logToolService.noDayTypeAnalysis.next(true);
+      this.logToolService.addCsvData(this.importDataFromCsv, this.fileReference.name);
+
+      // if (this.addingAdditionalData == true) {
+      //   this.logToolService.addAdditionalCsvData(this.importDataFromCsv, this.fileReference.name);
+      // } else {
+      //   this.logToolService.setImportDataFromCsv(this.importDataFromCsv, this.fileReference.name);
+      // }
+      // this.logToolService.parseImportData();
       this.importingData = false;
       this.logToolService.dataSubmitted.next(true);
-      this.validDate = true;
+      // this.validDate = true;
     }, 500);
   }
 
   addAdditionalCsvData() {
     this.fileReference = undefined;
-    this.validDate = undefined;
+    // this.validDate = undefined;
     this.addingAdditionalData = true;
     this.disableImportFile = false;
   }
@@ -168,21 +174,21 @@ export class SetupDataComponent implements OnInit {
   parseAdditionalImportData() {
     this.logToolService.dataSubmitted.next(false);
     this.disableImportFile = true;
-    this.validDate = undefined;
+    // this.validDate = undefined;
     this.importingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
       this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
-      let foundDate: string = this.testForDate();
-      if (foundDate != undefined) {
-        this.validDate = true;
-        this.logToolService.invalidDateDataFromCsv = undefined;
-        this.logToolService.addAdditionalCsvData(this.importDataFromCsv, this.fileReference.name, this.validDate);
-        this.logToolService.parseImportData();
-      } else {
-        this.logToolService.invalidDateDataFromCsv = this.importDataFromCsv;
-        this.validDate = false;
-      }
+      // let foundDate: string = this.testForDate();
+      // if (foundDate != undefined) {
+      //   this.validDate = true;
+      //   this.logToolService.invalidDateDataFromCsv = undefined;
+      // this.logToolService.addAdditionalCsvData(this.importDataFromCsv, this.fileReference.name);
+      //   this.logToolService.parseImportData();
+      // } else {
+      //   this.logToolService.invalidDateDataFromCsv = this.importDataFromCsv;
+      //   this.validDate = false;
+      // }
       this.importingData = false;
       this.logToolService.dataSubmitted.next(true);
       this.cd.detectChanges();

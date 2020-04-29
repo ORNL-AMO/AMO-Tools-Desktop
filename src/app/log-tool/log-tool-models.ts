@@ -1,3 +1,4 @@
+import { CsvImportData } from "../shared/helper-services/csv-to-json.service";
 
 export interface LogToolField {
     fieldName: string,
@@ -67,6 +68,17 @@ export interface DayTypeSummary {
             field: LogToolField
         }>
     }>
+}
+
+
+export interface IndividualDataFromCsv {
+    csvImportData: CsvImportData,
+    csvName: string,
+    fields: Array<LogToolField>;
+    startDate?: string, 
+    endDate?: string,
+    dataPointsPerColumn?: number,
+    hasDateField: boolean
 }
 
 

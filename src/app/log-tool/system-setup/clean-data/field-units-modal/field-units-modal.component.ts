@@ -66,7 +66,7 @@ export class FieldUnitsModalComponent implements OnInit {
 
   setUnit() {
     this.editField.unit = this.editFieldUnit;
-    this.logToolService.updateFieldUnit(this.editField);
+    // this.logToolService.updateFieldUnit(this.editField);
     this.hideEditModal();
   }
   

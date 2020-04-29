@@ -140,8 +140,8 @@ export class VisualizeService {
     let selectedXDataField: LogToolField;
     let noDayTypeAnalysis: boolean = this.logToolService.noDayTypeAnalysis.getValue();
     if (noDayTypeAnalysis == false) {
-      selectedXDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) });
-      selectedYDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) == undefined });
+      // selectedXDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) });
+      // selectedYDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) == undefined });
     } else {
       selectedYDataField = fields[0];
       selectedXDataField = fields.find((field) => { return field.fieldName != selectedYDataField.fieldName });
