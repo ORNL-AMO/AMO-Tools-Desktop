@@ -47,6 +47,10 @@ export class GraphBasicsComponent implements OnInit {
     this.visualizeService.focusedPanel.next('graphBasics');
   }
 
+  focusOut(){
+    this.visualizeService.focusedPanel.next('default');
+  }
+
   setHistogramStdDeviation(bool: boolean) {
     this.selectedGraphObj.useStandardDeviation = bool;
     this.setBarHistogramData();

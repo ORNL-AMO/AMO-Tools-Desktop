@@ -20,6 +20,7 @@ export class VisualizeGraphComponent implements OnInit {
   ngOnInit() {
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
       let mode = {
+        modeBarButtonsToRemove: ['lasso2d'],
         responsive: true,
         displaylogo: false,
         displayModeBar: true

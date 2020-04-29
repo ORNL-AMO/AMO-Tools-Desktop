@@ -37,4 +37,8 @@ export class XAxisDataComponent implements OnInit {
     this.visualizeService.focusedPanel.next('xAxis');
   }
 
+  focusOut(){
+    this.visualizeService.focusedPanel.next('default');
+  }
+
 }

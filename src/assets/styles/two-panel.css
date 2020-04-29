@@ -210,7 +210,7 @@
 	padding-right: 15px;
 } */
 
-.header h3{
+.header h3, .header .h3{
 	margin: 10px 0 0px 10px;
     font-size: 15px;
     text-transform: uppercase;

@@ -24,7 +24,7 @@ export class VisualizeMenuComponent implements OnInit {
   constructor(private visualizeService: VisualizeService) { }
 
   ngOnInit() {
-    this.visualizeService.focusedPanel.next('graphBasics');
+    this.visualizeService.focusedPanel.next('default');
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(val => {
       this.selectedGraphObj = val;
     });

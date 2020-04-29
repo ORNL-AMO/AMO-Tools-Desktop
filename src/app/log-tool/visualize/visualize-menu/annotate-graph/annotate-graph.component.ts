@@ -75,4 +75,8 @@ export class AnnotateGraphComponent implements OnInit {
   focusField(){
     this.visualizeService.focusedPanel.next('annotation');
   }
+
+  focusOut(){
+    this.visualizeService.focusedPanel.next('default');
+  }
 }

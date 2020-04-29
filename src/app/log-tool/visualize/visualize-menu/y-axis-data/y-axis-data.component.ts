@@ -54,4 +54,8 @@ export class YAxisDataComponent implements OnInit {
   focusField(){
     this.visualizeService.focusedPanel.next('yAxis');
   }
+
+  focusOut(){
+    this.visualizeService.focusedPanel.next('default');
+  }
 }
