@@ -69,7 +69,7 @@ export class LogToolService {
     // this.combinedDataFromCsv = data;
   }
 
-  addCsvData(data: CsvImportData, csvName: string,) {
+  addCsvData(data: CsvImportData, csvName: string, ) {
     let fields: Array<LogToolField> = data.meta.fields.map(field => {
       return {
         fieldName: field,
@@ -137,26 +137,31 @@ export class LogToolService {
   //   }
   // }
 
-  // setFields(_fields: Array<string>) {
-  //   this.fields = new Array();
-  //   _fields.forEach(field => {
-  //     let unit: string = '';
-  //     if (this.dateFields) {
-  //       let testExist = this.dateFields.find(dateField => { return field == dateField })
-  //       if (testExist) {
-  //         unit = 'Date';
-  //       }
-  //     }
-  //     this.fields.push({
-  //       fieldName: field,
-  //       alias: field,
-  //       useField: true,
-  //       isDateField: unit == 'Date',
-  //       unit: unit,
-  //       invalidField: false
-  //     });
-  //   });
-  // }
+  setFields(individualDataFromCsv: Array<IndividualDataFromCsv>) {
+    this.fields = _.flatMap(individualDataFromCsv, csvDataItem => { return csvDataItem.fields });
+    console.log(this.fields);
+    // individualDataFromCsv.forEach(csvData => {
+    //   let fields: Array<LogToolField> = csvData.fields;
+    //   this.fields.concat(csvData.fields);
+    // })
+    // _fields.forEach(field => {
+    //   let unit: string = '';
+    //   if (this.dateFields) {
+    //     let testExist = this.dateFields.find(dateField => { return field == dateField })
+    //     if (testExist) {
+    //       unit = 'Date';
+    //     }
+    //   }
+    //   this.fields.push({
+    //     fieldName: field,
+    //     alias: field,
+    //     useField: true,
+    //     isDateField: unit == 'Date',
+    //     unit: unit,
+    //     invalidField: false
+    //   });
+    // });
+  }
 
   updateFieldUnit(fieldToUpdate: LogToolField) {
     this.fields.forEach(field => {

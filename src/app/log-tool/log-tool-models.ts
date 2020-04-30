@@ -78,7 +78,9 @@ export interface IndividualDataFromCsv {
     startDate?: string, 
     endDate?: string,
     dataPointsPerColumn?: number,
-    hasDateField: boolean
+    hasDateField: boolean,
+    dateField?: LogToolField
+    // logToolDays: Array<LogToolDay>
 }
 
 

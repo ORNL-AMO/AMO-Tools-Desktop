@@ -35,65 +35,68 @@ export class LogToolDataService {
 
   //seperate log tool data into days
   setLogToolDays() {
-    // let csvDataCopy: Array<any> = JSON.parse(JSON.stringify(this.logToolService.combinedDataFromCsv.data));
-    // this.logToolDays = new Array();
-    // let startDate: Date = new Date(this.logToolService.startDate);
-    // let endDate: Date = new Date(this.logToolService.endDate);
-    // endDate.setDate(endDate.getDate() + 1);
-    // //iterate thru days from start day to end day
-    // for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
-    //   let filteredDayData: Array<any> = this.getDataForDay(tmpDate, csvDataCopy);
-    //   if (filteredDayData.length != 0) {
-    //     let hourlyAverages = this.getHourlyAverages(filteredDayData);
-    //     this.logToolDays.push({
-    //       date: new Date(tmpDate),
-    //       data: filteredDayData,
-    //       hourlyAverages: hourlyAverages
-    //     });
-    //   }
-    // }
+    let individualDataFromCsv: Array<IndividualDataFromCsv> = JSON.parse(JSON.stringify(this.logToolService.individualDataFromCsv));
+    this.logToolDays = new Array();
+    individualDataFromCsv.forEach(csvData => {
+      let startDate: Date = new Date(csvData.startDate);
+      let endDate: Date = new Date(csvData.endDate);
+      endDate.setDate(endDate.getDate() + 1);
+      //iterate thru days from start day to end day
+      for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
+        let filteredDayData: Array<any> = this.getDataForDay(tmpDate, csvData.csvImportData.data, csvData.dateField);
+        if (filteredDayData.length != 0) {
+          let hourlyAverages = this.getHourlyAverages(filteredDayData, csvData);
+          this.logToolDays.push({
+            date: new Date(tmpDate),
+            data: filteredDayData,
+            hourlyAverages: hourlyAverages
+          });
+        }
+      }
+    });
   }
 
-  getHourlyAverages(dayData: Array<any>): Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> {
+  getHourlyAverages(dayData: Array<any>, csvData: IndividualDataFromCsv): Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> {
     let hourlyAverages: Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> = new Array();
-    let fields: Array<LogToolField> = this.getDataFieldOptions();
+    let fields: Array<LogToolField> = csvData.fields;
     for (let i = 0; i < 24; i++) {
       let filteredDaysByHour = _.filter(dayData, (dayItem) => {
-        // let dateField: string = this.logToolService.dateFields.find(field => { return dayItem[field] != undefined });
-        // if (dayItem[dateField]) {
-        //   let date = new Date(dayItem[dateField]);
-        //   let dateVal = date.getHours();
-        //   return i == dateVal;
-        // };
+        if (dayItem[csvData.dateField.fieldName]) {
+          let date = new Date(dayItem[csvData.dateField.fieldName]);
+          let dateVal = date.getHours();
+          return i == dateVal;
+        };
       });
       let averages: Array<{ value: number, field: LogToolField }> = new Array();
       fields.forEach(field => {
-        let hourFieldMean: number;
-        if (filteredDaysByHour.length != 0) {
-          hourFieldMean = _.meanBy(filteredDaysByHour, (filteredDay) => { return filteredDay[field.fieldName] });
+        if (field.isDateField == false && field.useField == true) {
+          let hourFieldMean: number;
+          if (filteredDaysByHour.length != 0) {
+            hourFieldMean = _.meanBy(filteredDaysByHour, (filteredDay) => { return filteredDay[field.fieldName] });
+          }
+          averages.push({
+            value: hourFieldMean,
+            field: field
+          })
         }
-        averages.push({
-          value: hourFieldMean,
-          field: field
-        })
       })
       hourlyAverages.push({
         hour: i,
         averages: averages
       });
+
     }
     return hourlyAverages;
   }
 
-  getDataForDay(date: Date, data: Array<any>): Array<any> {
+  getDataForDay(date: Date, data: Array<any>, dateField: LogToolField): Array<any> {
     //filter matching day items from all day data and return array
     let filteredDayData: Array<any> = _.filter(data, (dataItem) => {
       let isSameDay: boolean = false;
-      // let dateField: string = this.logToolService.dateFields.find(field => { return dataItem[field] != undefined });
-      // if (dataItem[dateField] != undefined) {
-      //   let dataItemDate: Date = new Date(dataItem[dateField]);
-      //   isSameDay = this.checkSameDay(date, dataItemDate);
-      // }
+      if (dataItem[dateField.fieldName] != undefined) {
+        let dataItemDate: Date = new Date(dataItem[dateField.fieldName]);
+        isSameDay = this.checkSameDay(date, dataItemDate);
+      }
       return isSameDay;
     });
     return filteredDayData;
@@ -111,6 +114,7 @@ export class LogToolDataService {
     let tmpArr = _.countBy(dayDataNumberOfEntries);
     let tmpArr2 = _.entries(tmpArr)
     this.validNumberOfDayDataPoints = Number(_.maxBy(_.last(tmpArr2)));
+    console.log(this.validNumberOfDayDataPoints);
   }
 
   getAllFieldData(fieldName: string): Array<number> {
@@ -128,45 +132,32 @@ export class LogToolDataService {
         data = _.concat(data, individualDataItem.csvImportData.data);
       }
     });
-    //need to order data by date before returning
-    // data = _.sortBy(data, (data) => {
-    //   let date: Date;
-    //   this.logToolService.dateFields.forEach(field => {
-    //     if (data[field]) {
-    //       date = new Date(data[field]);
-    //     }
-    //   })
-    //   return date;
-    // }, ['desc']);
     return data;
   };
 
-
-
   submitIndividualCsvData(individualDataFromCsv: Array<IndividualDataFromCsv>) {
     individualDataFromCsv.forEach(csvData => {
-      let dateField: LogToolField = csvData.fields.find(field => {
+      csvData.dateField = csvData.fields.find(field => {
         return field.isDateField == true;
       });
-      if (dateField == undefined) {
+      if (csvData.dateField == undefined) {
         csvData.hasDateField = false;
         csvData.startDate = undefined;
         csvData.endDate = undefined;
       } else {
         csvData.hasDateField = true;
         //update date field format
-        csvData.csvImportData.data.map(dataItem => { dataItem[dateField.fieldName] = moment(dataItem[dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
+        csvData.csvImportData.data.map(dataItem => { dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
         //order by date descending
         csvData.csvImportData.data = _.sortBy(csvData.csvImportData.data, (dataItem) => {
-          return dataItem[dateField.fieldName];
+          return dataItem[csvData.dateField.fieldName];
         }, ['desc']);
         //set start date
-        csvData.startDate = csvData.csvImportData.data[0][dateField.fieldName];
+        csvData.startDate = csvData.csvImportData.data[0][csvData.dateField.fieldName];
         //find end date
-        debugger
-        csvData.endDate = csvData.csvImportData.data[csvData.csvImportData.data.length - 1][dateField.fieldName];
+        csvData.endDate = csvData.csvImportData.data[csvData.csvImportData.data.length - 1][csvData.dateField.fieldName];
         //find number of points per column
-        csvData.dataPointsPerColumn
+        csvData.dataPointsPerColumn = csvData.csvImportData.data.length;
       }
     });
   }
