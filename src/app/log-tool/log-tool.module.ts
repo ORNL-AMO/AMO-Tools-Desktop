@@ -35,6 +35,7 @@ import { GraphBasicsComponent } from './visualize/visualize-menu/graph-basics/gr
 import { XAxisDataComponent } from './visualize/visualize-menu/x-axis-data/x-axis-data.component';
 import { YAxisDataComponent } from './visualize/visualize-menu/y-axis-data/y-axis-data.component';
 import { VisualizeMenuService } from './visualize/visualize-menu/visualize-menu.service';
+import { VisualizeHelpComponent } from './visualize/visualize-help/visualize-help.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { VisualizeMenuService } from './visualize/visualize-menu/visualize-menu.
     AnnotateGraphComponent,
     GraphBasicsComponent,
     XAxisDataComponent,
-    YAxisDataComponent
+    YAxisDataComponent,
+    VisualizeHelpComponent
   ],
   imports: [
     CommonModule,

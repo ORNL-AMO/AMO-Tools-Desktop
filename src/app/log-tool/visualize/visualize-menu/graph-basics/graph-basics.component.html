@@ -1,36 +1,29 @@
 <form>
-    <!--graph setup-->
-    <!-- <div class="group-label">Graph Basics -->
-
-    <!-- </div> -->
+    <!--graph name-->
     <div class="form-group">
         <input class="form-control w-100" type="text" name="graphName" [(ngModel)]="selectedGraphObj.layout.title.text"
-            (input)="saveChanges()">
+            (input)="saveChanges()" (focus)="focusField()" (blur)="focusOut()">
     </div>
+    <!--graph type-->
     <div class="form-group pt-2">
         <select class="form-control w-100" name="graphType" [(ngModel)]="selectedGraphObj.data[0].type"
-            (change)="setGraphType()">
+            (change)="setGraphType()" (focus)="focusField()" (blur)="focusOut()">
             <option *ngFor="let graphType of graphTypes" [ngValue]="graphType.value">{{graphType.label}}
             </option>
         </select>
     </div>
-    <!-- <div class="form-group pt-2" *ngIf="selectedGraphObj.data[0].type == 'scattergl'">
-        <label>
-            <input type="checkbox" [(ngModel)]="selectedGraphObj.isTimeSeries" name="isTimeSeries"
-                (change)="setTimeSeries()" />
-            <a>Time Series</a>
-        </label>
-    </div> -->
+    <!--std deviation vs bins if histogram-->
     <div class="btn-group pt-2 pb-2 w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
         <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(true)"
             [ngClass]="{'active': selectedGraphObj.useStandardDeviation == true}">Std. Deviation</button>
-        <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(false)" 
+        <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(false)"
             [ngClass]="{'active': selectedGraphObj.useStandardDeviation == false}">Bins</button>
     </div>
+    <!--number of bins-->
     <div class="form-group pt-2"
         *ngIf="selectedGraphObj.data[0].type == 'bar' && !selectedGraphObj.useStandardDeviation">
         <label>Number of Bins</label>
         <input class="form-control" type="number" name="numberOfBins" [(ngModel)]="selectedGraphObj.numberOfBins"
-            (input)="setBarHistogramData()">
+            (input)="setBarHistogramData()" (focus)="focusField()" (blur)="focusOut()">
     </div>
 </form>

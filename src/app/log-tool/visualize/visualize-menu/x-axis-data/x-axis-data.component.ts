@@ -33,4 +33,12 @@ export class XAxisDataComponent implements OnInit {
     this.visualizeMenuService.setXAxisDataOption(this.selectedGraphObj);
   }
 
+  focusField(){
+    this.visualizeService.focusedPanel.next('xAxis');
+  }
+
+  focusOut(){
+    this.visualizeService.focusedPanel.next('default');
+  }
+
 }

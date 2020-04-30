@@ -1,13 +1,17 @@
 <form>
+    <!--axis label-->
     <div class="form-group">
         <label>Axis Label</label>
         <textarea rows="2" class="form-control w-100" [(ngModel)]="selectedGraphObj.layout.xaxis.title.text"
-            name="xAxisLabel" id="xAxisLabel" (input)="saveChanges()"></textarea>
+            name="xAxisLabel" id="xAxisLabel" (input)="saveChanges()" (focus)="focusField()"
+            (blur)="focusOut()"></textarea>
     </div>
+    <!--axis data-->
     <div class="form-group">
         <label>Data</label>
         <select class="form-control" name="xDatafield" [(ngModel)]="selectedGraphObj.selectedXAxisDataOption"
-            (change)="setXAxisDataOption()" [disabled]="selectedGraphObj.isTimeSeries">
+            (change)="setXAxisDataOption()" [disabled]="selectedGraphObj.isTimeSeries" (focus)="focusField()"
+            (blur)="focusOut()">
             <option *ngFor="let xAxisDataOption of selectedGraphObj.xAxisDataOptions" [ngValue]="xAxisDataOption">
                 {{xAxisDataOption.dataField.alias}}</option>
         </select>

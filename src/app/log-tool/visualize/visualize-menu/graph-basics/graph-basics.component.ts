@@ -43,9 +43,13 @@ export class GraphBasicsComponent implements OnInit {
     this.visualizeMenuService.setGraphType(this.selectedGraphObj);
   }
 
-  // setTimeSeries() {
+  focusField(){
+    this.visualizeService.focusedPanel.next('graphBasics');
+  }
 
-  // }
+  focusOut(){
+    this.visualizeService.focusedPanel.next('default');
+  }
 
   setHistogramStdDeviation(bool: boolean) {
     this.selectedGraphObj.useStandardDeviation = bool;
