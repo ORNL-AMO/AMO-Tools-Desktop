@@ -4,30 +4,6 @@
         <br>
     </div>
     <div class="text-center p-2">
-        <!-- <div class="pt-2">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td class="bold w-50">Number of Data Points</td>
-                        <td>{{numberOfDataPoints | number}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="pt-2" *ngIf="startDate && endDate">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td class="bold w-50">Start Date</td>
-                        <td class="bold">End Date</td>
-                    </tr>
-                    <tr>
-                        <td>{{startDate | date}}</td>
-                        <td>{{endDate | date}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div> -->
         <div class="pt-2" *ngFor="let csvData of individualDataFromCsv">
             <table class="table table-striped">
                 <tbody>

@@ -87,7 +87,6 @@ export class VisualizeMenuService {
       selectedGraphObj.layout.xaxis.type = 'category';
     } else {
       selectedGraphObj.layout.xaxis.type = 'linear';
-      console.log('set linear');
     }
 
     if (selectedGraphObj.data[0].type == 'bar') {
@@ -195,7 +194,6 @@ export class VisualizeMenuService {
   }
 
   setAnnotation(annotateDataPoint: AnnotationData, selectedGraphObj: GraphObj) {
-    console.log(annotateDataPoint);
     if (!selectedGraphObj.layout.annotations && annotateDataPoint.text) {
       selectedGraphObj.layout.annotations = [annotateDataPoint];
     } else {

@@ -3,8 +3,6 @@ import { LogToolField } from '../../../log-tool-models';
 import { ModalDirective } from 'ngx-bootstrap';
 import { measurementOptions } from './field-unit-options';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { LogToolDataService } from '../../../log-tool-data.service';
-import { LogToolService } from '../../../log-tool.service';
 
 @Component({
   selector: 'app-field-units-modal',
@@ -23,7 +21,7 @@ export class FieldUnitsModalComponent implements OnInit {
   selectedMeasure: string;
   unitOptions: Array<{ unit: any, display: string, displayUnit: string }>;
   editFieldUnit: string;
-  constructor(private convertUnitsService: ConvertUnitsService, private logToolService: LogToolService) { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.measurementOptions = measurementOptions;
@@ -66,7 +64,6 @@ export class FieldUnitsModalComponent implements OnInit {
 
   setUnit() {
     this.editField.unit = this.editFieldUnit;
-    // this.logToolService.updateFieldUnit(this.editField);
     this.hideEditModal();
   }
   
