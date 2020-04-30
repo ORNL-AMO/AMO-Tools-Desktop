@@ -15,20 +15,20 @@ export class PreAssessmentService {
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService) { }
 
 
-  getResults(preAssessments: Array<PreAssessment>, settings: Settings, resultType: string): Array<{ name: string, percent: number, value: number, color: string, energyCost: number }> {
-    let results = new Array<{ name: string, percent: number, value: number, color: string, energyCost: number }>();
+  getResults(preAssessments: Array<PreAssessment>, settings: Settings, resultType: string): Array<PreAssessmentResult> {
+    let results = new Array<PreAssessmentResult>();
     //calculation logic to get results (in pre-assessment.component.ts)
     preAssessments.forEach(assessment => {
       if (assessment.type === 'Metered') {
         if (assessment.meteredEnergy) {
-          let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.calculateMetered(assessment, settings);
+          let result: PreAssessmentResult = this.calculateMetered(assessment, settings);
           if (result) {
             results.push(result);
           }
         }
       } else if (assessment.type === 'Designed') {
         if (assessment.designedEnergy) {
-          let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.calculateDesigned(assessment, settings);
+          let result: PreAssessmentResult = this.calculateDesigned(assessment, settings);
           if (result) {
             results.push(result);
           }
@@ -44,7 +44,7 @@ export class PreAssessmentService {
     return results;
   }
 
-  calculateMetered(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number } {
+  calculateMetered(assessment: PreAssessment, settings: Settings): PreAssessmentResult {
     let fuelResults: number = 0;
     let fuelCost: number = 0;
     let steamResults: number = 0;
@@ -71,11 +71,11 @@ export class PreAssessmentService {
     }
     totalResults = electricityResults + steamResults + fuelResults;
     totalCost = electricityCost + steamCost + fuelCost;
-    let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.buildResult(totalResults, assessment.name, assessment.borderColor, totalCost);
+    let result: PreAssessmentResult = this.buildResult(totalResults, assessment.name, assessment.borderColor, totalCost, 'Metered');
     return result;
   }
 
-  calculateDesigned(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number } {
+  calculateDesigned(assessment: PreAssessment, settings: Settings): PreAssessmentResult {
     let fuelResults: number = 0;
     let fuelCost: number = 0;
     let steamResults: number = 0;
@@ -104,7 +104,7 @@ export class PreAssessmentService {
     electricityResults = this.convertElectrotechResults(electricityResults, settings);
     totalResults = electricityResults + steamResults + fuelResults;
     totalCost = electricityCost + steamCost + fuelCost;
-    let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.buildResult(totalResults, assessment.name, assessment.borderColor, totalCost);
+    let result: PreAssessmentResult = this.buildResult(totalResults, assessment.name, assessment.borderColor, totalCost, 'Designed');
     return result;
   }
 
@@ -130,14 +130,15 @@ export class PreAssessmentService {
     return val;
   }
 
-  buildResult(num: number, name: string, color: string, energyCost: number): { name: string, percent: number, value: number, color: string, energyCost: number } {
+  buildResult(num: number, name: string, color: string, energyCost: number, type: string): PreAssessmentResult {
     if (isNaN(num) !== true) {
-      let result: { name: string, percent: number, value: number, color: string, energyCost: number } = {
+      let result: PreAssessmentResult = {
         name: name,
         percent: null,
         value: num,
         color: color,
-        energyCost: energyCost
+        energyCost: energyCost,
+        type: type
       };
       return result;
     }
@@ -292,4 +293,14 @@ export class PreAssessmentService {
     examples = [example2, example1];
     return examples;
   }
+}
+
+
+export interface PreAssessmentResult { 
+  name: string, 
+  percent: number, 
+  value: number, 
+  color: string, 
+  energyCost: number,
+  type: string
 }

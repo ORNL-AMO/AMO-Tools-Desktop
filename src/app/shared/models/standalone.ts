@@ -95,14 +95,23 @@ export interface PipeSizes {
   four: number;
   five: number;
   six: number;
+  eight: number;
+  ten: number;
+  twelve: number;
+  fourteen: number;
+  sixteen: number;
+  eighteen: number;
+  twenty: number;
+  twentyFour: number;
 }
 
 export interface AirSystemCapacityInput extends PipeSizes {
   receiverCapacities: Array<number>;
   customPipes: Array<{ pipeSize: number, pipeLength: number }>;
+  allPipes: Array<{ pipeSize: string, customPipeSize: number, pipeLength: number }>;
 }
 
-export interface AirSystemCapacityOutput {
+export interface AirSystemCapacityOutput extends PipeSizes {
   totalPipeVolume: number;
   totalReceiverVolume: number;
   totalCapacityOfCompressedAirSystem: number;

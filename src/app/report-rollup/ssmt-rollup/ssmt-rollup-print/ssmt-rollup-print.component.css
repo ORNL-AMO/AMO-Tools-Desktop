@@ -7,6 +7,10 @@
         font-size: 40px !important;
         font-weight: bold;
     }
+
+    .print-avoid-break{
+        page-break-inside: avoid;
+    }
 }
 
 .group-label{

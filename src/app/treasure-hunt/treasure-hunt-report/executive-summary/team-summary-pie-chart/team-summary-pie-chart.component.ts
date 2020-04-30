@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import * as Plotly from 'plotly.js';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
@@ -28,13 +28,11 @@ export class TeamSummaryPieChartComponent implements OnInit {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (this.plotlyPieChart && !this.showPrintView) {
       // this.setHeight();
       this.drawPlot();
-    }
-
-    if (changes.showPrintView && !changes.showPrintView.firstChange && this.showPrintView) {
+    }else if (this.plotlyPieChart && this.showPrintView) {
       this.drawPrintPlot();
     }
   }

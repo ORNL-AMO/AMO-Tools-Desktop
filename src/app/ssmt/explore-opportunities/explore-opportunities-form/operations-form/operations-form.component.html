@@ -1,10 +1,12 @@
 <div class="checkbox" #formElement>
   <label class="group-label" for="adjustGeneralOperations">
     <input type="checkbox" id="adjustGeneralOperations" value="true" (focus)="focusField('hoursPerYear')"
-      (change)="toggleOperationsData()" [(ngModel)]="showOperationsData" /> Adjust General Operations
+      (change)="toggleOperationsData()" 
+      [(ngModel)]="ssmt.modifications[exploreModIndex].exploreOppsShowOperationsData.hasOpportunity" />
+       {{ssmt.modifications[exploreModIndex].exploreOppsShowOperationsData.display}}
   </label>
 </div>
-<ul *ngIf="showOperationsData">
+<ul *ngIf="ssmt.modifications[exploreModIndex].exploreOppsShowOperationsData.hasOpportunity">
 
   <li class="explore-opps-item">
       <div class="checkbox mt-2">
@@ -91,11 +93,13 @@
 <div class="checkbox">
   <label class="group-label" for="adjustUnitCosts">
     <input type="checkbox" id="adjustUnitCosts" value="true" (focus)="focusField('electricityCost')"
-      (change)="toggleUnitCosts()" [(ngModel)]="showUnitCosts" /> Adjust Unit Costs
-  </label>
+      (change)="toggleUnitCosts()" 
+      [(ngModel)]="ssmt.modifications[exploreModIndex].exploreOppsShowUnitCosts.hasOpportunity" /> 
+      {{ssmt.modifications[exploreModIndex].exploreOppsShowUnitCosts.display}}
+    </label>
 </div>
 
-<ul *ngIf="showUnitCosts">
+<ul *ngIf="ssmt.modifications[exploreModIndex].exploreOppsShowUnitCosts.hasOpportunity">
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
       <label for="modifyElectricityCost" class="steam-check-label">

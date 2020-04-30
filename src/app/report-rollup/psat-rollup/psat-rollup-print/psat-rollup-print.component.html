@@ -1,36 +1,56 @@
-<div class="print-break-before show-print" *ngIf="settings">
+<div class="row">
+    <div class="col-12">
+        <div class="print-page-title">
+            Pump Systems Rollup Summary
+        </div>
+    </div>
+</div>
+<!--pre assessments-->
+<div class="row print-avoid-break" *ngFor="let calculator of calculators">
+    <div class="col-12 pt-2">
+        <label class="group-label large">Pre Assessment Summary ({{calculator.name}})</label>
+    </div>
+    <div class="col-12">
+        <app-pre-assessment-print [settings]="settings" [calculator]="calculator"></app-pre-assessment-print>
+    </div>
+</div>
 
-    <div class="row justify-content-center row-bottom-divider">
-        <div class="col-12">
-            <h3>Pump Assessment Rollup Report</h3>
-        </div>
+<!--energy use pie and table-->
+<div class="row print-avoid-break" [ngClass]="{'pt-3': calculators.length != 0}">
+    <div class="print-pie-width">
+        <label class="group-label">Pump Systems Energy Use</label>
+        <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'energy'"
+            [energyUnit]="settings.powerMeasurement" [printView]="true"></app-rollup-summary-pie-chart>
     </div>
-    <!-- <div class="row justify-content-center print-avoid-break" *ngFor="let calculator of calculators">
-        <app-pre-assessment-print [calculator]="calculator" [settings]="settings">
-        </app-pre-assessment-print>
-    </div> -->
-    <div class="print-avoid-break">
-        <div class="row justify-content-center">
-            <div class="col-12 header text-center">
-                <h5>Energy Use</h5>
-            </div>
-        </div>
+    <div class="print-pie-width">
+        <label class="group-label">Pump Systems Energy Costs</label>
+        <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'cost'"
+            [energyUnit]="settings.powerMeasurement" [printView]="true"></app-rollup-summary-pie-chart>
     </div>
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <app-psat-rollup-graphs [settings]="settings" [printView]="true"></app-psat-rollup-graphs>
-        </div>
+    <div class="col-12">
+        <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="settings.powerMeasurement"
+            [equipmentType]="'Pump'"></app-rollup-summary-energy-table>
     </div>
-    <div class="print-avoid-break">
-        <div class="row justify-content-center">
-            <div class="col-12 header text-center">
-                <h5>Pumps Summary</h5>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <app-psat-rollup-pump-summary [settings]="settings" [printView]="true"></app-psat-rollup-pump-summary>
-            </div>
-        </div>
+</div>
+<!--system summary bar chart-->
+<div class="row print-avoid-break">
+    <div class="col-12 pt-2">
+        <label class="group-label">Pump System Energy Modification Summary</label>
+        <app-rollup-summary-bar-chart [barChartData]="energyBarChartData" [yAxisLabel]="energyYAxisLabel"
+            [tickFormat]="energyTickFormat" [printView]="true">
+        </app-rollup-summary-bar-chart>
+    </div>
+    <div class="col-12 pt-2">
+        <label class="group-label">Pump System Cost Modification Summary</label>
+        <app-rollup-summary-bar-chart [barChartData]="costBarChartData" [yAxisLabel]="costYAxisLabel"
+            [tickFormat]="costTickFormat" [printView]="true">
+        </app-rollup-summary-bar-chart>
+    </div>
+</div>
+<div class="row pt-2">
+    <div class="col-12">
+        <app-rollup-summary-table [tableData]="rollupSummaryTableData" [equipmentType]="'Pump'"
+            [energyUnit]="settings.powerMeasurement">
+        </app-rollup-summary-table>
     </div>
 </div>

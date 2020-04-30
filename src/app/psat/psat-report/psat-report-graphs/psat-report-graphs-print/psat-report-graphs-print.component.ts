@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Modification } from '../../../../shared/models/psat';
+import { Modification, PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
-import { Assessment } from '../../../../shared/models/assessment';
 import { ScenarioSummary } from '../../../../shared/models/reports';
 
 @Component({
@@ -19,12 +18,14 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   @Input()
   allChartData: Array<{
     name: string,
-    pieChartLabels: Array<string>,
-    pieChartValues: Array<number>,
+    valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
-    modification?: Modification
+    modification?: Modification,
+    isValid: boolean
   }>;
+  @Input()
+  psat: PSAT;
 
   scenarioSummaries: Array<ScenarioSummary>;
 
@@ -58,11 +59,11 @@ export class PsatReportGraphsPrintComponent implements OnInit {
 
   getScenarioSummary(chartDataObj: {
     name: string,
-    pieChartLabels: Array<string>,
-    pieChartValues: Array<number>,
+    valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>,
-    modification?: Modification
+    modification?: Modification,
+    isValid: boolean
   }): ScenarioSummary {
     let notes: Array<string> = this.getModificationNotes(chartDataObj.modification);
     let baselineGraphData = this.baselineGraphData();
@@ -91,12 +92,15 @@ export class PsatReportGraphsPrintComponent implements OnInit {
 
   baselineGraphData(): {
     name: string,
-    pieChartLabels: Array<string>,
-    pieChartValues: Array<number>,
+    valuesAndLabels: Array<{ value: number, label: string }>,
     barChartLabels: Array<string>,
     barChartValues: Array<number>
   } {
-    let baselineGraphData = this.allChartData.find(dataItem => { return dataItem.name == 'Baseline' });
-    return baselineGraphData;
+    return {
+      name: 'Baseline',
+      valuesAndLabels: this.allChartData[0].valuesAndLabels,
+      barChartLabels: this.allChartData[0].barChartLabels,
+      barChartValues: this.allChartData[0].barChartValues
+    }
   }
 }

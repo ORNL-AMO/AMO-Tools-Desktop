@@ -1,4 +1,4 @@
-<div class="print-graphs-container" *ngFor="let scenarioSummary of scenarioSummaries">
+<div class="print-graphs-container" *ngFor="let scenarioSummary of scenarioSummaries; let index = index;">
   <div class="print-page-title mb-3" *ngIf="scenarioSummary.modificationGraphData">
     Scenario: {{scenarioSummary.modificationGraphData.name}}
   </div>
@@ -12,20 +12,38 @@
   <div class="row no-gutters mt-2">
     <div class="print-pie-width">
       <div class="h3 mb-0">Baseline</div>
-      <app-plotly-pie-chart [values]="scenarioSummary.baselineGraphData.pieChartValues"
-        [labels]="scenarioSummary.baselineGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
+      <app-plotly-pie-chart [valuesAndLabels]="scenarioSummary.baselineGraphData.valuesAndLabels" [valuesUnit]="'kW'"
+        [isPrint]="true">
       </app-plotly-pie-chart>
     </div>
-    <div class="print-pie-width" *ngIf="scenarioSummary.modificationGraphData">
+    <div class="print-pie-width" *ngIf="scenarioSummary.modificationGraphData && scenarioSummary.modificationGraphData.isValid">
       <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
-      <app-plotly-pie-chart [values]="scenarioSummary.modificationGraphData.pieChartValues"
-        [labels]="scenarioSummary.modificationGraphData.pieChartLabels" [valuesUnit]="'kW'" [isPrint]="true">
+      <app-plotly-pie-chart [valuesAndLabels]="scenarioSummary.modificationGraphData.valuesAndLabels"
+        [valuesUnit]="'kW'" [isPrint]="true">
       </app-plotly-pie-chart>
+    </div>
+    <div  *ngIf="scenarioSummary.modificationGraphData && !scenarioSummary.modificationGraphData.isValid" class="alert-danger">
+      Scenario Setup is Invalid
     </div>
   </div>
-  <div class="row no-gutters w-100" *ngIf="scenarioSummary.modificationGraphData">
+  <div class="row no-gutters w-100" *ngIf="scenarioSummary.modificationGraphData && scenarioSummary.modificationGraphData.isValid">
     <app-plotly-bar-chart class="w-100"
       [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
-      [yAxisLabel]="'Power (kW)'"></app-plotly-bar-chart>
+      [yAxisLabel]="'Power (kW)'" [hoverLabel]="'Power'" [isPrint]="true"></app-plotly-bar-chart>
+  </div>
+  <div class="row print-avoid-break" *ngIf="printSankey">
+    <div class="col-12">
+      <div class="h3 mb-0">Baseline</div>
+      <app-psat-sankey [psat]="psat" [location]="'baseline'" [assessmentName]="'Baseline'" [settings]="settings"
+        [isBaseline]="true" [modIndex]="index" [printView]="true"></app-psat-sankey>
+    </div>
+    <div class="col-12" *ngIf="scenarioSummary.modificationGraphData">
+      <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
+      <app-psat-sankey [psat]="scenarioSummary.modificationGraphData.modification.psat"
+        [location]="scenarioSummary.modificationGraphData.name"
+        [assessmentName]="scenarioSummary.modificationGraphData.name" [settings]="settings" [isBaseline]="false"
+        [modIndex]="index" [printView]="true">
+      </app-psat-sankey>
+    </div>
   </div>
 </div>

@@ -1,10 +1,11 @@
 <div class="checkbox" #formElement>
   <label class="group-label" for="adjustBoilerData">
     <input type="checkbox" id="adjustBoilerData" (focus)="focusField('default')" (change)="toggleBoilerData()"
-      [(ngModel)]="showBoilerData" /> Adjust Boiler Operation
-  </label>
+      [(ngModel)]="ssmt.modifications[exploreModIndex].exploreOppsShowBoilerData.hasOpportunity" /> 
+    {{ssmt.modifications[exploreModIndex].exploreOppsShowBoilerData.display}}
+    </label>
 </div>
-<ul *ngIf="showBoilerData">
+<ul *ngIf="ssmt.modifications[exploreModIndex].exploreOppsShowBoilerData.hasOpportunity">
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
       <label for="modifyCombustionEfficiency" class="steam-check-label">

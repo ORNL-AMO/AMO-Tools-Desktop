@@ -1,4 +1,9 @@
 <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+  <div *ngIf="stepTab == 'gas-density'" class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+    <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+      <div>Results</div>
+    </a>
+  </div>
   <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
     <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
       <div>Help</div>
@@ -9,15 +14,17 @@
       <div>Diagram</div>
     </a>
   </div>
-
 </div>
 
 <div class="d-flex flex-column w-100 pr-2 pl-2" *ngIf="tabSelect == 'help'">
   <app-operating-points-help></app-operating-points-help>
 </div>
 
-
 <div class="d-flex flex-column w-100 pr-2 pl-2" *ngIf="tabSelect == 'diagram'">
   <app-fan-diagram-image></app-fan-diagram-image>
   <app-planar-results class="pt-2" [settings]="settings"></app-planar-results>
+</div>
+
+<div class="d-flex flex-column w-100 pr-2 pl-2" *ngIf="tabSelect == 'results' && stepTab == 'gas-density'">
+  <app-gas-density-results [settings]="settings"></app-gas-density-results>
 </div>

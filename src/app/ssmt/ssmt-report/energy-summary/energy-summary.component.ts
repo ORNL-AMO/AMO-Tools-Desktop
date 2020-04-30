@@ -3,6 +3,7 @@ import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
+import { SsmtValid } from '../../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-energy-summary',
@@ -13,7 +14,7 @@ export class EnergySummaryComponent implements OnInit {
   @Input()
   baselineOutput: SSMTOutput;
   @Input()
-  modificationOutputs: Array<{name: string, outputData: SSMTOutput}>;
+  modificationOutputs: Array<{name: string, outputData: SSMTOutput, valid: SsmtValid}>;
   @Input()
   settings: Settings;
   @Input()

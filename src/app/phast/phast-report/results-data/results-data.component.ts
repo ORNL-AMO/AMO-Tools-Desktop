@@ -5,6 +5,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { Subscription } from 'rxjs';
+import { PhastValidService } from '../../phast-valid.service';
 
 @Component({
   selector: 'app-results-data',
@@ -42,7 +43,9 @@ export class ResultsDataComponent implements OnInit {
 
   numMods: number = 0;
   selectedPhastsSub: Subscription;
-  constructor(private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService) { }
+  constructor(private phastResultsService: PhastResultsService, 
+              private reportRollupService: ReportRollupService,
+              private phastValidService: PhastValidService) { }
 
   ngOnInit() {
     this.getResults();
@@ -98,11 +101,13 @@ export class ResultsDataComponent implements OnInit {
         this.phastMods = this.phast.modifications;
         if (this.phast.modifications.length !== 0) {
           this.phast.modifications.forEach(mod => {
+            mod.phast.valid = this.phastValidService.checkValid(mod.phast);
             let tmpResults = this.phastResultsService.getResults(mod.phast, this.settings);
             this.modificationResults.push(tmpResults);
           });
         }
       } else if (this.modification && !this.inSetup && !this.inReport) {
+        this.modification.phast.valid = this.phastValidService.checkValid(this.modification.phast);
         let tmpResults = this.phastResultsService.getResults(this.modification.phast, this.settings);
         this.modificationResults.push(tmpResults);
       }
