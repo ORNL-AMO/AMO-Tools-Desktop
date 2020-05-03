@@ -14,11 +14,13 @@ export class VisualizeService {
   visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
   annotateDataPoint: BehaviorSubject<AnnotationData>;
   focusedPanel: BehaviorSubject<string>;
+  plotFunctionType: string;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
     this.initializeService();
   }
 
-  initializeService(){
+  initializeService() {
+    this.plotFunctionType = 'react';
     this.focusedPanel = new BehaviorSubject<string>(undefined);
     let initData = this.initGraphObj();
     this.graphObjects = new BehaviorSubject([initData]);
@@ -39,10 +41,14 @@ export class VisualizeService {
         y: [],
         name: '',
         type: 'scattergl',
-        mode: 'line+markers',
+        mode: 'markers',
         yaxis: undefined,
         marker: {
           color: undefined
+        },
+        line: {
+          color: undefined,
+          width: 1
         }
       }],
       layout: {

@@ -19,6 +19,7 @@ export class VisualizeGraphComponent implements OnInit {
 
   ngOnInit() {
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
+      // console.log(graphObj.data)
       let mode = {
         modeBarButtonsToRemove: ['lasso2d'],
         responsive: true,
@@ -27,13 +28,12 @@ export class VisualizeGraphComponent implements OnInit {
       }
 
       //first time rendering chart
-      if (!this.visualizeChart) {
-        //render chart
-        Plotly.newPlot('plotlyDiv', graphObj.data, graphObj.layout, mode).then(chart => {
-          //use boolean to prevent subscribing on every plot draw
-          //subscribe to click event for annotations
+      if (this.visualizeService.plotFunctionType == 'react') {
+        // render chart
+        Plotly.react('plotlyDiv', graphObj.data, graphObj.layout, mode).then(chart => {
+          // subscribe to click event for annotations
           chart.on('plotly_click', (data) => {
-            //send data point for annotations
+            // send data point for annotations
             let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
             this.visualizeService.annotateDataPoint.next(newAnnotation);
           });
@@ -48,6 +48,4 @@ export class VisualizeGraphComponent implements OnInit {
   ngOnDestroy() {
     this.selectedGraphDataSubscription.unsubscribe();
   }
-
-
 }

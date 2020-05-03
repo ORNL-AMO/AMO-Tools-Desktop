@@ -114,6 +114,10 @@ export interface GraphObj {
         marker: {
             color: string
         },
+        line: {
+          color: string,
+          width: number
+        }
     }],
     layout: {
         title: {
@@ -136,7 +140,14 @@ export interface GraphObj {
     },
     isTimeSeries: boolean,
     selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
-    selectedYAxisDataOptions: Array<{ index: number, dataOption: { dataField: LogToolField, data: Array<number | string> }, seriesColor: string, seriesName: string, yaxis: string }>,
+    selectedYAxisDataOptions: Array<{
+         index: number, 
+         dataOption: { dataField: LogToolField, data: Array<number | string> }, 
+         seriesColor: string, 
+         seriesName: string, 
+         yaxis: string,
+         linesOrMarkers: string
+        }>,
     hasSecondYAxis: boolean,
     numberOfBins: number,
     useStandardDeviation: boolean,

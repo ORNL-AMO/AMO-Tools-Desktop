@@ -41,6 +41,7 @@ export class AnnotateGraphComponent implements OnInit {
   }
 
   setAnnotation() {
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.setAnnotation(this.annotateDataPoint, this.selectedGraphObj);
   }
 
@@ -65,10 +66,12 @@ export class AnnotateGraphComponent implements OnInit {
   }
 
   selectAnnotation(annotation: AnnotationData) {
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeService.annotateDataPoint.next(annotation);
   }
 
   deleteAnnotation(annotation: AnnotationData) {
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.deleteAnnotation(annotation, this.selectedGraphObj);
   }
 

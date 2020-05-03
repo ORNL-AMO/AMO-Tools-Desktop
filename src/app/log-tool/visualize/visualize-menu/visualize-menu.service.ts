@@ -57,7 +57,7 @@ export class VisualizeMenuService {
   }
 
   setDefaultYAxisDataOptions(selectedGraphObj: GraphObj) {
-    selectedGraphObj.selectedYAxisDataOptions = [{ index: 0, dataOption: selectedGraphObj.yAxisDataOptions[0], seriesColor: graphColors[0], seriesName: 'Series 1', yaxis: 'y' }];
+    selectedGraphObj.selectedYAxisDataOptions = [{ index: 0, dataOption: selectedGraphObj.yAxisDataOptions[0], seriesColor: graphColors[0], seriesName: 'Series 1', yaxis: 'y', linesOrMarkers: 'markers' }];
   }
 
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
@@ -151,7 +151,9 @@ export class VisualizeMenuService {
       selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
       selectedGraphObj.data[index].name = selectedDataOption.seriesName;
       selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
-      selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis
+      selectedGraphObj.data[index].line.color = selectedDataOption.seriesColor;
+      selectedGraphObj.data[index].yaxis = selectedDataOption.yaxis;
+      selectedGraphObj.data[index].mode = selectedDataOption.linesOrMarkers;
       index++;
     })
     this.save(selectedGraphObj);
@@ -177,7 +179,8 @@ export class VisualizeMenuService {
       dataOption: dataOption,
       seriesName: 'Series ' + (selectedGraphObj.selectedYAxisDataOptions.length + 1),
       seriesColor: graphColors[selectedGraphObj.selectedYAxisDataOptions.length],
-      yaxis: 'y'
+      yaxis: 'y',
+      linesOrMarkers: selectedGraphObj.data[0].mode
     });
     selectedGraphObj.data.push(JSON.parse(JSON.stringify(selectedGraphObj.data[0])));
     this.setYAxisData(selectedGraphObj);
