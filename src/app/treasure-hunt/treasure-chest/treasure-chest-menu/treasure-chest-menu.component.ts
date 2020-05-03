@@ -69,14 +69,14 @@ export class TreasureChestMenuComponent implements OnInit {
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortCardsData = val;
       this.setSortByLabel();
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      let oppData = this.opportuntityCardsService.getOpportunityCardsData(treasureHunt, this.settings);
+      this.setTeams(oppData);
+      this.setEquipments(oppData);
+      this.setUtilityTypeOptions(oppData);
+      this.setCalculatorOptions(oppData);
     });
 
-    let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-    let oppData = this.opportuntityCardsService.getOpportunityCardsData(treasureHunt, this.settings);
-    this.setTeams(oppData);
-    this.setEquipments(oppData);
-    this.setUtilityTypeOptions(oppData);
-    this.setCalculatorOptions(oppData);
 
     this.opportunityCardsSub = this.opportuntityCardsService.opportunityCards.subscribe(val => {
       this.opportunityCardsData = val;
@@ -142,18 +142,21 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   setTeams(oppData: Array<OpportunityCardData>) {
-    let allTeamNames: Array<string> = this.treasureChestMenuService.getAllTeams(oppData);
+    let sortByCpy: SortCardsData = JSON.parse(JSON.stringify(this.sortCardsData));
+    sortByCpy.teams = [];
+    let sortedOppDataCpy: Array<OpportunityCardData> = this.sortCardsService.sortCards(JSON.parse(JSON.stringify(oppData)), sortByCpy);
+    let allTeamNames: Array<string> = this.treasureChestMenuService.getAllTeams(sortedOppDataCpy);
     this.teams = new Array();
     allTeamNames.forEach(teamName => {
       this.teams.push({
         display: teamName,
         value: teamName,
         selected: this.sortCardsData.teams.find(team => { return teamName == team.value }) != undefined,
-        numCalcs: this.getFilteredCalcsByTeam(oppData, teamName).length
+        numCalcs: this.getFilteredCalcsByTeam(sortedOppDataCpy, teamName).length
       });
     });
     let checkIsSelected: boolean = this.sortCardsData.teams.length == 0;
-    this.teams.unshift({ display: 'All', value: 'All', numCalcs: oppData.length, selected: checkIsSelected });
+    this.teams.unshift({ display: 'All', value: 'All', numCalcs: sortedOppDataCpy.length, selected: checkIsSelected });
   }
 
   setSelectedTeam(selectedTeam: FilterOption) {
@@ -163,7 +166,10 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   setEquipments(oppData: Array<OpportunityCardData>) {
-    let allEquipmentNames: Array<string> = this.treasureChestMenuService.getAllEquipment(oppData);
+    let sortByCpy: SortCardsData = JSON.parse(JSON.stringify(this.sortCardsData));
+    sortByCpy.equipments = [];
+    let sortedOppDataCpy: Array<OpportunityCardData> = this.sortCardsService.sortCards(JSON.parse(JSON.stringify(oppData)), sortByCpy);
+    let allEquipmentNames: Array<string> = this.treasureChestMenuService.getAllEquipment(sortedOppDataCpy);
     this.equipments = new Array();
     allEquipmentNames.forEach(equipment => {
       let equipmentVal: { value: string, display: string } = processEquipmentOptions.find(option => { return option.value == equipment });
@@ -172,12 +178,12 @@ export class TreasureChestMenuComponent implements OnInit {
           display: equipmentVal.display,
           value: equipmentVal.value,
           selected: this.sortCardsData.equipments.find(equipment => { return equipmentVal.value == equipment.value }) != undefined,
-          numCalcs: this.getFilteredCalcsByEquipment(oppData, equipmentVal.value).length
+          numCalcs: this.getFilteredCalcsByEquipment(sortedOppDataCpy, equipmentVal.value).length
         });
       }
     });
     let checkIsSelected: boolean = this.sortCardsData.equipments.length == 0;
-    this.equipments.unshift({ display: 'All', value: 'All', numCalcs: oppData.length, selected: checkIsSelected });
+    this.equipments.unshift({ display: 'All', value: 'All', numCalcs: sortedOppDataCpy.length, selected: checkIsSelected });
   }
 
   setSelectedEquipment(option: FilterOption) {
@@ -350,17 +356,19 @@ export class TreasureChestMenuComponent implements OnInit {
 
 
   setUtilityTypeOptions(oppData: Array<OpportunityCardData>) {
-    oppData = this.sortCardsService.sortCards(oppData, this.sortCardsData);
+    let sortByCpy: SortCardsData = JSON.parse(JSON.stringify(this.sortCardsData));
+    sortByCpy.utilityTypes = [];
+    let sortedOppDataCpy: Array<OpportunityCardData> = this.sortCardsService.sortCards(JSON.parse(JSON.stringify(oppData)), sortByCpy);
     this.utilityTypeOptions = new Array();
-    this.addUtilityOption('Electricity', oppData, this.utilityTypeOptions);
-    this.addUtilityOption('Steam', oppData, this.utilityTypeOptions);
-    this.addUtilityOption('Natural Gas', oppData, this.utilityTypeOptions);
-    this.addUtilityOption('Water', oppData, this.utilityTypeOptions);
-    this.addUtilityOption('Waste Water', oppData, this.utilityTypeOptions);
-    this.addUtilityOption('Other Fuel', oppData, this.utilityTypeOptions);
-    this.addUtilityOption('Compressed Air', oppData, this.utilityTypeOptions);
+    this.addUtilityOption('Electricity', sortedOppDataCpy, this.utilityTypeOptions);
+    this.addUtilityOption('Steam', sortedOppDataCpy, this.utilityTypeOptions);
+    this.addUtilityOption('Natural Gas', sortedOppDataCpy, this.utilityTypeOptions);
+    this.addUtilityOption('Water', sortedOppDataCpy, this.utilityTypeOptions);
+    this.addUtilityOption('Waste Water', sortedOppDataCpy, this.utilityTypeOptions);
+    this.addUtilityOption('Other Fuel', sortedOppDataCpy, this.utilityTypeOptions);
+    this.addUtilityOption('Compressed Air', sortedOppDataCpy, this.utilityTypeOptions);
     let checkIsSelected: boolean = this.sortCardsData.utilityTypes.length == 0;
-    this.utilityTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: oppData.length, selected: checkIsSelected });
+    this.utilityTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: sortedOppDataCpy.length, selected: checkIsSelected });
   }
 
   addUtilityOption(utilityStr: string, oppData: Array<OpportunityCardData>, utilityTypeOptions: Array<FilterOption>) {
@@ -379,20 +387,23 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   setCalculatorOptions(oppData: Array<OpportunityCardData>) {
+    let sortByCpy: SortCardsData = JSON.parse(JSON.stringify(this.sortCardsData));
+    sortByCpy.calculatorTypes = [];
+    let sortedOppDataCpy: Array<OpportunityCardData> = this.sortCardsService.sortCards(JSON.parse(JSON.stringify(oppData)), sortByCpy);
     this.calculatorTypeOptions = new Array();
-    this.addCalculatorOption({ display: 'Lighting Replacement', value: 'lighting-replacement' }, oppData, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Opportunity Sheet', value: 'opportunity-sheet' }, oppData, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Replace Existing Motor', value: 'replace-existing' }, oppData, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Motor Drive', value: 'motor-drive' }, oppData, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Natural Gas Reduction', value: 'natural-gas-reduction' }, oppData, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Electricity Reduction', value: 'electricity-reduction' }, oppData, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Compressed Air Reduction', value: 'compressed-air-reduction' }, oppData, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Compressed Air Pressure Reduction', value: 'compressed-air-pressure-reduction' }, oppData, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Water Reduction', value: 'water-reduction' }, oppData, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Steam Reduction', value: 'steam-reduction' }, oppData, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Pipe Insulation Reduction', value: 'pipe-insulation-reduction' }, oppData, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Lighting Replacement', value: 'lighting-replacement' }, sortedOppDataCpy, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Opportunity Sheet', value: 'opportunity-sheet' }, sortedOppDataCpy, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Replace Existing Motor', value: 'replace-existing' }, sortedOppDataCpy, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Motor Drive', value: 'motor-drive' }, sortedOppDataCpy, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Natural Gas Reduction', value: 'natural-gas-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Electricity Reduction', value: 'electricity-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Compressed Air Reduction', value: 'compressed-air-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Compressed Air Pressure Reduction', value: 'compressed-air-pressure-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Water Reduction', value: 'water-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Steam Reduction', value: 'steam-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+    this.addCalculatorOption({ display: 'Pipe Insulation Reduction', value: 'pipe-insulation-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
     let checkIsSelected: boolean = this.sortCardsData.calculatorTypes.length == 0;
-    this.calculatorTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: oppData.length, selected: checkIsSelected });
+    this.calculatorTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: sortedOppDataCpy.length, selected: checkIsSelected });
   }
 
   addCalculatorOption(calcOption: { display: string, value: string }, oppData: Array<OpportunityCardData>, calculatorTypeOptions: Array<FilterOption>) {
