@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../../shared/models/standalone";
 import { Settings } from '../../../../shared/models/settings';
-import { standardSizesConstant, metricSizesConstant } from '../../compressedAirConstants';
+import { standardSizesConstant, metricSizesConstant } from '../../compressed-air-constants';
 
 @Component({
   selector: 'app-system-capacity-form',
