@@ -30,11 +30,16 @@ export class VisualizeService {
 
   getVisualizeData(fieldName: string) {
     let data: Array<number | string>;
-    if(fieldName == 'Time Series'){
+    if (fieldName == 'Time Series') {
       //
-    }else{
+    } else {
       data = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.fieldName == fieldName }).data;
     }
+    return data;
+  }
+
+  getVisualizeDateData(field: LogToolField): Array<number | string> {
+    let data: Array<number | string> = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.csvId == field.csvId && dataItem.dataField.isDateField }).data;
     return data;
   }
 

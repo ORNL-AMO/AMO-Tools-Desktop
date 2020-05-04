@@ -6,7 +6,8 @@ export interface LogToolField {
     useField: boolean,
     isDateField: boolean,
     unit: string,
-    invalidField: boolean
+    invalidField: boolean,
+    csvId: string
 }
 
 export interface LogToolDay {

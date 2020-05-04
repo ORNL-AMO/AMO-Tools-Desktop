@@ -39,11 +39,11 @@ export class CleanDataComponent implements OnInit {
       this.logToolDataService.submitIndividualCsvData(this.individualDataFromCsv);
       this.logToolService.setFields(this.individualDataFromCsv);
       this.dateExistsForEachCsv = this.individualDataFromCsv.find(dataItem => { return dataItem.hasDateField == false }) == undefined;
-      this.logToolService.noDayTypeAnalysis.next(!this.dateExistsForEachCsv);
-      if (this.dateExistsForEachCsv == true) {
-        this.logToolDataService.setLogToolDays();
-        this.logToolDataService.setValidNumberOfDayDataPoints();
-      }
+      // this.logToolService.noDayTypeAnalysis.next(!this.dateExistsForEachCsv);
+      // if (this.dateExistsForEachCsv == true) {
+      //   this.logToolDataService.setLogToolDays();
+      //   this.logToolDataService.setValidNumberOfDayDataPoints();
+      // }
       this.logToolService.dataCleaned.next(true);
       this.cleaningData = false;
       this.dataSubmitted = true;

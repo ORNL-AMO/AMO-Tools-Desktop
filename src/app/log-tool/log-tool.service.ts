@@ -28,24 +28,8 @@ export class LogToolService {
     this.individualDataFromCsv = new Array();
   }
 
-  setImportDataFromCsv(data: CsvImportData, csvName: string) {
-    if (this.individualDataFromCsv == undefined) {
-      this.individualDataFromCsv = new Array();
-    }
-    let fields: Array<LogToolField> = data.meta.fields.map(field => {
-      return {
-        fieldName: field,
-        alias: field,
-        useField: true,
-        isDateField: false,
-        unit: '',
-        invalidField: false
-      }
-    })
-    this.individualDataFromCsv.push({ csvImportData: JSON.parse(JSON.stringify(data)), csvName: csvName, fields: fields, hasDateField: false });
-  }
-
   addCsvData(data: CsvImportData, csvName: string, ) {
+    let csvId: string = Math.random().toString(36).substr(2, 9);
     let fields: Array<LogToolField> = data.meta.fields.map(field => {
       return {
         fieldName: field,
@@ -53,7 +37,8 @@ export class LogToolService {
         useField: true,
         isDateField: false,
         unit: '',
-        invalidField: false
+        invalidField: false,
+        csvId: csvId
       }
     });
     this.individualDataFromCsv.push({ csvImportData: JSON.parse(JSON.stringify(data)), csvName: csvName, fields: fields, hasDateField: false });

@@ -31,15 +31,8 @@ export class XAxisDataComponent implements OnInit {
   }
 
   setXAxisDataOption() {
-    if(this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series'){
-      //set time series data'
-      
-    }else{
-      this.visualizeService.plotFunctionType = 'update';
-      this.visualizeMenuService.setXAxisDataOption(this.selectedGraphObj);
-    }
-
-    
+    this.visualizeService.plotFunctionType = 'update';
+    this.visualizeMenuService.setXAxisDataOption(this.selectedGraphObj);
   }
 
   focusField() {

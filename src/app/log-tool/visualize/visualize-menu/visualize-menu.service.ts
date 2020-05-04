@@ -60,6 +60,24 @@ export class VisualizeMenuService {
     selectedGraphObj.selectedYAxisDataOptions = [{ index: 0, dataOption: selectedGraphObj.yAxisDataOptions[0], seriesColor: graphColors[0], seriesName: 'Series 1', yaxis: 'y', linesOrMarkers: 'markers' }];
   }
 
+  setTimeSeriesData(selectedGraphObj: GraphObj) {
+    let index: number = 0;
+    selectedGraphObj.selectedYAxisDataOptions.forEach(option => {
+      let timeData: Array<string | number> = this.visualizeService.getVisualizeDateData(option.dataOption.dataField);
+      //if found set time data
+      if (timeData) {
+        selectedGraphObj.data[index].x = timeData;
+      } else {
+        //delete if no time data
+        selectedGraphObj.data.splice(index, 1);
+        selectedGraphObj.selectedYAxisDataOptions.splice(index, 1);
+      }
+      index++;
+    });
+    this.save(selectedGraphObj);
+  }
+
+
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
     let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
     if (selectedGraphObj.data[0].type == 'scattergl') {
@@ -69,7 +87,8 @@ export class VisualizeMenuService {
         useField: true,
         isDateField: true,
         unit: 'time',
-        invalidField: false
+        invalidField: false,
+        csvId: undefined
       })
     }
     selectedGraphObj.xAxisDataOptions = new Array();
@@ -84,19 +103,20 @@ export class VisualizeMenuService {
 
 
   setXAxisDataOption(selectedGraphObj: GraphObj) {
-    if (selectedGraphObj.selectedXAxisDataOption.dataField.isDateField) {
+    selectedGraphObj.layout.annotations = [];
+    if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
       selectedGraphObj.layout.xaxis.type = 'date';
+      this.setYAxisDataOptions(selectedGraphObj);
+      this.setTimeSeriesData(selectedGraphObj);
     } else if (selectedGraphObj.data[0].type == 'bar') {
       selectedGraphObj.layout.xaxis.type = 'category';
-    } else {
-      selectedGraphObj.layout.xaxis.type = 'linear';
-    }
-
-    if (selectedGraphObj.data[0].type == 'bar') {
+      this.setYAxisDataOptions(selectedGraphObj);
       this.setBarHistogramData(selectedGraphObj);
     } else {
+      selectedGraphObj.layout.xaxis.type = 'linear';
       selectedGraphObj.data[0].x = selectedGraphObj.selectedXAxisDataOption.data;
-      this.save(selectedGraphObj);
+      this.setYAxisDataOptions(selectedGraphObj);
+      this.setYAxisData(selectedGraphObj);
     }
   }
 
@@ -140,17 +160,43 @@ export class VisualizeMenuService {
     let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
     selectedGraphObj.yAxisDataOptions = new Array();
     dataFields.forEach(field => {
-      let data = this.visualizeService.getVisualizeData(field.fieldName);
-      selectedGraphObj.yAxisDataOptions.push({
-        data: data,
-        dataField: field
-      })
+      //check can add
+      //bar doesn't matter
+      //time series, only with time data
+      if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
+        //if time data exists add
+        let timeData: Array<string | number> = this.visualizeService.getVisualizeDateData(field);
+        if (timeData) {
+          let data = this.visualizeService.getVisualizeData(field.fieldName);
+          selectedGraphObj.yAxisDataOptions.push({
+            data: data,
+            dataField: field
+          });
+        }
+      }
+      //scatter add with corresponding csv options
+      else if (selectedGraphObj.data[0].type == 'scattergl' && selectedGraphObj.selectedXAxisDataOption.dataField.csvId == field.csvId) {
+        let data = this.visualizeService.getVisualizeData(field.fieldName);
+        selectedGraphObj.yAxisDataOptions.push({
+          data: data,
+          dataField: field
+        });
+      }
     });
   }
 
   setYAxisData(selectedGraphObj: GraphObj) {
     let index: number = 0;
     selectedGraphObj.selectedYAxisDataOptions.forEach(selectedDataOption => {
+      if (selectedGraphObj.selectedXAxisDataOption.dataField.fieldName == 'Time Series') {
+        let timeData: Array<string | number> = this.visualizeService.getVisualizeDateData(selectedDataOption.dataOption.dataField);
+        if (timeData) {
+          selectedGraphObj.data[index].x = timeData;
+        }
+      } else if (selectedDataOption.dataOption.dataField.csvId != selectedGraphObj.selectedXAxisDataOption.dataField.csvId) {
+        selectedDataOption.dataOption = selectedGraphObj.yAxisDataOptions[0]
+        selectedDataOption.seriesName = 'Series ' + (index + 1);
+      }
       selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
       selectedGraphObj.data[index].name = selectedDataOption.seriesName;
       selectedGraphObj.data[index].marker.color = selectedDataOption.seriesColor;
