@@ -29,7 +29,12 @@ export class VisualizeService {
   }
 
   getVisualizeData(fieldName: string) {
-    let data: Array<number | string> = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.fieldName == fieldName }).data;
+    let data: Array<number | string>;
+    if(fieldName == 'Time Series'){
+      //
+    }else{
+      data = _.find(this.visualizeData, (dataItem) => { return dataItem.dataField.fieldName == fieldName }).data;
+    }
     return data;
   }
 

@@ -14,6 +14,7 @@ export class VisualizeGraphComponent implements OnInit {
   @ViewChild('visualizeChart', { static: false }) visualizeChart: ElementRef;
 
   selectedGraphDataSubscription: Subscription;
+  isSubscribed: boolean = false;
   constructor(private visualizeService: VisualizeService) {
   }
 
@@ -31,12 +32,16 @@ export class VisualizeGraphComponent implements OnInit {
       if (this.visualizeService.plotFunctionType == 'react') {
         // render chart
         Plotly.react('plotlyDiv', graphObj.data, graphObj.layout, mode).then(chart => {
-          // subscribe to click event for annotations
-          chart.on('plotly_click', (data) => {
-            // send data point for annotations
-            let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
-            this.visualizeService.annotateDataPoint.next(newAnnotation);
-          });
+          //use boolean to only subscribe once
+          if (!this.isSubscribed) {
+            // subscribe to click event for annotations
+            chart.on('plotly_click', (data) => {
+              // send data point for annotations
+              let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
+              this.visualizeService.annotateDataPoint.next(newAnnotation);
+            });
+            this.isSubscribed = true;
+          }
         });
       } else {
         //update chart

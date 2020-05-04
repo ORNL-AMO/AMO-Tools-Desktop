@@ -61,13 +61,16 @@ export class VisualizeMenuService {
   }
 
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
-    let dataFields: Array<LogToolField>;
-    if (selectedGraphObj.data[0].type == 'bar') {
-      //no date
-      dataFields = this.logToolDataService.getDataFieldOptions();
-    } else {
-      //includes dates
-      dataFields = this.logToolDataService.getDataFieldOptionsWithDate();
+    let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
+    if (selectedGraphObj.data[0].type == 'scattergl') {
+      dataFields.push({
+        fieldName: 'Time Series',
+        alias: 'Time Series',
+        useField: true,
+        isDateField: true,
+        unit: 'time',
+        invalidField: false
+      })
     }
     selectedGraphObj.xAxisDataOptions = new Array();
     dataFields.forEach(field => {
