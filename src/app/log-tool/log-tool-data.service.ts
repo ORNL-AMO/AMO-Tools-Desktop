@@ -36,10 +36,12 @@ export class LogToolDataService {
   //seperate log tool data into days
   setLogToolDays() {
     let individualDataFromCsv: Array<IndividualDataFromCsv> = JSON.parse(JSON.stringify(this.logToolService.individualDataFromCsv));
+    let startDates: Array<Date> = individualDataFromCsv.map(csvItem => { return new Date(csvItem.startDate) });
+    let endDates: Array<Date> = individualDataFromCsv.map(csvItem => { return new Date(csvItem.endDate) });
     this.logToolDays = new Array();
     individualDataFromCsv.forEach(csvData => {
-      let startDate: Date = new Date(csvData.startDate);
-      let endDate: Date = new Date(csvData.endDate);
+      let startDate: Date = new Date(_.min(startDates));
+      let endDate: Date = new Date(_.max(endDates));
       endDate.setDate(endDate.getDate() + 1);
       //iterate thru days from start day to end day
       for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {

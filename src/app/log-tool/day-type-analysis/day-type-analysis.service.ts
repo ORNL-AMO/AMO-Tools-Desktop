@@ -261,9 +261,12 @@ export class DayTypeAnalysisService {
   }
 
   setStartDateAndNumberOfMonths() {
-    let logToolDays: Array<LogToolDay> = JSON.parse(JSON.stringify(this.logToolDataService.logToolDays));
-    let startDate: Date = new Date(logToolDays[0].date);
-    let endDate: Date = new Date(logToolDays[logToolDays.length - 1].date);
+    let startDates: Array<Date> = this.logToolService.individualDataFromCsv.map(csvItem => { return new Date(csvItem.startDate) });
+    let endDates: Array<Date> = this.logToolService.individualDataFromCsv.map(csvItem => { return new Date(csvItem.endDate) });
+    let startDate: Date = new Date(_.min(startDates));
+    let endDate: Date = new Date(_.max(endDates));
+    // let startDate: Date = new Date(logToolDays[0].date);
+    // let endDate: Date = new Date(logToolDays[logToolDays.length - 1].date);
     this.calendarStartDate = {
       year: startDate.getFullYear(),
       month: startDate.getMonth() + 1,

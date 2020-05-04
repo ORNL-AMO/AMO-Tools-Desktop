@@ -48,7 +48,11 @@ export class DayTypeTableComponent implements OnInit {
   }
 
   getAverageValue(averages: Array<{ value: number, field: LogToolField }>): number {
-    return _.find(averages, (average) => { return average.field.fieldName == this.selectedDataField.fieldName }).value;
+    let average = _.find(averages, (average) => { return average.field.fieldName == this.selectedDataField.fieldName });
+    if (average) {
+      return average.value;
+    }
+    return;
   }
 
   updateTable0String() {
