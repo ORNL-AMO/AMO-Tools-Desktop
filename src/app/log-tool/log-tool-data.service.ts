@@ -114,7 +114,6 @@ export class LogToolDataService {
     let tmpArr = _.countBy(dayDataNumberOfEntries);
     let tmpArr2 = _.entries(tmpArr)
     this.validNumberOfDayDataPoints = Number(_.maxBy(_.last(tmpArr2)));
-    console.log(this.validNumberOfDayDataPoints);
   }
 
   getAllFieldData(fieldName: string): Array<number> {
