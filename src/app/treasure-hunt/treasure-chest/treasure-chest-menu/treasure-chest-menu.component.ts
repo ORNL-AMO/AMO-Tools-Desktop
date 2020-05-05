@@ -41,10 +41,9 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   calculatorTypeOptions: Array<FilterOption> = [];
-  teams: Array<FilterOption>;
+  // teams: Array<FilterOption>;
   equipments: Array<FilterOption>;
 
-  displayUtilityTypeDropdown: boolean = false;
   displayCalculatorTypeDropdown: boolean = false;
   displayTeamDropdown: boolean = false;
   displayEquipment: boolean = false;
@@ -70,7 +69,7 @@ export class TreasureChestMenuComponent implements OnInit {
       this.setSortByLabel();
       let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
       let oppData = this.opportuntityCardsService.getOpportunityCardsData(treasureHunt, this.settings);
-      this.setTeams(oppData);
+      // this.setTeams(oppData);
       this.setEquipments(oppData);
       //this.setUtilityTypeOptions(oppData);
       this.setCalculatorOptions(oppData);
@@ -136,30 +135,6 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.deselectAll.next(false);
   }
 
-  setTeams(oppData: Array<OpportunityCardData>) {
-    let sortByCpy: SortCardsData = JSON.parse(JSON.stringify(this.sortCardsData));
-    sortByCpy.teams = [];
-    let sortedOppDataCpy: Array<OpportunityCardData> = this.sortCardsService.sortCards(JSON.parse(JSON.stringify(oppData)), sortByCpy);
-    let allTeamNames: Array<string> = this.treasureChestMenuService.getAllTeams(sortedOppDataCpy);
-    this.teams = new Array();
-    allTeamNames.forEach(teamName => {
-      this.teams.push({
-        display: teamName,
-        value: teamName,
-        selected: this.sortCardsData.teams.find(team => { return teamName == team.value }) != undefined,
-        numCalcs: this.getFilteredCalcsByTeam(sortedOppDataCpy, teamName).length
-      });
-    });
-    let checkIsSelected: boolean = this.sortCardsData.teams.length == 0;
-    this.teams.unshift({ display: 'All', value: 'All', numCalcs: sortedOppDataCpy.length, selected: checkIsSelected });
-  }
-
-  setSelectedTeam(selectedTeam: FilterOption) {
-    let selectedFilters = this.getSelectedOptions(selectedTeam, this.teams);
-    this.sortCardsData.teams = selectedFilters;
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  }
-
   setEquipments(oppData: Array<OpportunityCardData>) {
     let sortByCpy: SortCardsData = JSON.parse(JSON.stringify(this.sortCardsData));
     sortByCpy.equipments = [];
@@ -220,19 +195,19 @@ export class TreasureChestMenuComponent implements OnInit {
     return selected;
   }
 
-  removeTeam(teamName: string, index: number) {
-    this.sortCardsData.teams.splice(index, 1);
-    this.teams.forEach(team => {
-      if (team.value == teamName) {
-        team.selected = false;
-      }
-    });
-    if (this.sortCardsData.teams.length == 0) {
-      let allOption: FilterOption = this.teams.find(option => { return option.value == 'All' });
-      allOption.selected = true;
-    }
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  }
+  // removeTeam(teamName: string, index: number) {
+  //   this.sortCardsData.teams.splice(index, 1);
+  //   this.teams.forEach(team => {
+  //     if (team.value == teamName) {
+  //       team.selected = false;
+  //     }
+  //   });
+  //   if (this.sortCardsData.teams.length == 0) {
+  //     let allOption: FilterOption = this.teams.find(option => { return option.value == 'All' });
+  //     allOption.selected = true;
+  //   }
+  //   this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  // }
 
   removeEquipment(equipmentItem: { display: string, value: string }, index: number) {
     this.sortCardsData.equipments.splice(index, 1);
@@ -303,13 +278,13 @@ export class TreasureChestMenuComponent implements OnInit {
     this.sortCardsData.utilityTypes = [];
     this.sortCardsData.calculatorTypes = [];
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-    this.teams.forEach(team => {
-      if (team.value != 'All') {
-        team.selected = false;
-      } else {
-        team.selected = true;
-      }
-    })
+    // this.teams.forEach(team => {
+    //   if (team.value != 'All') {
+    //     team.selected = false;
+    //   } else {
+    //     team.selected = true;
+    //   }
+    // })
     this.equipments.forEach(equipment => {
       if (equipment.value != 'All') {
         equipment.selected = false;
@@ -381,7 +356,7 @@ export class TreasureChestMenuComponent implements OnInit {
     let filteredCards: Array<OpportunityCardData> = _.filter(oppData, (data) => { return _.includes(data.opportunityType, calculatorType) });
     return filteredCards;
   }
-  
+
   getFilteredCalcsByEquipment(oppData: Array<OpportunityCardData>, equipment: string): Array<OpportunityCardData> {
     let filteredCards: Array<OpportunityCardData> = _.filter(oppData, (item: OpportunityCardData) => {
       if (item.opportunitySheet) {
@@ -393,34 +368,11 @@ export class TreasureChestMenuComponent implements OnInit {
     return filteredCards;
   }
 
-  getFilteredCalcsByTeam(oppData: Array<OpportunityCardData>, selectedTeam: string): Array<OpportunityCardData> {
-    let filteredCards: Array<OpportunityCardData> = _.filter(oppData, (data) => { return _.includes(data.teamName, selectedTeam) });
-    return filteredCards;
-  }
-
   updateEquipmentOptions(clearSelected?: boolean) {
     this.equipments.forEach(equipment => {
       equipment.numCalcs = this.getFilteredCalcsByEquipment(this.opportunityCardsData, equipment.value).length;
       if (clearSelected) {
         equipment.selected = false;
-      }
-    });
-  }
-
-  // updateUtilityOptions(clearSelected?: boolean) {
-  //   this.utilityTypeOptions.forEach(option => {
-  //     option.numCalcs = this.getFilteredCalcsByUtility(this.opportunityCardsData, option.value).length;
-  //     if (clearSelected) {
-  //       option.selected = false;
-  //     }
-  //   })
-  // }
-
-  updateTeamOptions(clearSelected?: boolean) {
-    this.teams.forEach(team => {
-      team.numCalcs = this.getFilteredCalcsByTeam(this.opportunityCardsData, team.value).length
-      if (clearSelected) {
-        team.selected = false;
       }
     });
   }
