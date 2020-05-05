@@ -20,6 +20,7 @@ export class VisualizeTabsComponent implements OnInit {
   ngOnInit() {
     this.graphDataSubscription = this.visualizeService.graphObjects.subscribe(graphData => {
       this.graphData = graphData;
+      console.log(this.graphData);
     });
     this.selectedGraphDataSub = this.visualizeService.selectedGraphObj.subscribe(selectedGraphData => {
       this.selectedGraphData = selectedGraphData;

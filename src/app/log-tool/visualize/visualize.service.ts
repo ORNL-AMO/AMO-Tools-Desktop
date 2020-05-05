@@ -142,7 +142,8 @@ export class VisualizeService {
 
   addNewGraphDataObj() {
     let currentGraphData: Array<GraphObj> = this.graphObjects.getValue();
-    let newGraphDataObj: GraphObj = JSON.parse(JSON.stringify(this.selectedGraphObj.getValue()));
+    let selectedGraphObj: GraphObj = this.selectedGraphObj.getValue();
+    let newGraphDataObj: GraphObj = JSON.parse(JSON.stringify(selectedGraphObj));
     newGraphDataObj.graphId = Math.random().toString(36).substr(2, 9);
     newGraphDataObj.layout.title.text = 'Data Visualization ' + (currentGraphData.length + 1);
     currentGraphData.push(newGraphDataObj);
