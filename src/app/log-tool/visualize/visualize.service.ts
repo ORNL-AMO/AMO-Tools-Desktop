@@ -151,36 +151,36 @@ export class VisualizeService {
     this.graphObjects.next(currentGraphData);
   }
 
-  getNewGraphDataObject(): GraphDataObj {
-    let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptionsWithDate();
-    let selectedYDataField: LogToolField
-    let selectedXDataField: LogToolField;
-    let noDayTypeAnalysis: boolean = this.logToolService.noDayTypeAnalysis.getValue();
-    if (noDayTypeAnalysis == false) {
-      // selectedXDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) });
-      // selectedYDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) == undefined });
-    } else {
-      selectedYDataField = fields[0];
-      selectedXDataField = fields.find((field) => { return field.fieldName != selectedYDataField.fieldName });
-    }
-    let yData: Array<number | Date> = this.logToolDataService.getAllFieldData(selectedYDataField.fieldName);
-    let xData: Array<number | Date> = this.logToolDataService.getAllFieldData(selectedXDataField.fieldName);
-    let histogramData: { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } = this.getStandardDevBarChartData(selectedYDataField);
-    return {
-      graphType: { label: 'Scatter Plot', value: 'scattergl' },
-      selectedXDataField: selectedXDataField,
-      xData: xData,
-      selectedYDataField: selectedYDataField,
-      yData: yData,
-      graphName: 'New Graph',
-      graphId: Math.random().toString(36).substr(2, 9),
-      scatterPlotMode: 'markers',
-      useStandardDeviation: true,
-      numberOfBins: 5,
-      histogramDataField: selectedYDataField,
-      histogramData: histogramData
-    }
-  }
+  // getNewGraphDataObject(): GraphDataObj {
+  //   let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptionsWithDate();
+  //   let selectedYDataField: LogToolField
+  //   let selectedXDataField: LogToolField;
+  //   let noDayTypeAnalysis: boolean = this.logToolService.noDayTypeAnalysis.getValue();
+  //   if (noDayTypeAnalysis == false) {
+  //     // selectedXDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) });
+  //     // selectedYDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) == undefined });
+  //   } else {
+  //     selectedYDataField = fields[0];
+  //     selectedXDataField = fields.find((field) => { return field.fieldName != selectedYDataField.fieldName });
+  //   }
+  //   let yData: Array<number | Date> = this.logToolDataService.getAllFieldData(selectedYDataField.fieldName);
+  //   let xData: Array<number | Date> = this.logToolDataService.getAllFieldData(selectedXDataField.fieldName);
+  //   let histogramData: { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } = this.getStandardDevBarChartData(selectedYDataField);
+  //   return {
+  //     graphType: { label: 'Scatter Plot', value: 'scattergl' },
+  //     selectedXDataField: selectedXDataField,
+  //     xData: xData,
+  //     selectedYDataField: selectedYDataField,
+  //     yData: yData,
+  //     graphName: 'New Graph',
+  //     graphId: Math.random().toString(36).substr(2, 9),
+  //     scatterPlotMode: 'markers',
+  //     useStandardDeviation: true,
+  //     numberOfBins: 5,
+  //     histogramDataField: selectedYDataField,
+  //     histogramData: histogramData
+  //   }
+  // }
 
   removeGraphDataObj(graphId: string) {
     let currentGraphData: Array<GraphObj> = this.graphObjects.getValue();
@@ -202,17 +202,17 @@ export class VisualizeService {
     let yValues: Array<number> = new Array();
     let minValue: number = graphDataMin;
     for (let i = 0; i < numberOfBins; i++) {
-      let maxValue: number = Number((minValue + sizeOfBins).toFixed(2));
+      let maxValue: number = Number((minValue + sizeOfBins).toFixed(0));
       let graphDataInRange: Array<number> = _.filter(graphData, (dataItem) => {
         if (dataItem >= minValue && dataItem <= maxValue) {
           return true;
         }
       });
       let numberOfItemsInBin: number = graphDataInRange.length;
-      let xLabel: string = minValue + ' - ' + maxValue;
+      let xLabel: string = minValue.toLocaleString() + ' - ' + maxValue.toLocaleString();
       xLabels.push(xLabel)
       yValues.push(numberOfItemsInBin);
-      minValue = Number((minValue + sizeOfBins).toFixed(2));
+      minValue = Number((minValue + sizeOfBins).toFixed(0));
     }
     return { xLabels: xLabels, yValues: yValues, standardDeviation: 0, average: mean };
   }
@@ -229,17 +229,17 @@ export class VisualizeService {
     let yValues: Array<number> = new Array();
     let minValue: number = graphDataMin;
     for (let i = 0; i < numberOfBins; i++) {
-      let maxValue: number = Number((minValue + standardDeviation).toFixed(2));
+      let maxValue: number = Number((minValue + standardDeviation).toFixed(0));
       let graphDataInRange: Array<number> = _.filter(graphData, (dataItem) => {
         if (dataItem >= minValue && dataItem <= maxValue) {
           return true;
         }
       });
       let numberOfItemsInBin: number = graphDataInRange.length;
-      let xLabel: string = minValue + ' - ' + maxValue;
+      let xLabel: string = minValue.toLocaleString() + ' - ' + maxValue.toLocaleString();
       xLabels.push(xLabel)
       yValues.push(numberOfItemsInBin);
-      minValue = Number((minValue + standardDeviation).toFixed(2));
+      minValue = Number((minValue + standardDeviation).toFixed(0));
     }
     return { xLabels: xLabels, yValues: yValues, standardDeviation: standardDeviation, average: mean };
   }
