@@ -25,22 +25,8 @@
   <!--filter by utility type dropdown-->
   <app-utility-type-dropdown [settings]="settings"></app-utility-type-dropdown>
   <!--filter by calculator type dropdown-->
-  <div class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" (click)="toggleCalculatorType()">
-      Calculator Type
-    </a>
-    <div class="dropdown-menu p-0" [ngClass]="{'show': displayCalculatorTypeDropdown == true}">
-      <div class="list-group calc-width">
-        <a class="list-group-item list-group-item-action" *ngFor="let option of calculatorTypeOptions"
-          [ngClass]="{'active': option.selected}" (click)="setSelectedCalculator(option)">
-          {{option.display}}
-          <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': option.numCalcs > 0}">
-            {{option.numCalcs}}
-          </span>
-        </a>
-      </div>
-    </div>
-  </div>
+  <app-calculator-type-dropdown [settings]="settings"></app-calculator-type-dropdown>
+  
   <!--manage cards button group-->
   <div class="nav-item" *ngIf="!inReport">
     <div class="btn-group">

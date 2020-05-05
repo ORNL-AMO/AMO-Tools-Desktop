@@ -40,12 +40,9 @@ export class TreasureChestMenuComponent implements OnInit {
     this.getNavbarWidth();
   }
 
-  calculatorTypeOptions: Array<FilterOption> = [];
   // teams: Array<FilterOption>;
   equipments: Array<FilterOption>;
 
-  displayCalculatorTypeDropdown: boolean = false;
-  displayTeamDropdown: boolean = false;
   displayEquipment: boolean = false;
   displayAdditionalFiltersDropdown: string = 'hide';
   sortByDropdown: boolean = false;
@@ -72,7 +69,7 @@ export class TreasureChestMenuComponent implements OnInit {
       // this.setTeams(oppData);
       this.setEquipments(oppData);
       //this.setUtilityTypeOptions(oppData);
-      this.setCalculatorOptions(oppData);
+      // this.setCalculatorOptions(oppData);
     });
 
 
@@ -101,13 +98,6 @@ export class TreasureChestMenuComponent implements OnInit {
     this.getNavbarWidth();
   }
 
-  toggleCalculatorType() {
-    this.displayCalculatorTypeDropdown = !this.displayCalculatorTypeDropdown;
-  }
-
-  toggleTeams() {
-    this.displayTeamDropdown = !this.displayTeamDropdown;
-  }
 
   toggleEquipment() {
     this.displayEquipment = !this.displayEquipment;
@@ -223,19 +213,19 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
-  removeCalculator(calculatorItem: { display: string, value: string }, index: number) {
-    this.sortCardsData.calculatorTypes.splice(index, 1);
-    this.calculatorTypeOptions.forEach(calculator => {
-      if (calculator.value == calculatorItem.value) {
-        calculator.selected = false;
-      }
-    });
-    if (this.sortCardsData.calculatorTypes.length == 0) {
-      let allOption: FilterOption = this.calculatorTypeOptions.find(option => { return option.value == 'All' });
-      allOption.selected = true;
-    }
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  }
+  // removeCalculator(calculatorItem: { display: string, value: string }, index: number) {
+  //   this.sortCardsData.calculatorTypes.splice(index, 1);
+  //   this.calculatorTypeOptions.forEach(calculator => {
+  //     if (calculator.value == calculatorItem.value) {
+  //       calculator.selected = false;
+  //     }
+  //   });
+  //   if (this.sortCardsData.calculatorTypes.length == 0) {
+  //     let allOption: FilterOption = this.calculatorTypeOptions.find(option => { return option.value == 'All' });
+  //     allOption.selected = true;
+  //   }
+  //   this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  // }
 
   // removeUtilityType(utilityItem: { display: string, value: string }, index: number) {
   //   this.sortCardsData.utilityTypes.splice(index, 1);
@@ -292,13 +282,13 @@ export class TreasureChestMenuComponent implements OnInit {
         equipment.selected = true;
       }
     })
-    this.calculatorTypeOptions.forEach(option => {
-      if (option.value != 'All') {
-        option.selected = false;
-      } else {
-        option.selected = true;
-      }
-    })
+    // this.calculatorTypeOptions.forEach(option => {
+    //   if (option.value != 'All') {
+    //     option.selected = false;
+    //   } else {
+    //     option.selected = true;
+    //   }
+    // })
     // this.utilityTypeOptions.forEach(option => {
     //   if (option.value != 'All') {
     //     option.selected = false;
@@ -318,44 +308,44 @@ export class TreasureChestMenuComponent implements OnInit {
     }
   }
 
-  setSelectedCalculator(calcOption: FilterOption) {
-    let selectedFilters = this.getSelectedOptions(calcOption, this.calculatorTypeOptions);
-    this.sortCardsData.calculatorTypes = selectedFilters;
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  }
+  // setSelectedCalculator(calcOption: FilterOption) {
+  //   let selectedFilters = this.getSelectedOptions(calcOption, this.calculatorTypeOptions);
+  //   this.sortCardsData.calculatorTypes = selectedFilters;
+  //   this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  // }
 
-  setCalculatorOptions(oppData: Array<OpportunityCardData>) {
-    let sortByCpy: SortCardsData = JSON.parse(JSON.stringify(this.sortCardsData));
-    sortByCpy.calculatorTypes = [];
-    let sortedOppDataCpy: Array<OpportunityCardData> = this.sortCardsService.sortCards(JSON.parse(JSON.stringify(oppData)), sortByCpy);
-    this.calculatorTypeOptions = new Array();
-    this.addCalculatorOption({ display: 'Lighting Replacement', value: 'lighting-replacement' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Opportunity Sheet', value: 'opportunity-sheet' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Replace Existing Motor', value: 'replace-existing' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Motor Drive', value: 'motor-drive' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Natural Gas Reduction', value: 'natural-gas-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Electricity Reduction', value: 'electricity-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Compressed Air Reduction', value: 'compressed-air-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Compressed Air Pressure Reduction', value: 'compressed-air-pressure-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Water Reduction', value: 'water-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Steam Reduction', value: 'steam-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    this.addCalculatorOption({ display: 'Pipe Insulation Reduction', value: 'pipe-insulation-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
-    let checkIsSelected: boolean = this.sortCardsData.calculatorTypes.length == 0;
-    this.calculatorTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: sortedOppDataCpy.length, selected: checkIsSelected });
-  }
+  // setCalculatorOptions(oppData: Array<OpportunityCardData>) {
+  //   let sortByCpy: SortCardsData = JSON.parse(JSON.stringify(this.sortCardsData));
+  //   sortByCpy.calculatorTypes = [];
+  //   let sortedOppDataCpy: Array<OpportunityCardData> = this.sortCardsService.sortCards(JSON.parse(JSON.stringify(oppData)), sortByCpy);
+  //   this.calculatorTypeOptions = new Array();
+  //   this.addCalculatorOption({ display: 'Lighting Replacement', value: 'lighting-replacement' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   this.addCalculatorOption({ display: 'Opportunity Sheet', value: 'opportunity-sheet' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   this.addCalculatorOption({ display: 'Replace Existing Motor', value: 'replace-existing' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   this.addCalculatorOption({ display: 'Motor Drive', value: 'motor-drive' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   this.addCalculatorOption({ display: 'Natural Gas Reduction', value: 'natural-gas-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   this.addCalculatorOption({ display: 'Electricity Reduction', value: 'electricity-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   this.addCalculatorOption({ display: 'Compressed Air Reduction', value: 'compressed-air-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   this.addCalculatorOption({ display: 'Compressed Air Pressure Reduction', value: 'compressed-air-pressure-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   this.addCalculatorOption({ display: 'Water Reduction', value: 'water-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   this.addCalculatorOption({ display: 'Steam Reduction', value: 'steam-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   this.addCalculatorOption({ display: 'Pipe Insulation Reduction', value: 'pipe-insulation-reduction' }, sortedOppDataCpy, this.calculatorTypeOptions);
+  //   let checkIsSelected: boolean = this.sortCardsData.calculatorTypes.length == 0;
+  //   this.calculatorTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: sortedOppDataCpy.length, selected: checkIsSelected });
+  // }
 
-  addCalculatorOption(calcOption: { display: string, value: string }, oppData: Array<OpportunityCardData>, calculatorTypeOptions: Array<FilterOption>) {
-    let numCalcs: number = this.getFilteredCalcsByCalculator(oppData, calcOption.value).length;
-    if (numCalcs != 0) {
-      let checkIsSelected: { display: string, value: string } = this.sortCardsData.calculatorTypes.find(calculatorType => { return calculatorType.value == calcOption.value });
-      calculatorTypeOptions.push({ display: calcOption.display, value: calcOption.value, numCalcs: numCalcs, selected: checkIsSelected != undefined });
-    }
-  }
+  // addCalculatorOption(calcOption: { display: string, value: string }, oppData: Array<OpportunityCardData>, calculatorTypeOptions: Array<FilterOption>) {
+  //   let numCalcs: number = this.getFilteredCalcsByCalculator(oppData, calcOption.value).length;
+  //   if (numCalcs != 0) {
+  //     let checkIsSelected: { display: string, value: string } = this.sortCardsData.calculatorTypes.find(calculatorType => { return calculatorType.value == calcOption.value });
+  //     calculatorTypeOptions.push({ display: calcOption.display, value: calcOption.value, numCalcs: numCalcs, selected: checkIsSelected != undefined });
+  //   }
+  // }
 
-  getFilteredCalcsByCalculator(oppData: Array<OpportunityCardData>, calculatorType: string): Array<OpportunityCardData> {
-    let filteredCards: Array<OpportunityCardData> = _.filter(oppData, (data) => { return _.includes(data.opportunityType, calculatorType) });
-    return filteredCards;
-  }
+  // getFilteredCalcsByCalculator(oppData: Array<OpportunityCardData>, calculatorType: string): Array<OpportunityCardData> {
+  //   let filteredCards: Array<OpportunityCardData> = _.filter(oppData, (data) => { return _.includes(data.opportunityType, calculatorType) });
+  //   return filteredCards;
+  // }
 
   getFilteredCalcsByEquipment(oppData: Array<OpportunityCardData>, equipment: string): Array<OpportunityCardData> {
     let filteredCards: Array<OpportunityCardData> = _.filter(oppData, (item: OpportunityCardData) => {
@@ -366,24 +356,6 @@ export class TreasureChestMenuComponent implements OnInit {
       }
     });
     return filteredCards;
-  }
-
-  updateEquipmentOptions(clearSelected?: boolean) {
-    this.equipments.forEach(equipment => {
-      equipment.numCalcs = this.getFilteredCalcsByEquipment(this.opportunityCardsData, equipment.value).length;
-      if (clearSelected) {
-        equipment.selected = false;
-      }
-    });
-  }
-
-  updateCalculatorOptions(clearSelected?: boolean) {
-    this.calculatorTypeOptions.forEach(calcOption => {
-      calcOption.numCalcs = this.getFilteredCalcsByCalculator(this.opportunityCardsData, calcOption.value).length
-      if (clearSelected) {
-        calcOption.selected = false;
-      }
-    });
   }
 
   openImportModal() {
