@@ -22,23 +22,22 @@
                             <input type="checkbox" [(ngModel)]="field.useField" [disabled]="dataExists == true">
                         </td>
                         <td>
-                            <input type="checkbox" [(ngModel)]="field.isDateField" [disabled]="dataExists == true">
+                            <input type="checkbox" [(ngModel)]="field.isDateField"
+                                [disabled]="dataExists == true || (csvData.hasDateField && !field.isDateField)"
+                                (change)="setDateField(csvData)">
                         </td>
                         <td>{{field.fieldName}}</td>
                         <td>
                             <input *ngIf="!field.invalidField" type="text" class="form-control w-100"
-                                [(ngModel)]="field.alias" [disabled]="dataExists == true">
+                                [(ngModel)]="field.alias" [disabled]="dataExists == true || field.isDateField">
                             <span *ngIf="field.invalidField">Invalid field, not number or date. Cannot visualize.</span>
                         </td>
                         <td>
-                            <span *ngIf="field.isDateField == true">
-                                {{field.unit}}
-                            </span>
-                            <span *ngIf="field.unit && field.isDateField == false && !field.invalidField">
+                            <span *ngIf="field.unit && !field.isDateField && !field.invalidField">
                                 <a class="click-link" (click)="editUnit(field)"><span
                                         [innerHTML]="field.unit | settingsLabel"></span></a>
                             </span>
-                            <span *ngIf="!field.unit && !field.invalidField">
+                            <span *ngIf="!field.unit && !field.invalidField && !field.isDateField">
                                 <a class="click-link" (click)="editUnit(field)">+Add</a>
                             </span>
                         </td>

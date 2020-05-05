@@ -138,15 +138,12 @@ export class LogToolDataService {
 
   submitIndividualCsvData(individualDataFromCsv: Array<IndividualDataFromCsv>) {
     individualDataFromCsv.forEach(csvData => {
-      csvData.dateField = csvData.fields.find(field => {
-        return field.isDateField == true;
-      });
-      if (csvData.dateField == undefined) {
-        csvData.hasDateField = false;
+      if (csvData.hasDateField == false) {
+        // csvData.hasDateField = false;
         csvData.startDate = undefined;
         csvData.endDate = undefined;
       } else {
-        csvData.hasDateField = true;
+        // csvData.hasDateField = true;
         //update date field format
         csvData.csvImportData.data.map(dataItem => { dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
         //order by date descending

@@ -40,10 +40,6 @@ export class CleanDataComponent implements OnInit {
       this.logToolService.setFields(this.individualDataFromCsv);
       this.dateExistsForEachCsv = this.individualDataFromCsv.find(dataItem => { return dataItem.hasDateField == false }) == undefined;
       this.logToolService.noDayTypeAnalysis.next(!this.dateExistsForEachCsv);
-      // if (this.dateExistsForEachCsv == true) {
-      //   this.logToolDataService.setLogToolDays();
-      //   this.logToolDataService.setValidNumberOfDayDataPoints();
-      // }
       this.logToolService.dataCleaned.next(true);
       this.cleaningData = false;
       this.dataSubmitted = true;
@@ -68,5 +64,14 @@ export class CleanDataComponent implements OnInit {
   closeEditModal() {
     this.logToolService.isModalOpen.next(false);
     this.showEditModal = false;
+  }
+
+  setDateField(csvData: IndividualDataFromCsv) {
+    csvData.dateField = csvData.fields.find(field => {
+      return field.isDateField == true;
+    });
+    csvData.hasDateField = csvData.dateField != undefined;
+    console.log(this.individualDataFromCsv);
+    this.cd.detectChanges();
   }
 }
