@@ -1,0 +1,117 @@
+/* label, select {
+    font-size: 20px !important;
+} */
+
+
+.nav-btn{
+    background: #2E4053;
+    color: white;
+    border: none;
+    line-height: 2;
+}
+
+.nav-btn.middle{
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-right-width: 2px;
+    border-right-style: solid;
+}
+
+.nav-item .dropdown-toggle{
+    color: white;
+    background: #2E4053;
+}
+
+.navbar-nav .dropdown-menu{
+    position: absolute;
+    font-size: small;
+}
+
+.navbar{
+    background: white;
+    border-bottom: solid 4px;
+    font-size: small;
+}
+
+
+.nav-link, .btn{
+    padding: 4px;
+}
+
+.list-group-item{
+    padding: 8px;
+    font-size: small;
+}
+
+.list-group-item.active{
+    color: white;
+    background: #2E4053;
+}
+
+.dropdown-menu.filter-menu{
+    right: 0px;
+    left: inherit;
+}
+
+a.list-group-item:hover, .nav-link{
+    cursor: pointer;
+}
+
+a.list-group-item.active:hover{
+    color: white;
+}
+
+.nav-link.dropdown-toggle:hover, .nav-btn:hover{
+    background-color: #808B96;
+}
+
+
+.menu-modal{
+    position: fixed;
+    z-index: 8000;
+    border-style: solid;
+    border-width: 4px;
+    top: -150%;
+    left: 10px;
+  }
+
+  .menu-modal.show{
+      bottom: 10px;
+  }
+
+  .modal-card-header{
+      font-size: 1.5rem;
+      font-weight: bold;
+  }
+
+  .navbar.second-nav{
+    background: none;
+    border-bottom: none;
+    justify-content: flex-end;
+  }
+
+  .navbar.second-nav .nav-item:not(:first-child){
+      padding-left: 2px;
+      padding-right: 2px;
+  }
+
+  .list-group.calc-width{
+      min-width: 265px;
+  }
+
+  .badge-pill{
+    background-color: #2E4053;
+    color: white;
+    font-weight: bold;
+  }
+
+  .active .badge-pill{
+      background-color: white;
+      color: black;
+  }
+
+  .teams-dropdown{
+      left: auto;
+      right: 0;
+      
+  }

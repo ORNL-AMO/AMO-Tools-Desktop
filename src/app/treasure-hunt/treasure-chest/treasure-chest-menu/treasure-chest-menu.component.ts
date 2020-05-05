@@ -40,7 +40,6 @@ export class TreasureChestMenuComponent implements OnInit {
     this.getNavbarWidth();
   }
 
-  utilityTypeOptions: Array<FilterOption> = [];
   calculatorTypeOptions: Array<FilterOption> = [];
   teams: Array<FilterOption>;
   equipments: Array<FilterOption>;
@@ -73,7 +72,7 @@ export class TreasureChestMenuComponent implements OnInit {
       let oppData = this.opportuntityCardsService.getOpportunityCardsData(treasureHunt, this.settings);
       this.setTeams(oppData);
       this.setEquipments(oppData);
-      this.setUtilityTypeOptions(oppData);
+      //this.setUtilityTypeOptions(oppData);
       this.setCalculatorOptions(oppData);
     });
 
@@ -101,10 +100,6 @@ export class TreasureChestMenuComponent implements OnInit {
 
   ngAfterViewInit() {
     this.getNavbarWidth();
-  }
-
-  toggleUtilityType() {
-    this.displayUtilityTypeDropdown = !this.displayUtilityTypeDropdown;
   }
 
   toggleCalculatorType() {
@@ -267,19 +262,19 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
-  removeUtilityType(utilityItem: { display: string, value: string }, index: number) {
-    this.sortCardsData.utilityTypes.splice(index, 1);
-    this.utilityTypeOptions.forEach(utility => {
-      if (utility.value == utilityItem.value) {
-        utility.selected = false;
-      }
-    });
-    if (this.sortCardsData.utilityTypes.length == 0) {
-      let allOption: FilterOption = this.utilityTypeOptions.find(option => { return option.value == 'All' });
-      allOption.selected = true;
-    }
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  }
+  // removeUtilityType(utilityItem: { display: string, value: string }, index: number) {
+  //   this.sortCardsData.utilityTypes.splice(index, 1);
+  //   this.utilityTypeOptions.forEach(utility => {
+  //     if (utility.value == utilityItem.value) {
+  //       utility.selected = false;
+  //     }
+  //   });
+  //   if (this.sortCardsData.utilityTypes.length == 0) {
+  //     let allOption: FilterOption = this.utilityTypeOptions.find(option => { return option.value == 'All' });
+  //     allOption.selected = true;
+  //   }
+  //   this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  // }
 
 
   setSortBy(str: string) {
@@ -329,13 +324,13 @@ export class TreasureChestMenuComponent implements OnInit {
         option.selected = true;
       }
     })
-    this.utilityTypeOptions.forEach(option => {
-      if (option.value != 'All') {
-        option.selected = false;
-      } else {
-        option.selected = true;
-      }
-    })
+    // this.utilityTypeOptions.forEach(option => {
+    //   if (option.value != 'All') {
+    //     option.selected = false;
+    //   } else {
+    //     option.selected = true;
+    //   }
+    // })
     this.treasureChestMenuService.showImportModal.next(false);
     this.treasureChestMenuService.showExportModal.next(false);
   }
@@ -347,38 +342,6 @@ export class TreasureChestMenuComponent implements OnInit {
       }, 100);
     }
   }
-
-  setSelectedUtilityType(utilityOption: FilterOption) {
-    let selectedFilters = this.getSelectedOptions(utilityOption, this.utilityTypeOptions);
-    this.sortCardsData.utilityTypes = selectedFilters;
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  }
-
-
-  setUtilityTypeOptions(oppData: Array<OpportunityCardData>) {
-    let sortByCpy: SortCardsData = JSON.parse(JSON.stringify(this.sortCardsData));
-    sortByCpy.utilityTypes = [];
-    let sortedOppDataCpy: Array<OpportunityCardData> = this.sortCardsService.sortCards(JSON.parse(JSON.stringify(oppData)), sortByCpy);
-    this.utilityTypeOptions = new Array();
-    this.addUtilityOption('Electricity', sortedOppDataCpy, this.utilityTypeOptions);
-    this.addUtilityOption('Steam', sortedOppDataCpy, this.utilityTypeOptions);
-    this.addUtilityOption('Natural Gas', sortedOppDataCpy, this.utilityTypeOptions);
-    this.addUtilityOption('Water', sortedOppDataCpy, this.utilityTypeOptions);
-    this.addUtilityOption('Waste Water', sortedOppDataCpy, this.utilityTypeOptions);
-    this.addUtilityOption('Other Fuel', sortedOppDataCpy, this.utilityTypeOptions);
-    this.addUtilityOption('Compressed Air', sortedOppDataCpy, this.utilityTypeOptions);
-    let checkIsSelected: boolean = this.sortCardsData.utilityTypes.length == 0;
-    this.utilityTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: sortedOppDataCpy.length, selected: checkIsSelected });
-  }
-
-  addUtilityOption(utilityStr: string, oppData: Array<OpportunityCardData>, utilityTypeOptions: Array<FilterOption>) {
-    let numUtility: number = this.getFilteredCalcsByUtility(oppData, utilityStr).length;
-    if (numUtility != 0) {
-      let checkIsSelected: { display: string, value: string } = this.sortCardsData.utilityTypes.find(utilityType => { return utilityType.value == utilityStr });
-      utilityTypeOptions.push({ display: utilityStr, value: utilityStr, numCalcs: numUtility, selected: checkIsSelected != undefined });
-    }
-  }
-
 
   setSelectedCalculator(calcOption: FilterOption) {
     let selectedFilters = this.getSelectedOptions(calcOption, this.calculatorTypeOptions);
@@ -418,12 +381,7 @@ export class TreasureChestMenuComponent implements OnInit {
     let filteredCards: Array<OpportunityCardData> = _.filter(oppData, (data) => { return _.includes(data.opportunityType, calculatorType) });
     return filteredCards;
   }
-
-  getFilteredCalcsByUtility(oppData: Array<OpportunityCardData>, utilityType: string): Array<OpportunityCardData> {
-    let filteredCards: Array<OpportunityCardData> = _.filter(oppData, (data) => { return _.includes(data.utilityType, utilityType) });
-    return filteredCards;
-  }
-
+  
   getFilteredCalcsByEquipment(oppData: Array<OpportunityCardData>, equipment: string): Array<OpportunityCardData> {
     let filteredCards: Array<OpportunityCardData> = _.filter(oppData, (item: OpportunityCardData) => {
       if (item.opportunitySheet) {
@@ -449,14 +407,14 @@ export class TreasureChestMenuComponent implements OnInit {
     });
   }
 
-  updateUtilityOptions(clearSelected?: boolean) {
-    this.utilityTypeOptions.forEach(option => {
-      option.numCalcs = this.getFilteredCalcsByUtility(this.opportunityCardsData, option.value).length;
-      if (clearSelected) {
-        option.selected = false;
-      }
-    })
-  }
+  // updateUtilityOptions(clearSelected?: boolean) {
+  //   this.utilityTypeOptions.forEach(option => {
+  //     option.numCalcs = this.getFilteredCalcsByUtility(this.opportunityCardsData, option.value).length;
+  //     if (clearSelected) {
+  //       option.selected = false;
+  //     }
+  //   })
+  // }
 
   updateTeamOptions(clearSelected?: boolean) {
     this.teams.forEach(team => {

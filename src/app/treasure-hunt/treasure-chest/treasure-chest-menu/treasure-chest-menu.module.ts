@@ -7,12 +7,18 @@ import { ExportOpportunitiesComponent } from '../export-opportunities/export-opp
 import { ImportOpportunitiesService } from '../import-opportunities.service';
 import { ModalModule } from 'ngx-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { UtilityTypeDropdownComponent } from './utility-type-dropdown/utility-type-dropdown.component';
+import { CalculatorTypeDropdownComponent } from './calculator-type-dropdown/calculator-type-dropdown.component';
+import { TeamsDropdownComponent } from './teams-dropdown/teams-dropdown.component';
 
 @NgModule({
   declarations: [
     TreasureChestMenuComponent,
     ImportOpportunitiesComponent,
-    ExportOpportunitiesComponent
+    ExportOpportunitiesComponent,
+    UtilityTypeDropdownComponent,
+    CalculatorTypeDropdownComponent,
+    TeamsDropdownComponent
   ],
   imports: [
     CommonModule,
