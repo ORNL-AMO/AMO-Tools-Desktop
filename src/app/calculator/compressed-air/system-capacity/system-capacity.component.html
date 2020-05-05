@@ -47,13 +47,27 @@
         </h5>
         <hr class="my-1 hr-spacer">
 
-        <div class="my-2" *ngIf="currentField == 'pipeSize'">
+        <div class="my-2" *ngIf="currentField == 'pipeLength'">
           <h6>
             Pipe Length
             <br>
             <small class="text-muted">
-              Enter the length for different nominal pipe sizes.
-              Pipe sizes used are nominal schedule 40 pipe measured from the pipe’s inner diameter.
+              Enter the length of the specified pipe size.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'pipeSize'">
+          <h6>
+              Pipe Size
+              <br>
+            <small class="text-muted">
+              Select a pipe size from the list of nominal schedule 40 pipe inner diameters or enter a custom pipe size (inner diameter). For a quicker estimation,
+              ignore all pipe sizes 
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'">2"</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">50mm</span>  
+              or less (they do not add significant system capacity).
               <hr>
             </small>
           </h6>
@@ -65,19 +79,6 @@
             <br>
             <small class="text-muted">
               Enter the nameplate capacity for each receiver tank in the system.
-              <hr>
-            </small>
-          </h6>
-        </div>
-
-        <div class="my-2" *ngIf="currentField == 'customPipes'">
-          <h6>
-            Custom Pipes
-            <br>
-            <small class="text-muted">
-              Enter the length and size of any custom pipe in the compressed air system.
-              The size of the pipe should be taken as the pipe’s inner diameter.
-              This feature can be used to consider any non-nominal schedule 40 pipe.
               <hr>
             </small>
           </h6>

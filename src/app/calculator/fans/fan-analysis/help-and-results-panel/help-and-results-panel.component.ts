@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { Subscription } from 'rxjs';
+import { FanAnalysisService } from '../fan-analysis.service';
 
 @Component({
   selector: 'app-help-and-results-panel',
@@ -11,13 +13,26 @@ export class HelpAndResultsPanelComponent implements OnInit {
   settings: Settings;
 
   tabSelect: string = 'help';
-  constructor() { }
+  stepTabSub: Subscription;
+  stepTab: string;
+  constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
+    this.stepTabSub = this.fanAnalysisService.stepTab.subscribe(tab => {
+        this.stepTab = tab;
+        if (this.stepTab == 'gas-density') {
+          this.tabSelect = 'results';
+        }
+      });
   }
 
   setTab(str: string) {
     this.tabSelect = str;
   }
+
+  ngOnDestroy() {
+    this.stepTabSub.unsubscribe();
+  }
+  
 
 }

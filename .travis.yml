@@ -20,6 +20,7 @@ before_install:
   - travis_retry ./travis_scripts/before_install.sh
   - ./travis_scripts/get_os.sh
   - echo "$OS_FLAG"
+  - travis_retry npm run clean
 install:
   - travis_retry npm install
   - npm update

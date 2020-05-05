@@ -37,7 +37,6 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
   }
 
 

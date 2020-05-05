@@ -157,7 +157,7 @@ export class UtilityBarChartComponent implements OnInit {
       name: "Modification Costs",
       type: "bar",
       marker: {
-        color: graphColors[0],
+        color: graphColors[1],
         width: .8
       },
     };
@@ -169,7 +169,7 @@ export class UtilityBarChartComponent implements OnInit {
       name: "Savings From Baseline",
       type: "bar",
       marker: {
-        color: graphColors[1]
+        color: graphColors[0]
       },
     }
 

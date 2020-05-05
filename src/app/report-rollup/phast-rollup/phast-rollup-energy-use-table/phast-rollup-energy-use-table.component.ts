@@ -1,9 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ReportRollupService } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
-import { PhastResultsData } from '../../report-rollup-models';
-
+import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-phast-rollup-energy-use-table',
@@ -14,61 +13,51 @@ export class PhastRollupEnergyUseTableComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  resultData: Array<PhastResultsData>;
-  @Input()
-  graphColors: Array<string>;
-  @Input()
-  totalSteamEnergyUsed: number;
-  @Input()
-  totalElectricalEnergyUsed: number;
-  @Input()
-  totalFuelEnergyUsed: number;
-  @Input()
-  totalFuelCost: number;
-  @Input()
-  totalSteamCost: number;
-  @Input()
-  totalElectricalCost: number;
-  @Input()
-  totalEnergy: number;
-  @Input()
-  totalCost: number;
+  pieChartData: Array<PieChartDataItem>;
 
-  convertedSumFuel: number;
-  convertedSumElectricity: number;
-  convertedSumSteam: number;
-  constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
+  totalFuelUsage: number;
+  totalFuelCost: number;
+  totalElectricityUsage: number;
+  totalElectricityCost: number;
+  totalSteamUsage: number;
+  totalSteamCost: number;
+  tableData: Array<PieChartDataItem>
+  showSteam: boolean;
+  showFuel: boolean;
+  showElectricity: boolean;
+  showTotal: boolean;
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-  }
+    //pie chart data comes in converted to phastRollupUnit
+    //use copy to convert to individual type settings
+    this.tableData = JSON.parse(JSON.stringify(this.pieChartData));
+    this.tableData.forEach(dataItem => {
+      if (dataItem.furnaceType == 'electricity') {
+        dataItem.energyUsed = this.convertUnitsService.value(dataItem.energyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupElectricityUnit);
+      } else if (dataItem.furnaceType == 'steam') {
+        dataItem.energyUsed = this.convertUnitsService.value(dataItem.energyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupSteamUnit);
+      } else if (dataItem.furnaceType == 'fuel') {
+        dataItem.energyUsed = this.convertUnitsService.value(dataItem.energyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupFuelUnit);
+      }
+      dataItem.annualCost
+    })
 
-  getConvertedValue(val: number, settings: Settings, convertTo: string) {
-    return this.convertUnitsService.value(val).from(settings.energyResultUnit).to(convertTo);
-  }
+    let fuelResults: Array<PieChartDataItem> = this.tableData.filter(resultItem => { return resultItem.furnaceType == 'Fuel' });
+    this.totalFuelUsage = _.sumBy(fuelResults, 'energyUsed');
+    this.totalFuelCost = _.sumBy(fuelResults, 'annualCost');
 
-  getResultPercent(value: number, sum: number): number {
-    let percent = (value / sum) * 100;
-    let val = this.reportRollupService.transform(percent, 4);
-    return val;
-  }
+    let electricityResults: Array<PieChartDataItem> = this.tableData.filter(resultItem => { return resultItem.furnaceType == 'Electricity' });
+    this.totalElectricityUsage = _.sumBy(electricityResults, 'energyUsed');
+    this.totalElectricityCost = _.sumBy(electricityResults, 'annualCost');
 
-  getConvertedPercent(value: number, sum: number, settings: Settings) {
-    let convertVal = this.getConvertedValue(value, settings, this.settings.phastRollupUnit);
-    let percent = (convertVal / sum) * 100;
-    let val = this.reportRollupService.transform(percent, 4);
-    return val;
-  }
+    let steamResults: Array<PieChartDataItem> = this.tableData.filter(resultItem => { return resultItem.furnaceType == 'Steam' });
+    this.totalSteamUsage = _.sumBy(steamResults, 'energyUsed');
+    this.totalSteamCost = _.sumBy(steamResults, 'annualCost');
 
-  getFuelTotal() {
-    return this.convertUnitsService.value(this.totalFuelEnergyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupFuelUnit);
+    this.showElectricity = (this.totalElectricityCost != 0 || this.totalElectricityUsage != 0);
+    this.showFuel = (this.totalFuelCost != 0 || this.totalFuelUsage != 0);
+    this.showSteam = (this.totalSteamCost != 0 || this.totalSteamUsage != 0);
+    this.showTotal = (this.showElectricity && this.showFuel) || (this.showElectricity && this.showSteam) || (this.showFuel && this.showSteam);
   }
-
-  getElectricityTotal() {
-    return this.convertUnitsService.value(this.totalElectricalEnergyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupElectricityUnit);
-  }
-
-  getSteamTotal() {
-    return this.convertUnitsService.value(this.totalSteamEnergyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupSteamUnit);
-  }
-
 }

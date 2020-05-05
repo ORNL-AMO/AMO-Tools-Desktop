@@ -1,22 +1,22 @@
 @media print {
-    .print-break-before {
+    .page-break-before{
         page-break-before: always;
+    }
+
+    .print-page-title {
+        font-size: 40px !important;
+        font-weight: bold;
+    }
+
+    .print-avoid-break{
         page-break-inside: avoid;
     }
+}
 
-    .print-avoid-break {
-        page-break-inside: avoid;
-    }
+.group-label{
+    font-size: 22px;
+}
 
-    .row-bottom-divider {
-        border-bottom: solid 1px #999;
-    }
-
-    .header {
-        padding-top: 24px;
-    }
-
-    .print-rollup-pie-container {
-        padding-bottom: 35px;
-    }
+.print-pie-width{
+    width: 500px;
 }

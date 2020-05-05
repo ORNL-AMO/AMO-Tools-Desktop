@@ -15,6 +15,15 @@ export interface FSAT {
   isVFD?: boolean;
   operatingHours?: OperatingHours;
   outputs?: FsatOutput;
+  valid?: FsatValid;
+}
+
+export interface FsatValid {
+  isValid: boolean;
+  fluidValid: boolean;
+  fanValid: boolean;
+  motorValid: boolean;
+  fieldDataValid: boolean;
 }
 
 export interface Modification {
@@ -142,6 +151,19 @@ export interface BaseGasDensity {
   relativeHumidity?: number;
   wetBulbTemp?: number;
   specificHeatGas?: number; //used with wetBulb
+}
+
+export interface CalculatedGasDensity {
+  gasDensity: number;
+  absolutePressure: number;
+  saturatedHumidity: number;
+  saturationDegree: number;
+  humidityRatio: number;
+  specificVolume: number;
+  enthalpy: number;
+  dewPoint: number;
+  relativeHumidity: number;
+  saturationPressure: number;
 }
 
 export interface FanShaftPower {

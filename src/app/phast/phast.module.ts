@@ -37,6 +37,7 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
+import { PhastValidService } from './phast-valid.service';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit
   ],
   providers: [
     PhastService,
+    PhastValidService,
     PhastResultsService,
     ConvertPhastService,
     PhastCompareService

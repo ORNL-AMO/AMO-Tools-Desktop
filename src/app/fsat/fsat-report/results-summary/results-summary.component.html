@@ -21,7 +21,14 @@
         <td class="percent-graph" *ngFor="let modification of fsat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <div class="hide-print" *ngIf="modification.fsat.outputs.percentSavings">
-            <app-percent-graph [value]="modification.fsat.outputs.percentSavings"></app-percent-graph>
+            <app-percent-graph *ngIf="modification.fsat.valid.isValid" [value]="modification.fsat.outputs.percentSavings"></app-percent-graph>
+            <div class="alert-danger small" *ngIf="!modification.fsat.valid.isValid">
+              Invalid modification<br>
+              <span *ngIf="!modification.fsat.valid.fluidValid">Errors found in Fluid<br></span>
+              <span *ngIf="!modification.fsat.valid.fieldDataValid">Errors found in Field Data<br></span>
+              <span *ngIf="!modification.fsat.valid.fanValid">Errors found in Fan Setup<br></span>
+              <span *ngIf="!modification.fsat.valid.motorValid">Errors found in Motor<br></span>
+            </div>
           </div>
           <div class="show-print text-center" *ngIf="modification.fsat.outputs.percentSavings">
             {{modification.fsat.outputs.percentSavings | number:'1.0'}} %

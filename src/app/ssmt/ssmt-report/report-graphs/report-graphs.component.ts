@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SSMT } from '../../../shared/models/steam/ssmt';
+import { SSMT, SsmtValid } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 import * as _ from 'lodash';
@@ -16,7 +16,7 @@ export class ReportGraphsComponent implements OnInit {
   @Input()
   baselineLosses: SSMTLosses;
   @Input()
-  modificationLosses: Array<{ outputData: SSMTLosses, name: string }>;
+  modificationLosses: Array<{ outputData: SSMTLosses, name: string, valid: SsmtValid }>;
   @Input()
   printView: boolean;
   @Input()
@@ -40,7 +40,9 @@ export class ReportGraphsComponent implements OnInit {
   setWaterfallXAxis(){
     let energyInputArr: Array<number> = [this.baselineLosses.fuelEnergy + this.baselineLosses.makeupWaterEnergy];
     this.modificationLosses.forEach(modificationLoss => {
-      energyInputArr.push(modificationLoss.outputData.fuelEnergy + modificationLoss.outputData.makeupWaterEnergy)
+      if (modificationLoss.valid.isValid) {
+        energyInputArr.push(modificationLoss.outputData.fuelEnergy + modificationLoss.outputData.makeupWaterEnergy)
+      }
     });
     this.waterfallXAxisRange = _.max(energyInputArr);
   }

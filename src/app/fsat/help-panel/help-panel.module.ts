@@ -11,13 +11,15 @@ import { FsatFluidHelpComponent } from './fsat-fluid-help/fsat-fluid-help.compon
 import { ModifyConditionsNotesComponent } from './modify-conditions-notes/modify-conditions-notes.component';
 import { FsatResultsModule } from '../fsat-results/fsat-results.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { GasDensityResultsModule } from '../../shared/gas-density-results/gas-density-results.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    FsatResultsModule
+    FsatResultsModule,
+    GasDensityResultsModule
   ],
   declarations: [
     HelpPanelComponent,

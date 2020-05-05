@@ -5,6 +5,20 @@
   <table class="table table-hover table-striped" *ngIf="baselineLosses">
     <thead>
       <tr>
+        <td [ngStyle]="{'width.%': 15}" class="border-0"></td>
+        <td [ngStyle]="{'width.%': tableCellWidth}" class="border-0"></td>
+        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}" class="text-center border-0 bold">
+          <div class="alert-danger" *ngIf="!modification.valid.isValid">
+            Invalid Modification<br>
+            <span *ngIf="!modification.valid.boilerValid">Errors found in Boiler<br></span>
+            <span *ngIf="!modification.valid.headerValid">Errors found in Header<br></span>
+            <span *ngIf="!modification.valid.turbineValid">Errors found in Turbine<br></span>
+            <span *ngIf="!modification.valid.operationsValid">Errors found in Operations<br></span>
+          </div>
+        </td>
+      </tr>
+      <tr>
         <td [ngStyle]="{'width.%': 15}" class="bold">(<span
             [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"
@@ -34,10 +48,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.fuelEnergy">
+          <span *ngIf="modification.valid.isValid && modification.outputData.fuelEnergy">
             {{modification.outputData.fuelEnergy | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.fuelEnergy">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.fuelEnergy">
             &mdash;
           </span>
         </td>
@@ -54,10 +68,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.makeupWaterEnergy">
+          <span *ngIf="modification.valid.isValid && modification.outputData.makeupWaterEnergy">
             {{modification.outputData.makeupWaterEnergy | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.makeupWaterEnergy">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.makeupWaterEnergy">
             &mdash;
           </span>
         </td>
@@ -82,10 +96,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.condensingTurbineUsefulEnergy">
+          <span *ngIf="modification.valid.isValid && modification.outputData.condensingTurbineUsefulEnergy">
             {{modification.outputData.condensingTurbineUsefulEnergy | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.condensingTurbineUsefulEnergy">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.condensingTurbineUsefulEnergy">
             &mdash;
           </span>
         </td>
@@ -102,10 +116,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.highToLowTurbineUsefulEnergy">
+          <span *ngIf="modification.valid.isValid && modification.outputData.highToLowTurbineUsefulEnergy">
             {{modification.outputData.highToLowTurbineUsefulEnergy | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.highToLowTurbineUsefulEnergy">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.highToLowTurbineUsefulEnergy">
             &mdash;
           </span>
         </td>
@@ -123,10 +137,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.highToMediumTurbineUsefulEnergy">
+          <span *ngIf="modification.valid.isValid && modification.outputData.highToMediumTurbineUsefulEnergy">
             {{modification.outputData.highToMediumTurbineUsefulEnergy | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.highToMediumTurbineUsefulEnergy">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.highToMediumTurbineUsefulEnergy">
             &mdash;
           </span>
         </td>
@@ -144,10 +158,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.mediumToLowTurbineUsefulEnergy">
+          <span *ngIf="modification.valid.isValid && modification.outputData.mediumToLowTurbineUsefulEnergy">
             {{modification.outputData.mediumToLowTurbineUsefulEnergy | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.mediumToLowTurbineUsefulEnergy">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.mediumToLowTurbineUsefulEnergy">
             &mdash;
           </span>
         </td>
@@ -172,10 +186,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.highPressureProcessUsage">
+          <span *ngIf="modification.valid.isValid && modification.outputData.highPressureProcessUsage">
             {{modification.outputData.highPressureProcessUsage | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.highPressureProcessUsage">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.highPressureProcessUsage">
             &mdash;
           </span>
         </td>
@@ -192,10 +206,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.mediumPressureProcessUsage">
+          <span *ngIf="modification.valid.isValid && modification.outputData.mediumPressureProcessUsage">
             {{modification.outputData.mediumPressureProcessUsage | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.mediumPressureProcessUsage">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.mediumPressureProcessUsage">
             &mdash;
           </span>
         </td>
@@ -213,10 +227,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.lowPressureProcessUsage">
+          <span *ngIf="modification.valid.isValid && modification.outputData.lowPressureProcessUsage">
             {{modification.outputData.lowPressureProcessUsage | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.lowPressureProcessUsage">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.lowPressureProcessUsage">
             &mdash;
           </span>
         </td>
@@ -241,10 +255,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.stack">
+          <span *ngIf="modification.valid.isValid && modification.outputData.stack">
             {{modification.outputData.stack | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.stack">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.stack">
             &mdash;
           </span>
         </td>
@@ -261,10 +275,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.blowdown">
+          <span *ngIf="modification.valid.isValid && modification.outputData.blowdown">
             {{modification.outputData.blowdown | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.blowdown">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.blowdown">
             &mdash;
           </span>
         </td>
@@ -287,10 +301,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.highPressureHeader">
+          <span *ngIf="modification.valid.isValid && modification.outputData.highPressureHeader">
             {{modification.outputData.highPressureHeader | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.highPressureHeader">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.highPressureHeader">
             &mdash;
           </span>
         </td>
@@ -307,10 +321,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.mediumPressureHeader">
+          <span *ngIf="modification.valid.isValid && modification.outputData.mediumPressureHeader">
             {{modification.outputData.mediumPressureHeader | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.mediumPressureHeader">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.mediumPressureHeader">
             &mdash;
           </span>
         </td>
@@ -327,10 +341,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.lowPressureHeader">
+          <span *ngIf="modification.valid.isValid && modification.outputData.lowPressureHeader">
             {{modification.outputData.lowPressureHeader | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.lowPressureHeader">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.lowPressureHeader">
             &mdash;
           </span>
         </td>
@@ -354,10 +368,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.condensingTurbineEfficiencyLoss">
+          <span *ngIf="modification.valid.isValid && modification.outputData.condensingTurbineEfficiencyLoss">
             {{modification.outputData.condensingTurbineEfficiencyLoss | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.condensingTurbineEfficiencyLoss">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.condensingTurbineEfficiencyLoss">
             &mdash;
           </span>
         </td>
@@ -374,10 +388,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.highToMediumTurbineEfficiencyLoss">
+          <span *ngIf="modification.valid.isValid && modification.outputData.highToMediumTurbineEfficiencyLoss">
             {{modification.outputData.highToMediumTurbineEfficiencyLoss | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.highToMediumTurbineEfficiencyLoss">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.highToMediumTurbineEfficiencyLoss">
             &mdash;
           </span>
         </td>
@@ -394,10 +408,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.highToLowTurbineEfficiencyLoss">
+          <span *ngIf="modification.valid.isValid && modification.outputData.highToLowTurbineEfficiencyLoss">
             {{modification.outputData.highToLowTurbineEfficiencyLoss | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.highToLowTurbineEfficiencyLoss">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.highToLowTurbineEfficiencyLoss">
             &mdash;
           </span>
         </td>
@@ -414,10 +428,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.mediumToLowTurbineEfficiencyLoss">
+          <span *ngIf="modification.valid.isValid && modification.outputData.mediumToLowTurbineEfficiencyLoss">
             {{modification.outputData.mediumToLowTurbineEfficiencyLoss | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.mediumToLowTurbineEfficiencyLoss">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.mediumToLowTurbineEfficiencyLoss">
             &mdash;
           </span>
         </td>
@@ -434,10 +448,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.condensingLosses">
+          <span *ngIf="modification.valid.isValid && modification.outputData.condensingLosses">
             {{modification.outputData.condensingLosses | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.condensingLosses">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.condensingLosses">
             &mdash;
           </span>
         </td>
@@ -460,10 +474,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.condensateLosses">
+          <span *ngIf="modification.valid.isValid && modification.outputData.condensateLosses">
             {{modification.outputData.condensateLosses | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.condensateLosses">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.condensateLosses">
             &mdash;
           </span>
         </td>
@@ -486,10 +500,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.lowPressureVentLoss">
+          <span *ngIf="modification.valid.isValid && modification.outputData.lowPressureVentLoss">
             {{modification.outputData.lowPressureVentLoss | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.lowPressureVentLoss">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.lowPressureVentLoss">
             &mdash;
           </span>
         </td>
@@ -506,10 +520,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.condensateFlashTankLoss">
+          <span *ngIf="modification.valid.isValid && modification.outputData.condensateFlashTankLoss">
             {{modification.outputData.condensateFlashTankLoss | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.condensateFlashTankLoss">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.condensateFlashTankLoss">
             &mdash;
           </span>
         </td>
@@ -526,10 +540,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.deaeratorVentLoss">
+          <span *ngIf="modification.valid.isValid && modification.outputData.deaeratorVentLoss">
             {{modification.outputData.deaeratorVentLoss | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.deaeratorVentLoss">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.deaeratorVentLoss">
             &mdash;
           </span>
         </td>
@@ -552,10 +566,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.highPressureProcessLoss">
+          <span *ngIf="modification.valid.isValid && modification.outputData.highPressureProcessLoss">
             {{modification.outputData.highPressureProcessLoss | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.highPressureProcessLoss">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.highPressureProcessLoss">
             &mdash;
           </span>
         </td>
@@ -572,10 +586,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.mediumPressureProcessLoss">
+          <span *ngIf="modification.valid.isValid && modification.outputData.mediumPressureProcessLoss">
             {{modification.outputData.mediumPressureProcessLoss | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.mediumPressureProcessLoss">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.mediumPressureProcessLoss">
             &mdash;
           </span>
         </td>
@@ -592,10 +606,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.lowPressureProcessLoss">
+          <span *ngIf="modification.valid.isValid && modification.outputData.lowPressureProcessLoss">
             {{modification.outputData.lowPressureProcessLoss | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.lowPressureProcessLoss">
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.lowPressureProcessLoss">
             &mdash;
           </span>
         </td>

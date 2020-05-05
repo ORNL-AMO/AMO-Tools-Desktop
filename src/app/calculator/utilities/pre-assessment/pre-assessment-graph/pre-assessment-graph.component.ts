@@ -88,7 +88,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
 
       var layout = {
         font: {
-          size: 10,
+          size: 12,
         },
         showlegend: false,
         margin: { t: 30, b: 40, l: 40, r: 40 },

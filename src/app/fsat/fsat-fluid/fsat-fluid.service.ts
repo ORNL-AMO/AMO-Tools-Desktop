@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { BaseGasDensity } from '../../shared/models/fans';
+import { GreaterThanValidator } from '../../shared/validators/greater-than';
 
 @Injectable()
 export class FsatFluidService {
@@ -20,7 +21,7 @@ export class FsatFluidService {
       wetBulbTemp: [obj.wetBulbTemp, gasDensityValidators.wetBulbTempValidators],
       relativeHumidity: [obj.relativeHumidity, gasDensityValidators.relativeHumidityValidators],
       dewPoint: [obj.dewPoint, gasDensityValidators.dewPointValidators],
-      gasDensity: [obj.gasDensity, [Validators.min(0.01), Validators.required]],
+      gasDensity: [obj.gasDensity, [GreaterThanValidator.greaterThan(0), Validators.required]],
       specificHeatGas: [obj.specificHeatGas, gasDensityValidators.specificHeatGasValidators]
     });
     for (let key in form.controls) {
@@ -47,10 +48,11 @@ export class FsatFluidService {
     }
     if (obj.inputType === 'wetBulb') {
       wetBulbTempValidators = [Validators.required];
-      specificHeatGasValidators = [Validators.min(0.01), Validators.required];
+      // Not sure if specificHeatGas is necessary since it has been removed from user input in fans
+      specificHeatGasValidators = [GreaterThanValidator.greaterThan(0), Validators.required];
     }
     if (obj.inputType === 'relativeHumidity') {
-      relativeHumidityValidators = [Validators.min(0), Validators.max(100), Validators.required];
+      relativeHumidityValidators = [GreaterThanValidator.greaterThan(0), Validators.max(100), Validators.required];
     }
     if (obj.inputType === 'dewPoint') {
       dewPointValidators = [Validators.required];

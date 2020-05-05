@@ -27,18 +27,22 @@ export class SsmtPieChartComponent implements OnInit {
   ngOnInit(): void {
   }
   ngAfterViewInit() {
-    if (!this.printView) {
-      this.createChart();
-    } else {
-      this.createPrintChart();
+    if (this.ssmt.valid.isValid) {
+      if (!this.printView) {
+        this.createChart();
+      } else {
+        this.createPrintChart();
+      }
     }
   }
 
   ngOnChanges() {
-    if (this.ssmtPieChart && !this.printView) {
-      this.createChart();
-    } else if (this.ssmtPieChart && this.printView) {
-      this.createPrintChart();
+    if (this.ssmt.valid.isValid) {
+      if (this.ssmtPieChart && !this.printView) {
+        this.createChart();
+      } else if (this.ssmtPieChart && this.printView) {
+        this.createPrintChart();
+      }
     }
   }
 
@@ -141,7 +145,7 @@ export class SsmtPieChartComponent implements OnInit {
       var modebarBtns = {
         modeBarButtonsToRemove: ['hoverClosestPie'],
         displaylogo: false,
-        displayModeBar: true
+        displayModeBar: false
       };
       Plotly.react(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
     } else {

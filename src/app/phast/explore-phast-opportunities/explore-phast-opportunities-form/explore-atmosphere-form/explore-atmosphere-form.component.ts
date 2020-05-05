@@ -47,6 +47,7 @@ export class ExploreAtmosphereFormComponent implements OnInit {
     this.baselineWarnings = new Array<AtmosphereLossWarnings>();
     this.modificationWarnings = new Array<AtmosphereLossWarnings>();
     this.showInletTemp = new Array<boolean>();
+    
     let index: number = 0;
     this.phast.losses.atmosphereLosses.forEach(loss => {
       let check: boolean = (loss.flowRate !== this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].flowRate);
