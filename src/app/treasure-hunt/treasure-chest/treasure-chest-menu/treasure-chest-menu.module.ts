@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { UtilityTypeDropdownComponent } from './utility-type-dropdown/utility-type-dropdown.component';
 import { CalculatorTypeDropdownComponent } from './calculator-type-dropdown/calculator-type-dropdown.component';
 import { TeamsDropdownComponent } from './teams-dropdown/teams-dropdown.component';
+import { EquipmentsDropdownComponent } from './equipments-dropdown/equipments-dropdown.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TeamsDropdownComponent } from './teams-dropdown/teams-dropdown.componen
     ExportOpportunitiesComponent,
     UtilityTypeDropdownComponent,
     CalculatorTypeDropdownComponent,
-    TeamsDropdownComponent
+    TeamsDropdownComponent,
+    EquipmentsDropdownComponent
   ],
   imports: [
     CommonModule,
