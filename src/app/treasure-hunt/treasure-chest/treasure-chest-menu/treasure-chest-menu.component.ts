@@ -39,12 +39,11 @@ export class TreasureChestMenuComponent implements OnInit {
 
   displayAdditionalFiltersDropdown: string = 'hide';
   sortByDropdown: boolean = false;
-  treasureHunt: TreasureHunt;
   sortCardsData: SortCardsData;
   sortBySub: Subscription;
   sortByLabel: string;
-  opportunityCardsSub: Subscription;
-  opportunityCardsData: Array<OpportunityCardData>;
+  // opportunityCardsSub: Subscription;
+  // opportunityCardsData: Array<OpportunityCardData>;
 
   showImportModal: boolean;
   showImportModalSub: Subscription;
@@ -58,9 +57,9 @@ export class TreasureChestMenuComponent implements OnInit {
       this.setSortByLabel();
     });
 
-    this.opportunityCardsSub = this.opportuntityCardsService.opportunityCards.subscribe(val => {
-      this.opportunityCardsData = val;
-    });
+    // this.opportunityCardsSub = this.opportuntityCardsService.opportunityCards.subscribe(val => {
+    //   this.opportunityCardsData = val;
+    // });
 
     this.showImportModalSub = this.treasureChestMenuService.showImportModal.subscribe(val => {
       this.showImportModal = val;
@@ -74,7 +73,7 @@ export class TreasureChestMenuComponent implements OnInit {
 
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
-    this.opportunityCardsSub.unsubscribe();
+    // this.opportunityCardsSub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
   }
@@ -105,61 +104,25 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.deselectAll.next(false);
   }
 
-  // removeTeam(teamName: string, index: number) {
-  //   this.sortCardsData.teams.splice(index, 1);
-  //   this.teams.forEach(team => {
-  //     if (team.value == teamName) {
-  //       team.selected = false;
-  //     }
-  //   });
-  //   if (this.sortCardsData.teams.length == 0) {
-  //     let allOption: FilterOption = this.teams.find(option => { return option.value == 'All' });
-  //     allOption.selected = true;
-  //   }
-  //   this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  // }
+  removeTeam(index: number) {
+    this.sortCardsData.teams.splice(index, 1);
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
 
-  // removeEquipment(equipmentItem: { display: string, value: string }, index: number) {
-  //   this.sortCardsData.equipments.splice(index, 1);
-  //   this.equipments.forEach(equipment => {
-  //     if (equipment.value == equipmentItem.value) {
-  //       equipment.selected = false;
-  //     }
-  //   });
-  //   if (this.sortCardsData.equipments.length == 0) {
-  //     let allOption: FilterOption = this.equipments.find(option => { return option.value == 'All' });
-  //     allOption.selected = true;
-  //   }
-  //   this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  // }
+  removeEquipment(index: number) {
+    this.sortCardsData.equipments.splice(index, 1);
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
 
-  // removeCalculator(calculatorItem: { display: string, value: string }, index: number) {
-  //   this.sortCardsData.calculatorTypes.splice(index, 1);
-  //   this.calculatorTypeOptions.forEach(calculator => {
-  //     if (calculator.value == calculatorItem.value) {
-  //       calculator.selected = false;
-  //     }
-  //   });
-  //   if (this.sortCardsData.calculatorTypes.length == 0) {
-  //     let allOption: FilterOption = this.calculatorTypeOptions.find(option => { return option.value == 'All' });
-  //     allOption.selected = true;
-  //   }
-  //   this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  // }
+  removeCalculator(index: number) {
+    this.sortCardsData.calculatorTypes.splice(index, 1);
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
 
-  // removeUtilityType(utilityItem: { display: string, value: string }, index: number) {
-  //   this.sortCardsData.utilityTypes.splice(index, 1);
-  //   this.utilityTypeOptions.forEach(utility => {
-  //     if (utility.value == utilityItem.value) {
-  //       utility.selected = false;
-  //     }
-  //   });
-  //   if (this.sortCardsData.utilityTypes.length == 0) {
-  //     let allOption: FilterOption = this.utilityTypeOptions.find(option => { return option.value == 'All' });
-  //     allOption.selected = true;
-  //   }
-  //   this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  // }
+  removeUtilityType(index: number) {
+    this.sortCardsData.utilityTypes.splice(index, 1);
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
 
 
   setSortBy(str: string) {
@@ -188,34 +151,6 @@ export class TreasureChestMenuComponent implements OnInit {
     this.sortCardsData.utilityTypes = [];
     this.sortCardsData.calculatorTypes = [];
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-    // this.teams.forEach(team => {
-    //   if (team.value != 'All') {
-    //     team.selected = false;
-    //   } else {
-    //     team.selected = true;
-    //   }
-    // })
-    // this.equipments.forEach(equipment => {
-    //   if (equipment.value != 'All') {
-    //     equipment.selected = false;
-    //   } else {
-    //     equipment.selected = true;
-    //   }
-    // })
-    // this.calculatorTypeOptions.forEach(option => {
-    //   if (option.value != 'All') {
-    //     option.selected = false;
-    //   } else {
-    //     option.selected = true;
-    //   }
-    // })
-    // this.utilityTypeOptions.forEach(option => {
-    //   if (option.value != 'All') {
-    //     option.selected = false;
-    //   } else {
-    //     option.selected = true;
-    //   }
-    // })
     this.treasureChestMenuService.showImportModal.next(false);
     this.treasureChestMenuService.showExportModal.next(false);
   }

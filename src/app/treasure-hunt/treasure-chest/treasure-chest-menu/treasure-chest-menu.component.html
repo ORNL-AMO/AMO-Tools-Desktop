@@ -53,19 +53,19 @@
 <nav class="navbar second-nav"
   *ngIf="(sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0 || sortCardsData.calculatorTypes.length != 0 || sortCardsData.utilityTypes.length != 0) && !inReport">
   <div class="nav-item" *ngFor="let team of sortCardsData.teams; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeTeam(team, index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn" (click)="removeTeam(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{team.display}}</button>
   </div>
   <div class="nav-item" *ngFor="let equipment of sortCardsData.equipments; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeEquipment(equipment, index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn" (click)="removeEquipment(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{equipment.display}}</button>
   </div>
   <div class="nav-item" *ngFor="let calculator of sortCardsData.calculatorTypes; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeCalculator(calculator, index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn" (click)="removeCalculator(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{calculator.display}}</button>
   </div>
   <div class="nav-item" *ngFor="let utilityType of sortCardsData.utilityTypes; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeUtilityType(utilityType, index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn" (click)="removeUtilityType( index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{utilityType.display}}</button>
   </div>
   <div class="nav-item pull-right">
@@ -75,7 +75,8 @@
 
 
 <!--additional features modal-->
-<div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}">
+<div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}"
+  *ngIf="!inReport">
   <div class="card-header p-2">
     <span class="modal-card-header">Additional Filters</span>
   </div>
