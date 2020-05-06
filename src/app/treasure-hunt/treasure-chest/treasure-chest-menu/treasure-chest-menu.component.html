@@ -23,38 +23,10 @@
     </div>
   </div>
   <!--filter by utility type dropdown-->
-  <div class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" (click)="toggleUtilityType()">
-      Utility Type
-    </a>
-    <div class="dropdown-menu p-0" [ngClass]="{'show': displayUtilityTypeDropdown == true}">
-      <div class="list-group">
-        <a class="list-group-item list-group-item-action" *ngFor="let option of utilityTypeOptions"
-          [ngClass]="{'active': option.selected}" (click)="setSelectedUtilityType(option)">{{option.display}}
-          <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': option.numCalcs > 0}">
-            {{option.numCalcs}}
-          </span>
-        </a>
-      </div>
-    </div>
-  </div>
+  <app-utility-type-dropdown [settings]="settings"></app-utility-type-dropdown>
   <!--filter by calculator type dropdown-->
-  <div class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" (click)="toggleCalculatorType()">
-      Calculator Type
-    </a>
-    <div class="dropdown-menu p-0" [ngClass]="{'show': displayCalculatorTypeDropdown == true}">
-      <div class="list-group calc-width">
-        <a class="list-group-item list-group-item-action" *ngFor="let option of calculatorTypeOptions"
-          [ngClass]="{'active': option.selected}" (click)="setSelectedCalculator(option)">
-          {{option.display}}
-          <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': option.numCalcs > 0}">
-            {{option.numCalcs}}
-          </span>
-        </a>
-      </div>
-    </div>
-  </div>
+  <app-calculator-type-dropdown [settings]="settings"></app-calculator-type-dropdown>
+
   <!--manage cards button group-->
   <div class="nav-item" *ngIf="!inReport">
     <div class="btn-group">
@@ -70,58 +42,30 @@
     <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
   </div>
 
-  <!--teams. use dropdown in report-->
-  <div *ngIf="inReport" class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" (click)="toggleTeams()">
-      Teams
-    </a>
-    <div class="dropdown-menu p-0 teams-dropdown" [ngClass]="{'show': displayTeamDropdown == true}">
-      <div class="list-group">
-        <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
-          [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">{{team.display}}
-          <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': team.numCalcs > 0}">
-            {{team.numCalcs}}
-          </span>
-        </a>
-      </div>
-    </div>
-  </div>
+  <!--teams use dropdown in report-->
+  <app-teams-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-teams-dropdown>
 
   <!--equipment. use dropdown in report-->
-  <div *ngIf="inReport" class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" (click)="toggleEquipment()">
-      Equipment
-    </a>
-    <div class="dropdown-menu p-0 teams-dropdown" [ngClass]="{'show': displayEquipment == true}">
-      <div class="list-group">
-        <a class="list-group-item list-group-item-action" *ngFor="let option of equipments"
-          [ngClass]="{'active': option.selected}" (click)="setSelectedEquipment(option)">{{option.display}}
-          <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': option.numCalcs > 0}">
-            {{option.numCalcs}}
-          </span>
-        </a>
-      </div>
-    </div>
-  </div>
+  <app-equipments-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-equipments-dropdown>
 
 </nav>
 <!--displays selected filter options-->
 <nav class="navbar second-nav"
   *ngIf="(sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0 || sortCardsData.calculatorTypes.length != 0 || sortCardsData.utilityTypes.length != 0) && !inReport">
   <div class="nav-item" *ngFor="let team of sortCardsData.teams; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeTeam(team, index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn" (click)="removeTeam(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{team.display}}</button>
   </div>
   <div class="nav-item" *ngFor="let equipment of sortCardsData.equipments; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeEquipment(equipment, index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn" (click)="removeEquipment(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{equipment.display}}</button>
   </div>
   <div class="nav-item" *ngFor="let calculator of sortCardsData.calculatorTypes; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeCalculator(calculator, index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn" (click)="removeCalculator(index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{calculator.display}}</button>
   </div>
   <div class="nav-item" *ngFor="let utilityType of sortCardsData.utilityTypes; let index = index;">
-    <button type="button" class="nav-btn" (click)="removeUtilityType(utilityType, index)"><span aria-hidden="true"
+    <button type="button" class="nav-btn" (click)="removeUtilityType( index)"><span aria-hidden="true"
         class="pr-1">&times;</span>{{utilityType.display}}</button>
   </div>
   <div class="nav-item pull-right">
@@ -131,33 +75,18 @@
 
 
 <!--additional features modal-->
-<div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}">
+<div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}"
+  *ngIf="!inReport">
   <div class="card-header p-2">
     <span class="modal-card-header">Additional Filters</span>
   </div>
   <div class="card-body p-2 scroll-item">
     <div class="row no-gutters" *ngIf="displayAdditionalFiltersDropdown == 'show'">
       <div class="col-6 pr-1">
-        <h5>Select Teams</h5>
-        <div class="list-group list-group-flush">
-          <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
-            [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">{{team.display}}
-            <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': team.numCalcs > 0}">
-              {{team.numCalcs}}
-            </span>
-          </a>
-        </div>
+        <app-teams-dropdown [inReport]="inReport" [settings]="settings"></app-teams-dropdown>
       </div>
       <div class="col-6 pl-1">
-        <h5>Select Equipment</h5>
-        <div class="list-group list-group-flush">
-          <a class="list-group-item list-group-item-action" *ngFor="let equipment of equipments"
-            [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.display}}
-            <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': equipment.numCalcs > 0}">
-              {{equipment.numCalcs}}
-            </span>
-          </a>
-        </div>
+        <app-equipments-dropdown [inReport]="inReport" [settings]="settings"></app-equipments-dropdown>
       </div>
     </div>
   </div>
