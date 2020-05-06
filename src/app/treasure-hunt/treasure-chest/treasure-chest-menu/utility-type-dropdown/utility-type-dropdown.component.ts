@@ -16,7 +16,7 @@ import * as _ from 'lodash';
 export class UtilityTypeDropdownComponent implements OnInit {
   @Input()
   settings: Settings;
-  
+
   utilityTypeOptions: Array<FilterOption> = [];
   sortBySub: Subscription;
   sortCardsData: SortCardsData;
@@ -33,7 +33,7 @@ export class UtilityTypeDropdownComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sortBySub.unsubscribe();
   }
 
@@ -42,9 +42,9 @@ export class UtilityTypeDropdownComponent implements OnInit {
     this.sortCardsData.utilityTypes = selectedFilters;
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
-  
+
   setUtilityTypeOptions(oppData: Array<OpportunityCardData>) {
-    let allCardUtilities: Array<string> = _.flatMap(oppData, oppDataItem => {return oppDataItem.utilityType});
+    let allCardUtilities: Array<string> = _.flatMap(oppData, oppDataItem => { return oppDataItem.utilityType });
     allCardUtilities = _.uniq(allCardUtilities);
     let sortByCpy: SortCardsData = JSON.parse(JSON.stringify(this.sortCardsData));
     sortByCpy.utilityTypes = [];
@@ -52,23 +52,15 @@ export class UtilityTypeDropdownComponent implements OnInit {
     this.utilityTypeOptions = new Array();
     allCardUtilities.forEach(utility => {
       this.addUtilityOption(utility, sortedOppDataCpy, this.utilityTypeOptions);
-    });    
-    // this.addUtilityOption('Steam', sortedOppDataCpy, this.utilityTypeOptions);
-    // this.addUtilityOption('Natural Gas', sortedOppDataCpy, this.utilityTypeOptions);
-    // this.addUtilityOption('Water', sortedOppDataCpy, this.utilityTypeOptions);
-    // this.addUtilityOption('Waste Water', sortedOppDataCpy, this.utilityTypeOptions);
-    // this.addUtilityOption('Other Fuel', sortedOppDataCpy, this.utilityTypeOptions);
-    // this.addUtilityOption('Compressed Air', sortedOppDataCpy, this.utilityTypeOptions);
+    });
     let checkIsSelected: boolean = this.sortCardsData.utilityTypes.length == 0;
     this.utilityTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: sortedOppDataCpy.length, selected: checkIsSelected });
   }
 
   addUtilityOption(utilityStr: string, oppData: Array<OpportunityCardData>, utilityTypeOptions: Array<FilterOption>) {
     let numUtility: number = this.getFilteredCalcsByUtility(oppData, utilityStr).length;
-    // if (numUtility != 0) {
-      let checkIsSelected: { display: string, value: string } = this.sortCardsData.utilityTypes.find(utilityType => { return utilityType.value == utilityStr });
-      utilityTypeOptions.push({ display: utilityStr, value: utilityStr, numCalcs: numUtility, selected: checkIsSelected != undefined });
-    // }
+    let checkIsSelected: { display: string, value: string } = this.sortCardsData.utilityTypes.find(utilityType => { return utilityType.value == utilityStr });
+    utilityTypeOptions.push({ display: utilityStr, value: utilityStr, numCalcs: numUtility, selected: checkIsSelected != undefined });
   }
 
   getFilteredCalcsByUtility(oppData: Array<OpportunityCardData>, utilityType: string): Array<OpportunityCardData> {

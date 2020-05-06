@@ -1,11 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
-import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { TreasureChestMenuService } from './treasure-chest-menu.service';
 import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
-import { OpportunityCardsService, OpportunityCardData } from '../opportunity-cards/opportunity-cards.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
@@ -42,24 +39,18 @@ export class TreasureChestMenuComponent implements OnInit {
   sortCardsData: SortCardsData;
   sortBySub: Subscription;
   sortByLabel: string;
-  // opportunityCardsSub: Subscription;
-  // opportunityCardsData: Array<OpportunityCardData>;
 
   showImportModal: boolean;
   showImportModalSub: Subscription;
   showExportModal: boolean;
   showExportModalSub: Subscription;
-  constructor(private opportuntityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService) { }
+  constructor(private treasureChestMenuService: TreasureChestMenuService) { }
 
   ngOnInit() {
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortCardsData = val;
       this.setSortByLabel();
     });
-
-    // this.opportunityCardsSub = this.opportuntityCardsService.opportunityCards.subscribe(val => {
-    //   this.opportunityCardsData = val;
-    // });
 
     this.showImportModalSub = this.treasureChestMenuService.showImportModal.subscribe(val => {
       this.showImportModal = val;
@@ -73,7 +64,6 @@ export class TreasureChestMenuComponent implements OnInit {
 
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
-    // this.opportunityCardsSub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
   }
