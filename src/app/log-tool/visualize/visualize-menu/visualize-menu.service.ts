@@ -57,7 +57,14 @@ export class VisualizeMenuService {
   }
 
   setDefaultYAxisDataOptions(selectedGraphObj: GraphObj) {
-    selectedGraphObj.selectedYAxisDataOptions = [{ index: 0, dataOption: selectedGraphObj.yAxisDataOptions[0], seriesColor: graphColors[0], seriesName: 'Series 1', yaxis: 'y', linesOrMarkers: 'markers' }];
+    selectedGraphObj.selectedYAxisDataOptions = [{
+      index: 0,
+      dataOption: selectedGraphObj.yAxisDataOptions[0],
+      seriesColor: graphColors[0],
+      seriesName: this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField),
+      yaxis: 'y',
+      linesOrMarkers: 'markers'
+    }];
   }
 
   setTimeSeriesData(selectedGraphObj: GraphObj) {
@@ -196,7 +203,7 @@ export class VisualizeMenuService {
         }
       } else if (selectedDataOption.dataOption.dataField.csvId != selectedGraphObj.selectedXAxisDataOption.dataField.csvId) {
         selectedDataOption.dataOption = selectedGraphObj.yAxisDataOptions[0]
-        selectedDataOption.seriesName = 'Series ' + (index + 1);
+        selectedDataOption.seriesName = this.getSeriesName(selectedGraphObj.yAxisDataOptions[0].dataField);
       }
       selectedGraphObj.data[index].y = selectedDataOption.dataOption.data;
       selectedGraphObj.data[index].name = selectedDataOption.seriesName;
@@ -223,11 +230,19 @@ export class VisualizeMenuService {
   }
 
   addData(selectedGraphObj: GraphObj) {
-    let dataOption = selectedGraphObj.yAxisDataOptions.find(dataOption => { return dataOption.dataField.fieldName == selectedGraphObj.selectedYAxisDataOptions[0].dataOption.dataField.fieldName });
+    let currentSelections: Array<string> = selectedGraphObj.selectedYAxisDataOptions.map(option => { return option.dataOption.dataField.fieldName });
+    let unusedSelections: Array<{ dataField: LogToolField }> = JSON.parse(JSON.stringify(selectedGraphObj.yAxisDataOptions))
+    _.remove(unusedSelections, (option) => { return currentSelections.includes(option.dataField.fieldName) });
+    let dataOption;
+    if (unusedSelections.length != 0) {
+      dataOption = selectedGraphObj.yAxisDataOptions.find(dataOption => { return dataOption.dataField.fieldName == unusedSelections[0].dataField.fieldName });
+    } else {
+      dataOption = selectedGraphObj.yAxisDataOptions.find(dataOption => { return dataOption.dataField.fieldName == selectedGraphObj.selectedYAxisDataOptions[0].dataOption.dataField.fieldName });
+    }
     selectedGraphObj.selectedYAxisDataOptions.push({
       index: selectedGraphObj.selectedYAxisDataOptions.length,
       dataOption: dataOption,
-      seriesName: 'Series ' + (selectedGraphObj.selectedYAxisDataOptions.length + 1),
+      seriesName: this.getSeriesName(dataOption.dataField),
       seriesColor: graphColors[selectedGraphObj.selectedYAxisDataOptions.length],
       yaxis: 'y',
       linesOrMarkers: selectedGraphObj.data[0].mode
@@ -267,5 +282,13 @@ export class VisualizeMenuService {
   deleteAnnotation(annotation: AnnotationData, selectedGraphObj: GraphObj) {
     _.remove(selectedGraphObj.layout.annotations, (currentAnnotation) => { return currentAnnotation.annotationId == annotation.annotationId });
     this.save(selectedGraphObj);
+  }
+
+  getSeriesName(logToolField: LogToolField): string {
+    let seriesName: string = logToolField.alias;
+    if (logToolField.unit) {
+      seriesName = seriesName + ' (' + logToolField.unit + ')';
+    }
+    return seriesName;
   }
 }
