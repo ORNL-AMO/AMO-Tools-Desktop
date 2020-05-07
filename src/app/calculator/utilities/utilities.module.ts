@@ -17,6 +17,7 @@ import { PipeInsulationReductionModule } from './pipe-insulation-reduction/pipe-
 import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-insulation-reduction.module';
 import { UtilitiesListComponent } from './utilities-list/utilities-list.component';
 import { RouterModule } from '@angular/router';
+import { WeatherBinsModule } from './weather-bins/weather-bins.module';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import { RouterModule } from '@angular/router';
         TankInsulationReductionModule,
         CashFlowModule,
         UnitConverterModule,
-        RouterModule
+        RouterModule,
+        WeatherBinsModule
     ]
 })
 
