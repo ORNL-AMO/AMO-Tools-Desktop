@@ -80,7 +80,8 @@ export class VisualizeMenuService {
 
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
     let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
-    if (selectedGraphObj.data[0].type == 'scattergl') {
+    let testTimeSeries = dataFields.find(dataField => { return dataField.isDateField });
+    if (selectedGraphObj.data[0].type == 'scattergl' && testTimeSeries != undefined) {
       dataFields.push({
         fieldName: 'Time Series',
         alias: 'Time Series',

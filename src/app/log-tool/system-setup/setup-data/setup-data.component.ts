@@ -83,5 +83,6 @@ export class SetupDataComponent implements OnInit {
     this.dataExists = false;
     this.disableImportFile = false;
     this.addingAdditionalData = false;
+    this.cd.detectChanges();
   }
 }
