@@ -1,6 +1,29 @@
-<!-- <form>
-    <div class="form-group">
-        <label>Data File</label>
-        <input>
-    </div>
-</form> -->
+<div class="p-2" *ngFor="let case of inputData.cases; let caseIndex = index;">
+    <label class="group-label">
+        {{case.caseName}}
+    </label>
+    <form *ngFor="let parameter of case.caseParameters">
+        <div class="form-group">
+            <label for="{{'field'+index}}">Weather Parameter</label>
+            <select name="{{'field'+index}}" id="{{'field'+index}}" class="form-control" [(ngModel)]="parameter.field" (change)="save()">
+                <option *ngFor="let field of dataFields" [ngValue]="field">{{field}}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="{{'lowerBound'+index}}">Lower Bound</label>
+            <input name="{{'lowerBound'+index}}" type="number" class="form-control" id="{{'lowerBound'+index}}" [(ngModel)]="parameter.lowerBound" (input)="save()">
+        </div>
+
+        <div class="form-group">
+            <label for="{{'upperBound'+index}}">Upper Bound</label>
+            <input name="{{'upperBound'+index}}" type="number" class="form-control" id="{{'upperBound'+index}}" [(ngModel)]="parameter.upperBound" (input)="save()">
+        </div>
+        <div class="p-2">
+            <button class="btn btn-sm small" (click)="addParameter(caseIndex)">+Add Parameter</button>
+        </div>
+    </form>
+</div>
+<div class="p-2">
+    <button class="btn btn-sm small" (click)="addCase()">+Add Case</button>
+</div>

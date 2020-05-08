@@ -129,6 +129,7 @@
     "moment": "^2.18.1",
     "ngx-bootstrap": "5.1.1",
     "ngx-clipboard": "12.2.1",
+    "papaparse": "^5.1.0",
     "plotly.js": "^1.52.2",
     "popper.js": "1.14.3",
     "protractor": "^5.4.1",
