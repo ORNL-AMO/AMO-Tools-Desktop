@@ -7,7 +7,6 @@ import { LogToolService } from './log-tool.service';
 import { SystemSetupComponent } from './system-setup/system-setup.component';
 import { HelpPanelComponent } from './system-setup/help-panel/help-panel.component';
 import { VisualizeComponent } from './visualize/visualize.component';
-import { ReportComponent } from './report/report.component';
 import { SetupDataComponent } from './system-setup/setup-data/setup-data.component';
 import { FormsModule } from '@angular/forms';
 import { CleanDataComponent } from './system-setup/clean-data/clean-data.component';
@@ -45,7 +44,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     SystemSetupComponent,
     HelpPanelComponent,
     VisualizeComponent,
-    ReportComponent,
     SetupDataComponent,
     CleanDataComponent,
     DayTypeAnalysisComponent,
