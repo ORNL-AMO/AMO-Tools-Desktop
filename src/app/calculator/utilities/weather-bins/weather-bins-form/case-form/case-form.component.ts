@@ -22,7 +22,7 @@ export class CaseFormComponent implements OnInit {
 
     this.dataFieldsSub = this.weatherBinsService.dataFields.subscribe(dataFields => {
       this.dataFields = dataFields;
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -31,6 +31,7 @@ export class CaseFormComponent implements OnInit {
   }
 
   save() {
+    this.inputData = this.weatherBinsService.calculateBins(this.inputData);
     this.weatherBinsService.inputData.next(this.inputData);
   }
 

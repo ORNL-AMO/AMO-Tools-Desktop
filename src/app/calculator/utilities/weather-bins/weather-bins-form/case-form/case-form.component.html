@@ -1,29 +1,33 @@
-<div class="p-2" *ngFor="let case of inputData.cases; let caseIndex = index;">
-    <label class="group-label">
+<div class="form-section p-2" *ngFor="let case of inputData.cases; let caseIndex = index;">
+    <label class=" d-flex group-label w-100 justify-content-between">
         {{case.caseName}}
+        <a class="click-link small" (click)="addParameter(caseIndex)">+Add Parameter</a>
     </label>
-    <form *ngFor="let parameter of case.caseParameters">
+    <form class="pb-2" *ngFor="let parameter of case.caseParameters; let parameterIndex = index;">
         <div class="form-group">
-            <label for="{{'field'+index}}">Weather Parameter</label>
-            <select name="{{'field'+index}}" id="{{'field'+index}}" class="form-control" [(ngModel)]="parameter.field" (change)="save()">
+            <label for="{{'field'+parameterIndex}}">Weather Parameter</label>
+            <select name="{{'field'+parameterIndex}}" id="{{'field'+parameterIndex}}" class="form-control"
+                [(ngModel)]="parameter.field" (change)="save()">
                 <option *ngFor="let field of dataFields" [ngValue]="field">{{field}}</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="{{'lowerBound'+index}}">Lower Bound</label>
-            <input name="{{'lowerBound'+index}}" type="number" class="form-control" id="{{'lowerBound'+index}}" [(ngModel)]="parameter.lowerBound" (input)="save()">
+            <label for="{{'lowerBound'+parameterIndex}}">Lower Bound</label>
+            <input name="{{'lowerBound'+parameterIndex}}" type="number" class="form-control"
+                id="{{'lowerBound'+parameterIndex}}" [(ngModel)]="parameter.lowerBound" (input)="save()">
         </div>
 
         <div class="form-group">
-            <label for="{{'upperBound'+index}}">Upper Bound</label>
-            <input name="{{'upperBound'+index}}" type="number" class="form-control" id="{{'upperBound'+index}}" [(ngModel)]="parameter.upperBound" (input)="save()">
-        </div>
-        <div class="p-2">
-            <button class="btn btn-sm small" (click)="addParameter(caseIndex)">+Add Parameter</button>
+            <label for="{{'upperBound'+parameterIndex}}">Upper Bound</label>
+            <input name="{{'upperBound'+parameterIndex}}" type="number" class="form-control"
+                id="{{'upperBound'+parameterIndex}}" [(ngModel)]="parameter.upperBound" (input)="save()">
         </div>
     </form>
+    <div class="form-group">
+        <label>Case Number of Hours</label>
+        <div>{{case.totalNumberOfDataPoints}}</div>
+    </div>
 </div>
-<div class="p-2">
-    <button class="btn btn-sm small" (click)="addCase()">+Add Case</button>
-</div>
+
+<a *ngIf="dataFields != undefined" class="click-link pull-right-right p-2" (click)="addCase()">+Add Case</a>

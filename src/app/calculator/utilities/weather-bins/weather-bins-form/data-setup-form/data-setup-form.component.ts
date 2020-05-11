@@ -17,7 +17,6 @@ export class DataSetupFormComponent implements OnInit {
   disableImportFile: boolean;
   importingData: boolean;
   importSuccesful: boolean;
-  importDataFromCsv: CsvImportData;
   startDate: Date;
   endDate: Date;
   dateSelectionData: Array<DateSelection>;
@@ -69,8 +68,8 @@ export class DataSetupFormComponent implements OnInit {
     this.importingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
-      this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
-      this.weatherBinsService.setDataFields(this.importDataFromCsv);
+      this.weatherBinsService.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
+      this.weatherBinsService.setDataFields(this.weatherBinsService.importDataFromCsv);
       this.importSuccesful = true;
       this.importData = undefined;
       this.importingData = false;
@@ -93,6 +92,7 @@ export class DataSetupFormComponent implements OnInit {
   }
 
   save() {
+    this.inputData = this.weatherBinsService.calculateBins(this.inputData);
     this.weatherBinsService.inputData.next(this.inputData);
   }
 }
