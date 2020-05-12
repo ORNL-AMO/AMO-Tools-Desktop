@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CsvImportData } from '../../../shared/helper-services/csv-to-json.service';
 import * as _ from 'lodash';
+import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 
 @Injectable()
@@ -11,15 +13,15 @@ export class WeatherBinsService {
   inputData: BehaviorSubject<WeatherBinsInput>;
   importDataFromCsv: BehaviorSubject<CsvImportData>;
   dataInDateRange: Array<any>;
-  constructor() {
+  constructor(private convertUnitsService: ConvertUnitsService) {
     let initInputData: WeatherBinsInput = this.initInputData();
     this.inputData = new BehaviorSubject(initInputData);
     this.dataFields = new BehaviorSubject(undefined);
     this.importDataFromCsv = new BehaviorSubject(undefined);
   }
 
-  save(newInputData: WeatherBinsInput){
-    newInputData = this.calculateBins(newInputData);
+  save(newInputData: WeatherBinsInput, settings: Settings) {
+    newInputData = this.calculateBins(newInputData, settings);
     this.inputData.next(newInputData);
   }
 
@@ -61,12 +63,32 @@ export class WeatherBinsService {
     }
   }
 
-  calculateBins(inputData: WeatherBinsInput): WeatherBinsInput {
+  calculateBins(inputData: WeatherBinsInput, settings: Settings): WeatherBinsInput {
     let dataInRange: Array<any> = this.getDataInDateRange(inputData);
     inputData.cases.forEach(weatherCase => {
-      weatherCase.totalNumberOfDataPoints = this.calculateNumberOfParameterDataPoints(dataInRange, weatherCase.caseParameters);
+      let convertedCaseParameters: Array<CaseParameter> = this.convertCaseParameters(weatherCase.caseParameters, settings);
+      weatherCase.totalNumberOfDataPoints = this.calculateNumberOfParameterDataPoints(dataInRange, convertedCaseParameters);
     });
     return inputData;
+  }
+
+  convertCaseParameters(caseParameters: Array<CaseParameter>, settings: Settings): Array<CaseParameter> {
+    let caseParametersCopy: Array<CaseParameter> = JSON.parse(JSON.stringify(caseParameters));
+    if (settings.unitsOfMeasure == 'Metric') {
+      caseParametersCopy.forEach(parameter => {
+        if (parameter.field == 'Dry-bulb Temperature (F)' || 'Wet Bulb Temperature (F)') {
+          parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('C').to('F');
+          parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('C').to('F');
+        } else if (parameter.field == 'Atm Pressure (psia)') {
+          parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('Pa').to('psia');
+          parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('Pa').to('psia');
+        } else if (parameter.field == 'Enthalpy (BTU/lbm)') {
+          parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('kJkg').to('btuLb');
+          parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('kJkg').to('btuLb');
+        }
+      })
+    }
+    return caseParametersCopy;
   }
 
   calculateNumberOfParameterDataPoints(dataInDateRange: Array<any>, caseParameters: Array<CaseParameter>): number {

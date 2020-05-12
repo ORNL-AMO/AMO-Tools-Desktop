@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { CsvToJsonService, CsvImportData } from '../../../../../shared/helper-services/csv-to-json.service';
 import { DateSelection, DateSelectionData } from './date-data';
 import { WeatherBinsInput, WeatherBinsService } from '../../weather-bins.service';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
   selector: 'app-data-setup-form',
@@ -10,6 +11,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./data-setup-form.component.css']
 })
 export class DataSetupFormComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   fileReference: any;
   validFile: boolean;
@@ -92,6 +95,6 @@ export class DataSetupFormComponent implements OnInit {
   }
 
   save() {
-    this.weatherBinsService.save(this.inputData);
+    this.weatherBinsService.save(this.inputData, this.settings);
   }
 }

@@ -35,7 +35,7 @@ export class CaseFormComponent implements OnInit {
   }
 
   save() {
-    this.weatherBinsService.save(this.inputData);
+    this.weatherBinsService.save(this.inputData, this.settings);
   }
 
   addCase() {
