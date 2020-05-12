@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { WeatherBinsService, WeatherBinsInput, CaseParameter, WeatherBinCase } from '../../weather-bins.service';
 import { Subscription } from 'rxjs';
+import { CsvImportData } from '../../../../../shared/helper-services/csv-to-json.service';
+import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
   selector: 'app-case-form',
@@ -8,11 +10,13 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./case-form.component.css']
 })
 export class CaseFormComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   inputData: WeatherBinsInput;
   inputDataSub: Subscription;
-  dataFields: Array<string>;
-  dataFieldsSub: Subscription;
+  importDataFromCsvSub: Subscription;
+  importDataFromCsv: CsvImportData;
   constructor(private weatherBinsService: WeatherBinsService) { }
 
   ngOnInit(): void {
@@ -20,19 +24,18 @@ export class CaseFormComponent implements OnInit {
       this.inputData = val;
     });
 
-    this.dataFieldsSub = this.weatherBinsService.dataFields.subscribe(dataFields => {
-      this.dataFields = dataFields;
+    this.importDataFromCsvSub = this.weatherBinsService.importDataFromCsv.subscribe(importData => {
+      this.importDataFromCsv = importData;
     });
   }
 
   ngOnDestroy() {
     this.inputDataSub.unsubscribe();
-    this.dataFieldsSub.unsubscribe();
+    this.importDataFromCsvSub.unsubscribe();
   }
 
   save() {
-    this.inputData = this.weatherBinsService.calculateBins(this.inputData);
-    this.weatherBinsService.inputData.next(this.inputData);
+    this.weatherBinsService.save(this.inputData);
   }
 
   addCase() {
@@ -44,6 +47,21 @@ export class CaseFormComponent implements OnInit {
   addParameter(caseIndex: number) {
     let emptyParameter: CaseParameter = this.weatherBinsService.getEmptyCaseParameter();
     this.inputData.cases[caseIndex].caseParameters.push(emptyParameter);
+    this.save();
+  }
+
+  deleteParameter(caseIndex: number, parameterIndex: number) {
+    this.inputData.cases[caseIndex].caseParameters.splice(parameterIndex, 1);
+    this.save();
+  }
+
+  deleteCase(index: number) {
+    this.inputData.cases.splice(index, 1);
+    let newNameIndex: number = 1;
+    this.inputData.cases.forEach(caseItem => {
+      caseItem.caseName = 'Case #' + newNameIndex;
+    })
+
     this.save();
   }
 }

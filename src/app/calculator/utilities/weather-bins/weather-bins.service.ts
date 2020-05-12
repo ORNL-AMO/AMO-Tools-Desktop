@@ -9,16 +9,23 @@ export class WeatherBinsService {
 
   dataFields: BehaviorSubject<Array<string>>;
   inputData: BehaviorSubject<WeatherBinsInput>;
-  importDataFromCsv: CsvImportData;
+  importDataFromCsv: BehaviorSubject<CsvImportData>;
   dataInDateRange: Array<any>;
   constructor() {
     let initInputData: WeatherBinsInput = this.initInputData();
     this.inputData = new BehaviorSubject(initInputData);
     this.dataFields = new BehaviorSubject(undefined);
+    this.importDataFromCsv = new BehaviorSubject(undefined);
+  }
+
+  save(newInputData: WeatherBinsInput){
+    newInputData = this.calculateBins(newInputData);
+    this.inputData.next(newInputData);
   }
 
   setDataFields(csvImportData: CsvImportData) {
     let dataFields: Array<string> = JSON.parse(JSON.stringify(csvImportData.meta.fields));
+    console.log(dataFields);
     dataFields.shift();
     dataFields.shift();
     this.dataFields.next(dataFields);
@@ -93,9 +100,10 @@ export class WeatherBinsService {
 
   getDataInDateRange(inputData: WeatherBinsInput) {
     let dataInDateRange: Array<any> = new Array();
-    this.importDataFromCsv.data.forEach((dataItem) => {
+    let importDataFromCsv: CsvImportData = this.importDataFromCsv.getValue();
+    importDataFromCsv.data.forEach((dataItem) => {
       // let data = dataItem[field];
-      let dataItemDate = new Date(dataItem[this.importDataFromCsv.meta.fields[0]]);
+      let dataItemDate = new Date(dataItem[importDataFromCsv.meta.fields[0]]);
       let dateMonth: number = dataItemDate.getMonth();
       let dateDay: number = dataItemDate.getDate();
       let checkMax: boolean = false;

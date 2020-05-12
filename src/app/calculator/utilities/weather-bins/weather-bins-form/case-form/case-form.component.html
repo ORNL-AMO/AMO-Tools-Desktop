@@ -1,33 +1,99 @@
-<div class="form-section p-2" *ngFor="let case of inputData.cases; let caseIndex = index;">
-    <label class=" d-flex group-label w-100 justify-content-between">
-        {{case.caseName}}
-        <a class="click-link small" (click)="addParameter(caseIndex)">+Add Parameter</a>
-    </label>
-    <form class="pb-2" *ngFor="let parameter of case.caseParameters; let parameterIndex = index;">
-        <div class="form-group">
-            <label for="{{'field'+parameterIndex}}">Weather Parameter</label>
-            <select name="{{'field'+parameterIndex}}" id="{{'field'+parameterIndex}}" class="form-control"
-                [(ngModel)]="parameter.field" (change)="save()">
-                <option *ngFor="let field of dataFields" [ngValue]="field">{{field}}</option>
-            </select>
-        </div>
+<div class="p-2">
+    <div class="form-section" *ngFor="let case of inputData.cases; let caseIndex = index;">
+        <label class=" d-flex group-label w-100 justify-content-between">
+            <span class="fa fa-times-circle pr-2 delete click-link" (click)="deleteCase(caseIndex)"></span>
+            <span class="large">{{case.caseName}}</span>
+            <a class="click-link small" (click)="addParameter(caseIndex)">+Add Parameter</a>
+        </label>
+        <form class="form-section" *ngFor="let parameter of case.caseParameters; let parameterIndex = index;">
+            <div class="form-group">
+                <label for="{{'field'+parameterIndex}}">Weather Parameter</label>
+                <select name="{{'field'+parameterIndex}}" id="{{'field'+parameterIndex}}" class="form-control"
+                    [(ngModel)]="parameter.field" (change)="save()">
+                    <!-- <option *ngFor="let field of dataFields" [ngValue]="field">{{field}}</option> -->
+                    <option [ngValue]="'Dry-bulb Temperature (F)'">
+                        Dry-bulb Temperature
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(&#8457;)</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span>
+                    </option>
+                    <option [ngValue]="'RHum (%)'">Relative Humidity (%)</option>
+                    <option [ngValue]="'Atm Pressure (psia)'">
+                        Atm Pressure
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(Psia)</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(Paa)</span></option>
+                    <option [ngValue]="'Wet Bulb Temperature (F)'">
+                        Wet-bulb Temperature
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(&#8457;)</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span></option>
+                    <option [ngValue]="'Enthalpy (BTU/lbm)'">
+                        Enthalpy
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(BTU/lbm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(kJ/kg)</span></option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="{{'lowerBound'+parameterIndex}}">Lower Bound</label>
-            <input name="{{'lowerBound'+parameterIndex}}" type="number" class="form-control"
-                id="{{'lowerBound'+parameterIndex}}" [(ngModel)]="parameter.lowerBound" (input)="save()">
-        </div>
+            <div class="form-group">
+                <label for="{{'lowerBound'+parameterIndex}}">Lower Bound</label>
+                <div class="input-group">
+                    <input name="{{'lowerBound'+parameterIndex}}" type="number" class="form-control"
+                        id="{{'lowerBound'+parameterIndex}}" [(ngModel)]="parameter.lowerBound" (input)="save()">
 
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Dry-bulb Temperature (F)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+                    </span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'RHum (%)'">%</span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Atm Pressure (psia)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">Psia</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Paa</span>
+                    </span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Wet Bulb Temperature (F)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+                    </span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Enthalpy (BTU/lbm)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">BTU/lbm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{'upperBound'+parameterIndex}}">Upper Bound</label>
+                <div class="input-group">
+                    <input name="{{'upperBound'+parameterIndex}}" type="number" class="form-control"
+                        id="{{'upperBound'+parameterIndex}}" [(ngModel)]="parameter.upperBound" (input)="save()">
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Dry-bulb Temperature (F)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+                    </span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'RHum (%)'">%</span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Atm Pressure (psia)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">Psia</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Paa</span>
+                    </span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Wet Bulb Temperature (F)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+                    </span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Enthalpy (BTU/lbm)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">BTU/lbm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group text-right">
+                <a class="click-link delete small" (click)="deleteParameter(caseIndex, parameterIndex)">Delete
+                    Parameter</a>
+            </div>
+        </form>
         <div class="form-group">
-            <label for="{{'upperBound'+parameterIndex}}">Upper Bound</label>
-            <input name="{{'upperBound'+parameterIndex}}" type="number" class="form-control"
-                id="{{'upperBound'+parameterIndex}}" [(ngModel)]="parameter.upperBound" (input)="save()">
+            <label>Case Number of Hours</label>
+            <div class="text-center">{{case.totalNumberOfDataPoints}}</div>
         </div>
-    </form>
-    <div class="form-group">
-        <label>Case Number of Hours</label>
-        <div>{{case.totalNumberOfDataPoints}}</div>
+    </div>
+
+    <div class="d-flex w-100 justify-content-end" *ngIf="importDataFromCsv != undefined">
+        <a class="click-link p-2" (click)="addCase()">+Add Case</a>
     </div>
 </div>
-
-<a *ngIf="dataFields != undefined" class="click-link pull-right-right p-2" (click)="addCase()">+Add Case</a>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Settings } from '../../../shared/models/settings';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-weather-bins',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WeatherBinsComponent implements OnInit {
 
-  constructor() { }
+  settings: Settings;
+  tabSelect: string = 'results';
+  constructor(private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    this.settings = this.settingsDbService.globalSettings;
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
   }
 
 }
