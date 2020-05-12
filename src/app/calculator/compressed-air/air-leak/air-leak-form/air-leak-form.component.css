@@ -1,0 +1,102 @@
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+}
+
+.form-section {
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}
+
+.form-section-decibel {
+  padding-bottom: .25rem;
+  border-top: 1px dashed;
+}
+
+.btn-group {
+  /* display: block; */
+  text-align: center;
+}
+
+.compressor-form-item {
+  flex: 1 1 350px;
+  padding: 1em;
+}
+
+.leak-form-item {
+  flex: 1 1 460px;
+  padding: 1em;
+}
+
+.vertical {
+  display: inline;
+  border: .5px solid grey;
+}
+
+
+/* .btn-group .btn-sm {
+  font-size: small !important;
+} */
+
+.btn-margin-10 {
+  margin: 10px 0px;
+}
+
+.hidden-copy-table {
+  z-index: -10;
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  height: 0;
+  width: 0;
+}
+
+/* .btn-form {
+  border-radius: 4px !important;
+} */
+
+.group-label-wide {
+  width: 100%;
+  border-bottom: #145A32 solid 2px;
+  font-weight: bold;
+}
+
+.col-item-br{
+  border-right: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+table > tr {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.truncated {
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+td{
+  font-size: small;
+}
+
+td{
+  font-size: small;
+  border-right: solid 1px darkgray;
+  border-left: solid 1px darkgray;
+  padding: 3px;
+}
+
+tr > td:first-child {
+  border-right: none;
+}
+
+
+tbody{
+  box-shadow: 0 4px 8px 0 grey
+}
+
+.input-group-prepend{
+  align-items: center;
+  padding-right: 5px;
+}

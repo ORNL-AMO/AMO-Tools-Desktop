@@ -74,6 +74,7 @@ import { SteamPropertiesComponent } from '../calculator/steam/steam-properties/s
 import { TurbineComponent } from '../calculator/steam/turbine/turbine.component';
 import { TankInsulationReductionComponent } from '../calculator/utilities/tank-insulation-reduction/tank-insulation-reduction.component';
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
+import { AirLeakComponent } from '../calculator/compressed-air/air-leak/air-leak.component';
 
 export const coreRoutes: Routes = [
   {
@@ -189,6 +190,10 @@ export const coreRoutes: Routes = [
           {
             path: 'system-capacity',
             component: SystemCapacityComponent
+          },
+          {
+            path: 'air-leak',
+            component: AirLeakComponent
           },
           {
             path: 'fan-analysis',

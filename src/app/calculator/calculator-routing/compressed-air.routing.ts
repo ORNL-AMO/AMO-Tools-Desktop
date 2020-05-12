@@ -7,6 +7,7 @@ import { PneumaticAirComponent } from "../compressed-air/pneumatic-air/pneumatic
 import { ReceiverTankComponent } from "../compressed-air/receiver-tank/receiver-tank.component";
 import { SystemCapacityComponent } from "../compressed-air/system-capacity/system-capacity.component";
 import { CompressedAirListComponent } from "../compressed-air/compressed-air-list/compressed-air-list.component";
+import { AirLeakComponent } from "../compressed-air/air-leak/air-leak.component";
 
 export const compressedAirRoutes: Routes = [
     {
@@ -44,5 +45,9 @@ export const compressedAirRoutes: Routes = [
     {
         path: 'system-capacity',
         component: SystemCapacityComponent
+    },
+    {
+        path: 'air-leak',
+        component: AirLeakComponent
     }
 ]

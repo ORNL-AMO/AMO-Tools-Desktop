@@ -10,12 +10,14 @@ import { ReceiverTankModule } from './receiver-tank/receiver-tank.module';
 import { SystemCapacityModule } from './system-capacity/system-capacity.module';
 import { CompressedAirListComponent } from './compressed-air-list/compressed-air-list.component';
 import { RouterModule } from '@angular/router';
+import { AirLeakModule } from './air-leak/air-leak.module';
 
 @NgModule({
   imports: [
     CommonModule,
     AirVelocityModule,
     BagMethodModule,
+    AirLeakModule,
     // FlowFactorModule,
     OperatingCostModule,
     PipeSizingModule,

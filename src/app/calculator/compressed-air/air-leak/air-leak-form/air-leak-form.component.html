@@ -1,0 +1,702 @@
+<div class="tab-content">
+  <div class="d-flex flex-row flex-wrap">
+
+    <!--  Facility Compressor Data form -->
+    <div class="compressor-form-item pb-3">
+      <form [formGroup]="facilityCompressorDataForm" #formElement>
+        <label class="group-label-wide mb-2">Compressor Data</label>
+        <div class="form-group">
+          <label for="hoursPerYear">Annual Operating Hours</label>
+          <div class="input-group">
+            <span class="input-group-addon op-hour-addon units">
+              <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+            </span>
+            <input name="hoursPerYear" class="form-control" type="number" step="any"
+              formControlName="hoursPerYear" id="hoursPerYear" onfocus="this.select();"
+              (focus)="changeField('hoursPerYear')">
+            <span class="input-group-addon units">hrs/yr</span>
+            <span class="alert-danger pull-right small"
+              *ngIf="facilityCompressorDataForm.controls.hoursPerYear.invalid && !facilityCompressorDataForm.controls.hoursPerYear.pristine">
+              <span *ngIf="facilityCompressorDataForm.controls.hoursPerYear.errors.required">Value required.</span>
+              <span *ngIf="facilityCompressorDataForm.controls.hoursPerYear.errors.max">Value can't be greater than
+                {{facilityCompressorDataForm.controls.hoursPerYear.errors.max.max}}.</span>
+              <span *ngIf="facilityCompressorDataForm.controls.hoursPerYear.errors.min">Value can't be less than
+                {{facilityCompressorDataForm.controls.hoursPerYear.errors.min.min}}.</span>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Utility Type</label>
+          <select name="utilityType" class="form-control " id="utilityType" formControlName="utilityType" autofocus
+            (focus)="changeField('utilityType')" (change)="emitChange()" >
+            <option *ngFor="let utilityType of utilityTypeOptions" [ngValue]="utilityType.value">
+              {{utilityType.display}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="utilityCost">Utility Cost</label>
+          <div class="input-group">
+            <input name="utilityCost" class="form-control" type="number" step="any" formControlName="utilityCost"
+              id="utilityCost" onfocus="this.select();" (focus)="changeField('utilityCost')">
+            <span class="input-group-addon units">$/kWH</span>
+            <span class="alert-danger pull-right small"
+            *ngIf="facilityCompressorDataForm.controls.utilityCost.invalid && !facilityCompressorDataForm.controls.utilityCost.pristine">
+            <span *ngIf="facilityCompressorDataForm.controls.utilityCost.errors.required">Value required.</span>
+            <span *ngIf="facilityCompressorDataForm.controls.utilityCost.errors.min">Value can't be less than
+              {{facilityCompressorDataForm.controls.utilityCost.errors.min.min}}.</span>
+          </span>
+          </div>
+        </div>
+
+        <div formGroupName="compressorElectricityData" *ngIf="facilityCompressorDataForm.controls.utilityType.value == 1" class="pt-1">
+          <div class="form-group">
+            <label class="small" for="compressorControlType">Compressor Control Type</label>
+            <div class="input-group">
+              <select class="form-control" name="compressorControlType"
+                id="compressorControlType" formControlName="compressorControl"
+                (change)="changeCompressorControl()" (focus)="changeField('compressorControl')">
+                <option *ngFor="let control of compressorControlTypes" [ngValue]="control.value">{{control.display}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row" *ngIf="!compressorCustomControl">
+            <div class="col-6">
+              <label class="small bold" for="compressorControlAdjustment">Compressor Control
+                Adjustment</label>
+            </div>
+            <div class="col-6 text-center">
+              <span class="small bold">{{facilityCompressorDataForm.controls.compressorElectricityData.controls.compressorControlAdjustment.value | number:'1.0-2'}} %</span>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="compressorCustomControl">
+            <label class="small" for="compressorControlAdjustment">Compressor Control Adjustment</label>
+            <div class="input-group">
+              <input class="form-control" name="compressorControlAdjustment"
+                id="compressorControlAdjustment" type="number" (input)="changeCompressorControl()"
+                formControlName="compressorControlAdjustment" (focus)="changeField('compressorControlAdjustment')"
+                onfocus="this.select();">
+              <span class="units input-group-addon">%</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="small" for="compressorType">Compressor Type</label>
+            <div class="input-group">
+              <select class="form-control" name="compressorType"
+                id="compressorType" (change)="changeCompressorType()"
+                formControlName="compressorSpecificPowerControl" (focus)="changeField('compressorType')">
+                <option *ngFor="let compType of compressorTypes" [ngValue]="compType.value">{{compType.display}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="!compressorCustomSpecificPower">
+            <div class="col-6">
+              <label class="small bold" for="compressorSpecificPower">Compressor Specific Power</label>
+            </div>
+            <div class="col-6 text-center">
+              <span class="small bold">{{facilityCompressorDataForm.controls.compressorElectricityData.controls.compressorSpecificPower.value | number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="compressorCustomSpecificPower">
+            <label class="small" for="compressorCustomSpecificPower">Compressor Specific Power</label>
+            <div class="input-group">
+              <input class="form-control" name="compressorSpecificPower" id="compressorCustomSpecificPower"
+                formControlName="compressorSpecificPower" type="number" (focus)="changeField('compressorSpecificPower')"
+                onfocus="this.select();">
+              <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
+              <span class="units input-group-addon"
+                *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <label class="small bold">Electricity Use</label>
+            </div>
+            <div class="col-6 text-center">
+              <span class="small bold"
+                *ngIf="outputs.baselineData.energyUse">
+                {{outputs.baselineData.energyUse | number:'1.0-0'}}
+                kWh</span>
+              <span *ngIf="outputs.leakResults.length == 0"> -- </span>
+            </div>
+          </div>
+        </div>
+      </form>
+      </div>
+
+    <!-- Leak Form -->
+    <div class="leak-form-item mb-2">
+      <form [formGroup]="leakForm">
+        <label *ngIf="!inEditMode" class="group-label-wide mb-2">Add New Leak</label>
+        <label *ngIf="inEditMode" class="group-label-wide mb-2">Edit Leak</label>
+
+        <div class="form-group pb-1">
+          <label for="name">Leak Name</label>
+          <div class="input-group">
+            <input name="name" class="form-control" type="text" step="any"
+              formControlName="name" id="name" onfocus="this.select();"
+              (focus)="changeField('name')">
+              <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.name.invalid && !leakForm.controls.name.pristine">
+              <span *ngIf="leakForm.controls.name.errors.required">Value required.</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group pb-1">
+          <label for="leakDescription">Leak Description</label>
+          <div class="input-group">
+            <textarea name="leakDescription" rows="4" class="form-control" id="leakDescription" 
+            (focus)="changeField('leakDescription')" formControlName="leakDescription" onfocus="this.select();"></textarea>
+            <span class="alert-danger pull-right small"
+            *ngIf="leakForm.controls.leakDescription.invalid && !leakForm.controls.leakDescription.pristine">
+            <span *ngIf="leakForm.controls.leakDescription.errors.required">Value required.</span>
+          </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="measurementMethod">Measurement Method</label>
+          <div class="input-group">
+            <select class="form-control" name="measurementMethod"
+              id="measurementMethod" formControlName="measurementMethod"
+              (focus)="changeField('measurementMethod')">
+              <option *ngFor="let method of measurementMethods" [ngValue]="method.value">{{method.display}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div *ngIf="leakForm.controls.measurementMethod.value == 0">
+          <div class="form-group">
+            <label for="leakRateEstimate">Leak Rate Estimate</label>
+            <div class="input-group">
+              <input name="leakRateEstimate" class="form-control" type="number" step="any"
+                formControlName="leakRateEstimate" id="leakRateEstimate"
+                onfocus="this.select();" (focus)="changeField('leakRateEstimate')">
+              <span class="input-group-addon units">CFM</span>
+              <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.leakRateEstimate.invalid && !leakForm.controls.leakRateEstimate.pristine">
+              <span *ngIf="leakForm.controls.leakRateEstimate.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.leakRateEstimate.errors.greaterThan">Value must be greater than 0.</span>
+            </span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="leakForm.controls.measurementMethod.value == 2">
+          <div class="form-group">
+            <label for="fillTime">Bag Fill Time</label>
+            <div class="input-group">
+              <input name="fillTime" class="form-control" type="number" step="any"
+                formControlName="fillTime" id="fillTime" onfocus="this.select();"
+                (focus)="changeField('fillTime')">
+              <span class="input-group-addon units">s</span>
+              <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.fillTime.invalid && !leakForm.controls.fillTime.pristine">
+              <span *ngIf="leakForm.controls.fillTime.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.fillTime.errors.min">Value can't be less than
+                {{leakForm.controls.fillTime.errors.min.min}}.</span>
+            </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="height">Height of Bag</label>
+            <div class="input-group">
+              <input name="height" class="form-control" type="number" step="any"
+                formControlName="height" id="height" onfocus="this.select();"
+                (focus)="changeField('height')">
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
+              <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.height.invalid && !leakForm.controls.height.pristine">
+              <span *ngIf="leakForm.controls.height.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.height.errors.min">Value can't be less than
+                {{leakForm.controls.height.errors.min.min}}.</span>
+            </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="diameter">Diameter of Bag</label>
+            <div class="input-group">
+              <input name="diameter" class="form-control" type="number" step="any"
+                formControlName="diameter" id="diameter" onfocus="this.select();"
+                (focus)="changeField('diameter')">
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
+              <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.diameter.invalid && !leakForm.controls.diameter.pristine">
+              <span *ngIf="leakForm.controls.diameter.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.diameter.errors.min">Value can't be less than
+                {{leakForm.controls.diameter.errors.min.min}}.</span>
+            </span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="leakForm.controls.measurementMethod.value == 3">
+          <div class="form-group">
+            <label for="compressorAirTemp">Compressor Air Temperature</label>
+            <div class="input-group">
+              <input name="compressorAirTemp" class="form-control" type="number" step="any"
+                formControlName="compressorAirTemp" id="compressorAirTemp"
+                onfocus="this.select();" (focus)="changeField('compressorAirTemp')">
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">&#8457;</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+              <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.compressorAirTemp.invalid && !leakForm.controls.compressorAirTemp.pristine">
+              <span *ngIf="leakForm.controls.compressorAirTemp.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.compressorAirTemp.errors.min">Value can't be less than
+                {{leakForm.controls.compressorAirTemp.errors.min.min}}.</span>
+            </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="atmosphericPressure">Atmospheric Pressure</label>
+            <div class="input-group">
+              <input name="atmosphericPressure" class="form-control" type="number" step="any"
+                formControlName="atmosphericPressure" id="atmosphericPressure"
+                onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+              <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.atmosphericPressure.invalid && !leakForm.controls.atmosphericPressure.pristine">
+              <span *ngIf="leakForm.controls.atmosphericPressure.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.atmosphericPressure.errors.min">Value can't be less than
+                {{leakForm.controls.atmosphericPressure.errors.min.min}}.</span>
+            </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="dischargeCoefficient">Discharge Coefficient</label>
+            <div class="input-group">
+              <input name="dischargeCoefficient" class="form-control" type="number" step="any"
+                formControlName="dischargeCoefficient" id="dischargeCoefficient"
+                onfocus="this.select();" (focus)="changeField('dischargeCoefficient')">
+                <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.dischargeCoefficient.invalid && !leakForm.controls.dischargeCoefficient.pristine">
+              <span *ngIf="leakForm.controls.dischargeCoefficient.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.dischargeCoefficient.errors.min">Value can't be less than
+                {{leakForm.controls.dischargeCoefficient.errors.min.min}}.</span>
+            </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="orificeDiameter">Orifice Diameter</label>
+            <div class="input-group">
+              <input name="orificeDiameter" class="form-control" type="number" step="any"
+                formControlName="orificeDiameter" id="orificeDiameter" onfocus="this.select();"
+                (focus)="changeField('orificeDiameter')">
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
+              <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.orificeDiameter.invalid && !leakForm.controls.orificeDiameter.pristine">
+              <span *ngIf="leakForm.controls.orificeDiameter.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.orificeDiameter.errors.min">Value can't be less than
+                {{leakForm.controls.orificeDiameter.errors.min.min}}.</span>
+            </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="supplyPressure">Supply Pressure</label>
+            <div class="input-group">
+              <input name="supplyPressure" class="form-control" type="number" step="any"
+                formControlName="supplyPressure" id="supplyPressure" onfocus="this.select();"
+                (focus)="changeField('supplyPressure')">
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+              <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.supplyPressure.invalid && !leakForm.controls.supplyPressure.pristine">
+              <span *ngIf="leakForm.controls.supplyPressure.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.supplyPressure.errors.min">Value can't be less than
+                {{leakForm.controls.supplyPressure.errors.min.min}}.</span>
+            </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="numberOfOrifices">Number of Orifices</label>
+            <div class="input-group">
+              <input name="numberOfOrifices" class="form-control" type="number" step="any"
+                formControlName="numberOfOrifices" id="numberOfOrifices" onfocus="this.select();"
+                (focus)="changeField('numberOfOrifices')">
+                <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.numberOfOrifices.invalid && !leakForm.controls.numberOfOrifices.pristine">
+              <span *ngIf="leakForm.controls.numberOfOrifices.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.numberOfOrifices.errors.min">Value can't be less than
+                {{leakForm.controls.numberOfOrifices.errors.min.min}}.</span>
+            </span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="leakForm.controls.measurementMethod.value == 1">
+          <label class="group-label">
+            Leak Data
+          </label>
+          <div class="form-group">
+            <label for="linePressure">Line Pressure</label>
+            <div class="input-group">
+              <input name="linePressure" class="form-control" type="number" step="any"
+                formControlName="linePressure" id="linePressure" onfocus="this.select();"
+                (focus)="changeField('linePressure')">
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+              <span class="alert-danger pull-right small"
+              *ngIf="leakForm.controls.linePressure.invalid && !leakForm.controls.linePressure.pristine">
+              <span *ngIf="leakForm.controls.linePressure.errors.required">Value required.</span>
+              <span *ngIf="leakForm.controls.linePressure.errors.min">Value can't be less than
+                {{leakForm.controls.linePressure.errors.min.min}}.</span>
+                </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="decibels">Leak Decibels</label>
+            <div class="input-group">
+              <input name="decibels" class="form-control" type="number" step="any"
+                formControlName="decibels" id="decibels" onfocus="this.select();"
+                (focus)="changeField('supplyPressure')">
+                <span class="input-group-addon units">Db</span>
+                <span class="alert-danger pull-right small"
+                *ngIf="leakForm.controls.decibels.invalid && !leakForm.controls.decibels.pristine">
+                <span *ngIf="leakForm.controls.decibels.errors.required">Value required.</span>
+                <span *ngIf="leakForm.controls.decibels.errors.min">Value can't be less than
+                  {{leakForm.controls.decibels.errors.min.min}}.</span>
+                  </span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="leakForm.controls.measurementMethod.value == 1" class=" pt-1">
+          <label class="group-label">
+            Estimated Free Air Flow Table
+          </label>
+          <div class="form-group d-flex justify-content-end">
+            <label class="text-center">
+              <span class="group-label">
+                Pressures
+                (<span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kPaa</span>)
+              </span>
+            </label>
+          </div>
+          <div class="form-group row no-gutters">
+            <div class="col-6"></div>
+            <div class="col-3 pr-2">
+              <div class="input-group pt-1">
+                <input name="pressureA" class="form-control" type="number" step="any"
+                  formControlName="pressureA" id="pressureA" onfocus="this.select();"
+                  (focus)="changeField('pressureA')">
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+                <span class="alert-danger pull-right small"
+                *ngIf="leakForm.controls.pressureA.invalid && !leakForm.controls.pressureA.pristine">
+                <span *ngIf="leakForm.controls.pressureA.errors.required">Value required.</span>
+                <span *ngIf="leakForm.controls.pressureA.errors.min">Value can't be less than
+                  {{leakForm.controls.pressureA.errors.min.min}}.</span>
+                  </span>
+              </div>
+
+            </div>
+            <div class="col-3">
+              <div class="input-group pt-1">    
+                <input name="pressureB" class="form-control" type="number" step="any"
+                  formControlName="pressureB" id="pressureB" onfocus="this.select();"
+                  (focus)="changeField('pressureB')">
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+                <span class="alert-danger pull-right small"
+                *ngIf="leakForm.controls.pressureB.invalid && !leakForm.controls.pressureB.pristine">
+                <span *ngIf="leakForm.controls.pressureB.errors.required">Value required.</span>
+                <span *ngIf="leakForm.controls.pressureB.errors.min">Value can't be less than
+                  {{leakForm.controls.pressureB.errors.min.min}}.</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row no-gutters">
+            <div class="col-6">
+              <label class="pt-2">
+                <span class="group-label">
+                  Decibel Ratings
+                </span>
+              </label>
+              <div class="col-6 input-group pt-1">
+                <input name="decibelRatingA" class="form-control" type="number" step="any"
+                  formControlName="decibelRatingA" id="decibelRatingA" onfocus="this.select();"
+                  (focus)="changeField('decibelRatingA')">
+                  <span class="input-group-addon units">Db</span>
+                  <span class="alert-danger pull-right small"
+                  *ngIf="leakForm.controls.decibelRatingA.invalid && !leakForm.controls.decibelRatingA.pristine">
+                  <span *ngIf="leakForm.controls.decibelRatingA.errors.required">Value required.</span>
+                  <span *ngIf="leakForm.controls.decibelRatingA.errors.min">Value can't be less than
+                    {{leakForm.controls.decibelRatingA.errors.min.min}}.</span>
+                  </span>
+              </div>
+            </div>
+            <div class="col-3 pr-2">
+              <div class="input-group pt-1">
+                <input name="firstFlowA" class="form-control" type="number" step="any"
+                  formControlName="firstFlowA" id="firstFlowA" onfocus="this.select();"
+                  (focus)="changeField('firstFlowA')">
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
+                <span class="alert-danger pull-right small"
+                *ngIf="leakForm.controls.firstFlowA.invalid && !leakForm.controls.firstFlowA.pristine">
+                <span *ngIf="leakForm.controls.firstFlowA.errors.required">Value required.</span>
+                <span *ngIf="leakForm.controls.firstFlowA.errors.min">Value can't be less than
+                  {{leakForm.controls.firstFlowA.errors.min.min}}.</span>
+                </span>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="input-group pt-1">
+                <input name="secondFlowA" class="form-control" type="number" step="any"
+                  formControlName="secondFlowA" id="secondFlowA" onfocus="this.select();"
+                  (focus)="changeField('secondFlowA')">
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup></span>
+                <span class="alert-danger pull-right small"
+                *ngIf="leakForm.controls.secondFlowA.invalid && !leakForm.controls.secondFlowA.pristine">
+                <span *ngIf="leakForm.controls.secondFlowA.errors.required">Value required.</span>
+                <span *ngIf="leakForm.controls.secondFlowA.errors.min">Value can't be less than
+                  {{leakForm.controls.secondFlowA.errors.min.min}}.</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row no-gutters">
+            <div class="col-6">
+              <div class="col-6 ml-auto input-group pt-1">
+                <input name="decibelRatingB" class="form-control" type="number" step="any"
+                  formControlName="decibelRatingB" id="decibelRatingB" onfocus="this.select();"
+                  (focus)="changeField('decibelRatingB')">
+                <span class="input-group-addon units">Db</span>
+                <span class="alert-danger pull-right small"
+                *ngIf="leakForm.controls.decibelRatingB.invalid && !leakForm.controls.decibelRatingB.pristine">
+                <span *ngIf="leakForm.controls.decibelRatingB.errors.required">Value required.</span>
+                <span *ngIf="leakForm.controls.decibelRatingB.errors.min">Value can't be less than
+                  {{leakForm.controls.decibelRatingB.errors.min.min}}.</span>
+                </span>
+              </div>
+            </div>
+            <div class="col-3 pr-2">
+              <div class="input-group pt-1">
+                <input name="firstFlowB" class="form-control" type="number" step="any"
+                  formControlName="firstFlowB" id="firstFlowB" onfocus="this.select();"
+                  (focus)="changeField('firstFlowB')">
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup></span>
+                <span class="alert-danger pull-right small"
+                *ngIf="leakForm.controls.firstFlowB.invalid && !leakForm.controls.firstFlowB.pristine">
+                <span *ngIf="leakForm.controls.firstFlowB.errors.required">Value required.</span>
+                <span *ngIf="leakForm.controls.firstFlowB.errors.min">Value can't be less than
+                  {{leakForm.controls.firstFlowB.errors.min.min}}.</span>
+                </span>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="input-group pt-1">
+                <input name="secondFlowB" class="form-control" type="number" step="any"
+                  formControlName="secondFlowB" id="secondFlowB" onfocus="this.select();"
+                  (focus)="changeField('secondFlowB')">
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup></span>
+                <span class="alert-danger pull-right small"
+                *ngIf="leakForm.controls.secondFlowB.invalid && !leakForm.controls.secondFlowB.pristine">
+                <span *ngIf="leakForm.controls.secondFlowB.errors.required">Value required.</span>
+                <span *ngIf="leakForm.controls.secondFlowB.errors.min">Value can't be less than
+                  {{leakForm.controls.secondFlowB.errors.min.min}}.</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      </div>
+
+    </div>
+    <div class="w-100 justify-content-end btn-group btn-group-sm">
+      <div class="btn-group btn-group-sm">
+        <button *ngIf="!inEditMode" type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form "
+          [disabled]="!leakForm.valid && !facilityCompressorDataForm.valid"
+          (click)="addLeak()">
+          Add Leak
+        </button>
+        <button *ngIf="inEditMode" type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+          (click)="saveLeak()">
+          Save Leak
+        </button>
+      </div>
+    </div>
+
+</div>
+<!-- =================== -->
+
+
+<!-- Table of leaks -->
+<div *ngIf="outputs.leakResults.length > 0" class="mt-3">
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr class="bold text-center no-border">
+        <td>Fix</td>
+        <td class="w-25">Leak Name</td>
+        <td>Flow Rate
+          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>) 
+        </td>
+        <td>Air Loss 
+          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF/yr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>)  
+        </td>
+        <td *ngIf="inputs.facilityCompressorData.utilityType == 1">Electricity Consumption (kWh/yr)</td>
+        <td class="w-25"></td>
+      </tr>
+      <tr class="text-center" *ngFor="let leak of outputs.leakResults; let index = index">
+        <td class="p-3">
+          <div class="">
+            <input type="checkbox" [(ngModel)]="leak.selected" (change)="toggleSelected(index, leak.selected)" />
+          </div>
+        </td>
+        <td class="p-3 col-item-br">
+          <div >
+            <a (click)="editLeak(index)">
+              {{ leak.name }}
+            </a>
+          </div>
+        </td>
+        <td class="p-3 col-item-br">
+          <span *ngIf="leak.flowRate">
+            {{ leak.flowRate | number:'1.0-0'}}
+          </span>
+          <span *ngIf="!leak.flowRate">
+            --
+          </span>
+        </td>
+        <td class="p-3 col-item-br">
+          <span *ngIf="leak.airLoss">
+            {{ leak.airLoss | number:'1.0-0'}}   
+          </span>
+          <span *ngIf="!leak.airLoss">
+            --
+          </span>
+        </td>
+        <td *ngIf="inputs.facilityCompressorData.utilityType == 1" class="p-3 col-item-br">
+          <span *ngIf="leak.energyUse">
+            {{ leak.energyUse | number:'1.0-0' }}
+          </span>
+          <span *ngIf="!leak.energyUse">
+            --
+          </span>
+        </td>
+        <td class="pt-3 px-1 col-item-br">
+          <a class="click-link m-2" (click)="copyLeak(index)">Copy</a>
+          <hr class="vertical text-muted">
+          <a class="click-link m-2" (click)="editLeak(index)">Edit</a>
+          <hr class="vertical text-muted">
+          <a class="click-link m-2 text-danger" (click)="deleteLeak(index)">Delete</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+
+<!-- HIDDEN TABLE COPY TABLE -->
+<!--Must be visible and displayed -->
+<div class="hidden-copy-table">
+  <table #leaksTable>
+    <tbody >
+      <tr>
+        <td>Leak Name</td>
+        <td>Leak Description</td>
+        <td>Operating Hours</td>
+        <td>Utility Type</td>
+        <td>Utility Cost</td>
+        <td>Compressor Control Adjustment</td>
+        <td>Compressor Specific Power</td>
+        <td>Flow Rate</td>
+        <td>Air Loss</td>
+        <td>Electricity Consumption</td>
+      </tr>
+      <tr *ngFor="let leak of outputs.leakResults">
+        <td>
+          {{leak.name}}
+        </td>
+        <td >
+          {{ leak.leakDescription }}
+        </td>
+        <td>{{ outputs.facilityCompressorData.hoursPerYear }}</td>
+        <td>
+          <span *ngIf="outputs.facilityCompressorData.utilityType == 1">
+            Electric
+          </span>
+          <span *ngIf="outputs.facilityCompressorData.utilityType == 0">
+            Compressed Air
+          </span>
+        </td>
+        <td>{{ outputs.facilityCompressorData.utilityCost}}</td>
+        <td>{{ outputs.facilityCompressorData.compressorElectricityData.compressorControlAdjustment}}</td>
+        <td>{{ outputs.facilityCompressorData.compressorElectricityData.compressorSpecificPower}}</td>
+        <td>
+          {{ leak.flowRate }}
+          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span> )
+        </td>
+        <td>
+          <span *ngIf="leak.airLoss">
+            {{leak.airLoss | number:'1.0-0'}} 
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF/yr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>    
+          </span>
+          <span *ngIf="!leak.airLoss">
+            --
+          </span>
+        </td>
+        <td>
+          <span *ngIf="leak.electricityConsumption">
+            {{ leak.energyUse | number:'1.0-0' }} 
+            kWh/yr
+          </span>
+          <span *ngIf="!leak.electricityConsumption">
+            --
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<app-exportable-results-table *ngIf="outputs.leakResults.length > 0" [tableString]="leaksTableString"
+  (updateTableString)="updateLeaksTableString()"></app-exportable-results-table>
+
+</div>
+<div class="w-100 justify-content-end btn-group btn-group-sm mh-25">
+  <div class="btn-group btn-group-sm h-25">
+    <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+      Generate Example
+    </button>
+    <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+      Reset Data
+    </button>
+  </div>
+</div>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
+  [operatingHours]="operatingCostService.operatingCostOperatingHours">
+</app-operating-hours-modal>

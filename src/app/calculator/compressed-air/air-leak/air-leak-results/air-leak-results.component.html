@@ -1,0 +1,93 @@
+<label class="group-label">Baseline Results</label>
+<table #baselineTable class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Consumption</td>
+        <td class="text-center w-50">
+          {{outputs.baselineData.flowRate | number:'1.0-0'}} SCFM
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50" >Compressed Air Use</td>
+        <td class="text-center w-50">
+          {{outputs.baselineData.compressedAirUse | number:'1.0-0'}} kSCF
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Use</td>
+        <td class="text-center w-50">
+          {{outputs.baselineData.energyUse | number:'1.0-0'}} kWh
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50" >Annual Cost</td>
+        <td class="text-center w-50">
+          {{outputs.baselineData.energyCost | currency:'USD':'symbol':'1.0-0'}} 
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <label class="group-label" *ngIf="modificationExists">Modification Summary</label>
+  <table #modTable class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Consumption</td>
+        <td class="text-center w-50">
+          {{outputs.modificationData.flowRate | number:'1.0-0'}} SCFM
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50" >Compressed Air Use</td>
+        <td class="text-center w-50">
+          {{outputs.modificationData.compressedAirUse | number:'1.0-0'}} kSCF
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Use</td>
+        <td class="text-center w-50">
+          {{outputs.modificationData.energyUse | number:'1.0-0'}} kWh
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50" >Annual Cost</td>
+        <td class="text-center w-50">
+          {{outputs.modificationData.energyCost | currency:'USD':'symbol':'1.0-0'}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Savings table -->
+<label class="group-label" *ngIf="modificationExists">Savings</label>
+  <table #savingsTable class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Consumption</td>
+        <td class="text-center w-50">
+          {{outputs.savingsData.flowRate | number:'1.0-0'}} SCFM
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50" >Compressed Air Use</td>
+        <td class="text-center w-50">
+          {{outputs.savingsData.compressedAirUse | number:'1.0-0'}} kSCF
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Use</td>
+        <td class="text-center w-50">
+          {{outputs.savingsData.energyUse | number:'1.0-0'}} kWh
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50" >Annual Cost</td>
+        <td class="text-center w-50">
+          {{outputs.savingsData.energyCost | currency:'USD':'symbol':'1.0-0'}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+<app-exportable-results-table [tableString]="allTablesString"
+  (updateTableString)="updateTableString()"></app-exportable-results-table>
