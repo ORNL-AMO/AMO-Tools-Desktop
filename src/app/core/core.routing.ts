@@ -45,7 +45,6 @@ import { PowerFactorCorrectionComponent } from '../calculator/utilities/power-fa
 import { PreAssessmentComponent } from '../calculator/utilities/pre-assessment/pre-assessment.component';
 import { UnitConverterComponent } from '../calculator/utilities/unit-converter/unit-converter.component';
 import { WaterReductionComponent } from '../calculator/utilities/water-reduction/water-reduction.component';
-import { SteamReductionComponent } from '../calculator/utilities/steam-reduction/steam-reduction.component';
 import { LightingReplacementComponent } from '../calculator/lighting/lighting-replacement/lighting-replacement.component';
 import { MotorDriveComponent } from '../calculator/motors/motor-drive/motor-drive.component';
 import { MotorPerformanceComponent } from '../calculator/motors/motor-performance/motor-performance.component';
@@ -74,6 +73,7 @@ import { TankInsulationReductionComponent } from '../calculator/utilities/tank-i
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
 import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
 import { CompressedAirPressureReductionComponent } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
+import { SteamReductionComponent } from '../calculator/steam/steam-reduction/steam-reduction.component';
 
 export const coreRoutes: Routes = [
   {
