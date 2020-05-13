@@ -101,7 +101,7 @@ export class EnergyInputComponent implements OnInit {
 
   addLoss() {
     this._energyInputs.push({
-      form: this.energyInputService.initForm(this._energyInputs.length + 1),
+      form: this.energyInputService.initForm(this._energyInputs.length + 1, this.settings),
       results: {
         energyInputHeatDelivered: 0,
         energyInputTotalChemEnergy: 0,
