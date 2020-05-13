@@ -11,6 +11,7 @@ import { SystemCapacityModule } from './system-capacity/system-capacity.module';
 import { CompressedAirListComponent } from './compressed-air-list/compressed-air-list.component';
 import { RouterModule } from '@angular/router';
 import { CompressedAirReductionModule } from './compressed-air-reduction/compressed-air-reduction.module';
+import { CompressedAirPressureReductionModule } from './compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { CompressedAirReductionModule } from './compressed-air-reduction/compres
     ReceiverTankModule,
     SystemCapacityModule,
     CompressedAirReductionModule,
+    CompressedAirPressureReductionModule,
     RouterModule
   ],
   declarations: [

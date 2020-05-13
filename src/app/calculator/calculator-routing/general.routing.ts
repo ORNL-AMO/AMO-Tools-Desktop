@@ -2,7 +2,6 @@ import { Routes } from "@angular/router";
 import { CashFlowComponent } from "../utilities/cash-flow/cash-flow.component";
 import { Co2SavingsComponent } from "../utilities/co2-savings/co2-savings.component";
 import { CombinedHeatPowerComponent } from "../utilities/combined-heat-power/combined-heat-power.component";
-import { CompressedAirPressureReductionComponent } from "../utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component";
 import { ElectricityReductionComponent } from "../utilities/electricity-reduction/electricity-reduction.component";
 import { NaturalGasReductionComponent } from "../utilities/natural-gas-reduction/natural-gas-reduction.component";
 import { PipeInsulationReductionComponent } from "../utilities/pipe-insulation-reduction/pipe-insulation-reduction.component";
@@ -30,10 +29,6 @@ export const generalRoutes: Routes = [
     {
         path: 'combined-heat-power',
         component: CombinedHeatPowerComponent
-    },
-    {
-        path: 'compressed-air-pressure-reduction',
-        component: CompressedAirPressureReductionComponent
     },
     {
         path: 'electricity-reduction',
