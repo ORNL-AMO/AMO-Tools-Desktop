@@ -131,11 +131,8 @@ export class CompressedAirReductionFormComponent implements OnInit {
     if (!this.compressorCustomSpecificPower) {
       if (this.form.controls.compressorSpecificPowerControl.value == 4) {
         this.compressorCustomSpecificPower = true;
-        this.form.patchValue({ compressorSpecificPower: this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower });
       }
-      else {
-        this.form.patchValue({ compressorSpecificPower: this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower });
-      }
+      this.form.patchValue({ compressorSpecificPower: this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower });
     }
     else if (this.form.controls.compressorSpecificPowerControl.value != 4) {
       this.compressorCustomSpecificPower = false;
