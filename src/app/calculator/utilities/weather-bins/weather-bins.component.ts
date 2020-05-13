@@ -12,6 +12,7 @@ export class WeatherBinsComponent implements OnInit {
 
   settings: Settings;
   tabSelect: string = 'results';
+  headerHeight: number;
   constructor(private settingsDbService: SettingsDbService, private weatherBinsService: WeatherBinsService) { }
 
   ngOnInit(): void {
@@ -22,7 +23,7 @@ export class WeatherBinsComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  resetData(){
+  resetData() {
     this.weatherBinsService.resetData();
   }
 
