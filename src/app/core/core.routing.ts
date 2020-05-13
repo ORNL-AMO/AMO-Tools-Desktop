@@ -38,8 +38,6 @@ import { SystemAndEquipmentCurveComponent } from '../calculator/system-and-equip
 import { CashFlowComponent } from '../calculator/utilities/cash-flow/cash-flow.component';
 import { Co2SavingsComponent } from '../calculator/utilities/co2-savings/co2-savings.component';
 import { CombinedHeatPowerComponent } from '../calculator/utilities/combined-heat-power/combined-heat-power.component';
-import { CompressedAirPressureReductionComponent } from '../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
-import { CompressedAirReductionComponent } from '../calculator/utilities/compressed-air-reduction/compressed-air-reduction.component';
 import { ElectricityReductionComponent } from '../calculator/utilities/electricity-reduction/electricity-reduction.component';
 import { NaturalGasReductionComponent } from '../calculator/utilities/natural-gas-reduction/natural-gas-reduction.component';
 import { PipeInsulationReductionComponent } from '../calculator/utilities/pipe-insulation-reduction/pipe-insulation-reduction.component';
@@ -47,7 +45,6 @@ import { PowerFactorCorrectionComponent } from '../calculator/utilities/power-fa
 import { PreAssessmentComponent } from '../calculator/utilities/pre-assessment/pre-assessment.component';
 import { UnitConverterComponent } from '../calculator/utilities/unit-converter/unit-converter.component';
 import { WaterReductionComponent } from '../calculator/utilities/water-reduction/water-reduction.component';
-import { SteamReductionComponent } from '../calculator/utilities/steam-reduction/steam-reduction.component';
 import { LightingReplacementComponent } from '../calculator/lighting/lighting-replacement/lighting-replacement.component';
 import { MotorDriveComponent } from '../calculator/motors/motor-drive/motor-drive.component';
 import { MotorPerformanceComponent } from '../calculator/motors/motor-performance/motor-performance.component';
@@ -74,6 +71,9 @@ import { SteamPropertiesComponent } from '../calculator/steam/steam-properties/s
 import { TurbineComponent } from '../calculator/steam/turbine/turbine.component';
 import { TankInsulationReductionComponent } from '../calculator/utilities/tank-insulation-reduction/tank-insulation-reduction.component';
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
+import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
+import { CompressedAirPressureReductionComponent } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
+import { SteamReductionComponent } from '../calculator/steam/steam-reduction/steam-reduction.component';
 
 export const coreRoutes: Routes = [
   {
