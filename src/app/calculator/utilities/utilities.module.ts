@@ -7,7 +7,6 @@ import { PowerFactorCorrectionModule } from './power-factor-correction/power-fac
 import { Co2SavingsModule } from './co2-savings/co2-savings.module';
 import { ElectricityReductionModule } from './electricity-reduction/electricity-reduction.module';
 import { NaturalGasReductionModule } from './natural-gas-reduction/natural-gas-reduction.module';
-import { CompressedAirReductionModule } from './compressed-air-reduction/compressed-air-reduction.module';
 import { WaterReductionModule } from './water-reduction/water-reduction.module';
 import { CompressedAirPressureReductionModule } from './compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { SteamReductionModule } from './steam-reduction/steam-reduction.module';
@@ -35,7 +34,6 @@ import { RouterModule } from '@angular/router';
         Co2SavingsModule,
         ElectricityReductionModule,
         NaturalGasReductionModule,
-        CompressedAirReductionModule,
         CompressedAirPressureReductionModule,
         SteamReductionModule,
         WaterReductionModule,

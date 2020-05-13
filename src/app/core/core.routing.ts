@@ -39,7 +39,6 @@ import { CashFlowComponent } from '../calculator/utilities/cash-flow/cash-flow.c
 import { Co2SavingsComponent } from '../calculator/utilities/co2-savings/co2-savings.component';
 import { CombinedHeatPowerComponent } from '../calculator/utilities/combined-heat-power/combined-heat-power.component';
 import { CompressedAirPressureReductionComponent } from '../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
-import { CompressedAirReductionComponent } from '../calculator/utilities/compressed-air-reduction/compressed-air-reduction.component';
 import { ElectricityReductionComponent } from '../calculator/utilities/electricity-reduction/electricity-reduction.component';
 import { NaturalGasReductionComponent } from '../calculator/utilities/natural-gas-reduction/natural-gas-reduction.component';
 import { PipeInsulationReductionComponent } from '../calculator/utilities/pipe-insulation-reduction/pipe-insulation-reduction.component';
@@ -74,6 +73,7 @@ import { SteamPropertiesComponent } from '../calculator/steam/steam-properties/s
 import { TurbineComponent } from '../calculator/steam/turbine/turbine.component';
 import { TankInsulationReductionComponent } from '../calculator/utilities/tank-insulation-reduction/tank-insulation-reduction.component';
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
+import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
 
 export const coreRoutes: Routes = [
   {
