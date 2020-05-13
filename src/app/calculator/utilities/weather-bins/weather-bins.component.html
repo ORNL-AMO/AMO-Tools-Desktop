@@ -7,6 +7,9 @@
             <h3>Weather Bins</h3>
         </div>
         <app-weather-bins-form [settings]="settings"></app-weather-bins-form>
+        <div class="d-flex w-100 justify-content-end pt-4 pr-2">
+            <button class="btn btn-danger small" (click)="resetData()">Reset Data</button>
+        </div>
     </div>
     <div class="d-flex flex-column w-50 mh-100 scroll-item">
         <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">

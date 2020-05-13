@@ -9,15 +9,21 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 @Injectable()
 export class WeatherBinsService {
 
-  dataFields: BehaviorSubject<Array<string>>;
+  // dataFields: BehaviorSubject<Array<string>>;
   inputData: BehaviorSubject<WeatherBinsInput>;
   importDataFromCsv: BehaviorSubject<CsvImportData>;
   dataInDateRange: Array<any>;
   constructor(private convertUnitsService: ConvertUnitsService) {
     let initInputData: WeatherBinsInput = this.initInputData();
     this.inputData = new BehaviorSubject(initInputData);
-    this.dataFields = new BehaviorSubject(undefined);
+    // this.dataFields = new BehaviorSubject(undefined);
     this.importDataFromCsv = new BehaviorSubject(undefined);
+  }
+
+  resetData() {
+    let initInputData: WeatherBinsInput = this.initInputData();
+    this.inputData.next(initInputData);
+    this.importDataFromCsv.next(undefined);
   }
 
   save(newInputData: WeatherBinsInput, settings: Settings) {
@@ -25,13 +31,13 @@ export class WeatherBinsService {
     this.inputData.next(newInputData);
   }
 
-  setDataFields(csvImportData: CsvImportData) {
-    let dataFields: Array<string> = JSON.parse(JSON.stringify(csvImportData.meta.fields));
-    console.log(dataFields);
-    dataFields.shift();
-    dataFields.shift();
-    this.dataFields.next(dataFields);
-  }
+  // setDataFields(csvImportData: CsvImportData) {
+  //   let dataFields: Array<string> = JSON.parse(JSON.stringify(csvImportData.meta.fields));
+  //   console.log(dataFields);
+  //   dataFields.shift();
+  //   dataFields.shift();
+  //   this.dataFields.next(dataFields);
+  // }
 
   initInputData(): WeatherBinsInput {
     // let initCase: WeatherBinCase = this.getNewCase(1);
@@ -122,36 +128,38 @@ export class WeatherBinsService {
   getDataInDateRange(inputData: WeatherBinsInput) {
     let dataInDateRange: Array<any> = new Array();
     let importDataFromCsv: CsvImportData = this.importDataFromCsv.getValue();
-    importDataFromCsv.data.forEach((dataItem) => {
-      // let data = dataItem[field];
-      let dataItemDate = new Date(dataItem[importDataFromCsv.meta.fields[0]]);
-      let dateMonth: number = dataItemDate.getMonth();
-      let dateDay: number = dataItemDate.getDate();
-      let checkMax: boolean = false;
-      if (dateMonth <= inputData.endMonth) {
-        if (dateMonth == inputData.endMonth) {
-          if (dateDay <= inputData.endDay) {
+    if (importDataFromCsv) {
+      importDataFromCsv.data.forEach((dataItem) => {
+        // let data = dataItem[field];
+        let dataItemDate = new Date(dataItem[importDataFromCsv.meta.fields[0]]);
+        let dateMonth: number = dataItemDate.getMonth();
+        let dateDay: number = dataItemDate.getDate();
+        let checkMax: boolean = false;
+        if (dateMonth <= inputData.endMonth) {
+          if (dateMonth == inputData.endMonth) {
+            if (dateDay <= inputData.endDay) {
+              checkMax = true;
+            }
+          } else {
             checkMax = true;
           }
-        } else {
-          checkMax = true;
         }
-      }
 
-      let checkMin: boolean = false;
-      if (dateMonth >= inputData.startMonth) {
-        if (dateMonth == inputData.startMonth) {
-          if (dateDay >= inputData.startDay) {
+        let checkMin: boolean = false;
+        if (dateMonth >= inputData.startMonth) {
+          if (dateMonth == inputData.startMonth) {
+            if (dateDay >= inputData.startDay) {
+              checkMin = true;
+            }
+          } else {
             checkMin = true;
           }
-        } else {
-          checkMin = true;
         }
-      }
-      if (checkMax && checkMin) {
-        dataInDateRange.push(dataItem);
-      }
-    })
+        if (checkMax && checkMin) {
+          dataInDateRange.push(dataItem);
+        }
+      })
+    }
     return dataInDateRange;
   }
 

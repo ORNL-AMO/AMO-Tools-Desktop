@@ -32,6 +32,9 @@ export class DataSetupFormComponent implements OnInit {
   ngOnInit(): void {
     this.inputDataSub = this.weatherBinsService.inputData.subscribe(inputData => {
       this.inputData = inputData;
+      if(this.inputData.fileName){
+        this.validFile = true;
+      }
     });
     this.dateSelectionData = DateSelectionData;
     this.startMonthDays = this.dateSelectionData.find(dataSelection => { return dataSelection.monthValue == this.inputData.startMonth }).days;

@@ -49,7 +49,7 @@ export class WeatherBinsHelpComponent implements OnInit {
     temperatureUnit = this.convertUnitsService.getUnit(temperatureUnit).unit.name.display;
     atmPressureUnit = this.convertUnitsService.getUnit(atmPressureUnit).unit.name.display;
     enthalpyUnit = this.convertUnitsService.getUnit(enthalpyUnit).unit.name.display;
-
+    //TODO: add dew point once option is added
     this.fieldHelp = [
       {
         fieldName: 'Dry-bulb Temperature ' + temperatureUnit,
@@ -71,11 +71,11 @@ export class WeatherBinsHelpComponent implements OnInit {
         min: 0,
         max: undefined
       },
-      {
-        fieldName: 'Dew Point ' + dewPointUnit,
-        min: dewPointMin,
-        max: dewPointMax
-      },
+      // {
+      //   fieldName: 'Dew Point ' + dewPointUnit,
+      //   min: dewPointMin,
+      //   max: dewPointMax
+      // },
       {
         fieldName: 'Atm Pressure ' + atmPressureUnit,
         min: 0,

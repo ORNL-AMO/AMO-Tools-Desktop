@@ -29,6 +29,11 @@
                         Enthalpy
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">(Btu/lbm)</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">(kJ/kg)</span></option>
+                    <!--TODO: add dew point-->
+                    <!-- <option [ngValue]="'Dew Point (F)'">
+                        Dew Point
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(&#8457;)</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span></option> -->
                 </select>
             </div>
 
@@ -37,8 +42,9 @@
                 <div class="input-group">
                     <input name="{{'lowerBound'+parameterIndex}}" type="number" class="form-control"
                         id="{{'lowerBound'+parameterIndex}}" [(ngModel)]="parameter.lowerBound" (input)="save()">
-
-                    <span class="input-group-addon units" *ngIf="parameter.field == 'Dry-bulb Temperature (F)'">
+                    <!--TODO: add dewpoint-->
+                    <span class="input-group-addon units"
+                        *ngIf="parameter.field == 'Dry-bulb Temperature (F)' || parameter.field == 'Wet Bulb Temperature (F)'">
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
                     </span>
@@ -46,10 +52,6 @@
                     <span class="input-group-addon units" *ngIf="parameter.field == 'Atm Pressure (psia)'">
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
-                    </span>
-                    <span class="input-group-addon units" *ngIf="parameter.field == 'Wet Bulb Temperature (F)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
                     </span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'Enthalpy (BTU/lbm)'">
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">Btu/lb</span>
@@ -63,7 +65,9 @@
                 <div class="input-group">
                     <input name="{{'upperBound'+parameterIndex}}" type="number" class="form-control"
                         id="{{'upperBound'+parameterIndex}}" [(ngModel)]="parameter.upperBound" (input)="save()">
-                    <span class="input-group-addon units" *ngIf="parameter.field == 'Dry-bulb Temperature (F)'">
+                    <!--TODO: add dewpoint-->
+                    <span class="input-group-addon units"
+                        *ngIf="parameter.field == 'Dry-bulb Temperature (F)' || parameter.field == 'Wet Bulb Temperature (F)'">
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
                     </span>
@@ -71,10 +75,6 @@
                     <span class="input-group-addon units" *ngIf="parameter.field == 'Atm Pressure (psia)'">
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
-                    </span>
-                    <span class="input-group-addon units" *ngIf="parameter.field == 'Wet Bulb Temperature (F)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
                     </span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'Enthalpy (BTU/lbm)'">
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">Btu/lb</span>
