@@ -12,6 +12,7 @@
               <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
             </span>
             <input name="hoursPerYear" class="form-control" type="number" step="any"
+            (input)="emitChange()"
               formControlName="hoursPerYear" id="hoursPerYear" onfocus="this.select();"
               (focus)="changeField('hoursPerYear')">
             <span class="input-group-addon units">hrs/yr</span>
@@ -38,6 +39,7 @@
           <label for="utilityCost">Utility Cost</label>
           <div class="input-group">
             <input name="utilityCost" class="form-control" type="number" step="any" formControlName="utilityCost"
+            (input)="emitChange()"
               id="utilityCost" onfocus="this.select();" (focus)="changeField('utilityCost')">
             <span class="input-group-addon units">$/kWH</span>
             <span class="alert-danger pull-right small"
@@ -49,6 +51,7 @@
           </div>
         </div>
 
+        <!-- utility type is electricity -->
         <div formGroupName="compressorElectricityData" *ngIf="facilityCompressorDataForm.controls.utilityType.value == 1" class="pt-1">
           <div class="form-group">
             <label class="small" for="compressorControlType">Compressor Control Type</label>
@@ -75,7 +78,8 @@
             <label class="small" for="compressorControlAdjustment">Compressor Control Adjustment</label>
             <div class="input-group">
               <input class="form-control" name="compressorControlAdjustment"
-                id="compressorControlAdjustment" type="number" (input)="changeCompressorControl()"
+                id="compressorControlAdjustment" type="number" 
+                (input)="changeCompressorControl()"
                 formControlName="compressorControlAdjustment" (focus)="changeField('compressorControlAdjustment')"
                 onfocus="this.select();">
               <span class="units input-group-addon">%</span>
@@ -110,6 +114,7 @@
             <label class="small" for="compressorCustomSpecificPower">Compressor Specific Power</label>
             <div class="input-group">
               <input class="form-control" name="compressorSpecificPower" id="compressorCustomSpecificPower"
+              (input)="changeCompressorType()"
                 formControlName="compressorSpecificPower" type="number" (focus)="changeField('compressorSpecificPower')"
                 onfocus="this.select();">
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
@@ -124,10 +129,10 @@
             </div>
             <div class="col-6 text-center">
               <span class="small bold"
-                *ngIf="outputs.baselineData.energyUse">
-                {{outputs.baselineData.energyUse | number:'1.0-0'}}
+                *ngIf="outputs.baselineData.annualTotalElectricity">
+                {{outputs.baselineData.annualTotalElectricity | number:'1.0-0'}}
                 kWh</span>
-              <span *ngIf="outputs.leakResults.length == 0"> -- </span>
+              <span *ngIf="!outputs.baselineData.annualTotalElectricity"> -- </span>
             </div>
           </div>
         </div>
@@ -176,6 +181,7 @@
           </div>
         </div>
 
+        <!-- Estimate method -->
         <div *ngIf="leakForm.controls.measurementMethod.value == 0">
           <div class="form-group">
             <label for="leakRateEstimate">Leak Rate Estimate</label>
@@ -192,6 +198,8 @@
             </div>
           </div>
         </div>
+
+        <!-- Bag method -->
         <div *ngIf="leakForm.controls.measurementMethod.value == 2">
           <div class="form-group">
             <label for="fillTime">Bag Fill Time</label>
@@ -244,6 +252,7 @@
           </div>
         </div>
 
+        <!-- Orifice method -->
         <div *ngIf="leakForm.controls.measurementMethod.value == 3">
           <div class="form-group">
             <label for="compressorAirTemp">Compressor Air Temperature</label>
@@ -354,8 +363,8 @@
               <input name="linePressure" class="form-control" type="number" step="any"
                 formControlName="linePressure" id="linePressure" onfocus="this.select();"
                 (focus)="changeField('linePressure')">
-              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
               <span class="alert-danger pull-right small"
               *ngIf="leakForm.controls.linePressure.invalid && !leakForm.controls.linePressure.pristine">
               <span *ngIf="leakForm.controls.linePressure.errors.required">Value required.</span>
@@ -381,6 +390,7 @@
           </div>
         </div>
 
+        <!-- Decibel method -->
         <div *ngIf="leakForm.controls.measurementMethod.value == 1" class=" pt-1">
           <label class="group-label">
             Estimated Free Air Flow Table
@@ -389,8 +399,6 @@
             <label class="text-center">
               <span class="group-label">
                 Pressures
-                (<span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kPaa</span>)
               </span>
             </label>
           </div>
@@ -401,8 +409,8 @@
                 <input name="pressureA" class="form-control" type="number" step="any"
                   formControlName="pressureA" id="pressureA" onfocus="this.select();"
                   (focus)="changeField('pressureA')">
-                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
                 <span class="alert-danger pull-right small"
                 *ngIf="leakForm.controls.pressureA.invalid && !leakForm.controls.pressureA.pristine">
                 <span *ngIf="leakForm.controls.pressureA.errors.required">Value required.</span>
@@ -417,8 +425,8 @@
                 <input name="pressureB" class="form-control" type="number" step="any"
                   formControlName="pressureB" id="pressureB" onfocus="this.select();"
                   (focus)="changeField('pressureB')">
-                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
                 <span class="alert-danger pull-right small"
                 *ngIf="leakForm.controls.pressureB.invalid && !leakForm.controls.pressureB.pristine">
                 <span *ngIf="leakForm.controls.pressureB.errors.required">Value required.</span>
@@ -470,7 +478,7 @@
                   formControlName="secondFlowA" id="secondFlowA" onfocus="this.select();"
                   (focus)="changeField('secondFlowA')">
                 <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup></span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
                 <span class="alert-danger pull-right small"
                 *ngIf="leakForm.controls.secondFlowA.invalid && !leakForm.controls.secondFlowA.pristine">
                 <span *ngIf="leakForm.controls.secondFlowA.errors.required">Value required.</span>
@@ -502,7 +510,7 @@
                   formControlName="firstFlowB" id="firstFlowB" onfocus="this.select();"
                   (focus)="changeField('firstFlowB')">
                 <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup></span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
                 <span class="alert-danger pull-right small"
                 *ngIf="leakForm.controls.firstFlowB.invalid && !leakForm.controls.firstFlowB.pristine">
                 <span *ngIf="leakForm.controls.firstFlowB.errors.required">Value required.</span>
@@ -517,7 +525,7 @@
                   formControlName="secondFlowB" id="secondFlowB" onfocus="this.select();"
                   (focus)="changeField('secondFlowB')">
                 <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup></span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
                 <span class="alert-danger pull-right small"
                 *ngIf="leakForm.controls.secondFlowB.invalid && !leakForm.controls.secondFlowB.pristine">
                 <span *ngIf="leakForm.controls.secondFlowB.errors.required">Value required.</span>
@@ -547,10 +555,9 @@
     </div>
 
 </div>
-<!-- =================== -->
 
 
-<!-- Table of leaks -->
+<!-- Leaks Table -->
 <div *ngIf="outputs.leakResults.length > 0" class="mt-3">
   <table class="table table-hover table-striped">
     <tbody>
@@ -565,7 +572,7 @@
           (<span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF/yr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>)  
         </td>
-        <td *ngIf="inputs.facilityCompressorData.utilityType == 1">Electricity Consumption (kWh/yr)</td>
+        <td *ngIf="outputs.facilityCompressorData.utilityType == 1">Electricity Consumption (kWh/yr)</td>
         <td class="w-25"></td>
       </tr>
       <tr class="text-center" *ngFor="let leak of outputs.leakResults; let index = index">
@@ -582,26 +589,26 @@
           </div>
         </td>
         <td class="p-3 col-item-br">
-          <span *ngIf="leak.flowRate">
-            {{ leak.flowRate | number:'1.0-0'}}
+          <span *ngIf="leak.totalFlowRate">
+            {{ leak.totalFlowRate | number:'1.0-0'}}
           </span>
-          <span *ngIf="!leak.flowRate">
+          <span *ngIf="!leak.totalFlowRate">
             --
           </span>
         </td>
         <td class="p-3 col-item-br">
-          <span *ngIf="leak.airLoss">
-            {{ leak.airLoss | number:'1.0-0'}}   
+          <span *ngIf="leak.annualTotalFlowRate">
+            {{ leak.annualTotalFlowRate | number:'1.0-0'}}   
           </span>
-          <span *ngIf="!leak.airLoss">
+          <span *ngIf="!leak.annualTotalFlowRate">
             --
           </span>
         </td>
-        <td *ngIf="inputs.facilityCompressorData.utilityType == 1" class="p-3 col-item-br">
-          <span *ngIf="leak.energyUse">
-            {{ leak.energyUse | number:'1.0-0' }}
+        <td *ngIf="outputs.facilityCompressorData.utilityType == 1" class="p-3 col-item-br">
+          <span *ngIf="leak.annualTotalElectricity">
+            {{ leak.annualTotalElectricity | number:'1.0-0' }}
           </span>
-          <span *ngIf="!leak.energyUse">
+          <span *ngIf="!leak.annualTotalElectricity">
             --
           </span>
         </td>
@@ -618,7 +625,6 @@
   
 
 <!-- HIDDEN TABLE COPY TABLE -->
-<!--Must be visible and displayed -->
 <div class="hidden-copy-table">
   <table #leaksTable>
     <tbody >
@@ -630,9 +636,14 @@
         <td>Utility Cost</td>
         <td>Compressor Control Adjustment</td>
         <td>Compressor Specific Power</td>
-        <td>Flow Rate</td>
-        <td>Air Loss</td>
-        <td>Electricity Consumption</td>
+        <td>Flow Rate 
+          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span> )</td>
+        <td>Air Loss          
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF/yr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>   
+        </td>
+        <td>Electricity Consumption (kWh/yr)</td>
       </tr>
       <tr *ngFor="let leak of outputs.leakResults">
         <td>
@@ -654,26 +665,21 @@
         <td>{{ outputs.facilityCompressorData.compressorElectricityData.compressorControlAdjustment}}</td>
         <td>{{ outputs.facilityCompressorData.compressorElectricityData.compressorSpecificPower}}</td>
         <td>
-          {{ leak.flowRate }}
-          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span> )
+          {{ leak.totalFlowRate }}
         </td>
         <td>
-          <span *ngIf="leak.airLoss">
-            {{leak.airLoss | number:'1.0-0'}} 
-            <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF/yr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>    
+          <span *ngIf="leak.annualTotalFlowRate">
+            {{leak.annualTotalFlowRate | number:'1.0-0'}}  
           </span>
-          <span *ngIf="!leak.airLoss">
+          <span *ngIf="!leak.annualTotalFlowRate">
             --
           </span>
         </td>
         <td>
-          <span *ngIf="leak.electricityConsumption">
-            {{ leak.energyUse | number:'1.0-0' }} 
-            kWh/yr
+          <span *ngIf="leak.annualTotalElectricity">
+            {{ leak.annualTotalElectricity | number:'1.0-0' }} 
           </span>
-          <span *ngIf="!leak.electricityConsumption">
+          <span *ngIf="!leak.annualTotalElectricity">
             --
           </span>
         </td>

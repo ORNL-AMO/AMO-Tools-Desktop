@@ -14,7 +14,7 @@
         </div>
         <div class="d-flex flex-column m-4">
             <app-air-leak-form [settings]="settings" [inputs]="inputs" [outputs]="outputs"
-                (calculate)="calculateAirLeak($event)" (emitChangeField)="changeField($event)"></app-air-leak-form>
+                (calculate)="calculateAirLeak()" (emitChangeField)="changeField($event)"></app-air-leak-form>
         </div>
     </div>
     <div class="d-flex flex-column leak-results-width mh-100 scroll-item">

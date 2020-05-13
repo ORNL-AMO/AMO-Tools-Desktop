@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input, HostListener, EventEmitter, Output } from '@angular/core';
 import { AirLeakService } from './air-leak.service';
-import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData } from '../../../shared/models/standalone';
+import { AirLeakSurveyInput, AirLeakSurveyOutput } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
@@ -71,7 +71,6 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   }
   
   calculateAirLeak() {
-  console.log('this.inputs', this.inputs);
   this.outputs = this.airLeakService.calculate(this.inputs, this.settings);
   }
 

@@ -14,7 +14,6 @@
 }
 
 .btn-group {
-  /* display: block; */
   text-align: center;
 }
 
@@ -33,11 +32,6 @@
   border: .5px solid grey;
 }
 
-
-/* .btn-group .btn-sm {
-  font-size: small !important;
-} */
-
 .btn-margin-10 {
   margin: 10px 0px;
 }
@@ -50,10 +44,6 @@
   height: 0;
   width: 0;
 }
-
-/* .btn-form {
-  border-radius: 4px !important;
-} */
 
 .group-label-wide {
   width: 100%;

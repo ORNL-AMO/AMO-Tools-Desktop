@@ -38,7 +38,6 @@ export class AirLeakFormComponent implements OnInit {
   currentLeakIndex: number;
   currentFlowRate: number;
   currentElectricityUse: number;
-  // leak form
   leakForm: FormGroup;
   facilityCompressorDataForm: FormGroup;
   
@@ -114,11 +113,6 @@ export class AirLeakFormComponent implements OnInit {
     this.inputs.facilityCompressorData = this.getFacilityCompressorDataFormValue();
     this.emitChange();
     this.initLeakForm();
-    if (this.outputs.leakResults.length >= 1) {
-      this.currentLeakIndex = this.outputs.leakResults.length - 1;
-    } else {
-      this.currentLeakIndex = 0;
-    }
   }
 
   saveLeak() {
@@ -157,35 +151,24 @@ export class AirLeakFormComponent implements OnInit {
     this.outputs.leakResults.splice(index, 1);
     this.emitChange();
     this.initLeakForm();
-    if (this.currentLeakIndex == index) {
-      if (index >= 1) {
-        this.currentLeakIndex = this.outputs.leakResults.length - 1;
-      } else {
-        this.currentLeakIndex = 0;
-      }
-    } else {
-      this.currentLeakIndex = this.currentLeakIndex - 1;
-    }
     this.inEditMode = false;
   }
   
   emitChange() {
-    this.calculate.emit(this.inputs);
+    this.inputs.facilityCompressorData = this.getFacilityCompressorDataFormValue();
+    this.calculate.emit();
   }
 
   changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 
-  // changeCompressorControl and changeCompressorType from CA-Reduction form may have bugs. 
-  //  Specifically assigning to the wrong index?
   changeCompressorControl() {
     let compressorElectricityForm: FormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
     if (!this.compressorCustomControl) {
       if (compressorElectricityForm.controls.compressorControl.value == 8) {
         this.compressorCustomControl = true;
       }
-      compressorElectricityForm.patchValue({ compressorControlAdjustment: this.compressorControlTypes[compressorElectricityForm.controls.compressorControl.value].adjustment });
     }
     else if (compressorElectricityForm.controls.compressorControl.value !== 8) {
       this.compressorCustomControl = false;
@@ -193,7 +176,7 @@ export class AirLeakFormComponent implements OnInit {
     }
     else {
       if (compressorElectricityForm.controls.compressorControlAdjustment.valid) {
-        this.compressorControlTypes[8].adjustment = compressorElectricityForm.controls.compressorControlAdjustment.value;
+        this.compressorControlTypes[7].adjustment = compressorElectricityForm.controls.compressorControlAdjustment.value;
       }
     }
     this.airLeakService.setCompressorDataValidators(this.facilityCompressorDataForm);
@@ -206,7 +189,6 @@ export class AirLeakFormComponent implements OnInit {
       if (compressorElectricityForm.controls.compressorSpecificPowerControl.value == 4) {
         this.compressorCustomSpecificPower = true;
       }
-      compressorElectricityForm.patchValue({ compressorSpecificPower: this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower });
     }
     else if (compressorElectricityForm.controls.compressorSpecificPowerControl.value != 4) {
       this.compressorCustomSpecificPower = false;
@@ -214,7 +196,7 @@ export class AirLeakFormComponent implements OnInit {
     }
     else {
       if (compressorElectricityForm.controls.compressorSpecificPower.value) {
-        this.compressorTypes[5].specificPower = compressorElectricityForm.controls.compressorSpecificPower.value;
+        this.compressorTypes[4].specificPower = compressorElectricityForm.controls.compressorSpecificPower.value;
       }
     }
     this.airLeakService.setCompressorDataValidators(this.facilityCompressorDataForm);
@@ -261,9 +243,7 @@ export class AirLeakFormComponent implements OnInit {
     this.outputs.savingsData = emptyOutputs.savingsData;
     this.emitChange();
     this.initLeakForm();
-    this.initFacilityCompressorDataForm();
     this.inEditMode = false;
-    this.currentLeakIndex = 0;
   }
 
   btnGenerateExample() {
@@ -274,7 +254,5 @@ export class AirLeakFormComponent implements OnInit {
     this.emitChange();
     this.leakForm = this.airLeakService.getFormFromObj(this.inputs.compressedAirLeakSurveyInputVec[0]);
     this.facilityCompressorDataForm = this.airLeakService.getFacilityCompressorFormFromObj(exampleFacilityData);
-    this.currentLeakIndex = 0;
   }
-
 }

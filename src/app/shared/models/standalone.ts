@@ -387,15 +387,10 @@ export interface AirLeakSurveyResult {
   name?: string;
   leakDescription?: string;
   selected?: boolean;
-  //  consumption is bound as flowRate on backend
-  consumption: number;
-  compressedAirUse: number;
-  energyUse: number;
-  energyCost: number;
-  airLoss?: number;
-  flowRate: number;
-  electricityConsumption?: number;
-  electricityUse?: number;
+  totalFlowRate: number;
+  annualTotalFlowRate: number;
+  annualTotalElectricity: number;
+  annualTotalElectricityCost: number;
   }
 
 export interface DecibelsMethodData {

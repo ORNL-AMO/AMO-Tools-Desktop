@@ -113,7 +113,6 @@ export class AirLeakService {
         form.controls.compressorSpecificPower.setValidators([Validators.required, Validators.min(0)]);
       }
     }
-    console.log('facilityCompressorData w/ validators', facilityCompressorDataForm);
     return facilityCompressorDataForm;
   }
 
@@ -195,28 +194,22 @@ export class AirLeakService {
       leakResults: [
     ],
     baselineData: {
-      consumption: 0,
-      energyUse: 0,
-      compressedAirUse: 0,
-      energyCost: 0,
-      flowRate: 0,
-      airLoss: 0,
+      totalFlowRate: 0,
+      annualTotalElectricity: 0,
+      annualTotalFlowRate: 0,
+      annualTotalElectricityCost: 0,
     },
     modificationData: {
-      consumption: 0,
-      energyUse: 0,
-      compressedAirUse: 0,
-      energyCost: 0,
-      flowRate: 0,
-      airLoss: 0,
+      totalFlowRate: 0,
+      annualTotalElectricity: 0,
+      annualTotalFlowRate: 0,
+      annualTotalElectricityCost: 0,
     },
     savingsData: {
-      consumption: 0,
-      energyUse: 0,
-      compressedAirUse: 0,
-      energyCost: 0,
-      flowRate: 0,
-      airLoss: 0,
+      totalFlowRate: 0,
+      annualTotalElectricity: 0,
+      annualTotalFlowRate: 0,
+      annualTotalElectricityCost: 0,
     },
     };
   }
@@ -265,8 +258,16 @@ export class AirLeakService {
 
   calculate(airLeakSurveyInput: AirLeakSurveyInput, settings: Settings): AirLeakSurveyOutput {
     let inputCopy: AirLeakSurveyInput = JSON.parse(JSON.stringify(airLeakSurveyInput));
+
+    // Attach facility compressor data to leaks before conversion
+    inputCopy.compressedAirLeakSurveyInputVec.forEach(leak => {
+      leak.hoursPerYear = inputCopy.facilityCompressorData.hoursPerYear;
+      leak.utilityCost = inputCopy.facilityCompressorData.utilityCost;
+      leak.utilityType = inputCopy.facilityCompressorData.utilityType;
+      leak.compressorElectricityData = inputCopy.facilityCompressorData.compressorElectricityData;
+    })
     let inputArray: Array<AirLeakSurveyData> = this.convertAirleakService.convertInputs(inputCopy.compressedAirLeakSurveyInputVec, settings);
-    let inputFacilityCompressorData = this.convertAirleakService.convertFacilityCompressorData(inputCopy.facilityCompressorData.compressorElectricityData, settings);
+
     let baselineLeaks: AirLeakSurveyInput = {
       compressedAirLeakSurveyInputVec: inputArray
     };
@@ -276,41 +277,28 @@ export class AirLeakService {
     //  Build baseline / modification leak results
     let leakResults = Array<AirLeakSurveyResult>();
     baselineLeaks.compressedAirLeakSurveyInputVec.forEach(leak => {
-      leak.hoursPerYear = inputCopy.facilityCompressorData.hoursPerYear;
-      leak.utilityCost = inputCopy.facilityCompressorData.utilityCost;
-      leak.utilityType = inputCopy.facilityCompressorData.utilityType;
-      // leak.compressorElectricityData = inputCopy.facilityCompressorData.compressorElectricityData;
-      leak.compressorElectricityData = inputFacilityCompressorData;
-
       if (!leak.selected) {
-        modificationLeaks.compressedAirLeakSurveyInputVec.push(JSON.parse(JSON.stringify(leak)));
+        modificationLeaks.compressedAirLeakSurveyInputVec.push(leak);
       } 
       let leakResult: AirLeakSurveyResult = this.standaloneService.airLeakSurvey({compressedAirLeakSurveyInputVec: [leak]});
       leakResult.name = leak.name;
       leakResult.leakDescription = leak.leakDescription;
       leakResult.selected = leak.selected;
-      leakResult.airLoss = leakResult.flowRate * leak.hoursPerYear;
-      // utility == electricity
-      // if (leak.utilityType == 1) {
-      //   leakResult.electricityConsumption = leakResult.flowRate * (1/60) * leak.compressorElectricityData.compressorSpecificPower * leak.compressorElectricityData.compressorControlAdjustment;
-      // }
       let converted = this.convertAirleakService.convertResult(leakResult, settings);
       leakResults.push(converted)
     });
-    
+
     // Get cumulative leak results
-    console.log('leakResults', leakResults);
     let baselineResults: AirLeakSurveyResult = this.standaloneService.airLeakSurvey(baselineLeaks);
     let modificationResults: AirLeakSurveyResult = this.standaloneService.airLeakSurvey(modificationLeaks);
     baselineResults = this.convertAirleakService.convertResult(baselineResults, settings);
     modificationResults = this.convertAirleakService.convertResult(modificationResults, settings);
 
     let savings: AirLeakSurveyResult = {
-      consumption: baselineResults.consumption - modificationResults.consumption,
-      energyUse: baselineResults.energyUse - modificationResults.energyUse,
-      energyCost: baselineResults.energyCost - modificationResults.energyCost,
-      compressedAirUse: baselineResults.compressedAirUse - modificationResults.compressedAirUse,
-      flowRate: baselineResults.flowRate - modificationResults.flowRate
+      totalFlowRate: baselineResults.totalFlowRate - modificationResults.totalFlowRate,
+      annualTotalElectricity: baselineResults.annualTotalElectricity - modificationResults.annualTotalElectricity,
+      annualTotalElectricityCost: baselineResults.annualTotalElectricityCost - modificationResults.annualTotalElectricityCost,
+      annualTotalFlowRate: baselineResults.annualTotalFlowRate - modificationResults.annualTotalFlowRate,
     }
 
     let outputs: AirLeakSurveyOutput = {
@@ -320,25 +308,25 @@ export class AirLeakService {
       savingsData: savings,
       facilityCompressorData: inputCopy.facilityCompressorData,
     }
-    console.log('outputs', outputs);
     return outputs;
   }
 
   getExampleFacilityCompressorData(): FacilityCompressorData {
     let exampleData: FacilityCompressorData = {
-      hoursPerYear: 8640,
+      hoursPerYear: 8760,
       utilityType: 1,
       utilityCost: 0.12,
       compressorElectricityData: {
         compressorControl: 0,
-        compressorControlAdjustment: .40,
+        compressorControlAdjustment: .25,
         compressorSpecificPowerControl: 0,
         compressorSpecificPower: .16
       },
     };
     return exampleData;
   }
-
+  
+  
   getExample() {
     let exampleInputs: AirLeakSurveyInput = {
       compressedAirLeakSurveyInputVec: Array<AirLeakSurveyData>()
@@ -376,7 +364,42 @@ export class AirLeakService {
         supplyPressure: 0,
         numberOfOrifices: 0,
       },
-      units: 2
+      units: 1
+    };
+    let estimateLeak: AirLeakSurveyData = {
+      name: 'Estimate Leak',
+      leakDescription: "Enter notes about the leak here.",
+      selected: false,
+      measurementMethod: 0,
+      estimateMethodData: {
+        leakRateEstimate: .1
+      },
+      bagMethodData: {
+        height: 0,
+        diameter: 0,
+        fillTime: 0
+      },
+      decibelsMethodData: {
+        linePressure: 0,
+        decibels: 0,
+        decibelRatingA: 0,
+        pressureA: 0,
+        firstFlowA: 0,
+        secondFlowA: 0,
+        decibelRatingB: 0,
+        pressureB: 0,
+        firstFlowB: 0,
+        secondFlowB: 0
+      },
+      orificeMethodData: {
+        compressorAirTemp: 0,
+        atmosphericPressure: 0,
+        dischargeCoefficient: 0,
+        orificeDiameter: 0,
+        supplyPressure: 0,
+        numberOfOrifices: 0,
+      },
+      units: 1
     };
     let orificeLeak: AirLeakSurveyData = {
       name: 'Orifice Leak',
@@ -449,42 +472,156 @@ export class AirLeakService {
       },
       units: 1
     };
-    let estimateLeak: AirLeakSurveyData = {
-      name: 'Estimate Leak',
-      leakDescription: "Enter notes about the leak here.",
-      selected: false,
-      measurementMethod: 0,
-      estimateMethodData: {
-        leakRateEstimate: 0.1
-      },
-      bagMethodData: {
-        height: 0,
-        diameter: 0,
-        fillTime: 0
-      },
-      decibelsMethodData: {
-        linePressure: 0,
-        decibels: 0,
-        decibelRatingA: 0,
-        pressureA: 0,
-        firstFlowA: 0,
-        secondFlowA: 0,
-        decibelRatingB: 0,
-        pressureB: 0,
-        firstFlowB: 0,
-        secondFlowB: 0
-      },
-      orificeMethodData: {
-        compressorAirTemp: 0,
-        atmosphericPressure: 0,
-        dischargeCoefficient: 0,
-        orificeDiameter: 0,
-        supplyPressure: 0,
-        numberOfOrifices: 0,
-      },
-      units: 1
-    };
-    exampleInputs.compressedAirLeakSurveyInputVec.push(bagLeak, orificeLeak, decibelLeak, estimateLeak);
+    exampleInputs.compressedAirLeakSurveyInputVec.push(bagLeak, estimateLeak, orificeLeak, decibelLeak);
     return exampleInputs;
   }
+  
+  // // Example reflects backend js tests
+  // getExample() {
+  //   let exampleInputs: AirLeakSurveyInput = {
+  //     compressedAirLeakSurveyInputVec: Array<AirLeakSurveyData>()
+  //   }
+  //   let estimateLeakA: AirLeakSurveyData = {
+  //     name: 'Estimate Leak',
+  //     leakDescription: "Enter notes about the leak here.",
+  //     selected: false,
+  //     measurementMethod: 0,
+  //     estimateMethodData: {
+  //       leakRateEstimate: 100
+  //     },
+  //     bagMethodData: {
+  //       height: 0,
+  //       diameter: 0,
+  //       fillTime: 0
+  //     },
+  //     decibelsMethodData: {
+  //       linePressure: 0,
+  //       decibels: 0,
+  //       decibelRatingA: 0,
+  //       pressureA: 0,
+  //       firstFlowA: 0,
+  //       secondFlowA: 0,
+  //       decibelRatingB: 0,
+  //       pressureB: 0,
+  //       firstFlowB: 0,
+  //       secondFlowB: 0
+  //     },
+  //     orificeMethodData: {
+  //       compressorAirTemp: 0,
+  //       atmosphericPressure: 0,
+  //       dischargeCoefficient: 0,
+  //       orificeDiameter: 0,
+  //       supplyPressure: 0,
+  //       numberOfOrifices: 0,
+  //     },
+  //     units: 2
+  //   };
+  //   let estimateLeakB: AirLeakSurveyData = {
+  //     name: 'Estimate Leak',
+  //     leakDescription: "Enter notes about the leak here.",
+  //     selected: false,
+  //     measurementMethod: 0,
+  //     estimateMethodData: {
+  //       leakRateEstimate: 14
+  //     },
+  //     bagMethodData: {
+  //       height: 0,
+  //       diameter: 0,
+  //       fillTime: 0
+  //     },
+  //     decibelsMethodData: {
+  //       linePressure: 0,
+  //       decibels: 0,
+  //       decibelRatingA: 0,
+  //       pressureA: 0,
+  //       firstFlowA: 0,
+  //       secondFlowA: 0,
+  //       decibelRatingB: 0,
+  //       pressureB: 0,
+  //       firstFlowB: 0,
+  //       secondFlowB: 0
+  //     },
+  //     orificeMethodData: {
+  //       compressorAirTemp: 0,
+  //       atmosphericPressure: 0,
+  //       dischargeCoefficient: 0,
+  //       orificeDiameter: 0,
+  //       supplyPressure: 0,
+  //       numberOfOrifices: 0,
+  //     },
+  //     units: 1
+  //   };
+  //   let estimateLeakC: AirLeakSurveyData = {
+  //     name: 'Estimate Leak',
+  //     leakDescription: "Enter notes about the leak here.",
+  //     selected: false,
+  //     measurementMethod: 0,
+  //     estimateMethodData: {
+  //       leakRateEstimate: .785398163397448
+  //     },
+  //     bagMethodData: {
+  //       height: 0,
+  //       diameter: 0,
+  //       fillTime: 0
+  //     },
+  //     decibelsMethodData: {
+  //       linePressure: 0,
+  //       decibels: 0,
+  //       decibelRatingA: 0,
+  //       pressureA: 0,
+  //       firstFlowA: 0,
+  //       secondFlowA: 0,
+  //       decibelRatingB: 0,
+  //       pressureB: 0,
+  //       firstFlowB: 0,
+  //       secondFlowB: 0
+  //     },
+  //     orificeMethodData: {
+  //       compressorAirTemp: 0,
+  //       atmosphericPressure: 0,
+  //       dischargeCoefficient: 0,
+  //       orificeDiameter: 0,
+  //       supplyPressure: 0,
+  //       numberOfOrifices: 0,
+  //     },
+  //     units: 1
+  //   };
+  //   let estimateLeakD: AirLeakSurveyData = {
+  //     name: 'Estimate Leak',
+  //     leakDescription: "Enter notes about the leak here.",
+  //     selected: false,
+  //     measurementMethod: 0,
+  //     estimateMethodData: {
+  //       leakRateEstimate: 6.32517756495803
+  //     },
+  //     bagMethodData: {
+  //       height: 0,
+  //       diameter: 0,
+  //       fillTime: 0
+  //     },
+  //     decibelsMethodData: {
+  //       linePressure: 0,
+  //       decibels: 0,
+  //       decibelRatingA: 0,
+  //       pressureA: 0,
+  //       firstFlowA: 0,
+  //       secondFlowA: 0,
+  //       decibelRatingB: 0,
+  //       pressureB: 0,
+  //       firstFlowB: 0,
+  //       secondFlowB: 0
+  //     },
+  //     orificeMethodData: {
+  //       compressorAirTemp: 0,
+  //       atmosphericPressure: 0,
+  //       dischargeCoefficient: 0,
+  //       orificeDiameter: 0,
+  //       supplyPressure: 0,
+  //       numberOfOrifices: 0,
+  //     },
+  //     units: 1
+  //   };
+  //   exampleInputs.compressedAirLeakSurveyInputVec.push(estimateLeakA, estimateLeakB, estimateLeakC, estimateLeakD);
+  //   return exampleInputs;
+  // }
 }
