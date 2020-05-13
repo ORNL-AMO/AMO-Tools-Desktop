@@ -22,9 +22,9 @@
                 </a>
             </div>
         </div>
-        <div class="d-flex w-100">
-            <app-weather-bins-help *ngIf="tabSelect == 'help'"></app-weather-bins-help>
-            <app-weather-bins-bar-chart class="p-2 w-100" *ngIf="tabSelect == 'results'"></app-weather-bins-bar-chart>
+        <div class="p-2">
+            <app-weather-bins-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-weather-bins-help>
+            <app-weather-bins-bar-chart *ngIf="tabSelect == 'results'"></app-weather-bins-bar-chart>
         </div>
     </div>
 </div>

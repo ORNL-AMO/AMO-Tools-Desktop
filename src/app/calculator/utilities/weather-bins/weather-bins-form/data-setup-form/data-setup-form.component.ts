@@ -73,6 +73,7 @@ export class DataSetupFormComponent implements OnInit {
     setTimeout(() => {
       let csvImportData: CsvImportData = this.csvToJsonService.parseCSV(this.importData);
       this.weatherBinsService.importDataFromCsv.next(csvImportData);
+      this.inputData.fileName = this.fileReference.name;
       this.importSuccesful = true;
       this.importData = undefined;
       this.importingData = false;

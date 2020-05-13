@@ -1,0 +1,7 @@
+td{
+    width: 33%;
+}
+
+td:not(:first-of-type){
+    text-align: center;
+}

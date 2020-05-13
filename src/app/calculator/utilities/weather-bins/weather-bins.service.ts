@@ -36,6 +36,7 @@ export class WeatherBinsService {
   initInputData(): WeatherBinsInput {
     // let initCase: WeatherBinCase = this.getNewCase(1);
     return {
+      fileName: '',
       startDay: 1,
       startMonth: 0,
       endDay: 30,
@@ -56,9 +57,7 @@ export class WeatherBinsService {
   getEmptyCaseParameter(): CaseParameter {
     return {
       field: undefined,
-      lowerOperator: undefined,
       lowerBound: undefined,
-      upperOperator: undefined,
       upperBound: undefined
     }
   }
@@ -165,7 +164,8 @@ export interface WeatherBinsInput {
   startDay: number
   endDay: number,
   endMonth: number,
-  cases: Array<WeatherBinCase>
+  cases: Array<WeatherBinCase>,
+  fileName: string
 }
 
 
@@ -178,8 +178,6 @@ export interface WeatherBinCase {
 
 export interface CaseParameter {
   field: string,
-  lowerOperator: string,
   lowerBound: number,
-  upperOperator: string,
   upperBound: number
 }

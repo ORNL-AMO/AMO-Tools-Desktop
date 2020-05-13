@@ -19,15 +19,15 @@
                     <option [ngValue]="'RHum (%)'">Relative Humidity (%)</option>
                     <option [ngValue]="'Atm Pressure (psia)'">
                         Atm Pressure
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(Psia)</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(Paa)</span></option>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(psia)</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(Pa)</span></option>
                     <option [ngValue]="'Wet Bulb Temperature (F)'">
                         Wet-bulb Temperature
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">(&#8457;)</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span></option>
                     <option [ngValue]="'Enthalpy (BTU/lbm)'">
                         Enthalpy
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(BTU/lbm)</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(Btu/lbm)</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">(kJ/kg)</span></option>
                 </select>
             </div>
@@ -44,15 +44,15 @@
                     </span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'RHum (%)'">%</span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'Atm Pressure (psia)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">Psia</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Paa</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
                     </span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'Wet Bulb Temperature (F)'">
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
                     </span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'Enthalpy (BTU/lbm)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">BTU/lbm</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">Btu/lb</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
                     </span>
                 </div>
@@ -69,15 +69,15 @@
                     </span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'RHum (%)'">%</span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'Atm Pressure (psia)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">Psia</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Paa</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
                     </span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'Wet Bulb Temperature (F)'">
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
                     </span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'Enthalpy (BTU/lbm)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">BTU/lbm</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">Btu/lb</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
                     </span>
                 </div>
