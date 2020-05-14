@@ -4,10 +4,11 @@ import { GraphObj, LogToolField, AnnotationData } from '../../log-tool-models';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
+import { LogToolService } from '../../log-tool.service';
 @Injectable()
 export class VisualizeMenuService {
 
-  constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService) { }
+  constructor(private visualizeService: VisualizeService, private logToolDataService: LogToolDataService, private logToolService: LogToolService) { }
 
   save(selectedGraphObj: GraphObj) {
     this.visualizeService.selectedGraphObj.next(selectedGraphObj);
@@ -87,8 +88,8 @@ export class VisualizeMenuService {
 
   setXAxisDataOptions(selectedGraphObj: GraphObj) {
     let dataFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
-    let testTimeSeries = dataFields.find(dataField => { return dataField.isDateField });
-    if (selectedGraphObj.data[0].type == 'scattergl' && testTimeSeries != undefined) {
+    let noDayTypeAnalysis: boolean = this.logToolService.noDayTypeAnalysis.getValue();
+    if (selectedGraphObj.data[0].type == 'scattergl' && noDayTypeAnalysis == false) {
       dataFields.push({
         fieldName: 'Time Series',
         alias: 'Time Series',
