@@ -12,6 +12,11 @@ import { FacilityCompressorDataFormComponent } from './facility-compressor-data-
 import { AirLeakFormComponent } from './air-leak-form/air-leak-form.component';
 import { AirLeakResultsTableComponent } from './air-leak-results-table/air-leak-results-table.component';
 import { AirLeakCopyTableComponent } from './air-leak-copy-table/air-leak-copy-table.component';
+import { DecibelMethodFormComponent } from './air-leak-form/decibel-method-form/decibel-method-form.component';
+import { EstimateMethodFormComponent } from './air-leak-form/estimate-method-form/estimate-method-form.component';
+import { OrificeMethodFormComponent } from './air-leak-form/orifice-method-form/orifice-method-form.component';
+import { BagMethodFormComponent } from './air-leak-form/bag-method-form/bag-method-form.component';
+import { AirLeakFormService } from './air-leak-form/air-leak-form.service';
 
 
 
@@ -23,7 +28,10 @@ import { AirLeakCopyTableComponent } from './air-leak-copy-table/air-leak-copy-t
     FacilityCompressorDataFormComponent, 
     AirLeakFormComponent, 
     AirLeakResultsTableComponent, 
-    AirLeakCopyTableComponent
+    AirLeakCopyTableComponent, 
+    DecibelMethodFormComponent, 
+    EstimateMethodFormComponent, 
+    OrificeMethodFormComponent, BagMethodFormComponent
   ],
   imports: [
     CommonModule,
@@ -37,6 +45,7 @@ import { AirLeakCopyTableComponent } from './air-leak-copy-table/air-leak-copy-t
   ],
   providers: [
     AirLeakService,
+    AirLeakFormService,
     ConvertAirLeakService
   ]
 })

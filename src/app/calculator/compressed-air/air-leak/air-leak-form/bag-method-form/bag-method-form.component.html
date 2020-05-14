@@ -1,0 +1,51 @@
+    <form [formGroup]="bagMethodForm">
+        <div class="form-group">
+          <label for="fillTime">Bag Fill Time</label>
+          <div class="input-group">
+            <input name="fillTime" class="form-control" type="number" step="any"
+              formControlName="fillTime" id="fillTime" onfocus="this.select();"
+              (focus)="changeField('fillTime')">
+            <span class="input-group-addon units">s</span>
+            <span class="alert-danger pull-right small"
+            *ngIf="bagMethodForm.controls.fillTime.invalid && !bagMethodForm.controls.fillTime.pristine">
+            <span *ngIf="bagMethodForm.controls.fillTime.errors.required">Value required.</span>
+            <span *ngIf="bagMethodForm.controls.fillTime.errors.min">Value can't be less than
+              {{bagMethodForm.controls.fillTime.errors.min.min}}.</span>
+          </span>
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label for="height">Height of Bag</label>
+          <div class="input-group">
+            <input name="height" class="form-control" type="number" step="any"
+              formControlName="height" id="height" onfocus="this.select();"
+              (focus)="changeField('height')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
+            <span class="alert-danger pull-right small"
+            *ngIf="bagMethodForm.controls.height.invalid && !bagMethodForm.controls.height.pristine">
+            <span *ngIf="bagMethodForm.controls.height.errors.required">Value required.</span>
+            <span *ngIf="bagMethodForm.controls.height.errors.min">Value can't be less than
+              {{bagMethodForm.controls.height.errors.min.min}}.</span>
+          </span>
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label for="diameter">Diameter of Bag</label>
+          <div class="input-group">
+            <input name="diameter" class="form-control" type="number" step="any"
+              formControlName="diameter" id="diameter" onfocus="this.select();"
+              (focus)="changeField('diameter')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
+            <span class="alert-danger pull-right small"
+            *ngIf="bagMethodForm.controls.diameter.invalid && !bagMethodForm.controls.diameter.pristine">
+            <span *ngIf="bagMethodForm.controls.diameter.errors.required">Value required.</span>
+            <span *ngIf="bagMethodForm.controls.diameter.errors.min">Value can't be less than
+              {{bagMethodForm.controls.diameter.errors.min.min}}.</span>
+          </span>
+          </div>
+        </div>
+    </form>

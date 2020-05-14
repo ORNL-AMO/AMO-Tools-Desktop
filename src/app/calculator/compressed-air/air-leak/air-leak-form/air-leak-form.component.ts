@@ -42,9 +42,6 @@ export class AirLeakFormComponent implements OnInit {
     this.initSubscriptions();
     this.initForm();
   }
-  ngOnChange(changes: SimpleChanges) {
-    console.log(changes);
-  }
 
   ngOnDestroy() {
     this.airLeakInputSub.unsubscribe();

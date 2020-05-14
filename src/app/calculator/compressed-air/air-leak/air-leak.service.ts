@@ -23,19 +23,69 @@ export class AirLeakService {
               private standaloneService: StandaloneService,
               private formBuilder: FormBuilder) { 
     this.currentField = new BehaviorSubject<string>('default'); 
-    this.currentLeakIndex = new BehaviorSubject<number>(undefined);
+    // this.currentLeakIndex = new BehaviorSubject<number>(undefined);
+    this.currentLeakIndex = new BehaviorSubject<number>(0);
     this.resetData = new BehaviorSubject<boolean>(undefined);
-    this.airLeakInput = new BehaviorSubject<AirLeakSurveyInput>(undefined);
+    // this.airLeakInput = new BehaviorSubject<AirLeakSurveyInput>(undefined);
     this.airLeakOutput = new BehaviorSubject<AirLeakSurveyOutput>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
   }
 
+  // initDefaultEmptyInputs(settings: Settings) {
+  //   let emptyAirLeakInput: AirLeakSurveyInput = {
+  //     compressedAirLeakSurveyInputVec: Array<AirLeakSurveyData>(),
+  //     facilityCompressorData: this.getEmptyFacilityCompressorData(settings)
+  //   };
+  //   this.airLeakInput.next(emptyAirLeakInput);
+  // }
+
+  // 
   initDefaultEmptyInputs(settings: Settings) {
+    let emptyLeak = this.getEmptyLeakData();
     let emptyAirLeakInput: AirLeakSurveyInput = {
-      compressedAirLeakSurveyInputVec: Array<AirLeakSurveyData>(),
+      compressedAirLeakSurveyInputVec: [emptyLeak],
       facilityCompressorData: this.getEmptyFacilityCompressorData(settings)
     };
     this.airLeakInput.next(emptyAirLeakInput);
+  }
+
+  getEmptyLeakData() {
+    let emptyData: AirLeakSurveyData = {
+      leakDescription: '',
+      name: '',
+      selected: false,
+      measurementMethod: 0,
+      estimateMethodData: {
+        leakRateEstimate: 0.1
+      },
+      bagMethodData: {
+        height: 0,
+        diameter: 0,
+        fillTime: 0
+      },
+      decibelsMethodData: {
+        linePressure: 0,
+        decibels: 0,
+        decibelRatingA: 0,
+        pressureA: 0,
+        firstFlowA: 0,
+        secondFlowA: 0,
+        decibelRatingB: 0,
+        pressureB: 0,
+        firstFlowB: 0,
+        secondFlowB: 0
+      },
+      orificeMethodData: {
+        compressorAirTemp: 0,
+        atmosphericPressure: 0,
+        dischargeCoefficient: 0,
+        orificeDiameter: 0,
+        supplyPressure: 0,
+        numberOfOrifices: 1,
+      },
+      units: 1
+    };
+    return emptyData;
   }
 
   initDefaultEmptyOutputs() {
@@ -145,6 +195,21 @@ export class AirLeakService {
       emptyData = this.convertAirleakService.convertDefaultFacilityCompressorData(emptyData);
     }
     return emptyData;
+  }
+  
+  getExampleFacilityCompressorData(): FacilityCompressorData {
+    let exampleData: FacilityCompressorData = {
+      hoursPerYear: 8760,
+      utilityType: 1,
+      utilityCost: 0.12,
+      compressorElectricityData: {
+        compressorControl: 0,
+        compressorControlAdjustment: .25,
+        compressorSpecificPowerControl: 0,
+        compressorSpecificPower: .16
+      },
+    };
+    return exampleData;
   }
 
   setCompressorDataValidators(facilityCompressorDataForm: FormGroup): FormGroup {
@@ -362,21 +427,6 @@ export class AirLeakService {
       facilityCompressorData: inputCopy.facilityCompressorData,
     }
     this.airLeakOutput.next(outputs);
-  }
-
-  getExampleFacilityCompressorData(): FacilityCompressorData {
-    let exampleData: FacilityCompressorData = {
-      hoursPerYear: 8760,
-      utilityType: 1,
-      utilityCost: 0.12,
-      compressorElectricityData: {
-        compressorControl: 0,
-        compressorControlAdjustment: .25,
-        compressorSpecificPowerControl: 0,
-        compressorSpecificPower: .16
-      },
-    };
-    return exampleData;
   }
 
 

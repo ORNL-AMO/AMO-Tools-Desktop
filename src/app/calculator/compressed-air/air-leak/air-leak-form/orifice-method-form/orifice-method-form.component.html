@@ -1,0 +1,99 @@
+<form [formGroup]="orificeMethodForm">
+    <div class="form-group">
+      <label for="compressorAirTemp">Compressor Air Temperature</label>
+      <div class="input-group">
+        <input name="compressorAirTemp" class="form-control" type="number" step="any"
+          formControlName="compressorAirTemp" id="compressorAirTemp"
+          onfocus="this.select();" (focus)="changeField('compressorAirTemp')">
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="leakForm.controls.compressorAirTemp.invalid && !leakForm.controls.compressorAirTemp.pristine">
+        <span *ngIf="leakForm.controls.compressorAirTemp.errors.required">Value required.</span>
+        <span *ngIf="leakForm.controls.compressorAirTemp.errors.min">Value can't be less than
+          {{leakForm.controls.compressorAirTemp.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="atmosphericPressure">Atmospheric Pressure</label>
+      <div class="input-group">
+        <input name="atmosphericPressure" class="form-control" type="number" step="any"
+          formControlName="atmosphericPressure" id="atmosphericPressure"
+          onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="leakForm.controls.atmosphericPressure.invalid && !leakForm.controls.atmosphericPressure.pristine">
+        <span *ngIf="leakForm.controls.atmosphericPressure.errors.required">Value required.</span>
+        <span *ngIf="leakForm.controls.atmosphericPressure.errors.min">Value can't be less than
+          {{leakForm.controls.atmosphericPressure.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="dischargeCoefficient">Discharge Coefficient</label>
+      <div class="input-group">
+        <input name="dischargeCoefficient" class="form-control" type="number" step="any"
+          formControlName="dischargeCoefficient" id="dischargeCoefficient"
+          onfocus="this.select();" (focus)="changeField('dischargeCoefficient')">
+          <span class="alert-danger pull-right small"
+        *ngIf="leakForm.controls.dischargeCoefficient.invalid && !leakForm.controls.dischargeCoefficient.pristine">
+        <span *ngIf="leakForm.controls.dischargeCoefficient.errors.required">Value required.</span>
+        <span *ngIf="leakForm.controls.dischargeCoefficient.errors.min">Value can't be less than
+          {{leakForm.controls.dischargeCoefficient.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="orificeDiameter">Orifice Diameter</label>
+      <div class="input-group">
+        <input name="orificeDiameter" class="form-control" type="number" step="any"
+          formControlName="orificeDiameter" id="orificeDiameter" onfocus="this.select();"
+          (focus)="changeField('orificeDiameter')">
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="leakForm.controls.orificeDiameter.invalid && !leakForm.controls.orificeDiameter.pristine">
+        <span *ngIf="leakForm.controls.orificeDiameter.errors.required">Value required.</span>
+        <span *ngIf="leakForm.controls.orificeDiameter.errors.min">Value can't be less than
+          {{leakForm.controls.orificeDiameter.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="supplyPressure">Supply Pressure</label>
+      <div class="input-group">
+        <input name="supplyPressure" class="form-control" type="number" step="any"
+          formControlName="supplyPressure" id="supplyPressure" onfocus="this.select();"
+          (focus)="changeField('supplyPressure')">
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="leakForm.controls.supplyPressure.invalid && !leakForm.controls.supplyPressure.pristine">
+        <span *ngIf="leakForm.controls.supplyPressure.errors.required">Value required.</span>
+        <span *ngIf="leakForm.controls.supplyPressure.errors.min">Value can't be less than
+          {{leakForm.controls.supplyPressure.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="numberOfOrifices">Number of Orifices</label>
+      <div class="input-group">
+        <input name="numberOfOrifices" class="form-control" type="number" step="any"
+          formControlName="numberOfOrifices" id="numberOfOrifices" onfocus="this.select();"
+          (focus)="changeField('numberOfOrifices')">
+          <span class="alert-danger pull-right small"
+        *ngIf="leakForm.controls.numberOfOrifices.invalid && !leakForm.controls.numberOfOrifices.pristine">
+        <span *ngIf="leakForm.controls.numberOfOrifices.errors.required">Value required.</span>
+        <span *ngIf="leakForm.controls.numberOfOrifices.errors.min">Value can't be less than
+          {{leakForm.controls.numberOfOrifices.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+</form>
