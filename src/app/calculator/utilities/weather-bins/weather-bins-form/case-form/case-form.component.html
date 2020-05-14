@@ -33,28 +33,6 @@
             </div>
 
             <div class="form-group">
-                <label for="{{'lowerBound'+parameterIndex}}">Lower Bound</label>
-                <div class="input-group">
-                    <input name="{{'lowerBound'+parameterIndex}}" type="number" class="form-control"
-                        id="{{'lowerBound'+parameterIndex}}" [(ngModel)]="parameter.lowerBound" (input)="save()">
-                    <span class="input-group-addon units"
-                        *ngIf="parameter.field == 'Dry-bulb (C)' || parameter.field == 'Dew-point (C)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
-                    </span>
-                    <span class="input-group-addon units" *ngIf="parameter.field == 'RHum (%)'">%</span>
-                    <!-- <span class="input-group-addon units" *ngIf="parameter.field == 'Atm Pressure (psia)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
-                    </span> -->
-                    <!-- <span class="input-group-addon units" *ngIf="parameter.field == 'Enthalpy (BTU/lbm)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">Btu/lb</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
-                    </span> -->
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label for="{{'upperBound'+parameterIndex}}">Upper Bound</label>
                 <div class="input-group">
                     <input name="{{'upperBound'+parameterIndex}}" type="number" class="form-control"
@@ -73,6 +51,28 @@
                     <span *ngIf="settings.unitsOfMeasure != 'Metric'">Btu/lb</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
                 </span> -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{'lowerBound'+parameterIndex}}">Lower Bound</label>
+                <div class="input-group">
+                    <input name="{{'lowerBound'+parameterIndex}}" type="number" class="form-control"
+                        id="{{'lowerBound'+parameterIndex}}" [(ngModel)]="parameter.lowerBound" (input)="save()">
+                    <span class="input-group-addon units"
+                        *ngIf="parameter.field == 'Dry-bulb (C)' || parameter.field == 'Dew-point (C)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+                    </span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'RHum (%)'">%</span>
+                    <!-- <span class="input-group-addon units" *ngIf="parameter.field == 'Atm Pressure (psia)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
+                    </span> -->
+                    <!-- <span class="input-group-addon units" *ngIf="parameter.field == 'Enthalpy (BTU/lbm)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">Btu/lb</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
+                    </span> -->
                 </div>
             </div>
             <div class="form-group text-right">
