@@ -13,8 +13,33 @@
             </div>
         </div>
         <div class="d-flex flex-column m-4">
-            <app-air-leak-form [settings]="settings" [inputs]="inputs" [outputs]="outputs"
-                (calculate)="calculateAirLeak()" (emitChangeField)="changeField($event)"></app-air-leak-form>
+            <div class="tab-content">
+                <div class="d-flex flex-row flex-wrap">
+                    <div class="compressor-form-item pb-3">
+                        <app-facility-compressor-data-form [settings]="settings"></app-facility-compressor-data-form>
+                    </div>
+                    <div class="leak-form-item mb-2">
+                        <app-air-leak-form  [settings]="settings"></app-air-leak-form>
+                    </div>
+                </div>
+            </div>
+            <app-air-leak-results-table [settings]="settings"></app-air-leak-results-table>
+            <app-air-leak-copy-table [settings]="settings"></app-air-leak-copy-table>
+            <div class="w-100 justify-content-end btn-group btn-group-sm mh-25">
+                <div class="btn-group btn-group-sm h-25">
+                  <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+                    Generate Example
+                  </button>
+                  <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+                    Reset Data
+                  </button>
+                </div>
+            </div>
+              
+            <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+              (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
+              [operatingHours]="operatingCostService.operatingCostOperatingHours">
+            </app-operating-hours-modal>
         </div>
     </div>
     <div class="d-flex flex-column leak-results-width mh-100 scroll-item">
@@ -35,7 +60,7 @@
             <app-air-leak-help *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings">
             </app-air-leak-help>
             <div class="d-flex flex-column w-100 align-items-center pt-4 p-3" *ngIf="tabSelect == 'results'">
-                <app-air-leak-results class="w-100" [outputs]="outputs" [settings]="settings"></app-air-leak-results>
+                <app-air-leak-results class="w-100" [settings]="settings"></app-air-leak-results>
             </div>
         </div>
 

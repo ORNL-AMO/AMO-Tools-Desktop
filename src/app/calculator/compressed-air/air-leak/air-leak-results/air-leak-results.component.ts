@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { AirLeakSurveyOutput } from '../../../../shared/models/standalone';
+import { Subscription } from 'rxjs';
+import { AirLeakService } from '../air-leak.service';
 
 @Component({
   selector: 'app-air-leak-results',
@@ -9,8 +11,9 @@ import { AirLeakSurveyOutput } from '../../../../shared/models/standalone';
 })
 export class AirLeakSurveyResultsComponent implements OnInit {
 
-  @Input()
-  outputs: AirLeakSurveyOutput;
+  airLeakOutput: AirLeakSurveyOutput;
+  airLeakOutputSub: Subscription;
+
   @Input()
   settings: Settings;
   modificationExists: boolean = false;
@@ -22,10 +25,16 @@ export class AirLeakSurveyResultsComponent implements OnInit {
   @ViewChild('savingsTable', { static: false }) savingsTable: ElementRef;
   savingsTableString: any;
   allTablesString: any;
-  constructor() { }
+  constructor(private airLeakService: AirLeakService) { }
 
   ngOnInit() {
-    this.modificationExists = true;
+    this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
+      this.airLeakOutput = value;
+    })
+  }
+
+  ngOnDestroy() {
+    this.airLeakOutputSub.unsubscribe();
   }
 
   updateTableString() {

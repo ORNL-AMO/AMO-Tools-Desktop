@@ -4,13 +4,13 @@
       <tr>
         <td class="bold w-50">Consumption</td>
         <td class="text-center w-50">
-          {{outputs.baselineData.totalFlowRate | number:'1.0-0'}} SCFM
+          {{airLeakOutput.baselineData.totalFlowRate | number:'1.0-0'}} SCFM
         </td>
       </tr>
       <tr>
         <td class="bold w-50" >Compressed Air Use</td>
         <td class="text-center w-50">
-          {{outputs.baselineData.annualTotalFlowRate  | number:'1.0-0'}}
+          {{airLeakOutput.baselineData.annualTotalFlowRate  | number:'1.0-0'}}
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
         </td>
@@ -18,13 +18,13 @@
       <tr>
         <td class="bold w-50">Energy Use</td>
         <td class="text-center w-50">
-          {{outputs.baselineData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
+          {{airLeakOutput.baselineData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
         </td>
       </tr>
       <tr>
         <td class="bold w-50" >Annual Cost</td>
         <td class="text-center w-50">
-          {{outputs.baselineData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}} 
+          {{airLeakOutput.baselineData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}} 
         </td>
       </tr>
     </tbody>
@@ -36,13 +36,13 @@
       <tr>
         <td class="bold w-50">Consumption</td>
         <td class="text-center w-50">
-          {{outputs.modificationData.totalFlowRate | number:'1.0-0'}} SCFM
+          {{airLeakOutput.modificationData.totalFlowRate | number:'1.0-0'}} SCFM
         </td>
       </tr>
       <tr>
         <td class="bold w-50" >Compressed Air Use</td>
         <td class="text-center w-50">
-          {{outputs.modificationData.annualTotalFlowRate  | number:'1.0-0'}}
+          {{airLeakOutput.modificationData.annualTotalFlowRate  | number:'1.0-0'}}
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
         </td>
@@ -50,13 +50,13 @@
       <tr>
         <td class="bold w-50">Energy Use</td>
         <td class="text-center w-50">
-          {{outputs.modificationData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
+          {{airLeakOutput.modificationData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
         </td>
       </tr>
       <tr>
         <td class="bold w-50" >Annual Cost</td>
         <td class="text-center w-50">
-          {{outputs.modificationData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}}
+          {{airLeakOutput.modificationData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}}
         </td>
       </tr>
     </tbody>
@@ -68,13 +68,13 @@
       <tr>
         <td class="bold w-50">Consumption</td>
         <td class="text-center w-50">
-          {{outputs.savingsData.totalFlowRate | number:'1.0-0'}} SCFM
+          {{airLeakOutput.savingsData.totalFlowRate | number:'1.0-0'}} SCFM
         </td>
       </tr>
       <tr>
         <td class="bold w-50" >Compressed Air Use</td>
         <td class="text-center w-50">
-          {{outputs.savingsData.annualTotalFlowRate  | number:'1.0-0'}}
+          {{airLeakOutput.savingsData.annualTotalFlowRate  | number:'1.0-0'}}
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
         </td>
@@ -82,13 +82,13 @@
       <tr>
         <td class="bold w-50">Energy Use</td>
         <td class="text-center w-50">
-          {{outputs.savingsData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
+          {{airLeakOutput.savingsData.annualTotalElectricity | number:'1.0-0'}} kWh/yr
         </td>
       </tr>
       <tr>
         <td class="bold w-50" >Annual Cost</td>
         <td class="text-center w-50">
-          {{outputs.savingsData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}}
+          {{airLeakOutput.savingsData.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0'}}
         </td>
       </tr>
     </tbody>

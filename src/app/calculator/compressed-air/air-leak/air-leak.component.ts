@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input, HostListener, EventEmitter, Output } from '@angular/core';
 import { AirLeakService } from './air-leak.service';
-import { AirLeakSurveyInput, AirLeakSurveyOutput } from '../../../shared/models/standalone';
+import { AirLeakSurveyInput } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-air-leak',
@@ -11,22 +12,21 @@ import { OperatingHours } from '../../../shared/models/operations';
   styleUrls: ['./air-leak.component.css']
 })
 export class AirLeakComponent implements OnInit, AfterViewInit {
-
-  @Input()
-  inTreasureHunt: boolean;
   @Input()
   settings: Settings;
   @Input()
   operatingHours: OperatingHours;
   
   currentField: string;
+  currentFieldSub: Subscription;
+
   tabSelect: string = 'results';
   headerHeight: number;
   editMode: boolean = false;
   modificationExists: boolean;
-  
-  inputs: AirLeakSurveyInput;
-  outputs: AirLeakSurveyOutput;
+
+  airLeakInput: AirLeakSurveyInput;
+  airLeakInputSub: Subscription;
 
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
@@ -45,9 +45,25 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.initData();
-    this.calculateAirLeak();
+    this.airLeakService.initDefaultEmptyInputs(this.settings);
+    this.initSubscriptions();
   }
+
+  ngOnDestroy() {
+    this.currentFieldSub.unsubscribe();
+    this.airLeakInputSub.unsubscribe();
+  }
+
+  initSubscriptions() {
+    this.currentFieldSub = this.airLeakService.currentField.subscribe(val => {
+      this.currentField = val;
+    });
+    this.airLeakInputSub = this.airLeakService.airLeakInput.subscribe(value => {
+      this.airLeakInput = value;
+      this.airLeakService.calculate(this.settings);
+    })
+  }
+
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -61,20 +77,16 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
     }
   }
 
-  initData() {
-    this.outputs = this.airLeakService.getDefaultEmptyOutputs();
-    this.inputs = this.airLeakService.inputs;
-  }
-
   setTab(str: string) {
     this.tabSelect = str;
   }
-  
-  calculateAirLeak() {
-  this.outputs = this.airLeakService.calculate(this.inputs, this.settings);
+
+  btnResetData() {
+   this.airLeakService.resetData.next(true);
   }
 
-  changeField(str: string) {
-    this.currentField = str;
+  btnGenerateExample() {
+    this.airLeakService.generateExampleData();
   }
+
 }

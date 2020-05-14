@@ -36,3 +36,14 @@
     margin-right: .5rem;
     margin-bottom: 0px;
 }
+
+.compressor-form-item {
+    flex: 1 1 350px;
+    padding: 1em;
+  }
+  
+  .leak-form-item {
+    flex: 1 1 460px;
+    padding: 1em;
+  }
+  

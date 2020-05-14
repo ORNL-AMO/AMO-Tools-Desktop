@@ -1,10 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, FacilityCompressorData } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
-import { OperatingCostService } from '../../operating-cost/operating-cost.service';
-import { OperatingHours } from '../../../../shared/models/operations';
 import { AirLeakService } from '../air-leak.service';
 import { FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-air-leak-form',
@@ -13,46 +12,23 @@ import { FormGroup } from '@angular/forms';
 })
 export class AirLeakFormComponent implements OnInit {
 
-  @Output('calculate')
-  calculate = new EventEmitter<AirLeakSurveyInput>();
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
 
-
-  @Input()
-  inputs: AirLeakSurveyInput;
-  @Input()
-  outputs: AirLeakSurveyOutput;
-  @Input() 
-  inEditMode: boolean = false;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @Input()
   settings: Settings;
-  @Input()
-  resetForm: boolean = false;
-
-  showOperatingHoursModal: boolean;
-  compressorCustomControl: boolean;
-  compressorCustomSpecificPower: boolean;
-  formWidth: number;
-  leaksTableString: any;
-  currentLeakIndex: number;
-  currentFlowRate: number;
-  currentElectricityUse: number;
-  leakForm: FormGroup;
-  facilityCompressorDataForm: FormGroup;
   
-  @ViewChild('leaksTable', { static: false }) leaksTable: ElementRef;
-  @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setOpHoursModalWidth();
-  }
+  airLeakInput: AirLeakSurveyInput;
+  inEditMode: boolean = false;
+  currentLeakIndex: number;
+  leakForm: FormGroup;
 
-  utilityTypeOptions: Array<{display: string, value: number}> = [
-    {display: 'Compressed Air', value: 0},
-    {display: 'Electric', value: 1}
-  ];
-
+  resetData: boolean;
+  currentFieldSub: Subscription;
+  airLeakInputSub: Subscription;
+  resetDataSub: Subscription;
+  generateExampleSub: Subscription;
+  currentLeakIndexSub: Subscription;
+ 
   measurementMethods: Array<{display: string, value: number}> = [
     {display: 'Estimate', value: 0},
     {display: 'Decibel Method', value: 1},
@@ -60,199 +36,67 @@ export class AirLeakFormComponent implements OnInit {
     {display: 'Orifice Method', value: 3},
   ];
 
-  compressorControlTypes: Array<{ value: number, display: string, adjustment: number }> = [
-    { value: 0, display: 'Modulation (Poor)', adjustment: 25 },
-    { value: 1, display: 'Load-Unload (Short-Cycle)', adjustment: 40 },
-    { value: 2, display: 'Load-Unload (2+ Minute Cycle)', adjustment: 75 },
-    { value: 3, display: 'Centrifugal (Venting)', adjustment: 0 },
-    { value: 4, display: 'Centrifugal (Non-Venting)', adjustment: 75 },
-    { value: 5, display: 'Reciprocrating Unloaders', adjustment: 80 },
-    { value: 6, display: 'Variable Speed', adjustment: 60 },
-    { value: 7, display: 'Variable Displacement', adjustment: 60 },
-    { value: 8, display: 'Custom', adjustment: 0 }
-  ];
-  compressorTypes: Array<{ value: number, display: string, specificPower: number }> = [
-    { value: 0, display: 'Reciprocating', specificPower: 0.16 },
-    { value: 1, display: 'Rotary Screw (Lubricant-Injected)', specificPower: 0.20 },
-    { value: 2, display: 'Rotary Screw (Lubricant-Free)', specificPower: 0.23 },
-    { value: 3, display: 'Centrifugal', specificPower: 0.21 },
-    { value: 4, display: 'Custom', specificPower: 0.0 }
-  ];
-
-  constructor(private operatingCostService: OperatingCostService, private airLeakService: AirLeakService) { }
+  constructor(private airLeakService: AirLeakService) { }
 
   ngOnInit(): void {
-    this.initForms();
+    this.initSubscriptions();
+    this.initForm();
+  }
+  ngOnChange(changes: SimpleChanges) {
+    console.log(changes);
   }
 
-  ngAfterViewInit(){
-    setTimeout(() => {
-      this.setOpHoursModalWidth();
-    }, 100)
+  ngOnDestroy() {
+    this.airLeakInputSub.unsubscribe();
+    this.resetDataSub.unsubscribe();
+  }
+  
+  initSubscriptions() {
+    this.airLeakInputSub =  this.airLeakService.airLeakInput.subscribe(value => {
+      this.airLeakInput = value;
+    })
+    this.currentLeakIndexSub = this.airLeakService.currentLeakIndex.subscribe(value => {
+      this.currentLeakIndex = value;
+      if (this.airLeakInput.compressedAirLeakSurveyInputVec.length > 0) {
+        let tempLeak = this.airLeakInput.compressedAirLeakSurveyInputVec[value]
+        this.leakForm = this.airLeakService.getLeakFormFromObj(tempLeak);
+        this.inEditMode = true;
+      }
+    })
+    this.resetDataSub = this.airLeakService.resetData.subscribe(value => {
+      this.leakForm = this.airLeakService.getLeakFormReset(this.settings);
+      this.airLeakInput.compressedAirLeakSurveyInputVec = Array<AirLeakSurveyData>();
+      this.airLeakService.initDefaultEmptyOutputs();
+      this.emitChange();
+      this.inEditMode = false;
+    })
   }
 
-  initForms() {
-    this.initLeakForm();
-    this.initFacilityCompressorDataForm();
-  }
-
-  initFacilityCompressorDataForm() {
-    let defaultCompressorData: FacilityCompressorData = this.airLeakService.getFacilityCompressorFormReset();
-    this.facilityCompressorDataForm = this.airLeakService.getFacilityCompressorFormFromObj(defaultCompressorData);
-    this.inputs.facilityCompressorData = this.getFacilityCompressorDataFormValue();
-  }
-
-  initLeakForm() {
-    let defaultForm = this.airLeakService.getFormReset();
-    this.leakForm = this.airLeakService.getFormFromObj(defaultForm);
+  initForm() {
+    this.leakForm = this.airLeakService.getLeakFormReset(this.settings);
   }
 
   addLeak() {
     let tempForm = this.airLeakService.getObjFromForm(this.leakForm);
-    this.inputs.compressedAirLeakSurveyInputVec.push(tempForm);
-    this.inputs.facilityCompressorData = this.getFacilityCompressorDataFormValue();
+    this.airLeakInput.compressedAirLeakSurveyInputVec.push(tempForm);
     this.emitChange();
-    this.initLeakForm();
+    this.initForm();
   }
 
   saveLeak() {
     let tempForm: AirLeakSurveyData = this.airLeakService.getObjFromForm(this.leakForm);
-    this.inputs.compressedAirLeakSurveyInputVec[this.currentLeakIndex] = tempForm;
-    this.inputs.facilityCompressorData = this.getFacilityCompressorDataFormValue();
+    this.airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex] = tempForm;
     this.emitChange();
-    this.initLeakForm();
-    this.inEditMode = false;
-  }
-
-  getFacilityCompressorDataFormValue(): FacilityCompressorData  {
-    return {
-      hoursPerYear: this.facilityCompressorDataForm.controls.hoursPerYear.value,
-      utilityType: this.facilityCompressorDataForm.controls.utilityType.value,
-      utilityCost: this.facilityCompressorDataForm.controls.utilityCost.value,
-      compressorElectricityData: this.facilityCompressorDataForm.get("compressorElectricityData").value
-    }
-  }
-
-  editLeak(index: number) {
-    this.currentLeakIndex = index;
-    this.leakForm = this.airLeakService.getFormFromObj(this.inputs.compressedAirLeakSurveyInputVec[index]);
-    this.inEditMode = true;
-  }
-
-  copyLeak(index: number) {
-    let leakCopy = JSON.parse(JSON.stringify(this.inputs.compressedAirLeakSurveyInputVec[index]));
-    leakCopy.name = 'Copy of ' + leakCopy.name;
-    this.inputs.compressedAirLeakSurveyInputVec.push(leakCopy);
-    this.emitChange();
-  }
-
-  deleteLeak(index: number) {
-    this.inputs.compressedAirLeakSurveyInputVec.splice(index, 1);
-    this.outputs.leakResults.splice(index, 1);
-    this.emitChange();
-    this.initLeakForm();
+    this.initForm();
     this.inEditMode = false;
   }
   
   emitChange() {
-    this.inputs.facilityCompressorData = this.getFacilityCompressorDataFormValue();
-    this.calculate.emit();
+    this.airLeakService.airLeakInput.next(this.airLeakInput);
   }
 
   changeField(str: string) {
-    this.emitChangeField.emit(str);
+    this.airLeakService.currentField.next(str);
   }
 
-  changeCompressorControl() {
-    let compressorElectricityForm: FormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
-    if (!this.compressorCustomControl) {
-      if (compressorElectricityForm.controls.compressorControl.value == 8) {
-        this.compressorCustomControl = true;
-      }
-    }
-    else if (compressorElectricityForm.controls.compressorControl.value !== 8) {
-      this.compressorCustomControl = false;
-      compressorElectricityForm.patchValue({ compressorControlAdjustment: this.compressorControlTypes[compressorElectricityForm.controls.compressorControl.value].adjustment });
-    }
-    else {
-      if (compressorElectricityForm.controls.compressorControlAdjustment.valid) {
-        this.compressorControlTypes[7].adjustment = compressorElectricityForm.controls.compressorControlAdjustment.value;
-      }
-    }
-    this.airLeakService.setCompressorDataValidators(this.facilityCompressorDataForm);
-    this.emitChange();
-  }
-
-  changeCompressorType() {
-    let compressorElectricityForm: FormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
-    if (!this.compressorCustomSpecificPower) {
-      if (compressorElectricityForm.controls.compressorSpecificPowerControl.value == 4) {
-        this.compressorCustomSpecificPower = true;
-      }
-    }
-    else if (compressorElectricityForm.controls.compressorSpecificPowerControl.value != 4) {
-      this.compressorCustomSpecificPower = false;
-      compressorElectricityForm.patchValue({ compressorSpecificPower: this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower });
-    }
-    else {
-      if (compressorElectricityForm.controls.compressorSpecificPower.value) {
-        this.compressorTypes[4].specificPower = compressorElectricityForm.controls.compressorSpecificPower.value;
-      }
-    }
-    this.airLeakService.setCompressorDataValidators(this.facilityCompressorDataForm);
-    this.emitChange();
-  }
-  
-  toggleSelected(index: number, selected: boolean) {
-    this.inputs.compressedAirLeakSurveyInputVec[index].selected = selected;
-    this.emitChange();
-  }
-  
-  closeOperatingHoursModal() {
-    this.showOperatingHoursModal = false;
-  }
-
-  openOperatingHoursModal() {
-    this.showOperatingHoursModal = true;
-  }
-
-  setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
-      this.formWidth = this.formElement.nativeElement.clientWidth;
-    }
-  }
-
-  updateOperatingHours(oppHours: OperatingHours) {
-    this.operatingCostService.operatingHours = oppHours;
-    this.inputs.compressedAirLeakSurveyInputVec[this.currentLeakIndex].hoursPerYear = oppHours.hoursPerYear;
-    this.emitChange();
-    this.closeOperatingHoursModal();
-  }
-
-  updateLeaksTableString() {
-    this.leaksTableString = this.leaksTable.nativeElement.innerText;
-  }
-
-  btnResetData() {
-    let emptyInputs: AirLeakSurveyInput = this.airLeakService.getDefaultEmptyInputs();
-    let emptyOutputs: AirLeakSurveyOutput = this.airLeakService.getDefaultEmptyOutputs();
-    this.inputs.compressedAirLeakSurveyInputVec = emptyInputs.compressedAirLeakSurveyInputVec;
-    this.outputs.baselineData = emptyOutputs.baselineData;
-    this.outputs.leakResults = emptyOutputs.leakResults;
-    this.outputs.modificationData = emptyOutputs.modificationData;
-    this.outputs.savingsData = emptyOutputs.savingsData;
-    this.emitChange();
-    this.initLeakForm();
-    this.inEditMode = false;
-  }
-
-  btnGenerateExample() {
-    let exampleInputs: AirLeakSurveyInput = this.airLeakService.getExample();
-    let exampleFacilityData: FacilityCompressorData = this.airLeakService.getExampleFacilityCompressorData();
-    this.inputs.compressedAirLeakSurveyInputVec = exampleInputs.compressedAirLeakSurveyInputVec;
-    this.inputs.facilityCompressorData = exampleFacilityData;
-    this.emitChange();
-    this.leakForm = this.airLeakService.getFormFromObj(this.inputs.compressedAirLeakSurveyInputVec[0]);
-    this.facilityCompressorDataForm = this.airLeakService.getFacilityCompressorFormFromObj(exampleFacilityData);
-  }
 }
