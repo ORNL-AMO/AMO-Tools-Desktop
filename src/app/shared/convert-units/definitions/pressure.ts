@@ -67,6 +67,14 @@ export const pressure = {
       }
       , to_anchor: 1 / 10
     }
+    , mbar: {
+      name: {
+        singular: 'Millibar'
+        , plural: 'Millibars',
+        display: '(mbar)'
+      }
+      , to_anchor: .1
+    }
     , bar: {
       name: {
         singular: 'Bar'

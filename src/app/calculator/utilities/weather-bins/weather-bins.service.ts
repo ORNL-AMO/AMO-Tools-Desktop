@@ -15,6 +15,10 @@ MAIN OPTIONS:
 Dry-bulb (C)
 RHum (%)
 Dew-point (C)
+Wspd (m/s)
+Wdir (degrees)
+Lprecip depth (mm)
+Pressure (mbar)
 
 ADDITIONAL OPTIONS:
 ETR (W/m^2),
@@ -34,18 +38,11 @@ DH illum uncert (%),
 Zenith lum (cd/m^2),
 TotCld (tenths),
 OpqCld (tenths),
-Dry-bulb (C),
-Dew-point (C),
-RHum (%),
-Pressure (mbar),
-Wdir (degrees),
-Wspd (m/s),
 Hvis (m),
 CeilHgt (m),
 Pwat (cm),
 AOD (unitless),
 Alb (unitless),
-Lprecip depth (mm),
 Lprecip quantity (hr),
 */
 
@@ -124,17 +121,21 @@ export class WeatherBinsService {
     let caseParametersCopy: Array<CaseParameter> = JSON.parse(JSON.stringify(caseParameters));
     if (settings.unitsOfMeasure == 'Imperial') {
       caseParametersCopy.forEach(parameter => {
-        if ((parameter.field == 'Dry-bulb (C)' || 'Dew-point (C)') && parameter.lowerBound != undefined && parameter.upperBound) {
-          parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('C').to('F');
-          parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('C').to('F');
+        if (parameter.lowerBound != undefined && parameter.upperBound) {
+          if (parameter.field == 'Dry-bulb (C)' || 'Dew-point (C)') {
+            parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('F').to('C');
+            parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('F').to('C');
+          } else if (parameter.field == 'Wspd (m/s)') {
+            parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('ft').to('m');
+            parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('ft').to('m');
+          } else if (parameter.field == 'Pressure (mbar)') {
+            parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('inHg').to('mbar');
+            parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('inHg').to('mbar');
+          } else if (parameter.field == 'Lprecip depth (mm)') {
+            parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('in').to('mm');
+            parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('in').to('mm');
+          }
         }
-        // else if (parameter.field == 'Atm Pressure (psia)') {
-        //   parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('Pa').to('psia');
-        //   parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('Pa').to('psia');
-        // } else if (parameter.field == 'Enthalpy (BTU/lbm)') {
-        //   parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('kJkg').to('btuLb');
-        //   parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('kJkg').to('btuLb');
-        // }
       })
     }
     return caseParametersCopy;

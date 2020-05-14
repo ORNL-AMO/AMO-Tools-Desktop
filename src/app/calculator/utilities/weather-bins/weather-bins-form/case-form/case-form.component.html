@@ -17,18 +17,25 @@
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span>
                     </option>
                     <option [ngValue]="'RHum (%)'">Relative Humidity (%)</option>
-                    <!-- <option [ngValue]="'Atm Pressure (psia)'">
-                        Atm Pressure
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(psia)</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(Pa)</span></option> -->
                     <option [ngValue]="'Dew-point (C)'">
                         Dew-point
                         <span *ngIf="settings.unitsOfMeasure != 'Metric'">(&#8457;)</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span></option>
-                    <!-- <option [ngValue]="'Enthalpy (BTU/lbm)'">
-                        Enthalpy
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(Btu/lbm)</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(kJ/kg)</span></option> -->
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span>
+                    </option>
+                    <option [ngValue]="'Wspd (m/s)'">
+                        Wind Speed
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(ft/s)</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(m/s)</span>
+                    </option>
+                    <option [ngValue]="'Wdir (degrees)'">Wind Direction (degrees)</option>
+                    <option [ngValue]="'Lprecip depth (mm)'">Liquid Precipitation Depth
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(in)</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(mm)</span>
+                    </option>
+                    <option [ngValue]="'Pressure (mbar)'">Pressure
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">(in Hg)</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">(mbar)</span>
+                    </option>
                 </select>
             </div>
 
@@ -43,14 +50,15 @@
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
                     </span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'RHum (%)'">%</span>
-                    <!-- <span class="input-group-addon units" *ngIf="parameter.field == 'Atm Pressure (psia)'">
-                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
-                </span> -->
-                    <!-- <span class="input-group-addon units" *ngIf="parameter.field == 'Enthalpy (BTU/lbm)'">
-                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">Btu/lb</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
-                </span> -->
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Wdir (degrees)'">degrees</span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Pressure (mbar)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">in Hg</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">mbar</span>
+                    </span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Lprecip depth (mm)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">in</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
+                    </span>
                 </div>
             </div>
 
@@ -65,14 +73,15 @@
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
                     </span>
                     <span class="input-group-addon units" *ngIf="parameter.field == 'RHum (%)'">%</span>
-                    <!-- <span class="input-group-addon units" *ngIf="parameter.field == 'Atm Pressure (psia)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
-                    </span> -->
-                    <!-- <span class="input-group-addon units" *ngIf="parameter.field == 'Enthalpy (BTU/lbm)'">
-                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">Btu/lb</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
-                    </span> -->
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Wdir (degrees)'">degrees</span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Pressure (mbar)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">in Hg</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">mbar</span>
+                    </span>
+                    <span class="input-group-addon units" *ngIf="parameter.field == 'Lprecip depth (mm)'">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">in</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
+                    </span>
                 </div>
             </div>
             <div class="form-group text-right">
