@@ -16,21 +16,20 @@ export class CsvToJsonService {
     return results;
   }
 
-  // parseWeatherCSV(csvData: any): CsvImportData {
-  //   let results: CsvImportData = Papa.parse(csvData, {
-  //     // header: true,
-  //     dynamicTyping: true
-  //   });
-  //   results.data.shift();
+  parseWeatherCSV(csvData: any): CsvImportData {
+    let results: CsvImportData = Papa.parse(csvData, {
+      // header: true,
+      dynamicTyping: true
+    });
+    results.data.shift();
 
-  //   let unparsed = Papa.unparse(results.data);
-  //   console.log(unparsed);
-  //   results = Papa.parse(unparsed, {
-  //     header: true,
-  //     dynamicTyping: true
-  //   });
-  //   return results;
-  // }
+    let unparsed = Papa.unparse(results.data);
+    results = Papa.parse(unparsed, {
+      header: true,
+      dynamicTyping: true
+    });
+    return results;
+  }
 }
 
 

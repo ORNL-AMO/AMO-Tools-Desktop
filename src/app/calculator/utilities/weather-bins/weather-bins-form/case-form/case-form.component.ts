@@ -60,7 +60,7 @@ export class CaseFormComponent implements OnInit {
     let newNameIndex: number = 1;
     this.inputData.cases.forEach(caseItem => {
       caseItem.caseName = 'Case #' + newNameIndex;
-    })
+    });
 
     this.save();
   }

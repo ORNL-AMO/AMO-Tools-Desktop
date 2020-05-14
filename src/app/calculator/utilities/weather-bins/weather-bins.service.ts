@@ -4,7 +4,50 @@ import { CsvImportData } from '../../../shared/helper-services/csv-to-json.servi
 import * as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+/*
+WEATHER BINS FIELD OPTIONS FROM "TMY3" CSV DATA FOUND AT
+https://rredc.nrel.gov/solar/old_data/nsrdb/1991-2005/tmy3/by_state_and_city.html
 
+Date (MM/DD/YYYY),
+Time (HH:MM),
+
+MAIN OPTIONS:
+Dry-bulb (C)
+RHum (%)
+Dew-point (C)
+
+ADDITIONAL OPTIONS:
+ETR (W/m^2),
+ETRN (W/m^2),
+GHI (W/m^2),
+GHI uncert (%),
+DNI (W/m^2),
+DNI uncert (%),
+DHI (W/m^2),
+DHI uncert (%),
+GH illum (lx),
+Global illum uncert (%),
+DN illum (lx),
+DN illum uncert (%),
+DH illum (lx),
+DH illum uncert (%),
+Zenith lum (cd/m^2),
+TotCld (tenths),
+OpqCld (tenths),
+Dry-bulb (C),
+Dew-point (C),
+RHum (%),
+Pressure (mbar),
+Wdir (degrees),
+Wspd (m/s),
+Hvis (m),
+CeilHgt (m),
+Pwat (cm),
+AOD (unitless),
+Alb (unitless),
+Lprecip depth (mm),
+Lprecip quantity (hr),
+*/
 
 @Injectable()
 export class WeatherBinsService {
@@ -45,7 +88,7 @@ export class WeatherBinsService {
       fileName: '',
       startDay: 1,
       startMonth: 0,
-      endDay: 30,
+      endDay: 31,
       endMonth: 11,
       cases: new Array()
     }
@@ -79,18 +122,19 @@ export class WeatherBinsService {
 
   convertCaseParameters(caseParameters: Array<CaseParameter>, settings: Settings): Array<CaseParameter> {
     let caseParametersCopy: Array<CaseParameter> = JSON.parse(JSON.stringify(caseParameters));
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure == 'Imperial') {
       caseParametersCopy.forEach(parameter => {
-        if (parameter.field == 'Dry-bulb Temperature (F)' || 'Wet Bulb Temperature (F)') {
+        if ((parameter.field == 'Dry-bulb (C)' || 'Dew-point (C)') && parameter.lowerBound != undefined && parameter.upperBound) {
           parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('C').to('F');
           parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('C').to('F');
-        } else if (parameter.field == 'Atm Pressure (psia)') {
-          parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('Pa').to('psia');
-          parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('Pa').to('psia');
-        } else if (parameter.field == 'Enthalpy (BTU/lbm)') {
-          parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('kJkg').to('btuLb');
-          parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('kJkg').to('btuLb');
         }
+        // else if (parameter.field == 'Atm Pressure (psia)') {
+        //   parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('Pa').to('psia');
+        //   parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('Pa').to('psia');
+        // } else if (parameter.field == 'Enthalpy (BTU/lbm)') {
+        //   parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('kJkg').to('btuLb');
+        //   parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('kJkg').to('btuLb');
+        // }
       })
     }
     return caseParametersCopy;
@@ -131,6 +175,7 @@ export class WeatherBinsService {
     if (importDataFromCsv) {
       importDataFromCsv.data.forEach((dataItem) => {
         // let data = dataItem[field];
+        //first field will be date if using correct format
         let dataItemDate = new Date(dataItem[importDataFromCsv.meta.fields[0]]);
         let dateMonth: number = dataItemDate.getMonth();
         let dateDay: number = dataItemDate.getDate();
@@ -162,8 +207,6 @@ export class WeatherBinsService {
     }
     return dataInDateRange;
   }
-
-
 }
 
 
