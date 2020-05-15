@@ -1,4 +1,4 @@
-    <form [formGroup]="decibelMethodForm" class="pt-1">
+    <form [formGroup]="decibelsMethodForm" class="pt-1">
         <label class="group-label">
           Leak Data
         </label>
@@ -7,14 +7,15 @@
           <div class="input-group">
             <input name="linePressure" class="form-control" type="number" step="any"
               formControlName="linePressure" id="linePressure" onfocus="this.select();"
+              (input)="save()"
               (focus)="changeField('linePressure')">
             <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
             <span class="alert-danger pull-right small"
-            *ngIf="decibelMethodForm.controls.linePressure.invalid && !decibelMethodForm.controls.linePressure.pristine">
-            <span *ngIf="decibelMethodForm.controls.linePressure.errors.required">Value required.</span>
-            <span *ngIf="decibelMethodForm.controls.linePressure.errors.min">Value can't be less than
-              {{decibelMethodForm.controls.linePressure.errors.min.min}}.</span>
+            *ngIf="decibelsMethodForm.controls.linePressure.invalid && !decibelsMethodForm.controls.linePressure.pristine">
+            <span *ngIf="decibelsMethodForm.controls.linePressure.errors.required">Value required.</span>
+            <span *ngIf="decibelsMethodForm.controls.linePressure.errors.min">Value can't be less than
+              {{decibelsMethodForm.controls.linePressure.errors.min.min}}.</span>
               </span>
           </div>
         </div>
@@ -23,13 +24,14 @@
           <div class="input-group">
             <input name="decibels" class="form-control" type="number" step="any"
               formControlName="decibels" id="decibels" onfocus="this.select();"
+              (input)="save()"
               (focus)="changeField('supplyPressure')">
               <span class="input-group-addon units">Db</span>
               <span class="alert-danger pull-right small"
-              *ngIf="decibelMethodForm.controls.decibels.invalid && !decibelMethodForm.controls.decibels.pristine">
-              <span *ngIf="decibelMethodForm.controls.decibels.errors.required">Value required.</span>
-              <span *ngIf="decibelMethodForm.controls.decibels.errors.min">Value can't be less than
-                {{decibelMethodForm.controls.decibels.errors.min.min}}.</span>
+              *ngIf="decibelsMethodForm.controls.decibels.invalid && !decibelsMethodForm.controls.decibels.pristine">
+              <span *ngIf="decibelsMethodForm.controls.decibels.errors.required">Value required.</span>
+              <span *ngIf="decibelsMethodForm.controls.decibels.errors.min">Value can't be less than
+                {{decibelsMethodForm.controls.decibels.errors.min.min}}.</span>
                 </span>
           </div>
         </div>
@@ -51,14 +53,15 @@
             <div class="input-group pt-1">
               <input name="pressureA" class="form-control" type="number" step="any"
                 formControlName="pressureA" id="pressureA" onfocus="this.select();"
+                (input)="save()"
                 (focus)="changeField('pressureA')">
               <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
               <span class="alert-danger pull-right small"
-              *ngIf="decibelMethodForm.controls.pressureA.invalid && !decibelMethodForm.controls.pressureA.pristine">
-              <span *ngIf="decibelMethodForm.controls.pressureA.errors.required">Value required.</span>
-              <span *ngIf="decibelMethodForm.controls.pressureA.errors.min">Value can't be less than
-                {{decibelMethodForm.controls.pressureA.errors.min.min}}.</span>
+              *ngIf="decibelsMethodForm.controls.pressureA.invalid && !decibelsMethodForm.controls.pressureA.pristine">
+              <span *ngIf="decibelsMethodForm.controls.pressureA.errors.required">Value required.</span>
+              <span *ngIf="decibelsMethodForm.controls.pressureA.errors.min">Value can't be less than
+                {{decibelsMethodForm.controls.pressureA.errors.min.min}}.</span>
                 </span>
             </div>
   
@@ -67,14 +70,15 @@
             <div class="input-group pt-1">    
               <input name="pressureB" class="form-control" type="number" step="any"
                 formControlName="pressureB" id="pressureB" onfocus="this.select();"
+                (input)="save()"
                 (focus)="changeField('pressureB')">
               <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
               <span class="alert-danger pull-right small"
-              *ngIf="decibelMethodForm.controls.pressureB.invalid && !decibelMethodForm.controls.pressureB.pristine">
-              <span *ngIf="decibelMethodForm.controls.pressureB.errors.required">Value required.</span>
-              <span *ngIf="decibelMethodForm.controls.pressureB.errors.min">Value can't be less than
-                {{decibelMethodForm.controls.pressureB.errors.min.min}}.</span>
+              *ngIf="decibelsMethodForm.controls.pressureB.invalid && !decibelsMethodForm.controls.pressureB.pristine">
+              <span *ngIf="decibelsMethodForm.controls.pressureB.errors.required">Value required.</span>
+              <span *ngIf="decibelsMethodForm.controls.pressureB.errors.min">Value can't be less than
+                {{decibelsMethodForm.controls.pressureB.errors.min.min}}.</span>
               </span>
             </div>
           </div>
@@ -90,13 +94,14 @@
             <div class="col-6 input-group pt-1">
               <input name="decibelRatingA" class="form-control" type="number" step="any"
                 formControlName="decibelRatingA" id="decibelRatingA" onfocus="this.select();"
+                (input)="save()"
                 (focus)="changeField('decibelRatingA')">
                 <span class="input-group-addon units">Db</span>
                 <span class="alert-danger pull-right small"
-                *ngIf="decibelMethodForm.controls.decibelRatingA.invalid && !decibelMethodForm.controls.decibelRatingA.pristine">
-                <span *ngIf="decibelMethodForm.controls.decibelRatingA.errors.required">Value required.</span>
-                <span *ngIf="decibelMethodForm.controls.decibelRatingA.errors.min">Value can't be less than
-                  {{decibelMethodForm.controls.decibelRatingA.errors.min.min}}.</span>
+                *ngIf="decibelsMethodForm.controls.decibelRatingA.invalid && !decibelsMethodForm.controls.decibelRatingA.pristine">
+                <span *ngIf="decibelsMethodForm.controls.decibelRatingA.errors.required">Value required.</span>
+                <span *ngIf="decibelsMethodForm.controls.decibelRatingA.errors.min">Value can't be less than
+                  {{decibelsMethodForm.controls.decibelRatingA.errors.min.min}}.</span>
                 </span>
             </div>
           </div>
@@ -104,14 +109,15 @@
             <div class="input-group pt-1">
               <input name="firstFlowA" class="form-control" type="number" step="any"
                 formControlName="firstFlowA" id="firstFlowA" onfocus="this.select();"
+                (input)="save()"
                 (focus)="changeField('firstFlowA')">
               <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
               <span class="alert-danger pull-right small"
-              *ngIf="decibelMethodForm.controls.firstFlowA.invalid && !decibelMethodForm.controls.firstFlowA.pristine">
-              <span *ngIf="decibelMethodForm.controls.firstFlowA.errors.required">Value required.</span>
-              <span *ngIf="decibelMethodForm.controls.firstFlowA.errors.min">Value can't be less than
-                {{decibelMethodForm.controls.firstFlowA.errors.min.min}}.</span>
+              *ngIf="decibelsMethodForm.controls.firstFlowA.invalid && !decibelsMethodForm.controls.firstFlowA.pristine">
+              <span *ngIf="decibelsMethodForm.controls.firstFlowA.errors.required">Value required.</span>
+              <span *ngIf="decibelsMethodForm.controls.firstFlowA.errors.min">Value can't be less than
+                {{decibelsMethodForm.controls.firstFlowA.errors.min.min}}.</span>
               </span>
             </div>
           </div>
@@ -119,14 +125,15 @@
             <div class="input-group pt-1">
               <input name="secondFlowA" class="form-control" type="number" step="any"
                 formControlName="secondFlowA" id="secondFlowA" onfocus="this.select();"
+                (input)="save()"
                 (focus)="changeField('secondFlowA')">
               <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
               <span class="alert-danger pull-right small"
-              *ngIf="decibelMethodForm.controls.secondFlowA.invalid && !decibelMethodForm.controls.secondFlowA.pristine">
-              <span *ngIf="decibelMethodForm.controls.secondFlowA.errors.required">Value required.</span>
-              <span *ngIf="decibelMethodForm.controls.secondFlowA.errors.min">Value can't be less than
-                {{decibelMethodForm.controls.secondFlowA.errors.min.min}}.</span>
+              *ngIf="decibelsMethodForm.controls.secondFlowA.invalid && !decibelsMethodForm.controls.secondFlowA.pristine">
+              <span *ngIf="decibelsMethodForm.controls.secondFlowA.errors.required">Value required.</span>
+              <span *ngIf="decibelsMethodForm.controls.secondFlowA.errors.min">Value can't be less than
+                {{decibelsMethodForm.controls.secondFlowA.errors.min.min}}.</span>
               </span>
             </div>
           </div>
@@ -137,13 +144,14 @@
             <div class="col-6 ml-auto input-group pt-1">
               <input name="decibelRatingB" class="form-control" type="number" step="any"
                 formControlName="decibelRatingB" id="decibelRatingB" onfocus="this.select();"
+                (input)="save()"
                 (focus)="changeField('decibelRatingB')">
               <span class="input-group-addon units">Db</span>
               <span class="alert-danger pull-right small"
-              *ngIf="decibelMethodForm.controls.decibelRatingB.invalid && !decibelMethodForm.controls.decibelRatingB.pristine">
-              <span *ngIf="decibelMethodForm.controls.decibelRatingB.errors.required">Value required.</span>
-              <span *ngIf="decibelMethodForm.controls.decibelRatingB.errors.min">Value can't be less than
-                {{decibelMethodForm.controls.decibelRatingB.errors.min.min}}.</span>
+              *ngIf="decibelsMethodForm.controls.decibelRatingB.invalid && !decibelsMethodForm.controls.decibelRatingB.pristine">
+              <span *ngIf="decibelsMethodForm.controls.decibelRatingB.errors.required">Value required.</span>
+              <span *ngIf="decibelsMethodForm.controls.decibelRatingB.errors.min">Value can't be less than
+                {{decibelsMethodForm.controls.decibelRatingB.errors.min.min}}.</span>
               </span>
             </div>
           </div>
@@ -151,14 +159,15 @@
             <div class="input-group pt-1">
               <input name="firstFlowB" class="form-control" type="number" step="any"
                 formControlName="firstFlowB" id="firstFlowB" onfocus="this.select();"
+                (input)="save()"
                 (focus)="changeField('firstFlowB')">
               <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
               <span class="alert-danger pull-right small"
-              *ngIf="decibelMethodForm.controls.firstFlowB.invalid && !decibelMethodForm.controls.firstFlowB.pristine">
-              <span *ngIf="decibelMethodForm.controls.firstFlowB.errors.required">Value required.</span>
-              <span *ngIf="decibelMethodForm.controls.firstFlowB.errors.min">Value can't be less than
-                {{decibelMethodForm.controls.firstFlowB.errors.min.min}}.</span>
+              *ngIf="decibelsMethodForm.controls.firstFlowB.invalid && !decibelsMethodForm.controls.firstFlowB.pristine">
+              <span *ngIf="decibelsMethodForm.controls.firstFlowB.errors.required">Value required.</span>
+              <span *ngIf="decibelsMethodForm.controls.firstFlowB.errors.min">Value can't be less than
+                {{decibelsMethodForm.controls.firstFlowB.errors.min.min}}.</span>
               </span>
             </div>
           </div>
@@ -166,14 +175,15 @@
             <div class="input-group pt-1">
               <input name="secondFlowB" class="form-control" type="number" step="any"
                 formControlName="secondFlowB" id="secondFlowB" onfocus="this.select();"
+                (input)="save()"
                 (focus)="changeField('secondFlowB')">
               <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
               <span class="alert-danger pull-right small"
-              *ngIf="decibelMethodForm.controls.secondFlowB.invalid && !decibelMethodForm.controls.secondFlowB.pristine">
-              <span *ngIf="decibelMethodForm.controls.secondFlowB.errors.required">Value required.</span>
-              <span *ngIf="decibelMethodForm.controls.secondFlowB.errors.min">Value can't be less than
-                {{decibelMethodForm.controls.secondFlowB.errors.min.min}}.</span>
+              *ngIf="decibelsMethodForm.controls.secondFlowB.invalid && !decibelsMethodForm.controls.secondFlowB.pristine">
+              <span *ngIf="decibelsMethodForm.controls.secondFlowB.errors.required">Value required.</span>
+              <span *ngIf="decibelsMethodForm.controls.secondFlowB.errors.min">Value can't be less than
+                {{decibelsMethodForm.controls.secondFlowB.errors.min.min}}.</span>
               </span>
             </div>
           </div>

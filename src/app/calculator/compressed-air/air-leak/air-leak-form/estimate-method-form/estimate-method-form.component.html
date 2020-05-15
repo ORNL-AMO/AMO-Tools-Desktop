@@ -4,7 +4,7 @@
         <div class="input-group">
             <input name="leakRateEstimate" class="form-control" type="number" step="any"
                 formControlName="leakRateEstimate" id="leakRateEstimate" onfocus="this.select();"
-                (change)="save()"
+                (input)="save()"
                 (focus)="changeField('leakRateEstimate')">
             <span class="input-group-addon units">CFM</span>
             <span class="alert-danger pull-right small"

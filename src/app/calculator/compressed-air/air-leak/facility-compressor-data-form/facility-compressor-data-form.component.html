@@ -7,7 +7,7 @@
           <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
         </span>
         <input name="hoursPerYear" class="form-control" type="number" step="any"
-        (input)="emitChange()"
+        (input)="save()"
           formControlName="hoursPerYear" id="hoursPerYear" onfocus="this.select();"
           (focus)="changeField('hoursPerYear')">
         <span class="input-group-addon units">hrs/yr</span>
@@ -24,7 +24,7 @@
     <div class="form-group">
       <label>Utility Type</label>
       <select name="utilityType" class="form-control " id="utilityType" formControlName="utilityType" autofocus
-        (focus)="changeField('utilityType')" (change)="emitChange()" >
+        (focus)="changeField('utilityType')" (change)="save()">
         <option *ngFor="let utilityType of utilityTypeOptions" [ngValue]="utilityType.value">
           {{utilityType.display}}
         </option>
@@ -34,7 +34,7 @@
       <label for="utilityCost">Utility Cost</label>
       <div class="input-group">
         <input name="utilityCost" class="form-control" type="number" step="any" formControlName="utilityCost"
-        (input)="emitChange()"
+        (input)="save()"
           id="utilityCost" onfocus="this.select();" (focus)="changeField('utilityCost')">
         <span class="input-group-addon units">$/kWH</span>
         <span class="alert-danger pull-right small"

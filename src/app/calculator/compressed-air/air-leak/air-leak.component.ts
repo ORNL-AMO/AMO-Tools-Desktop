@@ -60,7 +60,6 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
     });
     this.airLeakInputSub = this.airLeakService.airLeakInput.subscribe(value => {
       this.airLeakInput = value;
-      console.log('Updated Input', this.airLeakInput);
       this.airLeakService.calculate(this.settings);
     })
   }
@@ -84,6 +83,8 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
 
   btnResetData() {
    this.airLeakService.resetData.next(true);
+   this.airLeakService.initDefaultEmptyInputs(this.settings);
+   this.airLeakService.currentLeakIndex.next(0);
   }
 
   btnGenerateExample() {

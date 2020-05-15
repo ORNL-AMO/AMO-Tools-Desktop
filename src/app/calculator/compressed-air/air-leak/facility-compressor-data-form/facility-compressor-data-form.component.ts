@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { AirLeakSurveyInput, FacilityCompressorData } from '../../../../shared/models/standalone';
+import { AirLeakSurveyInput } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 import { OperatingCostService } from '../../operating-cost/operating-cost.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { AirLeakService } from '../air-leak.service';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { AirLeakFormService } from '../air-leak-form/air-leak-form.service';
 
 @Component({
   selector: 'app-facility-compressor-data-form',
@@ -69,7 +70,9 @@ export class FacilityCompressorDataFormComponent implements OnInit {
     { value: 4, display: 'Custom', specificPower: 0.0 }
   ];
 
-  constructor(private operatingCostService: OperatingCostService, private airLeakService: AirLeakService) { }
+  constructor(private operatingCostService: OperatingCostService, 
+              private airLeakService: AirLeakService,
+              private airLeakFormService: AirLeakFormService) { }
 
   ngOnInit(): void {
     this.initSubscriptions();
@@ -89,14 +92,14 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   initSubscriptions() {
     this.airLeakInputSub = this.airLeakService.airLeakInput.subscribe(value => {
       this.airLeakInput = value;
-      this.facilityCompressorDataForm = this.airLeakService.getFacilityCompressorFormFromObj(this.airLeakInput.facilityCompressorData);
+      this.facilityCompressorDataForm = this.airLeakFormService.getFacilityCompressorFormFromObj(this.airLeakInput.facilityCompressorData);
     })
     this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
       this.annualTotalElectricity = value.baselineData.annualTotalElectricity;
     })
   }
 
-  emitChange() {
+  save() {
     this.airLeakInput.facilityCompressorData = this.facilityCompressorDataForm.value
     this.airLeakService.airLeakInput.next(this.airLeakInput);
   }
@@ -122,8 +125,8 @@ export class FacilityCompressorDataFormComponent implements OnInit {
         this.compressorControlTypes[7].adjustment = compressorElectricityForm.controls.compressorControlAdjustment.value;
       }
     }
-    this.airLeakService.setCompressorDataValidators(this.facilityCompressorDataForm);
-    this.emitChange();
+    this.airLeakFormService.setCompressorDataValidators(this.facilityCompressorDataForm);
+    this.save();
   }
 
   changeCompressorType() {
@@ -143,13 +146,13 @@ export class FacilityCompressorDataFormComponent implements OnInit {
         this.compressorTypes[4].specificPower = compressorElectricityForm.controls.compressorSpecificPower.value;
       }
     }
-    this.airLeakService.setCompressorDataValidators(this.facilityCompressorDataForm);
-    this.emitChange();
+    this.airLeakFormService.setCompressorDataValidators(this.facilityCompressorDataForm);
+    this.save();
   }
   
   toggleSelected(index: number, selected: boolean) {
     this.airLeakInput.compressedAirLeakSurveyInputVec[index].selected = selected;
-    this.emitChange();
+    this.save();
   }
   
   closeOperatingHoursModal() {
@@ -169,7 +172,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   updateOperatingHours(oppHours: OperatingHours) {
     this.operatingCostService.operatingHours = oppHours;
     this.airLeakInput.facilityCompressorData.hoursPerYear = oppHours.hoursPerYear;
-    this.emitChange();
+    this.save();
     this.closeOperatingHoursModal();
   }
 }

@@ -4,6 +4,7 @@
           <div class="input-group">
             <input name="fillTime" class="form-control" type="number" step="any"
               formControlName="fillTime" id="fillTime" onfocus="this.select();"
+              (input)="save()"
               (focus)="changeField('fillTime')">
             <span class="input-group-addon units">s</span>
             <span class="alert-danger pull-right small"
@@ -20,6 +21,7 @@
           <div class="input-group">
             <input name="height" class="form-control" type="number" step="any"
               formControlName="height" id="height" onfocus="this.select();"
+              (input)="save()"
               (focus)="changeField('height')">
             <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
@@ -37,6 +39,7 @@
           <div class="input-group">
             <input name="diameter" class="form-control" type="number" step="any"
               formControlName="diameter" id="diameter" onfocus="this.select();"
+              (input)="save()"
               (focus)="changeField('diameter')">
             <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
