@@ -59,7 +59,8 @@ export class CaseFormComponent implements OnInit {
     this.inputData.cases.splice(index, 1);
     let newNameIndex: number = 1;
     this.inputData.cases.forEach(caseItem => {
-      caseItem.caseName = 'Case #' + newNameIndex;
+      caseItem.caseName = 'Bin #' + newNameIndex;
+      newNameIndex++;
     });
 
     this.save();

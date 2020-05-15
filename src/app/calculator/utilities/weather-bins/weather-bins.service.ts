@@ -87,14 +87,16 @@ export class WeatherBinsService {
       startMonth: 0,
       endDay: 31,
       endMonth: 11,
-      cases: new Array()
+      cases: new Array(),
+      autoBinParameter: 'Dry-bulb (C)',
+      autoBinRangeValue: 10
     }
   }
 
   getNewCase(index: number): WeatherBinCase {
     let emptyCaseParameter: CaseParameter = this.getEmptyCaseParameter();
     return {
-      caseName: 'Case #' + index,
+      caseName: 'Bin #' + index,
       caseParameters: [emptyCaseParameter],
       totalNumberOfDataPoints: 0
     }
@@ -163,14 +165,14 @@ export class WeatherBinsService {
   checkDataPointFitsParameters(dataPoint: any, caseParameters: Array<CaseParameter>): boolean {
     let fitsParameters: boolean = true;
     caseParameters.forEach(parameter => {
-      if (dataPoint[parameter.field] > parameter.upperBound || dataPoint[parameter.field] < parameter.lowerBound) {
+      if (dataPoint[parameter.field] >= parameter.upperBound || dataPoint[parameter.field] < parameter.lowerBound) {
         fitsParameters = false;
       }
     });
     return fitsParameters;
   }
 
-  getDataInDateRange(inputData: WeatherBinsInput) {
+  getDataInDateRange(inputData: WeatherBinsInput): Array<any> {
     let dataInDateRange: Array<any> = new Array();
     let importDataFromCsv: CsvImportData = this.importDataFromCsv.getValue();
     if (importDataFromCsv) {
@@ -208,6 +210,37 @@ export class WeatherBinsService {
     }
     return dataInDateRange;
   }
+
+
+  setAutoBinCases(inputData: WeatherBinsInput): WeatherBinsInput {
+    let minAndMax: { min: number, max: number } = this.getParameterMinMax(inputData, inputData.autoBinParameter);
+    let lowerBound: number = minAndMax.min;
+    let maxValue: number = minAndMax.max;
+    inputData.cases = new Array();
+    let caseIndex: number = 1;
+    for (lowerBound; lowerBound <= maxValue; lowerBound += inputData.autoBinRangeValue) {
+      inputData.cases.push({
+        caseName: 'Bin #' + caseIndex,
+        caseParameters: [{
+          field: inputData.autoBinParameter,
+          lowerBound: Math.floor(lowerBound),
+          upperBound: Math.floor(lowerBound + inputData.autoBinRangeValue)
+        }],
+        totalNumberOfDataPoints: 0
+      });
+      caseIndex++;
+    };
+    return inputData;
+  }
+
+  getParameterMinMax(inputData: WeatherBinsInput, parameter: string): { min: number, max: number } {
+    let dataInDateRange: Array<any> = this.getDataInDateRange(inputData);
+    let minValueObj: any = _.minBy(dataInDateRange, parameter);
+    let maxValueObj: any = _.maxBy(dataInDateRange, parameter);
+    let min: number = minValueObj[parameter];
+    let max: number = maxValueObj[parameter];
+    return { min: min, max: max }
+  }
 }
 
 
@@ -217,7 +250,9 @@ export interface WeatherBinsInput {
   endDay: number,
   endMonth: number,
   cases: Array<WeatherBinCase>,
-  fileName: string
+  fileName: string,
+  autoBinParameter: string,
+  autoBinRangeValue: number
 }
 
 

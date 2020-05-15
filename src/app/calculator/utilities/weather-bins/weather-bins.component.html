@@ -1,13 +1,13 @@
 <div class="d-flex h-100 modify-conditions general standalone-calculator">
     <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
-        <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+        <div #leftPanelHeader class="header mr-2 ml-2 pb-1 pt-1">
             <!-- <div class="col-md-auto">
                 <img src="assets/images/calculator-icons/steam-icons/boiler.png" class="ico-size steam p-1">
             </div> -->
             <h3>Weather Bins</h3>
         </div>
         <app-weather-bins-form [settings]="settings"></app-weather-bins-form>
-        <div class="d-flex w-100 justify-content-end pt-4 pr-2">
+        <div class="row no-gutters justify-content-end pt-4 pr-2 mb-2">
             <button class="btn btn-danger small" (click)="resetData()">Reset Data</button>
         </div>
     </div>
