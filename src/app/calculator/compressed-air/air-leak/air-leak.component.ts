@@ -45,7 +45,10 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.airLeakService.initDefaultEmptyInputs(this.settings);
+    this.airLeakInput = this.airLeakService.airLeakInput.value;
+    if(!this.airLeakInput) {
+      this.airLeakService.initDefaultEmptyInputs(this.settings);
+    }
     this.initSubscriptions();
   }
 

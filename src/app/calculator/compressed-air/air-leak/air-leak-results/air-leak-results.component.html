@@ -4,7 +4,9 @@
       <tr>
         <td class="bold w-50">Consumption</td>
         <td class="text-center w-50">
-          {{airLeakOutput.baselineData.totalFlowRate | number:'1.0-0'}} SCFM
+          {{airLeakOutput.baselineData.totalFlowRate | number:'1.0-0'}} 
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
         </td>
       </tr>
       <tr>
@@ -36,7 +38,9 @@
       <tr>
         <td class="bold w-50">Consumption</td>
         <td class="text-center w-50">
-          {{airLeakOutput.modificationData.totalFlowRate | number:'1.0-0'}} SCFM
+          {{airLeakOutput.modificationData.totalFlowRate | number:'1.0-0'}} 
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
         </td>
       </tr>
       <tr>
@@ -68,7 +72,9 @@
       <tr>
         <td class="bold w-50">Consumption</td>
         <td class="text-center w-50">
-          {{airLeakOutput.savingsData.totalFlowRate | number:'1.0-0'}} SCFM
+          {{airLeakOutput.savingsData.totalFlowRate | number:'1.0-0'}} 
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
         </td>
       </tr>
       <tr>

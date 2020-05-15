@@ -11,8 +11,6 @@ export class AirLeakHelpComponent implements OnInit {
   @Input()
   currentField: string;
   @Input()
-  headToolType: string;
-  @Input()
   settings: Settings;
 
   dischargeLineLossCoefficientsExample: boolean = false;
@@ -20,14 +18,6 @@ export class AirLeakHelpComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.settings.distanceMeasurement == 'ft') {
-      this.smallUnit = 'in'
-    } else {
-      this.smallUnit = 'mm'
-    }
   }
 
-  showExample(bool: boolean) {
-    bool != bool;
-  }
 }

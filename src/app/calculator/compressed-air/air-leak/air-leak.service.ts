@@ -5,7 +5,7 @@ import { StandaloneService } from '../../standalone.service';
 import { ConvertAirLeakService } from './convert-air-leak.service';
 import { BehaviorSubject } from 'rxjs';
 import { AirLeakFormService } from './air-leak-form/air-leak-form.service';
-import { exampleLeakInputs } from '../compressedAirConstants';
+import { exampleLeakInputs } from '../compressed-air-constants';
 
 
 
