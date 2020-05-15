@@ -124,7 +124,7 @@ export class WeatherBinsService {
     if (settings.unitsOfMeasure == 'Imperial') {
       caseParametersCopy.forEach(parameter => {
         if (parameter.lowerBound != undefined && parameter.upperBound) {
-          if (parameter.field == 'Dry-bulb (C)' || 'Dew-point (C)') {
+          if (parameter.field == 'Dry-bulb (C)' || parameter.field == 'Dew-point (C)') {
             parameter.lowerBound = this.convertUnitsService.value(parameter.lowerBound).from('F').to('C');
             parameter.upperBound = this.convertUnitsService.value(parameter.upperBound).from('F').to('C');
           } else if (parameter.field == 'Wspd (m/s)') {
