@@ -6,12 +6,12 @@
       <div class="form-group">
         <label>Pipe Size
           (<span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">cm</span>)</label>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>)</label>
         <label>Pipe Length
           (<span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>)</label>
       </div>
-      <div class="pt-3" *ngFor="let inputPipe of inputs.allPipes; let index = index;">
+      <div class="pt-1" *ngFor="let inputPipe of inputs.allPipes; let index = index;">
         <div class="form-group row no-gutters">
           <div class="col-6 pr-2">
             <!--pipe size dropdown-->
@@ -27,7 +27,7 @@
                 [(ngModel)]="inputPipe.customPipeSize" id="{{'custom_pipe_size_' + index}}" (input)="emitChange()"
                 onfocus="this.select();" (focus)="changeField('pipeSize')">
               <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>    
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>    
             </div>
           </div>
           <!--length-->
@@ -42,7 +42,7 @@
             </div>
           </div>
         </div>
-        <hr>
+        <hr class="mt-2 mb-2">
       </div>
       <div class="row">
         <div class="col-md-auto mx-auto">

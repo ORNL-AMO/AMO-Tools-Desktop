@@ -340,7 +340,7 @@
           <label class="small" for="compressorSpecificPower">Compressor Specific Power</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{form.controls.compressorSpecificPower.value | number:'1.0-0'}}
+          <span class="small bold">{{form.controls.compressorSpecificPower.value | number:'1.0-2'}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
           </span>

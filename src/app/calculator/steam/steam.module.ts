@@ -15,6 +15,7 @@ import { ConvertSteamService } from './convert-steam.service';
 import { BoilerBlowdownRateModule } from './boiler-blowdown-rate/boiler-blowdown-rate.module';
 import { SteamListComponent } from './steam-list/steam-list.component';
 import { RouterModule } from '@angular/router';
+import { SteamReductionModule } from './steam-reduction/steam-reduction.module';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { RouterModule } from '@angular/router';
     HeaderModule,
     TurbineModule,
     BoilerBlowdownRateModule,
+    SteamReductionModule,
     RouterModule
   ],
   declarations: [
