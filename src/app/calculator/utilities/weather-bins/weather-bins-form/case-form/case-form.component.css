@@ -5,7 +5,7 @@
 .form-section{
     border-bottom: #bbb dashed 1px;
     padding-top: 1rem;
-    padding-bottom: .5rem;
+    /* padding-bottom: .5rem; */
 }
 
 .click-link.delete{

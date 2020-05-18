@@ -19,7 +19,7 @@ export class WeatherBinsHelpComponent implements OnInit {
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit(): void {
-    this.setFieldHelp();
+    // this.setFieldHelp();
   }
 
   setFieldHelp() {

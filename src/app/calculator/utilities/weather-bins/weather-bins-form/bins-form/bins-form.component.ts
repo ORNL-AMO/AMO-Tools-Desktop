@@ -3,6 +3,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { WeatherBinsInput, WeatherBinsService } from '../../weather-bins.service';
 import { CsvImportData } from '../../../../../shared/helper-services/csv-to-json.service';
+import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-bins-form',
@@ -19,7 +20,7 @@ export class BinsFormComponent implements OnInit {
   importDataFromCsv: CsvImportData;
   parameterMin: number;
   parameterMax: number;
-  constructor(private weatherBinsService: WeatherBinsService) { }
+  constructor(private weatherBinsService: WeatherBinsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit(): void {
     this.inputDataSub = this.weatherBinsService.inputData.subscribe(val => {
@@ -47,8 +48,23 @@ export class BinsFormComponent implements OnInit {
   setParameterMinMax() {
     if (this.importDataFromCsv) {
       let minAndMax: { min: number, max: number } = this.weatherBinsService.getParameterMinMax(this.inputData, this.inputData.autoBinParameter);
-      this.parameterMin = minAndMax.min;
-      this.parameterMax = minAndMax.max;
+      if (this.settings.unitsOfMeasure != 'Metric') {
+        if (this.inputData.autoBinParameter == 'Dry-bulb (C)' || this.inputData.autoBinParameter == 'Dew-point (C)') {
+          minAndMax.min = this.convertUnitsService.value(minAndMax.min).from('F').to('C');
+          minAndMax.max = this.convertUnitsService.value(minAndMax.max).from('F').to('C');
+        } else if (this.inputData.autoBinParameter == 'Wspd (m/s)') {
+          minAndMax.min = this.convertUnitsService.value(minAndMax.min).from('ft').to('m');
+          minAndMax.max = this.convertUnitsService.value(minAndMax.max).from('ft').to('m');
+        } else if (this.inputData.autoBinParameter == 'Pressure (mbar)') {
+          minAndMax.min = this.convertUnitsService.value(minAndMax.min).from('inHg').to('mbar');
+          minAndMax.max = this.convertUnitsService.value(minAndMax.max).from('inHg').to('mbar');
+        } else if (this.inputData.autoBinParameter == 'Lprecip depth (mm)') {
+          minAndMax.min = this.convertUnitsService.value(minAndMax.min).from('in').to('mm');
+          minAndMax.max = this.convertUnitsService.value(minAndMax.max).from('in').to('mm');
+        }
+      }
+      this.parameterMin = Math.floor(minAndMax.min);
+      this.parameterMax = Math.ceil(minAndMax.max);
     }
   }
 }

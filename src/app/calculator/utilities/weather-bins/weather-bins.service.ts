@@ -116,6 +116,8 @@ export class WeatherBinsService {
       let convertedCaseParameters: Array<CaseParameter> = this.convertCaseParameters(weatherCase.caseParameters, settings);
       weatherCase.totalNumberOfDataPoints = this.calculateNumberOfParameterDataPoints(dataInRange, convertedCaseParameters);
     });
+    let total = _.sumBy(inputData.cases, 'totalNumberOfDataPoints')
+    console.log('Total ' + total);
     return inputData;
   }
 
@@ -163,10 +165,10 @@ export class WeatherBinsService {
   }
 
   checkDataPointFitsParameters(dataPoint: any, caseParameters: Array<CaseParameter>): boolean {
-    let fitsParameters: boolean = true;
+    let fitsParameters: boolean = false;
     caseParameters.forEach(parameter => {
-      if (dataPoint[parameter.field] >= parameter.upperBound || dataPoint[parameter.field] < parameter.lowerBound) {
-        fitsParameters = false;
+      if (dataPoint[parameter.field] > parameter.lowerBound && dataPoint[parameter.field] <= parameter.upperBound) {
+        fitsParameters = true;
       }
     });
     return fitsParameters;
