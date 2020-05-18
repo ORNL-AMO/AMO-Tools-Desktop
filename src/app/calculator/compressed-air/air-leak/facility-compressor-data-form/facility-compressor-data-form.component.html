@@ -1,0 +1,134 @@
+<form [formGroup]="facilityCompressorDataForm" #formElement>
+    <label class="group-label-wide mb-2">Compressor Data</label>
+    <div class="form-group">
+      <label for="hoursPerYear">Annual Operating Hours</label>
+      <div class="input-group">
+        <span class="input-group-addon op-hour-addon units">
+          <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+        </span>
+        <input name="hoursPerYear" class="form-control" type="number" step="any"
+        (input)="save()"
+          formControlName="hoursPerYear" id="hoursPerYear" onfocus="this.select();"
+          (focus)="changeField('hoursPerYear')">
+        <span class="input-group-addon units">hrs/yr</span>
+        <span class="alert-danger pull-right small"
+          *ngIf="facilityCompressorDataForm.controls.hoursPerYear.invalid && !facilityCompressorDataForm.controls.hoursPerYear.pristine">
+          <span *ngIf="facilityCompressorDataForm.controls.hoursPerYear.errors.required">Value required.</span>
+          <span *ngIf="facilityCompressorDataForm.controls.hoursPerYear.errors.max">Value can't be greater than
+            {{facilityCompressorDataForm.controls.hoursPerYear.errors.max.max}}.</span>
+          <span *ngIf="facilityCompressorDataForm.controls.hoursPerYear.errors.min">Value can't be less than
+            {{facilityCompressorDataForm.controls.hoursPerYear.errors.min.min}}.</span>
+        </span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Utility Type</label>
+      <select name="utilityType" class="form-control " id="utilityType" formControlName="utilityType" autofocus
+        (focus)="changeField('utilityType')" (change)="save()">
+        <option *ngFor="let utilityType of utilityTypeOptions" [ngValue]="utilityType.value">
+          {{utilityType.display}}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="utilityCost">Utility Cost</label>
+      <div class="input-group">
+        <input name="utilityCost" class="form-control" type="number" step="any" formControlName="utilityCost"
+        (input)="save()"
+          id="utilityCost" onfocus="this.select();" (focus)="changeField('utilityCost')">
+        <span class="input-group-addon units">$/kWH</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="facilityCompressorDataForm.controls.utilityCost.invalid && !facilityCompressorDataForm.controls.utilityCost.pristine">
+        <span *ngIf="facilityCompressorDataForm.controls.utilityCost.errors.required">Value required.</span>
+        <span *ngIf="facilityCompressorDataForm.controls.utilityCost.errors.min">Value can't be less than
+          {{facilityCompressorDataForm.controls.utilityCost.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <!-- utility type is electricity -->
+    <div formGroupName="compressorElectricityData" *ngIf="facilityCompressorDataForm.controls.utilityType.value == 1" class="pt-1">
+      <div class="form-group">
+        <label class="small" for="compressorControlType">Compressor Control Type</label>
+        <div class="input-group">
+          <select class="form-control" name="compressorControlType"
+            id="compressorControlType" formControlName="compressorControl"
+            (change)="changeCompressorControl()" (focus)="changeField('compressorControl')">
+            <option *ngFor="let control of compressorControlTypes" [ngValue]="control.value">{{control.display}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row" *ngIf="!compressorCustomControl">
+        <div class="col-6">
+          <label class="small bold" for="compressorControlAdjustment">Compressor Control
+            Adjustment</label>
+        </div>
+        <div class="col-6 text-center">
+          <span class="small bold">{{facilityCompressorDataForm.controls.compressorElectricityData.controls.compressorControlAdjustment.value | number:'1.0-2'}} %</span>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="compressorCustomControl">
+        <label class="small" for="compressorControlAdjustment">Compressor Control Adjustment</label>
+        <div class="input-group">
+          <input class="form-control" name="compressorControlAdjustment"
+            id="compressorControlAdjustment" type="number" 
+            (input)="changeCompressorControl()"
+            formControlName="compressorControlAdjustment" (focus)="changeField('compressorControlAdjustment')"
+            onfocus="this.select();">
+          <span class="units input-group-addon">%</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="compressorType">Compressor Type</label>
+        <div class="input-group">
+          <select class="form-control" name="compressorType"
+            id="compressorType" (change)="changeCompressorType()"
+            formControlName="compressorSpecificPowerControl" (focus)="changeField('compressorType')">
+            <option *ngFor="let compType of compressorTypes" [ngValue]="compType.value">{{compType.display}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="!compressorCustomSpecificPower">
+        <div class="col-6">
+          <label class="small bold" for="compressorSpecificPower">Compressor Specific Power</label>
+        </div>
+        <div class="col-6 text-center">
+          <span class="small bold">{{facilityCompressorDataForm.controls.compressorElectricityData.controls.compressorSpecificPower.value | number:'1.0-2'}}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="compressorCustomSpecificPower">
+        <label class="small" for="compressorCustomSpecificPower">Compressor Specific Power</label>
+        <div class="input-group">
+          <input class="form-control" name="compressorSpecificPower" id="compressorCustomSpecificPower"
+          (input)="changeCompressorType()"
+            formControlName="compressorSpecificPower" type="number" (focus)="changeField('compressorSpecificPower')"
+            onfocus="this.select();">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
+          <span class="units input-group-addon"
+            *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <label class="small bold">Electricity Use</label>
+        </div>
+        <div class="col-6 text-center">
+          <span class="small bold"
+            *ngIf="annualTotalElectricity">
+            {{annualTotalElectricity | number:'1.0-0'}}
+            kWh</span>
+          <span *ngIf="!annualTotalElectricity"> -- </span>
+        </div>
+      </div>
+    </div>
+  </form>

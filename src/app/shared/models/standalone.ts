@@ -155,6 +155,7 @@ export interface BagMethodOutput {
   annualConsumption: number;
 }
 
+
 export interface CalculateUsableCapacity {
   tankSize: number;
   airPressureIn: number;
@@ -353,6 +354,77 @@ export interface CompressedAirReductionResult {
 };
 //===== END compressed air reduction objects =====
 
+export interface AirLeakSurveyInput {
+  compressedAirLeakSurveyInputVec: Array<AirLeakSurveyData>
+  facilityCompressorData?: FacilityCompressorData;
+}
+  
+export interface AirLeakSurveyData {
+  selected: boolean;
+  hoursPerYear?: number;
+  utilityType?: number;
+  utilityCost?: number;
+  name: string;
+  leakDescription: string,
+  measurementMethod: number;
+  compressorElectricityData?: CompressorElectricityData,
+  bagMethodData: BagMethodData,
+  estimateMethodData: EstimateMethodData,
+  orificeMethodData: OrificeMethodData,
+  decibelsMethodData: DecibelsMethodData,
+  units: number
+}
+
+export interface AirLeakSurveyOutput {
+  leakResults: Array<AirLeakSurveyResult>;
+  baselineData: AirLeakSurveyResult;
+  modificationData: AirLeakSurveyResult;
+  savingsData: AirLeakSurveyResult;
+  facilityCompressorData?: FacilityCompressorData,
+}
+
+export interface AirLeakSurveyResult {
+  name?: string;
+  leakDescription?: string;
+  selected?: boolean;
+  totalFlowRate: number;
+  annualTotalFlowRate: number;
+  annualTotalElectricity: number;
+  annualTotalElectricityCost: number;
+  }
+
+export interface DecibelsMethodData {
+  linePressure: number;
+  decibels: number;
+  decibelRatingA: number;
+  pressureA: number;
+  firstFlowA: number;
+  secondFlowA: number;
+  decibelRatingB: number;
+  pressureB: number;
+  firstFlowB: number;
+  secondFlowB: number;
+};
+
+export interface OrificeMethodData {
+  compressorAirTemp: number;
+  atmosphericPressure: number;
+  dischargeCoefficient: number;
+  orificeDiameter: number;
+  supplyPressure: number;
+  numberOfOrifices: number;
+};
+
+export interface EstimateMethodData {
+  leakRateEstimate: number,
+};
+
+export interface FacilityCompressorData {
+  hoursPerYear: number;
+  utilityType: number;
+  utilityCost: number;
+  compressorElectricityData: CompressorElectricityData
+}
 
 
 //====== compressed air pressure reduction objects =====

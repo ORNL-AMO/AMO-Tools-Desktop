@@ -1,0 +1,44 @@
+<form [formGroup]="leakForm">
+  <!-- <label *ngIf="!inEditMode" class="group-label-wide mb-2">Add New Leak</label> -->
+  <label class="group-label-wide mb-2">Leak Data</label>
+  <div class="form-group pb-1">
+    <label for="name">Leak Name</label>
+    <div class="input-group">
+      <input name="name" class="form-control" type="text" step="any" formControlName="name" id="name"
+        onfocus="this.select();" (focus)="changeField('name')" (change)="saveLeak()">
+      <span class="alert-danger pull-right small"
+        *ngIf="leakForm.controls.name.invalid && !leakForm.controls.name.pristine">
+        <span *ngIf="leakForm.controls.name.errors.required">Value required.</span>
+      </span>
+    </div>
+  </div>
+  <div class="form-group pb-1">
+    <label for="leakDescription">Leak Description</label>
+    <div class="input-group">
+      <textarea name="leakDescription" rows="4" class="form-control" id="leakDescription"
+        (focus)="changeField('leakDescription')" formControlName="leakDescription" onfocus="this.select();"
+        (change)="saveLeak()"></textarea>
+      <span class="alert-danger pull-right small"
+        *ngIf="leakForm.controls.leakDescription.invalid && !leakForm.controls.leakDescription.pristine">
+        <span *ngIf="leakForm.controls.leakDescription.errors.required">Value required.</span>
+      </span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small" for="measurementMethod">Measurement Method</label>
+    <div class="input-group">
+      <select class="form-control" name="measurementMethod" id="measurementMethod" formControlName="measurementMethod"
+        (focus)="changeField('measurementMethod')" (change)="saveLeak()">
+        <option *ngFor="let method of measurementMethods" [ngValue]="method.value">{{method.display}}</option>
+      </select>
+    </div>
+  </div>
+  <app-estimate-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == 0"></app-estimate-method-form>
+  <app-bag-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == 2"></app-bag-method-form>
+    <app-orifice-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == 3"></app-orifice-method-form>
+    <app-decibel-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == 1"></app-decibel-method-form>
+
+  <div class="d-flex w-100 justify-content-end">
+    <a class="click-link small" (click)="addLeak()">+Add Another Leak</a>
+  </div>
+</form>

@@ -1,0 +1,66 @@
+<div *ngIf="airLeakOutput.leakResults.length > 0" class="mt-3">
+    <div class="hidden-copy-table">
+      <table #leaksTable>
+        <tbody >
+          <tr>
+            <td>Leak Name</td>
+            <td>Leak Description</td>
+            <td>Operating Hours</td>
+            <td>Utility Type</td>
+            <td>Utility Cost</td>
+            <td>Compressor Control Adjustment</td>
+            <td>Compressor Specific Power</td>
+            <td>Flow Rate 
+              (<span *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span> )</td>
+            <td>Air Loss          
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'">kSCF/yr</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>   
+            </td>
+            <td>Electricity Consumption (kWh/yr)</td>
+          </tr>
+          <tr *ngFor="let leak of airLeakOutput.leakResults">
+            <td>
+              {{leak.name}}
+            </td>
+            <td >
+              {{ leak.leakDescription }}
+            </td>
+            <td>{{ airLeakOutput.facilityCompressorData.hoursPerYear }}</td>
+            <td>
+              <span *ngIf="airLeakOutput.facilityCompressorData.utilityType == 1">
+                Electric
+              </span>
+              <span *ngIf="airLeakOutput.facilityCompressorData.utilityType == 0">
+                Compressed Air
+              </span>
+            </td>
+            <td>{{ airLeakOutput.facilityCompressorData.utilityCost}}</td>
+            <td>{{ airLeakOutput.facilityCompressorData.compressorElectricityData.compressorControlAdjustment}}</td>
+            <td>{{ airLeakOutput.facilityCompressorData.compressorElectricityData.compressorSpecificPower}}</td>
+            <td>
+              {{ leak.totalFlowRate }}
+            </td>
+            <td>
+              <span *ngIf="leak.annualTotalFlowRate">
+                {{leak.annualTotalFlowRate | number:'1.0-0'}}  
+              </span>
+              <span *ngIf="!leak.annualTotalFlowRate">
+                --
+              </span>
+            </td>
+            <td>
+              <span *ngIf="leak.annualTotalElectricity">
+                {{ leak.annualTotalElectricity | number:'1.0-0' }} 
+              </span>
+              <span *ngIf="!leak.annualTotalElectricity">
+                --
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-exportable-results-table *ngIf="airLeakOutput.leakResults.length > 0" [tableString]="leaksTableString"
+      (updateTableString)="updateLeaksTableString()"></app-exportable-results-table>
+    </div>
