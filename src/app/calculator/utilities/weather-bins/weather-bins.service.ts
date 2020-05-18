@@ -214,8 +214,8 @@ export class WeatherBinsService {
   }
 
 
-  setAutoBinCases(inputData: WeatherBinsInput): WeatherBinsInput {
-    let minAndMax: { min: number, max: number } = this.getParameterMinMax(inputData, inputData.autoBinParameter);
+  setAutoBinCases(inputData: WeatherBinsInput, settings: Settings): WeatherBinsInput {
+    let minAndMax: { min: number, max: number } = this.getParameterMinMax(inputData, inputData.autoBinParameter, settings);
     let lowerBound: number = minAndMax.min;
     let maxValue: number = minAndMax.max;
     inputData.cases = new Array();
@@ -235,12 +235,27 @@ export class WeatherBinsService {
     return inputData;
   }
 
-  getParameterMinMax(inputData: WeatherBinsInput, parameter: string): { min: number, max: number } {
+  getParameterMinMax(inputData: WeatherBinsInput, parameter: string, settings: Settings): { min: number, max: number } {
     let dataInDateRange: Array<any> = this.getDataInDateRange(inputData);
     let minValueObj: any = _.minBy(dataInDateRange, parameter);
     let maxValueObj: any = _.maxBy(dataInDateRange, parameter);
     let min: number = minValueObj[parameter];
     let max: number = maxValueObj[parameter];
+    if (settings.unitsOfMeasure != 'Metric') {
+      if (parameter == 'Dry-bulb (C)' || parameter == 'Dew-point (C)') {
+        min = this.convertUnitsService.value(min).from('C').to('F');
+        max = this.convertUnitsService.value(max).from('C').to('F');
+      } else if (parameter == 'Wspd (m/s)') {
+        min = this.convertUnitsService.value(min).from('m').to('ft');
+        max = this.convertUnitsService.value(max).from('m').to('ft');
+      } else if (parameter == 'Pressure (mbar)') {
+        min = this.convertUnitsService.value(min).from('mbar').to('inHg');
+        max = this.convertUnitsService.value(max).from('mbar').to('inHg');
+      } else if (parameter == 'Lprecip depth (mm)') {
+        min = this.convertUnitsService.value(min).from('mm').to('in');
+        max = this.convertUnitsService.value(max).from('mm').to('in');
+      }
+    }
     return { min: min, max: max }
   }
 }
