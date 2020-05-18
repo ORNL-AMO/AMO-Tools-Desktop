@@ -40,7 +40,8 @@ export class SetupDataComponent implements OnInit {
     if ($event.target.files) {
       if ($event.target.files.length !== 0) {
         let regex = /.csv$/;
-        if (regex.test($event.target.files[0].name)) {
+        let regex2 = /.CSV$/;
+        if (regex.test($event.target.files[0].name) || regex2.test($event.target.files[0].name)) {
           this.fileReference = $event.target.files[0];
           this.validFile = true;
           this.importFile();
