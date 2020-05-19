@@ -81,13 +81,8 @@
             <span class="importing-text">Cleaning and setting up day data, one moment...</span>
         </div>
         <div class="text-center p-2" *ngIf="dataSubmitted == true && !cleaningData">
-            <div *ngIf="dateExistsForEachCsv == true" class="alert-success router-link"
-                [routerLink]="['/log-tool/day-type-analysis']">
-                Data cleaning finished! Click here or the tab for "Day Type Analysis" to continue.
-            </div>
-            <div *ngIf="dateExistsForEachCsv == false" class="alert-success router-link"
-                [routerLink]="['/log-tool/visualize']">
-                Data cleaning finished! Click here or the tab for "Day Type Analysis" to continue.
+            <div class="alert-success router-link">
+                Data cleaning finished! Click "Next" button to continue.
             </div>
         </div>
 

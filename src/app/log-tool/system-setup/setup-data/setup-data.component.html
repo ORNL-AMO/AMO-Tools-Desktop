@@ -23,9 +23,8 @@
             </div>
 
             <div class="text-center pt-2" *ngIf="importSuccesful">
-                <div class="alert-success router-link" [routerLink]="['/log-tool/system-setup/clean-data']">
-                    Data parsing successful! Add additional csv data or click here or the tab for Step 2: "Clean Data"
-                    to continue.
+                <div class="alert-success">
+                    Data parsing successful! You may add additional csv data or click the next button to continue setting up your data
                 </div>
             </div>
             <div class="d-flex flex-column align-items-center w-100 h-100" *ngIf="importingData == true">
