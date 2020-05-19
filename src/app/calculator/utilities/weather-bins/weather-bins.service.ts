@@ -216,8 +216,8 @@ export class WeatherBinsService {
 
   setAutoBinCases(inputData: WeatherBinsInput, settings: Settings): WeatherBinsInput {
     let minAndMax: { min: number, max: number } = this.getParameterMinMax(inputData, inputData.autoBinParameter, settings);
-    let lowerBound: number = minAndMax.min;
-    let maxValue: number = minAndMax.max;
+    let lowerBound: number = Math.floor(minAndMax.min);
+    let maxValue: number = Math.ceil(minAndMax.max);
     inputData.cases = new Array();
     let caseIndex: number = 1;
     for (lowerBound; lowerBound <= maxValue; lowerBound += inputData.autoBinRangeValue) {
@@ -225,8 +225,8 @@ export class WeatherBinsService {
         caseName: 'Bin #' + caseIndex,
         caseParameters: [{
           field: inputData.autoBinParameter,
-          lowerBound: Math.floor(lowerBound),
-          upperBound: Math.floor(lowerBound + inputData.autoBinRangeValue)
+          lowerBound: lowerBound,
+          upperBound: lowerBound + inputData.autoBinRangeValue
         }],
         totalNumberOfDataPoints: 0
       });
