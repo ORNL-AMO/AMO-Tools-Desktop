@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { LogToolService } from '../log-tool.service';
 import { LogToolDataService } from '../log-tool-data.service';
 import * as _ from 'lodash';
-import { GraphDataObj, LogToolField, GraphObj, AnnotationData } from '../log-tool-models';
+import { LogToolField, GraphObj, AnnotationData } from '../log-tool-models';
 
 @Injectable()
 export class VisualizeService {
@@ -15,7 +14,7 @@ export class VisualizeService {
   annotateDataPoint: BehaviorSubject<AnnotationData>;
   focusedPanel: BehaviorSubject<string>;
   plotFunctionType: string;
-  constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService) {
+  constructor(private logToolDataService: LogToolDataService) {
     this.initializeService();
   }
 
@@ -150,37 +149,6 @@ export class VisualizeService {
     this.selectedGraphObj.next(newGraphDataObj);
     this.graphObjects.next(currentGraphData);
   }
-
-  // getNewGraphDataObject(): GraphDataObj {
-  //   let fields: Array<LogToolField> = this.logToolDataService.getDataFieldOptionsWithDate();
-  //   let selectedYDataField: LogToolField
-  //   let selectedXDataField: LogToolField;
-  //   let noDayTypeAnalysis: boolean = this.logToolService.noDayTypeAnalysis.getValue();
-  //   if (noDayTypeAnalysis == false) {
-  //     // selectedXDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) });
-  //     // selectedYDataField = fields.find((field) => { return this.logToolService.dateFields.find((dateField) => { return dateField == field.fieldName }) == undefined });
-  //   } else {
-  //     selectedYDataField = fields[0];
-  //     selectedXDataField = fields.find((field) => { return field.fieldName != selectedYDataField.fieldName });
-  //   }
-  //   let yData: Array<number | Date> = this.logToolDataService.getAllFieldData(selectedYDataField.fieldName);
-  //   let xData: Array<number | Date> = this.logToolDataService.getAllFieldData(selectedXDataField.fieldName);
-  //   let histogramData: { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } = this.getStandardDevBarChartData(selectedYDataField);
-  //   return {
-  //     graphType: { label: 'Scatter Plot', value: 'scattergl' },
-  //     selectedXDataField: selectedXDataField,
-  //     xData: xData,
-  //     selectedYDataField: selectedYDataField,
-  //     yData: yData,
-  //     graphName: 'New Graph',
-  //     graphId: Math.random().toString(36).substr(2, 9),
-  //     scatterPlotMode: 'markers',
-  //     useStandardDeviation: true,
-  //     numberOfBins: 5,
-  //     histogramDataField: selectedYDataField,
-  //     histogramData: histogramData
-  //   }
-  // }
 
   removeGraphDataObj(graphId: string) {
     let currentGraphData: Array<GraphObj> = this.graphObjects.getValue();

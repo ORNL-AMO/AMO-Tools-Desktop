@@ -38,7 +38,8 @@ export class LogToolService {
         isDateField: false,
         unit: '',
         invalidField: false,
-        csvId: csvId
+        csvId: csvId,
+        csvName: csvName
       }
     });
     this.individualDataFromCsv.push({ csvImportData: JSON.parse(JSON.stringify(data)), csvName: csvName, fields: fields, hasDateField: false });

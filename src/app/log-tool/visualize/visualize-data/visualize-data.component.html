@@ -1,1 +1,60 @@
-<p>visualize-data works!</p>
+<div class="mr-2 ml-2 d-flex flex-column data-summary">
+    <div class="header">
+        <div class="h3">
+            Data Summary
+        </div>
+    </div>
+    <table class="table" *ngIf="timeSummaries.length != 0">
+        <tbody>
+            <tr>
+                <td>CSV</td>
+                <td *ngFor="let summary of timeSummaries">{{summary.csvName}}</td>
+            </tr>
+            <tr>
+                <td>Start Time</td>
+                <td *ngFor="let summary of timeSummaries">{{summary.startDate | date:'medium'}}</td>
+            </tr>
+            <tr>
+                <td>End Time</td>
+                <td *ngFor="let summary of timeSummaries">{{summary.endDate | date:'medium'}}</td>
+            </tr>
+            <tr>
+                <td>Data Frequency</td>
+                <td *ngFor="let summary of timeSummaries">{{summary.dataFrequency}} seconds</td>
+            </tr>
+            <tr>
+                <td># of Samples</td>
+                <td *ngFor="let summary of timeSummaries">{{summary.numberOfDataPoints}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Data Field</td>
+                <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.name}}</td>
+            </tr>
+            <tr>
+                <td>Max</td>
+                <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.max}}</td>
+            </tr>
+            <tr>
+                <td>Min</td>
+                <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.min}}</td>
+            </tr>
+            <tr>
+                <td>Mean</td>
+                <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.mean | number:'1.0-2'}}</td>
+            </tr>
+            <tr>
+                <td>Std. Deviation</td>
+                <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.standardDeviation | number:'1.0-2'}}</td>
+            </tr>
+            <tr>
+                <td># of Samples</td>
+                <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.numberOfDataPoints}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

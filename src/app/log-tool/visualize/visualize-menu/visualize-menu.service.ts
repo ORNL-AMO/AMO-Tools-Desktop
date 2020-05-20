@@ -97,7 +97,8 @@ export class VisualizeMenuService {
         isDateField: true,
         unit: 'time',
         invalidField: false,
-        csvId: undefined
+        csvId: undefined,
+        csvName: undefined
       })
     }
     selectedGraphObj.xAxisDataOptions = new Array();

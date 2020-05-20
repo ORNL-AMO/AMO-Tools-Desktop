@@ -1,0 +1,12 @@
+.header .h3{
+    font-size: 20px;
+}
+
+.data-summary{
+    background-color: white;
+}
+
+td{
+    font-size: small;
+    padding: 3px;
+}
