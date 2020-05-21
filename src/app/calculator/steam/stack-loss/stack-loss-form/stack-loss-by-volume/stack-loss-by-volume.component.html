@@ -2,6 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="gasTypeId">Fuel
+        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()">Add New Fuel</a>
       </label>
       <select name="gasTypeId" class="form-control" formControlName="gasTypeId" id="gasTypeId"
         (change)="setProperties()" (focus)="focusField('gasTypeId')" (blur)="focusOut()">
@@ -119,3 +120,15 @@
     </div> -->
   </div>
 </form>
+
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+          [settings]="settings"></app-flue-gas-material>
+      </div>
+    </div>
+  </div>
+</div>

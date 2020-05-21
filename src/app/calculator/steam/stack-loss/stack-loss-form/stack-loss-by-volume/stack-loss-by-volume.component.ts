@@ -1,9 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { PhastService } from '../../../../../phast/phast.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-stack-loss-by-volume',
@@ -19,6 +21,7 @@ export class StackLossByVolumeComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   options: any;
   calculationMethods: Array<string> = [
@@ -30,6 +33,9 @@ export class StackLossByVolumeComponent implements OnInit {
   calcMethodExcessAir: boolean;
   stackTemperatureWarning: boolean = false;
   tempMin: number;
+  showModal: boolean = false;
+  modalOpenSubscription: Subscription;
+
   constructor(private suiteDbService: SuiteDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -54,6 +60,29 @@ export class StackLossByVolumeComponent implements OnInit {
   }
   focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  showMaterialModal() {
+    this.showModal = true;
+    this.phastService.modalOpen.next(this.showModal);
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.options = this.suiteDbService.selectGasFlueGasMaterials();
+      let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
+      if (newMaterial.length !== 0) {
+        this.stackLossForm.patchValue({
+          gasTypeId: newMaterial[0].id
+        });
+        this.setProperties();
+      }
+    }
+    this.materialModal.hide();
+    this.showModal = false;
+    this.phastService.modalOpen.next(this.showModal);
+    this.calculate();
   }
 
   setCombustionValidation() {

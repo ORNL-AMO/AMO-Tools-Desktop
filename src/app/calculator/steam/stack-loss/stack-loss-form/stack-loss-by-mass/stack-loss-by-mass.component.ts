@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { PhastService } from '../../../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-stack-loss-by-mass',
@@ -19,6 +20,7 @@ export class StackLossByMassComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   options: any;
   showModal: boolean = false;
@@ -60,6 +62,29 @@ export class StackLossByMassComponent implements OnInit {
   }
   focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  showMaterialModal() {
+    this.showModal = true;
+    this.phastService.modalOpen.next(this.showModal);
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
+      if (newMaterial.length !== 0) {
+        this.stackLossForm.patchValue({
+          gasTypeId: newMaterial[0].id
+        });
+        this.setProperties();
+      }
+    }
+    this.materialModal.hide();
+    this.showModal = false;
+    this.phastService.modalOpen.next(this.showModal);
+    this.calculate();
   }
 
   setCombustionValidation() {

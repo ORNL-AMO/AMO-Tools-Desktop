@@ -11,12 +11,14 @@ import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { BoilerEfficiencyModalComponent } from './boiler-efficiency-modal/boiler-efficiency-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    SuiteDbModule,
     PercentGraphModule,
     SharedPipesModule,
     ModalModule
