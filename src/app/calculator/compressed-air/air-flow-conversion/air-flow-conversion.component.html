@@ -1,0 +1,78 @@
+<div class="d-flex h-100 modify-conditions compressed-air standalone-calculator">
+    <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+        <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+            <div class="col-md-auto">
+                <img src="assets/images/calculator-icons/compressed-air-icons/pneumatic-air-requirement.png"
+                    class="ico-size5">
+            </div>
+            <div class="pl-2">
+                <h3>Actual to Standard Air Flow</h3>
+            </div>
+        </div>
+        <div class="d-flex flex-column m-4">
+            <app-air-flow-conversion-form [settings]="settings"></app-air-flow-conversion-form>
+        <label class="group-label pt-3 pb-2 bold">Results</label>
+        <div *ngIf="airFlowConversionOutput" class="mt-2 mb-5 justify-content-center">
+            <div *ngIf="airFlowConversionOutput.acfm" class="col-12 text-right">
+                <label class="col-6 small bold">Airflow (ACFM)</label>
+                <span class="col-6 small bold">{{ airFlowConversionOutput.acfm | number:'1.0-2'}}
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">Aft<sup>3</sup>/min</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">Am<sup>3</sup>/min</span>
+                </span>
+            </div>
+            <div *ngIf="airFlowConversionOutput.scfm" class="col-12 text-right">
+                <label class="col-6 small bold">Airflow (SCFM)</label>
+                <span class="col-6 small bold">{{ airFlowConversionOutput.scfm | number:'1.0-2'}}
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">Sft<sup>3</sup>/min</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">Sm<sup>3</sup>/min</span>
+                </span>
+            </div>
+            <div *ngIf="!airFlowConversionOutput.scfm && !airFlowConversionOutput.acfm" class="col-12 text-right">
+                    <label class="col-6 small bold">Airflow</label>
+                    <span class="col-6 small bold">&mdash; &mdash;</span>
+            </div>
+        </div>  
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
+            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+                Reset Data
+            </button>
+            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+                (click)="btnGenerateExample()">
+                Generate Example
+            </button>
+        </div>
+        </div>
+    </div>
+    <div class="d-flex flex-column w-50 mh-100 scroll-item">
+        <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+            <div class="flex-fill panel-tab-item h-100 active">
+                <a class="h-100 d-flex justify-content-center align-items-center">
+                    <div>Help</div>
+                </a>    
+        </div>
+        <div class="d-flex">
+            <div class="p-4 pt-2 d-flex flex-column help-info">
+                <h5>
+                    Actual to Standard Air Flow Help
+                    <br>
+                    <small class="text-muted">
+                        The calculator converts ACFM (Actual cubic feet per minute) to SCFM (Standard cubic feet per minute) and
+                        vice versa for the given conditions using either ASME standard conditions or CAGI/ISO standard
+                        conditions.
+                    </small>
+                </h5>
+                <!-- <div class="my-2" *ngIf="currentField == 'airFlow'">
+                    <h6>
+                        Air Flow
+                        <br>
+                        <small class="text-muted">
+                            Volumetric flow rate of the air in the compressor system, referenced to the compressor inlet
+                            conditions.
+                            <hr>
+                        </small>
+                    </h6>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

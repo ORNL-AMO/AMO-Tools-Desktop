@@ -74,6 +74,7 @@ import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/
 import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
 import { CompressedAirPressureReductionComponent } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
 import { SteamReductionComponent } from '../calculator/steam/steam-reduction/steam-reduction.component';
+import { AirFlowConversionComponent } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.component';
 
 export const coreRoutes: Routes = [
   {
@@ -161,6 +162,10 @@ export const coreRoutes: Routes = [
           {
             path: 'air-velocity',
             component: AirVelocityComponent
+          },
+          {
+            path: 'air-flow-conversion',
+            component: AirFlowConversionComponent
           },
           {
             path: 'bag-method',
