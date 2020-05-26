@@ -8,8 +8,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 WEATHER BINS FIELD OPTIONS FROM "TMY3" CSV DATA FOUND AT
 https://rredc.nrel.gov/solar/old_data/nsrdb/1991-2005/tmy3/by_state_and_city.html
 
-Date (MM/DD/YYYY),
-Time (HH:MM),
+Date and Time,
 
 MAIN OPTIONS:
 Dry-bulb (C)
@@ -19,31 +18,6 @@ Wspd (m/s)
 Wdir (degrees)
 Lprecip depth (mm)
 Pressure (mbar)
-
-ADDITIONAL OPTIONS:
-ETR (W/m^2),
-ETRN (W/m^2),
-GHI (W/m^2),
-GHI uncert (%),
-DNI (W/m^2),
-DNI uncert (%),
-DHI (W/m^2),
-DHI uncert (%),
-GH illum (lx),
-Global illum uncert (%),
-DN illum (lx),
-DN illum uncert (%),
-DH illum (lx),
-DH illum uncert (%),
-Zenith lum (cd/m^2),
-TotCld (tenths),
-OpqCld (tenths),
-Hvis (m),
-CeilHgt (m),
-Pwat (cm),
-AOD (unitless),
-Alb (unitless),
-Lprecip quantity (hr),
 */
 
 @Injectable()
