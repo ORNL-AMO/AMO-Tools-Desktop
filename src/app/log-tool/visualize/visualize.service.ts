@@ -176,10 +176,10 @@ export class VisualizeService {
           return true;
         }
       });
-      let numberOfItemsInBin: number = graphDataInRange.length;
+      let percentOfItemsInBin: number = graphDataInRange.length / graphData.length * 100;
       let xLabel: string = minValue.toLocaleString() + ' - ' + maxValue.toLocaleString();
       xLabels.push(xLabel)
-      yValues.push(numberOfItemsInBin);
+      yValues.push(percentOfItemsInBin);
       minValue = Number((minValue + sizeOfBins).toFixed(0));
     }
     return { xLabels: xLabels, yValues: yValues, standardDeviation: 0, average: mean };
@@ -203,10 +203,10 @@ export class VisualizeService {
           return true;
         }
       });
-      let numberOfItemsInBin: number = graphDataInRange.length;
+      let percentOfItemsInBin: number = graphDataInRange.length / graphData.length * 100;
       let xLabel: string = minValue.toLocaleString() + ' - ' + maxValue.toLocaleString();
       xLabels.push(xLabel)
-      yValues.push(numberOfItemsInBin);
+      yValues.push(percentOfItemsInBin);
       minValue = Number((minValue + standardDeviation).toFixed(0));
     }
     return { xLabels: xLabels, yValues: yValues, standardDeviation: standardDeviation, average: mean };
