@@ -32,8 +32,9 @@ export class VisualizeGraphComponent implements OnInit {
 
       //first time rendering chart
       if (this.visualizeService.plotFunctionType == 'react') {
+        Plotly.purge('plotlyDiv');
         // render chart
-        Plotly.react('plotlyDiv', graphObj.data, graphObj.layout, mode).then(chart => {
+        Plotly.newPlot('plotlyDiv', graphObj.data, graphObj.layout, mode).then(chart => {
           //use boolean to only subscribe once
           if (!this.isSubscribed) {
             // subscribe to click event for annotations

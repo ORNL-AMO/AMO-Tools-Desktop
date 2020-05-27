@@ -160,6 +160,7 @@ export class VisualizeMenuService {
       selectedGraphObj.data[0].x = binsData.xLabels;
       selectedGraphObj.data[0].y = binsData.yValues;
     }
+    selectedGraphObj.data[0].yaxis = 'y';
     //set to first value for bar charts
     selectedGraphObj.data = [selectedGraphObj.data[0]];
     selectedGraphObj.selectedYAxisDataOptions = [selectedGraphObj.selectedYAxisDataOptions[0]];

@@ -43,10 +43,12 @@ export class VisualizeDataComponent implements OnInit {
         let xAxisSummary = this.getDataSummary(graphObj.selectedXAxisDataOption)
         this.axisSummaries.push(xAxisSummary);
       }
-      graphObj.selectedYAxisDataOptions.forEach(option => {
-        let summary = this.getDataSummary(option.dataOption);
-        this.axisSummaries.push(summary);
-      })
+      if (graphObj.data[0].type != 'bar') {
+        graphObj.selectedYAxisDataOptions.forEach(option => {
+          let summary = this.getDataSummary(option.dataOption);
+          this.axisSummaries.push(summary);
+        });
+      }
     });
   }
 

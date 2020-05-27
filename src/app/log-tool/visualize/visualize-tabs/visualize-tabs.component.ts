@@ -20,7 +20,6 @@ export class VisualizeTabsComponent implements OnInit {
   ngOnInit() {
     this.graphDataSubscription = this.visualizeService.graphObjects.subscribe(graphData => {
       this.graphData = graphData;
-      console.log(this.graphData);
     });
     this.selectedGraphDataSub = this.visualizeService.selectedGraphObj.subscribe(selectedGraphData => {
       this.selectedGraphData = selectedGraphData;
@@ -33,10 +32,12 @@ export class VisualizeTabsComponent implements OnInit {
   }
 
   addNewGraphDataObj() {
+    this.visualizeService.plotFunctionType = 'react';
     this.visualizeService.addNewGraphDataObj();
   }
 
   selectGraph(graphObj: GraphObj) {
+    this.visualizeService.plotFunctionType = 'react';
     this.visualizeService.selectedGraphObj.next(graphObj);
   }
 }
