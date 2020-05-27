@@ -6,6 +6,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
+import { StackLossService } from '../../stack-loss.service';
 
 @Component({
   selector: 'app-stack-loss-by-volume',
@@ -33,10 +34,8 @@ export class StackLossByVolumeComponent implements OnInit {
   calcMethodExcessAir: boolean;
   stackTemperatureWarning: boolean = false;
   tempMin: number;
-  showModal: boolean = false;
-  modalOpenSubscription: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private stackLossService: StackLossService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.options = this.suiteDbService.selectGasFlueGasMaterials();
@@ -63,8 +62,7 @@ export class StackLossByVolumeComponent implements OnInit {
   }
 
   showMaterialModal() {
-    this.showModal = true;
-    this.phastService.modalOpen.next(this.showModal);
+    this.stackLossService.modalOpen.next(true);
     this.materialModal.show();
   }
 
@@ -80,8 +78,7 @@ export class StackLossByVolumeComponent implements OnInit {
       }
     }
     this.materialModal.hide();
-    this.showModal = false;
-    this.phastService.modalOpen.next(this.showModal);
+    this.stackLossService.modalOpen.next(false);
     this.calculate();
   }
 

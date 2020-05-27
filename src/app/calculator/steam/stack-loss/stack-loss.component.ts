@@ -5,7 +5,6 @@ import { FormGroup } from '../../../../../node_modules/@angular/forms';
 import { FlueGasByVolume, FlueGasByMass } from '../../../shared/models/phast/losses/flueGas';
 import { StackLossService } from './stack-loss.service';
 import { Subscription } from 'rxjs';
-import { PhastService } from '../../../phast/phast.service';
 
 @Component({
   selector: 'app-stack-loss-calculator',
@@ -41,8 +40,7 @@ export class StackLossComponent implements OnInit {
   modalOpenSubscription: Subscription;
   isModalOpen: boolean = false;
 
-
-  constructor(private settingsDbService: SettingsDbService, private stackLossService: StackLossService, private phastService: PhastService) {
+  constructor(private settingsDbService: SettingsDbService, private stackLossService: StackLossService) {
   }
 
   ngOnInit() {
@@ -52,7 +50,7 @@ export class StackLossComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.modalOpenSubscription = this.phastService.modalOpen.subscribe(val => {
+    this.modalOpenSubscription = this.stackLossService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     }); 
     this.setStackLossForm();
@@ -63,7 +61,10 @@ export class StackLossComponent implements OnInit {
       this.resizeTabs();
     }, 200);
   }
-
+  
+  ngOnDestroy() {
+    this.modalOpenSubscription.unsubscribe();
+  }
 
   resizeTabs() {
     if (this.leftPanelHeader) {

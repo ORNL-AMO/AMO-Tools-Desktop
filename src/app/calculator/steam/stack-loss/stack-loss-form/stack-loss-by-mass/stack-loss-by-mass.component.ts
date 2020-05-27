@@ -5,6 +5,7 @@ import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { PhastService } from '../../../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
+import { StackLossService } from '../../stack-loss.service';
 
 @Component({
   selector: 'app-stack-loss-by-mass',
@@ -23,7 +24,6 @@ export class StackLossByMassComponent implements OnInit {
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   options: any;
-  showModal: boolean = false;
 
   calculationMethods: Array<string> = [
     'Excess Air',
@@ -37,7 +37,9 @@ export class StackLossByMassComponent implements OnInit {
   tempMin: number;
 
   constructor(private suiteDbService: SuiteDbService,
-    private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
+              private phastService: PhastService, 
+              private convertUnitsService: ConvertUnitsService,
+              private stackLossService: StackLossService) { }
 
 
   ngOnInit() {
@@ -65,8 +67,7 @@ export class StackLossByMassComponent implements OnInit {
   }
 
   showMaterialModal() {
-    this.showModal = true;
-    this.phastService.modalOpen.next(this.showModal);
+    this.stackLossService.modalOpen.next(true);
     this.materialModal.show();
   }
 
@@ -82,8 +83,7 @@ export class StackLossByMassComponent implements OnInit {
       }
     }
     this.materialModal.hide();
-    this.showModal = false;
-    this.phastService.modalOpen.next(this.showModal);
+    this.stackLossService.modalOpen.next(false);
     this.calculate();
   }
 
