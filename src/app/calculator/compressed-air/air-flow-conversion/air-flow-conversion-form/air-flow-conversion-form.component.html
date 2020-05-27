@@ -68,6 +68,12 @@
                     <span class="alert-danger pull-right small"
                     *ngIf="airFlowConversionForm.controls.actualAmbientTemperature.invalid && !airFlowConversionForm.controls.actualAmbientTemperature.pristine">
                         <span *ngIf="airFlowConversionForm.controls.actualAmbientTemperature.errors.required">Value Required</span>
+                        <span *ngIf="airFlowConversionForm.controls.actualAmbientTemperature.errors.min">Value can't be less than
+                            {{airFlowConversionForm.controls.actualAmbientTemperature.errors.min.min}}
+                            <span *ngIf="settings.unitsOfMeasure != 'Metric'">F</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">C</span>.
+                        </span>
+                        
                     </span>
                 </div>
             </div>
@@ -112,18 +118,6 @@
             </div>
         </div>
         <div class="pt-2">
-            <div class="row no-gutters justify-content-end pt-1 pb-1">
-                <div class="col-6 text-center">
-                    <label class="d-block text-center pt-2 pb-1" for="calculationMethod">Standard Conditions Method</label>
-                    <div class="btn-group btn-group-sm align-self-center">
-                        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setConditionsMethod('ASME')"
-                        [ngClass]="{'active': airFlowConversionForm.controls.conditionsMethod.value == 'ASME'}">ASME</button>
-                        <button type="button" class="btn btn-secondary btn-sm toggle-btn"
-                        (click)="setConditionsMethod('CAGI')"
-                        [ngClass]="{'active':  airFlowConversionForm.controls.conditionsMethod.value == 'CAGI'}">CAGI/ISO Pneurop</button>
-                    </div>
-                </div>
-            </div>
             <div class="form-group">
                 <label class="small" for="standardAtmosphericPressure">Standard Atmospheric Pressure</label>
                 <div class="input-group">
@@ -139,24 +133,37 @@
                     {{airFlowConversionForm.controls.standardAtmosphericPressure.errors.max.max}}</span>
                 <span *ngIf="airFlowConversionForm.controls.standardAtmosphericPressure.errors.min">Value can't be less than
                     {{airFlowConversionForm.controls.standardAtmosphericPressure.errors.min.min}}</span>
-                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">kPaa</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'"> psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'"> kPaa</span>
                 </span>
             </div>
             </div>
             <div class="form-group">
                 <label class="small" for="standardAmbientTemperature">Standard Ambient Temperature</label>
                 <div class="input-group">
-                    <input class="form-control"  name="standardAmbientTemperature" id="standardAmbientTemperature"
+                    <input class="form-control" name="standardAmbientTemperature" id="standardAmbientTemperature"
                         formControlName="standardAmbientTemperature" type="number" (input)="save()"
                         (focus)="changeField('standardAmbientTemperature')" (blur)="focusOut()" onfocus="this.select();">
                     <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">F</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">C</span>
                     <span class="alert-danger pull-right small"
-                    *ngIf="airFlowConversionForm.controls.standardAmbientTemperature.invalid && !airFlowConversionForm.controls.standardAmbientTemperature.pristine">
-                    <span *ngIf="airFlowConversionForm.controls.standardAmbientTemperature.errors.required">Value Required</span>
-                </span>
-            </div>
+                        *ngIf="airFlowConversionForm.controls.standardAmbientTemperature.invalid && !airFlowConversionForm.controls.standardAmbientTemperature.pristine">
+                        <span *ngIf="airFlowConversionForm.controls.standardAmbientTemperature.errors.required">Value
+                            Required</span>
+                        <span *ngIf="airFlowConversionForm.controls.standardAmbientTemperature.errors.max">Value can't be greater
+                            than
+                            {{airFlowConversionForm.controls.standardAmbientTemperature.errors.max.max}}
+                            <span *ngIf="settings.unitsOfMeasure != 'Metric'"> F</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'"> C</span>
+                        </span>
+                        <span *ngIf="airFlowConversionForm.controls.standardAmbientTemperature.errors.min">Value can't be less than
+                            {{airFlowConversionForm.controls.standardAmbientTemperature.errors.min.min}}
+                            <span *ngIf="settings.unitsOfMeasure != 'Metric'"> F</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'"> C</span>
+                        </span>
+                    </span>
+            
+                </div>
             </div>
             <div class="form-group">
                 <label class="small" for="standardRelativeHumidity">Standard Relative Humidity</label>

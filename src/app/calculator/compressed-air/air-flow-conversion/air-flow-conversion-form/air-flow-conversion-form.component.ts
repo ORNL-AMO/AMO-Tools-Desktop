@@ -30,13 +30,12 @@ export class AirFlowConversionFormComponent implements OnInit {
     })
     this.generateExampleSub = this.airFlowConversionService.generateExample.subscribe(value => {
       this.updateForm();
-
     })
   }
 
   updateForm() {
     let airFlowConversionInput: AirFlowConversionInput = this.airFlowConversionService.airFlowConversionInput.getValue();
-    this.airFlowConversionForm = this.airFlowConversionService.getAirFlowConversionFormFromObj(airFlowConversionInput);
+    this.airFlowConversionForm = this.airFlowConversionService.getAirFlowConversionFormFromObj(airFlowConversionInput, this.settings);
     this.setIsStandardConversion(airFlowConversionInput.convertToStandard);
   }
 
@@ -60,12 +59,6 @@ export class AirFlowConversionFormComponent implements OnInit {
     this.airFlowConversionForm.patchValue({
       convertToStandard: toStandard
     })
-    this.save();
-  }
-
-  setConditionsMethod(method: string) {
-    this.airFlowConversionForm.patchValue({conditionsMethod: method});
-    this.airFlowConversionForm = this.airFlowConversionService.setFormConditionMethodDefaults(this.airFlowConversionForm, this.settings);
     this.save();
   }
 

@@ -4,7 +4,6 @@ export interface AirFlowConversionInput {
     actualAtmosphericPressure: number;
     actualAmbientTemperature: number;
     actualRelativeHumidity: number;
-    conditionsMethod: string;
     acfm: number;
     scfm: number;
     convertToStandard: boolean;

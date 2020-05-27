@@ -178,19 +178,7 @@ export const cagiConditionsImperial  = {
     standardRelativeHumidity: 0
 }
 export const cagiConditionsMetric = {
-    standardAtmosphericPressure: .101,
+    standardAtmosphericPressure: 99.97,
     standardAmbientTemperature: 20,
     standardRelativeHumidity: 0
-}
-
-export const asmeConditionsImperial = {
-    standardAtmosphericPressure: 14.7,
-    standardAmbientTemperature: 68,
-    standardRelativeHumidity: 36
-}
-
-export const asmeConditionsMetric = {
-    standardAtmosphericPressure: .101,
-    standardAmbientTemperature: 20,
-    standardRelativeHumidity: 36
 }
