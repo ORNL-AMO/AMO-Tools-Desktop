@@ -146,9 +146,10 @@ export class AirFlowConversionService {
     form.controls.elevation.setValidators([Validators.min(0)]);
     form.controls.actualAtmosphericPressure.setValidators([Validators.required, Validators.min(0)]);
     form.controls.actualRelativeHumidity.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+    form.controls.standardRelativeHumidity.setValidators([Validators.required, Validators.min(0), Validators.max(40)]);
+
     if (settings.unitsOfMeasure == "Metric") {
       form.controls.actualAmbientTemperature.setValidators([Validators.required, Validators.min(0)]);
-      // Imperial pressure default min/max psia --> pa(99.97, 101.35)
       form.controls.standardAtmosphericPressure.setValidators([Validators.required, Validators.min(99.97), Validators.max(101.35)]);
       form.controls.standardAmbientTemperature.setValidators([Validators.required, Validators.min(0), Validators.max(25)]);
     } else {
@@ -156,9 +157,6 @@ export class AirFlowConversionService {
       form.controls.standardAtmosphericPressure.setValidators([Validators.required, Validators.min(14.5), Validators.max(14.7)]);
       form.controls.standardAmbientTemperature.setValidators([Validators.required, Validators.min(32), Validators.max(77)]);
     }
-    form.controls.standardAtmosphericPressure.setValidators([Validators.required, Validators.min(14.5), Validators.max(14.7)]);
-    form.controls.standardAmbientTemperature.setValidators([Validators.required, Validators.min(32), Validators.max(77)]);
-    form.controls.standardRelativeHumidity.setValidators([Validators.required, Validators.min(0), Validators.max(40)]);
     
     form.controls.acfm.setValidators([Validators.required, Validators.min(0)]);
     form.controls.scfm.setValidators([Validators.required, Validators.min(0)]);
@@ -172,18 +170,7 @@ export class AirFlowConversionService {
     if(!validInput) {
       this.initDefaultEmptyOutputs();
     } else {
-      inputCopy.actualRelativeHumidity = inputCopy.actualRelativeHumidity / 100;
-      inputCopy.standardRelativeHumidity = inputCopy.standardRelativeHumidity / 100;
-
-      if (settings.unitsOfMeasure == "Metric") {
-        inputCopy.actualAmbientTemperature = this.convertUnitsService.value(inputCopy.actualAmbientTemperature).from('C').to('K');
-        inputCopy.standardAmbientTemperature = this.convertUnitsService.value(inputCopy.standardAmbientTemperature).from('C').to('K');
-        inputCopy.actualAtmosphericPressure = this.convertUnitsService.value(inputCopy.actualAtmosphericPressure).from('kPaa').to('psia');
-        inputCopy.standardAtmosphericPressure = this.convertUnitsService.value(inputCopy.standardAtmosphericPressure).from('kPaa').to('psia');
-      } else {
-        inputCopy.actualAmbientTemperature = this.convertUnitsService.value(inputCopy.actualAmbientTemperature).from('F').to('K');
-        inputCopy.standardAmbientTemperature = this.convertUnitsService.value(inputCopy.standardAmbientTemperature).from('F').to('K');
-      }
+      inputCopy = this.convertInputUnits(inputCopy, settings);
       inputCopy.actualSaturatedVaporPressure = this.getSaturatedVaporPressure(inputCopy.actualAmbientTemperature);
       inputCopy.standardSaturatedVaporPressure = this.getSaturatedVaporPressure(inputCopy.standardAmbientTemperature);
 
@@ -212,6 +199,23 @@ export class AirFlowConversionService {
       acfm: acfmResult
     }
     return airFlowConversionOutput;
+  }
+
+  convertInputUnits(input: AirFlowConversionInput, settings: Settings) {
+    input.actualRelativeHumidity = input.actualRelativeHumidity / 100;
+    input.standardRelativeHumidity = input.standardRelativeHumidity / 100;
+
+    if (settings.unitsOfMeasure == "Metric") {
+      input.actualAmbientTemperature = this.convertUnitsService.value(input.actualAmbientTemperature).from('C').to('K');
+      input.standardAmbientTemperature = this.convertUnitsService.value(input.standardAmbientTemperature).from('C').to('K');
+      input.actualAtmosphericPressure = this.convertUnitsService.value(input.actualAtmosphericPressure).from('kPaa').to('psia');
+      input.standardAtmosphericPressure = this.convertUnitsService.value(input.standardAtmosphericPressure).from('kPaa').to('psia');
+    } else {
+      input.actualAmbientTemperature = this.convertUnitsService.value(input.actualAmbientTemperature).from('F').to('K');
+      input.standardAmbientTemperature = this.convertUnitsService.value(input.standardAmbientTemperature).from('F').to('K');
+    }
+
+    return input;
   }
   
   calculatePressureFromElevation(elevation: number, settings): number {
