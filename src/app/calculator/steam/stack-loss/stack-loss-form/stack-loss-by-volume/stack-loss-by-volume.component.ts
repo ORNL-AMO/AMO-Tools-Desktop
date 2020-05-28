@@ -23,7 +23,8 @@ export class StackLossByVolumeComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  baselineSelected: boolean = true;
+  inModal: boolean;
+
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   options: any;
@@ -57,14 +58,6 @@ export class StackLossByVolumeComponent implements OnInit {
     this.checkStackLossTemp();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.baselineSelected && changes.baselineSelected.firstChange) {
-      if (changes.baselineSelected.currentValue == undefined) {
-        this.baselineSelected = true
-      }
-    }
-  }
-  
   focusOut() {
     this.changeField.emit('default');
   }

@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="gasTypeId">Fuel
-        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngStyle]="{'visibility': !baselineSelected? 'hidden' : 'visible'}">Add New Fuel</a>
+        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" *ngIf="!inModal">Add New Fuel</a>
       </label>
       <select name="gasTypeId" class="form-control" formControlName="gasTypeId" id="gasTypeId"
         (change)="setProperties()" (focus)="focusField('gasTypeId')" (blur)="focusOut()">

@@ -19,7 +19,7 @@ export class StackLossFormComponent implements OnInit {
   @Input()
   method: number;
   @Input()
-  baselineSelected: boolean;
+  inModal: boolean;
   
   constructor() { }
 

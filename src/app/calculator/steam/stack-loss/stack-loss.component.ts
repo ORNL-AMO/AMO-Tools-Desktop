@@ -18,8 +18,6 @@ export class StackLossComponent implements OnInit {
   inModal: boolean;
   @Output('emitEfficiency')
   emitEfficiency = new EventEmitter<number>();
-  @Input()
-  baselineSelected: boolean;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
