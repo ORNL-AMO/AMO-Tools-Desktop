@@ -177,7 +177,8 @@ export interface AxisObj {
     },
     tickfont: {
         color: string
-    }
+    },
+    rangemode?: string
 }
 
 export interface AnnotationData {

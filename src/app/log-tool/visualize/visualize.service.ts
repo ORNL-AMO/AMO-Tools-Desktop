@@ -97,7 +97,8 @@ export class VisualizeService {
           },
           tickfont: {
             color: undefined
-          }
+          },
+          rangemode: 'tozero'
         },
         yaxis2: {
           autorange: true,
@@ -112,7 +113,8 @@ export class VisualizeService {
           },
           tickfont: {
             color: undefined
-          }
+          },
+          rangemode: 'tozero'
         },
         margin: {
           t: 75,
