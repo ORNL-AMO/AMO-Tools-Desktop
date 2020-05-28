@@ -26,7 +26,7 @@
               <input name="{{'custom_pipe_size_' + index}}" class="form-control" type="number" step="any"
                 [(ngModel)]="inputPipe.customPipeSize" id="{{'custom_pipe_size_' + index}}" (input)="emitChange()"
                 onfocus="this.select();" (focus)="changeField('pipeSize')">
-              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>    
             </div>
           </div>
