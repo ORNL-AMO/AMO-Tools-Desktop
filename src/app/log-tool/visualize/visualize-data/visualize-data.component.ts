@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { LogToolService } from '../../log-tool.service';
 import { VisualizeMenuService } from '../visualize-menu/visualize-menu.service';
 import { LogToolField } from '../../log-tool-models';
@@ -31,7 +31,7 @@ export class VisualizeDataComponent implements OnInit {
     mean: number,
     name: string
   }>;
-  constructor(private visualizeService: VisualizeService) { }
+  constructor(private visualizeService: VisualizeService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.selectedGraphObjSub = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
@@ -49,6 +49,7 @@ export class VisualizeDataComponent implements OnInit {
           this.axisSummaries.push(summary);
         });
       }
+      this.cd.detectChanges();
     });
   }
 

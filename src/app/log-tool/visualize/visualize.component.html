@@ -4,9 +4,22 @@
         <app-visualize-menu class="h-100"></app-visualize-menu>
         <div class="d-flex flex-column flex-fill">
             <app-visualize-graph></app-visualize-graph>
-            <div class="d-flex">
-                <app-visualize-help class="w-50"></app-visualize-help>
-                <app-visualize-data class="w-50"></app-visualize-data>
+            <div class="d-flex flex-column">
+                <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+                    <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                            (click)="setTab('results')">
+                            <div>Data Summary</div>
+                        </a>
+                    </div>
+                    <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                            <div>Help</div>
+                        </a>
+                    </div>
+                </div>
+                <app-visualize-help *ngIf="tabSelect == 'help'"></app-visualize-help>
+                <app-visualize-data *ngIf="tabSelect == 'results'"></app-visualize-data>
             </div>
         </div>
     </div>
