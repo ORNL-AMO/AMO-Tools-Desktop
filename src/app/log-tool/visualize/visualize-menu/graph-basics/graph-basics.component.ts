@@ -40,7 +40,7 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setGraphType() {
-    this.visualizeService.plotFunctionType = 'react';
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.setGraphType(this.selectedGraphObj);
   }
 
@@ -58,7 +58,7 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setBarHistogramData() {
-    this.visualizeService.plotFunctionType = 'react';
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.setBarHistogramData(this.selectedGraphObj);
   }
 }

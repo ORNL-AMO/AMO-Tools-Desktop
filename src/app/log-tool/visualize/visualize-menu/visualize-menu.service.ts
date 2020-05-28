@@ -124,7 +124,9 @@ export class VisualizeMenuService {
       this.setBarHistogramData(selectedGraphObj);
     } else {
       selectedGraphObj.layout.xaxis.type = 'linear';
-      selectedGraphObj.data[0].x = selectedGraphObj.selectedXAxisDataOption.data;
+      selectedGraphObj.data.forEach(dataItem => {
+        dataItem.x = selectedGraphObj.selectedXAxisDataOption.data;
+      });
       this.setYAxisDataOptions(selectedGraphObj);
       this.setYAxisData(selectedGraphObj);
     }
@@ -193,6 +195,11 @@ export class VisualizeMenuService {
           dataField: field
         });
       }
+    });
+    //set selected option to new option array for select menus
+    selectedGraphObj.selectedYAxisDataOptions.forEach(selectedOption => {
+      let findOption = selectedGraphObj.yAxisDataOptions.find(option => { return option.dataField.fieldName == selectedOption.dataOption.dataField.fieldName });
+      selectedOption.dataOption = findOption;
     });
   }
 
