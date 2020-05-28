@@ -1,9 +1,11 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { PhastService } from '../../../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { StackLossService } from '../../stack-loss.service';
 
 @Component({
   selector: 'app-stack-loss-by-mass',
@@ -19,9 +21,13 @@ export class StackLossByMassComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
+  @Input()
+  inModal: boolean;
+
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
+
 
   options: any;
-  showModal: boolean = false;
 
   calculationMethods: Array<string> = [
     'Excess Air',
@@ -35,7 +41,9 @@ export class StackLossByMassComponent implements OnInit {
   tempMin: number;
 
   constructor(private suiteDbService: SuiteDbService,
-    private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
+              private phastService: PhastService, 
+              private convertUnitsService: ConvertUnitsService,
+              private stackLossService: StackLossService) { }
 
 
   ngOnInit() {
@@ -55,11 +63,34 @@ export class StackLossByMassComponent implements OnInit {
     this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
     this.checkStackLossTemp();
   }
+
   focusOut() {
     this.changeField.emit('default');
   }
+
   focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  showMaterialModal() {
+    this.stackLossService.modalOpen.next(true);
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
+      if (newMaterial.length !== 0) {
+        this.stackLossForm.patchValue({
+          gasTypeId: newMaterial[0].id
+        });
+        this.setProperties();
+      }
+    }
+    this.materialModal.hide();
+    this.stackLossService.modalOpen.next(false);
+    this.calculate();
   }
 
   setCombustionValidation() {
