@@ -116,6 +116,10 @@
     border-bottom: #A569BD groove 2px;
 }
 
+.process-cooling .header{
+    border-bottom: #ADC8E2 groove 2px;
+}
+
 .steam .header{
    border-bottom: #2C3E50 solid 2px;
 }
@@ -262,6 +266,10 @@
 
 .compressed-air .group-label{
     border-bottom: #A569BD groove 2px;
+}
+
+.process-cooling .group-label{
+    border-bottom: #ADC8E2 groove 2px;
 }
 
 .general .group-label{

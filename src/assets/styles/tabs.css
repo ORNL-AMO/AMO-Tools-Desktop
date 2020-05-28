@@ -81,6 +81,11 @@ Tabs
     border-bottom:   #A569BD groove 3px;
   }
 
+  .process-cooling .tabs.primary .active a {
+    border: none;
+    border-bottom:   #ADC8E2 groove 3px;
+  }
+
   .ssmt .tabs.primary .active a {
     border: none;
     border-bottom: #F39C12 solid 3px;

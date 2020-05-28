@@ -14,6 +14,7 @@ import { CalculatorService } from './calculator.service';
 import { LightingModule } from './lighting/lighting.module';
 import { RouterModule } from '@angular/router';
 import { CalculatorsListComponent } from './calculators-list/calculators-list.component';
+import { ProcessCoolingModule } from './process-cooling/process-cooling.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { CalculatorsListComponent } from './calculators-list/calculators-list.co
     FurnacesModule,
     MotorsModule,
     CompressedAirModule,
+    ProcessCoolingModule,
     FansModule,
     LightingModule,
     RouterModule

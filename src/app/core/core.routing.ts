@@ -71,10 +71,12 @@ import { SteamPropertiesComponent } from '../calculator/steam/steam-properties/s
 import { TurbineComponent } from '../calculator/steam/turbine/turbine.component';
 import { TankInsulationReductionComponent } from '../calculator/utilities/tank-insulation-reduction/tank-insulation-reduction.component';
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
+import { AirLeakComponent } from '../calculator/compressed-air/air-leak/air-leak.component';
 import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
 import { CompressedAirPressureReductionComponent } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
 import { SteamReductionComponent } from '../calculator/steam/steam-reduction/steam-reduction.component';
 import { AirFlowConversionComponent } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.component';
+import { ProcessCoolingListComponent } from '../calculator/process-cooling/process-cooling-list/process-cooling-list.component';
 
 export const coreRoutes: Routes = [
   {
@@ -140,6 +142,10 @@ export const coreRoutes: Routes = [
             component: FurnacesListComponent
           },
           {
+            path: 'process-cooling-list',
+            component: ProcessCoolingListComponent
+          },
+          {
             path: 'lighting-list',
             component: LightingListComponent
           },
@@ -194,6 +200,10 @@ export const coreRoutes: Routes = [
           {
             path: 'system-capacity',
             component: SystemCapacityComponent
+          },
+          {
+            path: 'air-leak',
+            component: AirLeakComponent
           },
           {
             path: 'fan-analysis',

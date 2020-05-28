@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
 import { compressedAirRoutes } from "./compressed-air.routing";
+import { processCoolingRoutes } from "./process-cooling.routing";
 import { fanRoutes } from "./fan.routing";
 import { processHeatingRoutes } from "./process-heating.routing";
 import { lightingRoutes } from "./lighting.routing";
@@ -16,6 +17,7 @@ import { FurnacesListComponent } from "../furnaces/furnaces-list/furnaces-list.c
 import { LightingListComponent } from "../lighting/lighting-list/lighting-list.component";
 import { MotorsListComponent } from "../motors/motors-list/motors-list.component";
 import { PumpsListComponent } from "../pumps/pumps-list/pumps-list.component";
+import { ProcessCoolingListComponent } from "../process-cooling/process-cooling-list/process-cooling-list.component";
 
 
 
@@ -64,6 +66,10 @@ export const calculatorListRoutes: Routes = [
         path: 'motors-list',
         component: MotorsListComponent
     },
+    {
+        path: 'process-cooling-list',
+        component: ProcessCoolingListComponent
+    },
     // {
     //     path: 'motors',
     //     component: MotorsComponent,
@@ -99,4 +105,4 @@ export const calculatorListRoutes: Routes = [
 ]
 
 
-export const calculatorRoutes: Routes = calculatorListRoutes.concat(compressedAirRoutes, fanRoutes, processHeatingRoutes, lightingRoutes, motorRoutes, pumpRoutes, steamRoutes, generalRoutes);
+export const calculatorRoutes: Routes = calculatorListRoutes.concat(compressedAirRoutes, processCoolingRoutes, fanRoutes, processHeatingRoutes, lightingRoutes, motorRoutes, pumpRoutes, steamRoutes, generalRoutes);
