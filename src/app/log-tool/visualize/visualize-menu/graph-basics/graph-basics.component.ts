@@ -25,7 +25,7 @@ export class GraphBasicsComponent implements OnInit {
       if (this.selectedGraphObj == undefined || val.graphId != this.selectedGraphObj.graphId) {
         this.selectedGraphObj = val;
         this.setGraphType();
-      }else{
+      } else {
         this.selectedGraphObj = val;
       }
     });
@@ -40,15 +40,15 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setGraphType() {
-    this.visualizeService.plotFunctionType = 'update';
+    this.visualizeService.plotFunctionType = 'react';
     this.visualizeMenuService.setGraphType(this.selectedGraphObj);
   }
 
-  focusField(){
+  focusField() {
     this.visualizeService.focusedPanel.next('graphBasics');
   }
 
-  focusOut(){
+  focusOut() {
     this.visualizeService.focusedPanel.next('default');
   }
 
@@ -58,7 +58,7 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setBarHistogramData() {
-    this.visualizeService.plotFunctionType = 'update';
+    this.visualizeService.plotFunctionType = 'react';
     this.visualizeMenuService.setBarHistogramData(this.selectedGraphObj);
   }
 }

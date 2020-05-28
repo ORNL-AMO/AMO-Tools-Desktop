@@ -23,7 +23,6 @@ export class VisualizeGraphComponent implements OnInit {
     this.visualizeService.plotFunctionType = 'react';
 
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
-      console.log(graphObj);
       let mode = {
         modeBarButtonsToRemove: ['lasso2d'],
         responsive: true,
@@ -34,9 +33,9 @@ export class VisualizeGraphComponent implements OnInit {
       //first time rendering chart
       if (this.visualizeService.plotFunctionType == 'react') {
         Plotly.purge('plotlyDiv');
-        console.log('new');
         // render chart
-        Plotly.newPlot('plotlyDiv', graphObj.data, graphObj.layout, mode).then(chart => {
+        //use copy of layout otherwise range value gets set and messes stuff up
+        Plotly.newPlot('plotlyDiv', graphObj.data, JSON.parse(JSON.stringify(graphObj.layout)), mode).then(chart => {
           //use boolean to only subscribe once
           if (!this.isSubscribed) {
             // subscribe to click event for annotations
@@ -50,7 +49,8 @@ export class VisualizeGraphComponent implements OnInit {
         });
       } else {
         //update chart
-        Plotly.update('plotlyDiv', graphObj.data, graphObj.layout, mode);
+        //use copy of layout otherwise range value gets set and messes stuff up
+        Plotly.update('plotlyDiv', graphObj.data, JSON.parse(JSON.stringify(graphObj.layout)), mode);
       }
     });
   }
