@@ -16,7 +16,7 @@
           <option [ngValue]="0">Solid/Liquid</option>
         </select>
       </div>
-      <app-stack-loss-form *ngIf="stackLossForm" [method]="method" [stackLossForm]="stackLossForm" [settings]="settings"
+      <app-stack-loss-form *ngIf="stackLossForm" [method]="method" [stackLossForm]="stackLossForm" [settings]="settings" [baselineSelected]="baselineSelected"
         (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-stack-loss-form>
       <div class="form-group">
         <label class="small bold">Stack Loss</label>

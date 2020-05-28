@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges } from '@angular/core';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { PhastService } from '../../../../../phast/phast.service';
 import { FormGroup, Validators } from '@angular/forms';
@@ -22,6 +22,8 @@ export class StackLossByVolumeComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
+  @Input()
+  baselineSelected: boolean = true;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   options: any;
@@ -54,6 +56,15 @@ export class StackLossByVolumeComponent implements OnInit {
     this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
     this.checkStackLossTemp();
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.baselineSelected && changes.baselineSelected.firstChange) {
+      if (changes.baselineSelected.currentValue == undefined) {
+        this.baselineSelected = true
+      }
+    }
+  }
+  
   focusOut() {
     this.changeField.emit('default');
   }

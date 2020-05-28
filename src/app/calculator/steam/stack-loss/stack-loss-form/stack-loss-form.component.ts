@@ -18,6 +18,8 @@ export class StackLossFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
   @Input()
   method: number;
+  @Input()
+  baselineSelected: boolean;
   
   constructor() { }
 
