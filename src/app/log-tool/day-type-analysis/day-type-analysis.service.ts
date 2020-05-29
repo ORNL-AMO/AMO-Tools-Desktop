@@ -204,7 +204,7 @@ export class DayTypeAnalysisService {
     dayType.logToolDays.forEach(logToolDay => {
       dayTypeData = _.union(dayTypeData, logToolDay.data);
       allDayTypeHourlyAverages = _.union(allDayTypeHourlyAverages, logToolDay.hourlyAverages);
-    })
+    });
     let hourlyAverages: Array<HourlyAverage> = this.calculateDayTypeHourlyAverages(allDayTypeHourlyAverages);
     return {
       dayType: dayType,
@@ -240,10 +240,10 @@ export class DayTypeAnalysisService {
       combinedAverages = _.union(combinedAverages, obj.averages);
     });
     _.remove(combinedAverages, (averageObj) => {
-      if (averageObj.field.fieldName == field.fieldName && averageObj.value == undefined) {
+      if (averageObj.field.fieldName == field.fieldName && averageObj.value == undefined || averageObj.field.fieldName != field.fieldName) {
         return true;
       }
-    })
+    });
     let hourlyAverage: number = _.meanBy(combinedAverages, (averageObj) => {
       if (averageObj.field.fieldName == field.fieldName) {
         return averageObj.value

@@ -31,6 +31,7 @@ export class DayTypeTableComponent implements OnInit {
   ngOnInit() {
     this.dayTypeSummariesSub = this.dayTypeAnalysisService.dayTypeSummaries.subscribe(dayTypeSummaries => {
       this.dayTypeSummaries = dayTypeSummaries;
+      console.log(this.dayTypeSummaries);
     });
 
     this.selectedDataFieldSub = this.dayTypeAnalysisService.selectedDataField.subscribe(val => {
