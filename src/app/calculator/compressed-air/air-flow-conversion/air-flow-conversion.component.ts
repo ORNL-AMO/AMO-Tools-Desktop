@@ -3,7 +3,6 @@ import { Settings } from '../../../shared/models/settings';
 import { AirFlowConversionService } from './air-flow-conversion.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
-import { AirFlowConversionOutput } from '../../../shared/models/compressed-air/compressed-air';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -18,9 +17,7 @@ export class AirFlowConversionComponent implements OnInit {
   currentField: string = 'default';
   form: FormGroup;
 
-  airFlowConversionOutput: AirFlowConversionOutput;
   airFlowConversionInputSub: Subscription;
-  airFlowConversionOutputSub: Subscription;
   currentFieldSub: Subscription;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
@@ -45,6 +42,7 @@ export class AirFlowConversionComponent implements OnInit {
 
   ngOnDestroy() {
     this.airFlowConversionInputSub.unsubscribe();
+    this.currentFieldSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -62,9 +60,6 @@ export class AirFlowConversionComponent implements OnInit {
   initSubscriptions() {
     this.airFlowConversionInputSub = this.airFlowConversionService.airFlowConversionInput.subscribe(value => {
       this.calculate();
-    })
-    this.airFlowConversionOutputSub = this.airFlowConversionService.airFlowConversionOutput.subscribe(value => {
-      this.airFlowConversionOutput = value;
     })
     this.currentFieldSub = this.airFlowConversionService.currentField.subscribe(value => {
       this.currentField = value;

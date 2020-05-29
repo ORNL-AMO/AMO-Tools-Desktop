@@ -11,133 +11,24 @@
         </div>
         <div class="d-flex flex-column m-4">
             <app-air-flow-conversion-form [settings]="settings"></app-air-flow-conversion-form>
-        <label class="group-label pt-3 pb-2 bold">Results</label>
-        <div *ngIf="airFlowConversionOutput" class="mt-2 mb-5 justify-content-center">
-            <div *ngIf="airFlowConversionOutput.acfm" class="col-12 text-right">
-                <label class="col-6 small bold">Airflow (ACFM)</label>
-                <span class="col-6 small bold">{{ airFlowConversionOutput.acfm | number:'1.0-2'}}
-                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">Aft<sup>3</sup>/min</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">Am<sup>3</sup>/min</span>
-                </span>
+            <app-air-flow-conversion-results [settings]="settings"></app-air-flow-conversion-results>
+            <div class="w-100 justify-content-center btn-group btn-group-sm">
+                <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+                    Reset Data
+                </button>
+                <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+                    Generate Example
+                </button>
             </div>
-            <div *ngIf="airFlowConversionOutput.scfm" class="col-12 text-right">
-                <label class="col-6 small bold">Airflow (SCFM)</label>
-                <span class="col-6 small bold">{{ airFlowConversionOutput.scfm | number:'1.0-2'}}
-                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">Sft<sup>3</sup>/min</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">Sm<sup>3</sup>/min</span>
-                </span>
-            </div>
-            <div *ngIf="!airFlowConversionOutput.scfm && !airFlowConversionOutput.acfm" class="col-12 text-right">
-                    <label class="col-6 small bold">Airflow</label>
-                    <span class="col-6 small bold">&mdash; &mdash;</span>
-            </div>
-        </div>  
-        <div class="w-100 justify-content-center btn-group btn-group-sm">
-            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
-                Reset Data
-            </button>
-            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
-                (click)="btnGenerateExample()">
-                Generate Example
-            </button>
         </div>
         </div>
-    </div>
-    <div class="d-flex flex-column w-50 mh-100 scroll-item">
-        <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-            <div class="flex-fill panel-tab-item h-100 active">
-                <a class="h-100 d-flex justify-content-center align-items-center">
-                    <div>Help</div>
-                </a>
-            </div>
-            <div class="d-flex">
-                <div class="p-4 pt-2 d-flex flex-column help-info">
-                    <h5>
-                        Actual to Standard Air Flow Help
-                        <br>
-                        <small class="text-muted">
-                            The calculator converts ACFM (Actual cubic feet per minute) to SCFM (Standard cubic feet per minute) and
-                            vice versa for the given conditions using either ASME standard conditions or CAGI/ISO standard
-                            conditions.
-                        </small>
-                    </h5>
-                    <hr class="my-1 hr-spacer">
-            
-                    <div class="my-2">
-                        <h6>
-                            Standard Conditions
-                            <br>
-                            <small class="text-muted">
-                                Standard conditions (STP) are standard sets of conditions for experimental measurements to be
-                                established to
-                                allow comparisons to be made between different sets of data. These vary between different official
-                                standards.
-                                Conditions with temperatures greater than 32F are often called “Normal Conditions”. For converting
-                                air flow,
-                                the
-                                CAGI and ASME are the most used in the U.S.
-                                <br>
-                                Below are some common standard conditions
-                                <hr>
-                            </small>
-                        </h6>
-                        <div class="w-100 justify-content-center">
-                            <table class="table table-hover table-striped">
-                                <tbody>
-                                    <tr>
-                                        <th class="text-center">Temperature (F)</th>
-                                        <th class="text-center">Pressure (psia)</th>
-                                        <th class="text-center">Relative Humidity (%)</th>
-                                        <th class="text-center">Entity</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">32</td>
-                                        <td class="text-center">14.5038</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">IUPAC (STP)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">32</td>
-                                        <td class="text-center">14.6959</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">NIST, ISO 10780 (STP)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">68</td>
-                                        <td class="text-center">14.6959</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">EPA, NIST (NTP)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">77</td>
-                                        <td class="text-center">14.5038</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">IUPAC (SATP)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">68</td>
-                                        <td class="text-center">14.5038</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">CAGI/ISO</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">70</td>
-                                        <td class="text-center">14.7</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">AMCA</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">68</td>
-                                        <td class="text-center">14.7</td>
-                                        <td class="text-center">36</td>
-                                        <td class="text-center">ASME</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
+        <div class="d-flex flex-column w-50 mh-100 scroll-item">
+            <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+                <div class="flex-fill panel-tab-item h-100 active">
+                    <a class="h-100 d-flex justify-content-center align-items-center">
+                        <div>Help</div>
+                    </a>
                 </div>
+                <app-air-flow-conversion-help></app-air-flow-conversion-help>
             </div>
-            </div>
-</div>
+        </div>
