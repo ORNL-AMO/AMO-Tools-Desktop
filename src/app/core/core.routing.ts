@@ -76,6 +76,7 @@ import { CompressedAirReductionComponent } from '../calculator/compressed-air/co
 import { CompressedAirPressureReductionComponent } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
 import { SteamReductionComponent } from '../calculator/steam/steam-reduction/steam-reduction.component';
 import { ProcessCoolingListComponent } from '../calculator/process-cooling/process-cooling-list/process-cooling-list.component';
+import { CoolingTowerComponent } from '../calculator/process-cooling/cooling-tower/cooling-tower.component';
 
 export const coreRoutes: Routes = [
   {
@@ -375,6 +376,10 @@ export const coreRoutes: Routes = [
           {
             path: 'tank-insulation-reduction',
             component: TankInsulationReductionComponent
+          },
+          {
+            path: 'cooling-tower',
+            component: CoolingTowerComponent
           }
         ]
       }

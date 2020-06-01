@@ -1,0 +1,416 @@
+import { Injectable } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { OperatingHours } from '../../../shared/models/operations';
+import { Settings } from '../../../shared/models/settings';
+import { BehaviorSubject } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { CoolingTowerData, CoolingTowerOutput, CoolingTowerResult, CoolingTowerInput } from '../../../shared/models/chillers';
+import { ChillerService } from '../chiller.service';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
+
+declare var chillersAddon: any;
+
+@Injectable()
+export class CoolingTowerService {
+  operatingHours: OperatingHours;
+  baselineData: BehaviorSubject<Array<CoolingTowerData>>;
+  modificationData: BehaviorSubject<Array<CoolingTowerData>>;
+  coolingTowerOutput: BehaviorSubject<CoolingTowerOutput>;
+  
+  // modificationExists: BehaviorSubject<boolean>;
+  currentField: BehaviorSubject<string>;
+  resetData: BehaviorSubject<boolean>;
+  generateExample: BehaviorSubject<boolean>;
+
+  constructor(private formBuilder: FormBuilder, 
+              private convertUnitsService: ConvertUnitsService,
+              private chillerService: ChillerService) { 
+    this.baselineData = new BehaviorSubject<Array<CoolingTowerData>>(undefined);
+    this.modificationData = new BehaviorSubject<Array<CoolingTowerData>>(undefined);
+    this.coolingTowerOutput = new BehaviorSubject<CoolingTowerOutput>(undefined);
+
+    this.currentField = new BehaviorSubject<string>('default');
+    // this.modificationExists = new BehaviorSubject<boolean>(false);
+    this.resetData = new BehaviorSubject<boolean>(undefined);
+    this.generateExample = new BehaviorSubject<boolean>(undefined);
+  }
+
+  getFormFromObj(inputObj: CoolingTowerData): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      name: [inputObj.name, [Validators.required]],
+      operationalHours: [inputObj.operationalHours],
+      flowRate: [inputObj.flowRate],
+      userDefinedCoolingLoad:  [inputObj.userDefinedCoolingLoad],
+      temperatureDifference:  [inputObj.temperatureDifference],
+      coolingLoad: [inputObj.coolingLoad],
+      lossCorrectionFactor: [inputObj.lossCorrectionFactor],
+      hasDriftEliminator: [inputObj.hasDriftEliminator],
+      driftLossFactor: [inputObj.driftLossFactor],
+      cyclesOfConcentration: [inputObj.cyclesOfConcentration],
+    });
+    
+    form = this.setValidators(form);
+    return form;
+  }
+
+  setValidators(form: FormGroup): FormGroup {
+    form.controls.operationalHours.setValidators([Validators.required, Validators.min(0), Validators.max(8760)]);
+    form.controls.flowRate.setValidators([GreaterThanValidator.greaterThan(0), Validators.required]);
+    form.controls.coolingLoad.setValidators([Validators.required, Validators.min(0)]);
+    form.controls.temperatureDifference.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
+    form.controls.lossCorrectionFactor.setValidators([Validators.required, Validators.min(0), Validators.max(150)]);
+    form.controls.driftLossFactor.setValidators([Validators.required, Validators.min(0),  Validators.max(1)]);
+    form.controls.cyclesOfConcentration.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
+    return form;
+  }
+
+  getObjFromForm(form: FormGroup): CoolingTowerData {
+    let coolingTowerData: CoolingTowerData = {
+      name: form.controls.name.value,
+      operationalHours: form.controls.operationalHours.value,
+      flowRate: form.controls.flowRate.value,
+      userDefinedCoolingLoad: form.controls.userDefinedCoolingLoad.value,
+      temperatureDifference: form.controls.temperatureDifference.value,
+      coolingLoad: form.controls.coolingLoad.value,
+      lossCorrectionFactor: form.controls.lossCorrectionFactor.value,
+      hasDriftEliminator: form.controls.hasDriftEliminator.value,
+      driftLossFactor: form.controls.driftLossFactor.value,
+      cyclesOfConcentration: form.controls.cyclesOfConcentration.value,
+    };
+    return coolingTowerData;
+  }
+
+  initObject(index: number, settings: Settings, operatingHours: OperatingHours): CoolingTowerData {
+    let hoursPerYear: number = 8760;
+    if (operatingHours) {
+      hoursPerYear = operatingHours.hoursPerYear;
+    }
+    let obj: CoolingTowerData = {
+      name: 'Case #' + (index + 1),
+      operationalHours: hoursPerYear,
+      flowRate: 1,
+      userDefinedCoolingLoad: true,
+      temperatureDifference: 0,
+      coolingLoad: 0,
+      lossCorrectionFactor: 85,
+      hasDriftEliminator: 0,
+      driftLossFactor: .2,
+      cyclesOfConcentration: 1
+    };
+    return obj;
+  }
+
+  initDefaultEmptyInputs(index: number, settings: Settings, operatingHours: OperatingHours) {
+    let emptyBaselineData: CoolingTowerData = this.initObject(index, settings, operatingHours);
+    let baselineData: Array<CoolingTowerData> = [emptyBaselineData];
+    this.baselineData.next(baselineData);
+
+    let emptyModificationData: CoolingTowerData = this.initObject(index, settings, operatingHours);
+    let modificationData: Array<CoolingTowerData> = [emptyModificationData];
+    this.modificationData.next(modificationData);
+    // this.modificationExists.next(true);
+  }
+
+  initDefaultEmptyOutputs() {
+    let emptyCase: CoolingTowerResult = {
+      wcBaseline: 0,
+      wcModification: 0,
+      waterSavings: 0,
+    }
+    let casesOutput: Array<CoolingTowerResult> = [];
+    casesOutput.push(emptyCase);
+    let emptyOutput: CoolingTowerOutput = {
+      wcBaseline: 0,
+      wcModification: 0,
+      waterSavings: 0,
+      savingsPercentage: 0,
+      coolingTowerCaseResults: casesOutput
+    };
+    this.coolingTowerOutput.next(emptyOutput);
+  }
+
+  updateDataArray(data: CoolingTowerData, index: number, isBaseline: boolean) {
+    let dataArray: Array<CoolingTowerData>;
+    if (isBaseline) {
+      dataArray = this.baselineData.getValue();
+    } else {
+      dataArray = this.modificationData.getValue();
+    }
+    dataArray[index].name = data.name;
+    dataArray[index].operationalHours = data.operationalHours;
+    dataArray[index].flowRate = data.flowRate;
+    dataArray[index].coolingLoad = data.coolingLoad;
+    dataArray[index].lossCorrectionFactor = data.lossCorrectionFactor;
+    dataArray[index].driftLossFactor = data.driftLossFactor;
+    dataArray[index].cyclesOfConcentration = data.cyclesOfConcentration;
+    
+    if (isBaseline) {
+      let modificationDataArray = this.modificationData.getValue();
+      modificationDataArray[index].operationalHours = data.operationalHours;
+      modificationDataArray[index].coolingLoad = data.coolingLoad;
+      modificationDataArray[index].flowRate = data.flowRate;
+      modificationDataArray[index].temperatureDifference = data.temperatureDifference;
+      modificationDataArray[index].userDefinedCoolingLoad = data.userDefinedCoolingLoad;
+      this.baselineData.next(dataArray);
+      this.modificationData.next(modificationDataArray);
+    } else {
+      this.modificationData.next(dataArray);
+    }
+  }
+
+  createModification() {
+    let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
+    let currentBaselineCopy = JSON.parse(JSON.stringify(currentBaselineData));
+    this.modificationData.next(currentBaselineCopy);
+    // this.modificationExists.next(true);
+  }
+
+  // addCase(settings: Settings, operatingHours: OperatingHours, isBaseline: boolean) {
+  //   if (isBaseline) {
+  //     let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
+  //     let index = currentBaselineData.length;
+  //     let tmpObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
+  //     currentBaselineData.push(tmpObj)
+  //     this.baselineData.next(currentBaselineData);
+  //   } else {
+  //     let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
+  //     let currentModificationData: Array<CoolingTowerData> = this.modificationData.getValue();
+  //     let index = currentModificationData.length;
+  //     let tmpObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
+
+  //     // Set case constants
+  //     tmpObj.flowRate = currentBaselineData[index].flowRate;
+  //     tmpObj.coolingLoad = currentBaselineData[index].coolingLoad;
+  //     tmpObj.operationalHours = currentBaselineData[index].operationalHours;
+
+  //     currentModificationData.push(tmpObj);
+  //     this.modificationData.next(currentModificationData);
+  //   }
+  // }
+
+  // removeCase(i: number, isBaseline: boolean) {
+  //   if (isBaseline) {
+  //     let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
+  //     currentBaselineData.splice(i, 1);
+  //     this.baselineData.next(currentBaselineData);
+  //   } else {
+  //     let currentModificationData: Array<CoolingTowerData> = this.modificationData.getValue();
+  //     currentModificationData.splice(i, 1);
+  //     this.modificationData.next(currentModificationData);
+  //   }
+  // }
+
+  addCase(settings: Settings, operatingHours: OperatingHours) {
+      let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
+      let index = currentBaselineData.length;
+      let baselineObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
+      currentBaselineData.push(baselineObj)
+      this.baselineData.next(currentBaselineData);
+      
+      let currentModificationData: Array<CoolingTowerData> = this.modificationData.getValue();
+      let modificationObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
+
+      // Set case operational constants
+      modificationObj.flowRate = currentBaselineData[index].flowRate;
+      modificationObj.coolingLoad = currentBaselineData[index].coolingLoad;
+      modificationObj.operationalHours = currentBaselineData[index].operationalHours;
+
+      currentModificationData.push(modificationObj);
+      this.modificationData.next(currentModificationData);
+  }
+
+  removeCase(i: number) {
+      let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
+      currentBaselineData.splice(i, 1);
+      this.baselineData.next(currentBaselineData);
+      let currentModificationData: Array<CoolingTowerData> = this.modificationData.getValue();
+      currentModificationData.splice(i, 1);
+      this.modificationData.next(currentModificationData);
+  }
+  
+  checkValidInputData(cases: Array<CoolingTowerData>):boolean {
+    cases.forEach(data => {
+      let form = this.getFormFromObj(data);
+      if (!form.valid) {
+        return false;
+      }
+    })
+    return true;
+  }
+
+  calculate(settings: Settings) {
+    let baselineDataCopy = JSON.parse(JSON.stringify(this.baselineData.value))
+    let modificationDataCopy: Array<CoolingTowerData> = JSON.parse(JSON.stringify(this.modificationData.value))
+
+    let validBaseline: boolean = this.checkValidInputData(baselineDataCopy);
+    let validModification: boolean = this.checkValidInputData(modificationDataCopy);
+    if (!validBaseline || !validModification) {
+      this.initDefaultEmptyOutputs();
+    } else {
+      let coolingTowerInputs: Array<CoolingTowerInput> = this.buildInputObjects(baselineDataCopy, settings, modificationDataCopy)
+      
+      let coolingTowerOutput: CoolingTowerOutput = {
+        wcBaseline: 0,
+        wcModification: 0,
+        waterSavings: 0,
+        savingsPercentage: 0,
+        coolingTowerCaseResults: []
+      }
+      let coolingTowerCaseResults: Array<CoolingTowerResult> = [];
+      coolingTowerInputs.forEach(input => {
+        let caseResultData: CoolingTowerResult = this.chillerService.coolingTowerMakeupWater(input);
+        caseResultData = this.convertResultData(caseResultData, settings);
+        coolingTowerOutput.wcBaseline += caseResultData.wcBaseline;
+        coolingTowerOutput.wcModification += caseResultData.wcModification;
+        coolingTowerCaseResults.push(caseResultData)
+      });
+
+      coolingTowerOutput.waterSavings = coolingTowerOutput.wcBaseline - coolingTowerOutput.wcModification;
+
+      if (settings.unitsOfMeasure != "Imperial") {
+        let convertedSavings = this.convertUnitsService.value(coolingTowerOutput.waterSavings).from('L').to('gal');
+        convertedSavings = this.convertUnitsService.value(convertedSavings).from('gal').to('m3');
+        coolingTowerOutput.savingsPercentage = convertedSavings / coolingTowerOutput.wcBaseline * 100;
+      } else {
+        coolingTowerOutput.savingsPercentage = coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline * 100;
+      }
+
+      coolingTowerOutput.savingsPercentage = coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline * 100;
+
+      console.log('Output', coolingTowerOutput);
+      coolingTowerOutput.coolingTowerCaseResults = coolingTowerCaseResults;
+      this.coolingTowerOutput.next(coolingTowerOutput);
+    }
+  }
+
+  convertResultData(caseResultData: CoolingTowerResult, settings: Settings): CoolingTowerResult {
+    if (settings.unitsOfMeasure != "Imperial") {
+      caseResultData.wcBaseline = this.convertUnitsService.value(caseResultData.wcBaseline).from('gal').to('m3');
+      caseResultData.wcModification = this.convertUnitsService.value(caseResultData.wcModification).from('gal').to('m3');
+      caseResultData.waterSavings = this.convertUnitsService.value(caseResultData.waterSavings).from('gal').to('L');
+    } else {
+      caseResultData.wcBaseline = this.convertUnitsService.value(caseResultData.wcBaseline).from('gal').to('kgal');
+      caseResultData.wcModification = this.convertUnitsService.value(caseResultData.wcModification).from('gal').to('kgal');
+      caseResultData.waterSavings = this.convertUnitsService.value(caseResultData.waterSavings).from('gal').to('kgal');
+    }
+    return caseResultData;
+  }
+
+  buildInputObjects(baselineDataCopy: Array<CoolingTowerData>, settings: Settings, modificationDataCopy?: Array<CoolingTowerData>) {  
+    let coolingTowerInputs: Array<CoolingTowerInput> = baselineDataCopy.map(function (inputData: CoolingTowerData, index) {
+      inputData.driftLossFactor = inputData.driftLossFactor / 100;
+      inputData.lossCorrectionFactor = inputData.lossCorrectionFactor / 100;
+      let modCyclesOfConcentration = modificationDataCopy[index].cyclesOfConcentration;
+      let modDriftLossFactor = modificationDataCopy[index].driftLossFactor / 100;
+
+      // let modCyclesOfConcentration = 0;
+      // let modDriftLossFactor = 0
+      // if (modificationDataCopy != undefined && modificationDataCopy[index]) {
+      //   modCyclesOfConcentration = modificationDataCopy[index].cyclesOfConcentration;
+      //   modDriftLossFactor = modificationDataCopy[index].driftLossFactor / 100;
+      // }
+
+      // if (settings.unitsOfMeasure != "Imperial") {
+      //   // inputData.flowRate = this.convertUnitsService.value(inputData.flowRate).from('m3').to('gal');
+      //   inputData.flowRate = this.convertUnitsService.value(inputData.flowRate).from('m3/s').to('gpm');
+      //   inputData.coolingLoad = this.convertUnitsService.value(inputData.coolingLoad).from('GJ').to('MMBtu');
+      // }
+
+      let input = <CoolingTowerInput>{
+        coolingTowerMakeupWaterCalculator: {
+          operatingConditionsData: {
+            flowRate: inputData.flowRate,
+            coolingLoad: inputData.coolingLoad,
+            operationalHours: inputData.operationalHours,
+            lossCorrectionFactor: inputData.lossCorrectionFactor
+          },
+          waterConservationBaselineData: {
+            cyclesOfConcentration: inputData.cyclesOfConcentration,
+            driftLossFactor: inputData.driftLossFactor
+          },
+          waterConservationModificationData: {
+            cyclesOfConcentration: modCyclesOfConcentration,
+            driftLossFactor: modDriftLossFactor
+          }
+        }
+      }
+
+      return input;
+    });
+    return coolingTowerInputs;
+  }
+
+  calculateCoolingLoad(form: FormGroup, settings: Settings) {
+    let {temperatureDifference, flowRate} = this.getObjFromForm(form);
+    if (settings.unitsOfMeasure != "Imperial") {
+      // flowRate = this.convertUnitsService.value(flowRate).from('m3').to('gal');
+      flowRate = this.convertUnitsService.value(flowRate).from('m3/s').to('gpm');
+
+      temperatureDifference = this.convertUnitsService.value(temperatureDifference).from('C').to('R');
+    }
+    let coolingLoad = flowRate * (8.345 * 60 * 1 / 1000000) * temperatureDifference;
+
+    if (settings.unitsOfMeasure != "Imperial") {
+      coolingLoad = this.convertUnitsService.value(coolingLoad).from('MMBtu').to('GJ');
+    }
+    return coolingLoad;
+  }
+
+  generateExampleData(settings: Settings) {
+    let modificationExample: CoolingTowerData = {
+      name: 'Case #1',
+      operationalHours: 1000,
+      flowRate: 2500,
+      userDefinedCoolingLoad: true,
+      temperatureDifference: 0,
+      coolingLoad: 10,
+      lossCorrectionFactor: 100,
+      hasDriftEliminator: 1,
+      driftLossFactor: .01,
+      cyclesOfConcentration: 3
+    };
+    let baselineExample: CoolingTowerData = {
+      name: 'Case #1',
+      operationalHours: 1000,
+      flowRate: 2500,
+      userDefinedCoolingLoad: true,
+      temperatureDifference: 0,
+      coolingLoad: 10,
+      lossCorrectionFactor: 100,
+      hasDriftEliminator: 0,
+      driftLossFactor: .2,
+      cyclesOfConcentration: 3
+    };
+
+    if (settings.unitsOfMeasure != 'Imperial') {
+      baselineExample = this.convertExampleData(baselineExample);
+      modificationExample = this.convertExampleData(modificationExample);
+    }
+
+    let baselineDataExample: Array<CoolingTowerData> = [];
+    baselineDataExample.push(baselineExample);
+    this.baselineData.next(baselineDataExample);
+
+    let modificationDataExample: Array<CoolingTowerData> = [];
+    modificationDataExample.push(modificationExample);
+    this.modificationData.next(modificationDataExample);
+  }
+
+  convertExampleData(coolingTowerData: CoolingTowerData) {
+    // coolingTowerData.flowRate = this.convertUnitsService.value(coolingTowerData.flowRate).from('gal').to('m3');
+    coolingTowerData.flowRate = this.convertUnitsService.value(coolingTowerData.flowRate).from('gpm').to('m3/s');
+    coolingTowerData.coolingLoad = this.convertUnitsService.value(coolingTowerData.coolingLoad).from('MMBtu').to('GJ');
+
+    coolingTowerData.flowRate = this.roundVal(coolingTowerData.flowRate, 2);
+    coolingTowerData.coolingLoad = this.roundVal(coolingTowerData.coolingLoad, 2);
+    return coolingTowerData;
+  }
+
+  roundVal(num: number, digits?: number): number {
+    if (!digits) {
+      digits = 3;
+    }
+    return Number(num.toFixed(digits));
+  }
+
+}

@@ -1,0 +1,109 @@
+<div class="d-flex">
+    <div class="p-4 pt-2 d-flex flex-column help-info">
+        <h5>
+            Cooling Tower Makeup Water
+            <br>
+            <small class="text-muted">
+                Analyze the effect of drift eliminators/cycles of concentration on cooling tower water consumption and
+                estimate the resulting water savings.
+            </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+
+        <div class="my-2" *ngIf="currentField == 'flowRate'">
+            <h6>
+                Water Flow Rate
+                <br>
+                <small class="text-muted">
+                    Flow rate of circulating cooling water entering the cooling tower. Should be constant flow and can
+                    often be found on the cooling tower nameplate.
+                    <hr>
+                </small>
+            </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'temperatureDifference'">
+            <h6>
+                Temperature Difference
+                <br>
+                <small class="text-muted">
+                    The temperature difference between the warmer cooling tower inlet water and cooler outlet water.
+                    <hr>
+                </small>
+            </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'coolingLoad'">
+            <h6>
+                Cooling Load
+                <br>
+                <small class="text-muted">
+                    Energy removed from water by the cooling tower. This is not the design capacity of the cooling
+                    tower, but the actual load. This can be estimated using the link “Estimate Cooling Load” and
+                    entering a temperature difference.
+                    <hr>
+                </small>
+            </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'lossCorrectionFactor'">
+            <h6>
+                Evaporation Factor
+                <br>
+                <small class="text-muted">
+                    Rate of evaporation has been assumed as 1% of the circulation flow for each 10°F of rise between
+                    inlet and outlet across the tower. This can vary with operational conditions such as humidity. A
+                    correction factor is used to adjust this. By default, that correction factor is 0.85. If the climate
+                    is particularly moist, value may go down to 0.65; it if is very dry, it may go up to 1.0, or even
+                    1.2.
+                    <hr>
+                </small>
+            </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'hasDriftEliminator'">
+            <h6>
+                Drift Eliminator
+                <br>
+                <small class="text-muted">
+                    Water can be carried away from the tower in the form of mist or large droplets. Drift eliminators
+                    can capture large water droplets in the air stream by changing droplets travel direction and
+                    lowering their velocity and help droplets fall back into the cooling tower. Efficient drift
+                    eliminators will keep drift losses to less than 0.001% of the re-circulating water flow rate.
+                    <hr>
+                </small>
+            </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'driftLossFactor'">
+            <h6>
+                Drift Factor
+                <br>
+                <small class="text-muted">
+                    Fraction of inlet water carried away from the tower in the form of mist or large droplets. Without a
+                    drift eliminator, this is often around 0.2%. With a drift eliminator is can be less than 0.001%.
+                    <hr>
+                </small>
+            </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'cyclesOfConcentration'">
+            <h6>
+                Cycles of Concentration
+                <br>
+                <small class="text-muted">
+                    The cycle of concentration can be determined by calculating the ratio of the concentration of
+                    dissolved solids in the blowdown water compared to the make-up water. If the Cycles of Concentration
+                    limit is set too low, water will be drained sooner than is necessary. If the Cycles of Concentration
+                    limit is set too high, the cooling tower performance can be compromised by scale deposits on the
+                    fill.
+                    <hr>
+                </small>
+            </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'operationalHours'">
+            <h6>
+                Operational Hours
+                <br>
+                <small class="text-muted">
+                    Number of annual operating hours for the equipment.
+                    <hr>
+                </small>
+            </h6>
+        </div>
+    </div>
+</div>
