@@ -36,6 +36,8 @@ import { YAxisDataComponent } from './visualize/visualize-menu/y-axis-data/y-axi
 import { VisualizeMenuService } from './visualize/visualize-menu/visualize-menu.service';
 import { VisualizeHelpComponent } from './visualize/visualize-help/visualize-help.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { DayTypeSummaryTableComponent } from './day-type-analysis/day-type-table/day-type-summary-table/day-type-summary-table.component';
+import { IndividualDaySummaryTableComponent } from './day-type-analysis/day-type-table/individual-day-summary-table/individual-day-summary-table.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,9 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     GraphBasicsComponent,
     XAxisDataComponent,
     YAxisDataComponent,
-    VisualizeHelpComponent
+    VisualizeHelpComponent,
+    IndividualDaySummaryTableComponent,
+    DayTypeSummaryTableComponent
   ],
   imports: [
     CommonModule,

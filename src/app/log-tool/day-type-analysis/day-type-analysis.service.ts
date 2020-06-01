@@ -64,7 +64,7 @@ export class DayTypeAnalysisService {
     }
 
     if (weekendDates.length != 0) {
-      dayTypesArr.push({
+      dayTypesArr.unshift({
         color: 'blue',
         label: 'Weekend',
         useDayType: true,
@@ -73,7 +73,7 @@ export class DayTypeAnalysisService {
     }
 
     if (weekdayDates.length != 0) {
-      dayTypesArr.push({
+      dayTypesArr.unshift({
         color: 'green',
         label: 'Weekday',
         useDayType: true,

@@ -3,6 +3,8 @@ import { DayTypeAnalysisService } from '../day-type-analysis.service';
 import { DayTypeSummary, LogToolField, DayType, LogToolDay } from '../../log-tool-models';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
+import { LogToolDataService } from '../../log-tool-data.service';
+import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 @Component({
   selector: 'app-day-type-table',
   templateUrl: './day-type-table.component.html',
@@ -26,9 +28,14 @@ export class DayTypeTableComponent implements OnInit {
 
   dayTypeDaySummaries: Array<{ dayType: DayType, logToolDays: Array<LogToolDay> }>
   hourLabels: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService) { }
+  fields: Array<LogToolField>;
+  selectedGraphType: string;
+  selectedGraphTypeSub: Subscription;
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolDataService: LogToolDataService, private dayTypeGraphService: DayTypeGraphService) { }
 
   ngOnInit() {
+
+    this.fields = this.logToolDataService.getDataFieldOptions();
     this.dayTypeSummariesSub = this.dayTypeAnalysisService.dayTypeSummaries.subscribe(dayTypeSummaries => {
       this.dayTypeSummaries = dayTypeSummaries;
       console.log(this.dayTypeSummaries);
@@ -40,16 +47,21 @@ export class DayTypeTableComponent implements OnInit {
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(dayTypes => {
       this.dayTypes = dayTypes;
     });
+
+    this.selectedGraphTypeSub = this.dayTypeGraphService.selectedGraphType.subscribe(val => {
+      this.selectedGraphType = val;
+    });
   }
 
   ngOnDestroy() {
     this.dayTypeSummariesSub.unsubscribe();
     this.selectedDataFieldSub.unsubscribe();
     this.dayTypesSub.unsubscribe();
+    this.selectedGraphTypeSub.unsubscribe();
   }
 
-  getAverageValue(averages: Array<{ value: number, field: LogToolField }>): number {
-    let average = _.find(averages, (average) => { return average.field.fieldName == this.selectedDataField.fieldName });
+  getAverageValue(averages: Array<{ value: number, field: LogToolField }>, field: LogToolField): number {
+    let average = _.find(averages, (average) => { return average.field.fieldName == field.fieldName });
     if (average) {
       return average.value;
     }
