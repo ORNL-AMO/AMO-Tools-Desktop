@@ -44,8 +44,6 @@ export class AirFlowConversionFormComponent implements OnInit {
     this.generateExampleSub.unsubscribe();
   }
 
-  focusOut() {}
-
   showHideInputField() {
     this.airFlowConversionForm.patchValue({
       userDefinedPressure: !this.airFlowConversionForm.controls.userDefinedPressure.value
@@ -60,10 +58,6 @@ export class AirFlowConversionFormComponent implements OnInit {
       convertToStandard: toStandard
     })
     this.save();
-  }
-
-  changeField(str: string) {
-    this.airFlowConversionService.currentField.next(str);
   }
 
   save() {

@@ -16,13 +16,11 @@ export class AirFlowConversionService {
   airFlowConversionInput: BehaviorSubject<AirFlowConversionInput>;
   airFlowConversionOutput: BehaviorSubject<AirFlowConversionOutput>;
   resetData: BehaviorSubject<boolean>;
-  currentField: BehaviorSubject<string>;
   generateExample: BehaviorSubject<boolean>;
 
   constructor(private convertUnitsService: ConvertUnitsService,
               private formBuilder: FormBuilder) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
-    this.currentField = new BehaviorSubject<string>('default');
     this.airFlowConversionInput = new BehaviorSubject<AirFlowConversionInput>(undefined);
     this.airFlowConversionOutput = new BehaviorSubject<AirFlowConversionOutput>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
