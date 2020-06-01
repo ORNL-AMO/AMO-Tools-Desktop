@@ -20,7 +20,6 @@ export class CoolingTowerResultsComponent implements OnInit {
 
   @ViewChild('savingsTable', { static: false }) savingsTable: ElementRef;
   savingsTableString: any;
-  allTablesString: any;
   constructor(private coolingTowerService: CoolingTowerService) { }
 
   ngOnInit() {
@@ -34,7 +33,7 @@ export class CoolingTowerResultsComponent implements OnInit {
   }
 
   updateTableString() {
-    this.allTablesString = this.savingsTable.nativeElement.innerText;
+    this.savingsTableString = this.savingsTable.nativeElement.innerText;
   }
 
 }

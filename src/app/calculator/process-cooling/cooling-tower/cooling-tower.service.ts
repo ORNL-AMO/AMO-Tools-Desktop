@@ -17,7 +17,6 @@ export class CoolingTowerService {
   modificationData: BehaviorSubject<Array<CoolingTowerData>>;
   coolingTowerOutput: BehaviorSubject<CoolingTowerOutput>;
   
-  // modificationExists: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
@@ -30,7 +29,6 @@ export class CoolingTowerService {
     this.coolingTowerOutput = new BehaviorSubject<CoolingTowerOutput>(undefined);
 
     this.currentField = new BehaviorSubject<string>('default');
-    // this.modificationExists = new BehaviorSubject<boolean>(false);
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
   }
@@ -108,7 +106,6 @@ export class CoolingTowerService {
     let emptyModificationData: CoolingTowerData = this.initObject(index, settings, operatingHours);
     let modificationData: Array<CoolingTowerData> = [emptyModificationData];
     this.modificationData.next(modificationData);
-    // this.modificationExists.next(true);
   }
 
   initDefaultEmptyOutputs() {
@@ -162,43 +159,7 @@ export class CoolingTowerService {
     let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
     let currentBaselineCopy = JSON.parse(JSON.stringify(currentBaselineData));
     this.modificationData.next(currentBaselineCopy);
-    // this.modificationExists.next(true);
   }
-
-  // addCase(settings: Settings, operatingHours: OperatingHours, isBaseline: boolean) {
-  //   if (isBaseline) {
-  //     let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
-  //     let index = currentBaselineData.length;
-  //     let tmpObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
-  //     currentBaselineData.push(tmpObj)
-  //     this.baselineData.next(currentBaselineData);
-  //   } else {
-  //     let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
-  //     let currentModificationData: Array<CoolingTowerData> = this.modificationData.getValue();
-  //     let index = currentModificationData.length;
-  //     let tmpObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
-
-  //     // Set case constants
-  //     tmpObj.flowRate = currentBaselineData[index].flowRate;
-  //     tmpObj.coolingLoad = currentBaselineData[index].coolingLoad;
-  //     tmpObj.operationalHours = currentBaselineData[index].operationalHours;
-
-  //     currentModificationData.push(tmpObj);
-  //     this.modificationData.next(currentModificationData);
-  //   }
-  // }
-
-  // removeCase(i: number, isBaseline: boolean) {
-  //   if (isBaseline) {
-  //     let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
-  //     currentBaselineData.splice(i, 1);
-  //     this.baselineData.next(currentBaselineData);
-  //   } else {
-  //     let currentModificationData: Array<CoolingTowerData> = this.modificationData.getValue();
-  //     currentModificationData.splice(i, 1);
-  //     this.modificationData.next(currentModificationData);
-  //   }
-  // }
 
   addCase(settings: Settings, operatingHours: OperatingHours) {
       let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
@@ -274,8 +235,7 @@ export class CoolingTowerService {
       } else {
         coolingTowerOutput.savingsPercentage = coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline * 100;
       }
-
-      coolingTowerOutput.savingsPercentage = coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline * 100;
+      // coolingTowerOutput.savingsPercentage = coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline * 100;
 
       console.log('Output', coolingTowerOutput);
       coolingTowerOutput.coolingTowerCaseResults = coolingTowerCaseResults;
@@ -300,15 +260,16 @@ export class CoolingTowerService {
     let coolingTowerInputs: Array<CoolingTowerInput> = baselineDataCopy.map(function (inputData: CoolingTowerData, index) {
       inputData.driftLossFactor = inputData.driftLossFactor / 100;
       inputData.lossCorrectionFactor = inputData.lossCorrectionFactor / 100;
-      let modCyclesOfConcentration = modificationDataCopy[index].cyclesOfConcentration;
-      let modDriftLossFactor = modificationDataCopy[index].driftLossFactor / 100;
+      
+      let modCyclesOfConcentration = 0;
+      let modDriftLossFactor = 0
+      if (modificationDataCopy != undefined && modificationDataCopy[index]) {
+        modCyclesOfConcentration = modificationDataCopy[index].cyclesOfConcentration;
+        modDriftLossFactor = modificationDataCopy[index].driftLossFactor / 100;
+      }
 
-      // let modCyclesOfConcentration = 0;
-      // let modDriftLossFactor = 0
-      // if (modificationDataCopy != undefined && modificationDataCopy[index]) {
-      //   modCyclesOfConcentration = modificationDataCopy[index].cyclesOfConcentration;
-      //   modDriftLossFactor = modificationDataCopy[index].driftLossFactor / 100;
-      // }
+      // This commented out conversion block is blowing up. The data from previous conversions up to this point seems good. 
+      // Not sure what else to look at.
 
       // if (settings.unitsOfMeasure != "Imperial") {
       //   // inputData.flowRate = this.convertUnitsService.value(inputData.flowRate).from('m3').to('gal');
@@ -345,7 +306,6 @@ export class CoolingTowerService {
     if (settings.unitsOfMeasure != "Imperial") {
       // flowRate = this.convertUnitsService.value(flowRate).from('m3').to('gal');
       flowRate = this.convertUnitsService.value(flowRate).from('m3/s').to('gpm');
-
       temperatureDifference = this.convertUnitsService.value(temperatureDifference).from('C').to('R');
     }
     let coolingLoad = flowRate * (8.345 * 60 * 1 / 1000000) * temperatureDifference;

@@ -30,25 +30,19 @@ export class CoolingTowerComponent implements OnInit {
     }, 100);
   }
   
-  headerHeight: number;
   containerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
   baselineSelected: boolean = true;
   modifiedSelected: boolean = false;
 
-  modificationExists = true;
-
   coolingTowerResults: CoolingTowerOutput;
   baselineData: Array<CoolingTowerData>;
   modificationData: Array<CoolingTowerData>;
-  coolingTowerOuput: CoolingTowerOutput;
 
-  coolingTowerOutputSub: Subscription;
   currentFieldSub: Subscription;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
-  // modificationExistsSub: Subscription;
 
   constructor(private settingsDbService: SettingsDbService, 
               private coolingTowerService: CoolingTowerService) { }
@@ -73,7 +67,6 @@ export class CoolingTowerComponent implements OnInit {
 
   ngOnDestroy() {
       this.currentFieldSub.unsubscribe();
-      // this.modificationExistsSub.unsubscribe();
       this.baselineDataSub.unsubscribe();
       this.modificationDataSub.unsubscribe();
   }
@@ -82,9 +75,6 @@ export class CoolingTowerComponent implements OnInit {
     this.currentFieldSub = this.coolingTowerService.currentField.subscribe(val => {
       this.currentField = val;
     });
-    // this.modificationExistsSub = this.coolingTowerService.modificationExists.subscribe(val => {
-    //   this.modificationExists = val;
-    // });
     this.baselineDataSub = this.coolingTowerService.baselineData.subscribe(value => {
       this.baselineData = value;
       this.setBaselineSelected();
@@ -95,10 +85,6 @@ export class CoolingTowerComponent implements OnInit {
       this.setModificationSelected();
       this.coolingTowerService.calculate(this.settings);
     })
-    this.coolingTowerOutputSub = this.coolingTowerService.coolingTowerOutput.subscribe(value => {
-      //  Can I just pass this down to the child for individual results
-      this.coolingTowerOuput = value;
-    });
   }
 
   resizeTabs() {
@@ -119,10 +105,6 @@ export class CoolingTowerComponent implements OnInit {
    this.coolingTowerService.createModification();
   }
 
-  // addModificationCase() {
-  //   this.coolingTowerService.addCase(this.settings, this.operatingHours, false);
-  // }
-
   addCase() {
     this.coolingTowerService.addCase(this.settings, this.operatingHours);
   }
@@ -138,7 +120,6 @@ export class CoolingTowerComponent implements OnInit {
 
   btnGenerateExample() {
       this.coolingTowerService.generateExampleData(this.settings);
-      // this.modificationExists = true;
       this.baselineSelected = true;
       this.modifiedSelected = false;
   }

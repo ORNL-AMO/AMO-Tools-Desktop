@@ -141,11 +141,7 @@ export class CoolingTowerFormComponent implements OnInit {
     let tmpObj: CoolingTowerData = this.coolingTowerService.getObjFromForm(this.form);
     this.coolingTowerService.updateDataArray(tmpObj, this.index, this.isBaseline);
   }
-
-  // removeCase() {
-  //   this.coolingTowerService.removeCase(this.index, this.isBaseline);
-  // }
-
+  
   removeCase() {
     this.coolingTowerService.removeCase(this.index);
   }
