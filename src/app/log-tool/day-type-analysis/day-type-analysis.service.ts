@@ -18,12 +18,15 @@ export class DayTypeAnalysisService {
   dayTypesCalculated: boolean = false;
 
   dataView: BehaviorSubject<string>;
+
+  dataDisplayType: BehaviorSubject<string>;
   constructor(private logToolDataService: LogToolDataService, private logToolService: LogToolService) {
     this.dayTypes = new BehaviorSubject<Array<DayType>>(new Array());
     this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
     this.selectedDataField = new BehaviorSubject<LogToolField>(undefined);
     this.displayDayTypeCalander = new BehaviorSubject<boolean>(true);
     this.dataView = new BehaviorSubject<string>('graph');
+    this.dataDisplayType = new BehaviorSubject<string>('selected');
   }
 
   resetData() {

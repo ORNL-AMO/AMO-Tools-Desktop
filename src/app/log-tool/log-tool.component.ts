@@ -19,7 +19,6 @@ export class LogToolComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.url.subscribe(url => {
-      console.log(url)
       this.getContainerHeight();
     });
   }

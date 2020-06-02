@@ -1,2 +1,5 @@
-<app-day-type-summary-table *ngIf="selectedGraphType == 'dayType'"></app-day-type-summary-table>
-<app-individual-day-summary-table *ngIf="selectedGraphType == 'individualDay'"></app-individual-day-summary-table>
+<app-day-type-summary-table *ngIf="selectedGraphType == 'dayType' && dataDisplayType == 'All'">
+</app-day-type-summary-table>
+<app-individual-day-summary-table *ngIf="selectedGraphType == 'individualDay' && dataDisplayType == 'All'">
+</app-individual-day-summary-table>
+<app-selected-data-table *ngIf="dataDisplayType != 'All'"></app-selected-data-table>

@@ -8,7 +8,16 @@
         </div>
     </div>
 
-    <div class="nav-item pr-2">
+    <div class="nav-item pr-2" *ngIf="dataView == 'dataTable'">
+        <div class="btn-group">
+            <button class="btn" (click)="setDataDisplayType('selected')"
+                [ngClass]="{'active': dataDisplayType == 'selected'}">Display Selected</button>
+            <button class="btn" (click)="setDataDisplayType('All')"
+                [ngClass]="{'active': dataDisplayType == 'All'}">Display All</button>
+        </div>
+    </div>
+
+    <div class="nav-item pr-2" *ngIf="dataView == 'graph' || dataDisplayType == 'All'">
         <div class="btn-group">
             <button class="btn" (click)="setSelectedGraphType('dayType')"
                 [ngClass]="{'active': selectedGraphType == 'dayType'}">Day Types</button>
@@ -17,7 +26,7 @@
         </div>
     </div>
 
-    <div class="nav-item dropdown pr-2" *ngIf="dataView == 'graph'">
+    <div class="nav-item dropdown pr-2" *ngIf="dataView == 'graph' || dataDisplayType == 'selected'">
         <a class="nav-link dropdown-toggle" (click)="toggleSelectedDataFieldDropdown()">
             Selected Data: {{selectedDataField.alias}}
         </a>
@@ -29,4 +38,6 @@
             </div>
         </div>
     </div>
+
+
 </div>
