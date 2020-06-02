@@ -25,7 +25,7 @@
             <div class="d-flex flex-column mx-4 mb-4">
               <div *ngFor="let data of baselineData; let i = index;">
                 <app-cooling-tower-form [index]="i" [settings]="settings" [isBaseline]="true"
-                 [selected]="baselineSelected" [operatingHours]="operatingHours">
+                 [operatingHours]="operatingHours">
                 </app-cooling-tower-form>
               </div>
               <div class="w-100 justify content-center btn-group btn-group-sm">
@@ -41,7 +41,7 @@
           </div>
   
           <!-- modification -->
-          <div class="w-50 panel-column modification" (click)="setModificationSelected()"
+          <div class="w-50 panel-column modification" *ngIf="modificationExists" (click)="setModificationSelected()"
             [ngClass]="{'disabled': baselineSelected == true}">
             <div class="header mx-2 mb-4">
               <h3>Modification</h3>
@@ -49,11 +49,26 @@
             <div class="d-flex flex-column mx-4 mb-4">
               <div *ngFor="let data of modificationData; let i = index;">
                 <app-cooling-tower-form [index]="i" [settings]="settings" 
-                [isBaseline]="false" [selected]="!baselineSelected" [operatingHours]="operatingHours">
+                [isBaseline]="false" [operatingHours]="operatingHours">
                 </app-cooling-tower-form>
               </div>
             </div>
           </div>
+
+          <!-- no content message -->
+        <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"
+        [ngClass]="{'disabled': modifiedSelected == false}">
+        <div class="header mx-2">
+          <h3>Modification</h3>
+        </div>
+        <div class="p-3 no-data">
+          <h3>Once you have set up your baseline..</h3>
+          <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
+            Condition</button>
+          <p>Data will be copied from your current baseline condition.</p>
+        </div>
+      </div>
+
         </div>
   
   

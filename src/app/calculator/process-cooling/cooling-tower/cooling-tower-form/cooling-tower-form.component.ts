@@ -19,8 +19,6 @@ export class CoolingTowerFormComponent implements OnInit {
   @Input()
   isBaseline: boolean;
   @Input()
-  selected: boolean;
-  @Input()
   operatingHours: OperatingHours;
 
   
@@ -62,7 +60,9 @@ export class CoolingTowerFormComponent implements OnInit {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
     this.coolingTowerOutputSub.unsubscribe();
-    this.modificationDataSub.unsubscribe();
+    if (!this.isBaseline) {
+      this.modificationDataSub.unsubscribe();
+    }
   }
 
   ngAfterViewInit(){
@@ -81,11 +81,11 @@ export class CoolingTowerFormComponent implements OnInit {
     this.coolingTowerOutputSub = this.coolingTowerService.coolingTowerOutput.subscribe((coolingTowerOutput: CoolingTowerOutput) => {
       this.individualCaseResultData = coolingTowerOutput.coolingTowerCaseResults[this.index];
     });
-    this.modificationDataSub = this.coolingTowerService.modificationData.subscribe(updatedData => {
-      if (!this.isBaseline) {
+    if (!this.isBaseline) {
+      this.modificationDataSub = this.coolingTowerService.modificationData.subscribe(updatedData => {
         this.updateFormOperationalData(updatedData);
-      }
-    })
+      })
+    }
   }
 
   updateFormOperationalData(updatedModificationData: Array<CoolingTowerData>) {
@@ -146,7 +146,7 @@ export class CoolingTowerFormComponent implements OnInit {
     this.coolingTowerService.removeCase(this.index);
   }
 
-  editEquipmentName() {
+  editCaseName() {
     this.isEditingName = true;
   }
 
@@ -156,9 +156,6 @@ export class CoolingTowerFormComponent implements OnInit {
 
   focusField(str: string) {
     this.coolingTowerService.currentField.next(str);
-  }
-
-  focusOut() {
   }
 
   closeOperatingHoursModal(){

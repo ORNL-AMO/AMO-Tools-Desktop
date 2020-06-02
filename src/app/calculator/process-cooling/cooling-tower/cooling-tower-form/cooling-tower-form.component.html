@@ -1,7 +1,7 @@
 <div class="mb-4 p-2 form-card">
     <form [formGroup]="form" #formElement>
       <label *ngIf="!isEditingName" class="group-label w-100 bold">
-        <span (click)="editEquipmentName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+        <span (click)="editCaseName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
         <span>{{form.controls.name.value}}</span>
         <a *ngIf="isBaseline" class="click-link pull-right add-fixture text-danger small pl-2" (click)="removeCase(index)">+Remove Case</a>
       </label>
@@ -21,8 +21,7 @@
               <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
             </span>
             <input class="form-control" name="operationalHours" id="{{'operationalHours_'+idString}}"
-              formControlName="operationalHours" type="number" (input)="calculate()" (focus)="focusField('operationalHours')"
-              (blur)="focusOut()" onfocus="this.select();">
+              formControlName="operationalHours" type="number" (input)="calculate()" (focus)="focusField('operationalHours')" onfocus="this.select();">
             <span class="units input-group-addon">hrs/yr</span>
           </div>
           <span class="alert-danger pull-right small"
@@ -39,14 +38,14 @@
             <label class="small" for="{{'flowRate_'+idString}}">Water Flow Rate</label>
             <div class="input-group">
               <input class="form-control" type="number" name="flowRate" id="{{'flowRate_'+idString}}" formControlName="flowRate"
-                (input)="calculate()" (focus)="focusField('flowRate')" (blur)="focusOut()">
+                (input)="calculate()" (focus)="focusField('flowRate')">
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/s</span>
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">gpm</span>
             </div>
             <span class="alert-danger pull-right small"
               *ngIf="form.controls.flowRate.invalid && !form.controls.flowRate.pristine">
+              <span *ngIf="form.get('flowRate').hasError('greaterThan')">Value must be greater than 0.</span>
               <span *ngIf="form.controls.flowRate.errors.required">Value required.</span>
-              <span *ngIf="form.controls.flowRate.errors.greaterThan">Value must be greater than 0.</span>
             </span>
           </div>
           
@@ -55,14 +54,15 @@
             <div class="input-group">
               <input class="form-control" name="temperatureDifference" id="temperatureDifference"
                 formControlName="temperatureDifference" type="number" (input)="calculate()"
-                (focus)="focusField('temperatureDifference')" (blur)="focusOut()" onfocus="this.select();">
+                (focus)="focusField('temperatureDifference')" onfocus="this.select();">
               <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">&#8457;</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
               <span class="alert-danger pull-right small"
                 *ngIf="form.controls.temperatureDifference.invalid && !form.controls.temperatureDifference.pristine">
-                <span *ngIf="form.controls.temperatureDifference.errors.greaterThan">Value must be greater than 0.</span>
+                <span *ngIf="form.controls.temperatureDifference.errors.greaterThan">Value must be greater than 0.
                   <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
                   <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>.
+                </span>
               </span>
             </div>
           </div>
@@ -75,7 +75,7 @@
             </label>
             <div class="input-group" *ngIf="this.form.controls.userDefinedCoolingLoad.value == true">
               <input class="form-control" name="coolingLoad" id="coolingLoad" formControlName="coolingLoad" type="number"
-                (input)="calculate()" (focus)="focusField('coolingLoad')" (blur)="focusOut()" onfocus="this.select();">
+                (input)="calculate()" (focus)="focusField('coolingLoad')" onfocus="this.select();">
                 <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/h</span>
               <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
               <span class="alert-danger pull-right small"
@@ -157,8 +157,7 @@
                 <label class="small" for="{{'cyclesOfConcentration'+idString}}">Cycles of Concentration</label>
                 <div class="input-group">
                   <input class="form-control" type="number" step="1" name="cyclesOfConcentration" id="{{'cyclesOfConcentration_'+idString}}"
-                    formControlName="cyclesOfConcentration" (input)="calculate()" (focus)="focusField('cyclesOfConcentration')"
-                    (blur)="focusOut()">
+                    formControlName="cyclesOfConcentration" (input)="calculate()" (focus)="focusField('cyclesOfConcentration')">
                 </div>
                 <span class="alert-danger pull-right small"
                   *ngIf="form.controls.cyclesOfConcentration.invalid && !form.controls.cyclesOfConcentration.pristine">
@@ -171,8 +170,7 @@
                 <label class="small" for="{{'lossCorrectionFactor_'+idString}}">Evaporation Loss Correction Factor</label>
                 <div class="input-group">
                   <input class="form-control" type="number" name="lossCorrectionFactor" id="{{'lossCorrectionFactor_'+idString}}"
-                    formControlName="lossCorrectionFactor" (input)="calculate()" (focus)="focusField('lossCorrectionFactor')"
-                    (blur)="focusOut()">
+                    formControlName="lossCorrectionFactor" (input)="calculate()" (focus)="focusField('lossCorrectionFactor')">
                 </div>
                 <span class="alert-danger pull-right small"
                   *ngIf="form.controls.lossCorrectionFactor.invalid && !form.controls.lossCorrectionFactor.pristine">
@@ -191,7 +189,7 @@
                 <div class="input-group">
                   <select class="form-control" name="hasDriftEliminator" id="{{'hasDriftEliminator_'+idString}}"
                     formControlName="hasDriftEliminator" (change)="changeHasDriftEliminator()"
-                    (focus)="focusField('hasDriftEliminator')" (blur)="focusOut()">
+                    (focus)="focusField('hasDriftEliminator')">
                     <option *ngFor="let option of driftEliminatorOptions" [ngValue]="option.value">{{option.display}}</option>
                   </select>
                 </div>
@@ -200,8 +198,7 @@
             <label class="small" for="{{'driftLossFactor_'+idString}}">Drift Loss Factor</label>
             <div class="input-group">
               <input class="form-control" name="driftLossFactor" id="{{'driftLossFactor_'+idString}}"
-                formControlName="driftLossFactor" type="number" (input)="calculate()" (focus)="focusField('driftLossFactor')"
-                (blur)="focusOut()" onfocus="this.select();">
+                formControlName="driftLossFactor" type="number" (input)="calculate()" (focus)="focusField('driftLossFactor')" onfocus="this.select();">
                 <span class="units input-group-addon">%</span>
             </div>
             <span class="alert-danger pull-right small"

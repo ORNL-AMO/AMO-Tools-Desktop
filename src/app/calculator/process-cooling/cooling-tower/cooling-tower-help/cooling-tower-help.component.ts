@@ -19,4 +19,8 @@ export class CoolingTowerHelpComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.currentFieldSub.unsubscribe();
+  }
+
 }

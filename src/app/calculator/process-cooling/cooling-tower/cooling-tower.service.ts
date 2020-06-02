@@ -21,12 +21,15 @@ export class CoolingTowerService {
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
 
+  modificationExists: BehaviorSubject<boolean>;
+
   constructor(private formBuilder: FormBuilder, 
               private convertUnitsService: ConvertUnitsService,
               private chillerService: ChillerService) { 
     this.baselineData = new BehaviorSubject<Array<CoolingTowerData>>(undefined);
     this.modificationData = new BehaviorSubject<Array<CoolingTowerData>>(undefined);
     this.coolingTowerOutput = new BehaviorSubject<CoolingTowerOutput>(undefined);
+    this.modificationExists = new BehaviorSubject<boolean>(false);
 
     this.currentField = new BehaviorSubject<string>('default');
     this.resetData = new BehaviorSubject<boolean>(undefined);
@@ -102,10 +105,6 @@ export class CoolingTowerService {
     let emptyBaselineData: CoolingTowerData = this.initObject(index, settings, operatingHours);
     let baselineData: Array<CoolingTowerData> = [emptyBaselineData];
     this.baselineData.next(baselineData);
-
-    let emptyModificationData: CoolingTowerData = this.initObject(index, settings, operatingHours);
-    let modificationData: Array<CoolingTowerData> = [emptyModificationData];
-    this.modificationData.next(modificationData);
   }
 
   initDefaultEmptyOutputs() {
@@ -141,24 +140,20 @@ export class CoolingTowerService {
     dataArray[index].driftLossFactor = data.driftLossFactor;
     dataArray[index].cyclesOfConcentration = data.cyclesOfConcentration;
     
-    if (isBaseline) {
-      let modificationDataArray = this.modificationData.getValue();
+    let modificationDataArray = this.modificationData.getValue();
+     if (isBaseline && modificationDataArray) {
       modificationDataArray[index].operationalHours = data.operationalHours;
       modificationDataArray[index].coolingLoad = data.coolingLoad;
       modificationDataArray[index].flowRate = data.flowRate;
       modificationDataArray[index].temperatureDifference = data.temperatureDifference;
       modificationDataArray[index].userDefinedCoolingLoad = data.userDefinedCoolingLoad;
-      this.baselineData.next(dataArray);
       this.modificationData.next(modificationDataArray);
-    } else {
+    } else if (isBaseline && !modificationDataArray) {
+      this.baselineData.next(dataArray);
+    }else {
       this.modificationData.next(dataArray);
     }
-  }
 
-  createModification() {
-    let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
-    let currentBaselineCopy = JSON.parse(JSON.stringify(currentBaselineData));
-    this.modificationData.next(currentBaselineCopy);
   }
 
   addCase(settings: Settings, operatingHours: OperatingHours) {
@@ -178,6 +173,13 @@ export class CoolingTowerService {
 
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
+  }
+
+  createModification() {
+    let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
+    let currentBaselineCopy = JSON.parse(JSON.stringify(currentBaselineData));
+    this.modificationData.next(currentBaselineCopy);
+    this.modificationExists.next(true);
   }
 
   removeCase(i: number) {
@@ -200,11 +202,16 @@ export class CoolingTowerService {
   }
 
   calculate(settings: Settings) {
-    let baselineDataCopy = JSON.parse(JSON.stringify(this.baselineData.value))
-    let modificationDataCopy: Array<CoolingTowerData> = JSON.parse(JSON.stringify(this.modificationData.value))
+    let baselineDataCopy = JSON.parse(JSON.stringify(this.baselineData.value));
+
+    let modificationDataCopy: Array<CoolingTowerData>;
+    let validModification = true;
+    if (this.modificationData.value != undefined) {
+      modificationDataCopy = JSON.parse(JSON.stringify(this.modificationData.value));
+      validModification = this.checkValidInputData(modificationDataCopy);
+    }
 
     let validBaseline: boolean = this.checkValidInputData(baselineDataCopy);
-    let validModification: boolean = this.checkValidInputData(modificationDataCopy);
     if (!validBaseline || !validModification) {
       this.initDefaultEmptyOutputs();
     } else {
@@ -227,17 +234,8 @@ export class CoolingTowerService {
       });
 
       coolingTowerOutput.waterSavings = coolingTowerOutput.wcBaseline - coolingTowerOutput.wcModification;
+      coolingTowerOutput.savingsPercentage = coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline * 100;
 
-      if (settings.unitsOfMeasure != "Imperial") {
-        let convertedSavings = this.convertUnitsService.value(coolingTowerOutput.waterSavings).from('L').to('gal');
-        convertedSavings = this.convertUnitsService.value(convertedSavings).from('gal').to('m3');
-        coolingTowerOutput.savingsPercentage = convertedSavings / coolingTowerOutput.wcBaseline * 100;
-      } else {
-        coolingTowerOutput.savingsPercentage = coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline * 100;
-      }
-      // coolingTowerOutput.savingsPercentage = coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline * 100;
-
-      console.log('Output', coolingTowerOutput);
       coolingTowerOutput.coolingTowerCaseResults = coolingTowerCaseResults;
       this.coolingTowerOutput.next(coolingTowerOutput);
     }
@@ -247,7 +245,7 @@ export class CoolingTowerService {
     if (settings.unitsOfMeasure != "Imperial") {
       caseResultData.wcBaseline = this.convertUnitsService.value(caseResultData.wcBaseline).from('gal').to('m3');
       caseResultData.wcModification = this.convertUnitsService.value(caseResultData.wcModification).from('gal').to('m3');
-      caseResultData.waterSavings = this.convertUnitsService.value(caseResultData.waterSavings).from('gal').to('L');
+      caseResultData.waterSavings = this.convertUnitsService.value(caseResultData.waterSavings).from('gal').to('m3');
     } else {
       caseResultData.wcBaseline = this.convertUnitsService.value(caseResultData.wcBaseline).from('gal').to('kgal');
       caseResultData.wcModification = this.convertUnitsService.value(caseResultData.wcModification).from('gal').to('kgal');
@@ -256,8 +254,8 @@ export class CoolingTowerService {
     return caseResultData;
   }
 
-  buildInputObjects(baselineDataCopy: Array<CoolingTowerData>, settings: Settings, modificationDataCopy?: Array<CoolingTowerData>) {  
-    let coolingTowerInputs: Array<CoolingTowerInput> = baselineDataCopy.map(function (inputData: CoolingTowerData, index) {
+  buildInputObjects(baselineDataCopy: Array<CoolingTowerData>, settings: Settings, modificationDataCopy: Array<CoolingTowerData>) {  
+    let coolingTowerInputs: Array<CoolingTowerInput> = baselineDataCopy.map((inputData: CoolingTowerData, index) => {
       inputData.driftLossFactor = inputData.driftLossFactor / 100;
       inputData.lossCorrectionFactor = inputData.lossCorrectionFactor / 100;
       
@@ -268,14 +266,10 @@ export class CoolingTowerService {
         modDriftLossFactor = modificationDataCopy[index].driftLossFactor / 100;
       }
 
-      // This commented out conversion block is blowing up. The data from previous conversions up to this point seems good. 
-      // Not sure what else to look at.
-
-      // if (settings.unitsOfMeasure != "Imperial") {
-      //   // inputData.flowRate = this.convertUnitsService.value(inputData.flowRate).from('m3').to('gal');
-      //   inputData.flowRate = this.convertUnitsService.value(inputData.flowRate).from('m3/s').to('gpm');
-      //   inputData.coolingLoad = this.convertUnitsService.value(inputData.coolingLoad).from('GJ').to('MMBtu');
-      // }
+      if (settings.unitsOfMeasure != "Imperial") {
+        inputData.flowRate = this.convertUnitsService.value(inputData.flowRate).from('m3/s').to('gpm');
+        inputData.coolingLoad = this.convertUnitsService.value(inputData.coolingLoad).from('GJ').to('MMBtu');
+      }
 
       let input = <CoolingTowerInput>{
         coolingTowerMakeupWaterCalculator: {
@@ -304,7 +298,6 @@ export class CoolingTowerService {
   calculateCoolingLoad(form: FormGroup, settings: Settings) {
     let {temperatureDifference, flowRate} = this.getObjFromForm(form);
     if (settings.unitsOfMeasure != "Imperial") {
-      // flowRate = this.convertUnitsService.value(flowRate).from('m3').to('gal');
       flowRate = this.convertUnitsService.value(flowRate).from('m3/s').to('gpm');
       temperatureDifference = this.convertUnitsService.value(temperatureDifference).from('C').to('R');
     }
@@ -357,7 +350,6 @@ export class CoolingTowerService {
   }
 
   convertExampleData(coolingTowerData: CoolingTowerData) {
-    // coolingTowerData.flowRate = this.convertUnitsService.value(coolingTowerData.flowRate).from('gal').to('m3');
     coolingTowerData.flowRate = this.convertUnitsService.value(coolingTowerData.flowRate).from('gpm').to('m3/s');
     coolingTowerData.coolingLoad = this.convertUnitsService.value(coolingTowerData.coolingLoad).from('MMBtu').to('GJ');
 
