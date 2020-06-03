@@ -25,7 +25,7 @@
             <div class="d-flex flex-column mx-4 mb-4">
               <div *ngFor="let data of baselineData; let i = index;">
                 <app-cooling-tower-form [index]="i" [settings]="settings" [isBaseline]="true"
-                 [operatingHours]="operatingHours">
+                 [operatingHours]="operatingHours" [selected]="baselineSelected">
                 </app-cooling-tower-form>
               </div>
               <div class="w-100 justify content-center btn-group btn-group-sm">
@@ -49,7 +49,7 @@
             <div class="d-flex flex-column mx-4 mb-4">
               <div *ngFor="let data of modificationData; let i = index;">
                 <app-cooling-tower-form [index]="i" [settings]="settings" 
-                [isBaseline]="false" [operatingHours]="operatingHours">
+                [isBaseline]="false" [operatingHours]="operatingHours" [selected]="!baselineSelected">
                 </app-cooling-tower-form>
               </div>
             </div>
@@ -57,7 +57,7 @@
 
           <!-- no content message -->
         <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"
-        [ngClass]="{'disabled': modifiedSelected == false}">
+        [ngClass]="{'disabled': baselineSelected == true}">
         <div class="header mx-2">
           <h3>Modification</h3>
         </div>

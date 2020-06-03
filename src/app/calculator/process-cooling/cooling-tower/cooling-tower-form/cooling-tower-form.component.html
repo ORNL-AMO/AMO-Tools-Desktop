@@ -49,7 +49,7 @@
             </span>
           </div>
           
-          <div class="form-group" *ngIf="!this.form.controls.userDefinedCoolingLoad.value">
+          <div class="form-group" *ngIf="!form.controls.userDefinedCoolingLoad.value">
             <label for="temperatureDifference">Temperature Difference</label>
             <div class="input-group">
               <input class="form-control" name="temperatureDifference" id="temperatureDifference"
@@ -69,11 +69,11 @@
           <div class="form-group pt-1">
             <label>Cooling Load
               <a class="click-link small form-text" (click)="showHideInputField()"
-                *ngIf="this.form.controls.userDefinedCoolingLoad.value">Calculate Cooling Load</a>
+                *ngIf="form.controls.userDefinedCoolingLoad.value">Calculate Cooling Load</a>
               <a class="click-link small form-text" (click)="showHideInputField()"
-                *ngIf="!this.form.controls.userDefinedCoolingLoad.value">Define Cooling Load</a>
+                *ngIf="!form.controls.userDefinedCoolingLoad.value">Define Cooling Load</a>
             </label>
-            <div class="input-group" *ngIf="this.form.controls.userDefinedCoolingLoad.value == true">
+            <div class="input-group" *ngIf="form.controls.userDefinedCoolingLoad.value == true">
               <input class="form-control" name="coolingLoad" id="coolingLoad" formControlName="coolingLoad" type="number"
                 (input)="calculate()" (focus)="focusField('coolingLoad')" onfocus="this.select();">
                 <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/h</span>
@@ -86,7 +86,7 @@
               </span>
             </div>
             <div class="input-group d-flex justify-content-center small bold"
-              *ngIf="!this.form.controls.userDefinedCoolingLoad.value">
+              *ngIf="!form.controls.userDefinedCoolingLoad.value">
               <span class="mr-2" *ngIf="form.controls.coolingLoad.value">
                 {{form.controls.coolingLoad.value | number:'1.0-2'}}
               </span>
@@ -122,7 +122,7 @@
               <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/s</span>
             </div>
           </div>
-          <div class="form-group" *ngIf="!this.form.controls.userDefinedCoolingLoad.value">
+          <div class="form-group" *ngIf="!form.controls.userDefinedCoolingLoad.value">
             <label for="temperatureDifference" class="bold">Temperature Difference</label>
             <div class="input-group d-flex justify-content-center small bold">
               <span class="mr-2" *ngIf="form.controls.temperatureDifference.value">
@@ -136,9 +136,9 @@
           <div class="form-group py-1">
             <label class="bold">Cooling Load
               <span class="small form-text"
-                *ngIf="this.form.controls.userDefinedCoolingLoad.value">Calculated Cooling Load</span>
+                *ngIf="form.controls.userDefinedCoolingLoad.value">Calculated Cooling Load</span>
               <span class="small form-text"
-                *ngIf="!this.form.controls.userDefinedCoolingLoad.value">Defined Cooling Load</span>
+                *ngIf="!form.controls.userDefinedCoolingLoad.value">Defined Cooling Load</span>
             </label>
             <div class="input-group d-flex justify-content-center small bold">
               <span class="mr-2" *ngIf="form.controls.coolingLoad.value">

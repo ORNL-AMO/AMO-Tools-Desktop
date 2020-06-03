@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, Input, ElementRef, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { CoolingTowerService } from '../cooling-tower.service';
@@ -20,7 +20,8 @@ export class CoolingTowerFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   operatingHours: OperatingHours;
-
+  @Input()
+  selected: boolean;
   
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
@@ -54,6 +55,9 @@ export class CoolingTowerFormComponent implements OnInit {
       this.idString = 'modification_' + this.index;
     }
     this.initSubscriptions();
+    if (this.selected == false) {
+      this.form.disable();
+    }
   }
 
   ngOnDestroy() {
@@ -69,6 +73,16 @@ export class CoolingTowerFormComponent implements OnInit {
     setTimeout(() => {
       this.setOpHoursModalWidth();
     }, 100)
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected == false) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
+    }
   }
 
   initSubscriptions() {

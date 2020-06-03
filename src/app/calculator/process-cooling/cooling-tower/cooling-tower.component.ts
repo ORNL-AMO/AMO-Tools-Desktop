@@ -88,7 +88,6 @@ export class CoolingTowerComponent implements OnInit {
     })
     this.modificationDataSub = this.coolingTowerService.modificationData.subscribe(value => {
       this.modificationData = value;
-      this.setModificationSelected();
       this.coolingTowerService.calculate(this.settings);
     })
     this.modificationExistsSub = this.coolingTowerService.modificationExists.subscribe(val => {	
@@ -120,6 +119,7 @@ export class CoolingTowerComponent implements OnInit {
 
   createModification() {
     this.coolingTowerService.createModification();
+    this.setModificationSelected();
    }
 
   btnResetData() {
@@ -132,7 +132,7 @@ export class CoolingTowerComponent implements OnInit {
       this.coolingTowerService.generateExampleData(this.settings);
       this.modificationExists = true;
       this.baselineSelected = true;
-      this.modifiedSelected = false;
+      // this.modifiedSelected = false;
   }
 
   setBaselineSelected() {
