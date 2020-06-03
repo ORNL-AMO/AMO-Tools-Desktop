@@ -77,7 +77,7 @@ export interface IndividualDataFromCsv {
     csvImportData: CsvImportData,
     csvName: string,
     fields: Array<LogToolField>;
-    startDate?: string, 
+    startDate?: string,
     endDate?: string,
     dataPointsPerColumn?: number,
     hasDateField: boolean,
@@ -117,15 +117,15 @@ export interface GraphObj {
             color: string
         },
         line: {
-          color: string,
-          width: number
+            color: string,
+            width: number
         }
     }],
     layout: {
         title: {
             text: string,
             font: {
-              size: number
+                size: number
             }
         },
         hovermode: string,
@@ -143,16 +143,21 @@ export interface GraphObj {
     isTimeSeries: boolean,
     selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
     selectedYAxisDataOptions: Array<{
-         index: number, 
-         dataOption: { dataField: LogToolField, data: Array<number | string> }, 
-         seriesColor: string, 
-         seriesName: string, 
-         yaxis: string,
-         linesOrMarkers: string
-        }>,
+        index: number,
+        dataOption: { dataField: LogToolField, data: Array<number | string> },
+        seriesColor: string,
+        seriesName: string,
+        yaxis: string,
+        linesOrMarkers: string
+    }>,
     hasSecondYAxis: boolean,
+    //histogram
     numberOfBins: number,
+    bins: Array<{ min: number, max: number }>,
+    binnedField: LogToolField,
     useStandardDeviation: boolean,
+    binningMethod: string,
+    binSize: number,
     graphId: string,
     xAxisDataOptions: Array<{
         dataField: LogToolField,

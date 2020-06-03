@@ -127,14 +127,17 @@ export class VisualizeService {
       selectedXAxisDataOption: { dataField: undefined, data: [] },
       selectedYAxisDataOptions: [],
       hasSecondYAxis: false,
-      numberOfBins: 5,
+      numberOfBins: undefined,
+      bins: undefined,
+      binnedField: undefined,
+      binningMethod: 'binSize',
+      binSize: undefined,
       useStandardDeviation: true,
       graphId: Math.random().toString(36).substr(2, 9),
       xAxisDataOptions: [],
       yAxisDataOptions: []
     }
   }
-
 
   resetData() {
     this.initializeService();
@@ -160,31 +163,23 @@ export class VisualizeService {
     this.selectedGraphObj.next(currentGraphData[0]);
   }
 
-  getNumberOfBinsBarChartData(dataField: LogToolField, numberOfBins: number): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
+  getNumberOfBinsBarChartData(dataField: LogToolField, bins: Array<{ max: number, min: number }>): { xLabels: Array<string>, yValues: Array<number> } {
     let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
-    let graphDataMin: number = _.min(graphData);
-    let graphDataMax: number = _.max(graphData);
-    let graphRange: number = graphDataMax - graphDataMin;
-    let mean: number = _.mean(graphData);
-    // let numberOfBins: number = graphRange / standardDeviation;
-    let sizeOfBins: number = graphRange / numberOfBins;
     let xLabels: Array<string> = new Array();
     let yValues: Array<number> = new Array();
-    let minValue: number = graphDataMin;
-    for (let i = 0; i < numberOfBins; i++) {
-      let maxValue: number = Number((minValue + sizeOfBins).toFixed(0));
+    bins.forEach(bin => {
       let graphDataInRange: Array<number> = _.filter(graphData, (dataItem) => {
-        if (dataItem >= minValue && dataItem <= maxValue) {
+        if (dataItem >= bin.min && dataItem < bin.max) {
           return true;
         }
       });
       let percentOfItemsInBin: number = graphDataInRange.length / graphData.length * 100;
-      let xLabel: string = minValue.toLocaleString() + ' - ' + maxValue.toLocaleString();
+      percentOfItemsInBin = Number(percentOfItemsInBin.toFixed(2));
+      let xLabel: string = bin.min.toLocaleString() + ' - ' + bin.max.toLocaleString();
       xLabels.push(xLabel)
       yValues.push(percentOfItemsInBin);
-      minValue = Number((minValue + sizeOfBins).toFixed(0));
-    }
-    return { xLabels: xLabels, yValues: yValues, standardDeviation: 0, average: mean };
+    });
+    return { xLabels: xLabels, yValues: yValues };
   }
 
   getStandardDevBarChartData(dataField: LogToolField): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
@@ -206,6 +201,7 @@ export class VisualizeService {
         }
       });
       let percentOfItemsInBin: number = graphDataInRange.length / graphData.length * 100;
+      percentOfItemsInBin = Number(percentOfItemsInBin.toFixed(2));
       let xLabel: string = minValue.toLocaleString() + ' - ' + maxValue.toLocaleString();
       xLabels.push(xLabel)
       yValues.push(percentOfItemsInBin);
@@ -223,7 +219,7 @@ export class VisualizeService {
     _.remove(squareDiffs, (diff) => { return isNaN(diff) == true });
     let averageSquareDiff: number = _.mean(squareDiffs);
     let squareRootOfAverageSquareDiff: number = Math.sqrt(averageSquareDiff);
-    return squareRootOfAverageSquareDiff;
+    return Number(squareRootOfAverageSquareDiff.toFixed(3));
   }
 
   getAnnotationPoint(x: number | string, y: number | string, yref: string, seriesName: string): AnnotationData {

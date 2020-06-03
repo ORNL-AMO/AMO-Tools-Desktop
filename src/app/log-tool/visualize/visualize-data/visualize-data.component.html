@@ -36,11 +36,11 @@
                 </tr>
                 <tr>
                     <td class="bold">Max</td>
-                    <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.max}}</td>
+                    <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.max | number:'1.0-2'}}</td>
                 </tr>
                 <tr>
                     <td class="bold">Min</td>
-                    <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.min}}</td>
+                    <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.min | number:'1.0-2'}}</td>
                 </tr>
                 <tr>
                     <td class="bold">Mean</td>

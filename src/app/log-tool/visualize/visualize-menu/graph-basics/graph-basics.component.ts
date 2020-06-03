@@ -41,6 +41,9 @@ export class GraphBasicsComponent implements OnInit {
 
   setGraphType() {
     this.visualizeService.plotFunctionType = 'react';
+    if (this.selectedGraphObj.data[0].type == 'bar') {
+      this.checkBarHistogramData();
+    }
     this.visualizeMenuService.setGraphType(this.selectedGraphObj);
   }
 
@@ -60,5 +63,11 @@ export class GraphBasicsComponent implements OnInit {
   setBarHistogramData() {
     this.visualizeService.plotFunctionType = 'react';
     this.visualizeMenuService.setBarHistogramData(this.selectedGraphObj);
+  }
+
+  checkBarHistogramData() {
+    if (this.selectedGraphObj.binnedField == undefined || this.selectedGraphObj.binnedField.fieldName != this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName || this.selectedGraphObj.bins == undefined) {
+      this.selectedGraphObj = this.visualizeMenuService.initializeBinData(this.selectedGraphObj);
+    }
   }
 }

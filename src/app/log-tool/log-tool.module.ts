@@ -39,6 +39,7 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { DayTypeSummaryTableComponent } from './day-type-analysis/day-type-table/day-type-summary-table/day-type-summary-table.component';
 import { IndividualDaySummaryTableComponent } from './day-type-analysis/day-type-table/individual-day-summary-table/individual-day-summary-table.component';
 import { SelectedDataTableComponent } from './day-type-analysis/day-type-table/selected-data-table/selected-data-table.component';
+import { BinDataComponent } from './visualize/visualize-menu/bin-data/bin-data.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { SelectedDataTableComponent } from './day-type-analysis/day-type-table/s
     VisualizeHelpComponent,
     IndividualDaySummaryTableComponent,
     DayTypeSummaryTableComponent,
-    SelectedDataTableComponent
+    SelectedDataTableComponent,
+    BinDataComponent
   ],
   imports: [
     CommonModule,

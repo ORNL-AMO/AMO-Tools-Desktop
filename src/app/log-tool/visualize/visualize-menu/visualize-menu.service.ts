@@ -157,8 +157,8 @@ export class VisualizeMenuService {
       selectedGraphObj.data[0].x = stdDeviationBarData.xLabels;
       selectedGraphObj.data[0].y = stdDeviationBarData.yValues;
     } else {
-      //get num bins data
-      let binsData = this.visualizeService.getNumberOfBinsBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField, selectedGraphObj.numberOfBins);
+      //get bin size data
+      let binsData = this.visualizeService.getNumberOfBinsBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField, selectedGraphObj.bins);
       selectedGraphObj.data[0].x = binsData.xLabels;
       selectedGraphObj.data[0].y = binsData.yValues;
     }
@@ -300,5 +300,37 @@ export class VisualizeMenuService {
       seriesName = seriesName + ' (' + logToolField.unit + ')';
     }
     return seriesName;
+  }
+
+  initializeBinData(selectedGraphObj: GraphObj): GraphObj {
+    selectedGraphObj.binnedField = selectedGraphObj.selectedXAxisDataOption.dataField;
+    selectedGraphObj.binSize = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.binnedField).standardDeviation;
+    selectedGraphObj.binSize = Number((selectedGraphObj.binSize).toFixed(0));
+    selectedGraphObj = this.setBins(selectedGraphObj);
+    selectedGraphObj.numberOfBins = selectedGraphObj.bins.length;
+    return selectedGraphObj;
+  }
+
+  setNumberOfBins(selectedGraphObj: GraphObj): GraphObj {
+    let lowerBound = Number(_.min(selectedGraphObj.selectedXAxisDataOption.data));
+    let maxValue = Number(_.max(selectedGraphObj.selectedXAxisDataOption.data));
+    let diff: number = maxValue - lowerBound;
+    selectedGraphObj.binSize = Number((diff / selectedGraphObj.numberOfBins).toFixed(0));
+    selectedGraphObj = this.setBins(selectedGraphObj);
+    return selectedGraphObj;
+  }
+
+  setBins(selectedGraphObj: GraphObj): GraphObj {
+    let lowerBound = Number(_.min(selectedGraphObj.selectedXAxisDataOption.data));
+    let maxValue = Number(_.max(selectedGraphObj.selectedXAxisDataOption.data));
+    selectedGraphObj.bins = new Array();
+    for (lowerBound; lowerBound <= maxValue; lowerBound += selectedGraphObj.binSize) {
+      selectedGraphObj.bins.push({
+        min: Math.floor(lowerBound),
+        max: Math.floor(lowerBound + selectedGraphObj.binSize)
+      })
+    };
+    selectedGraphObj.numberOfBins = selectedGraphObj.bins.length;
+    return selectedGraphObj;
   }
 }

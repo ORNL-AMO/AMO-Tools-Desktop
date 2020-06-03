@@ -23,11 +23,4 @@
     <span class="form-text text-help" *ngIf="selectedGraphObj.data[0].type == 'bar'">
         *Calculates percent of data points within bin
     </span>
-    <!--number of bins-->
-    <div class="form-group pt-2"
-        *ngIf="selectedGraphObj.data[0].type == 'bar' && !selectedGraphObj.useStandardDeviation">
-        <label>Number of Bins</label>
-        <input class="form-control" type="number" name="numberOfBins" [(ngModel)]="selectedGraphObj.numberOfBins"
-            (input)="setBarHistogramData()" (focus)="focusField()" (blur)="focusOut()">
-    </div>
 </form>
