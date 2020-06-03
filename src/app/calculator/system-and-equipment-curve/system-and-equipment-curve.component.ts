@@ -126,7 +126,6 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   }
 
   setEquipmentType() {
-    // this.isEquipmentCurvePrimary = (this.router.url.indexOf('system-curve') == -1);
     if (this.router.url.indexOf('pump') != -1) {
       this.equipmentType = 'pump';
     } else if (this.router.url.indexOf('fan') != -1) {
