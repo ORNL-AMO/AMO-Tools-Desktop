@@ -1,0 +1,203 @@
+<div class="tab-content">
+    <form [formGroup]="airFlowConversionForm">
+        <div class="btn-col d-flex flex-column pb-3">
+            <div class="btn-group btn-group-sm align-self-center">
+                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setIsStandardConversion(true)"
+                    [ngClass]="{'active': this.airFlowConversionForm.controls.convertToStandard.value}">Convert to Standard CFM</button>
+                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setIsStandardConversion(false)"
+                    [ngClass]="{'active': !this.airFlowConversionForm.controls.convertToStandard.value}">Convert to Actual CFM</button>
+            </div>
+        </div>
+        <div >
+            <div class="form-group" *ngIf="!this.airFlowConversionForm.controls.userDefinedPressure.value">
+                <label for="fuelEnergy">Elevation</label>
+                <div class="input-group">
+                    <input class="form-control" name="elevation" id="elevation" formControlName="elevation"
+                        type="number" (input)="save()" onfocus="this.select();">
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
+                    <span class="alert-danger pull-right small"
+                    *ngIf="airFlowConversionForm.controls.elevation.invalid && !airFlowConversionForm.controls.elevation.pristine">
+                    <span *ngIf="airFlowConversionForm.controls.elevation.errors.min">Value can't be less than
+                        {{airFlowConversionForm.controls.elevation.errors.min.min}} 
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.
+                    </span>
+                </span>
+                </div>
+            </div>
+            <div class="form-group pt-1">
+                <label for="fuelEnergy">Actual Atmospheric Pressure
+                    <a class="click-link small form-text" (click)="showHideInputField()" *ngIf="this.airFlowConversionForm.controls.userDefinedPressure.value">Auto Calculate From Elevation</a>
+                    <a class="click-link small form-text" (click)="showHideInputField()" *ngIf="!this.airFlowConversionForm.controls.userDefinedPressure.value">Define Actual Atmospheric Pressure</a>
+                  </label>
+                <div class="input-group" *ngIf="this.airFlowConversionForm.controls.userDefinedPressure.value">
+                    <input class="form-control" name="actualAtmosphericPressure" id="actualAtmosphericPressure"
+                    formControlName="actualAtmosphericPressure" type="number" (input)="save()"
+                    onfocus="this.select();">
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+                    <span class="alert-danger pull-right small"
+                    *ngIf="airFlowConversionForm.controls.actualAtmosphericPressure.invalid && !airFlowConversionForm.controls.actualAtmosphericPressure.pristine">
+                    <span *ngIf="airFlowConversionForm.controls.actualAtmosphericPressure.errors.required">Value Required</span>
+                    <span *ngIf="airFlowConversionForm.controls.actualAtmosphericPressure.errors.min">Value can't be less than
+                        {{airFlowConversionForm.controls.actualAtmosphericPressure.errors.min.min}}
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">mPaa</span>.
+                    </span>
+                </span>
+                </div>
+                <div class="input-group d-flex justify-content-center small bold" *ngIf="!this.airFlowConversionForm.controls.userDefinedPressure.value">
+                    <span class="mr-2" *ngIf="airFlowConversionForm.controls.actualAtmosphericPressure.value">
+                        {{airFlowConversionForm.controls.actualAtmosphericPressure.value | number:'1.0-2'}}
+                      </span>
+                      <span class="mr-2" *ngIf="!airFlowConversionForm.controls.actualAtmosphericPressure.value">&mdash; &mdash;</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">mPaa</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="small" for="actualAmbientTemperature">Actual Ambient Temperature</label>
+                <div class="input-group">
+                    <input class="form-control" name="actualAmbientTemperature" id="actualAmbientTemperature"
+                        formControlName="actualAmbientTemperature" type="number" (input)="save()" onfocus="this.select();">
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">F</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">C</span>
+                    <span class="alert-danger pull-right small"
+                    *ngIf="airFlowConversionForm.controls.actualAmbientTemperature.invalid && !airFlowConversionForm.controls.actualAmbientTemperature.pristine">
+                        <span *ngIf="airFlowConversionForm.controls.actualAmbientTemperature.errors.required">Value Required</span>
+                        <span *ngIf="airFlowConversionForm.controls.actualAmbientTemperature.errors.min">Value can't be less than
+                            {{airFlowConversionForm.controls.actualAmbientTemperature.errors.min.min}}
+                            <span *ngIf="settings.unitsOfMeasure != 'Metric'">F</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">C</span>.
+                        </span>
+                        
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="small" for="actualRelativeHumidity">Actual Relative Humidity</label>
+                <div class="input-group">
+                    <input class="form-control" name="actualRelativeHumidity" id="actualRelativeHumidity"
+                        formControlName="actualRelativeHumidity" type="number" (input)="save()" onfocus="this.select();">
+                        <span class="input-group-addon units">%</span>
+                        <span class="alert-danger pull-right small"
+                        *ngIf="airFlowConversionForm.controls.actualRelativeHumidity.invalid && !airFlowConversionForm.controls.actualRelativeHumidity.pristine">
+                        <span *ngIf="airFlowConversionForm.controls.actualRelativeHumidity.errors.required">Value Required</span>
+                <span *ngIf="airFlowConversionForm.controls.actualRelativeHumidity.errors.max">Value can't be greater than
+                    {{airFlowConversionForm.controls.actualRelativeHumidity.errors.max.max}} 
+                    <span>%</span>.
+                </span>
+                <span *ngIf="airFlowConversionForm.controls.actualRelativeHumidity.errors.min">Value can't be less than
+                    {{airFlowConversionForm.controls.actualRelativeHumidity.errors.min.min}}
+                    <span>%</span>.</span>
+                </span>
+            </div>
+            </div>
+            <div class="form-group" [ngStyle]="{'visibility': !this.airFlowConversionForm.controls.convertToStandard.value? 'hidden' : ''}">
+                <label class="small" for="acfm">Actual Air Flow (ACFM)</label>
+                <div class="input-group">
+                    <input class="form-control" name="acfm" id="acfm"
+                        formControlName="acfm" type="number" (input)="save()" onfocus="this.select();">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft<sup>3</sup>/min</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
+                        <span class="alert-danger pull-right small"
+                        *ngIf="airFlowConversionForm.controls.acfm.invalid && !airFlowConversionForm.controls.acfm.pristine">
+                    <span *ngIf="airFlowConversionForm.controls.acfm.errors.required">Value Required</span>
+                    <span *ngIf="airFlowConversionForm.controls.acfm.errors.min">Value can't be less than
+                        {{airFlowConversionForm.controls.acfm.errors.min.min}} 
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">ft<sup>3</sup>/min</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                        .</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="pt-3">
+            <div class="form-group">
+                <label class="small" for="standardAtmosphericPressure">Standard Atmospheric Pressure</label>
+                <div class="input-group">
+                    <input class="form-control"  name="standardAtmosphericPressure" id="standardAtmosphericPressure"
+                        formControlName="standardAtmosphericPressure" type="number" (input)="save()" onfocus="this.select();">
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+                    <span class="alert-danger pull-right small"
+                    *ngIf="airFlowConversionForm.controls.standardAtmosphericPressure.invalid && !airFlowConversionForm.controls.standardAtmosphericPressure.pristine">
+                <span *ngIf="airFlowConversionForm.controls.standardAtmosphericPressure.errors.required">Value Required</span>
+                <span *ngIf="airFlowConversionForm.controls.standardAtmosphericPressure.errors.max">Value can't be greater than
+                    {{airFlowConversionForm.controls.standardAtmosphericPressure.errors.max.max}}</span>
+                <span *ngIf="airFlowConversionForm.controls.standardAtmosphericPressure.errors.min">Value can't be less than
+                    {{airFlowConversionForm.controls.standardAtmosphericPressure.errors.min.min}}</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'"> psia</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'"> kPaa</span>
+                </span>
+            </div>
+            </div>
+            <div class="form-group">
+                <label class="small" for="standardAmbientTemperature">Standard Ambient Temperature</label>
+                <div class="input-group">
+                    <input class="form-control" name="standardAmbientTemperature" id="standardAmbientTemperature"
+                        formControlName="standardAmbientTemperature" type="number" (input)="save()" onfocus="this.select();">
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">F</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">C</span>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="airFlowConversionForm.controls.standardAmbientTemperature.invalid && !airFlowConversionForm.controls.standardAmbientTemperature.pristine">
+                        <span *ngIf="airFlowConversionForm.controls.standardAmbientTemperature.errors.required">Value
+                            Required</span>
+                        <span *ngIf="airFlowConversionForm.controls.standardAmbientTemperature.errors.max">Value can't be greater
+                            than
+                            {{airFlowConversionForm.controls.standardAmbientTemperature.errors.max.max}}
+                            <span *ngIf="settings.unitsOfMeasure != 'Metric'"> F</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'"> C</span>
+                        </span>
+                        <span *ngIf="airFlowConversionForm.controls.standardAmbientTemperature.errors.min">Value can't be less than
+                            {{airFlowConversionForm.controls.standardAmbientTemperature.errors.min.min}}
+                            <span *ngIf="settings.unitsOfMeasure != 'Metric'"> F</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'"> C</span>
+                        </span>
+                    </span>
+            
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="small" for="standardRelativeHumidity">Standard Relative Humidity</label>
+                <div class="input-group">
+                    <input class="form-control"  name="standardRelativeHumidity" id="standardRelativeHumidity"
+                        formControlName="standardRelativeHumidity" type="number" (input)="save()" onfocus="this.select();">
+                    <span class="input-group-addon units">%</span>
+
+                    <span class="alert-danger pull-right small"
+                    *ngIf="airFlowConversionForm.controls.standardRelativeHumidity.invalid && !airFlowConversionForm.controls.standardRelativeHumidity.pristine">
+                    <span *ngIf="airFlowConversionForm.controls.standardRelativeHumidity.errors.required">Value Required</span>
+                    <span *ngIf="airFlowConversionForm.controls.standardRelativeHumidity.errors.max">Value can't be greater than
+                        {{airFlowConversionForm.controls.standardRelativeHumidity.errors.max.max}} 
+                        <span>%</span>.
+                    </span>
+                    <span *ngIf="airFlowConversionForm.controls.standardRelativeHumidity.errors.min">Value can't be less than
+                        {{airFlowConversionForm.controls.standardRelativeHumidity.errors.min.min}}
+                        <span>%</span>.</span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" [ngStyle]="{'visibility': this.airFlowConversionForm.controls.convertToStandard.value? 'hidden' : ''}">
+                <label class="small" for="scfm">Standard Air Flow (SCFM)</label>
+                <div class="input-group">
+                    <input class="form-control" name="acfm" id="scfm"
+                        formControlName="scfm" type="number" (input)="save()" onfocus="this.select();">
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft<sup>3</sup>/min</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
+                        <span class="alert-danger pull-right small"
+                        *ngIf="airFlowConversionForm.controls.scfm.invalid && !airFlowConversionForm.controls.scfm.pristine">
+                        <span *ngIf="airFlowConversionForm.controls.scfm.errors.required">Value Required</span>
+                        <span *ngIf="airFlowConversionForm.controls.scfm.errors.min">Value can't be less than
+                            {{airFlowConversionForm.controls.scfm.errors.min.min}} 
+                            <span *ngIf="settings.unitsOfMeasure != 'Metric'">ft<sup>3</sup>/min</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+                            .</span>
+                        </span>
+                    </div>
+            </div>
+        </div>
+
+    </form>
+</div>

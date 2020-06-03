@@ -174,6 +174,16 @@ export const metricSizesConstant: Array<{ size: string, display: string }> = [
     },
 ];
 
+export const cagiConditionsImperial  = {
+    standardAtmosphericPressure: 14.5,
+    standardAmbientTemperature: 68,
+    standardRelativeHumidity: 0
+}
+export const cagiConditionsMetric = {
+    standardAtmosphericPressure: 99.97,
+    standardAmbientTemperature: 20,
+    standardRelativeHumidity: 0
+}
 
 export const exampleLeakInputs: Array<AirLeakSurveyData> = [
   {
