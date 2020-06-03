@@ -26,7 +26,7 @@ export class BinDataComponent implements OnInit {
   }
 
   focusField() {
-    this.visualizeService.focusedPanel.next('graphBasics');
+    this.visualizeService.focusedPanel.next('histogramBins');
   }
 
   focusOut() {

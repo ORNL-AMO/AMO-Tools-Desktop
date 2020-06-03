@@ -27,6 +27,9 @@ export class GraphBasicsComponent implements OnInit {
         this.setGraphType();
       } else {
         this.selectedGraphObj = val;
+        if (this.selectedGraphObj.data[0].type == 'bar') {
+          this.checkBarHistogramData();
+        }
       }
     });
   }
@@ -67,6 +70,7 @@ export class GraphBasicsComponent implements OnInit {
 
   checkBarHistogramData() {
     if (this.selectedGraphObj.binnedField == undefined || this.selectedGraphObj.binnedField.fieldName != this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName || this.selectedGraphObj.bins == undefined) {
+      this.visualizeService.plotFunctionType = 'react';
       this.selectedGraphObj = this.visualizeMenuService.initializeBinData(this.selectedGraphObj);
     }
   }
