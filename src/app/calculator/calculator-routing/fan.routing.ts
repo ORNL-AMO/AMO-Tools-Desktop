@@ -18,10 +18,6 @@ export const fanRoutes: Routes = [
         component: FanEfficiencyComponent
     },
     {
-        path: 'fan-system-curve',
-        component: SystemAndEquipmentCurveComponent
-    },
-    {
         path: 'fan-curve',
         component: SystemAndEquipmentCurveComponent
     }

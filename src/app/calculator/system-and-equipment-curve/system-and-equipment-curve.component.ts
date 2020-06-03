@@ -21,8 +21,6 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   @Input()
   assessment: Assessment;
   @Input()
-  isEquipmentCurvePrimary: boolean;
-  @Input()
   settings: Settings;
 
   calculatorTitle: string;
@@ -128,7 +126,6 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   }
 
   setEquipmentType() {
-    this.isEquipmentCurvePrimary = (this.router.url.indexOf('system-curve') == -1);
     if (this.router.url.indexOf('pump') != -1) {
       this.equipmentType = 'pump';
     } else if (this.router.url.indexOf('fan') != -1) {
@@ -195,29 +192,15 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
 
   setCalculatorTitle() {
     if (this.equipmentType == 'fan') {
-      if (this.isEquipmentCurvePrimary == true) {
-        this.calculatorTitle = 'Fan Curve'
-        this.systemAndEquipmentCurveService.focusedCalculator.next('fan-curve');
-        this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next('open');
-        this.systemAndEquipmentCurveService.systemCurveCollapsed.next('closed');
-      } else {
-        this.calculatorTitle = 'Fan System Curve';
-        this.systemAndEquipmentCurveService.focusedCalculator.next('fan-system-curve');
-        this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next('closed');
-        this.systemAndEquipmentCurveService.systemCurveCollapsed.next('open');
-      }
+      this.calculatorTitle = 'Fan Curve'
+      this.systemAndEquipmentCurveService.focusedCalculator.next('fan-curve');
+      this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next('open');
+      this.systemAndEquipmentCurveService.systemCurveCollapsed.next('closed');
     } else {
-      if (this.isEquipmentCurvePrimary == true) {
-        this.calculatorTitle = 'Pump Curve'
-        this.systemAndEquipmentCurveService.focusedCalculator.next('pump-curve');
-        this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next('open');
-        this.systemAndEquipmentCurveService.systemCurveCollapsed.next('closed');
-      } else {
-        this.calculatorTitle = 'Pump System Curve';
-        this.systemAndEquipmentCurveService.focusedCalculator.next('pump-system-curve');
-        this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next('closed');
-        this.systemAndEquipmentCurveService.systemCurveCollapsed.next('open');
-      }
+      this.calculatorTitle = 'Pump Curve'
+      this.systemAndEquipmentCurveService.focusedCalculator.next('pump-curve');
+      this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next('open');
+      this.systemAndEquipmentCurveService.systemCurveCollapsed.next('closed');
     }
   }
 

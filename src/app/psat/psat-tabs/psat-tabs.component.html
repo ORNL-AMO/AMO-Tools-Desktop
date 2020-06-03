@@ -67,36 +67,21 @@
 
 
 <ul class="tabs subtabs psat" *ngIf="mainTab == 'calculators'">
-  <li [ngClass]="{'active': calcTab == 'system-curve'}">
-    <a (click)="changeCalcTab('system-curve')">Pump System Curve</a>
-  </li>
-  <!--
-  -->
   <li [ngClass]="{'active': calcTab == 'achievable-efficiency'}">
     <a (click)="changeCalcTab('achievable-efficiency')">Pump Achievable Efficiency</a>
   </li>
-  <!--
--->
   <li [ngClass]="{'active': calcTab == 'motor-performance'}">
     <a (click)="changeCalcTab('motor-performance')">Motor Performance</a>
   </li>
-  <!--
-  -->
   <li [ngClass]="{'active': calcTab == 'nema-energy-efficiency'}">
     <a (click)="changeCalcTab('nema-energy-efficiency')">NEMA Energy Efficiency</a>
   </li>
-  <!--
-  -->
   <li [ngClass]="{'active': calcTab == 'specific-speed'}">
     <a (click)="changeCalcTab('specific-speed')">Specific Speed</a>
   </li>
-  <!--
-  -->
   <li [ngClass]="{'active': calcTab == 'pump-curve'}">
     <a (click)="changeCalcTab('pump-curve')">Pump Curve</a>
   </li>
-  <!--
-  -->
   <li [ngClass]="{'active': calcTab == 'convert-units'}">
     <a (click)="changeCalcTab('convert-units')">Unit Converter</a>
   </li>
