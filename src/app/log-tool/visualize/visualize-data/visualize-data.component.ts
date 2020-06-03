@@ -96,10 +96,16 @@ export class VisualizeDataComponent implements OnInit {
     mean: number,
     name: string
   } {
-    let min: number = _.min(dataOption.data);
-    let max: number = _.max(dataOption.data);
-    let mean: number = _.mean(dataOption.data);
-    let standardDeviation = this.visualizeService.calculateStandardDeviation(dataOption.data, mean);
+    let min: number;
+    let max: number;
+    let mean: number;
+    let standardDeviation;
+    if (isNaN(dataOption.data[0]) == false) {
+      min = _.min(dataOption.data);
+      max = _.max(dataOption.data);
+      mean = _.mean(dataOption.data);
+      standardDeviation = this.visualizeService.calculateStandardDeviation(dataOption.data, mean);
+    }
     return {
       max: max,
       min: min,
