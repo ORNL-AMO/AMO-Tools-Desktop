@@ -214,10 +214,6 @@ export const coreRoutes: Routes = [
             component: FanEfficiencyComponent
           },
           {
-            path: 'fan-system-curve',
-            component: SystemAndEquipmentCurveComponent
-          },
-          {
             path: 'fan-curve',
             component: SystemAndEquipmentCurveComponent
           },
@@ -324,10 +320,6 @@ export const coreRoutes: Routes = [
           {
             path: 'specific-speed',
             component: SpecificSpeedComponent
-          },
-          {
-            path: 'pump-system-curve',
-            component: SystemAndEquipmentCurveComponent
           },
           {
             path: 'pump-curve',
