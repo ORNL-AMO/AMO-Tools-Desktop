@@ -34,6 +34,7 @@ export interface PHAST {
   implementationCost?: number;
   disableSetupDialog?: boolean;
   equipmentNotes?: string;
+  valid?: PhastValid;
 }
 
 
@@ -158,4 +159,25 @@ export interface CalculatedByPhast {
   fuelEnergyUsed: number;
   energyIntensity: number;
   electricityUsed: number;
+}
+
+export interface PhastValid {
+  isValid: boolean;
+  chargeMaterialValid: boolean;
+  flueGasValid: boolean;
+  fixtureValid: boolean;
+  wallValid: boolean;
+  coolingValid: boolean;
+  atmosphereValid: boolean;
+  openingValid: boolean;
+  leakageValid: boolean;
+  extendedSurfaceValid: boolean;
+  otherValid: boolean;
+  operationsValid: boolean;
+  systemEfficiencyValid: boolean;
+  slagValid: boolean;
+  energyInputValid: boolean;
+  exhaustGasValid: boolean;
+  inputExhaustValid: boolean
+  auxPowerValid: boolean;
 }

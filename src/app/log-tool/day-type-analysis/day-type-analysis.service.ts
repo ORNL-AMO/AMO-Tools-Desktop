@@ -18,12 +18,15 @@ export class DayTypeAnalysisService {
   dayTypesCalculated: boolean = false;
 
   dataView: BehaviorSubject<string>;
+
+  dataDisplayType: BehaviorSubject<string>;
   constructor(private logToolDataService: LogToolDataService, private logToolService: LogToolService) {
     this.dayTypes = new BehaviorSubject<Array<DayType>>(new Array());
     this.dayTypeSummaries = new BehaviorSubject<Array<DayTypeSummary>>(new Array());
     this.selectedDataField = new BehaviorSubject<LogToolField>(undefined);
     this.displayDayTypeCalander = new BehaviorSubject<boolean>(true);
     this.dataView = new BehaviorSubject<string>('graph');
+    this.dataDisplayType = new BehaviorSubject<string>('selected');
   }
 
   resetData() {
@@ -64,7 +67,7 @@ export class DayTypeAnalysisService {
     }
 
     if (weekendDates.length != 0) {
-      dayTypesArr.push({
+      dayTypesArr.unshift({
         color: 'blue',
         label: 'Weekend',
         useDayType: true,
@@ -73,7 +76,7 @@ export class DayTypeAnalysisService {
     }
 
     if (weekdayDates.length != 0) {
-      dayTypesArr.push({
+      dayTypesArr.unshift({
         color: 'green',
         label: 'Weekday',
         useDayType: true,
@@ -204,7 +207,7 @@ export class DayTypeAnalysisService {
     dayType.logToolDays.forEach(logToolDay => {
       dayTypeData = _.union(dayTypeData, logToolDay.data);
       allDayTypeHourlyAverages = _.union(allDayTypeHourlyAverages, logToolDay.hourlyAverages);
-    })
+    });
     let hourlyAverages: Array<HourlyAverage> = this.calculateDayTypeHourlyAverages(allDayTypeHourlyAverages);
     return {
       dayType: dayType,
@@ -240,10 +243,10 @@ export class DayTypeAnalysisService {
       combinedAverages = _.union(combinedAverages, obj.averages);
     });
     _.remove(combinedAverages, (averageObj) => {
-      if (averageObj.field.fieldName == field.fieldName && averageObj.value == undefined) {
+      if (averageObj.field.fieldName == field.fieldName && averageObj.value == undefined || averageObj.field.fieldName != field.fieldName) {
         return true;
       }
-    })
+    });
     let hourlyAverage: number = _.meanBy(combinedAverages, (averageObj) => {
       if (averageObj.field.fieldName == field.fieldName) {
         return averageObj.value
@@ -261,13 +264,19 @@ export class DayTypeAnalysisService {
   }
 
   setStartDateAndNumberOfMonths() {
+    let startDates: Array<Date> = this.logToolService.individualDataFromCsv.map(csvItem => { return new Date(csvItem.startDate) });
+    let endDates: Array<Date> = this.logToolService.individualDataFromCsv.map(csvItem => { return new Date(csvItem.endDate) });
+    let startDate: Date = new Date(_.min(startDates));
+    let endDate: Date = new Date(_.max(endDates));
+    // let startDate: Date = new Date(logToolDays[0].date);
+    // let endDate: Date = new Date(logToolDays[logToolDays.length - 1].date);
     this.calendarStartDate = {
-      year: this.logToolService.startDate.getFullYear(),
-      month: this.logToolService.startDate.getMonth() + 1,
-      day: this.logToolService.startDate.getDate()
+      year: startDate.getFullYear(),
+      month: startDate.getMonth() + 1,
+      day: startDate.getDate()
     };
-    let startMonth: number = this.logToolService.startDate.getMonth();
-    let endMonth: number = this.logToolService.endDate.getMonth();
+    let startMonth: number = startDate.getMonth();
+    let endMonth: number = endDate.getMonth();
     this.numberOfMonths = endMonth - startMonth + 1;
   }
 }

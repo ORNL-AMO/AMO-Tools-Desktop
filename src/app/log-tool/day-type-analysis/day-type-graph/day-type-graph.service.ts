@@ -41,7 +41,7 @@ export class DayTypeGraphService {
 
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
     dayTypeSummary.hourlyAverages.forEach(hourlyAverage => {
-      let currentFieldAverageValue: number = _.find(hourlyAverage.averages, (averageObj) => {return averageObj.field.fieldName == selectedDataField.fieldName}).value;
+      let currentFieldAverageValue: number = _.find(hourlyAverage.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName }).value;
       xData.push(hourlyAverage.hour);
       yData.push(currentFieldAverageValue);
     });
@@ -76,9 +76,11 @@ export class DayTypeGraphService {
     for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
       let hourAverageObj: HourlyAverage = _.find(logToolDay.hourlyAverages, (hourlyAverageObj) => { return hourlyAverageObj.hour == hourOfDay })
       if (hourAverageObj) {
-        let hourAverage: number = _.find(hourAverageObj.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName }).value;
-        yData.push(hourAverage);
-        xData.push(hourOfDay);
+        let hourAverage: { value: number, field: LogToolField } = _.find(hourAverageObj.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName });
+        if (hourAverage) {
+          yData.push(hourAverage.value);
+          xData.push(hourOfDay);
+        }
       }
     }
     return { xData: xData, yData: yData };

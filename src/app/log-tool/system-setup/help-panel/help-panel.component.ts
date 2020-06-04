@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class HelpPanelComponent implements OnInit {
 
   activeHelpPanel: string;
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
+  constructor(private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.activatedRoute.url.subscribe(url => {

@@ -4,63 +4,66 @@
         <br>
     </div>
     <div class="text-center p-2">
-        <div class="pt-2">
+        <div class="pt-2" *ngFor="let csvData of individualDataFromCsv">
             <table class="table table-striped">
                 <tbody>
                     <tr>
-                        <td class="bold w-50">Number of Data Points</td>
-                        <td>{{numberOfDataPoints | number}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="pt-2" *ngIf="startDate && endDate">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td class="bold w-50">Start Date</td>
-                        <td class="bold">End Date</td>
-                    </tr>
-                    <tr>
-                        <td>{{startDate | date}}</td>
-                        <td>{{endDate | date}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="pt-2">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td class="bold" colspan="4">Data Columns</td>
+                        <td class="bold" colspan="5">Data Columns ({{csvData.csvName}})</td>
                     </tr>
                     <tr>
                         <td class="bold">Use Column</td>
+                        <td class="bold">Is Date</td>
                         <td class="bold">Column Name</td>
                         <td class="bold">Alias</td>
                         <td class="bold">Unit</td>
                     </tr>
-                    <tr *ngFor="let field of dataFields">
+                    <tr *ngFor="let field of csvData.fields">
                         <td>
-                            <input type="checkbox" [(ngModel)]="field.useField"
-                                [disabled]="field.isDateField || dataExists == true || field.invalidField">
+                            <input type="checkbox" [(ngModel)]="field.useField" [disabled]="dataExists == true">
+                        </td>
+                        <td>
+                            <input type="checkbox" [(ngModel)]="field.isDateField"
+                                [disabled]="dataExists == true || (csvData.hasDateField && !field.isDateField)"
+                                (change)="setDateField(csvData)">
                         </td>
                         <td>{{field.fieldName}}</td>
                         <td>
-                            <input *ngIf="!field.invalidField" type="text" class="form-control w-100" [(ngModel)]="field.alias"
-                                [disabled]="dataExists == true">
+                            <input *ngIf="!field.invalidField" type="text" class="form-control w-100"
+                                [(ngModel)]="field.alias" [disabled]="dataExists == true || field.isDateField">
                             <span *ngIf="field.invalidField">Invalid field, not number or date. Cannot visualize.</span>
                         </td>
                         <td>
-                            <span *ngIf="field.isDateField == true">
-                                {{field.unit}}
+                            <span *ngIf="field.unit && !field.isDateField && !field.invalidField">
+                                <a class="click-link" (click)="editUnit(field)"><span
+                                        [innerHTML]="field.unit | settingsLabel"></span></a>
                             </span>
-                            <span *ngIf="field.unit && field.isDateField == false && !field.invalidField">
-                                <a class="click-link" (click)="editUnit(field)">{{field.unit}}</a>
-                            </span>
-                            <span *ngIf="!field.unit && !field.invalidField">
+                            <span *ngIf="!field.unit && !field.invalidField && !field.isDateField">
                                 <a class="click-link" (click)="editUnit(field)">+Add</a>
                             </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="csvData.startDate">
+                        <td colspan="3">
+                            Start Date
+                        </td>
+                        <td colspan="2">
+                            {{csvData.startDate | date}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="csvData.endDate">
+                        <td colspan="3">
+                            End Date
+                        </td>
+                        <td colspan="2">
+                            {{csvData.endDate | date}}
+                        </td>
+                    </tr>
+                    <tr *ngIf="csvData.dataPointsPerColumn">
+                        <td colspan="3">
+                            Data Points Per Column
+                        </td>
+                        <td colspan="2">
+                            {{csvData.dataPointsPerColumn}}
                         </td>
                     </tr>
                 </tbody>
@@ -77,9 +80,9 @@
             </div>
             <span class="importing-text">Cleaning and setting up day data, one moment...</span>
         </div>
-        <div class="text-center p-2" *ngIf="dataSubmitted == true">
-            <div class="alert-success router-link" [routerLink]="['/log-tool/day-type-analysis']">
-                Data cleaning finished! Click here or the tab for "Day Type Analysis" to continue.
+        <div class="text-center p-2" *ngIf="dataSubmitted == true && !cleaningData">
+            <div class="alert-success router-link">
+                Data cleaning finished! Click "Next" button to continue.
             </div>
         </div>
 
@@ -90,6 +93,12 @@
             </div>
             <hr>
             <button class="btn btn-danger pull-right" (click)="resetData()">Start Over</button>
+        </div>
+        <div class="p-2" *ngIf="dateExistsForEachCsv == false && !cleaningData">
+            <div class="alert-danger p-2">
+                One or more of your imported .csv files does not have a corresponding date field. Day Type Analysis
+                has been turned off.
+            </div>
         </div>
     </div>
 </div>

@@ -19,11 +19,8 @@
         <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(false)"
             [ngClass]="{'active': selectedGraphObj.useStandardDeviation == false}">Bins</button>
     </div>
-    <!--number of bins-->
-    <div class="form-group pt-2"
-        *ngIf="selectedGraphObj.data[0].type == 'bar' && !selectedGraphObj.useStandardDeviation">
-        <label>Number of Bins</label>
-        <input class="form-control" type="number" name="numberOfBins" [(ngModel)]="selectedGraphObj.numberOfBins"
-            (input)="setBarHistogramData()" (focus)="focusField()" (blur)="focusOut()">
-    </div>
+    <!--help-->
+    <span class="form-text text-help" *ngIf="selectedGraphObj.data[0].type == 'bar'">
+        *Calculates percent of data points within bin
+    </span>
 </form>

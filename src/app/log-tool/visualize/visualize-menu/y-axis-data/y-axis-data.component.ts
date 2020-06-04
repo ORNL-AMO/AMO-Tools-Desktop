@@ -27,27 +27,33 @@ export class YAxisDataComponent implements OnInit {
   }
 
   saveChanges() {
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.save(this.selectedGraphObj);
   }
 
   addAxis() {
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.addAxis(this.selectedGraphObj);
   }
 
   removeAxis() {
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.removeAxis(this.selectedGraphObj);
   }
 
 
   setYAxisData() {
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.setYAxisData(this.selectedGraphObj);
   }
 
   removeYAxisData(index: number) {
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.removeYAxisData(index, this.selectedGraphObj);
   }
 
   addData(){
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.addData(this.selectedGraphObj);
   }
 

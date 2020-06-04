@@ -7,7 +7,6 @@ import { LogToolService } from './log-tool.service';
 import { SystemSetupComponent } from './system-setup/system-setup.component';
 import { HelpPanelComponent } from './system-setup/help-panel/help-panel.component';
 import { VisualizeComponent } from './visualize/visualize.component';
-import { ReportComponent } from './report/report.component';
 import { SetupDataComponent } from './system-setup/setup-data/setup-data.component';
 import { FormsModule } from '@angular/forms';
 import { CleanDataComponent } from './system-setup/clean-data/clean-data.component';
@@ -36,6 +35,11 @@ import { XAxisDataComponent } from './visualize/visualize-menu/x-axis-data/x-axi
 import { YAxisDataComponent } from './visualize/visualize-menu/y-axis-data/y-axis-data.component';
 import { VisualizeMenuService } from './visualize/visualize-menu/visualize-menu.service';
 import { VisualizeHelpComponent } from './visualize/visualize-help/visualize-help.component';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { DayTypeSummaryTableComponent } from './day-type-analysis/day-type-table/day-type-summary-table/day-type-summary-table.component';
+import { IndividualDaySummaryTableComponent } from './day-type-analysis/day-type-table/individual-day-summary-table/individual-day-summary-table.component';
+import { SelectedDataTableComponent } from './day-type-analysis/day-type-table/selected-data-table/selected-data-table.component';
+import { BinDataComponent } from './visualize/visualize-menu/bin-data/bin-data.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +48,6 @@ import { VisualizeHelpComponent } from './visualize/visualize-help/visualize-hel
     SystemSetupComponent,
     HelpPanelComponent,
     VisualizeComponent,
-    ReportComponent,
     SetupDataComponent,
     CleanDataComponent,
     DayTypeAnalysisComponent,
@@ -63,7 +66,11 @@ import { VisualizeHelpComponent } from './visualize/visualize-help/visualize-hel
     GraphBasicsComponent,
     XAxisDataComponent,
     YAxisDataComponent,
-    VisualizeHelpComponent
+    VisualizeHelpComponent,
+    IndividualDaySummaryTableComponent,
+    DayTypeSummaryTableComponent,
+    SelectedDataTableComponent,
+    BinDataComponent
   ],
   imports: [
     CommonModule,
@@ -71,7 +78,8 @@ import { VisualizeHelpComponent } from './visualize/visualize-help/visualize-hel
     FormsModule,
     NgbDatepickerModule,
     ModalModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SharedPipesModule
   ],
   providers: [
     LogToolService,

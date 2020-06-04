@@ -14,7 +14,7 @@
         }">Cost Savings: {{ fsat1CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
       </div>
       <div class="w-75">
-        <app-fsat-sankey [fsat]="fsat1" [location]="'baseline'" [assessmentName]="assessmentName" [settings]="settings"
+        <app-fsat-sankey [fsat]="fsat1" [location]="'baseline'" [assessmentName]="assessment.name" [settings]="settings"
           [isBaseline]="true"></app-fsat-sankey>
       </div>
     </div>
@@ -33,7 +33,7 @@
         }">Cost Savings: {{ fsat2CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
       </div>
       <div class="w-75">
-        <app-fsat-sankey [fsat]="fsat2" [location]="'modification'" [assessmentName]="assessmentName"
+        <app-fsat-sankey [fsat]="fsat2" [location]="'modification'" [assessmentName]="assessment.name"
           [settings]="settings" [isBaseline]="false"></app-fsat-sankey>
       </div>
     </div>

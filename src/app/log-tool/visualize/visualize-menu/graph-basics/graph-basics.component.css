@@ -2,3 +2,10 @@
     padding: 4px;
     font-size: 14px;
 }
+
+
+.text-help{
+    font-size: small;
+    color: gray;
+    text-align: center;
+}

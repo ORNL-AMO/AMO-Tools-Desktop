@@ -5,6 +5,7 @@ import { SvgToPngService } from '../../shared/helper-services/svg-to-png.service
 import * as d3 from 'd3';
 import { Settings } from '../../shared/models/settings';
 import { SankeyService, FuelResults } from './sankey.service';
+import { PhastValidService } from '../phast-valid.service';
 
 var svg;
 // use these values to alter label font position and size
@@ -68,10 +69,13 @@ export class SankeyComponent implements OnInit {
   usefulOutputY: number;
 
 
-  constructor(private sankeyService: SankeyService, private svgToPngService: SvgToPngService) {
+  constructor(private sankeyService: SankeyService, 
+              private svgToPngService: SvgToPngService,
+              private phastValidService: PhastValidService) {
   }
 
   ngOnInit() {
+    this.phast.valid = this.phastValidService.checkValid(this.phast);
     if (this.location !== "sankey-diagram") {
       // this.location = this.location + this.modIndex.toString();
       if (this.location === 'baseline') {
@@ -94,12 +98,15 @@ export class SankeyComponent implements OnInit {
 
   ngAfterViewInit() {
     if (this.phast.losses) {
-      this.makeSankey();
+      if (this.phast.valid.isValid) {
+        this.makeSankey();
+      }
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.phast) {
+      this.phast.valid = this.phastValidService.checkValid(this.phast);
       if (!changes.phast.firstChange) {
         if (this.location !== "sankey-diagram") {
           if (this.isBaseline) {
@@ -112,7 +119,9 @@ export class SankeyComponent implements OnInit {
           this.location = this.location.replace(/[\])}[{(]/g, '');
           this.location = this.location.replace(/#/g, "");
         }
-        this.makeSankey();
+        if (this.phast.valid.isValid) {
+          this.makeSankey();
+        }
       }
     }
   }

@@ -12,8 +12,8 @@
         </app-phast-report>
     </div>
     <div *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
-        <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat" [assessment]="item.assessment"
-            [inRollup]="true" [settings]="item.settings">
+        <app-fsat-report *ngIf="item.assessment.fsat" [assessment]="item.assessment" [inRollup]="true"
+            [settings]="item.settings">
         </app-fsat-report>
     </div>
     <div *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
@@ -32,9 +32,10 @@
 
 <!-- PRINT!! -->
 <div class="print-container" *ngIf="printView">
-    <div *ngIf="_psatAssessments.length > 0 && rollupPrintOptions.printPsatRollup" class="row print-break-before">
+    <div *ngIf="_psatAssessments.length > 0 && rollupPrintOptions.printPsatRollup" class="row">
         <div class="col-12">
-            <app-psat-rollup-print [settings]="settings" [calculators]="selectedPsatCalcs"></app-psat-rollup-print>
+            <app-psat-rollup [settings]="settings" [calculators]="selectedPsatCalcs" [inPrintView]="true">
+            </app-psat-rollup>
         </div>
     </div>
     <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
@@ -45,10 +46,11 @@
         </div>
     </div>
 
-    <div *ngIf="_phastAssessments.length > 0 && rollupPrintOptions.printPhastRollup" class="row print-break-before">
+    <div *ngIf="_phastAssessments.length > 0 && rollupPrintOptions.printPhastRollup" class="row"
+        [ngClass]="{'page-break-before': _psatAssessments.length != 0}">
         <div class="col-12">
-            <app-phast-rollup-print [settings]="settings" [calculators]="selectedPhastCalcs">
-            </app-phast-rollup-print>
+            <app-phast-rollup [settings]="settings" [calculators]="selectedPhastCalcs" [inPrintView]="true">
+            </app-phast-rollup>
         </div>
     </div>
     <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
@@ -59,22 +61,24 @@
         </div>
     </div>
 
-    <div *ngIf="_fsatAssessments.length > 0 && rollupPrintOptions.printFsatRollup" class="row print-break-before">
+    <div *ngIf="_fsatAssessments.length > 0 && rollupPrintOptions.printFsatRollup" class="row"
+        [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0}">
         <div class="col-12">
-            <!--fsat print-->
-            <app-fsat-rollup-print [settings]="settings" [calculators]="selectedFsatCalcs"></app-fsat-rollup-print>
+            <app-fsat-rollup [settings]="settings" [calculators]="selectedFsatCalcs" [inPrintView]="true">
+            </app-fsat-rollup>
         </div>
     </div>
     <div class="assessment-item row" *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}">
         <div class="col-12">
-            <app-fsat-report *ngIf="item.assessment.fsat" [assessment]="item.assessment"
-                [settings]="item.settings" [inRollup]="true"></app-fsat-report>
+            <app-fsat-report *ngIf="item.assessment.fsat" [assessment]="item.assessment" [settings]="item.settings"
+                [inRollup]="true"></app-fsat-report>
         </div>
     </div>
 
-    <div *ngIf="_ssmtAssessments.length > 0 && rollupPrintOptions.printSsmtRollup" class="row print-break-before">
+    <div *ngIf="_ssmtAssessments.length > 0 && rollupPrintOptions.printSsmtRollup" class="row"
+        [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0 || _fsatAssessments.length != 0}">
         <div class="col-12">
-            <app-ssmt-rollup-print [settings]="settings"></app-ssmt-rollup-print>
+            <app-ssmt-rollup [settings]="settings" [printView]="true"></app-ssmt-rollup>
         </div>
     </div>
     <div class="assessment-item row" *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}">
@@ -84,8 +88,8 @@
         </div>
     </div>
 
-    <div *ngIf="_treasureHuntAssessments.length > 0 && rollupPrintOptions.printTreasureHuntRollup"
-        class="row print-break-before">
+    <div *ngIf="_treasureHuntAssessments.length > 0 && rollupPrintOptions.printTreasureHuntRollup" class="row"
+        [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0 || _fsatAssessments.length != 0 || _ssmtAssessments.length != 0}">
         <div class="col-12">
             <!--treasure hunt print-->
             <app-treasure-hunt-rollup [settings]="settings" [printView]="true"></app-treasure-hunt-rollup>

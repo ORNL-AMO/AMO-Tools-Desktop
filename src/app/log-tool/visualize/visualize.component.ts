@@ -9,6 +9,7 @@ import { VisualizeService } from './visualize.service';
 })
 export class VisualizeComponent implements OnInit {
 
+  tabSelect: string = 'results';
   constructor(private logToolDataService: LogToolDataService, private visualizeService: VisualizeService) { }
 
   ngOnInit() {
@@ -24,4 +25,7 @@ export class VisualizeComponent implements OnInit {
     });
   }
 
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
 }

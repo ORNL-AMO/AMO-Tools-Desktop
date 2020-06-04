@@ -17,10 +17,10 @@ export class DayTypeAnalysisComponent implements OnInit {
   displayDayTypeCalander: boolean;
   dataViewSub: Subscription;
   dataView: string;
+  calculatingData: boolean = false;
   constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private cd: ChangeDetectorRef, private logToolDataService: LogToolDataService) { }
 
   ngOnInit() {
-    this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
     this.displayDayTypeCalanderSub = this.dayTypeAnalysisService.displayDayTypeCalander.subscribe(val => {
       this.displayDayTypeCalander = val;
     });
@@ -31,26 +31,42 @@ export class DayTypeAnalysisComponent implements OnInit {
       let allFields: Array<LogToolField> = this.logToolDataService.getDataFieldOptions();
       this.dayTypeAnalysisService.selectedDataField.next(allFields[0]);
     }
-  }
-
-  ngAfterViewInit() {
-    if (this.dayTypeAnalysisService.dayTypesCalculated == false) {
-      setTimeout(() => {
-        this.dayTypeAnalysisService.initDayTypes();
-        this.dayTypeAnalysisService.setDayTypeSummaries();
-        this.dayTypeGraphService.setDayTypeScatterPlotData();
-        this.dayTypeGraphService.setIndividualDayScatterPlotData();
-        this.showContent = true;
-        this.dayTypeAnalysisService.dayTypesCalculated = true;
-      }, 100);
-    } else {
+    if (this.dayTypeAnalysisService.dayTypesCalculated == true) {
       this.showContent = true;
       this.cd.detectChanges();
     }
   }
 
+  ngAfterViewInit() {
+    // if (this.dayTypeAnalysisService.dayTypesCalculated == false) {
+    //   setTimeout(() => {
+    //   }, 100);
+    // } else {
+    //   this.showContent = true;
+    //   this.cd.detectChanges();
+    // }
+  }
+
   ngOnDestroy() {
     this.displayDayTypeCalanderSub.unsubscribe();
     this.dataViewSub.unsubscribe();
+  }
+
+  runAnalysis() {
+    this.calculatingData = true;
+    this.cd.detectChanges();
+    setTimeout(() => {
+      this.logToolDataService.setLogToolDays();
+      this.logToolDataService.setValidNumberOfDayDataPoints();
+      this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
+      this.dayTypeAnalysisService.initDayTypes();
+      this.dayTypeAnalysisService.setDayTypeSummaries();
+      this.dayTypeGraphService.setDayTypeScatterPlotData();
+      this.dayTypeGraphService.setIndividualDayScatterPlotData();
+      this.showContent = true;
+      this.dayTypeAnalysisService.dayTypesCalculated = true;
+      this.calculatingData = false;
+      this.cd.detectChanges();
+    }, 200)
   }
 }

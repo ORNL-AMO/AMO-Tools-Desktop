@@ -1,0 +1,37 @@
+<div class="p-2">
+    <div class="card day-type-table mb-3" *ngFor="let dayTypeSummary of dayTypeSummaries">
+        <div class="card-header day-type-header" [ngStyle]="{'border-left-color': dayTypeSummary.dayType.color}">
+            {{dayTypeSummary.dayType.label}}
+        </div>
+        <div class="card-body p-0">
+            <div class="scroll-item">
+                <table #copyTable0 class="table table-bordered mb-0">
+                    <tbody>
+                        <tr>
+                            <td class="bold">
+                                &nbsp;
+                            </td>
+                            <td class="bold text-center" *ngFor="let hourlyAverage of dayTypeSummary.hourlyAverages">
+                                {{hourlyAverage.hour}}
+                            </td>
+                        </tr>
+                        <tr *ngFor="let field of fields">
+                            <td class="bold day-type-label">
+                                {{field.fieldName}}
+                            </td>
+                            <td *ngFor="let hourlyAverage of dayTypeSummary.hourlyAverages">
+                                {{getAverageValue(hourlyAverage.averages, field) | number}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer p-0">
+            <div class="d-flex justify-content-end">
+                <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+                </app-exportable-results-table>
+            </div>
+        </div>
+    </div>
+</div>

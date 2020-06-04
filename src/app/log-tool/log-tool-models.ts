@@ -1,3 +1,4 @@
+import { CsvImportData } from "../shared/helper-services/csv-to-json.service";
 
 export interface LogToolField {
     fieldName: string,
@@ -5,7 +6,9 @@ export interface LogToolField {
     useField: boolean,
     isDateField: boolean,
     unit: string,
-    invalidField: boolean
+    invalidField: boolean,
+    csvId: string,
+    csvName: string
 }
 
 export interface LogToolDay {
@@ -70,6 +73,19 @@ export interface DayTypeSummary {
 }
 
 
+export interface IndividualDataFromCsv {
+    csvImportData: CsvImportData,
+    csvName: string,
+    fields: Array<LogToolField>;
+    startDate?: string,
+    endDate?: string,
+    dataPointsPerColumn?: number,
+    hasDateField: boolean,
+    dateField?: LogToolField
+    // logToolDays: Array<LogToolDay>
+}
+
+
 export interface HourlyAverage {
     hour: number,
     averages: Array<{
@@ -100,12 +116,16 @@ export interface GraphObj {
         marker: {
             color: string
         },
+        line: {
+            color: string,
+            width: number
+        }
     }],
     layout: {
         title: {
             text: string,
             font: {
-              size: number
+                size: number
             }
         },
         hovermode: string,
@@ -122,10 +142,22 @@ export interface GraphObj {
     },
     isTimeSeries: boolean,
     selectedXAxisDataOption: { dataField: LogToolField, data: Array<number | string> }
-    selectedYAxisDataOptions: Array<{ index: number, dataOption: { dataField: LogToolField, data: Array<number | string> }, seriesColor: string, seriesName: string, yaxis: string }>,
+    selectedYAxisDataOptions: Array<{
+        index: number,
+        dataOption: { dataField: LogToolField, data: Array<number | string> },
+        seriesColor: string,
+        seriesName: string,
+        yaxis: string,
+        linesOrMarkers: string
+    }>,
     hasSecondYAxis: boolean,
+    //histogram
     numberOfBins: number,
+    bins: Array<{ min: number, max: number }>,
+    binnedField: LogToolField,
     useStandardDeviation: boolean,
+    binningMethod: string,
+    binSize: number,
     graphId: string,
     xAxisDataOptions: Array<{
         dataField: LogToolField,
@@ -150,7 +182,8 @@ export interface AxisObj {
     },
     tickfont: {
         color: string
-    }
+    },
+    rangemode?: string
 }
 
 export interface AnnotationData {

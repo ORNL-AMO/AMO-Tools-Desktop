@@ -1,6 +1,5 @@
 import { Routes } from "@angular/router";
 import { SystemSetupComponent } from "./system-setup/system-setup.component";
-import { ReportComponent } from "./report/report.component";
 import { VisualizeComponent } from "./visualize/visualize.component";
 import { SetupDataComponent } from "./system-setup/setup-data/setup-data.component";
 import { CleanDataComponent } from "./system-setup/clean-data/clean-data.component";
@@ -35,10 +34,6 @@ export const logToolRoutes: Routes = [
     {
         path: 'visualize',
         component: VisualizeComponent
-    },
-    {
-        path: 'report',
-        component: ReportComponent
     },
     {
         path: 'day-type-analysis',

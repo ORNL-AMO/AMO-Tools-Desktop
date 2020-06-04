@@ -7,38 +7,26 @@
     </div>
     <div class="p-2 d-flex flex-column" *ngIf="activeHelpPanel == 'setup-data'">
         <h6>
-            <!-- Setup Data
-            <br>
-            <hr class="mt-2 mb-2"> -->
             <small class="text-muted">Choose a log file from your file system.
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">
-                Select the format of the date the file
-                is using.
             </small>
             <hr class="mt-2 mb-2">
             <small class="text-muted">Once you have submitted your log file, a table with the first row of data will
                 appear.
             </small>
             <hr class="mt-2 mb-2">
-            <small class="text-muted">Click "Add Additional .csv Data" to import data from addtional .csv files
-            </small>
-            <hr class="mt-2 mb-2">
-            <small class="text-muted">If no date field exists, you can click "Continue Without Day Type Analysis" and
-                the "Day Type Analysis" portion of the application will be disabled but you can still use the "Data
-                Visualization" portion.
+            <small class="text-muted">Import multiple .csv files using the same process
             </small>
         </h6>
     </div>
 
     <div class="p-2 d-flex flex-column" *ngIf="activeHelpPanel == 'clean-data'">
         <h6>
-            <!-- Clean Data
-            <br>
-            <hr class="mt-2 mb-2"> -->
-            <small class="text-muted">"Use Column" selects which data columns will be inlcuded in the "Day Type
+            <small class="text-muted">"Use Column" selects which data columns will be included in the "Day Type
                 Analysis" and "Data Visualization" sections.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">"Is Date" sets the date field corresponding to the csv file. Dates are needed for
+                day type analysis and time series plots
             </small>
             <hr class="mt-2 mb-2">
             <small class="text-muted">
@@ -46,7 +34,7 @@
             </small>
             <hr class="mt-2 mb-2">
             <small class="text-muted">
-                An "Alias" can be set that will be used for display purposed in the "Day Type Analysis" and "Data
+                An "Alias" can be set that will be used for display purposes in the "Day Type Analysis" and "Data
                 Visualization" sections.
             </small>
             <hr class="mt-2 mb-2">
@@ -55,9 +43,8 @@
             </small>
             <hr class="mt-2 mb-2">
             <small class="text-muted">
-                Once you have cleaned your data, click "Submit" and the application will do some number crunching. Once
-                this
-                is complete you can continue to "Day Type Analysis" or "Data Visualization".
+                Once you have cleaned your data, click "Submit" and your data will be cleaned and set for analysis. Once
+                this is complete you can continue to "Day Type Analysis" or "Data Visualization".
             </small>
         </h6>
     </div>

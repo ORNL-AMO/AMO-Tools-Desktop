@@ -25,8 +25,11 @@ export class GraphBasicsComponent implements OnInit {
       if (this.selectedGraphObj == undefined || val.graphId != this.selectedGraphObj.graphId) {
         this.selectedGraphObj = val;
         this.setGraphType();
-      }else{
+      } else {
         this.selectedGraphObj = val;
+        if (this.selectedGraphObj.data[0].type == 'bar') {
+          this.checkBarHistogramData();
+        }
       }
     });
   }
@@ -40,14 +43,18 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setGraphType() {
+    this.visualizeService.plotFunctionType = 'react';
+    if (this.selectedGraphObj.data[0].type == 'bar') {
+      this.checkBarHistogramData();
+    }
     this.visualizeMenuService.setGraphType(this.selectedGraphObj);
   }
 
-  focusField(){
+  focusField() {
     this.visualizeService.focusedPanel.next('graphBasics');
   }
 
-  focusOut(){
+  focusOut() {
     this.visualizeService.focusedPanel.next('default');
   }
 
@@ -57,6 +64,14 @@ export class GraphBasicsComponent implements OnInit {
   }
 
   setBarHistogramData() {
+    this.visualizeService.plotFunctionType = 'react';
     this.visualizeMenuService.setBarHistogramData(this.selectedGraphObj);
+  }
+
+  checkBarHistogramData() {
+    if (this.selectedGraphObj.binnedField == undefined || this.selectedGraphObj.binnedField.fieldName != this.selectedGraphObj.selectedXAxisDataOption.dataField.fieldName || this.selectedGraphObj.bins == undefined) {
+      this.visualizeService.plotFunctionType = 'react';
+      this.selectedGraphObj = this.visualizeMenuService.initializeBinData(this.selectedGraphObj);
+    }
   }
 }

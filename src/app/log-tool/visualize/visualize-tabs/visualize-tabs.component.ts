@@ -32,10 +32,12 @@ export class VisualizeTabsComponent implements OnInit {
   }
 
   addNewGraphDataObj() {
+    this.visualizeService.plotFunctionType = 'react';
     this.visualizeService.addNewGraphDataObj();
   }
 
   selectGraph(graphObj: GraphObj) {
+    this.visualizeService.plotFunctionType = 'react';
     this.visualizeService.selectedGraphObj.next(graphObj);
   }
 }

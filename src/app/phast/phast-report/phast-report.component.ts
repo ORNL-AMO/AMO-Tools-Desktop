@@ -3,16 +3,13 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SettingsService } from '../../settings/settings.service';
-import { PhastReportService } from './phast-report.service';
-import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import * as d3 from 'd3';
 import { Subscription } from 'rxjs';
 import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
+import { PhastValidService } from '../phast-valid.service';
 
 @Component({
   selector: 'app-phast-report',
@@ -52,7 +49,11 @@ export class PhastReportComponent implements OnInit {
   showPrintMenuSub: Subscription;
   printOptions: PrintOptions;
   showPrintViewSub: Subscription;
-  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private printOptionsMenuService: PrintOptionsMenuService, private settingsService: SettingsService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+              private directoryDbService: DirectoryDbService, 
+              private printOptionsMenuService: PrintOptionsMenuService, 
+              private phastValidService: PhastValidService,
+              private settingsService: SettingsService) { }
 
   ngOnInit() {
     // this.initPrintLogic();
@@ -80,6 +81,8 @@ export class PhastReportComponent implements OnInit {
       this.phast.operatingHours.hoursPerYear = 8760;
     }
 
+    this.setPhastValidity();
+
     if (!this.inRollup) {
       this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
         this.showPrintMenu = val;
@@ -99,28 +102,6 @@ export class PhastReportComponent implements OnInit {
       }
     })
 
-
-
-
-    // if (this.inRollup) {
-    //   this.showPrint = this.printView;
-    // }
-    // else {
-    //   //subscribe to print event
-    //   this.phastReportService.showPrint.subscribe(printVal => {
-    //     //shows loading print view
-    //     this.showPrintDiv = printVal;
-    //     if (printVal === true) {
-    //       //use delay to show loading before print payload starts
-    //       setTimeout(() => {
-    //         this.showPrint = printVal;
-    //       }, 20);
-    //     } else {
-    //       this.showPrint = printVal;
-    //     }
-    //   });
-    // }
-
   }
 
 
@@ -137,23 +118,29 @@ export class PhastReportComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if(this.showPrintMenuSub){
-            this.showPrintMenuSub.unsubscribe();
+    if (this.showPrintMenuSub) {
+      this.showPrintMenuSub.unsubscribe();
     }
     this.showPrintViewSub.unsubscribe();
   }
 
   getContainerHeight() {
-    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
-    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    if (this.reportBtns && this.reportHeader) {
+      let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+      let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    }
   }
 
   setTab(str: string): void {
     this.currentTab = str;
-    setTimeout(() => {
-      d3.selectAll('.tick text').style('display', 'initial');
-    }, 50);
+  }
+
+  setPhastValidity() {
+    this.phast.valid = this.phastValidService.checkValid(this.phast);
+    this.phast.modifications.forEach(modification => {
+      modification.phast.valid = this.phastValidService.checkValid(modification.phast);
+    });
   }
 
 
@@ -164,23 +151,6 @@ export class PhastReportComponent implements OnInit {
         tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);
       }
       this.settings = tmpSettings;
-    } else {
-      this.getParentDirectorySettings(this.assessment.directoryId);
-    }
-  }
-
-
-  getParentDirectorySettings(dirId: number): void {
-    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(dirId);
-    if (tmpSettings) {
-      if (!tmpSettings.energyResultUnit) {
-        tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);
-      }
-      this.settings = tmpSettings;
-    } else {
-      let parentDirectory = this.directoryDbService.getById(dirId);
-      //get parent directory settings
-      this.getParentDirectorySettings(parentDirectory.parentDirectoryId);
     }
   }
 

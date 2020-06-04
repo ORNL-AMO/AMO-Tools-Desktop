@@ -19,6 +19,7 @@ export class VisualizeMenuComponent implements OnInit {
   showXAxisOptions: boolean = true;
   showYAxisOptions: boolean = true;
   showAnnotateGraph: boolean = false;
+  showHistogramBins: boolean = true;
 
   showSidebar: boolean = true;
   constructor(private visualizeService: VisualizeService) { }
@@ -61,6 +62,11 @@ export class VisualizeMenuComponent implements OnInit {
   toggleAnnotateGraph() {
     this.showAnnotateGraph = !this.showAnnotateGraph;
     this.visualizeService.focusedPanel.next('annotation');
+  }
+
+  toggleHistogramBins() {
+    this.showHistogramBins = !this.showHistogramBins;
+    this.visualizeService.focusedPanel.next('histogram');
   }
 
   toggleSidebar() {

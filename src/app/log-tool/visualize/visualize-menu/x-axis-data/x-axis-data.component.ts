@@ -26,19 +26,20 @@ export class XAxisDataComponent implements OnInit {
   }
 
   saveChanges() {
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.save(this.selectedGraphObj);
   }
 
   setXAxisDataOption() {
+    this.visualizeService.plotFunctionType = 'update';
     this.visualizeMenuService.setXAxisDataOption(this.selectedGraphObj);
   }
 
-  focusField(){
+  focusField() {
     this.visualizeService.focusedPanel.next('xAxis');
   }
 
-  focusOut(){
+  focusOut() {
     this.visualizeService.focusedPanel.next('default');
   }
-
 }

@@ -17,6 +17,7 @@ export interface SSMT {
     headerInput?: HeaderInput;
     turbineInput?: TurbineInput;
     outputData?: SSMTOutput;
+    valid?: SsmtValid;
 }
 
 export interface SSMTInputs {
@@ -176,3 +177,12 @@ export interface HeaderNotHighestPressure {
     desuperheatSteamTemperature: number;
     useBaselineProcessSteamUsage: boolean;
 }
+
+
+export interface SsmtValid {
+    isValid: boolean;
+    boilerValid: boolean;
+    headerValid: boolean;
+    turbineValid: boolean;
+    operationsValid: boolean;
+  } 

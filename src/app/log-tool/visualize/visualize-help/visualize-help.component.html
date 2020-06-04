@@ -1,9 +1,4 @@
 <div class="mr-2 ml-2 d-flex flex-column help-info">
-    <div class="header">
-        <div class="h3">
-            Help
-        </div>
-    </div>
     <!--defaul help-->
     <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'default'">
         <div class="h6">
@@ -14,7 +9,7 @@
             <small class="text-muted">
                 Using the menu on the top right you can:
                 <ul>
-                    <li>Download a the plot as a png</li>
+                    <li>Download the plot as a png</li>
                     <li>Change cursor types to manipulate the plot</li>
                     <li>Zoom in, out and scale</li>
                     <li>Choose method in which hover data is displayed</li>
@@ -60,7 +55,11 @@
                 <br>
                 Wrap your text in &lt;b&gt;&lt;/b&gt; to <b>bold</b> it
                 <br>
+                &lt;b&gt;example&lt;/b&gt; = <b>example</b>
+                <br>
                 Wrap your text in &lt;i&gt;&lt;/i&gt; to <i>italicize</i> it
+                <br>
+                &lt;i&gt;example&lt;/i&gt; = <i>example</i>
             </small>
             <hr class="mt-2 mb-2">
             <small class="text-muted">
@@ -80,7 +79,11 @@
                 <br>
                 Wrap your text in &lt;b&gt;&lt;/b&gt; to <b>bold</b> it
                 <br>
+                &lt;b&gt;example&lt;/b&gt; = <b>example</b>
+                <br>
                 Wrap your text in &lt;i&gt;&lt;/i&gt; to <i>italicize</i> it
+                <br>
+                &lt;i&gt;example&lt;/i&gt; = <i>example</i>
             </small>
             <hr class="mt-2 mb-2">
             <small class="text-muted">Use the text box to set a name for the corresponding data
@@ -120,7 +123,11 @@
                 <br>
                 Wrap your text in &lt;b&gt;&lt;/b&gt; to <b>bold</b> it
                 <br>
+                &lt;b&gt;example&lt;/b&gt; = <b>example</b>
+                <br>
                 Wrap your text in &lt;i&gt;&lt;/i&gt; to <i>italicize</i> it
+                <br>
+                &lt;i&gt;example&lt;/i&gt; = <i>example</i>
             </small>
             <hr class="mt-2 mb-2">
             <small class="text-muted">
@@ -133,6 +140,27 @@
             <hr class="mt-2 mb-2">
             <small class="text-muted">
                 Existing annotations can be deleted or selected to be edited from the list at the bottom of the menu
+            </small>
+        </div>
+    </div>
+    <!--histogram-->
+    <div class="p-2 d-flex flex-column" *ngIf="focusedPanel == 'histogramBins'">
+        <div class="h6">
+            Histogram Bins
+            <br>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">The histogram will display the percentage of data points within each bin
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">Bins will be auto generated based on Bin Size or Number of Bins
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                The min and max of each bin can then be modified
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                Initial bin size will use the standard deviation of the data set
             </small>
         </div>
     </div>
