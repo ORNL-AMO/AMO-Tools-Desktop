@@ -58,6 +58,9 @@ export class CoolingTowerComponent implements OnInit {
       this.coolingTowerService.initDefaultEmptyInputs(0, this.settings, this.operatingHours);
     }
     this.initSubscriptions();
+    if(this.modificationData) {
+      this.modificationExists = true;
+    }
   }
 
   ngAfterViewInit() {
@@ -94,7 +97,7 @@ export class CoolingTowerComponent implements OnInit {
   }
 
   addCase() {
-    this.coolingTowerService.addCase(this.settings, this.operatingHours);
+    this.coolingTowerService.addCase(this.settings, this.operatingHours, this.modificationExists);
   }
 
   createModification() {
@@ -106,6 +109,7 @@ export class CoolingTowerComponent implements OnInit {
   btnResetData() {
     this.coolingTowerService.resetData.next(true);
     this.coolingTowerService.initDefaultEmptyInputs(0, this.settings, this.operatingHours);
+    this.coolingTowerService.modificationData.next(undefined);
     this.modificationExists = false;
   }
 

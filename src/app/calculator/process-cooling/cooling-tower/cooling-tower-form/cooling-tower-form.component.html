@@ -44,7 +44,7 @@
             </div>
             <span class="alert-danger pull-right small"
               *ngIf="form.controls.flowRate.invalid && !form.controls.flowRate.pristine">
-              <span *ngIf="form.get('flowRate').hasError('greaterThan')">Value must be greater than 0.</span>
+              <span *ngIf="form.controls.flowRate.errors.greaterThan == 0">Value must be greater than 0.</span>
               <span *ngIf="form.controls.flowRate.errors.required">Value required.</span>
             </span>
           </div>
@@ -59,7 +59,7 @@
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
               <span class="alert-danger pull-right small"
                 *ngIf="form.controls.temperatureDifference.invalid && !form.controls.temperatureDifference.pristine">
-                <span *ngIf="form.controls.temperatureDifference.errors.greaterThan">Value must be greater than 0.
+                <span *ngIf="form.controls.temperatureDifference.errors.greaterThan == 0">Value must be greater than 0.
                   <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
                   <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>.
                 </span>
@@ -162,7 +162,7 @@
                 <span class="alert-danger pull-right small"
                   *ngIf="form.controls.cyclesOfConcentration.invalid && !form.controls.cyclesOfConcentration.pristine">
                   <span *ngIf="form.controls.cyclesOfConcentration.errors.required">Value required.</span> 
-                  <span *ngIf="form.controls.cyclesOfConcentration.errors.greaterThan">Value must be greater than 0.</span>
+                  <span *ngIf="form.controls.cyclesOfConcentration.errors.greaterThan == 0">Value must be greater than 0.</span>
 
                 </span>
               </div>

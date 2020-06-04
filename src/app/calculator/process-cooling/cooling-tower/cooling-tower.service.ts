@@ -152,23 +152,25 @@ export class CoolingTowerService {
     }
   }
 
-  addCase(settings: Settings, operatingHours: OperatingHours) {
+  addCase(settings: Settings, operatingHours: OperatingHours, modificationExists: boolean) {
       let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
       let index = currentBaselineData.length;
       let baselineObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
       currentBaselineData.push(baselineObj)
       this.baselineData.next(currentBaselineData);
       
-      let currentModificationData: Array<CoolingTowerData> = this.modificationData.getValue();
-      let modificationObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
-
-      // Set case operational constants
-      modificationObj.flowRate = currentBaselineData[index].flowRate;
-      modificationObj.coolingLoad = currentBaselineData[index].coolingLoad;
-      modificationObj.operationalHours = currentBaselineData[index].operationalHours;
-
-      currentModificationData.push(modificationObj);
-      this.modificationData.next(currentModificationData);
+      if (modificationExists) {
+        let currentModificationData: Array<CoolingTowerData> = this.modificationData.getValue();
+        let modificationObj: CoolingTowerData = this.initObject(index, settings, operatingHours);
+        
+        // Set case operational constants
+        modificationObj.flowRate = currentBaselineData[index].flowRate;
+        modificationObj.coolingLoad = currentBaselineData[index].coolingLoad;
+        modificationObj.operationalHours = currentBaselineData[index].operationalHours;
+       
+        currentModificationData.push(modificationObj);
+        this.modificationData.next(currentModificationData);
+      }
   }
 
   createModification() {
@@ -182,8 +184,10 @@ export class CoolingTowerService {
       currentBaselineData.splice(i, 1);
       this.baselineData.next(currentBaselineData);
       let currentModificationData: Array<CoolingTowerData> = this.modificationData.getValue();
-      currentModificationData.splice(i, 1);
-      this.modificationData.next(currentModificationData);
+      if (currentModificationData) {
+        currentModificationData.splice(i, 1);
+        this.modificationData.next(currentModificationData);
+      }
   }
   
   checkValidInputData(cases: Array<CoolingTowerData>):boolean {

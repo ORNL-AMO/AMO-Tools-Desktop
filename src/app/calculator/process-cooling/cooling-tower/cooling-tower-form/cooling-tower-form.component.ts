@@ -87,7 +87,7 @@ export class CoolingTowerFormComponent implements OnInit {
 
   initSubscriptions() {
     this.resetDataSub = this.coolingTowerService.resetData.subscribe(value => {
-        this.updateForm();
+      this.updateForm();
       })
     this.generateExampleSub = this.coolingTowerService.generateExample.subscribe(value => {
       this.updateForm();
@@ -97,8 +97,10 @@ export class CoolingTowerFormComponent implements OnInit {
     });
     if (!this.isBaseline) {
       this.modificationDataSub = this.coolingTowerService.modificationData.subscribe(updatedData => {
-        this.updateModOperationalData(updatedData);
-      })
+        if (updatedData) {
+          this.updateModOperationalData(updatedData);
+        }
+      });
     }
   }
 
@@ -187,7 +189,7 @@ export class CoolingTowerFormComponent implements OnInit {
   }
 
   setOpHoursModalWidth(){
-    if (this.formElement.nativeElement.clientWidth) {
+    if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }
