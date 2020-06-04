@@ -13,3 +13,7 @@ a:not([href]):not([tabindex]){
 img {
     cursor: pointer;
 }
+
+.calc-img {
+    width: 60%;
+}
