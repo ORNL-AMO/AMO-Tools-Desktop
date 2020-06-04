@@ -16,7 +16,6 @@ export class CoolingTowerResultsComponent implements OnInit {
 
   @Input()
   settings: Settings;
-  modificationExists: boolean = false;
 
   @ViewChild('savingsTable', { static: false }) savingsTable: ElementRef;
   savingsTableString: any;

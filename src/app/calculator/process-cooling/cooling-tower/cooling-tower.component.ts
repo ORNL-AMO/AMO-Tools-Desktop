@@ -33,16 +33,12 @@ export class CoolingTowerComponent implements OnInit {
   containerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
-  baselineSelected: boolean = true;
-  modifiedSelected: boolean = false;
-  modificationExists = true;
+  baselineSelected = true;
+  modificationExists = false;
   
   coolingTowerResults: CoolingTowerOutput;
   baselineData: Array<CoolingTowerData>;
   modificationData: Array<CoolingTowerData>;
-  
-  modificationExistsSub: Subscription;
-  currentFieldSub: Subscription;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
 
@@ -71,16 +67,11 @@ export class CoolingTowerComponent implements OnInit {
   }
 
   ngOnDestroy() {
-      this.currentFieldSub.unsubscribe();
       this.baselineDataSub.unsubscribe();
       this.modificationDataSub.unsubscribe();
-      this.modificationExistsSub.unsubscribe();
   }
 
   initSubscriptions() {
-    this.currentFieldSub = this.coolingTowerService.currentField.subscribe(val => {
-      this.currentField = val;
-    });
     this.baselineDataSub = this.coolingTowerService.baselineData.subscribe(value => {
       this.baselineData = value;
       this.setBaselineSelected();
@@ -90,9 +81,6 @@ export class CoolingTowerComponent implements OnInit {
       this.modificationData = value;
       this.coolingTowerService.calculate(this.settings);
     })
-    this.modificationExistsSub = this.coolingTowerService.modificationExists.subscribe(val => {	
-      this.modificationExists = val;
-    });
   }
 
   resizeTabs() {
@@ -105,34 +93,26 @@ export class CoolingTowerComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  changeField(str: string) {
-    this.currentField = str;
-  }
-
   addCase() {
     this.coolingTowerService.addCase(this.settings, this.operatingHours);
   }
 
-  calculate() {
-    this.coolingTowerService.calculate(this.settings);
-  }
-
   createModification() {
     this.coolingTowerService.createModification();
+    this.modificationExists = true;
     this.setModificationSelected();
    }
 
   btnResetData() {
     this.coolingTowerService.resetData.next(true);
     this.coolingTowerService.initDefaultEmptyInputs(0, this.settings, this.operatingHours);
-    this.coolingTowerService.modificationExists.next(false);
+    this.modificationExists = false;
   }
 
   btnGenerateExample() {
       this.coolingTowerService.generateExampleData(this.settings);
       this.modificationExists = true;
       this.baselineSelected = true;
-      // this.modifiedSelected = false;
   }
 
   setBaselineSelected() {

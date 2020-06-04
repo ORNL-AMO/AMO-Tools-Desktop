@@ -21,15 +21,12 @@ export class CoolingTowerService {
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
 
-  modificationExists: BehaviorSubject<boolean>;
-
   constructor(private formBuilder: FormBuilder, 
               private convertUnitsService: ConvertUnitsService,
               private chillerService: ChillerService) { 
     this.baselineData = new BehaviorSubject<Array<CoolingTowerData>>(undefined);
     this.modificationData = new BehaviorSubject<Array<CoolingTowerData>>(undefined);
     this.coolingTowerOutput = new BehaviorSubject<CoolingTowerOutput>(undefined);
-    this.modificationExists = new BehaviorSubject<boolean>(false);
 
     this.currentField = new BehaviorSubject<string>('default');
     this.resetData = new BehaviorSubject<boolean>(undefined);
@@ -140,20 +137,19 @@ export class CoolingTowerService {
     dataArray[index].driftLossFactor = data.driftLossFactor;
     dataArray[index].cyclesOfConcentration = data.cyclesOfConcentration;
     
-    let modificationDataArray = this.modificationData.getValue();
-     if (isBaseline && modificationDataArray) {
-      modificationDataArray[index].operationalHours = data.operationalHours;
-      modificationDataArray[index].coolingLoad = data.coolingLoad;
-      modificationDataArray[index].flowRate = data.flowRate;
-      modificationDataArray[index].temperatureDifference = data.temperatureDifference;
-      modificationDataArray[index].userDefinedCoolingLoad = data.userDefinedCoolingLoad;
-      this.modificationData.next(modificationDataArray);
-    } else if (isBaseline && !modificationDataArray) {
+    let currentModificationData = this.modificationData.getValue();
+     if (isBaseline && currentModificationData) {
+      currentModificationData[index].operationalHours = data.operationalHours;
+      currentModificationData[index].coolingLoad = data.coolingLoad;
+      currentModificationData[index].flowRate = data.flowRate;
+      currentModificationData[index].temperatureDifference = data.temperatureDifference;
+      currentModificationData[index].userDefinedCoolingLoad = data.userDefinedCoolingLoad;
+      this.modificationData.next(currentModificationData);
+    } else if (isBaseline && !currentModificationData) {
       this.baselineData.next(dataArray);
     }else {
       this.modificationData.next(dataArray);
     }
-
   }
 
   addCase(settings: Settings, operatingHours: OperatingHours) {
@@ -179,7 +175,6 @@ export class CoolingTowerService {
     let currentBaselineData: Array<CoolingTowerData> = this.baselineData.getValue();
     let currentBaselineCopy = JSON.parse(JSON.stringify(currentBaselineData));
     this.modificationData.next(currentBaselineCopy);
-    this.modificationExists.next(true);
   }
 
   removeCase(i: number) {
@@ -202,16 +197,16 @@ export class CoolingTowerService {
   }
 
   calculate(settings: Settings) {
-    let baselineDataCopy = JSON.parse(JSON.stringify(this.baselineData.value));
-
+    let baselineDataCopy = JSON.parse(JSON.stringify(this.baselineData.getValue()));
+    let validBaseline: boolean = this.checkValidInputData(baselineDataCopy);
+    
     let modificationDataCopy: Array<CoolingTowerData>;
     let validModification = true;
     if (this.modificationData.value != undefined) {
-      modificationDataCopy = JSON.parse(JSON.stringify(this.modificationData.value));
+      modificationDataCopy = JSON.parse(JSON.stringify(this.modificationData.getValue()));
       validModification = this.checkValidInputData(modificationDataCopy);
     }
 
-    let validBaseline: boolean = this.checkValidInputData(baselineDataCopy);
     if (!validBaseline || !validModification) {
       this.initDefaultEmptyOutputs();
     } else {
@@ -232,10 +227,8 @@ export class CoolingTowerService {
         coolingTowerOutput.wcModification += caseResultData.wcModification;
         coolingTowerCaseResults.push(caseResultData)
       });
-
       coolingTowerOutput.waterSavings = coolingTowerOutput.wcBaseline - coolingTowerOutput.wcModification;
       coolingTowerOutput.savingsPercentage = coolingTowerOutput.waterSavings / coolingTowerOutput.wcBaseline * 100;
-
       coolingTowerOutput.coolingTowerCaseResults = coolingTowerCaseResults;
       this.coolingTowerOutput.next(coolingTowerOutput);
     }

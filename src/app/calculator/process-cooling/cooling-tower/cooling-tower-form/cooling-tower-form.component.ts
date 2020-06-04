@@ -39,7 +39,7 @@ export class CoolingTowerFormComponent implements OnInit {
 
   form: FormGroup;
   idString: string;
-  individualCaseResultData: CoolingTowerResult;
+  caseResultData: CoolingTowerResult;
   isEditingName: boolean = false;
   driftEliminatorOptions: Array<{value: number, display: string}> = [
     {value: 0, display: "No"},
@@ -93,16 +93,16 @@ export class CoolingTowerFormComponent implements OnInit {
       this.updateForm();
     })
     this.coolingTowerOutputSub = this.coolingTowerService.coolingTowerOutput.subscribe((coolingTowerOutput: CoolingTowerOutput) => {
-      this.individualCaseResultData = coolingTowerOutput.coolingTowerCaseResults[this.index];
+      this.caseResultData = coolingTowerOutput.coolingTowerCaseResults[this.index];
     });
     if (!this.isBaseline) {
       this.modificationDataSub = this.coolingTowerService.modificationData.subscribe(updatedData => {
-        this.updateFormOperationalData(updatedData);
+        this.updateModOperationalData(updatedData);
       })
     }
   }
 
-  updateFormOperationalData(updatedModificationData: Array<CoolingTowerData>) {
+  updateModOperationalData(updatedModificationData: Array<CoolingTowerData>) {
     let updated: CoolingTowerData = updatedModificationData[this.index];
     if (updated) {
       this.form.patchValue({

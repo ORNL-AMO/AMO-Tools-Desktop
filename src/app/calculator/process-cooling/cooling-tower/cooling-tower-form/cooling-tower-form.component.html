@@ -219,19 +219,19 @@
             <span class="px-3">
               Water Consumption
             </span>
-            <span *ngIf="isBaseline && individualCaseResultData">
-              <span *ngIf="individualCaseResultData.wcBaseline">
-                {{individualCaseResultData.wcBaseline | number: '1.0-0' }}
+            <span *ngIf="isBaseline && caseResultData">
+              <span *ngIf="caseResultData.wcBaseline">
+                {{caseResultData.wcBaseline | number: '1.0-0' }}
               </span>
-              <span *ngIf="!individualCaseResultData.wcBaseline">
+              <span *ngIf="!caseResultData.wcBaseline">
                 <strong>&mdash; &mdash;</strong>
               </span>
             </span>
-            <span *ngIf="!isBaseline && individualCaseResultData">
-              <span *ngIf="individualCaseResultData.wcModification">
-                {{individualCaseResultData.wcModification | number: '1.0-0' }}
+            <span *ngIf="!isBaseline && caseResultData">
+              <span *ngIf="caseResultData.wcModification">
+                {{caseResultData.wcModification | number: '1.0-0' }}
               </span>
-              <span *ngIf="!individualCaseResultData.wcBaseline">
+              <span *ngIf="!caseResultData.wcBaseline">
                 <strong>&mdash; &mdash;</strong>
               </span>
             </span>

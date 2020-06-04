@@ -25,7 +25,7 @@
         <td class="text-center w-50">
           {{coolingTowerOutput.waterSavings | number: '1.0-0'}}
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">kGal</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
         </td>
       </tr>
     </tbody>
