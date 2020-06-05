@@ -164,6 +164,7 @@ export interface CalculatedGasDensity {
   dewPoint: number;
   relativeHumidity: number;
   saturationPressure: number;
+  wetBulbTemp: number;
 }
 
 export interface FanShaftPower {
