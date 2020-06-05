@@ -347,6 +347,7 @@ export interface InletPressureData {
   airTreatmentLoss: number;
   flowMeasurementLoss: number;
   inletDamperLoss: number;
+  processRequirementsFixed: number;
   processRequirements: number;
   inletSystemEffectLoss: number;
   calculatedInletPressure: number;
@@ -357,6 +358,8 @@ export interface OutletPressureData {
   outletDamperLoss: number;
   airTreatmentLoss: number;
   systemDamperLoss: number;
+  outletDuctworkLoss: number;
+  processRequirementsFixed: number;
   processRequirements: number;
   calculatedOutletPressure: number;
 }

@@ -29,6 +29,7 @@ export class CalculateInletPressureComponent implements OnInit {
         airTreatmentLoss: 0,
         flowMeasurementLoss: 0,
         inletDamperLoss: 0,
+        processRequirementsFixed: 0,
         processRequirements: 0,
         inletSystemEffectLoss: 0,
         calculatedInletPressure: 0
