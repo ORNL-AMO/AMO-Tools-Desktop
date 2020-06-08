@@ -139,13 +139,15 @@ export class LogToolDataService {
   submitIndividualCsvData(individualDataFromCsv: Array<IndividualDataFromCsv>) {
     individualDataFromCsv.forEach(csvData => {
       if (csvData.hasDateField == false) {
-        // csvData.hasDateField = false;
         csvData.startDate = undefined;
         csvData.endDate = undefined;
       } else {
-        // csvData.hasDateField = true;
         //update date field format
         csvData.csvImportData.data.map(dataItem => { dataItem[csvData.dateField.fieldName] = moment(dataItem[csvData.dateField.fieldName]).format('YYYY-MM-DD HH:mm:ss'); });
+        //remove invalid dates
+        _.remove(csvData.csvImportData.data, (dataItem) => {
+          return dataItem[csvData.dateField.fieldName] == 'Invalid date';
+        });
         //order by date descending
         csvData.csvImportData.data = _.sortBy(csvData.csvImportData.data, (dataItem) => {
           return dataItem[csvData.dateField.fieldName];
