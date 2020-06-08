@@ -36,58 +36,34 @@ export class LogToolDataService {
   //seperate log tool data into days
   setLogToolDays() {
     let individualDataFromCsv: Array<IndividualDataFromCsv> = JSON.parse(JSON.stringify(this.logToolService.individualDataFromCsv));
-    // let startDates: Array<Date> = individualDataFromCsv.map(csvItem => { return new Date(csvItem.startDate) });
-    // let endDates: Array<Date> = individualDataFromCsv.map(csvItem => { return new Date(csvItem.endDate) });
     this.logToolDays = new Array();
     individualDataFromCsv.forEach(csvData => {
       let dataForDays: Array<{ date: Date, data: Array<any> }> = this.divideDataIntoDays(csvData.csvImportData.data, csvData.dateField.fieldName);
-      console.log(dataForDays)
-
       dataForDays.forEach(day => {
         let hourlyAverages = this.getHourlyAverages(day.data, csvData);
-        // console.timeEnd('getHourlyAverages')
         this.logToolDays.push({
           date: new Date(day.date),
           data: day.data,
           hourlyAverages: hourlyAverages
         });
       });
-
-
-      // let startDate: Date = new Date(_.min(startDates));
-      // let endDate: Date = new Date(_.max(endDates));
-      // endDate.setDate(endDate.getDate() + 1);
-      // //iterate thru days from start day to end day
-      // for (let tmpDate = startDate; this.checkSameDay(tmpDate, endDate) != true; tmpDate.setDate(tmpDate.getDate() + 1)) {
-      //   // console.time('filterDayData')
-      //   let filteredDayData: Array<any> = this.getDataForDay(tmpDate, csvData.csvImportData.data, csvData.dateField);
-      //   // console.timeEnd('filterDayData')
-      //   if (filteredDayData.length != 0) {
-      //     // console.time('getHourlyAverages')
-      //     let hourlyAverages = this.getHourlyAverages(filteredDayData, csvData);
-      //     // console.timeEnd('getHourlyAverages')
-      //     this.logToolDays.push({
-      //       date: new Date(tmpDate),
-      //       data: filteredDayData,
-      //       hourlyAverages: hourlyAverages
-      //     });
-      //   }
-      // }
     });
   }
 
   getHourlyAverages(dayData: Array<any>, csvData: IndividualDataFromCsv): Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> {
     let hourlyAverages: Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> = new Array();
     let fields: Array<LogToolField> = csvData.fields;
-    for (let i = 0; i < 24; i++) {
+    for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
+      //filter day data by hour
       let filteredDaysByHour = _.filter(dayData, (dayItem) => {
         if (dayItem[csvData.dateField.fieldName]) {
           let date = new Date(dayItem[csvData.dateField.fieldName]);
-          let dateVal = date.getHours();
-          return i == dateVal;
+          let dayDataHourVal = date.getHours();
+          return hourOfDay == dayDataHourVal;
         };
       });
       let averages: Array<{ value: number, field: LogToolField }> = new Array();
+      //iterate each field and get averages for the hour
       fields.forEach(field => {
         if (field.isDateField == false && field.useField == true) {
           let hourFieldMean: number;
@@ -101,26 +77,12 @@ export class LogToolDataService {
         }
       })
       hourlyAverages.push({
-        hour: i,
+        hour: hourOfDay,
         averages: averages
       });
 
     }
     return hourlyAverages;
-  }
-
-  getDataForDay(date: Date, data: Array<any>, dateField: LogToolField): Array<any> {
-    //filter matching day items from all day data and return array
-    console.log(data.length);
-    let filteredDayData: Array<any> = _.filter(data, (dataItem) => {
-      let isSameDay: boolean = false;
-      if (dataItem[dateField.fieldName] != undefined) {
-        let dataItemDate: Date = new Date(dataItem[dateField.fieldName]);
-        isSameDay = this.checkSameDay(date, dataItemDate);
-      }
-      return isSameDay;
-    });
-    return filteredDayData;
   }
 
   checkSameDay(day1: Date, day2: Date) {

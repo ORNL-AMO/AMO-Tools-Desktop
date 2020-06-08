@@ -21,7 +21,9 @@
             <div class="bounce2"></div>
             <div class="bounce3"></div>
         </div>
-        <span class="large text-center" *ngIf="calculatingData">Calculating Day Types<br> This may take a moment depending on the
-            amount of data you have supplied</span>
+        <span class="large text-center" *ngIf="calculatingData">Calculating Day Types<br> This may take a moment
+            depending on the amount of data you have supplied. <br>
+            {{calculatingMessage}}
+        </span>
     </div>
 </div>
