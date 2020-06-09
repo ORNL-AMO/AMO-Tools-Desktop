@@ -3,11 +3,16 @@ import { FanAnalysisComponent } from "../fans/fan-analysis/fan-analysis.componen
 import { FanEfficiencyComponent } from "../fans/fan-efficiency/fan-efficiency.component";
 import { FansListComponent } from "../fans/fans-list/fans-list.component";
 import { SystemAndEquipmentCurveComponent } from "../system-and-equipment-curve/system-and-equipment-curve.component";
+import { FanPsychometricComponent } from "../fans/fan-psychometric/fan-psychometric.component";
 
 export const fanRoutes: Routes = [
     {
         path: '',
         component: FansListComponent
+    },
+    {
+        path: 'fan-psychometric',
+        component: FanPsychometricComponent
     },
     {
         path: 'fan-analysis',

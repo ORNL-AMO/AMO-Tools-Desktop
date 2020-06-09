@@ -26,6 +26,7 @@ export class GasDensityFormService {
       gasType: [obj.gasType, Validators.required],
       dryBulbTemp: [obj.dryBulbTemp, [Validators.min(ranges.dryBulbTempMin), Validators.max(ranges.dryBulbTempMax)]],
       staticPressure: [obj.staticPressure, [Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
+      altitude: [obj.altitude],
       barometricPressure: [obj.barometricPressure, [Validators.min(ranges.barPressureMin), Validators.max(ranges.barPressureMax)]],
       specificGravity: [obj.specificGravity, [Validators.min(0), Validators.max(2)]],
       wetBulbTemp: [obj.wetBulbTemp, [Validators.min(ranges.wetBulbTempMin), Validators.max(ranges.wetBulbTempMax)]],
@@ -217,6 +218,15 @@ export class GasDensityFormService {
       specificHeatGas: form.controls.specificHeatGas.value
     };
     return fanGasDensity;
+  }
+
+  setValidators(gasDensityForm: FormGroup, settings: Settings) {
+    let ranges: GasDensityRanges = this.getGasDensityRanges(settings);
+    this.setRelativeHumidityValidators(gasDensityForm);
+    this.setWetBulbValidators(gasDensityForm, ranges);
+    this.setDewPointValidators(gasDensityForm, ranges);
+    this.setCustomValidators(gasDensityForm, ranges);
+    return gasDensityForm;
   }
 
 }

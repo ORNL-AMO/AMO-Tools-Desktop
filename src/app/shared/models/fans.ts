@@ -141,6 +141,7 @@ export interface PlaneData {
 export interface BaseGasDensity {
   dryBulbTemp?: number;
   staticPressure?: number;
+  altitude?: number;
   barometricPressure?: number;
   gasDensity?: number;
   gasType?: string;
