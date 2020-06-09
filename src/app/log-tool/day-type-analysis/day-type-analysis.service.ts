@@ -91,9 +91,7 @@ export class DayTypeAnalysisService {
     let testExcluded = logToolDay.hourlyAverages.find(averageItem => {
       return averageItem.averages.find(item => { return item.value == undefined });
     });
-
     if (testExcluded != undefined) {
-      console.log(testExcluded);
       return 'Excluded';
     } else {
       let dayCode: number = date.getDay();

@@ -9,7 +9,7 @@
             <div class="scroll-item">
                 <app-data-table></app-data-table>
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="dataExists == false">
                 <label>
                     Log File
                 </label>
@@ -24,7 +24,8 @@
 
             <div class="text-center pt-2" *ngIf="importSuccesful">
                 <div class="alert-success">
-                    Data parsing successful! You may add additional csv data or click the next button to continue setting up your data.
+                    Data parsing successful! You may add additional csv data or click the next button to continue
+                    setting up your data.
                 </div>
             </div>
             <div class="d-flex flex-column align-items-center w-100 h-100" *ngIf="importingData == true">

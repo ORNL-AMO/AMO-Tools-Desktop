@@ -44,7 +44,6 @@ export class LogToolDataService {
         this.addLogToolDay(new Date(day.date), hourlyAverages);
       });
     });
-    console.log(this.logToolDays);
   }
 
   addLogToolDay(dayDate: Date, hourlyAverages: Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }>) {
