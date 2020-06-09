@@ -41,14 +41,27 @@ export class LogToolDataService {
       let dataForDays: Array<{ date: Date, data: Array<any> }> = this.divideDataIntoDays(csvData.csvImportData.data, csvData.dateField.fieldName);
       dataForDays.forEach(day => {
         let hourlyAverages = this.getHourlyAverages(day.data, csvData);
-        this.logToolDays.push({
-          date: new Date(day.date),
-          data: day.data,
-          hourlyAverages: hourlyAverages
-        });
+        this.addLogToolDay(new Date(day.date), hourlyAverages);
       });
     });
+    console.log(this.logToolDays);
   }
+
+  addLogToolDay(dayDate: Date, hourlyAverages: Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }>) {
+    let existingDayIndex = this.logToolDays.findIndex(logToolDay => { return this.checkSameDay(logToolDay.date, dayDate) });
+    if (existingDayIndex != -1) {
+      this.logToolDays[existingDayIndex].hourlyAverages.forEach(hourItem => {
+        let addtionalAverages = hourlyAverages.find(hourlyAverage => { return hourlyAverage.hour == hourItem.hour });
+        hourItem.averages = _.union(hourItem.averages, addtionalAverages.averages);
+      });
+    } else {
+      this.logToolDays.push({
+        date: dayDate,
+        hourlyAverages: hourlyAverages
+      });
+    }
+  }
+
 
   getHourlyAverages(dayData: Array<any>, csvData: IndividualDataFromCsv): Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> {
     let hourlyAverages: Array<{ hour: number, averages: Array<{ value: number, field: LogToolField }> }> = new Array();
@@ -90,13 +103,13 @@ export class LogToolDataService {
   }
 
   setValidNumberOfDayDataPoints() {
-    let dayDataNumberOfEntries: Array<number> = new Array();
-    this.logToolDays.forEach(day => {
-      dayDataNumberOfEntries.push(day.data.length);
-    })
-    let tmpArr = _.countBy(dayDataNumberOfEntries);
-    let tmpArr2 = _.entries(tmpArr)
-    this.validNumberOfDayDataPoints = Number(_.maxBy(_.last(tmpArr2)));
+    // let dayDataNumberOfEntries: Array<number> = new Array();
+    // this.logToolDays.forEach(day => {
+    //   dayDataNumberOfEntries.push(day.data.length);
+    // })
+    // let tmpArr = _.countBy(dayDataNumberOfEntries);
+    // let tmpArr2 = _.entries(tmpArr)
+    // this.validNumberOfDayDataPoints = Number(_.maxBy(_.last(tmpArr2)));
   }
 
   getAllFieldData(fieldName: string): Array<number> {

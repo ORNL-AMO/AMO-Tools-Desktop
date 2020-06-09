@@ -88,7 +88,12 @@ export class DayTypeAnalysisService {
 
   getPrimaryDayType(date: Date): string {
     let logToolDay: LogToolDay = this.logToolDataService.logToolDays.find(day => { return this.logToolDataService.checkSameDay(day.date, date) });
-    if (logToolDay.data.length != this.logToolDataService.validNumberOfDayDataPoints) {
+    let testExcluded = logToolDay.hourlyAverages.find(averageItem => {
+      return averageItem.averages.find(item => { return item.value == undefined });
+    });
+
+    if (testExcluded != undefined) {
+      console.log(testExcluded);
       return 'Excluded';
     } else {
       let dayCode: number = date.getDay();
@@ -205,7 +210,7 @@ export class DayTypeAnalysisService {
     let dayTypeData: Array<any> = new Array();
     let allDayTypeHourlyAverages: Array<HourlyAverage> = new Array();
     dayType.logToolDays.forEach(logToolDay => {
-      dayTypeData = _.union(dayTypeData, logToolDay.data);
+      // dayTypeData = _.union(dayTypeData, logToolDay.data);
       allDayTypeHourlyAverages = _.union(allDayTypeHourlyAverages, logToolDay.hourlyAverages);
     });
     let hourlyAverages: Array<HourlyAverage> = this.calculateDayTypeHourlyAverages(allDayTypeHourlyAverages);

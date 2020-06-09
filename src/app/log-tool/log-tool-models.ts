@@ -13,7 +13,7 @@ export interface LogToolField {
 
 export interface LogToolDay {
     date: Date,
-    data: Array<any>,
+    // data: Array<any>,
     hourlyAverages: Array<{
         hour: number,
         averages: Array<{
