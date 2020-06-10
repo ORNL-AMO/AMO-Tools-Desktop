@@ -146,7 +146,7 @@ export class CurveDataService {
 
   setAssessmentCalculatorData(equipmentType: string, assessment: Assessment) {
     let calculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
-    if (calculator.systemAndEquipmentCurveData != undefined) {
+    if (calculator != undefined && calculator.systemAndEquipmentCurveData != undefined) {
       this.systemAndEquipmentCurveService.byDataInputs.next(calculator.systemAndEquipmentCurveData.byDataInputs);
       this.systemAndEquipmentCurveService.byEquationInputs.next(calculator.systemAndEquipmentCurveData.byEquationInputs);
       this.systemAndEquipmentCurveService.equipmentInputs.next(calculator.systemAndEquipmentCurveData.equipmentInputs);
