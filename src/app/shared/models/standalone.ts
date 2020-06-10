@@ -107,8 +107,16 @@ export interface PipeSizes {
 
 export interface AirSystemCapacityInput extends PipeSizes {
   receiverCapacities: Array<number>;
+  leakRateInput?: LeakRateInput;
   customPipes: Array<{ pipeSize: number, pipeLength: number }>;
   allPipes: Array<{ pipeSize: string, customPipeSize: number, pipeLength: number }>;
+}
+
+export interface LeakRateInput {
+  airPressureIn?: number;
+  airPressureOut?: number;
+  dischargeTime: number;
+  atmosphericPressure: number;
 }
 
 export interface AirSystemCapacityOutput extends PipeSizes {
@@ -116,6 +124,7 @@ export interface AirSystemCapacityOutput extends PipeSizes {
   totalReceiverVolume: number;
   totalCapacityOfCompressedAirSystem: number;
   receiverCapacities: Array<number>;
+  leakRate?: number;
 }
 
 export interface AirVelocityInput {
@@ -160,6 +169,7 @@ export interface CalculateUsableCapacity {
   tankSize: number;
   airPressureIn: number;
   airPressureOut: number;
+  leakRateInput?: LeakRateInput;
 };
 
 
