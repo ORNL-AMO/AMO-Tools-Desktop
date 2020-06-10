@@ -146,7 +146,7 @@
 
     <div class="form-group" *ngIf="gasDensityForm.controls.gasType.value == 'OTHER'"
         [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':gasDensityForm.controls.specificGravity.invalid}">
-        <label for="{{'specificGravity_'+idString}}">Air Relative Density (G)</label>
+        <label for="{{'specificGravity_'+idString}}">Gas Relative Density (G)</label>
         <div class="input-group">
           <input name="specificGravity" type="number" step="any" class="form-control" formControlName="specificGravity"
             id="{{'specificGravity_'+idString}}" (input)="getDensity()" (focus)="focusField('specificGravity')"
