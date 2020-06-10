@@ -103,6 +103,7 @@ export interface FanRatedInfo {
 
 export interface Plane {
   planeType: string;
+  // Height (displayed to the user) and length, refer to the same dimension
   length: number;
   width: number;
   area: number;

@@ -30,6 +30,8 @@ import { FanDataHelpComponent } from './help-and-results-panel/operating-points-
 import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { GasDensityResultsModule } from '../../../shared/gas-density-results/gas-density-results.module';
+import { InternalDimensionModalComponent } from './internal-dimension-modal/internal-dimension-modal.component';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -53,6 +55,7 @@ import { GasDensityResultsModule } from '../../../shared/gas-density-results/gas
     FsatBasicsHelpComponent,
     FanShaftPowerHelpComponent,
     FanDataHelpComponent,
+    InternalDimensionModalComponent,
   ],
   imports: [
     CommonModule,
@@ -60,7 +63,8 @@ import { GasDensityResultsModule } from '../../../shared/gas-density-results/gas
     ReactiveFormsModule,
     PercentGraphModule,
     SharedPipesModule,
-    GasDensityResultsModule
+    GasDensityResultsModule,
+    ModalModule,
   ],
   exports: [FanAnalysisComponent, HelpAndResultsPanelComponent, PlaneDataFormComponent, FanInfoFormComponent],
   providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService, FanShaftPowerFormService, PlaneDataFormService, ConvertFanAnalysisService]
