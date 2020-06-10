@@ -197,6 +197,10 @@ export class ReceiverTankService {
       tankSize: 0,
       airPressureIn: 0,
       airPressureOut: 0,
+      leakRateInput: {
+        dischargeTime: 0,
+        atmosphericPressure: 0
+      }
     };
   }
 
@@ -204,7 +208,11 @@ export class ReceiverTankService {
     return {
       tankSize: 1000,
       airPressureIn: 110,
-      airPressureOut: 100
+      airPressureOut: 100,
+      leakRateInput: {
+        dischargeTime: 120,
+        atmosphericPressure: 14.7
+      }
     };
   }
 
