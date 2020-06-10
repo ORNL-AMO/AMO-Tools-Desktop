@@ -27,9 +27,13 @@
         </table>
     </div>
     <div class="d-flex flex-column p-2">
-        <label class="group-label">Selected Data Summary</label>
+        <label class="group-label">Data Summary</label>
         <table class="table d-flex">
             <tbody>
+                <tr>
+                    <td class="bold">Axis</td>
+                    <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.axis}}</td>
+                </tr>
                 <tr>
                     <td class="bold">Data Field</td>
                     <td *ngFor="let axisSummary of axisSummaries">{{axisSummary.name}}</td>

@@ -1,6 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { LogToolService } from '../../log-tool.service';
-import { VisualizeMenuService } from '../visualize-menu/visualize-menu.service';
 import { LogToolField } from '../../log-tool-models';
 import { VisualizeService } from '../visualize.service';
 import * as _ from 'lodash';
@@ -40,12 +38,16 @@ export class VisualizeDataComponent implements OnInit {
       if (graphObj.selectedXAxisDataOption.dataField && graphObj.selectedXAxisDataOption.dataField.alias == 'Time Series') {
         this.setDataSummary();
       } else if (graphObj.selectedXAxisDataOption.dataField) {
-        let xAxisSummary = this.getDataSummary(graphObj.selectedXAxisDataOption)
+        let xAxisSummary = this.getDataSummary(graphObj.selectedXAxisDataOption, 'X-Axis')
         this.axisSummaries.push(xAxisSummary);
       }
       if (graphObj.data[0].type != 'bar') {
         graphObj.selectedYAxisDataOptions.forEach(option => {
-          let summary = this.getDataSummary(option.dataOption);
+          let yAxis: string = 'Y-Axis';
+          if(option.yaxis == 'y2'){
+            yAxis = 'Right Y-Axis'
+          }
+          let summary = this.getDataSummary(option.dataOption, yAxis);
           this.axisSummaries.push(summary);
         });
       }
@@ -88,13 +90,14 @@ export class VisualizeDataComponent implements OnInit {
     }
   }
 
-  getDataSummary(dataOption: { dataField: LogToolField, data: Array<any> }): {
+  getDataSummary(dataOption: { dataField: LogToolField, data: Array<any> }, axis: string): {
     max: number,
     min: number,
     numberOfDataPoints: number,
     standardDeviation: number,
     mean: number,
-    name: string
+    name: string,
+    axis: string
   } {
     let min: number;
     let max: number;
@@ -107,6 +110,7 @@ export class VisualizeDataComponent implements OnInit {
       standardDeviation = this.visualizeService.calculateStandardDeviation(dataOption.data, mean);
     }
     return {
+      axis: axis,
       max: max,
       min: min,
       numberOfDataPoints: dataOption.data.length,

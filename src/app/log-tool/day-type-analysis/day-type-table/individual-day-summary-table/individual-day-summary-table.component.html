@@ -18,7 +18,7 @@
                         </tr>
                         <tr *ngFor="let field of fields">
                             <td class="bold day-type-label">
-                                {{field.fieldName}}
+                                {{field.alias}}
                             </td>
                             <td *ngFor="let hourlyAverage of logToolDay.hourlyAverages">
                                 {{getAverageValue(hourlyAverage.averages, field) | number}}

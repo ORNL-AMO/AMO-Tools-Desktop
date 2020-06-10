@@ -37,16 +37,6 @@ export class DayTypeAnalysisComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    // if (this.dayTypeAnalysisService.dayTypesCalculated == false) {
-    //   setTimeout(() => {
-    //   }, 100);
-    // } else {
-    //   this.showContent = true;
-    //   this.cd.detectChanges();
-    // }
-  }
-
   ngOnDestroy() {
     this.displayDayTypeCalanderSub.unsubscribe();
     this.dataViewSub.unsubscribe();
@@ -56,17 +46,18 @@ export class DayTypeAnalysisComponent implements OnInit {
     this.calculatingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
+      // console.time('runAnalysis');
       this.logToolDataService.setLogToolDays();
-      this.logToolDataService.setValidNumberOfDayDataPoints();
       this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
       this.dayTypeAnalysisService.initDayTypes();
       this.dayTypeAnalysisService.setDayTypeSummaries();
       this.dayTypeGraphService.setDayTypeScatterPlotData();
       this.dayTypeGraphService.setIndividualDayScatterPlotData();
+      // console.timeEnd('runAnalysis');
       this.showContent = true;
       this.dayTypeAnalysisService.dayTypesCalculated = true;
       this.calculatingData = false;
       this.cd.detectChanges();
-    }, 200)
+    }, 50)
   }
 }

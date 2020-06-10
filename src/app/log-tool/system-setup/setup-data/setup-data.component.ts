@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CsvToJsonService, CsvImportData } from '../../../shared/helper-services/csv-to-json.service';
-import { _dateFormats } from './date-formats';
 import { LogToolService } from '../../log-tool.service';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysis.service';
@@ -14,15 +13,12 @@ import { IndividualDataFromCsv } from '../../log-tool-models';
 })
 export class SetupDataComponent implements OnInit {
 
-  importInProgress: boolean = false;
   fileReference: any;
   validFile: boolean;
   importData: any = null;
   importDataFromCsv: CsvImportData;
   importingData: boolean = false;
   dataExists: boolean = false;
-  addingAdditionalData: boolean = false;
-  disableImportFile: boolean = false;
   importSuccesful: boolean = false;
   individualDataFromCsv: Array<IndividualDataFromCsv>
   constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
@@ -61,7 +57,6 @@ export class SetupDataComponent implements OnInit {
   }
 
   parseImportData() {
-    this.disableImportFile = true;
     this.importingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
@@ -82,8 +77,6 @@ export class SetupDataComponent implements OnInit {
     this.logToolService.resetData();
     this.logToolDataService.resetData();
     this.dataExists = false;
-    this.disableImportFile = false;
-    this.addingAdditionalData = false;
     this.cd.detectChanges();
   }
 }

@@ -5,3 +5,8 @@
 .hidden{
     display: none;
 }
+
+.btn-secondary{
+    color: white;
+    background: #117A65;
+}

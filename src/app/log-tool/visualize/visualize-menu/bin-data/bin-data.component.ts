@@ -33,7 +33,6 @@ export class BinDataComponent implements OnInit {
     this.visualizeService.focusedPanel.next('default');
   }
 
-
   setNumberOfBins() {
     this.selectedGraphObj = this.visualizeMenuService.setNumberOfBins(this.selectedGraphObj);
     this.save();
@@ -43,11 +42,6 @@ export class BinDataComponent implements OnInit {
     this.selectedGraphObj = this.visualizeMenuService.setBins(this.selectedGraphObj);
     this.save();
   }
-
-  setBinningMethod() {
-    
-  }
-
 
   save() {
     this.visualizeService.plotFunctionType = 'react';

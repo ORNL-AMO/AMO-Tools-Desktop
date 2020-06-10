@@ -72,7 +72,7 @@ export class DayTypeGraphService {
     let xData: Array<any> = new Array();
     let yData: Array<number> = new Array();
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
-    //24 hrs in a day
+    //24 hrs in a day (0 -> 23)
     for (let hourOfDay = 0; hourOfDay < 24; hourOfDay++) {
       let hourAverageObj: HourlyAverage = _.find(logToolDay.hourlyAverages, (hourlyAverageObj) => { return hourlyAverageObj.hour == hourOfDay })
       if (hourAverageObj) {

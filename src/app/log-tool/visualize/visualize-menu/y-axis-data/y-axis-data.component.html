@@ -54,18 +54,6 @@
                     [ngStyle]="{'background-color': selectedDataOption.seriesColor}" (input)="setYAxisData()"
                     (focus)="focusField()" (blur)="focusOut()">
             </div>
-            <!--lines and/or markers-->
-            <!--TODO: Add lines/markers options functionality-->
-            <!-- <div class="form-group">
-                <label>Lines or Markers</label>
-                <select class="form-control" name="{{'linesOrMarkers'+selectedDataOption.index}}"
-                    [(ngModel)]="selectedDataOption.linesOrMarkers" (change)="setYAxisData()" (focus)="focusField()"
-                    (blur)="focusOut()">
-                    <option [ngValue]="'lines+markers'">Lines + Markers</option>
-                    <option [ngValue]="'markers'">Markers</option>
-                    <option [ngValue]="'lines'">Lines</option>
-                </select>
-            </div> -->
             <!--which axis to use-->
             <div class="form-group" *ngIf="selectedGraphObj.hasSecondYAxis">
                 <label>

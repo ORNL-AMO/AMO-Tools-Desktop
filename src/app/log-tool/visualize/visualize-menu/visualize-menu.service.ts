@@ -54,6 +54,7 @@ export class VisualizeMenuService {
     } else {
       this.setDefaultYAxisDataOptions(selectedGraphObj);
     }
+    selectedGraphObj.layout.yaxis.ticksuffix = '';
     this.setYAxisData(selectedGraphObj);
   }
 
@@ -146,6 +147,7 @@ export class VisualizeMenuService {
     } else {
       selectedGraphObj.selectedXAxisDataOption = selectedGraphObj.xAxisDataOptions[0];
     }
+    selectedGraphObj.layout.yaxis.ticksuffix = '%';
     this.setBarHistogramData(selectedGraphObj);
   }
 

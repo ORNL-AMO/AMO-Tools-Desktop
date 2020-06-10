@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DayTypeAnalysisService } from '../day-type-analysis.service';
-import { DayTypeSummary, LogToolField, DayType, LogToolDay } from '../../log-tool-models';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
-import { LogToolDataService } from '../../log-tool-data.service';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 @Component({
   selector: 'app-day-type-table',
