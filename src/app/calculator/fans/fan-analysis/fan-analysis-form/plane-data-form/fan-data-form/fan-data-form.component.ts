@@ -21,7 +21,8 @@ export class FanDataFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-
+  showInternalDimensionModal = false;
+  currentDimension: string;
   dataForm: FormGroup;
   velocityData: { pv3: number, percent75Rule: number };
   planeData: Plane;
@@ -60,7 +61,7 @@ export class FanDataFormComponent implements OnInit {
   }
 
   calcArea() {
-    let tmpData = this.planeDataFormService.getPlaneObjFromForm(this.dataForm, this.planeData);
+    let tmpData: Plane = this.planeDataFormService.getPlaneObjFromForm(this.dataForm, this.planeData);
     this.planeDataFormService.planeShape.next(tmpData.planeType);
     if (tmpData.planeType === 'Rectangular') {
       let tmpArea = tmpData.length * tmpData.width;
@@ -120,5 +121,22 @@ export class FanDataFormComponent implements OnInit {
       dispUnit = dispUnit.replace(')', '');
       return dispUnit;
     }
+  }
+
+  openInternalDimensionModal(dimension: string) {
+    this.showInternalDimensionModal = true;
+    this.currentDimension = dimension;
+    this.fanAnalysisService.modalOpen.next(this.showInternalDimensionModal);
+  }
+
+  closeInternalDimensionModal() {
+    this.showInternalDimensionModal = false;
+    this.fanAnalysisService.modalOpen.next(this.showInternalDimensionModal)
+  }
+
+  setInternalDimensionAndClose(internalDimension: number) {
+    let controlName = this.currentDimension == 'Width'? 'width': 'length';
+    this.dataForm.controls[controlName].patchValue(internalDimension);
+    this.closeInternalDimensionModal();
   }
 }

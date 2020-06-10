@@ -11,8 +11,17 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="length" *ngIf="dataForm.controls.planeType.value == 'Rectangular'">Length</label>
-        <label for="length" *ngIf="dataForm.controls.planeType.value == 'Circular'">Diameter</label>
+        <!-- Length/Height dimensions are interchangable -->
+        <label for="length" *ngIf="dataForm.controls.planeType.value == 'Rectangular'">Height
+          <a class="form-text click-link" (click)="openInternalDimensionModal('Height')">
+            Calculate Internal Clear Height
+          </a>
+        </label>
+        <label for="length" *ngIf="dataForm.controls.planeType.value == 'Circular'">Diameter
+          <a class="form-text click-link" (click)="openInternalDimensionModal('Diameter')">
+           Calculate Internal Clear Diameter
+         </a>
+        </label>
         <div class="input-group">
           <input name="length" type="number" step="any" class="form-control" formControlName="length" id="length" (input)="calcArea()"
             (focus)="focusField('length')" onfocus="this.select();">
@@ -25,7 +34,11 @@
         </span>
       </div>
       <div class="form-group" *ngIf="dataForm.controls.planeType.value == 'Rectangular'">
-        <label for="width">Width</label>
+        <label for="width">Width
+          <a class="form-text click-link" (click)="openInternalDimensionModal('Width')">
+            Calculate Internal Clear Width
+          </a>
+        </label>
         <div class="input-group">
           <input name="width" type="number" step="any" class="form-control" formControlName="width" id="width" (input)="calcArea()"
             (focus)="focusField('width')" onfocus="this.select();">
@@ -112,8 +125,13 @@
     </div>
     <div class="form-group bold" *ngIf="planeNum == '3a' || planeNum == '3b' || planeNum == '3c'">
       <label for="percent75Rule">Points Satisfying 75% Rule</label>
-      <div class="text-center">
+      <div class="text-center"
+       [ngClass]="{'text-danger': velocityData.percent75Rule < 75}">
         {{velocityData.percent75Rule | number: '1.1-1'}} %
       </div>
     </div>
   </form>
+
+  <app-internal-dimension-modal *ngIf="showInternalDimensionModal" [dimension]="currentDimension" [settings]="settings"
+  (emitClose)="closeInternalDimensionModal()" (emitSave)="setInternalDimensionAndClose($event)">
+</app-internal-dimension-modal>

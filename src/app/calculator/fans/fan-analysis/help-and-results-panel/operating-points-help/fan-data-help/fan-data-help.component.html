@@ -113,13 +113,13 @@
   </div>
   <div class="my-2" *ngIf=" currentField == 'length'">
     <h6>
-      <span *ngIf="planeType == 'Rectangular'">Length</span>
+      <span *ngIf="planeType == 'Rectangular'">Height</span>
       <span *ngIf="planeType == 'Circular'">Diameter</span>
       <br>
       <small class="text-muted">
-        The
-        <span *ngIf="planeType == 'Rectangular'">length</span>
-        <span *ngIf="planeType == 'Circular'">diameter</span> of the planar area.
+        The inner clear
+        <span *ngIf="planeType == 'Rectangular'">Height</span>
+        <span *ngIf="planeType == 'Circular'">diameter</span> of the plane.
         <hr>
       </small>
     </h6>
@@ -129,7 +129,7 @@
       Width
       <br>
       <small class="text-muted">
-        The width of the planar area.
+        The inner clear width of the plane
         <hr>
       </small>
     </h6>

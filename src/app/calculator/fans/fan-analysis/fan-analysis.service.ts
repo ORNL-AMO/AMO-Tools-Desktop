@@ -12,6 +12,8 @@ export class FanAnalysisService {
   currentField: BehaviorSubject<string>;
   resetForms: BehaviorSubject<boolean>;
   updateTraverseData: BehaviorSubject<boolean>;
+  modalOpen: BehaviorSubject<boolean>;
+
   inAssessmentModal: boolean;
   pressureCalcResultType: string = 'static';
   constructor() {
@@ -21,6 +23,7 @@ export class FanAnalysisService {
     this.currentField = new BehaviorSubject<string>('default');
     this.resetForms = new BehaviorSubject<boolean>(false);
     this.updateTraverseData = new BehaviorSubject<boolean>(false);
+    this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultData(): Fan203Inputs {
