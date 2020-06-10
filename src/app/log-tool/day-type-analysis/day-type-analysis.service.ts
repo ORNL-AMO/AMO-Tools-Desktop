@@ -8,7 +8,6 @@ import { LogToolField, DayType, DayTypeSummary, LogToolDay, HourlyAverage } from
 export class DayTypeAnalysisService {
 
   selectedDataField: BehaviorSubject<LogToolField>;
-  // daySummaries: Array<DaySummary>;
   dayTypes: BehaviorSubject<Array<DayType>>;
   dayTypeSummaries: BehaviorSubject<Array<DayTypeSummary>>;
   displayDayTypeCalander: BehaviorSubject<boolean>;
@@ -208,7 +207,6 @@ export class DayTypeAnalysisService {
     let dayTypeData: Array<any> = new Array();
     let allDayTypeHourlyAverages: Array<HourlyAverage> = new Array();
     dayType.logToolDays.forEach(logToolDay => {
-      // dayTypeData = _.union(dayTypeData, logToolDay.data);
       allDayTypeHourlyAverages = _.union(allDayTypeHourlyAverages, logToolDay.hourlyAverages);
     });
     let hourlyAverages: Array<HourlyAverage> = this.calculateDayTypeHourlyAverages(allDayTypeHourlyAverages);
@@ -271,8 +269,6 @@ export class DayTypeAnalysisService {
     let endDates: Array<Date> = this.logToolService.individualDataFromCsv.map(csvItem => { return new Date(csvItem.endDate) });
     let startDate: Date = new Date(_.min(startDates));
     let endDate: Date = new Date(_.max(endDates));
-    // let startDate: Date = new Date(logToolDays[0].date);
-    // let endDate: Date = new Date(logToolDays[logToolDays.length - 1].date);
     this.calendarStartDate = {
       year: startDate.getFullYear(),
       month: startDate.getMonth() + 1,

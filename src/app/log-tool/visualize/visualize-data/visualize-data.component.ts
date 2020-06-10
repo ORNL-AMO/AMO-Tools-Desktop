@@ -1,6 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { LogToolService } from '../../log-tool.service';
-import { VisualizeMenuService } from '../visualize-menu/visualize-menu.service';
 import { LogToolField } from '../../log-tool-models';
 import { VisualizeService } from '../visualize.service';
 import * as _ from 'lodash';

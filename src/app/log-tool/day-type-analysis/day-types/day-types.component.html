@@ -1,9 +1,6 @@
 <div class="card-header p-2">
     Day Types:
-    <!--primary day types-->
-    <!-- <span *ngFor="let dayType of dayTypes.primaryDayTypes" [ngStyle]="{'background-color': dayType.color}"
-        class="badge badge-pill">{{dayType.label}}</span> -->
-    <!--added day types-->
+    <!--day types-->
     <span *ngFor="let dayType of dayTypes" [ngStyle]="{'background-color': dayType.color}"
         class="badge badge-pill secondary-day-type" (click)="removeDayType(dayType)"><span class="fa fa-close"
             *ngIf="dayType.label != 'Excluded'"></span>

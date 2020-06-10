@@ -18,7 +18,6 @@ export class DayTypesComponent implements OnInit {
   newDayTypeColor: string;
   dayTypes: Array<DayType>;
   dayTypesSub: Subscription;
-  // daySummaries: Array<DaySummary>;
   selectedDays: Array<Date> = [];
   weekdaySelected: boolean = true;
   weekendSelected: boolean = true;
@@ -31,7 +30,6 @@ export class DayTypesComponent implements OnInit {
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(val => {
       this.dayTypes = val;
     });
-    // this.daySummaries = this.dayTypeAnalysisService.daySummaries;
     this.startDate = this.dayTypeAnalysisService.calendarStartDate;
     this.numberOfMonths = this.dayTypeAnalysisService.numberOfMonths;
   }

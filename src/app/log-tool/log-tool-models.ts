@@ -13,7 +13,6 @@ export interface LogToolField {
 
 export interface LogToolDay {
     date: Date,
-    // data: Array<any>,
     hourlyAverages: Array<{
         hour: number,
         averages: Array<{
@@ -43,11 +42,6 @@ export interface GraphDataObj {
     }
 }
 
-// export interface DaySummary {
-//     logToolDay: LogToolDay,
-//     // averages: Array<{ value: number, field: LogToolField }>,
-//     dayData: Array<any>
-// }
 
 export interface DayType {
     color: string,
@@ -59,10 +53,6 @@ export interface DayType {
 export interface DayTypeSummary {
     dayType: DayType,
     data: Array<any>,
-    // averages: Array<{
-    //     field: LogToolField,
-    //     value: number
-    // }>,
     hourlyAverages: Array<{
         hour: number,
         averages: Array<{
@@ -82,9 +72,7 @@ export interface IndividualDataFromCsv {
     dataPointsPerColumn?: number,
     hasDateField: boolean,
     dateField?: LogToolField
-    // logToolDays: Array<LogToolDay>
 }
-
 
 export interface HourlyAverage {
     hour: number,
@@ -93,7 +81,6 @@ export interface HourlyAverage {
         field: LogToolField
     }>
 }
-
 
 export interface DayTypeGraphItem {
     xData: Array<any>,
@@ -212,5 +199,4 @@ export interface AnnotationData {
     annotationId: string,
     yref: string,
     seriesName: string
-
 }

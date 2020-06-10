@@ -101,16 +101,6 @@ export class LogToolDataService {
     return moment(day1).isSame(day2, 'day');
   }
 
-  setValidNumberOfDayDataPoints() {
-    // let dayDataNumberOfEntries: Array<number> = new Array();
-    // this.logToolDays.forEach(day => {
-    //   dayDataNumberOfEntries.push(day.data.length);
-    // })
-    // let tmpArr = _.countBy(dayDataNumberOfEntries);
-    // let tmpArr2 = _.entries(tmpArr)
-    // this.validNumberOfDayDataPoints = Number(_.maxBy(_.last(tmpArr2)));
-  }
-
   getAllFieldData(fieldName: string): Array<number> {
     let data: Array<any> = this.getData(fieldName);
     let mappedValues: Array<any> = _.mapValues(data, (dataItem) => { return dataItem[fieldName] });

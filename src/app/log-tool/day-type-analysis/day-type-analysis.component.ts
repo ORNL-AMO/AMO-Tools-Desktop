@@ -46,15 +46,14 @@ export class DayTypeAnalysisComponent implements OnInit {
     this.calculatingData = true;
     this.cd.detectChanges();
     setTimeout(() => {
-      console.time('runAnalysis');
+      // console.time('runAnalysis');
       this.logToolDataService.setLogToolDays();
-      this.logToolDataService.setValidNumberOfDayDataPoints();
       this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
       this.dayTypeAnalysisService.initDayTypes();
       this.dayTypeAnalysisService.setDayTypeSummaries();
       this.dayTypeGraphService.setDayTypeScatterPlotData();
       this.dayTypeGraphService.setIndividualDayScatterPlotData();
-      console.timeEnd('runAnalysis');
+      // console.timeEnd('runAnalysis');
       this.showContent = true;
       this.dayTypeAnalysisService.dayTypesCalculated = true;
       this.calculatingData = false;
