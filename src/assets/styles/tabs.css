@@ -98,7 +98,15 @@ Tabs
   .treasure-hunt .tabs.primary .active a {
     border: none;
     border-bottom:   #2E4053 solid 3px;
-  }  
+  } 
+
+  .log-tool .tabs.primary .active a {
+    border: none;
+    border-bottom: #117A65 solid 3px;
+  }
+
+  
+
 
   .fixed-tab-size{
     min-width: 200px;
@@ -152,6 +160,10 @@ Tabs
   
   .tabs.subtabs.treasure-hunt {
     border-bottom: #2E4053 solid 3px;
+  }
+
+  .tabs.subtabs.log-tool {
+    border-bottom: #117A65 solid 3px;
   }
 
     .tabs.subtabs.progress-tabs a {
@@ -222,6 +234,10 @@ Tabs
 
       .tabs.subtabs.ssmt .active .step-number {
         background: #F39C12;
+      }
+
+      .tabs.subtabs.log-tool .active .step-number {
+        background: #117A65;
       }
 
       .tabs.subtabs.fsat .active .step-number{

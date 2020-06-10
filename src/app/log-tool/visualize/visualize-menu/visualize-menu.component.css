@@ -1,0 +1,32 @@
+
+.sidebar{
+    height: 100%;
+    background: white;
+    padding: .5rem;
+}
+
+label.group-label{
+    font-size: 18px;
+}
+
+label.group-label:hover{
+    cursor: pointer;
+    background-color: #D5D8DC;
+}
+
+a:not([href]):not([tabindex]).danger.click-link{
+    color: red;
+}
+
+
+.sidebar{
+    width: 325px;
+}
+
+.sidebar.collapse-sidebar{
+    width: 50px;
+}
+
+.link-padding{
+    padding-left: .2rem;
+}

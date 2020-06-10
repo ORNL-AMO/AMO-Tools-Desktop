@@ -1,0 +1,45 @@
+
+.list-group-item{
+    font-size: 12px;
+    padding: .25rem;
+}
+
+.list-group-item.active, .btn.active{
+    color: white;
+    background: #117A65;
+}
+
+
+.dropdown-menu.filter-menu{
+    right: 0px;
+    left: inherit;
+}
+
+
+.nav-item .dropdown-toggle{
+    color: white;
+    background: #117A65;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px;
+    padding: 5px;
+    line-height: 1;
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+}
+
+.tabs.subtabs.log-tool{
+    border-bottom: none;
+}
+.navbar{
+    padding: 0px;
+    border-bottom: #117A65 solid 3px;
+}
+
+.btn.active{
+    color: white;
+    background: #117A65;
+}
+
+.btn{
+    padding: 4px;
+}

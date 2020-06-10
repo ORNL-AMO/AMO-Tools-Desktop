@@ -1,0 +1,21 @@
+.header .h3{
+    font-size: 20px;
+}
+
+.data-summary{
+    background-color: white;
+}
+
+td{
+    font-size: small;
+    padding: 3px;
+    min-width: 200px;
+}
+
+table{
+    table-layout: fixed;
+}
+
+.group-label{
+    width: fit-content;
+}
