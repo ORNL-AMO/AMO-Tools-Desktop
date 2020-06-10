@@ -244,7 +244,7 @@ export class ConvertFanAnalysisService {
     if(settings.unitsOfMeasure == 'Metric'){
       input.specificVolume = this.convertNum(input.specificVolume, 'ft3lb', 'm3kg');
       input.enthalpy = this.convertNum(input.enthalpy, 'btuLb', 'kJkg');  
-      input.wetBulbTemp = this.convertNum(input.wetBulbTemp, 'F', 'C');
+      input.wetBulbTemp = this.convertNum(input.wetBulbTemp, 'F', settings.fanTemperatureMeasurement);
     }
     
     input.dewPoint = this.convertNum(input.dewPoint, 'F', settings.fanTemperatureMeasurement);
