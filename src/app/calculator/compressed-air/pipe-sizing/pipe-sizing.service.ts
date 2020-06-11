@@ -33,7 +33,7 @@ export class PipeSizingService {
     let tmpInputs: PipeSizingInput = inputs;
     if (settings.unitsOfMeasure == 'Metric') {
       tmpInputs.airFlow = Math.round(this.convertUnitsService.value(tmpInputs.airFlow).from('ft3').to('m3') * 100) / 100;
-      tmpInputs.airlinePressure = Math.round(this.convertUnitsService.value(tmpInputs.airlinePressure).from('psi').to('kPa') * 100) / 100;
+      tmpInputs.airlinePressure = Math.round(this.convertUnitsService.value(tmpInputs.airlinePressure).from('psig').to('kPa') * 100) / 100;
       tmpInputs.designVelocity = Math.round(this.convertUnitsService.value(tmpInputs.designVelocity).from('ft').to('m') * 100) / 100;
       tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
     }
