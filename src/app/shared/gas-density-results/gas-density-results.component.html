@@ -134,6 +134,18 @@
           <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
         </td>
       </tr>
+      <!--Wet Bulb Temp-->
+      <tr>
+        <td>Wet Bulb Temperature (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.wetBulbTemp | number:'1.0-1' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.wetBulbTemp | number:'1.0-1'}}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>

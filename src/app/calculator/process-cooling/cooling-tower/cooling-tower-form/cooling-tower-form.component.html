@@ -171,6 +171,8 @@
                 <div class="input-group">
                   <input class="form-control" type="number" name="lossCorrectionFactor" id="{{'lossCorrectionFactor_'+idString}}"
                     formControlName="lossCorrectionFactor" (input)="calculate()" (focus)="focusField('lossCorrectionFactor')">
+                  <span class="units input-group-addon">%</span>
+
                 </div>
                 <span class="alert-danger pull-right small"
                   *ngIf="form.controls.lossCorrectionFactor.invalid && !form.controls.lossCorrectionFactor.pristine">
@@ -221,7 +223,7 @@
             </span>
             <span *ngIf="isBaseline && caseResultData">
               <span *ngIf="caseResultData.wcBaseline">
-                {{caseResultData.wcBaseline | number: '1.0-0' }}
+                {{caseResultData.wcBaseline | number: '1.1-1' }}
               </span>
               <span *ngIf="!caseResultData.wcBaseline">
                 <strong>&mdash; &mdash;</strong>
@@ -229,7 +231,7 @@
             </span>
             <span *ngIf="!isBaseline && caseResultData">
               <span *ngIf="caseResultData.wcModification">
-                {{caseResultData.wcModification | number: '1.0-0' }}
+                {{caseResultData.wcModification | number: '1.1-1' }}
               </span>
               <span *ngIf="!caseResultData.wcBaseline">
                 <strong>&mdash; &mdash;</strong>

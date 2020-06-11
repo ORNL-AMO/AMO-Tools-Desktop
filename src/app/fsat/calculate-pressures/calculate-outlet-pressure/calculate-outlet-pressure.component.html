@@ -15,6 +15,14 @@
         </div>
 
         <div class="form-group">
+          <label for="outletDuctworkLoss">Outlet Ductwork Loss</label>
+          <div class="input-group">
+            <input name="outletDuctworkLoss" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.outletDuctworkLoss"
+              id="outletDuctworkLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('outletDuctworkLoss')">
+            <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+          </div>
+        </div>
+        <div class="form-group">
           <label for="outletDamperLoss">Outlet Damper Loss</label>
           <div class="input-group">
             <input name="outletDamperLoss" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.outletDamperLoss"
@@ -39,7 +47,15 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="processRequirements">Process Requirements (Discharge Side)</label>
+          <label for="processRequirementsFixed">Process Requirements (Discharge Side - Fixed)</label>
+          <div class="input-group">
+            <input name="processRequirementsFixed" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.processRequirementsFixed"
+              id="processRequirementsFixed" (input)="calculate()" onfocus="this.select();" (focus)="changeField('processRequirementsFixed')">
+            <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="processRequirements">Process Requirements (Discharge Side - Variable)</label>
           <div class="input-group">
             <input name="processRequirements" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.processRequirements"
               id="processRequirements" (input)="calculate()" onfocus="this.select();" (focus)="changeField('processRequirements')">

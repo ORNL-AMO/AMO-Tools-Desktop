@@ -130,7 +130,7 @@ export class CoolingTowerFormComponent implements OnInit {
   }
 
   changeHasDriftEliminator() {
-    if(this.form.controls.hasDriftEliminator.value == true) {
+    if(this.form.controls.hasDriftEliminator.value == 0) {
       this.form.patchValue({driftLossFactor: .2});
     } else {
       this.form.patchValue({driftLossFactor: .01});

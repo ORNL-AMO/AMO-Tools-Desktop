@@ -1,0 +1,66 @@
+
+td{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+    vertical-align: middle;
+}
+
+/* tbody{
+    box-shadow: 0 4px 8px 0 grey
+} */
+
+tbody tr{
+    background-color:  rgba(0, 0, 0, 0.12);
+}
+
+.day-type-label{
+    color: white;
+}
+
+.click-cell:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.btn{
+    padding: 6px;
+}
+
+.color-picker{
+    padding: .25rem;
+}
+
+.card-footer, .card-header{
+    background-color: white;
+}
+
+.card{
+    box-shadow: 0 4px 8px 0 grey;
+}
+
+.badge{
+    color: white;
+    font-size: 16px;
+    margin-left: .1rem;
+}
+
+
+.custom-day {      
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    border-radius: 1rem;
+    display: inline-block;
+    width: 2rem;
+    color: white;
+}
+
+.secondary-day-type:hover{
+    cursor: pointer;
+}
+
+ngb-datepicker{
+    border-top: none;
+    border-bottom: none;
+}

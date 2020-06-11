@@ -16,6 +16,8 @@ import { calculatorRoutes } from '../calculator/calculator-routing/calculators.r
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { DirectoryDashboardComponent } from '../dashboard/directory-dashboard/directory-dashboard.component';
 import { ReportRollupComponent } from '../report-rollup/report-rollup.component';
+import { LogToolComponent } from '../log-tool/log-tool.component';
+import { logToolRoutes } from '../log-tool/log-tool.routings';
 import { CalculatorsListComponent } from '../calculator/calculators-list/calculators-list.component';
 import { CompressedAirListComponent } from '../calculator/compressed-air/compressed-air-list/compressed-air-list.component';
 import { FansListComponent } from '../calculator/fans/fans-list/fans-list.component';
@@ -426,5 +428,11 @@ export const coreRoutes: Routes = [
         component: AssessmentReportsComponent
       }
     ]
+  },
+  {
+    path: 'log-tool',
+    component: LogToolComponent,
+    children: logToolRoutes
+
   }
 ];
