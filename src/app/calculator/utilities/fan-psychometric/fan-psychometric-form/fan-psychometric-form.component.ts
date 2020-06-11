@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { GasDensityFormService } from '../../fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 import { FormGroup } from '@angular/forms';
 import { FanPsychometricService } from '../fan-psychometric.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
+import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 
 @Component({
   selector: 'app-fan-psychometric-form',

@@ -14,7 +14,7 @@ import { PipeInsulationReductionModule } from './pipe-insulation-reduction/pipe-
 import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-insulation-reduction.module';
 import { UtilitiesListComponent } from './utilities-list/utilities-list.component';
 import { RouterModule } from '@angular/router';
-import { FanPsychometricModule } from '../fans/fan-psychometric/fan-psychometric.module';
+import { FanPsychometricModule } from './fan-psychometric/fan-psychometric.module';
 
 @NgModule({
     declarations: [

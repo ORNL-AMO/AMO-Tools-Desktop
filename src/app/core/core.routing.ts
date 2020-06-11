@@ -78,7 +78,7 @@ import { SteamReductionComponent } from '../calculator/steam/steam-reduction/ste
 import { AirFlowConversionComponent } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.component';
 import { ProcessCoolingListComponent } from '../calculator/process-cooling/process-cooling-list/process-cooling-list.component';
 import { CoolingTowerComponent } from '../calculator/process-cooling/cooling-tower/cooling-tower.component';
-import { FanPsychometricComponent } from '../calculator/fans/fan-psychometric/fan-psychometric.component';
+import { FanPsychometricComponent } from '../calculator/utilities/fan-psychometric/fan-psychometric.component';
 
 export const coreRoutes: Routes = [
   {

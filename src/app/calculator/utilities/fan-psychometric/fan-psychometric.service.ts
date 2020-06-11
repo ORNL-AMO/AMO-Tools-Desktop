@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CalculatedGasDensity, BaseGasDensity } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
-import { GasDensityFormService } from '../fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 import { FormGroup } from '@angular/forms';
 import { FsatService } from '../../../fsat/fsat.service';
+import { GasDensityFormService } from '../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 
 @Injectable()
 export class FanPsychometricService {
