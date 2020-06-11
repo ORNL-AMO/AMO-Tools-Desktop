@@ -1,58 +1,75 @@
-<div class="print-break-before show-print" *ngIf="settings">
-
-  <div class="row row-bottom-divider justify-content-center">
-    <div class="col-12">
-      <h3>Process Heating Rollup Report</h3>
+<div class="row">
+  <div class="col-12">
+    <div class="print-page-title">
+      Furnace Systems Rollup Summary
     </div>
   </div>
-
-  <!-- <div class="row justify-content-center print-avoid-break" *ngFor="let calculator of calculators">
-    <app-pre-assessment-print [calculator]="calculator" [settings]="settings">
+</div>
+<!--pre assessments-->
+<div class="row print-avoid-break" *ngFor="let calculator of calculators">
+  <div class="col-12 pt-2">
+    <label class="group-label large">Pre Assessment Summary ({{calculator.name}})</label>
+  </div>
+  <div class="col-12">
+    <app-pre-assessment-print [settings]="settings" [calculator]="calculator">
     </app-pre-assessment-print>
-  </div> -->
-
-  <div class="row print-avoid-break">
-    <div class="col-12">
-      <div class="row justify-content-center">
-        <div class="col-12 header text-center">
-          <h5>Summary of Energy Sources Used</h5>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <app-phast-rollup-energy-table [printView]="true" [settings]="settings"></app-phast-rollup-energy-table>
-        </div>
-      </div>
-    </div>
   </div>
+</div>
 
-  <div class="row print-avoid-break">
-    <div class="col-12">
-      <div class="row justify-content-center">
-        <div class="col-12 header text-center">
-          <h5>Energy Use</h5>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <app-phast-rollup-graphs [printView]="true" [settings]="settings"></app-phast-rollup-graphs>
-        </div>
-      </div>
-    </div>
+<!--energy use pie and table-->
+<div class="row print-avoid-break">
+  <div class="print-pie-width">
+    <label class="group-label">Furnace Systems Energy Use</label>
+    <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'energy'"
+      [energyUnit]="settings.phastRollupUnit" [printView]="true"></app-rollup-summary-pie-chart>
   </div>
+  <div class="print-pie-width">
+    <label class="group-label">Furnace Systems Energy Costs</label>
+    <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'cost'" [printView]="true">
+    </app-rollup-summary-pie-chart>
+  </div>
+  <div class="col-12">
+    <app-rollup-summary-energy-table [pieChartData]="pieChartData" [energyUnit]="settings.powerMeasurement"
+      [equipmentType]="'Fan'"></app-rollup-summary-energy-table>
+  </div>
+</div>
+<!--system summary bar chart-->
+<div class="row print-avoid-break">
+  <div class="col-12 pt-2">
+    <label class="group-label">Furnace System Energy Modification Summary</label>
+    <app-rollup-summary-bar-chart [barChartData]="energyBarChartData" [yAxisLabel]="energyYAxisLabel"
+      [tickFormat]="energyTickFormat" [printView]="true">
+    </app-rollup-summary-bar-chart>
+  </div>
+</div>
 
-  <div class="row print-avoid-break">
-    <div class="col-12">
-      <div class="row justify-content-center">
-        <div class="col-12 header text-center">
-          <h5>Modification Summary</h5>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <app-phast-rollup-furnace-summary [printView]="true" [settings]="settings"></app-phast-rollup-furnace-summary>
-        </div>
-      </div>
-    </div>
+<div class="row print-avoid-break">
+  <div class="col-12 pt-2">
+    <label class="group-label">Furnace System Cost Modification Summary</label>
+    <app-rollup-summary-bar-chart [barChartData]="costBarChartData" [yAxisLabel]="costYAxisLabel"
+      [tickFormat]="costTickFormat" [printView]="true">
+    </app-rollup-summary-bar-chart>
+  </div>
+</div>
+<div class="row print-avoid-break">
+  <div class="col-12 pt-2">
+    <label class="group-label">Furnace System Available Heat Modification Summary</label>
+    <app-rollup-summary-bar-chart [barChartData]="availableHeatBarChartData" [yAxisLabel]="availableHeatLabel"
+      [tickFormat]="availableHeatTickFormat" [printView]="true">
+    </app-rollup-summary-bar-chart>
+  </div>
+</div>
+
+<div class="row print-avoid-break">
+  <div class="col-12 pt-2">
+    <label class="group-label">Furnace System Energy Intensity Modification Summary</label>
+    <app-rollup-summary-bar-chart [barChartData]="energyIntensityBarChartData" [yAxisLabel]="energyIntensityLabel"
+      [tickFormat]="energyIntensityTickFormat" [printView]="true">
+    </app-rollup-summary-bar-chart>
+  </div>
+</div>
+<div class="row pt-2 print-avoid-break">
+  <div class="col-12">
+    <app-phast-rollup-furnace-summary-table [settings]="settings"></app-phast-rollup-furnace-summary-table>
   </div>
 </div>

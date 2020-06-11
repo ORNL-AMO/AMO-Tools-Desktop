@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
+import { SSMTInputs, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 
@@ -12,7 +12,7 @@ export class HeaderSummaryComponent implements OnInit {
   @Input()
   baselineInputData: SSMTInputs;
   @Input()
-  modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
+  modificationInputData: Array<{ name: string, inputData: SSMTInputs, valid: SsmtValid }>;
   @Input()
   settings: Settings;
   @Input()

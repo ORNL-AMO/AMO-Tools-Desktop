@@ -28,7 +28,7 @@ export class PreAssessmentFormComponent implements OnInit {
   @Input()
   settings: Settings;
   @Output('emitCalculate')
-  emitCalcualte = new EventEmitter<boolean>();
+  emitCalculate = new EventEmitter<boolean>();
   @Output('emitCollapse')
   emitCollapse = new EventEmitter<boolean>();
   @Output('emitDelete')
@@ -58,7 +58,7 @@ export class PreAssessmentFormComponent implements OnInit {
   }
 
   calculate() {
-    this.emitCalcualte.emit(true);
+    this.emitCalculate.emit(true);
   }
 
   collapsePreAssessment() {

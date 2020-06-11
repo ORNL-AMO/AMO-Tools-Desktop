@@ -4,6 +4,33 @@
   <table class="table table-striped table-hover">
     <thead>
       <tr>
+        <td [ngStyle]="{ 'width.%': 15 }" class="border-0"></td>
+        <td
+          [ngStyle]="{ 'width.%': tableCellWidth }"
+          class="border-0"
+          [ngClass]="{
+            'selected-modification': selectedModificationIndex == -1
+          }"
+        >
+        </td>
+        <td
+          [ngStyle]="{ 'width.%': tableCellWidth }"
+          *ngFor="let modification of modificationOutputs; let index = index"
+          [ngClass]="{
+            'selected-modification': index == selectedModificationIndex
+          }"
+          class="bold text-center border-0"
+        >
+        <div class="alert-danger" *ngIf="!modification.valid.isValid">
+          Invalid Modification<br>
+          <span *ngIf="!modification.valid.boilerValid">Errors found in Boiler<br></span>
+          <span *ngIf="!modification.valid.headerValid">Errors found in Header<br></span>
+          <span *ngIf="!modification.valid.turbineValid">Errors found in Turbine<br></span>
+          <span *ngIf="!modification.valid.operationsValid">Errors found in Operations<br></span>
+        </div>
+        </td>
+      </tr>
+      <tr>
         <td [ngStyle]="{ 'width.%': 15 }"></td>
         <td
           [ngStyle]="{ 'width.%': tableCellWidth }"
@@ -48,13 +75,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.powerGenerationCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -82,13 +109,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.powerGenerated
                 | number: "1.0-1"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
 
@@ -117,13 +144,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.sitePowerDemand
                 | number: "1.0-1"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -151,13 +178,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.sitePowerImport
                 | number: "1.0-1"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -181,13 +208,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.boilerFuelCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -213,12 +240,12 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.boilerOutput.fuelEnergy | number: "1.0-2"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -242,13 +269,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.makeupWaterCost 
                 | currency: "USD":"symbol":"1.0-0"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -277,13 +304,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput.makeupWaterVolumeFlow
                 | number: "1.0-2"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -312,13 +339,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.operationsOutput
                 .makeupWaterVolumeFlowAnnual | number: "1.0-2"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
@@ -360,13 +387,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.marginalHPCost
                 | currency: "USD":"symbol":"1.0-2"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr *ngIf="numberOfHeaders == 3">
@@ -394,13 +421,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.marginalMPCost
                 | currency: "USD":"symbol":"1.0-2"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr *ngIf="numberOfHeaders > 1">
@@ -428,13 +455,13 @@
             'selected-modification': index == selectedModificationIndex
           }"
         >
-          <span *ngIf="modResults.outputData.boilerOutput">
+          <span *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput">
             {{
               modResults.outputData.marginalLPCost
                 | currency: "USD":"symbol":"1.0-2"
             }}
           </span>
-          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr class="hide-print" *ngIf="inRollup">
@@ -463,7 +490,7 @@
           }"
         >
           <input
-            *ngIf="modResults.outputData.boilerOutput"
+            *ngIf="modResults.valid.isValid && modResults.outputData.boilerOutput"
             name="{{ 'summarySelect_' + assessment.id }}"
             type="radio"
             (change)="useModification()"
@@ -471,7 +498,7 @@
             [(ngModel)]="selectedModificationIndex"
           />
           <span
-            *ngIf="!modResults.outputData.boilerOutput"
+            *ngIf="!modResults.valid.isValid || !modResults.outputData.boilerOutput"
             class="alert-danger small"
           >
             Invalid Data

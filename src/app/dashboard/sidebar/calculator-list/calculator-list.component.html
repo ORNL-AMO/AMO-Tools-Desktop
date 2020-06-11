@@ -16,14 +16,19 @@
       Rewind</span>
   </div>
 </div>
+<!--process cooling-->
+<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
+  <span class="sidebar-item" [routerLink]="['/calculators/process-cooling-list']" routerLinkActive="selected">Process Cooling</span>
+  <div class="directory-item">
+    <span [routerLink]="['/calculators/cooling-tower']" routerLinkActive="selected" class="sidebar-item">Cooling Tower Makeup Water</span>
+  </div>
+</div>
 <!--pumps-->
 <div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
   <span class="sidebar-item" [routerLink]="['/calculators/pumps-list']" routerLinkActive="selected">Pumps</span>
   <div class="directory-item">
     <span [routerLink]="['/calculators/head-tool']" routerLinkActive="selected" class="sidebar-item">Pump Head
       Tool</span>
-    <span [routerLink]="['/calculators/pump-system-curve']" routerLinkActive="selected" class="sidebar-item">Pump System
-      Curve</span>
     <span [routerLink]="['/calculators/specific-speed']" routerLinkActive="selected" class="sidebar-item">Specific
       Speed</span>
     <span [routerLink]="['/calculators/achievable-efficiency']" routerLinkActive="selected" class="sidebar-item">Pump
@@ -37,8 +42,6 @@
   <div class="directory-item">
     <span [routerLink]="['/calculators/fan-analysis']" routerLinkActive="selected" class="sidebar-item">Fan Traverse
       Analysis</span>
-    <span [routerLink]="['/calculators/fan-system-curve']" routerLinkActive="selected" class="sidebar-item">Fan System
-      Curve</span>
     <span [routerLink]="['/calculators/fan-curve']" routerLinkActive="selected" class="sidebar-item">Fan Curve</span>
     <span [routerLink]="['/calculators/fan-efficiency']" routerLinkActive="selected" class="sidebar-item">Achievable
       Efficiency</span>
@@ -63,6 +66,8 @@
 <div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
   <span class="sidebar-item" [routerLink]="['/calculators/steam-list']" routerLinkActive="selected">Steam</span>
   <div class="directory-item">
+    <span [routerLink]="['/calculators/steam-reduction']" routerLinkActive="selected" class="sidebar-item">Steam
+      Reduction</span>
     <span [routerLink]="['/calculators/steam-properties']" routerLinkActive="selected" class="sidebar-item">Steam
       Properties</span>
     <span [routerLink]="['/calculators/saturated-properties']" routerLinkActive="selected"
@@ -85,6 +90,14 @@
   <span class="sidebar-item" [routerLink]="['/calculators/compressed-air-list']" routerLinkActive="selected">Compressed
     Air</span>
   <div class="directory-item">
+    <span [routerLink]="['/calculators/compressed-air-reduction']" routerLinkActive="selected"
+      class="sidebar-item">Compressed Air
+      Reduction</span>
+    <span [routerLink]="['/calculators/compressed-air-pressure-reduction']" routerLinkActive="selected"
+      class="sidebar-item">Compressed Air
+      Pressure Reduction</span>
+      <span [routerLink]="['/calculators/air-flow-conversion']" routerLinkActive="selected"
+      class="sidebar-item">Actual to Standard Air Flow</span>
     <span [routerLink]="['/calculators/bag-method']" routerLinkActive="selected" class="sidebar-item">Leak Loss
       Estimator - Bag Method</span>
     <span [routerLink]="['/calculators/pneumatic-air']" routerLinkActive="selected" class="sidebar-item">Pneumatic Air
@@ -101,6 +114,7 @@
       Capacity</span>
     <span [routerLink]="['/calculators/operating-cost']" routerLinkActive="selected" class="sidebar-item">Operating
       Costs</span>
+      <span [routerLink]="['/calculators/air-leak']" routerLinkActive="selected" class="sidebar-item">Air Leak Survey</span>
   </div>
 </div>
 <!--lighting-->
@@ -130,14 +144,6 @@
       class="sidebar-item">Electricity Reduction</span>
     <span [routerLink]="['/calculators/natural-gas-reduction']" routerLinkActive="selected" class="sidebar-item">Natural
       Gas Reduction</span>
-    <span [routerLink]="['/calculators/compressed-air-reduction']" routerLinkActive="selected"
-      class="sidebar-item">Compressed Air
-      Reduction</span>
-    <span [routerLink]="['/calculators/compressed-air-pressure-reduction']" routerLinkActive="selected"
-      class="sidebar-item">Compressed Air
-      Pressure Reduction</span>
-    <span [routerLink]="['/calculators/steam-reduction']" routerLinkActive="selected" class="sidebar-item">Steam
-      Reduction</span>
     <span [routerLink]="['/calculators/water-reduction']" routerLinkActive="selected" class="sidebar-item">Water
       Reduction</span>
     <span [routerLink]="['/calculators/pipe-insulation-reduction']" routerLinkActive="selected"

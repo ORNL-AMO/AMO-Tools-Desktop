@@ -10,11 +10,11 @@ import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-dri
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
 import { ElectricityReductionResults, NaturalGasReductionResults, CompressedAirReductionResults, WaterReductionResults, CompressedAirPressureReductionResults, SteamReductionResults, PipeInsulationReductionResults } from '../../shared/models/standalone';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
-import { CompressedAirReductionService } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
-import { CompressedAirPressureReductionService } from '../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
-import { SteamReductionService } from '../../calculator/utilities/steam-reduction/steam-reduction.service';
 import { PipeInsulationReductionService } from '../../calculator/utilities/pipe-insulation-reduction/pipe-insulation-reduction.service';
+import { CompressedAirReductionService } from '../../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.service';
+import { CompressedAirPressureReductionService } from '../../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
+import { SteamReductionService } from '../../calculator/steam/steam-reduction/steam-reduction.service';
 
 @Injectable()
 export class OpportunitySummaryService {
@@ -56,6 +56,9 @@ export class OpportunitySummaryService {
 
   getNewOpportunitySummary(opportunityName: string, utilityType: string, costSavings: number, totalEnergySavings: number, opportunityCost: OpportunityCost, baselineCost: number, modificationCost: number, mixedIndividualResults?: Array<OpportunitySummary>): OpportunitySummary {
     let totalCost: number = this.opportunitySheetService.getOppSheetImplementationCost(opportunityCost)
+    if (opportunityCost && opportunityCost.additionalAnnualSavings) {
+      costSavings = costSavings + opportunityCost.additionalAnnualSavings.cost;
+    }
     return {
       opportunityName: opportunityName,
       utilityType: utilityType,

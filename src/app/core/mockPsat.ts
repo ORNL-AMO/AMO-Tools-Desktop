@@ -69,22 +69,6 @@ export const MockPsat: Assessment = {
                     "fluidTemperature": 68,
                     "specifiedDriveEfficiency": null,
                     "implementationCosts": null
-                },
-                "outputs": {
-                    "pump_efficiency": 87.52,
-                    "motor_rated_power": 350.01,
-                    "motor_shaft_power": 308.56,
-                    "pump_shaft_power": 296.23,
-                    "motor_efficiency": 96.08,
-                    "motor_power_factor": 90.16,
-                    "motor_current": 333.55,
-                    "motor_power": 239.59,
-                    "load_factor": 0.88,
-                    "drive_efficiency": 96,
-                    "annual_energy": 2098.82,
-                    "annual_cost": 138521.99,
-                    "annual_savings_potential": 0,
-                    "optimization_rating": 0
                 }
             },
             "notes": {
@@ -126,22 +110,6 @@ export const MockPsat: Assessment = {
                     "specifiedDriveEfficiency": 95,
                     "implementationCosts": null,
                     "isVFD": true
-                },
-                "outputs": {
-                    "pump_efficiency": 67,
-                    "motor_rated_power": 350.01,
-                    "motor_shaft_power": 291.25,
-                    "pump_shaft_power": 276.69,
-                    "motor_efficiency": 94.3,
-                    "motor_power_factor": 88.67,
-                    "motor_current": 326.13,
-                    "motor_power": 230.4,
-                    "load_factor": 0.83,
-                    "drive_efficiency": 95,
-                    "annual_energy": 2018.27,
-                    "annual_cost": 133205.89,
-                    "annual_savings_potential": 0,
-                    "optimization_rating": 0
                 }
             },
             "notes": {
@@ -153,23 +121,7 @@ export const MockPsat: Assessment = {
             "exploreOpportunities": true
         }],
         "name": "Baseline",
-        "setupDone": true,
-        "outputs": {
-            "pump_efficiency": 71.21,
-            "motor_rated_power": 350.01,
-            "motor_shaft_power": 379.26,
-            "pump_shaft_power": 364.1,
-            "motor_efficiency": 94.04,
-            "motor_power_factor": 201.93,
-            "motor_current": 187,
-            "motor_power": 300.86,
-            "load_factor": 1.08,
-            "drive_efficiency": 96,
-            "annual_energy": 2635.5,
-            "annual_cost": 173942.85,
-            "annual_savings_potential": 0,
-            "optimization_rating": 0
-        }
+        "setupDone": true
     },
     "modifiedDate": new Date(),
     "appVersion": "0.5.3-beta"

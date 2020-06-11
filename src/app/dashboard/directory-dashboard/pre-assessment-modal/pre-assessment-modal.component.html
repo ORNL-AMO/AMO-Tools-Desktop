@@ -8,7 +8,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body pr-0 pl-0 tab-content">
+            <div class="modal-body pr-0 pl-0 tab-content" *ngIf="modalShown">
                 <app-pre-assessment [inModal]="true" [(calculator)]="preAssessmentCalculator"
                     [settings]="directorySettings"></app-pre-assessment>
             </div>

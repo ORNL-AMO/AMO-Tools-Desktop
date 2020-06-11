@@ -1,14 +1,15 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { PSAT } from '../../shared/models/psat';
+import { PSAT, PsatInputs, PsatOutputs, PsatValid } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { Directory } from '../../shared/models/directory';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SettingsService } from '../../settings/settings.service';
-import { PsatReportService } from './psat-report.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import * as d3 from 'd3';
+import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
+import { Subscription } from 'rxjs';
+import { PrintOptions } from '../../shared/models/printing';
+import { PsatService } from '../psat.service';
 
 @Component({
   selector: 'app-psat-report',
@@ -16,8 +17,7 @@ import * as d3 from 'd3';
   styleUrls: ['./psat-report.component.css']
 })
 export class PsatReportComponent implements OnInit {
-  @Input()
-  psat: PSAT;
+
   @Output('closeReport')
   closeReport = new EventEmitter();
   @Input()
@@ -33,43 +33,31 @@ export class PsatReportComponent implements OnInit {
   @Input()
   quickReport: boolean;
   @Input()
-  printView: boolean;
-  @Input()
-  printInputData: boolean;
-  @Input()
-  printResults: boolean;
-  @Input()
-  printReportGraphs: boolean;
-  @Input()
-  printReportSankey: boolean;
-  @Input()
   containerHeight: number;
 
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
-  showPrint: boolean = false;
+  showPrintView: boolean = false;
+  showPrintViewSub: Subscription;
   showPrintMenu: boolean = false;
+  showPrintMenuSub: Subscription;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
 
 
   assessmentDirectories: Directory[];
-  isFirstChange: boolean = true;
-  numMods: number = 0;
   currentTab: string = 'results';
   createdDate: Date;
   reportContainerHeight: number;
-  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private windowRefService: WindowRefService, private settingsService: SettingsService, private psatReportService: PsatReportService) { }
+  printOptions: PrintOptions;
+  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
+    private settingsService: SettingsService, private printOptionsMenuService: PrintOptionsMenuService,
+    private psatService: PsatService) { }
 
   ngOnInit() {
-    this.initPrintLogic();
     this.createdDate = new Date();
-    if (this.assessment.psat && this.settings && !this.psat) {
-      this.psat = this.assessment.psat;
-    }
-    else if (this.assessment.psat && !this.settings) {
-      this.psat = this.assessment.psat;
+    if (!this.settings) {
       //find settings
       this.getSettings();
     }
@@ -77,40 +65,32 @@ export class PsatReportComponent implements OnInit {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
     }
-
-    if (this.psat.modifications) {
-      this.numMods = this.psat.modifications.length;
-    } else {
-      this.psat.modifications = new Array();
+    if (!this.assessment.psat.modifications) {
+      this.assessment.psat.modifications = new Array();
     }
-
-    //subscribe to print event
-    this.psatReportService.showPrint.subscribe(printVal => {
-      //shows loading print view
-      this.showPrintDiv = printVal;
-      if (printVal == true) {
+    if (!this.inRollup) {
+      this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
+        this.showPrintMenu = val;
+      });
+    }
+    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
+      this.printOptions = this.printOptionsMenuService.printOptions.getValue();
+      this.showPrintDiv = val;
+      if (val == true) {
         //use delay to show loading before print payload starts
         setTimeout(() => {
-          this.showPrint = printVal;
+          this.showPrintView = val;
         }, 20)
       } else {
-        this.showPrint = printVal;
+        this.showPrintView = val;
       }
     });
-
-    if (this.printView !== undefined) {
-      if (this.printView) {
-        this.showPrint = true;
-      }
-    }
+    this.setOutputs();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
       this.getContainerHeight();
-    }
-    if (changes.printViewSelection && !changes.printViewSelection.firstChange) {
-      this.initPrintLogic();
     }
   }
 
@@ -120,17 +100,23 @@ export class PsatReportComponent implements OnInit {
     }, 100)
   }
 
+  ngOnDestroy() {
+    if (this.showPrintMenuSub) {
+      this.showPrintMenuSub.unsubscribe();
+    }
+    this.showPrintViewSub.unsubscribe();
+  }
+
   getContainerHeight() {
-    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
-    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    if (this.reportBtns && this.reportHeader) {
+      let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+      let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    }
   }
 
   setTab(str: string) {
     this.currentTab = str;
-    setTimeout(() => {
-      d3.selectAll('.tick text').style('display', 'initial');
-    }, 50);
   }
 
   getSettings() {
@@ -161,82 +147,37 @@ export class PsatReportComponent implements OnInit {
     this.exportData.emit(true);
   }
 
-  initPrintLogic() {
-    if (!this.inRollup) {
-      this.printReportGraphs = false;
-      this.printReportSankey = false;
-      this.printResults = false;
-      this.printInputData = false;
+  print() {
+    this.printOptionsMenuService.printContext.next('psat');
+    this.printOptionsMenuService.showPrintMenu.next(true);
+  }
+
+
+  setOutputs() {
+    this.assessment.psat.outputs = this.getResults(this.assessment.psat, this.settings, true);
+    this.assessment.psat.outputs.percent_annual_savings = 0;
+    this.assessment.psat.modifications.forEach(modification => {
+      modification.psat.outputs = this.getResults(modification.psat, this.settings, false);
+      modification.psat.outputs.percent_annual_savings = this.getSavingsPercentage(this.assessment.psat, modification.psat);
+    });
+  }
+
+  getResults(psat: PSAT, settings: Settings, isBaseline: boolean): PsatOutputs {
+    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
+    psat.valid = this.psatService.isPsatValid(psatInputs, isBaseline)
+    if (psat.valid.isValid) {
+      if (isBaseline) {
+        return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
+      } else {
+        return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings);
+      }
+    } else {
+      return this.psatService.emptyResults();
     }
   }
 
-  showModal(): void {
-    this.showPrintMenu = true;
-  }
-
-  closeModal(reset: boolean): void {
-    if (reset) {
-      this.resetPrintSelection();
-    }
-    this.showPrintMenu = false;
-  }
-
-  resetPrintSelection() {
-    this.selectAll = false;
-    this.printReportGraphs = false;
-    this.printReportSankey = false;
-    this.printResults = false;
-    this.printInputData = false;
-  }
-
-  togglePrint(section: string): void {
-    switch (section) {
-      case "selectAll": {
-        this.selectAll = !this.selectAll;
-        if (this.selectAll) {
-          this.printReportGraphs = true;
-          this.printReportSankey = true;
-          this.printResults = true;
-        }
-        else {
-          this.printReportGraphs = false;
-          this.printReportSankey = false;
-          this.printResults = false;
-        }
-        break;
-      }
-      case "reportGraphs": {
-        this.printReportGraphs = !this.printReportGraphs;
-        break;
-      }
-      case "reportSankey": {
-        this.printReportSankey = !this.printReportSankey;
-        break;
-      }
-      case "results": {
-        this.printResults = !this.printResults;
-        break;
-      }
-      case "inputData": {
-        this.printInputData = !this.printInputData;
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  }
-
-  print(): void {
-    this.closeModal(false);
-    //when print clicked set show print value to true
-    this.psatReportService.showPrint.next(true);
-    setTimeout(() => {
-      let win = this.windowRefService.nativeWindow;
-      win.print();
-      //after printing hide content again
-      this.psatReportService.showPrint.next(false);
-      this.resetPrintSelection();
-    }, 2000);
+  getSavingsPercentage(baseline: PSAT, modification: PSAT): number {
+    let tmpSavingsPercent: number = Number(Math.round(((((baseline.outputs.annual_cost - modification.outputs.annual_cost) * 100) / baseline.outputs.annual_cost) * 100) / 100).toFixed(0));
+    return tmpSavingsPercent;
   }
 }

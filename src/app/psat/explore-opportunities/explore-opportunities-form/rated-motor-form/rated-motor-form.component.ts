@@ -5,6 +5,7 @@ import { MotorService } from '../../../motor/motor.service';
 import { FormGroup } from '@angular/forms';
 import { motorEfficiencyConstants } from '../../../psatConstants';
 import { PsatService } from '../../../psat.service';
+import { Modification } from '../../../../shared/models/psat';
 @Component({
   selector: 'app-rated-motor-form',
   templateUrl: './rated-motor-form.component.html',
@@ -27,9 +28,10 @@ export class RatedMotorFormComponent implements OnInit {
   baselineWarnings: MotorWarnings;
   @Input()
   modificationWarnings: MotorWarnings;
+  @Input()
+  currentModification: Modification;
 
   showEfficiencyClass: boolean = false;
-  showRatedMotorData: boolean = false;
   showMotorEfficiency: boolean = false;
 
   efficiencyClasses: Array<{ display: string, value: number }>;
@@ -52,6 +54,7 @@ export class RatedMotorFormComponent implements OnInit {
     this.initEfficiencyClass();
     this.initMotorEfficiency();
     this.initRatedMotorData();
+    this.calculate();
   }
 
   initEfficiencyClass() {
@@ -72,14 +75,14 @@ export class RatedMotorFormComponent implements OnInit {
 
   initRatedMotorData() {
     if (this.showEfficiencyClass || this.showMotorEfficiency) {
-      this.showRatedMotorData = true;
+      this.currentModification.exploreOppsShowRatedMotorData = { hasOpportunity: true, display: 'Install More Efficient Motor' };
     } else {
-      this.showRatedMotorData = false;
+      this.currentModification.exploreOppsShowRatedMotorData = { hasOpportunity: false, display: 'Install More Efficient Motor' };
     }
   }
 
   toggleRatedMotorData() {
-    if (this.showRatedMotorData == false) {
+    if (this.currentModification.exploreOppsShowRatedMotorData.hasOpportunity == false) {
       this.showEfficiencyClass = false;
       this.showMotorEfficiency = false;
       this.toggleMotorEfficiency();

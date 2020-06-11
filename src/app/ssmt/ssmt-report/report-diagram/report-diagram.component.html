@@ -14,9 +14,13 @@
   <div class="d-flex">
     <h5>{{mod.name}}</h5>
   </div>
-  <app-ssmt-diagram *ngIf="mod.outputData.boilerOutput" [settings]="settings"
+  <app-ssmt-diagram *ngIf="mod.valid.isValid && mod.outputData.boilerOutput" [settings]="settings"
     [inputData]="modificationInputData[index].inputData" [outputData]="mod.outputData"></app-ssmt-diagram>
-  <div *ngIf="!mod.outputData.boilerOutput" class="p-2 w-100 alert-danger text-center">
-    <span class="p-2">Invalid Modification</span>
+  <div class="p-2 w-100 alert-danger text-center" *ngIf="!mod.valid.isValid || !mod.outputData.boilerOutput">
+    Invalid Modification<br>
+    <span *ngIf="!mod.valid.boilerValid">Errors found in Boiler<br></span>
+    <span *ngIf="!mod.valid.headerValid">Errors found in Header<br></span>
+    <span *ngIf="!mod.valid.turbineValid">Errors found in Turbine<br></span>
+    <span *ngIf="!mod.valid.operationsValid">Errors found in Operations<br></span>
   </div>
 </div>

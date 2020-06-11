@@ -33,7 +33,6 @@ export class ExploreOperationsFormComponent implements OnInit {
   formWidth: number;
   showOperatingHoursModal: boolean = false;
 
-  showOperations: boolean = false;
   showOpHours: boolean = false;
   showFuelCosts: boolean = false;
   showSteamCosts: boolean = false;
@@ -45,9 +44,7 @@ export class ExploreOperationsFormComponent implements OnInit {
     this.initSteamCosts();
     this.initFuelCosts();
     this.initOpHours();
-    if (this.showElectricityCosts || this.showFuelCosts || this.showSteamCosts || this.showOpHours) {
-      this.showOperations = true;
-    }
+    this.initAllOps();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -57,11 +54,7 @@ export class ExploreOperationsFormComponent implements OnInit {
         this.initSteamCosts();
         this.initFuelCosts();
         this.initOpHours();
-        if (this.showElectricityCosts || this.showFuelCosts || this.showSteamCosts || this.showOpHours) {
-          this.showOperations = true;
-        } else {
-          this.showOperations = false;
-        }
+        this.initAllOps();
       }
     }
   }
@@ -103,6 +96,14 @@ export class ExploreOperationsFormComponent implements OnInit {
       this.showOpHours = false;
     }
   }
+  
+  initAllOps() {
+    if (this.showElectricityCosts || this.showFuelCosts || this.showSteamCosts || this.showOpHours) {
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowOperations = { hasOpportunity: true, display: 'Adjust Operational Data' };
+    } else {
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowOperations = { hasOpportunity: false, display: 'Adjust Operational Data' }; 
+    }
+  }
 
   toggleElectricityCosts() {
     if (this.showElectricityCosts === false) {
@@ -133,7 +134,7 @@ export class ExploreOperationsFormComponent implements OnInit {
   }
 
   toggleOperations() {
-    if (this.showOperations === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowOperations.hasOpportunity === false) {
       this.showOpHours = false;
       this.showElectricityCosts = false;
       this.showSteamCosts = false;

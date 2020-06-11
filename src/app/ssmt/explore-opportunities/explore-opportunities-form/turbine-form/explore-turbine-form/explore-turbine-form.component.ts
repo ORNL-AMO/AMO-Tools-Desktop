@@ -49,9 +49,6 @@ export class ExploreTurbineFormComponent implements OnInit {
     }
     
     if (changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()) {
-      this.showUseTurbine = false;
-      this.showGenerationEfficiency = false;
-      this.showIsentropicEfficiency = false;
       this.initForm();
     }
   }
@@ -69,18 +66,24 @@ export class ExploreTurbineFormComponent implements OnInit {
   initTurbineStatus() {
     if (this.baselineForm.controls.useTurbine.value !== this.modificationForm.controls.useTurbine.value) {
       this.showUseTurbine = true;
+    } else {
+      this.showUseTurbine = false;
     }
   }
 
   initIsentropicEfficiency() {
     if (this.baselineForm.controls.isentropicEfficiency.value !== this.modificationForm.controls.isentropicEfficiency.value) {
       this.showIsentropicEfficiency = true;
+    } else {
+      this.showIsentropicEfficiency = false;
     }
   }
 
   initGenerationEfficiency() {
     if (this.baselineForm.controls.generationEfficiency.value !== this.modificationForm.controls.generationEfficiency.value) {
       this.showGenerationEfficiency = true;
+    } else {
+      this.showGenerationEfficiency = false;
     }
   }
 
@@ -92,13 +95,13 @@ export class ExploreTurbineFormComponent implements OnInit {
 
   toggleIsentropicEfficiency() {
     if (this.showIsentropicEfficiency === false) {
-      this.modificationForm.controls.isentropicEfficiency.patchValue(this.baselineForm.controls.isentropicEfficiency);
+      this.modificationForm.controls.isentropicEfficiency.patchValue(this.baselineForm.controls.isentropicEfficiency.value);
     }
   }
 
   toggleGenerationEfficiency() {
     if (this.showGenerationEfficiency === false) {
-      this.modificationForm.controls.generationEfficiency.patchValue(this.baselineForm.controls.generationEfficiency);
+      this.modificationForm.controls.generationEfficiency.patchValue(this.baselineForm.controls.generationEfficiency.value);
     }
   }
 

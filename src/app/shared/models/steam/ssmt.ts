@@ -1,6 +1,7 @@
 import { OperatingHours, OperatingCosts } from "../operations";
 import { SSMTOutput } from "./steam-outputs";
 import { StackLossInput } from "./steam-inputs";
+import { SavingsOpportunity } from "../explore-opps";
 
 export interface SSMT {
     name?: string;
@@ -16,6 +17,7 @@ export interface SSMT {
     headerInput?: HeaderInput;
     turbineInput?: TurbineInput;
     outputData?: SSMTOutput;
+    valid?: SsmtValid;
 }
 
 export interface SSMTInputs {
@@ -105,6 +107,16 @@ export interface GeneralSteamOperations {
 export interface Modification {
     ssmt?: SSMT;
     exploreOpportunities?: boolean;
+    exploreOppsShowOperationsData?: SavingsOpportunity,
+    exploreOppsShowUnitCosts?: SavingsOpportunity,
+    exploreOppsShowBoilerData?: SavingsOpportunity,
+    exploreOppsShowCondensateHandling?: SavingsOpportunity,
+    exploreOppsShowHeatLoss?: SavingsOpportunity,
+    exploreOppsShowSteamUsage?: SavingsOpportunity,
+    exploreOppsShowCondensingTurbine?: SavingsOpportunity,
+    exploreOppsShowHighToLowPressureTurbine?: SavingsOpportunity
+    exploreOppsShowHighToMediumPressureTurbine?: SavingsOpportunity
+    exploreOppsShowMediumToLowPressureTurbine?: SavingsOpportunity
 }
 
 export interface Notes {
@@ -165,3 +177,12 @@ export interface HeaderNotHighestPressure {
     desuperheatSteamTemperature: number;
     useBaselineProcessSteamUsage: boolean;
 }
+
+
+export interface SsmtValid {
+    isValid: boolean;
+    boilerValid: boolean;
+    headerValid: boolean;
+    turbineValid: boolean;
+    operationsValid: boolean;
+  } 

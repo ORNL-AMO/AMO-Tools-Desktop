@@ -1,6 +1,6 @@
 <div class="card summary-card">
   <div class="card-header" (click)="toggleCollapse()">
-    <h5>Base Gas Density
+    <h5>Fluid
       <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
     </h5>
   </div>
@@ -138,28 +138,6 @@
               <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.wetBulbTemp, mod.wetBulbTemp, 'wetBulbTempDiff', 0)}">
                 <span *ngIf="mod.inputType == 'wetBulb'">
                   {{mod.wetBulbTemp}}
-                </span>
-                <span *ngIf="mod.inputType != 'wetBulb'">
-                  &mdash; &mdash;
-                </span>
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatGasDiff[0] == true}">
-                Specific Heat of Gas
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatGasDiff[0] == true}">
-                <span *ngIf="baseGasDensity.baseline.inputType == 'wetBulb'">
-                  {{baseGasDensity.baseline.specificHeatGas}}
-                </span>
-                <span *ngIf="baseGasDensity.baseline.inputType != 'wetBulb'">
-                  &mdash; &mdash;
-                </span>
-              </td>
-              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.specificHeatGas, mod.specificHeatGas, 'specificHeatGasDiff', 0)}">
-                <span *ngIf="mod.inputType == 'wetBulb'">
-                  {{mod.specificHeatGas}}
                 </span>
                 <span *ngIf="mod.inputType != 'wetBulb'">
                   &mdash; &mdash;

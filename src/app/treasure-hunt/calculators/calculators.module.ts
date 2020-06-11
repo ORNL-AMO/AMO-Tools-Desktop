@@ -6,9 +6,7 @@ import { ReplaceExistingModule } from '../../calculator/motors/replace-existing/
 import { MotorDriveModule } from '../../calculator/motors/motor-drive/motor-drive.module';
 import { NaturalGasReductionModule } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.module';
 import { ElectricityReductionModule } from '../../calculator/utilities/electricity-reduction/electricity-reduction.module';
-import { CompressedAirReductionModule } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.module';
 import { WaterReductionModule } from '../../calculator/utilities/water-reduction/water-reduction.module';
-import { CompressedAirPressureReductionModule } from '../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { LightingReplacementModule } from '../../calculator/lighting/lighting-replacement/lighting-replacement.module';
 import { ModalModule } from 'ngx-bootstrap';
 
@@ -21,8 +19,10 @@ import { GeneralDetailsFormComponent } from './opportunity-sheet/general-details
 import { StandaloneOpportunitySheetComponent } from './standalone-opportunity-sheet/standalone-opportunity-sheet.component';
 import { EnergyUseFormComponent } from './standalone-opportunity-sheet/energy-use-form/energy-use-form.component';
 import { FormsModule } from '@angular/forms';
-import { SteamReductionModule } from '../../calculator/utilities/steam-reduction/steam-reduction.module';
 import { PipeInsulationReductionModule } from '../../calculator/utilities/pipe-insulation-reduction/pipe-insulation-reduction.module';
+import { CompressedAirReductionModule } from '../../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.module';
+import { CompressedAirPressureReductionModule } from '../../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
+import { SteamReductionModule } from '../../calculator/steam/steam-reduction/steam-reduction.module';
 
 @NgModule({
   declarations: [
@@ -42,13 +42,13 @@ import { PipeInsulationReductionModule } from '../../calculator/utilities/pipe-i
     MotorDriveModule,
     NaturalGasReductionModule,
     ElectricityReductionModule,
-    CompressedAirReductionModule,
     WaterReductionModule,
     CompressedAirPressureReductionModule,
     LightingReplacementModule,
     FormsModule,
     SteamReductionModule,
-    PipeInsulationReductionModule
+    PipeInsulationReductionModule,
+    CompressedAirReductionModule
   ],
   providers: [
     CalculatorsService,

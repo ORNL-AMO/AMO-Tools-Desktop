@@ -216,4 +216,23 @@ export class PhastResultsService {
     return phastCalcs;
   }
 
+
+  getAvailableHeat(data: PhastResults, settings: Settings): number {
+    let resultCategories: ShowResultsCategories = this.getResultCategories(settings);
+    if (resultCategories.showFlueGas) {
+      return data.flueGasAvailableHeat;
+    }
+
+    if (resultCategories.showSystemEff) {
+      return data.heatingSystemEfficiency;
+    }
+
+    if (resultCategories.showEnInput2) {
+      return data.availableHeatPercent;
+    }
+
+    if (resultCategories.showExGas) {
+      return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100;
+    }
+  }
 }

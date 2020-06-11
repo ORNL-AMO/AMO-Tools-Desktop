@@ -1,0 +1,16 @@
+td{
+    font-size: small;
+    padding: 3px;
+}
+
+.scroll-item{
+    overflow-x: auto;
+}
+
+.day-type-header{
+    padding: 8px;
+}
+
+.day-type-label{
+    color: white;
+}

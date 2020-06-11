@@ -4,6 +4,13 @@
     <thead>
       <tr>
         <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+        <th [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></th>
+        <th *ngFor="let mod of phast.modifications; let index = index;" [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <app-invalid-phast *ngIf="!mod.phast.valid.isValid" [phastValid]="mod.phast.valid"></app-invalid-phast>
+          </th>
+      </tr>
+      <tr>
+        <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
         <th [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
         <th *ngFor="let mod of phast.modifications; let index = index;" [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}</th>
       </tr>
@@ -13,16 +20,13 @@
         <td class="percent-savings">Percent Savings (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-
-          <div class="hide-print" *ngIf="mod.percentSavings">
-            
+          <div class="hide-print" *ngIf="mod.percentSavings && phast.modifications[index].phast.valid.isValid">
               <app-percent-graph [value]="mod.percentSavings"></app-percent-graph>
-            
           </div>
-          <div class="show-print text-center" *ngIf="mod.percentSavings">
+          <div class="show-print text-center" *ngIf="mod.percentSavings && phast.modifications[index].phast.valid.isValid">
             {{mod.percentSavings | number:'1.0'}} %
           </div>
-          <div *ngIf="!mod.percentSavings">
+          <div *ngIf="!mod.percentSavings && phast.modifications[index].phast.valid.isValid">
             &mdash; &mdash;
           </div>
 
@@ -91,6 +95,51 @@
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.paybackPeriod">{{mod.paybackPeriod | sigFigs:'5'}}</span>
           <span *ngIf="!mod.paybackPeriod">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr class="bold">
+        <td>Selected Energy Projects</td>
+        <td class="text-muted">&mdash;</td>
+        <td *ngFor="let modification of phast.modifications; let index = index;">
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowFlueGas && modification.exploreOppsShowFlueGas.hasOpportunity"
+            [innerHTML]="modification.exploreOppsShowFlueGas.display"></span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowAirTemp && modification.exploreOppsShowAirTemp.hasOpportunity">{{ modification.exploreOppsShowAirTemp.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowMaterial && modification.exploreOppsShowMaterial.hasOpportunity">{{ modification.exploreOppsShowMaterial.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowAllTimeOpen && modification.exploreOppsShowAllTimeOpen.hasOpportunity">{{ modification.exploreOppsShowAllTimeOpen.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowOpening && modification.exploreOppsShowOpening.hasOpportunity">{{ modification.exploreOppsShowOpening.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowAllEmissivity && modification.exploreOppsShowAllEmissivity.hasOpportunity">{{ modification.exploreOppsShowAllEmissivity.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowCooling && modification.exploreOppsShowCooling.hasOpportunity">{{ modification.exploreOppsShowCooling.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowAtmosphere && modification.exploreOppsShowAtmosphere.hasOpportunity">{{ modification.exploreOppsShowAtmosphere.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowOperations && modification.exploreOppsShowOperations.hasOpportunity">{{ modification.exploreOppsShowOperations.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowLeakage && modification.exploreOppsShowLeakage.hasOpportunity">{{ modification.exploreOppsShowLeakage.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowSlag && modification.exploreOppsShowSlag.hasOpportunity">{{ modification.exploreOppsShowSlag.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowWall && modification.exploreOppsShowWall.hasOpportunity">{{ modification.exploreOppsShowWall.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowEfficiencyData && modification.exploreOppsShowEfficiencyData.hasOpportunity">{{ modification.exploreOppsShowEfficiencyData.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowAllTemp && modification.exploreOppsShowAllTemp.hasOpportunity">{{ modification.exploreOppsShowAllTemp.display }}</span>
+          <span class="d-block"
+            *ngIf="modification.exploreOppsShowFixtures && modification.exploreOppsShowFixtures.hasOpportunity">{{ modification.exploreOppsShowFixtures.display }}</span>
+      </tr>
+      <tr class="bold">
+        <td>Modifications</td>
+        <td class="text-muted">&mdash;</td>
+        <td *ngFor="let modification of phast.modifications; let index = index;">
+          <div *ngFor="let modificationMade of getModificationsMadeList(modification.phast)">
+            {{modificationMade}}<br>
+          </div>
         </td>
       </tr>
       <tr class="hide-print" *ngIf="!inPhast">

@@ -1,0 +1,56 @@
+<div bsModal #internalDimensionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="internalClearDimensionModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content p-3">
+            <div class="h-100 d-flex flex-column">
+                <div class="row flex-grow-1">
+                    <div class="col-12">
+                        <div class="header card-header">
+                            <h3>
+                                Internal Clear {{dimension}}
+                            </h3>
+                          </div>
+                        <form class="py-2">
+                            <div class="form-group">
+                                <label class="small" for="externalDimension">External {{ dimension }}</label>
+                                <div class="input-group">
+                                    <input type="number" focus id="externalDimension" name="externalDimension" class="form-control"
+                                        [(ngModel)]="inputs.externalDimension" (input)="calculate()" />
+                                    <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="small" for="thickness">Duct Thickness</label>
+                                <div class="input-group">
+                                    <input type="number" id="thickness" name="thickness" class="form-control"
+                                        [(ngModel)]="inputs.thickness" (input)="calculate()" />
+                                    <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
+                                    <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
+                                </div>
+                            </div>
+                            <div class="form-group bold">
+                                <label for="percent75Rule">Internal Clear {{dimension}}</label>
+                                <div class="text-center small bold">
+                                    <span *ngIf="internalClearDimension">
+                                        {{internalClearDimension}}
+                                    </span>
+                                    <span *ngIf="!internalClearDimension">
+                                        <strong>&mdash; &mdash;</strong>
+                                    </span>
+                                    <span class="ml-3" *ngIf="settings.unitsOfMeasure != 'Metric'">in</span>
+                                    <span class="ml-3" *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
+                                </div>
+                            </div>
+                            </form>
+
+                    </div>
+                </div>
+                <div class="row pt-3 justify-content-center">
+                        <button class="btn btn-secondary btn-sm modal-btn" (click)="hideModal()">Cancel</button>
+                        <button class="btn btn-primary btn-sm modal-btn ml-0" (click)="save()">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,104 +1,133 @@
 <div class="checkbox" #formElement>
   <label class="group-label" for="adjustGeneralOperations">
     <input type="checkbox" id="adjustGeneralOperations" value="true" (focus)="focusField('hoursPerYear')"
-      (change)="toggleOperationsData()" [(ngModel)]="showOperationsData" /> Adjust General Operations
+      (change)="toggleOperationsData()" 
+      [(ngModel)]="ssmt.modifications[exploreModIndex].exploreOppsShowOperationsData.hasOpportunity" />
+       {{ssmt.modifications[exploreModIndex].exploreOppsShowOperationsData.display}}
   </label>
 </div>
-<ul *ngIf="showOperationsData">
-  <li>
-    <div class="checkbox">
-      <label for="modifyOperatingHours">
-        <input type="checkbox" id="modifyOperatingHours" value="true" (focus)="focusField('hoursPerYear')"
-          (change)="toggleHoursPerYear()" [(ngModel)]="showHoursPerYear" /> Modify Operating Hours
-      </label>
-    </div>
-    <form *ngIf="showHoursPerYear">
-      <div class="form-group">
-        <label for="baselineOperatingHours">Baseline Operating Hours</label>
-        <div class="input-group">
-          <span class="input-group-addon op-hour-addon units">
-            <span class="fa fa-calculator"></span>
-          </span>
-          <input name="baselineOperatingHours" type="number" step="any" id="baselineOperatingHours" class="form-control"
-            (focus)="focusField('hoursPerYear')" (input)="setBaselineOperatingHours()"
-            [(ngModel)]="ssmt.operatingHours.hoursPerYear" [disabled]="true" />
-          <span class="input-group-addon units">hrs/yr</span>
-        </div>
+<ul *ngIf="ssmt.modifications[exploreModIndex].exploreOppsShowOperationsData.hasOpportunity">
+
+  <li class="explore-opps-item">
+      <div class="checkbox mt-2">
+        <label for="modifyOperatingHours" class="steam-check-label">
+          <input type="checkbox" id="modifyOperatingHours" value="true" (focus)="focusField('hoursPerYear')"
+            (change)="toggleHoursPerYear()" [(ngModel)]="showHoursPerYear" /> Modify Operating Hours
+        </label>
       </div>
-      <div class="form-group">
-        <label for="modificationOperatingHours">Modification Operating Hours</label>
-        <div class="input-group">
+  </li>
+  <hr class="mt-0 mb-0">
+
+<div *ngIf="showHoursPerYear">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+  <li class="explore-opps-item mb-2">
+    <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baselineOperatingHours" class="baseline-value-label">Operating Hours</label>
+          <div class="text-muted text-center baseline-value-input">{{ ssmt.operatingHours.hoursPerYear | number: '1.0-0' }} hrs/yr</div>
+        </div>
+    </form>
+    <form class="explore-opps-form">
+      <div class="form-group explore-opps-formgroup">
+        <label for="modificationOperatingHours" class="mod-value-label">Operating Hours</label>
+        <div class="input-group mod-max-width">
           <span class="input-group-addon op-hour-addon units">
             <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
           </span>
           <input name="modificationOperatingHours" type="number" step="any" id="modificationOperatingHours"
-            class="form-control" (focus)="focusField('hoursPerYear')" (input)="setModificationOperatingHours()"
-            [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingHours.hoursPerYear" />
+          class="form-control" (focus)="focusField('hoursPerYear')" (input)="setModificationOperatingHours()"
+          [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingHours.hoursPerYear" />
           <span class="input-group-addon units">hrs/yr</span>
         </div>
       </div>
     </form>
   </li>
-  <li>
-    <div class="checkbox">
-      <label for="modifyMakeupWater">
-        <input type="checkbox" id="modifyMakeupWater" value="true" (focus)="focusField('makeUpWaterTemperature')"
-          (change)="toggleMakeupWaterTemp()" [(ngModel)]="showMakeupWaterTemp" /> Modify Make-up Water Temperature
-      </label>
-    </div>
-    <form *ngIf="showMakeupWaterTemp">
-      <div class="form-group">
-        <label for="baselineMakeupWaterTemp">Baseline Make-up Water Temperature</label>
-        <div class="input-group">
-          <input name="baselineMakeupWaterTemp" type="number" step="any" id="baselineOperatingHours"
-            class="form-control" (focus)="focusField('makeUpWaterTemperature')" (input)="save()"
-            [(ngModel)]="ssmt.generalSteamOperations.makeUpWaterTemperature" [disabled]="true" />
-          <span class="units input-group-addon"
-            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
-        </div>
+</div>
+  
+  <li class="explore-opps-item">
+      <div class="checkbox mt-2">
+        <label for="modifyMakeupWater" class="steam-check-label">
+          <input type="checkbox" id="modifyMakeupWater" value="true" (focus)="focusField('makeUpWaterTemperature')"
+            (change)="toggleMakeupWaterTemp()" [(ngModel)]="showMakeupWaterTemp" /> Modify Make-up Water Temperature
+        </label>
       </div>
-      <div class="form-group">
-        <label for="modificationMakeupWaterTemp">Modification Make-up Water Temperature</label>
-        <div class="input-group">
-          <input name="modificationMakeupWaterTemp" type="number" step="any" id="modificationMakeupWaterTemp"
+  </li>
+  <hr class="mt-0 mb-0">
+
+<div *ngIf="showMakeupWaterTemp">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+
+  <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baselineMakeupWaterTemp" class="baseline-value-label">Make-up Water Temperature</label>
+          <div class="text-muted text-center baseline-value-input">{{ ssmt.generalSteamOperations.makeUpWaterTemperature }} 
+            <span
+            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          </div>
+        </div>
+      </form>
+      <form class='explore-opps-form'>
+        <div class="form-group explore-opps-formgroup">
+          <label for="modificationMakeupWaterTemp" class="mod-value-label">Make-up Water Temperature</label>
+          <div class="input-group mod-max-width">
+            <input name="modificationMakeupWaterTemp" type="number" step="any" id="modificationMakeupWaterTemp"
             class="form-control" (focus)="focusField('makeUpWaterTemperature')" (input)="save()"
             [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.generalSteamOperations.makeUpWaterTemperature" />
-          <span class="units input-group-addon"
+            <span class="units input-group-addon"
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          </div>
         </div>
-      </div>
-    </form>
-  </li>
+      </form>
+    </li>
+  </div>
 </ul>
 
 
 <div class="checkbox">
   <label class="group-label" for="adjustUnitCosts">
     <input type="checkbox" id="adjustUnitCosts" value="true" (focus)="focusField('electricityCost')"
-      (change)="toggleUnitCosts()" [(ngModel)]="showUnitCosts" /> Adjust Unit Costs
-  </label>
+      (change)="toggleUnitCosts()" 
+      [(ngModel)]="ssmt.modifications[exploreModIndex].exploreOppsShowUnitCosts.hasOpportunity" /> 
+      {{ssmt.modifications[exploreModIndex].exploreOppsShowUnitCosts.display}}
+    </label>
 </div>
-<ul *ngIf="showUnitCosts">
-  <li>
-    <div class="checkbox">
-      <label for="modifyElectricityCost">
+
+<ul *ngIf="ssmt.modifications[exploreModIndex].exploreOppsShowUnitCosts.hasOpportunity">
+  <li class="explore-opps-item">
+    <div class="checkbox mt-2">
+      <label for="modifyElectricityCost" class="steam-check-label">
         <input type="checkbox" id="modifyElectricityCost" value="true" (focus)="focusField('electricityCost')"
-          (change)="toggleElectricityCost()" [(ngModel)]="showElectricityCost" /> Modify Electricity Unit Cost
+        (change)="toggleElectricityCost()" [(ngModel)]="showElectricityCost" /> Modify Electricity Unit Cost
       </label>
     </div>
-    <form *ngIf="showElectricityCost">
-      <div class="form-group">
-        <label for="baselineElectricityCost">Baseline Electricity Unit Cost</label>
-        <div class="input-group">
-          <input name="baselineElectricityCost" type="number" step="any" id="baselineElectricityCost"
-            class="form-control" (focus)="focusField('electricityCost')" (input)="save()"
-            [(ngModel)]="ssmt.operatingCosts.electricityCost" [disabled]="true" />
-          <span class="input-group-addon units">$/kWh</span>
+  </li>
+  <hr class="mt-0 mb-0">
+
+<div *ngIf="showElectricityCost">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+  
+  <li class="explore-opps-item mb-2">
+    <form class="explore-opps-form">
+      <div class="text-center">
+        <label for="baselineElectricityCost" class="baseline-value-label">Electricity Unit Cost</label>
+        <div class="text-muted text-center baseline-value-input">{{ ssmt.operatingCosts.electricityCost }} $/kWh
         </div>
       </div>
-      <div class="form-group">
-        <label for="modificationElectricityCost">Modification Electricity Unit Cost</label>
-        <div class="input-group">
+    </form>
+    <form class="explore-opps-form">
+      <div class="form-group explore-opps-formgroup">
+        <label for="modificationElectricityCost" class="mod-value-label">Electricity Unit Cost</label>
+        <div class="input-group mod-max-width">
           <input name="modificationElectricityCost" type="number" step="any" id="modificationElectricityCost"
             class="form-control" (focus)="focusField('electricityCost')" (input)="save()"
             [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingCosts.electricityCost" />
@@ -107,62 +136,82 @@
       </div>
     </form>
   </li>
-  <li>
-    <div class="checkbox">
-      <label for="modifyFuelCost">
+</div>
+
+  <li class="explore-opps-item">
+    <div class="checkbox mt-2">
+      <label for="modifyFuelCost" class="steam-check-label">
         <input type="checkbox" id="modifyFuelCost" value="true" (focus)="focusField('fuelCost')"
           (change)="toggleFuelCost()" [(ngModel)]="showFuelCost" /> Modify Fuel Cost
       </label>
     </div>
-    <form *ngIf="showFuelCost">
-      <div class="form-group">
-        <label for="baselineFuelCost">Baseline Fuel Cost</label>
-        <div class="input-group">
-          <input name="baselineFuelCost" type="number" step="any" id="baselineFuelCost" class="form-control"
-            (focus)="focusField('fuelCost')" (input)="save()" [(ngModel)]="ssmt.operatingCosts.fuelCost"
-            [disabled]="true" />
-          <span class="input-group-addon units">$/{{settings.steamEnergyMeasurement}}</span>
+    </li>
+    <hr class="mt-0 mb-0">
+  
+  <div *ngIf="showFuelCost">
+    <li class="explore-opps-header">
+      <span class="explore-opps-title text-muted">Baseline</span>
+      <span class="explore-opps-title text-muted">Modifications</span>
+    </li>
+
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baselineFuelCost" class="baseline-value-label">Fuel Cost</label>
+          <div class="text-muted text-center baseline-value-input">{{ ssmt.operatingCosts.fuelCost }} $/{{settings.steamEnergyMeasurement}}
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="modificationFuelCost">Modification Fuel Cost</label>
-        <div class="input-group">
-          <input name="modificationFuelCost" type="number" step="any" id="modificationFuelCost" class="form-control"
+      </form>
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="modificationFuelCost" class="baseline-value-label">Fuel Cost</label>
+          <div class="input-group mod-max-width">
+            <input name="modificationFuelCost" type="number" step="any" id="modificationFuelCost" class="form-control"
             (focus)="focusField('fuelCost')" (input)="save()"
             [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingCosts.fuelCost" />
-          <span class="input-group-addon units">$/{{settings.steamEnergyMeasurement}}</span>
+            <span class="input-group-addon units">$/{{settings.steamEnergyMeasurement}}</span>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
   </li>
-  <li>
-    <div class="checkbox">
-      <label for="modifyMakeupWaterCost">
+</div>
+
+  <li class="explore-opps-item">
+    <div class="checkbox mt-2">
+      <label for="modifyMakeupWaterCost" class="steam-check-label">
         <input type="checkbox" id="modifyMakeupWaterCost" value="true" (focus)="focusField('makeUpWaterCost')"
           (change)="toggleMakeupWaterCost()" [(ngModel)]="showMakeupWaterCost" /> Modify Make-up Water Cost
       </label>
     </div>
-    <form *ngIf="showMakeupWaterCost">
-      <div class="form-group">
-        <label for="baselineMakeupWaterCost">Baseline Make-up Water Cost</label>
-        <div class="input-group">
-          <input name="baselineMakeupWaterCost" type="number" step="any" id="baselineMakeupWaterCost"
-            class="form-control" (focus)="focusField('makeUpWaterCost')" (input)="save()"
-            [(ngModel)]="ssmt.operatingCosts.makeUpWaterCost" [disabled]="true" />
-          <span class="input-group-addon units">$/{{settings.steamVolumeMeasurement}}</span>
-        </div>
+  </li>
+  <hr class="mt-0 mb-0">
+
+<div *ngIf="showMakeupWaterCost">
+  <li class="explore-opps-header" >
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+
+  <li class="explore-opps-item mb-2">
+    <form class="explore-opps-form">
+      <div class="text-center">
+        <label for="baselineMakeupWaterCost" class="baseline-value-label">Make-up Water Cost</label>
+        <div class="text-muted text-center baseline-value-input">{{ ssmt.operatingCosts.makeUpWaterCost }} $/{{settings.steamVolumeMeasurement}}</div>
       </div>
-      <div class="form-group">
-        <label for="modificationMakeupWaterCost">Modification Make-up Water Cost</label>
-        <div class="input-group">
+    </form>
+    <form class="explore-opps-form">
+      <div class="form-group explore-opps-formgroup">
+        <label for="modificationMakeupWaterCost" class="mod-value-label">Make-up Water Cost</label>
+        <div class="input-group mod-max-width">
           <input name="modificationMakeupWaterCost" type="number" step="any" id="modificationMakeupWaterCost"
-            class="form-control" (focus)="focusField('makeUpWaterTemperature')" (input)="save()"
-            [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingCosts.makeUpWaterCost" />
+          class="form-control" (focus)="focusField('makeUpWaterTemperature')" (input)="save()"
+          [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingCosts.makeUpWaterCost" />
           <span class="input-group-addon units">$/{{settings.steamVolumeMeasurement}}</span>
         </div>
       </div>
     </form>
   </li>
+</div>
 </ul>
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"

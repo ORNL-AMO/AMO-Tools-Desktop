@@ -9,16 +9,13 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { Directory } from '../shared/models/directory';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
-import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput } from '../shared/models/steam/ssmt';
+import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput, SsmtValid } from '../shared/models/steam/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
-import { HeaderService } from './header/header.service';
-import { TurbineService } from './turbine/turbine.service';
-import { BoilerService } from './boiler/boiler.service';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { OperationsService } from './operations/operations.service';
+
 
 @Component({
   selector: 'app-ssmt',
@@ -84,11 +81,7 @@ export class SsmtComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private compareService: CompareService,
-    private headerService: HeaderService,
-    private turbineService: TurbineService,
-    private boilerService: BoilerService,
     private assessmentService: AssessmentService,
-    private operationsService: OperationsService,
     private cd: ChangeDetectorRef
   ) { }
 
@@ -271,24 +264,10 @@ export class SsmtComponent implements OnInit {
       });
     });
   }
-
+  
   checkSetupDone() {
-    if (this.modificationExists) {
-      this._ssmt.setupDone = true;
-    } else {
-      let isBoilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
-      let isHeaderValid: boolean;
-      if (this._ssmt.boilerInput) {
-        isHeaderValid = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings, this._ssmt.boilerInput);
-      }
-      let isTurbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
-      let operationsValid: boolean = this.operationsService.getForm(this._ssmt, this.settings).valid;
-      if (isBoilerValid && isHeaderValid && isTurbineValid && operationsValid) {
-        this._ssmt.setupDone = true;
-      } else {
-        this._ssmt.setupDone = false;
-      }
-    }
+    let ssmtValid: SsmtValid = this.ssmtService.checkValid(this._ssmt, this.settings);
+    this._ssmt.setupDone = ssmtValid.isValid;
   }
 
   saveBoiler(boilerData: BoilerInput) {
@@ -342,29 +321,24 @@ export class SsmtComponent implements OnInit {
   }
 
   getCanContinue() {
-    let boilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
-    let headerValid: boolean;
-    if (this._ssmt.boilerInput) {
-      headerValid = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings, this._ssmt.boilerInput);
-    }
-    let turbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
-    let operationsValid: boolean = this.operationsService.getForm(this._ssmt, this.settings).valid;
+    let ssmtValid: SsmtValid = this.ssmtService.checkValid(this._ssmt, this.settings);
+    
     if (this.stepTab === 'operations' || this.stepTab === 'system-basics') {
       return true;
     } else if (this.stepTab === 'boiler') {
-      if (boilerValid && operationsValid) {
+      if (ssmtValid.boilerValid && ssmtValid.operationsValid) {
         return true;
       } else {
         return false;
       }
     } else if (this.stepTab === 'header') {
-      if (boilerValid && headerValid && operationsValid) {
+      if (ssmtValid.boilerValid && ssmtValid.headerValid && ssmtValid.operationsValid) {
         return true;
       } else {
         return false;
       }
     } else if (this.stepTab === 'turbine') {
-      if (boilerValid && headerValid && turbineValid && operationsValid) {
+      if (ssmtValid.boilerValid && ssmtValid.headerValid && ssmtValid.turbineValid && ssmtValid.operationsValid) {
         return true;
       } else {
         return false;

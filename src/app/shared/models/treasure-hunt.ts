@@ -21,6 +21,13 @@ export interface TreasureHunt {
     setupDone: boolean;
 }
 
+export interface FilterOption {
+    value: string,
+    selected: boolean, 
+    numCalcs: number, 
+    display: string 
+}
+
 export interface EnergyUsage {
     electricityUsage: number,
     electricityCosts: number,
@@ -70,7 +77,8 @@ export interface OpportunityCost {
     labor?: number
     otherCosts?: Array<OtherCostItem>,
     costDescription?: string
-    additionalSavings?: OtherCostItem
+    additionalSavings?: OtherCostItem,
+    additionalAnnualSavings?: OtherCostItem
 }
 
 export interface OtherCostItem {

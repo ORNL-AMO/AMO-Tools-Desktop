@@ -108,6 +108,7 @@ export class SystemBasicsComponent implements OnInit {
       if (this.phast.designedEnergy) {
         this.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(this.phast.designedEnergy, this.oldSettings, this.settings);
       }
+      this.phast.operatingCosts = this.convertPhastService.convertOperatingCosts(this.phast.operatingCosts, this.oldSettings, this.settings);
       if (this.phast.modifications) {
         this.phast.modifications.forEach(mod => {
           if (mod.phast.losses) {
@@ -119,6 +120,7 @@ export class SystemBasicsComponent implements OnInit {
           if (mod.phast.designedEnergy) {
             mod.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(mod.phast.designedEnergy, this.oldSettings, this.settings);
           }
+          mod.phast.operatingCosts = this.convertPhastService.convertOperatingCosts(mod.phast.operatingCosts, this.oldSettings, this.settings);
         });
       }
       //tell parent to save new data

@@ -20,7 +20,7 @@ export class PsatTabService {
   constructor() {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
-    this.calcTab = new BehaviorSubject<string>('system-curve');
+    this.calcTab = new BehaviorSubject<string>('achievable-efficiency');
     this.modifyConditionsTab = new BehaviorSubject<string>('pump-fluid');
     this.stepTab = new BehaviorSubject<string>('system-basics');
   }

@@ -31,6 +31,7 @@ import { ToastModule } from '../shared/toast/toast.module';
 import { TutorialsModule } from '../tutorials/tutorials.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { UpdateToastComponent } from '../update-toast/update-toast.component';
+import { LogToolModule } from '../log-tool/log-tool.module';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { UpdateToastComponent } from '../update-toast/update-toast.component';
     HelperServicesModule,
     ToastModule,
     TutorialsModule,
-    DashboardModule
+    DashboardModule,
+    LogToolModule
   ],
   providers: [
     AssessmentService,

@@ -2,7 +2,7 @@ import { Assessment } from "../shared/models/assessment";
 import { Settings } from "../shared/models/settings";
 
 export const MockTreasureHunt: Assessment = {
-    "name": "Treasure Hunt Example",
+    "name": "Treasure Hunt Example 1",
     "type": "TreasureHunt",
     "isExample": true,
     "treasureHunt": {
@@ -42,13 +42,17 @@ export const MockTreasureHunt: Assessment = {
                 "operatingHours": 8760,
                 "fuelCost": 4,
                 "measurementMethod": 0,
-                "flowMeterMethodData": { "flowRate": 5 },
-                "otherMethodData": { "consumption": 89900 },
+                "flowMeterMethodData": {
+                    "flowRate": 5000
+                },
+                "otherMethodData": {
+                    "consumption": 89900
+                },
                 "airMassFlowData": {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 10
+                        "airVelocity": 9.999999999999998
                     },
                     "airMassFlowNameplateData": {
                         "airFlow": 50
@@ -80,7 +84,7 @@ export const MockTreasureHunt: Assessment = {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 10
+                        "airVelocity": 9.999999999999998
                     },
                     "airMassFlowNameplateData": {
                         "airFlow": 50
@@ -97,7 +101,6 @@ export const MockTreasureHunt: Assessment = {
                 },
                 "units": 1
             }],
-            "selected": true,
             "opportunitySheet": {
                 "name": "Insulate Hoses in Yard",
                 "equipment": "steam",
@@ -105,7 +108,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Utilities",
-                "businessUnits": "Yard",
+                "businessUnits": "Julio",
                 "opportunityCost": {
                     "engineeringServices": 200,
                     "material": 9000,
@@ -118,22 +121,30 @@ export const MockTreasureHunt: Assessment = {
                     "amount": 0
                 }],
                 "modificationEnergyUseItems": []
-            }
-        }, {
+            },
+            "selected": true
+        },
+        {
             "baseline": [{
                 "name": "Equipment #1",
                 "operatingHours": 8760,
-                "fuelCost": 4,
+                "fuelCost": 3.999999999999999,
                 "measurementMethod": 3,
-                "flowMeterMethodData": { "flowRate": 5 },
-                "otherMethodData": { "consumption": 125 },
+                "flowMeterMethodData": {
+                    "flowRate": 5
+                },
+                "otherMethodData": {
+                    "consumption": 125
+                },
                 "airMassFlowData": {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 10
+                        "airVelocity": 9.999999999999998
                     },
-                    "airMassFlowNameplateData": { "airFlow": 50 },
+                    "airMassFlowNameplateData": {
+                        "airFlow": 50
+                    },
                     "inletTemperature": 25,
                     "outletTemperature": 40,
                     "systemEfficiency": 80
@@ -149,17 +160,23 @@ export const MockTreasureHunt: Assessment = {
             "modification": [{
                 "name": "Equipment #1",
                 "operatingHours": 8760,
-                "fuelCost": 4,
+                "fuelCost": 3.999999999999999,
                 "measurementMethod": 3,
-                "flowMeterMethodData": { "flowRate": 5 },
-                "otherMethodData": { "consumption": 0 },
+                "flowMeterMethodData": {
+                    "flowRate": 5
+                },
+                "otherMethodData": {
+                    "consumption": 0
+                },
                 "airMassFlowData": {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 10
+                        "airVelocity": 9.999999999999998
                     },
-                    "airMassFlowNameplateData": { "airFlow": 50 },
+                    "airMassFlowNameplateData": {
+                        "airFlow": 50
+                    },
                     "inletTemperature": 25,
                     "outletTemperature": 40,
                     "systemEfficiency": 80
@@ -180,7 +197,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Process",
-                "businessUnits": "Bld5",
+                "businessUnits": "Kerry",
                 "opportunityCost": {
                     "engineeringServices": 200,
                     "material": 300,
@@ -194,21 +211,28 @@ export const MockTreasureHunt: Assessment = {
                 }],
                 "modificationEnergyUseItems": []
             }
-        }, {
+        },
+        {
             "baseline": [{
                 "name": "Equipment #1",
                 "operatingHours": 8760,
                 "fuelCost": 4,
                 "measurementMethod": 0,
-                "flowMeterMethodData": { "flowRate": 5 },
-                "otherMethodData": { "consumption": 89900 },
+                "flowMeterMethodData": {
+                    "flowRate": 5500
+                },
+                "otherMethodData": {
+                    "consumption": 89900
+                },
                 "airMassFlowData": {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 10
+                        "airVelocity": 9.999999999999998
                     },
-                    "airMassFlowNameplateData": { "airFlow": 50 },
+                    "airMassFlowNameplateData": {
+                        "airFlow": 50
+                    },
                     "inletTemperature": 25,
                     "outletTemperature": 40,
                     "systemEfficiency": 80
@@ -226,15 +250,21 @@ export const MockTreasureHunt: Assessment = {
                 "operatingHours": 8760,
                 "fuelCost": 4,
                 "measurementMethod": 3,
-                "flowMeterMethodData": { "flowRate": 5 },
-                "otherMethodData": { "consumption": 44894 },
+                "flowMeterMethodData": {
+                    "flowRate": 5
+                },
+                "otherMethodData": {
+                    "consumption": 44894
+                },
                 "airMassFlowData": {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 10
+                        "airVelocity": 9.999999999999998
                     },
-                    "airMassFlowNameplateData": { "airFlow": 50 },
+                    "airMassFlowNameplateData": {
+                        "airFlow": 50
+                    },
                     "inletTemperature": 25,
                     "outletTemperature": 40,
                     "systemEfficiency": 80
@@ -247,7 +277,6 @@ export const MockTreasureHunt: Assessment = {
                 },
                 "units": 1
             }],
-            "selected": true,
             "opportunitySheet": {
                 "name": "Insulate pipe near burner",
                 "equipment": "steam",
@@ -255,7 +284,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Utilities",
-                "businessUnits": "Bld2",
+                "businessUnits": "Julio",
                 "opportunityCost": {
                     "engineeringServices": 0,
                     "material": 0,
@@ -268,7 +297,8 @@ export const MockTreasureHunt: Assessment = {
                     "amount": 0
                 }],
                 "modificationEnergyUseItems": []
-            }
+            },
+            "selected": true
         }],
         "lightingReplacements": [{
             "baseline": [{
@@ -284,7 +314,8 @@ export const MockTreasureHunt: Assessment = {
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
                 "category": 0
-            }, {
+            },
+            {
                 "name": "Fixture #2",
                 "hoursPerYear": 8760,
                 "wattsPerLamp": 400,
@@ -297,7 +328,8 @@ export const MockTreasureHunt: Assessment = {
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
                 "category": 0
-            }, {
+            },
+            {
                 "name": "Fixture #3",
                 "hoursPerYear": 8760,
                 "wattsPerLamp": 100,
@@ -310,7 +342,8 @@ export const MockTreasureHunt: Assessment = {
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
                 "category": 0
-            }, {
+            },
+            {
                 "name": "Fixture #4",
                 "hoursPerYear": 8760,
                 "wattsPerLamp": 150,
@@ -337,7 +370,8 @@ export const MockTreasureHunt: Assessment = {
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
                 "category": 0
-            }, {
+            },
+            {
                 "name": "Fixture #2",
                 "hoursPerYear": 8760,
                 "wattsPerLamp": 50,
@@ -350,7 +384,8 @@ export const MockTreasureHunt: Assessment = {
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
                 "category": 0
-            }, {
+            },
+            {
                 "name": "Fixture #3",
                 "hoursPerYear": 8760,
                 "wattsPerLamp": 20,
@@ -363,7 +398,8 @@ export const MockTreasureHunt: Assessment = {
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
                 "category": 0
-            }, {
+            },
+            {
                 "name": "Fixture #4",
                 "hoursPerYear": 8760,
                 "wattsPerLamp": 20,
@@ -387,13 +423,17 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Facilities",
-                "businessUnits": "Exterior",
+                "businessUnits": "Alisha",
                 "opportunityCost": {
                     "engineeringServices": 100,
                     "material": 18000,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 1000
+                    "labor": 1000,
+                    "additionalAnnualSavings": {
+                        "description": "Other Annual Savings",
+                        "cost": 1500
+                    }
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -401,7 +441,8 @@ export const MockTreasureHunt: Assessment = {
                 }],
                 "modificationEnergyUseItems": []
             }
-        }, {
+        },
+        {
             "baseline": [{
                 "name": "Metal Halide 175W",
                 "hoursPerYear": 8760,
@@ -415,7 +456,8 @@ export const MockTreasureHunt: Assessment = {
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
                 "category": 0
-            }, {
+            },
+            {
                 "name": "Metal Halide 400W",
                 "hoursPerYear": 8760,
                 "wattsPerLamp": 400,
@@ -428,7 +470,8 @@ export const MockTreasureHunt: Assessment = {
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
                 "category": 0
-            }, {
+            },
+            {
                 "name": "Metal Halide 250W",
                 "hoursPerYear": 8760,
                 "wattsPerLamp": 250,
@@ -455,7 +498,8 @@ export const MockTreasureHunt: Assessment = {
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
                 "category": 0
-            }, {
+            },
+            {
                 "name": "LED 30W",
                 "hoursPerYear": 8760,
                 "wattsPerLamp": 30,
@@ -468,7 +512,8 @@ export const MockTreasureHunt: Assessment = {
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
                 "category": 0
-            }, {
+            },
+            {
                 "name": "Fixture #3",
                 "hoursPerYear": 8760,
                 "wattsPerLamp": 30,
@@ -491,13 +536,21 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Facilities",
-                "businessUnits": "Bld10",
+                "businessUnits": "Alisha",
                 "opportunityCost": {
                     "engineeringServices": 500,
                     "material": 15000,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 1000
+                    "labor": 1000,
+                    "additionalSavings": {
+                        "description": "Rebate Savings",
+                        "cost": 1000
+                    },
+                    "additionalAnnualSavings": {
+                        "description": "Maint. Annual Savings",
+                        "cost": 1500
+                    }
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -506,7 +559,8 @@ export const MockTreasureHunt: Assessment = {
                 "modificationEnergyUseItems": []
             },
             "selected": true
-        }, {
+        },
+        {
             "baseline": [{
                 "name": "T5",
                 "hoursPerYear": 8760,
@@ -537,7 +591,6 @@ export const MockTreasureHunt: Assessment = {
             }],
             "baselineElectricityCost": 0.05,
             "modificationElectricityCost": 0.05,
-            "selected": true,
             "opportunitySheet": {
                 "name": "Process Lighting A",
                 "equipment": "lights",
@@ -545,21 +598,31 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Process",
-                "businessUnits": "Bld5",
+                "businessUnits": "Alisha",
                 "opportunityCost": {
                     "engineeringServices": 1000,
                     "material": 27000,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 3000
+                    "labor": 3000,
+                    "additionalSavings": {
+                        "description": "Rebate Savings",
+                        "cost": 1000
+                    },
+                    "additionalAnnualSavings": {
+                        "description": "Maint. Annual Savings",
+                        "cost": 500
+                    }
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
                     "amount": 0
                 }],
                 "modificationEnergyUseItems": []
-            }
-        }, {
+            },
+            "selected": true
+        },
+        {
             "baseline": [{
                 "name": "T8",
                 "hoursPerYear": 8760,
@@ -598,7 +661,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Facilities",
-                "businessUnits": "Bld5",
+                "businessUnits": "Alisha",
                 "opportunityCost": {
                     "engineeringServices": 100,
                     "material": 6000,
@@ -622,7 +685,9 @@ export const MockTreasureHunt: Assessment = {
                 "compressedAirCost": 0.02,
                 "electricityCost": 0.05,
                 "measurementMethod": 1,
-                "flowMeterMethodData": { "meterReading": 0.2 },
+                "flowMeterMethodData": {
+                    "meterReading": 0.2
+                },
                 "bagMethodData": {
                     "height": 46,
                     "diameter": 40,
@@ -633,7 +698,9 @@ export const MockTreasureHunt: Assessment = {
                     "numberOfNozzles": 3,
                     "supplyPressure": 80
                 },
-                "otherMethodData": { "consumption": 1750 },
+                "otherMethodData": {
+                    "consumption": 1750
+                },
                 "compressorElectricityData": {
                     "compressorControl": 1,
                     "compressorControlAdjustment": 40,
@@ -650,7 +717,9 @@ export const MockTreasureHunt: Assessment = {
                 "compressedAirCost": 0.02,
                 "electricityCost": 0.05,
                 "measurementMethod": 3,
-                "flowMeterMethodData": { "meterReading": 0.2 },
+                "flowMeterMethodData": {
+                    "meterReading": 0.2
+                },
                 "bagMethodData": {
                     "height": 8,
                     "diameter": 12,
@@ -661,7 +730,9 @@ export const MockTreasureHunt: Assessment = {
                     "numberOfNozzles": 3,
                     "supplyPressure": 80
                 },
-                "otherMethodData": { "consumption": 0 },
+                "otherMethodData": {
+                    "consumption": 0
+                },
                 "compressorElectricityData": {
                     "compressorControl": 0,
                     "compressorControlAdjustment": 25,
@@ -670,7 +741,6 @@ export const MockTreasureHunt: Assessment = {
                 },
                 "units": 1
             }],
-            "selected": true,
             "opportunitySheet": {
                 "name": "Eliminate Air Leaks",
                 "equipment": "compressedAir",
@@ -678,7 +748,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Utilities",
-                "businessUnits": "Bld2",
+                "businessUnits": "Frank",
                 "opportunityCost": {
                     "engineeringServices": 0,
                     "material": 0,
@@ -691,8 +761,10 @@ export const MockTreasureHunt: Assessment = {
                     "amount": 0
                 }],
                 "modificationEnergyUseItems": []
-            }
-        }, {
+            },
+            "selected": true
+        },
+        {
             "baseline": [{
                 "name": "Equipment #1",
                 "hoursPerYear": 8760,
@@ -701,7 +773,9 @@ export const MockTreasureHunt: Assessment = {
                 "compressedAirCost": 0.02,
                 "electricityCost": 0.05,
                 "measurementMethod": 0,
-                "flowMeterMethodData": { "meterReading": 6000 },
+                "flowMeterMethodData": {
+                    "meterReading": 6000
+                },
                 "bagMethodData": {
                     "height": 8,
                     "diameter": 12,
@@ -712,7 +786,9 @@ export const MockTreasureHunt: Assessment = {
                     "numberOfNozzles": 3,
                     "supplyPressure": 80
                 },
-                "otherMethodData": { "consumption": 1750 },
+                "otherMethodData": {
+                    "consumption": 1750
+                },
                 "compressorElectricityData": {
                     "compressorControl": 0,
                     "compressorControlAdjustment": 25,
@@ -729,7 +805,9 @@ export const MockTreasureHunt: Assessment = {
                 "compressedAirCost": 0.02,
                 "electricityCost": 0.05,
                 "measurementMethod": 0,
-                "flowMeterMethodData": { "meterReading": 5600 },
+                "flowMeterMethodData": {
+                    "meterReading": 5600.000000000002
+                },
                 "bagMethodData": {
                     "height": 8,
                     "diameter": 12,
@@ -740,7 +818,9 @@ export const MockTreasureHunt: Assessment = {
                     "numberOfNozzles": 3,
                     "supplyPressure": 80
                 },
-                "otherMethodData": { "consumption": 1750 },
+                "otherMethodData": {
+                    "consumption": 1750
+                },
                 "compressorElectricityData": {
                     "compressorControl": 0,
                     "compressorControlAdjustment": 25,
@@ -756,7 +836,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Utilities",
-                "businessUnits": "Bld4",
+                "businessUnits": "Frank",
                 "opportunityCost": {
                     "engineeringServices": 100,
                     "material": 0,
@@ -785,17 +865,22 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 200,
+                    "ratedMotorPower": 199.99999999999997,
                     "variableSpeedMotor": true,
                     "operationalFrequency": 50,
                     "lineFrequency": 60,
                     "motorAndDriveEfficiency": 92,
                     "loadFactor": 90
                 },
-                "powerMeterData": { "power": 50 },
-                "otherMethodData": { "energy": 400000 },
+                "powerMeterData": {
+                    "power": 50
+                },
+                "otherMethodData": {
+                    "energy": 400000
+                },
                 "units": 1
-            }, {
+            },
+            {
                 "name": "Cooling Tower Pump 2",
                 "operatingHours": 8760,
                 "electricityCost": 0.05,
@@ -807,15 +892,19 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 100,
+                    "ratedMotorPower": 99.99999999999999,
                     "variableSpeedMotor": true,
                     "operationalFrequency": 50,
                     "lineFrequency": 60,
                     "motorAndDriveEfficiency": 94,
                     "loadFactor": 90
                 },
-                "powerMeterData": { "power": 50 },
-                "otherMethodData": { "energy": 400000 },
+                "powerMeterData": {
+                    "power": 50
+                },
+                "otherMethodData": {
+                    "energy": 400000
+                },
                 "units": 1
             }],
             "modification": [{
@@ -830,17 +919,22 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 200,
+                    "ratedMotorPower": 199.99999999999997,
                     "variableSpeedMotor": true,
                     "operationalFrequency": 50,
                     "lineFrequency": 60,
                     "motorAndDriveEfficiency": 92,
                     "loadFactor": 90
                 },
-                "powerMeterData": { "power": 50 },
-                "otherMethodData": { "energy": 400000 },
+                "powerMeterData": {
+                    "power": 50
+                },
+                "otherMethodData": {
+                    "energy": 400000
+                },
                 "units": 1
-            }, {
+            },
+            {
                 "name": "Cooling Tower Pump 2",
                 "operatingHours": 7600,
                 "electricityCost": 0.05,
@@ -852,15 +946,19 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 100,
+                    "ratedMotorPower": 99.99999999999999,
                     "variableSpeedMotor": true,
                     "operationalFrequency": 50,
                     "lineFrequency": 60,
                     "motorAndDriveEfficiency": 94,
                     "loadFactor": 90
                 },
-                "powerMeterData": { "power": 50 },
-                "otherMethodData": { "energy": 400000 },
+                "powerMeterData": {
+                    "power": 50
+                },
+                "otherMethodData": {
+                    "energy": 400000
+                },
                 "units": 1
             }],
             "selected": true,
@@ -871,13 +969,17 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Process",
-                "businessUnits": "Bld4",
+                "businessUnits": "Jorge",
                 "opportunityCost": {
                     "engineeringServices": 200,
                     "material": 0,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 0
+                    "labor": 0,
+                    "additionalAnnualSavings": {
+                        "description": "Other Annual Savings",
+                        "cost": 200
+                    }
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -885,7 +987,8 @@ export const MockTreasureHunt: Assessment = {
                 }],
                 "modificationEnergyUseItems": []
             }
-        }, {
+        },
+        {
             "baseline": [{
                 "name": "Equipment #1",
                 "operatingHours": 8760,
@@ -898,15 +1001,19 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 30,
+                    "ratedMotorPower": 29.999999999999996,
                     "variableSpeedMotor": false,
                     "operationalFrequency": 60,
                     "lineFrequency": 60,
                     "motorAndDriveEfficiency": 100,
                     "loadFactor": 70
                 },
-                "powerMeterData": { "power": 50 },
-                "otherMethodData": { "energy": 400000 },
+                "powerMeterData": {
+                    "power": 50
+                },
+                "otherMethodData": {
+                    "energy": 400000
+                },
                 "units": 1
             }],
             "modification": [{
@@ -921,15 +1028,19 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 30,
+                    "ratedMotorPower": 29.999999999999996,
                     "variableSpeedMotor": false,
                     "operationalFrequency": 50,
                     "lineFrequency": 60,
                     "motorAndDriveEfficiency": 100,
                     "loadFactor": 70
                 },
-                "powerMeterData": { "power": 50 },
-                "otherMethodData": { "energy": 400000 },
+                "powerMeterData": {
+                    "power": 50
+                },
+                "otherMethodData": {
+                    "energy": 400000
+                },
                 "units": 1
             }],
             "selected": true,
@@ -940,7 +1051,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Facilities",
-                "businessUnits": "Bld3",
+                "businessUnits": "Amy",
                 "opportunityCost": {
                     "engineeringServices": 0,
                     "material": 0,
@@ -962,7 +1073,7 @@ export const MockTreasureHunt: Assessment = {
             "originator": "",
             "date": new Date(),
             "owner": "Utilities",
-            "businessUnits": "Bld1",
+            "businessUnits": "Reyes",
             "opportunityCost": {
                 "engineeringServices": 100,
                 "material": 0,
@@ -973,14 +1084,16 @@ export const MockTreasureHunt: Assessment = {
             "baselineEnergyUseItems": [{
                 "type": "Gas",
                 "amount": 9
-            }, {
+            },
+            {
                 "type": "Water",
                 "amount": 3000000
             }],
             "modificationEnergyUseItems": [{
                 "type": "Gas",
                 "amount": 4.2
-            }, {
+            },
+            {
                 "type": "Water",
                 "amount": 1400000
             }],
@@ -989,7 +1102,7 @@ export const MockTreasureHunt: Assessment = {
         "replaceExistingMotors": [{
             "replaceExistingData": {
                 "operatingHours": 8760,
-                "motorSize": 250,
+                "motorSize": 249.99999999999997,
                 "existingEfficiency": 88,
                 "load": 90,
                 "electricityCost": 0.05,
@@ -1006,7 +1119,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Process",
-                "businessUnits": "Bld6",
+                "businessUnits": "Garth",
                 "opportunityCost": {
                     "engineeringServices": 1000,
                     "material": 15000,
@@ -1020,7 +1133,8 @@ export const MockTreasureHunt: Assessment = {
                 }],
                 "modificationEnergyUseItems": []
             }
-        }, {
+        },
+        {
             "replaceExistingData": {
                 "operatingHours": 8760,
                 "motorSize": 500,
@@ -1032,7 +1146,6 @@ export const MockTreasureHunt: Assessment = {
                 "rewindCost": 8000,
                 "rewindEfficiencyLoss": 1
             },
-            "selected": true,
             "opportunitySheet": {
                 "name": "Replace blower motor",
                 "equipment": "motor",
@@ -1040,7 +1153,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Process",
-                "businessUnits": "Bld5",
+                "businessUnits": "Frank",
                 "opportunityCost": {
                     "engineeringServices": 1000,
                     "material": 30000,
@@ -1053,15 +1166,18 @@ export const MockTreasureHunt: Assessment = {
                     "amount": 0
                 }],
                 "modificationEnergyUseItems": []
-            }
+            },
+            "selected": true
         }],
         "waterReductions": [{
             "baseline": [{
                 "name": "Equipment #1",
                 "hoursPerYear": 8760,
-                "waterCost": 0.0025,
+                "waterCost": 0.0024999999999999996,
                 "measurementMethod": 2,
-                "meteredFlowMethodData": { "meterReading": 100 },
+                "meteredFlowMethodData": {
+                    "meterReading": 100
+                },
                 "volumeMeterMethodData": {
                     "initialMeterReading": 4235,
                     "finalMeterReading": 5842,
@@ -1071,15 +1187,19 @@ export const MockTreasureHunt: Assessment = {
                     "bucketVolume": 10,
                     "bucketFillTime": 20
                 },
-                "otherMethodData": { "consumption": 15000 },
+                "otherMethodData": {
+                    "consumption": 15000.000000000004
+                },
                 "isWastewater": false
             }],
             "modification": [{
                 "name": "Equipment #1",
                 "hoursPerYear": 8760,
-                "waterCost": 0.0025,
+                "waterCost": 0.0024999999999999996,
                 "measurementMethod": 0,
-                "meteredFlowMethodData": { "meterReading": 28 },
+                "meteredFlowMethodData": {
+                    "meterReading": 28.000000000000007
+                },
                 "volumeMeterMethodData": {
                     "initialMeterReading": 4235,
                     "finalMeterReading": 5842,
@@ -1089,7 +1209,9 @@ export const MockTreasureHunt: Assessment = {
                     "bucketVolume": 10,
                     "bucketFillTime": 20
                 },
-                "otherMethodData": { "consumption": 15000 },
+                "otherMethodData": {
+                    "consumption": 15000.000000000004
+                },
                 "isWastewater": false
             }],
             "opportunitySheet": {
@@ -1099,7 +1221,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Process",
-                "businessUnits": "Bld5",
+                "businessUnits": "Araceli",
                 "opportunityCost": {
                     "engineeringServices": 300,
                     "material": 1000,
@@ -1122,7 +1244,7 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "electricityCost": 0.05,
                 "compressorPower": 300,
-                "pressure": 120,
+                "pressure": 119.99999999999999,
                 "proposedPressure": 0
             }],
             "modification": [{
@@ -1131,7 +1253,7 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "electricityCost": 0.05,
                 "compressorPower": 300,
-                "pressure": 120,
+                "pressure": 119.99999999999999,
                 "proposedPressure": 110
             }],
             "opportunitySheet": {
@@ -1141,7 +1263,7 @@ export const MockTreasureHunt: Assessment = {
                 "originator": "",
                 "date": new Date(),
                 "owner": "Utilities",
-                "businessUnits": "Bld4",
+                "businessUnits": "Frank",
                 "opportunityCost": {
                     "engineeringServices": 100,
                     "material": 0,
@@ -1157,7 +1279,12 @@ export const MockTreasureHunt: Assessment = {
             },
             "selected": true
         }]
-    }
+
+
+    },
+    "createdDate": new Date(),
+    "modifiedDate": new Date(),
+    "selected": false,
 }
 
 export const MockTreasureHuntSettings: Settings = {
@@ -1219,5 +1346,5 @@ export const MockTreasureHuntSettings: Settings = {
     "compressedAirCost": 0.0005,
     "otherFuelCost": 0,
     "waterCost": 0.0025,
-    "waterWasteCost": 0.005,
-};
+    "waterWasteCost": 0.005
+}

@@ -17,6 +17,10 @@
                 Baseline
               </th>
               <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of modificationInputData">
+                <div class="alert-danger" *ngIf="!mod.valid.boilerValid">
+                  Invalid Modification<br>
+                  <span>Errors found in Boiler<br></span>
+                </div>
                 {{mod.name}}
               </th>
             </tr>
