@@ -2,7 +2,8 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FanPsychometricService } from '../fan-psychometric.service';
 import { Subscription } from 'rxjs';
-import { CalculatedGasDensity } from '../../../../shared/models/fans';
+import { BaseGasDensity, PsychometricResults } from '../../../../shared/models/fans';
+
 
 @Component({
   selector: 'app-fan-psychometric-table',
@@ -15,27 +16,37 @@ export class FanPsychometricTableComponent implements OnInit {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
-  resultData: Array<CalculatedGasDensity>;
+  resultData: Array<PsychometricResults>;
+  inputData: {barometricPressure: number, dryBulbTemp: number};
   resetFormSubscription: Subscription;
-  currentBaseGasDensity: CalculatedGasDensity;
+  calculatedBaseGasDensitySubscription: Subscription;
+  psychometricResults: PsychometricResults;
+
 
   constructor(private fanPsychometricService: FanPsychometricService) { }
 
   ngOnInit() {
     this.resetFormSubscription = this.fanPsychometricService.resetData.subscribe(val => {
       this.resultData = [];
+      this.psychometricResults = undefined;
     });
-    this.resetFormSubscription = this.fanPsychometricService.calculatedBaseGasDensity.subscribe(val => {
-      this.currentBaseGasDensity = val;
+    this.calculatedBaseGasDensitySubscription = this.fanPsychometricService.calculatedBaseGasDensity.subscribe(results => {
+      if(results) {
+        this.psychometricResults = results;
+        let inputData: BaseGasDensity = this.fanPsychometricService.baseGasDensityData.getValue();
+        this.psychometricResults.barometricPressure = inputData.barometricPressure;
+        this.psychometricResults.dryBulbTemp = inputData.dryBulbTemp;
+      }
     });
   }
 
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
+    this.calculatedBaseGasDensitySubscription.unsubscribe();
   }
 
   addResult() {
-    this.resultData.push(this.currentBaseGasDensity);
+    this.resultData.push(this.psychometricResults);
   }
 
   deleteResult(index: number) {

@@ -7,28 +7,82 @@
         <td class="text-center bold">Baseline</td>
         <td class="text-center bold" *ngIf="modificationName">{{modificationName}}</td>
       </tr>
-      <!--gas density-->
+      <!--relative humidity-->
       <tr>
-        <td>Gas Density (<span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>)</td>
-        <td>
-          <span
-            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.gasDensity | sigFigs: '4'}}</span>
+        <td>Relative Humidity (%)</td>
+        <td><span
+          *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.relativeHumidity | number:'1.0-1' }}</span>
           <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
         </td>
         <td *ngIf="modificationName"><span
-            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.gasDensity | sigFigs: '4'}}</span>
+          *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.relativeHumidity | number:'1.0-1' }}</span>
           <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
         </td>
       </tr>
-      <!--absolute pressure-->
+      <!--dew point-->
       <tr>
-        <td>Absolute Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)</td>
+        <td>Dew Point (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
         <td><span
-            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.absolutePressure | number:'1.0-2' }}</span>
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.dewPoint | number:'1.0-1' }}</span>
           <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
         </td>
         <td *ngIf="modificationName"><span
-            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.absolutePressure | number:'1.0-2' }}</span>
+          *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.dewPoint | number:'1.0-1'}}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--enthalpy-->
+      <tr>
+        <td>Enthalpy
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">(kJ/kg)</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(btu/lb)</span> </td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.enthalpy | number:'1.0-1' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.enthalpy | number:'1.0-1' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--gas density-->
+      <tr>
+        <td>Air Density (<span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>)</td>
+        <td>
+          <span
+          *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.gasDensity | sigFigs: '4'}}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+          *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.gasDensity | sigFigs: '4'}}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--specific volume-->
+      <tr>
+        <td>Specific Volume
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">(m<sup>3</sup>/kg)</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(ft<sup>3</sup>/lb)</span>
+        </td>
+        <td><span
+          *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.specificVolume | number:'1.0-2' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+          *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.specificVolume | number:'1.0-2' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--saturation pressure-->
+      <tr>
+        <td>Saturation Pressure (<span [innerHTML]="settings.fanBarometricPressure|settingsLabel"></span>)</td>
+        <td><span
+            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.saturationPressure | number:'1.0-3' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName">
+          <span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.saturationPressure | number:'1.0-3' }}</span>
           <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
         </td>
       </tr>
@@ -41,6 +95,18 @@
         </td>
         <td *ngIf="modificationName"><span
             *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.saturatedHumidity | number:'1.0-3' }}</span>
+          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
+        </td>
+      </tr>
+      <!--absolute pressure-->
+      <tr>
+        <td>Absolute Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)</td>
+        <td><span
+          *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.absolutePressure | number:'1.0-2' }}</span>
+          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
+        </td>
+        <td *ngIf="modificationName"><span
+            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.absolutePressure | number:'1.0-2' }}</span>
           <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
         </td>
       </tr>
@@ -65,72 +131,6 @@
         </td>
         <td *ngIf="modificationName"><span
             *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.humidityRatio | number:'1.0-4'}}</span>
-          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
-        </td>
-      </tr>
-      <!--specific volume-->
-      <tr>
-        <td>Specific Volume
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">(m<sup>3</sup>/kg)</span>
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(ft<sup>3</sup>/lb)</span>
-        </td>
-        <td><span
-            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.specificVolume | number:'1.0-2' }}</span>
-          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
-        </td>
-        <td *ngIf="modificationName"><span
-            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.specificVolume | number:'1.0-2' }}</span>
-          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
-        </td>
-      </tr>
-      <!--enthalpy-->
-      <tr>
-        <td>Enthalpy
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">(kJ/kg)</span>
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">(btu/lb)</span> </td>
-        <td><span
-            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.enthalpy | number:'1.0-1' }}</span>
-          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
-        </td>
-        <td *ngIf="modificationName"><span
-            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.enthalpy | number:'1.0-1' }}</span>
-          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
-        </td>
-      </tr>
-      <!--dew point-->
-      <tr>
-        <td>Dew Point (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
-        <td><span
-            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.dewPoint | number:'1.0-1' }}</span>
-          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
-        </td>
-        <td *ngIf="modificationName"><span
-            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.dewPoint | number:'1.0-1'}}</span>
-          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
-        </td>
-      </tr>
-      <!--relative humidity-->
-      <tr>
-        <td>Relative Humidity (%)</td>
-        <td><span
-            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.relativeHumidity | number:'1.0-1' }}</span>
-          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
-        </td>
-        <td *ngIf="modificationName"><span
-            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.relativeHumidity | number:'1.0-1' }}</span>
-          <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
-        </td>
-      </tr>
-      <!--saturation pressure-->
-      <tr>
-        <td>Saturation Pressure (<span [innerHTML]="settings.fanBarometricPressure|settingsLabel"></span>)</td>
-        <td><span
-            *ngIf="!isBaselineTypeCustom && baselineCalculatedGasDensity">{{ baselineCalculatedGasDensity.saturationPressure | number:'1.0-3' }}</span>
-          <span *ngIf="isBaselineTypeCustom || !baselineCalculatedGasDensity">&mdash;</span>
-        </td>
-        <td *ngIf="modificationName">
-          <span
-            *ngIf="!isModificationTypeCustom && modCalculatedGasDensity">{{ modCalculatedGasDensity.saturationPressure | number:'1.0-3' }}</span>
           <span *ngIf="isModificationTypeCustom || !modCalculatedGasDensity">&mdash;</span>
         </td>
       </tr>

@@ -1,0 +1,105 @@
+<div class="mt-3">
+    <label class="group-label mb-2">Psycometric Data</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <!--dry bulb temp-->
+        <tr>
+          <td>Dry Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
+          <td><span *ngIf="psychometricResults && psychometricResults.dryBulbTemp">{{ psychometricResults.dryBulbTemp | number:'1.0-4' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.dryBulbTemp">&mdash;</span>
+          </td>
+        </tr>
+        <!--relative humidity-->
+        <tr>
+          <td>Relative Humidity (%)</td>
+          <td><span *ngIf="psychometricResults && psychometricResults.relativeHumidity">{{ psychometricResults.relativeHumidity | number:'1.0-1' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.relativeHumidity">&mdash;</span>
+          </td>
+        </tr>
+        <!--wet bulb temp-->
+        <tr>
+          <td>Wet Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
+          <td><span *ngIf="psychometricResults && psychometricResults.wetBulbTemp">{{ psychometricResults.wetBulbTemp | number:'1.0-4' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.wetBulbTemp">&mdash;</span>
+          </td>
+        </tr>
+        <!--dew point-->
+        <tr>
+          <td>Dew Point (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
+          <td><span *ngIf="psychometricResults && psychometricResults.dewPoint">{{ psychometricResults.dewPoint | number:'1.0-1' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.dewPoint">&mdash;</span>
+          </td>
+        </tr>
+        <!--enthalpy-->
+        <tr>
+          <td>Enthalpy
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">(kJ/kg)</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">(btu/lb)</span> </td>
+          <td><span *ngIf="psychometricResults && psychometricResults.enthalpy">{{ psychometricResults.enthalpy | number:'1.0-1' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.enthalpy">&mdash;</span>
+          </td>
+        </tr>
+        <!--gas density-->
+        <tr>
+          <td>Air Density (<span [innerHTML]="settings.densityMeasurement|settingsLabel"></span>)</td>
+          <td>
+            <span *ngIf="psychometricResults && psychometricResults.gasDensity">{{ psychometricResults.gasDensity | sigFigs: '4'}}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.gasDensity">&mdash;</span>
+          </td>
+        </tr>
+        <!--specific volume-->
+        <tr>
+          <td>Specific Volume
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">(m<sup>3</sup>/kg)</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">(ft<sup>3</sup>/lb)</span>
+          </td>
+          <td><span *ngIf="psychometricResults && psychometricResults.specificVolume">{{ psychometricResults.specificVolume | number:'1.0-2' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.specificVolume">&mdash;</span>
+          </td>
+        </tr>
+        <!--barometric pressure-->
+        <tr>
+          <td>Barometric Pressure (<span [innerHTML]="settings.fanBarometricPressure|settingsLabel"></span>)</td>
+          <td><span *ngIf="psychometricResults && psychometricResults.barometricPressure">{{ psychometricResults.barometricPressure | number:'1.0-3' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.barometricPressure">&mdash;</span>
+          </td>
+        </tr>
+        <!--saturation pressure-->
+        <tr>
+          <td>Saturation Pressure (<span [innerHTML]="settings.fanBarometricPressure|settingsLabel"></span>)</td>
+          <td><span *ngIf="psychometricResults && psychometricResults.saturationPressure">{{ psychometricResults.saturationPressure | number:'1.0-3' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.saturationPressure">&mdash;</span>
+          </td>
+        </tr>
+        <!--saturated humidity ratio-->
+        <tr>
+          <td>Saturated Humidity Ratio</td>
+          <td><span *ngIf="psychometricResults && psychometricResults.saturatedHumidity">{{ psychometricResults.saturatedHumidity | number:'1.0-3' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.saturatedHumidity">&mdash;</span>
+          </td>
+        </tr>
+        <!--absolute pressure-->
+        <tr>
+          <td>Absolute Pressure (<span [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>)</td>
+          <td><span *ngIf="psychometricResults && psychometricResults.absolutePressure">{{ psychometricResults.absolutePressure | number:'1.0-2' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.absolutePressure">&mdash;</span>
+          </td>
+        </tr>
+        <!--degree of saturation-->
+        <tr>
+          <td>Degree of Saturation</td>
+          <td><span *ngIf="psychometricResults && psychometricResults.saturationDegree">{{ psychometricResults.saturationDegree | number:'1.0-3' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.saturationDegree">&mdash;</span>
+          </td>
+        </tr>
+        <!--humidity ratio-->
+        <tr>
+          <td>Humidity Ratio</td>
+          <td><span *ngIf="psychometricResults && psychometricResults.humidityRatio">{{ psychometricResults.humidityRatio | number:'1.0-4' }}</span>
+            <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.humidityRatio">&mdash;</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

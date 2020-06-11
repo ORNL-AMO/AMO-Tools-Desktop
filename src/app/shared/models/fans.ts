@@ -154,6 +154,13 @@ export interface BaseGasDensity {
   specificHeatGas?: number; //used with wetBulb
 }
 
+
+export interface PsychometricResults extends CalculatedGasDensity {
+  barometricPressure?: number,
+  dryBulbTemp?: number;
+  wetBulbTemp?: number;
+}
+
 export interface CalculatedGasDensity {
   gasDensity: number;
   absolutePressure: number;

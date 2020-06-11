@@ -33,13 +33,13 @@ export class FanPsychometricService {
    getDefaultData(): BaseGasDensity {
     let data: BaseGasDensity = {
         dryBulbTemp: undefined,
-        staticPressure: undefined,
+        staticPressure: 0,
         barometricPressure: 29.92,
         gasDensity: .0765,
         altitude: undefined,
         gasType: 'AIR',
         inputType: 'wetBulb',
-        specificGravity: undefined,
+        specificGravity: 1,
         wetBulbTemp: undefined,
         relativeHumidity: undefined,
         dewPoint: undefined,
@@ -51,7 +51,7 @@ export class FanPsychometricService {
   getExampleData(): BaseGasDensity {
     let data: BaseGasDensity = {
       dryBulbTemp: 123,
-      staticPressure: -17.6,
+      staticPressure: 0,
       barometricPressure: 26.57,
       gasDensity: 0.0547,
       gasType: 'AIR',
@@ -82,9 +82,6 @@ export class FanPsychometricService {
     } 
 
     this.calculatedBaseGasDensity.next(calculatedGasDensity);
-    // Subscribed to in shared gas-density-results.component
-    this.gasDensityFormService.baselineCalculatedGasDensity.next(calculatedGasDensity);
-    this.gasDensityFormService.baselineCalculationType.next(inputType);
   }
 
   calcDensityWetBulb(baseGasDensityData: BaseGasDensity, settings: Settings): CalculatedGasDensity {

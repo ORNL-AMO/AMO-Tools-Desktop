@@ -6,9 +6,9 @@ import { FanPsychometricService } from './fan-psychometric.service';
 import { FanPsychometricTableComponent } from './fan-psychometric-table/fan-psychometric-table.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
-import { GasDensityResultsModule } from '../../../shared/gas-density-results/gas-density-results.module';
 import { FanPsychometricComponent } from './fan-psychometric.component';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { FanPsychometricResultsComponent } from './fan-psychometric-results/fan-psychometric-results.component';
 
 
 
@@ -17,13 +17,13 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     FanPsychometricFormComponent, 
     FanPsychometricHelpComponent, 
     FanPsychometricTableComponent,
-    FanPsychometricComponent
+    FanPsychometricComponent,
+    FanPsychometricResultsComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
-    GasDensityResultsModule,
     SharedPipesModule
   ],
   providers: [
