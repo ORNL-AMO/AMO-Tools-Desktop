@@ -184,8 +184,8 @@
     <div class="form-group"
       [ngClass]="{'indicate-different': isCompressibilityFactorDifferent(), 'invalid': fieldDataForm.controls.compressibilityFactor.invalid}">
       <label for="{{'compressibilityFactor_'+idString}}">Compressibility Factor
-        <a class="form-text small click-link" *ngIf="baseline" (click)="calculateCompressibility()"
-          [ngClass]="{'disabled-link':!selected}">Calculate
+        <a class="form-text small click-link" (click)="calculateCompressibility()"
+          >Calculate
           Compressibility Factor</a>
       </label>
       <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control"

@@ -162,21 +162,43 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   calculateCompressibility() {
-    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, true, this.settings);
-    //todo
+    let fsatOutput: FsatOutput;
+    let compressibilityFactor: number;
+    fsatOutput = this.fsatService.getResults(this.fsat, this.baseline, this.settings);
+
     let inputs: CompressibilityFactor = {
-      moverShaftPower: tmpResults.motorShaftPower,
+      moverShaftPower: fsatOutput.motorShaftPower,
       inletPressure: this.fieldDataForm.controls.inletPressure.value,
       outletPressure: this.fieldDataForm.controls.outletPressure.value,
       barometricPressure: this.fsat.baseGasDensity.barometricPressure,
       flowRate: this.fieldDataForm.controls.flowRate.value,
       specificHeatRatio: this.fieldDataForm.controls.specificHeatRatio.value
     };
-    let calcCompFactor: number = this.fsatService.compressibilityFactor(inputs, this.settings);
+
+    if (this.baseline) {
+      compressibilityFactor = this.fsatService.compressibilityFactor(inputs, this.settings);
+    } else {
+      let currentMoverShaftPower;
+      let diff = 1;
+
+      while (diff > .001) {
+        let fanEff = fsatOutput.fanEfficiency;
+        // If not first iteration, calculate with moverShaftPower (tempShaftPower from the previous iteration)
+        if (currentMoverShaftPower) {
+          inputs.moverShaftPower = currentMoverShaftPower
+        }
+        compressibilityFactor = this.fsatService.compressibilityFactor(inputs, this.settings);
+        let tempShaftPower = inputs.flowRate * (inputs.outletPressure - inputs.inletPressure) * compressibilityFactor / (6362 * (fanEff / 100));
+        
+        diff = Math.abs(inputs.moverShaftPower - tempShaftPower);
+        currentMoverShaftPower = tempShaftPower;
+      }
+    }
+
     this.fieldDataForm.patchValue({
-      compressibilityFactor: Number(calcCompFactor.toFixed(3))
+      compressibilityFactor: Number(compressibilityFactor.toFixed(3))
     });
-  }
+}
 
   showInletPressureModal() {
     if (this.fieldData.inletPressureData) {
