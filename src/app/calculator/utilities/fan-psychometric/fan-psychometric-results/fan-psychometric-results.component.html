@@ -19,7 +19,7 @@
         <!--wet bulb temp-->
         <tr>
           <td>Wet Bulb (<span [innerHTML]="settings.fanTemperatureMeasurement|settingsLabel"></span>)</td>
-          <td><span *ngIf="psychometricResults && psychometricResults.wetBulbTemp">{{ psychometricResults.wetBulbTemp | number:'1.0-4' }}</span>
+          <td><span *ngIf="psychometricResults && psychometricResults.wetBulbTemp">{{ psychometricResults.wetBulbTemp | number:'1.0-1' }}</span>
             <span *ngIf="!psychometricResults || psychometricResults && !psychometricResults.wetBulbTemp">&mdash;</span>
           </td>
         </tr>

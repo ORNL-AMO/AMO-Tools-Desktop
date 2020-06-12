@@ -159,7 +159,6 @@ export interface BaseGasDensity {
 export interface PsychometricResults extends CalculatedGasDensity {
   barometricPressure?: number,
   dryBulbTemp?: number;
-  wetBulbTemp?: number;
 }
 
 export interface CalculatedGasDensity {

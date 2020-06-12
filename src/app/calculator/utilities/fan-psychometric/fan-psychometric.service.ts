@@ -14,7 +14,6 @@ export class FanPsychometricService {
   generateExample: BehaviorSubject<boolean>;
   
   baseGasDensityData: BehaviorSubject<BaseGasDensity>;
-  gasDensityResult: BehaviorSubject<number>;
   calculatedBaseGasDensity: BehaviorSubject<CalculatedGasDensity>;
   psychometricResults: BehaviorSubject<Array<CalculatedGasDensity>>;
   
@@ -25,7 +24,6 @@ export class FanPsychometricService {
     this.generateExample = new BehaviorSubject<boolean>(undefined);
     
     this.psychometricResults = new BehaviorSubject<Array<CalculatedGasDensity>>(undefined);
-    this.gasDensityResult = new BehaviorSubject<number>(undefined);
     this.baseGasDensityData = new BehaviorSubject<BaseGasDensity>(undefined);
     this.calculatedBaseGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
    }
@@ -76,10 +74,6 @@ export class FanPsychometricService {
     } else if (inputType === 'dewPoint') {
       calculatedGasDensity = this.calcDensityDewPoint(currentBaseGasDensity, settings);
     }
-
-    if (calculatedGasDensity) {
-      this.gasDensityResult.next(calculatedGasDensity.gasDensity);
-    } 
 
     this.calculatedBaseGasDensity.next(calculatedGasDensity);
   }

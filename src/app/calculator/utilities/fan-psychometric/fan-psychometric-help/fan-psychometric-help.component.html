@@ -9,16 +9,7 @@
       </small>
     </h5>
     <hr class="my-1 hr-spacer">
-    <div class="my-2" *ngIf="currentField == 'gasType'">
-      <h6>
-        Gas Type
-        <br>
-        <small class="text-muted">
-          Select either ‘Air’ or ‘Other Gases’ depending on the type of gas.
-          <hr>
-        </small>
-      </h6>
-    </div>
+
     <div class="my-2" *ngIf="currentField == 'inputType'">
       <h6>
         Method to Establish Gas Density
@@ -68,33 +59,12 @@
         </small>
       </h6>
     </div>
-    <div class="my-2" *ngIf="currentField == 'staticPressure'">
-      <h6>
-        Static Pressure
-        <br>
-        <small class="text-muted">
-          Reference static pressure (relative to barometric pressure).
-          <hr>
-        </small>
-      </h6>
-    </div>
     <div class="my-2" *ngIf="currentField == 'barometricPressure'">
       <h6>
         Barometric Pressure
         <br>
         <small class="text-muted">
           Reference barometric pressure.
-          <hr>
-        </small>
-      </h6>
-    </div>
-    <div class="my-2" *ngIf="currentField == 'specificGravity'">
-      <h6>
-        Gas Relative Density
-        <br>
-        <small class="text-muted">
-          The ratio of molecular weight of the gas in question to that of air. For air, this is 1.0. For flue gases around 700 °C,
-          this is about 0.3.
           <hr>
         </small>
       </h6>
@@ -121,18 +91,6 @@
         </small>
       </h6>
     </div>
-    <div class="my-2" *ngIf="currentField == 'specificHeatGas'">
-      <h6>
-        Specific Heat Gas
-        <br>
-        <small class="text-muted">
-          The amount of heat required to raise the temperature of the gas one degree for each unit of mass. For air, this is 0.24 Btu/lb
-          °F; for flue gases, this ranges between 0.248 and 0.320 Btu/lb °F, depending on temperature and composition.
-  
-          <hr>
-        </small>
-      </h6>
-    </div>
     <div class="my-2" *ngIf="currentField == 'dewPoint'">
       <h6>
         Gas Dew Point
@@ -154,5 +112,4 @@
         </small>
       </h6>
     </div>
-    <!--TODO: rest of fields-->
   </div>

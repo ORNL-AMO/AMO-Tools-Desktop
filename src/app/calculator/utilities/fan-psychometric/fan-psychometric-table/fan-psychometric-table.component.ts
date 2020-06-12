@@ -17,7 +17,6 @@ export class FanPsychometricTableComponent implements OnInit {
   tableString: any;
 
   resultData: Array<PsychometricResults>;
-  inputData: {barometricPressure: number, dryBulbTemp: number};
   resetFormSubscription: Subscription;
   calculatedBaseGasDensitySubscription: Subscription;
   psychometricResults: PsychometricResults;

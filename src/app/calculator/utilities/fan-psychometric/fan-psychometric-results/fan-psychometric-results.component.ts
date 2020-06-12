@@ -15,7 +15,6 @@ export class FanPsychometricResultsComponent implements OnInit {
 
   resultData: Array<PsychometricResults>;
   hasValidResults: boolean; 
-  inputData: {barometricPressure: number, dryBulbTemp: number};
   psychometricResults: PsychometricResults;
   
   resetFormSubscription: Subscription;
@@ -30,8 +29,6 @@ export class FanPsychometricResultsComponent implements OnInit {
         let inputData: BaseGasDensity = this.fanPsychometricService.baseGasDensityData.getValue();
         this.psychometricResults.barometricPressure = inputData.barometricPressure;
         this.psychometricResults.dryBulbTemp = inputData.dryBulbTemp;
-         //  replace with calculated results once merged
-        this.psychometricResults.wetBulbTemp = inputData.wetBulbTemp;
       }
     });
   }

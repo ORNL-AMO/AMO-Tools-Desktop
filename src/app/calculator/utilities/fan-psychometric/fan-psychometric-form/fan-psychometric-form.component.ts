@@ -24,11 +24,9 @@ export class FanPsychometricFormComponent implements OnInit {
   
   userDefinedBarometricPressure: boolean = true;
   gasDensityForm: FormGroup;
-  gasDensityResult: number;
 
   resetFormSubscription: Subscription;
   generateFormSubscription: Subscription;
-  gasDensityResultSubscription: Subscription;
 
   constructor(private gasDensityFormService: GasDensityFormService,
     private fanPsychometricService: FanPsychometricService,
@@ -37,7 +35,6 @@ export class FanPsychometricFormComponent implements OnInit {
   ngOnInit() {
     let baseGasDensityData = this.fanPsychometricService.baseGasDensityData.getValue();
     this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, this.settings);
-    this.gasDensityResult = baseGasDensityData.gasDensity;
     this.save();
     this.initSubscriptions();
   }
@@ -45,7 +42,6 @@ export class FanPsychometricFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
     this.generateFormSubscription.unsubscribe();
-    this.gasDensityResultSubscription.unsubscribe();
   }
 
   initSubscriptions() {
@@ -56,9 +52,6 @@ export class FanPsychometricFormComponent implements OnInit {
     this.generateFormSubscription = this.fanPsychometricService.generateExample.subscribe(val => {
       let exampleData = this.fanPsychometricService.baseGasDensityData.getValue();
       this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(exampleData, this.settings);
-    });
-    this.gasDensityResultSubscription = this.fanPsychometricService.gasDensityResult.subscribe(value => {
-      this.updateFormGasDensityResult(value);
     });
   }
 
@@ -98,19 +91,6 @@ export class FanPsychometricFormComponent implements OnInit {
     return barometricPressure;
   }
 
-  updateFormGasDensityResult(gasDensityResult: number) {
-    this.gasDensityResult = gasDensityResult;
-    if (isNaN(gasDensityResult) === false) {
-      this.gasDensityForm.patchValue({
-        gasDensity: gasDensityResult
-      });
-    } else {
-      this.gasDensityForm.patchValue({
-        gasDensity: undefined
-      });
-    }
-  }
-  
   setValidators() {
     this.gasDensityForm = this.gasDensityFormService.setValidators(this.gasDensityForm, this.settings);
     this.save();

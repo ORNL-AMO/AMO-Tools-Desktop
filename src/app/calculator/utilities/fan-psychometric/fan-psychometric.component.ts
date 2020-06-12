@@ -53,7 +53,7 @@ export class FanPsychometricComponent implements OnInit {
   
   initSubscriptions() {
     this.baseGasDensityDataSub = this.fanPsychometricService.baseGasDensityData.subscribe(value => {
-      this.calculate(this.settings);
+      this.fanPsychometricService.calculateBaseGasDensity(this.settings);
     });
   }
 
@@ -75,10 +75,6 @@ export class FanPsychometricComponent implements OnInit {
         this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       }
     }
-  }
-
-  calculate(settings: Settings) {
-    this.fanPsychometricService.calculateBaseGasDensity(settings);
   }
 
   setTab(str: string) {

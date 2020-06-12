@@ -28,13 +28,6 @@
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">btu/lb</span>
         </th>
-        <!-- <th class="parent-col"><span class="pr-1">&rho;</span>
-          <span>lb/ft<sup>3</sup></span>
-        </th>
-        <th class="parent-col">P<sub class="pr-1">atm</sub>
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kPaa</span>
-        </th> -->
         <th class="pr-3"></th>
       </tr>
     </thead>
@@ -45,8 +38,6 @@
         <td>{{result.wetBulbTemp | number:'1.0-4'}}</td>
         <td>{{result.dewPoint | number:'1.0-1'}}</td>
         <td>{{result.enthalpy | number:'1.0-1'}}</td>
-        <!-- <td>{{result.gasDensity | sigFigs: '4'}}</td>
-        <td>{{result.barometricPressure | number:'1.2-2'}}</td> -->
         <td class="delete-row pr-3" (click)="deleteResult(i)">Delete</td>
       </tr>
     </tbody>
