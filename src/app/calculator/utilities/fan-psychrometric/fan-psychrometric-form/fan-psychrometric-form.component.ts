@@ -1,17 +1,17 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { FanPsychometricService } from '../fan-psychometric.service';
+import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
 import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 
 @Component({
-  selector: 'app-fan-psychometric-form',
-  templateUrl: './fan-psychometric-form.component.html',
-  styleUrls: ['./fan-psychometric-form.component.css']
+  selector: 'app-fan-psychrometric-form',
+  templateUrl: './fan-psychrometric-form.component.html',
+  styleUrls: ['./fan-psychrometric-form.component.css']
 })
-export class FanPsychometricFormComponent implements OnInit {
+export class FanPsychrometricFormComponent implements OnInit {
 
   @Input()
   settings: Settings;
@@ -29,11 +29,11 @@ export class FanPsychometricFormComponent implements OnInit {
   generateFormSubscription: Subscription;
 
   constructor(private gasDensityFormService: GasDensityFormService,
-    private fanPsychometricService: FanPsychometricService,
+    private fanPsychrometricService: FanPsychrometricService,
     private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    let baseGasDensityData = this.fanPsychometricService.baseGasDensityData.getValue();
+    let baseGasDensityData = this.fanPsychrometricService.baseGasDensityData.getValue();
     this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, this.settings);
     this.save();
     this.initSubscriptions();
@@ -45,12 +45,12 @@ export class FanPsychometricFormComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.resetFormSubscription = this.fanPsychometricService.resetData.subscribe(val => {
-      let defaultData = this.fanPsychometricService.baseGasDensityData.getValue();
+    this.resetFormSubscription = this.fanPsychrometricService.resetData.subscribe(val => {
+      let defaultData = this.fanPsychrometricService.baseGasDensityData.getValue();
       this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(defaultData, this.settings);
     });
-    this.generateFormSubscription = this.fanPsychometricService.generateExample.subscribe(val => {
-      let exampleData = this.fanPsychometricService.baseGasDensityData.getValue();
+    this.generateFormSubscription = this.fanPsychrometricService.generateExample.subscribe(val => {
+      let exampleData = this.fanPsychrometricService.baseGasDensityData.getValue();
       this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(exampleData, this.settings);
     });
   }
@@ -63,7 +63,7 @@ export class FanPsychometricFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.fanPsychometricService.currentField.next(str);
+    this.fanPsychrometricService.currentField.next(str);
   }
 
   save() {
@@ -73,7 +73,7 @@ export class FanPsychometricFormComponent implements OnInit {
       });
     }
     let currentData = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
-    this.fanPsychometricService.baseGasDensityData.next(currentData);
+    this.fanPsychrometricService.baseGasDensityData.next(currentData);
   }
 
   calculateBarometricPressure() {

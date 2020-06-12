@@ -1,16 +1,16 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { FanPsychometricService } from './fan-psychometric.service';
+import { FanPsychrometricService } from './fan-psychrometric.service';
 import { Subscription } from 'rxjs';
 import { BaseGasDensity } from '../../../shared/models/fans';
 
 @Component({
-  selector: 'app-fan-psychometric',
-  templateUrl: './fan-psychometric.component.html',
-  styleUrls: ['./fan-psychometric.component.css']
+  selector: 'app-fan-psychrometric',
+  templateUrl: './fan-psychrometric.component.html',
+  styleUrls: ['./fan-psychrometric.component.css']
 })
-export class FanPsychometricComponent implements OnInit {
+export class FanPsychrometricComponent implements OnInit {
   
   @Input()
   settings: Settings;
@@ -26,7 +26,7 @@ export class FanPsychometricComponent implements OnInit {
   baseGasDensityDataSub: Subscription;
 
   constructor(private settingsDbService: SettingsDbService, 
-              private fanPsychometricService: FanPsychometricService,
+              private fanPsychrometricService: FanPsychrometricService,
               ) { }
 
   ngOnInit() {
@@ -36,8 +36,8 @@ export class FanPsychometricComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-    let defaultData: BaseGasDensity = this.fanPsychometricService.getDefaultData();
-    this.fanPsychometricService.baseGasDensityData.next(defaultData);
+    let defaultData: BaseGasDensity = this.fanPsychrometricService.getDefaultData();
+    this.fanPsychrometricService.baseGasDensityData.next(defaultData);
     this.initSubscriptions();
   }
 
@@ -52,21 +52,21 @@ export class FanPsychometricComponent implements OnInit {
   }
   
   initSubscriptions() {
-    this.baseGasDensityDataSub = this.fanPsychometricService.baseGasDensityData.subscribe(value => {
-      this.fanPsychometricService.calculateBaseGasDensity(this.settings);
+    this.baseGasDensityDataSub = this.fanPsychrometricService.baseGasDensityData.subscribe(value => {
+      this.fanPsychrometricService.calculateBaseGasDensity(this.settings);
     });
   }
 
   btnGenerateExample(){
-    let exampleData: BaseGasDensity = this.fanPsychometricService.getExampleData();
-    this.fanPsychometricService.baseGasDensityData.next(exampleData);
-    this.fanPsychometricService.generateExample.next(true);
+    let exampleData: BaseGasDensity = this.fanPsychrometricService.getExampleData();
+    this.fanPsychrometricService.baseGasDensityData.next(exampleData);
+    this.fanPsychrometricService.generateExample.next(true);
   }
 
   btnResetData(){
-    let defaultData: BaseGasDensity = this.fanPsychometricService.getDefaultData();
-    this.fanPsychometricService.baseGasDensityData.next(defaultData);
-    this.fanPsychometricService.resetData.next(true);
+    let defaultData: BaseGasDensity = this.fanPsychrometricService.getDefaultData();
+    this.fanPsychrometricService.baseGasDensityData.next(defaultData);
+    this.fanPsychrometricService.resetData.next(true);
   }
 
   resizeTabs() {

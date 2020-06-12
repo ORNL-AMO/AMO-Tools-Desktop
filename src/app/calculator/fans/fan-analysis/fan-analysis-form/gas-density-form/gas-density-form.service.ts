@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseGasDensity, CalculatedGasDensity } from '../../../../../shared/models/fans';
+import { BaseGasDensity, PsychrometricResults } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
@@ -8,13 +8,13 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class GasDensityFormService {
 
-  baselineCalculatedGasDensity: BehaviorSubject<CalculatedGasDensity>;
-  modificationCalculatedGasDensity: BehaviorSubject<CalculatedGasDensity>;
+  baselinePsychrometricResults: BehaviorSubject<PsychrometricResults>;
+  modificationPsychrometricResults: BehaviorSubject<PsychrometricResults>;
   baselineCalculationType: BehaviorSubject<string>;
   modificationCalculationType: BehaviorSubject<string>;
   constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
-    this.baselineCalculatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
-    this.modificationCalculatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
+    this.baselinePsychrometricResults = new BehaviorSubject<PsychrometricResults>(undefined);
+    this.modificationPsychrometricResults = new BehaviorSubject<PsychrometricResults>(undefined);
     this.baselineCalculationType = new BehaviorSubject<string>(undefined);
     this.modificationCalculationType = new BehaviorSubject<string>(undefined)
   }

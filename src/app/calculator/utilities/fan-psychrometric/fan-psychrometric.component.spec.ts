@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FanPsychometricComponent } from './fan-psychometric.component';
+import { FanPsychrometricComponent } from './fan-psychrometric.component';
 
-describe('FanPsychometricComponent', () => {
-  let component: FanPsychometricComponent;
-  let fixture: ComponentFixture<FanPsychometricComponent>;
+describe('FanPsychrometricComponent', () => {
+  let component: FanPsychrometricComponent;
+  let fixture: ComponentFixture<FanPsychrometricComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FanPsychometricComponent ]
+      declarations: [ FanPsychrometricComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FanPsychometricComponent);
+    fixture = TestBed.createComponent(FanPsychrometricComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

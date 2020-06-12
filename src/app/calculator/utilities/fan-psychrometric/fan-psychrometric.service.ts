@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CalculatedGasDensity, BaseGasDensity } from '../../../shared/models/fans';
+import { PsychrometricResults, BaseGasDensity } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { FsatService } from '../../../fsat/fsat.service';
 import { GasDensityFormService } from '../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 
 @Injectable()
-export class FanPsychometricService {
+export class FanPsychrometricService {
   
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
   
   baseGasDensityData: BehaviorSubject<BaseGasDensity>;
-  calculatedBaseGasDensity: BehaviorSubject<CalculatedGasDensity>;
-  psychometricResults: BehaviorSubject<Array<CalculatedGasDensity>>;
+  calculatedBaseGasDensity: BehaviorSubject<PsychrometricResults>;
+  psychrometricResults: BehaviorSubject<Array<PsychrometricResults>>;
   
   constructor(private gasDensityFormService: GasDensityFormService,
               private fsatService: FsatService) {
@@ -23,9 +23,9 @@ export class FanPsychometricService {
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
     
-    this.psychometricResults = new BehaviorSubject<Array<CalculatedGasDensity>>(undefined);
+    this.psychrometricResults = new BehaviorSubject<Array<PsychrometricResults>>(undefined);
     this.baseGasDensityData = new BehaviorSubject<BaseGasDensity>(undefined);
-    this.calculatedBaseGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
+    this.calculatedBaseGasDensity = new BehaviorSubject<PsychrometricResults>(undefined);
    }
 
    getDefaultData(): BaseGasDensity {
@@ -66,25 +66,25 @@ export class FanPsychometricService {
   calculateBaseGasDensity(settings: Settings) {
     let currentBaseGasDensity = this.baseGasDensityData.getValue();
     let inputType = currentBaseGasDensity.inputType;
-    let calculatedGasDensity: CalculatedGasDensity;
+    let psychrometricResults: PsychrometricResults;
     if (inputType === 'relativeHumidity') {
-      calculatedGasDensity = this.calcDensityRelativeHumidity(currentBaseGasDensity, settings);
+      psychrometricResults = this.calcDensityRelativeHumidity(currentBaseGasDensity, settings);
     } else if (inputType === 'wetBulb') {
-      calculatedGasDensity = this.calcDensityWetBulb(currentBaseGasDensity, settings);
+      psychrometricResults = this.calcDensityWetBulb(currentBaseGasDensity, settings);
     } else if (inputType === 'dewPoint') {
-      calculatedGasDensity = this.calcDensityDewPoint(currentBaseGasDensity, settings);
+      psychrometricResults = this.calcDensityDewPoint(currentBaseGasDensity, settings);
     }
 
-    this.calculatedBaseGasDensity.next(calculatedGasDensity);
+    this.calculatedBaseGasDensity.next(psychrometricResults);
   }
 
-  calcDensityWetBulb(baseGasDensityData: BaseGasDensity, settings: Settings): CalculatedGasDensity {
-    let calculatedGasDensity: CalculatedGasDensity;
+  calcDensityWetBulb(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
     if (this.isWetBulbValid(form)) {
-      calculatedGasDensity = this.fsatService.getBaseGasDensityWetBulb(baseGasDensityData, settings);
+      psychrometricResults = this.fsatService.getPsychrometricWetBulb(baseGasDensityData, settings);
     }
-    return calculatedGasDensity;
+    return psychrometricResults;
   }
 
   isWetBulbValid(gasDensityForm: FormGroup): boolean {
@@ -92,13 +92,13 @@ export class FanPsychometricService {
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.wetBulbTemp.valid);
   }
 
-  calcDensityRelativeHumidity(baseGasDensityData: BaseGasDensity, settings: Settings): CalculatedGasDensity {
-    let calculatedGasDensity: CalculatedGasDensity;
+  calcDensityRelativeHumidity(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
     if (this.isRelativeHumidityValid(form)) {
-      calculatedGasDensity = this.fsatService.getBaseGasDensityRelativeHumidity(baseGasDensityData, settings);
+      psychrometricResults = this.fsatService.getPsychrometricRelativeHumidity(baseGasDensityData, settings);
     }
-    return calculatedGasDensity;
+    return psychrometricResults;
   }
 
   isRelativeHumidityValid(gasDensityForm: FormGroup): boolean {
@@ -106,13 +106,13 @@ export class FanPsychometricService {
       && gasDensityForm.controls.specificGravity.valid && gasDensityForm.controls.relativeHumidity.valid);
   }
 
-  calcDensityDewPoint(baseGasDensityData: BaseGasDensity, settings: Settings): CalculatedGasDensity {
-    let calculatedGasDensity: CalculatedGasDensity;
+  calcDensityDewPoint(baseGasDensityData: BaseGasDensity, settings: Settings): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults;
     let form = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, settings);
     if (this.isDewPointValid(form)) {
-      calculatedGasDensity = this.fsatService.getBaseGasDensityDewPoint(baseGasDensityData, settings);
+      psychrometricResults = this.fsatService.getPsychrometricDewPoint(baseGasDensityData, settings);
     }
-    return calculatedGasDensity;
+    return psychrometricResults;
   }
 
   isDewPointValid(gasDensityForm: FormGroup) {

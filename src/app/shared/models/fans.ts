@@ -156,12 +156,7 @@ export interface BaseGasDensity {
 }
 
 
-export interface PsychometricResults extends CalculatedGasDensity {
-  barometricPressure?: number,
-  dryBulbTemp?: number;
-}
-
-export interface CalculatedGasDensity {
+export interface PsychrometricResults {
   gasDensity: number;
   absolutePressure: number;
   saturatedHumidity: number;
@@ -173,6 +168,8 @@ export interface CalculatedGasDensity {
   relativeHumidity: number;
   saturationPressure: number;
   wetBulbTemp: number;
+  barometricPressure?: number,
+  dryBulbTemp?: number;
 }
 
 export interface FanShaftPower {

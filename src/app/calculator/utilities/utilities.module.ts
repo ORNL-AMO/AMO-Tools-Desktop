@@ -14,7 +14,7 @@ import { PipeInsulationReductionModule } from './pipe-insulation-reduction/pipe-
 import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-insulation-reduction.module';
 import { UtilitiesListComponent } from './utilities-list/utilities-list.component';
 import { RouterModule } from '@angular/router';
-import { FanPsychometricModule } from './fan-psychometric/fan-psychometric.module';
+import { FanPsychrometricModule } from './fan-psychrometric/fan-psychrometric.module';
 
 @NgModule({
     declarations: [
@@ -39,7 +39,7 @@ import { FanPsychometricModule } from './fan-psychometric/fan-psychometric.modul
         CashFlowModule,
         UnitConverterModule,
         RouterModule,
-        FanPsychometricModule
+        FanPsychrometricModule
     ]
 })
 

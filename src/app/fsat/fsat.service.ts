@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, CalculatedGasDensity } from '../shared/models/fans';
+import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, PsychrometricResults } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
@@ -56,25 +56,25 @@ export class FsatService {
     return results;
   }
 
-  getBaseGasDensityDewPoint(inputs: BaseGasDensity, settings: Settings): CalculatedGasDensity {
+  getPsychrometricDewPoint(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
-    let calculatedGasDensity: CalculatedGasDensity = fanAddon.getBaseGasDensityDewPoint(inputs);
-    calculatedGasDensity = this.convertFanAnalysisService.convertCalculatedGasDensity(calculatedGasDensity, settings);
-    return calculatedGasDensity;
+    let psychrometricResults: PsychrometricResults = fanAddon.getBaseGasDensityDewPoint(inputs);
+    psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
+    return psychrometricResults;
   }
 
-  getBaseGasDensityRelativeHumidity(inputs: BaseGasDensity, settings: Settings): CalculatedGasDensity {
+  getPsychrometricRelativeHumidity(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
-    let calculatedGasDensity: CalculatedGasDensity = fanAddon.getBaseGasDensityRelativeHumidity(inputs);
-    calculatedGasDensity = this.convertFanAnalysisService.convertCalculatedGasDensity(calculatedGasDensity, settings);
-    return calculatedGasDensity;
+    let psychrometricResults: PsychrometricResults = fanAddon.getBaseGasDensityRelativeHumidity(inputs);
+    psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
+    return psychrometricResults;
   }
 
-  getBaseGasDensityWetBulb(inputs: BaseGasDensity, settings: Settings): CalculatedGasDensity {
+  getPsychrometricWetBulb(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
-    let calculatedGasDensity: CalculatedGasDensity = fanAddon.getBaseGasDensityWetBulb(inputs);
-    calculatedGasDensity = this.convertFanAnalysisService.convertCalculatedGasDensity(calculatedGasDensity, settings);
-    return calculatedGasDensity;
+    let psychrometricResults: PsychrometricResults = fanAddon.getBaseGasDensityWetBulb(inputs);
+    psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
+    return psychrometricResults;
   }
 
   getVelocityPressureData(inputs: Plane, settings: Settings): { pv3: number, percent75Rule: number } {
