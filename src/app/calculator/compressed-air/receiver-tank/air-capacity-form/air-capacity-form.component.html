@@ -15,7 +15,7 @@
         <div class="input-group">
           <input name="airPressureIn" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureIn" id="airPressureIn"
             (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureIn')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
         </div>
       </div>
@@ -24,7 +24,7 @@
         <div class="input-group">
           <input name="airPressureOut" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureOut" id="airPressureOut"
             (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureOut')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
         </div>
       </div>
