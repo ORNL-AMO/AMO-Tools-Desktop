@@ -13,6 +13,7 @@ import { fluidProperties } from './psatConstants';
 @Injectable()
 export class PsatWarningService {
 
+  updateFla: boolean = false;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
   //FIELD DATA
   //warnings for field data form
@@ -140,12 +141,14 @@ export class PsatWarningService {
     let rpmError: string = this.checkMotorRpm(psat);
     let voltageError: string = this.checkMotorVoltage(psat);
     let flaError: string = this.checkFLA(psat, settings);
+    let recalculateFla: string = this.updateFla? "Inputs to this calculated value have changed. Consider re-estimating" : null;
     let ratedPowerError: string;
     ratedPowerError = this.checkMotorRatedPower(psat, settings, isModification);
     return {
       rpmError: rpmError,
       voltageError: voltageError,
       flaError: flaError,
+      recalculateFla: recalculateFla,
       ratedPowerError: ratedPowerError
     }
   }
@@ -282,6 +285,11 @@ export class PsatWarningService {
       } else if (psat.inputs.motor_rated_fla > this.psatService.flaRange.flaMax) {
         return 'Value should be less than ' + Math.round(this.psatService.flaRange.flaMax);
       } else {
+        if (psat.inputs.motor_rated_fla != estEfficiency) {
+          this.updateFla = true;
+        } else {
+          this.updateFla = false;
+        }
         return null;
       }
     } else {
@@ -378,6 +386,7 @@ export interface MotorWarnings {
   voltageError: string;
   flaError: string;
   ratedPowerError: string;
+  recalculateFla: string;
 }
 
 export interface PumpFluidWarnings {

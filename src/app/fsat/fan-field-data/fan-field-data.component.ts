@@ -50,6 +50,7 @@ export class FanFieldDataComponent implements OnInit {
 
   formWidth: number;
   showOperatingHoursModal: boolean = false;
+  userDefinedCompressibilityFactor: boolean = false;
 
   bodyHeight: number;
   loadEstimateMethods: Array<{ value: number, display: string }> = [
@@ -123,11 +124,31 @@ export class FanFieldDataComponent implements OnInit {
         this.fieldData.cost = this.settings.electricityCost;
       }
       this.fieldDataForm = this.fanFieldDataService.getFormFromObj(this.fieldData);
-      // this.helpPanelService.currentField.next('operatingFraction');
-      //init warning messages;
-      this.checkForWarnings();
-      //this.cd.detectChanges();
+      this.save();
     }
+  }
+
+  showHideInputField() {
+    this.userDefinedCompressibilityFactor = !this.userDefinedCompressibilityFactor;
+
+    this.save();
+  }
+
+  calculateCompressibility() {
+    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, true, this.settings);
+    let inputs: CompressibilityFactor = {
+      moverShaftPower: tmpResults.motorShaftPower,
+      inletPressure: this.fieldDataForm.controls.inletPressure.value,
+      outletPressure: this.fieldDataForm.controls.outletPressure.value,
+      barometricPressure: this.fsat.baseGasDensity.barometricPressure,
+      flowRate: this.fieldDataForm.controls.flowRate.value,
+      specificHeatRatio: this.fieldDataForm.controls.specificHeatRatio.value
+    };
+    let calcCompFactor: number = this.fsatService.compressibilityFactor(inputs, this.settings);
+
+    this.fieldDataForm.patchValue({
+      compressibilityFactor: Number(calcCompFactor.toFixed(3))
+    });
   }
 
   focusField(str: string) {
@@ -142,6 +163,9 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   save() {
+    if (!this.userDefinedCompressibilityFactor) {
+      this.calculateCompressibility();
+    }
     let tmpInletPressureData: InletPressureData = this.fieldData.inletPressureData;
     let tmpOutletPressureData: OutletPressureData = this.fieldData.outletPressureData;
     let tmpPlaneData: PlaneData = this.fieldData.planeData;
@@ -159,23 +183,6 @@ export class FanFieldDataComponent implements OnInit {
 
   checkForWarnings() {
     this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, !this.baseline);
-  }
-
-  calculateCompressibility() {
-    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, true, this.settings);
-    //todo
-    let inputs: CompressibilityFactor = {
-      moverShaftPower: tmpResults.motorShaftPower,
-      inletPressure: this.fieldDataForm.controls.inletPressure.value,
-      outletPressure: this.fieldDataForm.controls.outletPressure.value,
-      barometricPressure: this.fsat.baseGasDensity.barometricPressure,
-      flowRate: this.fieldDataForm.controls.flowRate.value,
-      specificHeatRatio: this.fieldDataForm.controls.specificHeatRatio.value
-    };
-    let calcCompFactor: number = this.fsatService.compressibilityFactor(inputs, this.settings);
-    this.fieldDataForm.patchValue({
-      compressibilityFactor: Number(calcCompFactor.toFixed(3))
-    });
   }
 
   showInletPressureModal() {
@@ -335,7 +342,7 @@ export class FanFieldDataComponent implements OnInit {
       return false;
     }
   }
-  // isLoadEstimatedMethodDifferent() {
+    // isLoadEstimatedMethodDifferent() {
   //   if (this.canCompare()) {
   //     return this.compareService.isLoadEstimatedMethodDifferent();
   //   } else {
@@ -364,7 +371,7 @@ export class FanFieldDataComponent implements OnInit {
       return false;
     }
   }
-  // isMeasuredVoltageDifferent() {
+    // isMeasuredVoltageDifferent() {
   //   if (this.canCompare()) {
   //     return this.compareService.isMeasuredVoltageDifferent();
   //   } else {

@@ -8,7 +8,8 @@ import { FsatService } from './fsat.service';
 @Injectable()
 export class FsatWarningService {
 
-  constructor(private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private fsatService: FsatService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private fsatService: FsatService) {
+   }
 
   checkFieldDataWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanFieldDataWarnings {
     let ratedPowerWarning: string = null;
@@ -255,6 +256,9 @@ export class FsatWarningService {
       } else if (fsat.fanMotor.fullLoadAmps > flaMax) {
         return 'Value should be less than ' + Math.round(flaMax) + ' A';
       } else {
+        if (fsat.fanMotor.fullLoadAmps != estEfficiency) {
+          return "Inputs to this calculated value have changed. Consider re-estimating";
+        }
         return null;
       }
     } else {
@@ -403,7 +407,6 @@ export interface FanFieldDataWarnings {
   // marginError: string,
   outletPressureError: string;
   //specificHeatRatioError: string,
-  //compressibilityFactorError: string
 }
 
 export interface FanMotorWarnings {
