@@ -7,7 +7,7 @@
       <tr>
         <td class="bold w-50">Baseline Consumption</td>
         <td class="text-center w-50">
-          {{coolingTowerOutput.wcBaseline | number:'1.0-0'}} 
+          {{coolingTowerOutput.wcBaseline | number:'1.1-1'}} 
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">kGal</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
         </td>
@@ -15,7 +15,7 @@
       <tr>
         <td class="bold w-50" >Modification Consumption</td>
         <td class="text-center w-50">
-          {{coolingTowerOutput.wcModification | number:'1.0-0'}}
+          {{coolingTowerOutput.wcModification | number:'1.1-1'}}
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">kGal</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
         </td>
@@ -23,7 +23,7 @@
       <tr>
         <td class="bold w-50" >Water Savings</td>
         <td class="text-center w-50">
-          {{coolingTowerOutput.waterSavings | number: '1.0-0'}}
+          {{coolingTowerOutput.waterSavings | number: '1.1-1'}}
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">kGal</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
         </td>

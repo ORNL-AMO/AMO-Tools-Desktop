@@ -44,6 +44,9 @@ export class FanAnalysisComponent implements OnInit {
   stepTabSubscription: Subscription;
   planeTabSubscription: Subscription;
   getResultsSubscription: Subscription;
+  modalOpenSub: Subscription;
+
+  isModalOpen: boolean;
   saving: boolean;
   calcExists: boolean;
   calculator: Calculator;
@@ -89,12 +92,17 @@ export class FanAnalysisComponent implements OnInit {
       }
     });
 
+    this.modalOpenSub = this.fanAnalysisService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    })
+
   }
 
   ngOnDestroy() {
     this.stepTabSubscription.unsubscribe();
     this.planeTabSubscription.unsubscribe();
     this.getResultsSubscription.unsubscribe();
+    this.modalOpenSub.unsubscribe();
     if (this.assessment && this.calcExists) {
       this.calculator.fan203Inputs = this.fanAnalysisService.inputData;
       this.saveCalculator();

@@ -1,0 +1,57 @@
+<div class="mr-2 ml-2 d-flex flex-column help-info">
+    <div class="header">
+        <h3>
+            Help
+            <br>
+        </h3>
+    </div>
+    <div class="p-2 d-flex flex-column" *ngIf="activeHelpPanel == 'setup-data'">
+        <h6>
+            <small class="text-muted">Choose a log file from your file system.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">Once you have submitted your log file, a table with the first row of data will
+                appear.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">Import multiple .csv files using the same process
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">Note: some functionality in the data visualization tool requires time stamps to
+                include seconds. Some loggers do not save time stamps in this format. To correct this, open the file in
+                a data analysis program and change the format of the column to the appropriate format. This step is not
+                required for day type analysis.
+            </small>
+        </h6>
+    </div>
+
+    <div class="p-2 d-flex flex-column" *ngIf="activeHelpPanel == 'clean-data'">
+        <h6>
+            <small class="text-muted">"Use Column" selects which data columns will be included in the "Day Type
+                Analysis" and "Data Visualization" sections.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">"Is Date" sets the date field corresponding to the csv file. Dates are needed for
+                day type analysis and time series plots
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                "Column Name" is the name corresponding to the column header as it appears in the imported .csv file.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                An "Alias" can be set that will be used for display purposes in the "Day Type Analysis" and "Data
+                Visualization" sections.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                "Units" can be set that correspond to the column.
+            </small>
+            <hr class="mt-2 mb-2">
+            <small class="text-muted">
+                Once you have cleaned your data, click "Submit" and your data will be cleaned and set for analysis. Once
+                this is complete you can continue to "Day Type Analysis" or "Data Visualization".
+            </small>
+        </h6>
+    </div>
+</div>

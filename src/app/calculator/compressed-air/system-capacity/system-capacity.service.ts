@@ -36,7 +36,12 @@ export class SystemCapacityService {
       eighteen: 0,
       twenty: 0,
       twentyFour: 0,
-
+      leakRateInput: {
+        airPressureIn: 0,
+        airPressureOut: 0,
+        dischargeTime: 0,
+        atmosphericPressure: 0
+      }
     };
   }
 
@@ -66,6 +71,7 @@ export class SystemCapacityService {
       totalReceiverVolume: 0,
       totalCapacityOfCompressedAirSystem: 0,
       receiverCapacities: [0],
+      leakRate: 0,
     };
   }
 
@@ -135,6 +141,12 @@ export class SystemCapacityService {
       eighteen: 0,
       twenty: 0,
       twentyFour: 0,
+      leakRateInput: {
+        airPressureIn: 119,
+        airPressureOut: 110,
+        dischargeTime: 120,
+        atmosphericPressure: 14.7
+      }
     };
   }
 

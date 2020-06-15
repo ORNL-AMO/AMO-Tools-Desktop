@@ -26,6 +26,8 @@ export class CalculateOutletPressureComponent implements OnInit {
         outletDamperLoss: 0,
         airTreatmentLoss: 0,
         systemDamperLoss: 0,
+        outletDuctworkLoss: 0,
+        processRequirementsFixed: 0,
         processRequirements: 0,
         calculatedOutletPressure: 0
       };
