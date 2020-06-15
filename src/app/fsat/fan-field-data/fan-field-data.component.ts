@@ -164,7 +164,7 @@ export class FanFieldDataComponent implements OnInit {
 
   save() {
     if (!this.userDefinedCompressibilityFactor) {
-      this.calculateCompressibility();
+      this.getCompressibilityFactor();
     }
     let tmpInletPressureData: InletPressureData = this.fieldData.inletPressureData;
     let tmpOutletPressureData: OutletPressureData = this.fieldData.outletPressureData;
@@ -183,6 +183,52 @@ export class FanFieldDataComponent implements OnInit {
 
   checkForWarnings() {
     this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, !this.baseline);
+  }
+
+  getCompressibilityFactor() {
+    let fsatOutput: FsatOutput;
+    fsatOutput = this.fsatService.getResults(this.fsat, this.baseline, this.settings);
+
+    let inputs: CompressibilityFactor = {
+      moverShaftPower: fsatOutput.motorShaftPower,
+      inletPressure: this.fieldDataForm.controls.inletPressure.value,
+      outletPressure: this.fieldDataForm.controls.outletPressure.value,
+      barometricPressure: this.fsat.baseGasDensity.barometricPressure,
+      flowRate: this.fieldDataForm.controls.flowRate.value,
+      specificHeatRatio: this.fieldDataForm.controls.specificHeatRatio.value
+    };
+    
+    let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, this.baseline, fsatOutput);
+
+    this.fieldDataForm.patchValue({
+      compressibilityFactor: Number(compressibilityFactor.toFixed(3))
+    });
+  }
+
+  calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput) {
+    let compressibilityFactor: number;
+
+    if (isBaseline) {
+      compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
+    } else {
+      let currentMoverShaftPower;
+      let diff = 1;
+
+      while (diff > .001) {
+        let fanEff = fsatOutput.fanEfficiency;
+        // If not first iteration, calculate with moverShaftPower (tempShaftPower from the previous iteration)
+        if (currentMoverShaftPower) {
+          compressibilityFactorInput.moverShaftPower = currentMoverShaftPower
+        }
+        compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
+        let tempShaftPower = compressibilityFactorInput.flowRate * (compressibilityFactorInput.outletPressure - compressibilityFactorInput.inletPressure) * compressibilityFactor / (6362 * (fanEff / 100));
+
+        diff = Math.abs(compressibilityFactorInput.moverShaftPower - tempShaftPower);
+        currentMoverShaftPower = tempShaftPower;
+      }
+    }
+
+    return compressibilityFactor;
   }
 
   showInletPressureModal() {
@@ -356,7 +402,7 @@ export class FanFieldDataComponent implements OnInit {
   //     return false;
   //   }
   // }
-  
+
   isSpecificHeatRatioDifferent() {
     if (this.canCompare()) {
       return this.compareService.isSpecificHeatRatioDifferent();
