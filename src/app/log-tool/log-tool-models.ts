@@ -200,3 +200,38 @@ export interface AnnotationData {
     yref: string,
     seriesName: string
 }
+
+
+export interface LogToolDbData {
+    id?: number,
+    name: string,
+    modifiedDate: Date,
+    setupData: {
+        logToolDays: Array<LogToolDay>,
+        individualDataFromCsv: Array<IndividualDataFromCsv>,
+        fields: Array<LogToolField>,
+        dataCleaned: boolean,
+        dataSubmitted: boolean,
+        isModalOpen: boolean,
+        noDayTypeAnalysis: boolean
+    }
+    visualizeData: {
+        graphObjects: Array<GraphObj>,
+        selectedGraphObj: GraphObj,
+        visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
+        annotateDataPoint: AnnotationData;
+    },
+    dayTypeData: {
+        selectedDataField: LogToolField,
+        dayTypes: Array<DayType>,
+        dayTypeSummaries: Array<DayTypeSummary>,
+        displayDayTypeCalander: boolean,
+        calendarStartDate: { year: number, month: number, day: number },
+        numberOfMonths: number,
+        dataView: string,
+        dataDisplayType: string,
+        selectedGraphType: string,
+        dayTypeScatterPlotData: Array<DayTypeGraphItem>,
+        individualDayScatterPlotData: Array<DayTypeGraphItem>
+    }
+}

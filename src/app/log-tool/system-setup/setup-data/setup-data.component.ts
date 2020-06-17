@@ -6,6 +6,8 @@ import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysi
 import { VisualizeService } from '../../visualize/visualize.service';
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { IndividualDataFromCsv } from '../../log-tool-models';
+import { LogToolDbService } from '../../log-tool-db.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-setup-data',
   templateUrl: './setup-data.component.html',
@@ -20,15 +22,28 @@ export class SetupDataComponent implements OnInit {
   importingData: boolean = false;
   dataExists: boolean = false;
   importSuccesful: boolean = false;
-  individualDataFromCsv: Array<IndividualDataFromCsv>
+  individualDataFromCsv: Array<IndividualDataFromCsv>;
+  previousDataAvailableSub: Subscription;
+  previousDataAvailable: boolean;
   constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
-    private logToolDataService: LogToolDataService) { }
+    private logToolDataService: LogToolDataService, private logToolDbService: LogToolDbService) { }
 
   ngOnInit() {
     this.individualDataFromCsv = this.logToolService.individualDataFromCsv;
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
+    }
+    if (this.dataExists == false) {
+      this.previousDataAvailableSub = this.logToolDbService.previousDataAvailable.subscribe(val => {
+        this.previousDataAvailable = val;
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.previousDataAvailableSub) {
+      this.previousDataAvailableSub.unsubscribe();
     }
   }
 

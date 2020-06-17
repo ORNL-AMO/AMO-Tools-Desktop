@@ -40,6 +40,7 @@ import { DayTypeSummaryTableComponent } from './day-type-analysis/day-type-table
 import { IndividualDaySummaryTableComponent } from './day-type-analysis/day-type-table/individual-day-summary-table/individual-day-summary-table.component';
 import { SelectedDataTableComponent } from './day-type-analysis/day-type-table/selected-data-table/selected-data-table.component';
 import { BinDataComponent } from './visualize/visualize-menu/bin-data/bin-data.component';
+import { LogToolDbService } from './log-tool-db.service';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { BinDataComponent } from './visualize/visualize-menu/bin-data/bin-data.c
     DayTypeGraphService,
     VisualizeService,
     LogToolDataService,
-    VisualizeMenuService
+    VisualizeMenuService,
+    LogToolDbService
   ]
 })
 export class LogToolModule { }
