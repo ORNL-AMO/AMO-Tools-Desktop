@@ -4,11 +4,16 @@ import { PsatInputs } from '../../../shared/models/psat';
 import { SpecificSpeedInputs } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class SpecificSpeedService {
   specificSpeedInputs: SpecificSpeedInputs;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  specificSpeedChart: BehaviorSubject<any>;
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { 
+    let emptyChart = this.initEmptyChart();
+    this.specificSpeedChart = new BehaviorSubject<any>(emptyChart);
+  }
 
 
   initForm(settings: Settings): FormGroup {
@@ -76,4 +81,206 @@ export class SpecificSpeedService {
       head: form.controls.head.value
     };
   }
+
+  initEmptyChart() {
+    let hoverTemplate = 'Specific Speed' + ': %{x:.2r} <br>' + 'Efficiency Correction' + ': %{y:.2r}%' + '<extra></extra>';
+    let showGrid = false;
+    // TODO pare down excess config props
+    return {
+      name: 'Specific Speed',
+      data: [
+        {
+          x: [],
+          y: [],
+          name: '',
+          type: 'scatter',
+          showlegend: false,
+          hovertemplate: hoverTemplate,
+          line: {
+            shape: 'spline'
+          }
+        }
+      ],
+      layout: {
+        // title: {
+        //   text: undefined,
+        //   font: {
+        //     size: 22
+        //   }
+        // },
+        hovermode: 'closest',
+        xaxis: {
+          autorange: true,
+          type: 'log',
+          showgrid: showGrid,
+          title: {
+            text: 'Specific Speed (U.S.)'
+          },
+          tickvals: [100, 1000, 10000, 100000],
+          tickmode: 'array',
+        },
+        yaxis: {
+          autorange: true,
+          showgrid: showGrid,
+          title: {
+            text: 'Efficiency Correction (%)'
+          },
+          // overlaying: undefined,
+          // titlefont: {
+          //   color: undefined
+          // },
+          // tickfont: {
+          //   color: undefined
+          // },
+          rangemode: 'tozero'
+        },
+        // yaxis2: {
+        //   autorange: true,
+        //   type: undefined,
+        //   title: {
+        //     text: 'Y Axis 2 Label'
+        //   },
+        //   side: 'right',
+        //   overlaying: 'y',
+        //   titlefont: {
+        //     color: undefined
+        //   },
+        //   tickfont: {
+        //     color: undefined
+        //   },
+        //   rangemode: 'tozero'
+        // },
+        margin: {
+          t: 75,
+          b: 100,
+          l: 100,
+          r: 100
+        }
+      },
+      config: {
+        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true
+      }
+    };
+  }
 }
+
+
+// interface ScatterChart {
+//   name?: string,
+//   data: [
+//     {
+//       x: [],
+//       y: [],
+//       name: '',
+//       type: 'scatter',
+//       hovertemplate: hoverTemplate,
+//       line: {
+//         shape: 'spline'
+//       },
+//       yaxis: undefined,
+//     },
+//     {
+//       x: [],
+//       y: [],
+//       type: 'scatter',
+//       name: 'Initial',
+//       hovertemplate: hoverTemplate,
+//       yaxis: undefined,
+//       mode: 'markers',
+//       marker: {
+//         color: [],
+//         size: 14,
+//       }
+//     }
+//   ],
+//   layout: {
+//     title: {
+//       text: undefined,
+//       font: {
+//         size: 22
+//       }
+//     },
+//     hovermode: 'closest',
+//     annotations: [],
+//     xaxis: {
+//       autorange: true,
+//       type: undefined,
+//       showgrid: showGrid,
+//       title: {
+//         text: 'Specific Speed (U.S.)'
+//       },
+//       side: undefined,
+//       overlaying: undefined,
+//       titlefont: {
+//         color: undefined
+//       },
+//       tickfont: {
+//         color: undefined
+//       }
+//     },
+//     yaxis: {
+//       autorange: true,
+//       type: undefined,
+//       showgrid: showGrid,
+//       title: {
+//         text: 'Efficiency Correction (%)'
+//       },
+//       side: undefined,
+//       overlaying: undefined,
+//       titlefont: {
+//         color: undefined
+//       },
+//       tickfont: {
+//         color: undefined
+//       },
+//       rangemode: 'tozero'
+//     },
+//     yaxis2: {
+//       autorange: true,
+//       type: undefined,
+//       title: {
+//         text: 'Y Axis 2 Label'
+//       },
+//       side: 'right',
+//       overlaying: 'y',
+//       titlefont: {
+//         color: undefined
+//       },
+//       tickfont: {
+//         color: undefined
+//       },
+//       rangemode: 'tozero'
+//     },
+//     margin: {
+//       t: 75,
+//       b: 100,
+//       l: 100,
+//       r: 100
+//     }
+//   },
+//   config: {
+//     modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+//     displaylogo: false,
+//     displayModeBar: true,
+//     responsive: true
+//   }
+// };
+
+// interface TraceData {
+//   {
+//     x: [],
+//     y: [],
+//     type: 'scatter',
+//     name: 'Initial',
+//     hovertemplate: hoverTemplate,
+//     yaxis: undefined,
+//     mode: 'markers',
+//     marker: {
+//       color: [],
+//       size: 14,
+//     }
+//   }
+// }
