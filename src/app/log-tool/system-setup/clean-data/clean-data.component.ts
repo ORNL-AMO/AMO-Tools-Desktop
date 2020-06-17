@@ -6,6 +6,7 @@ import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysi
 import { VisualizeService } from '../../visualize/visualize.service';
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { Router } from '@angular/router';
+import { LogToolDbService } from '../../log-tool-db.service';
 
 @Component({
   selector: 'app-clean-data',
@@ -23,7 +24,7 @@ export class CleanDataComponent implements OnInit {
   dateExistsForEachCsv: boolean;
   constructor(private logToolService: LogToolService, private logToolDataService: LogToolDataService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
-    private router: Router) { }
+    private router: Router, private logToolDbService: LogToolDbService) { }
 
   ngOnInit() {
     this.individualDataFromCsv = this.logToolService.individualDataFromCsv;
@@ -43,6 +44,7 @@ export class CleanDataComponent implements OnInit {
       this.logToolService.dataCleaned.next(true);
       this.cleaningData = false;
       this.dataSubmitted = true;
+      this.logToolDbService.saveData();
     }, 100)
   }
 

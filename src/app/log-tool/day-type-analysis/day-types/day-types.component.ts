@@ -6,6 +6,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 import { DayType } from '../../log-tool-models';
+import { LogToolDbService } from '../../log-tool-db.service';
 @Component({
   selector: 'app-day-types',
   templateUrl: './day-types.component.html',
@@ -24,11 +25,13 @@ export class DayTypesComponent implements OnInit {
   excludedSelected: boolean = true;
   startDate: { year: number, month: number, day: number };
   numberOfMonths: number;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolDataService: LogToolDataService, private dayTypeGraphService: DayTypeGraphService) { }
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private logToolDataService: LogToolDataService, 
+    private dayTypeGraphService: DayTypeGraphService, private logToolDbService: LogToolDbService) { }
 
   ngOnInit() {
     this.dayTypesSub = this.dayTypeAnalysisService.dayTypes.subscribe(val => {
       this.dayTypes = val;
+      this.logToolDbService.saveData();
     });
     this.startDate = this.dayTypeAnalysisService.calendarStartDate;
     this.numberOfMonths = this.dayTypeAnalysisService.numberOfMonths;
@@ -93,7 +96,7 @@ export class DayTypesComponent implements OnInit {
   }
 
   removeDayType(dayType: DayType) {
-    if(dayType.label != 'Excluded'){
+    if (dayType.label != 'Excluded') {
       this.dayTypeAnalysisService.removeDayType(dayType);
       dayType.logToolDays.forEach(day => {
         this.dayTypeAnalysisService.toggleDateType(day.date);
@@ -113,7 +116,7 @@ export class DayTypesComponent implements OnInit {
     return color;
   }
 
-  resetDayTypes(){
+  resetDayTypes() {
     this.dayTypeAnalysisService.initDayTypes();
     this.dayTypeGraphService.updateIndividualDayScatterPlotDataColors();
     this.dayTypeGraphService.setDayTypeScatterPlotData();

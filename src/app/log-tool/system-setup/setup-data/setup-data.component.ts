@@ -24,7 +24,7 @@ export class SetupDataComponent implements OnInit {
   importSuccesful: boolean = false;
   individualDataFromCsv: Array<IndividualDataFromCsv>;
   previousDataAvailableSub: Subscription;
-  previousDataAvailable: boolean;
+  previousDataAvailable: Date;
   constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
     private logToolDataService: LogToolDataService, private logToolDbService: LogToolDbService) { }
@@ -34,7 +34,7 @@ export class SetupDataComponent implements OnInit {
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
     }
-    if (this.dataExists == false) {
+    if (this.dataExists == false && this.logToolService.dataSubmitted.getValue() == false) {
       this.previousDataAvailableSub = this.logToolDbService.previousDataAvailable.subscribe(val => {
         this.previousDataAvailable = val;
       });
@@ -81,6 +81,8 @@ export class SetupDataComponent implements OnInit {
       this.importData = undefined;
       this.importingData = false;
       this.logToolService.dataSubmitted.next(true);
+      this.previousDataAvailable = undefined;
+      this.logToolDbService.saveData();
       this.cd.detectChanges();
     }, 100);
   }
@@ -92,6 +94,15 @@ export class SetupDataComponent implements OnInit {
     this.logToolService.resetData();
     this.logToolDataService.resetData();
     this.dataExists = false;
+    this.logToolDbService.saveData()
     this.cd.detectChanges();
+  }
+
+  usePreviousData(){
+    this.logToolDbService.setLogToolData();
+    this.previousDataAvailable = undefined;
+    if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
+      this.dataExists = true;
+    }
   }
 }

@@ -1306,7 +1306,7 @@ export class IndexedDbService {
   }
 
   putCalculator(calculator: Calculator): Promise<any> {
-    calculator.modifiedDate = new Date();
+    calculator.modifiedDate = new Date(new Date().toLocaleDateString());
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.calculator);

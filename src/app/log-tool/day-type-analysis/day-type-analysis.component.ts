@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { DayTypeGraphService } from './day-type-graph/day-type-graph.service';
 import { LogToolField } from '../log-tool-models';
 import { LogToolDataService } from '../log-tool-data.service';
+import { LogToolDbService } from '../log-tool-db.service';
 @Component({
   selector: 'app-day-type-analysis',
   templateUrl: './day-type-analysis.component.html',
@@ -18,7 +19,8 @@ export class DayTypeAnalysisComponent implements OnInit {
   dataViewSub: Subscription;
   dataView: string;
   calculatingData: boolean = false;
-  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, private cd: ChangeDetectorRef, private logToolDataService: LogToolDataService) { }
+  constructor(private dayTypeAnalysisService: DayTypeAnalysisService, private dayTypeGraphService: DayTypeGraphService, 
+    private cd: ChangeDetectorRef, private logToolDataService: LogToolDataService, private logToolDbService: LogToolDbService) { }
 
   ngOnInit() {
     this.displayDayTypeCalanderSub = this.dayTypeAnalysisService.displayDayTypeCalander.subscribe(val => {
@@ -40,6 +42,7 @@ export class DayTypeAnalysisComponent implements OnInit {
   ngOnDestroy() {
     this.displayDayTypeCalanderSub.unsubscribe();
     this.dataViewSub.unsubscribe();
+    this.logToolDbService.saveData();
   }
 
   runAnalysis() {

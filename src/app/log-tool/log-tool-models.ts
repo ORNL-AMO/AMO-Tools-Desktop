@@ -212,7 +212,6 @@ export interface LogToolDbData {
         fields: Array<LogToolField>,
         dataCleaned: boolean,
         dataSubmitted: boolean,
-        isModalOpen: boolean,
         noDayTypeAnalysis: boolean
     }
     visualizeData: {
@@ -226,6 +225,7 @@ export interface LogToolDbData {
         dayTypes: Array<DayType>,
         dayTypeSummaries: Array<DayTypeSummary>,
         displayDayTypeCalander: boolean,
+        dayTypesCalculated: boolean,
         calendarStartDate: { year: number, month: number, day: number },
         numberOfMonths: number,
         dataView: string,
