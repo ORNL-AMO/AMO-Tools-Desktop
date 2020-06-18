@@ -4,15 +4,13 @@ import { PsatInputs } from '../../../shared/models/psat';
 import { SpecificSpeedInputs } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { SelectedDataPoint } from './specific-speed-graph/specific-speed-graph.component';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class SpecificSpeedService {
   specificSpeedInputs: SpecificSpeedInputs;
-  specificSpeedChart: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { 
-    let emptyChart = this.initEmptyChart();
-    this.specificSpeedChart = new BehaviorSubject<any>(emptyChart);
   }
 
 
@@ -82,10 +80,26 @@ export class SpecificSpeedService {
     };
   }
 
-  initEmptyChart() {
+  getTraceDataFromPoint(selectedPoint: SelectedDataPoint) {
+    let hoverTemplate = 'Specific Speed' + ': %{x:.2r} <br>' + 'Efficiency Correction' + ': %{y:.2r}%' + '<extra></extra>';
+    let trace = {
+      x: [selectedPoint.pointX],
+      y: [selectedPoint.pointY],
+      type: 'scatter',
+      name: `${selectedPoint.pointX}, ${selectedPoint.pointY}`,
+      hovertemplate: hoverTemplate,
+      mode: 'markers',
+      marker: {
+        color: selectedPoint.pointColor,
+        size: 14,
+      },
+    };
+    return trace;
+  }
+
+  getEmptyChart() {
     let hoverTemplate = 'Specific Speed' + ': %{x:.2r} <br>' + 'Efficiency Correction' + ': %{y:.2r}%' + '<extra></extra>';
     let showGrid = false;
-    // TODO pare down excess config props
     return {
       name: 'Specific Speed',
       data: [
@@ -270,17 +284,15 @@ export class SpecificSpeedService {
 // };
 
 // interface TraceData {
-//   {
-//     x: [],
-//     y: [],
-//     type: 'scatter',
-//     name: 'Initial',
-//     hovertemplate: hoverTemplate,
-//     yaxis: undefined,
-//     mode: 'markers',
+//     x: Array<number | string>,
+//     y: Array<number | string>,
+//     type: string,
+//     name: string,
+//     hovertemplate: string,
+//     xaxis?: any,
+//     yaxis?: any,
+//     mode: string,
 //     marker: {
 //       color: [],
 //       size: 14,
-//     }
 //   }
-// }
