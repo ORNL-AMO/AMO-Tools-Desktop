@@ -2,15 +2,10 @@ import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, ChangeD
 import { PsatService } from '../../../../psat/psat.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { FormGroup } from '@angular/forms';
-import { SpecificSpeedService } from '../specific-speed.service';
+import { SpecificSpeedService} from '../specific-speed.service';
 
 import * as Plotly from 'plotly.js';
-
-export interface SelectedDataPoint {
-  pointColor: string;
-  pointX: number;
-  pointY: number;
-}
+import { SelectedDataPoint, SimpleChart, TraceData } from '../../../../shared/models/plotting';
 
 @Component({
   selector: 'app-specific-speed-graph',
@@ -32,14 +27,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
   @ViewChild('specificSpeedLine', { static: false }) specSpeedChart: ElementRef;
   chartId: string = 'plotlyDiv';
 
-
   selectedDataPoints: Array<SelectedDataPoint>;
   pointColors: Array<string>;
-  specificSpeedChart;
+  specificSpeedChart: SimpleChart;
   firstChange: boolean = true;
   validCurrentSpeed: boolean = false;
-  currentPumpType: any;
-
+  currentPumpType: number;
 
   constructor(private psatService: PsatService, 
               private specificSpeedService: SpecificSpeedService,
@@ -47,33 +40,35 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   ngOnInit() {
     this.currentPumpType = this.speedForm.controls.pumpType.value;
-    this.initRenderChart();
+    this.triggerInitialResize();
+  }
+
+  triggerInitialResize() {
+    window.dispatchEvent(new Event('resize'));
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 25)
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.resetData) {
+        this.specificSpeedService.initChartData();
         this.initRenderChart();
       }
       if (changes.toggleCalculate && !changes.resetData) {
-        // Temp removed check to not calculate if specified efficiency
-          this.checkRedrawLine();
+        if (this.speedForm.valid) {
+          this.checkReplotMethod();
+        }
       }
     } else {
       this.firstChange = false;
     }
   }
 
-  checkRedrawLine() {
-    let fromVerticalTurbine = this.currentPumpType == 9 && this.speedForm.controls.pumpType.value != 9;
-    let ToVerticalTurbine = this.currentPumpType != 9 && this.speedForm.controls.pumpType.value == 9;
-
-    if (fromVerticalTurbine || ToVerticalTurbine) {
-      this.initRenderChart();
-    } else {
-      this.updateChart();
-    }
-    this.currentPumpType = this.speedForm.controls.pumpType.value;
+  save() {
+    this.specificSpeedService.specificSpeedChart.next(this.specificSpeedChart);
+    this.specificSpeedService.selectedDataPoints.next(this.selectedDataPoints);
   }
 
   initRenderChart() {
@@ -89,19 +84,22 @@ export class SpecificSpeedGraphComponent implements OnInit {
           this.createSelectedDataPoint(graphData);
         });
       });
+    this.save();
+    
   }
 
   updateChart() {
     let chartLayout = JSON.parse(JSON.stringify(this.specificSpeedChart.layout));
     this.setCalculatedTrace();
     Plotly.update(this.chartId, this.specificSpeedChart.data, chartLayout, [1]);
+    this.save();
   }
 
   initChartSetup() {
     let currentData = this.getLineTraceData();
     this.pointColors = graphColors;
-    this.selectedDataPoints = new Array<SelectedDataPoint>();
-    this.specificSpeedChart = this.specificSpeedService.getEmptyChart();
+    this.specificSpeedChart = this.specificSpeedService.specificSpeedChart.getValue();
+    this.selectedDataPoints = this.specificSpeedService.selectedDataPoints.getValue();
     
     // lineTrace
     this.specificSpeedChart.data[0].x = currentData.x;
@@ -118,7 +116,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       pointY: efficiencyCorrection
     }
 
-    let resultCoordinateTrace = this.specificSpeedService.getTraceDataFromPoint(calculatedPoint);
+    let resultCoordinateTrace: TraceData = this.specificSpeedService.getTraceDataFromPoint(calculatedPoint);
     resultCoordinateTrace.name = "Current Specific Speed";
 
     if (!isNaN(calculatedPoint.pointX)) {
@@ -142,6 +140,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     Plotly.addTraces(this.chartId, selectedPointTrace);
     this.selectedDataPoints.push(selectedPoint);
     this.cd.detectChanges();
+    this.save();
   }
 
   toggleGrid() {
@@ -152,8 +151,20 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.updateChart();
   }
 
+  checkReplotMethod() {
+    let fromVerticalTurbine = this.currentPumpType == 9 && this.speedForm.controls.pumpType.value != 9;
+    let ToVerticalTurbine = this.currentPumpType != 9 && this.speedForm.controls.pumpType.value == 9;
+
+    if (fromVerticalTurbine || ToVerticalTurbine) {
+      this.initRenderChart();
+    } else {
+      this.updateChart();
+    }
+    this.currentPumpType = this.speedForm.controls.pumpType.value;
+  }
+
   getLineTraceData(): { x: Array<number>, y: Array<number> } {
-    let data: { x: Array<number>, y: Array<number> } = {
+    let traceCoordinates: { x: Array<number>, y: Array<number> } = {
       x: new Array<number>(),
       y: new Array<number>()
     };
@@ -178,44 +189,29 @@ export class SpecificSpeedGraphComponent implements OnInit {
     for (let i = curveType.init; i < curveType.end; i += curveType.step) {
       let efficiencyCorrection: number = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, i);
       if (efficiencyCorrection <= 5.5) {
-        data.x.push(i);
-        data.y.push(efficiencyCorrection);
+        traceCoordinates.x.push(i);
+        traceCoordinates.y.push(efficiencyCorrection);
       }
     }
 
-    return data;
+    return traceCoordinates;
   }
 
   deleteDataPoint(point: SelectedDataPoint) {
-    let traceCount = this.specificSpeedChart.data.length;
+    let traceCount: number = this.specificSpeedChart.data.length;
     let deleteTraceIndex: number = this.specificSpeedChart.data.findIndex(trace => trace.x[0] == point.pointX && trace.y[0] == point.pointY);
     // ignore default traces
     if (traceCount > 2 && deleteTraceIndex != -1) {
       Plotly.deleteTraces(this.chartId, [deleteTraceIndex]);
       this.selectedDataPoints.splice(deleteTraceIndex - 1, 1);
       this.cd.detectChanges();
+      this.save();
     }
   }
 
   getSpecificSpeed(): number {
     return this.speedForm.controls.pumpRPM.value * Math.pow(this.speedForm.controls.flowRate.value, 0.5) / Math.pow(this.speedForm.controls.head.value, .75);
-    // if (this.notSpecifiedEfficiency()) {
-    //   return this.speedForm.controls.pumpRPM.value * Math.pow(this.speedForm.controls.flowRate.value, 0.5) / Math.pow(this.speedForm.controls.head.value, .75);
-    // } else {
-    //   return 0;
-    // }
   }
-
-  // notSpecifiedEfficiency(): boolean {
-  //   if (
-  //     this.speedForm.valid &&
-  //     this.speedForm.controls.pumpType.value !== 11
-  //   ) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
   updateTableString() {
     this.dataSummaryTableString = this.dataSummaryTable.nativeElement.innerText;

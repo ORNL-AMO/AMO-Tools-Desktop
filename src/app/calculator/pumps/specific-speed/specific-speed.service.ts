@@ -4,15 +4,17 @@ import { PsatInputs } from '../../../shared/models/psat';
 import { SpecificSpeedInputs } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { SelectedDataPoint } from './specific-speed-graph/specific-speed-graph.component';
 import { BehaviorSubject } from 'rxjs';
+import { SimpleChart, SelectedDataPoint, TraceData } from '../../../shared/models/plotting';
 
 @Injectable()
 export class SpecificSpeedService {
   specificSpeedInputs: SpecificSpeedInputs;
+  specificSpeedChart: BehaviorSubject<SimpleChart>;
+  selectedDataPoints: BehaviorSubject<Array<SelectedDataPoint>>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { 
+    this.initChartData();
   }
-
 
   initForm(settings: Settings): FormGroup {
     let tmpFlowRate: number = 2000;
@@ -31,6 +33,13 @@ export class SpecificSpeedService {
       flowRate: [tmpFlowRate, [Validators.required, Validators.min(0)]],
       head: [tmpHead, [Validators.required, Validators.min(0)]],
     });
+  }
+
+  initChartData() {
+    let emptyChart: SimpleChart = this.getEmptyChart();
+    let dataPoints = new Array<SelectedDataPoint>();
+    this.specificSpeedChart = new BehaviorSubject<SimpleChart>(emptyChart);
+    this.selectedDataPoints = new BehaviorSubject<Array<SelectedDataPoint>>(dataPoints);
   }
 
   resetForm(settings: Settings): FormGroup {
@@ -80,9 +89,9 @@ export class SpecificSpeedService {
     };
   }
 
-  getTraceDataFromPoint(selectedPoint: SelectedDataPoint) {
+  getTraceDataFromPoint(selectedPoint: SelectedDataPoint): TraceData {
     let hoverTemplate = 'Specific Speed' + ': %{x:.2r} <br>' + 'Efficiency Correction' + ': %{y:.2r}%' + '<extra></extra>';
-    let trace = {
+    let trace: TraceData = {
       x: [selectedPoint.pointX],
       y: [selectedPoint.pointY],
       type: 'scatter',
@@ -97,9 +106,9 @@ export class SpecificSpeedService {
     return trace;
   }
 
-  getEmptyChart() {
+  getEmptyChart(): SimpleChart {
     let hoverTemplate = 'Specific Speed' + ': %{x:.2r} <br>' + 'Efficiency Correction' + ': %{y:.2r}%' + '<extra></extra>';
-    let showGrid = false;
+    let showGrid = true;
     return {
       name: 'Specific Speed',
       data: [
@@ -107,8 +116,8 @@ export class SpecificSpeedService {
           x: [],
           y: [],
           name: '',
-          type: 'scatter',
           showlegend: false,
+          type: 'scatter',
           hovertemplate: hoverTemplate,
           line: {
             shape: 'spline'
@@ -116,12 +125,6 @@ export class SpecificSpeedService {
         }
       ],
       layout: {
-        // title: {
-        //   text: undefined,
-        //   font: {
-        //     size: 22
-        //   }
-        // },
         hovermode: 'closest',
         xaxis: {
           autorange: true,
@@ -135,35 +138,13 @@ export class SpecificSpeedService {
         },
         yaxis: {
           autorange: true,
+          type: 'auto',
           showgrid: showGrid,
           title: {
             text: 'Efficiency Correction (%)'
           },
-          // overlaying: undefined,
-          // titlefont: {
-          //   color: undefined
-          // },
-          // tickfont: {
-          //   color: undefined
-          // },
           rangemode: 'tozero'
         },
-        // yaxis2: {
-        //   autorange: true,
-        //   type: undefined,
-        //   title: {
-        //     text: 'Y Axis 2 Label'
-        //   },
-        //   side: 'right',
-        //   overlaying: 'y',
-        //   titlefont: {
-        //     color: undefined
-        //   },
-        //   tickfont: {
-        //     color: undefined
-        //   },
-        //   rangemode: 'tozero'
-        // },
         margin: {
           t: 75,
           b: 100,
@@ -180,119 +161,3 @@ export class SpecificSpeedService {
     };
   }
 }
-
-
-// interface ScatterChart {
-//   name?: string,
-//   data: [
-//     {
-//       x: [],
-//       y: [],
-//       name: '',
-//       type: 'scatter',
-//       hovertemplate: hoverTemplate,
-//       line: {
-//         shape: 'spline'
-//       },
-//       yaxis: undefined,
-//     },
-//     {
-//       x: [],
-//       y: [],
-//       type: 'scatter',
-//       name: 'Initial',
-//       hovertemplate: hoverTemplate,
-//       yaxis: undefined,
-//       mode: 'markers',
-//       marker: {
-//         color: [],
-//         size: 14,
-//       }
-//     }
-//   ],
-//   layout: {
-//     title: {
-//       text: undefined,
-//       font: {
-//         size: 22
-//       }
-//     },
-//     hovermode: 'closest',
-//     annotations: [],
-//     xaxis: {
-//       autorange: true,
-//       type: undefined,
-//       showgrid: showGrid,
-//       title: {
-//         text: 'Specific Speed (U.S.)'
-//       },
-//       side: undefined,
-//       overlaying: undefined,
-//       titlefont: {
-//         color: undefined
-//       },
-//       tickfont: {
-//         color: undefined
-//       }
-//     },
-//     yaxis: {
-//       autorange: true,
-//       type: undefined,
-//       showgrid: showGrid,
-//       title: {
-//         text: 'Efficiency Correction (%)'
-//       },
-//       side: undefined,
-//       overlaying: undefined,
-//       titlefont: {
-//         color: undefined
-//       },
-//       tickfont: {
-//         color: undefined
-//       },
-//       rangemode: 'tozero'
-//     },
-//     yaxis2: {
-//       autorange: true,
-//       type: undefined,
-//       title: {
-//         text: 'Y Axis 2 Label'
-//       },
-//       side: 'right',
-//       overlaying: 'y',
-//       titlefont: {
-//         color: undefined
-//       },
-//       tickfont: {
-//         color: undefined
-//       },
-//       rangemode: 'tozero'
-//     },
-//     margin: {
-//       t: 75,
-//       b: 100,
-//       l: 100,
-//       r: 100
-//     }
-//   },
-//   config: {
-//     modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
-//     displaylogo: false,
-//     displayModeBar: true,
-//     responsive: true
-//   }
-// };
-
-// interface TraceData {
-//     x: Array<number | string>,
-//     y: Array<number | string>,
-//     type: string,
-//     name: string,
-//     hovertemplate: string,
-//     xaxis?: any,
-//     yaxis?: any,
-//     mode: string,
-//     marker: {
-//       color: [],
-//       size: 14,
-//   }
