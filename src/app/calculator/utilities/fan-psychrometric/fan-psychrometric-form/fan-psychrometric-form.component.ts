@@ -5,6 +5,7 @@ import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
 import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
+import { BaseGasDensity } from '../../../../shared/models/fans';
 
 @Component({
   selector: 'app-fan-psychrometric-form',
@@ -33,10 +34,8 @@ export class FanPsychrometricFormComponent implements OnInit {
     private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    let baseGasDensityData = this.fanPsychrometricService.baseGasDensityData.getValue();
-    this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(baseGasDensityData, this.settings);
-    this.save();
     this.initSubscriptions();
+    this.save();
   }
 
   ngOnDestroy() {

@@ -19,7 +19,6 @@ export class FanPsychrometricResultsComponent implements OnInit {
   
   resetFormSubscription: Subscription;
   calculatedBaseGasDensitySubscription: Subscription;
-  modificationName: string;
   constructor(private fanPsychrometricService: FanPsychrometricService) { }
 
   ngOnInit(): void {

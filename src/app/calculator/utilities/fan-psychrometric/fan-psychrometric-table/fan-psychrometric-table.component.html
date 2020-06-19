@@ -6,23 +6,16 @@
     <thead>
       <tr>
         <th class="parent-col">T<sub class="pr-1">DB</sub>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'F'">&#8457;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'C'">&#8451;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'K'">&#8490;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'R'">&#176;R</span>
+          <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
         </th>
         <th class="parent-col">RH %</th>
         <th class="parent-col">T<sub class="pr-1">WB</sub>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'F'">&#8457;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'C'">&#8451;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'K'">&#8490;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'R'">&#176;R</span>
+          <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
+
         </th>
         <th class="parent-col">T<sub class="pr-1">DP</sub>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'F'">&#8457;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'C'">&#8451;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'K'">&#8490;</span>
-          <span *ngIf="settings.fanTemperatureMeasurement == 'R'">&#176;R</span>
+          <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
+
         </th>
         <th class="parent-col"><span class="pr-1">h</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
