@@ -35,8 +35,8 @@ export class LogToolDbService {
   }
 
   addLogToolToDb() {
+    //no id on add, automatically set on insert
     let logToolDbData: LogToolDbData = {
-      // id: undefined,
       name: 'Latest',
       modifiedDate: new Date(),
       setupData: {
