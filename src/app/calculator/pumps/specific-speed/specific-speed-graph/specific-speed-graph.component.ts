@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { FormGroup } from '@angular/forms';
@@ -22,17 +22,36 @@ export class SpecificSpeedGraphComponent implements OnInit {
   @Input()
   toggleCalculate: boolean;
 
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
   @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
   dataSummaryTableString: any;
-  @ViewChild('specificSpeedLine', { static: false }) specSpeedChart: ElementRef;
-  chartId: string = 'plotlyDiv';
-
+  
+  tabPanelChartId: string = 'tabPanelDiv';
+  expandedChartId: string = 'expandedChartDiv';
+  currentChartId: string = 'tabPanelDiv';
+  
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code === 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
+  
   selectedDataPoints: Array<SelectedDataPoint>;
   pointColors: Array<string>;
   specificSpeedChart: SimpleChart;
   firstChange: boolean = true;
   validCurrentSpeed: boolean = false;
   currentPumpType: number;
+  expanded: boolean;
+  hoverBtnExpand: boolean;
+  displayExpandTooltip: boolean;
+  hoverBtnCollapse: boolean;
+  hoverBtnGridLines: any;
+  displayGridLinesTooltip: boolean;
+  displayCollapseTooltip: boolean;
 
   constructor(private psatService: PsatService, 
               private specificSpeedService: SpecificSpeedService,
@@ -72,13 +91,13 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   initRenderChart() {
-    Plotly.purge(this.chartId);
+    Plotly.purge(this.currentChartId);
     
     this.initChartSetup();
     this.setCalculatedTrace();
 
     let chartLayout = JSON.parse(JSON.stringify(this.specificSpeedChart.layout));
-    Plotly.newPlot(this.chartId, this.specificSpeedChart.data, chartLayout, this.specificSpeedChart.config)
+    Plotly.newPlot(this.currentChartId, this.specificSpeedChart.data, chartLayout, this.specificSpeedChart.config)
       .then(chart => {
         chart.on('plotly_click', (graphData) => {
           this.createSelectedDataPoint(graphData);
@@ -91,7 +110,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   updateChart() {
     let chartLayout = JSON.parse(JSON.stringify(this.specificSpeedChart.layout));
     this.setCalculatedTrace();
-    Plotly.update(this.chartId, this.specificSpeedChart.data, chartLayout, [1]);
+    Plotly.update(this.currentChartId, this.specificSpeedChart.data, chartLayout, [1]);
     this.save();
   }
 
@@ -137,18 +156,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
 
     let selectedPointTrace = this.specificSpeedService.getTraceDataFromPoint(selectedPoint);
-    Plotly.addTraces(this.chartId, selectedPointTrace);
+    Plotly.addTraces(this.currentChartId, selectedPointTrace);
     this.selectedDataPoints.push(selectedPoint);
     this.cd.detectChanges();
     this.save();
-  }
-
-  toggleGrid() {
-    let showingGridX: boolean = this.specificSpeedChart.layout.xaxis.showgrid;
-    let showingGridY: boolean = this.specificSpeedChart.layout.yaxis.showgrid;
-    this.specificSpeedChart.layout.xaxis.showgrid = !showingGridX;
-    this.specificSpeedChart.layout.yaxis.showgrid = !showingGridY;
-    this.updateChart();
   }
 
   checkReplotMethod() {
@@ -202,7 +213,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     let deleteTraceIndex: number = this.specificSpeedChart.data.findIndex(trace => trace.x[0] == point.pointX && trace.y[0] == point.pointY);
     // ignore default traces
     if (traceCount > 2 && deleteTraceIndex != -1) {
-      Plotly.deleteTraces(this.chartId, [deleteTraceIndex]);
+      Plotly.deleteTraces(this.currentChartId, [deleteTraceIndex]);
       this.selectedDataPoints.splice(deleteTraceIndex - 1, 1);
       this.cd.detectChanges();
       this.save();
@@ -215,6 +226,105 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   updateTableString() {
     this.dataSummaryTableString = this.dataSummaryTable.nativeElement.innerText;
+  }
+
+  resizeGraph() {
+    let expandedChart = this.ngChartContainer.nativeElement;
+    if (expandedChart) {
+      if (this.expanded) {
+        this.currentChartId = this.expandedChartId;
+      }
+      else {
+        this.currentChartId = this.tabPanelChartId;
+      }
+      if (this.speedForm.valid) {
+        this.initRenderChart();
+      }
+    }
+  }
+
+  toggleGrid() {
+    let showingGridX: boolean = this.specificSpeedChart.layout.xaxis.showgrid;
+    let showingGridY: boolean = this.specificSpeedChart.layout.yaxis.showgrid;
+    this.specificSpeedChart.layout.xaxis.showgrid = !showingGridX;
+    this.specificSpeedChart.layout.yaxis.showgrid = !showingGridY;
+    this.updateChart();
+  }
+
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100);
+  }
+  
+
+  hideTooltip(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      this.hoverBtnExpand = false;
+      this.displayExpandTooltip = false;
+    }
+    else if (btnType === 'btnCollapseChart') {
+      this.hoverBtnCollapse = false;
+      this.displayCollapseTooltip = false;
+    }
+    else if (btnType === 'btnGridLines') {
+      this.hoverBtnGridLines = false;
+      this.displayGridLinesTooltip = false;
+    }
+  }
+
+  initTooltip(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType === 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
+    }
+    else if (btnType === 'btnGridLines') {
+      this.hoverBtnGridLines = true;
+    }
+    setTimeout(() => {
+      this.checkHover(btnType);
+    }, 200);
+  }
+
+  checkHover(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
+      }
+      else {
+        this.displayExpandTooltip = false;
+      }
+    }
+    else if (btnType === 'btnGridLines') {
+      if (this.hoverBtnGridLines) {
+        this.displayGridLinesTooltip = true;
+      }
+      else {
+        this.displayGridLinesTooltip = false;
+      }
+    }
+    else if (btnType === 'btnCollapseChart') {
+      if (this.hoverBtnCollapse) {
+        this.displayCollapseTooltip = true;
+      }
+      else {
+        this.displayCollapseTooltip = false;
+      }
+    }
   }
 
 }

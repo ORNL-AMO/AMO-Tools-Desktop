@@ -34,7 +34,7 @@ export interface SimpleChart {
         displayModeBar: boolean,
         responsive: boolean
     }
-    graphId?: string,
+    chartId?: string,
 }
 
 export interface AxisObj {
@@ -61,8 +61,12 @@ export interface TraceData {
     yaxis?: any,
     mode?: string,
     marker?: {
-        color: string | Array<string>,
-        size: number,
+        color?: string | Array<string>,
+        colorbar?: {
+            ticksuffix: string,
+            showticksuffix: string
+        }
+        size?: number,
     },
     line?: {
         shape: string

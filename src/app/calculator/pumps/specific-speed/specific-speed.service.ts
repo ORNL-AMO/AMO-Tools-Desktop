@@ -98,6 +98,7 @@ export class SpecificSpeedService {
       name: `${selectedPoint.pointX}, ${selectedPoint.pointY}`,
       hovertemplate: hoverTemplate,
       mode: 'markers',
+      showlegend: false,
       marker: {
         color: selectedPoint.pointColor,
         size: 14,
@@ -121,6 +122,12 @@ export class SpecificSpeedService {
           hovertemplate: hoverTemplate,
           line: {
             shape: 'spline'
+          },
+          marker: {
+            colorbar: {
+              ticksuffix: '%',
+              showticksuffix: 'all'
+            }
           }
         }
       ],
@@ -146,10 +153,10 @@ export class SpecificSpeedService {
           rangemode: 'tozero'
         },
         margin: {
-          t: 75,
-          b: 100,
-          l: 100,
-          r: 100
+          t: 25,
+          b: 75,
+          l: 75,
+          r: 25
         }
       },
       config: {
@@ -157,7 +164,7 @@ export class SpecificSpeedService {
         displaylogo: false,
         displayModeBar: true,
         responsive: true
-      }
+      },
     };
   }
 }
