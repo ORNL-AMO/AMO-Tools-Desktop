@@ -72,4 +72,15 @@ export interface TraceData {
         shape: string
     }
 }
+
+export interface TraceCoordinates {
+    x: Array<number | string>,
+    y: Array<number | string>,
+};
+
+export interface DataPoint {
+  x: number;
+  y: number;
+}
+
 // End PUMP CALCULATOR PLOTS
