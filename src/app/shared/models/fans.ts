@@ -142,6 +142,7 @@ export interface PlaneData {
 export interface BaseGasDensity {
   dryBulbTemp?: number;
   staticPressure?: number;
+  altitude?: number;
   barometricPressure?: number;
   gasDensity?: number;
   gasType?: string;
@@ -154,7 +155,8 @@ export interface BaseGasDensity {
   specificHeatGas?: number; //used with wetBulb
 }
 
-export interface CalculatedGasDensity {
+
+export interface PsychrometricResults {
   gasDensity: number;
   absolutePressure: number;
   saturatedHumidity: number;
@@ -166,6 +168,8 @@ export interface CalculatedGasDensity {
   relativeHumidity: number;
   saturationPressure: number;
   wetBulbTemp: number;
+  barometricPressure?: number,
+  dryBulbTemp?: number;
 }
 
 export interface FanShaftPower {

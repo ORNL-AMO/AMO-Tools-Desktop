@@ -12,7 +12,7 @@
         <sub>bo</sub>)</label>
       <div class="input-group">
         <input name="barometricPressure" type="number" step="any" class="form-control"
-          formControlName="barometricPressure" id="{{'barometricPressure_'+idString}}" (input)="getDensity()"
+          formControlName="barometricPressure" id="{{'barometricPressure_'+idString}}" (input)="getResults()"
           (focus)="focusField('barometricPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
       </div>
@@ -53,7 +53,7 @@
           <sub>do</sub>)</label>
         <div class="input-group">
           <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp"
-            id="{{'dryBulbTemp_'+idString}}" (input)="getDensity()" (focus)="focusField('dryBulbTemp')"
+            id="{{'dryBulbTemp_'+idString}}" (input)="getResults()" (focus)="focusField('dryBulbTemp')"
             onfocus="this.select();" [readonly]="!selected">
           <span class="input-group-addon units">
             <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
@@ -72,7 +72,7 @@
           <sub>so</sub>)</label>
         <div class="input-group">
           <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure"
-            id="{{'staticPressure_'+idString}}" (input)="getDensity()" (focus)="focusField('staticPressure')"
+            id="{{'staticPressure_'+idString}}" (input)="getResults()" (focus)="focusField('staticPressure')"
             onfocus="this.select();" [readonly]="!selected">
           <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement|settingsLabel"></span>
         </div>
@@ -89,7 +89,7 @@
           <sub>wo</sub>)</label>
         <div class="input-group">
           <input name="wetBulbTemp" type="number" step="any" class="form-control" formControlName="wetBulbTemp"
-            id="{{'wetBulbTemp_'+idString}}" (input)="getDensity()" (focus)="focusField('wetBulbTemp')"
+            id="{{'wetBulbTemp_'+idString}}" (input)="getResults()" (focus)="focusField('wetBulbTemp')"
             onfocus="this.select();" [readonly]="!selected">
           <span class="input-group-addon units">
             <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
@@ -108,7 +108,7 @@
         <div class="input-group">
           <input name="relativeHumidity" type="number" step="any" class="form-control"
             formControlName="relativeHumidity" id="{{'relativeHumidity_'+idString}}"
-            (input)="getDensity()" (focus)="focusField('relativeHumidity')" onfocus="this.select();"
+            (input)="getResults()" (focus)="focusField('relativeHumidity')" onfocus="this.select();"
             [readonly]="!selected">
           <span class="input-group-addon units">%</span>
         </div>
@@ -129,7 +129,7 @@
           <sub>dp</sub>)</label>
         <div class="input-group">
           <input name="dewPoint" type="number" step="any" class="form-control" formControlName="dewPoint"
-            id="{{'dewPoint_'+idString}}" (input)="getDensity()" (focus)="focusField('dewPoint')"
+            id="{{'dewPoint_'+idString}}" (input)="getResults()" (focus)="focusField('dewPoint')"
             onfocus="this.select();" [readonly]="!selected">
           <span class="input-group-addon units">
             <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
@@ -149,7 +149,7 @@
         <label for="{{'specificGravity_'+idString}}">Gas Relative Density (G)</label>
         <div class="input-group">
           <input name="specificGravity" type="number" step="any" class="form-control" formControlName="specificGravity"
-            id="{{'specificGravity_'+idString}}" (input)="getDensity()" (focus)="focusField('specificGravity')"
+            id="{{'specificGravity_'+idString}}" (input)="getResults()" (focus)="focusField('specificGravity')"
             onfocus="this.select();" [readonly]="!selected">
         </div>
         <span class="alert-danger pull-right small"
@@ -173,7 +173,7 @@
       </div>
       <div class="input-group" *ngIf="gasDensityForm.controls.inputType.value == 'custom'">
         <input name="gasDensity" type="number" step="any" class="form-control" formControlName="gasDensity"
-          id="{{'gasDensity_'+idString}}" (input)="getDensity()" (focus)="focusField('gasDensity')"
+          id="{{'gasDensity_'+idString}}" (input)="getResults()" (focus)="focusField('gasDensity')"
           onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.densityMeasurement|settingsLabel"></span>
       </div>
