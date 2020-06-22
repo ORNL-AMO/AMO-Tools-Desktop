@@ -81,6 +81,8 @@ import { AirFlowConversionComponent } from '../calculator/compressed-air/air-flo
 import { ProcessCoolingListComponent } from '../calculator/process-cooling/process-cooling-list/process-cooling-list.component';
 import { CoolingTowerComponent } from '../calculator/process-cooling/cooling-tower/cooling-tower.component';
 import { FanPsychrometricComponent } from '../calculator/utilities/fan-psychrometric/fan-psychrometric.component';
+import { MotorInventoryComponent } from '../motor-inventory/motor-inventory.component';
+import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing';
 
 export const coreRoutes: Routes = [
   {
@@ -418,11 +420,6 @@ export const coreRoutes: Routes = [
     path: 'report-rollup',
     component: ReportRollupComponent,
     children: [
-      // {
-      //   path: '',
-      //   pathMatch: 'full',
-      //   redirectTo: 'assessment-reports'
-      // },
       {
         path: '',
         component: AssessmentReportsComponent
@@ -433,6 +430,10 @@ export const coreRoutes: Routes = [
     path: 'log-tool',
     component: LogToolComponent,
     children: logToolRoutes
-
-  }
+  },
+  {
+    component: MotorInventoryComponent,
+    path: 'motor-inventory',
+    children: motorInventoryRoutes
+  },
 ];

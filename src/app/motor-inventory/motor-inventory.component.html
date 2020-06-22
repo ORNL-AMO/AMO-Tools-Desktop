@@ -1,0 +1,9 @@
+<div #content class="log-tool-container log-tool d-flex flex-column">
+    <!--header-->
+    <div #header class="w-100 hide-print sticky-top">
+        <app-motor-inventory-banner></app-motor-inventory-banner>
+    </div>
+    <div [ngStyle]="{'height.px': containerHeight}">
+        <router-outlet></router-outlet>
+    </div>
+</div>
