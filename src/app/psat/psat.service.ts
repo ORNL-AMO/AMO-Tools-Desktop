@@ -70,27 +70,35 @@ export class PsatService {
 
   //results
   resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
-    //call results existing
-    let tmpResults: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
-
-
-    if (settings.powerMeasurement != 'hp') {
-      tmpResults = this.convertOutputs(tmpResults, settings);
+    let valid: PsatValid = this.isPsatValid(psatInputs, true)
+    if (valid.isValid) {
+      let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
+      //call results existing
+      let tmpResults: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
+      if (settings.powerMeasurement != 'hp') {
+        tmpResults = this.convertOutputs(tmpResults, settings);
+      }
+      tmpResults = this.roundResults(tmpResults);
+      return tmpResults;
+    } else {
+      return this.emptyResults();
     }
-    tmpResults = this.roundResults(tmpResults);
-    return tmpResults;
   }
 
   resultsModified(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    let tmpInputs: any = this.convertInputs(psatInputs, settings);
-    tmpInputs.margin = 1;
-    let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
-    if (settings.powerMeasurement != 'hp') {
-      tmpResults = this.convertOutputs(tmpResults, settings);
+    let valid: PsatValid = this.isPsatValid(psatInputs, false)
+    if (valid.isValid) {
+      let tmpInputs: any = this.convertInputs(psatInputs, settings);
+      tmpInputs.margin = 1;
+      let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
+      if (settings.powerMeasurement != 'hp') {
+        tmpResults = this.convertOutputs(tmpResults, settings);
+      }
+      tmpResults = this.roundResults(tmpResults);
+      return tmpResults;
+    } else {
+      return this.emptyResults();
     }
-    tmpResults = this.roundResults(tmpResults);
-    return tmpResults;
   }
 
   emptyResults(): PsatOutputs {
