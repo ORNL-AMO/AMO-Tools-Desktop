@@ -6,6 +6,8 @@ import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysi
 import { VisualizeService } from '../../visualize/visualize.service';
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { IndividualDataFromCsv } from '../../log-tool-models';
+import { LogToolDbService } from '../../log-tool-db.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-setup-data',
   templateUrl: './setup-data.component.html',
@@ -20,15 +22,28 @@ export class SetupDataComponent implements OnInit {
   importingData: boolean = false;
   dataExists: boolean = false;
   importSuccesful: boolean = false;
-  individualDataFromCsv: Array<IndividualDataFromCsv>
+  individualDataFromCsv: Array<IndividualDataFromCsv>;
+  previousDataAvailableSub: Subscription;
+  previousDataAvailable: Date;
   constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
-    private logToolDataService: LogToolDataService) { }
+    private logToolDataService: LogToolDataService, private logToolDbService: LogToolDbService) { }
 
   ngOnInit() {
     this.individualDataFromCsv = this.logToolService.individualDataFromCsv;
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
       this.dataExists = true;
+    }
+    if (this.dataExists == false && this.logToolService.dataSubmitted.getValue() == false) {
+      this.previousDataAvailableSub = this.logToolDbService.previousDataAvailable.subscribe(val => {
+        this.previousDataAvailable = val;
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.previousDataAvailableSub) {
+      this.previousDataAvailableSub.unsubscribe();
     }
   }
 
@@ -66,6 +81,8 @@ export class SetupDataComponent implements OnInit {
       this.importData = undefined;
       this.importingData = false;
       this.logToolService.dataSubmitted.next(true);
+      this.previousDataAvailable = undefined;
+      this.logToolDbService.saveData();
       this.cd.detectChanges();
     }, 100);
   }
@@ -77,6 +94,15 @@ export class SetupDataComponent implements OnInit {
     this.logToolService.resetData();
     this.logToolDataService.resetData();
     this.dataExists = false;
+    this.logToolDbService.saveData()
     this.cd.detectChanges();
+  }
+
+  usePreviousData(){
+    this.logToolDbService.setLogToolData();
+    this.previousDataAvailable = undefined;
+    if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
+      this.dataExists = true;
+    }
   }
 }

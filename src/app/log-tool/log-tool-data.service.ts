@@ -7,12 +7,10 @@ import { LogToolDay, LogToolField, IndividualDataFromCsv } from './log-tool-mode
 export class LogToolDataService {
 
   logToolDays: Array<LogToolDay>;
-  validNumberOfDayDataPoints: number;
   constructor(private logToolService: LogToolService) { }
 
   resetData() {
     this.logToolDays = new Array();
-    this.validNumberOfDayDataPoints = undefined;
   }
 
   getDataFieldOptions(): Array<LogToolField> {

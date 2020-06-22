@@ -28,7 +28,7 @@ export class LogToolService {
     this.individualDataFromCsv = new Array();
   }
 
-  addCsvData(data: CsvImportData, csvName: string, ) {
+  addCsvData(data: CsvImportData, csvName: string,) {
     let csvId: string = Math.random().toString(36).substr(2, 9);
     let fields: Array<LogToolField> = data.meta.fields.map(field => {
       return {

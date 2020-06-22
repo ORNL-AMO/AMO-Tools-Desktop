@@ -3,6 +3,7 @@ import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js';
 import { AnnotationData } from '../../log-tool-models';
+import { LogToolDbService } from '../../log-tool-db.service';
 
 @Component({
   selector: 'app-visualize-graph',
@@ -15,7 +16,7 @@ export class VisualizeGraphComponent implements OnInit {
 
   selectedGraphDataSubscription: Subscription;
   plotClickSubscription: any;
-  constructor(private visualizeService: VisualizeService) {
+  constructor(private visualizeService: VisualizeService, private logToolDbService: LogToolDbService) {
   }
 
   ngOnInit() {
@@ -23,6 +24,7 @@ export class VisualizeGraphComponent implements OnInit {
     this.visualizeService.plotFunctionType = 'react';
 
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
+      this.logToolDbService.saveData();
       let mode = {
         modeBarButtonsToRemove: ['lasso2d'],
         responsive: true,
