@@ -14,6 +14,7 @@ export class VisualizeService {
   annotateDataPoint: BehaviorSubject<AnnotationData>;
   focusedPanel: BehaviorSubject<string>;
   plotFunctionType: string;
+  restyleRanges: BehaviorSubject<{ xMin: number, xMax: number, yMin: number, yMax: number, y2Min: number, y2Max: number }>;
   constructor(private logToolDataService: LogToolDataService) {
     this.initializeService();
   }
@@ -25,6 +26,7 @@ export class VisualizeService {
     this.graphObjects = new BehaviorSubject([initData]);
     this.selectedGraphObj = new BehaviorSubject<GraphObj>(initData);
     this.annotateDataPoint = new BehaviorSubject<AnnotationData>(undefined);
+    this.restyleRanges = new BehaviorSubject(undefined);
   }
 
   getVisualizeData(fieldName: string) {
