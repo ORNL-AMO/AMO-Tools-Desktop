@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CalculatedGasDensity } from '../models/fans';
+import { PsychrometricResults } from '../models/fans';
 import { Subscription } from 'rxjs';
 import { Settings } from '../models/settings';
 import { GasDensityFormService } from '../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
@@ -21,8 +21,8 @@ export class GasDensityResultsComponent implements OnInit {
   baselineCalculationTypeSubscription: Subscription;
   selectedModificationSubscription: Subscription;
 
-  baselineCalculatedGasDensity: CalculatedGasDensity;
-  modCalculatedGasDensity: CalculatedGasDensity;
+  baselinePsychrometricResults: PsychrometricResults;
+  modPsychrometricResults: PsychrometricResults;
   isBaselineTypeCustom: boolean;
   isModificationTypeCustom: boolean;
 
@@ -31,15 +31,15 @@ export class GasDensityResultsComponent implements OnInit {
     private gasDensityFormService: GasDensityFormService, private compareService: CompareService) { }
 
   ngOnInit(): void {
-    this.modificationGasDensitySubscription = this.gasDensityFormService.modificationCalculatedGasDensity.subscribe(val => {
-      this.modCalculatedGasDensity = val;
+    this.modificationGasDensitySubscription = this.gasDensityFormService.modificationPsychrometricResults.subscribe(val => {
+      this.modPsychrometricResults = val;
     });
     this.modificationCalculationTypeSubscription = this.gasDensityFormService.modificationCalculationType.subscribe(val => {
       this.isModificationTypeCustom = (val === 'custom');
     });
 
-    this.baselineGasDensitySubscription = this.gasDensityFormService.baselineCalculatedGasDensity.subscribe(val => {
-      this.baselineCalculatedGasDensity = val;
+    this.baselineGasDensitySubscription = this.gasDensityFormService.baselinePsychrometricResults.subscribe(val => {
+      this.baselinePsychrometricResults = val;
     });
     this.baselineCalculationTypeSubscription = this.gasDensityFormService.baselineCalculationType.subscribe(val => {
       this.isBaselineTypeCustom = (val === 'custom');

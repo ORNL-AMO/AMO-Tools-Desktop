@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseGasDensity, CalculatedGasDensity } from '../../../../../shared/models/fans';
+import { BaseGasDensity, PsychrometricResults } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
@@ -8,13 +8,13 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class GasDensityFormService {
 
-  baselineCalculatedGasDensity: BehaviorSubject<CalculatedGasDensity>;
-  modificationCalculatedGasDensity: BehaviorSubject<CalculatedGasDensity>;
+  baselinePsychrometricResults: BehaviorSubject<PsychrometricResults>;
+  modificationPsychrometricResults: BehaviorSubject<PsychrometricResults>;
   baselineCalculationType: BehaviorSubject<string>;
   modificationCalculationType: BehaviorSubject<string>;
   constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
-    this.baselineCalculatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
-    this.modificationCalculatedGasDensity = new BehaviorSubject<CalculatedGasDensity>(undefined);
+    this.baselinePsychrometricResults = new BehaviorSubject<PsychrometricResults>(undefined);
+    this.modificationPsychrometricResults = new BehaviorSubject<PsychrometricResults>(undefined);
     this.baselineCalculationType = new BehaviorSubject<string>(undefined);
     this.modificationCalculationType = new BehaviorSubject<string>(undefined)
   }
@@ -26,6 +26,7 @@ export class GasDensityFormService {
       gasType: [obj.gasType, Validators.required],
       dryBulbTemp: [obj.dryBulbTemp, [Validators.min(ranges.dryBulbTempMin), Validators.max(ranges.dryBulbTempMax)]],
       staticPressure: [obj.staticPressure, [Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
+      altitude: [obj.altitude],
       barometricPressure: [obj.barometricPressure, [Validators.min(ranges.barPressureMin), Validators.max(ranges.barPressureMax)]],
       specificGravity: [obj.specificGravity, [Validators.min(0), Validators.max(2)]],
       wetBulbTemp: [obj.wetBulbTemp, [Validators.min(ranges.wetBulbTempMin), Validators.max(ranges.wetBulbTempMax)]],
@@ -217,6 +218,15 @@ export class GasDensityFormService {
       specificHeatGas: form.controls.specificHeatGas.value
     };
     return fanGasDensity;
+  }
+
+  setValidators(gasDensityForm: FormGroup, settings: Settings) {
+    let ranges: GasDensityRanges = this.getGasDensityRanges(settings);
+    this.setRelativeHumidityValidators(gasDensityForm);
+    this.setWetBulbValidators(gasDensityForm, ranges);
+    this.setDewPointValidators(gasDensityForm, ranges);
+    this.setCustomValidators(gasDensityForm, ranges);
+    return gasDensityForm;
   }
 
 }
