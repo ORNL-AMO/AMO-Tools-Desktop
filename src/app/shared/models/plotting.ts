@@ -46,8 +46,9 @@ export interface AxisObj {
     },
     tickvals?: Array<number | string>,
     tickmode?: string,
-    ticksuffix?: string,
     rangemode?: string,
+    showticksuffix: string;
+    ticksuffix?: string,
 }
 
 export interface TraceData {

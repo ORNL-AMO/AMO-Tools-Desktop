@@ -123,12 +123,6 @@ export class SpecificSpeedService {
           line: {
             shape: 'spline'
           },
-          marker: {
-            colorbar: {
-              ticksuffix: '%',
-              showticksuffix: 'all'
-            }
-          }
         }
       ],
       layout: {
@@ -141,7 +135,9 @@ export class SpecificSpeedService {
             text: 'Specific Speed (U.S.)'
           },
           tickvals: [100, 1000, 10000, 100000],
+          rangemode: 'tozero',
           tickmode: 'array',
+          showticksuffix: 'all'
         },
         yaxis: {
           autorange: true,
@@ -150,7 +146,9 @@ export class SpecificSpeedService {
           title: {
             text: 'Efficiency Correction (%)'
           },
-          rangemode: 'tozero'
+          rangemode: 'tozero',
+          ticksuffix: '%',
+          showticksuffix: 'all'
         },
         margin: {
           t: 25,
