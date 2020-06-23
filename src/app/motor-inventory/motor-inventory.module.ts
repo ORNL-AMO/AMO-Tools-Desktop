@@ -10,6 +10,8 @@ import { PlantSetupComponent } from './motor-inventory-setup/plant-setup/plant-s
 import { MotorInventoryCalculatorsComponent } from './motor-inventory-calculators/motor-inventory-calculators.component';
 import { MotorInventorySummaryComponent } from './motor-inventory-summary/motor-inventory-summary.component';
 import { BatchAnalysisComponent } from './batch-analysis/batch-analysis.component';
+import { HelpPanelComponent } from './help-panel/help-panel.component';
+import { SettingsModule } from '../settings/settings.module';
 
 
 
@@ -23,11 +25,13 @@ import { BatchAnalysisComponent } from './batch-analysis/batch-analysis.componen
     PlantSetupComponent,
     MotorInventoryCalculatorsComponent,
     MotorInventorySummaryComponent,
-    BatchAnalysisComponent
+    BatchAnalysisComponent,
+    HelpPanelComponent
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    SettingsModule
   ]
 })
 export class MotorInventoryModule { }

@@ -105,6 +105,12 @@ Tabs
     border-bottom: #117A65 solid 3px;
   }
 
+  .motor-inventory .tabs.primary .active a {
+    border: none;
+    border-bottom: #16A085 solid 3px;
+  }
+
+
   
 
 
@@ -164,6 +170,10 @@ Tabs
 
   .tabs.subtabs.log-tool {
     border-bottom: #117A65 solid 3px;
+  }
+
+  .tabs.subtabs.motor-inventory {
+    border-bottom: #16A085 solid 3px;
   }
 
     .tabs.subtabs.progress-tabs a {
@@ -238,6 +248,10 @@ Tabs
 
       .tabs.subtabs.log-tool .active .step-number {
         background: #117A65;
+      }
+
+      .tabs.subtabs.motor-inventory .active .step-number {
+        background: #16A085;
       }
 
       .tabs.subtabs.fsat .active .step-number{
