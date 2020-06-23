@@ -3,6 +3,15 @@
     font-size: 20px;
 }
 
+.hidden{
+    display: none;
+}
+
+.hidden.show{
+    display: inherit;
+}
+
+
 .nav-item{
     color: white;
 }
