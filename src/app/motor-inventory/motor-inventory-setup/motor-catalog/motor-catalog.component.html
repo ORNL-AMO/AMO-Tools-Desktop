@@ -4,36 +4,233 @@
             <div class="h3">Setup Motor Catalog</div>
         </div>
     </div>
-    <div class="col-12 pt-1">
+    <div class="col-12 pb-1 pt-1">
         <form class="p-0">
-            <div class="form-group">
-                <label>Department</label>
-                <input class="form-control" type="text" id="departmentName">
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea class="form-control" type="text" id="departmentDescription"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Line Frequency</label>
-                <div class="input-group">
-                    <input class="form-control" type="text" id="runTime">
-                    <span class="input-group-addon units">
-                        hr/yr
-                    </span>
+            <div class="form-section">
+                <div class="form-group">
+                    <label>Select Department</label>
+                    <select class="form-control">
+                        <option *ngFor="let department of motorInventoryData.departments">{{department.name}}</option>
+                    </select>
                 </div>
             </div>
-            <!--RPM-->
-            <!--Eff Class-->
-            <!--Estimated Nominal Efficiency-->
-            <!--Rated Voltage-->
-            <!--FLA-->
-            <!--Operating Hours-->
-            <!--Percent Load-->
-            <!--Drive Type-->
-            <!--VFD?-->
-            <!--Does This Motor Have Logger Data?-->
         </form>
-        <a class="click-link danger pull-right small">Delete</a>
+    </div>
+    <div class="col-12 pt-1">
+        <form class="p-0" [formGroup]="motorItemForm">
+            <label class="group-label">Motor Details</label>
+            <div class="form-section">
+                <!--name-->
+                <div class="form-group">
+                    <label>Motor Name</label>
+                    <input class="form-control" type="text" id="name" formControlName="name">
+                </div>
+                <!--description-->
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" type="text" id="description"
+                        formControlName="description"></textarea>
+                </div>
+                <!--operating hours-->
+                <div class="form-group">
+                    <label for="annualOperatingHours">Operating Hours</label>
+                    <div class="input-group">
+                        <span class="input-group-addon op-hour-addon units">
+                            <a class="click-link" (click)="openOperatingHoursModal()"><span
+                                    class="fa fa-calculator"></span></a>
+                        </span>
+                        <input name="annualOperatingHours" type="number" min="0" step="any" class="form-control"
+                            formControlName="annualOperatingHours" id="annualOperatingHours" (input)="save()"
+                            (focus)="focusField('annualOperatingHours')" onfocus="this.select();">
+                        <span class="input-group-addon units">hrs/yr</span>
+                    </div>
+                    <!-- <span class="alert-danger pull-right small"
+                    *ngIf="motorItemForm.controls.annualOperatingHours.invalid && !motorItemForm.controls.annualOperatingHours.pristine">
+                    <span *ngIf="motorItemForm.controls.annualOperatingHours.errors.required">Value Required</span>
+                    <span *ngIf="motorItemForm.controls.annualOperatingHours.errors.max">Value can't be greater than
+                        {{motorItemForm.controls.annualOperatingHours.errors.max.max}} hrs/yr.</span>
+                    <span *ngIf="motorItemForm.controls.annualOperatingHours.errors.min">Value can't be less than
+                        {{motorItemForm.controls.annualOperatingHours.errors.min.min}} hrs/yr.</span>
+                </span> -->
+                </div>
+            </div>
+            <div class="form-section">
+                <label class="group-label">Motor Properties</label>
+                <!--line freq-->
+                <div class="form-group">
+                    <label for="lineFrequency">Line Frequency</label>
+                    <select name="lineFrequency" class="form-control number-input-field" id="lineFrequency"
+                        formControlName="lineFrequency" (change)="changeLineFreq()"
+                        (focus)="focusField('lineFrequency')">
+                        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
+                    </select>
+                </div>
+
+                <!--RPM-->
+                <div class="form-group">
+                    <label for="motorRpm">Motor RPM</label>
+                    <div name="motorRpm" class="input-group">
+                        <input type="number" step="10" class="form-control number-input-field" id="motorRpm"
+                            formControlName="motorRpm" (input)="save()" (focus)="focusField('motorRPM')"
+                            onfocus="this.select();">
+                        <span class="input-group-addon units">rpm</span>
+                    </div>
+                    <!-- <span *ngIf="motorItemForm.controls.motorRpm.invalid && !motorItemForm.controls.motorRpm.pristine">
+                  <span class="alert-danger pull-right small" *ngIf="motorItemForm.controls.motorRpm.errors.required">Value
+                    Required</span>
+                </span>
+                <span class="alert-warning pull-right small">{{warnings.rpmError}}</span> -->
+                </div>
+
+                <!--Motor Rated Power-->
+                <div class="form-group">
+                    <label for="ratedMotorPower">Rated Motor Power</label>
+                    <div class="input-group">
+                        <input type="number" name="ratedMotorPower" class="form-control number-input-field"
+                            id="ratedMotorPower" (focus)="focusField('ratedMotorPower')" (input)="save()"
+                            formControlName="ratedMotorPower">
+                        <span class="input-group-addon units" *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
+                        <span class="input-group-addon units" *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
+                    </div>
+                    <!-- <span *ngIf="motorItemForm.controls.ratedMotorPower.invalid && !motorItemForm.controls.ratedMotorPower.pristine">
+                  <span class="alert-danger pull-right small" *ngIf="motorItemForm.controls.ratedMotorPower.errors.required">Value
+                    Required</span>
+                </span>
+                <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null && !motorItemForm.controls.ratedMotorPower.pristine && !motorItemForm.controls.fullLoadAmps.invalid">{{warnings.ratedPowerError}}</span> -->
+                </div>
+
+
+                <!--Eff Class-->
+                <div class="form-group">
+                    <label for="efficiencyClass">Efficiency Class</label>
+                    <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass"
+                        formControlName="efficiencyClass" (change)="changeEfficiencyClass()"
+                        (focus)="focusField('efficiencyClass')">
+                        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">
+                            {{efficiencyClass.display}}</option>
+                    </select>
+                </div>
+
+                <!--Estimated Nominal Efficiency-->
+                <div class="form-group">
+                    <label for="nominalEfficiency">Est. Nominal Efficiency</label>
+                    <div class="input-group">
+                        <input name="nominalEfficiency" type="number" min="0" step="any" class="form-control"
+                            id="nominalEfficiency" formControlName="nominalEfficiency" (input)="save()"
+                            (focus)="focusField('nominalEfficiency')" onfocus="this.select();">
+                        <span class="input-group-addon units">%</span>
+                    </div>
+                    <!-- <span class="alert-danger pull-right small"
+                    *ngIf="motorItemForm.controls.nominalEfficiency.invalid && !motorItemForm.controls.nominalEfficiency.pristine">
+                    <span *ngIf="motorItemForm.controls.nominalEfficiency.errors.required">Value Required</span>
+                    <span *ngIf="motorItemForm.controls.nominalEfficiency.errors.max">Value can't be greater than
+                        {{motorItemForm.controls.nominalEfficiency.errors.max.max}} %.</span>
+                    <span *ngIf="motorItemForm.controls.nominalEfficiency.errors.min">Value can't be less than
+                        {{motorItemForm.controls.nominalEfficiency.errors.min.min}} %.</span>
+                </span> -->
+                </div>
+
+                <!--Rated Voltage-->
+                <div class="form-group">
+                    <label for="ratedVoltage">Rated Voltage</label>
+                    <div class="input-group">
+                        <input name="ratedVoltage" type="number" min="0" step="any"
+                            class="form-control number-input-field" id="ratedVoltage" formControlName="ratedVoltage"
+                            (input)="save()" (focus)="focusField('motorVoltage')" onfocus="this.select();">
+                        <span class="input-group-addon units">V</span>
+                    </div>
+                    <!-- <span
+                    *ngIf="motorItemForm.controls.ratedVoltage.invalid && !motorItemForm.controls.ratedVoltage.pristine">
+                    <span class="alert-danger pull-right small"
+                        *ngIf="motorItemForm.controls.ratedVoltage.errors.required">Value
+                        Required</span>
+                </span>
+                <span class="alert-warning pull-right small"
+                    *ngIf="warnings.voltageError !== null && !motorItemForm.controls.ratedVoltage.pristine && !motorItemForm.controls.fullLoadAmps.invalid">{{warnings.voltageError}}</span> -->
+                </div>
+
+                <!--FLA-->
+                <div class="form-group">
+                    <label for="fullLoadAmps" aria-describedby="flaHelp">
+                        Full-Load Amps
+                        <!-- <a class="form-text small click-link" id="flaHelp" (click)="getFullLoadAmps()">Estimate Full-Load
+                        Amps</a> -->
+                    </label>
+                    <div class="input-group">
+                        <input name="fullLoadAmps" type="number" min="0" step="any"
+                            class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps"
+                            (input)="save()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();">
+                        <span class="input-group-addon units">A</span>
+                    </div>
+                    <!-- <span
+                    *ngIf="motorItemForm.controls.fullLoadAmps.invalid && !motorItemForm.controls.fullLoadAmps.pristine">
+                    <span class="alert-danger pull-right small"
+                        *ngIf="motorItemForm.controls.fullLoadAmps.errors.required">Value
+                        Required</span>
+                </span>
+                <span class="alert-warning pull-right small"
+                    *ngIf="warnings.flaError !== null && !motorItemForm.controls.fullLoadAmps.invalid">{{warnings.flaError}}</span> -->
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label class="group-label">Additional Properties</label>
+                <!--Percent Load-->
+                <div class="form-group">
+                    <label for="percentLoad">Percent Load</label>
+                    <div class="input-group">
+                        <input name="percentLoad" type="number" min="0" step="any" class="form-control" id="percentLoad"
+                            formControlName="percentLoad" (input)="save()" (focus)="focusField('percentLoad')"
+                            onfocus="this.select();">
+                        <span class="input-group-addon units">%</span>
+                    </div>
+                    <!-- <span class="alert-danger pull-right small"
+                    *ngIf="motorItemForm.controls.percentLoad.invalid && !motorItemForm.controls.percentLoad.pristine">
+                    <span *ngIf="motorItemForm.controls.percentLoad.errors.required">Value Required</span>
+                    <span *ngIf="motorItemForm.controls.percentLoad.errors.max">Value can't be greater than
+                        {{motorItemForm.controls.percentLoad.errors.max.max}} %.</span>
+                    <span *ngIf="motorItemForm.controls.percentLoad.errors.min">Value can't be less than
+                        {{motorItemForm.controls.percentLoad.errors.min.min}} %.</span>
+                    </span> -->
+                </div>
+                <!--Drive Type?-->
+                <div class="form-group">
+                    <label for="driveType">Drive</label>
+                    <select class="form-control" name="driveType" formControlName="driveType" id="driveType"
+                        (change)="save()" (focus)="focusField('driveType')">
+                        <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
+                    </select>
+                </div>
+                <!--VFD?-->
+                <div class="form-group">
+                    <label for="isVFD">Is VFD?</label>
+                    <select class="form-control" name="isVFD" formControlName="isVFD" id="isVFD" (change)="save()"
+                        (focus)="focusField('isVFD')">
+                        <option [ngValue]="true">Yes</option>
+                        <option [ngValue]="false">No</option>
+                    </select>
+                </div>
+                <!--Does This Motor Have Logger Data?-->
+                <div class="form-group">
+                    <label for="hasLoggerData">Has Logger Data?</label>
+                    <select class="form-control" name="hasLoggerData" formControlName="hasLoggerData" id="hasLoggerData"
+                        (change)="save()" (focus)="focusField('hasLoggerData')">
+                        <option [ngValue]="true">Yes</option>
+                        <option [ngValue]="false">No</option>
+                    </select>
+                </div>
+                <!--frame type-->
+                <div class="form-group">
+                    <label for="frameType">Frame Type</label>
+                    <input class="form-control" type="text" id="frameType" formControlName="frameType">
+                </div>
+                <!--num phases-->
+                <div class="form-group">
+                    <label for="numberOfPhases">Num. Phases</label>
+                    <input class="form-control" type="number" id="numberOfPhases" formControlName="numberOfPhases">
+                </div>
+            </div>
+
+        </form>
     </div>
 </div>

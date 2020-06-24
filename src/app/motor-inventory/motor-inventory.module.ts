@@ -13,7 +13,8 @@ import { BatchAnalysisComponent } from './batch-analysis/batch-analysis.componen
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { SettingsModule } from '../settings/settings.module';
 import { MotorInventoryService } from './motor-inventory.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
 
 @NgModule({
   declarations: [
@@ -32,10 +33,12 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     RouterModule,
     SettingsModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
-    MotorInventoryService
+    MotorInventoryService,
+    MotorCatalogService
   ]
 })
 export class MotorInventoryModule { }
