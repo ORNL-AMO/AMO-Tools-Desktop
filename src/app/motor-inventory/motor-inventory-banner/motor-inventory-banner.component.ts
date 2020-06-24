@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { MotorInventoryService } from '../motor-inventory.service';
 
 @Component({
   selector: 'app-motor-inventory-banner',
@@ -7,9 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MotorInventoryBannerComponent implements OnInit {
 
-  constructor() { }
+  setupTab: string;
+  setupTabSub: Subscription;
+  constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
+    this.setupTabSub = this.motorInventoryService.setupTab.subscribe(val => {
+      this.setupTab = val;
+    });
   }
 
+  ngOnDestroy(){
+    this.setupTabSub.unsubscribe();
+  }
+
+  setSetupTab(str: string){
+    this.motorInventoryService.setupTab.next(str);
+  }
 }

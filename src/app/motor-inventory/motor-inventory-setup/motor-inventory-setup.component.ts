@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MotorInventoryService } from '../motor-inventory.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-motor-inventory-setup',
@@ -7,9 +10,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MotorInventorySetupComponent implements OnInit {
 
-  constructor() { }
+  setupTab: string;
+  setupTabSubscription: Subscription;
+  tabSelect: string;
+  constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
+    this.setupTabSubscription = this.motorInventoryService.setupTab.subscribe(val => {
+      this.setupTab = val;
+    });
   }
 
+  ngOnDestroy(){
+    this.setupTabSubscription.unsubscribe();
+  }
+
+  setTab(str: string){
+    this.tabSelect = str;
+  }
 }

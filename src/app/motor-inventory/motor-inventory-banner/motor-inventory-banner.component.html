@@ -20,7 +20,8 @@
             <a class="nav-link" [routerLink]="['/motor-inventory/analysis']" routerLinkActive="active">Analysis</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [routerLink]="['/motor-inventory/calculators']" routerLinkActive="active">Calculators</a>
+            <a class="nav-link" [routerLink]="['/motor-inventory/calculators']"
+                routerLinkActive="active">Calculators</a>
         </div>
     </div>
     <div class="d-flex ml-auto pr-2 h-100">
@@ -30,20 +31,19 @@
     </div>
 </nav>
 
-
-<nav class="hide-print hidden" routerLinkActive="show" [routerLinkActiveOptions]="{exact:false}">
+<nav class="hide-print">
     <div class="d-flex tabs subtabs progress-tabs flex-wrap log-tool">
-        <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <a [routerLink]="['/motor-inventory/setup/plant-setup']">
-                <span class="step-number">1</span>Plant Setup</a>
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'plant-setup'}"
+            (click)="setSetupTab('plant-setup')">
+            <a><span class="step-number">1</span>Plant Setup</a>
         </div>
-        <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <a [routerLink]="['/motor-inventory/setup/departments']" routerLinkActive="active">
-                <span class="step-number">2</span>Departments</a>
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'department-setup'}"
+            (click)="setSetupTab('department-setup')">
+            <a><span class="step-number">2</span>Departments</a>
         </div>
-        <div class="fixed-tab-size" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <a [routerLink]="['/motor-inventory/setup/catalog']" routerLinkActive="active">
-                <span class="step-number">3</span>Catalog</a>
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'motor-catalog'}"
+            (click)="setSetupTab('motor-catalog')">
+            <a><span class="step-number">3</span>Catalog</a>
         </div>
     </div>
 </nav>

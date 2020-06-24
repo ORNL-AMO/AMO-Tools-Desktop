@@ -12,6 +12,7 @@ import { MotorInventorySummaryComponent } from './motor-inventory-summary/motor-
 import { BatchAnalysisComponent } from './batch-analysis/batch-analysis.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { SettingsModule } from '../settings/settings.module';
+import { MotorInventoryService } from './motor-inventory.service';
 
 
 
@@ -32,6 +33,9 @@ import { SettingsModule } from '../settings/settings.module';
     CommonModule,
     RouterModule,
     SettingsModule
+  ],
+  providers: [
+    MotorInventoryService
   ]
 })
 export class MotorInventoryModule { }

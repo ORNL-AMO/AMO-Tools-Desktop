@@ -17,26 +17,26 @@ export const motorInventoryRoutes: Routes = [
     {
         path: 'setup',
         component: MotorInventorySetupComponent,
-        children: [
-            {
-                path: '',
-                pathMatch: 'full',
-                redirectTo: 'plant-setup'
-            },
-            {
-                path: 'plant-setup',
-                component: PlantSetupComponent
-            },
-            {
-                path: 'catalog',
-                component: MotorCatalogComponent
+        // children: [
+        //     {
+        //         path: '',
+        //         pathMatch: 'full',
+        //         redirectTo: 'plant-setup'
+        //     },
+        //     {
+        //         path: 'plant-setup',
+        //         component: PlantSetupComponent
+        //     },
+        //     {
+        //         path: 'catalog',
+        //         component: MotorCatalogComponent
 
-            },
-            {
-                path: 'departments',
-                component: DepartmentSetupComponent
-            }
-        ]
+        //     },
+        //     {
+        //         path: 'departments',
+        //         component: DepartmentSetupComponent
+        //     }
+        // ]
     },
     {
         path: 'summary',
