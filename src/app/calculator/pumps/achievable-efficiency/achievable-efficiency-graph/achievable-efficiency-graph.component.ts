@@ -28,7 +28,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   settings: Settings;
 
   @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
-  @ViewChild('achievableEfficiency', { static: false }) specSpeedChart: ElementRef;
   @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
   dataSummaryTableString: any;
   tabPanelChartId: string = 'tabPanelDiv';
@@ -44,7 +43,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
   
-  validEfficiency: boolean;
+  validEfficiency: boolean = false;
   firstChange: boolean = true;
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
@@ -52,20 +51,23 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   displayExpandTooltip: boolean = false;
   hoverBtnCollapse: boolean = false;
   displayCollapseTooltip: boolean = false;
-  
-  currentPumpType: any;
-  defaultTraceCount: number = 2;
   expanded: boolean = false;
   
   selectedDataPoints: Array<SelectedDataPoint>;
   pointColors: Array<string>;
   efficiencyChart: SimpleChart;
 
+  xAxisTitle: string = "Flow Rate (gpm)";
+  currentPumpType: any;
+  defaultTraceCount: number = 2;
+  defaultTraceOutlineColor = 'rgba(0, 0, 0, .6)';
+
   constructor(private psatService: PsatService,
               private achievableEfficiencyService: AchievableEfficiencyService,
               private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.xAxisTitle = `Flow Rate (${this.settings.flowMeasurement})`;
     this.currentPumpType = this.efficiencyForm.controls.pumpType.value;
     this.triggerInitialResize();
   }
@@ -76,13 +78,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.achievableEfficiencyService.initChartData();
         this.initRenderChart();
       }
-      // TODO combine toggleExampleData into toggleCalculate?
       if (changes.toggleExampleData) {
         if (this.checkForm()) {
           this.initRenderChart();
         }
       }
-      if (changes.toggleCalculate) {
+      if (changes.toggleCalculate && !changes.toggleResetData && !changes.toggleExampleData) {
         if (this.checkForm()) {
           this.checkReplotMethod();
         }
@@ -129,7 +130,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     Plotly.newPlot(this.currentChartId, this.efficiencyChart.data, chartLayout, this.efficiencyChart.config)
       .then(chart => {
         chart.on('plotly_click', (graphData) => {
-          this.createSelectedDataPoint(graphData);
+          this.createSelectedDataPoints(graphData);
         });
       });
     this.save();
@@ -138,7 +139,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   updateChart() {
     let chartLayout = JSON.parse(JSON.stringify(this.efficiencyChart.layout));
     this.setCalculatedTraces();
-    Plotly.update(this.currentChartId, this.efficiencyChart.data, chartLayout, [1]);
+    Plotly.update(this.currentChartId, this.efficiencyChart.data, chartLayout, [2,3]);
+
     this.save();
   }
 
@@ -147,31 +149,37 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.efficiencyChart = this.achievableEfficiencyService.efficiencyChart.getValue();
     this.selectedDataPoints = this.achievableEfficiencyService.selectedDataPoints.getValue();
     
+    // Default line traces
     let maxData: TraceCoordinates = this.getMaxData();
-    let avgData: TraceCoordinates = this.getAvgData();
-    // // maxTrace
     this.efficiencyChart.data[0].x = maxData.x;
     this.efficiencyChart.data[0].y = maxData.y;
-    // avgTrace
+    this.efficiencyChart.data[0].line.color = this.pointColors[0];
+
+    let avgData: TraceCoordinates = this.getAvgData();
     this.efficiencyChart.data[1].x = avgData.x;
     this.efficiencyChart.data[1].y = avgData.y;
-
-    this.efficiencyChart.layout.xaxis.title.text =  `Flow Rate ("${this.settings.flowMeasurement}")`;
+    this.efficiencyChart.data[1].line.color = this.pointColors[1];
+    
+    this.efficiencyChart.layout.xaxis.range = [0, 5000];
+    this.efficiencyChart.layout.xaxis.title.text = this.xAxisTitle;
   }
+  
 
-  getCurrentPoints(): Array<DataPoint> {
+  getCurrentPoints(isUserDataPoint: boolean, userDataPointX?: number): Array<DataPoint> {
+    let flowRateValue: number = isUserDataPoint? userDataPointX : this.efficiencyForm.controls.flowRate.value;
     let points: Array<DataPoint> = [];
+    
     // Y values
-    let efficiencyMax = this.calculateYmax(this.efficiencyForm.controls.flowRate.value);
-    let efficiencyAvg = this.calculateYaverage(this.efficiencyForm.controls.flowRate.value);
+    let efficiencyMax = this.calculateYmax(flowRateValue);
+    let efficiencyAvg = this.calculateYaverage(flowRateValue);
     let calculatedX: number;
     
     if (efficiencyMax >= 0) {
-      calculatedX = this.efficiencyForm.controls.flowRate.value;
+      calculatedX = flowRateValue;
       points.push({x: calculatedX, y: efficiencyMax});
     } 
     if (efficiencyAvg >= 0) {
-      calculatedX = this.efficiencyForm.controls.flowRate.value;
+      calculatedX = flowRateValue;
       points.push({x: calculatedX, y: efficiencyAvg});
     }
 
@@ -179,38 +187,56 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   }
 
   setCalculatedTraces() {
-    let currentPoints = this.getCurrentPoints();
-    currentPoints.forEach((point, i) => {
-      let calculatedPoint: SelectedDataPoint = {
-        pointColor: '#000',
+    let currentPoints: DataPoint[] = this.getCurrentPoints(false);
+    let isInvalidPlot: boolean = currentPoints.some(point => isNaN(point.x) || isNaN(point.y)
+      || !isFinite(point.x) || !isFinite(point.y)
+    );
+
+    if (!isInvalidPlot) {
+      this.validEfficiency = true;
+      currentPoints.forEach((point, i) => {
+        let calculatedPoint: SelectedDataPoint = {
+          pointColor: this.pointColors[i],
+          pointX: point.x,
+          pointY: point.y
+        }
+        let resultCoordinateTrace: TraceData = this.achievableEfficiencyService.getTraceDataFromPoint(calculatedPoint);
+        let yMeasureTitle = i == 0? 'Maximum' : 'Average';
+        let hoverTemplate = 'Flow Rate' + ': %{x} <br>' + yMeasureTitle + ': %{y:.2r}% <br>' + '<extra></extra>';
+        resultCoordinateTrace.hovertemplate = hoverTemplate;
+        resultCoordinateTrace.marker.color = calculatedPoint.pointColor;
+        resultCoordinateTrace.marker.line = {
+          color: this.defaultTraceOutlineColor,
+          width: 4
+        }
+
+        this.efficiencyChart.data[this.defaultTraceCount + i] = resultCoordinateTrace;
+        this.selectedDataPoints.splice(i, 1, calculatedPoint);
+        this.cd.detectChanges();
+      });
+    } else {
+      this.validEfficiency = false;
+    }
+  }
+
+  createSelectedDataPoints(graphData) {
+    let dataPoints: DataPoint[] = this.getCurrentPoints(true, graphData.points[0].x);
+    
+    dataPoints.forEach((point, i) => {
+      let selectedPoint: SelectedDataPoint = {
+        pointColor: this.pointColors[(this.efficiencyChart.data.length + 1) % this.pointColors.length],
         pointX: point.x,
         pointY: point.y
       }
+      let selectedPointTrace = this.achievableEfficiencyService.getTraceDataFromPoint(selectedPoint);
+      let yMeasureTitle = i == 0? 'Maximum' : 'Average';
+      let hoverTemplate = 'Flow Rate' + ': %{x} <br>' + yMeasureTitle + ': %{y:.2r}% <br>' + '<extra></extra>';
+      selectedPointTrace.hovertemplate = hoverTemplate;
 
-      let resultCoordinateTrace: TraceData = this.achievableEfficiencyService.getTraceDataFromPoint(calculatedPoint);
-      resultCoordinateTrace.name = i == 0? "Achievable Efficiency (Max)" : "Achievable Efficiency (Avg)";
-
-      if (!isNaN(calculatedPoint.pointX)) {
-        this.validEfficiency = true;
-        this.efficiencyChart.data[this.defaultTraceCount + i] = resultCoordinateTrace;
-        this.selectedDataPoints.splice(this.defaultTraceCount + i, 1, calculatedPoint);
-        this.cd.detectChanges();
-      } else {
-        this.validEfficiency = false;
-      }
+      Plotly.addTraces(this.currentChartId, selectedPointTrace);
+      this.selectedDataPoints.push(selectedPoint);
     });
-  }
-
-  createSelectedDataPoint(graphData) {
-    let selectedPoint: SelectedDataPoint = {
-      pointColor: this.pointColors[(this.efficiencyChart.data.length + 1) % this.pointColors.length],
-      pointX: graphData.points[0].x,
-      pointY: graphData.points[0].y
-    }
-
-    let selectedPointTrace = this.achievableEfficiencyService.getTraceDataFromPoint(selectedPoint);
-    Plotly.addTraces(this.currentChartId, selectedPointTrace);
-    this.selectedDataPoints.push(selectedPoint);
+    
     this.cd.detectChanges();
     this.save();
   }
@@ -259,51 +285,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     } else { return 0; }
   }
 
-  checkForm() {
-    if (
-      this.efficiencyForm.controls.pumpType.status === 'VALID' &&
-      this.efficiencyForm.controls.flowRate.status === 'VALID' &&
-      this.efficiencyForm.controls.pumpType.value !== 'Specified Optimal Efficiency'
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  //   let tmpMax: any = _.maxBy(_.union(this.avgData, this.maxData), (val: { x: number, y: number }) => { return val.y; });
-  //   let tmpMin: any = _.minBy(_.union(this.avgData, this.maxData), (val: { x: number, y: number }) => { return val.y; });
-  //   let max = tmpMax.y;
-  //   let min = tmpMin.y;
-  //   let xRange: { min: number, max: number };
-  //   xRange = {
-  //     min: 0,
-  //     max: this.width
-  //   };
-  //   let xDomain: { min: number, max: number };
-  //   xDomain = {
-  //     min: 0,
-  //     max: 5000
-  //   };
-  //   this.x = this.lineChartHelperService.setScale("linear", xRange, xDomain);
-  //   this.xAxis = this.lineChartHelperService.setXAxis(this.svg, this.x, this.height, this.isGridToggled, 16, 0, 0, 0);
-  //   let yRange: { min: number, max: number };
-  //   yRange = {
-  //     min: this.height,
-  //     max: 0
-  //   };
-  //   let yDomain: { min: number, max: number };
-  //   yDomain = {
-  //     min: min - 10,
-  //     max: max + 10
-  //   };
-  //   this.y = this.lineChartHelperService.setScale('linear', yRange, yDomain);
-  //   this.yAxis = this.lineChartHelperService.setYAxis(this.svg, this.y, this.width, this.isGridToggled, 11, 0, 0, 15);
-  //   this.lineChartHelperService.setXAxisLabel(this.svg, this.width, this.height, 0, 70, "Flow Rate (" + this.settings.flowMeasurement + ")");
-  //   this.lineChartHelperService.setYAxisLabel(this.svg, 0, this.height, -60, 0, "Achievable Efficiency (%)");
-
-
-
   getAvgData(): TraceCoordinates {
     let data: TraceCoordinates = {
       x: [],
@@ -317,7 +298,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
     return data;
   }
-  getMaxData(): TraceCoordinates  {
+  getMaxData(): TraceCoordinates {
     let data: TraceCoordinates = {
       x: [],
       y: [],
@@ -329,6 +310,18 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       }
     }
     return data;
+  }
+
+  checkForm() {
+    if (
+      this.efficiencyForm.controls.pumpType.status === 'VALID' &&
+      this.efficiencyForm.controls.flowRate.status === 'VALID' &&
+      this.efficiencyForm.controls.pumpType.value !== 'Specified Optimal Efficiency'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   updateTableString() {

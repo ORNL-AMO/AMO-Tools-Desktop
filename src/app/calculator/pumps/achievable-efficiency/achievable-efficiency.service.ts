@@ -12,7 +12,6 @@ export class AchievableEfficiencyService {
   selectedDataPoints: BehaviorSubject<Array<SelectedDataPoint>>;
   constructor(private formBuilder: FormBuilder) {
     this.initChartData();
-
    }
 
    initChartData() {
@@ -35,13 +34,12 @@ export class AchievableEfficiencyService {
   }
 
   getTraceDataFromPoint(selectedPoint: SelectedDataPoint): TraceData {
-    let hoverTemplate = 'Specific Speed' + ': %{x:.2r} <br>' + 'Efficiency Correction' + ': %{y:.2r}%' + '<extra></extra>';
     let trace: TraceData = {
       x: [selectedPoint.pointX],
       y: [selectedPoint.pointY],
       type: 'scatter',
       name: `${selectedPoint.pointX}, ${selectedPoint.pointY}`,
-      hovertemplate: hoverTemplate,
+      showlegend: false,
       mode: 'markers',
       marker: {
         color: selectedPoint.pointColor,
@@ -52,10 +50,12 @@ export class AchievableEfficiencyService {
   }
 
   getEmptyChart(): SimpleChart {
-    let hoverTemplate = 'Specific Speed' + ': %{x:.2r} <br>' + 'Efficiency Correction' + ': %{y:.2r}%' + '<extra></extra>';
+    let maxTemplate = 'Flow Rate' + ': %{x} <br>' + 'Maximum' + ': %{y:.2r}% <br>' + '<extra></extra>';
+    let avgTemplate = 'Flow Rate' + ': %{x} <br>' + 'Average' + ': %{y:.2r}% <br>' + '<extra></extra>';
+    
     let showGrid = true;
     return {
-      name: 'AchievableEfficiency',
+      name: 'Achievable Efficiency',
       data: [
         {
           x: [],
@@ -63,9 +63,10 @@ export class AchievableEfficiencyService {
           name: '',
           showlegend: false,
           type: 'scatter',
-          hovertemplate: hoverTemplate,
+          hovertemplate: maxTemplate,
           line: {
-            shape: 'spline'
+            shape: 'spline',
+            color: undefined
           }
         },
         {
@@ -74,23 +75,24 @@ export class AchievableEfficiencyService {
           name: '',
           showlegend: false,
           type: 'scatter',
-          hovertemplate: hoverTemplate,
+          hovertemplate: avgTemplate,
           line: {
-            shape: 'spline'
+            shape: 'spline',
+            color: undefined
           }
         }
       ],
       layout: {
         hovermode: 'closest',
         xaxis: {
-          autorange: true,
-          type: 'log',
+          autorange: false,
+          type: 'linear',
           showgrid: showGrid,
           title: {
             text: ""
           },
-          tickvals: [100, 1000, 10000, 100000],
-          tickmode: 'array',
+          showticksuffix: 'all',
+          tickangle: -60
         },
         yaxis: {
           autorange: true,
@@ -99,13 +101,14 @@ export class AchievableEfficiencyService {
           title: {
             text: "Achievable Efficiency (%)"
           },
-          rangemode: 'tozero'
+          rangemode: 'tozero',
+          showticksuffix: 'all'
         },
         margin: {
-          t: 75,
-          b: 100,
-          l: 100,
-          r: 100
+          t: 50,
+          b: 75,
+          l: 75,
+          r: 50
         }
       },
       config: {

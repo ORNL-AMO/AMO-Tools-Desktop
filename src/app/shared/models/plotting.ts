@@ -46,9 +46,11 @@ export interface AxisObj {
     },
     tickvals?: Array<number | string>,
     tickmode?: string,
-    rangemode?: string,
-    showticksuffix: string;
     ticksuffix?: string,
+    tickangle?: number,
+    showticksuffix: string,
+    rangemode?: string,
+    range?: Array<number>
 }
 
 export interface TraceData {
@@ -57,12 +59,16 @@ export interface TraceData {
     type: string,
     name: string,
     showlegend?: boolean,
-    hovertemplate: string,
+    hovertemplate?: string,
     xaxis?: any,
     yaxis?: any,
     mode?: string,
     marker?: {
         color?: string | Array<string>,
+        line?: {
+            color: string,
+            width: number
+        }
         colorbar?: {
             ticksuffix: string,
             showticksuffix: string
@@ -70,7 +76,8 @@ export interface TraceData {
         size?: number,
     },
     line?: {
-        shape: string
+        shape: string,
+        color?: string,
     }
 }
 

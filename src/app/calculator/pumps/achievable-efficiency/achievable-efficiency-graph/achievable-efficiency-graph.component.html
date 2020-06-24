@@ -1,41 +1,3 @@
-<!-- <div #ngChartContainer class="panel-chart-container" [ngClass]="{'expanded-chart': expanded}">
-
-  <div *ngIf="expanded" class="row">
-    <div class="col-12">
-      <div class="graph-btn-container">
-        <span class="fa fa-compress" *ngIf="expanded" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')" (mouseleave)="hideTooltip('btnCollapseChart')"></span>
-        <app-simple-tooltip *ngIf="expanded" [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
-          [adjustLeft]="20" [adjustPercent]="false"></app-simple-tooltip>
-      </div>
-    </div>
-  </div>
-
-  <div class="d-flex w-100 h-100 justify-content-center align-items-center" [ngClass]="{'h-100': !expanded, 'h-90': expanded}">
-    <div class="row m-0">
-      <div class="col-12 p-0">
-        <div #ngChart (click)="buildTable()" class="clickable-graph"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-12">
-    <div class="graph-btn-container">
-      <span class="fa fa-download" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
-      <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="20"
-        [adjustPercent]="false"></app-simple-tooltip>
-    </div>
-    <div class="graph-btn-container">
-      <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
-      <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip"
-        [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
-    </div>
-    <div class="graph-btn-container">
-      <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
-      <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
-        [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
-    </div>
-  </div>
-</div> -->
 <div #ngChartContainer class="panel-chart-container" [ngClass]="{'expanded-chart': expanded}">
   <div *ngIf="expanded" class="row">
     <div class="col-12">
@@ -47,9 +9,8 @@
     </div>
   </div>
   <div *ngIf="expanded" class="w-100 p-3">
-    <div #achievableEfficiency id="expandedChartDiv"></div>
+    <div id="expandedChartDiv"></div>
   </div>
-
 </div>
 
 <div class="w-100 p-2">
@@ -75,18 +36,21 @@
   <tbody class="w-100">
     <tr class="bold small text-center no-border">
       <th class="bold w-25">Key</th>
-      <th class="bold w-25">Specific Speed</th>
-      <th class="bold w-25">Efficiency Correction (%)</th>
+      <th class="bold w-25">{{ xAxisTitle }}</th>
+      <th class="bold w-25">Achievable Efficiency (%)</th>
       <th class="bold w-25"></th>
     </tr>
     <tr *ngFor="let point of selectedDataPoints; let index = index">
       <td class="text-center">
-        <div class="point-key-circle" [ngStyle]="{'background': point.pointColor}"></div>
+        <div class="point-key-circle" 
+        [ngStyle]="{'background': point.pointColor, 
+                    'border': index < defaultTraceCount? '4px solid ' + defaultTraceOutlineColor : ''}">
+      </div>
       </td>
       <td class="text-center">{{point.pointX}}</td>
       <td class="text-center">{{point.pointY}}</td>
       <td class='delete-row text-center'>
-        <a *ngIf="!validCurrentSpeed || index != 0" class="click-link m-2 text-danger" (click)="deleteDataPoint(point)">
+        <a *ngIf="!validEfficiency || index >= defaultTraceCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point)">
           Delete
         </a>
       </td>
@@ -103,8 +67,8 @@
 <table #dataSummaryTable class="table pt-2 d-flex">
   <tbody class="w-100">
     <tr class="bold small text-center no-border">
-      <th class="bold w-25">Specific Speed</th>
-      <th class="bold w-25">Efficiency Correction (%)</th>
+      <th class="bold w-25">{{ xAxisTitle }}</th>
+      <th class="bold w-25">Achievable Efficiency (%)</th>
     </tr>
     <tr *ngFor="let point of selectedDataPoints; let index = index">
       <td class="text-center">{{point.pointX}}</td>
