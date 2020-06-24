@@ -108,7 +108,7 @@
 }
 
 .motor-inventory .header{
-    border-bottom: #16A085 solid 2px;
+    border-bottom: #6a846a solid 2px;
 }
 
 
@@ -164,7 +164,7 @@
     color: black;
 }
 .motor-inventory .btn-secondary:not([disabled]):not(.disabled).active{
-    background: #16A085;
+    background: #6a846a;
     transition: all .5s ease-in-out;
     color: black;
 }
@@ -302,7 +302,7 @@
 }
 
 .log-tool .group-label{
-    border-bottom: #16A085 solid 2px;
+    border-bottom: #6a846a solid 2px;
 }
 
 .loss-label{
@@ -471,6 +471,6 @@
     }
 
     .motor-inventory .scroll-item::-webkit-scrollbar-thumb{
-        background-color: #16A085;
+        background-color: #6a846a;
         outline: 1px solid slategrey;
     }

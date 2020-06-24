@@ -1241,6 +1241,10 @@ Banner
     color: white;
   }
 
+  .banner.motor-inventory{
+    background: #6a846a;
+  }
+
 
   .banner.fsat .btn-dashboard, .banner.fsat .title, 
   .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MotorInventoryService, MotorInventoryData, MotorInventoryDepartment } from '../../motor-inventory.service';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-department-setup',
@@ -21,7 +20,7 @@ export class DepartmentSetupComponent implements OnInit {
   }
 
   deleteDepartment(id: string) {
-    _.remove(this.motorInventoryData.departments, (department) => { return department.id == id });
+    this.motorInventoryData.departments.filter((department) => { return department.id == id });
     this.motorInventoryService.motorInventoryData.next(this.motorInventoryData);
   }
 

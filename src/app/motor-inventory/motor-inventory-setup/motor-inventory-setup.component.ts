@@ -12,7 +12,7 @@ export class MotorInventorySetupComponent implements OnInit {
 
   setupTab: string;
   setupTabSubscription: Subscription;
-  tabSelect: string;
+  tabSelect: string = 'help';
   constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
