@@ -32,7 +32,7 @@
 </nav>
 
 <nav class="hide-print">
-    <div class="d-flex tabs subtabs progress-tabs flex-wrap log-tool">
+    <div class="d-flex tabs subtabs progress-tabs flex-wrap motor-inventory">
         <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'plant-setup'}"
             (click)="setSetupTab('plant-setup')">
             <a><span class="step-number">1</span>Plant Setup</a>
@@ -44,6 +44,19 @@
         <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'motor-catalog'}"
             (click)="setSetupTab('motor-catalog')">
             <a><span class="step-number">3</span>Catalog</a>
+        </div>
+    </div>
+</nav>
+
+<nav class="hide-print" *ngIf="setupTab == 'motor-catalog'">
+    <div class="d-flex tabs subtabs progress-tabs flex-wrap motor-inventory">
+        <div *ngFor="let department of motorInventoryData.departments" class="fixed-tab-size"
+            [ngClass]="{'active': selectedDepartmentId == department.id}" (click)="selectedDepartment(department.id)">
+            <a>{{department.name}}
+                <span class="badge gray-badge">
+                    <strong>{{department.catalog.length}}</strong>
+                </span>
+            </a>
         </div>
     </div>
 </nav>

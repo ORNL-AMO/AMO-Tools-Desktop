@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MotorInventoryService } from '../motor-inventory.service';
+import { MotorInventoryService, MotorInventoryData } from '../motor-inventory.service';
+import { MotorCatalogService } from '../motor-inventory-setup/motor-catalog/motor-catalog.service';
 
 @Component({
   selector: 'app-motor-inventory-banner',
@@ -11,19 +12,37 @@ export class MotorInventoryBannerComponent implements OnInit {
 
   setupTab: string;
   setupTabSub: Subscription;
-  constructor(private motorInventoryService: MotorInventoryService) { }
+  motorInventoryData: MotorInventoryData;
+  motorInventoryDataSub: Subscription;
+  selectedDepartmentId: string;
+  selectedDepartmentIdSub: Subscription;
+  constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
     this.setupTabSub = this.motorInventoryService.setupTab.subscribe(val => {
       this.setupTab = val;
     });
+
+    this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(val => {
+      this.motorInventoryData = val;
+    });
+
+    this.selectedDepartmentIdSub = this.motorCatalogService.selectedDepartmentId.subscribe(val => {
+      this.selectedDepartmentId = val;
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.setupTabSub.unsubscribe();
+    this.motorInventoryDataSub.unsubscribe();
+    this.selectedDepartmentIdSub.unsubscribe();
   }
 
-  setSetupTab(str: string){
+  setSetupTab(str: string) {
     this.motorInventoryService.setupTab.next(str);
+  }
+
+  selectedDepartment(departmentId: string) {
+    this.motorCatalogService.selectedDepartmentId.next(departmentId);
   }
 }

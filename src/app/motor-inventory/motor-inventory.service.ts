@@ -22,12 +22,14 @@ export class MotorInventoryService {
   }
 
   getNewDepartment(departmentNum: number): MotorInventoryDepartment {
+    let departmentId: string = Math.random().toString(36).substr(2, 9);
+    let initMotor: MotorItem = this.getNewMotor(departmentId);
     return {
       name: 'Department ' + departmentNum,
       operatingHours: 8760,
       description: '',
-      id: Math.random().toString(36).substr(2, 9),
-      catalog: new Array<MotorItem>()
+      id: departmentId,
+      catalog: [initMotor]
     }
   }
 

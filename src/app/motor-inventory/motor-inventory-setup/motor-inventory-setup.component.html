@@ -22,6 +22,8 @@
             </div>
             <app-help-panel *ngIf="tabSelect == 'help' || setupTab != 'motor-catalog'"
                 [displayHeader]="setupTab != 'motor-catalog'"></app-help-panel>
+            <app-department-catalog-table *ngIf="tabSelect == 'department-catalog' && setupTab == 'motor-catalog'">
+            </app-department-catalog-table>
         </div>
     </div>
 </div>

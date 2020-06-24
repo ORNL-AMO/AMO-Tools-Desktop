@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { MotorItem } from '../../motor-inventory.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class MotorCatalogService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  selectedDepartmentId: BehaviorSubject<string>;
+  constructor(private formBuilder: FormBuilder) {
+    this.selectedDepartmentId = new BehaviorSubject<string>(undefined);
+  }
 
   getFormFromMotorItem(motorItem: MotorItem): FormGroup {
     return this.formBuilder.group({

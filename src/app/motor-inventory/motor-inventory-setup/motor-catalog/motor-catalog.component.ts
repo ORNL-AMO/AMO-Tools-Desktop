@@ -5,6 +5,7 @@ import { MotorCatalogService } from './motor-catalog.service';
 import { motorEfficiencyConstants, driveConstants } from '../../../psat/psatConstants';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-motor-catalog',
@@ -21,14 +22,29 @@ export class MotorCatalogComponent implements OnInit {
   frequencies: Array<number> = [50, 60];
   efficiencyClasses: Array<{ value: number, display: string }>;
   drives: Array<{ display: string, value: number }>;
+
+  selectedDepartmentIdSub: Subscription;
+
   constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.globalSettings;
     this.efficiencyClasses = motorEfficiencyConstants;
     this.drives = driveConstants;
+
     this.motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
-    this.initMotorForm(this.motorInventoryData.departments[0]);
+    this.selectedDepartmentIdSub = this.motorCatalogService.selectedDepartmentId.subscribe(val => {
+      if (!val) {
+        this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);
+      } else {
+        let findDepartment: MotorInventoryDepartment = this.motorInventoryData.departments.find(department => { return department.id == val });
+        this.initMotorForm(findDepartment);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.selectedDepartmentIdSub.unsubscribe();
   }
 
   initMotorForm(department: MotorInventoryDepartment) {
@@ -44,12 +60,9 @@ export class MotorCatalogComponent implements OnInit {
 
   save() {
     let selectedMotor: MotorItem = this.motorCatalogService.getMotorItemFromForm(this.motorItemForm);
-    let selectedDepartment: MotorInventoryDepartment = this.motorInventoryData.departments.find(department => { return department.id == selectedMotor.departmentId });
-    selectedDepartment.catalog.forEach(motorItem => {
-      if (motorItem.id == selectedMotor.id) {
-        motorItem = selectedMotor;
-      }
-    });
+    let selectedDepartmentIndex: number = this.motorInventoryData.departments.findIndex(department => { return department.id == selectedMotor.departmentId });
+    let catalogItemIndex: number = this.motorInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(motorItem => { return motorItem.id == selectedMotor.id; });
+    this.motorInventoryData.departments[selectedDepartmentIndex].catalog[catalogItemIndex] = selectedMotor;
     this.motorInventoryService.motorInventoryData.next(this.motorInventoryData);
   }
 

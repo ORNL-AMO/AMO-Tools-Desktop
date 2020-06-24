@@ -1,10 +1,10 @@
 <div class="row ml-0 mr-0">
     <div class="col-12">
         <div class="header">
-            <div class="h3">Setup Motor Catalog</div>
+            <div class="h3">Edit Motor</div>
         </div>
     </div>
-    <div class="col-12 pb-1 pt-1">
+    <!-- <div class="col-12 pb-1 pt-1">
         <form class="p-0">
             <div class="form-section">
                 <div class="form-group">
@@ -15,21 +15,21 @@
                 </div>
             </div>
         </form>
-    </div>
-    <div class="col-12 pt-1">
+    </div> -->
+    <div class="col-12 pt-1" *ngIf="motorItemForm">
         <form class="p-0" [formGroup]="motorItemForm">
             <label class="group-label">Motor Details</label>
             <div class="form-section">
                 <!--name-->
                 <div class="form-group">
                     <label>Motor Name</label>
-                    <input class="form-control" type="text" id="name" formControlName="name">
+                    <input class="form-control" type="text" id="name" formControlName="name" (input)="save()">
                 </div>
                 <!--description-->
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea class="form-control" type="text" id="description"
-                        formControlName="description"></textarea>
+                    <textarea class="form-control" type="text" id="description" formControlName="description"
+                        (input)="save()"></textarea>
                 </div>
                 <!--operating hours-->
                 <div class="form-group">
@@ -222,12 +222,13 @@
                 <!--frame type-->
                 <div class="form-group">
                     <label for="frameType">Frame Type</label>
-                    <input class="form-control" type="text" id="frameType" formControlName="frameType">
+                    <input class="form-control" type="text" id="frameType" formControlName="frameType" (input)="save()">
                 </div>
                 <!--num phases-->
                 <div class="form-group">
                     <label for="numberOfPhases">Num. Phases</label>
-                    <input class="form-control" type="number" id="numberOfPhases" formControlName="numberOfPhases">
+                    <input class="form-control" type="number" id="numberOfPhases" formControlName="numberOfPhases"
+                        (input)="save()">
                 </div>
             </div>
 

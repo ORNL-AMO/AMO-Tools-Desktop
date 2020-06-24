@@ -1,5 +1,7 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MotorInventoryService } from './motor-inventory.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-motor-inventory',
@@ -15,13 +17,22 @@ export class MotorInventoryComponent implements OnInit {
   @ViewChild('content', { static: false }) content: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   containerHeight: number;
-  constructor(private activatedRoute: ActivatedRoute) { }
+
+  setupTabSub: Subscription;
+  constructor(private activatedRoute: ActivatedRoute, private motorInvetoryService: MotorInventoryService) { }
 
   ngOnInit() {
     this.activatedRoute.url.subscribe(url => {
       this.getContainerHeight();
     });
 
+    this.setupTabSub = this.motorInvetoryService.setupTab.subscribe(val => {
+      this.getContainerHeight();
+    });
+  }
+
+  ngOnDestroy() {
+    this.setupTabSub.unsubscribe();
   }
 
   ngAfterViewInit() {

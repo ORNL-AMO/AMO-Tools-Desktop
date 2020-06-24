@@ -15,6 +15,7 @@ import { SettingsModule } from '../settings/settings.module';
 import { MotorInventoryService } from './motor-inventory.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
+import { DepartmentCatalogTableComponent } from './motor-inventory-setup/department-catalog-table/department-catalog-table.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor
     MotorInventoryCalculatorsComponent,
     MotorInventorySummaryComponent,
     BatchAnalysisComponent,
-    HelpPanelComponent
+    HelpPanelComponent,
+    DepartmentCatalogTableComponent
   ],
   imports: [
     CommonModule,

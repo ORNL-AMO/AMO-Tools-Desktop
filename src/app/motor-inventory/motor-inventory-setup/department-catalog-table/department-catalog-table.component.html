@@ -1,0 +1,14 @@
+<div class="p-2">
+    <table class="table" *ngIf="selectedMotorDepartment">
+        <tr>
+            <th>
+                Name
+            </th>
+        </tr>
+        <tr *ngFor="let motor of selectedMotorDepartment.catalog">
+            <td>
+                {{motor.name}}
+            </td>
+        </tr>
+    </table>
+</div>
