@@ -16,6 +16,8 @@ import { MotorInventoryService } from './motor-inventory.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { DepartmentCatalogTableComponent } from './motor-inventory-setup/department-catalog-table/department-catalog-table.component';
+import { SelectMotorModalComponent } from './motor-inventory-setup/motor-catalog/select-motor-modal/select-motor-modal.component';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -29,14 +31,16 @@ import { DepartmentCatalogTableComponent } from './motor-inventory-setup/departm
     MotorInventorySummaryComponent,
     BatchAnalysisComponent,
     HelpPanelComponent,
-    DepartmentCatalogTableComponent
+    DepartmentCatalogTableComponent,
+    SelectMotorModalComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     SettingsModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ModalModule
   ],
   providers: [
     MotorInventoryService,

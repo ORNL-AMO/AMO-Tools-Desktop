@@ -6,6 +6,7 @@ import { motorEfficiencyConstants, driveConstants } from '../../../psat/psatCons
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
+import { SuiteDbMotor } from '../../../shared/models/materials';
 
 @Component({
   selector: 'app-motor-catalog',
@@ -24,7 +25,7 @@ export class MotorCatalogComponent implements OnInit {
   drives: Array<{ display: string, value: number }>;
 
   selectedDepartmentIdSub: Subscription;
-
+  showSelectMotorModal: boolean = false;
   constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
@@ -90,5 +91,17 @@ export class MotorCatalogComponent implements OnInit {
 
   openOperatingHoursModal() {
 
+  }
+
+  openMotorSelectionModal() {
+    this.showSelectMotorModal = true;
+  }
+
+  closeMotorSelectionModal() {
+    this.showSelectMotorModal = false;
+  }
+
+  setMotorSelection(dbMotor: SuiteDbMotor) {
+    this.closeMotorSelectionModal();
   }
 }

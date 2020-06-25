@@ -7,11 +7,13 @@ export class MotorInventoryService {
   setupTab: BehaviorSubject<string>;
   motorInventoryData: BehaviorSubject<MotorInventoryData>;
   focusedField: BehaviorSubject<string>;
+  modalOpen: BehaviorSubject<boolean>;
   constructor() {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     let inventoryData: MotorInventoryData = this.initInventoryData();
     this.motorInventoryData = new BehaviorSubject<MotorInventoryData>(inventoryData);
     this.focusedField = new BehaviorSubject<string>('default');
+    this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
   initInventoryData(): MotorInventoryData {

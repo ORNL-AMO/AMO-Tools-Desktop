@@ -4,21 +4,9 @@
             <div class="h3">Edit Motor</div>
         </div>
     </div>
-    <!-- <div class="col-12 pb-1 pt-1">
-        <form class="p-0">
-            <div class="form-section">
-                <div class="form-group">
-                    <label>Select Department</label>
-                    <select class="form-control">
-                        <option *ngFor="let department of motorInventoryData.departments">{{department.name}}</option>
-                    </select>
-                </div>
-            </div>
-        </form>
-    </div> -->
     <div class="col-12 pt-1" *ngIf="motorItemForm">
         <form class="p-0" [formGroup]="motorItemForm">
-            <label class="group-label">Motor Details</label>
+            <!-- <label class="group-label">Motor Details</label> -->
             <div class="form-section">
                 <!--name-->
                 <div class="form-group">
@@ -55,7 +43,10 @@
                 </div>
             </div>
             <div class="form-section">
-                <label class="group-label">Motor Properties</label>
+                <div class="d-flex w-100 justify-content-between">
+                    <label class="group-label">Motor Properties</label>
+                    <a class="click-link small" (click)="openMotorSelectionModal()">Use Existing Motor</a>
+                </div>
                 <!--line freq-->
                 <div class="form-group">
                     <label for="lineFrequency">Line Frequency</label>
@@ -231,7 +222,10 @@
                         (input)="save()">
                 </div>
             </div>
-
         </form>
     </div>
 </div>
+
+
+<app-select-motor-modal *ngIf="showSelectMotorModal" (emitClose)="closeMotorSelectionModal()"
+    (emitSave)="setMotorSelection($event)"></app-select-motor-modal>

@@ -19,16 +19,17 @@ export class MotorInventoryComponent implements OnInit {
   containerHeight: number;
 
   setupTabSub: Subscription;
-  constructor(private activatedRoute: ActivatedRoute, private motorInvetoryService: MotorInventoryService) { }
+  constructor(private activatedRoute: ActivatedRoute, private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit() {
     this.activatedRoute.url.subscribe(url => {
       this.getContainerHeight();
     });
 
-    this.setupTabSub = this.motorInvetoryService.setupTab.subscribe(val => {
+    this.setupTabSub = this.motorInventoryService.setupTab.subscribe(val => {
       this.getContainerHeight();
     });
+
   }
 
   ngOnDestroy() {
