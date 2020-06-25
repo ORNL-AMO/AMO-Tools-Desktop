@@ -3,9 +3,16 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="card">
+        <div class="card-header">
+          Select Motor
+          <button class="close" aria-label="Close" (click)="hideDeleteItemsModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <div class="card-block scroll-item">
           <table class="table table-sm">
             <tr>
+              <th></th>
               <th>
                 Catalog
               </th>
@@ -39,6 +46,9 @@
             </tr>
             <tr *ngFor="let option of motorOptions">
               <td>
+                <a class="click-link" (click)="selectMotor(option)">Use</a>
+              </td>
+              <td>
                 {{option.catalog}}
               </td>
               <td>
@@ -71,10 +81,10 @@
             </tr>
           </table>
         </div>
-        <div class="card-footer">
+        <!-- <div class="card-footer">
           <button class="btn btn-danger" (click)="close()">Cancel</button>
           <button class="btn btn-success" (click)="save()">Save</button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

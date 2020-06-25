@@ -13,8 +13,8 @@ import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 export class SelectMotorModalComponent implements OnInit {
   @Output('emitClose')
   emitClose = new EventEmitter<boolean>();
-  @Output('emitSave')
-  emitSave = new EventEmitter<SuiteDbMotor>();
+  @Output('emitSelect')
+  emitSelect = new EventEmitter<SuiteDbMotor>();
 
   @ViewChild('motorModal', { static: false }) public motorModal: ModalDirective;
 
@@ -38,11 +38,12 @@ export class SelectMotorModalComponent implements OnInit {
     });
   }
 
-  save() {
+  selectMotor(motor: SuiteDbMotor) {
     this.motorModal.hide();
     this.motorInventoryService.modalOpen.next(false);
     this.motorModal.onHidden.subscribe(() => {
-      this.emitSave.emit(undefined);
+      this.emitSelect.emit(motor);
     });
   }
+
 }

@@ -103,5 +103,7 @@ export class MotorCatalogComponent implements OnInit {
 
   setMotorSelection(dbMotor: SuiteDbMotor) {
     this.closeMotorSelectionModal();
+    this.motorCatalogService.setSuiteDbMotorProperties(dbMotor, this.motorItemForm);
+    this.save();
   }
 }

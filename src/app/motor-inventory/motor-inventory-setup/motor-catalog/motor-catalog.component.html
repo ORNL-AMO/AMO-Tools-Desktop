@@ -221,6 +221,30 @@
                     <input class="form-control" type="number" id="numberOfPhases" formControlName="numberOfPhases"
                         (input)="save()">
                 </div>
+                <!--num phases-->
+                <div class="form-group">
+                    <label for="motorType">Motor Type</label>
+                    <input class="form-control" type="text" id="motorType" formControlName="motorType" (input)="save()">
+                </div>
+                <!--num phases-->
+                <div class="form-group">
+                    <label for="nemaTable">Nema Table</label>
+                    <input class="form-control" type="text" id="nemaTable" formControlName="nemaTable" (input)="save()">
+                </div>
+                <!--num phases-->
+                <div class="form-group">
+                    <label for="poles">Poles</label>
+                    <input class="form-control" type="number" id="poles" formControlName="poles" (input)="save()">
+                </div>
+                <!--num phases-->
+                <div class="form-group">
+                    <label for="synchronousSpeed">Synchronous Speed</label>
+                    <div class="input-group">
+                        <input class="form-control" type="number" id="synchronousSpeed"
+                            formControlName="synchronousSpeed" (input)="save()">
+                        <span class="input-group-addon units">rpm</span>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -228,4 +252,4 @@
 
 
 <app-select-motor-modal *ngIf="showSelectMotorModal" (emitClose)="closeMotorSelectionModal()"
-    (emitSave)="setMotorSelection($event)"></app-select-motor-modal>
+    (emitSelect)="setMotorSelection($event)"></app-select-motor-modal>

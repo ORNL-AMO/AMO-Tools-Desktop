@@ -55,7 +55,11 @@ export class MotorInventoryService {
       isVFD: false,
       hasLoggerData: false,
       frameType: undefined,
-      numberOfPhases: undefined
+      numberOfPhases: undefined,
+      motorType: undefined,
+      nemaTable: undefined,
+      poles: undefined,
+      synchronousSpeed: undefined
     }
   }
 }
@@ -93,5 +97,9 @@ export interface MotorItem {
   hasLoggerData?: boolean,
   frameType?: string,
   numberOfPhases?: number,
-  name: string
+  name: string,
+  motorType?: string,
+  nemaTable?: string,
+  poles?: number,
+  synchronousSpeed?: number
 }
