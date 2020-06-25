@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MotorInventoryService, MotorInventoryDepartment, MotorInventoryData } from '../../motor-inventory.service';
+import { MotorInventoryService, MotorInventoryDepartment, MotorInventoryData, MotorItem } from '../../motor-inventory.service';
 import { MotorCatalogService } from '../motor-catalog/motor-catalog.service';
 import { Subscription } from 'rxjs';
 
@@ -39,8 +39,17 @@ export class DepartmentCatalogTableComponent implements OnInit {
   setSelectedMotorDepartment() {
     if (this.motorInventoryData && this.selectedDepartmentId) {
       this.selectedMotorDepartment = this.motorInventoryData.departments.find(department => { return department.id == this.selectedDepartmentId });
-      console.log(this.selectedMotorDepartment);
     }
   }
 
+  addNewMotor(){
+    let newMotor: MotorItem = this.motorInventoryService.getNewMotor(this.selectedDepartmentId);
+    this.motorInventoryData.departments.forEach(department => {
+      if(department.id == this.selectedDepartmentId){
+        department.catalog.push(newMotor);
+      }
+    });
+    this.motorInventoryService.motorInventoryData.next(this.motorInventoryData);
+    this.motorCatalogService.selectedMotorItem.next(newMotor);
+  }
 }

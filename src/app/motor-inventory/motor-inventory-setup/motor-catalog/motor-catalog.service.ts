@@ -3,14 +3,15 @@ import { MotorItem } from '../../motor-inventory.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { SuiteDbMotor } from '../../../shared/models/materials';
-import { motorEfficiencyConstants } from '../../../psat/psatConstants';
 
 @Injectable()
 export class MotorCatalogService {
 
   selectedDepartmentId: BehaviorSubject<string>;
+  selectedMotorItem: BehaviorSubject<MotorItem>;
   constructor(private formBuilder: FormBuilder) {
     this.selectedDepartmentId = new BehaviorSubject<string>(undefined);
+    this.selectedMotorItem = new BehaviorSubject<MotorItem>(undefined);
   }
 
   getFormFromMotorItem(motorItem: MotorItem): FormGroup {
@@ -34,7 +35,6 @@ export class MotorCatalogService {
       hasLoggerData: [motorItem.hasLoggerData],
       frameType: [motorItem.frameType],
       numberOfPhases: [motorItem.numberOfPhases],
-
       motorType: [motorItem.motorType],
       nemaTable: [motorItem.nemaTable],
       poles: [motorItem.poles],

@@ -49,7 +49,7 @@ export class MotorInventoryService {
       nominalEfficiency: undefined,
       ratedVoltage: undefined,
       fullLoadAmps: undefined,
-      annualOperatingHours: undefined,
+      annualOperatingHours: 8760,
       percentLoad: undefined,
       driveType: undefined,
       isVFD: false,

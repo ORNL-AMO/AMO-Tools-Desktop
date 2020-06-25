@@ -1,14 +1,69 @@
 <div class="p-2">
-    <table class="table" *ngIf="selectedMotorDepartment">
-        <tr>
-            <th>
-                Name
-            </th>
-        </tr>
-        <tr *ngFor="let motor of selectedMotorDepartment.catalog">
-            <td>
-                {{motor.name}}
-            </td>
-        </tr>
+    <table class="table table-sm table-striped table-hover" *ngIf="selectedMotorDepartment">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Eff. Class
+                </th>
+                <th>
+                    Op. Hours
+                </th>
+                <th>
+                    RPM
+                </th>
+                <th>
+                    HP
+                </th>
+                <th>
+                    Hz
+                </th>
+                <th>
+                    Efficiency
+                </th>
+                <th>
+                    V
+                </th>
+                <th>
+                    FLA
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let motor of selectedMotorDepartment.catalog">
+                <td>
+                    {{motor.name}}
+                </td>
+                <td>
+                    {{motor.efficiencyClass}}
+                </td>
+                <td>
+                    {{motor.annualOperatingHours}}
+                </td>
+                <td>
+                    {{motor.motorRpm}}
+                </td>
+                <td>
+                    {{motor.ratedMotorPower}}
+                </td>
+                <td>
+                    {{motor.lineFrequency}}
+                </td>
+                <td>
+                    {{motor.nominalEfficiency}}
+                </td>
+                <td>
+                    {{motor.ratedVoltage}}
+                </td>
+                <td>
+                    {{motor.fullLoadAmps}}
+                </td>
+            </tr>
+        </tbody>
     </table>
+</div>
+<div class="p-2 w-100 text-center">
+    <a class="click-link" (click)="addNewMotor()">+Add New</a>
 </div>

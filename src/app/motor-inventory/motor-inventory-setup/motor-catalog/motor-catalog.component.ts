@@ -18,7 +18,7 @@ export class MotorCatalogComponent implements OnInit {
   settings: Settings;
 
   motorInventoryData: MotorInventoryData;
-
+  motorInventoryDataSub: Subscription;
   motorItemForm: FormGroup;
   frequencies: Array<number> = [50, 60];
   efficiencyClasses: Array<{ value: number, display: string }>;
@@ -26,6 +26,7 @@ export class MotorCatalogComponent implements OnInit {
 
   selectedDepartmentIdSub: Subscription;
   showSelectMotorModal: boolean = false;
+  selectedMotorItemSub: Subscription;
   constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
@@ -33,31 +34,29 @@ export class MotorCatalogComponent implements OnInit {
     this.efficiencyClasses = motorEfficiencyConstants;
     this.drives = driveConstants;
 
-    this.motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
+    this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(val => {
+      this.motorInventoryData = val;
+    });
     this.selectedDepartmentIdSub = this.motorCatalogService.selectedDepartmentId.subscribe(val => {
       if (!val) {
         this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);
       } else {
         let findDepartment: MotorInventoryDepartment = this.motorInventoryData.departments.find(department => { return department.id == val });
-        this.initMotorForm(findDepartment);
+        this.motorCatalogService.selectedMotorItem.next(findDepartment.catalog[0]);
+      }
+    });
+    this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
+      if (selectedMotor) {
+        this.motorItemForm = this.motorCatalogService.getFormFromMotorItem(selectedMotor);
       }
     });
   }
 
   ngOnDestroy() {
     this.selectedDepartmentIdSub.unsubscribe();
+    this.selectedMotorItemSub.unsubscribe();
+    this.motorInventoryDataSub.unsubscribe();
   }
-
-  initMotorForm(department: MotorInventoryDepartment) {
-    let selectedMotor: MotorItem;
-    if (department.catalog.length != 0) {
-      selectedMotor = department.catalog[0];
-    } else {
-      selectedMotor = this.motorInventoryService.getNewMotor(department.id)
-    }
-    this.motorItemForm = this.motorCatalogService.getFormFromMotorItem(selectedMotor);
-  }
-
 
   save() {
     let selectedMotor: MotorItem = this.motorCatalogService.getMotorItemFromForm(this.motorItemForm);

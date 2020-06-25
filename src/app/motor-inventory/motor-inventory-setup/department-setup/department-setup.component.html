@@ -3,7 +3,7 @@
         <div class="header">
             <div class="h3">Departments Setup</div>
         </div>
-        <a class="click-link small pull-right" (click)="addDepartment()">Add Department</a>
+        <a class="click-link small pull-right" (click)="addDepartment()">+Add Department</a>
     </div>
     <div class="col-12 pt-1 pb-2 form-section" *ngFor="let department of motorInventoryData.departments">
         <form class="p-0">
@@ -29,6 +29,6 @@
             </div>
         </form>
         <a class="click-link danger pull-right small" (click)="deleteDepartment(department)"
-            *ngIf="motorInventoryData.departments.length != 0">Delete</a>
+            *ngIf="motorInventoryData.departments.length != 1">Delete</a>
     </div>
 </div>
