@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
-import { EquipmentCurveService } from './equipment-curve/equipment-curve.service';
-import { FanSystemCurveFormService } from './system-curve/fan-system-curve-form.service';
-import { PumpSystemCurveFormService } from './system-curve/pump-system-curve-form.service';
-import { PSAT } from '../../shared/models/psat';
-import { FSAT } from '../../shared/models/fans';
 import { ByDataInputs, ByEquationInputs, EquipmentInputs, PumpSystemCurveData, FanSystemCurveData } from '../../shared/models/system-and-equipment-curve';
 import { RegressionEquationsService } from './regression-equations.service';
 import * as _ from 'lodash';

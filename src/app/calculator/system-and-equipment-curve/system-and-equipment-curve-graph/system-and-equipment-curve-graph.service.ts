@@ -7,6 +7,7 @@ import { RegressionEquationsService } from '../regression-equations.service';
 import { BehaviorSubject } from 'rxjs';
 import { SvgToPngService } from '../../../shared/helper-services/svg-to-png.service';
 import { PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../../../shared/models/system-and-equipment-curve';
+import { SimpleChart, SelectedDataPoint, TraceData } from '../../../shared/models/plotting';
 @Injectable()
 export class SystemAndEquipmentCurveGraphService {
 
@@ -17,12 +18,27 @@ export class SystemAndEquipmentCurveGraphService {
   xRef: any;
   yRef: any;
   svg: any;
+
+  curveEquipmentChart: BehaviorSubject<SimpleChart>;
+  selectedDataPoints: BehaviorSubject<Array<SelectedDataPoint>>;
+
   constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private svgToPngService: SvgToPngService) {
     this.selectedDataPoint = new BehaviorSubject(undefined);
     this.baselineIntersectionPoint = new BehaviorSubject(undefined);
     this.modificationIntersectionPoint = new BehaviorSubject(undefined);
     this.clearDataPoints = new BehaviorSubject<boolean>(false);
+
+    this.initChartData();
   }
+
+  initChartData() {
+    let emptyChart: SimpleChart = this.getEmptyChart();
+    let dataPoints = new Array<SelectedDataPoint>();
+    
+    this.curveEquipmentChart = new BehaviorSubject<SimpleChart>(emptyChart);
+    this.selectedDataPoints = new BehaviorSubject<Array<SelectedDataPoint>>(dataPoints);
+  }
+
 
   initColumnTitles(settings: Settings, equipmentType: string, displayEquipmentCurve: boolean, displayModificationCurve: boolean, displaySystemCurve: boolean): Array<string> {
     let columnTitles: Array<string> = new Array<string>();
@@ -314,5 +330,176 @@ export class SystemAndEquipmentCurveGraphService {
       exportName = equipmentType + '-curve-graph';
     }
     return exportName;
+  }
+
+  getTraceDataFromPoint(selectedPoint: SelectedDataPoint): TraceData {
+    let trace: TraceData = {
+      x: [selectedPoint.pointX],
+      y: [selectedPoint.pointY],
+      type: 'scatter',
+      name: `${selectedPoint.pointX}, ${selectedPoint.pointY}`,
+      showlegend: false,
+      mode: 'markers',
+      marker: {
+        color: selectedPoint.pointColor,
+        size: 14,
+      },
+    };
+    return trace;
+  }
+
+  getEmptyChart(): SimpleChart {
+    return {
+      name: 'System and Equipment Curve',
+      data: [
+        // System
+        {
+          x: [],
+          y: [],
+          name: '',
+          showlegend: false,
+          type: 'scatter',
+          // hovertemplate: maxTemplate,
+          line: {
+            shape: 'spline',
+            color: 'red',
+            dash: 'dot'
+          }
+        },
+        // Baseline
+        {
+          x: [],
+          y: [],
+          name: '',
+          showlegend: false,
+          type: 'scatter',
+          // hovertemplate: avgTemplate,
+          line: {
+            shape: 'spline',
+            color: undefined
+          }
+        },
+        // Baseline Intersect
+        {
+          x: [],
+          y: [],
+          type: 'scatter',
+          name: '',
+          showlegend: false,
+          mode: 'markers',
+          marker: {
+            color: 'rgba(0, 0, 0, 0)',
+            line: {
+              color: 'rgba(0, 0, 0, .6)',
+              width: 4
+            },
+            size: 12,
+          },
+        },
+        // Modification
+        {
+          x: [],
+          y: [],
+          name: '',
+          showlegend: false,
+          type: 'scatter',
+          // hovertemplate: avgTemplate,
+          line: {
+            shape: 'spline',
+            color: undefined
+          }
+        },
+        // Modification Intersect
+        {
+          x: [],
+          y: [],
+          type: 'scatter',
+          name: '',
+          showlegend: false,
+          mode: 'markers',
+          marker: {
+            color: 'rgba(0, 0, 0, 0)',
+            line: {
+              color: 'rgba(0, 0, 0, .6)',
+              width: 4
+            },
+            size: 12,
+          },
+        },
+        // System Hover
+        {
+          x: [],
+          y: [],
+          type: 'scatter',
+          name: '',
+          showlegend: false,
+          mode: 'markers',
+          marker: {
+            color: 'rgba(0, 0, 0, 0)',
+            line: {
+              color: 'rgba(255, 0, 0, .6)',
+              width: 4
+            },
+            size: 12,
+          },
+        },
+        // Baseline Hover
+        {
+          x: [],
+          y: [],
+          type: 'scatter',
+          name: '',
+          showlegend: false,
+          mode: 'markers',
+          marker: {
+            color: 'rgba(0, 0, 0, 0)',
+            line: {
+              color: 'rgba(30,118,64, .6)',
+              width: 4
+            },
+            size: 12,
+          },
+        },
+      ],
+      layout: {
+        hovermode: 'closest',
+        xaxis: {
+          autorange: true,
+          type: 'auto',
+          showgrid: true,
+          title: {
+            text: ""
+          },
+          showticksuffix: 'all',
+          tickangle: -60
+        },
+        yaxis: {
+          autorange: true,
+          type: 'linear',
+          showgrid: true,
+          title: {
+            text: ""
+          },
+          // tickvals: [0, 200, 400, 600, 800, 1000],
+          // tickmode: 'array',
+          // tick0: 0,
+          // dtick: 200,
+          rangemode: 'tozero',
+          showticksuffix: 'all'
+        },
+        margin: {
+          t: 50,
+          b: 75,
+          l: 75,
+          r: 50
+        }
+      },
+      config: {
+        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true
+      }
+    };
   }
 }
