@@ -80,6 +80,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       }
       if (changes.toggleExampleData) {
         if (this.checkForm()) {
+          this.achievableEfficiencyService.initChartData();
           this.initRenderChart();
         }
       }
@@ -244,6 +245,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   checkReplotMethod() {
     if (this.efficiencyForm.controls.pumpType.value !== this.currentPumpType) {
       this.currentPumpType = this.efficiencyForm.controls.pumpType.value;
+      this.achievableEfficiencyService.initChartData();
       this.initRenderChart();
     } else {
       this.updateChart();
