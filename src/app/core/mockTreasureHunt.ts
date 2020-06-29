@@ -2,7 +2,7 @@ import { Assessment } from "../shared/models/assessment";
 import { Settings } from "../shared/models/settings";
 
 export const MockTreasureHunt: Assessment = {
-    "name": "Treasure Hunt Example 1",
+    "name": "Treasure Hunt Example",
     "type": "TreasureHunt",
     "isExample": true,
     "treasureHunt": {
