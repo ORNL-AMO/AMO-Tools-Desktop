@@ -41,6 +41,8 @@ export interface AxisObj {
     autorange: boolean,
     type: string,
     showgrid: boolean,
+    showspikes?: boolean,
+    spikemode?: string,
     title: {
         text: string
     },

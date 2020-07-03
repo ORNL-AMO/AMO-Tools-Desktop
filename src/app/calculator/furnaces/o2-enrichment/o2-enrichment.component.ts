@@ -53,6 +53,8 @@ export class O2EnrichmentComponent implements OnInit {
   originalCalculator: Calculator;
   o2Form: FormGroup;
   toggleResetData: boolean = true;
+  toggleExampleData: boolean = false;
+
   constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService,
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
 
@@ -107,6 +109,7 @@ export class O2EnrichmentComponent implements OnInit {
   generateExample() {
     this.o2Enrichment = this.o2EnrichmentService.generateExample(this.settings);
     this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, this.o2Enrichment);
+    this.toggleExampleData = !this.toggleExampleData;
     this.calculate();
   }
 
@@ -117,7 +120,7 @@ export class O2EnrichmentComponent implements OnInit {
 
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }

@@ -5,13 +5,29 @@ import { Settings } from '../../../shared/models/settings';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PhastService } from '../../../phast/phast.service';
 import { OperatingHours } from '../../../shared/models/operations';
+import { SelectedDataPoint, SimpleChart, TraceData, TraceCoordinates } from '../../../shared/models/plotting';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class O2EnrichmentService {
   o2Enrichment: O2Enrichment;
   lines: Array<any> = [];
   operatingHours: OperatingHours;
-  constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
+  enrichmentChart: BehaviorSubject<SimpleChart>;
+  makePlot: BehaviorSubject<boolean>;
+  selectedDataPoints: BehaviorSubject<Array<EnrichmentPoint>>;
+  constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) 
+  {
+    this.initChartData();
+    this.makePlot = new BehaviorSubject<boolean>(undefined);
+   }
+
+  initChartData() {
+    let emptyChart: SimpleChart = this.getEmptyChart();
+    let dataPoints = new Array<EnrichmentPoint>();
+    this.enrichmentChart = new BehaviorSubject<SimpleChart>(emptyChart);
+    this.selectedDataPoints = new BehaviorSubject<Array<EnrichmentPoint>>(dataPoints);
+  }
 
   initForm(settings: Settings): FormGroup {
     let defaultO2Enrichment: O2Enrichment = {
@@ -194,12 +210,11 @@ export class O2EnrichmentService {
     return tmpO2EnrichmentMinMax;
   }
 
-
-  getGraphData(settings: Settings, o2EnrichmentPoint: any, line: any): { data: Array<any>, onGraph: boolean } {
+  getGraphData(settings: Settings, o2EnrichmentPoint: any, line: any): { data: TraceCoordinates, onGraph: boolean } {
     line.fuelSavings = 0.0;
-    let data = [];
+    let data = {x: [], y: []};
     let onGraph = false;
-    let returnObj: { data: Array<any>, onGraph: boolean };
+    let returnObj: { data: TraceCoordinates, onGraph: boolean };
 
     for (let i = 0; i <= 100; i += .5) {
       o2EnrichmentPoint.o2CombAirEnriched = i;
@@ -208,17 +223,13 @@ export class O2EnrichmentService {
         if (fuelSavings > line.fuelSavings) {
           line.fuelSavings = fuelSavings;
         }
-        if (!data.length) {
-          data.push({
-            x: i - .001,
-            y: 0
-          });
+        if (!data.x.length && !data.y.length) {
+          data.x.push(i - .001);
+          data.y.push(0);
         }
         onGraph = true;
-        data.push({
-          x: i,
-          y: fuelSavings
-        });
+        data.x.push(i);
+        data.y.push(fuelSavings);
       }
     }
     returnObj = {
@@ -228,7 +239,106 @@ export class O2EnrichmentService {
     return returnObj;
   }
 
+  getTraceDataFromPoint(selectedPoint: SelectedDataPoint): TraceData {
+    let trace: TraceData = {
+      x: [selectedPoint.pointX],
+      y: [selectedPoint.pointY],
+      type: 'scatter',
+      name: ``,
+      showlegend: false,
+      hovertemplate: `O<sub>2</sub> in Air (%): ${selectedPoint.pointX}<br>Fuel Savings (%): ${selectedPoint.pointY}<br>`,
+      mode: 'markers',
+      marker: {
+        color: '#000',
+        size: 14,
+      },
+    };
+    return trace;
+  }
 
+  getEmptyChart(): SimpleChart {
+    let showGrid = true;
+    return {
+      name: 'Achievable Efficiency',
+      data: [
+        // Main line
+        {
+          x: [],
+          y: [],
+          name: '',
+          showlegend: false,
+          type: 'scatter',
+          hovertemplate: `O<sub>2</sub> in Air (%): %{x}<br>Fuel Savings (%): %{y}<br>`,
+          line: {
+            shape: 'spline',
+            color: '#000'
+          }
+        },
+        // Point
+        {
+          x: [],
+          y: [],
+          type: 'scatter',
+          name: ``,
+          showlegend: false,
+          hovertemplate: `O<sub>2</sub> in Air (%): %{x}<br>Fuel Savings (%): %{y}<br>`,
+          mode: 'markers',
+          marker: {
+            color: 'rgba(0, 0, 0, 0)',
+            size: 14,
+          },
+        }
+      ],
+      layout: {
+        hovermode: 'closest',
+        xaxis: {
+          autorange: true,
+          type: 'linear',
+          showgrid: showGrid,
+          showspikes: true,
+          spikemode: 'across',
+          title: {
+            text: "O<sub>2</sub> in Air"
+          },
+          rangemode: 'tozero',
+          showticksuffix: 'all',
+          tickangle: -60
+        },
+        yaxis: {
+          autorange: true,
+          type: 'auto',
+          showgrid: showGrid,
+          title: {
+            text: "Fuel Savings (%)"
+          },
+          rangemode: 'tozero',
+          showticksuffix: 'all'
+        },
+        margin: {
+          t: 50,
+          b: 75,
+          l: 75,
+          r: 50
+        }
+      },
+      config: {
+        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true
+      }
+    };
+  }
+
+
+
+
+}
+
+export interface EnrichmentPoint extends SelectedDataPoint {
+  combustionTemp: number,
+  flueOxygen: number,
+  fuelTemp: number
 }
 
 

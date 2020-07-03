@@ -92,7 +92,7 @@ export class O2EnrichmentFormComponent implements OnInit {
   }
 
   plot() {
-
+    this.o2EnrichmentService.makePlot.next(true);
   }
 
   closeOperatingHoursModal(){
@@ -112,7 +112,7 @@ export class O2EnrichmentFormComponent implements OnInit {
   }
 
   setOpHoursModalWidth(){
-    if (this.formElement.nativeElement.clientWidth) {
+    if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }

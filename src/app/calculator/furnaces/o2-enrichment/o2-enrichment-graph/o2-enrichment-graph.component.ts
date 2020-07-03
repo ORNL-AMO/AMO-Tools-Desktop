@@ -323,28 +323,28 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     let onGraph = false;
     let data = [];
 
-    this.o2EnrichmentPoint = {
-      operatingHours: this.o2Enrichment.operatingHours,
-      operatingHoursEnriched: this.o2Enrichment.operatingHoursEnriched,
-      o2CombAir: this.o2Enrichment.o2CombAir,
-      o2CombAirEnriched: 0,
-      flueGasTemp: this.o2Enrichment.flueGasTemp,
-      flueGasTempEnriched: line.flueGasTempEnriched,
-      o2FlueGas: this.o2Enrichment.o2FlueGas,
-      o2FlueGasEnriched: line.o2FlueGasEnriched,
-      combAirTemp: this.o2Enrichment.combAirTemp,
-      combAirTempEnriched: line.combAirTempEnriched,
-      fuelConsumption: this.o2Enrichment.fuelConsumption,
-      fuelCost: this.o2Enrichment.fuelCost,
-      fuelCostEnriched: this.o2Enrichment.fuelCostEnriched
-    };
-    let graphData: { data: Array<any>, onGraph: boolean } = this.o2EnrichmentService.getGraphData(this.settings, this.o2EnrichmentPoint, line);
-    onGraph = graphData.onGraph;
-    data = graphData.data;
+    // this.o2EnrichmentPoint = {
+    //   operatingHours: this.o2Enrichment.operatingHours,
+    //   operatingHoursEnriched: this.o2Enrichment.operatingHoursEnriched,
+    //   o2CombAir: this.o2Enrichment.o2CombAir,
+    //   o2CombAirEnriched: 0,
+    //   flueGasTemp: this.o2Enrichment.flueGasTemp,
+    //   flueGasTempEnriched: line.flueGasTempEnriched,
+    //   o2FlueGas: this.o2Enrichment.o2FlueGas,
+    //   o2FlueGasEnriched: line.o2FlueGasEnriched,
+    //   combAirTemp: this.o2Enrichment.combAirTemp,
+    //   combAirTempEnriched: line.combAirTempEnriched,
+    //   fuelConsumption: this.o2Enrichment.fuelConsumption,
+    //   fuelCost: this.o2Enrichment.fuelCost,
+    //   fuelCostEnriched: this.o2Enrichment.fuelCostEnriched
+    // };
+    // let graphData: { data: Array<any>, onGraph: boolean } = this.o2EnrichmentService.getGraphData(this.settings, this.o2EnrichmentPoint, line);
+    // onGraph = graphData.onGraph;
+    // data = graphData.data;
 
-    if (!putOnGraph) {
-      return;
-    }
+    // if (!putOnGraph) {
+    //   return;
+    // }
 
     // reload the graph and return if no points are on the graph
     // edit: ensure no recursive infinite loop occurs
