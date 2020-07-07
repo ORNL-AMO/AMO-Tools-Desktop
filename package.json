@@ -113,7 +113,7 @@
     "angular-plotly.js": "^1.4.2",
     "chart.js": "^2.7.0",
     "codelyzer": "5.2.1",
-    "electron": "4.0.8",
+    "electron": "9.1.0",
     "electron-builder": "20.43.0",
     "electron-download-tf": "^4.3.4",
     "electron-packager": "13.1.1",
