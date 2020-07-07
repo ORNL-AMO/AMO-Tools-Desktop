@@ -135,6 +135,7 @@ export class VisualizeService {
       binningMethod: 'binSize',
       binSize: undefined,
       useStandardDeviation: true,
+      usePercentForBins: true,
       graphId: Math.random().toString(36).substr(2, 9),
       xAxisDataOptions: [],
       yAxisDataOptions: []
@@ -163,7 +164,7 @@ export class VisualizeService {
     this.selectedGraphObj.next(currentGraphData[0]);
   }
 
-  getNumberOfBinsBarChartData(dataField: LogToolField, bins: Array<{ max: number, min: number }>): { xLabels: Array<string>, yValues: Array<number> } {
+  getNumberOfBinsBarChartData(dataField: LogToolField, bins: Array<{ max: number, min: number }>, calculatePercentage: boolean): { xLabels: Array<string>, yValues: Array<number> } {
     let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
     let xLabels: Array<string> = new Array();
     let yValues: Array<number> = new Array();
@@ -173,16 +174,24 @@ export class VisualizeService {
           return true;
         }
       });
-      let percentOfItemsInBin: number = graphDataInRange.length / graphData.length * 100;
-      percentOfItemsInBin = Number(percentOfItemsInBin.toFixed(2));
+      if (calculatePercentage) {
+        let percentOfItemsInBin: number = graphDataInRange.length / graphData.length * 100;
+        percentOfItemsInBin = Number(percentOfItemsInBin.toFixed(2));
+        yValues.push(percentOfItemsInBin);
+
+      } else {
+        yValues.push(graphDataInRange.length);
+      }
+      // let percentOfItemsInBin: number = graphDataInRange.length / graphData.length * 100;
+      // percentOfItemsInBin = Number(percentOfItemsInBin.toFixed(2));
       let xLabel: string = bin.min.toLocaleString() + ' - ' + bin.max.toLocaleString();
       xLabels.push(xLabel)
-      yValues.push(percentOfItemsInBin);
+      // yValues.push(percentOfItemsInBin);
     });
     return { xLabels: xLabels, yValues: yValues };
   }
 
-  getStandardDevBarChartData(dataField: LogToolField): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
+  getStandardDevBarChartData(dataField: LogToolField, calculatePercentage: boolean): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
     let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
     let graphDataMin: number = _.min(graphData);
     let graphDataMax: number = _.max(graphData);
@@ -200,11 +209,16 @@ export class VisualizeService {
           return true;
         }
       });
-      let percentOfItemsInBin: number = graphDataInRange.length / graphData.length * 100;
-      percentOfItemsInBin = Number(percentOfItemsInBin.toFixed(2));
+      if (calculatePercentage) {
+        let percentOfItemsInBin: number = graphDataInRange.length / graphData.length * 100;
+        percentOfItemsInBin = Number(percentOfItemsInBin.toFixed(2));
+        yValues.push(percentOfItemsInBin);
+
+      } else {
+        yValues.push(graphDataInRange.length);
+      }
       let xLabel: string = minValue.toLocaleString() + ' - ' + maxValue.toLocaleString();
       xLabels.push(xLabel)
-      yValues.push(percentOfItemsInBin);
       minValue = Number((minValue + standardDeviation).toFixed(0));
     }
     return { xLabels: xLabels, yValues: yValues, standardDeviation: standardDeviation, average: mean };
