@@ -42,7 +42,7 @@
           <input class="form-control" type="number" name="electricityCost" id="{{'electricityCost_'+idString}}"
             formControlName="electricityCost" (input)="calculate()" (focus)="focusField('electricityCost')"
             (blur)="focusOut()">
-          <span class="units input-group-addon">$/kW</span>
+          <span class="units input-group-addon">$/kWh</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine">
