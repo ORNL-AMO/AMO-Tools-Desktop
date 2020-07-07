@@ -337,7 +337,7 @@ export class SystemAndEquipmentCurveGraphService {
       x: [selectedPoint.pointX],
       y: [selectedPoint.pointY],
       type: 'scatter',
-      name: `${selectedPoint.pointX}, ${selectedPoint.pointY}`,
+      name: '',
       showlegend: false,
       mode: 'markers',
       marker: {
@@ -359,7 +359,6 @@ export class SystemAndEquipmentCurveGraphService {
           name: '',
           showlegend: false,
           type: 'scatter',
-          // hovertemplate: maxTemplate,
           line: {
             shape: 'spline',
             color: 'red',
@@ -373,7 +372,6 @@ export class SystemAndEquipmentCurveGraphService {
           name: '',
           showlegend: false,
           type: 'scatter',
-          // hovertemplate: avgTemplate,
           line: {
             shape: 'spline',
             color: undefined
@@ -384,9 +382,9 @@ export class SystemAndEquipmentCurveGraphService {
           x: [],
           y: [],
           type: 'scatter',
-          name: '',
           showlegend: false,
           mode: 'markers',
+          name: '',
           marker: {
             color: 'rgba(0, 0, 0, 0)',
             line: {
@@ -403,7 +401,6 @@ export class SystemAndEquipmentCurveGraphService {
           name: '',
           showlegend: false,
           type: 'scatter',
-          // hovertemplate: avgTemplate,
           line: {
             shape: 'spline',
             color: undefined
@@ -414,9 +411,9 @@ export class SystemAndEquipmentCurveGraphService {
           x: [],
           y: [],
           type: 'scatter',
-          name: '',
           showlegend: false,
           mode: 'markers',
+          name: '',
           marker: {
             color: 'rgba(0, 0, 0, 0)',
             line: {
@@ -426,40 +423,57 @@ export class SystemAndEquipmentCurveGraphService {
             size: 12,
           },
         },
-        // System Hover
-        {
-          x: [],
-          y: [],
-          type: 'scatter',
-          name: '',
-          showlegend: false,
-          mode: 'markers',
-          marker: {
-            color: 'rgba(0, 0, 0, 0)',
-            line: {
-              color: 'rgba(255, 0, 0, .6)',
-              width: 4
-            },
-            size: 12,
-          },
-        },
-        // Baseline Hover
-        {
-          x: [],
-          y: [],
-          type: 'scatter',
-          name: '',
-          showlegend: false,
-          mode: 'markers',
-          marker: {
-            color: 'rgba(0, 0, 0, 0)',
-            line: {
-              color: 'rgba(30,118,64, .6)',
-              width: 4
-            },
-            size: 12,
-          },
-        },
+        // // System Hover
+        // {
+        //   x: [],
+        //   y: [],
+        //   type: 'scatter',
+        //   name: '',
+        //   showlegend: false,
+        //   mode: 'markers',
+        //   marker: {
+        //     color: 'rgba(0, 0, 0, 0)',
+        //     line: {
+        //       color: 'rgba(255, 0, 0, .6)',
+        //       width: 4
+        //     },
+        //     size: 12,
+        //   },
+        // },
+        // // Baseline Hover
+        // {
+        //   x: [],
+        //   y: [],
+        //   type: 'scatter',
+        //   name: '',
+        //   showlegend: false,
+        //   mode: 'markers',
+        //   marker: {
+        //     color: 'rgba(0, 0, 0, 0)',
+        //     line: {
+        //       color: 'rgba(30,118,64, .6)',
+        //       width: 4
+        //     },
+        //     size: 12,
+        //   },
+        // },
+        //  // Modification Hover
+        //  {
+        //   x: [],
+        //   y: [],
+        //   type: 'scatter',
+        //   name: '',
+        //   showlegend: false,
+        //   mode: 'markers',
+        //   marker: {
+        //     color: 'rgba(0, 0, 0, 0)',
+        //     line: {
+        //       color: 'rgba(42, 189, 218, .6)',
+        //       width: 4
+        //     },
+        //     size: 12,
+        //   },
+        // },
       ],
       layout: {
         hovermode: 'closest',

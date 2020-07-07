@@ -27,7 +27,6 @@ import { DataPointTableComponent } from './system-and-equipment-curve-graph/data
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 import { CurveDataService } from './curve-data.service';
-import { CurveGraphComponent } from './system-and-equipment-curve-graph/curve-graph/curve-graph.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +46,6 @@ import { CurveGraphComponent } from './system-and-equipment-curve-graph/curve-gr
     RegressionEquationsComponent,
     SystemAndEquipmentCurveGraphComponent,
     DataPointTableComponent,
-    CurveGraphComponent
   ],
   imports: [
     CommonModule,

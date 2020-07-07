@@ -59,7 +59,7 @@ export interface TraceData {
     x: Array<number | string>,
     y: Array<number | string>,
     type: string,
-    name: string,
+    name?: string,
     showlegend?: boolean,
     hovertemplate?: string,
     customdata?: Array<number | string>,
