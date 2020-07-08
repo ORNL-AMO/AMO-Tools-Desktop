@@ -18,6 +18,8 @@ import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor
 import { DepartmentCatalogTableComponent } from './motor-inventory-setup/department-catalog-table/department-catalog-table.component';
 import { SelectMotorModalComponent } from './motor-inventory-setup/motor-catalog/select-motor-modal/select-motor-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { FilterMotorsComponent } from './motor-inventory-setup/motor-catalog/select-motor-modal/filter-motors/filter-motors.component';
+import { MotorOptionsTableComponent } from './motor-inventory-setup/motor-catalog/select-motor-modal/motor-options-table/motor-options-table.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { ModalModule } from 'ngx-bootstrap';
     BatchAnalysisComponent,
     HelpPanelComponent,
     DepartmentCatalogTableComponent,
-    SelectMotorModalComponent
+    SelectMotorModalComponent,
+    FilterMotorsComponent,
+    MotorOptionsTableComponent
   ],
   imports: [
     CommonModule,

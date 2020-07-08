@@ -18,12 +18,11 @@ export class SelectMotorModalComponent implements OnInit {
 
   @ViewChild('motorModal', { static: false }) public motorModal: ModalDirective;
 
-  motorOptions: Array<SuiteDbMotor>
-  constructor(private motorInventoryService: MotorInventoryService, private suiteDbService: SuiteDbService) { }
+
+  constructor(private motorInventoryService: MotorInventoryService, ) { }
 
   ngOnInit() {
     this.motorInventoryService.modalOpen.next(true);
-    this.motorOptions = this.suiteDbService.selectMotors()
   }
 
   ngAfterViewInit() {
