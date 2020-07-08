@@ -182,11 +182,8 @@ export class VisualizeService {
       } else {
         yValues.push(graphDataInRange.length);
       }
-      // let percentOfItemsInBin: number = graphDataInRange.length / graphData.length * 100;
-      // percentOfItemsInBin = Number(percentOfItemsInBin.toFixed(2));
       let xLabel: string = bin.min.toLocaleString() + ' - ' + bin.max.toLocaleString();
       xLabels.push(xLabel)
-      // yValues.push(percentOfItemsInBin);
     });
     return { xLabels: xLabels, yValues: yValues };
   }
