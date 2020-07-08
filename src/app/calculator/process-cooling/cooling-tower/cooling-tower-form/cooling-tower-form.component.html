@@ -58,7 +58,7 @@
           <input class="form-control" name="coolingLoad" id="coolingLoad" formControlName="coolingLoad" type="number"
             (input)="calculate()" (focus)="focusField('coolingLoad')" onfocus="this.select();">
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/h</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/h</span>
           <span class="alert-danger pull-right small"
             *ngIf="form.controls.coolingLoad.invalid && !form.controls.coolingLoad.pristine">
             <span *ngIf="form.controls.coolingLoad.errors.required">Value required.</span>
@@ -73,7 +73,7 @@
           </span>
           <span class="mr-2" *ngIf="!form.controls.coolingLoad.value">&mdash; &mdash;</span>
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/h</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/h</span>
         </div>
       </div>
 
@@ -137,7 +137,7 @@
           </span>
           <span class="mr-2" *ngIf="!form.controls.coolingLoad.value">&mdash; &mdash;</span>
           <span *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/h</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/h</span>
         </div>
       </div>
       <div class="form-group">
