@@ -75,6 +75,8 @@ export class FacilityCompressorDataFormComponent implements OnInit {
               private airLeakFormService: AirLeakFormService) { }
 
   ngOnInit(): void {
+    this.airLeakInput = this.airLeakService.airLeakInput.getValue();
+    this.facilityCompressorDataForm = this.airLeakFormService.getFacilityCompressorFormFromObj(this.airLeakInput.facilityCompressorData);
     this.initSubscriptions();
   }
 
@@ -90,13 +92,9 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.airLeakInputSub = this.airLeakService.airLeakInput.subscribe(value => {
-      this.airLeakInput = value;
-      this.facilityCompressorDataForm = this.airLeakFormService.getFacilityCompressorFormFromObj(this.airLeakInput.facilityCompressorData);
-    })
     this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
       this.annualTotalElectricity = value.baselineData.annualTotalElectricity;
-    })
+    });
   }
 
   save() {
