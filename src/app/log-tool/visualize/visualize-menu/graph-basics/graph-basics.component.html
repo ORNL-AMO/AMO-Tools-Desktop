@@ -12,6 +12,13 @@
             </option>
         </select>
     </div>
+    <!--% vs # of poitns-->
+    <div class="btn-group pt-2 pb-2 w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
+        <button type="button" class="btn btn-secondary w-50" (click)="setHistogramUsePercent(true)"
+            [ngClass]="{'active': selectedGraphObj.usePercentForBins == true}">% of Points</button>
+        <button type="button" class="btn btn-secondary w-50" (click)="setHistogramUsePercent(false)"
+            [ngClass]="{'active': selectedGraphObj.usePercentForBins == false}"># of Points</button>
+    </div>
     <!--std deviation vs bins if histogram-->
     <div class="btn-group pt-2 pb-2 w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
         <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(true)"
@@ -21,6 +28,9 @@
     </div>
     <!--help-->
     <span class="form-text text-help" *ngIf="selectedGraphObj.data[0].type == 'bar'">
-        *Calculates percent of data points within bin
+        *Calculates
+        <span *ngIf="selectedGraphObj.usePercentForBins == false">#</span>
+        <span *ngIf="selectedGraphObj.usePercentForBins == true">%</span>
+        of data points within bin
     </span>
 </form>
