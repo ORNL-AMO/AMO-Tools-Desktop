@@ -85,9 +85,9 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   }
 
   btnResetData() {
-   this.airLeakService.resetData.next(true);
    this.airLeakService.initDefaultEmptyInputs(this.settings);
    this.airLeakService.currentLeakIndex.next(0);
+   this.airLeakService.resetData.next(true);
   }
 
   btnGenerateExample() {
