@@ -1,78 +1,46 @@
 <div #ngChartContainer class="panel-chart-container" [ngClass]="{'expanded-chart': expanded}">
-    <div *ngIf="expanded" class="row">
-      <div class="col-12">
-        <div class="graph-btn-container">
-          <span class="fa fa-compress" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')" (mouseleave)="hideTooltip('btnCollapseChart')"></span>
-          <app-simple-tooltip [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
+  <div *ngIf="expanded" class="row">
+    <div class="col-12">
+      <div class="graph-btn-container">
+        <span class="fa fa-compress" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')"
+          (mouseleave)="hideTooltip('btnCollapseChart')"></span>
+        <app-simple-tooltip [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
           [adjustLeft]="20" [adjustPercent]="false"></app-simple-tooltip>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="expanded" class="w-100 p-3">
+    <div #expandedChartDiv id="expandedChartDiv"></div>
+
+    <div class="w-100 tab-panel-background">
+      <div class="w-100" #tabPanelDiv id="tabPanelDiv">
+      </div>
+      <!--  Hover Data -->
+      <div class="w-100 tab-panel-background">
+        <app-chart-hover-data [showHoverGroupData]="showHoverGroupData" [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
+        <div class="col-md-12 mt-1">
+          <div class="graph-btn-container">
+            <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
+            <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip"
+              [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
+          </div>
+          <div class="graph-btn-container">
+            <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
+            <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
+              [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
+          </div>
         </div>
       </div>
     </div>
-    <div *ngIf="expanded" class="w-100 p-3">
-      <div #expandedChartDiv id="expandedChartDiv"></div>
-    </div>
   </div>
+</div>
   
   <div class="w-100 tab-panel-background">
     <div class="w-100" #tabPanelDiv id="tabPanelDiv">
     </div>
     <!--  Hover Data -->
     <div class="w-100 tab-panel-background">
-      <table *ngIf="hasHoverGroupData" class="table pt-2 d-flex justify-content-center">
-        <tbody>
-          <tr class="bold small text-center">
-            <th class="">Current Point Data</th>
-            <th class="small"> Flow ({{ xUnits }})</th>
-            <th class="small">{{ yName }} ({{ yUnits}})</th>
-            <th class="small">Fluid Power ({{ this.settings.powerMeasurement }})</th>
-          </tr>
-          <tr *ngIf="currentHoverData && currentHoverData.baseline" 
-          class="bold small text-center no-border"
-          [ngStyle]="{'color': currentHoverData.baseline.pointColor}">
-            <td class="text-left">Baseline</td>
-            <td>
-              <span *ngIf="currentHoverData.baseline.pointX">{{currentHoverData.baseline.pointX | number: '1.0-0'}}</span>
-              <span *ngIf="!currentHoverData.baseline.pointX">&mdash; &mdash;</span>
-            </td>
-            <td>
-              <span *ngIf="currentHoverData.baseline.pointY">{{currentHoverData.baseline.pointY | number: '1.0-0'}}</span>
-              <span *ngIf="!currentHoverData.baseline.pointY">&mdash; &mdash;</span>
-            </td>
-            <td></td>
-          </tr>
-          <tr *ngIf="currentHoverData && currentHoverData.modification" 
-          class="bold small text-center no-border" 
-          [ngStyle]="{'color': currentHoverData.modification.pointColor}">
-            <td class="text-left">Modification</td>
-            <td>
-              <span *ngIf="currentHoverData.modification.pointX">{{currentHoverData.modification.pointX | number: '1.0-0'}}</span>
-              <span *ngIf="!currentHoverData.modification.pointX">&mdash; &mdash;</span>
-            </td>
-            <td>
-              <span *ngIf="currentHoverData.modification.pointY">{{currentHoverData.modification.pointY | number: '1.0-0'}}</span>
-              <span *ngIf="!currentHoverData.modification.pointY">&mdash; &mdash;</span>
-            </td>
-            <td></td>
-          </tr>
-          <tr *ngIf="currentHoverData && currentHoverData.system" 
-          class="bold small text-center no-border"
-          [ngStyle]="{'color': currentHoverData.system.pointColor}">
-            <td class="text-left">System Curve</td>
-            <td>
-              <span *ngIf="currentHoverData.system.pointX">{{currentHoverData.system.pointX | number: '1.0-0'}}</span>
-              <span *ngIf="!currentHoverData.system.pointX">&mdash; &mdash;</span>
-            </td>
-            <td>
-              <span *ngIf="currentHoverData.system.pointY">{{currentHoverData.system.pointY | number: '1.0-0'}}</span>
-              <span *ngIf="!currentHoverData.system.pointY">&mdash; &mdash;</span>
-            </td>
-            <td>
-              <span *ngIf="currentHoverData.fluidPower">{{currentHoverData.fluidPower | number: '1.0-0'}}</span>
-              <span *ngIf="!currentHoverData.fluidPower">&mdash; &mdash;</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <app-chart-hover-data [showHoverGroupData]="showHoverGroupData" [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
       <div class="col-md-12 mt-1">
         <div class="graph-btn-container">
           <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
@@ -86,7 +54,6 @@
         </div>
       </div>
     </div>
-    
   </div>
 
   
@@ -96,15 +63,15 @@
     <tbody class="w-100">
       <tr class="bold small text-center no-border">
         <th class="bold w-25">Key</th>
-        <th class="bold w-25"> Flow ({{ xUnits }})</th>
-        <th class="bold w-25">{{ yName }} ({{ yUnits}})</th>
+        <th class="bold w-25"> Flow ({{ chartConfig.xUnits }})</th>
+        <th class="bold w-25">{{ chartConfig.yName }} ({{ chartConfig.yUnits}})</th>
         <th class="bold w-25"></th>
       </tr>
       <tr *ngFor="let point of selectedDataPoints; let index = index">
         <td class="text-center">
-          <div class="point-key-circle" 
-          [ngStyle]="{'background': index < defaultPointCount? defaultTraceBackground : point.pointColor, 
-                      'border': index < defaultPointCount? '4px solid ' + defaultTraceOutlineColor : ''}">
+        <div class="point-key-circle" 
+          [ngStyle]="{'background': point.pointColor, 
+                      'border': '4px solid ' + point.pointOutlineColor}">
         </div>
         </td>
         <td class="text-center">{{point.pointX | number: '1.0-0'}}</td>
@@ -127,8 +94,8 @@
   <table #dataSummaryTable class="table pt-2 d-flex">
     <tbody class="w-100">
       <tr class="bold small text-center no-border">
-        <th class="bold w-25"> Flow ({{ xUnits}})</th>
-        <th class="bold w-25">{{ yName }} ({{ yUnits}})</th>
+        <th class="bold w-25"> Flow ({{ chartConfig.xUnits}})</th>
+        <th class="bold w-25">{{ chartConfig.yName }} ({{ chartConfig.yUnits}})</th>
       </tr>
       <tr *ngFor="let point of selectedDataPoints; let index = index">
         <td class="text-center">{{point.pointX}}</td>

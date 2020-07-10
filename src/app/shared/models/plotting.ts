@@ -1,9 +1,9 @@
 //Shared objects for Plotly data visualizations
 
-
-// PUMP CALCULATOR PLOTS
 export interface SelectedDataPoint {
-    pointColor: string;
+    pointColor?: string;
+    pointOutlineColor?: string;
+    pointTraceIndex?: number;
     pointX: number;
     pointY: number;
 }
@@ -83,6 +83,7 @@ export interface TraceData {
         shape: string,
         color?: string,
         dash?: string,
+        smoothing?: number
     }
 }
 
@@ -96,4 +97,12 @@ export interface DataPoint {
   y: number;
 }
 
-// End PUMP CALCULATOR PLOTS
+export interface ChartConfig {
+    defaultPointCount: number,
+    defaultPointOutlineColor?: string,
+    defaultPointBackgroundColor?: string,
+    yName?: string,
+    xName?: string,
+    yUnits?: string,
+    xUnits?: string,
+}

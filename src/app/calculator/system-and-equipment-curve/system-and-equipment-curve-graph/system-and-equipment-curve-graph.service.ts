@@ -362,7 +362,8 @@ export class SystemAndEquipmentCurveGraphService {
           line: {
             shape: 'spline',
             color: 'red',
-            dash: 'dot'
+            dash: 'dot',
+            smoothing: 1.3
           }
         },
         // Baseline
@@ -374,7 +375,8 @@ export class SystemAndEquipmentCurveGraphService {
           type: 'scatter',
           line: {
             shape: 'spline',
-            color: undefined
+            color: undefined,
+            smoothing: 1.3
           }
         },
         // Baseline Intersect
@@ -403,7 +405,8 @@ export class SystemAndEquipmentCurveGraphService {
           type: 'scatter',
           line: {
             shape: 'spline',
-            color: undefined
+            color: undefined,
+            smoothing: 1.3
           }
         },
         // Modification Intersect
@@ -423,57 +426,6 @@ export class SystemAndEquipmentCurveGraphService {
             size: 12,
           },
         },
-        // // System Hover
-        // {
-        //   x: [],
-        //   y: [],
-        //   type: 'scatter',
-        //   name: '',
-        //   showlegend: false,
-        //   mode: 'markers',
-        //   marker: {
-        //     color: 'rgba(0, 0, 0, 0)',
-        //     line: {
-        //       color: 'rgba(255, 0, 0, .6)',
-        //       width: 4
-        //     },
-        //     size: 12,
-        //   },
-        // },
-        // // Baseline Hover
-        // {
-        //   x: [],
-        //   y: [],
-        //   type: 'scatter',
-        //   name: '',
-        //   showlegend: false,
-        //   mode: 'markers',
-        //   marker: {
-        //     color: 'rgba(0, 0, 0, 0)',
-        //     line: {
-        //       color: 'rgba(30,118,64, .6)',
-        //       width: 4
-        //     },
-        //     size: 12,
-        //   },
-        // },
-        //  // Modification Hover
-        //  {
-        //   x: [],
-        //   y: [],
-        //   type: 'scatter',
-        //   name: '',
-        //   showlegend: false,
-        //   mode: 'markers',
-        //   marker: {
-        //     color: 'rgba(0, 0, 0, 0)',
-        //     line: {
-        //       color: 'rgba(42, 189, 218, .6)',
-        //       width: 4
-        //     },
-        //     size: 12,
-        //   },
-        // },
       ],
       layout: {
         hovermode: 'closest',
@@ -494,10 +446,6 @@ export class SystemAndEquipmentCurveGraphService {
           title: {
             text: ""
           },
-          // tickvals: [0, 200, 400, 600, 800, 1000],
-          // tickmode: 'array',
-          // tick0: 0,
-          // dtick: 200,
           rangemode: 'tozero',
           showticksuffix: 'all'
         },
@@ -517,3 +465,10 @@ export class SystemAndEquipmentCurveGraphService {
     };
   }
 }
+
+export interface HoverGroupData {
+  baseline: SelectedDataPoint,
+  modification?: SelectedDataPoint,
+  system: SelectedDataPoint,
+  fluidPower?: number
+};

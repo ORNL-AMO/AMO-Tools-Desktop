@@ -206,6 +206,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
 
   btnGenerateExample() {
     this.curveDataService.setExample(this.settings, this.equipmentType);
+    this.curveDataService.generateExample.next(true);
     this.curveDataService.resetForms.next(true);
     this.curveDataService.resetForms.next(false);
   }

@@ -16,18 +16,20 @@ import { ByEquationInputs, EquipmentInputs, ByDataInputs, FanSystemCurveData, Pu
 export class CurveDataService {
 
   resetForms: BehaviorSubject<boolean>;
+  generateExample: BehaviorSubject<boolean>;
   constructor(private equipmentCurveService: EquipmentCurveService, private fanSystemCurveFormService: FanSystemCurveFormService,
     private pumpSystemCurveFormService: PumpSystemCurveFormService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private calculatorDbService: CalculatorDbService) {
     this.resetForms = new BehaviorSubject<boolean>(false);
+    this.generateExample = new BehaviorSubject<boolean>(false);
   }
-
 
   setExample(settings: Settings, equipmentType: string) {
     if (equipmentType == 'pump') {
       let byDataInputs: ByDataInputs = this.equipmentCurveService.getPumpByDataExample(settings);
       this.systemAndEquipmentCurveService.byDataInputs.next(byDataInputs);
       let pumpSystemCurveData: PumpSystemCurveData = this.pumpSystemCurveFormService.getPumpSystemCurveDefaults(settings);
+      console.log('exampleData', pumpSystemCurveData);
       this.systemAndEquipmentCurveService.pumpSystemCurveData.next(pumpSystemCurveData);
     } else if (equipmentType == 'fan') {
       let byDataInputs: ByDataInputs = this.equipmentCurveService.getFanByDataExample(settings);
@@ -72,6 +74,7 @@ export class CurveDataService {
       this.systemAndEquipmentCurveService.fanSystemCurveData.next(fanSystemCurveData);
     } else if (equipmentType == 'pump') {
       let pumpSystemCurveData: PumpSystemCurveData = this.pumpSystemCurveFormService.getResetPumpSystemCurveInputs();
+      console.log('resetData', pumpSystemCurveData);
       this.systemAndEquipmentCurveService.pumpSystemCurveData.next(pumpSystemCurveData);
     }
   }
