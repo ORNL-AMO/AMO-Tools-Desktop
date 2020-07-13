@@ -35,7 +35,7 @@ export class MotorCatalogService {
       hasLoggerData: [motorItem.hasLoggerData],
       frameType: [motorItem.frameType],
       numberOfPhases: [motorItem.numberOfPhases],
-      motorType: [motorItem.motorType],
+      enclosureType: [motorItem.enclosureType],
       nemaTable: [motorItem.nemaTable],
       poles: [motorItem.poles],
       synchronousSpeed: [motorItem.synchronousSpeed]
@@ -63,7 +63,7 @@ export class MotorCatalogService {
       frameType: form.controls.frameType.value,
       numberOfPhases: form.controls.numberOfPhases.value,
       motorRpm: form.controls.motorRpm.value,
-      motorType: form.controls.motorType.value,
+      enclosureType: form.controls.enclosureType.value,
       nemaTable: form.controls.nemaTable.value,
       poles: form.controls.poles.value,
       synchronousSpeed: form.controls.synchronousSpeed.value
@@ -71,19 +71,19 @@ export class MotorCatalogService {
   }
 
   setSuiteDbMotorProperties(motor: SuiteDbMotor, form: FormGroup) {
-    let efficiencyClass: number;
-    if (motor.efficiencyType == 'Energy Efficient') {
-      efficiencyClass = 1;
-    } else if (motor.efficiencyType == 'Premium Efficiency') {
-      efficiencyClass = 2;
-    } else if (motor.efficiencyType == 'Standard Efficiency') {
-      efficiencyClass = 0;
-    }
+    // let efficiencyClass: number;
+    // if (motor.efficiencyType == 'Energy Efficient') {
+    //   efficiencyClass = 1;
+    // } else if (motor.efficiencyType == 'Premium Efficiency') {
+    //   efficiencyClass = 2;
+    // } else if (motor.efficiencyType == 'Standard Efficiency') {
+    //   efficiencyClass = 0;
+    // }
     // motor.catalog
-    form.controls.efficiencyClass.patchValue(efficiencyClass);
+    form.controls.efficiencyClass.patchValue(motor.efficiencyClass);
     form.controls.ratedMotorPower.patchValue(motor.hp);
-    form.controls.lineFrequency.patchValue(motor.hz);
-    form.controls.motorType.patchValue(motor.motorType);
+    form.controls.lineFrequency.patchValue(motor.lineFrequency);
+    form.controls.enclosureType.patchValue(motor.enclosureType);
     form.controls.nemaTable.patchValue(motor.nemaTable);
     form.controls.nominalEfficiency.patchValue(motor.nominalEfficiency);
     form.controls.poles.patchValue(motor.poles);

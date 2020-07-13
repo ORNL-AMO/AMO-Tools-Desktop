@@ -4,7 +4,7 @@ import { SuiteDbMotor } from '../../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-select-motor-modal',
   templateUrl: './select-motor-modal.component.html',
@@ -24,6 +24,9 @@ export class SelectMotorModalComponent implements OnInit {
   ngOnInit() {
     this.motorInventoryService.modalOpen.next(true);
     this.motorOptions = this.suiteDbService.selectMotors()
+    // let filteredOptions = _.uniqBy(this.motorOptions, 'lineFrequency');
+    // let lineFreArr = filteredOptions.map(option => { return option.lineFrequency });
+    // console.log(lineFreArr);
   }
 
   ngAfterViewInit() {

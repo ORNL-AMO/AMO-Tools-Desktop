@@ -56,7 +56,7 @@ export class MotorInventoryService {
       hasLoggerData: false,
       frameType: undefined,
       numberOfPhases: undefined,
-      motorType: undefined,
+      enclosureType: undefined,
       nemaTable: undefined,
       poles: undefined,
       synchronousSpeed: undefined
@@ -98,7 +98,7 @@ export interface MotorItem {
   frameType?: string,
   numberOfPhases?: number,
   name: string,
-  motorType?: string,
+  enclosureType?: string,
   nemaTable?: string,
   poles?: number,
   synchronousSpeed?: number
