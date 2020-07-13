@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, Hos
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import * as Plotly from 'plotly.js';
-import { SelectedDataPoint, SimpleChart, DataPoint, ChartConfig } from '../../../shared/models/plotting';
+import { DataPoint, SimpleChart, ChartConfig } from '../../../shared/models/plotting';
 import { Settings } from '../../../shared/models/settings';
 import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import { SystemAndEquipmentCurveGraphService, HoverGroupData } from './system-and-equipment-curve-graph.service';
@@ -27,8 +27,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   tabPanelChartId: string = 'tabPanelDiv';
   expandedChartId: string = 'expandedChartDiv';
   currentChartId: string = 'tabPanelDiv';
-  showHoverGroupData: boolean;
-  calculatorTypeChanged: boolean;
   
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
@@ -55,8 +53,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   createGraphTimer: NodeJS.Timeout;
 
   // Graphing
-  selectedDataPoints: Array<SelectedDataPoint>;
-  userDataPoints: Array<SelectedDataPoint> = [];
+  selectedDataPoints: Array<DataPoint>;
+  userDataPoints: Array<DataPoint> = [];
   pointColors: Array<string>;
   curveEquipmentChart: SimpleChart;
   currentHoverData: HoverGroupData;
@@ -85,6 +83,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   isChartSetup: boolean = false;
   updatedTraces: Array<number> = [];
   fluidPowerData: Array<number>;
+  showHoverGroupData: boolean;
+
 
   constructor(
     private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
@@ -196,7 +196,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     Plotly.newPlot(this.currentChartId, this.curveEquipmentChart.data, chartLayout, this.curveEquipmentChart.config)
       .then(chart => {
         chart.on('plotly_click', (graphData) => {
-          this.createSelectedDataPoint(graphData);
+          this.createDataPoint(graphData);
         });
           chart.on('plotly_hover', hoverData => {
             if (hoverData.points[0].pointIndex != 0 && this.showHoverGroupData) {
@@ -327,13 +327,13 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
     this.currentHoverData = {
       system: {
-        pointX: Number(systemX[currentPointIndex]),
-        pointY: Number(systemY[currentPointIndex]),
+        x: Number(systemX[currentPointIndex]),
+        y: Number(systemY[currentPointIndex]),
         pointColor: 'red'
       },
       baseline: {
-        pointX: Number(baselineX[currentPointIndex]),
-        pointY: Number(baselineY[currentPointIndex]),
+        x: Number(baselineX[currentPointIndex]),
+        y: Number(baselineY[currentPointIndex]),
         pointColor: this.pointColors[this.traces.baseline - 1]
       },
       fluidPower: this.fluidPowerData[currentPointIndex]
@@ -343,8 +343,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       let modificationX = this.curveEquipmentChart.data[this.traces.modification].x;
       let modificationY = this.curveEquipmentChart.data[this.traces.modification].y;
       this.currentHoverData.modification = {
-        pointX: Number(modificationX[currentPointIndex]),
-        pointY: Number(modificationY[currentPointIndex]),
+        x: Number(modificationX[currentPointIndex]),
+        y: Number(modificationY[currentPointIndex]),
         pointColor: this.pointColors[this.traces.modification - 1]
       };
     }
@@ -354,13 +354,13 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   removeHoverGroupData() {
     this.currentHoverData = {
       system: {
-        pointX: 0,
-        pointY: 0,
+        x: 0,
+        y: 0,
         pointColor: ''
       },
       baseline: {
-        pointX: 0,
-        pointY: 0,
+        x: 0,
+        y: 0,
         pointColor: ''
       },
       fluidPower: 0
@@ -368,8 +368,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
     if (this.isEquipmentModificationShown) {
       this.currentHoverData.modification = {
-        pointX: 0,
-        pointY: 0,
+        x: 0,
+        y: 0,
         pointColor: ''
       }
     }
@@ -384,12 +384,12 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     
     this.curveEquipmentChart.data[traceDataIndex] = intersectionTrace;
 
-    let selectedPoint: SelectedDataPoint = {
+    let selectedPoint: DataPoint = {
       pointColor: this.chartConfig.defaultPointBackgroundColor,
       pointOutlineColor: this.chartConfig.defaultPointOutlineColor,
       pointTraceIndex: traceDataIndex,
-      pointX: point.x,
-      pointY: point.y
+      x: point.x,
+      y: point.y
     }
 
     let updatedPoint = false;
@@ -406,17 +406,17 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.save();
   }
 
-  createSelectedDataPoint(graphData, existingPoint?: SelectedDataPoint) {
+  createDataPoint(graphData, existingPoint?: DataPoint) {
     let selectedPoint = existingPoint;
     if (!selectedPoint) {
       selectedPoint = {
         pointColor: this.getNextColor(),
-        pointX: graphData.points[0].x,
-        pointY: graphData.points[0].y
+        x: graphData.points[0].x,
+        y: graphData.points[0].y
       }
     }
     let selectedPointTrace = this.systemAndEquipmentCurveGraphService.getTraceDataFromPoint(selectedPoint);
-    let hoverTemplate = `Flow: ${selectedPoint.pointX} ${this.chartConfig.xUnits}<br>${this.chartConfig.yName}: ${selectedPoint.pointY}  ${this.chartConfig.yUnits}<br>`;
+    let hoverTemplate = `Flow: ${selectedPoint.x} ${this.chartConfig.xUnits}<br>${this.chartConfig.yName}: ${selectedPoint.y}  ${this.chartConfig.yUnits}<br>`;
     selectedPointTrace.hovertemplate = hoverTemplate;
 
     Plotly.addTraces(this.currentChartId, selectedPointTrace);
@@ -426,9 +426,9 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.save();
   }
 
-  deleteDataPoint(point: SelectedDataPoint, index: number) {
+  deleteDataPoint(point: DataPoint, index: number) {
     let traceCount: number = this.curveEquipmentChart.data.length;
-    let deleteTraceIndex: number = this.curveEquipmentChart.data.findIndex(trace => trace.x[0] == point.pointX && trace.y[0] == point.pointY);
+    let deleteTraceIndex: number = this.curveEquipmentChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
     // ignore default traces
     if (traceCount > this.chartConfig.defaultPointCount && deleteTraceIndex != -1) {
       Plotly.deleteTraces(this.currentChartId, [deleteTraceIndex]);

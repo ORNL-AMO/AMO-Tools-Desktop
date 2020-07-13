@@ -74,8 +74,8 @@
                       'border': '4px solid ' + point.pointOutlineColor}">
         </div>
         </td>
-        <td class="text-center">{{point.pointX | number: '1.0-0'}}</td>
-        <td class="text-center">{{point.pointY | number: '1.0-0'}}</td>
+        <td class="text-center">{{point.x | number: '1.0-0'}}</td>
+        <td class="text-center">{{point.y | number: '1.0-0'}}</td>
         <td class='delete-row text-center'>
           <a *ngIf="index >= defaultPointCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
             Delete
@@ -98,8 +98,8 @@
         <th class="bold w-25">{{ chartConfig.yName }} ({{ chartConfig.yUnits}})</th>
       </tr>
       <tr *ngFor="let point of selectedDataPoints; let index = index">
-        <td class="text-center">{{point.pointX}}</td>
-        <td class="text-center">{{point.pointY}}</td>
+        <td class="text-center">{{point.x}}</td>
+        <td class="text-center">{{point.y}}</td>
       </tr>
     </tbody>
   </table>

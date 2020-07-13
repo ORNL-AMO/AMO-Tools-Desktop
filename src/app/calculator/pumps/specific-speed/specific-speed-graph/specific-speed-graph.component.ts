@@ -5,7 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { SpecificSpeedService} from '../specific-speed.service';
 
 import * as Plotly from 'plotly.js';
-import { SelectedDataPoint, SimpleChart, TraceData } from '../../../../shared/models/plotting';
+import { DataPoint, SimpleChart, TraceData } from '../../../../shared/models/plotting';
 
 @Component({
   selector: 'app-specific-speed-graph',
@@ -39,7 +39,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
   }
   
-  selectedDataPoints: Array<SelectedDataPoint>;
+  selectedDataPoints: Array<DataPoint>;
   pointColors: Array<string>;
   specificSpeedChart: SimpleChart;
   firstChange: boolean = true;
@@ -100,7 +100,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     Plotly.newPlot(this.currentChartId, this.specificSpeedChart.data, chartLayout, this.specificSpeedChart.config)
       .then(chart => {
         chart.on('plotly_click', (graphData) => {
-          this.createSelectedDataPoint(graphData);
+          this.createDataPoint(graphData);
         });
       });
     this.save();
@@ -129,16 +129,16 @@ export class SpecificSpeedGraphComponent implements OnInit {
     let specificSpeed = Math.round(this.getSpecificSpeed());
     let efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, specificSpeed);
 
-    let calculatedPoint: SelectedDataPoint = {
+    let calculatedPoint: DataPoint = {
       pointColor: '#000',
-      pointX: specificSpeed,
-      pointY: efficiencyCorrection
+      x: specificSpeed,
+      y: efficiencyCorrection
     }
 
     let resultCoordinateTrace: TraceData = this.specificSpeedService.getTraceDataFromPoint(calculatedPoint);
     resultCoordinateTrace.name = "Current Specific Speed";
 
-    if (!isNaN(calculatedPoint.pointX)) {
+    if (!isNaN(calculatedPoint.x)) {
       this.validCurrentSpeed = true;
       this.specificSpeedChart.data[1] = resultCoordinateTrace;
       this.selectedDataPoints.splice(0, 1, calculatedPoint);
@@ -148,11 +148,11 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
   }
 
-  createSelectedDataPoint(graphData) {
-    let selectedPoint: SelectedDataPoint = {
+  createDataPoint(graphData) {
+    let selectedPoint: DataPoint = {
       pointColor: this.pointColors[(this.specificSpeedChart.data.length + 1) % this.pointColors.length],
-      pointX: graphData.points[0].x,
-      pointY: graphData.points[0].y
+      x: graphData.points[0].x,
+      y: graphData.points[0].y
     }
 
     let selectedPointTrace = this.specificSpeedService.getTraceDataFromPoint(selectedPoint);
@@ -208,9 +208,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
     return traceCoordinates;
   }
 
-  deleteDataPoint(point: SelectedDataPoint) {
+  deleteDataPoint(point: DataPoint) {
     let traceCount: number = this.specificSpeedChart.data.length;
-    let deleteTraceIndex: number = this.specificSpeedChart.data.findIndex(trace => trace.x[0] == point.pointX && trace.y[0] == point.pointY);
+    let deleteTraceIndex: number = this.specificSpeedChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
     // ignore default traces
     if (traceCount > 2 && deleteTraceIndex != -1) {
       Plotly.deleteTraces(this.currentChartId, [deleteTraceIndex]);

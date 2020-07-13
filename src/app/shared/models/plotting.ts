@@ -1,11 +1,11 @@
 //Shared objects for Plotly data visualizations
 
-export interface SelectedDataPoint {
+export interface DataPoint {
     pointColor?: string;
     pointOutlineColor?: string;
     pointTraceIndex?: number;
-    pointX: number;
-    pointY: number;
+    x: number;
+    y: number;
 }
 
 export interface SimpleChart {
@@ -93,10 +93,10 @@ export interface TraceCoordinates {
     y: Array<number | string>,
 };
 
-export interface DataPoint {
-  x: number;
-  y: number;
-}
+// export interface DataPoint {
+//   x: number;
+//   y: number;
+// }
 
 export interface ChartConfig {
     defaultPointCount: number,

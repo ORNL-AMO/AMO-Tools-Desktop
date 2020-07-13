@@ -7,7 +7,7 @@ import { RegressionEquationsService } from '../regression-equations.service';
 import { BehaviorSubject } from 'rxjs';
 import { SvgToPngService } from '../../../shared/helper-services/svg-to-png.service';
 import { PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../../../shared/models/system-and-equipment-curve';
-import { SimpleChart, SelectedDataPoint, TraceData } from '../../../shared/models/plotting';
+import { SimpleChart, DataPoint, TraceData } from '../../../shared/models/plotting';
 @Injectable()
 export class SystemAndEquipmentCurveGraphService {
 
@@ -20,7 +20,7 @@ export class SystemAndEquipmentCurveGraphService {
   svg: any;
 
   curveEquipmentChart: BehaviorSubject<SimpleChart>;
-  selectedDataPoints: BehaviorSubject<Array<SelectedDataPoint>>;
+  selectedDataPoints: BehaviorSubject<Array<DataPoint>>;
 
   constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private svgToPngService: SvgToPngService) {
     this.selectedDataPoint = new BehaviorSubject(undefined);
@@ -33,10 +33,10 @@ export class SystemAndEquipmentCurveGraphService {
 
   initChartData() {
     let emptyChart: SimpleChart = this.getEmptyChart();
-    let dataPoints = new Array<SelectedDataPoint>();
+    let dataPoints = new Array<DataPoint>();
     
     this.curveEquipmentChart = new BehaviorSubject<SimpleChart>(emptyChart);
-    this.selectedDataPoints = new BehaviorSubject<Array<SelectedDataPoint>>(dataPoints);
+    this.selectedDataPoints = new BehaviorSubject<Array<DataPoint>>(dataPoints);
   }
 
 
@@ -332,10 +332,10 @@ export class SystemAndEquipmentCurveGraphService {
     return exportName;
   }
 
-  getTraceDataFromPoint(selectedPoint: SelectedDataPoint): TraceData {
+  getTraceDataFromPoint(selectedPoint: DataPoint): TraceData {
     let trace: TraceData = {
-      x: [selectedPoint.pointX],
-      y: [selectedPoint.pointY],
+      x: [selectedPoint.x],
+      y: [selectedPoint.y],
       type: 'scatter',
       name: '',
       showlegend: false,
@@ -468,8 +468,8 @@ export class SystemAndEquipmentCurveGraphService {
 }
 
 export interface HoverGroupData {
-  baseline: SelectedDataPoint,
-  modification?: SelectedDataPoint,
-  system: SelectedDataPoint,
+  baseline: DataPoint,
+  modification?: DataPoint,
+  system: DataPoint,
   fluidPower?: number
 };

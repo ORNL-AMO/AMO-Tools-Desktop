@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SimpleChart, SelectedDataPoint, TraceData } from '../../../shared/models/plotting';
+import { SimpleChart, DataPoint, TraceData } from '../../../shared/models/plotting';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -9,16 +9,16 @@ export class AchievableEfficiencyService {
   pumpType: number;
   flowRate: number;
   efficiencyChart: BehaviorSubject<SimpleChart>;
-  selectedDataPoints: BehaviorSubject<Array<SelectedDataPoint>>;
+  selectedDataPoints: BehaviorSubject<Array<DataPoint>>;
   constructor(private formBuilder: FormBuilder) {
     this.initChartData();
    }
 
    initChartData() {
     let emptyChart: SimpleChart = this.getEmptyChart();
-    let dataPoints = new Array<SelectedDataPoint>();
+    let dataPoints = new Array<DataPoint>();
     this.efficiencyChart = new BehaviorSubject<SimpleChart>(emptyChart);
-    this.selectedDataPoints = new BehaviorSubject<Array<SelectedDataPoint>>(dataPoints);
+    this.selectedDataPoints = new BehaviorSubject<Array<DataPoint>>(dataPoints);
   }
 
 
@@ -33,12 +33,12 @@ export class AchievableEfficiencyService {
     return form;
   }
 
-  getTraceDataFromPoint(selectedPoint: SelectedDataPoint): TraceData {
+  getTraceDataFromPoint(selectedPoint: DataPoint): TraceData {
     let trace: TraceData = {
-      x: [selectedPoint.pointX],
-      y: [selectedPoint.pointY],
+      x: [selectedPoint.x],
+      y: [selectedPoint.y],
       type: 'scatter',
-      name: `${selectedPoint.pointX}, ${selectedPoint.pointY}`,
+      name: `${selectedPoint.x}, ${selectedPoint.y}`,
       showlegend: false,
       mode: 'markers',
       marker: {
