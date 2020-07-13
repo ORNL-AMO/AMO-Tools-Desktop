@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { MotorItem } from '../../motor-inventory.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { SuiteDbMotor } from '../../../shared/models/materials';
+import { MotorItem } from '../../motor-inventory';
 
 @Injectable()
 export class MotorCatalogService {
@@ -33,7 +33,7 @@ export class MotorCatalogService {
       driveType: [motorItem.driveType],
       isVFD: [motorItem.isVFD],
       hasLoggerData: [motorItem.hasLoggerData],
-      frameType: [motorItem.frameType],
+      frameNumber: [motorItem.frameNumber],
       numberOfPhases: [motorItem.numberOfPhases],
       enclosureType: [motorItem.enclosureType],
       nemaTable: [motorItem.nemaTable],
@@ -60,7 +60,7 @@ export class MotorCatalogService {
       driveType: form.controls.driveType.value,
       isVFD: form.controls.isVFD.value,
       hasLoggerData: form.controls.hasLoggerData.value,
-      frameType: form.controls.frameType.value,
+      frameNumber: form.controls.frameNumber.value,
       numberOfPhases: form.controls.numberOfPhases.value,
       motorRpm: form.controls.motorRpm.value,
       enclosureType: form.controls.enclosureType.value,

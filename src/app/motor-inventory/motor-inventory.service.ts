@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { MotorItem, MotorInventoryDepartment, MotorInventoryData, MotorPropertyDisplayOptions } from './motor-inventory';
 
 @Injectable()
 export class MotorInventoryService {
@@ -18,8 +19,10 @@ export class MotorInventoryService {
 
   initInventoryData(): MotorInventoryData {
     let initialDepartment: MotorInventoryDepartment = this.getNewDepartment(1);
+    let displayOptions: MotorPropertyDisplayOptions = this.getDefaultDisplayOptions();
     return {
-      departments: [initialDepartment]
+      departments: [initialDepartment],
+      displayOptions: displayOptions
     }
   }
 
@@ -54,7 +57,6 @@ export class MotorInventoryService {
       driveType: undefined,
       isVFD: false,
       hasLoggerData: false,
-      frameType: undefined,
       numberOfPhases: undefined,
       enclosureType: undefined,
       nemaTable: undefined,
@@ -62,84 +64,58 @@ export class MotorInventoryService {
       synchronousSpeed: undefined
     }
   }
+
+  getDefaultDisplayOptions(): MotorPropertyDisplayOptions {
+    return {
+      ratedVoltage: true,
+      annualOperatingHours: true,
+      percentLoad: true,
+      driveType: true,
+      isVFD: true,
+      hasLoggerData: true,
+      numberOfPhases: true,
+      enclosureType: true,
+      poles: true,
+      manufacturer: true,
+      model: true,
+      catalogId: true,
+      motorType: true,
+      ratedSpeed: true,
+      fullLoadSpeed: true,
+      frameNumber: true,
+      purpose: true,
+      uFrame: true,
+      cFace: true,
+      verticalShaft: true,
+      dFlange: true,
+      serviceFactor: true,
+      insulationClass: true,
+      weight: true,
+      listPrice: true,
+      windingResistance: true,
+      warranty: true,
+      rotorBars: true,
+      statorSlots: true,
+      efficiency75: true,
+      efficiency50: true,
+      efficiency25: true,
+      powerFactor100: true,
+      powerFactor75: true,
+      powerFactor50: true,
+      powerFactor25: true,
+      torqueFullLoad: true,
+      torqueBreakDown: true,
+      torqueLockedRotor: true,
+      ampsIdle: true,
+      ampsLockedRotor: true,
+      stalledRotorTimeHot: true,
+      stalledRotorTimeCold: true,
+      voltageConnectionType: true,
+      currentType: true,
+      averageLoadFactor: true,
+      utilizationFactor: true
+    }
+  }
 }
 
 
-
-export interface MotorInventoryData {
-  departments: Array<MotorInventoryDepartment>,
-}
-
-export interface MotorInventoryDepartment {
-  name: string,
-  operatingHours: number,
-  description: string,
-  id: string,
-  catalog: Array<MotorItem>
-}
-
-export interface MotorItem {
-  id: string,
-  suiteDbItemId?: number,
-  departmentId?: string,
-  description: string,
-  //required properties
-  lineFrequency: number,
-  motorRpm: number,
-  ratedMotorPower: number,
-  efficiencyClass: number,
-  nominalEfficiency: number,
-  ratedVoltage: number,
-  fullLoadAmps: number,
-  annualOperatingHours: number,
-  percentLoad: number,
-  //optional properties
-  driveType?: number,
-  isVFD?: boolean,
-  hasLoggerData?: boolean,
-  frameType?: string,
-  numberOfPhases?: number,
-  name: string,
-  enclosureType?: string,
-  nemaTable?: string,
-  poles?: number,
-  synchronousSpeed?: number
-  //additional from excel
-  manufacturer?: string,
-  model?: string,
-  catalogId?: string,
-  motorType?: string,
-  speed?: number,
-  fullLoadSpeed?: number,
-  //excel says frameNumber = string..
-  frameNumber?: number
-  voltageRating?: number,
-  purpose?: string
-  uFrame?: number,
-  cFace?: number,
-  verticalShaft?: number,
-  dFlange?: number,
-  serviceFactor?: number,
-  insulationClass?: number,
-  weight?: number,
-  listPrice?: number,
-  windingResistance?: number,
-  //should warranty = boolean?
-  warranty?: number,
-  rotoBars?: number,
-  statorSlots?: number,
-  efficiency75?: number,
-  efficiency50?: number,
-  efficiency25?: number,
-  powerFactor100?: number,
-  powerFactor75?: number,
-  powerFactor50?: number,
-  powerFactor25?: number,
-  torqueFullLoad?: number,
-  torqueBreakDown?: number,
-  torqueLockedRotor?: number,
-  ampsIdle?: number,
-  ampsLockedRotor?: number,
-  stalledRotorTimeHot?: number,
-  stalledRotorTimeCold?: number
-}

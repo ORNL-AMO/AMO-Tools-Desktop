@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 import { SuiteDbMotor } from '../../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { MotorInventoryService } from '../../../motor-inventory.service';

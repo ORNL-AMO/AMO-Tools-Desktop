@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MotorInventoryService, MotorInventoryData } from '../motor-inventory.service';
+import { MotorInventoryService } from '../motor-inventory.service';
 import { MotorCatalogService } from '../motor-inventory-setup/motor-catalog/motor-catalog.service';
+import { MotorInventoryData } from '../motor-inventory';
 
 @Component({
   selector: 'app-motor-inventory-banner',

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MotorInventoryService, MotorInventoryData, MotorInventoryDepartment } from '../../motor-inventory.service';
+import { MotorInventoryService } from '../../motor-inventory.service';
+import { MotorInventoryData, MotorInventoryDepartment } from '../../motor-inventory';
 
 @Component({
   selector: 'app-department-setup',

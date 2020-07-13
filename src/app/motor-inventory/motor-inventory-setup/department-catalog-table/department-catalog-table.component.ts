@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MotorInventoryService, MotorInventoryDepartment, MotorInventoryData, MotorItem } from '../../motor-inventory.service';
+import { MotorInventoryService } from '../../motor-inventory.service';
 import { MotorCatalogService } from '../motor-catalog/motor-catalog.service';
 import { Subscription } from 'rxjs';
+import { MotorInventoryDepartment, MotorInventoryData, MotorItem } from '../../motor-inventory';
 
 @Component({
   selector: 'app-department-catalog-table',

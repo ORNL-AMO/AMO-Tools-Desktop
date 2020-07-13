@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MotorInventoryData, MotorInventoryService, MotorItem, MotorInventoryDepartment } from '../../motor-inventory.service';
+import { MotorInventoryService } from '../../motor-inventory.service';
 import { FormGroup } from '@angular/forms';
 import { MotorCatalogService } from './motor-catalog.service';
 import { motorEfficiencyConstants, driveConstants } from '../../../psat/psatConstants';
@@ -7,6 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
 import { SuiteDbMotor } from '../../../shared/models/materials';
+import { MotorInventoryData, MotorInventoryDepartment, MotorItem } from '../../motor-inventory';
 
 @Component({
   selector: 'app-motor-catalog',
