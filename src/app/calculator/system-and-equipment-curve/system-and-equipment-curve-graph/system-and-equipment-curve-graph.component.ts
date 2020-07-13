@@ -28,6 +28,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   expandedChartId: string = 'expandedChartDiv';
   currentChartId: string = 'tabPanelDiv';
   showHoverGroupData: boolean;
+  calculatorTypeChanged: boolean;
   
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
@@ -67,6 +68,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     yUnits: '',
     xUnits: ''
   };
+
   // Default traces
   traces = {
     'system': 0,
@@ -75,7 +77,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     'modification': 3,
     'modificationIntersect': 4,
   };
-
 
   // Update conditions/data
   isSystemCurveShown: boolean;
@@ -92,7 +93,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     private cd: ChangeDetectorRef
   ) { }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.setChartUnits();
     // Force resize during tab change
     this.triggerInitialResize();
@@ -223,11 +224,19 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.currentHoverData = undefined;
     this.fluidPowerData = [];
 
-    if (!isResize && this.curveEquipmentChart != undefined) {
-      // Trace data only updated if '..Shown' bools met - Get empty chart every render
+    if (this.curveEquipmentChart && !isResize) {
       this.systemAndEquipmentCurveGraphService.initChartData();
-    }    
-    this.curveEquipmentChart = this.systemAndEquipmentCurveGraphService.curveEquipmentChart.getValue();
+    }
+
+    let currentChart = this.systemAndEquipmentCurveGraphService.curveEquipmentChart.getValue();
+    if (currentChart.currentEquipmentType != this.equipmentType) {
+      this.systemAndEquipmentCurveGraphService.initChartData();
+      this.curveEquipmentChart = this.systemAndEquipmentCurveGraphService.curveEquipmentChart.getValue();
+      this.curveEquipmentChart.currentEquipmentType = this.equipmentType;
+      this.systemAndEquipmentCurveGraphService.curveEquipmentChart.next(this.curveEquipmentChart);
+    } else {
+      this.curveEquipmentChart = currentChart;
+    }
 
     this.selectedDataPoints = this.systemAndEquipmentCurveGraphService.selectedDataPoints.getValue();
     this.curveEquipmentChart.layout.xaxis.title.text = `Flow (${this.chartConfig.xUnits})`;
@@ -243,7 +252,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     if (this.isEquipmentCurveShown == true) {
       if (this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs != undefined && this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs != undefined) {
         this.drawEquipmentCurve(this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.traces.baseline, 'Baseline');
-        
         if (this.isEquipmentModificationShown == true) {
           this.drawEquipmentCurve(this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs, this.traces.modification, 'Modification');
         } 
@@ -275,16 +283,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.curveEquipmentChart.data[this.traces.system].y = yTmp;
     this.fluidPowerData = fluidTmp;
     this.setHoverTemplate('System Curve', this.traces.system);
-  }
-
-  resetSystemCurveData() {
-    this.resetTraceData(this.traces.system);
-    this.fluidPowerData = [];
-  }
-
-  resetTraceData(traceIndex: number) {
-    this.curveEquipmentChart.data[traceIndex].x = [];
-    this.curveEquipmentChart.data[traceIndex].y = [];
   }
 
   drawEquipmentCurve(traceData: Array<DataPoint>, traceIndex: number, traceTitle: string) {

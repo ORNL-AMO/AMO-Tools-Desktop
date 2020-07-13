@@ -29,7 +29,6 @@ export class CurveDataService {
       let byDataInputs: ByDataInputs = this.equipmentCurveService.getPumpByDataExample(settings);
       this.systemAndEquipmentCurveService.byDataInputs.next(byDataInputs);
       let pumpSystemCurveData: PumpSystemCurveData = this.pumpSystemCurveFormService.getPumpSystemCurveDefaults(settings);
-      console.log('exampleData', pumpSystemCurveData);
       this.systemAndEquipmentCurveService.pumpSystemCurveData.next(pumpSystemCurveData);
     } else if (equipmentType == 'fan') {
       let byDataInputs: ByDataInputs = this.equipmentCurveService.getFanByDataExample(settings);

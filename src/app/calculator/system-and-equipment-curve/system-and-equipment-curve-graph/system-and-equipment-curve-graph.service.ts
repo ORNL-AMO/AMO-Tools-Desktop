@@ -351,6 +351,7 @@ export class SystemAndEquipmentCurveGraphService {
   getEmptyChart(): SimpleChart {
     return {
       name: 'System and Equipment Curve',
+      currentEquipmentType: '',
       data: [
         // System
         {
@@ -363,7 +364,7 @@ export class SystemAndEquipmentCurveGraphService {
             shape: 'spline',
             color: 'red',
             dash: 'dot',
-            smoothing: 1.3
+            smoothing: .5
           }
         },
         // Baseline
@@ -376,7 +377,7 @@ export class SystemAndEquipmentCurveGraphService {
           line: {
             shape: 'spline',
             color: undefined,
-            smoothing: 1.3
+            smoothing: .2
           }
         },
         // Baseline Intersect
@@ -406,7 +407,7 @@ export class SystemAndEquipmentCurveGraphService {
           line: {
             shape: 'spline',
             color: undefined,
-            smoothing: 1.3
+            smoothing: .3
           }
         },
         // Modification Intersect

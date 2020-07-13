@@ -10,6 +10,7 @@ export interface SelectedDataPoint {
 
 export interface SimpleChart {
     name: string,
+    currentEquipmentType?: string,
     data: Array<TraceData>,
     layout: {
         title?: {
