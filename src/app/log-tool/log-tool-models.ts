@@ -143,6 +143,7 @@ export interface GraphObj {
     bins: Array<{ min: number, max: number }>,
     binnedField: LogToolField,
     useStandardDeviation: boolean,
+    usePercentForBins: boolean,
     binningMethod: string,
     binSize: number,
     graphId: string,

@@ -3,7 +3,7 @@ import { Settings } from "../shared/models/settings";
 export const MockPhast: Assessment = {
     isExample: true,
     type: "PHAST",
-    name: "Reheat Furnace Case Study",
+    name: "Process Heating - Fuel Example",
     phast: {
         name: null,
         systemEfficiency: 90,

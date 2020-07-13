@@ -71,6 +71,8 @@ export class AirLeakService {
       facilityCompressorData: this.airLeakFormService.getExampleFacilityCompressorData()
     }
     this.airLeakInput.next(airLeakInputExample);
+    this.generateExample.next(true);
+    this.generateExample.next(false);
   }
 
   deleteLeak(index: number) {

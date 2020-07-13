@@ -3,7 +3,7 @@ import { Calculator } from "../shared/models/calculators";
 import { Settings } from "../shared/models/settings";
 
 export const MockPsat: Assessment = {
-    "name": "Basic Pump Example",
+    "name": "Pump Example",
     "type": "PSAT",
     "isExample": true,
     "psat": {

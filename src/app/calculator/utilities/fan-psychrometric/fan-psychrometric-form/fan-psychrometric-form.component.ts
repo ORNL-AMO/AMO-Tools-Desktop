@@ -5,7 +5,6 @@ import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
 import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
-import { BaseGasDensity } from '../../../../shared/models/fans';
 
 @Component({
   selector: 'app-fan-psychrometric-form',
@@ -84,7 +83,7 @@ export class FanPsychrometricFormComponent implements OnInit {
     let exponentOp = Math.pow(parensOp, 5.2559);
     let barometricPressure = 101.325 * exponentOp;
     if (this.settings.unitsOfMeasure != 'Metric') {
-      barometricPressure = this.convertUnitsService.value(barometricPressure).from('kPaa').to('psia');
+      barometricPressure = this.convertUnitsService.value(barometricPressure).from('kPaa').to('inHg');
     }
 
     return barometricPressure;
