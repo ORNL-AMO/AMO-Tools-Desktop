@@ -41,9 +41,13 @@
             (click)="setSetupTab('department-setup')">
             <a><span class="step-number">2</span>Departments</a>
         </div>
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'motor-properties'}"
+            (click)="setSetupTab('motor-properties')">
+            <a><span class="step-number">3</span>Motor Properties</a>
+        </div>
         <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'motor-catalog'}"
             (click)="setSetupTab('motor-catalog')">
-            <a><span class="step-number">3</span>Catalog</a>
+            <a><span class="step-number">4</span>Catalog</a>
         </div>
     </div>
 </nav>

@@ -3,6 +3,7 @@
         <div class="w-50 panel-column panel-container modification scroll-item"
             [ngClass]="{'modal-open': isModalOpen == true}">
             <app-plant-setup *ngIf="setupTab == 'plant-setup'"></app-plant-setup>
+            <app-motor-properties *ngIf="setupTab == 'motor-properties'"></app-motor-properties>
             <app-motor-catalog *ngIf="setupTab == 'motor-catalog'"></app-motor-catalog>
             <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup>
         </div>
@@ -20,7 +21,7 @@
                     </a>
                 </div>
             </div>
-            <app-help-panel *ngIf="tabSelect == 'help' || setupTab != 'motor-catalog'"
+            <app-help-panel *ngIf="tabSelect == 'help' || setupTab != 'motor-catalog' || setupTab == 'motor-properties'"
                 [displayHeader]="setupTab != 'motor-catalog'"></app-help-panel>
             <app-department-catalog-table *ngIf="tabSelect == 'department-catalog' && setupTab == 'motor-catalog'">
             </app-department-catalog-table>

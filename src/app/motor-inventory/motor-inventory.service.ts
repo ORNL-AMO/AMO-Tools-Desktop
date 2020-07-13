@@ -83,6 +83,7 @@ export interface MotorItem {
   suiteDbItemId?: number,
   departmentId?: string,
   description: string,
+  //required properties
   lineFrequency: number,
   motorRpm: number,
   ratedMotorPower: number,
@@ -92,6 +93,7 @@ export interface MotorItem {
   fullLoadAmps: number,
   annualOperatingHours: number,
   percentLoad: number,
+  //optional properties
   driveType?: number,
   isVFD?: boolean,
   hasLoggerData?: boolean,
@@ -102,4 +104,42 @@ export interface MotorItem {
   nemaTable?: string,
   poles?: number,
   synchronousSpeed?: number
+  //additional from excel
+  manufacturer?: string,
+  model?: string,
+  catalogId?: string,
+  motorType?: string,
+  speed?: number,
+  fullLoadSpeed?: number,
+  //excel says frameNumber = string..
+  frameNumber?: number
+  voltageRating?: number,
+  purpose?: string
+  uFrame?: number,
+  cFace?: number,
+  verticalShaft?: number,
+  dFlange?: number,
+  serviceFactor?: number,
+  insulationClass?: number,
+  weight?: number,
+  listPrice?: number,
+  windingResistance?: number,
+  //should warranty = boolean?
+  warranty?: number,
+  rotoBars?: number,
+  statorSlots?: number,
+  efficiency75?: number,
+  efficiency50?: number,
+  efficiency25?: number,
+  powerFactor100?: number,
+  powerFactor75?: number,
+  powerFactor50?: number,
+  powerFactor25?: number,
+  torqueFullLoad?: number,
+  torqueBreakDown?: number,
+  torqueLockedRotor?: number,
+  ampsIdle?: number,
+  ampsLockedRotor?: number,
+  stalledRotorTimeHot?: number,
+  stalledRotorTimeCold?: number
 }
