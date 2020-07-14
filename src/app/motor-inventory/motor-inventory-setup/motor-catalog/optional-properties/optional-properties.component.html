@@ -1,5 +1,5 @@
 <label class="group-label">Additional Properties</label>
-<form [formGroup]="motorForm">
+<form class="p-0" [formGroup]="motorForm">
     <!-- ratedVoltage -->
     <div class="form-group" *ngIf="displayOptions.ratedVoltage">
         <label for="ratedVoltage">Rated Voltage</label>
@@ -9,13 +9,13 @@
         </div>
     </div>
     <!-- annualOperatingHours -->
-    <div class="form-group" *ngIf="displayOptions.annualOperatingHours">
+    <!-- <div class="form-group" *ngIf="displayOptions.annualOperatingHours">
         <label for="annualOperatingHours">Operating Hours</label>
         <div class="input-group">
             <input type="number" class="form-control" formControlName="annualOperatingHours" id="annualOperatingHours">
             <span class="input-group-addon units">hrs/yr</span>
         </div>
-    </div>
+    </div> -->
     <!-- percentLoad -->
     <div class="form-group" *ngIf="displayOptions.percentLoad">
         <label for="percentLoad">Percent Load</label>

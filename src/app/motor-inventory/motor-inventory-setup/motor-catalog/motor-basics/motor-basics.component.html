@@ -1,0 +1,34 @@
+<form class="p-0" [formGroup]="motorForm">
+    <!--name-->
+    <div class="form-group">
+        <label>Motor Name</label>
+        <input class="form-control" type="text" id="name" formControlName="name" (input)="save()">
+    </div>
+    <!--description-->
+    <div class="form-group">
+        <label>Description</label>
+        <textarea class="form-control" type="text" id="description" formControlName="description"
+            (input)="save()"></textarea>
+    </div>
+    <!--operating hours-->
+    <div class="form-group">
+        <label for="annualOperatingHours">Operating Hours</label>
+        <div class="input-group">
+            <span class="input-group-addon op-hour-addon units">
+                <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+            </span>
+            <input name="annualOperatingHours" type="number" min="0" step="any" class="form-control"
+                formControlName="annualOperatingHours" id="annualOperatingHours" (input)="save()"
+                (focus)="focusField('annualOperatingHours')" onfocus="this.select();">
+            <span class="input-group-addon units">hrs/yr</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+            *ngIf="motorItemForm.controls.annualOperatingHours.invalid && !motorItemForm.controls.annualOperatingHours.pristine">
+            <span *ngIf="motorItemForm.controls.annualOperatingHours.errors.required">Value Required</span>
+            <span *ngIf="motorItemForm.controls.annualOperatingHours.errors.max">Value can't be greater than
+                {{motorItemForm.controls.annualOperatingHours.errors.max.max}} hrs/yr.</span>
+            <span *ngIf="motorItemForm.controls.annualOperatingHours.errors.min">Value can't be less than
+                {{motorItemForm.controls.annualOperatingHours.errors.min.min}} hrs/yr.</span>
+        </span> -->
+    </div>
+</form>

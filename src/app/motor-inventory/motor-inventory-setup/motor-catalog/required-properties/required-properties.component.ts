@@ -5,6 +5,7 @@ import { MotorCatalogService } from '../motor-catalog.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../motor-inventory.service';
+import { MotorItem } from '../../../motor-inventory';
 
 @Component({
   selector: 'app-required-properties',
@@ -35,8 +36,10 @@ export class RequiredPropertiesComponent implements OnInit {
     this.selectedMotorItemSub.unsubscribe();
   }
 
-  save(){
-
+  save() {
+    let selectedMotor: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
+    selectedMotor = this.motorCatalogService.updateMotorItemFromRequiredForm(this.motorForm, selectedMotor);
+    this.motorInventoryService.updateMotorItem(selectedMotor);
   }
 
   //TODO: Update nominalEfficiency?

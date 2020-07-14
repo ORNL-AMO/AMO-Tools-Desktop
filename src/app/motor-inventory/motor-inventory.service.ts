@@ -17,6 +17,15 @@ export class MotorInventoryService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
+  updateMotorItem(selectedMotor: MotorItem){
+    let motorInventoryData: MotorInventoryData = this.motorInventoryData.getValue();
+    let selectedDepartmentIndex: number = motorInventoryData.departments.findIndex(department => { return department.id == selectedMotor.departmentId });
+    let catalogItemIndex: number = motorInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(motorItem => { return motorItem.id == selectedMotor.id; });
+    motorInventoryData.departments[selectedDepartmentIndex].catalog[catalogItemIndex] = selectedMotor;
+    this.motorInventoryData.next(motorInventoryData);
+  }
+
+
   initInventoryData(): MotorInventoryData {
     let initialDepartment: MotorInventoryDepartment = this.getNewDepartment(1);
     let displayOptions: MotorPropertyDisplayOptions = this.getDefaultDisplayOptions();

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MotorInventoryService } from '../../../motor-inventory.service';
-import { MotorPropertyDisplayOptions } from '../../../motor-inventory';
+import { MotorPropertyDisplayOptions, MotorItem } from '../../../motor-inventory';
 import { driveConstants } from '../../../../psat/psatConstants';
 import { MotorCatalogService } from '../motor-catalog.service';
 import { Subscription } from 'rxjs';
@@ -34,6 +34,16 @@ export class OptionalPropertiesComponent implements OnInit {
 
   ngOnDestroy(){
     this.selectedMotorItemSub.unsubscribe();
+  }
+
+  save() {
+    let selectedMotor: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
+    selectedMotor = this.motorCatalogService.updateMotorItemFromOptionalForm(this.motorForm, selectedMotor);
+    this.motorInventoryService.updateMotorItem(selectedMotor);
+  }
+
+  focusField(str: string) {
+    this.motorInventoryService.focusedField.next(str);
   }
 
 }

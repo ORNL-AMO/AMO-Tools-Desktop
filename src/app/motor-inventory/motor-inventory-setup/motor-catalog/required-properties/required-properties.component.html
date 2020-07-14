@@ -1,5 +1,5 @@
 <label class="group-label">Required Properties</label>
-<form *ngIf="motorForm" [formGroup]="motorForm">
+<form class="p-0" *ngIf="motorForm" [formGroup]="motorForm">
     <!--motor power: ratedMotorPower-->
     <div class="form-group">
         <label for="ratedMotorPower">Rated Motor Power</label>
@@ -45,8 +45,6 @@
                 </span> -->
     </div>
 
-
-
     <!--line frequency: lineFrequency-->
     <div class="form-group">
         <label for="lineFrequency">Line Frequency</label>
@@ -55,7 +53,6 @@
             <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
         </select>
     </div>
-
 
     <!--sychronous speed: synchronousSpeed-->
     <div class="form-group">

@@ -21,6 +21,7 @@ import { ModalModule } from 'ngx-bootstrap';
 import { MotorPropertiesComponent } from './motor-inventory-setup/motor-properties/motor-properties.component';
 import { RequiredPropertiesComponent } from './motor-inventory-setup/motor-catalog/required-properties/required-properties.component';
 import { OptionalPropertiesComponent } from './motor-inventory-setup/motor-catalog/optional-properties/optional-properties.component';
+import { MotorBasicsComponent } from './motor-inventory-setup/motor-catalog/motor-basics/motor-basics.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { OptionalPropertiesComponent } from './motor-inventory-setup/motor-catal
     SelectMotorModalComponent,
     MotorPropertiesComponent,
     RequiredPropertiesComponent,
-    OptionalPropertiesComponent
+    OptionalPropertiesComponent,
+    MotorBasicsComponent
   ],
   imports: [
     CommonModule,

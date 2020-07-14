@@ -21,13 +21,23 @@ export class MotorCatalogService {
       efficiencyClass: [motorItem.efficiencyClass, [Validators.required]],
       nominalEfficiency: [motorItem.nominalEfficiency, [Validators.required]],
       synchronousSpeed: [motorItem.synchronousSpeed, [Validators.required]]
-    })
+    });
   }
+
+  updateMotorItemFromRequiredForm(form: FormGroup, motorItem: MotorItem): MotorItem {
+    motorItem.lineFrequency = form.controls.lineFrequency.value;
+    motorItem.ratedMotorPower = form.controls.ratedMotorPower.value;
+    motorItem.efficiencyClass = form.controls.efficiencyClass.value;
+    motorItem.nominalEfficiency = form.controls.nominalEfficiency.value;
+    motorItem.synchronousSpeed = form.controls.synchronousSpeed.value;
+    return motorItem;
+  }
+
 
   getOptionalFormFromMotorItem(motorItem: MotorItem): FormGroup {
     return this.formBuilder.group({
       ratedVoltage: [motorItem.ratedVoltage],
-      annualOperatingHours: [motorItem.annualOperatingHours],
+      // annualOperatingHours: [motorItem.annualOperatingHours],
       percentLoad: [motorItem.percentLoad],
       driveType: [motorItem.driveType],
       isVFD: [motorItem.isVFD],
@@ -73,7 +83,15 @@ export class MotorCatalogService {
       currentType: [motorItem.currentType],
       averageLoadFactor: [motorItem.averageLoadFactor],
       utilizationFactor: [motorItem.utilizationFactor]
-    })
+    });
+  }
+
+  getMotorBasicsForm(motorItem: MotorItem): FormGroup {
+    return this.formBuilder.group({
+      name: [motorItem.name],
+      description: [motorItem.description],
+      annualOperatingHours: [motorItem.annualOperatingHours],
+    });
   }
 
   getFormFromMotorItem(motorItem: MotorItem): FormGroup {
@@ -104,52 +122,75 @@ export class MotorCatalogService {
     })
   }
 
-  getMotorItemFromForm(form: FormGroup): MotorItem {
-    return {
-      id: form.controls.id.value,
-      departmentId: form.controls.departmentId.value,
-      suiteDbItemId: form.controls.suiteDbItemId.value,
-      name: form.controls.name.value,
-      description: form.controls.description.value,
-      lineFrequency: form.controls.lineFrequency.value,
-      ratedMotorPower: form.controls.ratedMotorPower.value,
-      efficiencyClass: form.controls.efficiencyClass.value,
-      nominalEfficiency: form.controls.nominalEfficiency.value,
-      ratedVoltage: form.controls.ratedVoltage.value,
-      fullLoadAmps: form.controls.fullLoadAmps.value,
-      annualOperatingHours: form.controls.annualOperatingHours.value,
-      percentLoad: form.controls.percentLoad.value,
-      driveType: form.controls.driveType.value,
-      isVFD: form.controls.isVFD.value,
-      hasLoggerData: form.controls.hasLoggerData.value,
-      frameNumber: form.controls.frameNumber.value,
-      numberOfPhases: form.controls.numberOfPhases.value,
-      motorRpm: form.controls.motorRpm.value,
-      enclosureType: form.controls.enclosureType.value,
-      nemaTable: form.controls.nemaTable.value,
-      poles: form.controls.poles.value,
-      synchronousSpeed: form.controls.synchronousSpeed.value
-    }
+  updateMotorItemFromBasicsForm(form: FormGroup, motorItem: MotorItem): MotorItem {
+    motorItem.description = form.controls.description.value;
+    motorItem.name = form.controls.name.value;
+    motorItem.description = form.controls.description.value;
+    motorItem.annualOperatingHours = form.controls.annualOperatingHours.value;
+    return motorItem;
   }
 
-  setSuiteDbMotorProperties(motor: SuiteDbMotor, form: FormGroup) {
-    // let efficiencyClass: number;
-    // if (motor.efficiencyType == 'Energy Efficient') {
-    //   efficiencyClass = 1;
-    // } else if (motor.efficiencyType == 'Premium Efficiency') {
-    //   efficiencyClass = 2;
-    // } else if (motor.efficiencyType == 'Standard Efficiency') {
-    //   efficiencyClass = 0;
-    // }
-    // motor.catalog
-    form.controls.efficiencyClass.patchValue(motor.efficiencyClass);
-    form.controls.ratedMotorPower.patchValue(motor.hp);
-    form.controls.lineFrequency.patchValue(motor.lineFrequency);
-    form.controls.enclosureType.patchValue(motor.enclosureType);
-    form.controls.nemaTable.patchValue(motor.nemaTable);
-    form.controls.nominalEfficiency.patchValue(motor.nominalEfficiency);
-    form.controls.poles.patchValue(motor.poles);
-    form.controls.synchronousSpeed.patchValue(motor.synchronousSpeed);
-    form.controls.ratedVoltage.patchValue(motor.voltageLimit);
+  updateMotorItemFromOptionalForm(form: FormGroup, motorItem: MotorItem): MotorItem {
+    motorItem.ratedVoltage = form.controls.ratedVoltage.value;
+    motorItem.percentLoad = form.controls.percentLoad.value;
+    motorItem.driveType = form.controls.driveType.value;
+    motorItem.isVFD = form.controls.isVFD.value;
+    motorItem.hasLoggerData = form.controls.hasLoggerData.value;
+    motorItem.numberOfPhases = form.controls.numberOfPhases.value;
+    motorItem.enclosureType = form.controls.enclosureType.value;
+    motorItem.poles = form.controls.poles.value;
+    motorItem.manufacturer = form.controls.manufacturer.value;
+    motorItem.model = form.controls.model.value;
+    motorItem.catalogId = form.controls.catalogId.value;
+    motorItem.motorType = form.controls.motorType.value;
+    motorItem.ratedSpeed = form.controls.ratedSpeed.value;
+    motorItem.fullLoadSpeed = form.controls.fullLoadSpeed.value;
+    motorItem.frameNumber = form.controls.frameNumber.value;
+    motorItem.purpose = form.controls.purpose.value;
+    motorItem.uFrame = form.controls.uFrame.value;
+    motorItem.cFace = form.controls.cFace.value;
+    motorItem.verticalShaft = form.controls.verticalShaft.value;
+    motorItem.dFlange = form.controls.dFlange.value;
+    motorItem.serviceFactor = form.controls.serviceFactor.value;
+    motorItem.insulationClass = form.controls.insulationClass.value;
+    motorItem.weight = form.controls.weight.value;
+    motorItem.listPrice = form.controls.listPrice.value;
+    motorItem.windingResistance = form.controls.windingResistance.value;
+    motorItem.warranty = form.controls.warranty.value;
+    motorItem.rotorBars = form.controls.rotorBars.value;
+    motorItem.statorSlots = form.controls.statorSlots.value;
+    motorItem.efficiency75 = form.controls.efficiency75.value;
+    motorItem.efficiency50 = form.controls.efficiency50.value;
+    motorItem.efficiency25 = form.controls.efficiency25.value;
+    motorItem.powerFactor100 = form.controls.powerFactor100.value;
+    motorItem.powerFactor75 = form.controls.powerFactor75.value;
+    motorItem.powerFactor50 = form.controls.powerFactor50.value;
+    motorItem.powerFactor25 = form.controls.powerFactor25.value;
+    motorItem.torqueFullLoad = form.controls.torqueFullLoad.value;
+    motorItem.torqueBreakDown = form.controls.torqueBreakDown.value;
+    motorItem.torqueLockedRotor = form.controls.torqueLockedRotor.value;
+    motorItem.ampsIdle = form.controls.ampsIdle.value;
+    motorItem.ampsLockedRotor = form.controls.ampsLockedRotor.value;
+    motorItem.stalledRotorTimeHot = form.controls.stalledRotorTimeHot.value;
+    motorItem.stalledRotorTimeCold = form.controls.stalledRotorTimeCold.value;
+    motorItem.voltageConnectionType = form.controls.voltageConnectionType.value;
+    motorItem.currentType = form.controls.currentType.value;
+    motorItem.averageLoadFactor = form.controls.averageLoadFactor.value;
+    motorItem.utilizationFactor = form.controls.utilizationFactor.value;
+    return motorItem;
+  }
+
+
+  setSuiteDbMotorProperties(motor: SuiteDbMotor, motorItem: MotorItem) {
+    motorItem.efficiencyClass = motor.efficiencyClass;
+    motorItem.ratedMotorPower = motor.hp;
+    motorItem.lineFrequency = motor.lineFrequency;
+    motorItem.enclosureType = motor.enclosureType;
+    motorItem.nemaTable = motor.nemaTable;
+    motorItem.nominalEfficiency = motor.nominalEfficiency;
+    motorItem.poles = motor.poles;
+    motorItem.synchronousSpeed = motor.synchronousSpeed;
+    motorItem.ratedVoltage = motor.voltageLimit;
+    return motorItem;
   }
 }
