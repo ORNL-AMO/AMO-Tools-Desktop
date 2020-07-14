@@ -22,6 +22,7 @@ import { MotorPropertiesComponent } from './motor-inventory-setup/motor-properti
 import { RequiredPropertiesComponent } from './motor-inventory-setup/motor-catalog/required-properties/required-properties.component';
 import { OptionalPropertiesComponent } from './motor-inventory-setup/motor-catalog/optional-properties/optional-properties.component';
 import { MotorBasicsComponent } from './motor-inventory-setup/motor-catalog/motor-basics/motor-basics.component';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { MotorBasicsComponent } from './motor-inventory-setup/motor-catalog/moto
     SettingsModule,
     FormsModule,
     ReactiveFormsModule,
-    ModalModule
+    ModalModule,
+    SharedPipesModule
   ],
   providers: [
     MotorInventoryService,
