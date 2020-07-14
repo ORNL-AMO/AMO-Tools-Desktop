@@ -48,7 +48,7 @@ export class MotorInventoryService {
       lineFrequency: 60,
       motorRpm: 1780,
       ratedMotorPower: undefined,
-      efficiencyClass: undefined,
+      efficiencyClass: 1,
       nominalEfficiency: undefined,
       ratedVoltage: undefined,
       fullLoadAmps: undefined,

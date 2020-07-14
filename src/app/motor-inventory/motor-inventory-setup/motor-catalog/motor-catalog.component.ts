@@ -21,8 +21,7 @@ export class MotorCatalogComponent implements OnInit {
   motorInventoryData: MotorInventoryData;
   motorInventoryDataSub: Subscription;
   motorItemForm: FormGroup;
-  frequencies: Array<number> = [50, 60];
-  efficiencyClasses: Array<{ value: number, display: string }>;
+
   drives: Array<{ display: string, value: number }>;
 
   selectedDepartmentIdSub: Subscription;
@@ -32,7 +31,6 @@ export class MotorCatalogComponent implements OnInit {
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.globalSettings;
-    this.efficiencyClasses = motorEfficiencyConstants;
     this.drives = driveConstants;
 
     this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(val => {

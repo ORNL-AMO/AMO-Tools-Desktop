@@ -14,6 +14,68 @@ export class MotorCatalogService {
     this.selectedMotorItem = new BehaviorSubject<MotorItem>(undefined);
   }
 
+  getRequiredFormFromMotorItem(motorItem: MotorItem): FormGroup {
+    return this.formBuilder.group({
+      lineFrequency: [motorItem.lineFrequency, [Validators.required]],
+      ratedMotorPower: [motorItem.ratedMotorPower, [Validators.required]],
+      efficiencyClass: [motorItem.efficiencyClass, [Validators.required]],
+      nominalEfficiency: [motorItem.nominalEfficiency, [Validators.required]],
+      synchronousSpeed: [motorItem.synchronousSpeed, [Validators.required]]
+    })
+  }
+
+  getOptionalFormFromMotorItem(motorItem: MotorItem): FormGroup {
+    return this.formBuilder.group({
+      ratedVoltage: [motorItem.ratedVoltage],
+      annualOperatingHours: [motorItem.annualOperatingHours],
+      percentLoad: [motorItem.percentLoad],
+      driveType: [motorItem.driveType],
+      isVFD: [motorItem.isVFD],
+      hasLoggerData: [motorItem.hasLoggerData],
+      numberOfPhases: [motorItem.numberOfPhases],
+      enclosureType: [motorItem.enclosureType],
+      poles: [motorItem.poles],
+      manufacturer: [motorItem.manufacturer],
+      model: [motorItem.model],
+      catalogId: [motorItem.catalogId],
+      motorType: [motorItem.motorType],
+      ratedSpeed: [motorItem.ratedSpeed],
+      fullLoadSpeed: [motorItem.fullLoadSpeed],
+      frameNumber: [motorItem.frameNumber],
+      purpose: [motorItem.purpose],
+      uFrame: [motorItem.uFrame],
+      cFace: [motorItem.cFace],
+      verticalShaft: [motorItem.verticalShaft],
+      dFlange: [motorItem.dFlange],
+      serviceFactor: [motorItem.serviceFactor],
+      insulationClass: [motorItem.insulationClass],
+      weight: [motorItem.weight],
+      listPrice: [motorItem.listPrice],
+      windingResistance: [motorItem.windingResistance],
+      warranty: [motorItem.warranty],
+      rotorBars: [motorItem.rotorBars],
+      statorSlots: [motorItem.statorSlots],
+      efficiency75: [motorItem.efficiency75],
+      efficiency50: [motorItem.efficiency50],
+      efficiency25: [motorItem.efficiency25],
+      powerFactor100: [motorItem.powerFactor100],
+      powerFactor75: [motorItem.powerFactor75],
+      powerFactor50: [motorItem.powerFactor50],
+      powerFactor25: [motorItem.powerFactor25],
+      torqueFullLoad: [motorItem.torqueFullLoad],
+      torqueBreakDown: [motorItem.torqueBreakDown],
+      torqueLockedRotor: [motorItem.torqueLockedRotor],
+      ampsIdle: [motorItem.ampsIdle],
+      ampsLockedRotor: [motorItem.ampsLockedRotor],
+      stalledRotorTimeHot: [motorItem.stalledRotorTimeHot],
+      stalledRotorTimeCold: [motorItem.stalledRotorTimeCold],
+      voltageConnectionType: [motorItem.voltageConnectionType],
+      currentType: [motorItem.currentType],
+      averageLoadFactor: [motorItem.averageLoadFactor],
+      utilizationFactor: [motorItem.utilizationFactor]
+    })
+  }
+
   getFormFromMotorItem(motorItem: MotorItem): FormGroup {
     return this.formBuilder.group({
       id: [motorItem.id],

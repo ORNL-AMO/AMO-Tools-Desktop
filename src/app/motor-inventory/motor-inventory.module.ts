@@ -19,6 +19,8 @@ import { DepartmentCatalogTableComponent } from './motor-inventory-setup/departm
 import { SelectMotorModalComponent } from './motor-inventory-setup/motor-catalog/select-motor-modal/select-motor-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { MotorPropertiesComponent } from './motor-inventory-setup/motor-properties/motor-properties.component';
+import { RequiredPropertiesComponent } from './motor-inventory-setup/motor-catalog/required-properties/required-properties.component';
+import { OptionalPropertiesComponent } from './motor-inventory-setup/motor-catalog/optional-properties/optional-properties.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { MotorPropertiesComponent } from './motor-inventory-setup/motor-properti
     HelpPanelComponent,
     DepartmentCatalogTableComponent,
     SelectMotorModalComponent,
-    MotorPropertiesComponent
+    MotorPropertiesComponent,
+    RequiredPropertiesComponent,
+    OptionalPropertiesComponent
   ],
   imports: [
     CommonModule,

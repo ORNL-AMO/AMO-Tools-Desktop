@@ -4,22 +4,29 @@
             <div class="h3">Edit Motor</div>
         </div>
     </div>
-    <div class="col-12 pt-1" *ngIf="motorItemForm">
+    <div class="col-12 pt-1">
+        <app-required-properties [settings]="settings"></app-required-properties>
+    </div>
+    <div class="col-12">
+        <app-optional-properties [settings]="settings"></app-optional-properties>
+    </div>
+
+    <!-- <div class="col-12 pt-1" *ngIf="motorItemForm">
         <form class="p-0" [formGroup]="motorItemForm">
-            <!-- <label class="group-label">Motor Details</label> -->
+            <!-- <label class="group-label">Motor Details</label> --
             <div class="form-section">
-                <!--name-->
+                <!--name--
                 <div class="form-group">
                     <label>Motor Name</label>
                     <input class="form-control" type="text" id="name" formControlName="name" (input)="save()">
                 </div>
-                <!--description-->
+                <!--description--
                 <div class="form-group">
                     <label>Description</label>
                     <textarea class="form-control" type="text" id="description" formControlName="description"
                         (input)="save()"></textarea>
                 </div>
-                <!--operating hours-->
+                <!--operating hours--
                 <div class="form-group">
                     <label for="annualOperatingHours">Operating Hours</label>
                     <div class="input-group">
@@ -39,7 +46,7 @@
                         {{motorItemForm.controls.annualOperatingHours.errors.max.max}} hrs/yr.</span>
                     <span *ngIf="motorItemForm.controls.annualOperatingHours.errors.min">Value can't be less than
                         {{motorItemForm.controls.annualOperatingHours.errors.min.min}} hrs/yr.</span>
-                </span> -->
+                </span> --
                 </div>
             </div>
             <div class="form-section">
@@ -47,17 +54,9 @@
                     <label class="group-label">Motor Properties</label>
                     <a class="click-link small" (click)="openMotorSelectionModal()">Use Existing Motor</a>
                 </div>
-                <!--line freq-->
-                <div class="form-group">
-                    <label for="lineFrequency">Line Frequency</label>
-                    <select name="lineFrequency" class="form-control number-input-field" id="lineFrequency"
-                        formControlName="lineFrequency" (change)="changeLineFreq()"
-                        (focus)="focusField('lineFrequency')">
-                        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
-                    </select>
-                </div>
 
-                <!--RPM-->
+
+                <!--RPM--
                 <div class="form-group">
                     <label for="motorRpm">Motor RPM</label>
                     <div name="motorRpm" class="input-group">
@@ -70,58 +69,15 @@
                   <span class="alert-danger pull-right small" *ngIf="motorItemForm.controls.motorRpm.errors.required">Value
                     Required</span>
                 </span>
-                <span class="alert-warning pull-right small">{{warnings.rpmError}}</span> -->
-                </div>
-
-                <!--Motor Rated Power-->
-                <div class="form-group">
-                    <label for="ratedMotorPower">Rated Motor Power</label>
-                    <div class="input-group">
-                        <input type="number" name="ratedMotorPower" class="form-control number-input-field"
-                            id="ratedMotorPower" (focus)="focusField('ratedMotorPower')" (input)="save()"
-                            formControlName="ratedMotorPower">
-                        <span class="input-group-addon units" *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
-                        <span class="input-group-addon units" *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
-                    </div>
-                    <!-- <span *ngIf="motorItemForm.controls.ratedMotorPower.invalid && !motorItemForm.controls.ratedMotorPower.pristine">
-                  <span class="alert-danger pull-right small" *ngIf="motorItemForm.controls.ratedMotorPower.errors.required">Value
-                    Required</span>
-                </span>
-                <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null && !motorItemForm.controls.ratedMotorPower.pristine && !motorItemForm.controls.fullLoadAmps.invalid">{{warnings.ratedPowerError}}</span> -->
+                <span class="alert-warning pull-right small">{{warnings.rpmError}}</span> --
                 </div>
 
 
-                <!--Eff Class-->
-                <div class="form-group">
-                    <label for="efficiencyClass">Efficiency Class</label>
-                    <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass"
-                        formControlName="efficiencyClass" (change)="changeEfficiencyClass()"
-                        (focus)="focusField('efficiencyClass')">
-                        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">
-                            {{efficiencyClass.display}}</option>
-                    </select>
-                </div>
 
-                <!--Estimated Nominal Efficiency-->
-                <div class="form-group">
-                    <label for="nominalEfficiency">Est. Nominal Efficiency</label>
-                    <div class="input-group">
-                        <input name="nominalEfficiency" type="number" min="0" step="any" class="form-control"
-                            id="nominalEfficiency" formControlName="nominalEfficiency" (input)="save()"
-                            (focus)="focusField('nominalEfficiency')" onfocus="this.select();">
-                        <span class="input-group-addon units">%</span>
-                    </div>
-                    <!-- <span class="alert-danger pull-right small"
-                    *ngIf="motorItemForm.controls.nominalEfficiency.invalid && !motorItemForm.controls.nominalEfficiency.pristine">
-                    <span *ngIf="motorItemForm.controls.nominalEfficiency.errors.required">Value Required</span>
-                    <span *ngIf="motorItemForm.controls.nominalEfficiency.errors.max">Value can't be greater than
-                        {{motorItemForm.controls.nominalEfficiency.errors.max.max}} %.</span>
-                    <span *ngIf="motorItemForm.controls.nominalEfficiency.errors.min">Value can't be less than
-                        {{motorItemForm.controls.nominalEfficiency.errors.min.min}} %.</span>
-                </span> -->
-                </div>
 
-                <!--Rated Voltage-->
+
+
+                <!--Rated Voltage--
                 <div class="form-group">
                     <label for="ratedVoltage">Rated Voltage</label>
                     <div class="input-group">
@@ -137,15 +93,15 @@
                         Required</span>
                 </span>
                 <span class="alert-warning pull-right small"
-                    *ngIf="warnings.voltageError !== null && !motorItemForm.controls.ratedVoltage.pristine && !motorItemForm.controls.fullLoadAmps.invalid">{{warnings.voltageError}}</span> -->
+                    *ngIf="warnings.voltageError !== null && !motorItemForm.controls.ratedVoltage.pristine && !motorItemForm.controls.fullLoadAmps.invalid">{{warnings.voltageError}}</span> --
                 </div>
 
-                <!--FLA-->
+                <!--FLA--
                 <div class="form-group">
                     <label for="fullLoadAmps" aria-describedby="flaHelp">
                         Full-Load Amps
                         <!-- <a class="form-text small click-link" id="flaHelp" (click)="getFullLoadAmps()">Estimate Full-Load
-                        Amps</a> -->
+                        Amps</a> --
                     </label>
                     <div class="input-group">
                         <input name="fullLoadAmps" type="number" min="0" step="any"
@@ -160,13 +116,13 @@
                         Required</span>
                 </span>
                 <span class="alert-warning pull-right small"
-                    *ngIf="warnings.flaError !== null && !motorItemForm.controls.fullLoadAmps.invalid">{{warnings.flaError}}</span> -->
+                    *ngIf="warnings.flaError !== null && !motorItemForm.controls.fullLoadAmps.invalid">{{warnings.flaError}}</span> --
                 </div>
             </div>
 
             <div class="form-section">
                 <label class="group-label">Additional Properties</label>
-                <!--Percent Load-->
+                <!--Percent Load--
                 <div class="form-group">
                     <label for="percentLoad">Percent Load</label>
                     <div class="input-group">
@@ -182,9 +138,9 @@
                         {{motorItemForm.controls.percentLoad.errors.max.max}} %.</span>
                     <span *ngIf="motorItemForm.controls.percentLoad.errors.min">Value can't be less than
                         {{motorItemForm.controls.percentLoad.errors.min.min}} %.</span>
-                    </span> -->
-                </div>
-                <!--Drive Type?-->
+                    </span> --
+</div>
+<!--Drive Type?--
                 <div class="form-group">
                     <label for="driveType">Drive</label>
                     <select class="form-control" name="driveType" formControlName="driveType" id="driveType"
@@ -192,7 +148,7 @@
                         <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
                     </select>
                 </div>
-                <!--VFD?-->
+                <!--VFD?--
                 <div class="form-group">
                     <label for="isVFD">Is VFD?</label>
                     <select class="form-control" name="isVFD" formControlName="isVFD" id="isVFD" (change)="save()"
@@ -201,7 +157,7 @@
                         <option [ngValue]="false">No</option>
                     </select>
                 </div>
-                <!--Does This Motor Have Logger Data?-->
+                <!--Does This Motor Have Logger Data?--
                 <div class="form-group">
                     <label for="hasLoggerData">Has Logger Data?</label>
                     <select class="form-control" name="hasLoggerData" formControlName="hasLoggerData" id="hasLoggerData"
@@ -210,44 +166,37 @@
                         <option [ngValue]="false">No</option>
                     </select>
                 </div>
-                <!--frame type-->
+                <!--frame type--
                 <div class="form-group">
                     <label for="frameNumber">Frame Type</label>
                     <input class="form-control" type="text" id="frameNumber" formControlName="frameNumber" (input)="save()">
                 </div>
-                <!--num phases-->
+                <!--num phases--
                 <div class="form-group">
                     <label for="numberOfPhases">Num. Phases</label>
                     <input class="form-control" type="number" id="numberOfPhases" formControlName="numberOfPhases"
                         (input)="save()">
                 </div>
-                <!--num phases-->
+                <!--num phases--
                 <div class="form-group">
                     <label for="enclosureType">Enclosure Type</label>
                     <input class="form-control" type="text" id="enclosureType" formControlName="enclosureType" (input)="save()">
                 </div>
-                <!--num phases-->
+                <!--num phases--
                 <div class="form-group">
                     <label for="nemaTable">Nema Table</label>
                     <input class="form-control" type="text" id="nemaTable" formControlName="nemaTable" (input)="save()">
                 </div>
-                <!--num phases-->
+                <!--num phases--
                 <div class="form-group">
                     <label for="poles">Poles</label>
                     <input class="form-control" type="number" id="poles" formControlName="poles" (input)="save()">
                 </div>
-                <!--num phases-->
-                <div class="form-group">
-                    <label for="synchronousSpeed">Synchronous Speed</label>
-                    <div class="input-group">
-                        <input class="form-control" type="number" id="synchronousSpeed"
-                            formControlName="synchronousSpeed" (input)="save()">
-                        <span class="input-group-addon units">rpm</span>
-                    </div>
-                </div>
+                <!--num phases--
+               
             </div>
         </form>
-    </div>
+    </div> -->
 </div>
 
 
