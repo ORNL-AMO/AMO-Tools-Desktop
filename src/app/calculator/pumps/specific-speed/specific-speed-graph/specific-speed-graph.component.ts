@@ -39,12 +39,15 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
   }
   
+   // Update conditions/data
   selectedDataPoints: Array<DataPoint>;
   pointColors: Array<string>;
   specificSpeedChart: SimpleChart;
   firstChange: boolean = true;
   validCurrentSpeed: boolean = false;
   currentPumpType: number;
+  
+  // Tooltips
   expanded: boolean;
   hoverBtnExpand: boolean;
   displayExpandTooltip: boolean;

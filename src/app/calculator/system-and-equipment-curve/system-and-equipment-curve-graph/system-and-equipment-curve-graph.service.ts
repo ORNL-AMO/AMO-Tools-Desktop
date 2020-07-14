@@ -364,7 +364,6 @@ export class SystemAndEquipmentCurveGraphService {
             shape: 'spline',
             color: 'red',
             dash: 'dot',
-            smoothing: .5
           }
         },
         // Baseline
@@ -377,7 +376,6 @@ export class SystemAndEquipmentCurveGraphService {
           line: {
             shape: 'spline',
             color: undefined,
-            smoothing: .2
           }
         },
         // Baseline Intersect
@@ -407,7 +405,6 @@ export class SystemAndEquipmentCurveGraphService {
           line: {
             shape: 'spline',
             color: undefined,
-            smoothing: .3
           }
         },
         // Modification Intersect

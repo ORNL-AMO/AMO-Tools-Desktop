@@ -73,7 +73,6 @@ export class CurveDataService {
       this.systemAndEquipmentCurveService.fanSystemCurveData.next(fanSystemCurveData);
     } else if (equipmentType == 'pump') {
       let pumpSystemCurveData: PumpSystemCurveData = this.pumpSystemCurveFormService.getResetPumpSystemCurveInputs();
-      console.log('resetData', pumpSystemCurveData);
       this.systemAndEquipmentCurveService.pumpSystemCurveData.next(pumpSystemCurveData);
     }
   }

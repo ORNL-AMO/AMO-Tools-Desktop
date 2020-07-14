@@ -93,11 +93,6 @@ export interface TraceCoordinates {
     y: Array<number | string>,
 };
 
-// export interface DataPoint {
-//   x: number;
-//   y: number;
-// }
-
 export interface ChartConfig {
     defaultPointCount: number,
     defaultPointOutlineColor?: string,

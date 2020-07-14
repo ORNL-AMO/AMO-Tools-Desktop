@@ -17,7 +17,7 @@
       </div>
       <!--  Hover Data -->
       <div class="w-100 tab-panel-background">
-        <app-chart-hover-data [showHoverGroupData]="showHoverGroupData" [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
+        <app-chart-hover-data *ngIf="showHoverGroupData" [showHoverGroupData]="showHoverGroupData" [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
         <div class="col-md-12 mt-1">
           <div class="graph-btn-container">
             <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
@@ -35,12 +35,12 @@
   </div>
 </div>
   
-  <div class="w-100 tab-panel-background">
+  <div class="w-100 p-2 tab-panel-background">
     <div class="w-100" #tabPanelDiv id="tabPanelDiv">
     </div>
     <!--  Hover Data -->
     <div class="w-100 tab-panel-background">
-      <app-chart-hover-data [showHoverGroupData]="showHoverGroupData" [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
+      <app-chart-hover-data *ngIf="showHoverGroupData" [showHoverGroupData]="showHoverGroupData" [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
       <div class="col-md-12 mt-1">
         <div class="graph-btn-container">
           <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
@@ -77,7 +77,7 @@
         <td class="text-center">{{point.x | number: '1.0-0'}}</td>
         <td class="text-center">{{point.y | number: '1.0-0'}}</td>
         <td class='delete-row text-center'>
-          <a *ngIf="index >= defaultPointCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
+          <a *ngIf="index >= chartConfig.defaultPointCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
             Delete
           </a>
         </td>

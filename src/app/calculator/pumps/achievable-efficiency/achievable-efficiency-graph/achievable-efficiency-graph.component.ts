@@ -43,8 +43,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
   
-  validEfficiency: boolean = false;
-  firstChange: boolean = true;
+  // Tooltips
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
   hoverBtnExpand: boolean = false;
@@ -53,10 +52,13 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   displayCollapseTooltip: boolean = false;
   expanded: boolean = false;
   
+  validEfficiency: boolean = false;
+  firstChange: boolean = true;
+  
+  // Graphing / Defaults
   selectedDataPoints: Array<DataPoint>;
   pointColors: Array<string>;
   efficiencyChart: SimpleChart;
-
   xAxisTitle: string = "Flow Rate (gpm)";
   currentPumpType: any;
   defaultTraceCount: number = 2;

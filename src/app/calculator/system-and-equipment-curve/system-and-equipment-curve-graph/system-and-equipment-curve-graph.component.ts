@@ -59,7 +59,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   curveEquipmentChart: SimpleChart;
   currentHoverData: HoverGroupData;
   chartConfig: ChartConfig = {
-    defaultPointCount: 2,
+    defaultPointCount: 0,
     defaultPointOutlineColor: 'rgba(0, 0, 0, .6)',
     defaultPointBackgroundColor: 'rgba(0, 0, 0, 0)',
     yName: 'Pressure',
@@ -81,10 +81,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   isEquipmentCurveShown: boolean;
   isEquipmentModificationShown: boolean;
   isChartSetup: boolean = false;
-  updatedTraces: Array<number> = [];
   fluidPowerData: Array<number>;
   showHoverGroupData: boolean;
-
 
   constructor(
     private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
@@ -103,7 +101,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   initSubscriptions() {
     this.updateGraphSub = this.systemAndEquipmentCurveService.updateGraph.subscribe(updateGraph => {
       if (updateGraph == true) {
-        this.setDisplayDataOptions();
         if (this.createGraphTimer != undefined) {
           clearTimeout(this.createGraphTimer);
         }
@@ -189,6 +186,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
   initRenderChart(isResize = false) {
     Plotly.purge(this.currentChartId);
+
+    this.setDisplayDataOptions();
     this.initChartSetup(isResize);
     this.drawTraceData();
 
@@ -213,6 +212,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
   updateChart() {
+    this.setDisplayDataOptions();
     this.drawTraceData();
     let chartLayout = JSON.parse(JSON.stringify(this.curveEquipmentChart.layout));
     Plotly.update(this.currentChartId, this.curveEquipmentChart.data, chartLayout);
@@ -306,12 +306,14 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   addIntersectionPoints() {
     let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.systemAndEquipmentCurveService.systemCurveRegressionData);
     if (baselineIntersectionPoint != undefined) {
+      this.chartConfig.defaultPointCount = 1;
       this.setIntersectionTrace(baselineIntersectionPoint, this.traces.baselineIntersect, 'Baseline');
       this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.next(baselineIntersectionPoint);
     }
     if (this.isEquipmentModificationShown && this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs != undefined) {
       let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(baselineIntersectionPoint, this.settings, this.equipmentType, this.systemAndEquipmentCurveService.equipmentInputs.getValue());
       if (modifiedIntersectionPoint != undefined) {
+        this.chartConfig.defaultPointCount = 2;
         this.setIntersectionTrace(modifiedIntersectionPoint, this.traces.modificationIntersect, 'Modification');
         this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(modifiedIntersectionPoint);
       }
@@ -400,7 +402,11 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       }
     });
     if (!updatedPoint) {
-      this.selectedDataPoints.push(selectedPoint);
+      if (name == 'Modification') {
+        this.selectedDataPoints.splice(1, 0, selectedPoint);
+      } else {
+        this.selectedDataPoints.push(selectedPoint);
+      }
     }
     this.cd.detectChanges();
     this.save();
