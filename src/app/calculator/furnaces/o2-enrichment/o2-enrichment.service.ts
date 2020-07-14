@@ -15,7 +15,8 @@ export class O2EnrichmentService {
   operatingHours: OperatingHours;
   enrichmentChart: BehaviorSubject<SimpleChart>;
   makePlot: BehaviorSubject<boolean>;
-  selectedDataPoints: BehaviorSubject<Array<EnrichmentPoint>>;
+  selectedDataPoints: BehaviorSubject<Array<DisplayPoint>>;
+  hoverGroupData: BehaviorSubject<any>;
   constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) 
   {
     this.initChartData();
@@ -24,9 +25,14 @@ export class O2EnrichmentService {
 
   initChartData() {
     let emptyChart: SimpleChart = this.getEmptyChart();
-    let dataPoints = new Array<EnrichmentPoint>();
+    let dataPoints = new Array<DisplayPoint>();
+    let hoverGroupData = {
+      lineGroupData: [],
+      lineGroup: []
+    }
     this.enrichmentChart = new BehaviorSubject<SimpleChart>(emptyChart);
-    this.selectedDataPoints = new BehaviorSubject<Array<EnrichmentPoint>>(dataPoints);
+    this.selectedDataPoints = new BehaviorSubject<Array<DisplayPoint>>(dataPoints);
+    this.hoverGroupData = new BehaviorSubject<any>(hoverGroupData);
   }
 
   initForm(settings: Settings): FormGroup {
@@ -216,7 +222,7 @@ export class O2EnrichmentService {
     let onGraph = false;
     let returnObj: { data: TraceCoordinates, onGraph: boolean };
 
-    for (let i = 0; i <= 100; i += .5) {
+    for (let i = 21; i <= 100; i += .5) {
       o2EnrichmentPoint.o2CombAirEnriched = i;
       const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint, settings).fuelSavingsEnriched;
       if (fuelSavings > 0 && fuelSavings < 100) {
@@ -259,7 +265,7 @@ export class O2EnrichmentService {
   getEmptyChart(): SimpleChart {
     let showGrid = true;
     return {
-      name: 'Achievable Efficiency',
+      name: 'O<sub>2</sub> Enrichment',
       data: [
         // Main line
         {
@@ -268,7 +274,7 @@ export class O2EnrichmentService {
           name: '',
           showlegend: false,
           type: 'scatter',
-          hovertemplate: `O<sub>2</sub> in Air (%): %{x}<br>Fuel Savings (%): %{y}<br>`,
+          hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y}%<br>`,
           line: {
             shape: 'spline',
             color: '#000'
@@ -281,7 +287,7 @@ export class O2EnrichmentService {
           type: 'scatter',
           name: ``,
           showlegend: false,
-          hovertemplate: `O<sub>2</sub> in Air (%): %{x}<br>Fuel Savings (%): %{y}<br>`,
+          hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y}%<br>`,
           mode: 'markers',
           marker: {
             color: 'rgba(0, 0, 0, 0)',
@@ -298,10 +304,13 @@ export class O2EnrichmentService {
           showspikes: true,
           spikemode: 'across',
           title: {
-            text: "O<sub>2</sub> in Air"
+            text: "O<sub>2</sub> in Air (%)"
           },
-          rangemode: 'tozero',
+          // rangemode: 'tozero',
+          range: [20, 40, 60, 80, 100],
           showticksuffix: 'all',
+          // tickmode: 'array',
+          // tickvals: [20, 40, 60, 80, 100],
           tickangle: -60
         },
         yaxis: {
@@ -311,7 +320,7 @@ export class O2EnrichmentService {
           title: {
             text: "Fuel Savings (%)"
           },
-          rangemode: 'tozero',
+          // rangemode: 'tozero',
           showticksuffix: 'all'
         },
         margin: {
@@ -335,7 +344,7 @@ export class O2EnrichmentService {
 
 }
 
-export interface EnrichmentPoint extends SelectedDataPoint {
+export interface DisplayPoint extends SelectedDataPoint {
   combustionTemp: number,
   flueOxygen: number,
   fuelTemp: number

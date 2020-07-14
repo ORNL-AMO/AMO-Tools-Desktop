@@ -5,6 +5,16 @@
       margin: auto;
     border-radius: 50%;
   }
+
+.spline {
+  width: 2rem;
+  height: .25rem;
+  margin: auto;
+}
+
+  .tab-panel-background {
+    background: white;
+  }
   
   .grid-toggle-button {
     padding: 0;
