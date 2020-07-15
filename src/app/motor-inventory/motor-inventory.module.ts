@@ -23,6 +23,8 @@ import { RequiredPropertiesComponent } from './motor-inventory-setup/motor-catal
 import { OptionalPropertiesComponent } from './motor-inventory-setup/motor-catalog/optional-properties/optional-properties.component';
 import { MotorBasicsComponent } from './motor-inventory-setup/motor-catalog/motor-basics/motor-basics.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { FilterMotorsComponent } from './motor-inventory-setup/motor-catalog/select-motor-modal/filter-motors/filter-motors.component';
+import { MotorOptionsTableComponent } from './motor-inventory-setup/motor-catalog/select-motor-modal/motor-options-table/motor-options-table.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     MotorPropertiesComponent,
     RequiredPropertiesComponent,
     OptionalPropertiesComponent,
-    MotorBasicsComponent
+    MotorBasicsComponent,
+    FilterMotorsComponent,
+    MotorOptionsTableComponent
   ],
   imports: [
     CommonModule,

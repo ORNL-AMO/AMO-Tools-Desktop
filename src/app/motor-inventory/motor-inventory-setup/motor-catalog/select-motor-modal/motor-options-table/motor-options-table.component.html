@@ -1,0 +1,72 @@
+<div class="p-2">
+    <table class="table table-sm">
+        <tr>
+            <th></th>
+            <!-- <th>
+            Catalog
+          </th> -->
+            <th>
+                Type
+            </th>
+            <th>
+                Efficiency Class
+            </th>
+            <th>
+                Nominal Efficiency
+            </th>
+            <th>
+                HP
+            </th>
+            <th>
+                Hz
+            </th>
+            <th>
+                Synchronous Speed
+            </th>
+            <th>
+                Voltage Limit
+            </th>
+            <th>
+                Poles
+            </th>
+            <!-- <th>
+            Nema Table
+          </th> -->
+        </tr>
+        <tr *ngFor="let option of motorOptions">
+            <td>
+                <a class="click-link" (click)="selectMotor(option)">Use</a>
+            </td>
+            <!-- <td>
+            {{option.catalog}}
+          </td> -->
+            <td>
+                {{option.enclosureType}}
+            </td>
+            <td>
+                {{option.efficiencyClass | motorEfficiencyClass}}
+            </td>
+            <td>
+                {{option.nominalEfficiency | number:'1.1-1'}} %
+            </td>
+            <td>
+                {{option.hp}}
+            </td>
+            <td>
+                {{option.lineFrequency}}
+            </td>
+            <td>
+                {{option.synchronousSpeed}}
+            </td>
+            <td>
+                {{option.voltageLimit}}
+            </td>
+            <td>
+                {{option.poles}}
+            </td>
+            <!-- <td>
+            {{option.nemaTable}}
+          </td> -->
+        </tr>
+    </table>
+</div>
