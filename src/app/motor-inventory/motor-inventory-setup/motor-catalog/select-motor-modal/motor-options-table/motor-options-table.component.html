@@ -33,7 +33,7 @@
             Nema Table
           </th> -->
         </tr>
-        <tr *ngFor="let option of motorOptions">
+        <tr *ngFor="let option of motorOptions | filterMotorOptions:filterMotorOptions">
             <td>
                 <a class="click-link" (click)="selectMotor(option)">Use</a>
             </td>

@@ -1,1 +1,18 @@
-<p>filter-motors works!</p>
+<form>
+    <div class="form-group">
+        <label for="efficiencyMin">Efficiency Min</label>
+        <div class="input-group">
+            <input type="number" [(ngModel)]="filterMotorOptions.efficiencyMin" name="efficiencyMin" id="efficiencyMin"
+                (input)="save()" class="form-control">
+            <span class="input-group-addon units">%</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="efficiencyMax">Efficiency Max</label>
+        <div class="input-group">
+            <input type="number" [(ngModel)]="filterMotorOptions.efficiencyMax" name="efficiencyMax" id="efficiencyMax"
+                (input)="save()" class="form-control">
+            <span class="input-group-addon units">%</span>
+        </div>
+    </div>
+</form>

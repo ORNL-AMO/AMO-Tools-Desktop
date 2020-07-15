@@ -3,15 +3,18 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { SuiteDbMotor } from '../../../shared/models/materials';
 import { MotorItem } from '../../motor-inventory';
+import { FilterMotorOptions } from './select-motor-modal/filter-motor-options.pipe';
 
 @Injectable()
 export class MotorCatalogService {
 
   selectedDepartmentId: BehaviorSubject<string>;
   selectedMotorItem: BehaviorSubject<MotorItem>;
+  filterMotorOptions: BehaviorSubject<FilterMotorOptions>;
   constructor(private formBuilder: FormBuilder) {
     this.selectedDepartmentId = new BehaviorSubject<string>(undefined);
     this.selectedMotorItem = new BehaviorSubject<MotorItem>(undefined);
+    this.filterMotorOptions = new BehaviorSubject<FilterMotorOptions>(undefined);
   }
 
   getRequiredFormFromMotorItem(motorItem: MotorItem): FormGroup {
