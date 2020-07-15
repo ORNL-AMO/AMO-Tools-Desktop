@@ -1,0 +1,23 @@
+<div class="row ml-0 mr-0">
+    <div class="col-12">
+        <div class="header">
+            <div class="h3">Edit Motor</div>
+        </div>
+    </div>
+    <div class="col-12">
+        <app-motor-basics></app-motor-basics>
+    </div>
+    <div class="col-12">
+        <a class="click-link small pull-right" (click)="openMotorSelectionModal()">Set Data From Existing Motor</a>
+    </div>
+    <div class="col-12">
+        <app-required-properties [settings]="settings"></app-required-properties>
+    </div>
+    <div class="col-12">
+        <app-optional-properties [settings]="settings"></app-optional-properties>
+    </div>
+</div>
+
+
+<app-select-motor-modal *ngIf="showSelectMotorModal" (emitClose)="closeMotorSelectionModal()"
+    (emitSelect)="setMotorSelection($event)"></app-select-motor-modal>

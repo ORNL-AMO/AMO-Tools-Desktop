@@ -77,11 +77,11 @@ export interface WallLossesSurface {
 
 export interface SuiteDbMotor {
     catalog: string,
-    efficiencyType: string,
+    efficiencyClass: number,
     hp: number,
-    hz: number,
+    lineFrequency: number,
     id?: number,
-    motorType: string,
+    enclosureType: string,
     nemaTable: string,
     nominalEfficiency: number,
     poles: number,

@@ -1,0 +1,343 @@
+<div class="row ml-0 mr-0">
+    <div class="col-12">
+        <div class="header">
+            <div class="h3">Select Motor Properties</div>
+        </div>
+    </div>
+    <div class="col-12">
+        <form>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.manufacturer"
+                        name="manufacturer" id="manufacturer">
+                    Manufacturer
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.model" name="model" id="model">
+                    Model
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.motorType" name="motorType"
+                        id="motorType">
+                    Motor Type
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.catalogId" name="catalogId"
+                        id="catalogId">
+                    Catalog ID
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.ratedSpeed" name="ratedSpeed"
+                        id="ratedSpeed">
+                    Rated Speed
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.fullLoadSpeed"
+                        name="fullLoadSpeed" id="fullLoadSpeed">
+                    Full Load Speed
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.enclosureType"
+                        name="enclosureType" id="enclosureType">
+                    Enclosure Type
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.frameNumber" name="frameNumber"
+                        id="frameNumber">
+                    Frame Number
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.ratedVoltage"
+                        name="ratedVoltage" id="ratedVoltage">
+                    Voltage Rating
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.purpose" name="purpose"
+                        id="purpose">
+                    Purpose
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.uFrame" name="uFrame"
+                        id="uFrame">
+                    uFrame
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.cFace" name="cFace" id="cFace">
+                    cFace
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.verticalShaft"
+                        name="verticalShaft" id="verticalShaft">
+                    Vertical Shaft
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.dFlange" name="dFlange"
+                        id="dFlange">
+                    dFlange
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.serviceFactor"
+                        name="serviceFactor" id="serviceFactor">
+                    Service Factor
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.insulationClass"
+                        name="insulationClass" id="insulationClass">
+                    Insulation Class
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.weight" name="weight"
+                        id="weight">
+                    Weight
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.listPrice" name="listPrice"
+                        id="listPrice">
+                    List Price
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.windingResistance"
+                        name="windingResistance" id="windingResistance">
+                    Winding Resistance
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.warranty" name="warranty"
+                        id="warranty">
+                    Warranty
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.rotorBars" name="rotorBars"
+                        id="rotorBars">
+                    Number of Rotor Bars
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.statorSlots" name="statorSlots"
+                        id="statorSlots">
+                    Number of Stator Slots
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.efficiency75"
+                        name="efficiency75" id="efficiency75">
+                    Efficiency at 75% Load
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.efficiency50"
+                        name="efficiency50" id="efficiency50">
+                    Efficiency at 50% Load
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.efficiency25"
+                        name="efficiency25" id="efficiency25">
+                    Efficiency at 25% Load
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.powerFactor100"
+                        name="powerFactor100" id="powerFactor100">
+                    Power Factor at Full Load
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.powerFactor75"
+                        name="powerFactor75" id="powerFactor75">
+                    Power Factor at 75% Load
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.powerFactor50"
+                        name="powerFactor50" id="powerFactor50">
+                    Power Factor at 50% Load
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.powerFactor25"
+                        name="powerFactor25" id="powerFactor25">
+                    Power Factor at 25% Load
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.torqueFullLoad"
+                        name="torqueFullLoad" id="torqueFullLoad">
+                    Full Load Torque
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.torqueBreakDown"
+                        name="torqueBreakDown" id="torqueBreakDown">
+                    Break Down Torque
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.torqueLockedRotor"
+                        name="torqueLockedRotor" id="torqueLockedRotor">
+                    Locked Rotor Torque
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.ampsIdle" name="ampsIdle"
+                        id="ampsIdle">
+                    Idle Amps
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.ampsLockedRotor"
+                        name="ampsLockedRotor" id="ampsLockedRotor">
+                    Locked Rotor Amps
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.stalledRotorTimeHot"
+                        name="stalledRotorTimeHot" id="stalledRotorTimeHot">
+                    Stalled Rotor Time - Hot
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.stalledRotorTimeCold"
+                        name="stalledRotorTimeCold" id="stalledRotorTimeCold">
+                    Stalled Rotor Time - Cold
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.poles" name="poles" id="poles">
+                    Poles
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.annualOperatingHours"
+                        name="annualOperatingHours" id="annualOperatingHours">
+                    Motor Operating Hours
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.driveType" name="driveType"
+                        id="driveType">
+                    Drive Type
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.isVFD" name="isVFD" id="isVFD">
+                    VFD
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.hasLoggerData"
+                        name="hasLoggerData" id="hasLoggerData">
+                    Data Logger
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.numberOfPhases"
+                        name="numberOfPhases" id="numberOfPhases">
+                    Number of Phases
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.voltageConnectionType"
+                        name="voltageConnectionType" id="voltageConnectionType">
+                    Voltage Connection Type
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.currentType" name="currentType"
+                        id="currentType">
+                    Current Type
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.averageLoadFactor"
+                        name="averageLoadFactor" id="averageLoadFactor">
+                    Average Load Factor
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.utilizationFactor"
+                        name="utilizationFactor" id="utilizationFactor">
+                    Utilization Factor
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" (input)="save()" [(ngModel)]="displayOptions.percentLoad" name="percentLoad"
+                        id="percentLoad">
+                    Effeciency at Average Load
+                </label>
+            </div>
+        </form>
+    </div>
+</div>

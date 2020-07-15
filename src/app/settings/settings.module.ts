@@ -27,7 +27,7 @@ import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-c
         TutorialSettingsComponent,
         TreasureHuntSettingsComponent,
         AssessmentSettingsComponent,
-        ResetDataModalComponent
+        ResetDataModalComponent,
 
     ],
     imports: [
