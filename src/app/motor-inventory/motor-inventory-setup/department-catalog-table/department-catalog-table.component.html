@@ -6,44 +6,41 @@
                     Name
                 </th>
                 <th>
-                    Eff. Class
-                </th>
-                <th>
                     Op. Hours
                 </th>
                 <th>
-                    RPM
+                    Eff. Class
                 </th>
                 <th>
-                    HP
+                    Est. Efficiency
                 </th>
                 <th>
-                    Hz
+                    Rated Power
                 </th>
                 <th>
-                    Efficiency
+                    Line Frequency
                 </th>
                 <th>
-                    V
+                    Sync. Speed
                 </th>
                 <th>
-                    FLA
+                    Full Load Amps
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let motor of selectedMotorDepartment.catalog">
                 <td>
-                    {{motor.name}}
-                </td>
-                <td>
-                    {{motor.efficiencyClass | motorEfficiencyClass}}
+                    <a class="click-link" (click)="selectMotor(motor)">{{motor.name}}</a>
                 </td>
                 <td>
                     {{motor.annualOperatingHours}}
                 </td>
                 <td>
-                    {{motor.motorRpm}}
+                    {{motor.efficiencyClass | motorEfficiencyClass}}
+                </td>
+                <td>
+                    {{motor.nominalEfficiency}}
                 </td>
                 <td>
                     {{motor.ratedMotorPower}}
@@ -52,10 +49,7 @@
                     {{motor.lineFrequency}}
                 </td>
                 <td>
-                    {{motor.nominalEfficiency}}
-                </td>
-                <td>
-                    {{motor.ratedVoltage}}
+                    {{motor.synchronousSpeed}}
                 </td>
                 <td>
                     {{motor.fullLoadAmps}}

@@ -13,9 +13,9 @@
           <table class="table table-sm">
             <tr>
               <th></th>
-              <th>
+              <!-- <th>
                 Catalog
-              </th>
+              </th> -->
               <th>
                 Type
               </th>
@@ -40,17 +40,17 @@
               <th>
                 Poles
               </th>
-              <th>
+              <!-- <th>
                 Nema Table
-              </th>
+              </th> -->
             </tr>
             <tr *ngFor="let option of motorOptions">
               <td>
                 <a class="click-link" (click)="selectMotor(option)">Use</a>
               </td>
-              <td>
+              <!-- <td>
                 {{option.catalog}}
-              </td>
+              </td> -->
               <td>
                 {{option.enclosureType}}
               </td>
@@ -75,9 +75,9 @@
               <td>
                 {{option.poles}}
               </td>
-              <td>
+              <!-- <td>
                 {{option.nemaTable}}
-              </td>
+              </td> -->
             </tr>
           </table>
         </div>

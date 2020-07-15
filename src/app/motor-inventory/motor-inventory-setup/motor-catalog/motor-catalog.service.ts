@@ -20,7 +20,8 @@ export class MotorCatalogService {
       ratedMotorPower: [motorItem.ratedMotorPower, [Validators.required]],
       efficiencyClass: [motorItem.efficiencyClass, [Validators.required]],
       nominalEfficiency: [motorItem.nominalEfficiency, [Validators.required]],
-      synchronousSpeed: [motorItem.synchronousSpeed, [Validators.required]]
+      synchronousSpeed: [motorItem.synchronousSpeed, [Validators.required]],
+      fullLoadAmps: [motorItem.fullLoadAmps, [Validators.required]]
     });
   }
 
@@ -30,6 +31,7 @@ export class MotorCatalogService {
     motorItem.efficiencyClass = form.controls.efficiencyClass.value;
     motorItem.nominalEfficiency = form.controls.nominalEfficiency.value;
     motorItem.synchronousSpeed = form.controls.synchronousSpeed.value;
+    motorItem.fullLoadAmps = form.controls.fullLoadAmps.value;
     return motorItem;
   }
 
@@ -82,7 +84,7 @@ export class MotorCatalogService {
       voltageConnectionType: [motorItem.voltageConnectionType],
       currentType: [motorItem.currentType],
       averageLoadFactor: [motorItem.averageLoadFactor],
-      utilizationFactor: [motorItem.utilizationFactor]
+      utilizationFactor: [motorItem.utilizationFactor],
     });
   }
 
@@ -94,33 +96,33 @@ export class MotorCatalogService {
     });
   }
 
-  getFormFromMotorItem(motorItem: MotorItem): FormGroup {
-    return this.formBuilder.group({
-      id: [motorItem.id],
-      departmentId: [motorItem.departmentId],
-      suiteDbItemId: [motorItem.suiteDbItemId],
-      name: [motorItem.name],
-      motorRpm: [motorItem.motorRpm, [Validators.required]],
-      description: [motorItem.description, [Validators.required]],
-      lineFrequency: [motorItem.lineFrequency, [Validators.required]],
-      ratedMotorPower: [motorItem.ratedMotorPower, [Validators.required]],
-      efficiencyClass: [motorItem.efficiencyClass, [Validators.required]],
-      nominalEfficiency: [motorItem.nominalEfficiency, [Validators.required]],
-      ratedVoltage: [motorItem.ratedVoltage, [Validators.required]],
-      fullLoadAmps: [motorItem.fullLoadAmps, [Validators.required]],
-      annualOperatingHours: [motorItem.annualOperatingHours, [Validators.required]],
-      percentLoad: [motorItem.percentLoad, [Validators.required]],
-      driveType: [motorItem.driveType],
-      isVFD: [motorItem.isVFD],
-      hasLoggerData: [motorItem.hasLoggerData],
-      frameNumber: [motorItem.frameNumber],
-      numberOfPhases: [motorItem.numberOfPhases],
-      enclosureType: [motorItem.enclosureType],
-      nemaTable: [motorItem.nemaTable],
-      poles: [motorItem.poles],
-      synchronousSpeed: [motorItem.synchronousSpeed]
-    })
-  }
+  // getFormFromMotorItem(motorItem: MotorItem): FormGroup {
+  //   return this.formBuilder.group({
+  //     id: [motorItem.id],
+  //     departmentId: [motorItem.departmentId],
+  //     suiteDbItemId: [motorItem.suiteDbItemId],
+  //     name: [motorItem.name],
+  //     motorRpm: [motorItem.motorRpm, [Validators.required]],
+  //     description: [motorItem.description, [Validators.required]],
+  //     lineFrequency: [motorItem.lineFrequency, [Validators.required]],
+  //     ratedMotorPower: [motorItem.ratedMotorPower, [Validators.required]],
+  //     efficiencyClass: [motorItem.efficiencyClass, [Validators.required]],
+  //     nominalEfficiency: [motorItem.nominalEfficiency, [Validators.required]],
+  //     ratedVoltage: [motorItem.ratedVoltage, [Validators.required]],
+  //     fullLoadAmps: [motorItem.fullLoadAmps, [Validators.required]],
+  //     annualOperatingHours: [motorItem.annualOperatingHours, [Validators.required]],
+  //     percentLoad: [motorItem.percentLoad, [Validators.required]],
+  //     driveType: [motorItem.driveType],
+  //     isVFD: [motorItem.isVFD],
+  //     hasLoggerData: [motorItem.hasLoggerData],
+  //     frameNumber: [motorItem.frameNumber],
+  //     numberOfPhases: [motorItem.numberOfPhases],
+  //     enclosureType: [motorItem.enclosureType],
+  //     nemaTable: [motorItem.nemaTable],
+  //     poles: [motorItem.poles],
+  //     synchronousSpeed: [motorItem.synchronousSpeed]
+  //   })
+  // }
 
   updateMotorItemFromBasicsForm(form: FormGroup, motorItem: MotorItem): MotorItem {
     motorItem.description = form.controls.description.value;

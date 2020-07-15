@@ -1,20 +1,6 @@
 <label class="group-label">Required Properties</label>
 <form class="p-0" *ngIf="motorForm" [formGroup]="motorForm">
-    <!--motor power: ratedMotorPower-->
-    <div class="form-group">
-        <label for="ratedMotorPower">Rated Motor Power</label>
-        <div class="input-group">
-            <input type="number" name="ratedMotorPower" class="form-control number-input-field" id="ratedMotorPower"
-                (focus)="focusField('ratedMotorPower')" (input)="save()" formControlName="ratedMotorPower">
-            <span class="input-group-addon units" *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
-            <span class="input-group-addon units" *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
-        </div>
-        <!-- <span *ngIf="motorItemForm.controls.ratedMotorPower.invalid && !motorItemForm.controls.ratedMotorPower.pristine">
-                  <span class="alert-danger pull-right small" *ngIf="motorItemForm.controls.ratedMotorPower.errors.required">Value
-                    Required</span>
-                </span>
-                <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null && !motorItemForm.controls.ratedMotorPower.pristine && !motorItemForm.controls.fullLoadAmps.invalid">{{warnings.ratedPowerError}}</span> -->
-    </div>
+
 
     <!--Efficiency type: efficiencyClass-->
     <div class="form-group">
@@ -44,7 +30,21 @@
                         {{motorItemForm.controls.nominalEfficiency.errors.min.min}} %.</span>
                 </span> -->
     </div>
-
+    <!--motor power: ratedMotorPower-->
+    <div class="form-group">
+        <label for="ratedMotorPower">Rated Motor Power</label>
+        <div class="input-group">
+            <input type="number" name="ratedMotorPower" class="form-control number-input-field" id="ratedMotorPower"
+                (focus)="focusField('ratedMotorPower')" (input)="save()" formControlName="ratedMotorPower">
+            <span class="input-group-addon units" *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
+            <span class="input-group-addon units" *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
+        </div>
+        <!-- <span *ngIf="motorItemForm.controls.ratedMotorPower.invalid && !motorItemForm.controls.ratedMotorPower.pristine">
+                  <span class="alert-danger pull-right small" *ngIf="motorItemForm.controls.ratedMotorPower.errors.required">Value
+                    Required</span>
+                </span>
+                <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null && !motorItemForm.controls.ratedMotorPower.pristine && !motorItemForm.controls.fullLoadAmps.invalid">{{warnings.ratedPowerError}}</span> -->
+    </div>
     <!--line frequency: lineFrequency-->
     <div class="form-group">
         <label for="lineFrequency">Line Frequency</label>
@@ -63,4 +63,15 @@
             <span class="input-group-addon units">rpm</span>
         </div>
     </div>
+
+    <!--full load amps: fullLoadAmps-->
+    <div class="form-group">
+        <label for="fullLoadAmps">Full Load Amps</label>
+        <div class="input-group">
+            <input type="number" name="fullLoadAmps" class="form-control number-input-field" id="fullLoadAmps"
+                (focus)="focusField('fullLoadAmps')" (input)="save()" formControlName="fullLoadAmps">
+            <span class="input-group-addon units">A</span>
+        </div>
+    </div>
+
 </form>

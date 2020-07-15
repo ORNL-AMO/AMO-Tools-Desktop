@@ -4,7 +4,8 @@
     <div class="form-group" *ngIf="displayOptions.ratedVoltage">
         <label for="ratedVoltage">Rated Voltage</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="ratedVoltage" id="ratedVoltage">
+            <input type="number" class="form-control" (focus)="focusField('ratedVoltage')" (input)="save()"
+                formControlName="ratedVoltage" id="ratedVoltage">
             <span class="input-group-addon units">V</span>
         </div>
     </div>
@@ -12,7 +13,7 @@
     <!-- <div class="form-group" *ngIf="displayOptions.annualOperatingHours">
         <label for="annualOperatingHours">Operating Hours</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="annualOperatingHours" id="annualOperatingHours">
+            <input type="number" class="form-control" (focus)="focusField('')" (input)="save()" formControlName="annualOperatingHours" id="annualOperatingHours">
             <span class="input-group-addon units">hrs/yr</span>
         </div>
     </div> -->
@@ -20,14 +21,16 @@
     <div class="form-group" *ngIf="displayOptions.percentLoad">
         <label for="percentLoad">Percent Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="percentLoad" id="percentLoad">
+            <input type="number" class="form-control" (focus)="focusField('percentLoad')" (input)="save()"
+                formControlName="percentLoad" id="percentLoad">
             <span class="input-group-addon units">%</span>
         </div>
     </div>
     <!-- driveType -->
     <div class="form-group" *ngIf="displayOptions.driveType">
         <label for="driveType">Drive Type</label>
-        <select class="form-control" formControlName="driveType" id="driveType">
+        <select class="form-control" (focus)="focusField('driveType')" (change)="save()" formControlName="driveType"
+            id="driveType">
             <option *ngFor="let driveType of driveTypes" [ngValue]="driveType.value">{{driveType.display}}</option>
         </select>
     </div>
@@ -35,7 +38,7 @@
     <!-- isVFD -->
     <div class="form-group" *ngIf="displayOptions.isVFD">
         <label for="isVFD">Is VFD?</label>
-        <select class="form-control" formControlName="isVFD" id="isVFD">
+        <select class="form-control" (focus)="focusField('isVFD')" (change)="save()" formControlName="isVFD" id="isVFD">
             <option [ngValue]="true">Yes</option>
             <option [ngValue]="false">No</option>
         </select>
@@ -44,7 +47,8 @@
     <!-- hasLoggerData -->
     <div class="form-group" *ngIf="displayOptions.hasLoggerData">
         <label for="hasLoggerData">Has Logger Data?</label>
-        <select class="form-control" formControlName="hasLoggerData" id="hasLoggerData">
+        <select class="form-control" (focus)="focusField('hasLoggerData')" (change)="save()" formControlName="hasLoggerData"
+            id="hasLoggerData">
             <option [ngValue]="true">Yes</option>
             <option [ngValue]="false">No</option>
         </select>
@@ -53,7 +57,8 @@
     <!-- numberOfPhases -->
     <div class="form-group" *ngIf="displayOptions.numberOfPhases">
         <label for="numberOfPhases">Number of Phases</label>
-        <select class="form-control" formControlName="numberOfPhases" id="numberOfPhases">
+        <select class="form-control" (focus)="focusField('numberOfPhases')" (change)="save()" formControlName="numberOfPhases"
+            id="numberOfPhases">
             <option [ngValue]="1">1</option>
             <option [ngValue]="3">3</option>
         </select>
@@ -62,7 +67,8 @@
     <!-- enclosureType -->
     <div class="form-group" *ngIf="displayOptions.enclosureType">
         <label for="enclosureType">Enclosure Type</label>
-        <select class="form-control" formControlName="enclosureType" id="enclosureType">
+        <select class="form-control" (focus)="focusField('enclosureType')" (change)="save()" formControlName="enclosureType"
+            id="enclosureType">
             <option [ngValue]="'ODP'">ODP</option>
             <option [ngValue]="'TEFC'">TEFC</option>
             <option [ngValue]="'EXPL'">EXPL</option>
@@ -76,23 +82,27 @@
     <!-- poles -->
     <div class="form-group" *ngIf="displayOptions.poles">
         <label for="poles">Poles</label>
-        <input type="number" step="1" class="form-control" formControlName="poles" id="poles">
+        <input type="number" step="1" class="form-control" (focus)="focusField('poles')" (input)="save()"
+            formControlName="poles" id="poles">
     </div>
 
     <!-- manufacturer -->
     <div class="form-group" *ngIf="displayOptions.manufacturer">
         <label for="manufacturer">Manufacturer</label>
-        <input type="text" class="form-control" formControlName="manufacturer" id="manufacturer">
+        <input type="text" class="form-control" (focus)="focusField('manufacturer')" (input)="save()" formControlName="manufacturer"
+            id="manufacturer">
     </div>
     <!-- model -->
     <div class="form-group" *ngIf="displayOptions.model">
         <label for="model">Model</label>
-        <input type="text" class="form-control" formControlName="model" id="model">
+        <input type="text" class="form-control" (focus)="focusField('model')" (input)="save()" formControlName="model"
+            id="model">
     </div>
     <!-- catalogId -->
     <div class="form-group" *ngIf="displayOptions.catalogId">
         <label for="catalogId">Catalog ID</label>
-        <input type="text" class="form-control" formControlName="catalogId" id="catalogId">
+        <input type="text" class="form-control" (focus)="focusField('catalogId')" (input)="save()" formControlName="catalogId"
+            id="catalogId">
     </div>
     <!-- motorType -->
 
@@ -100,7 +110,8 @@
     <div class="form-group" *ngIf="displayOptions.ratedSpeed">
         <label for="ratedSpeed">Rated Speed</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="ratedSpeed" id="ratedSpeed">
+            <input type="number" class="form-control" (focus)="focusField('ratedSpeed')" (input)="save()"
+                formControlName="ratedSpeed" id="ratedSpeed">
             <span class="input-group-addon units">rpm</span>
         </div>
     </div>
@@ -108,49 +119,58 @@
     <div class="form-group" *ngIf="displayOptions.fullLoadSpeed">
         <label for="fullLoadSpeed">Full Load Speed</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="fullLoadSpeed" id="fullLoadSpeed">
+            <input type="number" class="form-control" (focus)="focusField('fullLoadSpeed')" (input)="save()"
+                formControlName="fullLoadSpeed" id="fullLoadSpeed">
             <span class="input-group-addon units">rpm</span>
         </div>
     </div>
     <!-- frameNumber -->
     <div class="form-group" *ngIf="displayOptions.frameNumber">
         <label for="frameNumber">Frame Name</label>
-        <input type="text" class="form-control" formControlName="frameNumber" id="frameNumber">
+        <input type="text" class="form-control" (focus)="focusField('frameNumber')" (input)="save()" formControlName="frameNumber"
+            id="frameNumber">
     </div>
     <!-- purpose -->
     <div class="form-group" *ngIf="displayOptions.purpose">
         <label for="purpose">Purpose</label>
-        <input type="text" class="form-control" formControlName="purpose" id="purpose">
+        <input type="text" class="form-control" (focus)="focusField('purpose')" (input)="save()" formControlName="purpose"
+            id="purpose">
     </div>
     <!-- uFrame -->
     <div class="form-group" *ngIf="displayOptions.uFrame">
         <label for="uFrame">uFrame</label>
-        <input type="text" class="form-control" formControlName="uFrame" id="uFrame">
+        <input type="text" class="form-control" (focus)="focusField('uFrame')" (input)="save()" formControlName="uFrame"
+            id="uFrame">
     </div>
     <!-- cFace -->
     <div class="form-group" *ngIf="displayOptions.cFace">
         <label for="cFace">cFace</label>
-        <input type="text" class="form-control" formControlName="cFace" id="cFace">
+        <input type="text" class="form-control" (focus)="focusField('cFace')" (input)="save()" formControlName="cFace"
+            id="cFace">
     </div>
     <!-- verticalShaft -->
     <div class="form-group" *ngIf="displayOptions.verticalShaft">
         <label for="verticalShaft">Vertical Shaft</label>
-        <input type="text" class="form-control" formControlName="verticalShaft" id="verticalShaft">
+        <input type="text" class="form-control" (focus)="focusField('verticalShaft')" (input)="save()"
+            formControlName="verticalShaft" id="verticalShaft">
     </div>
     <!-- dFlange -->
     <div class="form-group" *ngIf="displayOptions.dFlange">
         <label for="dFlange">dFlange</label>
-        <input type="text" class="form-control" formControlName="dFlange" id="dFlange">
+        <input type="text" class="form-control" (focus)="focusField('dFlange')" (input)="save()" formControlName="dFlange"
+            id="dFlange">
     </div>
     <!-- serviceFactor -->
     <div class="form-group" *ngIf="displayOptions.serviceFactor">
         <label for="serviceFactor">dFlange</label>
-        <input type="number" class="form-control" formControlName="serviceFactor" id="serviceFactor">
+        <input type="number" class="form-control" (focus)="focusField('serviceFactor')" (input)="save()"
+            formControlName="serviceFactor" id="serviceFactor">
     </div>
     <!-- insulationClass -->
     <div class="form-group" *ngIf="displayOptions.insulationClass">
         <label for="insulationClass">Insulation Class</label>
-        <select class="form-control" formControlName="insulationClass" id="insulationClass">
+        <select class="form-control" (focus)="focusField('insulationClass')" (change)="save()" formControlName="insulationClass"
+            id="insulationClass">
             <option [ngValue]="'A'">A</option>
             <option [ngValue]="'B'">B</option>
             <option [ngValue]="'F'">F</option>
@@ -161,7 +181,8 @@
     <div class="form-group" *ngIf="displayOptions.weight">
         <label for="weight">Weight</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="weight" id="weight">
+            <input type="number" class="form-control" (focus)="focusField('weight')" (input)="save()" formControlName="weight"
+                id="weight">
             <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">lb</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg</span>
         </div>
@@ -170,7 +191,8 @@
     <div class="form-group" *ngIf="displayOptions.listPrice">
         <label for="listPrice">List Price</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="listPrice" id="listPrice">
+            <input type="number" class="form-control" (focus)="focusField('listPrice')" (input)="save()"
+                formControlName="listPrice" id="listPrice">
             <span class="input-group-addon units">$</span>
         </div>
     </div>
@@ -178,7 +200,8 @@
     <div class="form-group" *ngIf="displayOptions.windingResistance">
         <label for="windingResistance">Winding Resistance</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="windingResistance" id="windingResistance">
+            <input type="number" class="form-control" (focus)="focusField('windingResistance')" (input)="save()"
+                formControlName="windingResistance" id="windingResistance">
             <!-- <span class="input-group-addon units">$</span> -->
         </div>
     </div>
@@ -186,25 +209,29 @@
     <div class="form-group" *ngIf="displayOptions.warranty">
         <label for="warranty">Warranty</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="warranty" id="warranty">
+            <input type="number" class="form-control" (focus)="focusField('warranty')" (input)="save()"
+                formControlName="warranty" id="warranty">
             <!-- <span class="input-group-addon units">$</span> -->
         </div>
     </div>
     <!-- rotorBars -->
     <div class="form-group" *ngIf="displayOptions.rotorBars">
         <label for="rotorBars">Rotor Bars</label>
-        <input type="number" class="form-control" formControlName="rotorBars" id="rotorBars">
+        <input type="number" class="form-control" (focus)="focusField('rotorBars')" (input)="save()" formControlName="rotorBars"
+            id="rotorBars">
     </div>
     <!-- statorSlots -->
     <div class="form-group" *ngIf="displayOptions.statorSlots">
         <label for="statorSlots">Stator Slots</label>
-        <input type="number" class="form-control" formControlName="statorSlots" id="statorSlots">
+        <input type="number" class="form-control" (focus)="focusField('statorSlots')" (input)="save()"
+            formControlName="statorSlots" id="statorSlots">
     </div>
     <!-- efficiency75 -->
     <div class="form-group" *ngIf="displayOptions.efficiency75">
         <label for="efficiency75">Efficiency at 75% Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="efficiency75" id="efficiency75">
+            <input type="number" class="form-control" (focus)="focusField('efficiency75')" (input)="save()"
+                formControlName="efficiency75" id="efficiency75">
             <span class="input-group-addon units">%</span>
         </div>
     </div>
@@ -212,7 +239,8 @@
     <div class="form-group" *ngIf="displayOptions.efficiency50">
         <label for="efficiency50">Efficiency at 50% Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="efficiency50" id="efficiency50">
+            <input type="number" class="form-control" (focus)="focusField('efficiency50')" (input)="save()"
+                formControlName="efficiency50" id="efficiency50">
             <span class="input-group-addon units">%</span>
         </div>
     </div>
@@ -220,50 +248,59 @@
     <div class="form-group" *ngIf="displayOptions.efficiency25">
         <label for="efficiency25">Efficiency at 25% Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="efficiency25" id="efficiency25">
+            <input type="number" class="form-control" (focus)="focusField('efficiency25')" (input)="save()"
+                formControlName="efficiency25" id="efficiency25">
             <span class="input-group-addon units">%</span>
         </div>
     </div>
     <!-- powerFactor100 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor100">
         <label for="powerFactor100">Power Factor at Full Load</label>
-        <input type="number" class="form-control" formControlName="powerFactor100" id="powerFactor100">
+        <input type="number" class="form-control" (focus)="focusField('powerFactor100')" (input)="save()"
+            formControlName="powerFactor100" id="powerFactor100">
     </div>
     <!-- powerFactor75 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor75">
         <label for="powerFactor75">Power Factor at 75% Load</label>
-        <input type="number" class="form-control" formControlName="powerFactor75" id="powerFactor75">
+        <input type="number" class="form-control" (focus)="focusField('powerFactor75')" (input)="save()"
+            formControlName="powerFactor75" id="powerFactor75">
     </div>
     <!-- powerFactor50 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor50">
         <label for="powerFactor50">Power Factor at 50% Load</label>
-        <input type="number" class="form-control" formControlName="powerFactor50" id="powerFactor50">
+        <input type="number" class="form-control" (focus)="focusField('powerFactor50')" (input)="save()"
+            formControlName="powerFactor50" id="powerFactor50">
     </div>
     <!-- powerFactor25 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor25">
         <label for="powerFactor25">Power Factor at 25% Load</label>
-        <input type="number" class="form-control" formControlName="powerFactor25" id="powerFactor25">
+        <input type="number" class="form-control" (focus)="focusField('powerFactor25')" (input)="save()"
+            formControlName="powerFactor25" id="powerFactor25">
     </div>
     <!-- torqueFullLoad -->
     <div class="form-group" *ngIf="displayOptions.torqueFullLoad">
         <label for="torqueFullLoad">Full Load Torque</label>
-        <input type="number" class="form-control" formControlName="torqueFullLoad" id="torqueFullLoad">
+        <input type="number" class="form-control" (focus)="focusField('torqueFullLoad')" (input)="save()"
+            formControlName="torqueFullLoad" id="torqueFullLoad">
     </div>
     <!-- torqueBreakDown -->
     <div class="form-group" *ngIf="displayOptions.torqueBreakDown">
         <label for="torqueBreakDown">Break Down Torque</label>
-        <input type="number" class="form-control" formControlName="torqueBreakDown" id="torqueBreakDown">
+        <input type="number" class="form-control" (focus)="focusField('torqueBreakDown')" (input)="save()"
+            formControlName="torqueBreakDown" id="torqueBreakDown">
     </div>
     <!-- torqueLockedRotor -->
     <div class="form-group" *ngIf="displayOptions.torqueLockedRotor">
         <label for="torqueLockedRotor">Locked Rotor Torque</label>
-        <input type="number" class="form-control" formControlName="torqueLockedRotor" id="torqueLockedRotor">
+        <input type="number" class="form-control" (focus)="focusField('torqueLockedRotor')" (input)="save()"
+            formControlName="torqueLockedRotor" id="torqueLockedRotor">
     </div>
     <!-- ampsIdle -->
     <div class="form-group" *ngIf="displayOptions.ampsIdle">
         <label for="ampsIdle">Idle Amps</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="ampsIdle" id="ampsIdle">
+            <input type="number" class="form-control" (focus)="focusField('')" (input)="save()"
+                formControlName="ampsIdle" id="ampsIdle">
             <span class="input-group-addon units">A</span>
         </div>
     </div>
@@ -271,24 +308,28 @@
     <div class="form-group" *ngIf="displayOptions.ampsLockedRotor">
         <label for="ampsLockedRotor">Locked Rotor Amps</label>
         <div class="input-group">
-            <input type="number" class="form-control" formControlName="ampsLockedRotor" id="ampsLockedRotor">
+            <input type="number" class="form-control" (focus)="focusField('ampsLockedRotor')" (input)="save()"
+                formControlName="ampsLockedRotor" id="ampsLockedRotor">
             <span class="input-group-addon units">A</span>
         </div>
     </div>
     <!-- stalledRotorTimeHot -->
     <div class="form-group" *ngIf="displayOptions.stalledRotorTimeHot">
         <label for="stalledRotorTimeHot">Stalled Rotor Time - Hot</label>
-        <input type="number" class="form-control" formControlName="stalledRotorTimeHot" id="stalledRotorTimeHot">
+        <input type="number" class="form-control" (focus)="focusField('stalledRotorTimeHot')" (input)="save()"
+            formControlName="stalledRotorTimeHot" id="stalledRotorTimeHot">
     </div>
     <!-- stalledRotorTimeCold -->
     <div class="form-group" *ngIf="displayOptions.stalledRotorTimeCold">
         <label for="stalledRotorTimeCold">Stalled Rotor Time - Cold</label>
-        <input type="number" class="form-control" formControlName="stalledRotorTimeCold" id="stalledRotorTimeCold">
+        <input type="number" class="form-control" (focus)="focusField('stalledRotorTimeCold')" (input)="save()"
+            formControlName="stalledRotorTimeCold" id="stalledRotorTimeCold">
     </div>
     <!-- voltageConnectionType -->
     <div class="form-group" *ngIf="displayOptions.voltageConnectionType">
         <label for="voltageConnectionType">Voltage Connection Type</label>
-        <select class="form-control" formControlName="voltageConnectionType" id="voltageConnectionType">
+        <select class="form-control" (focus)="focusField('voltageConnectionType')" (change)="save()" formControlName="voltageConnectionType"
+            id="voltageConnectionType">
             <option [ngValue]="'Delta'">Delta</option>
             <option [ngValue]="'Wye'">Wye</option>
         </select>
@@ -297,7 +338,8 @@
     <!-- currentType -->
     <div class="form-group" *ngIf="displayOptions.currentType">
         <label for="currentType">Current Type</label>
-        <select class="form-control" formControlName="currentType" id="currentType">
+        <select class="form-control" (focus)="focusField('currentType')" (input)="save()" formControlName="currentType"
+            id="currentType">
             <option [ngValue]="'AC'">AC</option>
             <option [ngValue]="'DC'">DC</option>
         </select>
@@ -305,11 +347,13 @@
     <!-- averageLoadFactor -->
     <div class="form-group" *ngIf="displayOptions.averageLoadFactor">
         <label for="averageLoadFactor">Average Load Factor</label>
-        <input type="number" class="form-control" formControlName="averageLoadFactor" id="averageLoadFactor">
+        <input type="number" class="form-control" (focus)="focusField('averageLoadFactor')" (input)="save()"
+            formControlName="averageLoadFactor" id="averageLoadFactor">
     </div>
     <!-- utilizationFactor -->
     <div class="form-group" *ngIf="displayOptions.utilizationFactor">
         <label for="utilizationFactor">Utilization Factor</label>
-        <input type="number" class="form-control" formControlName="utilizationFactor" id="utilizationFactor">
+        <input type="number" class="form-control" (focus)="focusField('utilizationFactor')" (input)="save()"
+            formControlName="utilizationFactor" id="utilizationFactor">
     </div>
 </form>

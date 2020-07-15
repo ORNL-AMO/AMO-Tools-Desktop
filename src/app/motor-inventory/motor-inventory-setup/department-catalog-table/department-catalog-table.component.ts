@@ -53,4 +53,8 @@ export class DepartmentCatalogTableComponent implements OnInit {
     this.motorInventoryService.motorInventoryData.next(this.motorInventoryData);
     this.motorCatalogService.selectedMotorItem.next(newMotor);
   }
+
+  selectMotor(motor: MotorItem){
+    this.motorCatalogService.selectedMotorItem.next(motor);
+  }
 }
