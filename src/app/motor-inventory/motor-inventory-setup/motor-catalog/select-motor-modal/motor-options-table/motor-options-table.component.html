@@ -1,6 +1,6 @@
 <div class="p-2">
-    <table class="table table-sm">
-        <tr>
+    <table class="table table-sm table-hover">
+        <tr class="header-row">
             <th></th>
             <!-- <th>
             Catalog
@@ -15,10 +15,10 @@
                 Nominal Efficiency
             </th>
             <th>
-                HP
+                Motor Power
             </th>
             <th>
-                Hz
+                Line Frequency
             </th>
             <th>
                 Synchronous Speed
@@ -50,16 +50,16 @@
                 {{option.nominalEfficiency | number:'1.1-1'}} %
             </td>
             <td>
-                {{option.hp}}
+                {{option.hp}} hp
             </td>
             <td>
-                {{option.lineFrequency}}
+                {{option.lineFrequency}} Hz
             </td>
             <td>
-                {{option.synchronousSpeed}}
+                {{option.synchronousSpeed}} rpm
             </td>
             <td>
-                {{option.voltageLimit}}
+                {{option.voltageLimit}} V
             </td>
             <td>
                 {{option.poles}}

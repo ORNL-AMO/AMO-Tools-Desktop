@@ -10,57 +10,44 @@ export class FilterMotorOptionsPipe implements PipeTransform {
   transform(motorOptions: Array<SuiteDbMotor>, filterMotorOptions: FilterMotorOptions): Array<SuiteDbMotor> {
     let motorOptionsCopy: Array<SuiteDbMotor> = JSON.parse(JSON.stringify(motorOptions));
     if (filterMotorOptions) {
-      // enclosureTypes: Array<string>;
-      if (filterMotorOptions.enclosureTypes.length != 0) {
-        motorOptionsCopy = _.filter(motorOptionsCopy, (motorOption) => {
-          return _.has(filterMotorOptions.enclosureTypes, motorOption.enclosureType);
-        })
-      }
-      // efficiencyClass: Array<number>;
-      if (filterMotorOptions.efficiencyClass.length != 0) {
-        motorOptionsCopy = _.filter(motorOptionsCopy, (motorOption) => {
-          return _.has(filterMotorOptions.efficiencyClass, motorOption.efficiencyClass);
-        })
-      }
-      // lineFrequencies: Array<number>;
-      if (filterMotorOptions.lineFrequencies.length != 0) {
-        motorOptionsCopy = _.filter(motorOptionsCopy, (motorOption) => {
-          return _.has(filterMotorOptions.lineFrequencies, motorOption.lineFrequency);
-        })
-      }
-      // poles: Array<number>;
-      if (filterMotorOptions.poles.length != 0) {
-        motorOptionsCopy = _.filter(motorOptionsCopy, (motorOption) => {
-          return _.has(filterMotorOptions.poles, motorOption.poles);
-        })
-      }
-      //min/max ranges
       motorOptionsCopy = _.filter(motorOptionsCopy, (motorOption) => {
-        return this.checkInRange(motorOption, filterMotorOptions);
+        return this.checkFilterMotorOption(motorOption, filterMotorOptions);
       })
     }
     return motorOptionsCopy;
   }
 
-  checkInRange(motorOption: SuiteDbMotor, filterMotorOptions: FilterMotorOptions): boolean {
+  checkFilterMotorOption(motorOption: SuiteDbMotor, filterMotorOptions: FilterMotorOptions): boolean {
     let isInRange: boolean = true;
-    // efficiencyMin: number;
-    // efficiencyMax: number;
+    // enclosureTypes
+    if (filterMotorOptions.enclosureType && filterMotorOptions.enclosureType != motorOption.enclosureType) {
+      isInRange = false;
+    }
+    // efficiencyClass
+    if (filterMotorOptions.efficiencyClass && filterMotorOptions.efficiencyClass != motorOption.efficiencyClass) {
+      isInRange = false;
+    }
+    // lineFrequencies
+    if (filterMotorOptions.lineFrequency && filterMotorOptions.lineFrequency != motorOption.lineFrequency) {
+      isInRange = false;
+    }
+    // poles
+    if (filterMotorOptions.poles && filterMotorOptions.poles != motorOption.poles) {
+      isInRange = false;
+    }
+    // efficiency
     if (motorOption.nominalEfficiency < filterMotorOptions.efficiencyMin || motorOption.nominalEfficiency > filterMotorOptions.efficiencyMax) {
       isInRange = false;
     };
-    // voltageLimitMin: number;
-    // voltageLimitMax: number;
+    // voltageLimit
     if (motorOption.voltageLimit < filterMotorOptions.voltageLimitMin || motorOption.voltageLimit > filterMotorOptions.voltageLimitMax) {
       isInRange = false;
     };
-    // syncSpeedMin: number;
-    // syncSpeedMax: number;
+    // syncSpeed
     if (motorOption.synchronousSpeed < filterMotorOptions.syncSpeedMin || motorOption.synchronousSpeed > filterMotorOptions.syncSpeedMax) {
       isInRange = false;
     };
-    // motorPowerMin: number;
-    // motorPowerMax: number;
+    // motorPower
     if (motorOption.hp < filterMotorOptions.motorPowerMin || motorOption.hp > filterMotorOptions.motorPowerMax) {
       isInRange = false;
     };
@@ -69,14 +56,13 @@ export class FilterMotorOptionsPipe implements PipeTransform {
 
 }
 
-
 export interface FilterMotorOptions {
-  enclosureTypes: Array<string>;
-  efficiencyClass: Array<number>;
-  lineFrequencies: Array<number>;
+  enclosureType: string;
+  efficiencyClass: number;
+  lineFrequency: number;
   efficiencyMin: number;
   efficiencyMax: number;
-  poles: Array<number>;
+  poles: number;
   voltageLimitMin: number;
   voltageLimitMax: number;
   syncSpeedMin: number;

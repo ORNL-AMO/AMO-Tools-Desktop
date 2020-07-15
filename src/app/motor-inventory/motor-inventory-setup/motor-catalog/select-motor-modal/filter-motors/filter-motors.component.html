@@ -1,18 +1,91 @@
 <form>
-    <div class="form-group">
-        <label for="efficiencyMin">Efficiency Min</label>
-        <div class="input-group">
-            <input type="number" [(ngModel)]="filterMotorOptions.efficiencyMin" name="efficiencyMin" id="efficiencyMin"
-                (input)="save()" class="form-control">
-            <span class="input-group-addon units">%</span>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="efficiencyClassOption">Efficiency Class</label>
+                <select [(ngModel)]="filterMotorOptions.efficiencyClass" name="efficiencyClassOption"
+                    id="efficiencyClassOption" class="form-control" (change)="save()">
+                    <option [ngValue]="undefined">All</option>
+                    <option *ngFor="let option of efficiencyClassOptions" [ngValue]="option">
+                        {{option | motorEfficiencyClass}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="lineFrequencyOption">Line Frequency</label>
+                <select [(ngModel)]="filterMotorOptions.lineFrequency" name="lineFrequencyOption" id="lineFrequencyOption" class="form-control"
+                    (change)="save()">
+                    <option [ngValue]="undefined">All</option>
+                    <option *ngFor="let option of lineFrequencyOptions" [ngValue]="option">
+                        {{option}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="enclosureTypeOption">Enclosure Type</label>
+                <select [(ngModel)]="filterMotorOptions.enclosureType" name="enclosureTypeOption"
+                    id="enclosureTypeOption" class="form-control" (change)="save()">
+                    <option [ngValue]="undefined">All</option>
+                    <option *ngFor="let option of enclosureTypeOptions" [ngValue]="option">
+                        {{option}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="polesOption">Poles</label>
+                <select [(ngModel)]="filterMotorOptions.poles" name="polesOption" id="polesOption" class="form-control"
+                    (change)="save()">
+                    <option [ngValue]="undefined">All</option>
+                    <option *ngFor="let option of polesOptions" [ngValue]="option">
+                        {{option}}
+                    </option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="efficiencyMax">Efficiency Max</label>
-        <div class="input-group">
-            <input type="number" [(ngModel)]="filterMotorOptions.efficiencyMax" name="efficiencyMax" id="efficiencyMax"
-                (input)="save()" class="form-control">
-            <span class="input-group-addon units">%</span>
+        <div class="col-6">
+
+
+            <div class="form-group d-flex flex-column">
+                <div class="d-flex">
+                    <label class="hide-text">no show</label>
+                    <input id="min" name="min" type="text" class="form-control disabled-input text-center"
+                        [disabled]="true" [(ngModel)]="minLabel">
+                    <input id="max" name="max" type="text" class="form-control disabled-input text-center"
+                        [disabled]="true" [(ngModel)]="maxLabel">
+                </div>
+                <!--efficiency min/max-->
+                <div class="d-flex">
+                    <label for="efficiencyMin">Efficiency (%)</label>
+                    <input type="number" [(ngModel)]="filterMotorOptions.efficiencyMin" name="efficiencyMin"
+                        id="efficiencyMin" (input)="save()" class="form-control">
+                    <input type="number" [(ngModel)]="filterMotorOptions.efficiencyMax" name="efficiencyMax"
+                        id="efficiencyMax" (input)="save()" class="form-control">
+                </div>
+                <!--voltageLimit min/max-->
+                <div class="d-flex">
+                    <label for="voltageLimitMin">Voltage Limit (V)</label>
+                    <input type="number" [(ngModel)]="filterMotorOptions.voltageLimitMin" name="voltageLimitMin"
+                        id="voltageLimitMin" (input)="save()" class="form-control">
+                    <input type="number" [(ngModel)]="filterMotorOptions.voltageLimitMax" name="voltageLimitMax"
+                        id="voltageLimitMax" (input)="save()" class="form-control">
+                </div>
+                <!--syncSpeed min/max-->
+                <div class="d-flex">
+                    <label for="syncSpeedMin">Sync. Speed (rpm)</label>
+                    <input type="number" [(ngModel)]="filterMotorOptions.syncSpeedMin" name="syncSpeedMin"
+                        id="syncSpeedMin" (input)="save()" class="form-control">
+                    <input type="number" [(ngModel)]="filterMotorOptions.syncSpeedMax" name="syncSpeedMax"
+                        id="syncSpeedMax" (input)="save()" class="form-control">
+                </div>
+                <!--motorPower min/max-->
+                <div class="d-flex">
+                    <label for="motorPowerMin">Motor Power (hp)</label>
+                    <input type="number" [(ngModel)]="filterMotorOptions.motorPowerMin" name="motorPowerMin"
+                        id="motorPowerMin" (input)="save()" class="form-control">
+                    <input type="number" [(ngModel)]="filterMotorOptions.motorPowerMax" name="motorPowerMax"
+                        id="motorPowerMax" (input)="save()" class="form-control">
+                </div>
+            </div>
         </div>
     </div>
 </form>

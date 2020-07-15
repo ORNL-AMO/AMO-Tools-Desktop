@@ -11,3 +11,8 @@
     height: 99vh;
     width: 99vw;
 }
+
+
+.card-header-text{
+    font-size: 24px;
+}
