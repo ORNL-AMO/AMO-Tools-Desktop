@@ -3,88 +3,19 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="card">
-        <div class="card-header">
-          Select Motor
+        <div class="card-header p-2">
+          <span class="card-header-text">
+            Select Motor
+          </span>
           <button class="close" aria-label="Close" (click)="close()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="card-block scroll-item">
-          <table class="table table-sm">
-            <tr>
-              <th></th>
-              <!-- <th>
-                Catalog
-              </th> -->
-              <th>
-                Type
-              </th>
-              <th>
-                Efficiency Class
-              </th>
-              <th>
-                Nominal Efficiency
-              </th>
-              <th>
-                HP
-              </th>
-              <th>
-                Hz
-              </th>
-              <th>
-                Synchronous Speed
-              </th>
-              <th>
-                Voltage Limit
-              </th>
-              <th>
-                Poles
-              </th>
-              <!-- <th>
-                Nema Table
-              </th> -->
-            </tr>
-            <tr *ngFor="let option of motorOptions">
-              <td>
-                <a class="click-link" (click)="selectMotor(option)">Use</a>
-              </td>
-              <!-- <td>
-                {{option.catalog}}
-              </td> -->
-              <td>
-                {{option.enclosureType}}
-              </td>
-              <td>
-                {{option.efficiencyClass | motorEfficiencyClass}}
-              </td>
-              <td>
-                {{option.nominalEfficiency | number:'1.1-1'}} %
-              </td>
-              <td>
-                {{option.hp}}
-              </td>
-              <td>
-                {{option.lineFrequency}}
-              </td>
-              <td>
-                {{option.synchronousSpeed}}
-              </td>
-              <td>
-                {{option.voltageLimit}}
-              </td>
-              <td>
-                {{option.poles}}
-              </td>
-              <!-- <td>
-                {{option.nemaTable}}
-              </td> -->
-            </tr>
-          </table>
+          <app-filter-motors></app-filter-motors>
+          <app-motor-options-table (emitSelect)="selectMotor($event)"></app-motor-options-table>
         </div>
-        <!-- <div class="card-footer">
-          <button class="btn btn-danger" (click)="close()">Cancel</button>
-          <button class="btn btn-success" (click)="save()">Save</button>
-        </div> -->
       </div>
     </div>
   </div>
+</div>

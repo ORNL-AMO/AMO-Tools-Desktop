@@ -17,15 +17,11 @@ export class SelectMotorModalComponent implements OnInit {
 
   @ViewChild('motorModal', { static: false }) public motorModal: ModalDirective;
 
-  motorOptions: Array<SuiteDbMotor>
-  constructor(private motorInventoryService: MotorInventoryService, private suiteDbService: SuiteDbService) { }
+
+  constructor(private motorInventoryService: MotorInventoryService, ) { }
 
   ngOnInit() {
     this.motorInventoryService.modalOpen.next(true);
-    this.motorOptions = this.suiteDbService.selectMotors()
-    // let filteredOptions = _.uniqBy(this.motorOptions, 'lineFrequency');
-    // let lineFreArr = filteredOptions.map(option => { return option.lineFrequency });
-    // console.log(lineFreArr);
   }
 
   ngAfterViewInit() {
