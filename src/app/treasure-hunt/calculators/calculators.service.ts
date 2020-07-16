@@ -8,7 +8,7 @@ import { NaturalGasReductionService } from '../../calculator/utilities/natural-g
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
-import { PipeInsulationReductionService } from '../../calculator/utilities/pipe-insulation-reduction/pipe-insulation-reduction.service';
+import { PipeInsulationReductionService } from '../../calculator/steam/pipe-insulation-reduction/pipe-insulation-reduction.service';
 import { CompressedAirReductionService } from '../../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.service';
 import { CompressedAirPressureReductionService } from '../../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
 import { SteamReductionService } from '../../calculator/steam/steam-reduction/steam-reduction.service';
