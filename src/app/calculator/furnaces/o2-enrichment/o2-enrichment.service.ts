@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { O2Enrichment } from '../../../shared/models/phast/o2Enrichment';
+import { O2Enrichment, O2EnrichmentOutput } from '../../../shared/models/phast/o2Enrichment';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -17,11 +17,27 @@ export class O2EnrichmentService {
   makePlot: BehaviorSubject<boolean>;
   selectedDataPoints: BehaviorSubject<Array<DisplayPoint>>;
   hoverGroupData: BehaviorSubject<any>;
-  constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) 
-  {
-    this.initChartData();
+
+  enrichmentInputs: BehaviorSubject<Array<O2Enrichment>>;
+  enrichmentOutputs: BehaviorSubject<Array<O2EnrichmentOutput>>;
+
+  currentEnrichmentIndex: BehaviorSubject<number>;
+  currentField: BehaviorSubject<string>;
+
+  resetData: BehaviorSubject<boolean>;
+  generatedExample: BehaviorSubject<boolean>;
+
+  constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
+    this.enrichmentInputs = new BehaviorSubject<Array<O2Enrichment>>(undefined);
+    this.enrichmentOutputs = new BehaviorSubject<Array<O2EnrichmentOutput>>(undefined);
+    this.currentEnrichmentIndex = new BehaviorSubject<number>(0);
+    this.currentField = new BehaviorSubject<string>(undefined);
+
+    this.resetData = new BehaviorSubject<boolean>(undefined);
+    this.generatedExample = new BehaviorSubject<boolean>(undefined);
     this.makePlot = new BehaviorSubject<boolean>(undefined);
-   }
+    this.initChartData();
+  }
 
   initChartData() {
     let emptyChart: SimpleChart = this.getEmptyChart();
@@ -35,8 +51,25 @@ export class O2EnrichmentService {
     this.hoverGroupData = new BehaviorSubject<any>(hoverGroupData);
   }
 
+  initDefaultEmptyInputs(settings: Settings) {
+    let initialForm = this.initForm(settings);
+    let defaultBaseline = this.getObjFromForm(initialForm);
+    let defaultMod = this.getObjFromForm(initialForm);
+    defaultBaseline.name = 'Baseline';
+    defaultMod.name = 'Modification';
+    let emptyEnrichmentInput: Array<O2Enrichment> = [defaultBaseline];
+    this.enrichmentInputs.next(emptyEnrichmentInput);
+  }
+
+  resetInputs(settings: Settings) {
+    let defaultBaseline: O2Enrichment = this.getResetData();
+    let emptyEnrichmentInput: Array<O2Enrichment> = [defaultBaseline];
+    this.enrichmentInputs.next(emptyEnrichmentInput);
+  }
+
   initForm(settings: Settings): FormGroup {
     let defaultO2Enrichment: O2Enrichment = {
+      name: 'New Line',
       operatingHours: 8640,
       operatingHoursEnriched: 8640,
       o2CombAir: 21,
@@ -62,6 +95,7 @@ export class O2EnrichmentService {
     let ranges: O2EnrichmentMinMax = this.getMinMaxRanges(settings);
 
     return this.formBuilder.group({
+      name: [defaultO2Enrichment.name, [Validators.required]],
       operatingHours: [defaultO2Enrichment.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       operatingHoursEnriched: [defaultO2Enrichment.operatingHoursEnriched, [Validators.required, Validators.min(0), Validators.max(8760)]],
       o2CombAir: [defaultO2Enrichment.o2CombAir, Validators.required],
@@ -81,6 +115,7 @@ export class O2EnrichmentService {
   initFormFromObj(settings: Settings, obj: O2Enrichment): FormGroup {
     let ranges: O2EnrichmentMinMax = this.getMinMaxRanges(settings, JSON.parse(JSON.stringify(obj)));
     return this.formBuilder.group({
+      name: [obj.name, [Validators.required]],
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       operatingHoursEnriched: [obj.operatingHoursEnriched, [Validators.required, Validators.min(0), Validators.max(8760)]],
       o2CombAir: [obj.o2CombAir, Validators.required],
@@ -99,6 +134,7 @@ export class O2EnrichmentService {
 
   getObjFromForm(form: FormGroup): O2Enrichment {
     return {
+      name: form.controls.name.value,
       operatingHours: form.controls.operatingHours.value,
       operatingHoursEnriched: form.controls.operatingHoursEnriched.value,
       o2CombAir: form.controls.o2CombAir.value,
@@ -115,7 +151,116 @@ export class O2EnrichmentService {
     };
   }
 
-  generateExample(settings: Settings): O2Enrichment {
+  setRanges(o2Form: FormGroup, settings: Settings): FormGroup {
+    let tmpO2Enrichment: O2Enrichment = this.getObjFromForm(o2Form);
+    let tmpRanges: O2EnrichmentMinMax = this.getMinMaxRanges(settings, tmpO2Enrichment);
+    let combAirTempDirty: boolean = o2Form.controls.combAirTempEnriched.dirty;
+    let o2CombAirDirty: boolean = o2Form.controls.o2CombAir.dirty;
+    let combAirTempEnrichedDirty: boolean = o2Form.controls.combAirTemp.dirty;
+
+    o2Form.controls.combAirTempEnriched.setValidators([Validators.required, Validators.min(tmpRanges.combAirTempEnrichedMin), Validators.max(tmpRanges.combAirTempEnrichedMax)]);
+    o2Form.controls.combAirTempEnriched.reset(o2Form.controls.combAirTempEnriched.value);
+
+    o2Form.controls.o2CombAir.setValidators([Validators.required, Validators.max(tmpRanges.o2CombAirMax)]);
+    o2Form.controls.o2CombAir.reset(o2Form.controls.o2CombAir.value);
+
+    o2Form.controls.combAirTemp.setValidators([Validators.required, Validators.min(tmpRanges.combAirTempMin), Validators.max(tmpRanges.combAirTempMax)]);
+    o2Form.controls.combAirTemp.reset(o2Form.controls.combAirTemp.value);
+
+    if (combAirTempDirty) {
+      o2Form.controls.combAirTempEnriched.markAsDirty();
+    }
+    if (o2CombAirDirty) {
+      o2Form.controls.o2CombAir.markAsDirty();
+    }
+    if (combAirTempEnrichedDirty) {
+      o2Form.controls.combAirTemp.markAsDirty();
+    }
+    return o2Form;
+  }
+
+  checkValidInputData(settings, cases: Array<O2Enrichment>): boolean {
+    cases.forEach(data => {
+      let form = this.initFormFromObj(settings, data);
+      if (!form.valid) {
+        return false;
+      }
+    });
+    return true;
+  }
+
+  initDefaultEmptyOutputs() {
+    let emptyOutput: O2EnrichmentOutput = {
+      availableHeatEnriched: 0.0,
+      availableHeatInput: 0.0,
+      fuelConsumptionEnriched: 0.0,
+      fuelSavingsEnriched: 0.0,
+      annualFuelCost: 0.0,
+      annualFuelCostEnriched: 0.0
+    };
+    let outputs: Array<O2EnrichmentOutput> = [emptyOutput];
+    this.enrichmentOutputs.next(outputs);
+  }
+
+  calculate(settings: Settings) {
+    let enrichmentInputs = JSON.parse(JSON.stringify(this.enrichmentInputs.getValue()));
+    let validInputs: boolean = this.checkValidInputData(settings, enrichmentInputs);
+
+    if (!validInputs) {
+      this.initDefaultEmptyOutputs();
+    } else {
+      if (enrichmentInputs.length > 1) {
+        enrichmentInputs = this.processModificationInputs(enrichmentInputs);
+      }
+      let enrichmentOutputs = []
+      enrichmentInputs.forEach((input: O2Enrichment, index) => {
+        let output: O2EnrichmentOutput = this.phastService.o2Enrichment(input, settings);
+        output.name = input.name;
+        output.annualFuelCost = input.fuelCost * input.operatingHours * input.fuelConsumption;
+        // console.log('raw output', JSON.parse(JSON.stringify(output)));
+
+        if (index == 0) {
+          // Displaying baseline in results table - overwrite 'enriched'/mod properties
+          output.availableHeatEnriched = output.availableHeatInput;
+          output.annualFuelCostEnriched = output.annualFuelCost;
+          output.fuelConsumptionEnriched = input.fuelConsumption;
+          output.fuelSavingsEnriched = undefined;
+        } else { 
+          output.annualFuelCostEnriched = input.fuelCostEnriched * input.operatingHoursEnriched * output.fuelConsumptionEnriched
+          output.annualCostSavings = output.annualFuelCost - output.annualFuelCostEnriched;
+        }
+        // console.log('processed output', output);
+
+        enrichmentOutputs.push(output);
+      });
+      this.enrichmentOutputs.next(enrichmentOutputs);
+    }
+  }
+
+  processModificationInputs(inputs: Array<O2Enrichment>) {
+    // For mod inputs, Swap non-enriched properties (baseline) over to mod
+    let baselineEnrichment: O2Enrichment = inputs[0];
+    inputs.forEach((input: O2Enrichment, index) => {
+      if (index != 0) {
+        input.combAirTempEnriched = input.combAirTemp;
+        input.o2CombAirEnriched = input.o2CombAir;
+        input.flueGasTempEnriched = input.flueGasTemp;
+        input.o2FlueGasEnriched = input.o2FlueGas
+        input.fuelCostEnriched = input.fuelCost;
+        input.operatingHoursEnriched = input.operatingHours;
+        // Swap in baseline
+        input.combAirTemp = baselineEnrichment.combAirTemp;
+        input.o2CombAir = baselineEnrichment.o2CombAir;
+        input.flueGasTemp = baselineEnrichment.flueGasTemp;
+        input.o2FlueGas = baselineEnrichment.o2FlueGas;
+        input.fuelCost = baselineEnrichment.fuelCost;
+        input.operatingHours = baselineEnrichment.operatingHours;
+      }
+    });
+    return inputs;
+  }
+
+  generateExample(settings: Settings) {
     let tmpFlueGasTemp: number = 1800;
     let tmpFlueGasTempEnriched: number = 1800;
     let tmpCombAirTemp: number = 80;
@@ -127,25 +272,32 @@ export class O2EnrichmentService {
       tmpCombAirTempEnriched = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpCombAirTempEnriched).from('F').to('C'), 2);
     }
     let tmpFuelConsumption: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to(settings.energyResultUnit), 100);
-    return {
+    let example: O2Enrichment = {
+      name: 'Example Baseline',
       operatingHours: 8640,
       operatingHoursEnriched: 8640,
-      fuelCost: settings.fuelCost,
-      fuelCostEnriched: settings.fuelCost,
       o2CombAir: 21,
       o2CombAirEnriched: 100,
-      combAirTemp: tmpCombAirTemp,
-      combAirTempEnriched: tmpCombAirTempEnriched,
       flueGasTemp: tmpFlueGasTemp,
       flueGasTempEnriched: tmpFlueGasTempEnriched,
       o2FlueGas: 5,
       o2FlueGasEnriched: 1,
-      fuelConsumption: tmpFuelConsumption
+      combAirTemp: tmpCombAirTemp,
+      combAirTempEnriched: tmpCombAirTempEnriched,
+      fuelConsumption: tmpFuelConsumption,
+      fuelCost: settings.fuelCost,
+      fuelCostEnriched: settings.fuelCost,
     };
+    let modExample = JSON.parse(JSON.stringify(example));
+    modExample.name = 'Example Modification'
+    let exampleEnrichment: Array<O2Enrichment> = [example, modExample];
+    this.enrichmentInputs.next(exampleEnrichment);
+    this.currentEnrichmentIndex.next(1);
   }
 
   getResetData(): O2Enrichment {
     return {
+      name: 'Baseline',
       operatingHours: 0,
       operatingHoursEnriched: 0,
       fuelCost: 0,
@@ -218,7 +370,7 @@ export class O2EnrichmentService {
 
   getGraphData(settings: Settings, o2EnrichmentPoint: any, line: any): { data: TraceCoordinates, onGraph: boolean } {
     line.fuelSavings = 0.0;
-    let data = {x: [], y: []};
+    let data = { x: [], y: [] };
     let onGraph = false;
     let returnObj: { data: TraceCoordinates, onGraph: boolean };
 
@@ -338,10 +490,6 @@ export class O2EnrichmentService {
       }
     };
   }
-
-
-
-
 }
 
 export interface DisplayPoint extends SelectedDataPoint {

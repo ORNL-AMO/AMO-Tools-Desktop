@@ -46,7 +46,7 @@
             (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
           </th>
-          <th class="bold w-25"></th>
+          <!-- <th class="bold w-25"></th> -->
         </tr>
         <tr *ngFor="let point of selectedDataPoints; let index = index">
 
@@ -60,11 +60,11 @@
           <td class="text-center">{{point.combustionTemp}}</td>
           <td class="text-center">{{point.flueOxygen}}</td>
           <td class="text-center">{{point.fuelTemp}}</td>
-          <td class='delete-row text-center'>
+          <!-- <td class='delete-row text-center'>
             <a *ngIf="index >= defaultTraceCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point)">
               Delete
             </a>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>

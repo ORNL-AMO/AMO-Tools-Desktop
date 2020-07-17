@@ -8,10 +8,10 @@
         <h3>O<sub>2</sub> Enrichment</h3>
       </div>
     </div>
-    <div class="d-flex flex-column m-4">
-      <app-o2-enrichment-form [o2Form]="o2Form" [o2EnrichmentOutput]="o2EnrichmentOutput" (calculate)="calculate()"
-        (changeFieldEmit)="changeField($event)" [settings]="settings"></app-o2-enrichment-form>
-      <br>
+    <div class="d-flex flex-column m-4" *ngIf="enrichmentInputs">
+      <app-o2-enrichment-form [settings]="settings"></app-o2-enrichment-form>
+      <app-o2-enrichment-results [settings]="settings"></app-o2-enrichment-results>
+    <br>
       <div class="w-100 justify-content-center btn-group btn-group-sm">
         <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
           Reset Data

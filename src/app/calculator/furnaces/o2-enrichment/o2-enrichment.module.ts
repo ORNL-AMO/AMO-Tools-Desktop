@@ -11,6 +11,7 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { EnrichmentGraphComponent } from './enrichment-graph/enrichment-graph.component';
+import { O2EnrichmentResultsComponent } from './o2-enrichment-results/o2-enrichment-results.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { EnrichmentGraphComponent } from './enrichment-graph/enrichment-graph.co
     O2EnrichmentComponent,
     O2EnrichmentGraphComponent,
     O2EnrichmentHelpComponent,
-    EnrichmentGraphComponent
+    EnrichmentGraphComponent,
+    O2EnrichmentResultsComponent
   ],
   exports: [
     O2EnrichmentComponent

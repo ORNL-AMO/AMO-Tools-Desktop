@@ -1,8 +1,59 @@
-.btn{
-  background: #BF3D00;  
-  padding: 6px;
-  color: white;
+.form-section {
+  padding-bottom: .25rem;
+  border-bottom: 1px dashed;
 }
+
+.baseline-label {
+  padding: .25em .5em;
+  background: #ffdccc;
+  margin-bottom: 5px;
+  border-radius: 5%;
+}
+
+.modification-label {
+  padding: .25em .5em;
+  background: lightgray;
+  margin-bottom: 5px;
+  border-radius: 5%;
+}
+
+.form-row-pad-fix {
+  margin-left: -15px !important;
+}
+
+.form-card {
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 20px 0 grey;
+}
+
+.btn-edit-name:hover {
+  cursor: pointer;
+}
+
+.btn{
+  /* background: #BF3D00;   */
+  color: white;
+  padding: 0.25rem 0.5rem;
+}
+
+.btn-group {
+  display: block;
+  text-align: center;
+}
+
+.btn-group .btn-sm {
+  font-size: small !important;
+}
+
+.btn-margin-10 {
+  margin: 10px 0px;
+}
+
+.btn-form {
+  border-radius: 4px !important;
+}
+
 
 .input-group-addon.units.op-hour-addon{
   border-left: solid 1px;
