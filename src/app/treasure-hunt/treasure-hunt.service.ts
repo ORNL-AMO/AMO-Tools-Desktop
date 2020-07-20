@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt } from '../shared/models/treasure-hunt';
+import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt } from '../shared/models/treasure-hunt';
 import { OpportunityCardsService, OpportunityCardData } from './treasure-chest/opportunity-cards/opportunity-cards.service';
 import { Settings } from '../shared/models/settings';
 
@@ -236,27 +236,49 @@ export class TreasureHuntService {
     treasureHunt.steamReductions.splice(index, 1);
     this.treasureHunt.next(treasureHunt);
   }
-//steam reduction
-addNewPipeInsulationReductionItem(pipeInsulationReduction: PipeInsulationReductionTreasureHunt) {
-  let treasureHunt: TreasureHunt = this.treasureHunt.value;
-  if (!treasureHunt.pipeInsulationReductions) {
-    treasureHunt.pipeInsulationReductions = new Array();
+  //pipe reduction
+  addNewPipeInsulationReductionItem(pipeInsulationReduction: PipeInsulationReductionTreasureHunt) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    if (!treasureHunt.pipeInsulationReductions) {
+      treasureHunt.pipeInsulationReductions = new Array();
+    }
+    treasureHunt.pipeInsulationReductions.push(pipeInsulationReduction);
+    this.treasureHunt.next(treasureHunt);
   }
-  treasureHunt.pipeInsulationReductions.push(pipeInsulationReduction);
-  this.treasureHunt.next(treasureHunt);
-}
-editPipeInsulationReductionItem(pipeInsulationReduction: PipeInsulationReductionTreasureHunt, index: number, settings: Settings) {
-  let treasureHunt: TreasureHunt = this.treasureHunt.value;
-  treasureHunt.pipeInsulationReductions[index] = pipeInsulationReduction;
-  let updatedCard: OpportunityCardData = this.opportunityCardsService.getPipeInsulationReductionCardData(pipeInsulationReduction, settings, index, treasureHunt.currentEnergyUsage);
-  this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
-  this.treasureHunt.next(treasureHunt);
-}
-deletePipeInsulationReductionsItem(index: number) {
-  let treasureHunt: TreasureHunt = this.treasureHunt.value;
-  treasureHunt.pipeInsulationReductions.splice(index, 1);
-  this.treasureHunt.next(treasureHunt);
-}
+  editPipeInsulationReductionItem(pipeInsulationReduction: PipeInsulationReductionTreasureHunt, index: number, settings: Settings) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.pipeInsulationReductions[index] = pipeInsulationReduction;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getPipeInsulationReductionCardData(pipeInsulationReduction, settings, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
+    this.treasureHunt.next(treasureHunt);
+  }
+  deletePipeInsulationReductionsItem(index: number) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.pipeInsulationReductions.splice(index, 1);
+    this.treasureHunt.next(treasureHunt);
+  }
+
+  //tank reduction
+  addNewTankInsulationReductionItem(tankInsulationReduction: TankInsulationReductionTreasureHunt) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    if (!treasureHunt.tankInsulationReductions) {
+      treasureHunt.tankInsulationReductions = new Array();
+    }
+    treasureHunt.tankInsulationReductions.push(tankInsulationReduction);
+    this.treasureHunt.next(treasureHunt);
+  }
+  editTankInsulationReductionItem(tankInsulationReduction: TankInsulationReductionTreasureHunt, index: number, settings: Settings) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.tankInsulationReductions[index] = tankInsulationReduction;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getTankInsulationReductionCardData(tankInsulationReduction, settings, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
+    this.treasureHunt.next(treasureHunt);
+  }
+  deleteTankInsulationReductionsItem(index: number) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.tankInsulationReductions.splice(index, 1);
+    this.treasureHunt.next(treasureHunt);
+  }
 
 
 

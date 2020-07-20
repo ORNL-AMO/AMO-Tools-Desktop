@@ -97,7 +97,9 @@ export class CalculatorTypeDropdownComponent implements OnInit {
       case 'steam-reduction':
         return 'Steam Reduction';
       case 'pipe-insulation-reduction':
-        return 'Pipe Insulation Reduction';
+        return 'Pipe Insulation';
+      case 'tank-insulation-reduction':
+        return 'Tank Insulation';
     }
   }
 }

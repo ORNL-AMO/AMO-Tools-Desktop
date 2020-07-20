@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CalculatorsService } from './calculators.service';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, LightingReplacementTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -30,6 +30,7 @@ export class CalculatorsComponent implements OnInit {
   standaloneOpportunitySheet: OpportunitySheet;
   steamReduction: SteamReductionTreasureHunt;
   pipeInsulationReduction: PipeInsulationReductionTreasureHunt;
+  tankInsulationReduction: TankInsulationReductionTreasureHunt;
 
   selectedCalc: string;
   selectedCalcSubscription: Subscription;
@@ -105,6 +106,8 @@ export class CalculatorsComponent implements OnInit {
       this.confirmSaveSteamReduction();
     } else if (this.selectedCalc == 'pipe-insulation-reduction') {
       this.confirmPipeInsulationReduction();
+    } else if (this.selectedCalc == 'tank-insulation-reduction'){
+      this.confirmTankInsulationReduction();
     }
   }
   initSaveCalc() {
@@ -306,6 +309,25 @@ export class CalculatorsComponent implements OnInit {
       this.treasureHuntService.addNewPipeInsulationReductionItem(this.pipeInsulationReduction);
     } else {
       this.treasureHuntService.editPipeInsulationReductionItem(this.pipeInsulationReduction, this.calculatorsService.itemIndex, this.settings);
+    }
+    this.finishSaveCalc();
+  }
+
+  //tank insulation reduction
+  cancelTankInsulationReduction() {
+    this.calculatorsService.cancelTankInsulationReduction();
+  }
+  saveTankInsulationReduction(tankInsulationReduction: TankInsulationReductionTreasureHunt) {
+    this.tankInsulationReduction = tankInsulationReduction;
+    this.initSaveCalc();
+  }
+  confirmTankInsulationReduction() {
+    this.tankInsulationReduction.opportunitySheet = this.calculatorsService.calcOpportunitySheet;
+    this.tankInsulationReduction.selected = true;
+    if (this.calculatorsService.isNewOpportunity == true) {
+      this.treasureHuntService.addNewTankInsulationReductionItem(this.tankInsulationReduction);
+    } else {
+      this.treasureHuntService.editTankInsulationReductionItem(this.tankInsulationReduction, this.calculatorsService.itemIndex, this.settings);
     }
     this.finishSaveCalc();
   }

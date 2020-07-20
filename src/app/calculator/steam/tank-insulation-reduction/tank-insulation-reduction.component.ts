@@ -5,6 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { TankInsulationReductionService } from './tank-insulation-reduction.service';
 import { TankInsulationReductionResults } from '../../../shared/models/standalone';
+import { TankInsulationReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-tank-insulation-reduction',
@@ -15,7 +16,7 @@ export class TankInsulationReductionComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @Output('emitSave')
-  emitSave = new EventEmitter<null>();
+  emitSave = new EventEmitter<TankInsulationReductionTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
   @Output('emitAddOpportunitySheet')
@@ -59,7 +60,7 @@ export class TankInsulationReductionComponent implements OnInit {
     this.getResults();
   }
 
-  
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
@@ -94,6 +95,8 @@ export class TankInsulationReductionComponent implements OnInit {
     this.baselineForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.baselineData, true);
     if (this.tankInsulationReductionService.modificationData) {
       this.modificationForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.modificationData, false);
+      this.modificationExists = true;
+      this.setModificationSelected();
     }
   }
 
@@ -159,5 +162,13 @@ export class TankInsulationReductionComponent implements OnInit {
     this.modificationForm = this.tankInsulationReductionService.getFormFromObj(this.tankInsulationReductionService.modificationData, false);
     this.modificationExists = true;
     this.setBaselineSelected();
+  }
+
+  save() {
+    this.emitSave.emit({ baseline: this.tankInsulationReductionService.baselineData, modification: this.tankInsulationReductionService.modificationData });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
   }
 }
