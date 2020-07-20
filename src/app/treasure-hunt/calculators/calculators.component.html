@@ -47,6 +47,12 @@
   [operatingHours]="treasureHunt.operatingHours">
 </app-pipe-insulation-reduction>
 
+<app-tank-insulation-reduction *ngIf="selectedCalc == 'tank-insulation-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveTankInsulationReduction($event)" (emitCancel)="cancelTankInsulationReduction()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours">
+</app-tank-insulation-reduction>
+
+
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">

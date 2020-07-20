@@ -107,6 +107,8 @@ export class OpportunityCardsComponent implements OnInit {
       this.calculatorsService.editSteamReductionsItem(opportunityCard.steamReduction, opportunityCard.opportunityIndex);
     } else if (opportunityCard.opportunityType == 'pipe-insulation-reduction') {
       this.calculatorsService.editPipeInsulationReductionsItem(opportunityCard.pipeInsulationReduction, opportunityCard.opportunityIndex);
+    } else if (opportunityCard.opportunityType == 'tank-insulation-reduction') {
+      this.calculatorsService.editTankInsulationReductionsItem(opportunityCard.tankInsulationReduction, opportunityCard.opportunityIndex);
     }
   }
 
@@ -148,6 +150,8 @@ export class OpportunityCardsComponent implements OnInit {
       this.treasureHuntService.deleteSteamReductionsItem(this.deleteOpportunity.opportunityIndex);
     } else if (this.deleteOpportunity.opportunityType == 'pipe-insulation-reduction') {
       this.treasureHuntService.deletePipeInsulationReductionsItem(this.deleteOpportunity.opportunityIndex);
+    } else if (this.deleteOpportunity.opportunityType == 'tank-insulation-reduction') {
+      this.treasureHuntService.deleteTankInsulationReductionsItem(this.deleteOpportunity.opportunityIndex);
     }
     this.hideDeleteItemModal();
     this.updateOpportunityCardsData();
@@ -218,6 +222,9 @@ export class OpportunityCardsComponent implements OnInit {
     } else if (this.editOpportunitySheetCardData.opportunityType == 'pipe-insulation-reduction') {
       this.editOpportunitySheetCardData.pipeInsulationReduction.opportunitySheet = updatedOpportunitySheet;
       this.treasureHuntService.editPipeInsulationReductionItem(this.editOpportunitySheetCardData.pipeInsulationReduction, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
+    } else if (this.editOpportunitySheetCardData.opportunityType == 'tank-insulation-reduction') {
+      this.editOpportunitySheetCardData.tankInsulationReduction.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editTankInsulationReductionItem(this.editOpportunitySheetCardData.tankInsulationReduction, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
     }
     this.hideOpportunitySheetModal();
   }
@@ -256,6 +263,9 @@ export class OpportunityCardsComponent implements OnInit {
     } else if (cardData.opportunityType == 'pipe-insulation-reduction') {
       cardData.pipeInsulationReduction.selected = cardData.selected;
       this.treasureHuntService.editPipeInsulationReductionItem(cardData.pipeInsulationReduction, cardData.opportunityIndex, this.settings);
+    } else if (cardData.opportunityType == 'tank-insulation-reduction') {
+      cardData.tankInsulationReduction.selected = cardData.selected;
+      this.treasureHuntService.editTankInsulationReductionItem(cardData.tankInsulationReduction, cardData.opportunityIndex, this.settings);
     }
   }
 
@@ -333,6 +343,11 @@ export class OpportunityCardsComponent implements OnInit {
       this.treasureHuntService.addNewPipeInsulationReductionItem(newOpportunityCard.pipeInsulationReduction);
       let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
       newOpportunityCard = this.opportunityCardsService.getPipeInsulationReductionCardData(newOpportunityCard.pipeInsulationReduction, this.settings, treasureHunt.pipeInsulationReductions.length - 1, treasureHunt.currentEnergyUsage);
+    } else if (newOpportunityCard.opportunityType == 'tank-insulation-reduction') {
+      newOpportunityCard.tankInsulationReduction.opportunitySheet = this.updateCopyName(newOpportunityCard.tankInsulationReduction.opportunitySheet);
+      this.treasureHuntService.addNewTankInsulationReductionItem(newOpportunityCard.tankInsulationReduction);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getTankInsulationReductionCardData(newOpportunityCard.tankInsulationReduction, this.settings, treasureHunt.pipeInsulationReductions.length - 1, treasureHunt.currentEnergyUsage);
     }
 
     this.opportunityCardsData.push(newOpportunityCard);

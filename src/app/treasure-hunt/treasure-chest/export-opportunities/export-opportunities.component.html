@@ -144,17 +144,33 @@
                         </ul>
                     </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.pipeInsulationReductions">
-                        <label>Pipe Insulation Reductions</label>
+                        <label>Pipe Insulations</label>
                         <ul>
                             <li
                                 *ngFor="let pipeInsulationReduction of exportOpportunities.pipeInsulationReductions; let index = index;">
                                 <span
                                     *ngIf="!pipeInsulationReduction.opportunitySheet || !pipeInsulationReduction.opportunitySheet.name">
-                                    Pipe Insulation Reduction #{{index+1}}
+                                    Pipe Insulation #{{index+1}}
                                 </span>
                                 <span
                                     *ngIf="pipeInsulationReduction.opportunitySheet && pipeInsulationReduction.opportunitySheet.name">
                                     {{pipeInsulationReduction.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.tankInsulationReductions">
+                        <label>Tank Insulations</label>
+                        <ul>
+                            <li
+                                *ngFor="let tankInsulationReduction of exportOpportunities.tankInsulationReductions; let index = index;">
+                                <span
+                                    *ngIf="!tankInsulationReduction.opportunitySheet || !tankInsulationReduction.opportunitySheet.name">
+                                    Tank Insulation #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="tankInsulationReduction.opportunitySheet && tankInsulationReduction.opportunitySheet.name">
+                                    {{tankInsulationReduction.opportunitySheet.name}}
                                 </span>
                             </li>
                         </ul>

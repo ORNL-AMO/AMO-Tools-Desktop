@@ -23,6 +23,7 @@ import { PipeInsulationReductionModule } from '../../calculator/steam/pipe-insul
 import { CompressedAirReductionModule } from '../../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.module';
 import { CompressedAirPressureReductionModule } from '../../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { SteamReductionModule } from '../../calculator/steam/steam-reduction/steam-reduction.module';
+import { TankInsulationReductionModule } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.module';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { SteamReductionModule } from '../../calculator/steam/steam-reduction/ste
     FormsModule,
     SteamReductionModule,
     PipeInsulationReductionModule,
-    CompressedAirReductionModule
+    CompressedAirReductionModule,
+    TankInsulationReductionModule
   ],
   providers: [
     CalculatorsService,

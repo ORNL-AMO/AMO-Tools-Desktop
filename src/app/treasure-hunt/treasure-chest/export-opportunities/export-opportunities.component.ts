@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
 import { ImportExportService } from '../../../dashboard/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
@@ -28,7 +28,7 @@ export class ExportOpportunitiesComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.treasureHuntSub.unsubscribe();
   }
 
@@ -58,7 +58,8 @@ export class ExportOpportunitiesComponent implements OnInit {
       compressedAirPressureReductions: this.getSelectedCompressedAirPressureReductions(this.treasureHunt.compressedAirPressureReductions),
       steamReductions: this.getSelectedSteamReductions(this.treasureHunt.steamReductions),
       waterReductions: this.getSelectedWaterReductions(this.treasureHunt.waterReductions),
-      pipeInsulationReductions: this.getSelectedPipeInsulationReductions(this.treasureHunt.pipeInsulationReductions)
+      pipeInsulationReductions: this.getSelectedPipeInsulationReductions(this.treasureHunt.pipeInsulationReductions),
+      tankInsulationReductions: this.getSelectedTankInsulationReductions(this.treasureHunt.tankInsulationReductions)
     }
   }
   getSelectedLighting(lightingReplacements: Array<LightingReplacementTreasureHunt>): Array<LightingReplacementTreasureHunt> {
@@ -132,6 +133,12 @@ export class ExportOpportunitiesComponent implements OnInit {
   }
 
   getSelectedPipeInsulationReductions(reductions: Array<PipeInsulationReductionTreasureHunt>): Array<PipeInsulationReductionTreasureHunt> {
+    if (reductions) {
+      return _.filter(reductions, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+  getSelectedTankInsulationReductions(reductions: Array<TankInsulationReductionTreasureHunt>): Array<TankInsulationReductionTreasureHunt> {
     if (reductions) {
       return _.filter(reductions, (opportunity) => { return opportunity.selected });
     }

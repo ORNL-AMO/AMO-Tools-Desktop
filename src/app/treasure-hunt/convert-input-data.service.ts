@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, EnergyUsage, EnergyUseItem } from '../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, EnergyUsage, EnergyUseItem, TankInsulationReductionTreasureHunt } from '../shared/models/treasure-hunt';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, CompressedAirPressureReductionData, WaterReductionData, SteamReductionData } from '../shared/models/standalone';
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, CompressedAirPressureReductionData, WaterReductionData, SteamReductionData, TankInsulationReductionInput } from '../shared/models/standalone';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -37,6 +37,9 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.steamReductions != undefined) {
       treasureHunt.steamReductions = this.convertSteamReductions(treasureHunt.steamReductions, oldSettings, newSettings);
+    }
+    if (treasureHunt.tankInsulationReductions != undefined) {
+      treasureHunt.tankInsulationReductions = this.convertTankInsulationReductions(treasureHunt.tankInsulationReductions, oldSettings, newSettings);
     }
     if (treasureHunt.currentEnergyUsage != undefined) {
       treasureHunt.currentEnergyUsage = this.convertCurrentEnergyUsage(treasureHunt.currentEnergyUsage, oldSettings, newSettings);
@@ -290,6 +293,35 @@ export class ConvertInputDataService {
     return reduction;
   }
 
+  convertTankInsulationReductions(tankReductions: Array<TankInsulationReductionTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<TankInsulationReductionTreasureHunt> {
+    tankReductions.forEach(tankReduction => {
+      tankReduction.baseline = this.convertTankInsulationReduction(tankReduction.baseline, oldSettings, newSettings);
+      tankReduction.modification = this.convertTankInsulationReduction(tankReduction.modification, oldSettings, newSettings);
+    })
+    return tankReductions;
+  }
+
+  convertTankInsulationReduction(reduction: TankInsulationReductionInput, oldSettings: Settings, newSettings: Settings): TankInsulationReductionInput {
+    //utilityType imperial: $/MMBtu, metric: $/GJ
+      reduction.utilityCost = this.convertDollarsPerMMBtuAndGJ(reduction.utilityCost, oldSettings, newSettings);
+
+    //tankHeight imperial: ft, metric: m
+    reduction.tankHeight =  this.convertFtAndMeterValue(reduction.tankHeight, oldSettings, newSettings);
+    //tankDiameter imperial: ft, metric: m
+    reduction.tankDiameter =  this.convertFtAndMeterValue(reduction.tankDiameter, oldSettings, newSettings);
+    //tankThickness imperial: ft, metric: m
+    reduction.tankThickness =  this.convertFtAndMeterValue(reduction.tankThickness, oldSettings, newSettings);
+    //insulationThickness imperial: ft, metric: m
+    reduction.insulationThickness =  this.convertFtAndMeterValue(reduction.insulationThickness, oldSettings, newSettings);
+    //tankTemperature imperial: F, metric: C
+    reduction.tankTemperature =  this.convertTemperatureValue(reduction.tankTemperature, oldSettings, newSettings);
+    //ambientTemperature imperial: F, metric: C
+    reduction.ambientTemperature =  this.convertTemperatureValue(reduction.ambientTemperature, oldSettings, newSettings);
+    //customInsulationConductivity imperial: Btu/hr*ft*F, metric: W/mK
+    reduction.customInsulationConductivity =  this.convertConductivity(reduction.customInsulationConductivity, oldSettings, newSettings);
+    return reduction;
+  }
+
   convertCurrentEnergyUsage(currentEnergyUsage: EnergyUsage, oldSettings: Settings, newSettings: Settings): EnergyUsage {
     //imperial: MMBtu/yr, metric: GJ/yr
     currentEnergyUsage.naturalGasUsage = this.convertMMBtuAndGJValue(currentEnergyUsage.naturalGasUsage, oldSettings, newSettings);
@@ -464,6 +496,14 @@ export class ConvertInputDataService {
       return this.convertDollarPerValue(val, 'klb', 'tonne');
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       return this.convertDollarPerValue(val, 'tonne', 'klb');
+    }
+  }
+
+  convertConductivity(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertDollarPerValue(val, 'Btu/hr-ft-R', 'W/mK');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertDollarPerValue(val, 'W/mK', 'Btu/hr-ft-R');
     }
   }
 
