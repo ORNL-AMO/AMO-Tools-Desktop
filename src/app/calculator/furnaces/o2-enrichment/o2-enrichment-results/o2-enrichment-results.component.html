@@ -1,82 +1,82 @@
 <div class="mb-4 p-2 result-card">
-<!-- All results -->
-<div *ngIf="outputs.length > 0">
-  <label class="group-label w-100 bold">
-    All Scenario Results
-  </label>
-  <div class="mt-2 p-1">
-  <table class="table table-hover d-flex">
-    <tbody>
-      <tr class="bold text-center no-border">
-        <td class="bold">Name</td>
-        <td>Available Heat (%)</td>
-        <td>Annual Fuel Cost</td>
-        <td>Fuel Consumption
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-             (MMBtu/hr)
-          </span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-            (GJ/hr)
-          </span>
-        </td>
-        <td>Fuel Savings (%) </td>
-        <td>Annual Cost Savings</td>
-        <td class="w-25"></td>
-      </tr>
-      <!-- <tr class="text-center" *ngFor="let enrichmentOutput of outputs; let index = index" [ngStyle]="{'background': getRowColor(index)}"> -->
-      <tr class="text-center" *ngFor="let enrichmentOutput of outputs; let index = index" [ngStyle]="{'background': index == 0? '#ffdccc' : ''}">
-        <td class="p-2">
-          <div >
-            <a class="bold" (click)="editEnrichment(index)">
-              {{ enrichmentOutput.name }}
-            </a>
-          </div>
-        </td>
-        <td class="p-2">
-          <span *ngIf="enrichmentOutput.availableHeatEnriched">
-            {{ enrichmentOutput.availableHeatEnriched | number:'1.0-0'}}
-          </span>
-          <span *ngIf="!enrichmentOutput.availableHeatEnriched">
-            --
-          </span>
-        </td>
-        <td class="p-2">
-          <span *ngIf="enrichmentOutput.annualFuelCostEnriched">
-            {{ enrichmentOutput.annualFuelCostEnriched | currency: 'USD': 'symbol': '1.0-0'}}   
-          </span>
-          <span *ngIf="!enrichmentOutput.annualFuelCostEnriched">
-            --
-          </span>
-        </td>
-        <td class="p-2">
-          <span *ngIf="enrichmentOutput.fuelConsumptionEnriched">
-            {{ enrichmentOutput.fuelConsumptionEnriched | number:'1.0-0' }}
-          </span>
-          <span *ngIf="!enrichmentOutput.fuelConsumptionEnriched">
-            --
-          </span>
-        </td>
-        <td class="p-2">
-          <span *ngIf="enrichmentOutput.fuelSavingsEnriched">
-            {{ enrichmentOutput.fuelSavingsEnriched | number:'1.0-0' }}
-          </span>
-          <span *ngIf="!enrichmentOutput.fuelSavingsEnriched">
-            --
-          </span>
-        </td>
-        <td class="p-2 w-25">
-          <span *ngIf="enrichmentOutput.annualCostSavings">
-            {{ enrichmentOutput.annualCostSavings | currency: 'USD': 'symbol': '1.0-0'}}
-          </span>
-          <span *ngIf="!enrichmentOutput.annualCostSavings">
-            --
-          </span>
-        </td>
-        <td class="pt-3 px-1">
-          <a class="click-link m-2" (click)="editEnrichment(index)">Edit</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- All results -->
+  <div *ngIf="outputs.length > 0">
+    <label class="group-label w-100 bold">
+      All Scenario Results
+    </label>
+    <div class="mt-2 p-1">
+      <table #enrichmentTable class="table table-hover d-flex">
+        <tbody>
+          <tr class="bold text-center no-border">
+            <td class="bold">Name</td>
+            <td>Available Heat (%)</td>
+            <td>Annual Fuel Cost</td>
+            <td>Fuel Consumption
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                (MMBtu/hr)
+              </span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                (GJ/hr)
+              </span>
+            </td>
+            <td>Fuel Savings (%) </td>
+            <td>Annual Cost Savings</td>
+            <td class="w-25"></td>
+          </tr>
+          <tr class="text-center" *ngFor="let enrichmentOutput of outputs; let index = index"
+            [ngClass]="{'selected-row': index == selectedRow}">
+            <td class="p-2">
+              <div>
+                <a class="bold" (click)="editEnrichment(index)">
+                  {{ enrichmentOutput.name }}
+                </a>
+              </div>
+            </td>
+            <td class="p-2">
+              <span *ngIf="enrichmentOutput.availableHeatEnriched">
+                {{ enrichmentOutput.availableHeatEnriched | number:'1.0-0'}}
+              </span>
+              <span *ngIf="!enrichmentOutput.availableHeatEnriched">
+                --
+              </span>
+            </td>
+            <td class="p-2">
+              <span *ngIf="enrichmentOutput.annualFuelCostEnriched">
+                {{ enrichmentOutput.annualFuelCostEnriched | currency: 'USD': 'symbol': '1.0-0'}}
+              </span>
+              <span *ngIf="!enrichmentOutput.annualFuelCostEnriched">
+                --
+              </span>
+            </td>
+            <td class="p-2">
+              <span *ngIf="enrichmentOutput.fuelConsumptionEnriched">
+                {{ enrichmentOutput.fuelConsumptionEnriched | number:'1.0-0' }}
+              </span>
+              <span *ngIf="!enrichmentOutput.fuelConsumptionEnriched">
+                --
+              </span>
+            </td>
+            <td class="p-2">
+              <span *ngIf="enrichmentOutput.fuelSavingsEnriched">
+                {{ enrichmentOutput.fuelSavingsEnriched | number:'1.0-0' }}
+              </span>
+              <span *ngIf="!enrichmentOutput.fuelSavingsEnriched">
+                --
+              </span>
+            </td>
+            <td class="p-2 w-25">
+              <span *ngIf="enrichmentOutput.annualCostSavings">
+                {{ enrichmentOutput.annualCostSavings | currency: 'USD': 'symbol': '1.0-0'}}
+              </span>
+              <span *ngIf="!enrichmentOutput.annualCostSavings">
+                --
+              </span>
+            </td>
+            <td class="pt-3 px-1">
+              <a class="click-link m-2" (click)="editEnrichment(index)">Edit</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>

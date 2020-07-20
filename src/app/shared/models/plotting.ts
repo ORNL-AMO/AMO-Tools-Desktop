@@ -35,6 +35,7 @@ export interface SimpleChart {
         responsive: boolean
     }
     chartId?: string,
+    inputCount?: number
 }
 
 export interface AxisObj {
@@ -60,6 +61,7 @@ export interface TraceData {
     y: Array<number | string>,
     type: string,
     name: string,
+    id?: string,
     showlegend?: boolean,
     hovertemplate?: string,
     xaxis?: any,
@@ -84,8 +86,8 @@ export interface TraceData {
 }
 
 export interface TraceCoordinates {
-    x: Array<number | string>,
-    y: Array<number | string>,
+    x: Array<number>,
+    y: Array<number>,
 };
 
 export interface DataPoint {

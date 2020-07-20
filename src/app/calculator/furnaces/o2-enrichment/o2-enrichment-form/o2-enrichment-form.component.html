@@ -8,8 +8,7 @@
       Combustion With O<sub>2</sub> Enriched Air
     </span>
 
-    <span [ngClass]="{'baseline-label': currentEnrichmentIndex == 0}">
-
+      <span class="line-name-label">
       <span *ngIf="!isEditingName" class="bold">
         <span (click)="editCaseName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
       <span>{{o2Form.controls.name.value}}</span>

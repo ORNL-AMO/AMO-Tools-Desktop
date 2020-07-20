@@ -11,6 +11,7 @@
     <div class="d-flex flex-column m-4" *ngIf="enrichmentInputs">
       <app-o2-enrichment-form [settings]="settings"></app-o2-enrichment-form>
       <app-o2-enrichment-results [settings]="settings"></app-o2-enrichment-results>
+      <app-o2-enrichment-copy-table [settings]="settings"></app-o2-enrichment-copy-table>
     <br>
       <div class="w-100 justify-content-center btn-group btn-group-sm">
         <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
@@ -39,8 +40,7 @@
       <app-o2-enrichment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-o2-enrichment-help>
       <div class="d-flex flex-column w-100 align-items-center p-2 pt-4" *ngIf="tabSelect == 'results'"
         id="o2EnrichmentGraph">
-        <app-enrichment-graph *ngIf="tabSelect == 'results'" class="w-100" [toggleResetData]="toggleResetData" [toggleExampleData]="toggleExampleData"
-          [o2Enrichment]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput" [settings]="settings">
+        <app-enrichment-graph *ngIf="tabSelect == 'results'" class="w-100" [settings]="settings">
         </app-enrichment-graph>
         <div class="alert alert-info alert-disclaimer">
           <strong>Note:</strong> Current limitation of the program would result in an error of about 2% to 5% for the

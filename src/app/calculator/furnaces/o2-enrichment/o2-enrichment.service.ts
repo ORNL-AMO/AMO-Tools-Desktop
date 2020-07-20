@@ -11,16 +11,14 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class O2EnrichmentService {
   o2Enrichment: O2Enrichment;
-  lines: Array<any> = [];
   operatingHours: OperatingHours;
+
   enrichmentChart: BehaviorSubject<SimpleChart>;
-  makePlot: BehaviorSubject<boolean>;
   selectedDataPoints: BehaviorSubject<Array<DisplayPoint>>;
   hoverGroupData: BehaviorSubject<any>;
 
   enrichmentInputs: BehaviorSubject<Array<O2Enrichment>>;
   enrichmentOutputs: BehaviorSubject<Array<O2EnrichmentOutput>>;
-
   currentEnrichmentIndex: BehaviorSubject<number>;
   currentField: BehaviorSubject<string>;
 
@@ -35,7 +33,6 @@ export class O2EnrichmentService {
 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generatedExample = new BehaviorSubject<boolean>(undefined);
-    this.makePlot = new BehaviorSubject<boolean>(undefined);
     this.initChartData();
   }
 
@@ -217,7 +214,6 @@ export class O2EnrichmentService {
         let output: O2EnrichmentOutput = this.phastService.o2Enrichment(input, settings);
         output.name = input.name;
         output.annualFuelCost = input.fuelCost * input.operatingHours * input.fuelConsumption;
-        // console.log('raw output', JSON.parse(JSON.stringify(output)));
 
         if (index == 0) {
           // Displaying baseline in results table - overwrite 'enriched'/mod properties
@@ -225,14 +221,14 @@ export class O2EnrichmentService {
           output.annualFuelCostEnriched = output.annualFuelCost;
           output.fuelConsumptionEnriched = input.fuelConsumption;
           output.fuelSavingsEnriched = undefined;
-        } else { 
+        } else {
           output.annualFuelCostEnriched = input.fuelCostEnriched * input.operatingHoursEnriched * output.fuelConsumptionEnriched
           output.annualCostSavings = output.annualFuelCost - output.annualFuelCostEnriched;
         }
-        // console.log('processed output', output);
-
+        output.input = input;
         enrichmentOutputs.push(output);
       });
+      console.log(enrichmentOutputs);
       this.enrichmentOutputs.next(enrichmentOutputs);
     }
   }
@@ -289,7 +285,8 @@ export class O2EnrichmentService {
       fuelCostEnriched: settings.fuelCost,
     };
     let modExample = JSON.parse(JSON.stringify(example));
-    modExample.name = 'Example Modification'
+    modExample.name = 'Example Modification';
+    modExample.combAirTemp = 400;
     let exampleEnrichment: Array<O2Enrichment> = [example, modExample];
     this.enrichmentInputs.next(exampleEnrichment);
     this.currentEnrichmentIndex.next(1);
@@ -376,7 +373,10 @@ export class O2EnrichmentService {
 
     for (let i = 21; i <= 100; i += .5) {
       o2EnrichmentPoint.o2CombAirEnriched = i;
-      const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint, settings).fuelSavingsEnriched;
+      // const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint, settings).fuelSavingsEnriched;
+      const output = this.phastService.o2Enrichment(o2EnrichmentPoint, settings);
+      console.log('output', output);
+      const fuelSavings = output.fuelSavingsEnriched;
       if (fuelSavings > 0 && fuelSavings < 100) {
         if (fuelSavings > line.fuelSavings) {
           line.fuelSavings = fuelSavings;
@@ -397,20 +397,40 @@ export class O2EnrichmentService {
     return returnObj;
   }
 
-  getTraceDataFromPoint(selectedPoint: SelectedDataPoint): TraceData {
+  getLineTrace(): TraceData {
+    let trace: TraceData = {
+      x: [],
+      y: [],
+      name: '',
+      showlegend: false,
+      type: 'scatter',
+      hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y}%<br>`,
+      line: {
+        shape: 'spline',
+        color: '#000'
+      }
+    };
+    return trace;
+  }
+
+  getPointTrace(selectedPoint: SelectedDataPoint): TraceData {
     let trace: TraceData = {
       x: [selectedPoint.pointX],
       y: [selectedPoint.pointY],
       type: 'scatter',
       name: ``,
       showlegend: false,
-      hovertemplate: `O<sub>2</sub> in Air (%): ${selectedPoint.pointX}<br>Fuel Savings (%): ${selectedPoint.pointY}<br>`,
+      hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y}%<br>`,
       mode: 'markers',
       marker: {
-        color: '#000',
+        color: selectedPoint.pointColor,
         size: 14,
+        line: {
+          color: '',
+          width: 4
+        }
       },
-    };
+    }
     return trace;
   }
 
@@ -418,35 +438,7 @@ export class O2EnrichmentService {
     let showGrid = true;
     return {
       name: 'O<sub>2</sub> Enrichment',
-      data: [
-        // Main line
-        {
-          x: [],
-          y: [],
-          name: '',
-          showlegend: false,
-          type: 'scatter',
-          hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y}%<br>`,
-          line: {
-            shape: 'spline',
-            color: '#000'
-          }
-        },
-        // Point
-        {
-          x: [],
-          y: [],
-          type: 'scatter',
-          name: ``,
-          showlegend: false,
-          hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y}%<br>`,
-          mode: 'markers',
-          marker: {
-            color: 'rgba(0, 0, 0, 0)',
-            size: 14,
-          },
-        }
-      ],
+      data: [],
       layout: {
         hovermode: 'closest',
         xaxis: {
@@ -487,15 +479,18 @@ export class O2EnrichmentService {
         displaylogo: false,
         displayModeBar: true,
         responsive: true
-      }
+      },
+      inputCount: 0
     };
   }
+
 }
 
 export interface DisplayPoint extends SelectedDataPoint {
   combustionTemp: number,
   flueOxygen: number,
-  fuelTemp: number
+  fuelTemp: number,
+  name?: string
 }
 
 

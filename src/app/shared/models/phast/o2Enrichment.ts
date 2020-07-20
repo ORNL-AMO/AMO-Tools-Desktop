@@ -36,4 +36,5 @@ export interface O2EnrichmentOutput {
     fuelConsumptionEnriched: number;
     fuelSavingsEnriched: number;
     annualCostSavings?: number;
+    input?: O2Enrichment;
 }

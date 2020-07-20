@@ -28,3 +28,7 @@ td {
   padding: 0.25em;
 }
 
+
+.selected-row {
+  background: #ffdccc;
+}

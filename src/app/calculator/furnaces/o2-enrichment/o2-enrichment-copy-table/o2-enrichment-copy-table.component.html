@@ -1,0 +1,120 @@
+<div *ngIf="outputs.length > 0">
+  <div class="hidden-copy-table">
+    <!-- <table [ngStyle]="{'visibility': clickedBtn == true? 'visible' : 'collapse'}" #enrichmentTable> -->
+      <table #enrichmentTable>
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td>Available Heat (%)</td>
+          <td>Annual Fuel Cost</td>
+          <td>Fuel Consumption
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+              (MMBtu/hr)
+            </span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+              (GJ/hr)
+            </span>
+          </td>
+          <td>Fuel Savings (%)</td>
+          <td>Annual Cost Savings</td>
+          <td>O<sub>2</sub> in Air (%)</td>
+          <td>Combustion Temp (%)</td>
+          <td>Flue O2 
+            (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
+          </td>
+          <td>Fuel Temp
+            (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
+          </td>
+        </tr>
+        <tr
+          *ngFor="let enrichmentOutput of outputs; let index = index">
+          <td>
+              <a>
+                {{ enrichmentOutput.name }}
+              </a>
+          </td>
+          <td>
+            <span *ngIf="enrichmentOutput.availableHeatEnriched">
+              {{ enrichmentOutput.availableHeatEnriched | number: "1.0-0" }}
+            </span>
+            <span *ngIf="!enrichmentOutput.availableHeatEnriched">
+              --
+            </span>
+          </td>
+          <td>
+            <span *ngIf="enrichmentOutput.annualFuelCostEnriched">
+              {{
+                enrichmentOutput.annualFuelCostEnriched
+                  | currency: "USD":"symbol":"1.0-0"
+              }}
+            </span>
+            <span *ngIf="!enrichmentOutput.annualFuelCostEnriched">
+              --
+            </span>
+          </td>
+          <td >
+            <span *ngIf="enrichmentOutput.fuelConsumptionEnriched">
+              {{ enrichmentOutput.fuelConsumptionEnriched | number: "1.0-0" }}
+            </span>
+            <span *ngIf="!enrichmentOutput.fuelConsumptionEnriched">
+              --
+            </span>
+          </td>
+          <td >
+            <span *ngIf="enrichmentOutput.fuelSavingsEnriched">
+              {{ enrichmentOutput.fuelSavingsEnriched | number: "1.0-0" }}
+            </span>
+            <span *ngIf="!enrichmentOutput.fuelSavingsEnriched">
+              --
+            </span>
+          </td>
+          <td >
+            <span *ngIf="enrichmentOutput.annualCostSavings">
+              {{ enrichmentOutput.annualCostSavings | currency: "USD":"symbol":"1.0-0" }}
+            </span>
+            <span *ngIf="!enrichmentOutput.annualCostSavings">
+              --
+            </span>
+          </td>
+          <!-- INPUTS  -->
+            <td >
+            <span *ngIf="enrichmentOutput.input.o2CombAirEnriched">
+              {{ enrichmentOutput.input.o2CombAirEnriched }}
+            </span>
+            <span *ngIf="!enrichmentOutput.input.o2CombAirEnriched">
+              --
+            </span>
+          </td>
+          <td >
+            <span *ngIf="enrichmentOutput.input.combAirTempEnriched">
+              {{ enrichmentOutput.input.combAirTempEnriched }}
+            </span>
+            <span *ngIf="!enrichmentOutput.input.combAirTempEnriched">
+              --
+            </span>
+          </td>
+          <td >
+            <span *ngIf="enrichmentOutput.input.o2FlueGasEnriched">
+              {{ enrichmentOutput.input.o2FlueGasEnriched }}
+            </span>
+            <span *ngIf="!enrichmentOutput.input.o2FlueGasEnriched">
+              --
+            </span>
+          </td>
+          <td >
+            <span *ngIf="enrichmentOutput.input.flueGasTempEnriched">
+              {{ enrichmentOutput.input.flueGasTempEnriched }}
+            </span>
+            <span *ngIf="!enrichmentOutput.input.flueGasTempEnriched">
+              --
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+ <app-exportable-results-table [tableString]="enrichmentTableString"
+  (updateTableString)="updateEnrichmentTableString()"></app-exportable-results-table>

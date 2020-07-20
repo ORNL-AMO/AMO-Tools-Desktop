@@ -12,6 +12,7 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { EnrichmentGraphComponent } from './enrichment-graph/enrichment-graph.component';
 import { O2EnrichmentResultsComponent } from './o2-enrichment-results/o2-enrichment-results.component';
+import { O2EnrichmentCopyTableComponent } from './o2-enrichment-copy-table/o2-enrichment-copy-table.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { O2EnrichmentResultsComponent } from './o2-enrichment-results/o2-enrichm
     O2EnrichmentGraphComponent,
     O2EnrichmentHelpComponent,
     EnrichmentGraphComponent,
-    O2EnrichmentResultsComponent
+    O2EnrichmentResultsComponent,
+    O2EnrichmentCopyTableComponent
   ],
   exports: [
     O2EnrichmentComponent

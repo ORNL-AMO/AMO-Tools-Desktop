@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, ChangeDetectorRef, KeyValueDiffers, OnChanges, SimpleChanges, DoCheck } from '@angular/core';
-import { O2EnrichmentOutput, O2Enrichment } from '../../../../shared/models/phast/o2Enrichment';
+import { O2Enrichment } from '../../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../../shared/models/settings';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
-import { SelectedDataPoint, SimpleChart, TraceCoordinates, TraceData } from '../../../../shared/models/plotting';
+import { SimpleChart, TraceCoordinates } from '../../../../shared/models/plotting';
 import * as Plotly from 'plotly.js';
 import { O2EnrichmentService, DisplayPoint } from '../o2-enrichment.service';
 import { PhastService } from '../../../../phast/phast.service';
@@ -17,17 +17,7 @@ import { Subscription } from 'rxjs';
 export class EnrichmentGraphComponent implements OnInit {
 
   @Input()
-  o2EnrichmentOutput: O2EnrichmentOutput;
-  @Input()
-  o2Enrichment: O2Enrichment;
-  @Input()
   settings: Settings;
-  @Input()
-  toggleCalculate: boolean;
-  @Input()
-  toggleResetData: boolean;
-  @Input()
-  toggleExampleData: boolean;
 
   // DOM
   @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
@@ -42,6 +32,8 @@ export class EnrichmentGraphComponent implements OnInit {
   defaultSelectedPointsData: Array<DisplayPoint>;
   pointColors: Array<string>;
   enrichmentChart: SimpleChart;
+  enrichmentInputsSub: Subscription;
+  enrichmentInputs: Array<O2Enrichment>;
 
   // Trace Defaults
   defaultPointOutlineColor = 'rgba(0, 0, 0, .6)';
@@ -59,15 +51,7 @@ export class EnrichmentGraphComponent implements OnInit {
 
   // Update conditions/data
   maxFuelSavings: number;
-  firstChange: boolean = true;
-  isFirstChange: boolean = true;
-  hasModification: boolean = false;
-
-  makePlotSub: Subscription;
-  enrichmentInputsSub: Subscription;
-  resetSub: Subscription;
-
-  enrichmentInputs: Array<O2Enrichment>;
+  initResizeCompleted: boolean = false;
 
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
@@ -81,7 +65,7 @@ export class EnrichmentGraphComponent implements OnInit {
   constructor(private o2EnrichmentService: O2EnrichmentService,
     private cd: ChangeDetectorRef,
     private phastService: PhastService,
-    ) {
+  ) {
   }
 
   ngOnInit() {
@@ -91,72 +75,27 @@ export class EnrichmentGraphComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.makePlotSub.unsubscribe();
-    this.resetSub.unsubscribe();
     this.enrichmentInputsSub.unsubscribe();
   }
 
   initSubscriptions() {
-    this.makePlotSub = this.o2EnrichmentService.makePlot.subscribe(makePlot => {
-      if(makePlot) {
-        this.enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
-        let addedEnrichment: O2Enrichment = this.enrichmentInputs[this.enrichmentInputs.length-1];
-        this.addTrace(addedEnrichment);
-        this.hasModification = true;
-      }
-    });
     this.enrichmentInputsSub = this.o2EnrichmentService.enrichmentInputs.subscribe(inputs => {
-      if(inputs) {
+      if (inputs && this.initResizeCompleted) {
         this.enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
-        if (this.enrichmentChart) {
+        let resetData = this.o2EnrichmentService.resetData.getValue();
+        if (this.enrichmentChart && !resetData) {
           this.updateChart();
         } else {
           this.initRenderChart();
         }
       }
     });
-    this.resetSub = this.o2EnrichmentService.resetData.subscribe(reset => {
-      if(reset) {
-        this.enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
-        this.initRenderChart();
-        this.hasModification = false;
-      }
-    });
-
   }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
-  //     this.o2EnrichmentService.initChartData();
-  //     this.enrichmentChart = this.o2EnrichmentService.enrichmentChart.getValue();
-  //     this.selectedDataPoints = this.o2EnrichmentService.selectedDataPoints.getValue();
-  //     this.initRenderChart();
-  //   }
-  //   else if (changes.toggleExampleData && !changes.toggleExampleData.firstChange) {
-  //     this.o2EnrichmentService.initChartData();
-  //     this.initChartSetup();
-  //     this.setDefaultTraces();
-  //     this.initRenderChart();
-  //   }
-  //   else if (!this.isFirstChange && changes) {
-  //     this.updateChart();
-  //   } else {
-  //     this.selectedDataPoints = this.o2EnrichmentService.selectedDataPoints.getValue();
-  //     this.enrichmentChart = this.o2EnrichmentService.enrichmentChart.getValue();
-  //     if (!this.selectedDataPoints) {
-  //       this.o2EnrichmentService.initChartData();
-  //       this.initChartSetup();
-  //       this.setDefaultTraces();
-  //     }
-  //     this.initRenderChart();
-  //     this.isFirstChange = false;
-  //   }
-  // }
 
   triggerInitialResize() {
     window.dispatchEvent(new Event('resize'));
     setTimeout(() => {
-      this.initRenderChart();
+      this.initRenderChart(true);
     }, 25)
   }
 
@@ -178,13 +117,11 @@ export class EnrichmentGraphComponent implements OnInit {
     this.o2EnrichmentService.selectedDataPoints.next(this.selectedDataPoints);
   }
 
-  initRenderChart() {
+  initRenderChart(isInitResize = false) {
     Plotly.purge(this.currentChartId);
-    
-    this.enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
-    this.initChartSetup();
-    this.setDefaultTraces();
-    
+    this.initChartSetup(isInitResize);
+    this.setTraces();
+
     let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
     Plotly.newPlot(this.currentChartId, this.enrichmentChart.data, chartLayout, this.enrichmentChart.config)
       .then(chart => {
@@ -195,118 +132,136 @@ export class EnrichmentGraphComponent implements OnInit {
           this.removeHoverGroupData();
         });
       });
+    if (isInitResize == true) {
+      this.initResizeCompleted = true;
+    }
     this.save();
   }
 
-  initChartSetup() {
+  initChartSetup(isInitResize) {
     this.maxFuelSavings = 0.0;
+    this.o2EnrichmentService.initChartData();
+    this.enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
     this.enrichmentChart = this.o2EnrichmentService.enrichmentChart.getValue();
     this.selectedDataPoints = this.o2EnrichmentService.selectedDataPoints.getValue();
-    this.hasModification = false;
   }
 
-  setDefaultTraces(isUpdate: boolean = false) {
-    // if (isUpdate) {
-    //   console.log('baseline update o2Enrichment', this.o2Enrichment);
-    // }
-    // let o2Enrichment = JSON.parse(JSON.stringify(this.o2Enrichment));
-    let baselineEnrichment = this.enrichmentInputs[0];
-    if (isUpdate) {
-      }
-      let o2Enrichment = JSON.parse(JSON.stringify(baselineEnrichment));
+  updateChart() {
+    this.updateTraces();
+    let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
+    Plotly.update(this.currentChartId, this.enrichmentChart.data, chartLayout);
+    this.save();
+  }
 
-    let defaultLine = this.getEnrichmentLine(o2Enrichment);
-    let enrichmentPoint = this.getEnrichmentPoint(o2Enrichment, defaultLine);
-
-    let graphData: { data: TraceCoordinates, onGraph: boolean } = this.o2EnrichmentService.getGraphData(this.settings, enrichmentPoint, defaultLine);
-    this.enrichmentChart.data[0].x = graphData.data.x;
-    this.enrichmentChart.data[0].y = graphData.data.y;
-
-    let fuelSavings = this.phastService.o2Enrichment(defaultLine, this.settings).fuelSavingsEnriched;
-    this.enrichmentChart.data[1].x = [defaultLine.o2CombAirEnriched];
-    this.enrichmentChart.data[1].y = [fuelSavings];
-    this.enrichmentChart.data[1].marker.color = this.defaultPointColor;
-    this.enrichmentChart.data[1].marker.line = {
-      color: this.defaultPointOutlineColor,
-      width: 4
-    };
-
-    if (!isUpdate) {
-
-      let mainTraceDataPoint: DisplayPoint = {
-        pointColor: '#000',
-        pointX: defaultLine.o2CombAirEnriched,
+  setTraces(isUpdate: boolean = false) {
+    this.enrichmentInputs.forEach((input: O2Enrichment, index) => {
+      // Set Line trace
+      let line = this.getEnrichmentLine(input);
+      let point = this.getEnrichmentPoint(input, line);
+      // line.combAirTempEnriched = line.combAirTemp;
+      let graphData: { data: TraceCoordinates, onGraph: boolean } = this.o2EnrichmentService.getGraphData(this.settings, point, line);
+      let lineTrace = this.o2EnrichmentService.getLineTrace();
+      lineTrace.x = graphData.data.x;
+      lineTrace.y = graphData.data.y;
+      lineTrace.line.color = this.getNextColor();
+      
+      // Set Point trace
+      // Originally getting enriched savings
+      let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
+      let fuelSavings = outputs[index].fuelSavingsEnriched;
+      console.log(fuelSavings);
+      let displayPoint: DisplayPoint = {
+        name: input.name,
+        pointColor: this.getNextColor(),
+        pointX: input.o2CombAir,
         pointY: fuelSavings,
-        combustionTemp: defaultLine.combAirTemp,
-        flueOxygen: defaultLine.o2FlueGas,
-        fuelTemp: defaultLine.flueGasTemp
+        combustionTemp: line.combAirTemp,
+        flueOxygen: line.o2FlueGas,
+        fuelTemp: line.flueGasTemp,
       }
-      this.selectedDataPoints.push(mainTraceDataPoint);
-    }
-    this.save();
+      let pointTrace = this.o2EnrichmentService.getPointTrace(displayPoint);
+      pointTrace.marker.color = this.getNextColor();
+      pointTrace.marker.line.color = this.getNextColor();
+
+      if (index == 0) {
+        lineTrace.line.color = "#000";
+        pointTrace.marker.color = this.defaultPointColor;
+        pointTrace.marker.line.color = this.defaultPointOutlineColor;
+        displayPoint.pointColor = "#000";
+      }
+      
+      this.enrichmentChart.data.push(lineTrace, pointTrace);
+      this.selectedDataPoints.push(displayPoint);
+    });
+    this.enrichmentChart.inputCount = this.enrichmentInputs.length;
   }
 
-  updateModificationTrace() {
-    let currentPointIndex = this.enrichmentChart.data.length - 1;
-    let currentLineIndex = this.enrichmentChart.data.length - 2;
-
-    let currentEnrichmentLine: any = this.getEnrichmentLine(this.o2Enrichment);
-    currentEnrichmentLine.color = this.getNextColor();
-    let enrichmentPoint = this.getEnrichmentPoint(this.o2Enrichment, currentEnrichmentLine);
-
-    let graphData: { data: TraceCoordinates, onGraph: boolean } = this.o2EnrichmentService.getGraphData(this.settings, enrichmentPoint, currentEnrichmentLine);
-    this.enrichmentChart.data[currentLineIndex].x = graphData.data.x;
-    this.enrichmentChart.data[currentLineIndex].y = graphData.data.y;
-
-    let fuelSavings = this.phastService.o2Enrichment(currentEnrichmentLine, this.settings).fuelSavingsEnriched;
-    this.enrichmentChart.data[currentPointIndex].x = [currentEnrichmentLine.o2CombAirEnriched];
-    this.enrichmentChart.data[currentPointIndex].y = [fuelSavings];
-    this.save();
-  }
-
-  addTrace(enrichment: O2Enrichment) {
-    let newLineTrace: TraceData = JSON.parse(JSON.stringify(this.enrichmentChart.data[0]));
-    let newPointTrace: TraceData = JSON.parse(JSON.stringify(this.enrichmentChart.data[1]));
-
-    // let newEnrichmentLine: any = this.getEnrichmentLine(this.o2Enrichment);
-    // newEnrichmentLine.color = this.getNextColor();
-    // let enrichmentPoint = this.getEnrichmentPoint(this.o2Enrichment, newEnrichmentLine)
-    let newEnrichmentLine: any = this.getEnrichmentLine(enrichment);
-    newEnrichmentLine.color = this.getNextColor();
-    let enrichmentPoint = this.getEnrichmentPoint(enrichment, newEnrichmentLine)
-
-    let graphData: { data: TraceCoordinates, onGraph: boolean } = this.o2EnrichmentService.getGraphData(this.settings, enrichmentPoint, newEnrichmentLine);
-    newLineTrace.x = graphData.data.x;
-    newLineTrace.y = graphData.data.y;
-    newLineTrace.line.color = this.getNextColor();
-
-    let fuelSavings = this.phastService.o2Enrichment(newEnrichmentLine, this.settings).fuelSavingsEnriched;
-    newPointTrace.x = [newEnrichmentLine.o2CombAirEnriched];
-    newPointTrace.y = [fuelSavings];
-    newPointTrace.marker.color = this.getNextColor();
-    newPointTrace.marker.line = {
-      color: this.getNextColor(),
-      width: 4
-    };
-
-    let displayDataPoint: DisplayPoint = {
-      pointColor: this.getNextColor(),
-      pointX: newEnrichmentLine.o2CombAirEnriched,
-      pointY: fuelSavings,
-      combustionTemp: newEnrichmentLine.combAirTemp,
-      flueOxygen: newEnrichmentLine.o2FlueGas,
-      fuelTemp: newEnrichmentLine.flueGasTemp
+  updateTraces() {
+    let addingTraces = this.enrichmentInputs.length > this.enrichmentChart.inputCount;
+    let removingTraces = this.enrichmentInputs.length < this.enrichmentChart.inputCount;
+    if (removingTraces) {
+      this.enrichmentChart.data.splice(this.enrichmentChart.data.length - 2, 2);
+      this.selectedDataPoints.splice(this.selectedDataPoints.length -1, 1);
     }
+    this.enrichmentInputs.forEach((input: O2Enrichment, index) => {
+      let isNewTrace = addingTraces && index == this.enrichmentInputs.length - 1;
+      let lineIndex = index + index;
+      let pointIndex = lineIndex + 1;
+      let lineTraceColor;
+      let pointOutlineColor;
+      let pointColor;
+      if (this.enrichmentChart.data[lineIndex]) {
+        lineTraceColor = this.enrichmentChart.data[lineIndex].line.color || undefined;
+        pointOutlineColor = this.enrichmentChart.data[pointIndex].marker.line.color || undefined;
+        pointColor = this.enrichmentChart.data[pointIndex].marker.line.color || undefined;
+      }
 
-    Plotly.addTraces(this.currentChartId, [newLineTrace, newPointTrace]);
-    this.selectedDataPoints.push(displayDataPoint);
-    this.o2EnrichmentService.makePlot.next(false);
-    this.save();
-    this.cd.detectChanges();
+      // Set Line trace
+      let line = this.getEnrichmentLine(input);
+      let point = this.getEnrichmentPoint(input, line);
+      // line.combAirTempEnriched = line.combAirTemp;
+      let graphData: { data: TraceCoordinates, onGraph: boolean } = this.o2EnrichmentService.getGraphData(this.settings, point, line);
+      let lineTrace = this.o2EnrichmentService.getLineTrace();
+      lineTrace.x = graphData.data.x;
+      lineTrace.y = graphData.data.y;
+      lineTrace.line.color = lineTraceColor || this.getNextColor();
+      
+      // Set Point trace
+      // Originally getting enriched savings
+      let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
+      let fuelSavings = outputs[index].fuelSavingsEnriched;
+      console.log(fuelSavings);
+
+      let displayPoint: DisplayPoint = {
+        name: input.name,
+        pointColor: pointColor || this.getNextColor(),
+        pointX: input.o2CombAir,
+        pointY: fuelSavings,
+        combustionTemp: line.combAirTemp,
+        flueOxygen: line.o2FlueGas,
+        fuelTemp: line.flueGasTemp
+      }
+      let pointTrace = this.o2EnrichmentService.getPointTrace(displayPoint);
+      pointTrace.marker.color = pointColor || this.getNextColor();
+      pointTrace.marker.line.color = pointOutlineColor || this.getNextColor();
+      
+      this.enrichmentChart.data[lineIndex] = lineTrace;
+      this.enrichmentChart.data[pointIndex] = pointTrace;
+      if (isNewTrace) {
+        this.selectedDataPoints.push(displayPoint);
+        isNewTrace = false;
+      } else {
+        for (let i = 0; i < this.selectedDataPoints.length; i++) {
+          if (i == index) {
+            this.selectedDataPoints[i] = displayPoint
+          }
+        }
+      }
+    });
+    this.enrichmentChart.inputCount = this.enrichmentInputs.length;
   }
 
   getEnrichmentLine(o2Enrichment: O2Enrichment) {
-    // o2Enrichment = JSON.parse(JSON.stringify(o2Enrichment))
     let line: any = {
       o2CombAir: o2Enrichment.o2CombAir,
       o2CombAirEnriched: o2Enrichment.o2CombAirEnriched,
@@ -327,7 +282,6 @@ export class EnrichmentGraphComponent implements OnInit {
   }
 
   getEnrichmentPoint(o2Enrichment: O2Enrichment, currentEnrichmentLine) {
-    // o2Enrichment = JSON.parse(JSON.stringify(o2Enrichment))
     let point = {
       operatingHours: o2Enrichment.operatingHours,
       operatingHoursEnriched: o2Enrichment.operatingHoursEnriched,
@@ -350,29 +304,20 @@ export class EnrichmentGraphComponent implements OnInit {
     return this.pointColors[(this.enrichmentChart.data.length + 1) % this.pointColors.length];
   }
 
-  updateChart() {
-    if (!this.hasModification) {
-      this.setDefaultTraces(true);
-    } else {
-      this.updateModificationTrace();
-    }
-    let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
-    Plotly.update(this.currentChartId, this.enrichmentChart.data, chartLayout);
-    this.save();
-  }
-
   displayHoverGroupData(hoverEventData) {
     let hoverIndex = hoverEventData.points[0].pointIndex;
-    // Save initial enrichment points to assign on un_hover
+    // Save initial enrichment points to assign on removeHoverGroupData
     this.defaultSelectedPointsData = JSON.parse(JSON.stringify(this.selectedDataPoints));
-
     this.selectedDataPoints.forEach((line, index) => {
       let splineTraceIndex = index + index;
+
       if (hoverIndex != 0) {
+        let x = Number(this.enrichmentChart.data[splineTraceIndex].x[hoverIndex])
+        let y = Number(this.enrichmentChart.data[splineTraceIndex].y[hoverIndex])
         line.pointX = Number(this.enrichmentChart.data[splineTraceIndex].x[hoverIndex]);
         line.pointY = Number(this.enrichmentChart.data[splineTraceIndex].y[hoverIndex]);
       } else {
-      // Hovering over trace marker - assign x,y directly
+        // Hovering over trace marker - assign x,y directly
         line.pointX = Number(hoverEventData.points[0].x);
         line.pointY = Number(hoverEventData.points[0].y);
       }
@@ -383,23 +328,6 @@ export class EnrichmentGraphComponent implements OnInit {
   removeHoverGroupData() {
     this.selectedDataPoints = this.defaultSelectedPointsData;
     this.cd.detectChanges();
-  }
-
-  deleteDataPoint(point: SelectedDataPoint) {
-    let traceCount: number = this.enrichmentChart.data.length;
-    let deleteTraceIndex: number = this.enrichmentChart.data.findIndex(trace => trace.x[0] == point.pointX && trace.y[0] == point.pointY);
-    
-    // ignore default traces
-    if (traceCount > this.defaultTraceCount) {
-      if(deleteTraceIndex == -1) {
-        Plotly.deleteTraces(this.currentChartId, [this.enrichmentChart.data.length - 1, this.enrichmentChart.data.length - 2]);
-      } else {
-        Plotly.deleteTraces(this.currentChartId, [deleteTraceIndex + 1, deleteTraceIndex + 2]);
-      }
-      this.selectedDataPoints.splice(deleteTraceIndex, 1);
-      this.cd.detectChanges();
-      this.save();
-    }
   }
 
   updateTableString() {
@@ -423,7 +351,7 @@ export class EnrichmentGraphComponent implements OnInit {
       this.resizeGraph();
     }, 100);
   }
-  
+
 
   hideTooltip(btnType: string) {
     if (btnType === 'btnExpandChart') {

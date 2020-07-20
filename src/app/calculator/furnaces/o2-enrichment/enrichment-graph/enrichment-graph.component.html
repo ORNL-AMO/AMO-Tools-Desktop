@@ -52,51 +52,25 @@
 
           <td class="text-center">
             <!-- line traces (current point along) -->
-            <div class="spline" [ngStyle]="{'background-color': point.pointColor}">
+            <div class="graph-point-name">
+              {{ point.name }}
+            </div>
+            <div class="spline mb-1" [ngStyle]="{'background-color': point.pointColor}">
             </div>
           </td>
           <td class="text-center">{{point.pointX | number: '1.0-1'}}</td>
-          <td class="text-center">{{point.pointY | number: '1.0-1'}}</td>
+          <td class="text-center">
+            <span *ngIf="point.pointY">
+              {{point.pointY | number: '1.0-1'}}
+            </span>
+            <span *ngIf="!point.pointY">
+              &mdash; &mdash;
+            </span>
+          </td>
           <td class="text-center">{{point.combustionTemp}}</td>
           <td class="text-center">{{point.flueOxygen}}</td>
           <td class="text-center">{{point.fuelTemp}}</td>
-          <!-- <td class='delete-row text-center'>
-            <a *ngIf="index >= defaultTraceCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point)">
-              Delete
-            </a>
-          </td> -->
         </tr>
       </tbody>
     </table>
     </div>
-  
-  <!-- Hidden copy table -->
-  <app-exportable-results-table [tableString]="dataSummaryTableString"
-  (updateTableString)="updateTableString()"></app-exportable-results-table>
-  <div class="hidden-copy-table">
-  <label class="group-label bold">Data Summary</label>
-  <table #dataSummaryTable class="table pt-2 d-flex">
-    <tbody class="w-100">
-      <tr class="bold small text-center no-border">
-        <th class="bold w-25">O<sub>2</sub> in Air (%)</th>
-        <th class="bold w-25">Fuel Savings (%)</th>
-        <th class="bold w-25">Combustion Temp (%)</th>
-        <th class="bold w-25">Flue O2 
-          (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
-        </th>
-        <th class="bold w-25">Fuel Temp
-          (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
-        </th>
-      </tr>
-      <tr *ngFor="let point of selectedDataPoints; let index = index">
-        <td class="text-center">{{point.pointX}}</td>
-        <td class="text-center">{{point.pointY}}</td>
-        <td class="text-center">{{point.combustionTemp}}</td>
-        <td class="text-center">{{point.flueOxygen}}</td>
-        <td class="text-center">{{point.fuelTemp}}</td>
-      </tr>
-    </tbody>
-  </table>
-  </div>
