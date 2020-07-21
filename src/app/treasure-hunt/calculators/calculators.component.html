@@ -52,6 +52,12 @@
   [operatingHours]="treasureHunt.operatingHours">
 </app-tank-insulation-reduction>
 
+<app-air-leak *ngIf="selectedCalc == 'air-leak-survey'" [inTreasureHunt]="true"
+  (emitSave)="saveAirLeakSurvey($event)" (emitCancel)="cancelAirLeakSurvey()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours">
+</app-air-leak>
+
+
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">

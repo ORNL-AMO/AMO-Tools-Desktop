@@ -18,10 +18,10 @@ export class AirLeakService {
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
 
-  constructor(private convertAirleakService: ConvertAirLeakService, 
-              private airLeakFormService: AirLeakFormService,
-              private standaloneService: StandaloneService) { 
-    this.currentField = new BehaviorSubject<string>('default'); 
+  constructor(private convertAirleakService: ConvertAirLeakService,
+    private airLeakFormService: AirLeakFormService,
+    private standaloneService: StandaloneService) {
+    this.currentField = new BehaviorSubject<string>('default');
     this.currentLeakIndex = new BehaviorSubject<number>(0);
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.airLeakInput = new BehaviorSubject<AirLeakSurveyInput>(undefined);
@@ -38,9 +38,9 @@ export class AirLeakService {
     this.airLeakInput.next(emptyAirLeakInput);
   }
 
-  initDefaultEmptyOutputs() {
+  initDefaultEmptyOutputs(): AirLeakSurveyOutput {
     let emptyAirLeakSurveyOutput: AirLeakSurveyOutput = {
-        leakResults: [
+      leakResults: [
       ],
       baselineData: {
         totalFlowRate: 0,
@@ -62,6 +62,7 @@ export class AirLeakService {
       },
     };
     this.airLeakOutput.next(emptyAirLeakSurveyOutput);
+    return emptyAirLeakSurveyOutput;
   }
 
   generateExampleData() {
@@ -92,8 +93,18 @@ export class AirLeakService {
     this.airLeakInput.next(this.airLeakInput.value);
   }
 
-  calculate(settings: Settings): void {
+  calculate(settings: Settings): AirLeakSurveyOutput {
     let airLeakSurveyInput = this.airLeakInput.value;
+    if (airLeakSurveyInput != undefined) {
+      let outputs = this.getResults(settings, airLeakSurveyInput);
+      this.airLeakOutput.next(outputs);
+      return outputs;
+    } else {
+      return this.initDefaultEmptyOutputs();
+    }
+  }
+
+  getResults(settings: Settings, airLeakSurveyInput: AirLeakSurveyInput): AirLeakSurveyOutput {
     let inputCopy: AirLeakSurveyInput = JSON.parse(JSON.stringify(airLeakSurveyInput));
     let validInput: boolean = this.airLeakFormService.checkValidInput(inputCopy);
 
@@ -108,16 +119,16 @@ export class AirLeakService {
       leak.compressorElectricityData = inputCopy.facilityCompressorData.compressorElectricityData;
     })
     let inputArray: Array<AirLeakSurveyData> = this.convertAirleakService.convertInputs(inputCopy.compressedAirLeakSurveyInputVec, settings);
-    
-    let baselineLeaks: AirLeakSurveyInput = {compressedAirLeakSurveyInputVec: inputArray};
-    let modificationLeaks: AirLeakSurveyInput = {compressedAirLeakSurveyInputVec: Array<AirLeakSurveyData>()};
+
+    let baselineLeaks: AirLeakSurveyInput = { compressedAirLeakSurveyInputVec: inputArray };
+    let modificationLeaks: AirLeakSurveyInput = { compressedAirLeakSurveyInputVec: Array<AirLeakSurveyData>() };
     //  Build baseline / modification leak results
     let leakResults = Array<AirLeakSurveyResult>();
     baselineLeaks.compressedAirLeakSurveyInputVec.forEach(leak => {
       if (!leak.selected) {
         modificationLeaks.compressedAirLeakSurveyInputVec.push(leak);
-      } 
-      let leakResult: AirLeakSurveyResult = this.standaloneService.airLeakSurvey({compressedAirLeakSurveyInputVec: [leak]});
+      }
+      let leakResult: AirLeakSurveyResult = this.standaloneService.airLeakSurvey({ compressedAirLeakSurveyInputVec: [leak] });
       leakResult.name = leak.name;
       leakResult.leakDescription = leak.leakDescription;
       leakResult.selected = leak.selected;
@@ -144,7 +155,7 @@ export class AirLeakService {
       savingsData: savings,
       facilityCompressorData: inputCopy.facilityCompressorData,
     }
-    this.airLeakOutput.next(outputs);
+    return outputs;
   }
 
 }

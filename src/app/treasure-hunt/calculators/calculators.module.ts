@@ -24,6 +24,7 @@ import { CompressedAirReductionModule } from '../../calculator/compressed-air/co
 import { CompressedAirPressureReductionModule } from '../../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { SteamReductionModule } from '../../calculator/steam/steam-reduction/steam-reduction.module';
 import { TankInsulationReductionModule } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.module';
+import { AirLeakModule } from '../../calculator/compressed-air/air-leak/air-leak.module';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { TankInsulationReductionModule } from '../../calculator/steam/tank-insul
     SteamReductionModule,
     PipeInsulationReductionModule,
     CompressedAirReductionModule,
-    TankInsulationReductionModule
+    TankInsulationReductionModule,
+    AirLeakModule
   ],
   providers: [
     CalculatorsService,
