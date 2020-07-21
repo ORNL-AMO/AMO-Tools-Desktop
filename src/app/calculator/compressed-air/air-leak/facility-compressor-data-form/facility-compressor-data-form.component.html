@@ -33,7 +33,11 @@
     <div class="input-group">
       <input name="utilityCost" class="form-control" type="number" formControlName="utilityCost" (input)="save()"
         id="utilityCost" onfocus="this.select();" (focus)="changeField('utilityCost')">
-      <span class="input-group-addon units">$/kWH</span>
+      <span class="input-group-addon units">
+        <span *ngIf="facilityCompressorDataForm.controls.utilityType.value == 1">$/kWH</span>
+        <span *ngIf="facilityCompressorDataForm.controls.utilityType.value == 0 && settings.unitsOfMeasure == 'Imperial'">$/SCF</span>
+        <span *ngIf="facilityCompressorDataForm.controls.utilityType.value == 0 && settings.unitsOfMeasure != 'Imperial'">$/m<sup>3</sup></span>
+      </span>
       <span class="alert-danger pull-right small"
         *ngIf="facilityCompressorDataForm.controls.utilityCost.invalid && !facilityCompressorDataForm.controls.utilityCost.pristine">
         <span *ngIf="facilityCompressorDataForm.controls.utilityCost.errors.required">Value required.</span>
