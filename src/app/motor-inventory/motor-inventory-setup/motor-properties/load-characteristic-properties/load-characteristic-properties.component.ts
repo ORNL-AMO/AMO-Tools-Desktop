@@ -20,11 +20,37 @@ export class LoadCharacteristicPropertiesComponent implements OnInit {
 
   save() {
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
+    this.checkDisplayLoadCharacteristics();
     motorInventoryData.displayOptions.loadCharactersticOptions = this.loadCharacteristicOptions;
     this.motorInventoryService.motorInventoryData.next(motorInventoryData);
   }
 
-  toggleForm(){
+  toggleForm() {
     this.displayForm = !this.displayForm;
+  }
+
+  setAll() {
+    this.loadCharacteristicOptions.efficiency75 = this.loadCharacteristicOptions.displayLoadCharacteristics;
+    this.loadCharacteristicOptions.efficiency50 = this.loadCharacteristicOptions.displayLoadCharacteristics;
+    this.loadCharacteristicOptions.efficiency25 = this.loadCharacteristicOptions.displayLoadCharacteristics;
+    this.loadCharacteristicOptions.powerFactor100 = this.loadCharacteristicOptions.displayLoadCharacteristics;
+    this.loadCharacteristicOptions.powerFactor75 = this.loadCharacteristicOptions.displayLoadCharacteristics;
+    this.loadCharacteristicOptions.powerFactor50 = this.loadCharacteristicOptions.displayLoadCharacteristics;
+    this.loadCharacteristicOptions.powerFactor25 = this.loadCharacteristicOptions.displayLoadCharacteristics;
+    this.loadCharacteristicOptions.ampsIdle = this.loadCharacteristicOptions.displayLoadCharacteristics;
+    this.save();
+  }
+
+  checkDisplayLoadCharacteristics() {
+    this.loadCharacteristicOptions.displayLoadCharacteristics = (
+      this.loadCharacteristicOptions.efficiency75 ||
+      this.loadCharacteristicOptions.efficiency50 ||
+      this.loadCharacteristicOptions.efficiency25 ||
+      this.loadCharacteristicOptions.powerFactor100 ||
+      this.loadCharacteristicOptions.powerFactor75 ||
+      this.loadCharacteristicOptions.powerFactor50 ||
+      this.loadCharacteristicOptions.powerFactor25 ||
+      this.loadCharacteristicOptions.ampsIdle
+    );
   }
 }

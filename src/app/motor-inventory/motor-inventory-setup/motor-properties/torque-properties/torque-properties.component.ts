@@ -17,15 +17,30 @@ export class TorquePropertiesComponent implements OnInit {
     this.torqueOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.torqueOptions;
   }
 
-
   save() {
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
+    this.checkDisplayTorque();
     motorInventoryData.displayOptions.torqueOptions = this.torqueOptions;
     this.motorInventoryService.motorInventoryData.next(motorInventoryData);
   }
 
   toggleForm(){
     this.displayForm = !this.displayForm;
-  } 
+  }
+
+  setAll(){
+    this.torqueOptions.torqueBreakDown = this.torqueOptions.displayTorque;
+    this.torqueOptions.torqueFullLoad = this.torqueOptions.displayTorque;
+    this.torqueOptions.torqueLockedRotor = this.torqueOptions.displayTorque;
+    this.save();
+  }
+
+  checkDisplayTorque(){
+    this.torqueOptions.displayTorque = (
+      this.torqueOptions.torqueBreakDown ||
+      this.torqueOptions.torqueFullLoad ||
+      this.torqueOptions.torqueLockedRotor
+    )
+  }
 
 }

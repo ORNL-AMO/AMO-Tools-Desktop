@@ -7,7 +7,7 @@
         </label>
     </div>
     <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" (input)="save()"
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
             [(ngModel)]="loadCharacteristicOptions.displayLoadCharacteristics" name="displayLoadCharacteristics"
             id="displayLoadCharacteristics">
         <label class="custom-control-label" for="displayLoadCharacteristics"></label>
@@ -17,7 +17,7 @@
 <form class="p-1" *ngIf="displayForm">
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="loadCharacteristicOptions.efficiency75" name="efficiency75"
+            <input type="checkbox" (change)="save()" [(ngModel)]="loadCharacteristicOptions.efficiency75" name="efficiency75"
                 id="efficiency75">
             Efficiency at 75% Load
         </label>
@@ -25,41 +25,41 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="loadCharacteristicOptions.efficiency50" name="efficiency50"
+            <input type="checkbox" (change)="save()" [(ngModel)]="loadCharacteristicOptions.efficiency50" name="efficiency50"
                 id="efficiency50">
             Efficiency at 50% Load
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="loadCharacteristicOptions.efficiency25" name="efficiency25"
+            <input type="checkbox" (change)="save()" [(ngModel)]="loadCharacteristicOptions.efficiency25" name="efficiency25"
                 id="efficiency25">
             Efficiency at 25% Load
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="loadCharacteristicOptions.ampsIdle" name="ampsIdle" id="ampsIdle">
+            <input type="checkbox" (change)="save()" [(ngModel)]="loadCharacteristicOptions.ampsIdle" name="ampsIdle" id="ampsIdle">
             Idle Amps
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="loadCharacteristicOptions.powerFactor100" name="powerFactor100"
+            <input type="checkbox" (change)="save()" [(ngModel)]="loadCharacteristicOptions.powerFactor100" name="powerFactor100"
                 id="powerFactor100">
             Power Factor at Full Load
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="loadCharacteristicOptions.powerFactor75" name="powerFactor75"
+            <input type="checkbox" (change)="save()" [(ngModel)]="loadCharacteristicOptions.powerFactor75" name="powerFactor75"
                 id="powerFactor75">
             Power Factor at 75% Load
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="loadCharacteristicOptions.powerFactor50" name="powerFactor50"
+            <input type="checkbox" (change)="save()" [(ngModel)]="loadCharacteristicOptions.powerFactor50" name="powerFactor50"
                 id="powerFactor50">
             Power Factor at 50% Load
         </label>
@@ -67,7 +67,7 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="loadCharacteristicOptions.powerFactor25" name="powerFactor25"
+            <input type="checkbox" (change)="save()" [(ngModel)]="loadCharacteristicOptions.powerFactor25" name="powerFactor25"
                 id="powerFactor25">
             Power Factor at 25% Load
         </label>

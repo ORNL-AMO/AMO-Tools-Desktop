@@ -7,7 +7,7 @@
         </label>
     </div>
     <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" (input)="save()"
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
             [(ngModel)]="torqueOptions.displayTorque" name="displayTorque"
             id="displayTorque">
         <label class="custom-control-label" for="displayTorque"></label>
@@ -17,7 +17,7 @@
 <form class="p-1" *ngIf="displayForm">
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="torqueOptions.torqueFullLoad" name="torqueFullLoad"
+            <input type="checkbox" (change)="save()" [(ngModel)]="torqueOptions.torqueFullLoad" name="torqueFullLoad"
                 id="torqueFullLoad">
             Full Load Torque
         </label>
@@ -25,14 +25,14 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="torqueOptions.torqueBreakDown" name="torqueBreakDown"
+            <input type="checkbox" (change)="save()" [(ngModel)]="torqueOptions.torqueBreakDown" name="torqueBreakDown"
                 id="torqueBreakDown">
             Break Down Torque
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="torqueOptions.torqueLockedRotor"
+            <input type="checkbox" (change)="save()" [(ngModel)]="torqueOptions.torqueLockedRotor"
                 name="torqueLockedRotor" id="torqueLockedRotor">
             Locked Rotor Torque
         </label>

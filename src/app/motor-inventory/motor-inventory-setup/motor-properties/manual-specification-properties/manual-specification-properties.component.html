@@ -7,7 +7,7 @@
         </label>
     </div>
     <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" (input)="save()"
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
             [(ngModel)]="manualSpecificationOptions.displayManualSpecifications" name="displayManualSpecifications"
             id="displayManualSpecifications">
         <label class="custom-control-label" for="displayManualSpecifications"></label>
@@ -17,7 +17,7 @@
 <form class="p-1" *ngIf="displayForm">
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.frameNumber"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.frameNumber"
                 name="frameNumber" id="frameNumber">
             Frame Number
         </label>
@@ -25,7 +25,7 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.uFrame" name="uFrame"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.uFrame" name="uFrame"
                 id="uFrame">
             uFrame
         </label>
@@ -33,21 +33,21 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.cFace" name="cFace"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.cFace" name="cFace"
                 id="cFace">
             cFace
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.verticalShaft"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.verticalShaft"
                 name="verticalShaft" id="verticalShaft">
             Vertical Shaft
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.dFlange" name="dFlange"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.dFlange" name="dFlange"
                 id="dFlange">
             dFlange
         </label>
@@ -55,56 +55,56 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.windingResistance"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.windingResistance"
                 name="windingResistance" id="windingResistance">
             Winding Resistance
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.rotorBars" name="rotorBars"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.rotorBars" name="rotorBars"
                 id="rotorBars">
             Number of Rotor Bars
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.statorSlots"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.statorSlots"
                 name="statorSlots" id="statorSlots">
             Number of Stator Slots
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.ampsLockedRotor"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.ampsLockedRotor"
                 name="ampsLockedRotor" id="ampsLockedRotor">
             Locked Rotor Amps
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.stalledRotorTimeHot"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.stalledRotorTimeHot"
                 name="stalledRotorTimeHot" id="stalledRotorTimeHot">
             Stalled Rotor Time - Hot
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.stalledRotorTimeCold"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.stalledRotorTimeCold"
                 name="stalledRotorTimeCold" id="stalledRotorTimeCold">
             Stalled Rotor Time - Cold
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.poles" name="poles"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.poles" name="poles"
                 id="poles">
             Poles
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="manualSpecificationOptions.currentType"
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.currentType"
                 name="currentType" id="currentType">
             Current Type
         </label>

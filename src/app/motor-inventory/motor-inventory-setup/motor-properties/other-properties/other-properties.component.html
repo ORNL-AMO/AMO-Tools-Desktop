@@ -7,9 +7,8 @@
         </label>
     </div>
     <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" (input)="save()"
-            [(ngModel)]="otherOptions.displayOther" name="displayOther"
-            id="displayOther">
+        <input type="checkbox" class="custom-control-input" (change)="setAll()" [(ngModel)]="otherOptions.displayOther"
+            name="displayOther" id="displayOther">
         <label class="custom-control-label" for="displayOther"></label>
     </div>
 </div>
@@ -17,20 +16,20 @@
 <form class="p-1" *ngIf="displayForm">
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="otherOptions.driveType" name="driveType"
+            <input type="checkbox" (change)="save()" [(ngModel)]="otherOptions.driveType" name="driveType"
                 id="driveType">
             Drive Type
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="otherOptions.isVFD" name="isVFD" id="isVFD">
+            <input type="checkbox" (change)="save()" [(ngModel)]="otherOptions.isVFD" name="isVFD" id="isVFD">
             VFD
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="otherOptions.hasLoggerData" name="hasLoggerData"
+            <input type="checkbox" (change)="save()" [(ngModel)]="otherOptions.hasLoggerData" name="hasLoggerData"
                 id="hasLoggerData">
             Data Logger
         </label>
@@ -38,7 +37,7 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="otherOptions.voltageConnectionType"
+            <input type="checkbox" (change)="save()" [(ngModel)]="otherOptions.voltageConnectionType"
                 name="voltageConnectionType" id="voltageConnectionType">
             Voltage Connection Type
         </label>

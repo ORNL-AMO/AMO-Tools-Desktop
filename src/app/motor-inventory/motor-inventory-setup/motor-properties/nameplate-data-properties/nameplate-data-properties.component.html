@@ -7,7 +7,7 @@
         </label>
     </div>
     <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" (input)="save()"
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
             [(ngModel)]="nameplateDataOptions.displayNameplateData" name="displayNameplateData"
             id="displayNameplateData">
         <label class="custom-control-label" for="displayNameplateData"></label>
@@ -17,69 +17,69 @@
 <form class="p-1" *ngIf="displayForm">
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.manufacturer" name="manufacturer"
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.manufacturer" name="manufacturer"
                 id="manufacturer">
             Manufacturer
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.model" name="model" id="model">
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.model" name="model" id="model">
             Model
         </label>
     </div>
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.motorType" name="motorType"
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.motorType" name="motorType"
                 id="motorType">
             Motor Type
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.enclosureType"
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.enclosureType"
                 name="enclosureType" id="enclosureType">
             Enclosure Type
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.ratedVoltage" name="ratedVoltage"
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.ratedVoltage" name="ratedVoltage"
                 id="ratedVoltage">
             Voltage Rating
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.serviceFactor"
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.serviceFactor"
                 name="serviceFactor" id="serviceFactor">
             Service Factor
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.insulationClass"
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.insulationClass"
                 name="insulationClass" id="insulationClass">
             Insulation Class
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.weight" name="weight" id="weight">
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.weight" name="weight" id="weight">
             Weight
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.numberOfPhases"
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.numberOfPhases"
                 name="numberOfPhases" id="numberOfPhases">
             Number of Phases
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.fullLoadSpeed"
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadSpeed"
                 name="fullLoadSpeed" id="fullLoadSpeed">
             Full Load Speed
         </label>

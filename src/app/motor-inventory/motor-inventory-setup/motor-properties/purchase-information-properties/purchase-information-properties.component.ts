@@ -17,14 +17,31 @@ export class PurchaseInformationPropertiesComponent implements OnInit {
     this.purchaseInformationOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.purchaseInformationOptions;
   }
 
-
   save() {
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
+    this.checkDisplayPurchaseInformation();
     motorInventoryData.displayOptions.purchaseInformationOptions = this.purchaseInformationOptions;
     this.motorInventoryService.motorInventoryData.next(motorInventoryData);
   }
 
   toggleForm(){
     this.displayForm = !this.displayForm;
-  } 
+  }
+
+  setAll(){
+    this.purchaseInformationOptions.catalogId = this.purchaseInformationOptions.displayPurchaseInformation;
+    this.purchaseInformationOptions.directReplacementCost = this.purchaseInformationOptions.displayPurchaseInformation;
+    this.purchaseInformationOptions.listPrice = this.purchaseInformationOptions.displayPurchaseInformation;
+    this.purchaseInformationOptions.warranty = this.purchaseInformationOptions.displayPurchaseInformation;
+    this.save();
+  }
+
+  checkDisplayPurchaseInformation(){
+    this.purchaseInformationOptions.displayPurchaseInformation = (
+      this.purchaseInformationOptions.catalogId ||
+      this.purchaseInformationOptions.directReplacementCost ||
+      this.purchaseInformationOptions.listPrice ||
+      this.purchaseInformationOptions.warranty
+    )
+  }
 }

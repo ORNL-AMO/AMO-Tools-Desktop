@@ -7,7 +7,7 @@
         </label>
     </div>
     <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" (input)="save()"
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
             [(ngModel)]="purchaseInformationOptions.displayPurchaseInformation" name="displayPurchaseInformation"
             id="displayPurchaseInformation">
         <label class="custom-control-label" for="displayPurchaseInformation"></label>
@@ -17,7 +17,7 @@
 <form class="p-1" *ngIf="displayForm">
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="purchaseInformationOptions.catalogId" name="catalogId"
+            <input type="checkbox" (change)="save()" [(ngModel)]="purchaseInformationOptions.catalogId" name="catalogId"
                 id="catalogId">
             Catalog ID
         </label>
@@ -25,21 +25,21 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="purchaseInformationOptions.listPrice" name="listPrice"
+            <input type="checkbox" (change)="save()" [(ngModel)]="purchaseInformationOptions.listPrice" name="listPrice"
                 id="listPrice">
             List Price
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="purchaseInformationOptions.warranty" name="warranty"
+            <input type="checkbox" (change)="save()" [(ngModel)]="purchaseInformationOptions.warranty" name="warranty"
                 id="warranty">
             Warranty
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="purchaseInformationOptions.directReplacementCost"
+            <input type="checkbox" (change)="save()" [(ngModel)]="purchaseInformationOptions.directReplacementCost"
                 name="directReplacementCost" id="directReplacementCost">
             Direct Replacement Cost
         </label>

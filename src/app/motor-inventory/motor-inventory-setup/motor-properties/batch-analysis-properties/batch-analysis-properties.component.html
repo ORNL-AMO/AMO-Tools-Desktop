@@ -7,7 +7,7 @@
         </label>
     </div>
     <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" (input)="save()"
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
             [(ngModel)]="batchAnalysisOptions.displayBatchAnalysis" name="displayBatchAnalysis"
             id="displayBatchAnalysis">
         <label class="custom-control-label" for="displayBatchAnalysis"></label>
@@ -17,42 +17,42 @@
 <form class="p-1" *ngIf="displayForm">
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.modifiedCost" name="modifiedCost"
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.modifiedCost" name="modifiedCost"
                 id="modifiedCost">
             Modified Cost
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.modifiedPower"
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.modifiedPower"
                 name="modifiedPower" id="modifiedPower">
             Modified Power
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.modifiedEfficiency"
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.modifiedEfficiency"
                 name="modifiedEfficiency" id="modifiedEfficiency">
             Modified Efficiency
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.modifiedPercentLoad"
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.modifiedPercentLoad"
                 name="modifiedPercentLoad" id="modifiedPercentLoad">
             Modified Percent Load
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.rewindCost" name="rewindCost"
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.rewindCost" name="rewindCost"
                 id="rewindCost">
             Rewind Cost
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.rewindEfficiencyLoss"
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.rewindEfficiencyLoss"
                 name="rewindEfficiencyLoss" id="rewindEfficiencyLoss">
             Rewind Efficiency Loss
         </label>

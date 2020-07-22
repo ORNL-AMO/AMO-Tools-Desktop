@@ -17,14 +17,43 @@ export class NameplateDataPropertiesComponent implements OnInit {
     this.nameplateDataOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.nameplateDataOptions;
   }
 
-
   save() {
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
+    this.checkDisplayNameData();
     motorInventoryData.displayOptions.nameplateDataOptions = this.nameplateDataOptions;
     this.motorInventoryService.motorInventoryData.next(motorInventoryData);
   }
 
-  toggleForm(){
+  toggleForm() {
     this.displayForm = !this.displayForm;
-  }  
+  }
+
+  setAll() {
+    this.nameplateDataOptions.manufacturer = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.model = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.motorType = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.enclosureType = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.ratedVoltage = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.serviceFactor = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.insulationClass = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.weight = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.numberOfPhases = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.fullLoadSpeed = this.nameplateDataOptions.displayNameplateData;
+    this.save();
+  }
+
+  checkDisplayNameData() {
+    this.nameplateDataOptions.displayNameplateData = (
+      this.nameplateDataOptions.manufacturer ||
+      this.nameplateDataOptions.model ||
+      this.nameplateDataOptions.motorType ||
+      this.nameplateDataOptions.enclosureType ||
+      this.nameplateDataOptions.ratedVoltage ||
+      this.nameplateDataOptions.serviceFactor ||
+      this.nameplateDataOptions.insulationClass ||
+      this.nameplateDataOptions.weight ||
+      this.nameplateDataOptions.numberOfPhases ||
+      this.nameplateDataOptions.fullLoadSpeed
+    );
+  }
 }

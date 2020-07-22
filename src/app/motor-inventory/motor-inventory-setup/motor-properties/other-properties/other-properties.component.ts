@@ -17,14 +17,31 @@ export class OtherPropertiesComponent implements OnInit {
     this.otherOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.otherOptions;
   }
 
-
   save() {
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
+    this.checkDisplayOther();
     motorInventoryData.displayOptions.otherOptions = this.otherOptions;
     this.motorInventoryService.motorInventoryData.next(motorInventoryData);
   }
 
-  toggleForm(){
+  toggleForm() {
     this.displayForm = !this.displayForm;
-  }  
+  }
+
+  setAll() {
+    this.otherOptions.driveType = this.otherOptions.displayOther;
+    this.otherOptions.hasLoggerData = this.otherOptions.displayOther;
+    this.otherOptions.isVFD = this.otherOptions.displayOther;
+    this.otherOptions.voltageConnectionType = this.otherOptions.displayOther;
+    this.save();
+  }
+
+  checkDisplayOther() {
+    this.otherOptions.displayOther = (
+      this.otherOptions.driveType ||
+      this.otherOptions.hasLoggerData ||
+      this.otherOptions.isVFD ||
+      this.otherOptions.voltageConnectionType
+    )
+  }
 }
