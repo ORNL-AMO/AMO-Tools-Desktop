@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, HostListener, ElementRef } from '@angular/core';
-import { O2Enrichment } from '../../../shared/models/phast/o2Enrichment';
+import { EnrichmentInput } from '../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { O2EnrichmentService } from './o2-enrichment.service';
@@ -43,7 +43,7 @@ export class O2EnrichmentComponent implements OnInit {
   toggleExampleData: boolean = false;
 
   currentFieldSub: Subscription;
-  enrichmentInputs: Array<O2Enrichment>;
+  enrichmentInputs: Array<EnrichmentInput>;
   enrichmentInputsSub: Subscription;
 
   constructor(private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService,
@@ -100,11 +100,10 @@ export class O2EnrichmentComponent implements OnInit {
       // this.o2EnrichmentService.o2Enrichment = this.o2Enrichment;
       // this.o2EnrichmentService.lines = this.lines;
     } else if (this.calcExists) {
-      let inputs: Array<O2Enrichment> = this.o2EnrichmentService.enrichmentInputs.getValue();
-      let tmpO2Enrichment: O2Enrichment = inputs[0];
-      this.calculator.o2Enrichment = tmpO2Enrichment
-      // this.calculator.o2Enrichment = this.o2Enrichment;
-      this.saveCalculator();
+      // let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
+      // let tmpO2Enrichment: EnrichmentInput = inputs[0];
+      // this.calculator.o2Enrichment = tmpO2Enrichment
+      // this.saveCalculator();
     }
   }
 
@@ -129,11 +128,11 @@ export class O2EnrichmentComponent implements OnInit {
 
   initCalculator(): Calculator {
     // TODO set new calculator to O2 enrichment
-    let inputs: Array<O2Enrichment> = this.o2EnrichmentService.enrichmentInputs.getValue();
-    let tmpO2Enrichment: O2Enrichment = inputs[0];
+    let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
+    let tmpO2Enrichment: EnrichmentInput = inputs[0];
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
-      o2Enrichment: tmpO2Enrichment
+      // o2Enrichment: tmpO2Enrichment
     };
     return tmpCalculator;
   }
@@ -158,7 +157,6 @@ export class O2EnrichmentComponent implements OnInit {
     }
   }
 
-  
   btnGenerateExample() {
     this.o2EnrichmentService.generateExample(this.settings);
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, DoCheck, KeyValueDiffers, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { PhastService } from '../../../../phast/phast.service';
-import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
+import { O2Enrichment, RawO2Output } from '../../../../shared/models/phast/o2Enrichment';
 import * as d3 from 'd3';
 import { Settings } from '../../../../shared/models/settings';
 import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
@@ -17,7 +17,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   // results
   @Input()
-  o2EnrichmentOutput: O2EnrichmentOutput;
+  RawO2Output: RawO2Output;
   // input data
   @Input()
   o2Enrichment: O2Enrichment;

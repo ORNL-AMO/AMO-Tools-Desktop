@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { O2EnrichmentService } from '../o2-enrichment.service';
-import { O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
+import { EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -14,8 +14,8 @@ export class O2EnrichmentResultsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  outputs: Array<O2EnrichmentOutput>;
-  currentEnrichmentOutput: O2EnrichmentOutput;
+  outputs: Array<EnrichmentOutput>;
+  currentEnrichmentOutput: EnrichmentOutput;
   outputSub: Subscription;
   selectedRow: number = 0;
   currentEnrichmentIndexSub: Subscription;

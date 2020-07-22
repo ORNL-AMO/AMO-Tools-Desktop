@@ -18,10 +18,12 @@
           <td>Fuel Savings (%)</td>
           <td>Annual Cost Savings</td>
           <td>O<sub>2</sub> in Air (%)</td>
-          <td>Combustion Temp (%)</td>
-          <td>Flue O2 
-            (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <td>Combustion Temp
+               (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
+          </td>
+          <td>Flue O2 (%)
+
           </td>
           <td>Fuel Temp
             (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
@@ -29,85 +31,85 @@
           </td>
         </tr>
         <tr
-          *ngFor="let enrichmentOutput of outputs; let index = index">
+          *ngFor="let output of outputs; let index = index">
           <td>
               <a>
-                {{ enrichmentOutput.name }}
+                {{ output.outputData.name }}
               </a>
           </td>
           <td>
-            <span *ngIf="enrichmentOutput.availableHeatEnriched">
-              {{ enrichmentOutput.availableHeatEnriched | number: "1.0-0" }}
+            <span *ngIf="output.outputData.availableHeatInput">
+              {{ output.outputData.availableHeatInput | number: "1.0-0" }}
             </span>
-            <span *ngIf="!enrichmentOutput.availableHeatEnriched">
+            <span *ngIf="!output.outputData.availableHeatInput">
               --
             </span>
           </td>
           <td>
-            <span *ngIf="enrichmentOutput.annualFuelCostEnriched">
+            <span *ngIf="output.outputData.annualFuelCost">
               {{
-                enrichmentOutput.annualFuelCostEnriched
+                output.outputData.annualFuelCost
                   | currency: "USD":"symbol":"1.0-0"
               }}
             </span>
-            <span *ngIf="!enrichmentOutput.annualFuelCostEnriched">
+            <span *ngIf="!output.outputData.annualFuelCost">
               --
             </span>
           </td>
           <td >
-            <span *ngIf="enrichmentOutput.fuelConsumptionEnriched">
-              {{ enrichmentOutput.fuelConsumptionEnriched | number: "1.0-0" }}
+            <span *ngIf="output.outputData.fuelConsumption">
+              {{ output.outputData.fuelConsumption | number: "1.1-1" }}
             </span>
-            <span *ngIf="!enrichmentOutput.fuelConsumptionEnriched">
+            <span *ngIf="!output.outputData.fuelConsumption">
               --
             </span>
           </td>
           <td >
-            <span *ngIf="enrichmentOutput.fuelSavingsEnriched">
-              {{ enrichmentOutput.fuelSavingsEnriched | number: "1.0-0" }}
+            <span *ngIf="output.outputData.fuelSavings">
+              {{ output.outputData.fuelSavings | number: "1.1-1" }}
             </span>
-            <span *ngIf="!enrichmentOutput.fuelSavingsEnriched">
+            <span *ngIf="!output.outputData.fuelSavings">
               --
             </span>
           </td>
           <td >
-            <span *ngIf="enrichmentOutput.annualCostSavings">
-              {{ enrichmentOutput.annualCostSavings | currency: "USD":"symbol":"1.0-0" }}
+            <span *ngIf="output.outputData.annualCostSavings">
+              {{ output.outputData.annualCostSavings | currency: "USD":"symbol":"1.0-0" }}
             </span>
-            <span *ngIf="!enrichmentOutput.annualCostSavings">
+            <span *ngIf="!output.outputData.annualCostSavings">
               --
             </span>
           </td>
           <!-- INPUTS  -->
             <td >
-            <span *ngIf="enrichmentOutput.input.o2CombAirEnriched">
-              {{ enrichmentOutput.input.o2CombAirEnriched }}
+            <span *ngIf="output.inputData.o2CombAir">
+              {{ output.inputData.o2CombAir }}
             </span>
-            <span *ngIf="!enrichmentOutput.input.o2CombAirEnriched">
+            <span *ngIf="!output.inputData.o2CombAir">
               --
             </span>
           </td>
           <td >
-            <span *ngIf="enrichmentOutput.input.combAirTempEnriched">
-              {{ enrichmentOutput.input.combAirTempEnriched }}
+            <span *ngIf="output.inputData.combAirTemp">
+              {{ output.inputData.combAirTemp }}
             </span>
-            <span *ngIf="!enrichmentOutput.input.combAirTempEnriched">
+            <span *ngIf="!output.inputData.combAirTemp">
               --
             </span>
           </td>
           <td >
-            <span *ngIf="enrichmentOutput.input.o2FlueGasEnriched">
-              {{ enrichmentOutput.input.o2FlueGasEnriched }}
+            <span *ngIf="output.inputData.o2FlueGas">
+              {{ output.inputData.o2FlueGas }}
             </span>
-            <span *ngIf="!enrichmentOutput.input.o2FlueGasEnriched">
+            <span *ngIf="!output.inputData.o2FlueGas">
               --
             </span>
           </td>
           <td >
-            <span *ngIf="enrichmentOutput.input.flueGasTempEnriched">
-              {{ enrichmentOutput.input.flueGasTempEnriched }}
+            <span *ngIf="output.inputData.flueGasTemp">
+              {{ output.inputData.flueGasTemp }}
             </span>
-            <span *ngIf="!enrichmentOutput.input.flueGasTempEnriched">
+            <span *ngIf="!output.inputData.flueGasTemp">
               --
             </span>
           </td>

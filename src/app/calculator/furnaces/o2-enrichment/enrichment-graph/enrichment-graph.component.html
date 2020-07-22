@@ -37,16 +37,16 @@
           <th class="bold w-25">Key</th>
           <th class="bold w-25">O<sub>2</sub> in Air (%)</th>
           <th class="bold w-25">Fuel Savings (%)</th>
-          <th class="bold w-25">Combustion Temp (%)</th>
-          <th class="bold w-25">Flue O2 
+          <th class="bold w-25">Combustion Temp 
             (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
+          </th>
+          <th class="bold w-25">Flue O2 (%)
           </th>
           <th class="bold w-25">Fuel Temp
             (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" >&#8451;</span>)
           </th>
-          <!-- <th class="bold w-25"></th> -->
         </tr>
         <tr *ngFor="let point of selectedDataPoints; let index = index">
 
@@ -61,7 +61,7 @@
           <td class="text-center">{{point.pointX | number: '1.0-1'}}</td>
           <td class="text-center">
             <span *ngIf="point.pointY">
-              {{point.pointY | number: '1.0-1'}}
+              {{point.pointY | number: '1.1-1'}}
             </span>
             <span *ngIf="!point.pointY">
               &mdash; &mdash;

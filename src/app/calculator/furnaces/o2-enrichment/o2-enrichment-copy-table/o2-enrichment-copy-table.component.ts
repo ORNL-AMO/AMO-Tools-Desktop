@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
+import { EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import { Subscription } from 'rxjs';
 import { O2EnrichmentService } from '../o2-enrichment.service';
 
@@ -16,8 +16,8 @@ export class O2EnrichmentCopyTableComponent implements OnInit {
   @ViewChild('enrichmentTable', { static: false }) enrichmentTable: ElementRef;
 
   enrichmentTableString: any;
-  outputs: Array<O2EnrichmentOutput>;
-  currentEnrichmentOutput: O2EnrichmentOutput;
+  outputs: Array<EnrichmentOutput>;
+  currentEnrichmentOutput: EnrichmentOutput;
   outputSub: Subscription;
   clickedBtn: boolean = false;
   constructor(private o2EnrichmentService: O2EnrichmentService) { }
@@ -28,7 +28,6 @@ export class O2EnrichmentCopyTableComponent implements OnInit {
       this.outputs = outputs;
       this.currentEnrichmentOutput = outputs[currentEnrichmentIndex];
     });
-    console.log('clickedBtn', this.clickedBtn);
   }
 
   ngOnDestroy() {

@@ -1,6 +1,51 @@
+export interface EnrichmentInput {
+    inputData: EnrichmentInputData,
+    adapter?: SuiteInputAdapter 
+}
+
+export interface EnrichmentOutput {
+    outputData: EnrichmentOutputData,
+    inputData?: EnrichmentInputData
+}
+
+// Input Display model
+export interface EnrichmentInputData {
+    name: string,
+    isBaseline?: boolean,
+    operatingHours: number;
+    o2CombAir: number;
+    flueGasTemp: number;
+    o2FlueGas: number;
+    combAirTemp: number;
+    fuelConsumption?: number;
+    fuelCost: number;
+}
+
+// Output Display Model
+export interface EnrichmentOutputData {
+    name?: string,
+    isBaseline?: boolean;
+    availableHeatInput: number;
+    annualFuelCost: number;
+    fuelConsumption: number;
+    fuelSavings: number;
+    annualCostSavings?: number;
+}
+
+export interface RawO2Output {
+    annualFuelCost: number;
+    availableHeatInput: number;
+    availableHeatEnriched: number;
+    annualFuelCostEnriched: number;
+    fuelConsumptionEnriched: number;
+    fuelSavingsEnriched: number;
+    annualCostSavings?: number;
+}
+
+export interface SuiteInputAdapter extends O2Enrichment{}
+// Legacy interface
 export interface O2Enrichment {
     // 'Enriched' are modification values
-    name?: string,
     operatingHours: number;
     operatingHoursEnriched: number;
     o2CombAir: number;
@@ -16,25 +61,3 @@ export interface O2Enrichment {
     fuelCostEnriched: number;
 }
 
-export interface EnrichmentInput {
-    name?: string,
-    operatingHours: number;
-    o2CombAir: number;
-    flueGasTemp: number;
-    o2FlueGas: number;
-    combAirTemp: number;
-    fuelConsumption: number;
-    fuelCost: number;
-}
-
-export interface O2EnrichmentOutput {
-    name?: string;
-    annualFuelCost: number;
-    availableHeatInput: number;
-    availableHeatEnriched: number;
-    annualFuelCostEnriched: number;
-    fuelConsumptionEnriched: number;
-    fuelSavingsEnriched: number;
-    annualCostSavings?: number;
-    input?: O2Enrichment;
-}

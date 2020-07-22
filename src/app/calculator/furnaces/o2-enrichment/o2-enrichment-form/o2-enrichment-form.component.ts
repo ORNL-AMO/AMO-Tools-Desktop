@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
+import { EnrichmentInput, EnrichmentOutput, EnrichmentInputData } from '../../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../../shared/models/settings';
 import { O2EnrichmentService } from '../o2-enrichment.service';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-o2-enrichment-form',
   templateUrl: './o2-enrichment-form.component.html',
@@ -13,26 +14,24 @@ import { Subscription } from 'rxjs';
 export class O2EnrichmentFormComponent implements OnInit {
   @Input()
   settings: Settings;
-  isBaseline: boolean = true;
-  o2Form: FormGroup;
-
+  
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-
+  
   formWidth: number;
   isEditingName: boolean = false;
   showOperatingHoursModal: boolean;
-  editingPlot: boolean = false;
   operatingHoursControl: AbstractControl;
+  isBaseline: boolean = true;
+  o2Form: FormGroup;
 
   currentEnrichmentIndexSub: Subscription;
   currentEnrichmentIndex: any;
+  currentEnrichmentOutput: EnrichmentOutput;
 
-  currentEnrichmentOutput: O2EnrichmentOutput;
-  outputSub: Subscription;
   constructor(private o2EnrichmentService: O2EnrichmentService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -50,23 +49,19 @@ export class O2EnrichmentFormComponent implements OnInit {
 
   initSubscriptions() {
     this.currentEnrichmentIndexSub = this.o2EnrichmentService.currentEnrichmentIndex.subscribe(index => {
-      let inputs: Array<O2Enrichment> = this.o2EnrichmentService.enrichmentInputs.getValue();
+      this.currentEnrichmentIndex = index;
+      let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
+      let outputs: Array<EnrichmentOutput> = this.o2EnrichmentService.enrichmentOutputs.getValue();
+      this.currentEnrichmentOutput = outputs[index];
       if (inputs) {
         this.initForm(inputs, index);
       }
     });
-
-    this.outputSub = this.o2EnrichmentService.enrichmentOutputs.subscribe(outputs => {
-      let currentEnrichmentIndex = this.o2EnrichmentService.currentEnrichmentIndex.getValue();
-      this.currentEnrichmentOutput = outputs[currentEnrichmentIndex];
-    });
   }
 
   initForm(inputs, index: number) {
-    this.currentEnrichmentIndex = index;
-    let currentEnrichment = inputs[index];
-
-    this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, currentEnrichment);
+    let currentInput = inputs[index];
+    this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, currentInput.inputData);
     this.cd.detectChanges();
     if (this.currentEnrichmentIndex == 0) {
       this.isBaseline = true;
@@ -78,27 +73,22 @@ export class O2EnrichmentFormComponent implements OnInit {
   }
 
   addModification() {
-    let currentEnrichment = this.o2EnrichmentService.getObjFromForm(this.o2Form);
-    currentEnrichment.name = 'Modification';
-    let enrichmentInputs: Array<O2Enrichment> = this.o2EnrichmentService.enrichmentInputs.getValue();
-    enrichmentInputs.push(currentEnrichment);
-    this.o2EnrichmentService.enrichmentInputs.next(enrichmentInputs);
-    this.o2EnrichmentService.currentEnrichmentIndex.next(enrichmentInputs.length - 1);
+    this.o2EnrichmentService.addModification(this.o2Form);
   }
 
   removeModification() {
-    let enrichmentInputs: Array<O2Enrichment> = this.o2EnrichmentService.enrichmentInputs.getValue();
-    enrichmentInputs.splice(this.currentEnrichmentIndex, 1);
-    this.o2EnrichmentService.enrichmentInputs.next(enrichmentInputs);
-    this.o2EnrichmentService.currentEnrichmentIndex.next(this.currentEnrichmentIndex - 1);
+    this.o2EnrichmentService.removeModification(this.currentEnrichmentIndex);
   }
 
 
   calculate() {
     this.o2EnrichmentService.setRanges(this.o2Form, this.settings);
-    let currentEnrichment: O2Enrichment = this.o2EnrichmentService.getObjFromForm(this.o2Form);
+    let inputData: EnrichmentInputData = this.o2EnrichmentService.getObjFromForm(this.o2Form);
     let enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
-    enrichmentInputs[this.currentEnrichmentIndex] = currentEnrichment;
+    let currentInput = {
+      inputData: inputData
+    };
+    enrichmentInputs[this.currentEnrichmentIndex] = currentInput;
     this.o2EnrichmentService.enrichmentInputs.next(enrichmentInputs);
   }
 

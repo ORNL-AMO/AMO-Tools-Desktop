@@ -174,10 +174,10 @@
       <label class="small font-weight-bold w-50">Available Heat</label>
       <div class="small w-50">
         <strong>
-          <span *ngIf="currentEnrichmentOutput.availableHeatInput">
-            {{currentEnrichmentOutput.availableHeatInput | number:'1.0-0'}} % of HHV   
+          <span *ngIf="currentEnrichmentOutput.outputData.availableHeatInput">
+            {{currentEnrichmentOutput.outputData.availableHeatInput | number:'1.0-0'}} % of HHV   
           </span>
-          <span *ngIf="!currentEnrichmentOutput.availableHeatInput">
+          <span *ngIf="!currentEnrichmentOutput.outputData.availableHeatInput">
             &mdash; &mdash;
           </span>
         </strong>
@@ -187,10 +187,10 @@
       <label class="small font-weight-bold w-50">Annual Fuel Cost</label>
       <div class="small w-50">
         <strong>
-          <span *ngIf="currentEnrichmentOutput.annualFuelCost">
-            {{currentEnrichmentOutput.annualFuelCost | currency: 'USD': 'symbol': '1.0-0'}} 
+          <span *ngIf="currentEnrichmentOutput.outputData.annualFuelCost">
+            {{currentEnrichmentOutput.outputData.annualFuelCost | currency: 'USD': 'symbol': '1.0-0'}} 
           </span>
-          <span *ngIf="!currentEnrichmentOutput.annualFuelCost">
+          <span *ngIf="!currentEnrichmentOutput.outputData.annualFuelCost">
             &mdash; &mdash;
           </span>
         </strong>
@@ -202,8 +202,8 @@
     <label class="small font-weight-bold w-50">Fuel Consumption</label>
     <div class="small w-50">
       <strong>
-        <span *ngIf="currentEnrichmentOutput.fuelConsumptionEnriched">
-          {{currentEnrichmentOutput.fuelConsumptionEnriched | number:'1.0-0'}}
+        <span *ngIf="currentEnrichmentOutput.outputData.fuelConsumption">
+          {{currentEnrichmentOutput.outputData.fuelConsumption | number:'1.1-1'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
             MMBtu/hr
           </span>
@@ -211,7 +211,7 @@
             GJ/hr
           </span>
         </span>
-        <span *ngIf="!currentEnrichmentOutput.fuelConsumptionEnriched">
+        <span *ngIf="!currentEnrichmentOutput.outputData.fuelConsumption">
           &mdash; &mdash;
         </span>
       </strong>
@@ -221,10 +221,10 @@
     <label class="small font-weight-bold w-50">Available Heat</label>
     <div class="small w-50">
       <strong>
-        <span *ngIf="currentEnrichmentOutput.availableHeatEnriched">
-          {{currentEnrichmentOutput.availableHeatEnriched | number:'1.0-0'}} % of HHV
+        <span *ngIf="currentEnrichmentOutput.outputData.availableHeatInput">
+          {{currentEnrichmentOutput.outputData.availableHeatInput | number:'1.0-0'}} % of HHV
         </span>
-        <span *ngIf="!currentEnrichmentOutput.availableHeatEnriched">
+        <span *ngIf="!currentEnrichmentOutput.outputData.availableHeatInput">
           &mdash; &mdash;
         </span>
       </strong>
@@ -234,10 +234,10 @@
     <label class="small font-weight-bold w-50">Fuel Savings</label>
     <div class="small">
       <strong>
-        <span *ngIf="currentEnrichmentOutput.fuelSavingsEnriched">
-          {{currentEnrichmentOutput.fuelSavingsEnriched | number:'1.0-0'}} %  
+        <span *ngIf="currentEnrichmentOutput.outputData.fuelSavings">
+          {{currentEnrichmentOutput.outputData.fuelSavings | number:'1.1-1'}} %  
         </span>
-        <span *ngIf="!currentEnrichmentOutput.fuelSavingsEnriched">
+        <span *ngIf="!currentEnrichmentOutput.outputData.fuelSavings">
           &mdash; &mdash;
         </span>
       </strong>
@@ -247,10 +247,10 @@
     <label class="small font-weight-bold w-50">Annual Fuel Cost</label>
     <div class="small w-50">
       <strong>
-        <span *ngIf="currentEnrichmentOutput.annualFuelCostEnriched">
-          {{currentEnrichmentOutput.annualFuelCostEnriched | currency: 'USD': 'symbol': '1.0-0'}}   
+        <span *ngIf="currentEnrichmentOutput.outputData.annualFuelCost">
+          {{currentEnrichmentOutput.outputData.annualFuelCost | currency: 'USD': 'symbol': '1.0-0'}}   
         </span>
-        <span *ngIf="!currentEnrichmentOutput.annualFuelCostEnriched">
+        <span *ngIf="!currentEnrichmentOutput.outputData.annualFuelCost">
           &mdash; &mdash;
         </span>
       </strong>
@@ -260,10 +260,10 @@
     <label class="small font-weight-bold w-50">Annual Cost Savings</label>
     <div class="small">
       <strong>
-        <span *ngIf="currentEnrichmentOutput.annualCostSavings">
-          {{currentEnrichmentOutput.annualCostSavings | currency: 'USD': 'symbol': '1.0-0'}}   
+        <span *ngIf="currentEnrichmentOutput.outputData.annualCostSavings">
+          {{currentEnrichmentOutput.outputData.annualCostSavings | currency: 'USD': 'symbol': '1.0-0'}}   
         </span>
-        <span *ngIf="!currentEnrichmentOutput.annualCostSavings">
+        <span *ngIf="!currentEnrichmentOutput.outputData.annualCostSavings">
           &mdash; &mdash;
         </span>
       </strong>
