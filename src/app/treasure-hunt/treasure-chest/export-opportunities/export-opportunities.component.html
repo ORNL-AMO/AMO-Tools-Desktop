@@ -175,6 +175,22 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.airLeakSurveys">
+                        <label>Air Leak Surveys</label>
+                        <ul>
+                            <li
+                                *ngFor="let airLeakSurvey of exportOpportunities.airLeakSurveys; let index = index;">
+                                <span
+                                    *ngIf="!airLeakSurvey.opportunitySheet || !airLeakSurvey.opportunitySheet.name">
+                                    Air Leak Survey #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="airLeakSurvey.opportunitySheet && airLeakSurvey.opportunitySheet.name">
+                                    {{airLeakSurvey.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.opportunitySheets">
                         <label>Opportunity Sheets</label>
                         <ul>

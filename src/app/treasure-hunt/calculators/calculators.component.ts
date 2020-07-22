@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CalculatorsService } from './calculators.service';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, LightingReplacementTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -31,6 +31,7 @@ export class CalculatorsComponent implements OnInit {
   steamReduction: SteamReductionTreasureHunt;
   pipeInsulationReduction: PipeInsulationReductionTreasureHunt;
   tankInsulationReduction: TankInsulationReductionTreasureHunt;
+  airLeakSurveyTreasureHunt: AirLeakSurveyTreasureHunt;
 
   selectedCalc: string;
   selectedCalcSubscription: Subscription;
@@ -108,6 +109,8 @@ export class CalculatorsComponent implements OnInit {
       this.confirmPipeInsulationReduction();
     } else if (this.selectedCalc == 'tank-insulation-reduction'){
       this.confirmTankInsulationReduction();
+    } else if(this.selectedCalc == 'air-leak-survey'){
+      this.confirmAirLeakSurvey();
     }
   }
   initSaveCalc() {
@@ -331,6 +334,26 @@ export class CalculatorsComponent implements OnInit {
     }
     this.finishSaveCalc();
   }
+
+  //air leak survey
+  cancelAirLeakSurvey() {
+    this.calculatorsService.cancelAirLeakSurvey();
+  }
+  saveAirLeakSurvey(airLeakSurvey: AirLeakSurveyTreasureHunt) {
+    this.airLeakSurveyTreasureHunt = airLeakSurvey;
+    this.initSaveCalc();
+  }
+  confirmAirLeakSurvey() {
+    this.airLeakSurveyTreasureHunt.opportunitySheet = this.calculatorsService.calcOpportunitySheet;
+    this.airLeakSurveyTreasureHunt.selected = true;
+    if (this.calculatorsService.isNewOpportunity == true) {
+      this.treasureHuntService.addNewAirLeakSurveyItem(this.airLeakSurveyTreasureHunt);
+    } else {
+      this.treasureHuntService.editAirLeakSurveyItem(this.airLeakSurveyTreasureHunt, this.calculatorsService.itemIndex, this.settings);
+    }
+    this.finishSaveCalc();
+  }
+
 
   //stand alone opportunity sheet
   cancelStandaloneOpportunitySheet() {

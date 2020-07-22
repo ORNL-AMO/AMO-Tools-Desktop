@@ -109,6 +109,8 @@ export class OpportunityCardsComponent implements OnInit {
       this.calculatorsService.editPipeInsulationReductionsItem(opportunityCard.pipeInsulationReduction, opportunityCard.opportunityIndex);
     } else if (opportunityCard.opportunityType == 'tank-insulation-reduction') {
       this.calculatorsService.editTankInsulationReductionsItem(opportunityCard.tankInsulationReduction, opportunityCard.opportunityIndex);
+    } else if (opportunityCard.opportunityType == 'air-leak-survey') {
+      this.calculatorsService.editAirLeakSurveyItem(opportunityCard.airLeakSurvey, opportunityCard.opportunityIndex);
     }
   }
 
@@ -152,6 +154,8 @@ export class OpportunityCardsComponent implements OnInit {
       this.treasureHuntService.deletePipeInsulationReductionsItem(this.deleteOpportunity.opportunityIndex);
     } else if (this.deleteOpportunity.opportunityType == 'tank-insulation-reduction') {
       this.treasureHuntService.deleteTankInsulationReductionsItem(this.deleteOpportunity.opportunityIndex);
+    } else if (this.deleteOpportunity.opportunityType == 'air-leak-survey') {
+      this.treasureHuntService.deleteAirLeakSurveyItem(this.deleteOpportunity.opportunityIndex);
     }
     this.hideDeleteItemModal();
     this.updateOpportunityCardsData();
@@ -225,6 +229,9 @@ export class OpportunityCardsComponent implements OnInit {
     } else if (this.editOpportunitySheetCardData.opportunityType == 'tank-insulation-reduction') {
       this.editOpportunitySheetCardData.tankInsulationReduction.opportunitySheet = updatedOpportunitySheet;
       this.treasureHuntService.editTankInsulationReductionItem(this.editOpportunitySheetCardData.tankInsulationReduction, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
+    } else if (this.editOpportunitySheetCardData.opportunityType == 'air-leak-survey') {
+      this.editOpportunitySheetCardData.airLeakSurvey.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editAirLeakSurveyItem(this.editOpportunitySheetCardData.airLeakSurvey, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
     }
     this.hideOpportunitySheetModal();
   }
@@ -266,6 +273,9 @@ export class OpportunityCardsComponent implements OnInit {
     } else if (cardData.opportunityType == 'tank-insulation-reduction') {
       cardData.tankInsulationReduction.selected = cardData.selected;
       this.treasureHuntService.editTankInsulationReductionItem(cardData.tankInsulationReduction, cardData.opportunityIndex, this.settings);
+    } else if (cardData.opportunityType == 'air-leak-survey') {
+      cardData.airLeakSurvey.selected = cardData.selected;
+      this.treasureHuntService.editAirLeakSurveyItem(cardData.airLeakSurvey, cardData.opportunityIndex, this.settings);
     }
   }
 
@@ -347,7 +357,12 @@ export class OpportunityCardsComponent implements OnInit {
       newOpportunityCard.tankInsulationReduction.opportunitySheet = this.updateCopyName(newOpportunityCard.tankInsulationReduction.opportunitySheet);
       this.treasureHuntService.addNewTankInsulationReductionItem(newOpportunityCard.tankInsulationReduction);
       let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-      newOpportunityCard = this.opportunityCardsService.getTankInsulationReductionCardData(newOpportunityCard.tankInsulationReduction, this.settings, treasureHunt.pipeInsulationReductions.length - 1, treasureHunt.currentEnergyUsage);
+      newOpportunityCard = this.opportunityCardsService.getTankInsulationReductionCardData(newOpportunityCard.tankInsulationReduction, this.settings, treasureHunt.tankInsulationReductions.length - 1, treasureHunt.currentEnergyUsage);
+    } else if (newOpportunityCard.opportunityType == 'air-leak-survey') {
+      newOpportunityCard.airLeakSurvey.opportunitySheet = this.updateCopyName(newOpportunityCard.airLeakSurvey.opportunitySheet);
+      this.treasureHuntService.addNewAirLeakSurveyItem(newOpportunityCard.airLeakSurvey);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getAirLeakSurveyCardData(newOpportunityCard.airLeakSurvey, this.settings, treasureHunt.airLeakSurveys.length - 1, treasureHunt.currentEnergyUsage);
     }
 
     this.opportunityCardsData.push(newOpportunityCard);

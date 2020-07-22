@@ -1,7 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput } from "./standalone";
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput } from "./standalone";
 
 export interface TreasureHunt {
     name: string,
@@ -17,6 +17,7 @@ export interface TreasureHunt {
     steamReductions?: Array<SteamReductionTreasureHunt>;
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
+    airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     setupDone: boolean;
@@ -153,7 +154,6 @@ export interface TankInsulationReductionTreasureHunt {
     selected?: boolean;
 }
 
-
 export interface WaterReductionTreasureHunt {
     baseline: Array<WaterReductionData>;
     modification: Array<WaterReductionData>;
@@ -168,6 +168,11 @@ export interface WastewaterReductionTreasureHunt {
     selected?: boolean;
 }
 
+export interface AirLeakSurveyTreasureHunt {
+    airLeakSurveyInput: AirLeakSurveyInput,
+    opportunitySheet?: OpportunitySheet,
+    selected?: boolean
+}
 
 export interface OpportunitySheetResults {
     electricityResults: OpportunitySheetResult,
@@ -269,4 +274,5 @@ export interface ImportExportOpportunities {
     steamReductions?: Array<SteamReductionTreasureHunt>;
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
     tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
+    airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
 }

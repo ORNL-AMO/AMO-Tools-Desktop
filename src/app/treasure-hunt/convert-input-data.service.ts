@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, EnergyUsage, EnergyUseItem, TankInsulationReductionTreasureHunt } from '../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, EnergyUsage, EnergyUseItem, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../shared/models/treasure-hunt';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, CompressedAirPressureReductionData, WaterReductionData, SteamReductionData, TankInsulationReductionInput } from '../shared/models/standalone';
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, CompressedAirPressureReductionData, WaterReductionData, SteamReductionData, TankInsulationReductionInput, AirLeakSurveyInput } from '../shared/models/standalone';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -40,6 +40,9 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.tankInsulationReductions != undefined) {
       treasureHunt.tankInsulationReductions = this.convertTankInsulationReductions(treasureHunt.tankInsulationReductions, oldSettings, newSettings);
+    }
+    if (treasureHunt.airLeakSurveys != undefined) {
+      treasureHunt.airLeakSurveys = this.convertAirLeakSurveys(treasureHunt.airLeakSurveys, oldSettings, newSettings);
     }
     if (treasureHunt.currentEnergyUsage != undefined) {
       treasureHunt.currentEnergyUsage = this.convertCurrentEnergyUsage(treasureHunt.currentEnergyUsage, oldSettings, newSettings);
@@ -303,23 +306,55 @@ export class ConvertInputDataService {
 
   convertTankInsulationReduction(reduction: TankInsulationReductionInput, oldSettings: Settings, newSettings: Settings): TankInsulationReductionInput {
     //utilityType imperial: $/MMBtu, metric: $/GJ
-      reduction.utilityCost = this.convertDollarsPerMMBtuAndGJ(reduction.utilityCost, oldSettings, newSettings);
+    reduction.utilityCost = this.convertDollarsPerMMBtuAndGJ(reduction.utilityCost, oldSettings, newSettings);
 
     //tankHeight imperial: ft, metric: m
-    reduction.tankHeight =  this.convertFtAndMeterValue(reduction.tankHeight, oldSettings, newSettings);
+    reduction.tankHeight = this.convertFtAndMeterValue(reduction.tankHeight, oldSettings, newSettings);
     //tankDiameter imperial: ft, metric: m
-    reduction.tankDiameter =  this.convertFtAndMeterValue(reduction.tankDiameter, oldSettings, newSettings);
+    reduction.tankDiameter = this.convertFtAndMeterValue(reduction.tankDiameter, oldSettings, newSettings);
     //tankThickness imperial: ft, metric: m
-    reduction.tankThickness =  this.convertFtAndMeterValue(reduction.tankThickness, oldSettings, newSettings);
+    reduction.tankThickness = this.convertFtAndMeterValue(reduction.tankThickness, oldSettings, newSettings);
     //insulationThickness imperial: ft, metric: m
-    reduction.insulationThickness =  this.convertFtAndMeterValue(reduction.insulationThickness, oldSettings, newSettings);
+    reduction.insulationThickness = this.convertFtAndMeterValue(reduction.insulationThickness, oldSettings, newSettings);
     //tankTemperature imperial: F, metric: C
-    reduction.tankTemperature =  this.convertTemperatureValue(reduction.tankTemperature, oldSettings, newSettings);
+    reduction.tankTemperature = this.convertTemperatureValue(reduction.tankTemperature, oldSettings, newSettings);
     //ambientTemperature imperial: F, metric: C
-    reduction.ambientTemperature =  this.convertTemperatureValue(reduction.ambientTemperature, oldSettings, newSettings);
+    reduction.ambientTemperature = this.convertTemperatureValue(reduction.ambientTemperature, oldSettings, newSettings);
     //customInsulationConductivity imperial: Btu/hr*ft*F, metric: W/mK
-    reduction.customInsulationConductivity =  this.convertConductivity(reduction.customInsulationConductivity, oldSettings, newSettings);
+    reduction.customInsulationConductivity = this.convertConductivity(reduction.customInsulationConductivity, oldSettings, newSettings);
     return reduction;
+  }
+
+  convertAirLeakSurveys(airLeakSurveys: Array<AirLeakSurveyTreasureHunt>, oldSettings: Settings, newSettings: Settings): Array<AirLeakSurveyTreasureHunt> {
+    airLeakSurveys.forEach(airLeakSurvey => {
+      airLeakSurvey.airLeakSurveyInput = this.convertAirLeakSurveyInput(airLeakSurvey.airLeakSurveyInput, oldSettings, newSettings);
+    });
+    return airLeakSurveys;
+  }
+
+  convertAirLeakSurveyInput(survey: AirLeakSurveyInput, oldSettings: Settings, newSettings: Settings): AirLeakSurveyInput {
+    survey.compressedAirLeakSurveyInputVec.forEach(input => {
+      //cm, in
+      input.bagMethodData.height = this.convertInAndCmValue(input.bagMethodData.height, oldSettings, newSettings);
+      input.bagMethodData.diameter = this.convertInAndCmValue(input.bagMethodData.diameter, oldSettings, newSettings);
+      //ft3 m3 
+      input.estimateMethodData.leakRateEstimate = this.convertFt3AndM3Value(input.estimateMethodData.leakRateEstimate, oldSettings, newSettings);
+      //psig kPag
+      input.decibelsMethodData.linePressure = this.convertPsigAndKpag(input.decibelsMethodData.linePressure, oldSettings, newSettings);
+      input.decibelsMethodData.pressureA = this.convertPsigAndKpag(input.decibelsMethodData.pressureA, oldSettings, newSettings);
+      input.decibelsMethodData.pressureB = this.convertPsigAndKpag(input.decibelsMethodData.pressureB, oldSettings, newSettings);
+      //F C
+      input.orificeMethodData.compressorAirTemp = this.convertTemperatureValue(input.orificeMethodData.compressorAirTemp, oldSettings, newSettings);
+      //psia kPaa
+      input.orificeMethodData.atmosphericPressure = this.convertPsiaAndKpaa(input.orificeMethodData.atmosphericPressure, oldSettings, newSettings);
+      //in cm
+      input.orificeMethodData.orificeDiameter = this.convertInAndCmValue(input.orificeMethodData.orificeDiameter, oldSettings, newSettings);
+      //psia kPaa
+      input.orificeMethodData.supplyPressure = this.convertPsiaAndKpaa(input.orificeMethodData.supplyPressure, oldSettings, newSettings);
+      //1/m3 1/ft3
+      input.compressorElectricityData.compressorSpecificPower = this.convertDollarsPerFt3AndM3(input.compressorElectricityData.compressorSpecificPower, oldSettings, newSettings)
+    })
+    return survey;
   }
 
   convertCurrentEnergyUsage(currentEnergyUsage: EnergyUsage, oldSettings: Settings, newSettings: Settings): EnergyUsage {
@@ -501,9 +536,25 @@ export class ConvertInputDataService {
 
   convertConductivity(val: number, oldSettings: Settings, newSettings: Settings): number {
     if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      return this.convertDollarPerValue(val, 'Btu/hr-ft-R', 'W/mK');
+      return this.convertValue(val, 'Btu/hr-ft-R', 'W/mK');
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      return this.convertDollarPerValue(val, 'W/mK', 'Btu/hr-ft-R');
+      return this.convertValue(val, 'W/mK', 'Btu/hr-ft-R');
+    }
+  }
+
+  convertPsiaAndKpaa(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'psia', 'kPaa');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'kPaa', 'psia');
+    }
+  }
+
+  convertPsigAndKpag(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      return this.convertValue(val, 'psig', 'kPag');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      return this.convertValue(val, 'kPag', 'psig');
     }
   }
 

@@ -76,6 +76,12 @@ export class ImportOpportunitiesService {
       }
       treasureHunt.tankInsulationReductions = treasureHunt.tankInsulationReductions.concat(data.tankInsulationReductions);
     }
+    if(data.airLeakSurveys){
+      if (treasureHunt.airLeakSurveys == undefined) {
+        treasureHunt.airLeakSurveys = new Array();
+      }
+      treasureHunt.airLeakSurveys = treasureHunt.airLeakSurveys.concat(data.airLeakSurveys);
+    }
     return treasureHunt;
   }
 }
