@@ -1,0 +1,72 @@
+<form>
+    <label class="group-label">Nameplate Data</label>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.manufacturer" name="manufacturer"
+                id="manufacturer">
+            Manufacturer
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.model" name="model" id="model">
+            Model
+        </label>
+    </div>
+
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.motorType" name="motorType"
+                id="motorType">
+            Motor Type
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.enclosureType"
+                name="enclosureType" id="enclosureType">
+            Enclosure Type
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.ratedVoltage" name="ratedVoltage"
+                id="ratedVoltage">
+            Voltage Rating
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.serviceFactor"
+                name="serviceFactor" id="serviceFactor">
+            Service Factor
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.insulationClass"
+                name="insulationClass" id="insulationClass">
+            Insulation Class
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.weight" name="weight" id="weight">
+            Weight
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.numberOfPhases"
+                name="numberOfPhases" id="numberOfPhases">
+            Number of Phases
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.fullLoadSpeed"
+                name="fullLoadSpeed" id="fullLoadSpeed">
+            Full Load Speed
+        </label>
+    </div>
+</form>

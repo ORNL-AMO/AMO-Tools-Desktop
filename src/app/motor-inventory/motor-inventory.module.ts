@@ -26,6 +26,14 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { FilterMotorsComponent } from './motor-inventory-setup/motor-catalog/select-motor-modal/filter-motors/filter-motors.component';
 import { MotorOptionsTableComponent } from './motor-inventory-setup/motor-catalog/select-motor-modal/motor-options-table/motor-options-table.component';
 import { FilterMotorOptionsPipe } from './motor-inventory-setup/motor-catalog/select-motor-modal/filter-motor-options.pipe';
+import { LoadCharacteristicPropertiesComponent } from './motor-inventory-setup/motor-properties/load-characteristic-properties/load-characteristic-properties.component';
+import { ManualSpecificationPropertiesComponent } from './motor-inventory-setup/motor-properties/manual-specification-properties/manual-specification-properties.component';
+import { NameplateDataPropertiesComponent } from './motor-inventory-setup/motor-properties/nameplate-data-properties/nameplate-data-properties.component';
+import { OperationDataPropertiesComponent } from './motor-inventory-setup/motor-properties/operation-data-properties/operation-data-properties.component';
+import { OtherPropertiesComponent } from './motor-inventory-setup/motor-properties/other-properties/other-properties.component';
+import { PurchaseInformationPropertiesComponent } from './motor-inventory-setup/motor-properties/purchase-information-properties/purchase-information-properties.component';
+import { TorquePropertiesComponent } from './motor-inventory-setup/motor-properties/torque-properties/torque-properties.component';
+import { BatchAnalysisPropertiesComponent } from './motor-inventory-setup/motor-properties/batch-analysis-properties/batch-analysis-properties.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +55,15 @@ import { FilterMotorOptionsPipe } from './motor-inventory-setup/motor-catalog/se
     MotorBasicsComponent,
     FilterMotorsComponent,
     MotorOptionsTableComponent,
-    FilterMotorOptionsPipe
+    FilterMotorOptionsPipe,
+    LoadCharacteristicPropertiesComponent,
+    ManualSpecificationPropertiesComponent,
+    NameplateDataPropertiesComponent,
+    OperationDataPropertiesComponent,
+    OtherPropertiesComponent,
+    PurchaseInformationPropertiesComponent,
+    TorquePropertiesComponent,
+    BatchAnalysisPropertiesComponent
   ],
   imports: [
     CommonModule,

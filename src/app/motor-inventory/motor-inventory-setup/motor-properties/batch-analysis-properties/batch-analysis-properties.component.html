@@ -1,0 +1,46 @@
+<form>
+    <label class="group-label">Batch Analysis</label>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.modifiedCost" name="modifiedCost"
+                id="modifiedCost">
+            Modified Cost
+        </label>
+    </div>
+
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.modifiedPower" name="modifiedPower"
+                id="modifiedPower">
+            Modified Power
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.modifiedEfficiency"
+                name="modifiedEfficiency" id="modifiedEfficiency">
+            Modified Efficiency
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.modifiedPercentLoad"
+                name="modifiedPercentLoad" id="modifiedPercentLoad">
+            Modified Percent Load
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.rewindCost" name="rewindCost"
+                id="rewindCost">
+            Rewind Cost
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="batchAnalysisOptions.rewindEfficiencyLoss"
+                name="rewindEfficiencyLoss" id="rewindEfficiencyLoss">
+            Rewind Efficiency Loss
+        </label>
+    </div>
+</form>

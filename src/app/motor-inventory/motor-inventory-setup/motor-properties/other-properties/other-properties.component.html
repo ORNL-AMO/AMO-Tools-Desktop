@@ -1,0 +1,31 @@
+<form>
+    <label class="group-label">Other</label>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="otherOptions.driveType" name="driveType"
+                id="driveType">
+            Drive Type
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="otherOptions.isVFD" name="isVFD" id="isVFD">
+            VFD
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="otherOptions.hasLoggerData" name="hasLoggerData"
+                id="hasLoggerData">
+            Data Logger
+        </label>
+    </div>
+
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="otherOptions.voltageConnectionType"
+                name="voltageConnectionType" id="voltageConnectionType">
+            Voltage Connection Type
+        </label>
+    </div>
+</form>

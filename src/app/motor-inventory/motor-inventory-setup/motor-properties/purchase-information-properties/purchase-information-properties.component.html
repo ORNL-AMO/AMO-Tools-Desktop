@@ -1,0 +1,32 @@
+<form>
+    <label class="group-label">Purchase Information</label>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="purchaseInformationOptions.catalogId" name="catalogId"
+                id="catalogId">
+            Catalog ID
+        </label>
+    </div>
+
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="purchaseInformationOptions.listPrice" name="listPrice"
+                id="listPrice">
+            List Price
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="purchaseInformationOptions.warranty" name="warranty"
+                id="warranty">
+            Warranty
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (input)="save()" [(ngModel)]="purchaseInformationOptions.directReplacementCost"
+                name="directReplacementCost" id="directReplacementCost">
+            Direct Replacement Cost
+        </label>
+    </div>
+</form>

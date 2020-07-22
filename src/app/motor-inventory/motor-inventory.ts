@@ -81,35 +81,27 @@ export interface MotorItem {
 }
 
 export interface MotorPropertyDisplayOptions {
-  ratedVoltage: boolean,
-  annualOperatingHours: boolean,
-  percentLoad: boolean,
-  driveType: boolean,
-  isVFD: boolean,
-  hasLoggerData: boolean,
-  numberOfPhases: boolean,
-  enclosureType: boolean,
-  poles: boolean,
-  manufacturer: boolean,
-  model: boolean,
-  catalogId: boolean,
-  motorType: boolean,
-  ratedSpeed: boolean,
-  fullLoadSpeed: boolean,
-  frameNumber: boolean,
-  purpose: boolean,
-  uFrame: boolean,
-  cFace: boolean,
-  verticalShaft: boolean,
-  dFlange: boolean,
-  serviceFactor: boolean,
-  insulationClass: boolean,
-  weight: boolean,
-  listPrice: boolean,
-  windingResistance: boolean,
-  warranty: boolean,
-  rotorBars: boolean,
-  statorSlots: boolean,
+  batchAnalysisOptions: BatchAnalysisOptions,
+  loadCharactersticOptions: LoadCharacteristicOptions,
+  manualSpecificationOptions: ManualSpecificationOptions,
+  nameplateDataOptions: NameplateDataOptions,
+  operationDataOptions: OperationDataOptions,
+  otherOptions: OtherOptions,
+  purchaseInformationOptions: PurchaseInformationOptions,
+  torqueOptions: TorqueOptions
+}
+
+export interface BatchAnalysisOptions {
+  //Add
+  modifiedCost: boolean,
+  modifiedPower: boolean,
+  modifiedEfficiency: boolean,
+  modifiedPercentLoad: boolean,
+  rewindCost: boolean,
+  rewindEfficiencyLoss: boolean
+}
+
+export interface LoadCharacteristicOptions {
   efficiency75: boolean,
   efficiency50: boolean,
   efficiency25: boolean,
@@ -117,15 +109,66 @@ export interface MotorPropertyDisplayOptions {
   powerFactor75: boolean,
   powerFactor50: boolean,
   powerFactor25: boolean,
-  torqueFullLoad: boolean,
-  torqueBreakDown: boolean,
-  torqueLockedRotor: boolean,
   ampsIdle: boolean,
+}
+
+export interface ManualSpecificationOptions {
+  frameNumber: boolean,
+  uFrame: boolean,
+  cFace: boolean,
+  verticalShaft: boolean,
+  dFlange: boolean,
+  windingResistance: boolean,
+  rotorBars: boolean,
+  statorSlots: boolean,
   ampsLockedRotor: boolean,
   stalledRotorTimeHot: boolean,
   stalledRotorTimeCold: boolean,
-  voltageConnectionType: boolean,
+  poles: boolean,
   currentType: boolean,
+}
+
+export interface NameplateDataOptions {
+  manufacturer: boolean,
+  model: boolean,
+  motorType: boolean,
+  enclosureType: boolean,
+  ratedVoltage: boolean,
+  serviceFactor: boolean,
+  insulationClass: boolean,
+  weight: boolean,
+  numberOfPhases: boolean,
+  fullLoadSpeed: boolean,
+}
+
+export interface OperationDataOptions {
+  ratedSpeed: boolean,
+  purpose: boolean,
+  annualOperatingHours: boolean,
   averageLoadFactor: boolean,
-  utilizationFactor: boolean
+  utilizationFactor: boolean,
+  percentLoad: boolean,
+  //Add
+  powerFactorAtLoad: boolean
+}
+
+export interface OtherOptions {
+  driveType: boolean,
+  isVFD: boolean,
+  hasLoggerData: boolean,
+  voltageConnectionType: boolean,
+}
+
+export interface PurchaseInformationOptions {
+  catalogId: boolean,
+  listPrice: boolean,
+  warranty: boolean,
+  //Add
+  directReplacementCost: boolean
+}
+
+export interface TorqueOptions {
+  torqueFullLoad: boolean,
+  torqueBreakDown: boolean,
+  torqueLockedRotor: boolean,
 }
