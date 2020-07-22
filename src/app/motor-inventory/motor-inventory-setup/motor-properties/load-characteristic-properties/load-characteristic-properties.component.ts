@@ -10,6 +10,7 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 export class LoadCharacteristicPropertiesComponent implements OnInit {
 
   loadCharacteristicOptions: LoadCharacteristicOptions;
+  displayForm: boolean = true;
   constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
@@ -21,5 +22,9 @@ export class LoadCharacteristicPropertiesComponent implements OnInit {
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
     motorInventoryData.displayOptions.loadCharactersticOptions = this.loadCharacteristicOptions;
     this.motorInventoryService.motorInventoryData.next(motorInventoryData);
+  }
+
+  toggleForm(){
+    this.displayForm = !this.displayForm;
   }
 }

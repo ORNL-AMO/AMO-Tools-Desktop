@@ -9,6 +9,7 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 })
 export class PurchaseInformationPropertiesComponent implements OnInit {
 
+  displayForm: boolean = true;
   purchaseInformationOptions: PurchaseInformationOptions;
   constructor(private motorInventoryService: MotorInventoryService) { }
 
@@ -23,4 +24,7 @@ export class PurchaseInformationPropertiesComponent implements OnInit {
     this.motorInventoryService.motorInventoryData.next(motorInventoryData);
   }
 
+  toggleForm(){
+    this.displayForm = !this.displayForm;
+  } 
 }

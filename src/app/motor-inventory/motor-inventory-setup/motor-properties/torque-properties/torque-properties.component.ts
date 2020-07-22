@@ -8,7 +8,8 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
   styleUrls: ['./torque-properties.component.css']
 })
 export class TorquePropertiesComponent implements OnInit {
-
+  
+  displayForm: boolean = true;
   torqueOptions: TorqueOptions;
   constructor(private motorInventoryService: MotorInventoryService) { }
 
@@ -22,5 +23,9 @@ export class TorquePropertiesComponent implements OnInit {
     motorInventoryData.displayOptions.torqueOptions = this.torqueOptions;
     this.motorInventoryService.motorInventoryData.next(motorInventoryData);
   }
+
+  toggleForm(){
+    this.displayForm = !this.displayForm;
+  } 
 
 }

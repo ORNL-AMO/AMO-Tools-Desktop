@@ -92,6 +92,7 @@ export interface MotorPropertyDisplayOptions {
 }
 
 export interface BatchAnalysisOptions {
+  displayBatchAnalysis: boolean,
   //Add
   modifiedCost: boolean,
   modifiedPower: boolean,
@@ -102,6 +103,7 @@ export interface BatchAnalysisOptions {
 }
 
 export interface LoadCharacteristicOptions {
+  displayLoadCharacteristics: boolean,
   efficiency75: boolean,
   efficiency50: boolean,
   efficiency25: boolean,
@@ -113,6 +115,7 @@ export interface LoadCharacteristicOptions {
 }
 
 export interface ManualSpecificationOptions {
+  displayManualSpecifications: boolean,
   frameNumber: boolean,
   uFrame: boolean,
   cFace: boolean,
@@ -129,6 +132,7 @@ export interface ManualSpecificationOptions {
 }
 
 export interface NameplateDataOptions {
+  displayNameplateData: boolean,
   manufacturer: boolean,
   model: boolean,
   motorType: boolean,
@@ -142,6 +146,7 @@ export interface NameplateDataOptions {
 }
 
 export interface OperationDataOptions {
+  displayOperationData: boolean,
   ratedSpeed: boolean,
   purpose: boolean,
   annualOperatingHours: boolean,
@@ -153,6 +158,7 @@ export interface OperationDataOptions {
 }
 
 export interface OtherOptions {
+  displayOther: boolean,
   driveType: boolean,
   isVFD: boolean,
   hasLoggerData: boolean,
@@ -160,6 +166,7 @@ export interface OtherOptions {
 }
 
 export interface PurchaseInformationOptions {
+  displayPurchaseInformation: boolean,
   catalogId: boolean,
   listPrice: boolean,
   warranty: boolean,
@@ -168,6 +175,7 @@ export interface PurchaseInformationOptions {
 }
 
 export interface TorqueOptions {
+  displayTorque: boolean,
   torqueFullLoad: boolean,
   torqueBreakDown: boolean,
   torqueLockedRotor: boolean,

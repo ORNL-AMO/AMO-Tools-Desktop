@@ -17,7 +17,7 @@ export class MotorInventoryService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
-  updateMotorItem(selectedMotor: MotorItem){
+  updateMotorItem(selectedMotor: MotorItem) {
     let motorInventoryData: MotorInventoryData = this.motorInventoryData.getValue();
     let selectedDepartmentIndex: number = motorInventoryData.departments.findIndex(department => { return department.id == selectedMotor.departmentId });
     let catalogItemIndex: number = motorInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(motorItem => { return motorItem.id == selectedMotor.id; });
@@ -77,6 +77,7 @@ export class MotorInventoryService {
   getDefaultDisplayOptions(): MotorPropertyDisplayOptions {
     return {
       batchAnalysisOptions: {
+        displayBatchAnalysis: true,
         modifiedCost: true,
         modifiedPower: true,
         modifiedEfficiency: true,
@@ -85,6 +86,7 @@ export class MotorInventoryService {
         rewindEfficiencyLoss: true
       },
       loadCharactersticOptions: {
+        displayLoadCharacteristics: true,
         efficiency75: true,
         efficiency50: true,
         efficiency25: true,
@@ -95,6 +97,7 @@ export class MotorInventoryService {
         ampsIdle: true,
       },
       manualSpecificationOptions: {
+        displayManualSpecifications: true,
         frameNumber: true,
         uFrame: true,
         cFace: true,
@@ -110,6 +113,7 @@ export class MotorInventoryService {
         currentType: true,
       },
       nameplateDataOptions: {
+        displayNameplateData: true,
         manufacturer: true,
         model: true,
         motorType: true,
@@ -122,6 +126,7 @@ export class MotorInventoryService {
         fullLoadSpeed: true,
       },
       operationDataOptions: {
+        displayOperationData: true,
         ratedSpeed: true,
         purpose: true,
         annualOperatingHours: true,
@@ -131,18 +136,21 @@ export class MotorInventoryService {
         powerFactorAtLoad: true
       },
       otherOptions: {
+        displayOther: true,
         driveType: true,
         isVFD: true,
         hasLoggerData: true,
         voltageConnectionType: true,
       },
       purchaseInformationOptions: {
+        displayPurchaseInformation: true,
         catalogId: true,
         listPrice: true,
         warranty: true,
         directReplacementCost: true
       },
       torqueOptions: {
+        displayTorque: true,
         torqueFullLoad: true,
         torqueBreakDown: true,
         torqueLockedRotor: true,

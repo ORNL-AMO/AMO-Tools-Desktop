@@ -1,5 +1,20 @@
-<form>
-    <label class="group-label">Nameplate Data</label>
+<div class="d-flex w-100">
+    <div class="d-flex flex-fill">
+        <label class="group-label" (click)="toggleForm()">
+            <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+            <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+            Nameplate Data
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (input)="save()"
+            [(ngModel)]="nameplateDataOptions.displayNameplateData" name="displayNameplateData"
+            id="displayNameplateData">
+        <label class="custom-control-label" for="displayNameplateData"></label>
+    </div>
+</div>
+
+<form class="p-1" *ngIf="displayForm">
     <div class="checkbox">
         <label>
             <input type="checkbox" (input)="save()" [(ngModel)]="nameplateDataOptions.manufacturer" name="manufacturer"

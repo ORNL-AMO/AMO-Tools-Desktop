@@ -9,6 +9,8 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 })
 export class ManualSpecificationPropertiesComponent implements OnInit {
 
+  
+  displayForm: boolean = true;
   manualSpecificationOptions: ManualSpecificationOptions;
   constructor(private motorInventoryService: MotorInventoryService) { }
 
@@ -22,4 +24,8 @@ export class ManualSpecificationPropertiesComponent implements OnInit {
     motorInventoryData.displayOptions.manualSpecificationOptions = this.manualSpecificationOptions;
     this.motorInventoryService.motorInventoryData.next(motorInventoryData);
   }
+
+  toggleForm(){
+    this.displayForm = !this.displayForm;
+  }  
 }
