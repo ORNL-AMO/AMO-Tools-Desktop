@@ -26,6 +26,7 @@ import { OtherDataService } from './other-data/other-data.service';
 import { PurchaseInformationDataService } from './purchase-information-data/purchase-information-data.service';
 import { TorqueDataService } from './torque-data/torque-data.service';
 import { LoadCharacteristicDataService } from './load-characteristic-data/load-characteristic-data.service';
+import { MotorBasicsService } from './motor-basics/motor-basics.service';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { LoadCharacteristicDataService } from './load-characteristic-data/load-c
     OtherDataService,
     PurchaseInformationDataService,
     TorqueDataService,
-    LoadCharacteristicDataService
+    LoadCharacteristicDataService,
+    MotorBasicsService
   ],
   exports: [
     MotorCatalogComponent

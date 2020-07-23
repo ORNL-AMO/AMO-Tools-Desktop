@@ -9,12 +9,13 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 })
 export class NameplateDataPropertiesComponent implements OnInit {
 
-  displayForm: boolean = true;
+  displayForm: boolean;
   nameplateDataOptions: NameplateDataOptions;
   constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
     this.nameplateDataOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.nameplateDataOptions;
+    this.displayForm = this.nameplateDataOptions.displayNameplateData;
   }
 
   save() {

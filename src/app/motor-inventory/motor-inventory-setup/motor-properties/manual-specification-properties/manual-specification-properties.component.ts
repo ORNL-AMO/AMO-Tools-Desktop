@@ -10,12 +10,13 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 export class ManualSpecificationPropertiesComponent implements OnInit {
 
 
-  displayForm: boolean = true;
+  displayForm: boolean;
   manualSpecificationOptions: ManualSpecificationOptions;
   constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
     this.manualSpecificationOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.manualSpecificationOptions;
+    this.displayForm = this.manualSpecificationOptions.displayManualSpecifications;
   }
 
   save() {

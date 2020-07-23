@@ -9,12 +9,13 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 })
 export class PurchaseInformationPropertiesComponent implements OnInit {
 
-  displayForm: boolean = true;
+  displayForm: boolean;
   purchaseInformationOptions: PurchaseInformationOptions;
   constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
     this.purchaseInformationOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.purchaseInformationOptions;
+    this.displayForm = this.purchaseInformationOptions.displayPurchaseInformation;
   }
 
   save() {

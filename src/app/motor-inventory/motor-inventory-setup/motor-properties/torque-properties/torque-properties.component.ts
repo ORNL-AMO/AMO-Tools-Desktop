@@ -9,12 +9,13 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 })
 export class TorquePropertiesComponent implements OnInit {
   
-  displayForm: boolean = true;
+  displayForm: boolean;
   torqueOptions: TorqueOptions;
   constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
     this.torqueOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.torqueOptions;
+    this.displayForm = this.torqueOptions.displayTorque;
   }
 
   save() {

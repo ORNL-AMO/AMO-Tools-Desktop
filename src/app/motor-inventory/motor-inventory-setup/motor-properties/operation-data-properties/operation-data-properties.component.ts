@@ -9,12 +9,13 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 })
 export class OperationDataPropertiesComponent implements OnInit {
 
-  displayForm: boolean = true;
+  displayForm: boolean;
   operationDataOptions: OperationDataOptions
   constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
     this.operationDataOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.operationDataOptions;
+    this.displayForm = this.operationDataOptions.displayOperationData;
   }
 
   save() {

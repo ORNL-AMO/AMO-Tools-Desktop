@@ -10,11 +10,12 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 export class BatchAnalysisPropertiesComponent implements OnInit {
 
   batchAnalysisOptions: BatchAnalysisOptions;
-  displayForm: boolean = true;
+  displayForm: boolean;
   constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
     this.batchAnalysisOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.batchAnalysisOptions;
+    this.displayForm = this.batchAnalysisOptions.displayBatchAnalysis;
   }
 
   save() {
