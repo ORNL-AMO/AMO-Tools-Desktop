@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, HostListener, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { EnrichmentInput, EnrichmentOutput, EnrichmentInputData } from '../../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../../shared/models/settings';
 import { O2EnrichmentService } from '../o2-enrichment.service';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { Subscription } from 'rxjs';
+import { O2EnrichmentFormService } from '../o2-enrichment-form.service';
 
 @Component({
   selector: 'app-o2-enrichment-form',
@@ -32,11 +33,13 @@ export class O2EnrichmentFormComponent implements OnInit {
   currentEnrichmentIndex: any;
   currentEnrichmentOutput: EnrichmentOutput;
 
-  constructor(private o2EnrichmentService: O2EnrichmentService, private cd: ChangeDetectorRef) { }
+  constructor(private o2EnrichmentService: O2EnrichmentService, 
+              private cd: ChangeDetectorRef,
+              private o2FormService: O2EnrichmentFormService) { }
 
   ngOnInit() {
     this.initSubscriptions();
-    this.o2EnrichmentService.setRanges(this.o2Form, this.settings);
+    this.o2FormService.setRanges(this.o2Form, this.settings);
   }
 
   ngOnDestroy() {
@@ -61,13 +64,11 @@ export class O2EnrichmentFormComponent implements OnInit {
 
   initForm(inputs, index: number) {
     let currentInput = inputs[index];
-    this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, currentInput.inputData);
+    this.o2Form = this.o2FormService.initFormFromObj(this.settings, currentInput.inputData);
     this.cd.detectChanges();
-    if (this.currentEnrichmentIndex == 0) {
-      this.isBaseline = true;
+    if (this.o2Form.controls.isBaseline.value) {
       this.o2Form.controls.o2CombAir.disable();
     } else {
-      this.isBaseline = false;
       this.o2Form.controls.o2CombAir.enable();
     }
   }
@@ -82,8 +83,8 @@ export class O2EnrichmentFormComponent implements OnInit {
 
 
   calculate() {
-    this.o2EnrichmentService.setRanges(this.o2Form, this.settings);
-    let inputData: EnrichmentInputData = this.o2EnrichmentService.getObjFromForm(this.o2Form);
+    this.o2FormService.setRanges(this.o2Form, this.settings);
+    let inputData: EnrichmentInputData = this.o2FormService.getObjFromForm(this.o2Form);
     let enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
     let currentInput = {
       inputData: inputData

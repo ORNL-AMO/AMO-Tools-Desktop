@@ -19,7 +19,6 @@ export class O2EnrichmentCopyTableComponent implements OnInit {
   outputs: Array<EnrichmentOutput>;
   currentEnrichmentOutput: EnrichmentOutput;
   outputSub: Subscription;
-  clickedBtn: boolean = false;
   constructor(private o2EnrichmentService: O2EnrichmentService) { }
 
   ngOnInit(): void {
@@ -35,9 +34,6 @@ export class O2EnrichmentCopyTableComponent implements OnInit {
   }
 
   updateEnrichmentTableString() {
-    // this.clickedBtn = true;
     this.enrichmentTableString = this.enrichmentTable.nativeElement.innerText;
-    // console.log('clicked', this.clickedBtn, this.enrichmentTableString);
-    // this.clickedBtn = false;
   }
 }

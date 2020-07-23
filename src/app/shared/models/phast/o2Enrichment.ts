@@ -8,7 +8,6 @@ export interface EnrichmentOutput {
     inputData?: EnrichmentInputData
 }
 
-// Input Display model
 export interface EnrichmentInputData {
     name: string,
     isBaseline?: boolean,
@@ -21,7 +20,6 @@ export interface EnrichmentInputData {
     fuelCost: number;
 }
 
-// Output Display Model
 export interface EnrichmentOutputData {
     name?: string,
     isBaseline?: boolean;
@@ -59,5 +57,24 @@ export interface O2Enrichment {
     fuelConsumption: number;
     fuelCost: number;
     fuelCostEnriched: number;
+    fuelSavings?: number
 }
 
+
+export interface O2EnrichmentMinMax {
+    o2CombAirMax: number;
+    o2CombAirModificationMin: number;
+    o2CombAirModificationMax: number;
+    flueGasTempMin: number;
+    flueGasTempMax: number;
+    flueGasTempModificationMin: number;
+    flueGasTempModificationMax: number;
+    o2FlueGasMin: number;
+    o2FlueGasMax: number;
+    o2FlueGasModificationMin: number;
+    o2FlueGasModificationMax: number;
+    combAirTempMin: number;
+    combAirTempMax: number;
+    combAirTempModificationMin: number;
+    combAirTempModificationMax: number;
+  }

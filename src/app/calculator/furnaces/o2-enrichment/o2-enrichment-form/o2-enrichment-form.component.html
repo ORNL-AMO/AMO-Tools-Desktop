@@ -1,10 +1,10 @@
 <div class="mb-4 p-2 form-card">
 <form [formGroup]="o2Form" #formElement>
   <label class="group-label w-100 mb-2 bold d-flex justify-content-between">
-    <span *ngIf="isBaseline">
+    <span *ngIf="o2Form.controls.isBaseline.value">
       Combustion With Air
     </span>
-    <span *ngIf="!isBaseline">
+    <span *ngIf="!o2Form.controls.isBaseline.value">
       Combustion With O<sub>2</sub> Enriched Air
     </span>
 
@@ -140,7 +140,7 @@
     </span>
   </div>
 
-  <div *ngIf="isBaseline" class="form-group">
+  <div *ngIf="o2Form.controls.isBaseline.value" class="form-group">
     <label class="small" for="fuelConsumption">Fuel consumption</label>
     <div class="input-group">
       <input name="fuelConsumption" type="number" min="0" step="any" class="form-control" id="fuelConsumption"
@@ -158,7 +158,7 @@
   <div class="d-flex w-100 justify-content-end">
     <button type="button" class="btn btn-primary pull-right m-2 btn-form" id="plotBtn" 
     (click)="addModification()">Add New Line</button>
-    <button *ngIf="!isBaseline" type="button" class="btn btn-danger pull-right m-2 btn-form" id="removeBtn" 
+    <button *ngIf="!o2Form.controls.isBaseline.value" type="button" class="btn btn-danger pull-right m-2 btn-form" id="removeBtn" 
     (click)="removeModification()">Remove Line</button>
   </div>
 </form>

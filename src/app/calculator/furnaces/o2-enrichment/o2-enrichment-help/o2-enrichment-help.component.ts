@@ -8,7 +8,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./o2-enrichment-help.component.css']
 })
 export class O2EnrichmentHelpComponent implements OnInit {
-  @Input()
   currentField: string;
   currentFieldSub: Subscription;
   

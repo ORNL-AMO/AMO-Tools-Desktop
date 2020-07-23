@@ -6,7 +6,6 @@ import { graphColors } from '../../../../phast/phast-report/report-graphs/graphC
 import { SimpleChart, TraceCoordinates } from '../../../../shared/models/plotting';
 import * as Plotly from 'plotly.js';
 import { O2EnrichmentService, DisplayPoint } from '../o2-enrichment.service';
-import { PhastService } from '../../../../phast/phast.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -49,8 +48,6 @@ export class EnrichmentGraphComponent implements OnInit {
   displayCollapseTooltip: boolean = false;
   expanded: boolean = false;
 
-  // Update conditions/data
-  maxFuelSavings: number;
   initResizeCompleted: boolean = false;
 
   @HostListener('document:keyup', ['$event'])
@@ -64,7 +61,6 @@ export class EnrichmentGraphComponent implements OnInit {
 
   constructor(private o2EnrichmentService: O2EnrichmentService,
     private cd: ChangeDetectorRef,
-    private phastService: PhastService,
   ) {
   }
 
@@ -119,7 +115,7 @@ export class EnrichmentGraphComponent implements OnInit {
 
   initRenderChart(isInitResize = false) {
     Plotly.purge(this.currentChartId);
-    this.initChartSetup(isInitResize);
+    this.initChartSetup();
     this.setTraces();
 
     let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
@@ -138,8 +134,7 @@ export class EnrichmentGraphComponent implements OnInit {
     this.save();
   }
 
-  initChartSetup(isInitResize) {
-    this.maxFuelSavings = 0.0;
+  initChartSetup() {
     this.o2EnrichmentService.initChartData();
     this.enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
     this.enrichmentChart = this.o2EnrichmentService.enrichmentChart.getValue();
@@ -155,16 +150,14 @@ export class EnrichmentGraphComponent implements OnInit {
 
   setTraces() {
     this.enrichmentInputs.forEach((enrichmentInput: EnrichmentInput, index) => {
-      // Set Line trace
-      let line = this.getEnrichmentLine(enrichmentInput.inputData);
-      let point = this.getEnrichmentPoint(enrichmentInput.inputData, line);
-      let graphData: { data: TraceCoordinates, onGraph: boolean } = this.o2EnrichmentService.getGraphData(this.settings, point, line);
+      // Line trace
+      let graphData: TraceCoordinates = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData);
       let lineTrace = this.o2EnrichmentService.getLineTrace();
-      lineTrace.x = graphData.data.x;
-      lineTrace.y = graphData.data.y;
+      lineTrace.x = graphData.x;
+      lineTrace.y = graphData.y;
       lineTrace.line.color = this.getNextColor();
       
-      // Set Point trace
+      // Point trace
       let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
       let fuelSavings = outputs[index].outputData.fuelSavings;
       let displayPoint: DisplayPoint = {
@@ -172,9 +165,9 @@ export class EnrichmentGraphComponent implements OnInit {
         pointColor: this.getNextColor(),
         pointX: enrichmentInput.inputData.o2CombAir,
         pointY: fuelSavings,
-        combustionTemp: line.combAirTemp,
-        flueOxygen: line.o2FlueGas,
-        fuelTemp: line.flueGasTemp,
+        combustionTemp: enrichmentInput.inputData.combAirTemp,
+        flueOxygen: enrichmentInput.inputData.o2FlueGas,
+        fuelTemp: enrichmentInput.inputData.flueGasTemp
       }
       let pointTrace = this.o2EnrichmentService.getPointTrace(displayPoint);
       pointTrace.marker.color = this.getNextColor();
@@ -203,7 +196,6 @@ export class EnrichmentGraphComponent implements OnInit {
       this.selectedDataPoints.splice(this.selectedDataPoints.length -1, 1);
     }
     this.enrichmentInputs.forEach((enrichmentInput: EnrichmentInput, index) => {
-      // let isNewTrace = addingTraces && index == this.enrichmentInputs.length - 1;
       let isNewTrace: boolean = false;
       if (addingTraces) {
         let offset = this.enrichmentInputs.length - this.enrichmentChart.inputCount;
@@ -217,22 +209,21 @@ export class EnrichmentGraphComponent implements OnInit {
       let lineTraceColor;
       let pointOutlineColor;
       let pointColor;
+      // Get existing colors
       if (this.enrichmentChart.data[lineIndex]) {
         lineTraceColor = this.enrichmentChart.data[lineIndex].line.color;
         pointOutlineColor = this.enrichmentChart.data[pointIndex].marker.line.color;
-        pointColor = this.enrichmentChart.data[pointIndex].marker.line.color;
+        pointColor = this.enrichmentChart.data[pointIndex].marker.color;
       }
 
-      // Set Line trace
-      let line = this.getEnrichmentLine(enrichmentInput.inputData);
-      let point = this.getEnrichmentPoint(enrichmentInput.inputData, line);
-      let graphData: { data: TraceCoordinates, onGraph: boolean } = this.o2EnrichmentService.getGraphData(this.settings, point, line);
+      // Line trace
+      let graphData: TraceCoordinates = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData);
       let lineTrace = this.o2EnrichmentService.getLineTrace();
-      lineTrace.x = graphData.data.x;
-      lineTrace.y = graphData.data.y;
+      lineTrace.x = graphData.x;
+      lineTrace.y = graphData.y;
       lineTrace.line.color = lineTraceColor || this.getNextColor();
       
-      // Set Point trace
+      // Point trace
       let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
       let fuelSavings = outputs[index].outputData.fuelSavings;
 
@@ -268,64 +259,13 @@ export class EnrichmentGraphComponent implements OnInit {
     this.enrichmentChart.inputCount = this.enrichmentInputs.length;
   }
 
-  getEnrichmentLine(input: EnrichmentInputData) {
-    let baselineInput
-    if (!input.isBaseline) {
-      baselineInput = this.enrichmentInputs[0].inputData;
-    } else {
-      baselineInput = input;
-    }
-    let line: any = {
-      o2CombAir: baselineInput.o2CombAir,
-      o2CombAirEnriched: input.o2CombAir,
-      flueGasTemp: baselineInput.flueGasTemp,
-      flueGasTempEnriched: input.flueGasTemp,
-      o2FlueGas: baselineInput.o2FlueGas,
-      o2FlueGasEnriched: input.o2FlueGas,
-      combAirTemp: baselineInput.combAirTemp,
-      combAirTempEnriched: input.combAirTemp,
-      fuelConsumption: baselineInput.fuelConsumption,
-      color: '#000000',
-      fuelSavings: 0,
-      data: [],
-      x: null,
-      y: null
-    };
-    return line;
-  }
-
-  getEnrichmentPoint(input: EnrichmentInputData, currentEnrichmentLine) {
-    let baselineInput
-    if (!input.isBaseline) {
-      baselineInput = this.enrichmentInputs[0].inputData;
-    } else {
-      baselineInput = input;
-    }
-    let point = {
-      operatingHours: baselineInput.operatingHours,
-      operatingHoursEnriched: input.operatingHours,
-      o2CombAir: baselineInput.o2CombAir,
-      o2CombAirEnriched: 0,
-      flueGasTemp: baselineInput.flueGasTemp,
-      flueGasTempEnriched: currentEnrichmentLine.flueGasTempEnriched,
-      o2FlueGas: baselineInput.o2FlueGas,
-      o2FlueGasEnriched: currentEnrichmentLine.o2FlueGasEnriched,
-      combAirTemp: baselineInput.combAirTemp,
-      combAirTempEnriched: currentEnrichmentLine.combAirTempEnriched,
-      fuelConsumption: baselineInput.fuelConsumption,
-      fuelCost: baselineInput.fuelCost,
-      fuelCostEnriched: input.fuelCost
-    };
-    return point;
-  }
-
   getNextColor(): string {
     return this.pointColors[(this.enrichmentChart.data.length + 1) % this.pointColors.length];
   }
 
   displayHoverGroupData(hoverEventData) {
     let hoverIndex = hoverEventData.points[0].pointIndex;
-    // Save initial enrichment points to assign on removeHoverGroupData
+    // Save initial point data - assign on removeHoverGroupData
     this.defaultSelectedPointsData = JSON.parse(JSON.stringify(this.selectedDataPoints));
     this.selectedDataPoints.forEach((line, index) => {
       let splineTraceIndex = index + index;

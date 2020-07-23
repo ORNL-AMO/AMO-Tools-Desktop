@@ -9,6 +9,7 @@ import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Calculator } from '../../../shared/models/calculators';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { O2EnrichmentFormService } from './o2-enrichment-form.service';
 
 @Component({
   selector: 'app-o2-enrichment',
@@ -33,7 +34,6 @@ export class O2EnrichmentComponent implements OnInit {
   headerHeight: number;
 
   tabSelect: string = 'results';
-  currentField: string = 'default';
   calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
@@ -42,11 +42,10 @@ export class O2EnrichmentComponent implements OnInit {
   toggleResetData: boolean = true;
   toggleExampleData: boolean = false;
 
-  currentFieldSub: Subscription;
   enrichmentInputs: Array<EnrichmentInput>;
   enrichmentInputsSub: Subscription;
 
-  constructor(private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService,
+  constructor(private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService, private o2FormService: O2EnrichmentFormService,
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
@@ -78,14 +77,10 @@ export class O2EnrichmentComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.currentFieldSub.unsubscribe();
     this.enrichmentInputsSub.unsubscribe();
   }
 
   initSubscriptions() {
-    this.currentFieldSub = this.o2EnrichmentService.currentField.subscribe(val => {
-      this.currentField = val;
-    });
     this.enrichmentInputsSub = this.o2EnrichmentService.enrichmentInputs.subscribe(value => {
       this.enrichmentInputs = value;
       this.calculate();
@@ -95,11 +90,7 @@ export class O2EnrichmentComponent implements OnInit {
   calculate() {
     this.o2EnrichmentService.calculate(this.settings);
 
-    if (!this.inAssessment) {
-      // Need to set BheaveSub from calculator props if in assessment
-      // this.o2EnrichmentService.o2Enrichment = this.o2Enrichment;
-      // this.o2EnrichmentService.lines = this.lines;
-    } else if (this.calcExists) {
+    if (this.calcExists) {
       // let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
       // let tmpO2Enrichment: EnrichmentInput = inputs[0];
       // this.calculator.o2Enrichment = tmpO2Enrichment
@@ -109,33 +100,30 @@ export class O2EnrichmentComponent implements OnInit {
 
   getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-    console.log('calculator', this.calculator);
     if (this.calculator) {
       this.calcExists = true;
       if (this.calculator.o2Enrichment) {
-        // TODO Set input objects from stored calculator
-        // this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, this.calculator.o2Enrichment);
+        // Set/translate this.calculator.o2enrichment to this.o2EnrichmentService.enrichmentInputs.next();
       } else {
-        // TODO Is new form - set calculator O2
-        // this.calculator.o2Enrichment = tmpO2Enrichment;
+        // Set calculator.o2Enrichment from current - this.o2EnrichmentService.enrichmentInputs.getValue();
         this.saveCalculator();
       }
     } else {
-      this.calculator = this.initCalculator();
+      // this.calculator = this.initCalculator();
       this.saveCalculator();
     }
   }
 
-  initCalculator(): Calculator {
-    // TODO set new calculator to O2 enrichment
-    let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
-    let tmpO2Enrichment: EnrichmentInput = inputs[0];
-    let tmpCalculator: Calculator = {
-      assessmentId: this.assessment.id,
-      // o2Enrichment: tmpO2Enrichment
-    };
-    return tmpCalculator;
-  }
+  // initCalculator(): Calculator {
+  //   let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
+  //   // Need to update Calculator model
+  //   let tmpCalculator: Calculator = {
+  //     assessmentId: this.assessment.id,
+  //     // o2Enrichment: tmpO2Enrichment
+  //     enrichmentInputs: inputs
+  //   };
+  //   return tmpCalculator;
+  // }
 
   saveCalculator() {
     if (!this.saving || this.calcExists) {
@@ -158,7 +146,9 @@ export class O2EnrichmentComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.o2EnrichmentService.generateExample(this.settings);
+    let exampleInputs: Array<EnrichmentInput> = this.o2FormService.generateExample(this.settings);
+    this.o2EnrichmentService.enrichmentInputs.next(exampleInputs);
+    this.o2EnrichmentService.currentEnrichmentIndex.next(1);
   }
   
   btnResetData() {
@@ -169,7 +159,6 @@ export class O2EnrichmentComponent implements OnInit {
     this.o2EnrichmentService.resetInputs(this.settings);
     this.o2EnrichmentService.currentEnrichmentIndex.next(0);
   }
-
 
   resizeTabs() {
     if (this.leftPanelHeader) {
