@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OptionalPropertiesComponent } from './optional-properties.component';
+import { RequiredMotorDataComponent } from './required-motor-data.component';
 
-describe('OptionalPropertiesComponent', () => {
-  let component: OptionalPropertiesComponent;
-  let fixture: ComponentFixture<OptionalPropertiesComponent>;
+describe('RequiredMotorDataComponent', () => {
+  let component: RequiredMotorDataComponent;
+  let fixture: ComponentFixture<RequiredMotorDataComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OptionalPropertiesComponent ]
+      declarations: [ RequiredMotorDataComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OptionalPropertiesComponent);
+    fixture = TestBed.createComponent(RequiredMotorDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

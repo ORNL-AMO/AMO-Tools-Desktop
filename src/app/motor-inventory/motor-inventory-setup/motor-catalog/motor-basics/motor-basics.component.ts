@@ -19,7 +19,7 @@ export class MotorBasicsComponent implements OnInit {
   ngOnInit(): void {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
-        this.motorForm = this.motorCatalogService.getMotorBasicsForm(selectedMotor);
+        //this.motorForm = this.motorCatalogService.getMotorBasicsForm(selectedMotor);
       }
     });
   }
@@ -30,7 +30,7 @@ export class MotorBasicsComponent implements OnInit {
 
   save() {
     let selectedMotor: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
-    selectedMotor = this.motorCatalogService.updateMotorItemFromBasicsForm(this.motorForm, selectedMotor);
+   // selectedMotor = this.motorCatalogService.updateMotorItemFromBasicsForm(this.motorForm, selectedMotor);
     this.motorInventoryService.updateMotorItem(selectedMotor);
   }
 

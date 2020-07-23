@@ -15,51 +15,44 @@ export interface MotorInventoryDepartment {
 export interface MotorItem {
   id: string,
   suiteDbItemId?: number,
+  nemaTable?: string,
   departmentId?: string,
-  //required properties
+  name: string,
+  description?: string,
+
+
+
+  requiredMotorData: RequiredMotorData
+  batchAnalysisData: BatchAnalysisData,
+  loadCharacteristicData: LoadCharacteristicData,
+  manualSpecificationData: ManualSpecificationData,
+  nameplateData: NameplateData,
+  operationData: OperationData
+  otherData: OtherData,
+  purchaseInformationData: PurchaseInformationData,
+  torqueData: TorqueData
+}
+
+export interface RequiredMotorData {
   ratedMotorPower: number,
   efficiencyClass: number,
   nominalEfficiency: number,
   synchronousSpeed: number
   lineFrequency: number,
+  motorRpm: number,
+  fullLoadAmps: number,
+}
 
-  //optional properties
-  description?: string,
-  motorRpm?: number,
-  ratedVoltage?: number,
-  fullLoadAmps?: number,
-  annualOperatingHours?: number,
-  percentLoad?: number,
-  driveType?: number,
-  isVFD?: boolean,
-  hasLoggerData?: boolean,
-  numberOfPhases?: number,
-  name: string,
-  enclosureType?: string,
-  nemaTable?: string,
-  poles?: number,
-  //additional from excel
-  manufacturer?: string,
-  model?: string,
-  catalogId?: string,
-  motorType?: string,
-  ratedSpeed?: number,
-  fullLoadSpeed?: number,
-  frameNumber?: string,
-  purpose?: string
-  uFrame?: number,
-  cFace?: number,
-  verticalShaft?: number,
-  dFlange?: number,
-  serviceFactor?: number,
-  insulationClass?: number,
-  weight?: number,
-  listPrice?: number,
-  windingResistance?: number,
-  //should warranty = boolean?
-  warranty?: number,
-  rotorBars?: number,
-  statorSlots?: number,
+export interface BatchAnalysisData {
+  modifiedCost?: number,
+  modifiedPower?: number,
+  modifiedEfficiency?: number,
+  modifiedPercentLoad?: number,
+  rewindCost?: number,
+  rewindEfficiencyLoss?: number
+}
+
+export interface LoadCharacteristicData {
   efficiency75?: number,
   efficiency50?: number,
   efficiency25?: number,
@@ -67,19 +60,77 @@ export interface MotorItem {
   powerFactor75?: number,
   powerFactor50?: number,
   powerFactor25?: number,
-  torqueFullLoad?: number,
-  torqueBreakDown?: number,
-  torqueLockedRotor?: number,
   ampsIdle?: number,
+}
+
+export interface ManualSpecificationData {
+  frameNumber?: string,
+  uFrame?: number,
+  cFace?: number,
+  verticalShaft?: number,
+  dFlange?: number, 
+  windingResistance?: number,
+  rotorBars?: number,
+  statorSlots?: number,
   ampsLockedRotor?: number,
   stalledRotorTimeHot?: number,
   stalledRotorTimeCold?: number
-  voltageConnectionType?: string,
+  poles?: number,
   currentType?: number,
-  averageLoadFactor?: number,
-  utilizationFactor?: number
 }
 
+export interface NameplateData {
+  manufacturer?: string,
+  model?: string,
+  motorType?: string,
+  enclosureType?: string,
+  ratedVoltage?: number,
+  serviceFactor?: number,
+  insulationClass?: number,
+  weight?: number,
+  numberOfPhases?: number,
+  fullLoadSpeed?: number,
+}
+
+export interface OperationData {
+  ratedSpeed?: number,
+  purpose?: string,
+  annualOperatingHours?: number,
+  averageLoadFactor?: number,
+  utilizationFactor?: number,
+  percentLoad?: number,
+  //Add
+  powerFactorAtLoad?: number
+}
+
+export interface OtherData {
+  driveType?: number,
+  isVFD?: boolean,
+  hasLoggerData?: boolean,
+  voltageConnectionType?: string,
+}
+
+export interface PurchaseInformationData {
+  catalogId?: string,
+  listPrice?: number,
+  warranty?: Date,
+  //Add
+  directReplacementCost?: boolean
+}
+
+export interface TorqueData {
+  torqueFullLoad?: number,
+  torqueBreakDown?: number,
+  torqueLockedRotor?: number,
+}
+
+
+
+
+
+
+
+//DISPLAY OPTIONS
 export interface MotorPropertyDisplayOptions {
   batchAnalysisOptions: BatchAnalysisOptions,
   loadCharactersticOptions: LoadCharacteristicOptions,

@@ -53,9 +53,9 @@ export class MotorCatalogComponent implements OnInit {
 
   setMotorSelection(dbMotor: SuiteDbMotor) {
     this.closeMotorSelectionModal();
-    let selectedMotor: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
-    let updatedMotorItem: MotorItem = this.motorCatalogService.setSuiteDbMotorProperties(dbMotor, selectedMotor);
-    this.motorInventoryService.updateMotorItem(updatedMotorItem);
-    this.motorCatalogService.selectedMotorItem.next(updatedMotorItem);
+    // let selectedMotor: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
+    // let updatedMotorItem: MotorItem = this.motorCatalogService.setSuiteDbMotorProperties(dbMotor, selectedMotor);
+    // this.motorInventoryService.updateMotorItem(updatedMotorItem);
+    // this.motorCatalogService.selectedMotorItem.next(updatedMotorItem);
   }
 }

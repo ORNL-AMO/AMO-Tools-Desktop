@@ -1,18 +1,19 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
+import { Settings } from 'http2';
 import { FormGroup } from '@angular/forms';
-import { MotorCatalogService } from '../motor-catalog.service';
 import { Subscription } from 'rxjs';
-import { Settings } from '../../../../shared/models/settings';
+import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
+import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 import { MotorItem } from '../../../motor-inventory';
+import { RequiredMotorDataService } from './required-motor-data.service';
 
 @Component({
-  selector: 'app-required-properties',
-  templateUrl: './required-properties.component.html',
-  styleUrls: ['./required-properties.component.css']
+  selector: 'app-required-motor-data',
+  templateUrl: './required-motor-data.component.html',
+  styleUrls: ['./required-motor-data.component.css']
 })
-export class RequiredPropertiesComponent implements OnInit {
+export class RequiredMotorDataComponent implements OnInit {
   @Input()
   settings: Settings;
 
@@ -20,14 +21,16 @@ export class RequiredPropertiesComponent implements OnInit {
   frequencies: Array<number> = [50, 60];
   efficiencyClasses: Array<{ value: number, display: string }>;
   motorForm: FormGroup;
-  selectedMotorItemSub: Subscription
-  constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService) { }
+  selectedMotorItemSub: Subscription;
+  displayForm: boolean = true;
+  constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
+    private requiredMotorDataService: RequiredMotorDataService) { }
 
   ngOnInit(): void {
     this.efficiencyClasses = motorEfficiencyConstants;
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
-        this.motorForm = this.motorCatalogService.getRequiredFormFromMotorItem(selectedMotor);
+        this.motorForm = this.requiredMotorDataService.getFormFromRequiredMotorData(selectedMotor.requiredMotorData);
       }
     });
   }
@@ -38,7 +41,7 @@ export class RequiredPropertiesComponent implements OnInit {
 
   save() {
     let selectedMotor: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
-    selectedMotor = this.motorCatalogService.updateMotorItemFromRequiredForm(this.motorForm, selectedMotor);
+    selectedMotor.requiredMotorData = this.requiredMotorDataService.updateRequiredMotorDataFromForm(this.motorForm, selectedMotor.requiredMotorData);
     this.motorInventoryService.updateMotorItem(selectedMotor);
   }
 
@@ -52,4 +55,7 @@ export class RequiredPropertiesComponent implements OnInit {
     this.motorInventoryService.focusedField.next(str);
   }
 
+  toggleForm(){
+    this.displayForm = !this.displayForm;
+  }
 }

@@ -53,24 +53,88 @@ export class MotorInventoryService {
       departmentId: departmentId,
       suiteDbItemId: undefined,
       description: '',
-      name: 'New Motor',
-      lineFrequency: 60,
-      motorRpm: 1780,
-      ratedMotorPower: undefined,
-      efficiencyClass: 1,
-      nominalEfficiency: undefined,
-      ratedVoltage: undefined,
-      fullLoadAmps: undefined,
-      annualOperatingHours: 8760,
-      percentLoad: undefined,
-      driveType: undefined,
-      isVFD: false,
-      hasLoggerData: false,
-      numberOfPhases: undefined,
-      enclosureType: undefined,
-      nemaTable: undefined,
-      poles: undefined,
-      synchronousSpeed: undefined
+      name: 'New Motor',    
+      requiredMotorData: {
+        ratedMotorPower: undefined,
+        efficiencyClass: 1,
+        nominalEfficiency: undefined,
+        synchronousSpeed: undefined,
+        lineFrequency: 60,
+        motorRpm: 1780,
+        fullLoadAmps: undefined
+      },
+      batchAnalysisData: {
+        modifiedCost: undefined,
+        modifiedPower: undefined,
+        modifiedEfficiency: undefined,
+        modifiedPercentLoad: undefined,
+        rewindCost: undefined,
+        rewindEfficiencyLoss: undefined
+      },
+      loadCharacteristicData: {
+        efficiency75: undefined,
+        efficiency50: undefined,
+        efficiency25: undefined,
+        powerFactor100: undefined,
+        powerFactor75: undefined,
+        powerFactor50: undefined,
+        powerFactor25: undefined,
+        ampsIdle: undefined,
+      },
+      manualSpecificationData:  {
+        frameNumber: undefined,
+        uFrame: undefined,
+        cFace: undefined,
+        verticalShaft: undefined,
+        dFlange: undefined, 
+        windingResistance: undefined,
+        rotorBars: undefined,
+        statorSlots: undefined,
+        ampsLockedRotor: undefined,
+        stalledRotorTimeHot: undefined,
+        stalledRotorTimeCold: undefined,
+        poles: undefined,
+        currentType: undefined        
+      },
+      nameplateData:  {
+        manufacturer: undefined,
+        model: undefined,
+        motorType: undefined,
+        enclosureType: undefined,
+        ratedVoltage: undefined,
+        serviceFactor: undefined,
+        insulationClass: undefined,
+        weight: undefined,
+        numberOfPhases: undefined,
+        fullLoadSpeed: undefined,
+      },
+      operationData:  {
+        ratedSpeed: undefined,
+        purpose: undefined,
+        annualOperatingHours: 8760,
+        averageLoadFactor: undefined,
+        utilizationFactor: undefined,
+        percentLoad: undefined,
+        powerFactorAtLoad: undefined
+      },
+      otherData:  {
+        driveType: undefined,
+        isVFD: undefined,
+        hasLoggerData: undefined,
+        voltageConnectionType: undefined,
+      },
+      purchaseInformationData:  {
+        catalogId: undefined,
+        listPrice: undefined,
+        warranty: undefined,
+        //Add
+        directReplacementCost: undefined
+      },
+      torqueData:  {
+        torqueFullLoad: undefined,
+        torqueBreakDown: undefined,
+        torqueLockedRotor: undefined,
+      }
     }
   }
 
