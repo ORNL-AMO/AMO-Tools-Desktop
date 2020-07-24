@@ -7,28 +7,28 @@ export class LoadCharacteristicDataService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getFormFromLoadCharacteristicData(loadhCharacteristicData: LoadCharacteristicData): FormGroup {
+  getFormFromLoadCharacteristicData(loadCharacteristicData: LoadCharacteristicData): FormGroup {
     return this.formBuilder.group({
-      efficiency75: [loadhCharacteristicData.efficiency75, [Validators.min(0), Validators.max(100)]],
-      efficiency50: [loadhCharacteristicData.efficiency50, [Validators.min(0), Validators.max(100)]],
-      efficiency25: [loadhCharacteristicData.efficiency25, [Validators.min(0), Validators.max(100)]],
-      powerFactor100: [loadhCharacteristicData.powerFactor100],
-      powerFactor75: [loadhCharacteristicData.powerFactor75],
-      powerFactor50: [loadhCharacteristicData.powerFactor50],
-      powerFactor25: [loadhCharacteristicData.powerFactor25],
-      ampsIdle: [loadhCharacteristicData.ampsIdle],
+      efficiency75: [loadCharacteristicData.efficiency75, [Validators.min(0), Validators.max(100)]],
+      efficiency50: [loadCharacteristicData.efficiency50, [Validators.min(0), Validators.max(100)]],
+      efficiency25: [loadCharacteristicData.efficiency25, [Validators.min(0), Validators.max(100)]],
+      powerFactor100: [loadCharacteristicData.powerFactor100],
+      powerFactor75: [loadCharacteristicData.powerFactor75],
+      powerFactor50: [loadCharacteristicData.powerFactor50],
+      powerFactor25: [loadCharacteristicData.powerFactor25],
+      ampsIdle: [loadCharacteristicData.ampsIdle],
     });
   }
 
-  updateLoadCharacteristicDataFromForm(form: FormGroup, loadhCharacteristicData: LoadCharacteristicData): LoadCharacteristicData {
-    loadhCharacteristicData.efficiency75 = form.controls.efficiency75.value
-    loadhCharacteristicData.efficiency50 = form.controls.efficiency50.value
-    loadhCharacteristicData.efficiency25 = form.controls.efficiency25.value
-    loadhCharacteristicData.powerFactor100 = form.controls.powerFactor100.value
-    loadhCharacteristicData.powerFactor75 = form.controls.powerFactor75.value
-    loadhCharacteristicData.powerFactor50 = form.controls.powerFactor50.value
-    loadhCharacteristicData.powerFactor25 = form.controls.powerFactor25.value
-    loadhCharacteristicData.ampsIdle = form.controls.ampsIdle.value
-    return loadhCharacteristicData;
+  updateLoadCharacteristicDataFromForm(form: FormGroup, loadCharacteristicData: LoadCharacteristicData): LoadCharacteristicData {
+    loadCharacteristicData.efficiency75 = form.controls.efficiency75.value
+    loadCharacteristicData.efficiency50 = form.controls.efficiency50.value
+    loadCharacteristicData.efficiency25 = form.controls.efficiency25.value
+    loadCharacteristicData.powerFactor100 = form.controls.powerFactor100.value
+    loadCharacteristicData.powerFactor75 = form.controls.powerFactor75.value
+    loadCharacteristicData.powerFactor50 = form.controls.powerFactor50.value
+    loadCharacteristicData.powerFactor25 = form.controls.powerFactor25.value
+    loadCharacteristicData.ampsIdle = form.controls.ampsIdle.value
+    return loadCharacteristicData;
   }
 }

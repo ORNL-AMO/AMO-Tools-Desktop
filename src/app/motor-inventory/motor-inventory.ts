@@ -21,7 +21,6 @@ export interface MotorItem {
   description: string,
   voltageLimit: number,
 
-  // requiredMotorData: RequiredMotorData
   batchAnalysisData: BatchAnalysisData,
   loadCharacteristicData: LoadCharacteristicData,
   manualSpecificationData: ManualSpecificationData,
@@ -31,12 +30,6 @@ export interface MotorItem {
   purchaseInformationData: PurchaseInformationData,
   torqueData: TorqueData
 }
-
-// export interface RequiredMotorData {
-
-
- 
-// }
 
 export interface BatchAnalysisData {
   modifiedCost: number,
@@ -105,7 +98,6 @@ export interface OperationData {
   averageLoadFactor: number,
   utilizationFactor: number,
   percentLoad: number,
-  //Add
   powerFactorAtLoad: number
 }
 
@@ -120,7 +112,6 @@ export interface PurchaseInformationData {
   catalogId: string,
   listPrice: number,
   warranty: Date,
-  //Add
   directReplacementCost: boolean
 }
 
@@ -129,12 +120,6 @@ export interface TorqueData {
   torqueBreakDown: number,
   torqueLockedRotor: number,
 }
-
-
-
-
-
-
 
 //DISPLAY OPTIONS
 export interface MotorPropertyDisplayOptions {
@@ -150,7 +135,6 @@ export interface MotorPropertyDisplayOptions {
 
 export interface BatchAnalysisOptions {
   displayBatchAnalysis: boolean,
-  //Add
   modifiedCost: boolean,
   modifiedPower: boolean,
   modifiedEfficiency: boolean,
