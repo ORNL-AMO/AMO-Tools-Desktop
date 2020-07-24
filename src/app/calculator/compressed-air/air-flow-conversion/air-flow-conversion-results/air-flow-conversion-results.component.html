@@ -3,13 +3,15 @@
     <div *ngIf="airFlowConversionOutput.acfm" class="col-12 text-right">
         <label class="col-6 small bold">Airflow</label>
         <span class="col-6 small bold">{{ airFlowConversionOutput.acfm | number:'1.0-2'}}
-            <span>acfm</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" >acfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" >m3/min</span>
         </span>
     </div>
     <div *ngIf="airFlowConversionOutput.scfm" class="col-12 text-right">
         <label class="col-6 small bold">Airflow</label>
         <span class="col-6 small bold">{{ airFlowConversionOutput.scfm | number:'1.0-2'}}
-            <span>scfm</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm3/min</span>
         </span>
     </div>
     <div *ngIf="!airFlowConversionOutput.scfm && !airFlowConversionOutput.acfm" class="col-12 text-right">
