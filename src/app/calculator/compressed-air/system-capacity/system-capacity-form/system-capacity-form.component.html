@@ -108,7 +108,7 @@
             <input name="atmosphericPressure" [(ngModel)]="inputs.leakRateInput.atmosphericPressure" class="form-control" type="number" step="any" id="atmosphericPressure"
               (input)="emitChange()" onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
           <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
           </div>
         </div>
     </div>
