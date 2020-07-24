@@ -15,17 +15,9 @@ import { MotorInventoryService } from './motor-inventory.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DepartmentCatalogTableComponent } from './motor-inventory-setup/department-catalog-table/department-catalog-table.component';
 import { ModalModule } from 'ngx-bootstrap';
-import { MotorPropertiesComponent } from './motor-inventory-setup/motor-properties/motor-properties.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
-import { LoadCharacteristicPropertiesComponent } from './motor-inventory-setup/motor-properties/load-characteristic-properties/load-characteristic-properties.component';
-import { ManualSpecificationPropertiesComponent } from './motor-inventory-setup/motor-properties/manual-specification-properties/manual-specification-properties.component';
-import { NameplateDataPropertiesComponent } from './motor-inventory-setup/motor-properties/nameplate-data-properties/nameplate-data-properties.component';
-import { OperationDataPropertiesComponent } from './motor-inventory-setup/motor-properties/operation-data-properties/operation-data-properties.component';
-import { OtherPropertiesComponent } from './motor-inventory-setup/motor-properties/other-properties/other-properties.component';
-import { PurchaseInformationPropertiesComponent } from './motor-inventory-setup/motor-properties/purchase-information-properties/purchase-information-properties.component';
-import { TorquePropertiesComponent } from './motor-inventory-setup/motor-properties/torque-properties/torque-properties.component';
 import { MotorCatalogModule } from './motor-inventory-setup/motor-catalog/motor-catalog.module';
-import { BatchAnalysisPropertiesComponent } from './motor-inventory-setup/motor-properties/batch-analysis-properties/batch-analysis-properties.component';
+import { MotorPropertiesModule } from './motor-inventory-setup/motor-properties/motor-properties.module';
 
 @NgModule({
   declarations: [
@@ -39,15 +31,6 @@ import { BatchAnalysisPropertiesComponent } from './motor-inventory-setup/motor-
     BatchAnalysisComponent,
     HelpPanelComponent,
     DepartmentCatalogTableComponent,
-    MotorPropertiesComponent,
-    LoadCharacteristicPropertiesComponent,
-    ManualSpecificationPropertiesComponent,
-    NameplateDataPropertiesComponent,
-    OperationDataPropertiesComponent,
-    OtherPropertiesComponent,
-    PurchaseInformationPropertiesComponent,
-    TorquePropertiesComponent,
-    BatchAnalysisPropertiesComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +40,8 @@ import { BatchAnalysisPropertiesComponent } from './motor-inventory-setup/motor-
     ReactiveFormsModule,
     ModalModule,
     SharedPipesModule,
-    MotorCatalogModule
+    MotorCatalogModule,
+    MotorPropertiesModule
   ],
   providers: [
     MotorInventoryService
