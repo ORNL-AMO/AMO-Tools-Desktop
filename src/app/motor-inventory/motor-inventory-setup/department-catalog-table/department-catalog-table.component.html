@@ -34,25 +34,25 @@
                     <a class="click-link" (click)="selectMotor(motor)">{{motor.name}}</a>
                 </td>
                 <td>
-                    {{motor.annualOperatingHours}}
+                    {{motor.operationData.annualOperatingHours}}
                 </td>
                 <td>
-                    {{motor.efficiencyClass | motorEfficiencyClass}}
+                    {{motor.nameplateData.efficiencyClass | motorEfficiencyClass}}
                 </td>
                 <td>
-                    {{motor.nominalEfficiency}}
+                    {{motor.nameplateData.nominalEfficiency}}
                 </td>
                 <td>
-                    {{motor.ratedMotorPower}}
+                    {{motor.nameplateData.ratedMotorPower}}
                 </td>
                 <td>
-                    {{motor.lineFrequency}}
+                    {{motor.nameplateData.lineFrequency}}
                 </td>
                 <td>
-                    {{motor.synchronousSpeed}}
+                    {{motor.manualSpecificationData.synchronousSpeed}}
                 </td>
                 <td>
-                    {{motor.fullLoadAmps}}
+                    {{motor.manualSpecificationData.fullLoadAmps}}
                 </td>
             </tr>
         </tbody>
