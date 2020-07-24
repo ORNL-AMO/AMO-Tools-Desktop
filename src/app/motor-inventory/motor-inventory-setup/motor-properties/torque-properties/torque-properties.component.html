@@ -1,0 +1,40 @@
+<div class="d-flex w-100">
+    <div class="d-flex flex-fill">
+        <label class="group-label" (click)="toggleForm()">
+            <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+            <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+            Torque
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
+            [(ngModel)]="torqueOptions.displayTorque" name="displayTorque"
+            id="displayTorque">
+        <label class="custom-control-label" for="displayTorque"></label>
+    </div>
+</div>
+
+<form class="p-1" *ngIf="displayForm">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="torqueOptions.torqueFullLoad" name="torqueFullLoad"
+                id="torqueFullLoad">
+            Full Load Torque
+        </label>
+    </div>
+
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="torqueOptions.torqueBreakDown" name="torqueBreakDown"
+                id="torqueBreakDown">
+            Break Down Torque
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="torqueOptions.torqueLockedRotor"
+                name="torqueLockedRotor" id="torqueLockedRotor">
+            Locked Rotor Torque
+        </label>
+    </div>
+</form>

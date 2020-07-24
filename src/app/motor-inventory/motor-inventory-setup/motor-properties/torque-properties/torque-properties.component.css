@@ -1,0 +1,12 @@
+label.group-label{
+    padding-bottom: 0px;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #6a846a;
+    background-color: #6a846a;
+}
+
+.custom-control.custom-switch{
+    border-bottom: #6a846a solid 2px
+}

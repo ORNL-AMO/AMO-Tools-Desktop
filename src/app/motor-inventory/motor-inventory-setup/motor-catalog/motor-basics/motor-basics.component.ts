@@ -3,7 +3,8 @@ import { MotorCatalogService } from '../motor-catalog.service';
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { MotorInventoryService } from '../../../motor-inventory.service';
-import { MotorInventoryData, MotorItem } from '../../../motor-inventory';
+import { MotorItem } from '../../../motor-inventory';
+import { MotorBasicsService } from './motor-basics.service';
 
 @Component({
   selector: 'app-motor-basics',
@@ -12,14 +13,15 @@ import { MotorInventoryData, MotorItem } from '../../../motor-inventory';
 })
 export class MotorBasicsComponent implements OnInit {
 
-  selectedMotorItemSub: Subscription;
   motorForm: FormGroup;
-  constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService) { }
+  selectedMotorItemSub: Subscription;
+  constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
+    private motorBasicsService: MotorBasicsService) { }
 
   ngOnInit(): void {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
-        this.motorForm = this.motorCatalogService.getMotorBasicsForm(selectedMotor);
+        this.motorForm = this.motorBasicsService.getFormFromMotorItem(selectedMotor);
       }
     });
   }
@@ -30,15 +32,11 @@ export class MotorBasicsComponent implements OnInit {
 
   save() {
     let selectedMotor: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
-    selectedMotor = this.motorCatalogService.updateMotorItemFromBasicsForm(this.motorForm, selectedMotor);
+    selectedMotor = this.motorBasicsService.updateMotorItemFromForm(this.motorForm, selectedMotor);
     this.motorInventoryService.updateMotorItem(selectedMotor);
   }
 
   focusField(str: string) {
     this.motorInventoryService.focusedField.next(str);
-  }
-
-  openOperatingHoursModal() {
-
   }
 }

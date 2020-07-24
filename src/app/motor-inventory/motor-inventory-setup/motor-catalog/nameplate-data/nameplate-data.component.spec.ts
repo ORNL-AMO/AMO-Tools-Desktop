@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RequiredPropertiesComponent } from './required-properties.component';
+import { NameplateDataComponent } from './nameplate-data.component';
 
-describe('RequiredPropertiesComponent', () => {
-  let component: RequiredPropertiesComponent;
-  let fixture: ComponentFixture<RequiredPropertiesComponent>;
+describe('NameplateDataComponent', () => {
+  let component: NameplateDataComponent;
+  let fixture: ComponentFixture<NameplateDataComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RequiredPropertiesComponent ]
+      declarations: [ NameplateDataComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RequiredPropertiesComponent);
+    fixture = TestBed.createComponent(NameplateDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
