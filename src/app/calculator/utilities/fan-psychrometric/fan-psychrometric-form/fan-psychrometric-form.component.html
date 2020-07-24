@@ -82,7 +82,7 @@
         <label for="altitude">Altitude</label>
         <div class="input-group">
           <input class="form-control" name="altitude" id="altitude" formControlName="altitude" type="number"
-            (input)="save()" onfocus="this.select();">
+            (input)="save()" (focus)="focusField('altitude')" onfocus="this.select();">
           <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
           <span class="alert-danger pull-right small"
