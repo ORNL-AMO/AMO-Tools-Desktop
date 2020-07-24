@@ -13,7 +13,7 @@ import { NameplateDataComponent } from './nameplate-data/nameplate-data.componen
 import { OperationsDataComponent } from './operations-data/operations-data.component';
 import { BatchAnalysisDataService } from './batch-analysis-data/batch-analysis-data.service';
 import { MotorCatalogComponent } from './motor-catalog.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ManualSpecificationDataService } from './manual-specification-data/manual-specification-data.service';
 import { NameplateDataService } from './nameplate-data/nameplate-data.service';
 import { OperationsDataService } from './operations-data/operations-data.service';
@@ -25,6 +25,8 @@ import { PurchaseInformationDataService } from './purchase-information-data/purc
 import { TorqueDataService } from './torque-data/torque-data.service';
 import { LoadCharacteristicDataService } from './load-characteristic-data/load-characteristic-data.service';
 import { MotorBasicsService } from './motor-basics/motor-basics.service';
+import { ModalModule } from 'ngx-bootstrap';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [
@@ -41,11 +43,14 @@ import { MotorBasicsService } from './motor-basics/motor-basics.service';
     OperationsDataComponent,
     TorqueDataComponent,
     OtherDataComponent,
-    PurchaseInformationDataComponent,
+    PurchaseInformationDataComponent
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
+    ModalModule,
+    SharedPipesModule
   ],
   providers: [
     BatchAnalysisDataService,

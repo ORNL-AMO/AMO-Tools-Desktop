@@ -24,6 +24,7 @@ export class NameplateDataService {
       weight: [nameplateData.weight],
       numberOfPhases: [nameplateData.numberOfPhases],
       fullLoadSpeed: [nameplateData.fullLoadSpeed],
+      fullLoadAmps: [nameplateData.fullLoadAmps]
     });
   }
 
@@ -43,6 +44,7 @@ export class NameplateDataService {
     nameplateData.weight = form.controls.weight.value;
     nameplateData.numberOfPhases = form.controls.numberOfPhases.value;
     nameplateData.fullLoadSpeed = form.controls.fullLoadSpeed.value;
+    nameplateData.fullLoadAmps = form.controls.fullLoadAmps.value;
     return nameplateData;
   }
 }

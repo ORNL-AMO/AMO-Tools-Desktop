@@ -14,7 +14,6 @@ import { SettingsModule } from '../settings/settings.module';
 import { MotorInventoryService } from './motor-inventory.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DepartmentCatalogTableComponent } from './motor-inventory-setup/department-catalog-table/department-catalog-table.component';
-import { ModalModule } from 'ngx-bootstrap';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { MotorCatalogModule } from './motor-inventory-setup/motor-catalog/motor-catalog.module';
 import { MotorPropertiesModule } from './motor-inventory-setup/motor-properties/motor-properties.module';
@@ -38,7 +37,6 @@ import { MotorPropertiesModule } from './motor-inventory-setup/motor-properties/
     SettingsModule,
     FormsModule,
     ReactiveFormsModule,
-    ModalModule,
     SharedPipesModule,
     MotorCatalogModule,
     MotorPropertiesModule

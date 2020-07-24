@@ -19,6 +19,7 @@ export interface MotorItem {
   departmentId: string,
   name: string,
   description: string,
+  voltageLimit: number,
 
   // requiredMotorData: RequiredMotorData
   batchAnalysisData: BatchAnalysisData,

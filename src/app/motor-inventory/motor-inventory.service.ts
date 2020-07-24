@@ -55,6 +55,7 @@ export class MotorInventoryService {
       description: '',
       name: 'New Motor',
       nemaTable: undefined,
+      voltageLimit: undefined,
       batchAnalysisData: {
         modifiedCost: undefined,
         modifiedPower: undefined,
