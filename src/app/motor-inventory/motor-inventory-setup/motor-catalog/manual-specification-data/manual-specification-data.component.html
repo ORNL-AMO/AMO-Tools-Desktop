@@ -4,6 +4,16 @@
     Manual Specification
 </label>
 <form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
+    <!--sychronous speed: synchronousSpeed-->
+    <div class="form-group">
+        <label for="synchronousSpeed">Synchronous Speed</label>
+        <div class="input-group">
+            <input class="form-control" type="number" id="synchronousSpeed" formControlName="synchronousSpeed"
+                (input)="save()">
+            <span class="input-group-addon units">rpm</span>
+        </div>
+    </div>
+
     <!-- frameNumber -->
     <div class="form-group" *ngIf="displayOptions.frameNumber">
         <label for="frameNumber">Frame Name</label>

@@ -53,16 +53,8 @@ export class MotorInventoryService {
       departmentId: departmentId,
       suiteDbItemId: undefined,
       description: '',
-      name: 'New Motor',    
-      requiredMotorData: {
-        ratedMotorPower: undefined,
-        efficiencyClass: 1,
-        nominalEfficiency: undefined,
-        synchronousSpeed: undefined,
-        lineFrequency: 60,
-        motorRpm: 1780,
-        fullLoadAmps: undefined
-      },
+      name: 'New Motor',
+      nemaTable: undefined,
       batchAnalysisData: {
         modifiedCost: undefined,
         modifiedPower: undefined,
@@ -82,6 +74,7 @@ export class MotorInventoryService {
         ampsIdle: undefined,
       },
       manualSpecificationData:  {
+        synchronousSpeed: undefined,
         frameNumber: undefined,
         uFrame: undefined,
         cFace: undefined,
@@ -97,6 +90,10 @@ export class MotorInventoryService {
         currentType: undefined        
       },
       nameplateData:  {
+        ratedMotorPower: undefined,
+        efficiencyClass: 1,
+        lineFrequency: 60,
+        nominalEfficiency: undefined,
         manufacturer: undefined,
         model: undefined,
         motorType: undefined,
@@ -107,6 +104,8 @@ export class MotorInventoryService {
         weight: undefined,
         numberOfPhases: undefined,
         fullLoadSpeed: undefined,
+        fullLoadAmps: undefined,
+        motorRpm: 1780
       },
       operationData:  {
         ratedSpeed: undefined,
@@ -188,6 +187,7 @@ export class MotorInventoryService {
         weight: true,
         numberOfPhases: true,
         fullLoadSpeed: true,
+        fullLoadAmps: undefined
       },
       operationDataOptions: {
         displayOperationData: true,

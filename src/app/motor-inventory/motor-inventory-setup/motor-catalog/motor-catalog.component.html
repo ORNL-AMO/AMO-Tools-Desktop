@@ -11,10 +11,6 @@
         <a class="click-link small pull-right" (click)="openMotorSelectionModal()">Set Data From Existing Motor</a>
     </div>
     <div class="col-12">
-        <app-required-motor-data [settings]="settings"></app-required-motor-data>
-    </div>
-    <div class="col-12"
-        *ngIf="motorInventoryData.displayOptions.nameplateDataOptions.displayNameplateData">
         <app-nameplate-data [settings]="settings"></app-nameplate-data>
     </div>
     <div class="col-12" *ngIf="motorInventoryData.displayOptions.loadCharactersticOptions.displayLoadCharacteristics">
@@ -23,8 +19,7 @@
     <div class="col-12" *ngIf="motorInventoryData.displayOptions.operationDataOptions.displayOperationData">
         <app-operations-data></app-operations-data>
     </div>
-    <div class="col-12"
-        *ngIf="motorInventoryData.displayOptions.manualSpecificationOptions.displayManualSpecifications">
+    <div class="col-12">
         <app-manual-specification-data></app-manual-specification-data>
     </div>
     <div class="col-12" *ngIf="motorInventoryData.displayOptions.batchAnalysisOptions.displayBatchAnalysis">

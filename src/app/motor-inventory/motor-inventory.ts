@@ -14,15 +14,13 @@ export interface MotorInventoryDepartment {
 
 export interface MotorItem {
   id: string,
-  suiteDbItemId?: number,
-  nemaTable?: string,
-  departmentId?: string,
+  suiteDbItemId: number,
+  nemaTable: string,
+  departmentId: string,
   name: string,
-  description?: string,
+  description: string,
 
-
-
-  requiredMotorData: RequiredMotorData
+  // requiredMotorData: RequiredMotorData
   batchAnalysisData: BatchAnalysisData,
   loadCharacteristicData: LoadCharacteristicData,
   manualSpecificationData: ManualSpecificationData,
@@ -33,95 +31,102 @@ export interface MotorItem {
   torqueData: TorqueData
 }
 
-export interface RequiredMotorData {
-  ratedMotorPower: number,
-  efficiencyClass: number,
-  nominalEfficiency: number,
-  synchronousSpeed: number
-  lineFrequency: number,
-  motorRpm: number,
-  fullLoadAmps: number,
-}
+// export interface RequiredMotorData {
+
+
+ 
+// }
 
 export interface BatchAnalysisData {
-  modifiedCost?: number,
-  modifiedPower?: number,
-  modifiedEfficiency?: number,
-  modifiedPercentLoad?: number,
-  rewindCost?: number,
-  rewindEfficiencyLoss?: number
+  modifiedCost: number,
+  modifiedPower: number,
+  modifiedEfficiency: number,
+  modifiedPercentLoad: number,
+  rewindCost: number,
+  rewindEfficiencyLoss: number
 }
 
 export interface LoadCharacteristicData {
-  efficiency75?: number,
-  efficiency50?: number,
-  efficiency25?: number,
-  powerFactor100?: number,
-  powerFactor75?: number,
-  powerFactor50?: number,
-  powerFactor25?: number,
-  ampsIdle?: number,
+  efficiency75: number,
+  efficiency50: number,
+  efficiency25: number,
+  powerFactor100: number,
+  powerFactor75: number,
+  powerFactor50: number,
+  powerFactor25: number,
+  ampsIdle: number,
 }
 
 export interface ManualSpecificationData {
-  frameNumber?: string,
-  uFrame?: number,
-  cFace?: number,
-  verticalShaft?: number,
-  dFlange?: number, 
-  windingResistance?: number,
-  rotorBars?: number,
-  statorSlots?: number,
-  ampsLockedRotor?: number,
-  stalledRotorTimeHot?: number,
-  stalledRotorTimeCold?: number
-  poles?: number,
-  currentType?: number,
+  //required data
+  synchronousSpeed: number,
+  //optional
+  frameNumber: string,
+  uFrame: number,
+  cFace: number,
+  verticalShaft: number,
+  dFlange: number, 
+  windingResistance: number,
+  rotorBars: number,
+  statorSlots: number,
+  ampsLockedRotor: number,
+  stalledRotorTimeHot: number,
+  stalledRotorTimeCold: number
+  poles: number,
+  currentType: number,
 }
 
 export interface NameplateData {
-  manufacturer?: string,
-  model?: string,
-  motorType?: string,
-  enclosureType?: string,
-  ratedVoltage?: number,
-  serviceFactor?: number,
-  insulationClass?: number,
-  weight?: number,
-  numberOfPhases?: number,
-  fullLoadSpeed?: number,
+  //required data
+  ratedMotorPower: number,
+  efficiencyClass: number,
+  nominalEfficiency: number,
+  lineFrequency: number,
+  motorRpm: number
+  //optional
+  manufacturer: string,
+  model: string,
+  motorType: string,
+  enclosureType: string,
+  ratedVoltage: number,
+  serviceFactor: number,
+  insulationClass: number,
+  weight: number,
+  numberOfPhases: number,
+  fullLoadSpeed: number,
+  fullLoadAmps: number,
 }
 
 export interface OperationData {
-  ratedSpeed?: number,
-  purpose?: string,
-  annualOperatingHours?: number,
-  averageLoadFactor?: number,
-  utilizationFactor?: number,
-  percentLoad?: number,
+  ratedSpeed: number,
+  purpose: string,
+  annualOperatingHours: number,
+  averageLoadFactor: number,
+  utilizationFactor: number,
+  percentLoad: number,
   //Add
-  powerFactorAtLoad?: number
+  powerFactorAtLoad: number
 }
 
 export interface OtherData {
-  driveType?: number,
-  isVFD?: boolean,
-  hasLoggerData?: boolean,
-  voltageConnectionType?: string,
+  driveType: number,
+  isVFD: boolean,
+  hasLoggerData: boolean,
+  voltageConnectionType: string,
 }
 
 export interface PurchaseInformationData {
-  catalogId?: string,
-  listPrice?: number,
-  warranty?: Date,
+  catalogId: string,
+  listPrice: number,
+  warranty: Date,
   //Add
-  directReplacementCost?: boolean
+  directReplacementCost: boolean
 }
 
 export interface TorqueData {
-  torqueFullLoad?: number,
-  torqueBreakDown?: number,
-  torqueLockedRotor?: number,
+  torqueFullLoad: number,
+  torqueBreakDown: number,
+  torqueLockedRotor: number,
 }
 
 
@@ -194,6 +199,7 @@ export interface NameplateDataOptions {
   weight: boolean,
   numberOfPhases: boolean,
   fullLoadSpeed: boolean,
+  fullLoadAmps: boolean
 }
 
 export interface OperationDataOptions {

@@ -84,4 +84,11 @@
             Full Load Speed
         </label>
     </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadAmps"
+                name="fullLoadAmps" id="fullLoadAmps">
+            Full Load Amps
+        </label>
+    </div>
 </form>

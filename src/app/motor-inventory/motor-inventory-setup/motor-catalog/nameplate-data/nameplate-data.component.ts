@@ -6,6 +6,7 @@ import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { NameplateDataService } from './nameplate-data.service';
 import { Settings } from '../../../../shared/models/settings';
+import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 
 @Component({
   selector: 'app-nameplate-data',
@@ -20,10 +21,13 @@ export class NameplateDataComponent implements OnInit {
   selectedMotorItemSub: Subscription;
   displayOptions: NameplateDataOptions;
   displayForm: boolean = true;
+  frequencies: Array<number> = [50, 60];
+  efficiencyClasses: Array<{ value: number, display: string }>;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private nameplateDataService: NameplateDataService) { }
 
   ngOnInit(): void {
+    this.efficiencyClasses = motorEfficiencyConstants;
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.nameplateDataService.getFormFromNameplateData(selectedMotor.nameplateData);
@@ -48,6 +52,12 @@ export class NameplateDataComponent implements OnInit {
 
   toggleForm() {
     this.displayForm = !this.displayForm;
+  }
+
+  //TODO: Update nominalEfficiency?
+  changeEfficiencyClass() {
+
+    this.save();
   }
 
 }

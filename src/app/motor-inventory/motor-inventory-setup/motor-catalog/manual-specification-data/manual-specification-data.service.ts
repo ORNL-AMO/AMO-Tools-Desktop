@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ManualSpecificationData } from '../../../motor-inventory';
 
 @Injectable()
@@ -9,6 +9,7 @@ export class ManualSpecificationDataService {
 
   getFormFromManualSpecificationData(manualSpecificationData: ManualSpecificationData): FormGroup {
     return this.formBuilder.group({
+      synchronousSpeed: [manualSpecificationData.synchronousSpeed, [Validators.required]],
       frameNumber: [manualSpecificationData.frameNumber],
       uFrame: [manualSpecificationData.uFrame],
       cFace: [manualSpecificationData.cFace],
@@ -26,6 +27,7 @@ export class ManualSpecificationDataService {
   }
 
   updateManualDataFromForm(form: FormGroup, manualSpecificationData: ManualSpecificationData): ManualSpecificationData {
+    manualSpecificationData.synchronousSpeed = form.controls.synchronousSpeed.value;
     manualSpecificationData.frameNumber = form.controls.frameNumber.value;
     manualSpecificationData.uFrame = form.controls.uFrame.value;
     manualSpecificationData.cFace = form.controls.cFace.value;

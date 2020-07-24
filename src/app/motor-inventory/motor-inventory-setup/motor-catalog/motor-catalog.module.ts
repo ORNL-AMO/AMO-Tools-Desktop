@@ -6,14 +6,12 @@ import { MotorBasicsComponent } from './motor-basics/motor-basics.component';
 import { FilterMotorsComponent } from './select-motor-modal/filter-motors/filter-motors.component';
 import { MotorOptionsTableComponent } from './select-motor-modal/motor-options-table/motor-options-table.component';
 import { FilterMotorOptionsPipe } from './select-motor-modal/filter-motor-options.pipe';
-import { RequiredMotorDataComponent } from './required-motor-data/required-motor-data.component';
 import { BatchAnalysisDataComponent } from './batch-analysis-data/batch-analysis-data.component';
 import { LoadCharacteristicDataComponent } from './load-characteristic-data/load-characteristic-data.component';
 import { ManualSpecificationDataComponent } from './manual-specification-data/manual-specification-data.component';
 import { NameplateDataComponent } from './nameplate-data/nameplate-data.component';
 import { OperationsDataComponent } from './operations-data/operations-data.component';
 import { BatchAnalysisDataService } from './batch-analysis-data/batch-analysis-data.service';
-import { RequiredMotorDataService } from './required-motor-data/required-motor-data.service';
 import { MotorCatalogComponent } from './motor-catalog.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ManualSpecificationDataService } from './manual-specification-data/manual-specification-data.service';
@@ -36,7 +34,6 @@ import { MotorBasicsService } from './motor-basics/motor-basics.service';
     FilterMotorsComponent,
     MotorOptionsTableComponent,
     FilterMotorOptionsPipe,
-    RequiredMotorDataComponent,
     BatchAnalysisDataComponent,
     LoadCharacteristicDataComponent,
     ManualSpecificationDataComponent,
@@ -52,7 +49,6 @@ import { MotorBasicsService } from './motor-basics/motor-basics.service';
   ],
   providers: [
     BatchAnalysisDataService,
-    RequiredMotorDataService,
     MotorCatalogService,
     ManualSpecificationDataService,
     NameplateDataService,
