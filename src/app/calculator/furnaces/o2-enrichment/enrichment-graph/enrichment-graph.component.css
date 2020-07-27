@@ -1,0 +1,62 @@
+
+.point-key-circle {
+    width: 16px;
+      height: 16px;
+      margin: auto;
+    border-radius: 50%;
+  }
+
+.spline {
+  width: 4rem;
+  height: 4px;
+  margin: auto;
+}
+
+  .tab-panel-background {
+    background: white;
+  }
+  
+  .grid-toggle-button {
+    padding: 0;
+    position: absolute;
+    top: 100px;
+    right: 200px;
+    z-index: 1;
+  }
+  
+  td{
+    font-size: small;
+  }
+  
+  th {
+    border-top: none;
+    padding: .5rem;
+  }
+  
+  td{
+    font-size: small;
+    padding: .5rem;
+  }
+  
+  table {
+    margin-bottom: .5rem;
+  }
+  
+  .data-summary{
+    background-color: white;
+  }
+  
+  
+  .hidden-copy-table {
+    z-index: -10;
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    height: 0;
+    width: 0;
+  }
+
+  .graph-point-name {
+    font-weight: bold;
+    margin-bottom: .5rem;
+  }
