@@ -35,7 +35,8 @@ export interface SimpleChart {
         responsive: boolean
     }
     chartId?: string,
-    inputCount?: number
+    inputCount?: number,
+    removeIndex?: number
 }
 
 export interface AxisObj {

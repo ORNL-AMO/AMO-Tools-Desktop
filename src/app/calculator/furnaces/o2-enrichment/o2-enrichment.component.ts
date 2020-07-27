@@ -83,19 +83,8 @@ export class O2EnrichmentComponent implements OnInit {
   initSubscriptions() {
     this.enrichmentInputsSub = this.o2EnrichmentService.enrichmentInputs.subscribe(value => {
       this.enrichmentInputs = value;
-      this.calculate();
+      this.o2EnrichmentService.calculate(this.settings);
     })
-  }
-
-  calculate() {
-    this.o2EnrichmentService.calculate(this.settings);
-
-    if (this.calcExists) {
-      // let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
-      // let tmpO2Enrichment: EnrichmentInput = inputs[0];
-      // this.calculator.o2Enrichment = tmpO2Enrichment
-      // this.saveCalculator();
-    }
   }
 
   getCalculator() {

@@ -79,6 +79,7 @@ export class O2EnrichmentService {
   addModification(form: FormGroup) {
     let enrichmentCopy = this.o2FormService.getObjFromForm(form);
     enrichmentCopy.name = 'Modification';
+    enrichmentCopy.isBaseline = false;
     let enrichmentInputs: Array<EnrichmentInput> = this.enrichmentInputs.getValue();
     let modificationInput: EnrichmentInput = {
       inputData: enrichmentCopy
@@ -91,6 +92,10 @@ export class O2EnrichmentService {
   removeModification(currentIndex: number) {
     let enrichmentInputs: Array<EnrichmentInput> = this.enrichmentInputs.getValue();
     enrichmentInputs.splice(currentIndex, 1);
+    let updatedChart = this.enrichmentChart.getValue();
+    updatedChart.removeIndex = currentIndex;
+    this.enrichmentChart.next(updatedChart);
+
     this.enrichmentInputs.next(enrichmentInputs);
     this.currentEnrichmentIndex.next(currentIndex - 1);
   }
@@ -289,7 +294,7 @@ export class O2EnrichmentService {
       name: '',
       showlegend: false,
       type: 'scatter',
-      hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y}%<br>`,
+      hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y:.2r}%<br>`,
       line: {
         shape: 'spline',
         color: '#000'
@@ -305,7 +310,7 @@ export class O2EnrichmentService {
       type: 'scatter',
       name: ``,
       showlegend: false,
-      hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y}%<br>`,
+      hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y:.2r}%<br>`,
       mode: 'markers',
       marker: {
         color: selectedPoint.pointColor,
@@ -361,7 +366,8 @@ export class O2EnrichmentService {
         displayModeBar: true,
         responsive: true
       },
-      inputCount: 0
+      inputCount: 0,
+      removeIndex: undefined
     };
   }
 

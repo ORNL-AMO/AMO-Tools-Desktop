@@ -37,7 +37,7 @@
                 {{ output.outputData.availableHeatInput | number:'1.0-0'}}
               </span>
               <span *ngIf="!output.outputData.availableHeatInput">
-                --
+                &mdash; &mdash;
               </span>
             </td>
             <td class="p-2">
@@ -45,7 +45,7 @@
                 {{ output.outputData.annualFuelCost | currency: 'USD': 'symbol': '1.0-0'}}
               </span>
               <span *ngIf="!output.outputData.annualFuelCost">
-                --
+                &mdash; &mdash;
               </span>
             </td>
             <td class="p-2">
@@ -53,7 +53,7 @@
                 {{ output.outputData.fuelConsumption | number:'1.1-1' }}
               </span>
               <span *ngIf="!output.outputData.fuelConsumption">
-                --
+                &mdash; &mdash;
               </span>
             </td>
             <td class="p-2">
@@ -61,7 +61,7 @@
                 {{ output.outputData.fuelSavings | number:'1.1-1' }}
               </span>
               <span *ngIf="!output.outputData.fuelSavings">
-                --
+                &mdash; &mdash;
               </span>
             </td>
             <td class="p-2 w-25">
@@ -69,7 +69,7 @@
                 {{ output.outputData.annualCostSavings | currency: 'USD': 'symbol': '1.0-0'}}
               </span>
               <span *ngIf="!output.outputData.annualCostSavings">
-                --
+                &mdash; &mdash;
               </span>
             </td>
             <td class="pt-3 px-1">

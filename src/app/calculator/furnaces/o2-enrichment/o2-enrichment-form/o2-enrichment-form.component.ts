@@ -26,11 +26,10 @@ export class O2EnrichmentFormComponent implements OnInit {
   isEditingName: boolean = false;
   showOperatingHoursModal: boolean;
   operatingHoursControl: AbstractControl;
-  isBaseline: boolean = true;
   o2Form: FormGroup;
 
   currentEnrichmentIndexSub: Subscription;
-  currentEnrichmentIndex: any;
+  currentEnrichmentIndex: number;
   currentEnrichmentOutput: EnrichmentOutput;
 
   constructor(private o2EnrichmentService: O2EnrichmentService, 

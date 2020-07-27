@@ -29,15 +29,10 @@ export class EnrichmentGraphComponent implements OnInit {
   // Graph Data
   selectedDataPoints: Array<DisplayPoint>;
   defaultSelectedPointsData: Array<DisplayPoint>;
-  pointColors: Array<string>;
+  // pointColors: Array<string>;
   enrichmentChart: SimpleChart;
   enrichmentInputsSub: Subscription;
   enrichmentInputs: Array<EnrichmentInput>;
-
-  // Trace Defaults
-  defaultPointOutlineColor = 'rgba(0, 0, 0, .6)';
-  defaultPointColor = 'rgba(0, 0, 0, 0)';
-  defaultTraceCount: number = 1;
 
   // Tooltips
   hoverBtnGridLines: boolean = false;
@@ -47,8 +42,6 @@ export class EnrichmentGraphComponent implements OnInit {
   hoverBtnCollapse: boolean = false;
   displayCollapseTooltip: boolean = false;
   expanded: boolean = false;
-
-  initResizeCompleted: boolean = false;
 
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
@@ -65,7 +58,7 @@ export class EnrichmentGraphComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pointColors = graphColors;
+    // this.pointColors = graphColors;
     this.triggerInitialResize();
     this.initSubscriptions();
   }
@@ -76,7 +69,7 @@ export class EnrichmentGraphComponent implements OnInit {
 
   initSubscriptions() {
     this.enrichmentInputsSub = this.o2EnrichmentService.enrichmentInputs.subscribe(inputs => {
-      if (inputs && this.initResizeCompleted) {
+      if (inputs) {
         this.enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
         let resetData = this.o2EnrichmentService.resetData.getValue();
         if (this.enrichmentChart && !resetData) {
@@ -128,9 +121,6 @@ export class EnrichmentGraphComponent implements OnInit {
           this.removeHoverGroupData();
         });
       });
-    if (isInitResize == true) {
-      this.initResizeCompleted = true;
-    }
     this.save();
   }
 
@@ -150,19 +140,20 @@ export class EnrichmentGraphComponent implements OnInit {
 
   setTraces() {
     this.enrichmentInputs.forEach((enrichmentInput: EnrichmentInput, index) => {
+      let currentColor = this.getNextColor();
       // Line trace
       let graphData: TraceCoordinates = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData);
       let lineTrace = this.o2EnrichmentService.getLineTrace();
       lineTrace.x = graphData.x;
       lineTrace.y = graphData.y;
-      lineTrace.line.color = this.getNextColor();
+      lineTrace.line.color = currentColor;
       
       // Point trace
       let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
       let fuelSavings = outputs[index].outputData.fuelSavings;
       let displayPoint: DisplayPoint = {
         name: enrichmentInput.inputData.name,
-        pointColor: this.getNextColor(),
+        pointColor: currentColor,
         pointX: enrichmentInput.inputData.o2CombAir,
         pointY: fuelSavings,
         combustionTemp: enrichmentInput.inputData.combAirTemp,
@@ -170,13 +161,13 @@ export class EnrichmentGraphComponent implements OnInit {
         fuelTemp: enrichmentInput.inputData.flueGasTemp
       }
       let pointTrace = this.o2EnrichmentService.getPointTrace(displayPoint);
-      pointTrace.marker.color = this.getNextColor();
-      pointTrace.marker.line.color = this.getNextColor();
+      pointTrace.marker.color = currentColor;
+      pointTrace.marker.line.color = currentColor;
 
       if (index == 0) {
         lineTrace.line.color = "#000";
-        pointTrace.marker.color = this.defaultPointColor;
-        pointTrace.marker.line.color = this.defaultPointOutlineColor;
+        pointTrace.marker.color = 'rgba(0, 0, 0, 0)';
+        pointTrace.marker.line.color = 'rgba(0, 0, 0, .6)';
         displayPoint.pointColor = "#000";
       }
       
@@ -188,14 +179,17 @@ export class EnrichmentGraphComponent implements OnInit {
 
   updateTraces() {
     let addingTraces: boolean = this.enrichmentInputs.length > this.enrichmentChart.inputCount;
-    let removingTraces: boolean = this.enrichmentInputs.length < this.enrichmentChart.inputCount;
-    if (removingTraces) {
-      // Remove line
-      this.enrichmentChart.data.splice(this.enrichmentChart.data.length - 2, 2);
-      // Remove point
-      this.selectedDataPoints.splice(this.selectedDataPoints.length -1, 1);
+    if (this.enrichmentChart.removeIndex != undefined) {
+      // Each input is represented by a pair of traces(line and point). 
+      // Ex. Add input index to itself to find the line in enrichmentChart.data (add 1 for point)
+      let index = this.enrichmentChart.removeIndex;
+      let lineIndexOffset: number = index + index;
+      this.enrichmentChart.data.splice(lineIndexOffset, 2);
+      this.selectedDataPoints.splice(index, 1);
+      this.enrichmentChart.removeIndex = undefined;
     }
     this.enrichmentInputs.forEach((enrichmentInput: EnrichmentInput, index) => {
+      let currentColor = this.getNextColor();
       let isNewTrace: boolean = false;
       if (addingTraces) {
         let offset = this.enrichmentInputs.length - this.enrichmentChart.inputCount;
@@ -221,7 +215,7 @@ export class EnrichmentGraphComponent implements OnInit {
       let lineTrace = this.o2EnrichmentService.getLineTrace();
       lineTrace.x = graphData.x;
       lineTrace.y = graphData.y;
-      lineTrace.line.color = lineTraceColor || this.getNextColor();
+      lineTrace.line.color = lineTraceColor || currentColor;
       
       // Point trace
       let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
@@ -229,7 +223,7 @@ export class EnrichmentGraphComponent implements OnInit {
 
       let displayPoint: DisplayPoint = {
         name: enrichmentInput.inputData.name,
-        pointColor: pointColor || this.getNextColor(),
+        pointColor: pointColor || currentColor,
         pointX: enrichmentInput.inputData.o2CombAir,
         pointY: fuelSavings,
         combustionTemp: enrichmentInput.inputData.combAirTemp,
@@ -237,8 +231,8 @@ export class EnrichmentGraphComponent implements OnInit {
         fuelTemp: enrichmentInput.inputData.flueGasTemp
       };
       let pointTrace = this.o2EnrichmentService.getPointTrace(displayPoint);
-      pointTrace.marker.color = pointColor || this.getNextColor();
-      pointTrace.marker.line.color = pointOutlineColor || this.getNextColor();
+      pointTrace.marker.color = pointColor || currentColor;
+      pointTrace.marker.line.color = pointOutlineColor || currentColor;
       
       this.enrichmentChart.data[lineIndex] = lineTrace;
       this.enrichmentChart.data[pointIndex] = pointTrace;
@@ -260,7 +254,7 @@ export class EnrichmentGraphComponent implements OnInit {
   }
 
   getNextColor(): string {
-    return this.pointColors[(this.enrichmentChart.data.length + 1) % this.pointColors.length];
+    return graphColors[(this.enrichmentChart.data.length + 1) % graphColors.length];
   }
 
   displayHoverGroupData(hoverEventData) {
@@ -271,8 +265,6 @@ export class EnrichmentGraphComponent implements OnInit {
       let splineTraceIndex = index + index;
 
       if (hoverIndex != 0) {
-        let x = Number(this.enrichmentChart.data[splineTraceIndex].x[hoverIndex])
-        let y = Number(this.enrichmentChart.data[splineTraceIndex].y[hoverIndex])
         line.pointX = Number(this.enrichmentChart.data[splineTraceIndex].x[hoverIndex]);
         line.pointY = Number(this.enrichmentChart.data[splineTraceIndex].y[hoverIndex]);
       } else {
