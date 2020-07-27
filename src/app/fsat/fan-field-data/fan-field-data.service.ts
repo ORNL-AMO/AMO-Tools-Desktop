@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FieldData } from '../../shared/models/fans';
+import { GreaterThanValidator } from '../../shared/validators/greater-than';
 
 @Injectable()
 export class FanFieldDataService {
@@ -20,7 +21,7 @@ export class FanFieldDataService {
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],
       motorPower: [obj.motorPower, Validators.required],
       cost: [obj.cost, [Validators.required, Validators.min(0)]],
-      specificHeatRatio: [obj.specificHeatRatio, [Validators.required, Validators.min(0)]],
+      specificHeatRatio: [obj.specificHeatRatio, [Validators.required, GreaterThanValidator.greaterThan(1), Validators.max(2)]],
       compressibilityFactor: [obj.compressibilityFactor, [Validators.required, Validators.min(0)]],
       measuredVoltage: [obj.measuredVoltage, Validators.required]
     });
