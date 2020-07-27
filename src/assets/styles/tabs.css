@@ -107,7 +107,7 @@ Tabs
 
   .motor-inventory .tabs.primary .active a {
     border: none;
-    border-bottom: #6a846a solid 3px;
+    border-bottom: #84b641 solid 3px;
   }
 
 
@@ -173,7 +173,7 @@ Tabs
   }
 
   .tabs.subtabs.motor-inventory {
-    border-bottom: #6a846a solid 3px;
+    border-bottom: #84b641 solid 3px;
   }
 
     .tabs.subtabs.progress-tabs a {
@@ -251,7 +251,7 @@ Tabs
       }
 
       .tabs.subtabs.motor-inventory .active .step-number {
-        background: #6a846a;
+        background: #84b641;
       }
 
       .tabs.subtabs.fsat .active .step-number{
