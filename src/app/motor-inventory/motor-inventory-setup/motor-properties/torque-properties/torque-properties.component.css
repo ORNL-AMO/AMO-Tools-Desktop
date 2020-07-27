@@ -3,10 +3,10 @@ label.group-label{
 }
 
 .custom-control-input:checked ~ .custom-control-label::before {
-    border-color: #6a846a;
-    background-color: #6a846a;
+    border-color: #84b641;
+    background-color: #84b641;
 }
 
 .custom-control.custom-switch{
-    border-bottom: #6a846a solid 2px
+    border-bottom: #84b641 solid 2px
 }
