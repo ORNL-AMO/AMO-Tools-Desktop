@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { O2EnrichmentService } from '../o2-enrichment.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-o2-enrichment-help',
@@ -6,12 +8,20 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./o2-enrichment-help.component.css']
 })
 export class O2EnrichmentHelpComponent implements OnInit {
-  @Input()
   currentField: string;
+  currentFieldSub: Subscription;
   
-  constructor() { }
+  constructor(private o2EnrichmentService: O2EnrichmentService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.currentFieldSub = this.o2EnrichmentService.currentField.subscribe(val => {
+      this.currentField = val;
+    });
   }
+
+  ngOnDestroy(): void {
+    this.currentFieldSub.unsubscribe();
+  }
+
 
 }

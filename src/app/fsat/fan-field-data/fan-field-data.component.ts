@@ -187,19 +187,22 @@ export class FanFieldDataComponent implements OnInit {
 
   getCompressibilityFactor() {
     let fsatOutput: FsatOutput;
-    fsatOutput = this.fsatService.getResults(this.fsat, this.baseline, this.settings);
-
+    let fsatCopy: FSAT = JSON.parse(JSON.stringify(this.fsat));
+    fsatCopy.fieldData = this.fanFieldDataService.getObjFromForm(this.fieldDataForm);
+    if(isNaN(fsatCopy.fieldData.compressibilityFactor) || fsatCopy.fieldData.compressibilityFactor == 0 || fsatCopy.fieldData.compressibilityFactor == undefined){
+      fsatCopy.fieldData.compressibilityFactor = 1;
+    }
+    fsatOutput = this.fsatService.getResults(fsatCopy, this.baseline, this.settings);
     let inputs: CompressibilityFactor = {
-      moverShaftPower: fsatOutput.motorShaftPower,
+      moverShaftPower: fsatOutput.fanShaftPower,
       inletPressure: this.fieldDataForm.controls.inletPressure.value,
       outletPressure: this.fieldDataForm.controls.outletPressure.value,
       barometricPressure: this.fsat.baseGasDensity.barometricPressure,
       flowRate: this.fieldDataForm.controls.flowRate.value,
       specificHeatRatio: this.fieldDataForm.controls.specificHeatRatio.value
     };
-    
-    let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, this.baseline, fsatOutput);
 
+    let compressibilityFactor: number = this.calculateCompressibilityFactor(inputs, this.baseline, fsatOutput);
     this.fieldDataForm.patchValue({
       compressibilityFactor: Number(compressibilityFactor.toFixed(3))
     });
@@ -207,7 +210,6 @@ export class FanFieldDataComponent implements OnInit {
 
   calculateCompressibilityFactor(compressibilityFactorInput: CompressibilityFactor, isBaseline: boolean, fsatOutput: FsatOutput) {
     let compressibilityFactor: number;
-
     if (isBaseline) {
       compressibilityFactor = this.fsatService.compressibilityFactor(compressibilityFactorInput, this.settings);
     } else {
@@ -227,7 +229,6 @@ export class FanFieldDataComponent implements OnInit {
         currentMoverShaftPower = tempShaftPower;
       }
     }
-
     return compressibilityFactor;
   }
 
