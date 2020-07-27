@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, ChangeDetectorRef, KeyValueDiffers, OnChanges, SimpleChanges, DoCheck } from '@angular/core';
-import { EnrichmentInput, EnrichmentInputData } from '../../../../shared/models/phast/o2Enrichment';
+import { EnrichmentInput } from '../../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../../shared/models/settings';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
@@ -29,7 +29,6 @@ export class EnrichmentGraphComponent implements OnInit {
   // Graph Data
   selectedDataPoints: Array<DisplayPoint>;
   defaultSelectedPointsData: Array<DisplayPoint>;
-  // pointColors: Array<string>;
   enrichmentChart: SimpleChart;
   enrichmentInputsSub: Subscription;
   enrichmentInputs: Array<EnrichmentInput>;
@@ -45,12 +44,7 @@ export class EnrichmentGraphComponent implements OnInit {
 
   initResizeCompleted: boolean = false;
 
-  selectedAxisOptions = [
-    {display: 'O2 in Combustion Air', value: 0},
-    {display: 'Combustion Air Preheat Temperature', value: 1},
-    {display: 'Flue Gas Temperature', value: 2},
-    {display: 'O2 in Flue Gases', value: 3},
-  ];
+  selectedAxisOptions = Array<{display: string, value: number}>();
   selectedAxis: number = 0;
   xAxis: Axis;
   selectedAxisSub: Subscription;
@@ -70,7 +64,7 @@ export class EnrichmentGraphComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.pointColors = graphColors;
+    this.initAxisOptions();
     this.triggerInitialResize();
     this.initSubscriptions();
   }
@@ -111,6 +105,19 @@ export class EnrichmentGraphComponent implements OnInit {
       }
       this.initRenderChart();
     }
+  }
+
+  initAxisOptions() {
+    let temperatureUnit = '&#8457;';
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      temperatureUnit = '&#8451;';
+    }
+    this.selectedAxisOptions = [
+      {display: 'O2 in Combustion Air (%)', value: 0},
+      {display: 'Combustion Air Preheat Temperature ' + temperatureUnit, value: 1},
+      {display: 'Flue Gas Temperature ' + temperatureUnit, value: 2},
+      {display: 'O2 in Flue Gases (%)', value: 3},
+    ];
   }
 
   save() {
@@ -155,7 +162,7 @@ export class EnrichmentGraphComponent implements OnInit {
     let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
     chartLayout.xaxis.range = [];
     chartLayout.xaxis.autorange = true;
-    chartLayout.xaxis.title.text = this.xAxis.title;
+    // chartLayout.xaxis.title.text = this.xAxis.title;
     Plotly.update(this.currentChartId, this.enrichmentChart.data, chartLayout);
     this.save();
   }
@@ -170,24 +177,23 @@ export class EnrichmentGraphComponent implements OnInit {
       lineTrace.x = graphData.data.x;
       lineTrace.y = graphData.data.y;
       lineTrace.hovertemplate = this.xAxis.hoverTemplate;
-      lineTrace.line.color = this.getNextColor();
+      lineTrace.line.color = currentColor;
       
       // Point trace
       let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
       let fuelSavings = outputs[index].outputData.fuelSavings;
       let displayPoint: DisplayPoint = {
         name: enrichmentInput.inputData.name,
-        pointColor: this.getNextColor(),
+        pointColor: currentColor,
         pointX: enrichmentInput.inputData[this.xAxis.pointPropertyName],
         pointY: fuelSavings,
         combAirTemp: enrichmentInput.inputData.combAirTemp,
         o2FlueGas: enrichmentInput.inputData.o2FlueGas,
         flueGasTemp: enrichmentInput.inputData.flueGasTemp
       };
-      console.log('displayPoint', displayPoint);
       let pointTrace = this.o2EnrichmentService.getPointTrace(displayPoint);
-      pointTrace.marker.color = this.getNextColor();
-      pointTrace.marker.line.color = this.getNextColor();
+      pointTrace.marker.color = currentColor;
+      pointTrace.marker.line.color = currentColor;
       pointTrace.hovertemplate = this.xAxis.hoverTemplate;
 
 
@@ -244,7 +250,7 @@ export class EnrichmentGraphComponent implements OnInit {
       lineTrace.x = graphData.data.x;
       lineTrace.y = graphData.data.y;
       lineTrace.hovertemplate = this.xAxis.hoverTemplate;
-      lineTrace.line.color = lineTraceColor || this.getNextColor();
+      lineTrace.line.color = lineTraceColor || currentColor;
       
       // Point trace
       let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
@@ -252,7 +258,7 @@ export class EnrichmentGraphComponent implements OnInit {
 
       let displayPoint: DisplayPoint = {
         name: enrichmentInput.inputData.name,
-        pointColor: pointColor || this.getNextColor(),
+        pointColor: pointColor || currentColor,
         pointX: enrichmentInput.inputData[this.xAxis.pointPropertyName],
         pointY: fuelSavings,
         combAirTemp: enrichmentInput.inputData.combAirTemp,
@@ -260,8 +266,8 @@ export class EnrichmentGraphComponent implements OnInit {
         flueGasTemp: enrichmentInput.inputData.flueGasTemp
       };
       let pointTrace = this.o2EnrichmentService.getPointTrace(displayPoint);
-      pointTrace.marker.color = pointColor || this.getNextColor();
-      pointTrace.marker.line.color = pointOutlineColor || this.getNextColor();
+      pointTrace.marker.color = pointColor || currentColor;
+      pointTrace.marker.line.color = pointOutlineColor || currentColor;
       pointTrace.hovertemplate = this.xAxis.hoverTemplate;
       
       this.enrichmentChart.data[lineIndex] = lineTrace;

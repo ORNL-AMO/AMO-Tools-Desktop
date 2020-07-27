@@ -7,7 +7,6 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { SelectedDataPoint, SimpleChart, TraceData, TraceCoordinates } from '../../../shared/models/plotting';
 import { BehaviorSubject } from 'rxjs';
 import { O2EnrichmentFormService } from './o2-enrichment-form.service';
-import { property } from 'lodash';
 
 @Injectable()
 export class O2EnrichmentService {
@@ -234,7 +233,6 @@ export class O2EnrichmentService {
         }
       }
     }
-    // console.log('graphData', graphData)
     return {data: graphData, xAxis: xAxis};  
   }
 
@@ -243,52 +241,49 @@ export class O2EnrichmentService {
     if (settings.unitsOfMeasure == 'Metric') {
       temperatureUnit = '&#8451;';
     }
-    // Ranges from Krisitina
-//     Combustion Air: 50 to 2000, by 10? (I'll leave the increments up to you)
-// O2 in flue: 0% - 20%  (by 0.5%?)
-// Flue gas temp: 100 to 3000, by 10?
     let axes: { [selected: number]: Axis } = {
       0: {
         propertyName: "o2CombAirEnriched",
         pointPropertyName: "o2CombAir",
-        hoverTemplate: `O<sub>2</sub> in Air: %{x:.2r}%<br>Fuel Savings: %{y}%<br>`,
+        hoverTemplate: `O<sub>2</sub> in Air: %{x:.2r}%<br>Fuel Savings: %{y:.1r}%<br>`,
         propertyStartValue: point.o2CombAirEnriched,
         axisStartValue: 21,
         increment: 0.5,
         termination: 100,
-        title: 'O<sub>2</sub> in Air (%)' 
+        title: 'O<sub>2</sub> in Air (%)'
       },
       1: {
         propertyName: "combAirTempEnriched",
         pointPropertyName: "combAirTemp",
-        hoverTemplate: `Combustion Air Preheat Temperature: %{x:.2r} ${temperatureUnit}<br>Fuel Savings: %{y}%<br>`,
+        hoverTemplate: `Combustion Air Preheat Temperature: %{x:.2r} ${temperatureUnit}<br>Fuel Savings: %{y:.1r}%<br>`,
         propertyStartValue: point.combAirTempEnriched,
-        axisStartValue: 100,
-        increment: 20,
-        termination: 1200,
-        title: 'Combustion Air Preheat Temperature' 
+        axisStartValue: 50,
+        increment: 10,
+        termination: 2000,
+        title: 'Combustion Air Preheat Temperature'
 
       },
       2: {
         propertyName: "flueGasTempEnriched",
         pointPropertyName: "flueGasTemp",
-        hoverTemplate: `Flue Gas Temperature: %{x:.2r} ${temperatureUnit}<br>Fuel Savings: %{y}%<br>`,
+        hoverTemplate: `Flue Gas Temperature: %{x:.2r} ${temperatureUnit}<br>Fuel Savings: %{y:.1r}%<br>`,
         propertyStartValue: point.flueGasTempEnriched,
-        axisStartValue: 900,
-        increment: 20,
-        termination: 1800,
-        title: 'Flue Gas Temperature' 
+        axisStartValue: 100,
+        increment: 10,
+        termination: 3000,
+        title: 'Flue Gas Temperature'
 
       },
       3: {
         propertyName: "o2FlueGasEnriched",
         pointPropertyName: "o2FlueGas",
-        hoverTemplate: `O<sub>2</sub> in Flue Gases: %{x:.2r}%<br>Fuel Savings: %{y}%<br>`,
+        hoverTemplate: `O<sub>2</sub> in Flue Gases: %{x:.2r}%<br>Fuel Savings: %{y:.1r}%<br>`,
         propertyStartValue: point.o2FlueGasEnriched,
-        axisStartValue: 0.5,
+        axisStartValue: 0,
         increment: 0.1,
-        termination: 10,
-        title: 'O<sub>2</sub> in Flue Gases' 
+        // increment: 0.5,
+        termination: 20,
+        title: 'O<sub>2</sub> in Flue Gases'
 
       },
     };
@@ -394,9 +389,9 @@ export class O2EnrichmentService {
           showgrid: showGrid,
           showspikes: true,
           spikemode: 'across',
-          title: {
-            text: "O<sub>2</sub> in Air (%)"
-          },
+          // title: {
+          //   text: "O<sub>2</sub> in Air (%)"
+          // },
           range: [20, 40, 60, 80, 100],
           showticksuffix: 'all',
           tickangle: -60
@@ -412,7 +407,7 @@ export class O2EnrichmentService {
         },
         margin: {
           t: 50,
-          b: 75,
+          b: 50,
           l: 75,
           r: 50
         }

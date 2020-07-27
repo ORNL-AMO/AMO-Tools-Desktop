@@ -45,7 +45,7 @@ export interface AxisObj {
     showgrid: boolean,
     showspikes?: boolean,
     spikemode?: string,
-    title: {
+    title?: {
         text: string
     },
     tickvals?: Array<number | string>,
