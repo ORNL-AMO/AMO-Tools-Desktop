@@ -11,6 +11,8 @@ import { StackLossComponent } from "../steam/stack-loss/stack-loss.component";
 import { SteamPropertiesComponent } from "../steam/steam-properties/steam-properties.component";
 import { TurbineComponent } from "../steam/turbine/turbine.component";
 import { SteamListComponent } from "../steam/steam-list/steam-list.component";
+import { PipeInsulationReductionComponent } from "../steam/pipe-insulation-reduction/pipe-insulation-reduction.component";
+import { TankInsulationReductionComponent } from "../steam/tank-insulation-reduction/tank-insulation-reduction.component";
 
 export const steamRoutes: Routes = [
     {
@@ -60,5 +62,13 @@ export const steamRoutes: Routes = [
     {
         path: 'turbine',
         component: TurbineComponent   
+    },
+    {
+        path: 'pipe-insulation-reduction',
+        component: PipeInsulationReductionComponent
+    },
+    {
+        path: 'tank-insulation-reduction',
+        component: TankInsulationReductionComponent
     }
 ]

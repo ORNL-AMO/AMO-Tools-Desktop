@@ -15,6 +15,7 @@ export class AboutPageComponent implements OnInit {
   showFAST: boolean = false;
   showDisclosure: boolean = false;
   showTreasureHunt: boolean = false;
+  showDataExplorer: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -39,5 +40,8 @@ export class AboutPageComponent implements OnInit {
   }
   toggleTreasureHunt(){
     this.showTreasureHunt = !this.showTreasureHunt;
+  }
+  toggleDataExplorer(){
+    this.showDataExplorer = !this.showDataExplorer;
   }
 }

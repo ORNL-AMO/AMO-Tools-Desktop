@@ -175,17 +175,18 @@
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.specificHeatRatio.invalid && !fieldDataForm.controls.specificHeatRatio.pristine">
         <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.required">Value Required</span>
-        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.min">Value can't be less than
-          {{fieldDataForm.controls.specificHeatRatio.errors.min.min}}.</span>
+        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.max">Value can't be less than
+          {{fieldDataForm.controls.specificHeatRatio.errors.max.max}}.</span>
+        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.greaterThan">Value must be greater than 1.</span>
       </span>
     </div>
 
     <div class="form-group">
       <label for="{{'compressibilityFactor_'+idString}}">Compressibility Factor
-        <a class="form-text small click-link" *ngIf="userDefinedCompressibilityFactor"
-          (click)="showHideInputField()" [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a>
-        <a class="form-text small click-link" *ngIf="!userDefinedCompressibilityFactor"
-          (click)="showHideInputField()" [ngClass]="{'disabled-link':!selected}">Define Compressibility Factor</a>
+        <a class="form-text small click-link" *ngIf="userDefinedCompressibilityFactor" (click)="showHideInputField()"
+          [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a>
+        <a class="form-text small click-link" *ngIf="!userDefinedCompressibilityFactor" (click)="showHideInputField()"
+          [ngClass]="{'disabled-link':!selected}">Define Compressibility Factor</a>
       </label>
       <div class="input-group" *ngIf="userDefinedCompressibilityFactor">
         <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control"
