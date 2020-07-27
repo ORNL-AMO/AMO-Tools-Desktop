@@ -268,18 +268,18 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   setXRange() {
     let ranges = JSON.parse(JSON.stringify(pumpTypeRanges));
     let xRange = {
-      range: [],
+      range: {min: 0, max: 0},
       increment: 10,
     };
     xRange.range = ranges.find(pumpType => pumpType.value == this.currentPumpType).range;
-    if (xRange.range[1] <= 5000) {
+    if (xRange.range.min <= 5000) {
       xRange.increment = 10;
-    } else if (xRange.range[1] <= 50000) {
+    } else if (xRange.range.max[1] <= 50000) {
       xRange.increment = 100;
     } else {
       xRange.increment = 250;
     }
-    this.efficiencyChart.layout.xaxis.range = xRange.range;
+    this.efficiencyChart.layout.xaxis.range = [xRange.range.min, xRange.range.max];
     return xRange;
   }
 
@@ -311,7 +311,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       x: [],
       y: [],
     };
-    for (let i = xRange.range[0]; i < xRange.range[1]; i = i + xRange.increment) {
+    for (let i = xRange.range.min; i < xRange.range.max; i = i + xRange.increment) {
       if (this.calculateYaverage(i) <= 100) {
         data.x.push(i);
         data.y.push(this.calculateYaverage(i));
@@ -325,7 +325,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       x: [],
       y: [],
     };
-    for (let i = xRange.range[0]; i < xRange.range[1]; i = i + xRange.increment) {
+    for (let i = xRange.range.min; i < xRange.range.max; i = i + xRange.increment) {
       if (this.calculateYmax(i) <= 100) {
         data.x.push(i);
         data.y.push(this.calculateYmax(i));
