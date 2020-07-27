@@ -29,7 +29,6 @@ export class EnrichmentGraphComponent implements OnInit {
   // Graph Data
   selectedDataPoints: Array<DisplayPoint>;
   defaultSelectedPointsData: Array<DisplayPoint>;
-  // pointColors: Array<string>;
   enrichmentChart: SimpleChart;
   enrichmentInputsSub: Subscription;
   enrichmentInputs: Array<EnrichmentInput>;
@@ -58,7 +57,6 @@ export class EnrichmentGraphComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.pointColors = graphColors;
     this.triggerInitialResize();
     this.initSubscriptions();
   }
