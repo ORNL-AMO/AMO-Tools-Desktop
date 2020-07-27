@@ -162,7 +162,6 @@ export class EnrichmentGraphComponent implements OnInit {
     let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
     chartLayout.xaxis.range = [];
     chartLayout.xaxis.autorange = true;
-    // chartLayout.xaxis.title.text = this.xAxis.title;
     Plotly.update(this.currentChartId, this.enrichmentChart.data, chartLayout);
     this.save();
   }
