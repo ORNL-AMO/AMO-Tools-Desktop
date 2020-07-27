@@ -7,6 +7,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { SelectedDataPoint, SimpleChart, TraceData, TraceCoordinates } from '../../../shared/models/plotting';
 import { BehaviorSubject } from 'rxjs';
 import { O2EnrichmentFormService } from './o2-enrichment-form.service';
+import { property } from 'lodash';
 
 @Injectable()
 export class O2EnrichmentService {
@@ -208,17 +209,15 @@ export class O2EnrichmentService {
     return inputs;
   }
 
-  getGraphData(settings: Settings, inputData: EnrichmentInputData): TraceCoordinates {
+  getGraphData(settings: Settings, inputData: EnrichmentInputData, selectedAxis: number): {data: TraceCoordinates, xAxis: Axis} {
+    let graphData: TraceCoordinates = {x: [], y: []};
     let line = this.getEnrichmentLine(inputData);
     let point = this.getEnrichmentPoint(inputData, line);
+    let xAxis: Axis = this.getAxis(point, selectedAxis, settings);
 
     line.fuelSavings = 0.0;
-    let graphData: TraceCoordinates = {x: [], y: []};
-    // O2 in un-enriched air is 21%
-    let startingEnrichment = 21;
-
-    for (let i = startingEnrichment; i <= 100; i += .5) {
-      point.o2CombAirEnriched = i;
+    for (let i = xAxis.axisStartValue; i <= xAxis.termination; i += xAxis.increment) {
+      point[xAxis.propertyName] = i;
       let output = this.phastService.o2Enrichment(point, settings);
       let fuelSavings = output.fuelSavingsEnriched;
       if (fuelSavings > 0 && fuelSavings < 100) {
@@ -235,7 +234,65 @@ export class O2EnrichmentService {
         }
       }
     }
-    return graphData;  
+    // console.log('graphData', graphData)
+    return {data: graphData, xAxis: xAxis};  
+  }
+
+  getAxis(point, selectedAxis: number, settings: Settings): Axis {
+    let temperatureUnit = '&#8457;';
+    if (settings.unitsOfMeasure == 'Metric') {
+      temperatureUnit = '&#8451;';
+    }
+    // Ranges from Krisitina
+//     Combustion Air: 50 to 2000, by 10? (I'll leave the increments up to you)
+// O2 in flue: 0% - 20%  (by 0.5%?)
+// Flue gas temp: 100 to 3000, by 10?
+    let axes: { [selected: number]: Axis } = {
+      0: {
+        propertyName: "o2CombAirEnriched",
+        pointPropertyName: "o2CombAir",
+        hoverTemplate: `O<sub>2</sub> in Air: %{x:.2r}%<br>Fuel Savings: %{y}%<br>`,
+        propertyStartValue: point.o2CombAirEnriched,
+        axisStartValue: 21,
+        increment: 0.5,
+        termination: 100,
+        title: 'O<sub>2</sub> in Air (%)' 
+      },
+      1: {
+        propertyName: "combAirTempEnriched",
+        pointPropertyName: "combAirTemp",
+        hoverTemplate: `Combustion Air Preheat Temperature: %{x:.2r} ${temperatureUnit}<br>Fuel Savings: %{y}%<br>`,
+        propertyStartValue: point.combAirTempEnriched,
+        axisStartValue: 100,
+        increment: 20,
+        termination: 1200,
+        title: 'Combustion Air Preheat Temperature' 
+
+      },
+      2: {
+        propertyName: "flueGasTempEnriched",
+        pointPropertyName: "flueGasTemp",
+        hoverTemplate: `Flue Gas Temperature: %{x:.2r} ${temperatureUnit}<br>Fuel Savings: %{y}%<br>`,
+        propertyStartValue: point.flueGasTempEnriched,
+        axisStartValue: 900,
+        increment: 20,
+        termination: 1800,
+        title: 'Flue Gas Temperature' 
+
+      },
+      3: {
+        propertyName: "o2FlueGasEnriched",
+        pointPropertyName: "o2FlueGas",
+        hoverTemplate: `O<sub>2</sub> in Flue Gases: %{x:.2r}%<br>Fuel Savings: %{y}%<br>`,
+        propertyStartValue: point.o2FlueGasEnriched,
+        axisStartValue: 0.5,
+        increment: 0.1,
+        termination: 10,
+        title: 'O<sub>2</sub> in Flue Gases' 
+
+      },
+    };
+    return axes[selectedAxis];
   }
 
   getEnrichmentLine(input: EnrichmentInputData) {
@@ -273,7 +330,7 @@ export class O2EnrichmentService {
       operatingHours: baselineInput.operatingHours,
       operatingHoursEnriched: input.operatingHours,
       o2CombAir: baselineInput.o2CombAir,
-      o2CombAirEnriched: 0,
+      o2CombAirEnriched: input.o2CombAir,
       flueGasTemp: baselineInput.flueGasTemp,
       flueGasTempEnriched: currentEnrichmentLine.flueGasTempEnriched,
       o2FlueGas: baselineInput.o2FlueGas,
@@ -374,9 +431,19 @@ export class O2EnrichmentService {
 }
 
 export interface DisplayPoint extends SelectedDataPoint {
-  combustionTemp: number,
-  flueOxygen: number,
-  fuelTemp: number,
+  combAirTemp: number,
+  o2FlueGas: number,
+  flueGasTemp: number,
   name?: string
 }
 
+export interface Axis {
+  propertyName: string,
+  pointPropertyName: string,
+  hoverTemplate: string,
+  propertyStartValue: number,
+  axisStartValue: number,
+  increment: number,
+  termination: number,
+  title: string,
+}

@@ -26,6 +26,17 @@
         <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
           [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
       </div>
+      <form>
+      <div class="form-group">
+        <label class="small text-right bold mr-3" for="selectedAxis">X-Axis</label>
+          <div class="input-group">
+            <select class="form-control" name="selectedAxis" id="selectedAxis"
+            [(ngModel)]="selectedAxis" (change)="setAxisAndUpdate()">
+            <option *ngFor="let axis of selectedAxisOptions" [ngValue]="axis.value">{{axis.display}}</option>
+          </select>
+        </div>
+      </div>
+    </form>
     </div>
   </div>
 
@@ -67,9 +78,9 @@
               &mdash; &mdash;
             </span>
           </td>
-          <td class="text-center">{{point.combustionTemp}}</td>
-          <td class="text-center">{{point.flueOxygen}}</td>
-          <td class="text-center">{{point.fuelTemp}}</td>
+          <td class="text-center">{{point.combAirTemp}}</td>
+          <td class="text-center">{{point.o2FlueGas | number: '1.0-2'}}</td>
+          <td class="text-center">{{point.flueGasTemp | number: '1.0-2'}}</td>
         </tr>
       </tbody>
     </table>

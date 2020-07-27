@@ -5,7 +5,7 @@ import { graphColors } from '../../../../phast/phast-report/report-graphs/graphC
 
 import { SimpleChart, TraceCoordinates } from '../../../../shared/models/plotting';
 import * as Plotly from 'plotly.js';
-import { O2EnrichmentService, DisplayPoint } from '../o2-enrichment.service';
+import { O2EnrichmentService, DisplayPoint, Axis } from '../o2-enrichment.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -42,6 +42,18 @@ export class EnrichmentGraphComponent implements OnInit {
   hoverBtnCollapse: boolean = false;
   displayCollapseTooltip: boolean = false;
   expanded: boolean = false;
+
+  initResizeCompleted: boolean = false;
+
+  selectedAxisOptions = [
+    {display: 'O2 in Combustion Air', value: 0},
+    {display: 'Combustion Air Preheat Temperature', value: 1},
+    {display: 'Flue Gas Temperature', value: 2},
+    {display: 'O2 in Flue Gases', value: 3},
+  ];
+  selectedAxis: number = 0;
+  xAxis: Axis;
+  selectedAxisSub: Subscription;
 
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
@@ -138,31 +150,46 @@ export class EnrichmentGraphComponent implements OnInit {
     this.save();
   }
 
+  setAxisAndUpdate() {
+    this.updateTraces();
+    let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
+    chartLayout.xaxis.range = [];
+    chartLayout.xaxis.autorange = true;
+    chartLayout.xaxis.title.text = this.xAxis.title;
+    Plotly.update(this.currentChartId, this.enrichmentChart.data, chartLayout);
+    this.save();
+  }
+
   setTraces() {
     this.enrichmentInputs.forEach((enrichmentInput: EnrichmentInput, index) => {
       let currentColor = this.getNextColor();
       // Line trace
-      let graphData: TraceCoordinates = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData);
+      let graphData: {data: TraceCoordinates, xAxis: Axis} = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData, this.selectedAxis);
+      this.xAxis = graphData.xAxis;
       let lineTrace = this.o2EnrichmentService.getLineTrace();
-      lineTrace.x = graphData.x;
-      lineTrace.y = graphData.y;
-      lineTrace.line.color = currentColor;
+      lineTrace.x = graphData.data.x;
+      lineTrace.y = graphData.data.y;
+      lineTrace.hovertemplate = this.xAxis.hoverTemplate;
+      lineTrace.line.color = this.getNextColor();
       
       // Point trace
       let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
       let fuelSavings = outputs[index].outputData.fuelSavings;
       let displayPoint: DisplayPoint = {
         name: enrichmentInput.inputData.name,
-        pointColor: currentColor,
-        pointX: enrichmentInput.inputData.o2CombAir,
+        pointColor: this.getNextColor(),
+        pointX: enrichmentInput.inputData[this.xAxis.pointPropertyName],
         pointY: fuelSavings,
-        combustionTemp: enrichmentInput.inputData.combAirTemp,
-        flueOxygen: enrichmentInput.inputData.o2FlueGas,
-        fuelTemp: enrichmentInput.inputData.flueGasTemp
-      }
+        combAirTemp: enrichmentInput.inputData.combAirTemp,
+        o2FlueGas: enrichmentInput.inputData.o2FlueGas,
+        flueGasTemp: enrichmentInput.inputData.flueGasTemp
+      };
+      console.log('displayPoint', displayPoint);
       let pointTrace = this.o2EnrichmentService.getPointTrace(displayPoint);
-      pointTrace.marker.color = currentColor;
-      pointTrace.marker.line.color = currentColor;
+      pointTrace.marker.color = this.getNextColor();
+      pointTrace.marker.line.color = this.getNextColor();
+      pointTrace.hovertemplate = this.xAxis.hoverTemplate;
+
 
       if (index == 0) {
         lineTrace.line.color = "#000";
@@ -211,11 +238,13 @@ export class EnrichmentGraphComponent implements OnInit {
       }
 
       // Line trace
-      let graphData: TraceCoordinates = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData);
+      let graphData: {data: TraceCoordinates, xAxis: Axis} = this.o2EnrichmentService.getGraphData(this.settings, enrichmentInput.inputData, this.selectedAxis);
+      this.xAxis = graphData.xAxis;
       let lineTrace = this.o2EnrichmentService.getLineTrace();
-      lineTrace.x = graphData.x;
-      lineTrace.y = graphData.y;
-      lineTrace.line.color = lineTraceColor || currentColor;
+      lineTrace.x = graphData.data.x;
+      lineTrace.y = graphData.data.y;
+      lineTrace.hovertemplate = this.xAxis.hoverTemplate;
+      lineTrace.line.color = lineTraceColor || this.getNextColor();
       
       // Point trace
       let outputs = this.o2EnrichmentService.enrichmentOutputs.getValue();
@@ -223,16 +252,17 @@ export class EnrichmentGraphComponent implements OnInit {
 
       let displayPoint: DisplayPoint = {
         name: enrichmentInput.inputData.name,
-        pointColor: pointColor || currentColor,
-        pointX: enrichmentInput.inputData.o2CombAir,
+        pointColor: pointColor || this.getNextColor(),
+        pointX: enrichmentInput.inputData[this.xAxis.pointPropertyName],
         pointY: fuelSavings,
-        combustionTemp: enrichmentInput.inputData.combAirTemp,
-        flueOxygen: enrichmentInput.inputData.o2FlueGas,
-        fuelTemp: enrichmentInput.inputData.flueGasTemp
+        combAirTemp: enrichmentInput.inputData.combAirTemp,
+        o2FlueGas: enrichmentInput.inputData.o2FlueGas,
+        flueGasTemp: enrichmentInput.inputData.flueGasTemp
       };
       let pointTrace = this.o2EnrichmentService.getPointTrace(displayPoint);
-      pointTrace.marker.color = pointColor || currentColor;
-      pointTrace.marker.line.color = pointOutlineColor || currentColor;
+      pointTrace.marker.color = pointColor || this.getNextColor();
+      pointTrace.marker.line.color = pointOutlineColor || this.getNextColor();
+      pointTrace.hovertemplate = this.xAxis.hoverTemplate;
       
       this.enrichmentChart.data[lineIndex] = lineTrace;
       this.enrichmentChart.data[pointIndex] = pointTrace;
@@ -243,9 +273,9 @@ export class EnrichmentGraphComponent implements OnInit {
       } else {
         this.selectedDataPoints.map((point, i) => {
           if (i == index) {
-            point.combustionTemp = displayPoint.combustionTemp;
-            point.fuelTemp = displayPoint.fuelTemp;
-            point.flueOxygen = displayPoint.flueOxygen;
+            point.combAirTemp = displayPoint.combAirTemp;
+            point.o2FlueGas = displayPoint.o2FlueGas;
+            point.flueGasTemp = displayPoint.flueGasTemp;
           }
         })
       }
@@ -265,7 +295,7 @@ export class EnrichmentGraphComponent implements OnInit {
       let splineTraceIndex = index + index;
 
       if (hoverIndex != 0) {
-        line.pointX = Number(this.enrichmentChart.data[splineTraceIndex].x[hoverIndex]);
+        line[this.xAxis.pointPropertyName] = Number(this.enrichmentChart.data[splineTraceIndex].x[hoverIndex]);
         line.pointY = Number(this.enrichmentChart.data[splineTraceIndex].y[hoverIndex]);
       } else {
         // Hovering over trace marker - assign x,y directly
