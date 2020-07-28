@@ -7,7 +7,6 @@ import { MotorInventorySetupComponent } from './motor-inventory-setup/motor-inve
 import { DepartmentSetupComponent } from './motor-inventory-setup/department-setup/department-setup.component';
 import { PlantSetupComponent } from './motor-inventory-setup/plant-setup/plant-setup.component';
 import { MotorInventoryCalculatorsComponent } from './motor-inventory-calculators/motor-inventory-calculators.component';
-import { MotorInventorySummaryComponent } from './motor-inventory-summary/motor-inventory-summary.component';
 import { BatchAnalysisComponent } from './batch-analysis/batch-analysis.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { SettingsModule } from '../settings/settings.module';
@@ -17,6 +16,7 @@ import { DepartmentCatalogTableComponent } from './motor-inventory-setup/departm
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { MotorCatalogModule } from './motor-inventory-setup/motor-catalog/motor-catalog.module';
 import { MotorPropertiesModule } from './motor-inventory-setup/motor-properties/motor-properties.module';
+import { MotorInventorySummaryModule } from './motor-inventory-summary/motor-inventory-summary.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,6 @@ import { MotorPropertiesModule } from './motor-inventory-setup/motor-properties/
     DepartmentSetupComponent,
     PlantSetupComponent,
     MotorInventoryCalculatorsComponent,
-    MotorInventorySummaryComponent,
     BatchAnalysisComponent,
     HelpPanelComponent,
     DepartmentCatalogTableComponent,
@@ -39,7 +38,8 @@ import { MotorPropertiesModule } from './motor-inventory-setup/motor-properties/
     ReactiveFormsModule,
     SharedPipesModule,
     MotorCatalogModule,
-    MotorPropertiesModule
+    MotorPropertiesModule,
+    MotorInventorySummaryModule
   ],
   providers: [
     MotorInventoryService
