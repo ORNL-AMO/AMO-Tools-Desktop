@@ -13,6 +13,7 @@ export class BinDataComponent implements OnInit {
 
   selectedGraphObjSub: Subscription;
   selectedGraphObj: GraphObj;
+  calculatingData: any;
   constructor(private visualizeService: VisualizeService, private visualizeMenuService: VisualizeMenuService) { }
 
   ngOnInit(): void {
@@ -34,13 +35,33 @@ export class BinDataComponent implements OnInit {
   }
 
   setNumberOfBins() {
-    this.selectedGraphObj = this.visualizeMenuService.setNumberOfBins(this.selectedGraphObj);
-    this.save();
+    if (this.calculatingData) {
+      clearTimeout(this.calculatingData);
+    }
+    this.calculatingData = setTimeout(() => {
+      this.selectedGraphObj = this.visualizeMenuService.setNumberOfBins(this.selectedGraphObj);
+      this.save();
+    }, 500);
   }
 
   setBinSize() {
-    this.selectedGraphObj = this.visualizeMenuService.setBins(this.selectedGraphObj);
-    this.save();
+    if (this.calculatingData) {
+      clearTimeout(this.calculatingData);
+    }
+    this.calculatingData = setTimeout(() => {
+      this.selectedGraphObj = this.visualizeMenuService.setBins(this.selectedGraphObj);
+      this.save();
+    }, 500);
+  }
+
+  setMinBin() {
+    if (this.calculatingData) {
+      clearTimeout(this.calculatingData);
+    }
+    this.calculatingData = setTimeout(() => {
+      this.selectedGraphObj = this.visualizeMenuService.setBins(this.selectedGraphObj, this.selectedGraphObj.bins[0].min);
+      this.save();
+    }, 500);
   }
 
   save() {
