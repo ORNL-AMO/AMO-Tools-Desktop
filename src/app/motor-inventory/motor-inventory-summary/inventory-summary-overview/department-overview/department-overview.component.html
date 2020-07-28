@@ -1,0 +1,163 @@
+<label class="group-label">
+    {{department.name}}
+</label>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <!--nameplate data-->
+            <th>Efficiency Class</th>
+            <th>Est. Nominal Efficiency</th>
+            <th>Rated Motor Power</th>
+            <th>Line Frequency</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.manufacturer">Manufacturer</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.model">Model</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.motorType">Motor Type</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.enclosureType">Enclosure Type</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.ratedVoltage">Rated Voltage</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.serviceFactor">Service Factor</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.insulationClass">Insulation Class</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.weight">Weight</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.numberOfPhases">Num. of Phases</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.fullLoadSpeed">Full Load Speed</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.fullLoadAmps">Full Load Amps</th>
+            <!--load characteristics-->
+            <th>Synchronous Speed</th>
+            <th *ngIf="displayOptions.loadCharactersticOptions.efficiency75">Efficiency at 75% Load</th>
+            <th *ngIf="displayOptions.loadCharactersticOptions.efficiency50">Efficiency at 50% Load</th>
+            <th *ngIf="displayOptions.loadCharactersticOptions.efficiency25">Efficiency at 25% Load</th>
+            <th *ngIf="displayOptions.loadCharactersticOptions.ampsIdle">Idle Amps</th>
+            <th *ngIf="displayOptions.loadCharactersticOptions.powerFactor100">Power Factor at Full Load
+            </th>
+            <th *ngIf="displayOptions.loadCharactersticOptions.powerFactor75">Power Factor at 75% Load</th>
+            <th *ngIf="displayOptions.loadCharactersticOptions.powerFactor50">Power Factor at 50% Load</th>
+            <th *ngIf="displayOptions.loadCharactersticOptions.powerFactor25">Power Factor at 25% Load</th>
+            <!--operation data-->
+            <th *ngIf="displayOptions.operationDataOptions.ratedSpeed">Rated Speed</th>
+            <th *ngIf="displayOptions.operationDataOptions.purpose">Purpose</th>
+            <th *ngIf="displayOptions.operationDataOptions.annualOperatingHours">Operating Hours</th>
+            <th *ngIf="displayOptions.operationDataOptions.averageLoadFactor">Average Load Factor</th>
+            <th *ngIf="displayOptions.operationDataOptions.utilizationFactor">Utilization Factor</th>
+            <th *ngIf="displayOptions.operationDataOptions.percentLoad">Percent Load</th>
+            <th *ngIf="displayOptions.operationDataOptions.powerFactorAtLoad">Power Factor at Load</th>
+            <!--manual specifications-->
+            <th *ngIf="displayOptions.manualSpecificationOptions.frameNumber">Frame Number</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.uFrame">uFrame</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.cFace">cFace</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.verticalShaft">Vertical Shaft</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.dFlange">dFlange</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.windingResistance">Winding Resistance</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.rotorBars">Rotor Bars</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.statorSlots">Stator Slots</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.ampsLockedRotor">Amps Locked Rotor</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.stalledRotorTimeHot">Stalled Rotor Time -
+                Hot</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.stalledRotorTimeCold">Stalled Rotor Time -
+                Cold
+            </th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.poles">Poles</th>
+            <th *ngIf="displayOptions.manualSpecificationOptions.currentType">Current Type</th>
+            <!--replacement information-->
+            <th *ngIf="displayOptions.batchAnalysisOptions.modifiedCost">Modified Cost</th>
+            <th *ngIf="displayOptions.batchAnalysisOptions.modifiedPower">Modified Power</th>
+            <th *ngIf="displayOptions.batchAnalysisOptions.modifiedEfficiency">Modified Efficiency</th>
+            <th *ngIf="displayOptions.batchAnalysisOptions.modifiedPercentLoad">Modified Percent Load</th>
+            <th *ngIf="displayOptions.batchAnalysisOptions.rewindCost">Rewind Cost</th>
+            <th *ngIf="displayOptions.batchAnalysisOptions.rewindEfficiencyLoss">Reqind Efficiency Loss</th>
+            <!--purchase information-->
+            <th *ngIf="displayOptions.purchaseInformationOptions.catalogId">Catalog ID</th>
+            <th *ngIf="displayOptions.purchaseInformationOptions.listPrice">List Price</th>
+            <th *ngIf="displayOptions.purchaseInformationOptions.warranty">Warranty</th>
+            <th *ngIf="displayOptions.purchaseInformationOptions.directReplacementCost">Direct Replacement
+                Cost
+            </th>
+            <!--torque-->
+            <th *ngIf="displayOptions.torqueOptions.torqueFullLoad">Torque Full Load</th>
+            <th *ngIf="displayOptions.torqueOptions.torqueBreakDown">Torque Break Down</th>
+            <th *ngIf="displayOptions.torqueOptions.torqueLockedRotor">Torque Locked Rotor</th>
+            <!--other-->
+            <th *ngIf="displayOptions.otherOptions.driveType">Drive Type</th>
+            <th *ngIf="displayOptions.otherOptions.isVFD">Is VFD?</th>
+            <th *ngIf="displayOptions.otherOptions.hasLoggerData">Has Logger Data</th>
+            <th *ngIf="displayOptions.otherOptions.voltageConnectionType">Voltage Connection Type</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        <tr *ngFor="let motor of department.catalog">
+            <td>
+                {{motor.name}}
+            </td>
+            <!--nameplate data-->
+            <td>{{motor.nameplateData.efficiencyClass | motorEfficiencyClass}}</td>
+            <td>{{motor.nameplateData.nominalEfficiency}}</td>
+            <td>{{motor.nameplateData.ratedMotorPower}}</td>
+            <td>{{motor.nameplateData.lineFrequency}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.manufacturer">{{motor.nameplateData.manufacturer}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.model">{{motor.nameplateData.model}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.motorType">{{motor.nameplateData.motorType}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.enclosureType">{{motor.nameplateData.enclosureType}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.ratedVoltage">{{motor.nameplateData.ratedVoltage}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.serviceFactor">{{motor.nameplateData.serviceFactor}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.insulationClass">{{motor.nameplateData.insulationClass}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.weight">{{motor.nameplateData.weight}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.numberOfPhases">{{motor.nameplateData.numberOfPhases}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.fullLoadSpeed">{{motor.nameplateData.fullLoadSpeed}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.fullLoadAmps">{{motor.nameplateData.fullLoadAmps}}</td>
+            <!--load characteristics-->
+            <td>{{motor.loadCharacteristicData.synchronousSpeed}}</td>
+            <td *ngIf="displayOptions.loadCharactersticOptions.efficiency75">{{motor.loadCharacteristicData.efficiency75}}</td>
+            <td *ngIf="displayOptions.loadCharactersticOptions.efficiency50">{{motor.loadCharacteristicData.efficiency50}}</td>
+            <td *ngIf="displayOptions.loadCharactersticOptions.efficiency25">{{motor.loadCharacteristicData.efficiency25}}</td>
+            <td *ngIf="displayOptions.loadCharactersticOptions.ampsIdle">{{motor.loadCharacteristicData.ampsIdle}}</td>
+            <td *ngIf="displayOptions.loadCharactersticOptions.powerFactor100">{{motor.loadCharacteristicData.powerFactor100}}
+            </td>
+            <td *ngIf="displayOptions.loadCharactersticOptions.powerFactor75">{{motor.loadCharacteristicData.powerFactor75}}</td>
+            <td *ngIf="displayOptions.loadCharactersticOptions.powerFactor50">{{motor.loadCharacteristicData.powerFactor50}}</td>
+            <td *ngIf="displayOptions.loadCharactersticOptions.powerFactor25">{{motor.loadCharacteristicData.powerFactor25}}</td>
+            <!--operation data-->
+            <td *ngIf="displayOptions.operationDataOptions.ratedSpeed">{{motor.operationData.ratedSpeed}}</td>
+            <td *ngIf="displayOptions.operationDataOptions.purpose">{{motor.operationData.purpose}}</td>
+            <td *ngIf="displayOptions.operationDataOptions.annualOperatingHours">{{motor.operationData.annualOperatingHours}}</td>
+            <td *ngIf="displayOptions.operationDataOptions.averageLoadFactor">{{motor.operationData.averageLoadFactor}}</td>
+            <td *ngIf="displayOptions.operationDataOptions.utilizationFactor">{{motor.operationData.utilizationFactor}}</td>
+            <td *ngIf="displayOptions.operationDataOptions.percentLoad">{{motor.operationData.percentLoad}}</td>
+            <td *ngIf="displayOptions.operationDataOptions.powerFactorAtLoad">{{motor.operationData.powerFactorAtLoad}}</td>
+            <!--manual specifications-->
+            <td *ngIf="displayOptions.manualSpecificationOptions.frameNumber">{{motor.manualSpecificationData.frameNumber}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.uFrame">{{motor.manualSpecificationData.uFrame}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.cFace">{{motor.manualSpecificationData.cFace}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.verticalShaft">{{motor.manualSpecificationData.verticalShaft}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.dFlange">{{motor.manualSpecificationData.dFlange}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.windingResistance">{{motor.manualSpecificationData.windingResistance}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.rotorBars">{{motor.manualSpecificationData.rotorBars}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.statorSlots">{{motor.manualSpecificationData.statorSlots}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.ampsLockedRotor">{{motor.manualSpecificationData.ampsLockedRotor}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.stalledRotorTimeHot">{{motor.manualSpecificationData.stalledRotorTimeHot}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.stalledRotorTimeCold">{{motor.manualSpecificationData.stalledRotorTimeCold}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.poles">{{motor.manualSpecificationData.poles}}</td>
+            <td *ngIf="displayOptions.manualSpecificationOptions.currentType">{{motor.manualSpecificationData.currentType}}</td>
+            <!--replacement information-->
+            <td *ngIf="displayOptions.batchAnalysisOptions.modifiedCost">{{motor.batchAnalysisData.modifiedCost}}</td>
+            <td *ngIf="displayOptions.batchAnalysisOptions.modifiedPower">{{motor.batchAnalysisData.modifiedPower}}</td>
+            <td *ngIf="displayOptions.batchAnalysisOptions.modifiedEfficiency">{{motor.batchAnalysisData.modifiedEfficiency}}</td>
+            <td *ngIf="displayOptions.batchAnalysisOptions.modifiedPercentLoad">{{motor.batchAnalysisData.modifiedPercentLoad}}</td>
+            <td *ngIf="displayOptions.batchAnalysisOptions.rewindCost">{{motor.batchAnalysisData.rewindCost}}</td>
+            <td *ngIf="displayOptions.batchAnalysisOptions.rewindEfficiencyLoss">{{motor.batchAnalysisData.rewindEfficiencyLoss}}</td>
+            <!--purchase information-->
+            <td *ngIf="displayOptions.purchaseInformationOptions.catalogId">{{motor.purchaseInformationData.catalogId}}</td>
+            <td *ngIf="displayOptions.purchaseInformationOptions.listPrice">{{motor.purchaseInformationData.listPrice}}</td>
+            <td *ngIf="displayOptions.purchaseInformationOptions.warranty">{{motor.purchaseInformationData.warranty}}</td>
+            <td *ngIf="displayOptions.purchaseInformationOptions.directReplacementCost">{{motor.purchaseInformationData.directReplacementCost}}</td>
+            <!--torque-->
+            <td *ngIf="displayOptions.torqueOptions.torqueFullLoad">{{motor.torqueData.torqueFullLoad}}</td>
+            <td *ngIf="displayOptions.torqueOptions.torqueBreakDown">{{motor.torqueData.torqueBreakDown}}</td>
+            <td *ngIf="displayOptions.torqueOptions.torqueLockedRotor">{{motor.torqueData.torqueLockedRotor}}</td>
+            <!--other-->
+            <td *ngIf="displayOptions.otherOptions.driveType">{{motor.otherData.driveType}}</td>
+            <td *ngIf="displayOptions.otherOptions.isVFD">{{motor.otherData.isVFD}}</td>
+            <td *ngIf="displayOptions.otherOptions.hasLoggerData">{{motor.otherData.hasLoggerData}}</td>
+            <td *ngIf="displayOptions.otherOptions.voltageConnectionType">{{motor.otherData.voltageConnectionType}}</td>
+        </tr>
+    </tbody>
+</table>

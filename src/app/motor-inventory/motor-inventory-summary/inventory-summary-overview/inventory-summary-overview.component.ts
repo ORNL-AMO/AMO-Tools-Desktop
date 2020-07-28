@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MotorInventoryData } from '../../motor-inventory';
+import { MotorInventoryService } from '../../motor-inventory.service';
 
 @Component({
   selector: 'app-inventory-summary-overview',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InventorySummaryOverviewComponent implements OnInit {
 
-  constructor() { }
+  motorInventoryData: MotorInventoryData;
+  constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
+    this.motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
+    console.log(this.motorInventoryData);
   }
 
 }

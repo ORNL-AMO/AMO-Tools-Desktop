@@ -1,1 +1,4 @@
-<p>inventory-summary-overview works!</p>
+<div class="p-2" *ngFor="let department of motorInventoryData.departments">
+    <app-department-overview [department]="department" [displayOptions]="motorInventoryData.displayOptions">
+    </app-department-overview>
+</div>

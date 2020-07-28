@@ -5,6 +5,8 @@ import { InventorySummaryTableComponent } from './inventory-summary-table/invent
 import { InventorySummaryOverviewComponent } from './inventory-summary-overview/inventory-summary-overview.component';
 import { InventorySummaryMotorDetailsComponent } from './inventory-summary-motor-details/inventory-summary-motor-details.component';
 import { MotorInventorySummaryComponent } from './motor-inventory-summary.component';
+import { DepartmentOverviewComponent } from './inventory-summary-overview/department-overview/department-overview.component';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 
 
@@ -14,10 +16,11 @@ import { MotorInventorySummaryComponent } from './motor-inventory-summary.compon
     InventorySummaryGraphsComponent, 
     InventorySummaryTableComponent, 
     InventorySummaryOverviewComponent, 
-    InventorySummaryMotorDetailsComponent
+    InventorySummaryMotorDetailsComponent, DepartmentOverviewComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    SharedPipesModule
   ],
   exports: [
     MotorInventorySummaryComponent

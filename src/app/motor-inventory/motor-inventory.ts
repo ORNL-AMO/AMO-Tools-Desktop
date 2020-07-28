@@ -195,7 +195,6 @@ export interface OperationDataOptions {
   averageLoadFactor: boolean,
   utilizationFactor: boolean,
   percentLoad: boolean,
-  //Add
   powerFactorAtLoad: boolean
 }
 
@@ -212,7 +211,6 @@ export interface PurchaseInformationOptions {
   catalogId: boolean,
   listPrice: boolean,
   warranty: boolean,
-  //Add
   directReplacementCost: boolean
 }
 
