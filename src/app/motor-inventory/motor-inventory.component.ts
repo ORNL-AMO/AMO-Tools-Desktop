@@ -1,6 +1,12 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { MotorInventoryService } from './motor-inventory.service';
 import { Subscription } from 'rxjs';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { Assessment } from '../shared/models/assessment';
+import { MotorInventoryData } from './motor-inventory';
+
+declare const packageJson;
 
 @Component({
   selector: 'app-motor-inventory',
@@ -21,22 +27,38 @@ export class MotorInventoryComponent implements OnInit {
   mainTab: string;
   mainTabSub: Subscription;
 
-  constructor(private motorInventoryService: MotorInventoryService) { }
+  motorInventoryDataSub: Subscription;
+  motorInventoryAssessment: Assessment;
+  constructor(private motorInventoryService: MotorInventoryService, private assessmentDbService: AssessmentDbService,
+    private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
-    this.setupTabSub = this.motorInventoryService.setupTab.subscribe(val => {
-      this.getContainerHeight();
-    });
 
+    this.setMotorInventoryAssessment();
+    if (this.motorInventoryAssessment) {
+      this.motorInventoryService.motorInventoryData.next(this.motorInventoryAssessment.motorInventory);
+    }
+    
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
     });
+    this.setupTabSub = this.motorInventoryService.setupTab.subscribe(val => {
+      this.getContainerHeight();
+
+    });
+
+
+    this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(data => {
+      this.saveDbData(data);
+    });
+
   }
 
   ngOnDestroy() {
     this.setupTabSub.unsubscribe();
     this.mainTabSub.unsubscribe();
+    this.motorInventoryDataSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -52,5 +74,44 @@ export class MotorInventoryComponent implements OnInit {
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
     }
+  }
+
+  setMotorInventoryAssessment() {
+    this.motorInventoryAssessment = this.assessmentDbService.getByDirectoryId(1).find(assessment => { return assessment.motorInventory != undefined });
+  }
+
+  saveDbData(inventoryData: MotorInventoryData) {
+    if (this.motorInventoryAssessment) {
+      this.motorInventoryAssessment.motorInventory = inventoryData;
+      this.indexedDbService.putAssessment(this.motorInventoryAssessment).then(results => {
+        this.assessmentDbService.setAll().then(() => {
+        });
+      });
+    } else {
+      let newAssessment: Assessment = {
+        name: null,
+        createdDate: new Date(),
+        modifiedDate: new Date(),
+        type: 'motorInventory',
+        appVersion: packageJson.version,
+        motorInventory: inventoryData,
+        directoryId: 1
+      };
+      this.indexedDbService.addAssessment(newAssessment).then(assessmentId => {
+        this.assessmentDbService.setAll().then(() => {
+          this.setMotorInventoryAssessment();
+        });
+      });
+    }
+  }
+
+  resetData() {
+    this.indexedDbService.deleteAssessment(this.motorInventoryAssessment.id).then(results => {
+      this.assessmentDbService.setAll().then(() => {
+        this.motorInventoryAssessment = undefined;
+        let inventoryData: MotorInventoryData = this.motorInventoryService.initInventoryData();
+        this.motorInventoryService.motorInventoryData.next(inventoryData);
+      })
+    })
   }
 }
