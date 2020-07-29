@@ -1,0 +1,31 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <!--purchase information-->
+            <th *ngIf="displayOptions.purchaseInformationOptions.catalogId">Catalog ID</th>
+            <th *ngIf="displayOptions.purchaseInformationOptions.listPrice">List Price</th>
+            <th *ngIf="displayOptions.purchaseInformationOptions.warranty">Warranty</th>
+            <th *ngIf="displayOptions.purchaseInformationOptions.directReplacementCost">Direct Replacement
+                Cost
+            </th>
+        </tr>
+
+    </thead>
+    <tbody>
+        <tr *ngFor="let motor of department.catalog">
+            <td>
+                {{motor.name}}
+            </td>
+            <!--purchase information-->
+            <td *ngIf="displayOptions.purchaseInformationOptions.catalogId">{{motor.purchaseInformationData.catalogId}}
+            </td>
+            <td *ngIf="displayOptions.purchaseInformationOptions.listPrice">{{motor.purchaseInformationData.listPrice}}
+            </td>
+            <td *ngIf="displayOptions.purchaseInformationOptions.warranty">{{motor.purchaseInformationData.warranty}}
+            </td>
+            <td *ngIf="displayOptions.purchaseInformationOptions.directReplacementCost">
+                {{motor.purchaseInformationData.directReplacementCost}}</td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,10 @@
+thead{
+    background-color: white;
+}
+
+table{
+    font-size: small;
+}
+.table th{
+    padding: .5rem;
+}

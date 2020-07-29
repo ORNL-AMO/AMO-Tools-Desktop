@@ -1,0 +1,22 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <!--torque-->
+            <th *ngIf="displayOptions.torqueOptions.torqueFullLoad">Torque Full Load</th>
+            <th *ngIf="displayOptions.torqueOptions.torqueBreakDown">Torque Break Down</th>
+            <th *ngIf="displayOptions.torqueOptions.torqueLockedRotor">Torque Locked Rotor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let motor of department.catalog">
+            <td>
+                {{motor.name}}
+            </td>
+            <!--torque-->
+            <td *ngIf="displayOptions.torqueOptions.torqueFullLoad">{{motor.torqueData.torqueFullLoad}}</td>
+            <td *ngIf="displayOptions.torqueOptions.torqueBreakDown">{{motor.torqueData.torqueBreakDown}}</td>
+            <td *ngIf="displayOptions.torqueOptions.torqueLockedRotor">{{motor.torqueData.torqueLockedRotor}}</td>
+        </tr>
+    </tbody>
+</table>

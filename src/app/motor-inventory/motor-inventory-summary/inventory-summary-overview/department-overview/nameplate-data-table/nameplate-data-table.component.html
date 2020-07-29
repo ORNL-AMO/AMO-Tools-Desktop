@@ -1,0 +1,45 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <!--nameplate data-->
+            <th>Efficiency Class</th>
+            <th>Est. Nominal Efficiency</th>
+            <th>Rated Motor Power</th>
+            <th>Line Frequency</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.manufacturer">Manufacturer</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.model">Model</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.motorType">Motor Type</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.enclosureType">Enclosure Type</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.ratedVoltage">Rated Voltage</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.serviceFactor">Service Factor</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.insulationClass">Insulation Class</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.weight">Weight</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.numberOfPhases">Num. of Phases</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.fullLoadSpeed">Full Load Speed</th>
+            <th *ngIf="displayOptions.nameplateDataOptions.fullLoadAmps">Full Load Amps</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let motor of department.catalog">
+            <td>
+                {{motor.name}}
+            </td>
+            <!--nameplate data-->
+            <td>{{motor.nameplateData.efficiencyClass | motorEfficiencyClass}}</td>
+            <td>{{motor.nameplateData.nominalEfficiency}}</td>
+            <td>{{motor.nameplateData.ratedMotorPower}}</td>
+            <td>{{motor.nameplateData.lineFrequency}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.manufacturer">{{motor.nameplateData.manufacturer}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.model">{{motor.nameplateData.model}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.motorType">{{motor.nameplateData.motorType}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.enclosureType">{{motor.nameplateData.enclosureType}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.ratedVoltage">{{motor.nameplateData.ratedVoltage}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.serviceFactor">{{motor.nameplateData.serviceFactor}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.insulationClass">{{motor.nameplateData.insulationClass}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.weight">{{motor.nameplateData.weight}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.numberOfPhases">{{motor.nameplateData.numberOfPhases}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.fullLoadSpeed">{{motor.nameplateData.fullLoadSpeed}}</td>
+            <td *ngIf="displayOptions.nameplateDataOptions.fullLoadAmps">{{motor.nameplateData.fullLoadAmps}}</td>
+        </tr>
+    </tbody>
+</table>
