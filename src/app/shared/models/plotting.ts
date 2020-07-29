@@ -36,7 +36,8 @@ export interface SimpleChart {
     }
     chartId?: string,
     inputCount?: number,
-    removeIndex?: number
+    removeIndex?: number,
+    existingPoint?: boolean
 }
 
 export interface AxisObj {
@@ -45,7 +46,7 @@ export interface AxisObj {
     showgrid: boolean,
     showspikes?: boolean,
     spikemode?: string,
-    title: {
+    title?: {
         text: string
     },
     tickvals?: Array<number | string>,
@@ -67,12 +68,15 @@ export interface TraceData {
     hovertemplate?: string,
     xaxis?: any,
     yaxis?: any,
+    fill?: string,
+    fillcolor?: string,
     mode?: string,
     marker?: {
         color?: string | Array<string>,
         line?: {
             color: string,
-            width: number
+            width: number,
+            shape?: string,
         }
         colorbar?: {
             ticksuffix: string,
@@ -83,6 +87,7 @@ export interface TraceData {
     line?: {
         shape: string,
         color?: string,
+        width?: number
     }
 }
 

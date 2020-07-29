@@ -51,10 +51,9 @@
         </select>
       </form>
       <div class="w-100 h-100" #lineChartContainer>
-        <app-steam-properties-graph *ngIf="graphToggleForm.controls.graphToggle.value == 0" [settings]="settings"
-          [chartContainerHeight]="chartContainerHeight" [chartContainerWidth]="chartContainerWidth"
-          [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-graph>
-        <app-steam-properties-ph-graph *ngIf="graphToggleForm.controls.graphToggle.value == 1" [settings]="settings"
+        <app-steam-properties-chart *ngIf="graphToggleForm.controls.graphToggle.value == 0" [settings]="settings" [toggleReset]="toggleResetData"
+        [steamPropertiesOutput]="steamPropertiesOutput" [validPlot]="validPlot"></app-steam-properties-chart>
+          <app-steam-properties-ph-graph *ngIf="graphToggleForm.controls.graphToggle.value == 1" [settings]="settings"
           [chartContainerHeight]="chartContainerHeight" [chartContainerWidth]="chartContainerWidth"
           [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-ph-graph>
       </div>
