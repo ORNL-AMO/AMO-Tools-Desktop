@@ -12,6 +12,10 @@
   margin: auto;
 }
 
+.panel-chart-container {
+  background: white;
+}
+
   .tab-panel-background {
     background: white;
   }
