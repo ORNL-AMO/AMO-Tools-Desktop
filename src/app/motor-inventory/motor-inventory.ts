@@ -112,7 +112,7 @@ export interface PurchaseInformationData {
   catalogId: string,
   listPrice: number,
   warranty: Date,
-  directReplacementCost: boolean
+  directReplacementCost: number
 }
 
 export interface TorqueData {
