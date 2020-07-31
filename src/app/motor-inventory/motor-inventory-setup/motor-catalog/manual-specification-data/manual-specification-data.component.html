@@ -13,6 +13,15 @@
             <span class="input-group-addon units">rpm</span>
         </div>
     </div>
+    <!-- ratedSpeed -->
+    <div class="form-group" *ngIf="displayOptions.ratedSpeed">
+        <label for="ratedSpeed">Rated Speed</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('ratedSpeed')" (input)="save()"
+                formControlName="ratedSpeed" id="ratedSpeed">
+            <span class="input-group-addon units">rpm</span>
+        </div>
+    </div>
 
     <!-- frameNumber -->
     <div class="form-group" *ngIf="displayOptions.frameNumber">
@@ -76,14 +85,20 @@
     <!-- stalledRotorTimeHot -->
     <div class="form-group" *ngIf="displayOptions.stalledRotorTimeHot">
         <label for="stalledRotorTimeHot">Stalled Rotor Time - Hot</label>
-        <input type="number" class="form-control" (focus)="focusField('stalledRotorTimeHot')" (input)="save()"
-            formControlName="stalledRotorTimeHot" id="stalledRotorTimeHot">
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('stalledRotorTimeHot')" (input)="save()"
+                formControlName="stalledRotorTimeHot" id="stalledRotorTimeHot">
+            <span class="input-group-addon units">s</span>
+        </div>
     </div>
     <!-- stalledRotorTimeCold -->
     <div class="form-group" *ngIf="displayOptions.stalledRotorTimeCold">
         <label for="stalledRotorTimeCold">Stalled Rotor Time - Cold</label>
-        <input type="number" class="form-control" (focus)="focusField('stalledRotorTimeCold')" (input)="save()"
-            formControlName="stalledRotorTimeCold" id="stalledRotorTimeCold">
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('stalledRotorTimeCold')" (input)="save()"
+                formControlName="stalledRotorTimeCold" id="stalledRotorTimeCold">
+            <span class="input-group-addon units">s</span>
+        </div>
     </div>
 
     <!-- currentType -->
@@ -101,14 +116,5 @@
         <label for="poles">Poles</label>
         <input type="number" step="1" class="form-control" (focus)="focusField('poles')" (input)="save()"
             formControlName="poles" id="poles">
-    </div>
-    <!-- ratedSpeed -->
-    <div class="form-group" *ngIf="displayOptions.ratedSpeed">
-        <label for="ratedSpeed">Rated Speed</label>
-        <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('ratedSpeed')" (input)="save()"
-                formControlName="ratedSpeed" id="ratedSpeed">
-            <span class="input-group-addon units">rpm</span>
-        </div>
     </div>
 </form>

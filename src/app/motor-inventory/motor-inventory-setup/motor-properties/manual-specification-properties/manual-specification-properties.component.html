@@ -17,6 +17,13 @@
 <form class="p-1" *ngIf="displayForm">
     <div class="checkbox">
         <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.ratedSpeed" name="ratedSpeed"
+                id="ratedSpeed">
+            Rated Speed
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.frameNumber"
                 name="frameNumber" id="frameNumber">
             Frame Number
@@ -107,13 +114,6 @@
             <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.currentType"
                 name="currentType" id="currentType">
             Current Type
-        </label>
-    </div>
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.ratedSpeed" name="ratedSpeed"
-                id="ratedSpeed">
-            Rated Speed
         </label>
     </div>
 </form>
