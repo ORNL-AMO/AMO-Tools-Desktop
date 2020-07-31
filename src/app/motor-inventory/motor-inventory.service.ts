@@ -114,7 +114,7 @@ export class MotorInventoryService {
         annualOperatingHours: 8760,
         averageLoadFactor: undefined,
         utilizationFactor: undefined,
-        percentLoad: undefined,
+        efficiencyAtAverageLoad: undefined,
         powerFactorAtLoad: undefined
       },
       otherData:  {
@@ -197,7 +197,7 @@ export class MotorInventoryService {
         annualOperatingHours: false,
         averageLoadFactor: false,
         utilizationFactor: false,
-        percentLoad: false,
+        efficiencyAtAverageLoad: false,
         powerFactorAtLoad: false
       },
       otherOptions: {

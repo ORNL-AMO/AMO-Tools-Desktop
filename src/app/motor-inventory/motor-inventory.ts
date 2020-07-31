@@ -97,7 +97,7 @@ export interface OperationData {
   annualOperatingHours: number,
   averageLoadFactor: number,
   utilizationFactor: number,
-  percentLoad: number,
+  efficiencyAtAverageLoad: number,
   powerFactorAtLoad: number
 }
 
@@ -194,8 +194,7 @@ export interface OperationDataOptions {
   annualOperatingHours: boolean,
   averageLoadFactor: boolean,
   utilizationFactor: boolean,
-  percentLoad: boolean,
-  //Add
+  efficiencyAtAverageLoad: boolean,
   powerFactorAtLoad: boolean
 }
 

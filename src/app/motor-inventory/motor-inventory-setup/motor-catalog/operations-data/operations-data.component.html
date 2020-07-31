@@ -1,7 +1,7 @@
 <label class="group-label" (click)="toggleForm()">
     <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
     <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
-    Operations Data
+    Field Measurements
 </label>
 <form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
     <!-- ratedSpeed -->
@@ -42,12 +42,12 @@
         <input type="number" class="form-control" (focus)="focusField('utilizationFactor')" (input)="save()"
             formControlName="utilizationFactor" id="utilizationFactor">
     </div>
-    <!-- percentLoad -->
-    <div class="form-group" *ngIf="displayOptions.percentLoad">
-        <label for="percentLoad">Percent Load</label>
+    <!-- efficiencyAtAverageLoad -->
+    <div class="form-group" *ngIf="displayOptions.efficiencyAtAverageLoad">
+        <label for="efficiencyAtAverageLoad">Efficiency at Average Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('percentLoad')" (input)="save()"
-                formControlName="percentLoad" id="percentLoad">
+            <input type="number" class="form-control" (focus)="focusField('efficiencyAtAverageLoad')" (input)="save()"
+                formControlName="efficiencyAtAverageLoad" id="efficiencyAtAverageLoad">
             <span class="input-group-addon units">%</span>
         </div>
     </div>

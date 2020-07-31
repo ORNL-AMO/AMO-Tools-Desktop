@@ -35,7 +35,7 @@ export class OperationDataPropertiesComponent implements OnInit {
     this.operationDataOptions.annualOperatingHours = this.operationDataOptions.displayOperationData;
     this.operationDataOptions.averageLoadFactor = this.operationDataOptions.displayOperationData;
     this.operationDataOptions.utilizationFactor = this.operationDataOptions.displayOperationData;
-    this.operationDataOptions.percentLoad = this.operationDataOptions.displayOperationData;
+    this.operationDataOptions.efficiencyAtAverageLoad = this.operationDataOptions.displayOperationData;
     this.operationDataOptions.powerFactorAtLoad = this.operationDataOptions.displayOperationData;
     this.save();
   }
@@ -47,7 +47,7 @@ export class OperationDataPropertiesComponent implements OnInit {
       this.operationDataOptions.annualOperatingHours ||
       this.operationDataOptions.averageLoadFactor ||
       this.operationDataOptions.utilizationFactor ||
-      this.operationDataOptions.percentLoad ||
+      this.operationDataOptions.efficiencyAtAverageLoad ||
       this.operationDataOptions.powerFactorAtLoad
     );
   }

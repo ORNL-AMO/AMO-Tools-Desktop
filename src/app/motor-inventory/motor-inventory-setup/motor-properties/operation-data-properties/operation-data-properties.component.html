@@ -3,7 +3,7 @@
         <label class="group-label" (click)="toggleForm()">
             <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
             <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
-            Operation Data
+            Field Measurements
         </label>
     </div>
     <div class="custom-control custom-switch">
@@ -52,9 +52,9 @@
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="operationDataOptions.percentLoad" name="percentLoad"
-                id="percentLoad">
-            Effeciency at Average Load
+            <input type="checkbox" (change)="save()" [(ngModel)]="operationDataOptions.efficiencyAtAverageLoad" name="efficiencyAtAverageLoad"
+                id="efficiencyAtAverageLoad">
+            Efficiency at Average Load
         </label>
     </div>
     <div class="checkbox">
