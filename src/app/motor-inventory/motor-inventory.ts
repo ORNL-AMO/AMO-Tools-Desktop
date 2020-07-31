@@ -93,7 +93,7 @@ export interface NameplateData {
 
 export interface OperationData {
   ratedSpeed: number,
-  purpose: string,
+  location: string,
   annualOperatingHours: number,
   averageLoadFactor: number,
   utilizationFactor: number,
@@ -190,7 +190,7 @@ export interface NameplateDataOptions {
 export interface OperationDataOptions {
   displayOperationData: boolean,
   ratedSpeed: boolean,
-  purpose: boolean,
+  location: boolean,
   annualOperatingHours: boolean,
   averageLoadFactor: boolean,
   utilizationFactor: boolean,

@@ -110,7 +110,7 @@ export class MotorInventoryService {
       },
       operationData:  {
         ratedSpeed: undefined,
-        purpose: undefined,
+        location: undefined,
         annualOperatingHours: 8760,
         averageLoadFactor: undefined,
         utilizationFactor: undefined,
@@ -193,7 +193,7 @@ export class MotorInventoryService {
       operationDataOptions: {
         displayOperationData: false,
         ratedSpeed: false,
-        purpose: false,
+        location: false,
         annualOperatingHours: false,
         averageLoadFactor: false,
         utilizationFactor: false,
