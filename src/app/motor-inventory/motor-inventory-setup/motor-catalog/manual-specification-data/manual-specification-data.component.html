@@ -104,7 +104,7 @@
     <!-- currentType -->
     <div class="form-group" *ngIf="displayOptions.currentType">
         <label for="currentType">Current Type</label>
-        <select class="form-control" (focus)="focusField('currentType')" (input)="save()" formControlName="currentType"
+        <select class="form-control" (focus)="focusField('currentType')" (change)="save()" formControlName="currentType"
             id="currentType">
             <option [ngValue]="'AC'">AC</option>
             <option [ngValue]="'DC'">DC</option>
@@ -116,5 +116,8 @@
         <label for="poles">Poles</label>
         <input type="number" step="1" class="form-control" (focus)="focusField('poles')" (input)="save()"
             formControlName="poles" id="poles">
+        <select class="form-control" (focus)="focusField('poles')" (change)="save()" formControlName="poles" id="poles">
+            <option *ngFor="let option of polesOptions" [ngValue]="option">{{option}}</option>
+        </select>
     </div>
 </form>
