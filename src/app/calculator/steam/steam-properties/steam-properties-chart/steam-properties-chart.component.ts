@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, ChangeDetectorRef, KeyValueDiffers, OnChanges, SimpleChanges, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, OnChanges, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 import { SimpleChart } from '../../../../shared/models/plotting';
@@ -6,6 +6,7 @@ import * as Plotly from 'plotly.js';
 import { SteamPropertiesService, IsobarCoordinates } from '../steam-properties.service';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { SteamPropertiesConversionService } from '../steam-properties-conversion.service';
 
 
 @Component({
@@ -54,10 +55,10 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
     }
   }
 
-  constructor(private steamPropertiesService: SteamPropertiesService) { }
+  constructor(private steamPropertiesService: SteamPropertiesService, 
+    private steamPropertiesConversionService: SteamPropertiesConversionService) { }
   
   ngOnInit() {
-    this.triggerInitialResize();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -73,13 +74,6 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
     else {
       this.initRenderChart();
     }
-  }
-
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.initRenderChart();
-    }, 25)
   }
 
   save() {
@@ -110,9 +104,9 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
   }
 
   initChartSetup() {
-    this.steamPropertiesService.initChartData();
+    this.steamPropertiesService.initEntropyChartData();
     this.propertiesChart = this.steamPropertiesService.propertiesChart.getValue();
-    this.steamPropertiesService.setChartConfig(this.settings);
+    this.steamPropertiesService.setEntropyChartConfig(this.settings);
   }
   
   initIsobarTraces() {
@@ -130,15 +124,15 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
   checkConvertIsobars() {
     if (this.settings.steamSpecificEntropyMeasurement !== undefined 
       && this.settings.steamSpecificEntropyMeasurement !== this.defaultEntropyUnit) {
-      this.steamPropertiesService.convertIsobarEntropy(this.settings, this.defaultEntropyUnit);
+      this.steamPropertiesConversionService.convertIsobarEntropy(this.settings, this.defaultEntropyUnit);
     }
     if (this.settings.steamTemperatureMeasurement !== undefined 
       && this.settings.steamTemperatureMeasurement !== this.defaultTempUnit) {
-      this.steamPropertiesService.convertIsobarTemperature(this.settings, this.defaultTempUnit);
+      this.steamPropertiesConversionService.convertIsobarTemperature(this.settings, this.defaultTempUnit);
     }
     if (this.settings.steamPressureMeasurement !== undefined 
       && this.settings.steamPressureMeasurement !== this.defaultPressureUnit) {
-      this.steamPropertiesService.convertIsobarPressure(this.settings, this.defaultPressureUnit);
+      this.steamPropertiesConversionService.convertIsobarPressure(this.settings, this.defaultPressureUnit);
     }
   }
 
@@ -156,9 +150,9 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
     domeOutlineTrace.y = this.steamPropertiesService.temperatures;
     domeOutlineTrace.line.width = 2;
     domeOutlineTrace.line.color = "#000000";
-    domeOutlineTrace.hovertemplate = "Saturated Liquid/Vapor";
-    domeOutlineTrace.name = "Saturated Liquid/Vapor";
-    
+    domeOutlineTrace.name = "Saturated";
+    domeOutlineTrace.hovertemplate = this.steamPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, true);
+
     this.propertiesChart.data.push(domeFillTrace, domeOutlineTrace);
   }
 
@@ -167,6 +161,7 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
     pointTrace.marker.color = graphColors[0];
     pointTrace.x = [entropy];
     pointTrace.y = [temperature];
+    pointTrace.hovertemplate = this.steamPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, true);
 
     if (this.propertiesChart.existingPoint) {
       this.propertiesChart.data[this.propertiesChart.data.length - 1] = pointTrace;
@@ -277,7 +272,7 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
     let showingGridY: boolean = this.propertiesChart.layout.yaxis.showgrid;
     this.propertiesChart.layout.xaxis.showgrid = !showingGridX;
     this.propertiesChart.layout.yaxis.showgrid = !showingGridY;
-    // this.updateChart();
+    this.updateChart();
   }
 
 }

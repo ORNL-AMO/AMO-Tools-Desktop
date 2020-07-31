@@ -3,7 +3,8 @@ import { SimpleChart, TraceData } from '../../../shared/models/plotting';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { IsobarData} from './steam-properties-constants';
+import { IsobarData} from './steam-isobar-constants';
+import { IsothermData } from './steam-isotherm-constants';
 
 @Injectable({
   providedIn: 'root'
@@ -11,85 +12,92 @@ import { IsobarData} from './steam-properties-constants';
 export class SteamPropertiesService {
 
   propertiesChart: BehaviorSubject<SimpleChart>;
+  enthalpyChart: BehaviorSubject<SimpleChart>;
+
+  isobarData;
   isobars: BehaviorSubject<Array<IsobarCoordinates>>;
   entropy: Array<number>;
   temperatures: Array<number>;
-  isobarData;
+  
+  isothermData;
+  isotherms: BehaviorSubject<Array<IsothermCoordinates>>;
+  vaporQualities: BehaviorSubject<Array<IsothermCoordinates>>;
+  enthalpy: Array<number>;
+  pressures: Array<number>;
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
-  initChartData() {
-    this.isobarData = JSON.parse(JSON.stringify(IsobarData))
-    let isobars = this.isobarData.coordinates;
-    this.isobars = new BehaviorSubject<Array<IsobarCoordinates>>(isobars);
-
-    this.entropy = this.isobarData.entropy
-    this.temperatures = this.isobarData.temperature;
+  initEntropyChartData() {
+    this.initEntropyChartConstants();
     let emptyChart: SimpleChart = this.getEmptyChart();
     this.propertiesChart = new BehaviorSubject<SimpleChart>(emptyChart);
   }
 
-  convertIsobarTemperature(settings: Settings, defaultTempUnit) {
-      let isobars = this.isobars.getValue();
-      this.temperatures = this.convertArray(this.temperatures, defaultTempUnit, settings.steamTemperatureMeasurement);
-      isobars.map((line: IsobarCoordinates) => {
-        line.temp = this.convertArray(line.temp, defaultTempUnit, settings.steamTemperatureMeasurement);
-      });
-      this.isobars.next(isobars);
+  initEnthalpyChartData() {
+    this.initEnthalpyChartConstants();
+    let emptyChart: SimpleChart = this.getEmptyChart();
+    this.enthalpyChart = new BehaviorSubject<SimpleChart>(emptyChart);
   }
 
-  convertIsobarEntropy(settings: Settings, defaultEntropyUnit) {
-      let isobars = this.isobars.getValue();
-      this.entropy = this.convertArray(this.entropy, defaultEntropyUnit, settings.steamSpecificEntropyMeasurement);
-      isobars.map((line: IsobarCoordinates) => {
-        line.entropy = this.convertArray(line.entropy, defaultEntropyUnit, settings.steamSpecificEntropyMeasurement);
-      });
-      this.isobars.next(isobars);
+  initEntropyChartConstants() {
+    // Isobar Data corresponds to Entropy (TS) chart
+    this.isobarData = JSON.parse(JSON.stringify(IsobarData));
+    this.isobars = new BehaviorSubject<Array<IsobarCoordinates>>(this.isobarData.coordinates);
+    this.entropy = this.isobarData.entropy
+    this.temperatures = this.isobarData.temperature;
   }
 
-  convertIsobarPressure(settings: Settings, defaultPressureUnit) {
-    let isobars = this.isobars.getValue();
-    isobars.map((line: IsobarCoordinates) => {
-      let converted = this.convertVal(line.pressureValue, defaultPressureUnit, settings.steamPressureMeasurement);
-      converted = this.roundVal(converted, 2);
-      line.pressureValue = converted;
 
-    });
-    this.isobars.next(isobars);
-}
-  convertArray(oldArray: Array<number>, from: string, to: string): Array<number> {
-    let convertedArray = new Array<number>();
-    for (let i = 0; i < oldArray.length; i++) {
-      convertedArray.push(this.convertVal(oldArray[i], from, to));
-    }
+  initEnthalpyChartConstants() {
+    // Isotherm Data corresponds to Enthalpy (PH) chart
+    this.isothermData = JSON.parse(JSON.stringify(IsothermData));
+    this.isotherms = new BehaviorSubject<Array<IsothermCoordinates>>(this.isothermData.coordinates);
+    this.vaporQualities = new BehaviorSubject<Array<IsothermCoordinates>>(this.isothermData.vaporQualities);
+    this.enthalpy = this.isothermData.enthalpy
+    this.pressures = this.isothermData.pressure;
 
-    return convertedArray;
   }
 
-  convertVal(val: number, from: string, to: string) {
-    if (val !== undefined) {
-      val = this.convertUnitsService.value(val).from(from).to(to);
-    }
-
-    return val;
-  }
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
-  }
-
-  setChartConfig(settings: Settings) {
+  setEntropyChartConfig(settings: Settings) {
     let chart = this.propertiesChart.getValue();
     let temperatureUnit = this.convertUnitsService.getUnit(settings.steamTemperatureMeasurement).unit.name.display;
     let entropyUnit = this.convertUnitsService.getUnit(settings.steamSpecificEntropyMeasurement).unit.name.display;
     chart.layout.xaxis.title.text = `Entropy ${entropyUnit}`;
     chart.layout.yaxis.title.text = `Temperature ${temperatureUnit}`;
-
-    if (settings.unitsOfMeasure == 'Metric') {
-      chart.layout.xaxis.range = this.isobarData.ranges.metric.x;
-      chart.layout.yaxis.range = this.isobarData.ranges.metric.y;
-    }
+    // Set range from constants - isobars will skew the autorange
+    chart.layout.yaxis.range = this.isobarData.ranges[settings.steamTemperatureMeasurement].y;
+    chart.layout.xaxis.autorange = true;
     this.propertiesChart.next(chart);
+  }
+
+  setEnthalpyChartConfig(settings: Settings) {
+    let chart = this.enthalpyChart.getValue();
+    let pressureUnit = this.getDisplayUnit(settings.steamPressureMeasurement);
+    let enthalpyUnit = this.getDisplayUnit(settings.steamSpecificEnthalpyMeasurement);
+    chart.layout.xaxis.title.text = `Enthalpy ${enthalpyUnit}`;
+    chart.layout.yaxis.title.text = `Pressure ${pressureUnit}`;
+    chart.layout.xaxis.range = this.isothermData.ranges[settings.steamSpecificEnthalpyMeasurement].x;
+    
+    chart.layout.yaxis.type ='log';
+    chart.layout.yaxis.autorange = true;
+    chart.layout.yaxis.rangemode = 'normal';
+    chart.layout.yaxis.tickmode = 'array';
+    chart.layout.yaxis.tickvals = this.isothermData.logTicks;
+    this.enthalpyChart.next(chart);
+  }
+
+  getDisplayUnit(unit: string) {
+    return this.convertUnitsService.getUnit(unit).unit.name.display;
+  }
+
+  getHoverTemplate(xMeasure: string, yMeasure: string, isEntropyChart) {
+    let xDisplayUnit = this.getDisplayUnit(xMeasure);
+    let yDisplayUnit = this.getDisplayUnit(yMeasure);
+    if (isEntropyChart) {
+      return `Entropy ${xDisplayUnit}: %{x:.2r}<br>Temperature ${yDisplayUnit}: %{y:.2r}`
+    } else {
+      return `Enthalpy ${xDisplayUnit}: %{x:.2r}<br>Pressure ${yDisplayUnit}: %{y:.2r}`;
+    }
   }
 
   getEmptyChart(): SimpleChart {
@@ -102,7 +110,6 @@ export class SteamPropertiesService {
         xaxis: {
           autorange: false,
           type: 'auto',
-          range: this.isobarData.ranges.imperial.x,
           showgrid: showGrid,
           title: {
             text: `Entropy (Btu/lb F)`
@@ -111,7 +118,6 @@ export class SteamPropertiesService {
         },
         yaxis: {
           autorange: false,
-          range: this.isobarData.ranges.imperial.y,
           type: 'auto',
           showgrid: showGrid,
           showticksuffix: 'all',
@@ -155,13 +161,14 @@ export class SteamPropertiesService {
   }
 
   getPointTrace(): TraceData {
+
     let trace: TraceData = {
       x: [],
       y: [],
       type: 'scatter',
-      name: `Saturated Point`,
+      name: '',
       showlegend: false,
-      hovertemplate: `Saturated Point`,
+      hovertemplate: ``,
       mode: 'markers',
       marker: {
         color: '',
@@ -174,8 +181,6 @@ export class SteamPropertiesService {
     }
     return trace;
   }
-
-
 }
 
 
@@ -183,4 +188,10 @@ export interface IsobarCoordinates {
   temp: number[],
   entropy: number[],
   pressureValue: number
+}
+
+export interface IsothermCoordinates {
+  pressure: number[],
+  enthalpy: number[],
+  temperature: number
 }

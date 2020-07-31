@@ -2,11 +2,11 @@ import { IsobarCoordinates } from "./steam-properties.service";
 
 //temperature default is Celsius
 //entropy default is kJ/kg*K
+// These two constant arrays generate the black outline of the dome
 const temperatureConstants = [0.01, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 373.95, 370, 360, 350, 340, 330, 320, 310, 300, 290, 280, 270, 260, 250, 240, 230, 220, 210, 200, 190, 180, 170, 160, 150, 140, 130, 120, 110, 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0.01];
-    
 const entropyConstants = [0, 0.0763, 0.1511, 0.2245, 0.2965, 0.3672, 0.4368, 0.5051, 0.5724, 0.6386, 0.7038, 0.768, 0.8313, 0.8937, 0.9551, 1.0158, 1.0756, 1.1346, 1.1929, 1.2504, 1.3072, 1.4188, 1.5279, 1.6346, 1.7392, 1.8418, 1.9426, 2.0417, 2.1392, 2.2355, 2.3305, 2.4245, 2.5177, 2.6101, 2.702, 2.7935, 2.8849, 2.9765, 3.0685, 3.1612, 3.2552, 3.351, 3.4494, 3.5518, 3.6601, 3.7784, 3.9167, 4.1112, 4.407, 4.8012, 5.0536, 5.211, 5.3356, 5.4422, 5.5372, 5.6244, 5.7059, 5.7834, 5.8579, 5.9304, 6.0016, 6.0721, 6.1423, 6.2128, 6.284, 6.3563, 6.4302, 6.5059, 6.584, 6.665, 6.7491, 6.8371, 6.9293, 7.0264, 7.1291, 7.2381, 7.3541, 7.4151, 7.4781, 7.5434, 7.6111, 7.6812, 7.754, 7.8296, 7.9081, 7.9898, 8.0748, 8.1633, 8.2555, 8.3517, 8.452, 8.5566, 8.666, 8.7803, 8.8998, 9.0248, 9.1555];
 
-const isobarsConstant = {
+const isobars = {
     pressure001t: [3.27, 6.576, 9.927, 13.322, 16.762, 20.245, 23.773, 27.344, 30.959, 34.619, 38.324, 42.073, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.808, 45.989, 54.375, 63.045, 71.971, 81.146, 90.569, 100.241, 110.163, 120.337, 130.766, 141.452, 152.397, 163.604, 175.075, 186.814, 198.824, 211.106, 223.665, 236.504, 249.624, 263.03, 276.723, 290.708, 304.986, 319.561, 334.435, 349.61, 365.089, 380.875, 396.969, 413.373, 430.089, 447.12, 464.465, 482.128, 500.109, 518.409, 537.03],
     pressure001e: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2, 2.05, 2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.45, 2.5, 2.55, 2.6, 2.65, 2.7, 2.75, 2.8, 2.85, 2.9, 2.95, 3, 3.05, 3.1, 3.15, 3.2, 3.25, 3.3, 3.35, 3.4, 3.45, 3.5, 3.55, 3.6, 3.65, 3.7, 3.75, 3.8, 3.85, 3.9, 3.95, 4, 4.05, 4.1, 4.15, 4.2, 4.25, 4.3, 4.35, 4.4, 4.45, 4.5, 4.55, 4.6, 4.65, 4.7, 4.75, 4.8, 4.85, 4.9, 4.95, 5, 5.05, 5.1, 5.15, 5.2, 5.25, 5.3, 5.35, 5.4, 5.45, 5.5, 5.55, 5.6, 5.65, 5.7, 5.75, 5.8, 5.85, 5.9, 5.95, 6, 6.05, 6.1, 6.15, 6.2, 6.25, 6.3, 6.35, 6.4, 6.45, 6.5, 6.55, 6.6, 6.65, 6.7, 6.75, 6.8, 6.85, 6.9, 6.95, 7, 7.05, 7.1, 7.15, 7.2, 7.25, 7.3, 7.35, 7.4, 7.45, 7.5, 7.55, 7.6, 7.65, 7.7, 7.75, 7.8, 7.85, 7.9, 7.95, 8, 8.05, 8.1, 8.15, 8.2, 8.25, 8.3, 8.35, 8.4, 8.45, 8.5, 8.55, 8.6, 8.65, 8.7, 8.75, 8.8, 8.85, 8.9, 8.95, 9, 9.05, 9.1, 9.15, 9.2, 9.25, 9.3, 9.35, 9.4, 9.45, 9.5, 9.55, 9.6, 9.65, 9.7, 9.75, 9.8, 9.85, 9.9, 9.95, 10],
 
@@ -54,75 +54,75 @@ const isobarsConstant = {
 // Pressures in MPa
 const isobarCoordinates: Array<IsobarCoordinates> = [
     {
-        temp: isobarsConstant.pressure001t,
-        entropy: isobarsConstant.pressure001e,
+        temp: isobars.pressure001t,
+        entropy: isobars.pressure001e,
         pressureValue: .001 
     },
     {
-        temp: isobarsConstant.pressure01t,
-        entropy: isobarsConstant.pressure01e,
+        temp: isobars.pressure01t,
+        entropy: isobars.pressure01e,
         pressureValue: .01  
     },
     {
-        temp: isobarsConstant.pressure05t,
-        entropy: isobarsConstant.pressure05e,
+        temp: isobars.pressure05t,
+        entropy: isobars.pressure05e,
         pressureValue: .05
     },
     {
-        temp: isobarsConstant.pressure1t,
-        entropy: isobarsConstant.pressure1e,
+        temp: isobars.pressure1t,
+        entropy: isobars.pressure1e,
         pressureValue: 1
     },
     {
-        temp: isobarsConstant.pressure2t,
-        entropy: isobarsConstant.pressure2e,
+        temp: isobars.pressure2t,
+        entropy: isobars.pressure2e,
         pressureValue: 2 
 
     },
     {
-        temp: isobarsConstant.pressure4t,
-        entropy: isobarsConstant.pressure4e,
+        temp: isobars.pressure4t,
+        entropy: isobars.pressure4e,
         pressureValue: 4
     },
     {
-        temp: isobarsConstant.pressure6t,
-        entropy: isobarsConstant.pressure6e,
+        temp: isobars.pressure6t,
+        entropy: isobars.pressure6e,
         pressureValue: 6 
     },
     {
-        temp: isobarsConstant.pressure8t,
-        entropy: isobarsConstant.pressure8e,
+        temp: isobars.pressure8t,
+        entropy: isobars.pressure8e,
         pressureValue: 8 
     },
     {
-        temp: isobarsConstant.pressure10t,
-        entropy: isobarsConstant.pressure10e,
+        temp: isobars.pressure10t,
+        entropy: isobars.pressure10e,
         pressureValue: 10 
     },
     {
-        temp: isobarsConstant.pressure15t,
-        entropy: isobarsConstant.pressure15e,
+        temp: isobars.pressure15t,
+        entropy: isobars.pressure15e,
         pressureValue: 15 
     },
-    // Needs to be recalculated
+    // Line is off - recalculate 
     // {
-    //     temp: isobarsConstant.pressure25t,
-    //     entropy: isobarsConstant.pressure25e,
+    //     temp: isobars.pressure25t,
+    //     entropy: isobars.pressure25e,
     //     pressureValue: 25 
     // },
     {
-        temp: isobarsConstant.pressure50t,
-        entropy: isobarsConstant.pressure50e,
+        temp: isobars.pressure50t,
+        entropy: isobars.pressure50e,
         pressureValue: 50 
     },
     {
-        temp: isobarsConstant.pressure75t,
-        entropy: isobarsConstant.pressure75e,
+        temp: isobars.pressure75t,
+        entropy: isobars.pressure75e,
         pressureValue: 75
     },
     {
-        temp: isobarsConstant.pressure100t,
-        entropy: isobarsConstant.pressure100e,
+        temp: isobars.pressure100t,
+        entropy: isobars.pressure100e,
         pressureValue: 100 
     }
 ];
@@ -132,13 +132,21 @@ export const IsobarData = {
     temperature: temperatureConstants,
     entropy: entropyConstants,
     ranges: {
-        metric: {
+        C: {
             x: [0, 10],
-            y: [0, 500]
+            y: [0, 600]
         },
-        imperial: {
+        F: {
             x: [0, 2.5],
             y: [0, 1200]
+        },
+        K: {
+            x: [0, 10],
+            y: [0, 600]
+        },
+        R: {
+            x: [0, 10],
+            y: [0, 600]
         },
     }
 }
