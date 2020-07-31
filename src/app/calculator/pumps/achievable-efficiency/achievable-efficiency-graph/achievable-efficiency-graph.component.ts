@@ -274,7 +274,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     xRange.range = ranges.find(pumpType => pumpType.value == this.currentPumpType).range;
     if (xRange.range.min <= 5000) {
       xRange.increment = 10;
-    } else if (xRange.range.max[1] <= 50000) {
+    } else if (xRange.range.max <= 50000) {
       xRange.increment = 100;
     } else {
       xRange.increment = 250;

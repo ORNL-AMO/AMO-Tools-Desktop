@@ -326,8 +326,11 @@ export class VisualizeMenuService {
     return selectedGraphObj;
   }
 
-  setBins(selectedGraphObj: GraphObj): GraphObj {
+  setBins(selectedGraphObj: GraphObj, setLowerBound?: number): GraphObj {
     let lowerBound = Number(_.min(selectedGraphObj.selectedXAxisDataOption.data));
+    if(setLowerBound != undefined){
+      lowerBound = setLowerBound;
+    }
     let maxValue = Number(_.max(selectedGraphObj.selectedXAxisDataOption.data));
     selectedGraphObj.bins = new Array();
     for (lowerBound; lowerBound <= maxValue; lowerBound += selectedGraphObj.binSize) {

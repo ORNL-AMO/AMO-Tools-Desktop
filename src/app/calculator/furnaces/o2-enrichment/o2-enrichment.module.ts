@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { O2EnrichmentHelpComponent } from '../o2-enrichment/o2-enrichment-help/o2-enrichment-help.component';
 import { O2EnrichmentComponent } from '../o2-enrichment/o2-enrichment.component';
 import { O2EnrichmentFormComponent } from '../o2-enrichment/o2-enrichment-form/o2-enrichment-form.component';
@@ -17,6 +17,7 @@ import { O2EnrichmentCopyTableComponent } from './o2-enrichment-copy-table/o2-en
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule,
     SimpleTooltipModule,

@@ -10,12 +10,36 @@
     </div>
     <div *ngIf="expanded" class="w-100 p-3">
       <div class="w-100" id="expandedChartDiv"></div>
+      <div class="col-md-12">
+        <form class="w-75 mx-auto">
+          <div class="form-group">
+              <div class="input-group">
+                <select class="form-control" name="selectedAxis" id="selectedAxis"
+                [(ngModel)]="selectedAxis" (change)="setAxisAndUpdate()">
+                <option *ngFor="let axis of selectedAxisOptions" [ngValue]="axis.value" [innerHTML]="axis.display"></option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
   
   <div class="w-100 tab-panel-background p-2">
     <div class="w-100" id="tabPanelDiv"></div>
     <div class="col-md-12">
+      <form class="w-75 mx-auto">
+        <div class="form-group">
+            <div class="input-group">
+              <select class="form-control" name="selectedAxis" id="selectedAxis"
+              [(ngModel)]="selectedAxis" (change)="setAxisAndUpdate()">
+              <option *ngFor="let axis of selectedAxisOptions" [ngValue]="axis.value" [innerHTML]="axis.display"></option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-12 mt-3">
       <div class="graph-btn-container">
         <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
         <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip"
@@ -67,9 +91,9 @@
               &mdash; &mdash;
             </span>
           </td>
-          <td class="text-center">{{point.combustionTemp}}</td>
-          <td class="text-center">{{point.flueOxygen}}</td>
-          <td class="text-center">{{point.fuelTemp}}</td>
+          <td class="text-center">{{point.combAirTemp}}</td>
+          <td class="text-center">{{point.o2FlueGas | number: '1.0-2'}}</td>
+          <td class="text-center">{{point.flueGasTemp | number: '1.0-2'}}</td>
         </tr>
       </tbody>
     </table>
