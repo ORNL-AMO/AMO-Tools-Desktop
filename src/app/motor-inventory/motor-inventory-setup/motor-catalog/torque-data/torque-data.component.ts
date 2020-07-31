@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MotorItem, TorqueOptions } from '../../../motor-inventory';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { TorqueDataService } from './torque-data.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-torque-data',
@@ -12,6 +13,9 @@ import { TorqueDataService } from './torque-data.service';
   styleUrls: ['./torque-data.component.css']
 })
 export class TorqueDataComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  
   motorForm: FormGroup;
   selectedMotorItemSub: Subscription;
   displayOptions: TorqueOptions;

@@ -24,14 +24,20 @@
     <!-- averageLoadFactor -->
     <div class="form-group" *ngIf="displayOptions.averageLoadFactor">
         <label for="averageLoadFactor">Average Load Factor</label>
-        <input type="number" class="form-control" (focus)="focusField('averageLoadFactor')" (input)="save()"
-            formControlName="averageLoadFactor" id="averageLoadFactor">
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('averageLoadFactor')" (input)="save()"
+                formControlName="averageLoadFactor" id="averageLoadFactor">
+            <span class="input-group-addon units">%</span>
+        </div>
     </div>
     <!-- utilizationFactor -->
     <div class="form-group" *ngIf="displayOptions.utilizationFactor">
         <label for="utilizationFactor">Utilization Factor</label>
-        <input type="number" class="form-control" (focus)="focusField('utilizationFactor')" (input)="save()"
-            formControlName="utilizationFactor" id="utilizationFactor">
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('utilizationFactor')" (input)="save()"
+                formControlName="utilizationFactor" id="utilizationFactor">
+            <span class="input-group-addon units">%</span>
+        </div>
     </div>
     <!-- efficiencyAtAverageLoad -->
     <div class="form-group" *ngIf="displayOptions.efficiencyAtAverageLoad">

@@ -29,7 +29,7 @@
         <app-purchase-information-data></app-purchase-information-data>
     </div>
     <div class="col-12" *ngIf="motorInventoryData.displayOptions.torqueOptions.displayTorque">
-        <app-torque-data></app-torque-data>
+        <app-torque-data [settings]="settings"></app-torque-data>
     </div>
     <div class="col-12" *ngIf="motorInventoryData.displayOptions.otherOptions.displayOther">
         <app-other-data></app-other-data>
