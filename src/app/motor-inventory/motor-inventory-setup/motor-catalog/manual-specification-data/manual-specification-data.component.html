@@ -102,4 +102,13 @@
         <input type="number" step="1" class="form-control" (focus)="focusField('poles')" (input)="save()"
             formControlName="poles" id="poles">
     </div>
+    <!-- ratedSpeed -->
+    <div class="form-group" *ngIf="displayOptions.ratedSpeed">
+        <label for="ratedSpeed">Rated Speed</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('ratedSpeed')" (input)="save()"
+                formControlName="ratedSpeed" id="ratedSpeed">
+            <span class="input-group-addon units">rpm</span>
+        </div>
+    </div>
 </form>

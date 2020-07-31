@@ -23,7 +23,10 @@ export class OtherDataComponent implements OnInit {
     private otherDataService: OtherDataService) { }
 
   ngOnInit(): void {
-    this.driveTypes = driveConstants;
+    this.driveTypes = JSON.parse(JSON.stringify(driveConstants));
+    //remove specified
+    this.driveTypes.pop();
+
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.otherDataService.getFormFromOtherData(selectedMotor.otherData);

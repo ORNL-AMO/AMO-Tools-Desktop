@@ -55,6 +55,7 @@ export interface ManualSpecificationData {
   //required data
   synchronousSpeed: number,
   //optional
+  ratedSpeed: number,
   frameNumber: string,
   uFrame: number,
   cFace: number,
@@ -92,7 +93,6 @@ export interface NameplateData {
 }
 
 export interface OperationData {
-  ratedSpeed: number,
   location: string,
   annualOperatingHours: number,
   averageLoadFactor: number,
@@ -157,6 +157,7 @@ export interface LoadCharacteristicOptions {
 
 export interface ManualSpecificationOptions {
   displayManualSpecifications: boolean,
+  ratedSpeed: boolean,
   frameNumber: boolean,
   uFrame: boolean,
   cFace: boolean,
@@ -189,7 +190,6 @@ export interface NameplateDataOptions {
 
 export interface OperationDataOptions {
   displayOperationData: boolean,
-  ratedSpeed: boolean,
   location: boolean,
   annualOperatingHours: boolean,
   averageLoadFactor: boolean,

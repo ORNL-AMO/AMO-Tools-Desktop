@@ -30,7 +30,6 @@ export class OperationDataPropertiesComponent implements OnInit {
   }
 
   setAll() {
-    this.operationDataOptions.ratedSpeed = this.operationDataOptions.displayOperationData;
     this.operationDataOptions.location = this.operationDataOptions.displayOperationData;
     this.operationDataOptions.annualOperatingHours = this.operationDataOptions.displayOperationData;
     this.operationDataOptions.averageLoadFactor = this.operationDataOptions.displayOperationData;
@@ -42,7 +41,6 @@ export class OperationDataPropertiesComponent implements OnInit {
 
   checkDisplayOperationData() {
     this.operationDataOptions.displayOperationData = (
-      this.operationDataOptions.ratedSpeed ||
       this.operationDataOptions.location ||
       this.operationDataOptions.annualOperatingHours ||
       this.operationDataOptions.averageLoadFactor ||

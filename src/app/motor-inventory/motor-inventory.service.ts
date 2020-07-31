@@ -88,7 +88,8 @@ export class MotorInventoryService {
         stalledRotorTimeHot: undefined,
         stalledRotorTimeCold: undefined,
         poles: undefined,
-        currentType: undefined        
+        currentType: undefined,
+        ratedSpeed: undefined    
       },
       nameplateData:  {
         ratedMotorPower: undefined,
@@ -109,7 +110,6 @@ export class MotorInventoryService {
         motorRpm: 1780
       },
       operationData:  {
-        ratedSpeed: undefined,
         location: undefined,
         annualOperatingHours: 8760,
         averageLoadFactor: undefined,
@@ -175,6 +175,7 @@ export class MotorInventoryService {
         stalledRotorTimeCold: false,
         poles: false,
         currentType: false,
+        ratedSpeed: false,
       },
       nameplateDataOptions: {
         displayNameplateData: true,
@@ -192,7 +193,6 @@ export class MotorInventoryService {
       },
       operationDataOptions: {
         displayOperationData: false,
-        ratedSpeed: false,
         location: false,
         annualOperatingHours: false,
         averageLoadFactor: false,

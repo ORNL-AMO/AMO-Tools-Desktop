@@ -22,7 +22,8 @@ export class ManualSpecificationDataService {
       stalledRotorTimeHot: [manualSpecificationData.stalledRotorTimeHot],
       stalledRotorTimeCold: [manualSpecificationData.stalledRotorTimeCold],
       poles: [manualSpecificationData.poles],
-      currentType: [manualSpecificationData.currentType]
+      currentType: [manualSpecificationData.currentType],
+      ratedSpeed: [manualSpecificationData.ratedSpeed]
     });
   }
 
@@ -41,6 +42,7 @@ export class ManualSpecificationDataService {
     manualSpecificationData.stalledRotorTimeCold = form.controls.stalledRotorTimeCold.value;
     manualSpecificationData.poles = form.controls.poles.value;
     manualSpecificationData.currentType = form.controls.currentType.value;
+    manualSpecificationData.ratedSpeed = form.controls.ratedSpeed.value;
     return manualSpecificationData;
   }
 }

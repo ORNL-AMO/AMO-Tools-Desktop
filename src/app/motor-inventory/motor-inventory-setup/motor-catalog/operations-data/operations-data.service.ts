@@ -9,7 +9,6 @@ export class OperationsDataService {
 
   getFormFromOperationData(operationData: OperationData): FormGroup {
     return this.formBuilder.group({
-      ratedSpeed: [operationData.ratedSpeed],
       location: [operationData.location],
       annualOperatingHours: [operationData.annualOperatingHours],
       averageLoadFactor: [operationData.averageLoadFactor],
@@ -20,7 +19,6 @@ export class OperationsDataService {
   }
 
   updateOperationDataFromForm(form: FormGroup, operationData: OperationData): OperationData {
-    operationData.ratedSpeed = form.controls.frameNumber.value;
     operationData.location = form.controls.location.value;
     operationData.annualOperatingHours = form.controls.annualOperatingHours.value;
     operationData.averageLoadFactor = form.controls.averageLoadFactor.value;

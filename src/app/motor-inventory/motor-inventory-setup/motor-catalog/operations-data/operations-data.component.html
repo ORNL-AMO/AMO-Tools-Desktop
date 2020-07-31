@@ -4,15 +4,6 @@
     Field Measurements
 </label>
 <form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
-    <!-- ratedSpeed -->
-    <div class="form-group" *ngIf="displayOptions.ratedSpeed">
-        <label for="ratedSpeed">Rated Speed</label>
-        <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('ratedSpeed')" (input)="save()"
-                formControlName="ratedSpeed" id="ratedSpeed">
-            <span class="input-group-addon units">rpm</span>
-        </div>
-    </div>
 
     <!-- location -->
     <div class="form-group" *ngIf="displayOptions.location">
