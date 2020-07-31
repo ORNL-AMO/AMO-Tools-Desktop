@@ -10,11 +10,8 @@ export class ManualSpecificationDataService {
   getFormFromManualSpecificationData(manualSpecificationData: ManualSpecificationData): FormGroup {
     return this.formBuilder.group({
       synchronousSpeed: [manualSpecificationData.synchronousSpeed, [Validators.required]],
-      frameNumber: [manualSpecificationData.frameNumber],
-      uFrame: [manualSpecificationData.uFrame],
-      cFace: [manualSpecificationData.cFace],
-      verticalShaft: [manualSpecificationData.verticalShaft],
-      dFlange: [manualSpecificationData.dFlange],
+      frame: [manualSpecificationData.frame],
+      shaftPosiion: [manualSpecificationData.shaftPosiion],
       windingResistance: [manualSpecificationData.windingResistance],
       rotorBars: [manualSpecificationData.rotorBars],
       statorSlots: [manualSpecificationData.statorSlots],
@@ -29,11 +26,8 @@ export class ManualSpecificationDataService {
 
   updateManualDataFromForm(form: FormGroup, manualSpecificationData: ManualSpecificationData): ManualSpecificationData {
     manualSpecificationData.synchronousSpeed = form.controls.synchronousSpeed.value;
-    manualSpecificationData.frameNumber = form.controls.frameNumber.value;
-    manualSpecificationData.uFrame = form.controls.uFrame.value;
-    manualSpecificationData.cFace = form.controls.cFace.value;
-    manualSpecificationData.verticalShaft = form.controls.verticalShaft.value;
-    manualSpecificationData.dFlange = form.controls.dFlange.value;
+    manualSpecificationData.frame = form.controls.frame.value;
+    manualSpecificationData.shaftPosiion = form.controls.shaftPosiion.value;
     manualSpecificationData.windingResistance = form.controls.windingResistance.value;
     manualSpecificationData.rotorBars = form.controls.rotorBars.value;
     manualSpecificationData.statorSlots = form.controls.statorSlots.value;

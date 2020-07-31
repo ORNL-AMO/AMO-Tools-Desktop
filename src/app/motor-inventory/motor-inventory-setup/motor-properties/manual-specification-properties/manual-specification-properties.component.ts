@@ -32,11 +32,8 @@ export class ManualSpecificationPropertiesComponent implements OnInit {
 
   setAll() {
     this.manualSpecificationOptions.ratedSpeed = this.manualSpecificationOptions.displayManualSpecifications;
-    this.manualSpecificationOptions.frameNumber = this.manualSpecificationOptions.displayManualSpecifications;
-    this.manualSpecificationOptions.uFrame = this.manualSpecificationOptions.displayManualSpecifications;
-    this.manualSpecificationOptions.cFace = this.manualSpecificationOptions.displayManualSpecifications;
-    this.manualSpecificationOptions.verticalShaft = this.manualSpecificationOptions.displayManualSpecifications;
-    this.manualSpecificationOptions.dFlange = this.manualSpecificationOptions.displayManualSpecifications;
+    this.manualSpecificationOptions.frame = this.manualSpecificationOptions.displayManualSpecifications;
+    this.manualSpecificationOptions.shaftPosiion = this.manualSpecificationOptions.displayManualSpecifications;
     this.manualSpecificationOptions.windingResistance = this.manualSpecificationOptions.displayManualSpecifications;
     this.manualSpecificationOptions.rotorBars = this.manualSpecificationOptions.displayManualSpecifications;
     this.manualSpecificationOptions.statorSlots = this.manualSpecificationOptions.displayManualSpecifications;
@@ -50,11 +47,8 @@ export class ManualSpecificationPropertiesComponent implements OnInit {
 
   checkDisplayManualSpecifications() {
     this.manualSpecificationOptions.displayManualSpecifications = (
-      this.manualSpecificationOptions.frameNumber ||
-      this.manualSpecificationOptions.uFrame ||
-      this.manualSpecificationOptions.cFace ||
-      this.manualSpecificationOptions.verticalShaft ||
-      this.manualSpecificationOptions.dFlange ||
+      this.manualSpecificationOptions.frame ||
+      this.manualSpecificationOptions.shaftPosiion ||
       this.manualSpecificationOptions.windingResistance ||
       this.manualSpecificationOptions.rotorBars ||
       this.manualSpecificationOptions.statorSlots ||
