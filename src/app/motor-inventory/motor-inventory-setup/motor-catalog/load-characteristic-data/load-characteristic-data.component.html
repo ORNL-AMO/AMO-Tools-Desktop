@@ -35,26 +35,38 @@
     <!-- powerFactor100 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor100">
         <label for="powerFactor100">Power Factor at Full Load</label>
-        <input type="number" class="form-control" (focus)="focusField('powerFactor100')" (input)="save()"
-            formControlName="powerFactor100" id="powerFactor100">
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor100')" (input)="save()"
+                formControlName="powerFactor100" id="powerFactor100">
+            <span class="input-group-addon units">%</span>
+        </div>
     </div>
     <!-- powerFactor75 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor75">
         <label for="powerFactor75">Power Factor at 75% Load</label>
-        <input type="number" class="form-control" (focus)="focusField('powerFactor75')" (input)="save()"
-            formControlName="powerFactor75" id="powerFactor75">
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor75')" (input)="save()"
+                formControlName="powerFactor75" id="powerFactor75">
+            <span class="input-group-addon units">%</span>
+        </div>
     </div>
     <!-- powerFactor50 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor50">
         <label for="powerFactor50">Power Factor at 50% Load</label>
-        <input type="number" class="form-control" (focus)="focusField('powerFactor50')" (input)="save()"
-            formControlName="powerFactor50" id="powerFactor50">
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor50')" (input)="save()"
+                formControlName="powerFactor50" id="powerFactor50">
+            <span class="input-group-addon units">%</span>
+        </div>
     </div>
     <!-- powerFactor25 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor25">
         <label for="powerFactor25">Power Factor at 25% Load</label>
-        <input type="number" class="form-control" (focus)="focusField('powerFactor25')" (input)="save()"
-            formControlName="powerFactor25" id="powerFactor25">
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor25')" (input)="save()"
+                formControlName="powerFactor25" id="powerFactor25">
+            <span class="input-group-addon units">%</span>
+        </div>
     </div>
     <!-- ampsIdle -->
     <div class="form-group" *ngIf="displayOptions.ampsIdle">

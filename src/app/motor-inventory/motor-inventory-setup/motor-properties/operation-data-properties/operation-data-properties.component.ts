@@ -30,24 +30,22 @@ export class OperationDataPropertiesComponent implements OnInit {
   }
 
   setAll() {
-    this.operationDataOptions.ratedSpeed = this.operationDataOptions.displayOperationData;
-    this.operationDataOptions.purpose = this.operationDataOptions.displayOperationData;
+    this.operationDataOptions.location = this.operationDataOptions.displayOperationData;
     this.operationDataOptions.annualOperatingHours = this.operationDataOptions.displayOperationData;
     this.operationDataOptions.averageLoadFactor = this.operationDataOptions.displayOperationData;
     this.operationDataOptions.utilizationFactor = this.operationDataOptions.displayOperationData;
-    this.operationDataOptions.percentLoad = this.operationDataOptions.displayOperationData;
+    this.operationDataOptions.efficiencyAtAverageLoad = this.operationDataOptions.displayOperationData;
     this.operationDataOptions.powerFactorAtLoad = this.operationDataOptions.displayOperationData;
     this.save();
   }
 
   checkDisplayOperationData() {
     this.operationDataOptions.displayOperationData = (
-      this.operationDataOptions.ratedSpeed ||
-      this.operationDataOptions.purpose ||
+      this.operationDataOptions.location ||
       this.operationDataOptions.annualOperatingHours ||
       this.operationDataOptions.averageLoadFactor ||
       this.operationDataOptions.utilizationFactor ||
-      this.operationDataOptions.percentLoad ||
+      this.operationDataOptions.efficiencyAtAverageLoad ||
       this.operationDataOptions.powerFactorAtLoad
     );
   }

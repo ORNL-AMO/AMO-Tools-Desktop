@@ -55,11 +55,9 @@ export interface ManualSpecificationData {
   //required data
   synchronousSpeed: number,
   //optional
-  frameNumber: string,
-  uFrame: number,
-  cFace: number,
-  verticalShaft: number,
-  dFlange: number, 
+  ratedSpeed: number,
+  frame: string,
+  shaftPosiion: string,
   windingResistance: number,
   rotorBars: number,
   statorSlots: number,
@@ -92,12 +90,11 @@ export interface NameplateData {
 }
 
 export interface OperationData {
-  ratedSpeed: number,
-  purpose: string,
+  location: string,
   annualOperatingHours: number,
   averageLoadFactor: number,
   utilizationFactor: number,
-  percentLoad: number,
+  efficiencyAtAverageLoad: number,
   powerFactorAtLoad: number
 }
 
@@ -157,11 +154,9 @@ export interface LoadCharacteristicOptions {
 
 export interface ManualSpecificationOptions {
   displayManualSpecifications: boolean,
-  frameNumber: boolean,
-  uFrame: boolean,
-  cFace: boolean,
-  verticalShaft: boolean,
-  dFlange: boolean,
+  ratedSpeed: boolean,
+  frame: boolean,
+  shaftPosiion: boolean,
   windingResistance: boolean,
   rotorBars: boolean,
   statorSlots: boolean,
@@ -189,12 +184,11 @@ export interface NameplateDataOptions {
 
 export interface OperationDataOptions {
   displayOperationData: boolean,
-  ratedSpeed: boolean,
-  purpose: boolean,
+  location: boolean,
   annualOperatingHours: boolean,
   averageLoadFactor: boolean,
   utilizationFactor: boolean,
-  percentLoad: boolean,
+  efficiencyAtAverageLoad: boolean,
   powerFactorAtLoad: boolean
 }
 
