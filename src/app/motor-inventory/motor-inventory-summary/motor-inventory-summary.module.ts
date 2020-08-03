@@ -7,14 +7,16 @@ import { InventorySummaryMotorDetailsComponent } from './inventory-summary-motor
 import { MotorInventorySummaryComponent } from './motor-inventory-summary.component';
 import { InventorySummaryOverviewService } from './inventory-summary-overview/inventory-summary-overview.service';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { MotorSummaryTablePipe } from './inventory-summary-overview/motor-summary-table.pipe';
 
 @NgModule({
   declarations: [
-    MotorInventorySummaryComponent, 
-    InventorySummaryGraphsComponent, 
-    InventorySummaryTableComponent, 
-    InventorySummaryOverviewComponent, 
-    InventorySummaryMotorDetailsComponent
+    MotorInventorySummaryComponent,
+    InventorySummaryGraphsComponent,
+    InventorySummaryTableComponent,
+    InventorySummaryOverviewComponent,
+    InventorySummaryMotorDetailsComponent,
+    MotorSummaryTablePipe
   ],
   imports: [
     CommonModule,

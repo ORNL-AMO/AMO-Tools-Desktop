@@ -25,3 +25,12 @@ th, td{
 .max-height{
     max-height: 100%;
 }
+
+.sort-by-active{
+    text-decoration: underline;
+}
+
+.header-cell:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}

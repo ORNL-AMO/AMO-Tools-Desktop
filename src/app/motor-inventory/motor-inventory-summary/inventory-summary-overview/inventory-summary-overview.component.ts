@@ -11,6 +11,8 @@ import { InventorySummaryOverviewService, InventorySummaryData } from './invento
 export class InventorySummaryOverviewComponent implements OnInit {
 
   inventorySummaryData: InventorySummaryData;
+  sortByField: string = 'name';
+  sortByDirection: string = 'desc';
   constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryOverviewService: InventorySummaryOverviewService) { }
 
   ngOnInit(): void {
@@ -18,12 +20,14 @@ export class InventorySummaryOverviewComponent implements OnInit {
     this.inventorySummaryData = this.inventorySummaryOverviewService.getInventorySummaryData(motorInventoryData);
   }
 
-
-  getData(d: { pipe?: string, value: any }) {
-    if (d.pipe) {
-      return d.value + ' | ' + d.pipe;
-    } else {
-      return d.value;
+  setSortByField(str: string) {
+    if (this.sortByField == str) {
+      if (this.sortByDirection == 'desc') {
+        this.sortByDirection = 'asc';
+      } else {
+        this.sortByDirection = 'desc';
+      }
     }
+    this.sortByField = str;
   }
 }
