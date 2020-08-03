@@ -210,7 +210,6 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     this.enthalpyChart.data.splice(this.enthalpyChart.data.length - 1, 1);
     this.enthalpyChart.existingPoint = false;
     let chartLayout = JSON.parse(JSON.stringify(this.enthalpyChart.layout));
-    // TODO opnly update last trace?
     Plotly.update(this.currentChartId, this.enthalpyChart.data, chartLayout);
     this.save();
   }
