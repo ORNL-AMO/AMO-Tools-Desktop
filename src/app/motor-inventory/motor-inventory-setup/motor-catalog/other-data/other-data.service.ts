@@ -17,10 +17,10 @@ export class OtherDataService {
   }
 
   updateOtherDataFromForm(form: FormGroup, otherData: OtherData): OtherData {
-    otherData.driveType = form.controls.frameNumber.value;
-    otherData.isVFD = form.controls.frameNumber.value;
-    otherData.hasLoggerData = form.controls.frameNumber.value;
-    otherData.voltageConnectionType = form.controls.frameNumber.value;
+    otherData.driveType = form.controls.driveType.value;
+    otherData.isVFD = form.controls.isVFD.value;
+    otherData.hasLoggerData = form.controls.hasLoggerData.value;
+    otherData.voltageConnectionType = form.controls.voltageConnectionType.value;
     return otherData;
   }
 }

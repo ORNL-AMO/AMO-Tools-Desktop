@@ -76,11 +76,8 @@ export class MotorInventoryService {
       },
       manualSpecificationData:  {
         synchronousSpeed: undefined,
-        frameNumber: undefined,
-        uFrame: undefined,
-        cFace: undefined,
-        verticalShaft: undefined,
-        dFlange: undefined, 
+        frame: undefined,
+        shaftPosiion: undefined,
         windingResistance: undefined,
         rotorBars: undefined,
         statorSlots: undefined,
@@ -88,7 +85,8 @@ export class MotorInventoryService {
         stalledRotorTimeHot: undefined,
         stalledRotorTimeCold: undefined,
         poles: undefined,
-        currentType: undefined        
+        currentType: undefined,
+        ratedSpeed: undefined    
       },
       nameplateData:  {
         ratedMotorPower: undefined,
@@ -109,12 +107,11 @@ export class MotorInventoryService {
         motorRpm: 1780
       },
       operationData:  {
-        ratedSpeed: undefined,
-        purpose: undefined,
+        location: undefined,
         annualOperatingHours: 8760,
         averageLoadFactor: undefined,
         utilizationFactor: undefined,
-        percentLoad: undefined,
+        efficiencyAtAverageLoad: undefined,
         powerFactorAtLoad: undefined
       },
       otherData:  {
@@ -162,11 +159,8 @@ export class MotorInventoryService {
       },
       manualSpecificationOptions: {
         displayManualSpecifications: false,
-        frameNumber: false,
-        uFrame: false,
-        cFace: false,
-        verticalShaft: false,
-        dFlange: false,
+        frame: false,
+        shaftPosiion: false,
         windingResistance: false,
         rotorBars: false,
         statorSlots: false,
@@ -175,6 +169,7 @@ export class MotorInventoryService {
         stalledRotorTimeCold: false,
         poles: false,
         currentType: false,
+        ratedSpeed: false,
       },
       nameplateDataOptions: {
         displayNameplateData: true,
@@ -192,12 +187,11 @@ export class MotorInventoryService {
       },
       operationDataOptions: {
         displayOperationData: false,
-        ratedSpeed: false,
-        purpose: false,
+        location: false,
         annualOperatingHours: false,
         averageLoadFactor: false,
         utilizationFactor: false,
-        percentLoad: false,
+        efficiencyAtAverageLoad: false,
         powerFactorAtLoad: false
       },
       otherOptions: {

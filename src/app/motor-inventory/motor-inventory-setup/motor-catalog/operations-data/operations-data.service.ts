@@ -9,23 +9,21 @@ export class OperationsDataService {
 
   getFormFromOperationData(operationData: OperationData): FormGroup {
     return this.formBuilder.group({
-      ratedSpeed: [operationData.ratedSpeed],
-      purpose: [operationData.purpose],
+      location: [operationData.location],
       annualOperatingHours: [operationData.annualOperatingHours],
       averageLoadFactor: [operationData.averageLoadFactor],
       utilizationFactor: [operationData.utilizationFactor],
-      percentLoad: [operationData.percentLoad],
+      efficiencyAtAverageLoad: [operationData.efficiencyAtAverageLoad],
       powerFactorAtLoad: [operationData.powerFactorAtLoad],
     });
   }
 
   updateOperationDataFromForm(form: FormGroup, operationData: OperationData): OperationData {
-    operationData.ratedSpeed = form.controls.frameNumber.value;
-    operationData.purpose = form.controls.purpose.value;
+    operationData.location = form.controls.location.value;
     operationData.annualOperatingHours = form.controls.annualOperatingHours.value;
     operationData.averageLoadFactor = form.controls.averageLoadFactor.value;
     operationData.utilizationFactor = form.controls.utilizationFactor.value;
-    operationData.percentLoad = form.controls.percentLoad.value;
+    operationData.efficiencyAtAverageLoad = form.controls.efficiencyAtAverageLoad.value;
     operationData.powerFactorAtLoad = form.controls.powerFactorAtLoad.value;
     return operationData;
   }

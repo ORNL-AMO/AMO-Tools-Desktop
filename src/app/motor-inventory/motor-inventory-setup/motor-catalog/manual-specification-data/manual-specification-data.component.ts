@@ -17,6 +17,7 @@ export class ManualSpecificationDataComponent implements OnInit {
   selectedMotorItemSub: Subscription;
   displayOptions: ManualSpecificationOptions;
   displayForm: boolean = true;
+  polesOptions: Array<number> = [2, 4, 6, 8, 10, 12];
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private manualSpecificationDataService: ManualSpecificationDataService) { }
 
@@ -43,7 +44,7 @@ export class ManualSpecificationDataComponent implements OnInit {
     this.motorInventoryService.focusedField.next(str);
   }
 
-  toggleForm(){
+  toggleForm() {
     this.displayForm = !this.displayForm;
   }
 
