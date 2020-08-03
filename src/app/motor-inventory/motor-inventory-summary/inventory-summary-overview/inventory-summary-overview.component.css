@@ -6,6 +6,7 @@
 
 .table{
     font-size: small;
+    margin-bottom: 0px;
 }
 
 
@@ -19,4 +20,8 @@
 
 th, td{
     min-width: 75px;
+}
+
+.max-height{
+    max-height: 100%;
 }

@@ -167,20 +167,15 @@ export class InventorySummaryOverviewService {
     let fields: Array<string> = ['Synchronous Speed'];
 
     if (manualSpecificationOptions.displayManualSpecifications) {
-      if (manualSpecificationOptions.frameNumber) {
-        fields.push('Frame Number');
+      
+      if (manualSpecificationOptions.ratedSpeed) {
+        fields.push('Rated Speed');
       }
-      if (manualSpecificationOptions.uFrame) {
-        fields.push('uFrame');
+      if (manualSpecificationOptions.frame) {
+        fields.push('Frame');
       }
-      if (manualSpecificationOptions.cFace) {
-        fields.push('cFace');
-      }
-      if (manualSpecificationOptions.verticalShaft) {
-        fields.push('Vertical Shaft');
-      }
-      if (manualSpecificationOptions.dFlange) {
-        fields.push('dFlange');
+      if (manualSpecificationOptions.shaftPosiion) {
+        fields.push('Shaft Position');
       }
       if (manualSpecificationOptions.windingResistance) {
         fields.push('Winding Resistance');
@@ -213,20 +208,14 @@ export class InventorySummaryOverviewService {
   getManualSpecificationData(manualSpecificationData: ManualSpecificationData, manualSpecificationOptions: ManualSpecificationOptions): Array<SummaryMotorData> {
     let motorData: Array<SummaryMotorData> = [{ value: manualSpecificationData.synchronousSpeed }];
     if (manualSpecificationOptions.displayManualSpecifications) {
-      if (manualSpecificationOptions.frameNumber) {
-        motorData.push({ value: manualSpecificationData.frameNumber });
+      if (manualSpecificationOptions.ratedSpeed) {
+        motorData.push({ value: manualSpecificationData.ratedSpeed });
       }
-      if (manualSpecificationOptions.uFrame) {
-        motorData.push({ value: manualSpecificationData.uFrame });
+      if (manualSpecificationOptions.frame) {
+        motorData.push({ value: manualSpecificationData.frame });
       }
-      if (manualSpecificationOptions.cFace) {
-        motorData.push({ value: manualSpecificationData.cFace });
-      }
-      if (manualSpecificationOptions.verticalShaft) {
-        motorData.push({ value: manualSpecificationData.verticalShaft });
-      }
-      if (manualSpecificationOptions.dFlange) {
-        motorData.push({ value: manualSpecificationData.dFlange });
+      if (manualSpecificationOptions.shaftPosiion) {
+        motorData.push({ value: manualSpecificationData.shaftPosiion });
       }
       if (manualSpecificationOptions.windingResistance) {
         motorData.push({ value: manualSpecificationData.windingResistance });
@@ -322,11 +311,8 @@ export class InventorySummaryOverviewService {
   getOperationsDataFields(operationDataOptions: OperationDataOptions): Array<string> {
     let fields: Array<string> = new Array();
     if (operationDataOptions.displayOperationData) {
-      if (operationDataOptions.ratedSpeed) {
-        fields.push('Rated Speed');
-      }
-      if (operationDataOptions.purpose) {
-        fields.push('Purpose');
+      if (operationDataOptions.location) {
+        fields.push('Location');
       }
       if (operationDataOptions.annualOperatingHours) {
         fields.push('Operating Hours');
@@ -337,8 +323,8 @@ export class InventorySummaryOverviewService {
       if (operationDataOptions.utilizationFactor) {
         fields.push('Utilization Factor');
       }
-      if (operationDataOptions.percentLoad) {
-        fields.push('Percent Load');
+      if (operationDataOptions.efficiencyAtAverageLoad) {
+        fields.push('Efficiency at Average Load');
       }
       if (operationDataOptions.powerFactorAtLoad) {
         fields.push('Power Factor at Load');
@@ -350,11 +336,8 @@ export class InventorySummaryOverviewService {
   getOperationsData(operationsData: OperationData, operationDataOptions: OperationDataOptions): Array<SummaryMotorData> {
     let motorData: Array<SummaryMotorData> = []
     if (operationDataOptions.displayOperationData) {
-      if (operationDataOptions.ratedSpeed) {
-        motorData.push({ value: operationsData.ratedSpeed });
-      }
-      if (operationDataOptions.purpose) {
-        motorData.push({ value: operationsData.purpose });
+      if (operationDataOptions.location) {
+        motorData.push({ value: operationsData.location });
       }
       if (operationDataOptions.annualOperatingHours) {
         motorData.push({ value: operationsData.annualOperatingHours });
@@ -365,8 +348,8 @@ export class InventorySummaryOverviewService {
       if (operationDataOptions.utilizationFactor) {
         motorData.push({ value: operationsData.utilizationFactor });
       }
-      if (operationDataOptions.percentLoad) {
-        motorData.push({ value: operationsData.percentLoad });
+      if (operationDataOptions.efficiencyAtAverageLoad) {
+        motorData.push({ value: operationsData.efficiencyAtAverageLoad });
       }
       if (operationDataOptions.powerFactorAtLoad) {
         motorData.push({ value: operationsData.powerFactorAtLoad });
@@ -455,7 +438,7 @@ export class InventorySummaryOverviewService {
         motorData.push({ value: purchaseInformationData.listPrice });
       }
       if (purchaseInformationOptions.warranty) {
-        motorData.push({ value: purchaseInformationData.warranty });
+        motorData.push({ value: purchaseInformationData.warranty, pipe: 'date' });
       }
       if (purchaseInformationOptions.directReplacementCost) {
         motorData.push({ value: purchaseInformationData.directReplacementCost });

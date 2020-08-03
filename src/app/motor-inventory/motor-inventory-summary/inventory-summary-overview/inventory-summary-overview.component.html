@@ -1,8 +1,8 @@
-<div class="d-flex w-100 scroll-item">
+<div class="d-flex w-100 scroll-item max-height">
     <table class="table table-sm table-bordered table-hover">
         <thead>
             <tr>
-                <th class="header-cell" *ngFor="let field of inventorySummaryData.fields; let index = index;"
+                <th class="header-cell sticky-top" *ngFor="let field of inventorySummaryData.fields; let index = index;"
                     [ngClass]="{'sticky-left': index == 0}">{{field}}</th>
             </tr>
         </thead>
@@ -11,6 +11,7 @@
                 <td *ngFor="let d of data; let index = index;" [ngClass]="{'sticky-left name-cell': index == 0}">
                     <span *ngIf="!d.pipe">{{d.value}} {{d.unit}}</span>
                     <span *ngIf="d.pipe && d.pipe == 'motorEfficiencyClass'">{{d.value | motorEfficiencyClass}}</span>
+                    <span *ngIf="d.pipe && d.pipe == 'date'">{{d.value | date}}</span>
                 </td>
             </tr>
         </tbody>
