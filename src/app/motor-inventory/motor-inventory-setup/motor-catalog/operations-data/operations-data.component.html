@@ -51,7 +51,10 @@
     <!-- utilizationFactor -->
     <div class="form-group" *ngIf="displayOptions.powerFactorAtLoad">
         <label for="powerFactorAtLoad">Power Factor at Load</label>
-        <input type="number" class="form-control" (focus)="focusField('powerFactorAtLoad')" (input)="save()"
-            formControlName="powerFactorAtLoad" id="powerFactorAtLoad">
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('powerFactorAtLoad')" (input)="save()"
+                formControlName="powerFactorAtLoad" id="powerFactorAtLoad">
+            <span class="input-group-addon units">%</span>
+        </div>
     </div>
 </form>

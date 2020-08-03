@@ -5,6 +5,8 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { MotorInventoryData } from './motor-inventory';
+import { Settings } from '../shared/models/settings';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
 
 declare const packageJson;
 
@@ -29,11 +31,12 @@ export class MotorInventoryComponent implements OnInit {
 
   motorInventoryDataSub: Subscription;
   motorInventoryAssessment: Assessment;
+  settings: Settings;
   constructor(private motorInventoryService: MotorInventoryService, private assessmentDbService: AssessmentDbService,
-    private indexedDbService: IndexedDbService) { }
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-
+    this.settings = this.settingsDbService.globalSettings;
     this.setMotorInventoryAssessment();
     if (this.motorInventoryAssessment) {
       this.motorInventoryService.motorInventoryData.next(this.motorInventoryAssessment.motorInventory);

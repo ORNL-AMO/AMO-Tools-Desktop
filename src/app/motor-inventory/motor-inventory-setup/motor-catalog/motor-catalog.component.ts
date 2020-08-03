@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { MotorCatalogService } from './motor-catalog.service';
 import { Settings } from '../../../shared/models/settings';
@@ -13,7 +13,7 @@ import { MotorInventoryData, MotorInventoryDepartment, MotorItem } from '../../m
   styleUrls: ['./motor-catalog.component.css']
 })
 export class MotorCatalogComponent implements OnInit {
-
+  @Input()
   settings: Settings;
 
   motorInventoryData: MotorInventoryData;

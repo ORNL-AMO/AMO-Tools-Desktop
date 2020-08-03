@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MotorInventoryData } from '../../motor-inventory';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { InventorySummaryOverviewService, InventorySummaryData } from './inventory-summary-overview.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-inventory-summary-overview',
@@ -9,7 +10,9 @@ import { InventorySummaryOverviewService, InventorySummaryData } from './invento
   styleUrls: ['./inventory-summary-overview.component.css']
 })
 export class InventorySummaryOverviewComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
+  
   inventorySummaryData: InventorySummaryData;
   sortByField: string = 'name';
   sortByDirection: string = 'desc';
@@ -17,7 +20,7 @@ export class InventorySummaryOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
-    this.inventorySummaryData = this.inventorySummaryOverviewService.getInventorySummaryData(motorInventoryData);
+    this.inventorySummaryData = this.inventorySummaryOverviewService.getInventorySummaryData(motorInventoryData, this.settings);
   }
 
   setSortByField(str: string) {

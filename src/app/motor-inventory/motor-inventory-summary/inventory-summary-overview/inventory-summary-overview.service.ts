@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { MotorInventoryData, MotorPropertyDisplayOptions, MotorItem, LoadCharacteristicOptions, NameplateDataOptions, NameplateData, LoadCharacteristicData, ManualSpecificationOptions, ManualSpecificationData, OperationDataOptions, OperationData, BatchAnalysisOptions, BatchAnalysisData, PurchaseInformationOptions, PurchaseInformationData, TorqueOptions, TorqueData, OtherOptions, OtherData } from '../../motor-inventory';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class InventorySummaryOverviewService {
 
   constructor() { }
 
-  getInventorySummaryData(motorInventoryData: MotorInventoryData): InventorySummaryData {
+  getInventorySummaryData(motorInventoryData: MotorInventoryData, settings: Settings): InventorySummaryData {
     let motorData: Array<Array<SummaryMotorData>> = new Array();
     let fields: Array<{ display: string, value: string }> = this.getFields(motorInventoryData.displayOptions);
     motorInventoryData.departments.forEach(department => {
       department.catalog.forEach(motorItem => {
-        let motorItemData = this.getMotorData(motorItem, department.name, motorInventoryData.displayOptions);
+        let motorItemData = this.getMotorData(motorItem, department.name, motorInventoryData.displayOptions, settings);
         motorData.push(motorItemData);
       });
     });
@@ -50,11 +51,11 @@ export class InventorySummaryOverviewService {
     return fields;
   }
 
-  getMotorData(motorItem: MotorItem, departmentName: string, displayOptions: MotorPropertyDisplayOptions): Array<SummaryMotorData> {
+  getMotorData(motorItem: MotorItem, departmentName: string, displayOptions: MotorPropertyDisplayOptions, settings: Settings): Array<SummaryMotorData> {
     let motorData: Array<SummaryMotorData> = new Array();
     motorData = [{ value: motorItem.name, fieldStr: 'name' }, { value: departmentName, fieldStr: 'departmentName' }];
     //nameplate
-    let nameplateData = this.getNameplateMotorData(motorItem.nameplateData, displayOptions.nameplateDataOptions);
+    let nameplateData = this.getNameplateMotorData(motorItem.nameplateData, displayOptions.nameplateDataOptions, settings);
     motorData = motorData.concat(nameplateData);
     //load characteristics
     let loadCharactristicData = this.getLoadCharactersticData(motorItem.loadCharacteristicData, displayOptions.loadCharactersticOptions);
@@ -66,13 +67,13 @@ export class InventorySummaryOverviewService {
     let manualData = this.getManualSpecificationData(motorItem.manualSpecificationData, displayOptions.manualSpecificationOptions);
     motorData = motorData.concat(manualData);
     //batch analysis
-    let batchAnalysisData = this.getBatchAnalysisData(motorItem.batchAnalysisData, displayOptions.batchAnalysisOptions);
+    let batchAnalysisData = this.getBatchAnalysisData(motorItem.batchAnalysisData, displayOptions.batchAnalysisOptions, settings);
     motorData = motorData.concat(batchAnalysisData);
     //purchase information
     let purchaseInfoData = this.getPurchaseInfoData(motorItem.purchaseInformationData, displayOptions.purchaseInformationOptions);
     motorData = motorData.concat(purchaseInfoData);
     //torque
-    let torqueData = this.getTorqueData(motorItem.torqueData, displayOptions.torqueOptions);
+    let torqueData = this.getTorqueData(motorItem.torqueData, displayOptions.torqueOptions, settings);
     motorData = motorData.concat(torqueData);
     //other
     let otherData = this.getOtherData(motorItem.otherData, displayOptions.otherOptions);
@@ -90,10 +91,10 @@ export class InventorySummaryOverviewService {
       { display: 'Line Frequency', value: 'lineFrequency' }
     ];
     if (nameplateDataOptions.manufacturer) {
-      fields.push({ display: 'Manufacturer', value: 'lineFrequency' });
+      fields.push({ display: 'Manufacturer', value: 'manufacturer' });
     }
     if (nameplateDataOptions.model) {
-      fields.push({ display: 'Model', value: 'lineFrequency' });
+      fields.push({ display: 'Model', value: 'model' });
     }
     if (nameplateDataOptions.motorType) {
       fields.push({ display: 'Motor Type', value: 'motorType' });
@@ -125,12 +126,16 @@ export class InventorySummaryOverviewService {
     return fields;
   }
 
-  getNameplateMotorData(nameplateData: NameplateData, nameplateDataOptions: NameplateDataOptions): Array<SummaryMotorData> {
+  getNameplateMotorData(nameplateData: NameplateData, nameplateDataOptions: NameplateDataOptions, settings: Settings): Array<SummaryMotorData> {
+    let powerUnit: string = 'hp';
+    if(settings.unitsOfMeasure != 'Imperial'){
+      powerUnit = 'kW';
+    }
     let motorData: Array<SummaryMotorData> = [
       { value: nameplateData.efficiencyClass, pipe: 'motorEfficiencyClass', fieldStr: 'efficiencyClass' },
-      { value: nameplateData.nominalEfficiency, fieldStr: 'nominalEfficiency' },
-      { value: nameplateData.ratedMotorPower, fieldStr: 'ratedMotorPower' },
-      { value: nameplateData.lineFrequency, fieldStr: 'lineFrequency' }
+      { value: nameplateData.nominalEfficiency, fieldStr: 'nominalEfficiency', unit: '%' },
+      { value: nameplateData.ratedMotorPower, fieldStr: 'ratedMotorPower', unit: powerUnit },
+      { value: nameplateData.lineFrequency, fieldStr: 'lineFrequency', unit: 'Hz' }
     ];
     if (nameplateDataOptions.manufacturer) {
       motorData.push({ value: nameplateData.manufacturer, fieldStr: 'manufacturer' });
@@ -145,7 +150,7 @@ export class InventorySummaryOverviewService {
       motorData.push({ value: nameplateData.enclosureType, fieldStr: 'enclosureType' });
     }
     if (nameplateDataOptions.ratedVoltage) {
-      motorData.push({ value: nameplateData.ratedVoltage, fieldStr: 'ratedVoltage' });
+      motorData.push({ value: nameplateData.ratedVoltage, fieldStr: 'ratedVoltage', unit: 'V' });
     }
     if (nameplateDataOptions.serviceFactor) {
       motorData.push({ value: nameplateData.serviceFactor, fieldStr: 'serviceFactor' });
@@ -154,16 +159,20 @@ export class InventorySummaryOverviewService {
       motorData.push({ value: nameplateData.insulationClass, fieldStr: 'insulationClass' });
     }
     if (nameplateDataOptions.weight) {
-      motorData.push({ value: nameplateData.weight, fieldStr: 'weight' });
+      let weightUnit: string = 'lb';
+      if(settings.unitsOfMeasure != 'Imperial'){
+        weightUnit = 'kg';
+      }
+      motorData.push({ value: nameplateData.weight, fieldStr: 'weight', unit: weightUnit });
     }
     if (nameplateDataOptions.numberOfPhases) {
       motorData.push({ value: nameplateData.numberOfPhases, fieldStr: 'numberOfPhases' });
     }
     if (nameplateDataOptions.fullLoadSpeed) {
-      motorData.push({ value: nameplateData.fullLoadSpeed, fieldStr: 'fullLoadSpeed' });
+      motorData.push({ value: nameplateData.fullLoadSpeed, fieldStr: 'fullLoadSpeed', unit: 'rpm' });
     }
     if (nameplateDataOptions.fullLoadAmps) {
-      motorData.push({ value: nameplateData.fullLoadAmps, fieldStr: 'fullLoadAmps' });
+      motorData.push({ value: nameplateData.fullLoadAmps, fieldStr: 'fullLoadAmps', unit: 'A' });
     }
     return motorData;
   }
@@ -215,7 +224,7 @@ export class InventorySummaryOverviewService {
     let motorData: Array<SummaryMotorData> = [{ value: manualSpecificationData.synchronousSpeed, fieldStr: 'synchronousSpeed' }];
     if (manualSpecificationOptions.displayManualSpecifications) {
       if (manualSpecificationOptions.ratedSpeed) {
-        motorData.push({ value: manualSpecificationData.ratedSpeed, fieldStr: 'ratedSpeed' });
+        motorData.push({ value: manualSpecificationData.ratedSpeed, fieldStr: 'ratedSpeed', unit: 'rpm' });
       }
       if (manualSpecificationOptions.frame) {
         motorData.push({ value: manualSpecificationData.frame, fieldStr: 'frame' });
@@ -224,7 +233,7 @@ export class InventorySummaryOverviewService {
         motorData.push({ value: manualSpecificationData.shaftPosiion, fieldStr: 'shaftPosiion' });
       }
       if (manualSpecificationOptions.windingResistance) {
-        motorData.push({ value: manualSpecificationData.windingResistance, fieldStr: 'windingResistance' });
+        motorData.push({ value: manualSpecificationData.windingResistance, fieldStr: 'windingResistance', unit: '&#x3A9;' });
       }
       if (manualSpecificationOptions.rotorBars) {
         motorData.push({ value: manualSpecificationData.rotorBars, fieldStr: 'rotorBars' });
@@ -233,13 +242,13 @@ export class InventorySummaryOverviewService {
         motorData.push({ value: manualSpecificationData.statorSlots, fieldStr: 'statorSlots' });
       }
       if (manualSpecificationOptions.ampsLockedRotor) {
-        motorData.push({ value: manualSpecificationData.ampsLockedRotor, fieldStr: 'ampsLockedRotor' });
+        motorData.push({ value: manualSpecificationData.ampsLockedRotor, fieldStr: 'ampsLockedRotor', unit: 'A' });
       }
       if (manualSpecificationOptions.stalledRotorTimeHot) {
-        motorData.push({ value: manualSpecificationData.stalledRotorTimeHot, fieldStr: 'stalledRotorTimeHot' });
+        motorData.push({ value: manualSpecificationData.stalledRotorTimeHot, fieldStr: 'stalledRotorTimeHot', unit: 's' });
       }
       if (manualSpecificationOptions.stalledRotorTimeCold) {
-        motorData.push({ value: manualSpecificationData.stalledRotorTimeCold, fieldStr: 'stalledRotorTimeCold' });
+        motorData.push({ value: manualSpecificationData.stalledRotorTimeCold, fieldStr: 'stalledRotorTimeCold', unit: 's' });
       }
       if (manualSpecificationOptions.poles) {
         motorData.push({ value: manualSpecificationData.poles, fieldStr: 'poles' });
@@ -287,28 +296,28 @@ export class InventorySummaryOverviewService {
     let motorData: Array<SummaryMotorData> = []
     if (loadCharactersticOptions.displayLoadCharacteristics) {
       if (loadCharactersticOptions.efficiency75) {
-        motorData.push({ value: loadCharactristicData.efficiency75, fieldStr: 'efficiency75' });
+        motorData.push({ value: loadCharactristicData.efficiency75, fieldStr: 'efficiency75', unit: '%' });
       }
       if (loadCharactersticOptions.efficiency50) {
-        motorData.push({ value: loadCharactristicData.efficiency50, fieldStr: 'efficiency50' });
+        motorData.push({ value: loadCharactristicData.efficiency50, fieldStr: 'efficiency50', unit: '%' });
       }
       if (loadCharactersticOptions.efficiency25) {
-        motorData.push({ value: loadCharactristicData.efficiency25, fieldStr: 'efficiency25' });
+        motorData.push({ value: loadCharactristicData.efficiency25, fieldStr: 'efficiency25', unit: '%' });
       }
       if (loadCharactersticOptions.powerFactor100) {
-        motorData.push({ value: loadCharactristicData.powerFactor100, fieldStr: 'powerFactor100' });
+        motorData.push({ value: loadCharactristicData.powerFactor100, fieldStr: 'powerFactor100', unit: '%' });
       }
       if (loadCharactersticOptions.powerFactor75) {
-        motorData.push({ value: loadCharactristicData.powerFactor75, fieldStr: 'powerFactor75' });
+        motorData.push({ value: loadCharactristicData.powerFactor75, fieldStr: 'powerFactor75', unit: '%' });
       }
       if (loadCharactersticOptions.powerFactor50) {
-        motorData.push({ value: loadCharactristicData.powerFactor50, fieldStr: 'powerFactor50' });
+        motorData.push({ value: loadCharactristicData.powerFactor50, fieldStr: 'powerFactor50', unit: '%' });
       }
       if (loadCharactersticOptions.powerFactor25) {
-        motorData.push({ value: loadCharactristicData.powerFactor25, fieldStr: 'powerFactor25' });
+        motorData.push({ value: loadCharactristicData.powerFactor25, fieldStr: 'powerFactor25', unit: '%' });
       }
       if (loadCharactersticOptions.ampsIdle) {
-        motorData.push({ value: loadCharactristicData.ampsIdle, fieldStr: 'ampsIdle' });
+        motorData.push({ value: loadCharactristicData.ampsIdle, fieldStr: 'ampsIdle', unit: 'A' });
       }
     }
     return motorData;
@@ -346,19 +355,19 @@ export class InventorySummaryOverviewService {
         motorData.push({ value: operationsData.location, fieldStr: 'location' });
       }
       if (operationDataOptions.annualOperatingHours) {
-        motorData.push({ value: operationsData.annualOperatingHours, fieldStr: 'annualOperatingHours' });
+        motorData.push({ value: operationsData.annualOperatingHours, fieldStr: 'annualOperatingHours', unit: 'hrs/yr' });
       }
       if (operationDataOptions.averageLoadFactor) {
-        motorData.push({ value: operationsData.averageLoadFactor, fieldStr: 'averageLoadFactor' });
+        motorData.push({ value: operationsData.averageLoadFactor, fieldStr: 'averageLoadFactor', unit: '%' });
       }
       if (operationDataOptions.utilizationFactor) {
-        motorData.push({ value: operationsData.utilizationFactor, fieldStr: 'utilizationFactor' });
+        motorData.push({ value: operationsData.utilizationFactor, fieldStr: 'utilizationFactor', unit: '%' });
       }
       if (operationDataOptions.efficiencyAtAverageLoad) {
-        motorData.push({ value: operationsData.efficiencyAtAverageLoad, fieldStr: 'efficiencyAtAverageLoad' });
+        motorData.push({ value: operationsData.efficiencyAtAverageLoad, fieldStr: 'efficiencyAtAverageLoad', unit: '%' });
       }
       if (operationDataOptions.powerFactorAtLoad) {
-        motorData.push({ value: operationsData.powerFactorAtLoad, fieldStr: 'powerFactorAtLoad' });
+        motorData.push({ value: operationsData.powerFactorAtLoad, fieldStr: 'powerFactorAtLoad', unit: '%' });
       }
     }
     return motorData;
@@ -389,26 +398,30 @@ export class InventorySummaryOverviewService {
     return fields;
   }
 
-  getBatchAnalysisData(batchAnalysisData: BatchAnalysisData, batchAnalysisOptions: BatchAnalysisOptions): Array<SummaryMotorData> {
+  getBatchAnalysisData(batchAnalysisData: BatchAnalysisData, batchAnalysisOptions: BatchAnalysisOptions, settings: Settings): Array<SummaryMotorData> {
     let motorData: Array<SummaryMotorData> = []
     if (batchAnalysisOptions.displayBatchAnalysis) {
       if (batchAnalysisOptions.modifiedCost) {
-        motorData.push({ value: batchAnalysisData.modifiedCost, fieldStr: 'modifiedCost' });
+        motorData.push({ value: batchAnalysisData.modifiedCost, fieldStr: 'modifiedCost', pipe: 'currency' });
       }
       if (batchAnalysisOptions.modifiedPower) {
-        motorData.push({ value: batchAnalysisData.modifiedPower, fieldStr: 'modifiedPower' });
+        let powerUnit: string = 'hp';
+        if(settings.unitsOfMeasure != 'Imperial'){
+          powerUnit = 'kW';
+        }
+        motorData.push({ value: batchAnalysisData.modifiedPower, fieldStr: 'modifiedPower', unit: powerUnit });
       }
       if (batchAnalysisOptions.modifiedEfficiency) {
-        motorData.push({ value: batchAnalysisData.modifiedEfficiency, fieldStr: 'modifiedEfficiency' });
+        motorData.push({ value: batchAnalysisData.modifiedEfficiency, fieldStr: 'modifiedEfficiency', unit: '%' });
       }
       if (batchAnalysisOptions.modifiedPercentLoad) {
-        motorData.push({ value: batchAnalysisData.modifiedPercentLoad, fieldStr: 'modifiedPercentLoad' });
+        motorData.push({ value: batchAnalysisData.modifiedPercentLoad, fieldStr: 'modifiedPercentLoad', unit: '%' });
       }
       if (batchAnalysisOptions.rewindCost) {
-        motorData.push({ value: batchAnalysisData.rewindCost, fieldStr: 'rewindCost' });
+        motorData.push({ value: batchAnalysisData.rewindCost, fieldStr: 'rewindCost', pipe: 'currency' });
       }
       if (batchAnalysisOptions.rewindEfficiencyLoss) {
-        motorData.push({ value: batchAnalysisData.rewindEfficiencyLoss, fieldStr: 'rewindEfficiencyLoss' });
+        motorData.push({ value: batchAnalysisData.rewindEfficiencyLoss, fieldStr: 'rewindEfficiencyLoss', unit: '%' });
       }
     }
     return motorData;
@@ -441,13 +454,13 @@ export class InventorySummaryOverviewService {
         motorData.push({ value: purchaseInformationData.catalogId, fieldStr: 'catalogId' });
       }
       if (purchaseInformationOptions.listPrice) {
-        motorData.push({ value: purchaseInformationData.listPrice, fieldStr: 'listPrice' });
+        motorData.push({ value: purchaseInformationData.listPrice, fieldStr: 'listPrice', pipe: 'currency' });
       }
       if (purchaseInformationOptions.warranty) {
         motorData.push({ value: purchaseInformationData.warranty, pipe: 'date', fieldStr: 'warranty' });
       }
       if (purchaseInformationOptions.directReplacementCost) {
-        motorData.push({ value: purchaseInformationData.directReplacementCost, fieldStr: 'directReplacementCost' });
+        motorData.push({ value: purchaseInformationData.directReplacementCost, fieldStr: 'directReplacementCost', pipe: 'currency' });
       }
     }
     return motorData;
@@ -469,17 +482,22 @@ export class InventorySummaryOverviewService {
     return fields;
   }
 
-  getTorqueData(torqueData: TorqueData, torqueOptions: TorqueOptions): Array<SummaryMotorData> {
+  getTorqueData(torqueData: TorqueData, torqueOptions: TorqueOptions, settings: Settings): Array<SummaryMotorData> {
     let motorData: Array<SummaryMotorData> = [];
     if (torqueOptions.displayTorque) {
+      let torqueUnit: string = 'ft-lb';
+      if(settings.unitsOfMeasure != 'Imperial'){
+        torqueUnit = 'N-m';
+      }
+
       if (torqueOptions.torqueFullLoad) {
-        motorData.push({ value: torqueData.torqueFullLoad, fieldStr: 'torqueFullLoad' });
+        motorData.push({ value: torqueData.torqueFullLoad, fieldStr: 'torqueFullLoad', unit: torqueUnit });
       }
       if (torqueOptions.torqueBreakDown) {
-        motorData.push({ value: torqueData.torqueBreakDown, fieldStr: 'torqueBreakDown' });
+        motorData.push({ value: torqueData.torqueBreakDown, fieldStr: 'torqueBreakDown', unit: torqueUnit });
       }
       if (torqueOptions.torqueLockedRotor) {
-        motorData.push({ value: torqueData.torqueLockedRotor, fieldStr: 'torqueLockedRotor' });
+        motorData.push({ value: torqueData.torqueLockedRotor, fieldStr: 'torqueLockedRotor', unit: torqueUnit });
       }
     }
     return motorData;
@@ -542,5 +560,6 @@ export interface InventorySummaryData {
 export interface SummaryMotorData {
   fieldStr: string,
   value: number | string | Date,
-  pipe?: string
+  pipe?: string,
+  unit?: string
 }
