@@ -3,10 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 
 import { SimpleChart } from '../../../../shared/models/plotting';
 import * as Plotly from 'plotly.js';
-import { SteamPropertiesService, IsothermCoordinates } from '../steam-properties.service';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { SteamPropertiesConversionService } from '../steam-properties-conversion.service';
+import { SaturatedPropertiesService, IsothermCoordinates } from '../../saturated-properties.service';
+import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
 
 
 
@@ -55,8 +55,9 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     }
   }
 
-  constructor(private steamPropertiesService: SteamPropertiesService, 
-    private steamPropertiesConversionService: SteamPropertiesConversionService) { }
+  // Use shared SaturatedPropertiesService to supply isotherm, isobar, and dome objects/rendering
+  constructor(private saturatedPropertiesService: SaturatedPropertiesService, 
+    private saturatedPropertiesConversionService: SaturatedPropertiesConversionService) { }
   
   ngOnInit() {
     this.triggerInitialResize();
@@ -85,7 +86,7 @@ export class SteamPropertiesPhChartComponent implements OnInit {
   }
 
   save() {
-    this.steamPropertiesService.enthalpyChart.next(this.enthalpyChart);
+    this.saturatedPropertiesService.enthalpyChart.next(this.enthalpyChart);
   }
   
   // Force specified conversions to avoid rendering problems
@@ -125,31 +126,31 @@ export class SteamPropertiesPhChartComponent implements OnInit {
 
   initChartSetup() {
     this.initConvertPressureUnit();
-    this.steamPropertiesService.initEnthalpyChartData();
-    this.enthalpyChart = this.steamPropertiesService.enthalpyChart.getValue();
-    this.steamPropertiesService.setEnthalpyChartConfig(this.settings);
+    this.saturatedPropertiesService.initEnthalpyChartData();
+    this.enthalpyChart = this.saturatedPropertiesService.enthalpyChart.getValue();
+    this.saturatedPropertiesService.setEnthalpyChartConfig(this.settings);
   }
   
   initIsothermTraces() {
     this.checkConvertIsotherms();
-    let isotherms: Array<IsothermCoordinates> = this.steamPropertiesService.isotherms.getValue();    
+    let isotherms: Array<IsothermCoordinates> = this.saturatedPropertiesService.isotherms.getValue();    
     isotherms.forEach((line: IsothermCoordinates) => {
-      let trace = this.steamPropertiesService.getEmptyTrace();
+      let trace = this.saturatedPropertiesService.getEmptyTrace();
       trace.x = line.enthalpy;
       trace.y = line.pressure;
-      let temperatureUnit = this.steamPropertiesService.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      let temperatureUnit = this.saturatedPropertiesService.getDisplayUnit(this.settings.steamTemperatureMeasurement);
       trace.hovertemplate = `Isotherm ${line.temperature} ${temperatureUnit}`;
       this.enthalpyChart.data.push(trace);
     });
   }
 
   initVaporQualityTraces() {
-    let vaporQualities: Array<IsothermCoordinates> = this.steamPropertiesService.vaporQualities.getValue();    
+    let vaporQualities: Array<IsothermCoordinates> = this.saturatedPropertiesService.vaporQualities.getValue();    
     vaporQualities.forEach((line: IsothermCoordinates) => {
-      let trace = this.steamPropertiesService.getEmptyTrace();
+      let trace = this.saturatedPropertiesService.getEmptyTrace();
       trace.x = line.enthalpy;
       trace.y = line.pressure;
-      trace.hovertemplate = this.steamPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+      trace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
       this.enthalpyChart.data.push(trace);
     });
   }
@@ -157,32 +158,32 @@ export class SteamPropertiesPhChartComponent implements OnInit {
   checkConvertIsotherms() {
     if (this.settings.steamSpecificEnthalpyMeasurement !== undefined 
       && this.settings.steamSpecificEnthalpyMeasurement !== this.defaultEnthalpyUnit) {
-      this.steamPropertiesConversionService.convertIsothermEnthalpy(this.settings, this.defaultEnthalpyUnit);
-      this.steamPropertiesConversionService.convertVaporQualities(this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
+      this.saturatedPropertiesConversionService.convertIsothermEnthalpy(this.settings, this.defaultEnthalpyUnit);
+      this.saturatedPropertiesConversionService.convertVaporQualities(this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
     }
     if (this.settings.steamPressureMeasurement !== undefined 
       && this.settings.steamPressureMeasurement !== this.defaultPressureUnit) {
-      this.steamPropertiesConversionService.convertIsothermPressure(this.settings, this.defaultPressureUnit, this.convertPressureUnit);
-      this.steamPropertiesConversionService.convertVaporQualities(this.defaultPressureUnit, this.convertPressureUnit, true);
+      this.saturatedPropertiesConversionService.convertIsothermPressure(this.settings, this.defaultPressureUnit, this.convertPressureUnit);
+      this.saturatedPropertiesConversionService.convertVaporQualities(this.defaultPressureUnit, this.convertPressureUnit, true);
     }
   }
 
   initDomeAreaTraces() {
     // Fill in 'Liquid Vapor Dome' area
-    let domeFillTrace = this.steamPropertiesService.getEmptyTrace();
+    let domeFillTrace = this.saturatedPropertiesService.getEmptyTrace();
     domeFillTrace.fill = 'toself';
     domeFillTrace.fillcolor = 'rgba(70,130,180,0.4)';
-    domeFillTrace.x = this.steamPropertiesService.enthalpy;
-    domeFillTrace.y = this.steamPropertiesService.pressures;
+    domeFillTrace.x = this.saturatedPropertiesService.enthalpy;
+    domeFillTrace.y = this.saturatedPropertiesService.pressures;
 
     // Black dome outline (envelope)
-    let domeOutlineTrace = this.steamPropertiesService.getEmptyTrace();
-    domeOutlineTrace.x = this.steamPropertiesService.enthalpy;
-    domeOutlineTrace.y = this.steamPropertiesService.pressures;
+    let domeOutlineTrace = this.saturatedPropertiesService.getEmptyTrace();
+    domeOutlineTrace.x = this.saturatedPropertiesService.enthalpy;
+    domeOutlineTrace.y = this.saturatedPropertiesService.pressures;
     domeOutlineTrace.line.width = 2;
     domeOutlineTrace.line.color = "#000000";
     domeOutlineTrace.name = "Saturated"
-    domeOutlineTrace.hovertemplate = this.steamPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+    domeOutlineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
     
     this.enthalpyChart.data.push(domeFillTrace, domeOutlineTrace);
   }
@@ -190,13 +191,13 @@ export class SteamPropertiesPhChartComponent implements OnInit {
   plotPoint(pressure: number, enthalpy: number) {
     let convertedPressure = pressure;
     if (this.convertPressureUnit) {
-      convertedPressure = this.steamPropertiesConversionService.convertVal(pressure, this.settings.steamPressureMeasurement, this.convertPressureUnit);
+      convertedPressure = this.saturatedPropertiesConversionService.convertVal(pressure, this.settings.steamPressureMeasurement, this.convertPressureUnit);
     }
-    let pointTrace = this.steamPropertiesService.getPointTrace();
+    let pointTrace = this.saturatedPropertiesService.getPointTrace();
     pointTrace.marker.color = graphColors[0];
     pointTrace.x = [enthalpy];
     pointTrace.y = [convertedPressure];
-    pointTrace.hovertemplate = this.steamPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+    pointTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
 
     if (this.enthalpyChart.existingPoint) {
       this.enthalpyChart.data[this.enthalpyChart.data.length - 1] = pointTrace;

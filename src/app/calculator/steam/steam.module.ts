@@ -18,6 +18,8 @@ import { RouterModule } from '@angular/router';
 import { SteamReductionModule } from './steam-reduction/steam-reduction.module';
 import { PipeInsulationReductionModule } from './pipe-insulation-reduction/pipe-insulation-reduction.module';
 import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-insulation-reduction.module';
+import { SaturatedPropertiesConversionService } from './saturated-properties-conversion.service';
+import { SaturatedPropertiesService } from './saturated-properties.service';
 
 
 @NgModule({
@@ -47,7 +49,9 @@ import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-
   ],
   providers: [
     SteamService,
-    ConvertSteamService
+    ConvertSteamService,
+    SaturatedPropertiesConversionService,
+    SaturatedPropertiesService
   ]
 })
 export class SteamModule { }

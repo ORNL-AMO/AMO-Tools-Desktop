@@ -2,11 +2,11 @@ import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, SimpleCh
 import { Settings } from '../../../../shared/models/settings';
 import { SaturatedPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 import { SimpleChart } from '../../../../shared/models/plotting';
-import { SaturatedPropertiesService, IsobarCoordinates } from '../saturated-properties.service';
-import { SaturatedPropertiesConversionService } from '../saturated-properties-conversion.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
 import * as Plotly from 'plotly.js';
+import { SaturatedPropertiesService, IsobarCoordinates } from '../../saturated-properties.service';
+import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
 
 @Component({
   selector: 'app-saturated-properties-chart',
@@ -58,6 +58,14 @@ export class SaturatedPropertiesChartComponent implements OnInit {
     private saturatedPropertiesConversionService: SaturatedPropertiesConversionService) { }
   
   ngOnInit() {
+    // this.triggerInitialResize();
+  }
+
+  triggerInitialResize() {
+    window.dispatchEvent(new Event('resize'));
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 25)
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -81,6 +89,7 @@ export class SaturatedPropertiesChartComponent implements OnInit {
 
   initRenderChart() {
     Plotly.purge(this.currentChartId);
+
     this.initChartSetup();
     this.initIsobarTraces();
     this.initDomeAreaTraces();

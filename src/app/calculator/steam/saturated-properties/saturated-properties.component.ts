@@ -67,6 +67,10 @@ export class SaturatedPropertiesComponent implements OnInit {
     this.calculate(this.saturatedPropertiesForm);
   }
 
+  ngOnDestroy() {
+    
+  }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.getChartWidth();
@@ -77,7 +81,7 @@ export class SaturatedPropertiesComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }

@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SimpleChart, TraceData } from '../../../shared/models/plotting';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { IsothermData } from '../steam-isotherm-constants';
-import { IsobarData } from '../steam-isobar-constants';
-import { Settings } from '../../../shared/models/settings';
-import { SaturatedPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { SimpleChart, TraceData } from '../../shared/models/plotting';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { IsobarData } from './steam-isobar-constants';
+import { Settings } from '../../shared/models/settings';
+import { IsothermData } from './steam-isotherm-constants';
 
-@Injectable({
-  providedIn: 'root'
-})
+
+@Injectable()
 export class SaturatedPropertiesService {
 
   entropyChart: BehaviorSubject<SimpleChart>;
@@ -26,6 +24,8 @@ export class SaturatedPropertiesService {
   enthalpy: Array<number>;
   pressures: Array<number>;
 
+  // SaturatedPropertiesService shared by steam-properties to 
+  // supply isotherm, isobar, and dome objects/rendering
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   initEntropyChartData() {

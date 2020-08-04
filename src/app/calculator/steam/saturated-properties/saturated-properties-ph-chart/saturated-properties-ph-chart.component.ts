@@ -2,11 +2,11 @@ import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, HostLis
 import { Settings } from '../../../../shared/models/settings';
 import { SimpleChart } from '../../../../shared/models/plotting';
 import { SaturatedPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
-import { SaturatedPropertiesService, IsothermCoordinates } from '../saturated-properties.service';
-import { SaturatedPropertiesConversionService } from '../saturated-properties-conversion.service';
+import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
 import * as Plotly from 'plotly.js';
+import { SaturatedPropertiesService, IsothermCoordinates } from '../../saturated-properties.service';
 
 @Component({
   selector: 'app-saturated-properties-ph-chart',
@@ -187,13 +187,6 @@ export class SaturatedPropertiesPhChartComponent implements OnInit, OnChanges {
   plotSegment() { 
     let liquidEnthalpy = this.saturatedPropertiesOutput.liquidEnthalpy;
     let gasEnthalpy = this.saturatedPropertiesOutput.gasEnthalpy;
-    
-    // Doesn't need to be converted?
-    // if (this.settings.steamSpecificEnthalpyMeasurement !== this.defaultEnthalpyUnit) {
-    //   console.log('converting liquid enthalpy: previous', JSON.parse(JSON.stringify(liquidEnthalpy)), this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
-    //   liquidEnthalpy = this.saturatedPropertiesConversionService.convertVal(this.saturatedPropertiesOutput.liquidEnthalpy, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
-    //   gasEnthalpy = this.saturatedPropertiesConversionService.convertVal(this.saturatedPropertiesOutput.gasEnthalpy, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
-    // }
 
     let convertedPressure = this.saturatedPropertiesOutput.saturatedPressure;
     if (this.convertPressureUnit) {

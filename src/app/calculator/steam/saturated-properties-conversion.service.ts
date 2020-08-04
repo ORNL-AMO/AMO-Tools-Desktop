@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { SaturatedPropertiesService, IsobarCoordinates, IsothermCoordinates } from './saturated-properties.service';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { Settings } from '../../shared/models/settings';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SaturatedPropertiesConversionService {
 
+  // SaturatedPropertiesConversionService shared by steam-properties to 
+  // supply isotherm, isobar, and dome objects/rendering
   constructor(private saturatedPropertiesService: SaturatedPropertiesService, private convertUnitsService: ConvertUnitsService) { }
 
   convertIsobarTemperature(settings: Settings, defaultTempUnit) {

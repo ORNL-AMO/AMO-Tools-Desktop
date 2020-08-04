@@ -1,12 +1,12 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 import { SimpleChart } from '../../../../shared/models/plotting';
 import * as Plotly from 'plotly.js';
-import { SteamPropertiesService, IsobarCoordinates } from '../steam-properties.service';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { SteamPropertiesConversionService } from '../steam-properties-conversion.service';
+import { SaturatedPropertiesService, IsobarCoordinates } from '../../saturated-properties.service';
+import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
   expandedChartId: string = 'expandedChartDiv';
   currentChartId: string = 'tabPanelDiv';
 
-  propertiesChart: SimpleChart;
+  entropyChart: SimpleChart;
   defaultEntropyUnit: string = 'kJkgK';
   defaultTempUnit: string = 'C';
   defaultPressureUnit: string = 'MPaa';
@@ -55,10 +55,19 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
     }
   }
 
-  constructor(private steamPropertiesService: SteamPropertiesService, 
-    private steamPropertiesConversionService: SteamPropertiesConversionService) { }
+  // Use shared SaturatedPropertiesService to supply isotherm, isobar, and dome objects/rendering
+  constructor(private saturatedPropertiesService: SaturatedPropertiesService, 
+    private saturatedPropertiesConversionService: SaturatedPropertiesConversionService) { }
   
   ngOnInit() {
+    // this.triggerInitialResize();
+  }
+
+  triggerInitialResize() {
+    window.dispatchEvent(new Event('resize'));
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 25)
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -67,7 +76,7 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
           this.updateChart();
         }
     } else if (changes.toggleReset && !changes.toggleReset.firstChange) {
-      if (this.propertiesChart.existingPoint) {
+      if (this.entropyChart.existingPoint) {
         this.removePointTrace();
       } 
     }
@@ -77,7 +86,7 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
   }
 
   save() {
-    this.steamPropertiesService.propertiesChart.next(this.propertiesChart);
+    this.saturatedPropertiesService.entropyChart.next(this.entropyChart);
   }
 
   initRenderChart() {
@@ -89,8 +98,8 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
       this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
     }
 
-    let chartLayout = JSON.parse(JSON.stringify(this.propertiesChart.layout));
-    Plotly.newPlot(this.currentChartId, this.propertiesChart.data, chartLayout, this.propertiesChart.config)
+    let chartLayout = JSON.parse(JSON.stringify(this.entropyChart.layout));
+    Plotly.newPlot(this.currentChartId, this.entropyChart.data, chartLayout, this.entropyChart.config)
     this.save();
   }
 
@@ -98,84 +107,84 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
     if (this.validPlot) {
       this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
     }
-    let chartLayout = JSON.parse(JSON.stringify(this.propertiesChart.layout));
-    Plotly.update(this.currentChartId, this.propertiesChart.data, chartLayout);
+    let chartLayout = JSON.parse(JSON.stringify(this.entropyChart.layout));
+    Plotly.update(this.currentChartId, this.entropyChart.data, chartLayout);
     this.save();
   }
 
   initChartSetup() {
-    this.steamPropertiesService.initEntropyChartData();
-    this.propertiesChart = this.steamPropertiesService.propertiesChart.getValue();
-    this.steamPropertiesService.setEntropyChartConfig(this.settings);
+    this.saturatedPropertiesService.initEntropyChartData();
+    this.entropyChart = this.saturatedPropertiesService.entropyChart.getValue();
+    this.saturatedPropertiesService.setEntropyChartConfig(this.settings);
   }
   
   initIsobarTraces() {
     this.checkConvertIsobars();
-    let isobars: Array<IsobarCoordinates> = this.steamPropertiesService.isobars.getValue();    
+    let isobars: Array<IsobarCoordinates> = this.saturatedPropertiesService.isobars.getValue();    
     isobars.forEach((line: IsobarCoordinates) => {
-      let trace = this.steamPropertiesService.getEmptyTrace();
+      let trace = this.saturatedPropertiesService.getEmptyTrace();
       trace.x = line.entropy;
       trace.y = line.temp;
       trace.hovertemplate = `Isobar ${line.pressureValue} ${this.settings.steamPressureMeasurement}`;
-      this.propertiesChart.data.push(trace);
+      this.entropyChart.data.push(trace);
     });
   }
 
   checkConvertIsobars() {
     if (this.settings.steamSpecificEntropyMeasurement !== undefined 
       && this.settings.steamSpecificEntropyMeasurement !== this.defaultEntropyUnit) {
-      this.steamPropertiesConversionService.convertIsobarEntropy(this.settings, this.defaultEntropyUnit);
+      this.saturatedPropertiesConversionService.convertIsobarEntropy(this.settings, this.defaultEntropyUnit);
     }
     if (this.settings.steamTemperatureMeasurement !== undefined 
       && this.settings.steamTemperatureMeasurement !== this.defaultTempUnit) {
-      this.steamPropertiesConversionService.convertIsobarTemperature(this.settings, this.defaultTempUnit);
+      this.saturatedPropertiesConversionService.convertIsobarTemperature(this.settings, this.defaultTempUnit);
     }
     if (this.settings.steamPressureMeasurement !== undefined 
       && this.settings.steamPressureMeasurement !== this.defaultPressureUnit) {
-      this.steamPropertiesConversionService.convertIsobarPressure(this.settings, this.defaultPressureUnit);
+      this.saturatedPropertiesConversionService.convertIsobarPressure(this.settings, this.defaultPressureUnit);
     }
   }
 
   initDomeAreaTraces() {
     // Fill in 'Liquid Vapor Dome' area
-    let domeFillTrace = this.steamPropertiesService.getEmptyTrace();
+    let domeFillTrace = this.saturatedPropertiesService.getEmptyTrace();
     domeFillTrace.fill = 'tozeroy';
     domeFillTrace.fillcolor = 'rgba(70,130,180,0.4)';
-    domeFillTrace.x = this.steamPropertiesService.entropy;
-    domeFillTrace.y = this.steamPropertiesService.temperatures;
+    domeFillTrace.x = this.saturatedPropertiesService.entropy;
+    domeFillTrace.y = this.saturatedPropertiesService.temperatures;
 
     // Black dome outline (envelope)
-    let domeOutlineTrace = this.steamPropertiesService.getEmptyTrace();
-    domeOutlineTrace.x = this.steamPropertiesService.entropy;
-    domeOutlineTrace.y = this.steamPropertiesService.temperatures;
+    let domeOutlineTrace = this.saturatedPropertiesService.getEmptyTrace();
+    domeOutlineTrace.x = this.saturatedPropertiesService.entropy;
+    domeOutlineTrace.y = this.saturatedPropertiesService.temperatures;
     domeOutlineTrace.line.width = 2;
     domeOutlineTrace.line.color = "#000000";
     domeOutlineTrace.name = "Saturated";
-    domeOutlineTrace.hovertemplate = this.steamPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, true);
+    domeOutlineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, true);
 
-    this.propertiesChart.data.push(domeFillTrace, domeOutlineTrace);
+    this.entropyChart.data.push(domeFillTrace, domeOutlineTrace);
   }
 
   plotPoint(temperature: number, entropy: number) {
-    let pointTrace = this.steamPropertiesService.getPointTrace();
+    let pointTrace = this.saturatedPropertiesService.getPointTrace();
     pointTrace.marker.color = graphColors[0];
     pointTrace.x = [entropy];
     pointTrace.y = [temperature];
-    pointTrace.hovertemplate = this.steamPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, true);
+    pointTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, true);
 
-    if (this.propertiesChart.existingPoint) {
-      this.propertiesChart.data[this.propertiesChart.data.length - 1] = pointTrace;
+    if (this.entropyChart.existingPoint) {
+      this.entropyChart.data[this.entropyChart.data.length - 1] = pointTrace;
     } else {
-      this.propertiesChart.data.push(pointTrace);
-      this.propertiesChart.existingPoint = true;
+      this.entropyChart.data.push(pointTrace);
+      this.entropyChart.existingPoint = true;
     }
   }
 
   removePointTrace() {
-    this.propertiesChart.data.splice(this.propertiesChart.data.length - 1, 1);
-    this.propertiesChart.existingPoint = false;
-    let chartLayout = JSON.parse(JSON.stringify(this.propertiesChart.layout));
-    Plotly.update(this.currentChartId, this.propertiesChart.data, chartLayout);
+    this.entropyChart.data.splice(this.entropyChart.data.length - 1, 1);
+    this.entropyChart.existingPoint = false;
+    let chartLayout = JSON.parse(JSON.stringify(this.entropyChart.layout));
+    Plotly.update(this.currentChartId, this.entropyChart.data, chartLayout);
     this.save();
   }
 
@@ -268,10 +277,10 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
     }
 
   toggleGrid() {
-    let showingGridX: boolean = this.propertiesChart.layout.xaxis.showgrid;
-    let showingGridY: boolean = this.propertiesChart.layout.yaxis.showgrid;
-    this.propertiesChart.layout.xaxis.showgrid = !showingGridX;
-    this.propertiesChart.layout.yaxis.showgrid = !showingGridY;
+    let showingGridX: boolean = this.entropyChart.layout.xaxis.showgrid;
+    let showingGridY: boolean = this.entropyChart.layout.yaxis.showgrid;
+    this.entropyChart.layout.xaxis.showgrid = !showingGridX;
+    this.entropyChart.layout.yaxis.showgrid = !showingGridY;
     this.updateChart();
   }
 

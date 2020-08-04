@@ -2,7 +2,8 @@
 //temperature default is Celsius
 //entropy default is kJ/kg*K
 
-import { IsobarCoordinates } from "./saturated-properties/saturated-properties.service";
+import { IsobarCoordinates } from "./saturated-properties.service";
+
 
 // These two constant arrays generate the black outline of the dome
 const temperatureConstants = [0.01, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 373.95, 370, 360, 350, 340, 330, 320, 310, 300, 290, 280, 270, 260, 250, 240, 230, 220, 210, 200, 190, 180, 170, 160, 150, 140, 130, 120, 110, 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0.01];
