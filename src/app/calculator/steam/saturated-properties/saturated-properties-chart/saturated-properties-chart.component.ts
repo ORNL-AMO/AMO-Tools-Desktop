@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, SimpleChanges } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, HostListener, SimpleChanges, OnChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { SaturatedPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 import { SimpleChart } from '../../../../shared/models/plotting';
@@ -13,7 +13,7 @@ import { SaturatedPropertiesConversionService } from '../../saturated-properties
   templateUrl: './saturated-properties-chart.component.html',
   styleUrls: ['./saturated-properties-chart.component.css']
 })
-export class SaturatedPropertiesChartComponent implements OnInit {
+export class SaturatedPropertiesChartComponent implements OnChanges {
 
   @Input()
   settings: Settings;
@@ -56,17 +56,7 @@ export class SaturatedPropertiesChartComponent implements OnInit {
 
   constructor(private saturatedPropertiesService: SaturatedPropertiesService, 
     private saturatedPropertiesConversionService: SaturatedPropertiesConversionService) { }
-  
-  ngOnInit() {
-    // this.triggerInitialResize();
-  }
 
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.initRenderChart();
-    }, 25)
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.saturatedPropertiesOutput && !changes.toggleReset && !changes.saturatedPropertiesOutput.firstChange) {

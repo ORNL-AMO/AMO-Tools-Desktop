@@ -9,12 +9,13 @@ import { SaturatedPropertiesService, IsobarCoordinates } from '../../saturated-p
 import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
 
 
+
 @Component({
   selector: 'app-steam-properties-chart',
   templateUrl: './steam-properties-chart.component.html',
   styleUrls: ['./steam-properties-chart.component.css']
 })
-export class SteamPropertiesChartComponent implements OnInit, OnChanges {
+export class SteamPropertiesChartComponent implements OnChanges {
 
   @Input()
   settings: Settings;
@@ -27,9 +28,9 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
 
   // DOM
   @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
-  tabPanelChartId: string = 'tabPanelDiv';
-  expandedChartId: string = 'expandedChartDiv';
-  currentChartId: string = 'tabPanelDiv';
+  tabPanelChartId: string = 'tabPanelPropertiesChartDiv';
+  expandedChartId: string = 'expandedPropertiesCharttDiv';
+  currentChartId: string = 'tabPanelPropertiesChartDiv';
 
   entropyChart: SimpleChart;
   defaultEntropyUnit: string = 'kJkgK';
@@ -58,17 +59,6 @@ export class SteamPropertiesChartComponent implements OnInit, OnChanges {
   // Use shared SaturatedPropertiesService to supply isotherm, isobar, and dome objects/rendering
   constructor(private saturatedPropertiesService: SaturatedPropertiesService, 
     private saturatedPropertiesConversionService: SaturatedPropertiesConversionService) { }
-  
-  ngOnInit() {
-    // this.triggerInitialResize();
-  }
-
-  triggerInitialResize() {
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-      this.initRenderChart();
-    }, 25)
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.steamPropertiesOutput && !changes.toggleReset && !changes.steamPropertiesOutput.firstChange) {
