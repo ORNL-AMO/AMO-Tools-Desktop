@@ -13,6 +13,10 @@ export class MotorInventoryBannerComponent implements OnInit {
 
   setupTab: string;
   setupTabSub: Subscription;
+  summaryTab: string;
+  summaryTabSub: Subscription;
+  mainTab: string;
+  mainTabSub: Subscription;
   motorInventoryData: MotorInventoryData;
   motorInventoryDataSub: Subscription;
   selectedDepartmentId: string;
@@ -20,6 +24,10 @@ export class MotorInventoryBannerComponent implements OnInit {
   constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
+    this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
+      this.mainTab = val;
+    });
+
     this.setupTabSub = this.motorInventoryService.setupTab.subscribe(val => {
       this.setupTab = val;
     });
@@ -31,12 +39,18 @@ export class MotorInventoryBannerComponent implements OnInit {
     this.selectedDepartmentIdSub = this.motorCatalogService.selectedDepartmentId.subscribe(val => {
       this.selectedDepartmentId = val;
     });
+
+    this.summaryTabSub = this.motorInventoryService.summaryTab.subscribe(val => {
+      this.summaryTab = val;
+    });
   }
 
   ngOnDestroy() {
     this.setupTabSub.unsubscribe();
     this.motorInventoryDataSub.unsubscribe();
     this.selectedDepartmentIdSub.unsubscribe();
+    this.mainTabSub.unsubscribe();
+    this.summaryTabSub.unsubscribe();
   }
 
   setSetupTab(str: string) {
@@ -45,5 +59,13 @@ export class MotorInventoryBannerComponent implements OnInit {
 
   selectedDepartment(departmentId: string) {
     this.motorCatalogService.selectedDepartmentId.next(departmentId);
+  }
+
+  setMainTab(str: string) {
+    this.motorInventoryService.mainTab.next(str);
+  }
+
+  setSummaryTab(str: string) {
+    this.motorInventoryService.summaryTab.next(str);
   }
 }

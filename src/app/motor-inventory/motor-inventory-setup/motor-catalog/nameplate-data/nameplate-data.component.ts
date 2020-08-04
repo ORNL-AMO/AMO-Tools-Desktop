@@ -27,7 +27,8 @@ export class NameplateDataComponent implements OnInit {
     private nameplateDataService: NameplateDataService) { }
 
   ngOnInit(): void {
-    this.efficiencyClasses = motorEfficiencyConstants;
+    this.efficiencyClasses = JSON.parse(JSON.stringify(motorEfficiencyConstants));
+    this.efficiencyClasses.pop();
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.nameplateDataService.getFormFromNameplateData(selectedMotor.nameplateData);

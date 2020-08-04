@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { MotorInventoryService } from '../motor-inventory.service';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-motor-inventory-setup',
@@ -9,6 +9,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./motor-inventory-setup.component.css']
 })
 export class MotorInventorySetupComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   setupTab: string;
   setupTabSubscription: Subscription;

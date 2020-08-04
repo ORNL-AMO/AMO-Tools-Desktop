@@ -1,11 +1,12 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { MotorInventoryService } from './motor-inventory.service';
 import { Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { MotorInventoryData } from './motor-inventory';
+import { Settings } from '../shared/models/settings';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
 
 declare const packageJson;
 
@@ -25,23 +26,29 @@ export class MotorInventoryComponent implements OnInit {
   containerHeight: number;
 
   setupTabSub: Subscription;
+  mainTab: string;
+  mainTabSub: Subscription;
+
   motorInventoryDataSub: Subscription;
   motorInventoryAssessment: Assessment;
-  constructor(private activatedRoute: ActivatedRoute, private motorInventoryService: MotorInventoryService, private assessmentDbService: AssessmentDbService,
-    private indexedDbService: IndexedDbService) { }
+  settings: Settings;
+  constructor(private motorInventoryService: MotorInventoryService, private assessmentDbService: AssessmentDbService,
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+    this.settings = this.settingsDbService.globalSettings;
     this.setMotorInventoryAssessment();
     if (this.motorInventoryAssessment) {
       this.motorInventoryService.motorInventoryData.next(this.motorInventoryAssessment.motorInventory);
     }
-
-    this.activatedRoute.url.subscribe(url => {
+    
+    this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
+      this.mainTab = val;
       this.getContainerHeight();
     });
-
     this.setupTabSub = this.motorInventoryService.setupTab.subscribe(val => {
       this.getContainerHeight();
+
     });
 
 
@@ -53,6 +60,7 @@ export class MotorInventoryComponent implements OnInit {
 
   ngOnDestroy() {
     this.setupTabSub.unsubscribe();
+    this.mainTabSub.unsubscribe();
     this.motorInventoryDataSub.unsubscribe();
   }
 
@@ -65,7 +73,10 @@ export class MotorInventoryComponent implements OnInit {
       setTimeout(() => {
         let contentHeight = this.content.nativeElement.clientHeight;
         let headerHeight = this.header.nativeElement.clientHeight;
-        let footerHeight = this.footer.nativeElement.clientHeight;
+        let footerHeight = 0;
+        if(this.footer){
+          footerHeight = this.footer.nativeElement.clientHeight;
+        }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
     }

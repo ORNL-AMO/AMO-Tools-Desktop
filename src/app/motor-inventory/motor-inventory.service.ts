@@ -5,16 +5,20 @@ import { MotorItem, MotorInventoryDepartment, MotorInventoryData, MotorPropertyD
 @Injectable()
 export class MotorInventoryService {
 
+  mainTab: BehaviorSubject<string>;
   setupTab: BehaviorSubject<string>;
+  summaryTab: BehaviorSubject<string>;
   motorInventoryData: BehaviorSubject<MotorInventoryData>;
   focusedField: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   constructor() {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
+    this.mainTab = new BehaviorSubject<string>('setup');
     let inventoryData: MotorInventoryData = this.initInventoryData();
     this.motorInventoryData = new BehaviorSubject<MotorInventoryData>(inventoryData);
     this.focusedField = new BehaviorSubject<string>('default');
     this.modalOpen = new BehaviorSubject<boolean>(false);
+    this.summaryTab = new BehaviorSubject<string>('overview');
   }
 
   updateMotorItem(selectedMotor: MotorItem) {

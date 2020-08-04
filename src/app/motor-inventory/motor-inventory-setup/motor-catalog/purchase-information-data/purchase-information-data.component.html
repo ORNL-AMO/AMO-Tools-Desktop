@@ -23,9 +23,8 @@
     <div class="form-group" *ngIf="displayOptions.warranty">
         <label for="warranty">Warranty</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('warranty')" (input)="save()"
+            <input type="date" class="form-control" (focus)="focusField('warranty')" (change)="save()"
                 formControlName="warranty" id="warranty">
-            <!-- <span class="input-group-addon units">$</span> -->
         </div>
     </div>
     <!-- directReplacementCost -->
