@@ -2,7 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostLis
 import { CashFlowResults } from '../cash-flow';
 import { CashFlowForm } from '../cash-flow';
 import { CashFlowService } from '../cash-flow.service';
-import { TraceData } from '../../../../shared/models/plotting';
+import { TraceData, SimpleChart } from '../../../../shared/models/plotting';
 
 import * as Plotly from 'plotly.js';
 
@@ -37,11 +37,8 @@ export class CashFlowDiagramComponent implements OnInit {
   displayCollapseTooltip: boolean;
   hoverBtnExport: boolean;
 
-  cashFlowChart;
-
-  firstChange: boolean = true;
-
-  cashFlowData;
+  cashFlowChart: SimpleChart;
+  cashFlowData: Array<any>;
   years: Array<any>;
   constructor(private cashFlowService: CashFlowService) {}
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CashFlowForm } from './cash-flow';
-import { TraceData } from '../../../shared/models/plotting';
+import { TraceData, SimpleChart } from '../../../shared/models/plotting';
 
 @Injectable()
 export class CashFlowService {
@@ -25,7 +25,7 @@ export class CashFlowService {
     return trace;
   }
 
-  getEmptyChart() {
+  getEmptyChart(): SimpleChart {
     return {
       name: 'Cash Flow',
       data: [],
@@ -38,12 +38,16 @@ export class CashFlowService {
         xaxis: {
           autorange: true,
           type: 'auto',
+          showgrid: false,
+          showticksuffix: ''
         },
         yaxis: {
           autorange: true,
           type: 'auto',
+          showgrid: false,
+          showticksuffix: '',
           title: {
-            text: 'Value (%)'
+            text: 'Cost USD (thousands)'
           },
         },
         margin: {
