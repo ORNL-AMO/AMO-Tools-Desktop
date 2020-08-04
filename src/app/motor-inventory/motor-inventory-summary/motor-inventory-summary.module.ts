@@ -9,7 +9,6 @@ import { InventorySummaryOverviewService } from './inventory-summary-overview/in
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { MotorSummaryTablePipe } from './inventory-summary-table/motor-summary-table.pipe';
 import { InventorySummaryTableService } from './inventory-summary-table/inventory-summary-table.service';
-import { InventorySummaryGraphsTabsComponent } from './inventory-summary-graphs/inventory-summary-graphs-tabs/inventory-summary-graphs-tabs.component';
 import { InventorySummaryGraphsMenuComponent } from './inventory-summary-graphs/inventory-summary-graphs-menu/inventory-summary-graphs-menu.component';
 import { InventorySummaryGraphComponent } from './inventory-summary-graphs/inventory-summary-graph/inventory-summary-graph.component';
 import { InventorySummaryGraphsService } from './inventory-summary-graphs/inventory-summary-graphs.service';
@@ -22,7 +21,6 @@ import { InventorySummaryGraphsService } from './inventory-summary-graphs/invent
     InventorySummaryOverviewComponent,
     InventorySummaryMotorDetailsComponent,
     MotorSummaryTablePipe,
-    InventorySummaryGraphsTabsComponent,
     InventorySummaryGraphsMenuComponent,
     InventorySummaryGraphComponent
   ],

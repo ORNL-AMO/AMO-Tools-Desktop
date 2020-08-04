@@ -8,7 +8,7 @@ export class InventorySummaryTableService {
   constructor() { }
   getInventorySummaryData(motorInventoryData: MotorInventoryData, settings: Settings): InventorySummaryData {
     let motorData: Array<Array<SummaryMotorData>> = new Array();
-    let fields: Array<{ display: string, value: string }> = this.getFields(motorInventoryData.displayOptions);
+    let fields: Array<{ display: string, value: string, group: string }> = this.getFields(motorInventoryData.displayOptions);
     motorInventoryData.departments.forEach(department => {
       department.catalog.forEach(motorItem => {
         let motorItemData = this.getMotorData(motorItem, department.name, motorInventoryData.displayOptions, settings);
@@ -21,31 +21,39 @@ export class InventorySummaryTableService {
     }
   }
 
-  getFields(displayOptions: MotorPropertyDisplayOptions): Array<{ display: string, value: string }> {
-    let fields: Array<{ display: string, value: string }> = [{ display: 'Name', value: 'name' }, { display: 'Department', value: 'department' }];
+  getFields(displayOptions: MotorPropertyDisplayOptions): Array<{ display: string, value: string, group: string }> {
+    let fields: Array<{ display: string, value: string, group: string }> = [{
+      display: 'Name',
+      value: 'name',
+      group: 'nameplateData'
+    }, {
+      display: 'Department',
+      value: 'department',
+      group: 'nameplateData'
+    }];
     //nameplate
-    let nameplateFields: Array<{ display: string, value: string }> = this.getNameplateDataFields(displayOptions.nameplateDataOptions);
+    let nameplateFields: Array<{ display: string, value: string, group: string }> = this.getNameplateDataFields(displayOptions.nameplateDataOptions);
     fields = fields.concat(nameplateFields);
     //load characteristics
-    let loadCharactersticOptions: Array<{ display: string, value: string }> = this.getLoadCharacteristicsFields(displayOptions.loadCharactersticOptions);
+    let loadCharactersticOptions: Array<{ display: string, value: string, group: string }> = this.getLoadCharacteristicsFields(displayOptions.loadCharactersticOptions);
     fields = fields.concat(loadCharactersticOptions);
     //operations data
-    let operationsFields: Array<{ display: string, value: string }> = this.getOperationsDataFields(displayOptions.operationDataOptions);
+    let operationsFields: Array<{ display: string, value: string, group: string }> = this.getOperationsDataFields(displayOptions.operationDataOptions);
     fields = fields.concat(operationsFields);
     //manual
-    let manualFields: Array<{ display: string, value: string }> = this.getManualSpecificationsFields(displayOptions.manualSpecificationOptions);
+    let manualFields: Array<{ display: string, value: string, group: string }> = this.getManualSpecificationsFields(displayOptions.manualSpecificationOptions);
     fields = fields.concat(manualFields);
     //batch analysis
-    let batchFields: Array<{ display: string, value: string }> = this.getBatchAnalysisFields(displayOptions.batchAnalysisOptions);
+    let batchFields: Array<{ display: string, value: string, group: string }> = this.getBatchAnalysisFields(displayOptions.batchAnalysisOptions);
     fields = fields.concat(batchFields);
     //purchase information
-    let purchaseInfoFields: Array<{ display: string, value: string }> = this.getPurchaseInfoFields(displayOptions.purchaseInformationOptions);
+    let purchaseInfoFields: Array<{ display: string, value: string, group: string }> = this.getPurchaseInfoFields(displayOptions.purchaseInformationOptions);
     fields = fields.concat(purchaseInfoFields);
     //torque
-    let torqueFields: Array<{ display: string, value: string }> = this.getTorqueDataFields(displayOptions.torqueOptions);
+    let torqueFields: Array<{ display: string, value: string, group: string }> = this.getTorqueDataFields(displayOptions.torqueOptions);
     fields = fields.concat(torqueFields);
     //other
-    let otherFields: Array<{ display: string, value: string }> = this.getOtherFields(displayOptions.otherOptions);
+    let otherFields: Array<{ display: string, value: string, group: string }> = this.getOtherFields(displayOptions.otherOptions);
     fields = fields.concat(otherFields)
     return fields;
   }
@@ -82,52 +90,52 @@ export class InventorySummaryTableService {
   }
 
   //nameplate data
-  getNameplateDataFields(nameplateDataOptions: NameplateDataOptions): Array<{ display: string, value: string }> {
-    let fields: Array<{ display: string, value: string }> = [
-      { display: 'Efficiency Class', value: 'efficiencyClass' },
-      { display: 'Est. Nominal Efficiency', value: 'nominalEfficiency' },
-      { display: 'Rated Motor Power', value: 'ratedMotorPower' },
-      { display: 'Line Frequency', value: 'lineFrequency' }
+  getNameplateDataFields(nameplateDataOptions: NameplateDataOptions): Array<{ display: string, value: string, group: string }> {
+    let fields: Array<{ display: string, value: string, group: string }> = [
+      { display: 'Efficiency Class', value: 'efficiencyClass', group: 'nameplateData' },
+      { display: 'Est. Nominal Efficiency', value: 'nominalEfficiency', group: 'nameplateData' },
+      { display: 'Rated Motor Power', value: 'ratedMotorPower', group: 'nameplateData' },
+      { display: 'Line Frequency', value: 'lineFrequency', group: 'nameplateData' }
     ];
     if (nameplateDataOptions.manufacturer) {
-      fields.push({ display: 'Manufacturer', value: 'manufacturer' });
+      fields.push({ display: 'Manufacturer', value: 'manufacturer', group: 'nameplateData' });
     }
     if (nameplateDataOptions.model) {
-      fields.push({ display: 'Model', value: 'model' });
+      fields.push({ display: 'Model', value: 'model', group: 'nameplateData' });
     }
     if (nameplateDataOptions.motorType) {
-      fields.push({ display: 'Motor Type', value: 'motorType' });
+      fields.push({ display: 'Motor Type', value: 'motorType', group: 'nameplateData' });
     }
     if (nameplateDataOptions.enclosureType) {
-      fields.push({ display: 'Enclosure Type', value: 'enclosureType' });
+      fields.push({ display: 'Enclosure Type', value: 'enclosureType', group: 'nameplateData' });
     }
     if (nameplateDataOptions.ratedVoltage) {
-      fields.push({ display: 'Rated Voltage', value: 'ratedVoltage' });
+      fields.push({ display: 'Rated Voltage', value: 'ratedVoltage', group: 'nameplateData' });
     }
     if (nameplateDataOptions.serviceFactor) {
-      fields.push({ display: 'Service Factor', value: 'serviceFactor' });
+      fields.push({ display: 'Service Factor', value: 'serviceFactor', group: 'nameplateData' });
     }
     if (nameplateDataOptions.insulationClass) {
-      fields.push({ display: 'Insulation Class', value: 'insulationClass' });
+      fields.push({ display: 'Insulation Class', value: 'insulationClass', group: 'nameplateData' });
     }
     if (nameplateDataOptions.weight) {
-      fields.push({ display: 'Weight', value: 'weight' });
+      fields.push({ display: 'Weight', value: 'weight', group: 'nameplateData' });
     }
     if (nameplateDataOptions.numberOfPhases) {
-      fields.push({ display: 'Number of Phases', value: 'numberOfPhases' });
+      fields.push({ display: 'Number of Phases', value: 'numberOfPhases', group: 'nameplateData' });
     }
     if (nameplateDataOptions.fullLoadSpeed) {
-      fields.push({ display: 'Full Load Speed', value: 'fullLoadSpeed' });
+      fields.push({ display: 'Full Load Speed', value: 'fullLoadSpeed', group: 'nameplateData' });
     }
     if (nameplateDataOptions.fullLoadAmps) {
-      fields.push({ display: 'Full Load Amps', value: 'fullLoadAmps' });
+      fields.push({ display: 'Full Load Amps', value: 'fullLoadAmps', group: 'nameplateData' });
     }
     return fields;
   }
 
   getNameplateMotorData(nameplateData: NameplateData, nameplateDataOptions: NameplateDataOptions, settings: Settings): Array<SummaryMotorData> {
     let powerUnit: string = 'hp';
-    if(settings.unitsOfMeasure != 'Imperial'){
+    if (settings.unitsOfMeasure != 'Imperial') {
       powerUnit = 'kW';
     }
     let motorData: Array<SummaryMotorData> = [
@@ -159,7 +167,7 @@ export class InventorySummaryTableService {
     }
     if (nameplateDataOptions.weight) {
       let weightUnit: string = 'lb';
-      if(settings.unitsOfMeasure != 'Imperial'){
+      if (settings.unitsOfMeasure != 'Imperial') {
         weightUnit = 'kg';
       }
       motorData.push({ value: nameplateData.weight, fieldStr: 'weight', unit: weightUnit });
@@ -176,44 +184,44 @@ export class InventorySummaryTableService {
     return motorData;
   }
   //manual specifications
-  getManualSpecificationsFields(manualSpecificationOptions: ManualSpecificationOptions): Array<{ display: string, value: string }> {
-    let fields: Array<{ display: string, value: string }> = [
-      { display: 'Synchronous Speed', value: 'synchronousSpeed' }];
+  getManualSpecificationsFields(manualSpecificationOptions: ManualSpecificationOptions): Array<{ display: string, value: string, group: string }> {
+    let fields: Array<{ display: string, value: string, group: string }> = [
+      { display: 'Synchronous Speed', value: 'synchronousSpeed', group: 'manualSpecificationData' }];
 
     if (manualSpecificationOptions.displayManualSpecifications) {
 
       if (manualSpecificationOptions.ratedSpeed) {
-        fields.push({ display: 'Rated Speed', value: 'ratedSpeed' });
+        fields.push({ display: 'Rated Speed', value: 'ratedSpeed', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.frame) {
-        fields.push({ display: 'Frame', value: 'frame' });
+        fields.push({ display: 'Frame', value: 'frame', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.shaftPosiion) {
-        fields.push({ display: 'Shaft Position', value: 'shaftPosiion' });
+        fields.push({ display: 'Shaft Position', value: 'shaftPosiion', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.windingResistance) {
-        fields.push({ display: 'Winding Resistance', value: 'windingResistance' });
+        fields.push({ display: 'Winding Resistance', value: 'windingResistance', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.rotorBars) {
-        fields.push({ display: 'Rotor Bars', value: 'rotorBars' });
+        fields.push({ display: 'Rotor Bars', value: 'rotorBars', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.statorSlots) {
-        fields.push({ display: 'Stator Slots', value: 'statorSlots' });
+        fields.push({ display: 'Stator Slots', value: 'statorSlots', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.ampsLockedRotor) {
-        fields.push({ display: 'Amps Locked Rotor', value: 'ampsLockedRotor' });
+        fields.push({ display: 'Amps Locked Rotor', value: 'ampsLockedRotor', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.stalledRotorTimeHot) {
-        fields.push({ display: 'Stalled Rotor Time - Hot', value: 'stalledRotorTimeHot' });
+        fields.push({ display: 'Stalled Rotor Time - Hot', value: 'stalledRotorTimeHot', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.stalledRotorTimeCold) {
-        fields.push({ display: 'Stalled Rotor Time - Cold', value: 'stalledRotorTimeCold' });
+        fields.push({ display: 'Stalled Rotor Time - Cold', value: 'stalledRotorTimeCold', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.poles) {
-        fields.push({ display: 'Poles', value: 'poles' });
+        fields.push({ display: 'Poles', value: 'poles', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.currentType) {
-        fields.push({ display: 'Current Type', value: 'currentType' });
+        fields.push({ display: 'Current Type', value: 'currentType', group: 'manualSpecificationData' });
       }
     }
     return fields;
@@ -260,32 +268,32 @@ export class InventorySummaryTableService {
   }
 
   //load characteristics
-  getLoadCharacteristicsFields(loadCharactersticOptions: LoadCharacteristicOptions): Array<{ display: string, value: string }> {
-    let fields: Array<{ display: string, value: string }> = [];
+  getLoadCharacteristicsFields(loadCharactersticOptions: LoadCharacteristicOptions): Array<{ display: string, value: string, group: string }> {
+    let fields: Array<{ display: string, value: string, group: string }> = [];
     if (loadCharactersticOptions.displayLoadCharacteristics) {
       if (loadCharactersticOptions.efficiency75) {
-        fields.push({ display: 'Efficiency at 75% Load', value: 'efficiency75' });
+        fields.push({ display: 'Efficiency at 75% Load', value: 'efficiency75', group: 'loadCharactristicData' });
       }
       if (loadCharactersticOptions.efficiency50) {
-        fields.push({ display: 'Efficiency at 50% Load', value: 'efficiency50' });
+        fields.push({ display: 'Efficiency at 50% Load', value: 'efficiency50', group: 'loadCharactristicData' });
       }
       if (loadCharactersticOptions.efficiency25) {
-        fields.push({ display: 'Efficiency at 25% Load', value: 'efficiency25' });
+        fields.push({ display: 'Efficiency at 25% Load', value: 'efficiency25', group: 'loadCharactristicData' });
       }
       if (loadCharactersticOptions.powerFactor100) {
-        fields.push({ display: 'Power Factor at Full Load', value: 'powerFactor100' });
+        fields.push({ display: 'Power Factor at Full Load', value: 'powerFactor100', group: 'loadCharactristicData' });
       }
       if (loadCharactersticOptions.powerFactor75) {
-        fields.push({ display: 'Power Factor at 75% Load', value: 'powerFactor75' });
+        fields.push({ display: 'Power Factor at 75% Load', value: 'powerFactor75', group: 'loadCharactristicData' });
       }
       if (loadCharactersticOptions.powerFactor50) {
-        fields.push({ display: 'Power Factor at 50% Load', value: 'powerFactor50' });
+        fields.push({ display: 'Power Factor at 50% Load', value: 'powerFactor50', group: 'loadCharactristicData' });
       }
       if (loadCharactersticOptions.powerFactor25) {
-        fields.push({ display: 'Power Factor at 25% Load', value: 'powerFactor25' });
+        fields.push({ display: 'Power Factor at 25% Load', value: 'powerFactor25', group: 'loadCharactristicData' });
       }
       if (loadCharactersticOptions.ampsIdle) {
-        fields.push({ display: 'Amps Idle', value: 'ampsIdle' });
+        fields.push({ display: 'Amps Idle', value: 'ampsIdle', group: 'loadCharactristicData' });
       }
     }
     return fields;
@@ -322,26 +330,26 @@ export class InventorySummaryTableService {
     return motorData;
   }
   //operations
-  getOperationsDataFields(operationDataOptions: OperationDataOptions): Array<{ display: string, value: string }> {
-    let fields: Array<{ display: string, value: string }> = new Array();
+  getOperationsDataFields(operationDataOptions: OperationDataOptions): Array<{ display: string, value: string, group: string }> {
+    let fields: Array<{ display: string, value: string, group: string }> = new Array();
     if (operationDataOptions.displayOperationData) {
       if (operationDataOptions.location) {
-        fields.push({ display: 'Location', value: 'location' });
+        fields.push({ display: 'Location', value: 'location', group: 'operationsData' });
       }
       if (operationDataOptions.annualOperatingHours) {
-        fields.push({ display: 'Operating Hours', value: 'annualOperatingHours' });
+        fields.push({ display: 'Operating Hours', value: 'annualOperatingHours', group: 'operationsData' });
       }
       if (operationDataOptions.averageLoadFactor) {
-        fields.push({ display: 'Average Load Factor', value: 'averageLoadFactor' });
+        fields.push({ display: 'Average Load Factor', value: 'averageLoadFactor', group: 'operationsData' });
       }
       if (operationDataOptions.utilizationFactor) {
-        fields.push({ display: 'Utilization Factor', value: 'utilizationFactor' });
+        fields.push({ display: 'Utilization Factor', value: 'utilizationFactor', group: 'operationsData' });
       }
       if (operationDataOptions.efficiencyAtAverageLoad) {
-        fields.push({ display: 'Efficiency at Average Load', value: 'efficiencyAtAverageLoad' });
+        fields.push({ display: 'Efficiency at Average Load', value: 'efficiencyAtAverageLoad', group: 'operationsData' });
       }
       if (operationDataOptions.powerFactorAtLoad) {
-        fields.push({ display: 'Power Factor at Load', value: 'powerFactorAtLoad' });
+        fields.push({ display: 'Power Factor at Load', value: 'powerFactorAtLoad', group: 'operationsData' });
       }
     }
     return fields;
@@ -372,26 +380,26 @@ export class InventorySummaryTableService {
     return motorData;
   }
   //batch analysis
-  getBatchAnalysisFields(batchAnalysisOptions: BatchAnalysisOptions): Array<{ display: string, value: string }> {
-    let fields: Array<{ display: string, value: string }> = new Array();
+  getBatchAnalysisFields(batchAnalysisOptions: BatchAnalysisOptions): Array<{ display: string, value: string, group: string }> {
+    let fields: Array<{ display: string, value: string, group: string }> = new Array();
     if (batchAnalysisOptions.displayBatchAnalysis) {
       if (batchAnalysisOptions.modifiedCost) {
-        fields.push({ display: 'Modified Cost', value: 'modifiedCost' });
+        fields.push({ display: 'Modified Cost', value: 'modifiedCost', group: 'batchAnalysisData' });
       }
       if (batchAnalysisOptions.modifiedPower) {
-        fields.push({ display: 'Modified Power', value: 'modifiedPower' });
+        fields.push({ display: 'Modified Power', value: 'modifiedPower', group: 'batchAnalysisData' });
       }
       if (batchAnalysisOptions.modifiedEfficiency) {
-        fields.push({ display: 'Modified Efficiency', value: 'modifiedEfficiency' });
+        fields.push({ display: 'Modified Efficiency', value: 'modifiedEfficiency', group: 'batchAnalysisData' });
       }
       if (batchAnalysisOptions.modifiedPercentLoad) {
-        fields.push({ display: 'Modified Percent Load', value: 'modifiedPercentLoad' });
+        fields.push({ display: 'Modified Percent Load', value: 'modifiedPercentLoad', group: 'batchAnalysisData' });
       }
       if (batchAnalysisOptions.rewindCost) {
-        fields.push({ display: 'Rewind Cost', value: 'rewindCost' });
+        fields.push({ display: 'Rewind Cost', value: 'rewindCost', group: 'batchAnalysisData' });
       }
       if (batchAnalysisOptions.rewindEfficiencyLoss) {
-        fields.push({ display: 'Rewind Efficiency Loss', value: 'rewindEfficiencyLoss' });
+        fields.push({ display: 'Rewind Efficiency Loss', value: 'rewindEfficiencyLoss', group: 'batchAnalysisData' });
       }
     }
     return fields;
@@ -405,7 +413,7 @@ export class InventorySummaryTableService {
       }
       if (batchAnalysisOptions.modifiedPower) {
         let powerUnit: string = 'hp';
-        if(settings.unitsOfMeasure != 'Imperial'){
+        if (settings.unitsOfMeasure != 'Imperial') {
           powerUnit = 'kW';
         }
         motorData.push({ value: batchAnalysisData.modifiedPower, fieldStr: 'modifiedPower', unit: powerUnit });
@@ -427,20 +435,20 @@ export class InventorySummaryTableService {
   }
 
   //purchase info
-  getPurchaseInfoFields(purchaseInformationOptions: PurchaseInformationOptions): Array<{ display: string, value: string }> {
-    let fields: Array<{ display: string, value: string }> = new Array();
+  getPurchaseInfoFields(purchaseInformationOptions: PurchaseInformationOptions): Array<{ display: string, value: string, group: string }> {
+    let fields: Array<{ display: string, value: string, group: string }> = new Array();
     if (purchaseInformationOptions.displayPurchaseInformation) {
       if (purchaseInformationOptions.catalogId) {
-        fields.push({ display: 'Catalog ID', value: 'catalogId' });
+        fields.push({ display: 'Catalog ID', value: 'catalogId', group: 'purchaseInformationData' });
       }
       if (purchaseInformationOptions.listPrice) {
-        fields.push({ display: 'List Price', value: 'listPrice' });
+        fields.push({ display: 'List Price', value: 'listPrice', group: 'purchaseInformationData' });
       }
       if (purchaseInformationOptions.warranty) {
-        fields.push({ display: 'Warranty', value: 'warranty' });
+        fields.push({ display: 'Warranty', value: 'warranty', group: 'purchaseInformationData' });
       }
       if (purchaseInformationOptions.directReplacementCost) {
-        fields.push({ display: 'Direct Replacement Cost', value: 'directReplacementCost' });
+        fields.push({ display: 'Direct Replacement Cost', value: 'directReplacementCost', group: 'purchaseInformationData' });
       }
     }
     return fields;
@@ -465,17 +473,17 @@ export class InventorySummaryTableService {
     return motorData;
   }
   //torque data
-  getTorqueDataFields(torqueOptions: TorqueOptions): Array<{ display: string, value: string }> {
-    let fields: Array<{ display: string, value: string }> = new Array();
+  getTorqueDataFields(torqueOptions: TorqueOptions): Array<{ display: string, value: string, group: string }> {
+    let fields: Array<{ display: string, value: string, group: string }> = new Array();
     if (torqueOptions.displayTorque) {
       if (torqueOptions.torqueFullLoad) {
-        fields.push({ display: 'Torque Full Load', value: 'torqueFullLoad' });
+        fields.push({ display: 'Torque Full Load', value: 'torqueFullLoad', group: 'torqueData' });
       }
       if (torqueOptions.torqueBreakDown) {
-        fields.push({ display: 'Torque Break Down', value: 'torqueBreakDown' });
+        fields.push({ display: 'Torque Break Down', value: 'torqueBreakDown', group: 'torqueData' });
       }
       if (torqueOptions.torqueLockedRotor) {
-        fields.push({ display: 'Torque Locked Rotor', value: 'torqueLockedRotor' });
+        fields.push({ display: 'Torque Locked Rotor', value: 'torqueLockedRotor', group: 'torqueData' });
       }
     }
     return fields;
@@ -485,7 +493,7 @@ export class InventorySummaryTableService {
     let motorData: Array<SummaryMotorData> = [];
     if (torqueOptions.displayTorque) {
       let torqueUnit: string = 'ft-lb';
-      if(settings.unitsOfMeasure != 'Imperial'){
+      if (settings.unitsOfMeasure != 'Imperial') {
         torqueUnit = 'N-m';
       }
 
@@ -503,20 +511,20 @@ export class InventorySummaryTableService {
   }
 
   //other data
-  getOtherFields(otherOptions: OtherOptions): Array<{ display: string, value: string }> {
-    let fields: Array<{ display: string, value: string }> = new Array();
+  getOtherFields(otherOptions: OtherOptions): Array<{ display: string, value: string, group: string }> {
+    let fields: Array<{ display: string, value: string, group: string }> = new Array();
     if (otherOptions.displayOther) {
       if (otherOptions.driveType) {
-        fields.push({ display: 'Drive Type', value: 'driveType' });
+        fields.push({ display: 'Drive Type', value: 'driveType', group: 'otherData' });
       }
       if (otherOptions.isVFD) {
-        fields.push({ display: 'Is VFD?', value: 'isVFD' });
+        fields.push({ display: 'Is VFD?', value: 'isVFD', group: 'otherData' });
       }
       if (otherOptions.hasLoggerData) {
-        fields.push({ display: 'Has Logger Data', value: 'hasLoggerData' });
+        fields.push({ display: 'Has Logger Data', value: 'hasLoggerData', group: 'otherData' });
       }
       if (otherOptions.voltageConnectionType) {
-        fields.push({ display: 'Voltage Connection Type', value: 'voltageConnectionType' });
+        fields.push({ display: 'Voltage Connection Type', value: 'voltageConnectionType', group: 'otherData' });
       }
     }
     return fields;
@@ -552,7 +560,7 @@ export class InventorySummaryTableService {
 
 
 export interface InventorySummaryData {
-  fields: Array<{ display: string, value: string }>,
+  fields: Array<{ display: string, value: string, group: string }>,
   motorData: Array<Array<SummaryMotorData>>
 }
 
