@@ -12,6 +12,10 @@ export interface SimpleChart {
     name: string,
     data: Array<TraceData>,
     layout: {
+        barmode?: string,
+        legend?: {
+            orientation: string
+        }
         title?: {
             text: string,
             font: {
