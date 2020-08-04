@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { SummaryMotorData } from './inventory-summary-overview.service';
 import * as _ from 'lodash';
+import { SummaryMotorData } from './inventory-summary-table.service';
 
 @Pipe({
   name: 'motorSummaryTable',
