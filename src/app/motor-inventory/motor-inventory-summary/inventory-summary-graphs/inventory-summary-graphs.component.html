@@ -1,1 +1,32 @@
-<p>inventory-summary-graphs works!</p>
+<div class="w-100 h-100">
+    <app-inventory-summary-graphs-tabs></app-inventory-summary-graphs-tabs>
+    <div class="d-flex w-100 h-100 tab-content">
+        <app-inventory-summary-graphs-menu class="h-100"></app-inventory-summary-graphs-menu>
+        <div class="row no-gutters w-100 scroll-item mb-5">
+            <div class="col-12">
+                <app-inventory-summary-graph></app-inventory-summary-graph>
+            </div>
+            <!-- <div class="col-12">
+                <div class="row no-gutters tabs primary mr-2 ml-2">
+                    <div class="col-6 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                            (click)="setTab('results')">
+                            <div>Data Summary</div>
+                        </a>
+                    </div>
+                    <div class="col-6 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                            <div>Help</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-12">
+                        <app-visualize-help *ngIf="tabSelect == 'help'"></app-visualize-help>
+                        <app-visualize-data *ngIf="tabSelect == 'results'"></app-visualize-data>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>

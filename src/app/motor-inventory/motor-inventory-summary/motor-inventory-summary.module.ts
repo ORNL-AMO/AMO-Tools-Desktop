@@ -9,6 +9,10 @@ import { InventorySummaryOverviewService } from './inventory-summary-overview/in
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { MotorSummaryTablePipe } from './inventory-summary-table/motor-summary-table.pipe';
 import { InventorySummaryTableService } from './inventory-summary-table/inventory-summary-table.service';
+import { InventorySummaryGraphsTabsComponent } from './inventory-summary-graphs/inventory-summary-graphs-tabs/inventory-summary-graphs-tabs.component';
+import { InventorySummaryGraphsMenuComponent } from './inventory-summary-graphs/inventory-summary-graphs-menu/inventory-summary-graphs-menu.component';
+import { InventorySummaryGraphComponent } from './inventory-summary-graphs/inventory-summary-graph/inventory-summary-graph.component';
+import { InventorySummaryGraphsService } from './inventory-summary-graphs/inventory-summary-graphs.service';
 
 @NgModule({
   declarations: [
@@ -17,7 +21,10 @@ import { InventorySummaryTableService } from './inventory-summary-table/inventor
     InventorySummaryTableComponent,
     InventorySummaryOverviewComponent,
     InventorySummaryMotorDetailsComponent,
-    MotorSummaryTablePipe
+    MotorSummaryTablePipe,
+    InventorySummaryGraphsTabsComponent,
+    InventorySummaryGraphsMenuComponent,
+    InventorySummaryGraphComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +35,8 @@ import { InventorySummaryTableService } from './inventory-summary-table/inventor
   ],
   providers: [
     InventorySummaryOverviewService,
-    InventorySummaryTableService
+    InventorySummaryTableService,
+    InventorySummaryGraphsService
   ]
 })
 export class MotorInventorySummaryModule { }
