@@ -20,19 +20,55 @@ export class InventorySummaryGraphComponent implements OnInit {
   ngOnInit(): void {
     this.selectedFieldSub = this.inventorySummaryGraphService.selectedField.subscribe(val => {
       Plotly.purge('inventoryGraph');
-      let motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
-      let calcedData = this.inventorySummaryGraphsService.getBinData(motorInventoryData, val.group, val.value);
-      let type: string = this.inventorySummaryGraphService.graphType.getValue();
-      var data = [
-        {
-          x: calcedData.xData,
-          y: calcedData.yData,
-          values: calcedData.yData,
-          labels: calcedData.xData,
-          type: type
-        }
-      ];
-      Plotly.newPlot('inventoryGraph', data);
+      if (val) {
+        let motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
+        let calcedData = this.inventorySummaryGraphsService.getBinData(motorInventoryData, val);
+        let type: string = this.inventorySummaryGraphService.graphType.getValue();
+        var data = [
+          {
+            x: calcedData.xData,
+            y: calcedData.yData,
+            values: calcedData.yData,
+            labels: calcedData.xData,
+            type: type
+          }
+        ];
+        let layout = {
+          title: {
+            text: 'Motor Inventory',
+            font: {
+              family: 'Arial',
+              size: 22
+            }
+          },
+          yaxis: {
+            // hoverformat: '.3r',
+            title: {
+              text: '# of Motors',
+              font: {
+                family: 'Arial',
+                size: 16
+              }
+            },
+            fixedrange: true
+          },
+          xaxis: {
+            fixedrange: true,
+            title: {
+              text: val.display
+            },
+            font: {
+              family: 'Arial',
+              size: 16
+            }
+          },
+        };
+        Plotly.newPlot('inventoryGraph', data, layout);
+      }
     });
+  }
+
+  ngOnDestroy() {
+    this.selectedFieldSub.unsubscribe();
   }
 }
