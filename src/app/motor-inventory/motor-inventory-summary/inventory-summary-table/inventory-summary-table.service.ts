@@ -455,10 +455,10 @@ export class InventorySummaryTableService {
     let fields: Array<MotorField> = new Array();
     if (purchaseInformationOptions.displayPurchaseInformation) {
       if (purchaseInformationOptions.catalogId) {
-        fields.push({ display: 'Catalog ID', value: 'catalogId', group: 'purchaseInformationData', unit: '$' });
+        fields.push({ display: 'Catalog ID', value: 'catalogId', group: 'purchaseInformationData' });
       }
       if (purchaseInformationOptions.listPrice) {
-        fields.push({ display: 'List Price', value: 'listPrice', group: 'purchaseInformationData' });
+        fields.push({ display: 'List Price', value: 'listPrice', group: 'purchaseInformationData', unit: '$' });
       }
       if (purchaseInformationOptions.warranty) {
         fields.push({ display: 'Warranty', value: 'warranty', group: 'purchaseInformationData' });

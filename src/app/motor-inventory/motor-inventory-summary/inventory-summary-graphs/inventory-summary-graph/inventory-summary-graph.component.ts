@@ -24,15 +24,21 @@ export class InventorySummaryGraphComponent implements OnInit {
         let motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
         let calcedData = this.inventorySummaryGraphsService.getBinData(motorInventoryData, val);
         let type: string = this.inventorySummaryGraphService.graphType.getValue();
-        var data = [
+        let data = [
           {
             x: calcedData.xData,
             y: calcedData.yData,
             values: calcedData.yData,
             labels: calcedData.xData,
-            type: type
+            type: type,
+            textinfo: 'label+value'
           }
         ];
+        let ticksuffix: string;
+        if (val.unit) {
+          ticksuffix = ' ' + val.unit
+        }
+
         let layout = {
           title: {
             text: 'Motor Inventory',
@@ -50,7 +56,8 @@ export class InventorySummaryGraphComponent implements OnInit {
                 size: 16
               }
             },
-            fixedrange: true
+            fixedrange: true,
+            tickformat: ',d'
           },
           xaxis: {
             fixedrange: true,
@@ -60,10 +67,13 @@ export class InventorySummaryGraphComponent implements OnInit {
             font: {
               family: 'Arial',
               size: 16
-            }
+            },
+            type: 'category',
+            ticksuffix: ticksuffix
           },
         };
-        Plotly.newPlot('inventoryGraph', data, layout);
+        let config = { responsive: true }
+        Plotly.newPlot('inventoryGraph', data, layout, config);
       }
     });
   }
