@@ -22,13 +22,14 @@ export class InventorySummaryGraphComponent implements OnInit {
       Plotly.purge('inventoryGraph');
       let motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
       let calcedData = this.inventorySummaryGraphsService.getBinData(motorInventoryData, val.group, val.value);
+      let type: string = this.inventorySummaryGraphService.graphType.getValue();
       var data = [
         {
           x: calcedData.xData,
           y: calcedData.yData,
           values: calcedData.yData,
           labels: calcedData.xData,
-          type: 'bar'
+          type: type
         }
       ];
       Plotly.newPlot('inventoryGraph', data);

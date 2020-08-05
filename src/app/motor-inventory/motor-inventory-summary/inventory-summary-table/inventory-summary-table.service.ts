@@ -65,8 +65,8 @@ export class InventorySummaryTableService {
     let nameplateData = this.getNameplateMotorData(motorItem.nameplateData, displayOptions.nameplateDataOptions, settings);
     motorData = motorData.concat(nameplateData);
     //load characteristics
-    let loadCharactristicData = this.getLoadCharactersticData(motorItem.loadCharacteristicData, displayOptions.loadCharactersticOptions);
-    motorData = motorData.concat(loadCharactristicData);
+    let loadCharacteristicData = this.getLoadCharactersticData(motorItem.loadCharacteristicData, displayOptions.loadCharactersticOptions);
+    motorData = motorData.concat(loadCharacteristicData);
     //operations data
     let operationsData = this.getOperationsData(motorItem.operationData, displayOptions.operationDataOptions);
     motorData = motorData.concat(operationsData);
@@ -272,59 +272,59 @@ export class InventorySummaryTableService {
     let fields: Array<{ display: string, value: string, group: string }> = [];
     if (loadCharactersticOptions.displayLoadCharacteristics) {
       if (loadCharactersticOptions.efficiency75) {
-        fields.push({ display: 'Efficiency at 75% Load', value: 'efficiency75', group: 'loadCharactristicData' });
+        fields.push({ display: 'Efficiency at 75% Load', value: 'efficiency75', group: 'loadCharacteristicData' });
       }
       if (loadCharactersticOptions.efficiency50) {
-        fields.push({ display: 'Efficiency at 50% Load', value: 'efficiency50', group: 'loadCharactristicData' });
+        fields.push({ display: 'Efficiency at 50% Load', value: 'efficiency50', group: 'loadCharacteristicData' });
       }
       if (loadCharactersticOptions.efficiency25) {
-        fields.push({ display: 'Efficiency at 25% Load', value: 'efficiency25', group: 'loadCharactristicData' });
+        fields.push({ display: 'Efficiency at 25% Load', value: 'efficiency25', group: 'loadCharacteristicData' });
       }
       if (loadCharactersticOptions.powerFactor100) {
-        fields.push({ display: 'Power Factor at Full Load', value: 'powerFactor100', group: 'loadCharactristicData' });
+        fields.push({ display: 'Power Factor at Full Load', value: 'powerFactor100', group: 'loadCharacteristicData' });
       }
       if (loadCharactersticOptions.powerFactor75) {
-        fields.push({ display: 'Power Factor at 75% Load', value: 'powerFactor75', group: 'loadCharactristicData' });
+        fields.push({ display: 'Power Factor at 75% Load', value: 'powerFactor75', group: 'loadCharacteristicData' });
       }
       if (loadCharactersticOptions.powerFactor50) {
-        fields.push({ display: 'Power Factor at 50% Load', value: 'powerFactor50', group: 'loadCharactristicData' });
+        fields.push({ display: 'Power Factor at 50% Load', value: 'powerFactor50', group: 'loadCharacteristicData' });
       }
       if (loadCharactersticOptions.powerFactor25) {
-        fields.push({ display: 'Power Factor at 25% Load', value: 'powerFactor25', group: 'loadCharactristicData' });
+        fields.push({ display: 'Power Factor at 25% Load', value: 'powerFactor25', group: 'loadCharacteristicData' });
       }
       if (loadCharactersticOptions.ampsIdle) {
-        fields.push({ display: 'Amps Idle', value: 'ampsIdle', group: 'loadCharactristicData' });
+        fields.push({ display: 'Amps Idle', value: 'ampsIdle', group: 'loadCharacteristicData' });
       }
     }
     return fields;
   }
 
-  getLoadCharactersticData(loadCharactristicData: LoadCharacteristicData, loadCharactersticOptions: LoadCharacteristicOptions): Array<SummaryMotorData> {
+  getLoadCharactersticData(loadCharacteristicData: LoadCharacteristicData, loadCharactersticOptions: LoadCharacteristicOptions): Array<SummaryMotorData> {
     let motorData: Array<SummaryMotorData> = []
     if (loadCharactersticOptions.displayLoadCharacteristics) {
       if (loadCharactersticOptions.efficiency75) {
-        motorData.push({ value: loadCharactristicData.efficiency75, fieldStr: 'efficiency75', unit: '%' });
+        motorData.push({ value: loadCharacteristicData.efficiency75, fieldStr: 'efficiency75', unit: '%' });
       }
       if (loadCharactersticOptions.efficiency50) {
-        motorData.push({ value: loadCharactristicData.efficiency50, fieldStr: 'efficiency50', unit: '%' });
+        motorData.push({ value: loadCharacteristicData.efficiency50, fieldStr: 'efficiency50', unit: '%' });
       }
       if (loadCharactersticOptions.efficiency25) {
-        motorData.push({ value: loadCharactristicData.efficiency25, fieldStr: 'efficiency25', unit: '%' });
+        motorData.push({ value: loadCharacteristicData.efficiency25, fieldStr: 'efficiency25', unit: '%' });
       }
       if (loadCharactersticOptions.powerFactor100) {
-        motorData.push({ value: loadCharactristicData.powerFactor100, fieldStr: 'powerFactor100', unit: '%' });
+        motorData.push({ value: loadCharacteristicData.powerFactor100, fieldStr: 'powerFactor100', unit: '%' });
       }
       if (loadCharactersticOptions.powerFactor75) {
-        motorData.push({ value: loadCharactristicData.powerFactor75, fieldStr: 'powerFactor75', unit: '%' });
+        motorData.push({ value: loadCharacteristicData.powerFactor75, fieldStr: 'powerFactor75', unit: '%' });
       }
       if (loadCharactersticOptions.powerFactor50) {
-        motorData.push({ value: loadCharactristicData.powerFactor50, fieldStr: 'powerFactor50', unit: '%' });
+        motorData.push({ value: loadCharacteristicData.powerFactor50, fieldStr: 'powerFactor50', unit: '%' });
       }
       if (loadCharactersticOptions.powerFactor25) {
-        motorData.push({ value: loadCharactristicData.powerFactor25, fieldStr: 'powerFactor25', unit: '%' });
+        motorData.push({ value: loadCharacteristicData.powerFactor25, fieldStr: 'powerFactor25', unit: '%' });
       }
       if (loadCharactersticOptions.ampsIdle) {
-        motorData.push({ value: loadCharactristicData.ampsIdle, fieldStr: 'ampsIdle', unit: 'A' });
+        motorData.push({ value: loadCharacteristicData.ampsIdle, fieldStr: 'ampsIdle', unit: 'A' });
       }
     }
     return motorData;
@@ -334,47 +334,47 @@ export class InventorySummaryTableService {
     let fields: Array<{ display: string, value: string, group: string }> = new Array();
     if (operationDataOptions.displayOperationData) {
       if (operationDataOptions.location) {
-        fields.push({ display: 'Location', value: 'location', group: 'operationsData' });
+        fields.push({ display: 'Location', value: 'location', group: 'operationData' });
       }
       if (operationDataOptions.annualOperatingHours) {
-        fields.push({ display: 'Operating Hours', value: 'annualOperatingHours', group: 'operationsData' });
+        fields.push({ display: 'Operating Hours', value: 'annualOperatingHours', group: 'operationData' });
       }
       if (operationDataOptions.averageLoadFactor) {
-        fields.push({ display: 'Average Load Factor', value: 'averageLoadFactor', group: 'operationsData' });
+        fields.push({ display: 'Average Load Factor', value: 'averageLoadFactor', group: 'operationData' });
       }
       if (operationDataOptions.utilizationFactor) {
-        fields.push({ display: 'Utilization Factor', value: 'utilizationFactor', group: 'operationsData' });
+        fields.push({ display: 'Utilization Factor', value: 'utilizationFactor', group: 'operationData' });
       }
       if (operationDataOptions.efficiencyAtAverageLoad) {
-        fields.push({ display: 'Efficiency at Average Load', value: 'efficiencyAtAverageLoad', group: 'operationsData' });
+        fields.push({ display: 'Efficiency at Average Load', value: 'efficiencyAtAverageLoad', group: 'operationData' });
       }
       if (operationDataOptions.powerFactorAtLoad) {
-        fields.push({ display: 'Power Factor at Load', value: 'powerFactorAtLoad', group: 'operationsData' });
+        fields.push({ display: 'Power Factor at Load', value: 'powerFactorAtLoad', group: 'operationData' });
       }
     }
     return fields;
   }
 
-  getOperationsData(operationsData: OperationData, operationDataOptions: OperationDataOptions): Array<SummaryMotorData> {
+  getOperationsData(operationData: OperationData, operationDataOptions: OperationDataOptions): Array<SummaryMotorData> {
     let motorData: Array<SummaryMotorData> = []
     if (operationDataOptions.displayOperationData) {
       if (operationDataOptions.location) {
-        motorData.push({ value: operationsData.location, fieldStr: 'location' });
+        motorData.push({ value: operationData.location, fieldStr: 'location' });
       }
       if (operationDataOptions.annualOperatingHours) {
-        motorData.push({ value: operationsData.annualOperatingHours, fieldStr: 'annualOperatingHours', unit: 'hrs/yr' });
+        motorData.push({ value: operationData.annualOperatingHours, fieldStr: 'annualOperatingHours', unit: 'hrs/yr' });
       }
       if (operationDataOptions.averageLoadFactor) {
-        motorData.push({ value: operationsData.averageLoadFactor, fieldStr: 'averageLoadFactor', unit: '%' });
+        motorData.push({ value: operationData.averageLoadFactor, fieldStr: 'averageLoadFactor', unit: '%' });
       }
       if (operationDataOptions.utilizationFactor) {
-        motorData.push({ value: operationsData.utilizationFactor, fieldStr: 'utilizationFactor', unit: '%' });
+        motorData.push({ value: operationData.utilizationFactor, fieldStr: 'utilizationFactor', unit: '%' });
       }
       if (operationDataOptions.efficiencyAtAverageLoad) {
-        motorData.push({ value: operationsData.efficiencyAtAverageLoad, fieldStr: 'efficiencyAtAverageLoad', unit: '%' });
+        motorData.push({ value: operationData.efficiencyAtAverageLoad, fieldStr: 'efficiencyAtAverageLoad', unit: '%' });
       }
       if (operationDataOptions.powerFactorAtLoad) {
-        motorData.push({ value: operationsData.powerFactorAtLoad, fieldStr: 'powerFactorAtLoad', unit: '%' });
+        motorData.push({ value: operationData.powerFactorAtLoad, fieldStr: 'powerFactorAtLoad', unit: '%' });
       }
     }
     return motorData;

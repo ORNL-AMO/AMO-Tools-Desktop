@@ -9,12 +9,14 @@ export class InventorySummaryGraphsService {
   selectedField: BehaviorSubject<{
     display: string, value: string, group: string
   }>
+  graphType: BehaviorSubject<string>;
   constructor() {
     this.selectedField = new BehaviorSubject({
       group: 'nameplateData',
       value: 'ratedMotorPower',
       display: 'Rated Motor Power'
     });
+    this.graphType = new BehaviorSubject<string>('bar');
   }
 
   getBinData(motorInventoryData: MotorInventoryData, group: string, field: string): { xData: Array<any>, yData: Array<any> } {

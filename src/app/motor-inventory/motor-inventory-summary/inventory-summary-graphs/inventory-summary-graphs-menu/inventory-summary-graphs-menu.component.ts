@@ -14,7 +14,8 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
 
   selectedFieldSub: Subscription;
   selectedField: { display: string, value: string, group: string };
-
+  graphTypeSub: Subscription;
+  graphType: string;
   groups: Array<{
     options: Array<{ display: string, value: string, group: string }>,
     groupLabel: string,
@@ -27,14 +28,18 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
     this.selectedFieldSub = this.inventorySummaryGraphService.selectedField.subscribe(val => {
       this.selectedField = val;
     });
+    this.graphTypeSub = this.inventorySummaryGraphService.graphType.subscribe(val => {
+      this.graphType = val;
+    })
     this.setOptions();
   }
 
   ngOnDestroy() {
     this.selectedFieldSub.unsubscribe();
+    this.graphTypeSub.unsubscribe();
   }
 
-  setOptions(){
+  setOptions() {
     this.groups = new Array();
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
     //nameplate
@@ -45,7 +50,7 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
     });
     //load characteristics
     this.groups.push({
-      options:  this.inventorySummaryTableService.getLoadCharacteristicsFields(motorInventoryData.displayOptions.loadCharactersticOptions),
+      options: this.inventorySummaryTableService.getLoadCharacteristicsFields(motorInventoryData.displayOptions.loadCharactersticOptions),
       groupLabel: 'Load Characteristics',
       showGroup: false
     });
@@ -69,7 +74,7 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
     });
     //purchase information
     this.groups.push({
-      options:  this.inventorySummaryTableService.getPurchaseInfoFields(motorInventoryData.displayOptions.purchaseInformationOptions),
+      options: this.inventorySummaryTableService.getPurchaseInfoFields(motorInventoryData.displayOptions.purchaseInformationOptions),
       groupLabel: 'Purchase Information',
       showGroup: false
     });
@@ -88,12 +93,17 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
 
   }
 
-  setSelectedField(option: {display: string, value: string, group: string }){
+  setSelectedField(option: { display: string, value: string, group: string }) {
     this.inventorySummaryGraphService.selectedField.next(option);
   }
 
 
-  toggleShow(group: any){
+  toggleShow(group: any) {
     group.showGroup = !group.showGroup;
+  }
+
+  setGraphType(str: string) {
+    this.inventorySummaryGraphService.graphType.next(str);
+    this.inventorySummaryGraphService.selectedField.next(this.selectedField);
   }
 }
