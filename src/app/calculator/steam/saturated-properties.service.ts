@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
-import { SimpleChart, TraceData } from '../../../shared/models/plotting';
 import { BehaviorSubject } from 'rxjs';
-import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { IsobarData} from './steam-isobar-constants';
+import { SimpleChart, TraceData } from '../../shared/models/plotting';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { IsobarData } from './steam-isobar-constants';
+import { Settings } from '../../shared/models/settings';
 import { IsothermData } from './steam-isotherm-constants';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class SteamPropertiesService {
 
-  propertiesChart: BehaviorSubject<SimpleChart>;
+@Injectable()
+export class SaturatedPropertiesService {
+
+  entropyChart: BehaviorSubject<SimpleChart>;
   enthalpyChart: BehaviorSubject<SimpleChart>;
 
   isobarData;
@@ -25,12 +24,14 @@ export class SteamPropertiesService {
   enthalpy: Array<number>;
   pressures: Array<number>;
 
+  // SaturatedPropertiesService shared by steam-properties to 
+  // supply isotherm, isobar, and dome objects/rendering
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   initEntropyChartData() {
     this.initEntropyChartConstants();
     let emptyChart: SimpleChart = this.getEmptyChart();
-    this.propertiesChart = new BehaviorSubject<SimpleChart>(emptyChart);
+    this.entropyChart = new BehaviorSubject<SimpleChart>(emptyChart);
   }
 
   initEnthalpyChartData() {
@@ -59,7 +60,7 @@ export class SteamPropertiesService {
   }
 
   setEntropyChartConfig(settings: Settings) {
-    let chart = this.propertiesChart.getValue();
+    let chart = this.entropyChart.getValue();
     let temperatureUnit = this.convertUnitsService.getUnit(settings.steamTemperatureMeasurement).unit.name.display;
     let entropyUnit = this.convertUnitsService.getUnit(settings.steamSpecificEntropyMeasurement).unit.name.display;
     chart.layout.xaxis.title.text = `Entropy ${entropyUnit}`;
@@ -67,7 +68,7 @@ export class SteamPropertiesService {
     // Set range from constants - isobars will skew the autorange
     chart.layout.yaxis.range = this.isobarData.ranges[settings.steamTemperatureMeasurement].y;
     chart.layout.xaxis.autorange = true;
-    this.propertiesChart.next(chart);
+    this.entropyChart.next(chart);
   }
 
   setEnthalpyChartConfig(settings: Settings) {
@@ -161,7 +162,6 @@ export class SteamPropertiesService {
   }
 
   getPointTrace(): TraceData {
-
     let trace: TraceData = {
       x: [],
       y: [],
@@ -173,6 +173,27 @@ export class SteamPropertiesService {
       marker: {
         color: '',
         size: 12,
+        line: {
+          color: '',
+          width: 4
+        }
+      },
+    }
+    return trace;
+  }
+
+  getLineTrace(x, y): TraceData {
+    let trace: TraceData = {
+      x: x,
+      y: y,
+      type: 'scatter',
+      name: '',
+      showlegend: false,
+      hovertemplate: ``,
+      mode: 'lines+markers',
+      marker: {
+        color: '',
+        size: 10,
         line: {
           color: '',
           width: 4

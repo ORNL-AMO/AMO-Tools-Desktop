@@ -1,64 +1,64 @@
 import { Injectable } from '@angular/core';
-import { SteamPropertiesService, IsobarCoordinates, IsothermCoordinates } from './steam-properties.service';
-import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { SaturatedPropertiesService, IsobarCoordinates, IsothermCoordinates } from './saturated-properties.service';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { Settings } from '../../shared/models/settings';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class SteamPropertiesConversionService {
+@Injectable()
+export class SaturatedPropertiesConversionService {
 
-  constructor(private steamPropertiesService: SteamPropertiesService, private convertUnitsService: ConvertUnitsService) { }
+  // SaturatedPropertiesConversionService shared by steam-properties to 
+  // supply isotherm, isobar, and dome objects/rendering
+  constructor(private saturatedPropertiesService: SaturatedPropertiesService, private convertUnitsService: ConvertUnitsService) { }
 
   convertIsobarTemperature(settings: Settings, defaultTempUnit) {
-    let isobars = this.steamPropertiesService.isobars.getValue();
-    this.steamPropertiesService.temperatures = this.convertArray(this.steamPropertiesService.temperatures, defaultTempUnit, settings.steamTemperatureMeasurement);
+    let isobars = this.saturatedPropertiesService.isobars.getValue();
+    this.saturatedPropertiesService.temperatures = this.convertArray(this.saturatedPropertiesService.temperatures, defaultTempUnit, settings.steamTemperatureMeasurement);
     isobars.map((line: IsobarCoordinates) => {
       line.temp = this.convertArray(line.temp, defaultTempUnit, settings.steamTemperatureMeasurement);
     });
-    this.steamPropertiesService.isobars.next(isobars);
+    this.saturatedPropertiesService.isobars.next(isobars);
   }
 
   convertIsobarEntropy(settings: Settings, defaultEntropyUnit) {
-    let isobars = this.steamPropertiesService.isobars.getValue();
-    this.steamPropertiesService.entropy = this.convertArray(this.steamPropertiesService.entropy, defaultEntropyUnit, settings.steamSpecificEntropyMeasurement);
+    let isobars = this.saturatedPropertiesService.isobars.getValue();
+    this.saturatedPropertiesService.entropy = this.convertArray(this.saturatedPropertiesService.entropy, defaultEntropyUnit, settings.steamSpecificEntropyMeasurement);
     isobars.map((line: IsobarCoordinates) => {
       line.entropy = this.convertArray(line.entropy, defaultEntropyUnit, settings.steamSpecificEntropyMeasurement);
     });
-    this.steamPropertiesService.isobars.next(isobars);
+    this.saturatedPropertiesService.isobars.next(isobars);
   }
 
   convertIsobarPressure(settings: Settings, defaultPressureUnit) {
-    let isobars = this.steamPropertiesService.isobars.getValue();
+    let isobars = this.saturatedPropertiesService.isobars.getValue();
     isobars.map((line: IsobarCoordinates) => {
       let converted = this.convertVal(line.pressureValue, defaultPressureUnit, settings.steamPressureMeasurement);
       converted = this.roundVal(converted, 2);
       line.pressureValue = converted;
 
     });
-    this.steamPropertiesService.isobars.next(isobars);
+    this.saturatedPropertiesService.isobars.next(isobars);
   }
 
   convertIsothermPressure(settings: Settings, defaultPressureUnit: string, conversionUnit: string) {
-    let isotherms = this.steamPropertiesService.isotherms.getValue();
-    this.steamPropertiesService.pressures = this.convertArray(this.steamPropertiesService.pressures, defaultPressureUnit, conversionUnit);
+    let isotherms = this.saturatedPropertiesService.isotherms.getValue();
+    this.saturatedPropertiesService.pressures = this.convertArray(this.saturatedPropertiesService.pressures, defaultPressureUnit, conversionUnit);
     isotherms.map((line: IsothermCoordinates) => {
       line.pressure = this.convertArray(line.pressure, defaultPressureUnit, conversionUnit);
     });
-    this.steamPropertiesService.isotherms.next(isotherms);
+    this.saturatedPropertiesService.isotherms.next(isotherms);
   }
 
   convertIsothermEnthalpy(settings: Settings, defaultEnthalpyUnit) {
-    let isotherms = this.steamPropertiesService.isotherms.getValue();
-    this.steamPropertiesService.enthalpy = this.convertArray(this.steamPropertiesService.enthalpy, defaultEnthalpyUnit, settings.steamSpecificEnthalpyMeasurement);
+    let isotherms = this.saturatedPropertiesService.isotherms.getValue();
+    this.saturatedPropertiesService.enthalpy = this.convertArray(this.saturatedPropertiesService.enthalpy, defaultEnthalpyUnit, settings.steamSpecificEnthalpyMeasurement);
     isotherms.map((line: IsothermCoordinates) => {
       line.enthalpy = this.convertArray(line.enthalpy, defaultEnthalpyUnit, settings.steamSpecificEnthalpyMeasurement);
     });
-    this.steamPropertiesService.isotherms.next(isotherms);
+    this.saturatedPropertiesService.isotherms.next(isotherms);
   }
 
   convertVaporQualities(defaultUnit, conversionUnit, isPressure = false) {
-    let qualities = this.steamPropertiesService.vaporQualities.getValue();
+    let qualities = this.saturatedPropertiesService.vaporQualities.getValue();
     qualities.map((quality: IsothermCoordinates) => {
       if (isPressure) {
         quality.pressure = this.convertArray(quality.pressure, defaultUnit, conversionUnit);
@@ -66,7 +66,7 @@ export class SteamPropertiesConversionService {
         quality.enthalpy = this.convertArray(quality.enthalpy, defaultUnit, conversionUnit);
       }
     });
-    this.steamPropertiesService.vaporQualities.next(qualities);
+    this.saturatedPropertiesService.vaporQualities.next(qualities);
   }
 
   convertArray(oldArray: Array<number>, from: string, to: string): Array<number> {

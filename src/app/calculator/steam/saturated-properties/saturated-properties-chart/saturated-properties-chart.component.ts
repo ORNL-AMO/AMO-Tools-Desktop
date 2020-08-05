@@ -1,26 +1,24 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, HostListener, SimpleChanges, OnChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-
+import { SaturatedPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 import { SimpleChart } from '../../../../shared/models/plotting';
-import * as Plotly from 'plotly.js';
-import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+
+import * as Plotly from 'plotly.js';
 import { SaturatedPropertiesService, IsobarCoordinates } from '../../saturated-properties.service';
 import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
 
-
-
 @Component({
-  selector: 'app-steam-properties-chart',
-  templateUrl: './steam-properties-chart.component.html',
-  styleUrls: ['./steam-properties-chart.component.css']
+  selector: 'app-saturated-properties-chart',
+  templateUrl: './saturated-properties-chart.component.html',
+  styleUrls: ['./saturated-properties-chart.component.css']
 })
-export class SteamPropertiesChartComponent implements OnChanges {
+export class SaturatedPropertiesChartComponent implements OnChanges {
 
   @Input()
   settings: Settings;
   @Input()
-  steamPropertiesOutput: SteamPropertiesOutput;
+  saturatedPropertiesOutput: SaturatedPropertiesOutput;
   @Input()
   validPlot: boolean;
   @Input()
@@ -28,9 +26,9 @@ export class SteamPropertiesChartComponent implements OnChanges {
 
   // DOM
   @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
-  tabPanelChartId: string = 'tabPanelPropertiesChartDiv';
-  expandedChartId: string = 'expandedPropertiesCharttDiv';
-  currentChartId: string = 'tabPanelPropertiesChartDiv';
+  tabPanelChartId: string = 'tabPanelDiv';
+  expandedChartId: string = 'expandedChartDiv';
+  currentChartId: string = 'tabPanelDiv';
 
   entropyChart: SimpleChart;
   defaultEntropyUnit: string = 'kJkgK';
@@ -56,13 +54,13 @@ export class SteamPropertiesChartComponent implements OnChanges {
     }
   }
 
-  // Use shared SaturatedPropertiesService to supply isotherm, isobar, and dome objects/rendering
   constructor(private saturatedPropertiesService: SaturatedPropertiesService, 
     private saturatedPropertiesConversionService: SaturatedPropertiesConversionService) { }
 
+
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.steamPropertiesOutput && !changes.toggleReset && !changes.steamPropertiesOutput.firstChange) {
-        if (this.validPlot && this.steamPropertiesOutput !== undefined) {
+    if (changes.saturatedPropertiesOutput && !changes.toggleReset && !changes.saturatedPropertiesOutput.firstChange) {
+        if (this.validPlot && this.saturatedPropertiesOutput !== undefined) {
           this.updateChart();
         }
     } else if (changes.toggleReset && !changes.toggleReset.firstChange) {
@@ -81,11 +79,12 @@ export class SteamPropertiesChartComponent implements OnChanges {
 
   initRenderChart() {
     Plotly.purge(this.currentChartId);
+
     this.initChartSetup();
     this.initIsobarTraces();
     this.initDomeAreaTraces();
-    if (this.validPlot && this.steamPropertiesOutput !== undefined) {
-      this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+    if (this.validPlot && this.saturatedPropertiesOutput !== undefined) {
+      this.plotSegment();
     }
 
     let chartLayout = JSON.parse(JSON.stringify(this.entropyChart.layout));
@@ -95,7 +94,7 @@ export class SteamPropertiesChartComponent implements OnChanges {
 
   updateChart() {
     if (this.validPlot) {
-      this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+      this.plotSegment();
     }
     let chartLayout = JSON.parse(JSON.stringify(this.entropyChart.layout));
     Plotly.update(this.currentChartId, this.entropyChart.data, chartLayout);
@@ -155,17 +154,18 @@ export class SteamPropertiesChartComponent implements OnChanges {
     this.entropyChart.data.push(domeFillTrace, domeOutlineTrace);
   }
 
-  plotPoint(temperature: number, entropy: number) {
-    let pointTrace = this.saturatedPropertiesService.getPointTrace();
-    pointTrace.marker.color = graphColors[0];
-    pointTrace.x = [entropy];
-    pointTrace.y = [temperature];
-    pointTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, true);
-
+  plotSegment() {
+    let x = [this.saturatedPropertiesOutput.liquidEntropy, this.saturatedPropertiesOutput.gasEntropy];
+    let y = [this.saturatedPropertiesOutput.saturatedTemperature, this.saturatedPropertiesOutput.saturatedTemperature];
+    let lineTrace = this.saturatedPropertiesService.getLineTrace(x, y);
+    lineTrace.marker.color = graphColors[0];
+    lineTrace.marker.line.color = graphColors[0];
+    lineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, true);
+    
     if (this.entropyChart.existingPoint) {
-      this.entropyChart.data[this.entropyChart.data.length - 1] = pointTrace;
+      this.entropyChart.data[this.entropyChart.data.length - 1] = lineTrace;
     } else {
-      this.entropyChart.data.push(pointTrace);
+      this.entropyChart.data.push(lineTrace);
       this.entropyChart.existingPoint = true;
     }
   }
@@ -273,5 +273,6 @@ export class SteamPropertiesChartComponent implements OnChanges {
     this.entropyChart.layout.yaxis.showgrid = !showingGridY;
     this.updateChart();
   }
+
 
 }
