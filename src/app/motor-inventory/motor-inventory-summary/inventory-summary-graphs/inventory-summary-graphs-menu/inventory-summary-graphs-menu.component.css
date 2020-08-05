@@ -1,5 +1,5 @@
 .field-item{
-    border-top: solid 1px;
+    border-bottom: solid 1px;
     padding: .5rem;
     font-size: 12px
 }
@@ -7,11 +7,21 @@
 .field-item:hover, .group-item:hover{
     cursor: pointer;
     text-decoration: underline;
-    background-color: #efefef;
+    background-color: #d7f0b6;
 }
 
 
 .group-item{
     padding: .25rem;
-    font-size: 18px;
+    font-size: 16px;
+    border-bottom: groove 4px;
+    font-weight: bold;
+}
+
+.fa{
+    font-size: 12px;
+}
+
+.field-item.active{
+    background-color: #84b641;
 }
