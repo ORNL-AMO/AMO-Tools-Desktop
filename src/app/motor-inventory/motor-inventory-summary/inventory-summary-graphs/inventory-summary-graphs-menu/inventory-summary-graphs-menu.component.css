@@ -1,0 +1,17 @@
+.field-item{
+    border-top: solid 1px;
+    padding: .5rem;
+    font-size: 12px
+}
+
+.field-item:hover, .group-item:hover{
+    cursor: pointer;
+    text-decoration: underline;
+    background-color: #efefef;
+}
+
+
+.group-item{
+    padding: .25rem;
+    font-size: 18px;
+}

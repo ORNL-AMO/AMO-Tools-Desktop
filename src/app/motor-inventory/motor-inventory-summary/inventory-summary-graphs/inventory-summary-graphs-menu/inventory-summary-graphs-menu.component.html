@@ -1,5 +1,13 @@
-<ul>
-    <li *ngFor="let nameplateOption of nameplateOptions">
-        <a class="click-link" (click)="setSelectedField(nameplateOption)">{{nameplateOption.display}}</a>
-    </li>
-</ul>
+<div class="d-flex flex-column" *ngFor="let group of groups">
+    <div class="d-flex flex-column" *ngIf="group.options.length != 0">
+        <div class="group-item" (click)="toggleShow(group)">
+            <span class="fa" [ngClass]="{'fa-chevron-right': !group.showGroup, 'fa-chevron-down': group.showGroup}"></span>
+            {{group.groupLabel}}
+        </div>
+        <div class="d-flex flex-column" *ngIf="group.showGroup">
+            <div class="field-item" *ngFor="let option of group.options" (click)="setSelectedField(option)">
+                {{option.display}}
+            </div>
+        </div>
+    </div>
+</div>

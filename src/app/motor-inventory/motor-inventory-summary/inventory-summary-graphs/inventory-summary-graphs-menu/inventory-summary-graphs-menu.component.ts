@@ -12,24 +12,14 @@ import { MotorInventoryData } from '../../../motor-inventory';
 })
 export class InventorySummaryGraphsMenuComponent implements OnInit {
 
-  nameplateOptions: Array<{ display: string, value: string, group: string }>;
-  showNameplateOptions: boolean = true;
-  batchAnalysisOptions: Array<any>;
-  showBatchAnalysisOptions: boolean = true;
-  loadCharacteristicOptions: Array<any>;
-  showLoadCharacteristicOptions: boolean = true;
-  manualSpecificationOptions: Array<any>;
-  showManualSpecificationOptions: boolean = true;
-  operationOptions: Array<any>;
-  showOperationOptions: boolean = true;
-  otherOptions: Array<any>;
-  showOtherOptions: boolean = true;
-  purchaseInformationOptions: Array<any>;
-  showPurchaseInformationOptions: boolean = true;
-  torqueOptions: Array<any>;
-  showTorqueOptions: boolean = true;
   selectedFieldSub: Subscription;
   selectedField: { display: string, value: string, group: string };
+
+  groups: Array<{
+    options: Array<{ display: string, value: string, group: string }>,
+    groupLabel: string,
+    showGroup: boolean
+  }>
   constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryGraphService: InventorySummaryGraphsService,
     private inventorySummaryTableService: InventorySummaryTableService) { }
 
@@ -38,7 +28,64 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
       this.selectedField = val;
     });
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
-    this.nameplateOptions = this.inventorySummaryTableService.getNameplateDataFields(motorInventoryData.displayOptions.nameplateDataOptions);
+    this.groups = new Array();
+    //nameplate
+    let nameplateOptions = this.inventorySummaryTableService.getNameplateDataFields(motorInventoryData.displayOptions.nameplateDataOptions);
+    this.groups.push({
+      options: nameplateOptions,
+      groupLabel: 'Nameplate Data',
+      showGroup: true
+    });
+    //load characteristics
+    let loadCharacteristics = this.inventorySummaryTableService.getLoadCharacteristicsFields(motorInventoryData.displayOptions.loadCharactersticOptions);
+    this.groups.push({
+      options: loadCharacteristics,
+      groupLabel: 'Load Characteristics',
+      showGroup: false
+    });
+    //field measurements (operations)
+    let fieldMeasurementOptions = this.inventorySummaryTableService.getOperationsDataFields(motorInventoryData.displayOptions.operationDataOptions);
+    this.groups.push({
+      options: fieldMeasurementOptions,
+      groupLabel: 'Field Measurements',
+      showGroup: false
+    });
+    //manual specifications
+    let manualSpecificationOptions = this.inventorySummaryTableService.getManualSpecificationsFields(motorInventoryData.displayOptions.manualSpecificationOptions);
+    this.groups.push({
+      options: manualSpecificationOptions,
+      groupLabel: 'Manual Specifications',
+      showGroup: false
+    });
+    //replacement information (batch analysis)
+    let replacementInfoOptions = this.inventorySummaryTableService.getBatchAnalysisFields(motorInventoryData.displayOptions.batchAnalysisOptions);
+    this.groups.push({
+      options: replacementInfoOptions,
+      groupLabel: 'Replacement Information',
+      showGroup: false
+    });
+    //purchase information
+    let purchaseInformationOptions = this.inventorySummaryTableService.getPurchaseInfoFields(motorInventoryData.displayOptions.purchaseInformationOptions);
+    this.groups.push({
+      options: purchaseInformationOptions,
+      groupLabel: 'Purchase Information',
+      showGroup: false
+    });
+    //torque
+    let torqueOptions = this.inventorySummaryTableService.getTorqueDataFields(motorInventoryData.displayOptions.torqueOptions);
+    this.groups.push({
+      options: torqueOptions,
+      groupLabel: 'Torque',
+      showGroup: false
+    })
+    //other
+    let otherOptions = this.inventorySummaryTableService.getOtherFields(motorInventoryData.displayOptions.otherOptions);
+    this.groups.push({
+      options: otherOptions,
+      groupLabel: 'Other',
+      showGroup: false
+    });
+  
   }
 
   ngOnDestroy() {
@@ -49,4 +96,8 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
     this.inventorySummaryGraphService.selectedField.next(option);
   }
 
+
+  toggleShow(group: any){
+    group.showGroup = !group.showGroup;
+  }
 }
