@@ -59,13 +59,13 @@ export class O2EnrichmentComponent implements OnInit {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
     this.enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.value;
-    if(!this.enrichmentInputs) {
+    if (!this.enrichmentInputs) {
       this.o2EnrichmentService.initDefaultEmptyInputs(this.settings);
     }
     if (this.inAssessment) {
       this.getCalculator();
       this.originalCalculator = this.calculator;
-    } 
+    }
 
     this.initSubscriptions();
   }
@@ -84,6 +84,9 @@ export class O2EnrichmentComponent implements OnInit {
     this.enrichmentInputsSub = this.o2EnrichmentService.enrichmentInputs.subscribe(value => {
       this.enrichmentInputs = value;
       this.o2EnrichmentService.calculate(this.settings);
+      if(this.inAssessment){
+        this.saveCalculator();
+      }
     })
   }
 
@@ -91,28 +94,26 @@ export class O2EnrichmentComponent implements OnInit {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       this.calcExists = true;
-      if (this.calculator.o2Enrichment) {
-        // Set/translate this.calculator.o2enrichment to this.o2EnrichmentService.enrichmentInputs.next();
+      if (this.calculator.o2EnrichmentInputs) {
+        this.o2EnrichmentService.enrichmentInputs.next(this.calculator.o2EnrichmentInputs);
       } else {
-        // Set calculator.o2Enrichment from current - this.o2EnrichmentService.enrichmentInputs.getValue();
+        this.calculator.o2EnrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
         this.saveCalculator();
       }
     } else {
-      // this.calculator = this.initCalculator();
+      this.calculator = this.initCalculator();
       this.saveCalculator();
     }
   }
 
-  // initCalculator(): Calculator {
-  //   let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
-  //   // Need to update Calculator model
-  //   let tmpCalculator: Calculator = {
-  //     assessmentId: this.assessment.id,
-  //     // o2Enrichment: tmpO2Enrichment
-  //     enrichmentInputs: inputs
-  //   };
-  //   return tmpCalculator;
-  // }
+  initCalculator(): Calculator {
+    let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      o2EnrichmentInputs: inputs
+    };
+    return tmpCalculator;
+  }
 
   saveCalculator() {
     if (!this.saving || this.calcExists) {
@@ -139,11 +140,11 @@ export class O2EnrichmentComponent implements OnInit {
     this.o2EnrichmentService.enrichmentInputs.next(exampleInputs);
     this.o2EnrichmentService.currentEnrichmentIndex.next(1);
   }
-  
+
   btnResetData() {
     if (this.inAssessment) {
       this.calculator = this.originalCalculator;
-    } 
+    }
     this.o2EnrichmentService.resetData.next(true);
     this.o2EnrichmentService.resetInputs(this.settings);
     this.o2EnrichmentService.currentEnrichmentIndex.next(0);
