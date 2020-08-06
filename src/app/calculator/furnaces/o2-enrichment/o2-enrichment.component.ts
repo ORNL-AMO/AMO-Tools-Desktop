@@ -95,10 +95,8 @@ export class O2EnrichmentComponent implements OnInit {
     if (this.calculator) {
       this.calcExists = true;
       if (this.calculator.o2EnrichmentInputs) {
-        // Set/translate this.calculator.o2enrichment to this.o2EnrichmentService.enrichmentInputs.next();
         this.o2EnrichmentService.enrichmentInputs.next(this.calculator.o2EnrichmentInputs);
       } else {
-        // Set calculator.o2Enrichment from current - this.o2EnrichmentService.enrichmentInputs.getValue();
         this.calculator.o2EnrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
         this.saveCalculator();
       }
@@ -110,7 +108,6 @@ export class O2EnrichmentComponent implements OnInit {
 
   initCalculator(): Calculator {
     let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
-    // Need to update Calculator model
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       o2EnrichmentInputs: inputs
