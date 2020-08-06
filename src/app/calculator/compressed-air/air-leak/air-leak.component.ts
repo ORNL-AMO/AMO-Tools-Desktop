@@ -98,7 +98,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   }
 
   btnGenerateExample() {
-    this.airLeakService.generateExampleData();
+    this.airLeakService.generateExampleData(this.settings);
   }
 
   save() {
