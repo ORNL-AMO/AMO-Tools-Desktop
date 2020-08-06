@@ -65,11 +65,15 @@ export class AirLeakService {
     return emptyAirLeakSurveyOutput;
   }
 
-  generateExampleData() {
+  generateExampleData(settings: Settings) {
     let exampleLeaks: Array<AirLeakSurveyData> = JSON.parse(JSON.stringify(exampleLeakInputs));
     let airLeakInputExample: AirLeakSurveyInput = {
       compressedAirLeakSurveyInputVec: exampleLeaks,
       facilityCompressorData: this.airLeakFormService.getExampleFacilityCompressorData()
+    }
+    //convert example
+    if (settings.unitsOfMeasure != 'Imperial') {
+      airLeakInputExample = this.convertAirleakService.convertExample(airLeakInputExample);
     }
     this.airLeakInput.next(airLeakInputExample);
     this.generateExample.next(true);
@@ -119,7 +123,6 @@ export class AirLeakService {
       leak.compressorElectricityData = inputCopy.facilityCompressorData.compressorElectricityData;
     })
     let inputArray: Array<AirLeakSurveyData> = this.convertAirleakService.convertInputs(inputCopy.compressedAirLeakSurveyInputVec, settings);
-
     let baselineLeaks: AirLeakSurveyInput = { compressedAirLeakSurveyInputVec: inputArray };
     let modificationLeaks: AirLeakSurveyInput = { compressedAirLeakSurveyInputVec: Array<AirLeakSurveyData>() };
     //  Build baseline / modification leak results

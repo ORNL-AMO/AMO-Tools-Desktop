@@ -1,5 +1,5 @@
 <div #contentContainer class="d-flex h-100 modify-conditions general standalone-calculator">
-    <div class="d-flex flex-column mh-100 scroll-item w-100">
+    <div class="d-flex flex-column mh-100w-100">
         <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center w-100"
             [ngClass]="{'justify-content-between': inTreasureHunt}">
             <div class="d-flex pl-2 align-items-center">
@@ -28,7 +28,7 @@
         </div>
         <!--add this ngIf so form wont render untils airLeakInput is initialized-->
         <div class="d-flex w-100 h-100">
-            <div class="d-flex flex-column leak-form-width modification" *ngIf="airLeakInput">
+            <div class="d-flex flex-column leak-form-width modification scroll-item h-100" *ngIf="airLeakInput">
                 <div class="tab-content">
                     <div class="d-flex flex-row flex-wrap">
                         <div class="compressor-form-item pb-3">

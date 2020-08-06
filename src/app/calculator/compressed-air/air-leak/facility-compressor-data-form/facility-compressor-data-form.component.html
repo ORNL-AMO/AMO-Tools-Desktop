@@ -22,7 +22,7 @@
   <div class="form-group">
     <label>Utility Type</label>
     <select name="utilityType" class="form-control " id="utilityType" formControlName="utilityType" autofocus
-      (focus)="changeField('utilityType')" (change)="save()">
+      (focus)="changeField('utilityType')" (change)="changeUtilityType()">
       <option *ngFor="let utilityType of utilityTypeOptions" [ngValue]="utilityType.value">
         {{utilityType.display}}
       </option>
