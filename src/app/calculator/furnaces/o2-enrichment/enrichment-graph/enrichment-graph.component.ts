@@ -175,6 +175,7 @@ export class EnrichmentGraphComponent implements OnInit {
       let lineTrace = this.o2EnrichmentService.getLineTrace();
       lineTrace.x = graphData.data.x;
       lineTrace.y = graphData.data.y;
+      lineTrace.name = enrichmentInput.inputData.name;
       lineTrace.hovertemplate = this.xAxis.hoverTemplate;
       lineTrace.line.color = currentColor;
       
@@ -248,6 +249,7 @@ export class EnrichmentGraphComponent implements OnInit {
       let lineTrace = this.o2EnrichmentService.getLineTrace();
       lineTrace.x = graphData.data.x;
       lineTrace.y = graphData.data.y;
+      lineTrace.name = enrichmentInput.inputData.name;
       lineTrace.hovertemplate = this.xAxis.hoverTemplate;
       lineTrace.line.color = lineTraceColor || currentColor;
       
