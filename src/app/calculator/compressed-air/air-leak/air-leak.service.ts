@@ -117,10 +117,10 @@ export class AirLeakService {
     }
     // Attach facility compressor data to leaks before conversion
     inputCopy.compressedAirLeakSurveyInputVec.forEach(leak => {
-      leak.hoursPerYear = inputCopy.facilityCompressorData.hoursPerYear;
-      leak.utilityCost = inputCopy.facilityCompressorData.utilityCost;
-      leak.utilityType = inputCopy.facilityCompressorData.utilityType;
-      leak.compressorElectricityData = inputCopy.facilityCompressorData.compressorElectricityData;
+      leak.hoursPerYear = JSON.parse(JSON.stringify(inputCopy.facilityCompressorData.hoursPerYear));
+      leak.utilityCost = JSON.parse(JSON.stringify(inputCopy.facilityCompressorData.utilityCost));
+      leak.utilityType = JSON.parse(JSON.stringify(inputCopy.facilityCompressorData.utilityType));
+      leak.compressorElectricityData = JSON.parse(JSON.stringify(inputCopy.facilityCompressorData.compressorElectricityData));
     })
     let inputArray: Array<AirLeakSurveyData> = this.convertAirleakService.convertInputs(inputCopy.compressedAirLeakSurveyInputVec, settings);
     let baselineLeaks: AirLeakSurveyInput = { compressedAirLeakSurveyInputVec: inputArray };
