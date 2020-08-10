@@ -46,8 +46,8 @@ export interface SimpleChart {
 }
 
 export interface AxisObj {
-    autorange: boolean,
-    type: string,
+    autorange?: boolean,
+    type?: string,
     showgrid: boolean,
     showspikes?: boolean,
     spikemode?: string,
@@ -55,7 +55,11 @@ export interface AxisObj {
         text: string
     },
     tickvals?: Array<number | string>,
+    ticktext?: Array<number | string>,
     tickmode?: string,
+    autotick?: boolean,
+    tick0?: number,
+    dtick?: number,
     ticksuffix?: string,
     tickangle?: number,
     showticksuffix: string,

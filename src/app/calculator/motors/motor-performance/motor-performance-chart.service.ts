@@ -113,14 +113,17 @@ export class MotorPerformanceChartService {
         },
         hovermode: 'x',
         xaxis: {
-          autorange: true,
-          type: 'auto',
+          autorange: false,
           showgrid: true,
           title: {
             text: "Motor Shaft Load (%)"
           },
           showticksuffix: 'all',
-          tickangle: -60
+          tickangle: -60,
+          tickmode: 'array',
+          range: [0, 1.4],
+          tickvals: [0, .2, .4, .6, .8, 1, 1.2],
+          ticktext: [0, 20, 40, 60, 80, 100, 120],
         },
         yaxis: {
           autorange: true,

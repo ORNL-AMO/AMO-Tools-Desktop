@@ -5,7 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
 import * as Plotly from 'plotly.js';
-import { MotorPerformanceChartService, MotorPoint, HoverGroupData } from '../motor-performance-chart.service';
+import { MotorPerformanceChartService, MotorPoint } from '../motor-performance-chart.service';
 
 @Component({
   selector: 'app-motor-performance-chart',
