@@ -7,6 +7,7 @@ import { AirLeakService } from '../air-leak.service';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AirLeakFormService } from '../air-leak-form/air-leak-form.service';
+import { ConvertAirLeakService } from '../convert-air-leak.service';
 
 @Component({
   selector: 'app-facility-compressor-data-form',
@@ -73,7 +74,8 @@ export class FacilityCompressorDataFormComponent implements OnInit {
 
   constructor(private operatingCostService: OperatingCostService,
     private airLeakService: AirLeakService,
-    private airLeakFormService: AirLeakFormService) { }
+    private airLeakFormService: AirLeakFormService,
+    private convertAirLeakService: ConvertAirLeakService) { }
 
   ngOnInit(): void {
     this.setFormFromInputs();
@@ -151,11 +153,21 @@ export class FacilityCompressorDataFormComponent implements OnInit {
       if (compressorElectricityForm.controls.compressorSpecificPowerControl.value == 4) {
         this.compressorCustomSpecificPower = true;
       }
-      compressorElectricityForm.patchValue({ compressorSpecificPower: this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower });
+      let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
+      if (this.settings.unitsOfMeasure != 'Imperial') {
+        specificPower = this.convertAirLeakService.convertSpecificPower(specificPower);
+        specificPower = this.convertAirLeakService.roundVal(specificPower);
+      }
+      compressorElectricityForm.patchValue({ compressorSpecificPower: specificPower });
     }
     else if (compressorElectricityForm.controls.compressorSpecificPowerControl.value != 4) {
       this.compressorCustomSpecificPower = false;
-      compressorElectricityForm.patchValue({ compressorSpecificPower: this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower });
+      let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
+      if (this.settings.unitsOfMeasure != 'Imperial') {
+        specificPower = this.convertAirLeakService.convertSpecificPower(specificPower);
+        specificPower = this.convertAirLeakService.roundVal(specificPower);
+      }
+      compressorElectricityForm.patchValue({ compressorSpecificPower: specificPower });
     }
     else {
       if (compressorElectricityForm.controls.compressorSpecificPower.value) {
@@ -190,5 +202,14 @@ export class FacilityCompressorDataFormComponent implements OnInit {
     this.airLeakInput.facilityCompressorData.hoursPerYear = oppHours.hoursPerYear;
     this.save();
     this.closeOperatingHoursModal();
+  }
+
+  changeUtilityType() {
+    if (this.facilityCompressorDataForm.controls.utilityType.value == 0) {
+      this.facilityCompressorDataForm.controls.utilityCost.patchValue(this.settings.compressedAirCost);
+    } else {
+      this.facilityCompressorDataForm.controls.utilityCost.patchValue(this.settings.electricityCost);
+    }
+    this.save();
   }
 }

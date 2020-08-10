@@ -43,20 +43,20 @@
       </div>
     </div>
     <div class="d-flex flex-column p-2 h-100" *ngIf="tabSelect == 'results'">
-      <form class="pt-2 pb-2" [formGroup]="graphToggleForm">
-        <select name="graphToggle" class="form-control mx-auto justify-self-center align-self-center" formControlName="graphToggle"
-          id="graphToggle" (change)="toggleGraph()">
-          <option [ngValue]=0>T-S Diagram</option>
-          <option [ngValue]=1>P-H Diagram</option>
-        </select>
-      </form>
       <div class="w-100 h-100" #lineChartContainer>
-        <app-steam-properties-graph *ngIf="graphToggleForm.controls.graphToggle.value == 0" [settings]="settings"
-          [chartContainerHeight]="chartContainerHeight" [chartContainerWidth]="chartContainerWidth"
-          [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-graph>
-        <app-steam-properties-ph-graph *ngIf="graphToggleForm.controls.graphToggle.value == 1" [settings]="settings"
-          [chartContainerHeight]="chartContainerHeight" [chartContainerWidth]="chartContainerWidth"
-          [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-ph-graph>
+        <div class="tab-panel-background">
+          <form class="pt-2 pb-2" [formGroup]="graphToggleForm">
+            <select name="graphToggle" class="form-control mx-auto justify-self-center mt-3 align-self-center" formControlName="graphToggle"
+            id="graphToggle" (change)="toggleGraph()">
+            <option [ngValue]=0>T-S Diagram</option>
+            <option [ngValue]=1>P-H Diagram</option>
+          </select>
+        </form>
+        <app-steam-properties-chart *ngIf="graphToggleForm.controls.graphToggle.value == 0" [settings]="settings" [toggleReset]="toggleResetData"
+        [steamPropertiesOutput]="steamPropertiesOutput" [validPlot]="validPlot"></app-steam-properties-chart>
+        <app-steam-properties-ph-chart *ngIf="graphToggleForm.controls.graphToggle.value == 1" [settings]="settings" [toggleReset]="toggleResetData"
+        [steamPropertiesOutput]="steamPropertiesOutput" [validPlot]="validPlot"></app-steam-properties-ph-chart>
+      </div>
       </div>
     </div>
     <div class="d-flex flex-column" *ngIf="tabSelect == 'help'">

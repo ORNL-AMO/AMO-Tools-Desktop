@@ -8,6 +8,7 @@ import { FormGroup } from '../../../../../../node_modules/@angular/forms';
 import * as Plotly from 'plotly.js';
 import { DataPoint, SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/models/plotting';
 import { AchievableEfficiencyService } from '../achievable-efficiency.service';
+import { pumpTypeRanges } from '../../../../psat/psatConstants';
 
 
 @Component({
@@ -163,7 +164,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.efficiencyChart.data[1].y = avgData.y;
     this.efficiencyChart.data[1].line.color = this.pointColors[1];
     
-    this.efficiencyChart.layout.xaxis.range = [0, 5000];
     this.efficiencyChart.layout.xaxis.title.text = this.xAxisTitle;
   }
   
@@ -267,6 +267,24 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
 
+  setXRange() {
+    let ranges = JSON.parse(JSON.stringify(pumpTypeRanges));
+    let xRange = {
+      range: {min: 0, max: 0},
+      increment: 10,
+    };
+    xRange.range = ranges.find(pumpType => pumpType.value == this.currentPumpType).range;
+    if (xRange.range.min <= 5000) {
+      xRange.increment = 10;
+    } else if (xRange.range.max <= 50000) {
+      xRange.increment = 100;
+    } else {
+      xRange.increment = 250;
+    }
+    this.efficiencyChart.layout.xaxis.range = [xRange.range.min, xRange.range.max];
+    return xRange;
+  }
+
   calculateYaverage(flow: number) {
     if (this.checkForm()) {
       let tmpResults = this.psatService.pumpEfficiency(
@@ -290,11 +308,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   }
 
   getAvgData(): TraceCoordinates {
+    let xRange = this.setXRange();
     let data: TraceCoordinates = {
       x: [],
       y: [],
     };
-    for (var i = 0; i < 5000; i = i + 10) {
+    for (let i = xRange.range.min; i < xRange.range.max; i = i + xRange.increment) {
       if (this.calculateYaverage(i) <= 100) {
         data.x.push(i);
         data.y.push(this.calculateYaverage(i));
@@ -303,11 +322,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     return data;
   }
   getMaxData(): TraceCoordinates {
+    let xRange = this.setXRange();
     let data: TraceCoordinates = {
       x: [],
       y: [],
     };
-    for (var i = 0; i < 5000; i = i + 10) {
+    for (let i = xRange.range.min; i < xRange.range.max; i = i + xRange.increment) {
       if (this.calculateYmax(i) <= 100) {
         data.x.push(i);
         data.y.push(this.calculateYmax(i));

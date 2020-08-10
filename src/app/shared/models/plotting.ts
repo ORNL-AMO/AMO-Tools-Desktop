@@ -13,6 +13,10 @@ export interface SimpleChart {
     currentEquipmentType?: string,
     data: Array<TraceData>,
     layout: {
+        barmode?: string,
+        legend?: {
+            orientation: string
+        }
         title?: {
             text: string,
             font: {
@@ -36,13 +40,18 @@ export interface SimpleChart {
         responsive: boolean
     }
     chartId?: string,
+    inputCount?: number,
+    removeIndex?: number,
+    existingPoint?: boolean
 }
 
 export interface AxisObj {
     autorange: boolean,
     type: string,
     showgrid: boolean,
-    title: {
+    showspikes?: boolean,
+    spikemode?: string,
+    title?: {
         text: string
     },
     tickvals?: Array<number | string>,
@@ -61,18 +70,22 @@ export interface TraceData {
     y: Array<number | string>,
     type: string,
     name?: string,
+    id?: string,
     showlegend?: boolean,
     hovertemplate?: string,
     customdata?: Array<number | string>,
     text?: Array<string>,
     xaxis?: any,
     yaxis?: any,
+    fill?: string,
+    fillcolor?: string,
     mode?: string,
     marker?: {
         color?: string | Array<string>,
         line?: {
             color: string,
             width: number,
+            shape?: string,
         }
         colorbar?: {
             ticksuffix: string,
@@ -85,12 +98,13 @@ export interface TraceData {
         color?: string,
         dash?: string,
         smoothing?: number
+        width?: number
     }
 }
 
 export interface TraceCoordinates {
-    x: Array<number | string>,
-    y: Array<number | string>,
+    x: Array<number>,
+    y: Array<number>,
 };
 
 export interface ChartConfig {
