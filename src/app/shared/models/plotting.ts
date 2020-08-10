@@ -1,7 +1,5 @@
 //Shared objects for Plotly data visualizations
 
-
-// PUMP CALCULATOR PLOTS
 export interface SelectedDataPoint {
     pointColor: string;
     pointX: number;
@@ -14,7 +12,10 @@ export interface SimpleChart {
     layout: {
         barmode?: string,
         legend?: {
-            orientation: string
+            orientation: string,
+            font?: {
+                size: number,
+              },
         }
         title?: {
             text: string,
@@ -101,8 +102,10 @@ export interface TraceCoordinates {
 };
 
 export interface DataPoint {
-  x: number;
-  y: number;
+    pointColor?: string;
+    pointOutlineColor?: string;
+    pointTraceIndex?: number;
+    name?: string;
+    x: number;
+    y: number;
 }
-
-// End PUMP CALCULATOR PLOTS
