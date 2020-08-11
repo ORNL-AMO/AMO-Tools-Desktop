@@ -1,8 +1,12 @@
-.navbar{
-    background: white;
-    border-bottom: solid 4px;
-    font-size: small;
+.nav-item .dropdown-toggle{
+    color: white;
+    background: #84b641;
 }
+
+.nav-link{
+    padding: 4px;
+}
+
 .list-group-item{
     padding: 8px;
     font-size: small;
@@ -10,7 +14,7 @@
 
 .list-group-item.active{
     color: white;
-    background: #2E4053;
+    background: #84b641;
 }
 
 a.list-group-item:hover, .nav-link{
@@ -23,4 +27,15 @@ a.list-group-item.active:hover{
 
 .nav-link.dropdown-toggle:hover, .nav-btn:hover{
     background-color: #808B96;
+}
+
+.badge-pill{
+    background-color: #84b641;
+    color: white;
+    font-weight: bold;
+  }
+
+.active .badge-pill{
+    background-color: white;
+    color: black;
 }
