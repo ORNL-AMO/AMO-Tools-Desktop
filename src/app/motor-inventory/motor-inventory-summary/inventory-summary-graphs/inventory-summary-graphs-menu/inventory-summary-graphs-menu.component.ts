@@ -6,6 +6,7 @@ import { InventorySummaryTableService } from '../../inventory-summary-table/inve
 import { MotorInventoryData } from '../../../motor-inventory';
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
+import { MotorInventorySummaryService } from '../../motor-inventory-summary.service';
 @Component({
   selector: 'app-inventory-summary-graphs-menu',
   templateUrl: './inventory-summary-graphs-menu.component.html',
@@ -24,8 +25,7 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
     groupLabel: string,
     showGroup: boolean
   }>
-  constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryGraphService: InventorySummaryGraphsService,
-    private inventorySummaryTableService: InventorySummaryTableService) { }
+  constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryGraphService: InventorySummaryGraphsService, private motorInventorySummaryService: MotorInventorySummaryService) { }
 
   ngOnInit(): void {
     this.setOptions();
@@ -52,49 +52,49 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
     //nameplate
     this.groups.push({
-      options: this.inventorySummaryTableService.getNameplateDataFields(motorInventoryData.displayOptions.nameplateDataOptions, this.settings),
+      options: this.motorInventorySummaryService.getNameplateDataFields(motorInventoryData.displayOptions.nameplateDataOptions, this.settings),
       groupLabel: 'Nameplate Data',
       showGroup: true
     });
     //load characteristics
     this.groups.push({
-      options: this.inventorySummaryTableService.getLoadCharacteristicsFields(motorInventoryData.displayOptions.loadCharactersticOptions),
+      options: this.motorInventorySummaryService.getLoadCharacteristicsFields(motorInventoryData.displayOptions.loadCharactersticOptions),
       groupLabel: 'Load Characteristics',
       showGroup: false
     });
     //field measurements (operations)
     this.groups.push({
-      options: this.inventorySummaryTableService.getOperationsDataFields(motorInventoryData.displayOptions.operationDataOptions),
+      options: this.motorInventorySummaryService.getOperationsDataFields(motorInventoryData.displayOptions.operationDataOptions),
       groupLabel: 'Field Measurements',
       showGroup: false
     });
     //manual specifications
     this.groups.push({
-      options: this.inventorySummaryTableService.getManualSpecificationsFields(motorInventoryData.displayOptions.manualSpecificationOptions),
+      options: this.motorInventorySummaryService.getManualSpecificationsFields(motorInventoryData.displayOptions.manualSpecificationOptions),
       groupLabel: 'Manual Specifications',
       showGroup: false
     });
     //replacement information (batch analysis)
     this.groups.push({
-      options: this.inventorySummaryTableService.getBatchAnalysisFields(motorInventoryData.displayOptions.batchAnalysisOptions, this.settings),
+      options: this.motorInventorySummaryService.getBatchAnalysisFields(motorInventoryData.displayOptions.batchAnalysisOptions, this.settings),
       groupLabel: 'Replacement Information',
       showGroup: false
     });
     //purchase information
     this.groups.push({
-      options: this.inventorySummaryTableService.getPurchaseInfoFields(motorInventoryData.displayOptions.purchaseInformationOptions),
+      options: this.motorInventorySummaryService.getPurchaseInfoFields(motorInventoryData.displayOptions.purchaseInformationOptions),
       groupLabel: 'Purchase Information',
       showGroup: false
     });
     //torque
     this.groups.push({
-      options: this.inventorySummaryTableService.getTorqueDataFields(motorInventoryData.displayOptions.torqueOptions, this.settings),
+      options: this.motorInventorySummaryService.getTorqueDataFields(motorInventoryData.displayOptions.torqueOptions, this.settings),
       groupLabel: 'Torque',
       showGroup: false
     })
     //other
     this.groups.push({
-      options: this.inventorySummaryTableService.getOtherFields(motorInventoryData.displayOptions.otherOptions),
+      options: this.motorInventorySummaryService.getOtherFields(motorInventoryData.displayOptions.otherOptions),
       groupLabel: 'Other',
       showGroup: false
     });

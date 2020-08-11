@@ -3,6 +3,8 @@ import { MotorInventoryData } from '../../motor-inventory';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { Settings } from '../../../shared/models/settings';
 import { InventorySummaryTableService, InventorySummaryData } from './inventory-summary-table.service';
+import { MotorInventorySummaryService } from '../motor-inventory-summary.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-inventory-summary-table',
@@ -12,15 +14,23 @@ import { InventorySummaryTableService, InventorySummaryData } from './inventory-
 export class InventorySummaryTableComponent implements OnInit {
   @Input()
   settings: Settings;
-  
+
   inventorySummaryData: InventorySummaryData;
   sortByField: string = 'name';
   sortByDirection: string = 'desc';
-  constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryTableService: InventorySummaryTableService) { }
+  filterInventorySummarySub: Subscription;
+  constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryTableService: InventorySummaryTableService, private motorInventorySummaryService: MotorInventorySummaryService) { }
 
   ngOnInit(): void {
-    let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
-    this.inventorySummaryData = this.inventorySummaryTableService.getInventorySummaryData(motorInventoryData, this.settings);
+    this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
+      let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.value;
+      let filteredInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(motorInventoryData);
+      this.inventorySummaryData = this.inventorySummaryTableService.getInventorySummaryData(filteredInventoryData, this.settings);
+    });
+  }
+
+  ngOnDestroy() {
+    this.filterInventorySummarySub.unsubscribe();
   }
 
   setSortByField(str: string) {

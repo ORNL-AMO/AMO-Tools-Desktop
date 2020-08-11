@@ -1,0 +1,27 @@
+<nav class="navbar" #navbar>
+    <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" (click)="toggleDepartments()">
+            Select Department
+        </a>
+        <div class="dropdown-menu p-0" [ngClass]="{'show': departmentsDropdown == true}">
+            <div class="list-group">
+                <a class="list-group-item list-group-item-action"
+                    [ngClass]="{'active': filterInventorySummary.selectedDepartmentIds.length == 0}"
+                    (click)="selectAllDepartments()">
+                    All
+                    <!-- <span class="badge gray-badge">
+                <strong>{{department.catalog.length}}</strong>
+            </span> -->
+                </a>
+                <a class="list-group-item list-group-item-action"
+                    *ngFor="let department of motorInventoryData.departments"
+                    [ngClass]="{'active': checkActive(department.id)}" (click)="selectDepartment(department.id)">
+                    {{department.name}}
+                    <!-- <span class="badge gray-badge">
+                        <strong>{{department.catalog.length}}</strong>
+                    </span> -->
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

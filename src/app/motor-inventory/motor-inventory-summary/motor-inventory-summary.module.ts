@@ -12,6 +12,8 @@ import { InventorySummaryTableService } from './inventory-summary-table/inventor
 import { InventorySummaryGraphsMenuComponent } from './inventory-summary-graphs/inventory-summary-graphs-menu/inventory-summary-graphs-menu.component';
 import { InventorySummaryGraphComponent } from './inventory-summary-graphs/inventory-summary-graph/inventory-summary-graph.component';
 import { InventorySummaryGraphsService } from './inventory-summary-graphs/inventory-summary-graphs.service';
+import { SummaryFilterComponent } from './summary-filter/summary-filter.component';
+import { MotorInventorySummaryService } from './motor-inventory-summary.service';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { InventorySummaryGraphsService } from './inventory-summary-graphs/invent
     InventorySummaryMotorDetailsComponent,
     MotorSummaryTablePipe,
     InventorySummaryGraphsMenuComponent,
-    InventorySummaryGraphComponent
+    InventorySummaryGraphComponent,
+    SummaryFilterComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +37,8 @@ import { InventorySummaryGraphsService } from './inventory-summary-graphs/invent
   providers: [
     InventorySummaryOverviewService,
     InventorySummaryTableService,
-    InventorySummaryGraphsService
+    InventorySummaryGraphsService,
+    MotorInventorySummaryService
   ]
 })
 export class MotorInventorySummaryModule { }
