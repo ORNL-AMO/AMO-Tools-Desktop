@@ -1,23 +1,38 @@
 import { Injectable } from '@angular/core';
-import { MotorPropertyDisplayOptions, OtherOptions, TorqueOptions, PurchaseInformationOptions, BatchAnalysisOptions, OperationDataOptions, LoadCharacteristicOptions, ManualSpecificationOptions, NameplateDataOptions, MotorInventoryData } from '../motor-inventory';
+import { MotorPropertyDisplayOptions, OtherOptions, TorqueOptions, PurchaseInformationOptions, BatchAnalysisOptions, OperationDataOptions, LoadCharacteristicOptions, ManualSpecificationOptions, NameplateDataOptions, MotorInventoryData, MotorInventoryDepartment, MotorItem, FilterInventorySummary } from '../motor-inventory';
 import { MotorField } from './inventory-summary-table/inventory-summary-table.service';
 import { Settings } from '../../shared/models/settings';
 import { BehaviorSubject } from 'rxjs';
-
+import * as _ from 'lodash';
 @Injectable()
 export class MotorInventorySummaryService {
 
-  filterInventorySummary: BehaviorSubject<{ selectedDepartmentIds: Array<string> }>;
+  filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
   constructor() {
-    this.filterInventorySummary = new BehaviorSubject({ selectedDepartmentIds: new Array() });
+    this.filterInventorySummary = new BehaviorSubject({
+      selectedDepartmentIds: new Array(),
+      efficiencyClasses: new Array()
+    });
   }
 
-  filterMotorInventoryData(inventoryData: MotorInventoryData): MotorInventoryData {
+
+  getAllMotors(inventoryData: MotorInventoryData): Array<MotorItem> {
+    let allMotors: Array<MotorItem> = _.flatMap(inventoryData.departments, (department) => { return department.catalog });
+    return allMotors;
+  }
+
+  filterMotorInventoryData(inventoryData: MotorInventoryData, filterInventorySummary: FilterInventorySummary): MotorInventoryData {
     let filteredInventoryData: MotorInventoryData = JSON.parse(JSON.stringify(inventoryData));
-    let filterInventorySummary: { selectedDepartmentIds: Array<string> } = this.filterInventorySummary.getValue();
     if (filterInventorySummary.selectedDepartmentIds.length != 0) {
-      filteredInventoryData.departments = filteredInventoryData.departments.filter(department => {
-        return filterInventorySummary.selectedDepartmentIds.find(id => { return department.id == id }) != undefined;
+      filteredInventoryData.departments = _.filter(filteredInventoryData.departments, (department) => {
+        return _.find(filterInventorySummary.selectedDepartmentIds, (id) => { return department.id == id }) != undefined;
+      });
+    }
+    if (filterInventorySummary.efficiencyClasses.length != 0) {
+      filteredInventoryData.departments.forEach(department => {
+        department.catalog = _.filter(department.catalog, (motorItem) => {
+          return _.includes(filterInventorySummary.efficiencyClasses, motorItem.nameplateData.efficiencyClass);
+        })
       });
     }
     return filteredInventoryData;

@@ -214,3 +214,10 @@ export interface TorqueOptions {
   torqueBreakDown: boolean,
   torqueLockedRotor: boolean,
 }
+
+
+
+export interface FilterInventorySummary {
+  selectedDepartmentIds: Array<string>,
+  efficiencyClasses: Array<number>
+}

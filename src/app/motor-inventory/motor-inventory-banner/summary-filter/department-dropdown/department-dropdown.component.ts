@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MotorInventoryData } from '../../../motor-inventory';
+import { MotorInventoryData, FilterInventorySummary } from '../../../motor-inventory';
 import { Subscription } from 'rxjs';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { MotorInventorySummaryService } from '../../../motor-inventory-summary/motor-inventory-summary.service';
 import { InventorySummaryGraphsService } from '../../../motor-inventory-summary/inventory-summary-graphs/inventory-summary-graphs.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-department-dropdown',
@@ -15,7 +16,7 @@ export class DepartmentDropdownComponent implements OnInit {
   departmentsDropdown: boolean = false;
   motorInventoryData: MotorInventoryData
   filterInventorySummarySub: Subscription;
-  filterInventorySummary: { selectedDepartmentIds: Array<string> };
+  filterInventorySummary: FilterInventorySummary;
   constructor(private motorInventoryService: MotorInventoryService, private motorInventorySummaryService: MotorInventorySummaryService,
     private inventorySummaryGraphService: InventorySummaryGraphsService) { }
 
@@ -42,12 +43,8 @@ export class DepartmentDropdownComponent implements OnInit {
   }
 
   checkActive(departmentId: string): boolean {
-    let department = this.filterInventorySummary.selectedDepartmentIds.find(id => { return id == departmentId });
-    if (department) {
-      return true;
-    } else {
-      return false;
-    }
+    let isActive = _.includes(this.filterInventorySummary.selectedDepartmentIds, departmentId);
+    return isActive;
   }
 
   selectDepartment(departmentId: string) {

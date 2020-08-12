@@ -4,24 +4,20 @@ import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { MotorField } from '../inventory-summary-table/inventory-summary-table.service';
 import { motorEfficiencyConstants, driveConstants } from '../../../psat/psatConstants';
+import { MotorInventorySummaryService } from '../motor-inventory-summary.service';
 
 @Injectable()
 export class InventorySummaryGraphsService {
 
   selectedField: BehaviorSubject<MotorField>
   graphType: BehaviorSubject<string>;
-  constructor() {
+  constructor(private motorInventorySummaryService: MotorInventorySummaryService) {
     this.selectedField = new BehaviorSubject(undefined);
     this.graphType = new BehaviorSubject<string>('bar');
   }
 
   getBinData(motorInventoryData: MotorInventoryData, motorField: MotorField): { xData: Array<any>, yData: Array<any> } {
-    let motors: Array<MotorItem> = new Array();
-    motorInventoryData.departments.forEach(department => {
-      department.catalog.forEach(motor => {
-        motors.push(motor);
-      })
-    });
+    let motors: Array<MotorItem> = this.motorInventorySummaryService.getAllMotors(motorInventoryData);
     // let sorted = _.sortBy(motors, [(motor) => { return motor[motorField.group][motorField.value] }]);
     // sorted.forEach(item => {
     //   console.log(item[motorField.group][motorField.value])

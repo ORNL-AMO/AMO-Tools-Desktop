@@ -24,7 +24,7 @@ export class InventorySummaryTableComponent implements OnInit {
   ngOnInit(): void {
     this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
       let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.value;
-      let filteredInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(motorInventoryData);
+      let filteredInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(motorInventoryData, val);
       this.inventorySummaryData = this.inventorySummaryTableService.getInventorySummaryData(filteredInventoryData, this.settings);
     });
   }

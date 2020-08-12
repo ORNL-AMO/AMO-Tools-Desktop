@@ -23,7 +23,8 @@ export class InventorySummaryGraphComponent implements OnInit {
       Plotly.purge('inventoryGraph');
       if (val) {
         let motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
-        let filteredMotorInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(motorInventoryData);
+        let filterInventorySummary = this.motorInventorySummaryService.filterInventorySummary.getValue();
+        let filteredMotorInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(motorInventoryData, filterInventorySummary);
         let calcedData = this.inventorySummaryGraphsService.getBinData(filteredMotorInventoryData, val);
         let type: string = this.inventorySummaryGraphService.graphType.getValue();
         let data = [
