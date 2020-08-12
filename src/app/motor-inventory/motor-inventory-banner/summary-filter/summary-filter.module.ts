@@ -6,6 +6,7 @@ import { EfficiencyClassDropdownComponent } from './efficiency-class-dropdown/ef
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { RatedVoltageDropdownComponent } from './rated-voltage-dropdown/rated-voltage-dropdown.component';
 import { RatedPowerDropdownComponent } from './rated-power-dropdown/rated-power-dropdown.component';
+import { SelectedOptionsComponent } from './selected-options/selected-options.component';
 
 
 
@@ -15,7 +16,8 @@ import { RatedPowerDropdownComponent } from './rated-power-dropdown/rated-power-
     DepartmentDropdownComponent,
     EfficiencyClassDropdownComponent,
     RatedVoltageDropdownComponent,
-    RatedPowerDropdownComponent
+    RatedPowerDropdownComponent,
+    SelectedOptionsComponent
   ],
   imports: [
     CommonModule,
