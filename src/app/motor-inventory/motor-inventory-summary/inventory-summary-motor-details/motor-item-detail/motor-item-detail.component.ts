@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MotorInventoryDepartment, MotorItem } from '../../../motor-inventory';
+import { MotorInventoryDepartment, MotorItem, MotorPropertyDisplayOptions } from '../../../motor-inventory';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -14,7 +14,9 @@ export class MotorItemDetailComponent implements OnInit {
   motorItem: MotorItem;
   @Input()
   settings: Settings;
-  
+  @Input()
+  displayOptions: MotorPropertyDisplayOptions;
+
   constructor() { }
 
   ngOnInit(): void {

@@ -3,19 +3,11 @@
     /* width: 100%; */
 }
 
-.section-title{
-    padding-top: .5rem;
-    font-size: 18px;
-    /* text-decoration: underline; */
+hr.hr-spacer{
+    border: dashed 1px lightgray;
+    width: 100%;
 }
 
-.section{
-    padding-left: .5rem;
-    padding-right: .5rem;
-    font-size: 16px;
-}
-.label-item{
-    width: 200px;
-    padding-right: .25rem;
-    text-align: right;
+hr.hr-spacer.last-spacer{
+    border: dashed 3px lightgray;
 }

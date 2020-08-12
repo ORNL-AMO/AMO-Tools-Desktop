@@ -1,0 +1,25 @@
+<div class="section-title">
+    Nameplate Data
+</div>
+<div class="row no-gutters section">
+    <div class="col-6">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap">
+                <div class="label-item">
+                    Efficiency Class:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.efficiencyClass | motorEfficiencyClass}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap">
+                <div class="label-item">
+                    Nominal Efficiency:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.nominalEfficiency}} %
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

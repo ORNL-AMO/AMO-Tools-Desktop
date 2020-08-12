@@ -1,0 +1,17 @@
+
+.section-title{
+    padding-top: .5rem;
+    font-size: 18px;
+    /* text-decoration: underline; */
+}
+
+.section{
+    padding-left: .5rem;
+    padding-right: .5rem;
+    font-size: 16px;
+}
+.label-item{
+    width: 200px;
+    padding-right: .25rem;
+    text-align: right;
+}

@@ -11,7 +11,7 @@
                 </p>
                 <!--motors-->
                 <app-motor-item-detail *ngFor="let motorItem of department.catalog" [department]="department"
-                    [motorItem]="motorItem" [settings]="settings">
+                    [motorItem]="motorItem" [settings]="settings" [displayOptions]="motorInventoryData.displayOptions">
                 </app-motor-item-detail>
             </div>
         </div>

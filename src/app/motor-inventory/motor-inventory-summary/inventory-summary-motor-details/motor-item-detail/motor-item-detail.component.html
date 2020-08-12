@@ -7,63 +7,28 @@
 </p>
 <div class="d-flex flex-column w-100 pl-2">
     <!--nameplate-->
-    <div class="section-title">
-        Nameplate Data
-    </div>
-    <div class="row no-gutters section">
-        <div class="col-6">
-            <div class="d-flex flex-column w-100 card-text">
-                <div class="d-flex flex-wrap">
-                    <div class="label-item">
-                        Efficiency Class:
-                    </div>
-                    <div class="flex-fill">
-                        {{motorItem.nameplateData.efficiencyClass | motorEfficiencyClass}}
-                    </div>
-                </div>
-                <div class="d-flex flex-wrap">
-                    <div class="label-item">
-                        Nominal Efficiency:
-                    </div>
-                    <div class="flex-fill">
-                        {{motorItem.nameplateData.nominalEfficiency}} %
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <app-nameplate-details [nameplateData]="motorItem.nameplateData" [settings]="settings"
+        [nameplateDataOptions]="displayOptions.nameplateDataOptions"></app-nameplate-details>
     <hr class="my-1 hr-spacer">
     <!--load characteristics-->
-    <div class="section-title">
-        Load Characteristics
-    </div>
+    <app-load-characteristic-details></app-load-characteristic-details>
+    <hr class="my-1 hr-spacer">
     <!--field measurements-->
-    <div class="section-title">
-        Field Measurements
-    </div>
+    <app-operations-details></app-operations-details>
+    <hr class="my-1 hr-spacer">
     <!--manual specs-->
-
-    <div class="section-title">
-        Manual Specifications
-    </div>
+    <app-manual-specifications-details></app-manual-specifications-details>
+    <hr class="my-1 hr-spacer">
     <!--replacement information-->
-
-    <div class="section-title">
-        Replacement Info
-    </div>
+    <app-batch-analysis-details></app-batch-analysis-details>
+    <hr class="my-1 hr-spacer">
     <!--purchase info-->
-
-    <div class="section-title">
-        Purchase Info
-    </div>
+    <app-purchase-info-details></app-purchase-info-details>
+    <hr class="my-1 hr-spacer">
     <!--torque-->
-
-    <div class="section-title">
-        Torque
-    </div>
+    <app-torque-details></app-torque-details>
+    <hr class="my-1 hr-spacer">
     <!--other-->
-
-    <div class="section-title">
-        Other
-    </div>
+    <app-other-details></app-other-details>
+    <hr class="my-1 hr-spacer last-spacer">
 </div>
