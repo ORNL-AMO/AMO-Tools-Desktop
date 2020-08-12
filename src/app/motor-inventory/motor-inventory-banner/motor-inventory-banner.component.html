@@ -64,6 +64,8 @@
     </div>
 </nav>
 
+<app-summary-filter *ngIf="mainTab == 'summary'" [settings]="settings"></app-summary-filter>
+
 <nav class="hide-print" *ngIf="mainTab == 'summary'">
     <div class="d-flex tabs subtabs progress-tabs flex-wrap motor-inventory">
         <div class="fixed-tab-size" [ngClass]="{'active': summaryTab == 'overview'}" (click)="setSummaryTab('overview')">

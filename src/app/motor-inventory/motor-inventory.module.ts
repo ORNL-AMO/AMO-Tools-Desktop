@@ -17,6 +17,7 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { MotorCatalogModule } from './motor-inventory-setup/motor-catalog/motor-catalog.module';
 import { MotorPropertiesModule } from './motor-inventory-setup/motor-properties/motor-properties.module';
 import { MotorInventorySummaryModule } from './motor-inventory-summary/motor-inventory-summary.module';
+import { SummaryFilterModule } from './motor-inventory-banner/summary-filter/summary-filter.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import { MotorInventorySummaryModule } from './motor-inventory-summary/motor-inv
     MotorInventoryCalculatorsComponent,
     BatchAnalysisComponent,
     HelpPanelComponent,
-    DepartmentCatalogTableComponent,
+    DepartmentCatalogTableComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +40,8 @@ import { MotorInventorySummaryModule } from './motor-inventory-summary/motor-inv
     SharedPipesModule,
     MotorCatalogModule,
     MotorPropertiesModule,
-    MotorInventorySummaryModule
+    MotorInventorySummaryModule,
+    SummaryFilterModule
   ],
   providers: [
     MotorInventoryService
