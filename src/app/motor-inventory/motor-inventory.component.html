@@ -1,7 +1,7 @@
 <div #content class="motor-inventory-container motor-inventory d-flex flex-column">
     <!--header-->
     <div #header class="w-100 hide-print sticky-top">
-        <app-motor-inventory-banner></app-motor-inventory-banner>
+        <app-motor-inventory-banner [settings]="settings"></app-motor-inventory-banner>
     </div>
     <div [ngStyle]="{'height.px': containerHeight}">
         <app-motor-inventory-setup *ngIf="mainTab == 'setup'" [settings]="settings"></app-motor-inventory-setup>

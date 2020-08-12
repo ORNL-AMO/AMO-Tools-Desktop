@@ -1,9 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MotorInventoryService } from '../../motor-inventory.service';
-import { MotorInventoryData } from '../../motor-inventory';
-import { MotorInventorySummaryService } from '../../motor-inventory-summary/motor-inventory-summary.service';
-import { Subscription } from 'rxjs';
-import { InventorySummaryGraphsService } from '../../motor-inventory-summary/inventory-summary-graphs/inventory-summary-graphs.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-summary-filter',
@@ -11,7 +7,9 @@ import { InventorySummaryGraphsService } from '../../motor-inventory-summary/inv
   styleUrls: ['./summary-filter.component.css']
 })
 export class SummaryFilterComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
+  
   constructor() { }
 
   ngOnInit(): void {

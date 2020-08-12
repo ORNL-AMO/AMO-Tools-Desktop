@@ -4,6 +4,8 @@ import { SummaryFilterComponent } from './summary-filter.component';
 import { DepartmentDropdownComponent } from './department-dropdown/department-dropdown.component';
 import { EfficiencyClassDropdownComponent } from './efficiency-class-dropdown/efficiency-class-dropdown.component';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { RatedVoltageDropdownComponent } from './rated-voltage-dropdown/rated-voltage-dropdown.component';
+import { RatedPowerDropdownComponent } from './rated-power-dropdown/rated-power-dropdown.component';
 
 
 
@@ -11,7 +13,9 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
   declarations: [
     SummaryFilterComponent,
     DepartmentDropdownComponent,
-    EfficiencyClassDropdownComponent
+    EfficiencyClassDropdownComponent,
+    RatedVoltageDropdownComponent,
+    RatedPowerDropdownComponent
   ],
   imports: [
     CommonModule,

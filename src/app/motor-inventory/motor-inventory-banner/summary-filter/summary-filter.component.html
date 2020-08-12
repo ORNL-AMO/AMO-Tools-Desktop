@@ -1,6 +1,12 @@
 <nav class="navbar justify-content-start" #navbar>
     <app-department-dropdown></app-department-dropdown>
-    <div class="pl-1 pr-1">
+    <div class="pl-1">
         <app-efficiency-class-dropdown></app-efficiency-class-dropdown>
+    </div>
+    <div class="pl-1">
+        <app-rated-power-dropdown [settings]="settings"></app-rated-power-dropdown>
+    </div>
+    <div class="pl-1">
+        <app-rated-voltage-dropdown></app-rated-voltage-dropdown>
     </div>
 </nav>

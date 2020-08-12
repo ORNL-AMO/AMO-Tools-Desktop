@@ -219,5 +219,7 @@ export interface TorqueOptions {
 
 export interface FilterInventorySummary {
   selectedDepartmentIds: Array<string>,
-  efficiencyClasses: Array<number>
+  efficiencyClasses: Array<number>,
+  ratedPower: Array<number>,
+  ratedVoltage: Array<number>
 }

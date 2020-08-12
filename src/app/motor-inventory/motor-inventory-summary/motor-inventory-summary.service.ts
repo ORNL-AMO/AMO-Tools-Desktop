@@ -11,7 +11,9 @@ export class MotorInventorySummaryService {
   constructor() {
     this.filterInventorySummary = new BehaviorSubject({
       selectedDepartmentIds: new Array(),
-      efficiencyClasses: new Array()
+      efficiencyClasses: new Array(),
+      ratedPower: new Array(),
+      ratedVoltage: new Array()
     });
   }
 
@@ -32,6 +34,20 @@ export class MotorInventorySummaryService {
       filteredInventoryData.departments.forEach(department => {
         department.catalog = _.filter(department.catalog, (motorItem) => {
           return _.includes(filterInventorySummary.efficiencyClasses, motorItem.nameplateData.efficiencyClass);
+        })
+      });
+    }
+    if (filterInventorySummary.ratedPower.length != 0) {
+      filteredInventoryData.departments.forEach(department => {
+        department.catalog = _.filter(department.catalog, (motorItem) => {
+          return _.includes(filterInventorySummary.ratedPower, motorItem.nameplateData.ratedMotorPower);
+        })
+      });
+    }
+    if (filterInventorySummary.ratedVoltage.length != 0) {
+      filteredInventoryData.departments.forEach(department => {
+        department.catalog = _.filter(department.catalog, (motorItem) => {
+          return _.includes(filterInventorySummary.ratedVoltage, motorItem.nameplateData.ratedVoltage);
         })
       });
     }

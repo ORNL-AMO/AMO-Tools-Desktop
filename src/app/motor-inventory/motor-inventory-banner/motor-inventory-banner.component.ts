@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MotorInventoryService } from '../motor-inventory.service';
 import { MotorCatalogService } from '../motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { MotorInventoryData } from '../motor-inventory';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-motor-inventory-banner',
@@ -10,7 +11,9 @@ import { MotorInventoryData } from '../motor-inventory';
   styleUrls: ['./motor-inventory-banner.component.css']
 })
 export class MotorInventoryBannerComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
+  
   setupTab: string;
   setupTabSub: Subscription;
   summaryTab: string;
