@@ -1,0 +1,69 @@
+<label class="group-label">
+    Motor: {{motorItem.name}}
+</label>
+<!--general details-->
+<p *ngIf="motorItem.description" class="card-text mb-2">
+    {{motorItem.description}}
+</p>
+<div class="d-flex flex-column w-100 pl-2">
+    <!--nameplate-->
+    <div class="section-title">
+        Nameplate Data
+    </div>
+    <div class="row no-gutters section">
+        <div class="col-6">
+            <div class="d-flex flex-column w-100 card-text">
+                <div class="d-flex flex-wrap">
+                    <div class="label-item">
+                        Efficiency Class:
+                    </div>
+                    <div class="flex-fill">
+                        {{motorItem.nameplateData.efficiencyClass | motorEfficiencyClass}}
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div class="label-item">
+                        Nominal Efficiency:
+                    </div>
+                    <div class="flex-fill">
+                        {{motorItem.nameplateData.nominalEfficiency}} %
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="my-1 hr-spacer">
+    <!--load characteristics-->
+    <div class="section-title">
+        Load Characteristics
+    </div>
+    <!--field measurements-->
+    <div class="section-title">
+        Field Measurements
+    </div>
+    <!--manual specs-->
+
+    <div class="section-title">
+        Manual Specifications
+    </div>
+    <!--replacement information-->
+
+    <div class="section-title">
+        Replacement Info
+    </div>
+    <!--purchase info-->
+
+    <div class="section-title">
+        Purchase Info
+    </div>
+    <!--torque-->
+
+    <div class="section-title">
+        Torque
+    </div>
+    <!--other-->
+
+    <div class="section-title">
+        Other
+    </div>
+</div>

@@ -1,0 +1,23 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { MotorInventoryDepartment, MotorItem } from '../../../motor-inventory';
+import { Settings } from '../../../../shared/models/settings';
+
+@Component({
+  selector: 'app-motor-item-detail',
+  templateUrl: './motor-item-detail.component.html',
+  styleUrls: ['./motor-item-detail.component.css']
+})
+export class MotorItemDetailComponent implements OnInit {
+  @Input()
+  department: MotorInventoryDepartment;
+  @Input()
+  motorItem: MotorItem;
+  @Input()
+  settings: Settings;
+  
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}
