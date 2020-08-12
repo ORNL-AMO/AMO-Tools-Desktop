@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { OperationDataOptions, OperationData } from '../../../../motor-inventory';
 
 @Component({
   selector: 'app-operations-details',
@@ -6,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./operations-details.component.css']
 })
 export class OperationsDetailsComponent implements OnInit {
-
+  @Input()
+  displayOptions: OperationDataOptions;
+  @Input()
+  operationData: OperationData;
   constructor() { }
 
   ngOnInit(): void {

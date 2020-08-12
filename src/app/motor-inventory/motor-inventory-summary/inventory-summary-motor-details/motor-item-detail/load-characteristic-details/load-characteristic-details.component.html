@@ -1,3 +1,78 @@
 <div class="section-title">
     Load Characteristics
 </div>
+<div class="row no-gutters section">
+    <div class="col-md-6 col-sm-12"
+        *ngIf="displayOptions.efficiency75 || displayOptions.efficiency50 || displayOptions.efficiency25|| displayOptions.ampsIdle">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.efficiency75">
+                <div class="label-item">
+                    Efficiency at 75% Load:
+                </div>
+                <div class="flex-fill">
+                    {{loadCharacteristicData.efficiency75}} %
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.efficiency50">
+                <div class="label-item">
+                    Efficiency at 50% Load:
+                </div>
+                <div class="flex-fill">
+                    {{loadCharacteristicData.efficiency50}} %
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.efficiency25">
+                <div class="label-item">
+                    Efficiency at 25% Load:
+                </div>
+                <div class="flex-fill">
+                    {{loadCharacteristicData.efficiency25}} %
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.ampsIdle">
+                <div class="label-item">
+                    Idle Amps:
+                </div>
+                <div class="flex-fill">
+                    {{loadCharacteristicData.ampsIdle}} A
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.powerFactor100">
+                <div class="label-item">
+                    Power Factor at Full Load:
+                </div>
+                <div class="flex-fill">
+                    {{loadCharacteristicData.powerFactor100}} %
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.powerFactor75">
+                <div class="label-item">
+                    Power Factor at 75% Load:
+                </div>
+                <div class="flex-fill">
+                    {{loadCharacteristicData.powerFactor75}} %
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.powerFactor50">
+                <div class="label-item">
+                    Power Factor at 50% Load:
+                </div>
+                <div class="flex-fill">
+                    {{loadCharacteristicData.powerFactor50}} %
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.powerFactor25">
+                <div class="label-item">
+                    Power Factor at 25% Load:
+                </div>
+                <div class="flex-fill">
+                    {{loadCharacteristicData.powerFactor25}} %
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

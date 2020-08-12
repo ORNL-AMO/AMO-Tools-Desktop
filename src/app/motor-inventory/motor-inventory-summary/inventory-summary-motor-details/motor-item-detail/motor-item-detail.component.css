@@ -9,5 +9,5 @@ hr.hr-spacer{
 }
 
 hr.hr-spacer.last-spacer{
-    border: dashed 3px lightgray;
+    border: dashed 2px gray;
 }

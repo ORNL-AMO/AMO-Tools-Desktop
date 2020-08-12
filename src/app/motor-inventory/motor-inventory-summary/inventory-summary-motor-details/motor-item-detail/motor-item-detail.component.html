@@ -8,27 +8,40 @@
 <div class="d-flex flex-column w-100 pl-2">
     <!--nameplate-->
     <app-nameplate-details [nameplateData]="motorItem.nameplateData" [settings]="settings"
-        [nameplateDataOptions]="displayOptions.nameplateDataOptions"></app-nameplate-details>
+        [displayOptions]="displayOptions.nameplateDataOptions"></app-nameplate-details>
     <hr class="my-1 hr-spacer">
     <!--load characteristics-->
-    <app-load-characteristic-details></app-load-characteristic-details>
-    <hr class="my-1 hr-spacer">
+    <app-load-characteristic-details *ngIf="displayOptions.loadCharactersticOptions.displayLoadCharacteristics"
+        [loadCharacteristicData]="motorItem.loadCharacteristicData"
+        [displayOptions]="displayOptions.loadCharactersticOptions"></app-load-characteristic-details>
+    <hr class="my-1 hr-spacer" *ngIf="displayOptions.loadCharactersticOptions.displayLoadCharacteristics">
     <!--field measurements-->
-    <app-operations-details></app-operations-details>
-    <hr class="my-1 hr-spacer">
+    <app-operations-details *ngIf="displayOptions.operationDataOptions.displayOperationData"
+        [operationData]="motorItem.operationData" [displayOptions]="displayOptions.operationDataOptions">
+    </app-operations-details>
+    <hr class="my-1 hr-spacer" *ngIf="displayOptions.operationDataOptions.displayOperationData">
     <!--manual specs-->
-    <app-manual-specifications-details></app-manual-specifications-details>
+    <app-manual-specifications-details [manualSpecificationData]="motorItem.manualSpecificationData"
+        [displayOptions]="displayOptions.manualSpecificationOptions"></app-manual-specifications-details>
     <hr class="my-1 hr-spacer">
     <!--replacement information-->
-    <app-batch-analysis-details></app-batch-analysis-details>
-    <hr class="my-1 hr-spacer">
+    <div class="col-sm-6 col-md-12">
+        <app-batch-analysis-details></app-batch-analysis-details>
+        <hr class="my-1 hr-spacer">
+    </div>
     <!--purchase info-->
-    <app-purchase-info-details></app-purchase-info-details>
-    <hr class="my-1 hr-spacer">
+    <div class="col-sm-6 col-md-12">
+        <app-purchase-info-details></app-purchase-info-details>
+        <hr class="my-1 hr-spacer">
+    </div>
     <!--torque-->
-    <app-torque-details></app-torque-details>
-    <hr class="my-1 hr-spacer">
+    <div class="col-sm-6 col-md-12">
+        <app-torque-details></app-torque-details>
+        <hr class="my-1 hr-spacer">
+    </div>
     <!--other-->
-    <app-other-details></app-other-details>
-    <hr class="my-1 hr-spacer last-spacer">
+    <div class="col-sm-6 col-md-12">
+        <app-other-details></app-other-details>
+    </div>
 </div>
+<hr class="my-1 hr-spacer last-spacer">

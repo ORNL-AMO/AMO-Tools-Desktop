@@ -11,7 +11,7 @@ export class NameplateDetailsComponent implements OnInit {
   @Input()
   nameplateData: NameplateData;
   @Input()
-  nameplateDataOptions: NameplateDataOptions;
+  displayOptions: NameplateDataOptions;
   @Input()
   settings: Settings;
   
