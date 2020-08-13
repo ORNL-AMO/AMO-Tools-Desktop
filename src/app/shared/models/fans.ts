@@ -103,6 +103,7 @@ export interface FanRatedInfo {
 
 export interface Plane {
   planeType: string;
+  // Height (displayed to the user) and length, refer to the same dimension
   length: number;
   width: number;
   area: number;
@@ -141,6 +142,7 @@ export interface PlaneData {
 export interface BaseGasDensity {
   dryBulbTemp?: number;
   staticPressure?: number;
+  altitude?: number;
   barometricPressure?: number;
   gasDensity?: number;
   gasType?: string;
@@ -153,7 +155,8 @@ export interface BaseGasDensity {
   specificHeatGas?: number; //used with wetBulb
 }
 
-export interface CalculatedGasDensity {
+
+export interface PsychrometricResults {
   gasDensity: number;
   absolutePressure: number;
   saturatedHumidity: number;
@@ -164,6 +167,9 @@ export interface CalculatedGasDensity {
   dewPoint: number;
   relativeHumidity: number;
   saturationPressure: number;
+  wetBulbTemp: number;
+  barometricPressure?: number,
+  dryBulbTemp?: number;
 }
 
 export interface FanShaftPower {
@@ -347,6 +353,7 @@ export interface InletPressureData {
   airTreatmentLoss: number;
   flowMeasurementLoss: number;
   inletDamperLoss: number;
+  processRequirementsFixed: number;
   processRequirements: number;
   inletSystemEffectLoss: number;
   calculatedInletPressure: number;
@@ -357,6 +364,8 @@ export interface OutletPressureData {
   outletDamperLoss: number;
   airTreatmentLoss: number;
   systemDamperLoss: number;
+  outletDuctworkLoss: number;
+  processRequirementsFixed: number;
   processRequirements: number;
   calculatedOutletPressure: number;
 }

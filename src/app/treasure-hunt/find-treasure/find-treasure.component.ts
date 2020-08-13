@@ -80,4 +80,12 @@ export class FindTreasureComponent implements OnInit {
   selectPipeInsulationReduction(){
     this.calculatorsService.addNewPipeInsulationReduction();
   }
+
+  selectTankInsulationReduction(){
+    this.calculatorsService.addNewTankInsulationReduction();
+  }
+
+  selectAirLeakSurvey(){
+    this.calculatorsService.addNewAirLeakSurvey()
+  }
 }

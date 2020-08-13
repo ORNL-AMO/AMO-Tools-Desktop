@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FsatService } from '../fsat.service';
 import { FormGroup } from '@angular/forms';
-import { FSAT, BaseGasDensity, CalculatedGasDensity } from '../../shared/models/fans';
+import { FSAT, BaseGasDensity, PsychrometricResults } from '../../shared/models/fans';
 import { FsatFluidService } from './fsat-fluid.service';
 import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from '../help-panel/help-panel.service';
@@ -65,7 +65,7 @@ export class FsatFluidComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
-    this.getDensity();
+    this.getResults();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -82,8 +82,8 @@ export class FsatFluidComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.gasDensityFormService.baselineCalculatedGasDensity.next(undefined);
-    this.gasDensityFormService.modificationCalculatedGasDensity.next(undefined);
+    this.gasDensityFormService.baselinePsychrometricResults.next(undefined);
+    this.gasDensityFormService.modificationPsychrometricResults.next(undefined);
     this.gasDensityFormService.baselineCalculationType.next(undefined);
     this.gasDensityFormService.modificationCalculationType.next(undefined);
   }
@@ -121,24 +121,24 @@ export class FsatFluidComponent implements OnInit {
       });
       this.changeMethod();
     } else {
-      this.getDensity();
+      this.getResults();
     }
   }
 
-  getDensity() {
-    let calculatedGasDensity: CalculatedGasDensity;
+  getResults() {
+    let psychrometricResults: PsychrometricResults;
     if (this.gasDensityForm.controls.inputType.value === 'relativeHumidity') {
-      calculatedGasDensity = this.calcDensityRelativeHumidity();
+      psychrometricResults = this.calcPsychrometricRelativeHumidity();
     } else if (this.gasDensityForm.controls.inputType.value === 'wetBulb') {
-      calculatedGasDensity = this.calcDensityWetBulb();
+      psychrometricResults = this.calcPsychrometricWetBulb();
     } else if (this.gasDensityForm.controls.inputType.value === 'dewPoint') {
-      calculatedGasDensity = this.calcDensityDewPoint();
+      psychrometricResults = this.calcPsychrometricDewPoint();
     }
 
     if (this.gasDensityForm.controls.inputType.value != 'custom') {
-      if (calculatedGasDensity && isNaN(calculatedGasDensity.gasDensity) === false) {
+      if (psychrometricResults && isNaN(psychrometricResults.gasDensity) === false) {
         this.gasDensityForm.patchValue({
-          gasDensity: calculatedGasDensity.gasDensity
+          gasDensity: psychrometricResults.gasDensity
         });
       } else {
         this.gasDensityForm.patchValue({
@@ -148,22 +148,22 @@ export class FsatFluidComponent implements OnInit {
     }
 
     if (!this.baseline) {
-      this.gasDensityFormService.modificationCalculatedGasDensity.next(calculatedGasDensity);
+      this.gasDensityFormService.modificationPsychrometricResults.next(psychrometricResults);
       this.gasDensityFormService.modificationCalculationType.next(this.gasDensityForm.controls.inputType.value);
     } else {
-      this.gasDensityFormService.baselineCalculatedGasDensity.next(calculatedGasDensity);
+      this.gasDensityFormService.baselinePsychrometricResults.next(psychrometricResults);
       this.gasDensityFormService.baselineCalculationType.next(this.gasDensityForm.controls.inputType.value);
     }
     this.save();
   }
 
-  calcDensityWetBulb(): CalculatedGasDensity {
-    let calculatedGasDensity: CalculatedGasDensity;
+  calcPsychrometricWetBulb(): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults;
     if (this.isWetBulbValid()) {
       let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-      calculatedGasDensity = this.fsatService.getBaseGasDensityWetBulb(tmpObj, this.settings);
+      psychrometricResults = this.fsatService.getPsychrometricWetBulb(tmpObj, this.settings);
     }
-    return calculatedGasDensity;
+    return psychrometricResults;
   }
 
   isWetBulbValid(): boolean {
@@ -175,13 +175,13 @@ export class FsatFluidComponent implements OnInit {
       && this.gasDensityForm.controls.specificGravity.valid && this.gasDensityForm.controls.wetBulbTemp.valid);
   }
 
-  calcDensityRelativeHumidity(): CalculatedGasDensity {
-    let calculatedGasDensity: CalculatedGasDensity;
+  calcPsychrometricRelativeHumidity(): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults;
     if (this.isRelativeHumidityValid()) {
       let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-      calculatedGasDensity = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj, this.settings);
+      psychrometricResults = this.fsatService.getPsychrometricRelativeHumidity(tmpObj, this.settings);
     }
-    return calculatedGasDensity;
+    return psychrometricResults;
   }
 
   isRelativeHumidityValid(): boolean {
@@ -194,13 +194,13 @@ export class FsatFluidComponent implements OnInit {
   }
 
 
-  calcDensityDewPoint(): CalculatedGasDensity {
-    let calculatedGasDensity: CalculatedGasDensity;
+  calcPsychrometricDewPoint(): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults;
     if (this.isDewPointValid()) {
       let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-      calculatedGasDensity = this.fsatService.getBaseGasDensityDewPoint(tmpObj, this.settings);
+      psychrometricResults = this.fsatService.getPsychrometricDewPoint(tmpObj, this.settings);
     }
-    return calculatedGasDensity;
+    return psychrometricResults;
   }
 
   isDewPointValid() {
@@ -214,7 +214,7 @@ export class FsatFluidComponent implements OnInit {
 
   changeMethod() {
     this.gasDensityForm = this.fsatFluidService.updateGasDensityForm(this.gasDensityForm);
-    this.getDensity();
+    this.getResults();
   }
 
   canCompare() {

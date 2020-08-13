@@ -28,3 +28,24 @@
     </small>
   </h6>
 </div>
+<div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
+  <h6>
+   Atmospheric Pressure
+    <br>
+    <small class="text-muted">
+      General value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure
+        at that location can be given.
+      <hr>
+    </small>
+  </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'dischargeTime'">
+  <h6>
+    Discharge Time
+    <br>
+    <small class="text-muted">
+      Time required to fully discharge the system.
+      <hr>
+    </small>
+  </h6>
+</div>

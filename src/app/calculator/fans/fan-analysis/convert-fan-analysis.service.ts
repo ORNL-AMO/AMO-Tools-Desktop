@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Fan203Inputs, FanRatedInfo, BaseGasDensity, Plane, PlaneData, Fan203Results, PlaneResults, PlaneResult, CalculatedGasDensity } from '../../../shared/models/fans';
+import { Fan203Inputs, FanRatedInfo, BaseGasDensity, Plane, PlaneData, Fan203Results, PlaneResults, PlaneResult, PsychrometricResults } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 declare var fanAddon: any;
@@ -236,7 +236,7 @@ export class ConvertFanAnalysisService {
     return input;
   }
 
-  convertCalculatedGasDensity(input: CalculatedGasDensity, settings: Settings): CalculatedGasDensity {
+  convertPsychrometricResults(input: PsychrometricResults, settings: Settings): PsychrometricResults {
     input.gasDensity = this.convertNum(input.gasDensity, 'lbscf', settings.densityMeasurement);
     input.absolutePressure = this.convertNum(input.absolutePressure, 'inH2o', settings.fanPressureMeasurement);
     input.relativeHumidity = input.relativeHumidity * 100;
@@ -244,6 +244,7 @@ export class ConvertFanAnalysisService {
     if(settings.unitsOfMeasure == 'Metric'){
       input.specificVolume = this.convertNum(input.specificVolume, 'ft3lb', 'm3kg');
       input.enthalpy = this.convertNum(input.enthalpy, 'btuLb', 'kJkg');  
+      input.wetBulbTemp = this.convertNum(input.wetBulbTemp, 'F', settings.fanTemperatureMeasurement);
     }
     
     input.dewPoint = this.convertNum(input.dewPoint, 'F', settings.fanTemperatureMeasurement);

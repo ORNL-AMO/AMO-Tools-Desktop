@@ -1,0 +1,15 @@
+.btn{
+    padding: 6px;
+}
+
+
+.btn:hover{
+    color: white;
+    background: #117A65;
+}
+
+
+.fa-times-circle:hover {
+    cursor: pointer;
+    color: gray;
+}

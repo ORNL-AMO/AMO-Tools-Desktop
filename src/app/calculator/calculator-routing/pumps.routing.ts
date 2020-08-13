@@ -23,10 +23,6 @@ export const pumpRoutes: Routes = [
         component: SpecificSpeedComponent   
     },
     {
-        path: 'pump-system-curve',
-        component: SystemAndEquipmentCurveComponent
-    },
-    {
         path: 'pump-curve',
         component: SystemAndEquipmentCurveComponent
     }

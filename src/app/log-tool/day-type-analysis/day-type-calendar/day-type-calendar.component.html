@@ -1,0 +1,11 @@
+<div class="card-body p-0">
+    <ngb-datepicker [dayTemplate]="customDay" [navigation]="'none'" (select)="onDateSelect($event)"
+        [outsideDays]="'hidden'" [startDate]="startDate" [displayMonths]="numberOfMonths" [firstDayOfWeek]="7">
+    </ngb-datepicker>
+</div>
+
+<ng-template #customDay let-date="date">
+    <div class="custom-day" [style.background-color]="getDateBackground(date)">
+        {{ date.day }}
+    </div>
+</ng-template>

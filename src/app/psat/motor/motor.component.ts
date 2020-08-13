@@ -131,7 +131,7 @@ export class MotorComponent implements OnInit {
 
   save() {
     this.psat.inputs = this.motorService.getInputsFromFrom(this.psatForm, this.psat.inputs);
-    this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, !this.baseline);
+    this.checkWarnings();
     this.saved.emit(this.selected);
   }
 

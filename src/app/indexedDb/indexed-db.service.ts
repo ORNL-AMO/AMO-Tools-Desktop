@@ -6,10 +6,11 @@ import { Settings } from '../shared/models/settings';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { UpdateDataService } from '../shared/helper-services/update-data.service';
 import { Calculator } from '../shared/models/calculators';
+import { LogToolDbData } from '../log-tool/log-tool-models';
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 4,
+  version: 5,
   instance: {},
   storeNames: {
     assessments: 'assessments',
@@ -22,7 +23,8 @@ var myDb: any = {
     wallLossesSurface: 'wallLossesSurface',
     flueGasMaterial: 'flueGasMaterial',
     solidLiquidFlueGasMaterial: 'solidLiquidFlueGasMaterial',
-    calculator: 'calculator'
+    calculator: 'calculator',
+    logTool: 'logTool'
   },
   defaultErrorHandler: function (e) {
     //todo: implement error handling
@@ -159,6 +161,15 @@ export class IndexedDbService {
           calculatorObjStore.createIndex('id', 'id', { unique: false });
           calculatorObjStore.createIndex('directoryId', 'directoryId', { unique: false });
           calculatorObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
+        }      
+          //calculator
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.logTool)) {
+          console.log('creating logTool store...');
+          let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.logTool, {
+            autoIncrement: true,
+            keyPath: 'id'
+          });
+          calculatorObjStore.createIndex('id', 'id', { unique: false });
         }
       };
       myDb.setDefaultErrorHandler(this.request, myDb);
@@ -1295,7 +1306,7 @@ export class IndexedDbService {
   }
 
   putCalculator(calculator: Calculator): Promise<any> {
-    calculator.modifiedDate = new Date();
+    calculator.modifiedDate = new Date(new Date().toLocaleDateString());
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.calculator);
@@ -1331,4 +1342,72 @@ export class IndexedDbService {
     });
   }
 
+  //log tool
+  addLogTool(logTool: LogToolDbData): Promise<any> {
+    logTool.modifiedDate = new Date();
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.logTool], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.logTool);
+      let addRequest = store.add(logTool);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      };
+      addRequest.onerror = (e) => {
+        reject(e.target.result);
+      };
+    });
+  }
+
+  getAllLogTool(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.logTool], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.logTool);
+      let getRequest = store.getAll();
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      };
+      getRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
+  }
+
+  putLogTool(logTool: LogToolDbData): Promise<any> {
+    logTool.modifiedDate = new Date();
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.logTool], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.logTool);
+      let getRequest = store.get(logTool.id);
+      getRequest.onsuccess = (event) => {
+        let tmpCalc: Calculator = event.target.result;
+        tmpCalc = logTool;
+        let updateRequest = store.put(tmpCalc);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        };
+        updateRequest.onerror = (event) => {
+          reject(event);
+        };
+      };
+      getRequest.onerror = (event) => {
+        reject(event);
+      };
+    });
+  }
+
+  deleteLogTool(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.logTool], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.logTool);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      };
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      };
+    });
+  }
 }

@@ -45,6 +45,7 @@ export class PhastService {
   stepTab: BehaviorSubject<StepTab>;
   specTab: BehaviorSubject<StepTab>;
   calcTab: BehaviorSubject<string>;
+  modalOpen: BehaviorSubject<boolean>;
   assessmentTab: BehaviorSubject<string>;
   constructor(
     private openingLossesService: OpeningLossesService,
@@ -60,6 +61,7 @@ export class PhastService {
     private slagService: SlagService
   ) {
     this.initTabs();
+    this.modalOpen = new BehaviorSubject<boolean>(false);
   }
   initTabs() {
     this.mainTab = new BehaviorSubject<string>('system-setup');

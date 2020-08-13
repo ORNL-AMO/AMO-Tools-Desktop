@@ -64,6 +64,24 @@ export class ImportOpportunitiesService {
       }
       treasureHunt.compressedAirPressureReductions = treasureHunt.compressedAirPressureReductions.concat(data.compressedAirPressureReductions);
     }
+    if (data.pipeInsulationReductions) {
+      if (treasureHunt.pipeInsulationReductions == undefined) {
+        treasureHunt.pipeInsulationReductions = new Array();
+      }
+      treasureHunt.pipeInsulationReductions = treasureHunt.pipeInsulationReductions.concat(data.pipeInsulationReductions);
+    }
+    if (data.tankInsulationReductions) {
+      if (treasureHunt.tankInsulationReductions == undefined) {
+        treasureHunt.tankInsulationReductions = new Array();
+      }
+      treasureHunt.tankInsulationReductions = treasureHunt.tankInsulationReductions.concat(data.tankInsulationReductions);
+    }
+    if(data.airLeakSurveys){
+      if (treasureHunt.airLeakSurveys == undefined) {
+        treasureHunt.airLeakSurveys = new Array();
+      }
+      treasureHunt.airLeakSurveys = treasureHunt.airLeakSurveys.concat(data.airLeakSurveys);
+    }
     return treasureHunt;
   }
 }

@@ -50,9 +50,6 @@
 
   <!--calculators tab-->
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-    <app-system-and-equipment-curve *ngIf="calcTab == 'system-curve'" [settings]="settings" [equipmentType]="'pump'"
-      [assessment]="assessment" [isEquipmentCurvePrimary]="false">
-    </app-system-and-equipment-curve>
     <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings"
       [psat]="_psat"></app-achievable-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inAssessment]="true" [assessment]="assessment"
@@ -62,7 +59,7 @@
     <app-specific-speed *ngIf="calcTab == 'specific-speed'" [settings]="settings" [inAssessment]="true"
       [assessment]="assessment" [psat]="_psat"></app-specific-speed>
     <app-system-and-equipment-curve *ngIf="calcTab == 'pump-curve'" [settings]="settings" [equipmentType]="'pump'"
-      [assessment]="assessment" [isEquipmentCurvePrimary]="true"></app-system-and-equipment-curve>
+      [assessment]="assessment"></app-system-and-equipment-curve>
     <app-unit-converter *ngIf="calcTab == 'convert-units'" [inAssessment]="true"></app-unit-converter>
   </div>
   <!--end calculators-->
@@ -94,8 +91,8 @@
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
-      <app-psat-report [settings]="settings" [assessment]="assessment" [inPsat]="true"
-        (closeReport)="closeReport()" (exportData)="exportData()" [containerHeight]="containerHeight"></app-psat-report>
+      <app-psat-report [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
+        (exportData)="exportData()" [containerHeight]="containerHeight"></app-psat-report>
     </div>
   </div>
   <!--end report-->
