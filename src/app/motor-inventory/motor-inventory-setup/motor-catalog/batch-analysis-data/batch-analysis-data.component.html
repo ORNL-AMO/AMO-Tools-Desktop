@@ -19,7 +19,8 @@
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('modifiedPower')" (input)="save()"
                 formControlName="modifiedPower" id="modifiedPower">
-            <span class="input-group-addon units">hp</span>
+            <span class="input-group-addon units" *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
+            <span class="input-group-addon units" *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
         </div>
     </div>
     <!-- modifiedEfficiency -->

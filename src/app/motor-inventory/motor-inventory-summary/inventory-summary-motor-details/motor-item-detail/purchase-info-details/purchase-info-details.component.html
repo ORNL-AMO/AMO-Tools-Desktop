@@ -1,0 +1,41 @@
+<div class="section-title">
+    Purchase Info
+</div>
+<div class="row no-gutters section">
+    <div class="col-12">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.catalogId">
+                <div class="label-item">
+                    Catalog ID:
+                </div>
+                <div class="flex-fill">
+                    {{purchaseInformationData.catalogId}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.listPrice">
+                <div class="label-item">
+                    List Price:
+                </div>
+                <div class="flex-fill">
+                    {{purchaseInformationData.listPrice | currency}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.warranty">
+                <div class="label-item">
+                    Warranty:
+                </div>
+                <div class="flex-fill">
+                    {{purchaseInformationData.warranty}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.directReplacementCost">
+                <div class="label-item">
+                    Direct Replacement Cost:
+                </div>
+                <div class="flex-fill">
+                    {{purchaseInformationData.directReplacementCost | currency}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

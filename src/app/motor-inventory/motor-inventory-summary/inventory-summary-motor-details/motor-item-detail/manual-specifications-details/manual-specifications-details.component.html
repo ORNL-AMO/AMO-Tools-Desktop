@@ -1,0 +1,85 @@
+<div class="section-title">
+    Manual Specifications
+</div>
+<div class="row no-gutters section">
+    <div class="col-md-6 col-sm-12">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap">
+                <div class="label-item">
+                    Synchronous Speed:
+                </div>
+                <div class="flex-fill">
+                    {{manualSpecificationData.synchronousSpeed}} rpm
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.ratedSpeed">
+                <div class="label-item">
+                    Rated Speed:
+                </div>
+                <div class="flex-fill">
+                    {{manualSpecificationData.ratedSpeed}} rpm
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.frame">
+                <div class="label-item">
+                    Frame:
+                </div>
+                <div class="flex-fill">
+                    {{manualSpecificationData.frame}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.shaftPosiion">
+                <div class="label-item">
+                    Shaft Position:
+                </div>
+                <div class="flex-fill">
+                    {{manualSpecificationData.shaftPosiion}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.windingResistance">
+                <div class="label-item">
+                    Winding Resistance:
+                </div>
+                <div class="flex-fill">
+                    {{manualSpecificationData.windingResistance}} &#x3A9;
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.rotorBars">
+                <div class="label-item">
+                    Rotor Bars:
+                </div>
+                <div class="flex-fill">
+                    {{manualSpecificationData.rotorBars}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.ampsLockedRotor">
+                <div class="label-item">
+                    Locked Rotor Amps:
+                </div>
+                <div class="flex-fill">
+                    {{manualSpecificationData.ampsLockedRotor}} A
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.currentType">
+                <div class="label-item">
+                    Current Type:
+                </div>
+                <div class="flex-fill">
+                    {{manualSpecificationData.currentType}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.poles">
+                <div class="label-item">
+                    Poles:
+                </div>
+                <div class="flex-fill">
+                    {{manualSpecificationData.poles}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
