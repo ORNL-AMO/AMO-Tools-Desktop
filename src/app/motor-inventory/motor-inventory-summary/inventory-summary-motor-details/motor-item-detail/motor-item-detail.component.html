@@ -1,47 +1,68 @@
-<label class="group-label">
-    Motor: {{motorItem.name}}
-</label>
-<!--general details-->
-<p *ngIf="motorItem.description" class="card-text mb-2">
-    {{motorItem.description}}
-</p>
-<div class="d-flex flex-column w-100 pl-2">
-    <!--nameplate-->
-    <app-nameplate-details [nameplateData]="motorItem.nameplateData" [settings]="settings"
-        [displayOptions]="displayOptions.nameplateDataOptions"></app-nameplate-details>
-    <hr class="my-1 hr-spacer">
-    <!--load characteristics-->
-    <app-load-characteristic-details *ngIf="displayOptions.loadCharactersticOptions.displayLoadCharacteristics"
-        [loadCharacteristicData]="motorItem.loadCharacteristicData"
-        [displayOptions]="displayOptions.loadCharactersticOptions"></app-load-characteristic-details>
-    <hr class="my-1 hr-spacer" *ngIf="displayOptions.loadCharactersticOptions.displayLoadCharacteristics">
-    <!--field measurements-->
-    <app-operations-details *ngIf="displayOptions.operationDataOptions.displayOperationData"
-        [operationData]="motorItem.operationData" [displayOptions]="displayOptions.operationDataOptions">
-    </app-operations-details>
-    <hr class="my-1 hr-spacer" *ngIf="displayOptions.operationDataOptions.displayOperationData">
-    <!--manual specs-->
-    <app-manual-specifications-details [manualSpecificationData]="motorItem.manualSpecificationData"
-        [displayOptions]="displayOptions.manualSpecificationOptions"></app-manual-specifications-details>
-    <hr class="my-1 hr-spacer">
-    <!--replacement information-->
-    <div class="col-sm-6 col-md-12">
-        <app-batch-analysis-details></app-batch-analysis-details>
+<div class="pb-3">
+    <label class="group-label">
+        Motor: {{motorItem.name}}
+    </label>
+    <!--general details-->
+    <p *ngIf="motorItem.description" class="card-text mb-2">
+        {{motorItem.description}}
+    </p>
+    <div class="d-flex flex-column w-100 pl-2">
+        <!--nameplate-->
+        <app-nameplate-details [nameplateData]="motorItem.nameplateData" [settings]="settings"
+            [displayOptions]="displayOptions.nameplateDataOptions"></app-nameplate-details>
         <hr class="my-1 hr-spacer">
-    </div>
-    <!--purchase info-->
-    <div class="col-sm-6 col-md-12">
-        <app-purchase-info-details></app-purchase-info-details>
+        <!--load characteristics-->
+        <app-load-characteristic-details *ngIf="displayOptions.loadCharactersticOptions.displayLoadCharacteristics"
+            [loadCharacteristicData]="motorItem.loadCharacteristicData"
+            [displayOptions]="displayOptions.loadCharactersticOptions"></app-load-characteristic-details>
+        <hr class="my-1 hr-spacer" *ngIf="displayOptions.loadCharactersticOptions.displayLoadCharacteristics">
+        <!--field measurements-->
+        <app-operations-details *ngIf="displayOptions.operationDataOptions.displayOperationData"
+            [operationData]="motorItem.operationData" [displayOptions]="displayOptions.operationDataOptions">
+        </app-operations-details>
+        <hr class="my-1 hr-spacer" *ngIf="displayOptions.operationDataOptions.displayOperationData">
+        <!--manual specs-->
+        <app-manual-specifications-details [manualSpecificationData]="motorItem.manualSpecificationData"
+            [displayOptions]="displayOptions.manualSpecificationOptions"></app-manual-specifications-details>
         <hr class="my-1 hr-spacer">
+        <div class="row no-gutters">
+            <!--replacement information-->
+            <div class="col-sm-12 col-md-6" *ngIf="displayOptions.batchAnalysisOptions.displayBatchAnalysis">
+                <div class="d-flex flex-column h-100 pl-1 pr-1">
+                    <app-batch-analysis-details class="flex-fill" [batchAnalysisData]="motorItem.batchAnalysisData"
+                        [displayOptions]="displayOptions.batchAnalysisOptions" [settings]="settings">
+                    </app-batch-analysis-details>
+                    <hr class="my-1 hr-spacer">
+                </div>
+            </div>
+            <!--purchase info-->
+            <div class="col-sm-12 col-md-6"
+                *ngIf="displayOptions.purchaseInformationOptions.displayPurchaseInformation">
+                <div class="d-flex flex-column h-100 pl-1 pr-1">
+                    <app-purchase-info-details class="flex-fill"
+                        [displayOptions]="displayOptions.purchaseInformationOptions"
+                        [purchaseInformationData]="motorItem.purchaseInformationData"></app-purchase-info-details>
+                    <hr class="my-1 hr-spacer">
+                </div>
+            </div>
+            <!--torque-->
+            <div class="col-sm-12 col-md-6" *ngIf="displayOptions.torqueOptions.displayTorque">
+                <div class="d-flex flex-column h-100 pl-1 pr-1">
+                    <app-torque-details class="flex-fill" [displayOptions]="displayOptions.torqueOptions"
+                        [torqueData]="motorItem.torqueData" [settings]="settings">
+                    </app-torque-details>
+                    <hr class="my-1 hr-spacer">
+                </div>
+            </div>
+            <!--other-->
+            <div class="col-sm-12 col-md-6" *ngIf="displayOptions.otherOptions.displayOther">
+                <div class="d-flex flex-column h-100 pl-1 pr-1">
+                    <app-other-details [displayOptions]="displayOptions.otherOptions" [otherData]="motorItem.otherData">
+                    </app-other-details>
+                    <hr class="my-1 hr-spacer">
+                </div>
+            </div>
+        </div>
     </div>
-    <!--torque-->
-    <div class="col-sm-6 col-md-12">
-        <app-torque-details></app-torque-details>
-        <hr class="my-1 hr-spacer">
-    </div>
-    <!--other-->
-    <div class="col-sm-6 col-md-12">
-        <app-other-details></app-other-details>
-    </div>
+    <hr class="my-1 hr-spacer last-spacer">
 </div>
-<hr class="my-1 hr-spacer last-spacer">

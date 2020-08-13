@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { BatchAnalysisDataService } from './batch-analysis-data.service';
 import { MotorItem, BatchAnalysisOptions } from '../../../motor-inventory';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-batch-analysis-data',
@@ -12,8 +13,8 @@ import { MotorItem, BatchAnalysisOptions } from '../../../motor-inventory';
   styleUrls: ['./batch-analysis-data.component.css']
 })
 export class BatchAnalysisDataComponent implements OnInit {
-  // @Input()
-  // settings: Settings;
+  @Input()
+  settings: Settings;
 
   motorForm: FormGroup;
   selectedMotorItemSub: Subscription

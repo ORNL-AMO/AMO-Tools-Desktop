@@ -23,7 +23,7 @@
         <app-manual-specification-data></app-manual-specification-data>
     </div>
     <div class="col-12" *ngIf="motorInventoryData.displayOptions.batchAnalysisOptions.displayBatchAnalysis">
-        <app-batch-analysis-data></app-batch-analysis-data>
+        <app-batch-analysis-data [settings]="settings"></app-batch-analysis-data>
     </div>
     <div class="col-12" *ngIf="motorInventoryData.displayOptions.purchaseInformationOptions.displayPurchaseInformation">
         <app-purchase-information-data></app-purchase-information-data>

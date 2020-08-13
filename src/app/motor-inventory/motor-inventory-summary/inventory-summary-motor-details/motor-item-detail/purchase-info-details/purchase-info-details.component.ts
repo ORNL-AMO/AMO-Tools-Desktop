@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { PurchaseInformationOptions, PurchaseInformationData } from '../../../../motor-inventory';
 
 @Component({
   selector: 'app-purchase-info-details',
@@ -6,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./purchase-info-details.component.css']
 })
 export class PurchaseInfoDetailsComponent implements OnInit {
-
+  @Input()
+  displayOptions: PurchaseInformationOptions;
+  @Input()
+  purchaseInformationData: PurchaseInformationData;
   constructor() { }
 
   ngOnInit(): void {

@@ -10,8 +10,9 @@
                     {{department.description}}
                 </p>
                 <!--motors-->
-                <app-motor-item-detail *ngFor="let motorItem of department.catalog" [department]="department"
-                    [motorItem]="motorItem" [settings]="settings" [displayOptions]="motorInventoryData.displayOptions">
+                <app-motor-item-detail *ngFor="let motorItem of department.catalog; let index = index;"
+                    [ngClass]="{'pt-4': index != 0}" [department]="department" [motorItem]="motorItem"
+                    [settings]="settings" [displayOptions]="motorInventoryData.displayOptions">
                 </app-motor-item-detail>
             </div>
         </div>

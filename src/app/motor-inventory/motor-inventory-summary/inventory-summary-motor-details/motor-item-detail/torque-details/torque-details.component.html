@@ -1,3 +1,39 @@
 <div class="section-title">
     Torque
 </div>
+<div class="row no-gutters section">
+    <div class="col-12">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.torqueFullLoad">
+                <div class="label-item">
+                    Full Load Torque:
+                </div>
+                <div class="flex-fill">
+                    {{torqueData.torqueFullLoad}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.torqueBreakDown">
+                <div class="label-item">
+                    Break Down Torque:
+                </div>
+                <div class="flex-fill">
+                    {{torqueData.torqueBreakDown}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.torqueLockedRotor">
+                <div class="label-item">
+                    Locked Rotor Torque:
+                </div>
+                <div class="flex-fill">
+                    {{torqueData.torqueLockedRotor}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
