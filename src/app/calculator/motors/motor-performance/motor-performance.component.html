@@ -37,7 +37,7 @@
     </div>
     <div class="d-flex w-100" id="motorPerformanceGraph">
       <app-motor-performance-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-motor-performance-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
+      <div class="d-flex flex-column w-100 align-items-center pt-4 p-3" *ngIf="tabSelect == 'results'">
         <app-motor-performance-chart class="w-100" [performanceForm]="performanceForm" [settings]="settings"
         [toggleCalculate]="toggleCalculate"></app-motor-performance-chart>
       </div>

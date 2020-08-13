@@ -54,10 +54,8 @@ export class MotorPerformanceChartComponent implements OnInit {
     1: 'Power',
     2: 'Efficiency'
   };
-
-  curveChanged: boolean = false;
   graphColors: Array<string>;
-
+  
   tempMotorPower: number;
   tempRpm: number;
   tempEfficiencyClass: string;
@@ -65,8 +63,6 @@ export class MotorPerformanceChartComponent implements OnInit {
   tempAmps: number;
   tempLineFrequency: string;
   motorPointColors: Array<string>;
-
-  firstChange: boolean = true;
   constructor(private performanceChartService: MotorPerformanceChartService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -74,13 +70,9 @@ export class MotorPerformanceChartComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.toggleCalculate && this.performanceForm.valid) {
+    if (changes.toggleCalculate && !changes.toggleCalculate.firstChange && this.performanceForm.valid) {
         this.checkCurveChanged();
         this.initRenderChart();
-      }
-    } else {
-      this.firstChange = false;
     }
   }
 
@@ -168,32 +160,33 @@ export class MotorPerformanceChartComponent implements OnInit {
   }
 
   checkCurveChanged() {
+    let curveChanged = false;
     if (this.tempMotorPower !== this.performanceForm.controls.horsePower.value) {
-      this.curveChanged = true;
+      curveChanged = true;
       this.tempMotorPower = this.performanceForm.controls.horsePower.value;
     }
     if (this.tempEfficiencyClass !== this.performanceForm.controls.efficiencyClass.value) {
-      this.curveChanged = true;
+      curveChanged = true;
       this.tempEfficiencyClass = this.performanceForm.controls.efficiencyClass.value;
     }
     if (this.tempRpm !== this.performanceForm.controls.motorRPM.value) {
-      this.curveChanged = true;
+      curveChanged = true;
       this.tempRpm = this.performanceForm.controls.motorRPM.value;
     }
     if (this.tempAmps !== this.performanceForm.controls.fullLoadAmps.value) {
-      this.curveChanged = true;
+      curveChanged = true;
       this.tempRpm = this.performanceForm.controls.fullLoadAmps.value;
     }
     if (this.tempVoltage !== this.performanceForm.controls.motorVoltage.value) {
-      this.curveChanged = true;
+      curveChanged = true;
       this.tempVoltage = this.performanceForm.controls.motorVoltage.value;
     }
     if (this.tempLineFrequency !== this.performanceForm.controls.frequency.value) {
-      this.curveChanged = true;
+      curveChanged = true;
       this.tempLineFrequency = this.performanceForm.controls.frequency.value;
     }
 
-    if (this.curveChanged) {
+    if (curveChanged) {
       this.performanceChartService.initChart();
     }
   }
