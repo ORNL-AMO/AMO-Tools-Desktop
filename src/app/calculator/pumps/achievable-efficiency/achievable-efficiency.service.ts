@@ -10,6 +10,7 @@ export class AchievableEfficiencyService {
   flowRate: number;
   efficiencyChart: BehaviorSubject<SimpleChart>;
   selectedDataPoints: BehaviorSubject<Array<SelectedDataPoint>>;
+  
   constructor(private formBuilder: FormBuilder) {
     this.initChartData();
    }
