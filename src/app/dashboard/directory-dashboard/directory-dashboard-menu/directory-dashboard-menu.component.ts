@@ -101,7 +101,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   showAddInventory(){
-    
+    this.dashboardService.createInventory.next(true);
   }
 
   showExportModal() {

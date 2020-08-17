@@ -1,5 +1,4 @@
 <div #content class="motor-inventory-container motor-inventory d-flex flex-column">
-    <!--header-->
     <div #header class="w-100 hide-print sticky-top">
         <app-motor-inventory-banner [settings]="settings"></app-motor-inventory-banner>
     </div>
@@ -14,8 +13,7 @@
             <button class="btn btn-default" (click)="back()">Back</button>
         </div>
         <div class="pull-right">
-            <!-- <button class="btn btn-primary" (click)="continue()" [disabled]="true">Next</button> -->
-            <button class="btn btn-danger" (click)="resetData()">Reset Inventory</button>
+            <button class="btn btn-primary" (click)="continue()" [disabled]="true">Next</button>
         </div>
     </div>
 </div>

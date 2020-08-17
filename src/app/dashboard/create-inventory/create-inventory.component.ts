@@ -47,11 +47,6 @@ export class CreateInventoryComponent implements OnInit {
     this.newInventoryItemForm = this.initForm();
     this.newFolderForm = this.initFolderForm();
     this.canCreate = true;
-    // if (this.dashboardService.newAssessmentType) {
-    //   this.newInventoryItemForm.patchValue({
-    //     assessmentType: this.dashboardService.newAssessmentType
-    //   });
-    // }
   }
 
   ngAfterViewInit() {
@@ -66,12 +61,12 @@ export class CreateInventoryComponent implements OnInit {
     });
   }
 
-  //  CREATE ASSESSMENT MODAL
+  //  CREATE inventory MODAL
   showCreateModal() {
     this.createInventoryItemModal.show();
   }
 
-  hideCreateModal(bool?: boolean) {
+  hideCreateModal() {
     this.createInventoryItemModal.hide();
     this.dashboardService.createInventory.next(false);
   }
@@ -79,12 +74,11 @@ export class CreateInventoryComponent implements OnInit {
   create() {
     if (this.newInventoryItemForm.valid && this.canCreate) {
       this.canCreate = false;
-      this.hideCreateModal(true);
+      this.hideCreateModal();
       this.createInventoryItemModal.onHidden.subscribe(() => {
-        //psat
         if (this.newInventoryItemForm.controls.inventoryType.value === 'motorInventory') {
           let tmpInventoryItem: InventoryItem = this.inventoryService.getNewMotorInventoryItem();
-          tmpInventoryItem.name = this.newInventoryItemForm.controls.assessmentName.value;
+          tmpInventoryItem.name = this.newInventoryItemForm.controls.inventoryName.value;
           tmpInventoryItem.directoryId = this.newInventoryItemForm.controls.directoryId.value;
           this.indexedDbService.addInventoryItem(tmpInventoryItem).then(itemId => {
             this.inventoryDbService.setAll().then(() => {
@@ -92,7 +86,6 @@ export class CreateInventoryComponent implements OnInit {
             });
           });
         }
-       
       });
     }
   }
@@ -111,7 +104,6 @@ export class CreateInventoryComponent implements OnInit {
     }
   }
 
-
   addFolder() {
     this.showNewFolder = true;
   }
@@ -119,7 +111,6 @@ export class CreateInventoryComponent implements OnInit {
   cancelNewFolder() {
     this.showNewFolder = false;
   }
-
 
   createFolder() {
     let tmpFolder: Directory = {

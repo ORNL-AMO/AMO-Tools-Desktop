@@ -40,10 +40,8 @@ export class DirectoryDashboardService {
 
   getDirectoryItems(directory: Directory): Array<DirectoryItem> {
     let directoryItems = new Array<DirectoryItem>();
-    // this.displayAddPreAssessment = true;
     let calculatorIndex: number = 0;
     directory.calculators.forEach(calculator => {
-      // this.displayAddPreAssessment = false;
       directoryItems.push({
         type: 'calculator',
         calculator: calculator,
@@ -74,7 +72,17 @@ export class DirectoryDashboardService {
         createdDate: subDirectory.createdDate,
         modifiedDate: subDirectory.modifiedDate,
         name: subDirectory.name
-      })
+      });
+    });
+    directory.inventories.forEach(inventoryItem => {
+      directoryItems.push({
+        type: 'inventory',
+        inventoryItem: inventoryItem,
+        isShown: true,
+        createdDate: inventoryItem.createdDate,
+        modifiedDate: inventoryItem.modifiedDate,
+        name: inventoryItem.name
+      });
     });
     return directoryItems;
   }

@@ -1,26 +1,27 @@
 <!--CREATE inventory MODAL-->
-<div bsModal #createInventoryItemModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}">
+<div bsModal #createInventoryItemModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="createModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md create-inventory-modal">
     <div class="modal-content">
 
       <div class="modal-header">
         <h3>Create New Inventory</h3>
-        <button class="close" (click)="hideCreateModal(false)">
+        <button class="close" (click)="hideCreateModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <!-- End .modal-header -->
 
-      <form [formGroup]="newInventoryItemForm" (ngSubmit)="createAssessment()" *ngIf="!showNewFolder">
+      <form [formGroup]="newInventoryItemForm" (ngSubmit)="create()" *ngIf="!showNewFolder">
 
         <div class="modal-body">
 
           <div class="form-group">
-            <label class="form-control-label" for="inventoryName">Assessment Name</label>
+            <label class="form-control-label" for="inventoryName">Inventory Name</label>
             <input #inventoryName class="form-control" formControlName="inventoryName" id="inventoryName" type="text" />
             <div class="help-text">
-              <p *ngIf="newInventoryItemForm.controls.inventoryType.value == 'motorInventory'">Example: "Inventory123" or "ORNL Motor Inventory"</p>
+              <p *ngIf="newInventoryItemForm.controls.inventoryType.value == 'motorInventory'">Example: "Inventory123"
+                or "ORNL Motor Inventory"</p>
 
             </div>
           </div>
@@ -42,7 +43,7 @@
               </option>
             </select>
             <div class="help-text">
-              <a class="click-link" (click)="addFolder()">Add a new folder for this assessment</a>
+              <a class="click-link" (click)="addFolder()">Add a new folder for this inventory</a>
             </div>
           </div>
         </div>
@@ -54,7 +55,8 @@
             <button class="btn btn-secondary" type="button" (click)="hideCreateModal()">Close</button>
           </div>
           <div class="p-2">
-            <button class="btn btn-primary" type="submit" [disabled]="!newInventoryItemForm.valid" (click)="create()">Add Inventory</button>
+            <button class="btn btn-primary" type="submit" [disabled]="!newInventoryItemForm.valid"
+              (click)="create()">Add Inventory</button>
           </div>
         </div>
 
@@ -105,7 +107,8 @@
             </div>
 
             <div class="p-2">
-              <button class="btn btn-secondary" type="button" [disabled]="!newFolderForm.valid" (click)="createFolder()">Create Folder</button>
+              <button class="btn btn-secondary" type="button" [disabled]="!newFolderForm.valid"
+                (click)="createFolder()">Create Folder</button>
             </div>
           </div>
         </div>

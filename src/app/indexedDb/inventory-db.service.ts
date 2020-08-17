@@ -27,12 +27,12 @@ export class InventoryDbService {
   }
 
   getById(id: number): InventoryItem {
-    let selectedInventoryItem: InventoryItem = _.find(this.allInventoryItems, (inventoryItem) => { return inventoryItem.id === id; });
+    let selectedInventoryItem: InventoryItem = _.find(this.allInventoryItems, (inventoryItem) => { return inventoryItem.id == id; });
     return selectedInventoryItem;
   }
 
   getByDirectoryId(id: number): Array<InventoryItem> {
-    let selectedInventoryItem: Array<InventoryItem> = _.filter(this.allInventoryItems, (inventoryItem) => { return inventoryItem.directoryId === id; });
+    let selectedInventoryItem: Array<InventoryItem> = _.filter(this.allInventoryItems, (inventoryItem) => { return inventoryItem.directoryId == id; });
     return selectedInventoryItem;
   }
 }

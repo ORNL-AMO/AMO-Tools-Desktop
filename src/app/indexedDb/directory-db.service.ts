@@ -5,11 +5,13 @@ import * as _ from 'lodash';
 import { AssessmentDbService } from './assessment-db.service';
 import { CalculatorDbService } from './calculator-db.service';
 import { Calculator } from '../shared/models/calculators';
+import { InventoryDbService } from './inventory-db.service';
 @Injectable()
 export class DirectoryDbService {
 
   allDirectories: Array<Directory>;
-  constructor(private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private calculatorDbService: CalculatorDbService) {
+  constructor(private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private calculatorDbService: CalculatorDbService,
+    private inventoryDbService: InventoryDbService) {
     // this.indexedDbService.setAllDirs.subscribe(val => {
     //   console.log('set all dirs 1')
     //   this.setAll();
@@ -39,6 +41,7 @@ export class DirectoryDbService {
     selectedDirectory.assessments = this.assessmentDbService.getByDirectoryId(id);
     selectedDirectory.subDirectory = this.getSubDirectoriesById(id);
     selectedDirectory.calculators = this.calculatorDbService.getByDirectoryId(id);
+    selectedDirectory.inventories = this.inventoryDbService.getByDirectoryId(id);
     return selectedDirectory;
   }
 
