@@ -7,14 +7,13 @@
                 src="assets/images/ico-psat-diagram.png"> -->
             <a (click)="goToInventoryItem()">{{inventoryItem.name}}</a>
         </div>
-        <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
         <div class="btn-group">
             <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
             </button>
             <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
-                <!-- <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
+                <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
                 <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
-                <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span> -->
+                <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
             </div>
         </div>
     </div>
@@ -41,7 +40,7 @@
             <div class="last-updated">Last updated {{inventoryItem.modifiedDate | date }}</div>
         </div>
     </div>
-    <!-- <div class="d-flex flex-column flex-fill">
+    <div class="d-flex flex-column flex-fill">
         <div class="actions justify-content-end">
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
@@ -53,7 +52,7 @@
                 </div>
             </div>
         </div>
-        <div class="actions pt-1 justify-content-end " *ngIf="isSetup">
+        <!-- <div class="actions pt-1 justify-content-end " *ngIf="isSetup">
             <a (click)="goToAssessment(assessment, 'system-setup')">Equipment Setup</a>
             <a (click)="goToAssessment(assessment, 'assessment')">Assessment</a>
             <a (click)="showReportModal()">Quick Report</a>
@@ -61,17 +60,17 @@
         </div>
         <div class="actions pt-1 justify-content-end" *ngIf="!isSetup">
             <div class="last-updated">Asset not setup</div>
-        </div>
-    </div> -->
+        </div> -->
+    </div>
 </div>
 
 <!--edit modal-->
-<!-- <div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-md">
         <div class="modal-content" *ngIf="editForm">
             <div class="modal-header">
-                Edit {{assessment.name}} Properties
+                Edit {{inventoryItem.name}} Properties
                 <button class="close" (click)="hideEditModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -79,11 +78,11 @@
             <div class="modal-body">
                 <form [formGroup]="editForm">
                     <div class="form-group">
-                        <label>Edit Assessment Name</label>
+                        <label>Edit Inventory Name</label>
                         <input type="text" class="form-control w-100" formControlName="name" class="form-control w-100">
                     </div>
                     <div class="form-group" *ngIf="allDirectories">
-                        <label>Move Assessment to Different Folder</label>
+                        <label>Move Inventory to Different Folder</label>
                         <select class="form-control w-100" formControlName="directoryId">
                             <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
                                 <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
@@ -98,7 +97,7 @@
             </div>
         </div>
     </div>
-</div> -->
+</div>
 
 <!--copy modal-->
 <!-- <div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
