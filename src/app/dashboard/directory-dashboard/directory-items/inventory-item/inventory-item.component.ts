@@ -11,6 +11,8 @@ import { DashboardService } from '../../../dashboard.service';
 import { Directory } from '../../../../shared/models/directory';
 import * as _ from 'lodash';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
+import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-inventory-item',
@@ -20,7 +22,7 @@ import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 export class InventoryItemComponent implements OnInit {
   @Input()
   inventoryItem: InventoryItem;
-  
+
   @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
   @ViewChild('copyModal', { static: false }) public copyModal: ModalDirective;
   @ViewChild('deleteModal', { static: false }) public deleteModal: ModalDirective;
@@ -28,14 +30,14 @@ export class InventoryItemComponent implements OnInit {
   dropdownOpen: boolean = false;
   dashboardViewSub: Subscription;
   dashboardView: string;
-  editForm: FormGroup;  
+  editForm: FormGroup;
   allDirectories: Array<Directory>;
 
   updateDashboardDataSub: Subscription;
 
   constructor(private router: Router, private directoryDashboardService: DirectoryDashboardService,
     private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private inventoryDbService: InventoryDbService,
-    private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
+    private dashboardService: DashboardService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
@@ -46,7 +48,7 @@ export class InventoryItemComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.dashboardViewSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
   }
@@ -90,5 +92,27 @@ export class InventoryItemComponent implements OnInit {
       str = parentDir.name + '/' + str;
     }
     return str;
+  }
+
+  showDeleteModal() {
+    this.deleteModal.show();
+  }
+
+  hideDeleteModal() {
+    this.deleteModal.hide();
+  }
+
+  deleteInventory() {
+    let deleteSettings: Settings = this.settingsDbService.getByInventoryId(this.inventoryItem);
+    this.indexedDbService.deleteInventoryItem(this.inventoryItem.id).then(() => {
+      this.indexedDbService.deleteSettings(deleteSettings.id).then(() => {
+        this.inventoryDbService.setAll().then(() => {
+          this.settingsDbService.setAll().then(() => {
+            this.dashboardService.updateDashboardData.next(true);
+            this.hideDeleteModal();
+          });
+        });
+      });
+    });
   }
 }
