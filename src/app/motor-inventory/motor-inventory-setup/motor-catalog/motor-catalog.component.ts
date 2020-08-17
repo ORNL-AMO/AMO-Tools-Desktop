@@ -1,8 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { MotorCatalogService } from './motor-catalog.service';
-import { Settings } from '../../../shared/models/settings';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
 import { SuiteDbMotor } from '../../../shared/models/materials';
 import { MotorInventoryData, MotorInventoryDepartment, MotorItem } from '../../motor-inventory';
@@ -13,18 +11,15 @@ import { MotorInventoryData, MotorInventoryDepartment, MotorItem } from '../../m
   styleUrls: ['./motor-catalog.component.css']
 })
 export class MotorCatalogComponent implements OnInit {
-  @Input()
-  settings: Settings;
 
   motorInventoryData: MotorInventoryData;
   motorInventoryDataSub: Subscription;
 
   selectedDepartmentIdSub: Subscription;
   showSelectMotorModal: boolean = false;
-  constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService, private settingsDbService: SettingsDbService) { }
+  constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
-    this.settings = this.settingsDbService.globalSettings;
     this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(val => {
       this.motorInventoryData = val;
     });

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MotorItem, MotorInventoryDepartment, MotorInventoryData, MotorPropertyDisplayOptions } from './motor-inventory';
+import { Settings } from '../shared/models/settings';
 
 @Injectable()
 export class MotorInventoryService {
@@ -11,6 +12,7 @@ export class MotorInventoryService {
   motorInventoryData: BehaviorSubject<MotorInventoryData>;
   focusedField: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
+  settings: BehaviorSubject<Settings>;
   constructor() {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
@@ -19,6 +21,7 @@ export class MotorInventoryService {
     this.focusedField = new BehaviorSubject<string>('default');
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.summaryTab = new BehaviorSubject<string>('overview');
+    this.settings = new BehaviorSubject<Settings>(undefined);
   }
 
   updateMotorItem(selectedMotor: MotorItem) {

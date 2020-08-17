@@ -11,10 +11,9 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./inventory-summary-motor-details.component.css']
 })
 export class InventorySummaryMotorDetailsComponent implements OnInit {
-  @Input()
+
   settings: Settings;
-
-
+  settingsSub: Subscription;
   motorInventoryData: MotorInventoryData;
   filterInventorySummarySub: Subscription;
   constructor(private motorInventoryService: MotorInventoryService, private motorInventorySummaryService: MotorInventorySummaryService) { }
@@ -24,6 +23,15 @@ export class InventorySummaryMotorDetailsComponent implements OnInit {
       let inventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.value;
       this.motorInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(inventoryData, val);
     });
+
+    this.settingsSub = this.motorInventoryService.settings.subscribe(val => {
+      this.settings = val;
+    })
+  }
+
+  ngOnDestroy(){
+    this.filterInventorySummarySub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
 }

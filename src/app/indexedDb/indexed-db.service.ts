@@ -87,6 +87,7 @@ export class IndexedDbService {
           });
           settingsObjStore.createIndex('directoryId', 'directoryId', { unique: false });
           settingsObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
+          settingsObjStore.createIndex('inventoryId', 'inventoryId', {unique: false});
         }
         //gasLoadChargeMaterial
         if (!newVersion.objectStoreNames.contains(myDb.storeNames.gasLoadChargeMaterial)) {

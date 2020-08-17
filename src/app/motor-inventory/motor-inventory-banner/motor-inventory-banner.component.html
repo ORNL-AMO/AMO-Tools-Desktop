@@ -1,11 +1,16 @@
-<nav class="motor-inventory navbar banner d-flex mr-auto pt-2 pb-2 pl-0 pr-0 flex-nowrap">
+<nav class="motor-inventory navbar banner d-flex mr-auto p-0 flex-nowrap">
     <div class="d-flex align-items-center p-1">
         <div class="img-col col-sm-auto col-md-auto col-lg-auto">
             <!-- <img class="img-icon" src="assets/images/data-explorer-icon.png"> -->
         </div>
         <div class="d-flex flex-column pl-2">
             <div class="h2-name">
-                Motor Inventory
+                {{motorInventoryItem.name}}
+            </div>
+            <div class="h2-name">
+                <span class="small">
+                    Last modified: {{motorInventoryItem.modifiedDate | date:'mediumDate'}}
+                </span>
             </div>
         </div>
     </div>
@@ -64,11 +69,12 @@
     </div>
 </nav>
 
-<app-summary-filter *ngIf="mainTab == 'summary'" [settings]="settings"></app-summary-filter>
+<app-summary-filter *ngIf="mainTab == 'summary'"></app-summary-filter>
 
 <nav class="hide-print" *ngIf="mainTab == 'summary'">
     <div class="d-flex tabs subtabs progress-tabs flex-wrap motor-inventory">
-        <div class="fixed-tab-size" [ngClass]="{'active': summaryTab == 'overview'}" (click)="setSummaryTab('overview')">
+        <div class="fixed-tab-size" [ngClass]="{'active': summaryTab == 'overview'}"
+            (click)="setSummaryTab('overview')">
             <a>Overview</a>
         </div>
         <div class="fixed-tab-size" [ngClass]="{'active': summaryTab == 'graphs'}" (click)="setSummaryTab('graphs')">

@@ -8,6 +8,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
+import { SettingsService } from '../settings/settings.service';
 
 declare const packageJson;
 
@@ -32,15 +33,17 @@ export class MotorInventoryComponent implements OnInit {
 
   motorInventoryDataSub: Subscription;
   motorInventoryItem: InventoryItem;
-  settings: Settings;
   constructor(private motorInventoryService: MotorInventoryService, private activatedRoute: ActivatedRoute,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService) { }
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService,
+    private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       let tmpItemId = Number(params['id']);
       this.motorInventoryItem = this.inventoryDbService.getById(tmpItemId);
-      this.settings = this.settingsDbService.getByDirectoryId(this.motorInventoryItem.directoryId);
+      let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
+      console.log(settings);
+      this.motorInventoryService.settings.next(settings);
       this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
     });
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {

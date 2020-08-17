@@ -4,6 +4,7 @@ export interface Settings {
     unitsOfMeasure?: string
     assessmentId?: number,
     directoryId?: number,
+    inventoryId?: number,
     createdDate?: Date,
     modifiedDate?: Date
     flowMeasurement?: string,

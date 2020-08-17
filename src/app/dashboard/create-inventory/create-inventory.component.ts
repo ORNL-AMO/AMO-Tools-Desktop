@@ -13,6 +13,7 @@ import { InventoryService } from '../inventory.service';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
+import { SettingsService } from '../../settings/settings.service';
 @Component({
   selector: 'app-create-inventory',
   templateUrl: './create-inventory.component.html',
@@ -37,7 +38,8 @@ export class CreateInventoryComponent implements OnInit {
     private directoryDashboardService: DirectoryDashboardService,
     private dashboardService: DashboardService,
     private inventoryDbService: InventoryDbService,
-    private inventoryService: InventoryService) { }
+    private inventoryService: InventoryService,
+    private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.directories = this.directoryDbService.getAll();
@@ -82,7 +84,16 @@ export class CreateInventoryComponent implements OnInit {
           tmpInventoryItem.directoryId = this.newInventoryItemForm.controls.directoryId.value;
           this.indexedDbService.addInventoryItem(tmpInventoryItem).then(itemId => {
             this.inventoryDbService.setAll().then(() => {
-              this.router.navigateByUrl('/motor-inventory/' + itemId);
+              let settingsForm = this.settingsService.getFormFromSettings(this.settings);
+              this.settings = this.settingsService.getSettingsFromForm(settingsForm);
+              this.settings.createdDate = new Date();
+              this.settings.modifiedDate = new Date();
+              this.settings.inventoryId = itemId;
+              this.indexedDbService.addSettings(this.settings).then(settingsId => {
+                this.settingsDbService.setAll().then(() => {
+                  this.router.navigateByUrl('/motor-inventory/' + itemId);
+                })
+              });
             });
           });
         }

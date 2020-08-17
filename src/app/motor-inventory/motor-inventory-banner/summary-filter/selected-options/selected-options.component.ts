@@ -12,9 +12,9 @@ import { InventorySummaryGraphsService } from '../../../motor-inventory-summary/
   styleUrls: ['./selected-options.component.css']
 })
 export class SelectedOptionsComponent implements OnInit {
-  @Input()
-  settings: Settings;
 
+  
+  settings: Settings;
   filterInventorySummarySub: Subscription;
   filterInventorySummary: FilterInventorySummary;
 
@@ -23,6 +23,7 @@ export class SelectedOptionsComponent implements OnInit {
     private inventorySummaryGraphService: InventorySummaryGraphsService) { }
 
   ngOnInit(): void {
+    this.settings = this.motorInventoryService.settings.getValue();
     this.motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
     this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
       this.filterInventorySummary = val;

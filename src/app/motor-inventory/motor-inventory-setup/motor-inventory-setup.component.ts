@@ -9,8 +9,6 @@ import { Settings } from '../../shared/models/settings';
   styleUrls: ['./motor-inventory-setup.component.css']
 })
 export class MotorInventorySetupComponent implements OnInit {
-  @Input()
-  settings: Settings;
 
   setupTab: string;
   setupTabSubscription: Subscription;

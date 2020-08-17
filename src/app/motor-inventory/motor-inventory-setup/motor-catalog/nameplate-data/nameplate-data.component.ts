@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { NameplateDataOptions, MotorItem } from '../../../motor-inventory';
@@ -14,7 +14,7 @@ import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
   styleUrls: ['./nameplate-data.component.css']
 })
 export class NameplateDataComponent implements OnInit {
-  @Input()
+  settingsSub: Subscription;
   settings: Settings;
 
   motorForm: FormGroup;
@@ -27,6 +27,9 @@ export class NameplateDataComponent implements OnInit {
     private nameplateDataService: NameplateDataService) { }
 
   ngOnInit(): void {
+    this.settingsSub = this.motorInventoryService.settings.subscribe(val => {
+      this.settings = val;
+    });
     this.efficiencyClasses = JSON.parse(JSON.stringify(motorEfficiencyConstants));
     this.efficiencyClasses.pop();
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
@@ -39,6 +42,7 @@ export class NameplateDataComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedMotorItemSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   save() {

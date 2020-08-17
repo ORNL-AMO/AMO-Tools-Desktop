@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MotorInventoryData } from '../../motor-inventory';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { Settings } from '../../../shared/models/settings';
@@ -12,9 +12,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./inventory-summary-table.component.css']
 })
 export class InventorySummaryTableComponent implements OnInit {
-  @Input()
-  settings: Settings;
-
   inventorySummaryData: InventorySummaryData;
   sortByField: string = 'name';
   sortByDirection: string = 'desc';
@@ -25,7 +22,8 @@ export class InventorySummaryTableComponent implements OnInit {
     this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
       let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.value;
       let filteredInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(motorInventoryData, val);
-      this.inventorySummaryData = this.inventorySummaryTableService.getInventorySummaryData(filteredInventoryData, this.settings);
+      let settings: Settings = this.motorInventoryService.settings.getValue();
+      this.inventorySummaryData = this.inventorySummaryTableService.getInventorySummaryData(filteredInventoryData, settings);
     });
   }
 

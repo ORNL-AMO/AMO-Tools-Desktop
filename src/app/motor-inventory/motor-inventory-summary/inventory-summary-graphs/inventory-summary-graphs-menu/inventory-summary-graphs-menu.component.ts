@@ -1,8 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { InventorySummaryGraphsService } from '../inventory-summary-graphs.service';
 import { Subscription } from 'rxjs';
-import { InventorySummaryTableService } from '../../inventory-summary-table/inventory-summary-table.service';
 import { MotorInventoryData } from '../../../motor-inventory';
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
@@ -13,8 +12,6 @@ import { MotorInventorySummaryService } from '../../motor-inventory-summary.serv
   styleUrls: ['./inventory-summary-graphs-menu.component.css']
 })
 export class InventorySummaryGraphsMenuComponent implements OnInit {
-  @Input()
-  settings: Settings;
 
   selectedFieldSub: Subscription;
   selectedField: { display: string, value: string, group: string };
@@ -28,7 +25,6 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
   constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryGraphService: InventorySummaryGraphsService, private motorInventorySummaryService: MotorInventorySummaryService) { }
 
   ngOnInit(): void {
-    this.setOptions();
     this.selectedFieldSub = this.inventorySummaryGraphService.selectedField.subscribe(val => {
       if (val) {
         this.selectedField = val;
@@ -49,10 +45,11 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
 
   setOptions() {
     this.groups = new Array();
+    let settings: Settings = this.motorInventoryService.settings.getValue();
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
     //nameplate
     this.groups.push({
-      options: this.motorInventorySummaryService.getNameplateDataFields(motorInventoryData.displayOptions.nameplateDataOptions, this.settings),
+      options: this.motorInventorySummaryService.getNameplateDataFields(motorInventoryData.displayOptions.nameplateDataOptions, settings),
       groupLabel: 'Nameplate Data',
       showGroup: true
     });
@@ -76,7 +73,7 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
     });
     //replacement information (batch analysis)
     this.groups.push({
-      options: this.motorInventorySummaryService.getBatchAnalysisFields(motorInventoryData.displayOptions.batchAnalysisOptions, this.settings),
+      options: this.motorInventorySummaryService.getBatchAnalysisFields(motorInventoryData.displayOptions.batchAnalysisOptions, settings),
       groupLabel: 'Replacement Information',
       showGroup: false
     });
@@ -88,7 +85,7 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
     });
     //torque
     this.groups.push({
-      options: this.motorInventorySummaryService.getTorqueDataFields(motorInventoryData.displayOptions.torqueOptions, this.settings),
+      options: this.motorInventorySummaryService.getTorqueDataFields(motorInventoryData.displayOptions.torqueOptions, settings),
       groupLabel: 'Torque',
       showGroup: false
     })

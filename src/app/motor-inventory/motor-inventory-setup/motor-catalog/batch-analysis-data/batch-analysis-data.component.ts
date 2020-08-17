@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MotorCatalogService } from '../motor-catalog.service';
@@ -13,7 +13,7 @@ import { Settings } from '../../../../shared/models/settings';
   styleUrls: ['./batch-analysis-data.component.css']
 })
 export class BatchAnalysisDataComponent implements OnInit {
-  @Input()
+  settingsSub: Subscription;
   settings: Settings;
 
   motorForm: FormGroup;
@@ -24,6 +24,9 @@ export class BatchAnalysisDataComponent implements OnInit {
     private batchAnalysisDataService: BatchAnalysisDataService) { }
 
   ngOnInit(): void {
+    this.settingsSub = this.motorInventoryService.settings.subscribe(val => {
+      this.settings = val;
+    });
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.batchAnalysisDataService.getFormFromBatchAnalysisData(selectedMotor.batchAnalysisData);
@@ -34,6 +37,7 @@ export class BatchAnalysisDataComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedMotorItemSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   save() {
