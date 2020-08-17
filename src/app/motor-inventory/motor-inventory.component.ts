@@ -30,7 +30,7 @@ export class MotorInventoryComponent implements OnInit {
   mainTabSub: Subscription;
 
   motorInventoryDataSub: Subscription;
-  motorInventoryAssessment: Assessment;
+  // motorInventoryAssessment: Assessment;
   settings: Settings;
   constructor(private motorInventoryService: MotorInventoryService, private assessmentDbService: AssessmentDbService,
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
@@ -38,9 +38,9 @@ export class MotorInventoryComponent implements OnInit {
   ngOnInit() {
     this.settings = this.settingsDbService.globalSettings;
     this.setMotorInventoryAssessment();
-    if (this.motorInventoryAssessment) {
-      this.motorInventoryService.motorInventoryData.next(this.motorInventoryAssessment.motorInventory);
-    }
+    // if (this.motorInventoryAssessment) {
+    //   // this.motorInventoryService.motorInventoryData.next(this.motorInventoryAssessment.motorInventory);
+    // }
     
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -83,41 +83,41 @@ export class MotorInventoryComponent implements OnInit {
   }
 
   setMotorInventoryAssessment() {
-    this.motorInventoryAssessment = this.assessmentDbService.getByDirectoryId(1).find(assessment => { return assessment.motorInventory != undefined });
+    // this.motorInventoryAssessment = this.assessmentDbService.getByDirectoryId(1).find(assessment => { return assessment.motorInventory != undefined });
   }
 
   saveDbData(inventoryData: MotorInventoryData) {
-    if (this.motorInventoryAssessment) {
-      this.motorInventoryAssessment.motorInventory = inventoryData;
-      this.indexedDbService.putAssessment(this.motorInventoryAssessment).then(results => {
-        this.assessmentDbService.setAll().then(() => {
-        });
-      });
-    } else {
-      let newAssessment: Assessment = {
-        name: null,
-        createdDate: new Date(),
-        modifiedDate: new Date(),
-        type: 'motorInventory',
-        appVersion: packageJson.version,
-        motorInventory: inventoryData,
-        directoryId: 1
-      };
-      this.indexedDbService.addAssessment(newAssessment).then(assessmentId => {
-        this.assessmentDbService.setAll().then(() => {
-          this.setMotorInventoryAssessment();
-        });
-      });
-    }
+    // if (this.motorInventoryAssessment) {
+    //   this.motorInventoryAssessment.motorInventory = inventoryData;
+    //   this.indexedDbService.putAssessment(this.motorInventoryAssessment).then(results => {
+    //     this.assessmentDbService.setAll().then(() => {
+    //     });
+    //   });
+    // } else {
+    //   let newAssessment: Assessment = {
+    //     name: null,
+    //     createdDate: new Date(),
+    //     modifiedDate: new Date(),
+    //     type: 'motorInventory',
+    //     appVersion: packageJson.version,
+    //     motorInventory: inventoryData,
+    //     directoryId: 1
+    //   };
+    //   this.indexedDbService.addAssessment(newAssessment).then(assessmentId => {
+    //     this.assessmentDbService.setAll().then(() => {
+    //       this.setMotorInventoryAssessment();
+    //     });
+    //   });
+    // }
   }
 
-  resetData() {
-    this.indexedDbService.deleteAssessment(this.motorInventoryAssessment.id).then(results => {
-      this.assessmentDbService.setAll().then(() => {
-        this.motorInventoryAssessment = undefined;
-        let inventoryData: MotorInventoryData = this.motorInventoryService.initInventoryData();
-        this.motorInventoryService.motorInventoryData.next(inventoryData);
-      })
-    })
-  }
+  // resetData() {
+  //   this.indexedDbService.deleteAssessment(this.motorInventoryAssessment.id).then(results => {
+  //     this.assessmentDbService.setAll().then(() => {
+  //       this.motorInventoryAssessment = undefined;
+  //       let inventoryData: MotorInventoryData = this.motorInventoryService.initInventoryData();
+  //       this.motorInventoryService.motorInventoryData.next(inventoryData);
+  //     })
+  //   })
+  // }
 }

@@ -57,8 +57,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     })
   }
 
-
-
   checkSelected() {
     let assessmentSelectedTest: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
     let directorySelectedTest: Directory = _.find(this.directory.subDirectory, (value) => {
@@ -100,6 +98,10 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
   showImportModal() {
     this.directoryDashboardService.showImportModal.next(true);
+  }
+
+  showAddInventory(){
+    
   }
 
   showExportModal() {

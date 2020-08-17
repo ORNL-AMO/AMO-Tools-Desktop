@@ -26,6 +26,9 @@
                     Pre-Assessment</button>
                 <button class="btn btn-secondary action-btn" (click)="showCreateFolder()" type="button">Add
                     Folder</button>
+                <botton class="btn btn-secondary action-btn" (click)="showAddInventory()" type="button">
+                    Add Inventory
+                </botton>
                 <!-- <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()"></app-create-folder> -->
                 <button class="btn btn-secondary action-btn" [disabled]="!checkReport()" type="button"
                     (click)="generateReport()">Generate Report</button>
