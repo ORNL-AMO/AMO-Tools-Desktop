@@ -100,13 +100,12 @@
 </div>
 
 <!--copy modal-->
-<!-- <div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
-    aria-hidden="true" [config]="{backdrop: 'static'}"
-    [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+<div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-md">
         <div class="modal-content" *ngIf="copyForm">
             <div class="modal-header">
-                Create {{assessment.name}} Copy
+                Create {{inventoryItem.name}} Copy
                 <button class="close" (click)="hideCopyModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -114,7 +113,7 @@
             <div class="modal-body">
                 <form [formGroup]="copyForm">
                     <div class="form-group">
-                        <label>Copy Assessment Name</label>
+                        <label>Copy Inventory Name</label>
                         <input type="text" class="form-control w-100" formControlName="name">
                     </div>
                     <div class="form-group" *ngIf="allDirectories">
@@ -126,16 +125,6 @@
                             </option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" class="pr-2" formControlName="copyModifications">Include
-                            modifications?</label>
-                    </div>
-                    <div class="form-group" *ngIf="assessmentCalculatorCopy">
-                        <label>
-                            <input type="checkbox" class="pr-2" formControlName="copyCalculators">Include
-                            calculators?</label>
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -143,7 +132,7 @@
             </div>
         </div>
     </div>
-</div> -->
+</div>
 <!--delete modal-->
 <div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">

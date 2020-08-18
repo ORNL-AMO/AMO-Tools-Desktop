@@ -31,6 +31,7 @@ export class InventoryItemComponent implements OnInit {
   dashboardViewSub: Subscription;
   dashboardView: string;
   editForm: FormGroup;
+  copyForm: FormGroup;
   allDirectories: Array<Directory>;
 
   updateDashboardDataSub: Subscription;
@@ -115,4 +116,40 @@ export class InventoryItemComponent implements OnInit {
       });
     });
   }
+
+  showCopyModal() {
+    this.copyForm = this.formBuilder.group({
+      'name': [this.inventoryItem.name + ' (copy)', Validators.required],
+      'directoryId': [this.inventoryItem.directoryId, Validators.required],
+    });
+    this.copyModal.show();
+  }
+
+  hideCopyModal() {
+    this.copyModal.hide();
+  }
+
+  createCopy() {
+    let inventoryCopy: InventoryItem = JSON.parse(JSON.stringify(this.inventoryItem));
+    delete inventoryCopy.id;
+    let tmpSettings: Settings = this.settingsDbService.getByInventoryId(this.inventoryItem);
+    let settingsCopy: Settings = JSON.parse(JSON.stringify(tmpSettings));
+    delete settingsCopy.id;
+    inventoryCopy.name = this.copyForm.controls.name.value;
+    inventoryCopy.directoryId = this.copyForm.controls.directoryId.value;
+    inventoryCopy.createdDate = new Date();
+    inventoryCopy.modifiedDate = new Date();
+    this.indexedDbService.addInventoryItem(inventoryCopy).then(newInventoryId => {
+      settingsCopy.inventoryId = newInventoryId;
+      this.indexedDbService.addSettings(settingsCopy).then(() => {
+        this.settingsDbService.setAll().then(() => {
+          this.inventoryDbService.setAll().then(() => {
+            this.dashboardService.updateDashboardData.next(true);
+            this.hideCopyModal();
+          });
+        });
+      });
+    });
+  }
+
 }
