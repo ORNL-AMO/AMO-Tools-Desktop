@@ -38,10 +38,12 @@ export class DirectoryDbService {
 
   getById(id: number): Directory {
     let selectedDirectory: Directory = _.find(this.allDirectories, (directory) => { return directory.id === id; });
-    selectedDirectory.assessments = this.assessmentDbService.getByDirectoryId(id);
-    selectedDirectory.subDirectory = this.getSubDirectoriesById(id);
-    selectedDirectory.calculators = this.calculatorDbService.getByDirectoryId(id);
-    selectedDirectory.inventories = this.inventoryDbService.getByDirectoryId(id);
+    if (selectedDirectory) {
+      selectedDirectory.assessments = this.assessmentDbService.getByDirectoryId(id);
+      selectedDirectory.subDirectory = this.getSubDirectoriesById(id);
+      selectedDirectory.calculators = this.calculatorDbService.getByDirectoryId(id);
+      selectedDirectory.inventories = this.inventoryDbService.getByDirectoryId(id);
+    }
     return selectedDirectory;
   }
 
