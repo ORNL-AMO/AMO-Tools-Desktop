@@ -4,7 +4,7 @@
             [ngClass]="{'modal-open': isModalOpen == true}">
             <app-plant-setup *ngIf="setupTab == 'plant-setup'"></app-plant-setup>
             <app-motor-properties *ngIf="setupTab == 'motor-properties'"></app-motor-properties>
-            <app-motor-catalog *ngIf="setupTab == 'motor-catalog'" [settings]="settings"></app-motor-catalog>
+            <app-motor-catalog *ngIf="setupTab == 'motor-catalog'"></app-motor-catalog>
             <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup>
         </div>
         <div class="d-flex flex-column w-50 mh-100 scroll-item">
