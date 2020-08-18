@@ -7,6 +7,7 @@ import { AirLeakService } from '../air-leak.service';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AirLeakFormService } from '../air-leak-form/air-leak-form.service';
+import { ConvertAirLeakService } from '../convert-air-leak.service';
 
 @Component({
   selector: 'app-facility-compressor-data-form',
@@ -17,12 +18,13 @@ export class FacilityCompressorDataFormComponent implements OnInit {
 
   @Input()
   settings: Settings;
-  
+
   airLeakInput: AirLeakSurveyInput;
-  
-  airLeakInputSub: Subscription;
+
   airLeakOutputSub: Subscription;
-  
+  generateExampleSub: Subscription;
+  resetDataSub: Subscription;
+
   annualTotalElectricity: number;
   currentField: string;
   showOperatingHoursModal: boolean;
@@ -31,7 +33,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   formWidth: number;
   currentElectricityUse: number;
   facilityCompressorDataForm: FormGroup;
-  
+
   @ViewChild('leaksTable', { static: false }) leaksTable: ElementRef;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -39,16 +41,16 @@ export class FacilityCompressorDataFormComponent implements OnInit {
     this.setOpHoursModalWidth();
   }
 
-  utilityTypeOptions: Array<{display: string, value: number}> = [
-    {display: 'Compressed Air', value: 0},
-    {display: 'Electric', value: 1}
+  utilityTypeOptions: Array<{ display: string, value: number }> = [
+    { display: 'Compressed Air', value: 0 },
+    { display: 'Electric', value: 1 }
   ];
 
-  measurementMethods: Array<{display: string, value: number}> = [
-    {display: 'Estimate', value: 0},
-    {display: 'Decibel Method', value: 1},
-    {display: 'Bag Method', value: 2},
-    {display: 'Orifice Method', value: 3},
+  measurementMethods: Array<{ display: string, value: number }> = [
+    { display: 'Estimate', value: 0 },
+    { display: 'Decibel Method', value: 1 },
+    { display: 'Bag Method', value: 2 },
+    { display: 'Orifice Method', value: 3 },
   ];
 
   compressorControlTypes: Array<{ value: number, display: string, adjustment: number }> = [
@@ -70,32 +72,48 @@ export class FacilityCompressorDataFormComponent implements OnInit {
     { value: 4, display: 'Custom', specificPower: 0.0 }
   ];
 
-  constructor(private operatingCostService: OperatingCostService, 
-              private airLeakService: AirLeakService,
-              private airLeakFormService: AirLeakFormService) { }
+  constructor(private operatingCostService: OperatingCostService,
+    private airLeakService: AirLeakService,
+    private airLeakFormService: AirLeakFormService,
+    private convertAirLeakService: ConvertAirLeakService) { }
 
   ngOnInit(): void {
+    this.setFormFromInputs();
     this.initSubscriptions();
   }
 
   ngOnDestroy() {
-    this.airLeakInputSub.unsubscribe();
     this.airLeakOutputSub.unsubscribe();
+    this.generateExampleSub.unsubscribe();
+    this.resetDataSub.unsubscribe();
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     setTimeout(() => {
       this.setOpHoursModalWidth();
     }, 100)
   }
 
+  setFormFromInputs() {
+    this.airLeakInput = this.airLeakService.airLeakInput.getValue();
+    this.facilityCompressorDataForm = this.airLeakFormService.getFacilityCompressorFormFromObj(this.airLeakInput.facilityCompressorData);
+  }
+
   initSubscriptions() {
-    this.airLeakInputSub = this.airLeakService.airLeakInput.subscribe(value => {
-      this.airLeakInput = value;
-      this.facilityCompressorDataForm = this.airLeakFormService.getFacilityCompressorFormFromObj(this.airLeakInput.facilityCompressorData);
-    })
     this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
       this.annualTotalElectricity = value.baselineData.annualTotalElectricity;
+    });
+
+    this.generateExampleSub = this.airLeakService.generateExample.subscribe(val => {
+      if (val == true) {
+        this.setFormFromInputs();
+      }
+    });
+
+    this.resetDataSub = this.airLeakService.resetData.subscribe(val => {
+      if (val == true) {
+        this.setFormFromInputs();
+      }
     })
   }
 
@@ -135,11 +153,21 @@ export class FacilityCompressorDataFormComponent implements OnInit {
       if (compressorElectricityForm.controls.compressorSpecificPowerControl.value == 4) {
         this.compressorCustomSpecificPower = true;
       }
-      compressorElectricityForm.patchValue({ compressorSpecificPower: this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower });
+      let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
+      if (this.settings.unitsOfMeasure != 'Imperial') {
+        specificPower = this.convertAirLeakService.convertSpecificPower(specificPower);
+        specificPower = this.convertAirLeakService.roundVal(specificPower);
+      }
+      compressorElectricityForm.patchValue({ compressorSpecificPower: specificPower });
     }
     else if (compressorElectricityForm.controls.compressorSpecificPowerControl.value != 4) {
       this.compressorCustomSpecificPower = false;
-      compressorElectricityForm.patchValue({ compressorSpecificPower: this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower });
+      let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
+      if (this.settings.unitsOfMeasure != 'Imperial') {
+        specificPower = this.convertAirLeakService.convertSpecificPower(specificPower);
+        specificPower = this.convertAirLeakService.roundVal(specificPower);
+      }
+      compressorElectricityForm.patchValue({ compressorSpecificPower: specificPower });
     }
     else {
       if (compressorElectricityForm.controls.compressorSpecificPower.value) {
@@ -149,12 +177,12 @@ export class FacilityCompressorDataFormComponent implements OnInit {
     this.airLeakFormService.setCompressorDataValidators(this.facilityCompressorDataForm);
     this.save();
   }
-  
+
   toggleSelected(index: number, selected: boolean) {
     this.airLeakInput.compressedAirLeakSurveyInputVec[index].selected = selected;
     this.save();
   }
-  
+
   closeOperatingHoursModal() {
     this.showOperatingHoursModal = false;
   }
@@ -174,5 +202,14 @@ export class FacilityCompressorDataFormComponent implements OnInit {
     this.airLeakInput.facilityCompressorData.hoursPerYear = oppHours.hoursPerYear;
     this.save();
     this.closeOperatingHoursModal();
+  }
+
+  changeUtilityType() {
+    if (this.facilityCompressorDataForm.controls.utilityType.value == 0) {
+      this.facilityCompressorDataForm.controls.utilityCost.patchValue(this.settings.compressedAirCost);
+    } else {
+      this.facilityCompressorDataForm.controls.utilityCost.patchValue(this.settings.electricityCost);
+    }
+    this.save();
   }
 }

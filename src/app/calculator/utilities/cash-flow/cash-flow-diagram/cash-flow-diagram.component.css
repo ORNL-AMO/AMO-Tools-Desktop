@@ -8,6 +8,10 @@
   shape-rendering: crispEdges;
 }
 
+.panel-chart-container {
+  background: white;
+}
+
 #cashFlowDl {
   position: absolute;
   z-index: 9999;

@@ -36,7 +36,7 @@ export class FanPsychrometricComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-    let defaultData: BaseGasDensity = this.fanPsychrometricService.getDefaultData();
+    let defaultData: BaseGasDensity = this.fanPsychrometricService.getDefaultData(this.settings);
     this.fanPsychrometricService.baseGasDensityData.next(defaultData);
     this.initSubscriptions();
   }
@@ -58,13 +58,13 @@ export class FanPsychrometricComponent implements OnInit {
   }
 
   btnGenerateExample(){
-    let exampleData: BaseGasDensity = this.fanPsychrometricService.getExampleData();
+    let exampleData: BaseGasDensity = this.fanPsychrometricService.getExampleData(this.settings);
     this.fanPsychrometricService.baseGasDensityData.next(exampleData);
     this.fanPsychrometricService.generateExample.next(true);
   }
 
   btnResetData(){
-    let defaultData: BaseGasDensity = this.fanPsychrometricService.getDefaultData();
+    let defaultData: BaseGasDensity = this.fanPsychrometricService.getDefaultData(this.settings);
     this.fanPsychrometricService.baseGasDensityData.next(defaultData);
     this.fanPsychrometricService.resetData.next(true);
   }

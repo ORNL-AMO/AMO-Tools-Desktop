@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { FsatService } from '../../../fsat/fsat.service';
 import { GasDensityFormService } from '../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class FanPsychrometricService {
@@ -18,6 +19,7 @@ export class FanPsychrometricService {
   psychrometricResults: BehaviorSubject<Array<PsychrometricResults>>;
   
   constructor(private gasDensityFormService: GasDensityFormService,
+              private convertUnitsService: ConvertUnitsService,
               private fsatService: FsatService) {
     this.currentField = new BehaviorSubject<string>('default'); 
     this.resetData = new BehaviorSubject<boolean>(undefined);
@@ -28,11 +30,15 @@ export class FanPsychrometricService {
     this.calculatedBaseGasDensity = new BehaviorSubject<PsychrometricResults>(undefined);
    }
 
-   getDefaultData(): BaseGasDensity {
+   getDefaultData(settings: Settings): BaseGasDensity {
+    let barometricPressure = 29.92;
+    if (settings.unitsOfMeasure == 'Metric') {
+      barometricPressure = this.convertUnitsService.value(barometricPressure).from('inHg').to('kPaa')
+    }
     let data: BaseGasDensity = {
         dryBulbTemp: undefined,
         staticPressure: 0,
-        barometricPressure: 29.92,
+        barometricPressure: barometricPressure,
         gasDensity: .0765,
         altitude: undefined,
         gasType: 'AIR',
@@ -46,11 +52,16 @@ export class FanPsychrometricService {
     return data;
   }
 
-  getExampleData(): BaseGasDensity {
+  getExampleData(settings: Settings): BaseGasDensity {
+    let barometricPressure = 26.57;
+    if (settings.unitsOfMeasure == 'Metric') {
+      barometricPressure = this.convertUnitsService.value(barometricPressure).from('inHg').to('kPaa')
+    }
+
     let data: BaseGasDensity = {
       dryBulbTemp: 123,
       staticPressure: 0,
-      barometricPressure: 26.57,
+      barometricPressure: barometricPressure,
       gasDensity: 0.0547,
       gasType: 'AIR',
       inputType: "wetBulb",

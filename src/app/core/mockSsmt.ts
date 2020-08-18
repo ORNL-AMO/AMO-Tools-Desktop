@@ -2,7 +2,7 @@ import { Assessment } from "../shared/models/assessment";
 import { Settings } from "../shared/models/settings";
 
 export const MockSsmt: Assessment = {
-    "name": "3 Header Example",
+    "name": "Steam Example",
     "type": "SSMT",
     "isExample": true,
     "ssmt": {

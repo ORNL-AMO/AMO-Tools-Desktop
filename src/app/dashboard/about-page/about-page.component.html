@@ -5,9 +5,9 @@
       <p class="small">
         The Manufacturing Energy Assessment Software for Utility Reduction (MEASUR) is an open-source software suite for
         increasing the understanding of energy use and potential savings opportunities for industrial and commercial
-        equipment. MEASUR is based on and will ultimately replace several of DOE’s legacy software tools. 
-        It leverages DOE’s extensive understanding of industrial energy use to help users better understand 
-        the energy use of their equipment. It also allows them to evaluate various energy-related “what-if” scenarios 
+        equipment. MEASUR is based on and will ultimately replace several of DOE’s legacy software tools.
+        It leverages DOE’s extensive understanding of industrial energy use to help users better understand
+        the energy use of their equipment. It also allows them to evaluate various energy-related “what-if” scenarios
         to quantify potential energy and cost savings.
       </p>
       <hr>
@@ -213,9 +213,11 @@
           <span class="pull-right" *ngIf="showSteam"><i class="fa fa-chevron-up"></i></span>
         </div>
         <div *ngIf="showSteam" class="card-body small">
-          <p>The Steam System Assessment Tool (SSAT) was originally developed by Linnhoff March, a division of KBC Process Technology Ltd.,
-             Spirax Sarco Inc., and Greg Harrell, Ph.D., P.E.. The Steam System Modeler Tool (SSMT) was based on the SSAT and 
-             further developed by Michael B. Mueller.</p>
+          <p>The Steam System Assessment Tool (SSAT) was originally developed by Linnhoff March, a division of KBC
+            Process Technology Ltd.,
+            Spirax Sarco Inc., and Greg Harrell, Ph.D., P.E.. The Steam System Modeler Tool (SSMT) was based on the SSAT
+            and
+            further developed by Michael B. Mueller.</p>
           <hr>
           <p>
             The MEASUR Steam module helps users identify and evaluate the potential energy savings opportunities in
@@ -272,6 +274,31 @@
             <li> Estimated energy use and savings in alternate scenarios</li>
             <li> Total potential annual energy savings</li>
             <li> Estimations of opportunity payback</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header bold" (click)="toggleDataExplorer()">
+          Data Explorer
+          <span class="pull-right" *ngIf="!showDataExplorer"><i class="fa fa-chevron-down"></i></span>
+          <span class="pull-right" *ngIf="showDataExplorer"><i class="fa fa-chevron-up"></i></span>
+        </div>
+        <div *ngIf="showDataExplorer" class="card-body small">
+          <p>The Data Explorer module was designed to replace AirMaster's LogTool (originally developed by SBW
+            Consulting for the Compressed Air Challenge). The Data Explorer module, like LogTool, can be used to create
+            "Day Types" (hourly averages for days with similar operation) used in the Compressed Air analysis module. It
+            can also be used to create scatter plots and histograms of large data files (such as 5-second operating
+            data). </p>
+          <hr>
+          <div class="content-subheader">Inputs</div>
+          <p>A .csv file with cleaned data from loggers. Currently, the first row MUST be column names (there is no
+            restrictions on how these columns are named). For a better experience, combine data files with matching time
+            stamps (this will allow full use of the scatter plot abilities).</p>
+          <div class="content-subheader">Outputs</div>
+          <p>Based on inputs, the Data Explorer module will provide the following:</p>
+          <ul>
+            <li> Day Type Analysis displaying hourly averages - for input data containing time stamp information</li>
+            <li> Data Visualization (Scatter plots and histograms)</li>
           </ul>
         </div>
       </div>

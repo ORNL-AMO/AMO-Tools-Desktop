@@ -122,3 +122,56 @@ export const motorEfficiencyConstants: Array<{ value: number, display: string }>
         display: 'Specified'
     }
 ]
+
+// Ordered by pumpTypeConstants
+export const pumpTypeRanges: Array<{ range: {min: number, max: number}, value: number }> = [
+    {
+        value: 0,
+        range: {min: 100, max: 20000}
+    },
+    {
+        value: 1,
+        range: {min: 100, max: 22500}
+    },
+    {
+        value: 2,
+        range: {min: 400, max: 22000}
+    },
+    {
+        value: 3,
+        range: {min: 100, max: 22500}
+    },
+    {
+        value: 4,
+        range: {min: 400, max: 22000}
+    },
+    {
+        value: 5,
+        range: {min: 100, max: 4000}
+    },
+    {
+        value: 6,
+        range: {min: 10, max: 5000}
+    },
+    {
+        value: 7,
+        range: {min: 200, max: 40000}
+    },
+    {
+        value: 8,
+        range: {min: 200, max: 100000}
+    },
+    {
+        value: 9,
+        range: {min: 200, max: 40000}
+    },
+    {
+        value: 10,
+        range: {min: 5000, max: 100000}
+    },
+    {
+        value: 11,
+        range: {min: 100, max: 100000}
+    }
+
+];

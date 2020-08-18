@@ -147,20 +147,24 @@ export class VisualizeMenuService {
     } else {
       selectedGraphObj.selectedXAxisDataOption = selectedGraphObj.xAxisDataOptions[0];
     }
-    selectedGraphObj.layout.yaxis.ticksuffix = '%';
+    if (selectedGraphObj.usePercentForBins) {
+      selectedGraphObj.layout.yaxis.ticksuffix = '%';
+    } else {
+      selectedGraphObj.layout.yaxis.ticksuffix = '';
+    }
     this.setBarHistogramData(selectedGraphObj);
   }
 
   setBarHistogramData(selectedGraphObj: GraphObj) {
     if (selectedGraphObj.useStandardDeviation == true) {
       //get std deviation
-      let stdDeviationBarData = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField);
+      let stdDeviationBarData = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField, selectedGraphObj.usePercentForBins);
       //set data
       selectedGraphObj.data[0].x = stdDeviationBarData.xLabels;
       selectedGraphObj.data[0].y = stdDeviationBarData.yValues;
     } else {
       //get bin size data
-      let binsData = this.visualizeService.getNumberOfBinsBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField, selectedGraphObj.bins);
+      let binsData = this.visualizeService.getNumberOfBinsBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField, selectedGraphObj.bins, selectedGraphObj.usePercentForBins);
       selectedGraphObj.data[0].x = binsData.xLabels;
       selectedGraphObj.data[0].y = binsData.yValues;
     }
@@ -306,7 +310,7 @@ export class VisualizeMenuService {
 
   initializeBinData(selectedGraphObj: GraphObj): GraphObj {
     selectedGraphObj.binnedField = selectedGraphObj.selectedXAxisDataOption.dataField;
-    selectedGraphObj.binSize = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.binnedField).standardDeviation;
+    selectedGraphObj.binSize = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.binnedField, selectedGraphObj.usePercentForBins).standardDeviation;
     selectedGraphObj.binSize = Number((selectedGraphObj.binSize).toFixed(0));
     selectedGraphObj = this.setBins(selectedGraphObj);
     selectedGraphObj.numberOfBins = selectedGraphObj.bins.length;
@@ -322,8 +326,11 @@ export class VisualizeMenuService {
     return selectedGraphObj;
   }
 
-  setBins(selectedGraphObj: GraphObj): GraphObj {
+  setBins(selectedGraphObj: GraphObj, setLowerBound?: number): GraphObj {
     let lowerBound = Number(_.min(selectedGraphObj.selectedXAxisDataOption.data));
+    if(setLowerBound != undefined){
+      lowerBound = setLowerBound;
+    }
     let maxValue = Number(_.max(selectedGraphObj.selectedXAxisDataOption.data));
     selectedGraphObj.bins = new Array();
     for (lowerBound; lowerBound <= maxValue; lowerBound += selectedGraphObj.binSize) {
