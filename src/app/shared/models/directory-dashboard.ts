@@ -25,5 +25,6 @@ export interface FilterDashboardBy {
     showTreasureHunt: boolean,
     showSubFolders: boolean,
     showPreAssessments: boolean,
-    showPhast: boolean
+    showPhast: boolean,
+    showMotorInventory: boolean
 }
