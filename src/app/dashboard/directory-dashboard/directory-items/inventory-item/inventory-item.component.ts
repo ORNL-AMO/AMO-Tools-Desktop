@@ -13,6 +13,7 @@ import * as _ from 'lodash';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
+import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
 
 @Component({
   selector: 'app-inventory-item',
@@ -36,17 +37,27 @@ export class InventoryItemComponent implements OnInit {
 
   updateDashboardDataSub: Subscription;
 
+  numberOfDepartments: number = 0;
+  numberOfMotors: number = 0;
+
   constructor(private router: Router, private directoryDashboardService: DirectoryDashboardService,
     private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private inventoryDbService: InventoryDbService,
-    private dashboardService: DashboardService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService) { }
+    private dashboardService: DashboardService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
+    private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
+
     this.dashboardViewSub = this.directoryDashboardService.dashboardView.subscribe(val => {
       this.dashboardView = val;
     });
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.allDirectories = this.directoryDbService.getAll();
     });
+
+    this.numberOfDepartments = this.inventoryItem.motorInventoryData.departments.length;
+    this.inventoryItem.motorInventoryData.departments.forEach(department => {
+      this.numberOfMotors = this.numberOfMotors + department.catalog.length;
+    })
   }
 
   ngOnDestroy() {
@@ -54,7 +65,10 @@ export class InventoryItemComponent implements OnInit {
     this.updateDashboardDataSub.unsubscribe();
   }
 
-  goToInventoryItem() {
+  goToInventoryItem(inventoryPage?: string) {
+    if (inventoryPage) {
+      this.motorInventoryService.mainTab.next(inventoryPage);
+    }
     this.router.navigateByUrl('/motor-inventory/' + this.inventoryItem.id);
   }
 

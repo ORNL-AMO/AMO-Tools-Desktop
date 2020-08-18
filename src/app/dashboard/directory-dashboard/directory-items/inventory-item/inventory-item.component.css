@@ -183,3 +183,8 @@ span.fa.fa-clipboard{
   font-size: 15px;
   color: black;
 }
+
+td{
+  padding: 0px;
+  font-size: small;
+}
