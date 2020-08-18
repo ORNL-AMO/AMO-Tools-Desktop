@@ -158,3 +158,28 @@ i{
     max-height: 85vh;
     overflow: auto;
   }
+
+  .card-header{
+    border-bottom: #84b641 groove 2px;
+    border-image: linear-gradient(to right, #F0F3F4, #84b641) 50 / 2;
+  }
+
+.dropdown-toggle,
+.btn-primary{
+  background-color: #84b641;
+}
+
+.card, .card-header{
+  background-color: floralwhite;
+}
+
+.list-row{
+  border-bottom: #84b641 groove 6px;
+  border-image: linear-gradient(to right,#F0F3F4, #84b641) 80 / 2;
+}
+
+span.fa.fa-clipboard{
+  padding: 4px;
+  font-size: 15px;
+  color: black;
+}
