@@ -4,13 +4,11 @@ import { Co2SavingsComponent } from "../utilities/co2-savings/co2-savings.compon
 import { CombinedHeatPowerComponent } from "../utilities/combined-heat-power/combined-heat-power.component";
 import { ElectricityReductionComponent } from "../utilities/electricity-reduction/electricity-reduction.component";
 import { NaturalGasReductionComponent } from "../utilities/natural-gas-reduction/natural-gas-reduction.component";
-import { PipeInsulationReductionComponent } from "../utilities/pipe-insulation-reduction/pipe-insulation-reduction.component";
 import { PowerFactorCorrectionComponent } from "../utilities/power-factor-correction/power-factor-correction.component";
 import { PreAssessmentComponent } from "../utilities/pre-assessment/pre-assessment.component";
 import { UnitConverterComponent } from "../utilities/unit-converter/unit-converter.component";
 import { WaterReductionComponent } from "../utilities/water-reduction/water-reduction.component";
 import { UtilitiesListComponent } from "../utilities/utilities-list/utilities-list.component";
-import { TankInsulationReductionComponent } from "../utilities/tank-insulation-reduction/tank-insulation-reduction.component";
 
 export const generalRoutes: Routes = [
     {
@@ -38,10 +36,6 @@ export const generalRoutes: Routes = [
         component: NaturalGasReductionComponent
     },
     {
-        path: 'pipe-insulation-reduction',
-        component: PipeInsulationReductionComponent
-    },
-    {
         path: 'power-factor-correction',
         component: PowerFactorCorrectionComponent
     },
@@ -56,9 +50,5 @@ export const generalRoutes: Routes = [
     {
         path: 'water-reduction',
         component: WaterReductionComponent
-    },
-    {
-        path: 'tank-insulation-reduction',
-        component: TankInsulationReductionComponent
     }
 ]

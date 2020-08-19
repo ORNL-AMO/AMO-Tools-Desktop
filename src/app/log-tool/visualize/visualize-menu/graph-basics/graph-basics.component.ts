@@ -63,6 +63,16 @@ export class GraphBasicsComponent implements OnInit {
     this.setBarHistogramData();
   }
 
+  setHistogramUsePercent(bool: boolean) {
+    this.selectedGraphObj.usePercentForBins = bool;
+    if (this.selectedGraphObj.usePercentForBins) {
+      this.selectedGraphObj.layout.yaxis.ticksuffix = '%';
+    } else {
+      this.selectedGraphObj.layout.yaxis.ticksuffix = '';
+    }
+    this.setBarHistogramData();
+  }
+
   setBarHistogramData() {
     this.visualizeService.plotFunctionType = 'react';
     this.visualizeMenuService.setBarHistogramData(this.selectedGraphObj);
