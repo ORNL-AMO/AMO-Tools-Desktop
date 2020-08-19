@@ -41,6 +41,7 @@ export class ManualSpecificationDataComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.motorInventoryService.focusedDataGroup.next('manual-specifications');
     this.motorInventoryService.focusedField.next(str);
   }
 

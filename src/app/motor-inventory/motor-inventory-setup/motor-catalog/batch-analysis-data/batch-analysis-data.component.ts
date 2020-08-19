@@ -47,6 +47,7 @@ export class BatchAnalysisDataComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.motorInventoryService.focusedDataGroup.next('batch-analysis')
     this.motorInventoryService.focusedField.next(str);
   }
 

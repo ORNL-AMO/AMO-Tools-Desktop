@@ -40,6 +40,7 @@ export class PurchaseInformationDataComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.motorInventoryService.focusedDataGroup.next('purchase-information');
     this.motorInventoryService.focusedField.next(str);
   }
 

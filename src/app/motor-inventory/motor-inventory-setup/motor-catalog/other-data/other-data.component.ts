@@ -46,6 +46,7 @@ export class OtherDataComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.motorInventoryService.focusedDataGroup.next('other');
     this.motorInventoryService.focusedField.next(str);
   }
 

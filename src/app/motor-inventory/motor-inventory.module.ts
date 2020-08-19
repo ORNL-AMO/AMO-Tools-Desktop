@@ -18,6 +18,7 @@ import { MotorCatalogModule } from './motor-inventory-setup/motor-catalog/motor-
 import { MotorPropertiesModule } from './motor-inventory-setup/motor-properties/motor-properties.module';
 import { MotorInventorySummaryModule } from './motor-inventory-summary/motor-inventory-summary.module';
 import { SummaryFilterModule } from './motor-inventory-banner/summary-filter/summary-filter.module';
+import { HelpPanelModule } from './help-panel/help-panel.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,6 @@ import { SummaryFilterModule } from './motor-inventory-banner/summary-filter/sum
     PlantSetupComponent,
     MotorInventoryCalculatorsComponent,
     BatchAnalysisComponent,
-    HelpPanelComponent,
     DepartmentCatalogTableComponent
   ],
   imports: [
@@ -41,7 +41,8 @@ import { SummaryFilterModule } from './motor-inventory-banner/summary-filter/sum
     MotorCatalogModule,
     MotorPropertiesModule,
     MotorInventorySummaryModule,
-    SummaryFilterModule
+    SummaryFilterModule,
+    HelpPanelModule
   ],
   providers: [
     MotorInventoryService

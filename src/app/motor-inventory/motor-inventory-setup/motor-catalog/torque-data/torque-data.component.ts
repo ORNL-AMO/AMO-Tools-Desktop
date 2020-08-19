@@ -48,6 +48,7 @@ export class TorqueDataComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.motorInventoryService.focusedDataGroup.next('torque');
     this.motorInventoryService.focusedField.next(str);
   }
 

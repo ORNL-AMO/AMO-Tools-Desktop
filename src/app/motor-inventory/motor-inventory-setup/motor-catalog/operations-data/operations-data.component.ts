@@ -40,6 +40,7 @@ export class OperationsDataComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.motorInventoryService.focusedDataGroup.next('operation-data');
     this.motorInventoryService.focusedField.next(str);
   }
 

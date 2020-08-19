@@ -4,4 +4,14 @@
             Help
         </div>
     </div>
+    <div *ngIf="setupTab == 'motor-properties' || setupTab == 'motor-catalog'">
+        <app-batch-analysis-help *ngIf="focusedDataGroup == 'batch-analysis'"></app-batch-analysis-help>
+        <app-load-characteristics-help *ngIf="focusedDataGroup == 'load-characteristics'"></app-load-characteristics-help>
+        <app-manual-specifications-help *ngIf="focusedDataGroup == 'manual-specifications'"></app-manual-specifications-help>
+        <app-nameplate-data-help *ngIf="focusedDataGroup == 'nameplate-data'"></app-nameplate-data-help>
+        <app-operation-data-help *ngIf="focusedDataGroup == 'operation-data'"></app-operation-data-help>
+        <app-other-help *ngIf="focusedDataGroup == 'other'"></app-other-help>
+        <app-purchase-information-help *ngIf="focusedDataGroup == 'purchase-information'"></app-purchase-information-help>
+        <app-torque-help *ngIf="focusedDataGroup == 'torque'"></app-torque-help>
+    </div>
 </div>

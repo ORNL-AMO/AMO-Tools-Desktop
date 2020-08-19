@@ -40,6 +40,7 @@ export class LoadCharacteristicDataComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.motorInventoryService.focusedDataGroup.next('load-characteristics')
     this.motorInventoryService.focusedField.next(str);
   }
 

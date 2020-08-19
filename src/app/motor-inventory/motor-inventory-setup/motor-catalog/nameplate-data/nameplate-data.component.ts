@@ -52,6 +52,7 @@ export class NameplateDataComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.motorInventoryService.focusedDataGroup.next('nameplate-data');
     this.motorInventoryService.focusedField.next(str);
   }
 
