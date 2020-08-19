@@ -232,14 +232,16 @@
           [outletPressureData]="outletPressureCopy" (emitSave)="saveOutletPressureCopy($event)"
           [bodyHeight]="bodyHeight"></app-calculate-outlet-pressure>
         <app-calculate-flow-pressure *ngIf="pressureCalcType == 'flow' && bodyHeight" [settings]="settings"
-          [bodyHeight]="bodyHeight" [fsat]="fsatCopy" (emitInvalid)="setCalcInvalid()"
-          (saveFlowAndPressure)="saveFsatCopy($event)">
+          [bodyHeight]="bodyHeight" [fsat]="modalFsatCopy" 
+          (emitInvalid)="setCalcInvalid($event)" (updateFsatCopy)="updateTempFsatCopy($event)">
         </app-calculate-flow-pressure>
       </div>
       <div class="modal-footer fsat justify-content-between">
-        <button class="btn btn-default pull-left" (click)="hidePressureModal()">Cancel</button>
-        <button class="btn btn-primary" (click)="saveAndClose()" [disabled]="disableApplyData == true">Apply
-          Data</button>
+        <button class="btn btn-default pull-left" (click)="resetModalData()">Cancel</button>
+        <span>
+          <button [disabled]="disableApplyData != true" class="btn btn-primary" (click)="hidePressureModal()">Save and Exit</button>
+          <button [disabled]="disableApplyData == true" class="ml-2 btn btn-primary" (click)="applyModalData()">Apply Data</button>
+          </span>
       </div>
     </div>
   </div>
