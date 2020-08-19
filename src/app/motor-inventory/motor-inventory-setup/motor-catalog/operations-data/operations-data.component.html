@@ -16,7 +16,7 @@
     <div class="form-group" *ngIf="displayOptions.annualOperatingHours">
         <label for="annualOperatingHours">Operating Hours</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('')" (input)="save()"
+            <input type="number" class="form-control" (focus)="focusField('annualOperatingHours')" (input)="save()"
                 formControlName="annualOperatingHours" id="annualOperatingHours">
             <span class="input-group-addon units">hrs/yr</span>
         </div>
