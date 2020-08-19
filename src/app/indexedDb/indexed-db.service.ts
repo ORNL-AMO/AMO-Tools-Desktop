@@ -11,7 +11,7 @@ import { InventoryItem } from '../shared/models/inventory/inventory';
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 5,
+  version: 6,
   instance: {},
   storeNames: {
     assessments: 'assessments',
