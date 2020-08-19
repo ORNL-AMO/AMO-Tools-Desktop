@@ -106,10 +106,12 @@ export class MotorPerformanceChartService {
       data: [],
       layout: {
         legend: {
-          orientation: 'v',
+          orientation: 'h',
           font: {
             size: 12,
           },
+          x: 0,
+          y: -.25
         },
         hovermode: 'x',
         xaxis: {

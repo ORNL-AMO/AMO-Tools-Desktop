@@ -16,7 +16,9 @@ export interface SimpleChart {
             font?: {
                 size: number,
               },
-        }
+              x?: number,
+              y?: number
+        },
         title?: {
             text: string,
             font: {
