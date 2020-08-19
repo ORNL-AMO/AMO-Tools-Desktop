@@ -38,9 +38,7 @@ export class ManualSpecificationPropertiesComponent implements OnInit {
     this.manualSpecificationOptions.rotorBars = this.manualSpecificationOptions.displayManualSpecifications;
     this.manualSpecificationOptions.statorSlots = this.manualSpecificationOptions.displayManualSpecifications;
     this.manualSpecificationOptions.ampsLockedRotor = this.manualSpecificationOptions.displayManualSpecifications;
-    this.manualSpecificationOptions.stalledRotorTimeHot = this.manualSpecificationOptions.displayManualSpecifications;
-    this.manualSpecificationOptions.stalledRotorTimeCold = this.manualSpecificationOptions.displayManualSpecifications;
-    this.manualSpecificationOptions.poles = this.manualSpecificationOptions.displayManualSpecifications;
+     this.manualSpecificationOptions.poles = this.manualSpecificationOptions.displayManualSpecifications;
     this.manualSpecificationOptions.currentType = this.manualSpecificationOptions.displayManualSpecifications;
     this.save();
   }
@@ -53,8 +51,6 @@ export class ManualSpecificationPropertiesComponent implements OnInit {
       this.manualSpecificationOptions.rotorBars ||
       this.manualSpecificationOptions.statorSlots ||
       this.manualSpecificationOptions.ampsLockedRotor ||
-      this.manualSpecificationOptions.stalledRotorTimeHot ||
-      this.manualSpecificationOptions.stalledRotorTimeCold ||
       this.manualSpecificationOptions.poles ||
       this.manualSpecificationOptions.currentType || 
       this.manualSpecificationOptions.ratedSpeed

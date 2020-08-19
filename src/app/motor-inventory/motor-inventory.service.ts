@@ -91,8 +91,6 @@ export class MotorInventoryService {
         rotorBars: undefined,
         statorSlots: undefined,
         ampsLockedRotor: undefined,
-        stalledRotorTimeHot: undefined,
-        stalledRotorTimeCold: undefined,
         poles: undefined,
         currentType: undefined,
         ratedSpeed: undefined    
@@ -174,8 +172,6 @@ export class MotorInventoryService {
         rotorBars: false,
         statorSlots: false,
         ampsLockedRotor: false,
-        stalledRotorTimeHot: false,
-        stalledRotorTimeCold: false,
         poles: false,
         currentType: false,
         ratedSpeed: false,

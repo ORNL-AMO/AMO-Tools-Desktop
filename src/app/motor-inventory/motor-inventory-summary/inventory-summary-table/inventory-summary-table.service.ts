@@ -134,12 +134,6 @@ export class InventorySummaryTableService {
       if (manualSpecificationOptions.ampsLockedRotor) {
         motorData.push({ value: manualSpecificationData.ampsLockedRotor, fieldStr: 'ampsLockedRotor', unit: 'A' });
       }
-      if (manualSpecificationOptions.stalledRotorTimeHot) {
-        motorData.push({ value: manualSpecificationData.stalledRotorTimeHot, fieldStr: 'stalledRotorTimeHot', unit: 's' });
-      }
-      if (manualSpecificationOptions.stalledRotorTimeCold) {
-        motorData.push({ value: manualSpecificationData.stalledRotorTimeCold, fieldStr: 'stalledRotorTimeCold', unit: 's' });
-      }
       if (manualSpecificationOptions.poles) {
         motorData.push({ value: manualSpecificationData.poles, fieldStr: 'poles' });
       }

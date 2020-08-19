@@ -9,7 +9,7 @@
         <label for="synchronousSpeed">Synchronous Speed</label>
         <div class="input-group">
             <input class="form-control" type="number" id="synchronousSpeed" formControlName="synchronousSpeed"
-                (input)="save()">
+                (input)="save()" (focus)="focusField('synchronousSpeed')">
             <span class="input-group-addon units">rpm</span>
         </div>
     </div>
@@ -32,7 +32,7 @@
 
     <!-- shaftPosiion -->
     <div class="form-group" *ngIf="displayOptions.shaftPosiion">
-        <label for="shaftPosiion">Shaft Position</label>
+        <label for="shaftPosiion">Shaft Orientation</label>
         <select class="form-control" (focus)="focusField('shaftPosiion')" (change)="save()"
             formControlName="shaftPosiion" id="shaftPosiion">
             <option [ngValue]="'Vertical'">Vertical</option>
@@ -50,13 +50,13 @@
     </div>
     <!-- rotorBars -->
     <div class="form-group" *ngIf="displayOptions.rotorBars">
-        <label for="rotorBars">Rotor Bars</label>
+        <label for="rotorBars">Number of Rotor Bars</label>
         <input type="number" class="form-control" (focus)="focusField('rotorBars')" (input)="save()"
             formControlName="rotorBars" id="rotorBars">
     </div>
     <!-- statorSlots -->
     <div class="form-group" *ngIf="displayOptions.statorSlots">
-        <label for="statorSlots">Stator Slots</label>
+        <label for="statorSlots">Number of Stator Slots</label>
         <input type="number" class="form-control" (focus)="focusField('statorSlots')" (input)="save()"
             formControlName="statorSlots" id="statorSlots">
     </div>
@@ -69,25 +69,7 @@
             <span class="input-group-addon units">A</span>
         </div>
     </div>
-    <!-- stalledRotorTimeHot -->
-    <div class="form-group" *ngIf="displayOptions.stalledRotorTimeHot">
-        <label for="stalledRotorTimeHot">Stalled Rotor Time - Hot</label>
-        <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('stalledRotorTimeHot')" (input)="save()"
-                formControlName="stalledRotorTimeHot" id="stalledRotorTimeHot">
-            <span class="input-group-addon units">s</span>
-        </div>
-    </div>
-    <!-- stalledRotorTimeCold -->
-    <div class="form-group" *ngIf="displayOptions.stalledRotorTimeCold">
-        <label for="stalledRotorTimeCold">Stalled Rotor Time - Cold</label>
-        <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('stalledRotorTimeCold')" (input)="save()"
-                formControlName="stalledRotorTimeCold" id="stalledRotorTimeCold">
-            <span class="input-group-addon units">s</span>
-        </div>
-    </div>
-
+    
     <!-- currentType -->
     <div class="form-group" *ngIf="displayOptions.currentType">
         <label for="currentType">Current Type</label>
