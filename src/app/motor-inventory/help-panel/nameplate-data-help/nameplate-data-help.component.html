@@ -1,1 +1,257 @@
-<p>nameplate-data-help works!</p>
+<div class="p-2 pt-3 d-flex flex-column help-info">
+    <h5>
+        Nameplate Data Help
+        <br>
+        <!-- <small class="text-muted">Enter measured data to calculate your system's annual savings potential.
+      </small> -->
+    </h5>
+    <hr class="my-1 hr-spacer">
+    <div class="my-2" *ngIf="focusedField == 'efficiencyClass'">
+        <h6>
+            Efficiency Class
+            <br>
+            <small class="text-muted">
+                Efficiency Class is the classification of efficiency given to motor. This can be found either on the
+                nameplate or based on
+                how the motor compares with the NEMA MG 1-2003.
+                <hr> Efficiency Class options include
+                <u>Standard Efficiency</u>,
+                <u>Energy Efficient</u>, or
+                <u>Premium Efficient</u>
+                <br><br>
+                The Premium (IE3) and Energy Efficient (IE2) classes are based on motors that match those NEMA classes.
+                Standard motors should be used if the efficiency is below Energy Efficient (IE2).
+                Efficiency values can also be directly input using User Specified.
+            </small>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'nominalEfficiency'">
+        <h6>
+            Estimated Nominal Efficiency
+            <br>
+            <small class="text-muted">
+                Efficiency at full load. This can often be found on the nameplate but can also be estimated by MEASUR
+            </small>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'ratedMotorPower'">
+        <h6>
+            Rated Motor Power
+            <br>
+            <small class="text-muted">
+                The rated output power of the motor
+            </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="w-50 text-center">Minimum</th>
+                        <th class="w-50 text-center">Maximum</th>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">0
+                            <span *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
+                            <span *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
+                        </td>
+                        <td class="w-50 text-center">&mdash;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'lineFrequency'">
+        <h6>
+            Line Frequency
+            <br>
+            <small class="text-muted">
+                The frequency level of the AC electricity used in transmission and distribution from electricity
+                generation sources to customers (utility frequency, power line frequency, mains frequency). In North or
+                South America and parts of Asia, this is usually 60Hz. In many other countries, it is 50 Hz
+            </small>
+        </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="focusedField == 'manufacturer'">
+        <h6>
+            Manufacturer
+            <br>
+            <small class="text-muted">
+                The company that made the original motor.
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'model'">
+        <h6>
+            Model
+            <br>
+            <small class="text-muted">
+                The model number of the motor, typically found on the motor nameplate
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'motorType'">
+        <h6>
+            Motor Type
+            <br>
+            <small class="text-muted">
+                The design style of the motor
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'enclosureType'">
+        <h6>
+            Enclosure Type
+            <br>
+            <small class="text-muted">
+                The type of style of the motor enclosure. Most commonly found enclosure types are ODP and TEFC
+            </small>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'ratedVoltage'">
+        <h6>
+            Voltage Rating
+            <br>
+            <small class="text-muted">
+                The voltage at which the motor is designed to operate.
+            </small>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'serviceFactor'">
+        <h6>
+            Service Factor
+            <br>
+            <small class="text-muted">
+                The percentage multiplier that a motor can withstand for short periods of time when operating within its
+                normal voltage and frequency tolerance.
+            </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="w-50 text-center">Minimum</th>
+                        <th class="w-50 text-center">Maximum</th>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">0 %</td>
+                        <td class="w-50 text-center">100%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'insulationClass'">
+        <h6>
+            Insulation Class
+            <br>
+            <small class="text-muted">
+                The insulation rating given to the motor, the reflects the thickness and the heats resistance of the
+                insulation
+            </small>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'weight'">
+        <h6>
+            Weight
+            <br>
+            <small class="text-muted">
+                The weight of the motor
+
+            </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="w-50 text-center">Minimum</th>
+                        <th class="w-50 text-center">Maximum</th>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">0
+                            <span *ngIf="settings.unitsOfMeasure != 'Metric'">lb</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg</span>
+                        </td>
+                        <td class="w-50 text-center">&mdash;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'numberOfPhases'">
+        <h6>
+            Number of Phases
+            <br>
+            <small class="text-muted">
+                The electrical voltage wiring connected to the motor electrical panel
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'fullLoadSpeed'">
+        <h6>
+            Full Load Speed
+            <br>
+            <small class="text-muted">
+                The rotational speed of the motor at full load. This speed is the speed at which maximum torque can be
+                achieved.
+            </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="w-50 text-center">Minimum</th>
+                        <th class="w-50 text-center">Maximum</th>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">0 rpm </td>
+                        <td class="w-50 text-center">3600 rpm</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'fullLoadAmps'">
+        <h6>
+            Full Load Amps
+            <br>
+            <small class="text-muted">
+                The maximum current that the motor can draw/supply safely by meeting (either supplying or consuming) the
+                full-load conditions.
+            </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="text-center">Minimum</th>
+                        <th class="text-center">Maximum</th>
+                    </tr>
+                    <tr>
+                        <td class="text-center">0 A</td>
+                        <td class="text-center">&mdash;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--TODO-->
+        <!-- <h6>
+          <small class="text-muted">
+            <hr> An expected range is determined by the provided motor rated power, speed, voltage and class.
+            <br>
+            <u>Expected Minimum Value:</u>
+            {{getFlaMin() | number:'2.2-2'}} A
+            <br>
+            <u>Expected Maximum Value:</u>
+            {{getFlaMax() | number:'2.2-2'}} A
+            <br>
+          </small>
+        </h6> -->
+    </div>
+</div>
