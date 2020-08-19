@@ -240,7 +240,6 @@ export class FsatService {
 
   compressibilityFactor(inputs: CompressibilityFactor, settings: Settings) {
     let inputCpy: CompressibilityFactor = JSON.parse(JSON.stringify(inputs));
-    console.log(inputCpy);
     inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from(settings.fanFlowRate).to('ft3/min');
     inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
     inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');

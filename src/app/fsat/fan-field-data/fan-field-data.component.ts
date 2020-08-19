@@ -62,7 +62,7 @@ export class FanFieldDataComponent implements OnInit {
   fieldDataForm: FormGroup;
   pressureCalcType: string;
   pressureModalSub: Subscription;
-  fsatCopy: FSAT;
+  modalFsatCopy: FSAT;
   inletPressureCopy: InletPressureData;
   outletPressureCopy: OutletPressureData;
   idString: string;
@@ -155,13 +155,6 @@ export class FanFieldDataComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
-  showAmcaModal() {
-    this.fsatCopy = JSON.parse(JSON.stringify(this.fsat));
-    this.pressureCalcType = 'flow';
-    this.fsatService.modalOpen.next(true);
-    this.pressureModal.show();
-  }
-
   save() {
     if (!this.userDefinedCompressibilityFactor) {
       this.getCompressibilityFactor();
@@ -250,11 +243,27 @@ export class FanFieldDataComponent implements OnInit {
     this.pressureModal.show();
   }
 
+  showAmcaModal() {
+    if (this.fsat.tempFsatCopy) {
+      this.modalFsatCopy = this.fsat.tempFsatCopy;
+    } else {
+      this.modalFsatCopy = JSON.parse(JSON.stringify(this.fsat));
+    }
+    this.pressureCalcType = 'flow';
+    this.fsatService.modalOpen.next(true);
+    this.pressureModal.show();
+  }
+
   hidePressureModal() {
     this.pressureCalcType = undefined;
-    this.disableApplyData = false;
     this.fsatService.modalOpen.next(false);
     this.pressureModal.hide();
+  }
+
+  resetModalData() {
+    this.fsat.tempFsatCopy = undefined;
+    this.disableApplyData = false;
+    this.hidePressureModal();
   }
 
   saveOutletPressure(outletPressureData: OutletPressureData) {
@@ -294,18 +303,18 @@ export class FanFieldDataComponent implements OnInit {
     this.save();
   }
 
-  saveFsatCopy(fsat: FSAT) {
-    this.disableApplyData = false;
-    this.fsatCopy = fsat;
+  updateTempFsatCopy(modalFsat: FSAT) {
+    this.fsat.tempFsatCopy = modalFsat;
   }
 
-  setCalcInvalid() {
-    this.disableApplyData = true;
+  setCalcInvalid(isCalcValid: boolean) {
+    this.disableApplyData = isCalcValid;
   }
 
-  saveAndClose() {
+  applyModalData() {
     if (this.pressureCalcType === 'flow') {
-      this.saveFlowAndPressure(this.fsatCopy);
+      this.saveFlowAndPressure(this.fsat.tempFsatCopy);
+      this.fsat.tempFsatCopy = undefined;
     } else if (this.pressureCalcType === 'inlet') {
       this.saveInletPressure(this.inletPressureCopy);
     } else if (this.pressureCalcType === 'outlet') {
