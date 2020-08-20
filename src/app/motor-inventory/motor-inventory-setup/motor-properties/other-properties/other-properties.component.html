@@ -1,4 +1,4 @@
-<div class="d-flex w-100">
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
     <div class="d-flex flex-fill">
         <label class="group-label" (click)="toggleForm()">
             <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
@@ -14,20 +14,20 @@
 </div>
 
 <form class="p-1" *ngIf="displayForm">
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('driveType')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="otherOptions.driveType" name="driveType"
                 id="driveType">
             Drive Type
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('isVFD')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="otherOptions.isVFD" name="isVFD" id="isVFD">
             VFD
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('hasLoggerData')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="otherOptions.hasLoggerData" name="hasLoggerData"
                 id="hasLoggerData">
@@ -35,7 +35,7 @@
         </label>
     </div>
 
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('voltageConnectionType')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="otherOptions.voltageConnectionType"
                 name="voltageConnectionType" id="voltageConnectionType">

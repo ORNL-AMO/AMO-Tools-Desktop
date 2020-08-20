@@ -10,3 +10,7 @@ label.group-label{
 .custom-control.custom-switch{
     border-bottom: #84b641 solid 2px
 }
+label.group-label:hover, .checkbox:hover{
+    background-color: #efefef;
+    cursor: pointer;
+}

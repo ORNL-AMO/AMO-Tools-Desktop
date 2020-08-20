@@ -1,4 +1,4 @@
-<div class="d-flex w-100">
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
     <div class="d-flex flex-fill">
         <label class="group-label" (click)="toggleForm()">
             <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
@@ -15,21 +15,21 @@
 </div>
 
 <form class="p-1" *ngIf="displayForm">
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('ratedSpeed')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.ratedSpeed" name="ratedSpeed"
-                id="ratedSpeed">
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.ratedSpeed"
+                name="ratedSpeed" id="ratedSpeed">
             Rated Speed
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('frame')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.frame"
-                name="frame" id="frame">
+            <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.frame" name="frame"
+                id="frame">
             Frame
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('shaftPosiion')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.shaftPosiion"
                 name="shaftPosiion" id="shaftPosiion">
@@ -37,42 +37,42 @@
         </label>
     </div>
 
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('windingResistance')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.windingResistance"
                 name="windingResistance" id="windingResistance">
             Winding Resistance
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('rotorBars')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.rotorBars" name="rotorBars"
                 id="rotorBars">
             Number of Rotor Bars
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('statorSlots')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.statorSlots"
                 name="statorSlots" id="statorSlots">
             Number of Stator Slots
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('ampsLockedRotor')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.ampsLockedRotor"
                 name="ampsLockedRotor" id="ampsLockedRotor">
             Locked Rotor Amps
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('poles')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.poles" name="poles"
                 id="poles">
             Poles
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('currentType')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="manualSpecificationOptions.currentType"
                 name="currentType" id="currentType">

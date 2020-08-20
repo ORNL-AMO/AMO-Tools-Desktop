@@ -2,6 +2,11 @@ label.group-label{
     padding-bottom: 0px;
 }
 
+label.group-label:hover, .checkbox:hover{
+    background-color: #efefef;
+    cursor: pointer;
+}
+
 .custom-control-input:checked ~ .custom-control-label::before {
     border-color: #84b641;
     background-color: #84b641;

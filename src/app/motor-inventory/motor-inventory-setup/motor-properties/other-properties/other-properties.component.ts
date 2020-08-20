@@ -45,4 +45,12 @@ export class OtherPropertiesComponent implements OnInit {
       this.otherOptions.voltageConnectionType
     )
   }
+  focusField(str: string){
+    this.focusGroup();
+    this.motorInventoryService.focusedField.next(str);
+  }
+
+  focusGroup(){
+    this.motorInventoryService.focusedDataGroup.next('other');
+  }
 }

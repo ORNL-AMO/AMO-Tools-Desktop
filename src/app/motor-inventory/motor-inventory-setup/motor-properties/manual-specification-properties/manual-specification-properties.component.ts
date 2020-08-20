@@ -56,4 +56,12 @@ export class ManualSpecificationPropertiesComponent implements OnInit {
       this.manualSpecificationOptions.ratedSpeed
     );
   }
+  focusField(str: string){
+    this.focusGroup();
+    this.motorInventoryService.focusedField.next(str);
+  }
+
+  focusGroup(){
+    this.motorInventoryService.focusedDataGroup.next('manual-specifications');
+  }
 }
