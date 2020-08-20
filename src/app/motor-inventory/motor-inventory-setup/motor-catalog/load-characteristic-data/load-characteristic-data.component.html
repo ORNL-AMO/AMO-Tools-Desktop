@@ -12,6 +12,12 @@
                 formControlName="efficiency75" id="efficiency75">
             <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.efficiency75.invalid">
+            <span *ngIf="motorForm.controls.efficiency75.errors.max">Value can't be greater than
+                {{motorForm.controls.efficiency75.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.efficiency75.errors.min">Value can't be less than
+                {{motorForm.controls.efficiency75.errors.min.min}} %.</span>
+        </span>
     </div>
     <!-- efficiency50 -->
     <div class="form-group" *ngIf="displayOptions.efficiency50">
@@ -21,6 +27,12 @@
                 formControlName="efficiency50" id="efficiency50">
             <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.efficiency50.invalid">
+            <span *ngIf="motorForm.controls.efficiency50.errors.max">Value can't be greater than
+                {{motorForm.controls.efficiency50.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.efficiency50.errors.min">Value can't be less than
+                {{motorForm.controls.efficiency50.errors.min.min}} %.</span>
+        </span>
     </div>
     <!-- efficiency25 -->
     <div class="form-group" *ngIf="displayOptions.efficiency25">
@@ -30,6 +42,12 @@
                 formControlName="efficiency25" id="efficiency25">
             <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.efficiency25.invalid">
+            <span *ngIf="motorForm.controls.efficiency25.errors.max">Value can't be greater than
+                {{motorForm.controls.efficiency25.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.efficiency25.errors.min">Value can't be less than
+                {{motorForm.controls.efficiency25.errors.min.min}} %.</span>
+        </span>
     </div>
 
     <!-- powerFactor100 -->
@@ -40,6 +58,12 @@
                 formControlName="powerFactor100" id="powerFactor100">
             <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor100.invalid">
+            <span *ngIf="motorForm.controls.powerFactor100.errors.max">Value can't be greater than
+                {{motorForm.controls.powerFactor100.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.powerFactor100.errors.min">Value can't be less than
+                {{motorForm.controls.powerFactor100.errors.min.min}} %.</span>
+        </span>
     </div>
     <!-- powerFactor75 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor75">
@@ -49,6 +73,12 @@
                 formControlName="powerFactor75" id="powerFactor75">
             <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor75.invalid">
+            <span *ngIf="motorForm.controls.powerFactor75.errors.max">Value can't be greater than
+                {{motorForm.controls.powerFactor75.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.powerFactor75.errors.min">Value can't be less than
+                {{motorForm.controls.powerFactor75.errors.min.min}} %.</span>
+        </span>
     </div>
     <!-- powerFactor50 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor50">
@@ -58,6 +88,12 @@
                 formControlName="powerFactor50" id="powerFactor50">
             <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor50.invalid">
+            <span *ngIf="motorForm.controls.powerFactor50.errors.max">Value can't be greater than
+                {{motorForm.controls.powerFactor50.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.powerFactor50.errors.min">Value can't be less than
+                {{motorForm.controls.powerFactor50.errors.min.min}} %.</span>
+        </span>
     </div>
     <!-- powerFactor25 -->
     <div class="form-group" *ngIf="displayOptions.powerFactor25">
@@ -67,6 +103,12 @@
                 formControlName="powerFactor25" id="powerFactor25">
             <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor25.invalid">
+            <span *ngIf="motorForm.controls.powerFactor25.errors.max">Value can't be greater than
+                {{motorForm.controls.powerFactor25.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.powerFactor25.errors.min">Value can't be less than
+                {{motorForm.controls.powerFactor25.errors.min.min}} %.</span>
+        </span>
     </div>
     <!-- ampsIdle -->
     <div class="form-group" *ngIf="displayOptions.ampsIdle">
@@ -76,5 +118,9 @@
                 formControlName="ampsIdle" id="ampsIdle">
             <span class="input-group-addon units">A</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.ampsIdle.invalid">
+            <span *ngIf="motorForm.controls.ampsIdle.errors.min">Value can't be less than
+                {{motorForm.controls.ampsIdle.errors.min.min}} A.</span>
+        </span>
     </div>
 </form>

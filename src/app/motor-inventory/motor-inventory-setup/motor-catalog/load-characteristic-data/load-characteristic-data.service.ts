@@ -12,11 +12,11 @@ export class LoadCharacteristicDataService {
       efficiency75: [loadCharacteristicData.efficiency75, [Validators.min(0), Validators.max(100)]],
       efficiency50: [loadCharacteristicData.efficiency50, [Validators.min(0), Validators.max(100)]],
       efficiency25: [loadCharacteristicData.efficiency25, [Validators.min(0), Validators.max(100)]],
-      powerFactor100: [loadCharacteristicData.powerFactor100],
-      powerFactor75: [loadCharacteristicData.powerFactor75],
-      powerFactor50: [loadCharacteristicData.powerFactor50],
-      powerFactor25: [loadCharacteristicData.powerFactor25],
-      ampsIdle: [loadCharacteristicData.ampsIdle],
+      powerFactor100: [loadCharacteristicData.powerFactor100, [Validators.min(0), Validators.max(100)]],
+      powerFactor75: [loadCharacteristicData.powerFactor75, [Validators.min(0), Validators.max(100)]],
+      powerFactor50: [loadCharacteristicData.powerFactor50, [Validators.min(0), Validators.max(100)]],
+      powerFactor25: [loadCharacteristicData.powerFactor25, [Validators.min(0), Validators.max(100)]],
+      ampsIdle: [loadCharacteristicData.ampsIdle, [Validators.min(0)]],
     });
   }
 
