@@ -23,6 +23,7 @@ export class NameplateDataComponent implements OnInit {
   displayForm: boolean = true;
   frequencies: Array<number> = [50, 60];
   efficiencyClasses: Array<{ value: number, display: string }>;
+  voltageRatingOptions: Array<number> = [200, 208, 220, 230, 440, 460, 575, 796, 2300, 4000, 6600];
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private nameplateDataService: NameplateDataService) { }
 

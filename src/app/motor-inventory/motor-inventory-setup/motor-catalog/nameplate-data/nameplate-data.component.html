@@ -34,7 +34,7 @@
     <div class="form-group">
         <label for="ratedMotorPower">Rated Motor Power</label>
         <div class="input-group">
-            <input type="number" name="ratedMotorPower" class="form-control number-input-field" id="ratedMotorPower"
+            <input type="number" name="ratedMotorPower" class="form-control" id="ratedMotorPower"
                 (focus)="focusField('ratedMotorPower')" (input)="save()" formControlName="ratedMotorPower">
             <span class="input-group-addon units" *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
             <span class="input-group-addon units" *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
@@ -49,8 +49,8 @@
     <!--line frequency: lineFrequency-->
     <div class="form-group">
         <label for="lineFrequency">Line Frequency</label>
-        <select name="lineFrequency" class="form-control number-input-field" id="lineFrequency"
-            formControlName="lineFrequency" (change)="save()" (focus)="focusField('lineFrequency')">
+        <select name="lineFrequency" class="form-control" id="lineFrequency" formControlName="lineFrequency"
+            (change)="save()" (focus)="focusField('lineFrequency')">
             <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
         </select>
     </div>
@@ -84,7 +84,7 @@
             <option [ngValue]="'EXPL'">EXPL</option>
             <option [ngValue]="'TENV'">TENV</option>
             <option [ngValue]="'WP'">WP</option>
-            <option [ngValue]="'TEBC'">TETEBCFC</option>
+            <option [ngValue]="'TEBC'">TEBC</option>
             <option [ngValue]="'TEAO'">TEAO</option>
         </select>
     </div>
@@ -92,15 +92,10 @@
     <!-- ratedVoltage -->
     <div class="form-group" *ngIf="displayOptions.ratedVoltage">
         <label for="ratedVoltage">Rated Voltage</label>
-        <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('ratedVoltage')" (input)="save()"
-                formControlName="ratedVoltage" id="ratedVoltage">
-            <span class="input-group-addon units">V</span>
-        </div>
-        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.ratedVoltage.invalid">
-            <span *ngIf="motorForm.controls.ratedVoltage.errors.min">Value can't be less than
-                {{motorForm.controls.ratedVoltage.errors.min.min}} V</span>
-        </span>
+        <select name="ratedVoltage" class="form-control" id="ratedVoltage" formControlName="ratedVoltage"
+            (change)="save()" (focus)="focusField('ratedVoltage')">
+            <option *ngFor="let option of voltageRatingOptions" [ngValue]="option">{{option}} V</option>
+        </select>
     </div>
     <!-- serviceFactor -->
     <div class="form-group" *ngIf="displayOptions.serviceFactor">
@@ -172,7 +167,7 @@
     <div class="form-group" *ngIf="displayOptions.fullLoadAmps">
         <label for="fullLoadAmps">Full Load Amps</label>
         <div class="input-group">
-            <input type="number" name="fullLoadAmps" class="form-control number-input-field" id="fullLoadAmps"
+            <input type="number" name="fullLoadAmps" class="form-control" id="fullLoadAmps"
                 (focus)="focusField('fullLoadAmps')" (input)="save()" formControlName="fullLoadAmps">
             <span class="input-group-addon units">A</span>
         </div>

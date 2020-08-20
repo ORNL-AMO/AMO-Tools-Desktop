@@ -13,12 +13,19 @@
             <small class="text-muted">
                 The is the ideal speed of the motor, the speed at which the magnetic field runs. This is given by
                 60*frequency/number of pole pairs
-                <hr>
+                <hr> 60 Hz options include
+                <u>900</u>,
+                <u>1200</u>,
+                <u>1800</u>, or
+                <u>3600</u>
+                <hr> 50 Hz options include
+                <u>1000</u>,
+                <u>1500</u>, or
+                <u>3000</u>
             </small>
         </h6>
     </div>
-    <div class="my-2"
-        *ngIf="focusedField == 'ratedSpeed'">
+    <div class="my-2" *ngIf="focusedField == 'ratedSpeed'">
         <h6>
             Rated Speed
             <br>
@@ -41,7 +48,7 @@
                 </tbody>
             </table>
         </div>
-    </div>    
+    </div>
     <div class="my-2" *ngIf="focusedField == 'frame'">
         <h6>
             Frame
@@ -59,7 +66,9 @@
             <br>
             <small class="text-muted">
                 The physical orientation of the motor shaft.
-                <hr>
+                <hr> Options are
+                <u>Vertical</u> or
+                <u>Horizontal</u>
             </small>
         </h6>
     </div>
@@ -159,7 +168,9 @@
             <br>
             <small class="text-muted">
                 The type of current connection to your motor, direct current or alternating current
-                <hr>
+                <hr> Options are
+                <u>AC</u> or
+                <u>DC</u>
             </small>
         </h6>
     </div>
@@ -169,7 +180,11 @@
             <br>
             <small class="text-muted">
                 The number of magnetic poles in the motor
-                <hr>
+                <hr> Options are
+                <u>2</u>,
+                <u>4</u>,
+                <u>6</u>, or
+                <u>8</u>
             </small>
         </h6>
     </div>

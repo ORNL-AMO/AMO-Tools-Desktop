@@ -15,23 +15,40 @@ export class ManualSpecificationDataComponent implements OnInit {
 
   motorForm: FormGroup;
   selectedMotorItemSub: Subscription;
+  motorInventoryDataSub: Subscription;
   displayOptions: ManualSpecificationOptions;
   displayForm: boolean = true;
   polesOptions: Array<number> = [2, 4, 6, 8, 10, 12];
+  synchronousSpeedOptions: Array<number>;
+  selectedMotorItem: MotorItem;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private manualSpecificationDataService: ManualSpecificationDataService) { }
 
   ngOnInit(): void {
+    //updates when selected motor changes by selection
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
+      this.selectedMotorItem = selectedMotor;
       if (selectedMotor) {
         this.motorForm = this.manualSpecificationDataService.getFormFromManualSpecificationData(selectedMotor.manualSpecificationData);
+
       }
     });
+    //updates on all motor changes
+    this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(motorInventoryData => {
+      let department = motorInventoryData.departments.find(department => { return department.id = this.selectedMotorItem.departmentId });
+      this.selectedMotorItem = department.catalog.find(motorItem => { return motorItem.id == this.selectedMotorItem.id });
+      if (this.selectedMotorItem.nameplateData.lineFrequency == 60) {
+        this.synchronousSpeedOptions = [900, 1200, 1800, 3600];
+      } else if (this.selectedMotorItem.nameplateData.lineFrequency == 50) {
+        this.synchronousSpeedOptions = [1000, 1500, 3000];
+      }
+    })
     this.displayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.manualSpecificationOptions;
   }
 
   ngOnDestroy() {
     this.selectedMotorItemSub.unsubscribe();
+    this.motorInventoryDataSub.unsubscribe();
   }
 
   save() {

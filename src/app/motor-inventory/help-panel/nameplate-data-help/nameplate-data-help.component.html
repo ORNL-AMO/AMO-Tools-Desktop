@@ -83,7 +83,8 @@
             <small class="text-muted">
                 The frequency level of the AC electricity used in transmission and distribution from electricity
                 generation sources to customers (utility frequency, power line frequency, mains frequency). In North or
-                South America and parts of Asia, this is usually 60Hz. In many other countries, it is 50 Hz
+                South America and parts of Asia, this is usually <u>60 Hz</u>. In many other countries, it is <u>50
+                    Hz</u>
             </small>
         </h6>
     </div>
@@ -127,6 +128,50 @@
                 The type of style of the motor enclosure. Most commonly found enclosure types are ODP and TEFC
             </small>
         </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th colspan="2" class="w-50 text-center">Enclosure Options</th>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">ODP
+                        </td>
+                        <td class="w-50 text-center">Open Drip Proof</td>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">TEFC
+                        </td>
+                        <td class="w-50 text-center">Totally Enclosed Fan-Cooled</td>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">EXPL
+                        </td>
+                        <td class="w-50 text-center">Explosion Proof</td>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">TENV
+                        </td>
+                        <td class="w-50 text-center">Non-Ventilated</td>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">WP
+                        </td>
+                        <td class="w-50 text-center">Weather Protected</td>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">TEBC
+                        </td>
+                        <td class="w-50 text-center">Totally Enclosed Blower-Cooled</td>
+                    </tr>
+                    <tr>
+                        <td class="w-50 text-center">TEAO
+                        </td>
+                        <td class="w-50 text-center">Totally Enclosed Air-Over</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="my-2" *ngIf="focusedField == 'ratedVoltage'">
         <h6>
@@ -134,6 +179,8 @@
             <br>
             <small class="text-muted">
                 The voltage at which the motor is designed to operate.
+                <hr>Options include <u>200 V</u>, <u>208 V</u>, <u>220 V</u>, <u>230 V</u>, <u>440 V</u>, <u>460 V</u>, <u>575 V</u>,
+                <u>796 V</u>, <u>2300 V</u>, <u>4000 V</u>, or <u>6600 V</u>.
             </small>
         </h6>
     </div>
@@ -167,7 +214,8 @@
             <br>
             <small class="text-muted">
                 The insulation rating given to the motor, the reflects the thickness and the heats resistance of the
-                insulation
+                insulation.
+                <hr>Options include <u>A</u>, <u>B</u>, <u>F</u>, or <u>H</u>.
             </small>
         </h6>
     </div>
@@ -203,7 +251,8 @@
             Number of Phases
             <br>
             <small class="text-muted">
-                The electrical voltage wiring connected to the motor electrical panel
+                The electrical voltage wiring connected to the motor electrical panel.
+                <hr>Options are <u>1</u> or <u>3</u>.
             </small>
         </h6>
     </div>
