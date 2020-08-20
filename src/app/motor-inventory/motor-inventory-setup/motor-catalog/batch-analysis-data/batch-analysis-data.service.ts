@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BatchAnalysisData } from '../../../motor-inventory';
 
 @Injectable()
@@ -9,12 +9,12 @@ export class BatchAnalysisDataService {
 
   getFormFromBatchAnalysisData(batchAnalysisData: BatchAnalysisData): FormGroup {
     return this.formBuilder.group({
-      modifiedCost: [batchAnalysisData.modifiedCost],
-      modifiedPower: [batchAnalysisData.modifiedPower],
-      modifiedEfficiency: [batchAnalysisData.modifiedEfficiency],
-      modifiedPercentLoad: [batchAnalysisData.modifiedPercentLoad],
-      rewindCost: [batchAnalysisData.rewindCost],
-      rewindEfficiencyLoss: [batchAnalysisData.rewindEfficiencyLoss]
+      modifiedCost: [batchAnalysisData.modifiedCost, [Validators.min(0)]],
+      modifiedPower: [batchAnalysisData.modifiedPower, [Validators.min(0)]],
+      modifiedEfficiency: [batchAnalysisData.modifiedEfficiency, [Validators.min(0), Validators.max(100)]],
+      modifiedPercentLoad: [batchAnalysisData.modifiedPercentLoad, [Validators.min(0), Validators.max(100)]],
+      rewindCost: [batchAnalysisData.rewindCost, [Validators.min(0)]],
+      rewindEfficiencyLoss: [batchAnalysisData.rewindEfficiencyLoss, [Validators.min(0)]]
     });
   }
 

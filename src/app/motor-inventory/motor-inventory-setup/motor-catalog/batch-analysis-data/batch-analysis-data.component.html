@@ -12,6 +12,11 @@
                 formControlName="modifiedCost" id="modifiedCost">
             <span class="input-group-addon units">$</span>
         </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="motorForm.controls.modifiedCost.invalid">
+            <span *ngIf="motorForm.controls.modifiedCost.errors.min">Value can't be less than
+                {{motorForm.controls.modifiedCost.errors.min.min | currency}}.</span>
+        </span>
     </div>
     <!-- modifiedPower -->
     <div class="form-group" *ngIf="displayOptions.modifiedPower">
@@ -22,6 +27,14 @@
             <span class="input-group-addon units" *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
             <span class="input-group-addon units" *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
         </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="motorForm.controls.modifiedPower.invalid">
+            <span *ngIf="motorForm.controls.modifiedPower.errors.min">Value can't be less than
+                {{motorForm.controls.modifiedPower.errors.min.min }}
+                <span *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
+                <span *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>.
+            </span>
+        </span>
     </div>
     <!-- modifiedEfficiency -->
     <div class="form-group" *ngIf="displayOptions.modifiedEfficiency">
@@ -31,6 +44,14 @@
                 formControlName="modifiedEfficiency" id="modifiedEfficiency">
             <span class="input-group-addon units">%</span>
         </div>
+
+        <span class="alert-danger pull-right small"
+            *ngIf="motorForm.controls.modifiedEfficiency.invalid">
+            <span *ngIf="motorForm.controls.modifiedEfficiency.errors.max">Value can't be greater than
+                {{motorForm.controls.modifiedEfficiency.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.modifiedEfficiency.errors.min">Value can't be less than
+                {{motorForm.controls.modifiedEfficiency.errors.min.min}} %.</span>
+        </span>
     </div>
     <!-- modifiedPercentLoad -->
     <div class="form-group" *ngIf="displayOptions.modifiedPercentLoad">
@@ -40,6 +61,13 @@
                 formControlName="modifiedPercentLoad" id="modifiedPercentLoad">
             <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="motorForm.controls.modifiedPercentLoad.invalid">
+            <span *ngIf="motorForm.controls.modifiedPercentLoad.errors.max">Value can't be greater than
+                {{motorForm.controls.modifiedPercentLoad.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.modifiedPercentLoad.errors.min">Value can't be less than
+                {{motorForm.controls.modifiedPercentLoad.errors.min.min}} %.</span>
+        </span>
     </div>
     <!-- rewindCost -->
     <div class="form-group" *ngIf="displayOptions.rewindCost">
@@ -49,6 +77,11 @@
                 formControlName="rewindCost" id="rewindCost">
             <span class="input-group-addon units">$</span>
         </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="motorForm.controls.rewindCost.invalid">
+            <span *ngIf="motorForm.controls.rewindCost.errors.min">Value can't be less than
+                {{motorForm.controls.rewindCost.errors.min.min | currency}}.</span>
+        </span>
     </div>
     <!-- rewindEfficiencyLoss -->
     <div class="form-group" *ngIf="displayOptions.rewindEfficiencyLoss">
@@ -58,5 +91,10 @@
                 formControlName="rewindEfficiencyLoss" id="rewindEfficiencyLoss">
             <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="motorForm.controls.rewindEfficiencyLoss.invalid">
+            <span *ngIf="motorForm.controls.rewindEfficiencyLoss.errors.min">Value can't be less than
+                {{motorForm.controls.rewindEfficiencyLoss.errors.min.min}} %.</span>
+        </span>
     </div>
 </form>
