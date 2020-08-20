@@ -9,16 +9,16 @@ export class ManualSpecificationDataService {
 
   getFormFromManualSpecificationData(manualSpecificationData: ManualSpecificationData): FormGroup {
     return this.formBuilder.group({
-      synchronousSpeed: [manualSpecificationData.synchronousSpeed, [Validators.required]],
+      synchronousSpeed: [manualSpecificationData.synchronousSpeed],
       frame: [manualSpecificationData.frame],
       shaftPosiion: [manualSpecificationData.shaftPosiion],
-      windingResistance: [manualSpecificationData.windingResistance],
-      rotorBars: [manualSpecificationData.rotorBars],
-      statorSlots: [manualSpecificationData.statorSlots],
-      ampsLockedRotor: [manualSpecificationData.ampsLockedRotor],
+      windingResistance: [manualSpecificationData.windingResistance, [Validators.min(0)]],
+      rotorBars: [manualSpecificationData.rotorBars, [Validators.min(0)]],
+      statorSlots: [manualSpecificationData.statorSlots, [Validators.min(0)]],
+      ampsLockedRotor: [manualSpecificationData.ampsLockedRotor, [Validators.min(0)]],
       poles: [manualSpecificationData.poles],
       currentType: [manualSpecificationData.currentType],
-      ratedSpeed: [manualSpecificationData.ratedSpeed]
+      ratedSpeed: [manualSpecificationData.ratedSpeed, [Validators.min(0), Validators.max(3600)]]
     });
   }
 

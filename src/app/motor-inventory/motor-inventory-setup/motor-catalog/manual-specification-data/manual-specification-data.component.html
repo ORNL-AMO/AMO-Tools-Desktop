@@ -21,6 +21,12 @@
                 formControlName="ratedSpeed" id="ratedSpeed">
             <span class="input-group-addon units">rpm</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.ratedSpeed.invalid">
+            <span *ngIf="motorForm.controls.ratedSpeed.errors.min">Value can't be less than
+                {{motorForm.controls.ratedSpeed.errors.min.min}} rpm.</span>
+            <span *ngIf="motorForm.controls.ratedSpeed.errors.max">Value can't be less than
+                {{motorForm.controls.ratedSpeed.errors.max.max}} rpm.</span>
+        </span>
     </div>
 
     <!-- frame -->
@@ -47,18 +53,30 @@
                 formControlName="windingResistance" id="windingResistance">
             <span class="input-group-addon units">&#x3A9;</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.windingResistance.invalid">
+            <span *ngIf="motorForm.controls.windingResistance.errors.min">Value can't be less than
+                {{motorForm.controls.windingResistance.errors.min.min}} &#x3A9;.</span>
+        </span>
     </div>
     <!-- rotorBars -->
     <div class="form-group" *ngIf="displayOptions.rotorBars">
         <label for="rotorBars">Number of Rotor Bars</label>
         <input type="number" class="form-control" (focus)="focusField('rotorBars')" (input)="save()"
             formControlName="rotorBars" id="rotorBars">
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.rotorBars.invalid">
+            <span *ngIf="motorForm.controls.rotorBars.errors.min">Value can't be less than
+                {{motorForm.controls.rotorBars.errors.min.min}}</span>
+        </span>
     </div>
     <!-- statorSlots -->
     <div class="form-group" *ngIf="displayOptions.statorSlots">
         <label for="statorSlots">Number of Stator Slots</label>
         <input type="number" class="form-control" (focus)="focusField('statorSlots')" (input)="save()"
             formControlName="statorSlots" id="statorSlots">
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.statorSlots.invalid">
+            <span *ngIf="motorForm.controls.statorSlots.errors.min">Value can't be less than
+                {{motorForm.controls.statorSlots.errors.min.min}}</span>
+        </span>
     </div>
     <!-- ampsLockedRotor -->
     <div class="form-group" *ngIf="displayOptions.ampsLockedRotor">
@@ -68,8 +86,12 @@
                 formControlName="ampsLockedRotor" id="ampsLockedRotor">
             <span class="input-group-addon units">A</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.ampsLockedRotor.invalid">
+            <span *ngIf="motorForm.controls.ampsLockedRotor.errors.min">Value can't be less than
+                {{motorForm.controls.ampsLockedRotor.errors.min.min}} A</span>
+        </span>
     </div>
-    
+
     <!-- currentType -->
     <div class="form-group" *ngIf="displayOptions.currentType">
         <label for="currentType">Current Type</label>
