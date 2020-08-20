@@ -18,6 +18,10 @@
                 formControlName="listPrice" id="listPrice">
             <span class="input-group-addon units">$</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.listPrice.invalid">
+            <span *ngIf="motorForm.controls.listPrice.errors.min">Value can't be less than
+                {{motorForm.controls.listPrice.errors.min.min | currency}}.</span>
+        </span>
     </div>
     <!-- warranty TODO: Make date input -->
     <div class="form-group" *ngIf="displayOptions.warranty">
@@ -35,5 +39,9 @@
                 formControlName="directReplacementCost" id="directReplacementCost">
             <span class="input-group-addon units">$</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.directReplacementCost.invalid">
+            <span *ngIf="motorForm.controls.directReplacementCost.errors.min">Value can't be less than
+                {{motorForm.controls.directReplacementCost.errors.min.min | currency}}.</span>
+        </span>
     </div>
 </form>

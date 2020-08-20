@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TorqueData } from '../../../motor-inventory';
 
 @Injectable()
@@ -9,9 +9,9 @@ export class TorqueDataService {
 
   getFormFromTorqueData(torqueData: TorqueData): FormGroup {
     return this.formBuilder.group({
-      torqueFullLoad: [torqueData.torqueFullLoad],
-      torqueBreakDown: [torqueData.torqueBreakDown],
-      torqueLockedRotor: [torqueData.torqueLockedRotor],
+      torqueFullLoad: [torqueData.torqueFullLoad, [Validators.min(0)]],
+      torqueBreakDown: [torqueData.torqueBreakDown, [Validators.min(0)]],
+      torqueLockedRotor: [torqueData.torqueLockedRotor, [Validators.min(0)]],
     });
   }
 

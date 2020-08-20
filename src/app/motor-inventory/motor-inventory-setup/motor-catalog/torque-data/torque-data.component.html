@@ -13,6 +13,12 @@
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.torqueFullLoad.invalid">
+            <span *ngIf="motorForm.controls.torqueFullLoad.errors.min">Value can't be less than
+                {{motorForm.controls.torqueFullLoad.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>.</span>
+        </span>
     </div>
     <!-- torqueBreakDown -->
     <div class="form-group" *ngIf="displayOptions.torqueBreakDown">
@@ -23,6 +29,12 @@
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.torqueBreakDown.invalid">
+            <span *ngIf="motorForm.controls.torqueBreakDown.errors.min">Value can't be less than
+                {{motorForm.controls.torqueBreakDown.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>.</span>
+        </span>
     </div>
     <!-- torqueLockedRotor -->
     <div class="form-group" *ngIf="displayOptions.torqueLockedRotor">
@@ -33,5 +45,11 @@
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.torqueLockedRotor.invalid">
+            <span *ngIf="motorForm.controls.torqueLockedRotor.errors.min">Value can't be less than
+                {{motorForm.controls.torqueLockedRotor.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>.</span>
+        </span>
     </div>
 </form>
