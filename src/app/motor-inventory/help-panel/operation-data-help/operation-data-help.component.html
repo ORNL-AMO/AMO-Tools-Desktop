@@ -1,143 +1,145 @@
-<div class="p-2 pt-3 d-flex flex-column help-info">
-    <h5>
-        Field Measurements Help
+<hr class="my-1 hr-spacer">
+<div class="my-2">
+    <h6>
+        Field Measurements
         <br>
-        <small class="text-muted">Enter measurements taken during motor operation.
-      </small>
-    </h5>
-    <hr class="my-1 hr-spacer">
-    <div class="my-2" *ngIf="focusedField == 'location'">
-        <h6>
-            Location
-            <br>
-            <small class="text-muted">
-                Where the motor can be found in the facility. Use short-named that you will be able to use for other
-                motors.
-            </small>
-        </h6>
+        <small class="text-muted">
+            Enter measurements taken during motor operation.
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'location'">
+    <h6>
+        Location
+        <br>
+        <small class="text-muted">
+            Where the motor can be found in the facility. Use short-named that you will be able to use for other
+            motors.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'annualOperatingHours'">
+    <h6>
+        Operating Hours
+        <br>
+        <small class="text-muted">
+            Annual hours that the motor is in use.
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 hrs/yr
+                    </td>
+                    <td class="w-50 text-center">3600 hrs/yr</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'annualOperatingHours'">
-        <h6>
-            Operating Hours
-            <br>
-            <small class="text-muted">
-                Annual hours that the motor is in use.
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 hrs/yr
-                        </td>
-                        <td class="w-50 text-center">3600 hrs/yr</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+</div>
+<div class="my-2" *ngIf="focusedField == 'averageLoadFactor'">
+    <h6>
+        Average Load Factor
+        <br>
+        <small class="text-muted">
+            Also called percent loaded, this is the ratio between actual load and rated load.
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 %
+                    </td>
+                    <td class="w-50 text-center">100 %</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'averageLoadFactor'">
-        <h6>
-            Average Load Factor
-            <br>
-            <small class="text-muted">
-                Also called percent loaded, this is the ratio between actual load and rated load.
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 %
-                        </td>
-                        <td class="w-50 text-center">100 %</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+</div>
 
-    <div class="my-2" *ngIf="focusedField == 'utilizationFactor'">
-        <h6>
-            Utilization Factor
-            <br>
-            <small class="text-muted">
-                The percentage of operating time the motor is actually loaded. If the operating hours reflect the loaded
-                time of the motor then this value is 100%
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 %
-                        </td>
-                        <td class="w-50 text-center">100 %</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="my-2" *ngIf="focusedField == 'utilizationFactor'">
+    <h6>
+        Utilization Factor
+        <br>
+        <small class="text-muted">
+            The percentage of operating time the motor is actually loaded. If the operating hours reflect the loaded
+            time of the motor then this value is 100%
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 %
+                    </td>
+                    <td class="w-50 text-center">100 %</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'efficiencyAtAverageLoad'">
-        <h6>
-            Efficiency at Average Load
-            <br>
-            <small class="text-muted">
-                The efficiency at average operating power/load
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 %
-                        </td>
-                        <td class="w-50 text-center">100 %</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+</div>
+<div class="my-2" *ngIf="focusedField == 'efficiencyAtAverageLoad'">
+    <h6>
+        Efficiency at Average Load
+        <br>
+        <small class="text-muted">
+            The efficiency at average operating power/load
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 %
+                    </td>
+                    <td class="w-50 text-center">100 %</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+</div>
 
-    <div class="my-2" *ngIf="focusedField == 'powerFactorAtLoad'">
-        <h6>
-            Power Factor at Load
-            <br>
-            <small class="text-muted">
-                The recorded power factor during operation, can be found with an instantaneous clamp on meter or
-                estimated with MEASUR.
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 %
-                        </td>
-                        <td class="w-50 text-center">100 %</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="my-2" *ngIf="focusedField == 'powerFactorAtLoad'">
+    <h6>
+        Power Factor at Load
+        <br>
+        <small class="text-muted">
+            The recorded power factor during operation, can be found with an instantaneous clamp on meter or
+            estimated with MEASUR.
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 %
+                    </td>
+                    <td class="w-50 text-center">100 %</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

@@ -1,41 +1,44 @@
-<div class="p-2 pt-3 d-flex flex-column help-info">
-    <h5>
-        Purchase Information Help
+<hr class="my-1 hr-spacer">
+<div class="my-2">
+    <h6>
+        Purchase Information
         <br>
-        <small class="text-muted">Enter catalog and cost information used for procurement of the motor.
-      </small>
-    </h5>
-    <hr class="my-1 hr-spacer">
-    <div class="my-2" *ngIf="focusedField == 'catalogId'">
-        <h6>
-            Catalog ID
-            <br>
-            <small class="text-muted">Catalog information for purchasing the motor
-            </small>
-        </h6>
-    </div>
-    <div class="my-2" *ngIf="focusedField == 'listPrice'">
-        <h6>
-            List Price
-            <br>
-            <small class="text-muted">The price paid for the motor
-            </small>
-        </h6>
-    </div>
-    <div class="my-2" *ngIf="focusedField == 'warranty'">
-        <h6>
-            Warranty
-            <br>
-            <small class="text-muted">The date when the motor warranty will end
-            </small>
-        </h6>
-    </div>
-    <div class="my-2" *ngIf="focusedField == 'directReplacementCost'">
-        <h6>
-            Direct Replacement Cost
-            <br>
-            <small class="text-muted">The cost to replace the motor with an identical motor
-            </small>
-        </h6>
-    </div>
+        <small class="text-muted">
+            Enter catalog and cost information used for procurement of the motor.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'catalogId'">
+    <h6>
+        Catalog ID
+        <br>
+        <small class="text-muted">Catalog information for purchasing the motor
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'listPrice'">
+    <h6>
+        List Price
+        <br>
+        <small class="text-muted">The price paid for the motor
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'warranty'">
+    <h6>
+        Warranty
+        <br>
+        <small class="text-muted">The date when the motor warranty will end
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'directReplacementCost'">
+    <h6>
+        Direct Replacement Cost
+        <br>
+        <small class="text-muted">The cost to replace the motor with an identical motor
+        </small>
+    </h6>
 </div>

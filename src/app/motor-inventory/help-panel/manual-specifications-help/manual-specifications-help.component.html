@@ -1,191 +1,193 @@
-<div class="p-2 pt-3 d-flex flex-column help-info">
-    <h5>
-        Manual Specification Help
+<hr class="my-1 hr-spacer">
+<div class="my-2">
+    <h6>
+        Manual Specification
         <br>
-        <small class="text-muted">Enter detailed information found from the motor's manual or the manufacturer.
+        <small class="text-muted">
+            Enter detailed information found from the motor's manual or the manufacturer.
+            <hr>
         </small>
-    </h5>
-    <hr class="my-1 hr-spacer">
-    <div class="my-2" *ngIf="focusedField == 'synchronousSpeed'">
-        <h6>
-            Synchronous Speed
-            <br>
-            <small class="text-muted">
-                The is the ideal speed of the motor, the speed at which the magnetic field runs. This is given by
-                60*frequency/number of pole pairs
-                <hr> 60 Hz options include
-                <u>900</u>,
-                <u>1200</u>,
-                <u>1800</u>, or
-                <u>3600</u>
-                <hr> 50 Hz options include
-                <u>1000</u>,
-                <u>1500</u>, or
-                <u>3000</u>
-            </small>
-        </h6>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'synchronousSpeed'">
+    <h6>
+        Synchronous Speed
+        <br>
+        <small class="text-muted">
+            The is the ideal speed of the motor, the speed at which the magnetic field runs. This is given by
+            60*frequency/number of pole pairs
+            <hr> 60 Hz options include
+            <u>900</u>,
+            <u>1200</u>,
+            <u>1800</u>, or
+            <u>3600</u>
+            <hr> 50 Hz options include
+            <u>1000</u>,
+            <u>1500</u>, or
+            <u>3000</u>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'ratedSpeed'">
+    <h6>
+        Rated Speed
+        <br>
+        <small class="text-muted">
+            The rotational speed where the motor gives full power. This is less than synchronous speed
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 rpm</td>
+                    <td class="w-50 text-center">3600 rpm</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'ratedSpeed'">
-        <h6>
-            Rated Speed
-            <br>
-            <small class="text-muted">
-                The rotational speed where the motor gives full power. This is less than synchronous speed
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 rpm</td>
-                        <td class="w-50 text-center">3600 rpm</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+</div>
+<div class="my-2" *ngIf="focusedField == 'frame'">
+    <h6>
+        Frame
+        <br>
+        <small class="text-muted">
+            The demission information of the motor frame. This is an alphanumeric code referring to the frame type
+            and size.
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'shaftPosiion'">
+    <h6>
+        Shaft Orientation
+        <br>
+        <small class="text-muted">
+            The physical orientation of the motor shaft.
+            <hr> Options are
+            <u>Vertical</u> or
+            <u>Horizontal</u>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'windingResistance'">
+    <h6>
+        Winding Resistance
+        <br>
+        <small class="text-muted">
+            It is the electrical resistance (measured in ohms) between two of the three winding phases of an
+            induction motor.  The goal is for the resistance between all of the phases to be the same to keep the
+            developed torque the same.
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 &#x3A9;</td>
+                    <td class="w-50 text-center">&mdash;</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'frame'">
-        <h6>
-            Frame
-            <br>
-            <small class="text-muted">
-                The demission information of the motor frame. This is an alphanumeric code referring to the frame type
-                and size.
-                <hr>
-            </small>
-        </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'rotorBars'">
+    <h6>
+        Number of Rotor Bars
+        <br>
+        <small class="text-muted">
+            The number of rotor bars that run through the motor. This can be found in the manual, directly
+            contacting the manufacturer, or by visual inspection of the motor.
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0</td>
+                    <td class="w-50 text-center">&mdash;</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'shaftPosiion'">
-        <h6>
-            Shaft Orientation
-            <br>
-            <small class="text-muted">
-                The physical orientation of the motor shaft.
-                <hr> Options are
-                <u>Vertical</u> or
-                <u>Horizontal</u>
-            </small>
-        </h6>
+    <hr>
+    <img class="p-1 motor-help-diagram" src="assets/images/motor-help-diagram.png">
+</div>
+<div class="my-2" *ngIf="focusedField == 'statorSlots'">
+    <h6>
+        Number of Stator Slots
+        <br>
+        <small class="text-muted">
+            The number of stator slots that runt through the motor. This can be found in the manual, directly
+            contacting the manufacturer, or by visual inspection of the motor.
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0</td>
+                    <td class="w-50 text-center">&mdash;</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'windingResistance'">
-        <h6>
-            Winding Resistance
-            <br>
-            <small class="text-muted">
-                It is the electrical resistance (measured in ohms) between two of the three winding phases of an
-                induction motor.  The goal is for the resistance between all of the phases to be the same to keep the
-                developed torque the same.
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 &#x3A9;</td>
-                        <td class="w-50 text-center">&mdash;</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="my-2" *ngIf="focusedField == 'rotorBars'">
-        <h6>
-            Number of Rotor Bars
-            <br>
-            <small class="text-muted">
-                The number of rotor bars that run through the motor. This can be found in the manual, directly
-                contacting the manufacturer, or by visual inspection of the motor.
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0</td>
-                        <td class="w-50 text-center">&mdash;</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <hr>
-        <img class="p-1 motor-help-diagram" src="assets/images/motor-help-diagram.png">
-    </div>
-    <div class="my-2" *ngIf="focusedField == 'statorSlots'">
-        <h6>
-            Number of Stator Slots
-            <br>
-            <small class="text-muted">
-                The number of stator slots that runt through the motor. This can be found in the manual, directly
-                contacting the manufacturer, or by visual inspection of the motor.
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0</td>
-                        <td class="w-50 text-center">&mdash;</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <hr>
-        <img class="p-1 motor-help-diagram" src="assets/images/motor-help-diagram.png">
-    </div>
-    <div class="my-2" *ngIf="focusedField == 'ampsLockedRotor'">
-        <h6>
-            Locked Rotor Amps
-            <br>
-            <small class="text-muted">
-                The current drawn during a motor standstill
-                <hr>
-            </small>
-        </h6>
-    </div>
-    <div class="my-2" *ngIf="focusedField == 'currentType'">
-        <h6>
-            Current Type
-            <br>
-            <small class="text-muted">
-                The type of current connection to your motor, direct current or alternating current
-                <hr> Options are
-                <u>AC</u> or
-                <u>DC</u>
-            </small>
-        </h6>
-    </div>
-    <div class="my-2" *ngIf="focusedField == 'poles'">
-        <h6>
-            Poles
-            <br>
-            <small class="text-muted">
-                The number of magnetic poles in the motor
-                <hr> Options are
-                <u>2</u>,
-                <u>4</u>,
-                <u>6</u>, or
-                <u>8</u>
-            </small>
-        </h6>
-    </div>
+    <hr>
+    <img class="p-1 motor-help-diagram" src="assets/images/motor-help-diagram.png">
+</div>
+<div class="my-2" *ngIf="focusedField == 'ampsLockedRotor'">
+    <h6>
+        Locked Rotor Amps
+        <br>
+        <small class="text-muted">
+            The current drawn during a motor standstill
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'currentType'">
+    <h6>
+        Current Type
+        <br>
+        <small class="text-muted">
+            The type of current connection to your motor, direct current or alternating current
+            <hr> Options are
+            <u>AC</u> or
+            <u>DC</u>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'poles'">
+    <h6>
+        Poles
+        <br>
+        <small class="text-muted">
+            The number of magnetic poles in the motor
+            <hr> Options are
+            <u>2</u>,
+            <u>4</u>,
+            <u>6</u>, or
+            <u>8</u>
+        </small>
+    </h6>
 </div>

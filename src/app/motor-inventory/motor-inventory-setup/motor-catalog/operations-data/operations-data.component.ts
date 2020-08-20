@@ -46,6 +46,13 @@ export class OperationsDataComponent implements OnInit {
 
   toggleForm(){
     this.displayForm = !this.displayForm;
+    this.focusOut();
   }
+
+  focusOut() {
+    this.motorInventoryService.focusedDataGroup.next('operation-data')
+    this.motorInventoryService.focusedField.next('default');
+  }
+
 
 }

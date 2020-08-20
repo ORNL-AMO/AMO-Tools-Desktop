@@ -1,157 +1,159 @@
-<div class="p-2 pt-3 d-flex flex-column help-info">
-    <h5>
-        Replacement Information Help
+<hr class="my-1 hr-spacer">
+<div class="my-2">
+    <h6>
+        Replacement Information
         <br>
-        <small class="text-muted">Enter information for a potential motor replacemnt, used in the batch analysis.
+        <small class="text-muted">
+            Enter information for a potential motor replacemnt, used in the batch analysis.
+            <hr>
         </small>
-    </h5>
-    <hr class="my-1 hr-spacer">
-    <div class="my-2" *ngIf="focusedField == 'modifiedCost'">
-        <h6>
-            Modified Cost
-            <br>
-            <small class="text-muted">
-                The total cost of the replacement motor.
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">{{0 | currency}}</td>
-                        <td class="w-50 text-center">&mdash;</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'modifiedCost'">
+    <h6>
+        Modified Cost
+        <br>
+        <small class="text-muted">
+            The total cost of the replacement motor.
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">{{0 | currency}}</td>
+                    <td class="w-50 text-center">&mdash;</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'modifiedPower'">
-        <h6>
-            Modified Power
-            <br>
-            <small class="text-muted">
-                The rated power of the replacement motor.
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0
-                            <span *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
-                            <span *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
-                        </td>
-                        <td class="w-50 text-center">&mdash;</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+</div>
+<div class="my-2" *ngIf="focusedField == 'modifiedPower'">
+    <h6>
+        Modified Power
+        <br>
+        <small class="text-muted">
+            The rated power of the replacement motor.
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0
+                        <span *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
+                        <span *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
+                    </td>
+                    <td class="w-50 text-center">&mdash;</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'modifiedEfficiency'">
-        <h6>
-            Modified Efficiency
-            <br>
-            <small class="text-muted">
-                The nominal efficiency of the replacement motor
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 %</td>
-                        <td class="w-50 text-center">100 %</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+</div>
+<div class="my-2" *ngIf="focusedField == 'modifiedEfficiency'">
+    <h6>
+        Modified Efficiency
+        <br>
+        <small class="text-muted">
+            The nominal efficiency of the replacement motor
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 %</td>
+                    <td class="w-50 text-center">100 %</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'modifiedPercentLoad'">
-        <h6>
-            Modified Percent Load
-            <br>
-            <small class="text-muted">
-                The expected load factor of the replacement motor. Note if you downsize the motor, this will be
-                different than the current percent load.
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 %</td>
-                        <td class="w-50 text-center">100 %</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+</div>
+<div class="my-2" *ngIf="focusedField == 'modifiedPercentLoad'">
+    <h6>
+        Modified Percent Load
+        <br>
+        <small class="text-muted">
+            The expected load factor of the replacement motor. Note if you downsize the motor, this will be
+            different than the current percent load.
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 %</td>
+                    <td class="w-50 text-center">100 %</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'rewindCost'">
-        <h6>
-            Rewind Cost
-            <br>
-            <small class="text-muted">
-                The total cost to rewind the motor
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 %</td>
-                        <td class="w-50 text-center">&mdash;</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+</div>
+<div class="my-2" *ngIf="focusedField == 'rewindCost'">
+    <h6>
+        Rewind Cost
+        <br>
+        <small class="text-muted">
+            The total cost to rewind the motor
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 %</td>
+                    <td class="w-50 text-center">&mdash;</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="my-2" *ngIf="focusedField == 'rewindEfficiencyLoss'">
-        <h6>
-            Rewind Efficiency Loss
-            <br>
-            <small class="text-muted">
-                The efficiency reduction due to the motor being rewound
-                <hr>
-            </small>
-        </h6>
-        <div class="w-100 justify-content-center">
-            <table class="table table-hover table-striped">
-                <tbody>
-                    <tr>
-                        <th class="w-50 text-center">Minimum</th>
-                        <th class="w-50 text-center">Maximum</th>
-                    </tr>
-                    <tr>
-                        <td class="w-50 text-center">0 %</td>
-                        <td class="w-50 text-center">&mdash;</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+</div>
+<div class="my-2" *ngIf="focusedField == 'rewindEfficiencyLoss'">
+    <h6>
+        Rewind Efficiency Loss
+        <br>
+        <small class="text-muted">
+            The efficiency reduction due to the motor being rewound
+            <hr>
+        </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+            <tbody>
+                <tr>
+                    <th class="w-50 text-center">Minimum</th>
+                    <th class="w-50 text-center">Maximum</th>
+                </tr>
+                <tr>
+                    <td class="w-50 text-center">0 %</td>
+                    <td class="w-50 text-center">&mdash;</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

@@ -61,6 +61,12 @@ export class NameplateDataComponent implements OnInit {
 
   toggleForm() {
     this.displayForm = !this.displayForm;
+    this.focusOut();
+  }
+
+  focusOut() {
+    this.motorInventoryService.focusedDataGroup.next('nameplate-data')
+    this.motorInventoryService.focusedField.next('default');
   }
 
   //TODO: Update nominalEfficiency?

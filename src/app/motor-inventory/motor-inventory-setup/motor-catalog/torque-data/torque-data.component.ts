@@ -54,5 +54,11 @@ export class TorqueDataComponent implements OnInit {
 
   toggleForm() {
     this.displayForm = !this.displayForm;
+    this.focusOut();
+  }
+
+  focusOut() {
+    this.motorInventoryService.focusedDataGroup.next('other')
+    this.motorInventoryService.focusedField.next('default');
   }
 }

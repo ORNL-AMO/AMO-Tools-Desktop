@@ -4,7 +4,19 @@
             Help
         </div>
     </div>
-    <div *ngIf="setupTab == 'motor-properties' || setupTab == 'motor-catalog'">
+    <div class="p-2 pt-3" *ngIf="setupTab == 'motor-properties' || setupTab == 'motor-catalog'">
+        <h5 *ngIf="setupTab == 'motor-catalog'">
+            Motor Catalog Help
+            <br>
+            <small class="text-muted">Add motors and fill out the property information for departments.
+            </small>
+        </h5>
+        <h5 *ngIf="setupTab == 'motor-properties'">
+            Motor Properties Help
+            <br>
+            <small class="text-muted">Select motor properties you want to track in this motor inventory.
+            </small>
+        </h5>
         <app-batch-analysis-help *ngIf="focusedDataGroup == 'batch-analysis'"></app-batch-analysis-help>
         <app-load-characteristics-help *ngIf="focusedDataGroup == 'load-characteristics'"></app-load-characteristics-help>
         <app-manual-specifications-help *ngIf="focusedDataGroup == 'manual-specifications'"></app-manual-specifications-help>

@@ -46,6 +46,12 @@ export class LoadCharacteristicDataComponent implements OnInit {
 
   toggleForm(){
     this.displayForm = !this.displayForm;
+    this.focusOut();
+  }
+
+  focusOut() {
+    this.motorInventoryService.focusedDataGroup.next('load-characteristics')
+    this.motorInventoryService.focusedField.next('default');
   }
 
 }

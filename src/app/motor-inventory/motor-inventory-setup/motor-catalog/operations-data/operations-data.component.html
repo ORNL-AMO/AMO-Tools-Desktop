@@ -8,7 +8,7 @@
     <!-- location -->
     <div class="form-group" *ngIf="displayOptions.location">
         <label for="location">Location</label>
-        <input type="text" class="form-control" (focus)="focusField('location')" (input)="save()"
+        <input type="text" class="form-control" (blur)="focusOut()" (focus)="focusField('location')" (input)="save()"
             formControlName="location" id="location">
     </div>
 
@@ -16,8 +16,8 @@
     <div class="form-group" *ngIf="displayOptions.annualOperatingHours">
         <label for="annualOperatingHours">Operating Hours</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('annualOperatingHours')" (input)="save()"
-                formControlName="annualOperatingHours" id="annualOperatingHours">
+            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('annualOperatingHours')"
+                (input)="save()" formControlName="annualOperatingHours" id="annualOperatingHours">
             <span class="input-group-addon units">hrs/yr</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.annualOperatingHours.invalid">
@@ -31,8 +31,8 @@
     <div class="form-group" *ngIf="displayOptions.averageLoadFactor">
         <label for="averageLoadFactor">Average Load Factor</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('averageLoadFactor')" (input)="save()"
-                formControlName="averageLoadFactor" id="averageLoadFactor">
+            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('averageLoadFactor')"
+                (input)="save()" formControlName="averageLoadFactor" id="averageLoadFactor">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.averageLoadFactor.invalid">
@@ -46,8 +46,8 @@
     <div class="form-group" *ngIf="displayOptions.utilizationFactor">
         <label for="utilizationFactor">Utilization Factor</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('utilizationFactor')" (input)="save()"
-                formControlName="utilizationFactor" id="utilizationFactor">
+            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('utilizationFactor')"
+                (input)="save()" formControlName="utilizationFactor" id="utilizationFactor">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.utilizationFactor.invalid">
@@ -61,7 +61,8 @@
     <div class="form-group" *ngIf="displayOptions.efficiencyAtAverageLoad">
         <label for="efficiencyAtAverageLoad">Efficiency at Average Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('efficiencyAtAverageLoad')" (input)="save()"
+            <input type="number" class="form-control" (blur)="focusOut()"
+                (focus)="focusField('efficiencyAtAverageLoad')" (input)="save()"
                 formControlName="efficiencyAtAverageLoad" id="efficiencyAtAverageLoad">
             <span class="input-group-addon units">%</span>
         </div>
@@ -76,8 +77,8 @@
     <div class="form-group" *ngIf="displayOptions.powerFactorAtLoad">
         <label for="powerFactorAtLoad">Power Factor at Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('powerFactorAtLoad')" (input)="save()"
-                formControlName="powerFactorAtLoad" id="powerFactorAtLoad">
+            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('powerFactorAtLoad')"
+                (input)="save()" formControlName="powerFactorAtLoad" id="powerFactorAtLoad">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactorAtLoad.invalid">

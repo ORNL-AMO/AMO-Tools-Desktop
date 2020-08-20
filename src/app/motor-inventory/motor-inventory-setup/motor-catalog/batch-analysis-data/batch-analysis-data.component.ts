@@ -51,7 +51,13 @@ export class BatchAnalysisDataComponent implements OnInit {
     this.motorInventoryService.focusedField.next(str);
   }
 
-  toggleForm(){
+  toggleForm() {
     this.displayForm = !this.displayForm;
+    this.focusOut();
+  }
+
+  focusOut() {
+    this.motorInventoryService.focusedDataGroup.next('batch-analysis')
+    this.motorInventoryService.focusedField.next('default');
   }
 }
