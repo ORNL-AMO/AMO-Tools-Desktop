@@ -7,8 +7,7 @@ import { Settings } from '../../../shared/models/settings';
   styleUrls: ['./inventory-summary-graphs.component.css']
 })
 export class InventorySummaryGraphsComponent implements OnInit {
-  @Input()
-  settings: Settings;
+
   constructor() { }
 
   ngOnInit(): void {

@@ -12,9 +12,8 @@ import * as _ from 'lodash';
   styleUrls: ['./rated-power-dropdown.component.css']
 })
 export class RatedPowerDropdownComponent implements OnInit {
-  @Input()
-  settings: Settings;
 
+  settings: Settings;
   ratedPowerOptions: Array<{ value: number, numMotors: number }>;
   filterInventorySummarySub: Subscription;
   filterInventorySummary: FilterInventorySummary;
@@ -23,6 +22,7 @@ export class RatedPowerDropdownComponent implements OnInit {
   constructor(private motorInventoryService: MotorInventoryService, private motorInventorySummaryService: MotorInventorySummaryService, private inventorySummaryGraphService: InventorySummaryGraphsService) { }
 
   ngOnInit(): void {
+    this.settings = this.motorInventoryService.settings.getValue();
     this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
       this.filterInventorySummary = val;
       this.setOptions();

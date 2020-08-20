@@ -1,12 +1,14 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { MotorInventoryService } from './motor-inventory.service';
 import { Subscription } from 'rxjs';
-import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
-import { Assessment } from '../shared/models/assessment';
 import { MotorInventoryData } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { ActivatedRoute } from '@angular/router';
+import { InventoryDbService } from '../indexedDb/inventory-db.service';
+import { InventoryItem } from '../shared/models/inventory/inventory';
+import { SettingsService } from '../settings/settings.service';
 
 declare const packageJson;
 
@@ -30,28 +32,27 @@ export class MotorInventoryComponent implements OnInit {
   mainTabSub: Subscription;
 
   motorInventoryDataSub: Subscription;
-  motorInventoryAssessment: Assessment;
-  settings: Settings;
-  constructor(private motorInventoryService: MotorInventoryService, private assessmentDbService: AssessmentDbService,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
+  motorInventoryItem: InventoryItem;
+  constructor(private motorInventoryService: MotorInventoryService, private activatedRoute: ActivatedRoute,
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService,
+    private settingsService: SettingsService) { }
 
   ngOnInit() {
-    this.settings = this.settingsDbService.globalSettings;
-    this.setMotorInventoryAssessment();
-    if (this.motorInventoryAssessment) {
-      this.motorInventoryService.motorInventoryData.next(this.motorInventoryAssessment.motorInventory);
-    }
-    
+    this.activatedRoute.params.subscribe(params => {
+      let tmpItemId = Number(params['id']);
+      this.motorInventoryItem = this.inventoryDbService.getById(tmpItemId);
+      let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
+      console.log(settings);
+      this.motorInventoryService.settings.next(settings);
+      this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
+    });
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
     });
     this.setupTabSub = this.motorInventoryService.setupTab.subscribe(val => {
       this.getContainerHeight();
-
     });
-
-
     this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(data => {
       this.saveDbData(data);
     });
@@ -74,7 +75,7 @@ export class MotorInventoryComponent implements OnInit {
         let contentHeight = this.content.nativeElement.clientHeight;
         let headerHeight = this.header.nativeElement.clientHeight;
         let footerHeight = 0;
-        if(this.footer){
+        if (this.footer) {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
@@ -82,42 +83,12 @@ export class MotorInventoryComponent implements OnInit {
     }
   }
 
-  setMotorInventoryAssessment() {
-    this.motorInventoryAssessment = this.assessmentDbService.getByDirectoryId(1).find(assessment => { return assessment.motorInventory != undefined });
-  }
-
   saveDbData(inventoryData: MotorInventoryData) {
-    if (this.motorInventoryAssessment) {
-      this.motorInventoryAssessment.motorInventory = inventoryData;
-      this.indexedDbService.putAssessment(this.motorInventoryAssessment).then(results => {
-        this.assessmentDbService.setAll().then(() => {
-        });
-      });
-    } else {
-      let newAssessment: Assessment = {
-        name: null,
-        createdDate: new Date(),
-        modifiedDate: new Date(),
-        type: 'motorInventory',
-        appVersion: packageJson.version,
-        motorInventory: inventoryData,
-        directoryId: 1
-      };
-      this.indexedDbService.addAssessment(newAssessment).then(assessmentId => {
-        this.assessmentDbService.setAll().then(() => {
-          this.setMotorInventoryAssessment();
-        });
-      });
-    }
-  }
-
-  resetData() {
-    this.indexedDbService.deleteAssessment(this.motorInventoryAssessment.id).then(results => {
-      this.assessmentDbService.setAll().then(() => {
-        this.motorInventoryAssessment = undefined;
-        let inventoryData: MotorInventoryData = this.motorInventoryService.initInventoryData();
-        this.motorInventoryService.motorInventoryData.next(inventoryData);
-      })
-    })
+    this.motorInventoryItem.modifiedDate = new Date();
+    this.motorInventoryItem.appVersion = packageJson.version;
+    this.motorInventoryItem.motorInventoryData = inventoryData;
+    this.indexedDbService.putInventoryItem(this.motorInventoryItem).then(() => {
+      this.inventoryDbService.setAll();
+    });
   }
 }

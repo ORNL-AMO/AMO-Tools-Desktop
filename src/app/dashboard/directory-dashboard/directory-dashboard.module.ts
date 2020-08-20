@@ -29,6 +29,7 @@ import { PreAssessmentItemComponent } from './directory-items/pre-assessment-ite
 import { AddPreAssessmentItemComponent } from './directory-items/add-pre-assessment-item/add-pre-assessment-item.component';
 import { ContentControlsComponent } from './directory-dashboard-menu/content-controls/content-controls.component';
 import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
+import { InventoryItemComponent } from './directory-items/inventory-item/inventory-item.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
      DirectoryItemComponent,
      PreAssessmentItemComponent,
      AddPreAssessmentItemComponent,
-     ContentControlsComponent
+     ContentControlsComponent,
+     InventoryItemComponent
     ],
   imports: [
     CommonModule,

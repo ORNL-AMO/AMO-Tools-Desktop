@@ -3,7 +3,6 @@ import { PHAST } from './phast/phast';
 import { FSAT } from './fans';
 import { SSMT } from './steam/ssmt';
 import { TreasureHunt } from './treasure-hunt';
-import { MotorInventoryData } from '../../motor-inventory/motor-inventory';
 
 export interface Assessment {
   id?: number,
@@ -13,7 +12,7 @@ export interface Assessment {
   fsat?: FSAT,
   ssmt?: SSMT,
   treasureHunt?: TreasureHunt,
-  motorInventory?: MotorInventoryData,
+  // motorInventory?: MotorInventoryData,
   createdDate?: Date,
   modifiedDate?: Date,
   type: string;

@@ -15,6 +15,7 @@ import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { MockSsmt, MockSsmtSettings } from '../../../core/mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from '../../../core/mockTreasureHunt';
 import { DashboardService } from '../../../dashboard/dashboard.service';
+import { InventoryDbService } from '../../../indexedDb/inventory-db.service';
 @Component({
   selector: 'app-reset-data-modal',
   templateUrl: './reset-data-modal.component.html',
@@ -31,7 +32,8 @@ export class ResetDataModalComponent implements OnInit {
   resetUserAssessments: boolean = false;
   resetCustomMaterials: boolean = false;
   deleting: boolean = false;
-  constructor(private dashboardService: DashboardService, private calculatorDbService: CalculatorDbService, private coreService: CoreService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService) { }
+  constructor(private dashboardService: DashboardService, private calculatorDbService: CalculatorDbService, private coreService: CoreService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService,
+    private inventoryDbService: InventoryDbService) { }
 
   ngOnInit() {
   }
@@ -344,8 +346,10 @@ export class ResetDataModalComponent implements OnInit {
       this.assessmentDbService.setAll().then(() => {
         this.settingsDbService.setAll().then(() => {
           this.calculatorDbService.setAll().then(() => {
-            this.dashboardService.updateDashboardData.next(true);
-            this.hideResetSystemSettingsModal();
+            this.inventoryDbService.setAll().then(() => {
+              this.dashboardService.updateDashboardData.next(true);
+              this.hideResetSystemSettingsModal();
+            })
           });
         });
       });

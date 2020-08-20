@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MotorItem, TorqueOptions } from '../../../motor-inventory';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,8 @@ import { Settings } from '../../../../shared/models/settings';
   styleUrls: ['./torque-data.component.css']
 })
 export class TorqueDataComponent implements OnInit {
-  @Input()
+
+  settingsSub: Subscription;
   settings: Settings;
   
   motorForm: FormGroup;
@@ -24,6 +25,9 @@ export class TorqueDataComponent implements OnInit {
     private torqueDataService: TorqueDataService) { }
 
   ngOnInit(): void {
+    this.settingsSub = this.motorInventoryService.settings.subscribe(val => {
+      this.settings = val;
+    });
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.torqueDataService.getFormFromTorqueData(selectedMotor.torqueData);
@@ -34,6 +38,7 @@ export class TorqueDataComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedMotorItemSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   save() {

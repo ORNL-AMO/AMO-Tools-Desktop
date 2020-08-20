@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ImportExportAssessment, ImportExportDirectory, ImportExportData } from './importExportModel';
+import { ImportExportAssessment, ImportExportDirectory, ImportExportData, ImportExportInventory } from './importExportModel';
 import { Directory } from '../../shared/models/directory';
 import { Assessment } from '../../shared/models/assessment';
 import * as _ from 'lodash';
@@ -9,8 +9,9 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
-import { BehaviorSubject } from 'rxjs';
 import { SSMT } from '../../shared/models/steam/ssmt';
+import { InventoryItem } from '../../shared/models/inventory/inventory';
+import { InventoryDbService } from '../../indexedDb/inventory-db.service';
 
 @Injectable()
 export class ExportService {
@@ -19,23 +20,25 @@ export class ExportService {
   exportData: ImportExportData;
   exportDirectories: Array<ImportExportDirectory>;
   exportAssessments: Array<ImportExportAssessment>;
-  // workingDirId: number;
-  // selectAllFolder: boolean;
-  constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService) {
-    // this.exportAllClick = new BehaviorSubject<boolean>(false);
+  exportInventories: Array<ImportExportInventory>;
+  constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
+    private inventoryDbService: InventoryDbService) {
   }
 
 
   getSelected(dir: Directory, isSelectAll: boolean): ImportExportData {
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDirectories = new Array<ImportExportDirectory>();
+    this.exportInventories = new Array<ImportExportInventory>();
     let assessments: Array<Assessment>;
     let subDirs: Array<Directory>;
     let calculators: Array<Calculator> = new Array<Calculator>();
+    let inventories: Array<InventoryItem> = new Array<InventoryItem>();
     if (!isSelectAll) {
       assessments = _.filter(dir.assessments, (assessment) => { return assessment.selected === true; });
       subDirs = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
       calculators = _.filter(dir.calculators, (calc) => { return calc.selected === true; });
+      inventories = _.filter(dir.inventories, (inventory) => { return inventory.selected === true });
     } else {
       subDirs = [dir];
     }
@@ -50,14 +53,23 @@ export class ExportService {
     if (subDirs) {
       subDirs.forEach(dir => {
         this.addDirectoryObj(dir);
-        let objs = this.getSubDirData(dir, this.exportAssessments);
+        let objs = this.getSubDirAssessmentData(dir, this.exportAssessments);
         this.exportAssessments.concat(objs);
+        let inventoryObjs = this.getSubDirInventoryData(dir, this.exportInventories);
+        this.exportInventories.concat(inventoryObjs);
+      });
+    }
+    if (inventories) {
+      inventories.forEach(inventory => {
+        let obj = this.getInventoryObj(inventory);
+        this.exportInventories.push(obj);
       });
     }
     this.exportData = {
       directories: this.exportDirectories,
       assessments: this.exportAssessments,
-      calculators: calculators
+      calculators: calculators,
+      inventories: this.exportInventories
     };
     return this.exportData;
   }
@@ -110,13 +122,13 @@ export class ExportService {
     }
   }
 
-  getSubDirData(subDir: Directory, assessmentObjs: Array<ImportExportAssessment>) {
+  getSubDirAssessmentData(subDir: Directory, assessmentObjs: Array<ImportExportAssessment>): Array<ImportExportAssessment> {
     this.addDirectoryObj(subDir);
-    let subDirAssessments = this.getSubDirSelected(subDir, assessmentObjs);
+    let subDirAssessments: Array<ImportExportAssessment> = this.getSubDirSelectedAssessments(subDir, assessmentObjs);
     return subDirAssessments;
   }
 
-  getSubDirSelected(dir: Directory, assessmentObjs: Array<ImportExportAssessment>) {
+  getSubDirSelectedAssessments(dir: Directory, assessmentObjs: Array<ImportExportAssessment>): Array<ImportExportAssessment> {
     let assessments = this.assessmentDbService.getByDirectoryId(dir.id);
     if (assessments) {
       assessments.forEach(assessment => {
@@ -128,11 +140,43 @@ export class ExportService {
     if (subDirs) {
       subDirs.forEach(subDir => {
         this.addDirectoryObj(subDir);
-        let objs = this.getSubDirSelected(subDir, assessmentObjs);
+        let objs = this.getSubDirSelectedAssessments(subDir, assessmentObjs);
         assessmentObjs.concat(objs);
       });
     }
     return assessmentObjs;
   }
 
+  getSubDirInventoryData(subDir: Directory, inventoryObjs: Array<ImportExportInventory>): Array<ImportExportInventory> {
+    this.addDirectoryObj(subDir);
+    let subDirInventories: Array<ImportExportInventory> = this.getSubDirSelectedInventory(subDir, inventoryObjs);
+    return subDirInventories;
+  }
+
+  getSubDirSelectedInventory(dir: Directory, inventoryObjs: Array<ImportExportInventory>): Array<ImportExportInventory> {
+    let inventories = this.inventoryDbService.getByDirectoryId(dir.id);
+    if (inventories) {
+      inventories.forEach(inventory => {
+        let obj = this.getInventoryObj(inventory);
+        inventoryObjs.push(obj);
+      });
+    }
+    let subDirs = this.directoryDbService.getSubDirectoriesById(dir.id);
+    if (subDirs) {
+      subDirs.forEach(subDir => {
+        this.addDirectoryObj(subDir);
+        let objs = this.getSubDirSelectedInventory(subDir, inventoryObjs);
+        inventoryObjs.concat(objs);
+      });
+    }
+    return inventoryObjs;
+  }
+
+
+  getInventoryObj(inventory: InventoryItem): ImportExportInventory {
+    return {
+      inventoryItem: inventory,
+      settings: this.settingsDbService.getByInventoryId(inventory)
+    }
+  }
 }

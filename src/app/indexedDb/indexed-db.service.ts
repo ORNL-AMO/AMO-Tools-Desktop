@@ -7,10 +7,11 @@ import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, Sol
 import { UpdateDataService } from '../shared/helper-services/update-data.service';
 import { Calculator } from '../shared/models/calculators';
 import { LogToolDbData } from '../log-tool/log-tool-models';
+import { InventoryItem } from '../shared/models/inventory/inventory';
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 5,
+  version: 6,
   instance: {},
   storeNames: {
     assessments: 'assessments',
@@ -24,7 +25,8 @@ var myDb: any = {
     flueGasMaterial: 'flueGasMaterial',
     solidLiquidFlueGasMaterial: 'solidLiquidFlueGasMaterial',
     calculator: 'calculator',
-    logTool: 'logTool'
+    logTool: 'logTool',
+    inventoryItems: 'inventoryItems'
   },
   defaultErrorHandler: function (e) {
     //todo: implement error handling
@@ -85,6 +87,7 @@ export class IndexedDbService {
           });
           settingsObjStore.createIndex('directoryId', 'directoryId', { unique: false });
           settingsObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
+          settingsObjStore.createIndex('inventoryId', 'inventoryId', {unique: false});
         }
         //gasLoadChargeMaterial
         if (!newVersion.objectStoreNames.contains(myDb.storeNames.gasLoadChargeMaterial)) {
@@ -161,8 +164,8 @@ export class IndexedDbService {
           calculatorObjStore.createIndex('id', 'id', { unique: false });
           calculatorObjStore.createIndex('directoryId', 'directoryId', { unique: false });
           calculatorObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
-        }      
-          //calculator
+        }
+        //calculator
         if (!newVersion.objectStoreNames.contains(myDb.storeNames.logTool)) {
           console.log('creating logTool store...');
           let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.logTool, {
@@ -170,6 +173,15 @@ export class IndexedDbService {
             keyPath: 'id'
           });
           calculatorObjStore.createIndex('id', 'id', { unique: false });
+        }
+        //inventoryItems
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.inventoryItems)) {
+          console.log('creating inventoryItems store...');
+          let inventoryItemsObjStore = newVersion.createObjectStore(myDb.storeNames.inventoryItems, {
+            autoIncrement: true,
+            keyPath: 'id'
+          });
+          inventoryItemsObjStore.createIndex('directoryId', 'directoryId', { unique: false });
         }
       };
       myDb.setDefaultErrorHandler(this.request, myDb);
@@ -1410,4 +1422,98 @@ export class IndexedDbService {
       };
     });
   }
+
+  //inventoryItems
+  addInventoryItem(inventoryItem: InventoryItem): Promise<any> {
+    inventoryItem.createdDate = new Date();
+    inventoryItem.modifiedDate = new Date();
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.inventoryItems);
+      let addRequest = store.add(inventoryItem);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = function (e) {
+        resolve(e.target.result);
+      };
+      addRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
+  }
+
+  getAllInventoryItems(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.inventoryItems);
+      let getRequest = store.getAll();
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        // e.target.result.forEach(inventoryItem => {
+        //   inventoryItem = this.updateDataService.checkAssessment(inventoryItem);
+        // })
+        resolve(e.target.result);
+      };
+      getRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
+  }
+
+  getInventoryItem(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.inventoryItems);
+      let getRequest = store.get(id);
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        //e.target.result = Assessment
+        // let assessment = this.updateDataService.checkAssessment(e.target.result);
+        resolve(e.target.result);
+      };
+      getRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
+  }
+
+  putInventoryItem(inventoryItem: InventoryItem): Promise<any> {
+    inventoryItem.modifiedDate = new Date();
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.inventoryItems);
+      let getRequest = store.get(inventoryItem.id);
+
+      getRequest.onsuccess = (event) => {
+        let tmpInventoryItem: InventoryItem = event.target.result;
+        tmpInventoryItem = inventoryItem;
+        tmpInventoryItem.modifiedDate = new Date();
+        tmpInventoryItem.id = inventoryItem.id;
+        let updateRequest = store.put(tmpInventoryItem);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        };
+        updateRequest.onerror = (event) => {
+          reject(event);
+        };
+      };
+      getRequest.onerror = (event) => {
+        reject(event);
+      };
+    });
+  }
+
+  deleteInventoryItem(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.inventoryItems], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.inventoryItems);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      };
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      };
+    });
+  }
+
 }

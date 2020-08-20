@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { MotorInventoryService } from '../motor-inventory.service';
 import { MotorCatalogService } from '../motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { MotorInventoryData } from '../motor-inventory';
-import { Settings } from '../../shared/models/settings';
+import { InventoryItem } from '../../shared/models/inventory/inventory';
 
 @Component({
   selector: 'app-motor-inventory-banner',
@@ -12,7 +12,7 @@ import { Settings } from '../../shared/models/settings';
 })
 export class MotorInventoryBannerComponent implements OnInit {
   @Input()
-  settings: Settings;
+  motorInventoryItem: InventoryItem;
   
   setupTab: string;
   setupTabSub: Subscription;

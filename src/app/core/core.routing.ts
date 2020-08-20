@@ -433,7 +433,7 @@ export const coreRoutes: Routes = [
   },
   {
     component: MotorInventoryComponent,
-    path: 'motor-inventory',
+    path: 'motor-inventory/:id',
     children: motorInventoryRoutes
   },
 ];

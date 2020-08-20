@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { ActivatedRoute } from '@angular/router';
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { Subscription } from 'rxjs';
 import { DirectoryDashboardService } from './directory-dashboard.service';

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-summary-filter',
@@ -7,8 +6,6 @@ import { Settings } from '../../../shared/models/settings';
   styleUrls: ['./summary-filter.component.css']
 })
 export class SummaryFilterComponent implements OnInit {
-  @Input()
-  settings: Settings;
   
   constructor() { }
 
