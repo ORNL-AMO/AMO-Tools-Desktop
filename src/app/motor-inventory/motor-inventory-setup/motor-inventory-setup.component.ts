@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MotorInventoryService } from '../motor-inventory.service';
 import { Subscription } from 'rxjs';
-import { Settings } from '../../shared/models/settings';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-motor-inventory-setup',
@@ -15,9 +15,10 @@ export class MotorInventorySetupComponent implements OnInit {
   tabSelect: string = 'department-catalog';
   modalOpenSub: Subscription;
   isModalOpen: boolean;
-  constructor(private motorInventoryService: MotorInventoryService, private cd: ChangeDetectorRef) { }
+  constructor(private motorInventoryService: MotorInventoryService, private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
+    this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     this.setupTabSubscription = this.motorInventoryService.setupTab.subscribe(val => {
       this.setupTab = val;
     });
