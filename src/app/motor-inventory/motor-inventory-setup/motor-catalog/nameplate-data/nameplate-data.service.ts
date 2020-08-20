@@ -9,22 +9,22 @@ export class NameplateDataService {
 
   getFormFromNameplateData(nameplateData: NameplateData): FormGroup {
     return this.formBuilder.group({
-      lineFrequency: [nameplateData.lineFrequency, [Validators.required]],
-      ratedMotorPower: [nameplateData.ratedMotorPower, [Validators.required]],
-      efficiencyClass: [nameplateData.efficiencyClass, [Validators.required]],
-      nominalEfficiency: [nameplateData.nominalEfficiency, [Validators.required]],
+      lineFrequency: [nameplateData.lineFrequency],
+      ratedMotorPower: [nameplateData.ratedMotorPower, [Validators.min(0)]],
+      efficiencyClass: [nameplateData.efficiencyClass],
+      nominalEfficiency: [nameplateData.nominalEfficiency, [Validators.min(0), Validators.max(100)]],
     
       manufacturer: [nameplateData.manufacturer],
       model: [nameplateData.model],
       motorType: [nameplateData.motorType],
       enclosureType: [nameplateData.enclosureType],
       ratedVoltage: [nameplateData.ratedVoltage],
-      serviceFactor: [nameplateData.serviceFactor],
+      serviceFactor: [nameplateData.serviceFactor, [Validators.min(0), Validators.max(100)]],
       insulationClass: [nameplateData.insulationClass],
-      weight: [nameplateData.weight],
+      weight: [nameplateData.weight, [Validators.min(0)]],
       numberOfPhases: [nameplateData.numberOfPhases],
-      fullLoadSpeed: [nameplateData.fullLoadSpeed],
-      fullLoadAmps: [nameplateData.fullLoadAmps]
+      fullLoadSpeed: [nameplateData.fullLoadSpeed, [Validators.min(0), Validators.max(3600)]],
+      fullLoadAmps: [nameplateData.fullLoadAmps, [Validators.min(0)]]
     });
   }
 

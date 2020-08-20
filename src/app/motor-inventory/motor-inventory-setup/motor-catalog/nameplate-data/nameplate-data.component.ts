@@ -27,6 +27,8 @@ export class NameplateDataComponent implements OnInit {
     private nameplateDataService: NameplateDataService) { }
 
   ngOnInit(): void {
+    //TODO: add warnings for FLA
+
     this.settingsSub = this.motorInventoryService.settings.subscribe(val => {
       this.settings = val;
     });
