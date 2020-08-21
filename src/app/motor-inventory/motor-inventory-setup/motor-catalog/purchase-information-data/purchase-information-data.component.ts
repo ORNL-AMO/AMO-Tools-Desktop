@@ -40,11 +40,18 @@ export class PurchaseInformationDataComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.motorInventoryService.focusedDataGroup.next('purchase-information');
     this.motorInventoryService.focusedField.next(str);
   }
 
   toggleForm() {
     this.displayForm = !this.displayForm;
+    this.focusOut();
+  }
+
+  focusOut() {
+    this.motorInventoryService.focusedDataGroup.next('other')
+    this.motorInventoryService.focusedField.next('default');
   }
 
 }

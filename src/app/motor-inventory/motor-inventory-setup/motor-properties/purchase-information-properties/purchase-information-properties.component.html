@@ -1,4 +1,4 @@
-<div class="d-flex w-100">
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
     <div class="d-flex flex-fill">
         <label class="group-label" (click)="toggleForm()">
             <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
@@ -15,7 +15,7 @@
 </div>
 
 <form class="p-1" *ngIf="displayForm">
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('catalogId')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="purchaseInformationOptions.catalogId" name="catalogId"
                 id="catalogId">
@@ -23,21 +23,21 @@
         </label>
     </div>
 
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('listPrice')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="purchaseInformationOptions.listPrice" name="listPrice"
                 id="listPrice">
             List Price
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('warranty')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="purchaseInformationOptions.warranty" name="warranty"
                 id="warranty">
             Warranty
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('directReplacementCost')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="purchaseInformationOptions.directReplacementCost"
                 name="directReplacementCost" id="directReplacementCost">

@@ -49,4 +49,12 @@ export class OperationDataPropertiesComponent implements OnInit {
       this.operationDataOptions.powerFactorAtLoad
     );
   }
+  focusField(str: string){
+    this.focusGroup();
+    this.motorInventoryService.focusedField.next(str);
+  }
+
+  focusGroup(){
+    this.motorInventoryService.focusedDataGroup.next('operation-data');
+  }
 }

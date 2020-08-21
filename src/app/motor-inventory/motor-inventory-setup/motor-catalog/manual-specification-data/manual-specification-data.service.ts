@@ -9,18 +9,16 @@ export class ManualSpecificationDataService {
 
   getFormFromManualSpecificationData(manualSpecificationData: ManualSpecificationData): FormGroup {
     return this.formBuilder.group({
-      synchronousSpeed: [manualSpecificationData.synchronousSpeed, [Validators.required]],
+      synchronousSpeed: [manualSpecificationData.synchronousSpeed],
       frame: [manualSpecificationData.frame],
       shaftPosiion: [manualSpecificationData.shaftPosiion],
-      windingResistance: [manualSpecificationData.windingResistance],
-      rotorBars: [manualSpecificationData.rotorBars],
-      statorSlots: [manualSpecificationData.statorSlots],
-      ampsLockedRotor: [manualSpecificationData.ampsLockedRotor],
-      stalledRotorTimeHot: [manualSpecificationData.stalledRotorTimeHot],
-      stalledRotorTimeCold: [manualSpecificationData.stalledRotorTimeCold],
+      windingResistance: [manualSpecificationData.windingResistance, [Validators.min(0)]],
+      rotorBars: [manualSpecificationData.rotorBars, [Validators.min(0)]],
+      statorSlots: [manualSpecificationData.statorSlots, [Validators.min(0)]],
+      ampsLockedRotor: [manualSpecificationData.ampsLockedRotor, [Validators.min(0)]],
       poles: [manualSpecificationData.poles],
       currentType: [manualSpecificationData.currentType],
-      ratedSpeed: [manualSpecificationData.ratedSpeed]
+      ratedSpeed: [manualSpecificationData.ratedSpeed, [Validators.min(0), Validators.max(3600)]]
     });
   }
 
@@ -32,8 +30,6 @@ export class ManualSpecificationDataService {
     manualSpecificationData.rotorBars = form.controls.rotorBars.value;
     manualSpecificationData.statorSlots = form.controls.statorSlots.value;
     manualSpecificationData.ampsLockedRotor = form.controls.ampsLockedRotor.value;
-    manualSpecificationData.stalledRotorTimeHot = form.controls.stalledRotorTimeHot.value;
-    manualSpecificationData.stalledRotorTimeCold = form.controls.stalledRotorTimeCold.value;
     manualSpecificationData.poles = form.controls.poles.value;
     manualSpecificationData.currentType = form.controls.currentType.value;
     manualSpecificationData.ratedSpeed = form.controls.ratedSpeed.value;

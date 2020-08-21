@@ -49,4 +49,13 @@ export class BatchAnalysisPropertiesComponent implements OnInit {
       this.batchAnalysisOptions.rewindEfficiencyLoss
     );
   }
+
+  focusField(str: string){
+    this.focusGroup();
+    this.motorInventoryService.focusedField.next(str);
+  }
+
+  focusGroup(){
+    this.motorInventoryService.focusedDataGroup.next('batch-analysis');
+  }
 }

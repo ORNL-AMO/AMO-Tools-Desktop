@@ -155,27 +155,21 @@ export class MotorInventorySummaryService {
         fields.push({ display: 'Frame', value: 'frame', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.shaftPosiion) {
-        fields.push({ display: 'Shaft Position', value: 'shaftPosiion', group: 'manualSpecificationData' });
+        fields.push({ display: 'Shaft Orientation', value: 'shaftPosiion', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.windingResistance) {
         fields.push({ display: 'Winding Resistance', value: 'windingResistance', group: 'manualSpecificationData', unit: '&#x3A9;' });
       }
       if (manualSpecificationOptions.rotorBars) {
-        fields.push({ display: 'Rotor Bars', value: 'rotorBars', group: 'manualSpecificationData' });
+        fields.push({ display: 'Number of Rotor Bars', value: 'rotorBars', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.statorSlots) {
-        fields.push({ display: 'Stator Slots', value: 'statorSlots', group: 'manualSpecificationData' });
+        fields.push({ display: 'Number of Stator Slots', value: 'statorSlots', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.ampsLockedRotor) {
         fields.push({ display: 'Amps Locked Rotor', value: 'ampsLockedRotor', group: 'manualSpecificationData', unit: 'A' });
       }
-      if (manualSpecificationOptions.stalledRotorTimeHot) {
-        fields.push({ display: 'Stalled Rotor Time - Hot', value: 'stalledRotorTimeHot', group: 'manualSpecificationData', unit: 's' });
-      }
-      if (manualSpecificationOptions.stalledRotorTimeCold) {
-        fields.push({ display: 'Stalled Rotor Time - Cold', value: 'stalledRotorTimeCold', group: 'manualSpecificationData', unit: 's' });
-      }
-      if (manualSpecificationOptions.poles) {
+     if (manualSpecificationOptions.poles) {
         fields.push({ display: 'Poles', value: 'poles', group: 'manualSpecificationData' });
       }
       if (manualSpecificationOptions.currentType) {

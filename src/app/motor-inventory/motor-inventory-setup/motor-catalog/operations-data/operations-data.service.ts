@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OperationData } from '../../../motor-inventory';
 
 @Injectable()
@@ -10,11 +10,11 @@ export class OperationsDataService {
   getFormFromOperationData(operationData: OperationData): FormGroup {
     return this.formBuilder.group({
       location: [operationData.location],
-      annualOperatingHours: [operationData.annualOperatingHours],
-      averageLoadFactor: [operationData.averageLoadFactor],
-      utilizationFactor: [operationData.utilizationFactor],
-      efficiencyAtAverageLoad: [operationData.efficiencyAtAverageLoad],
-      powerFactorAtLoad: [operationData.powerFactorAtLoad],
+      annualOperatingHours: [operationData.annualOperatingHours, [Validators.min(0), Validators.max(8760)]],
+      averageLoadFactor: [operationData.averageLoadFactor, [Validators.min(0), Validators.max(100)]],
+      utilizationFactor: [operationData.utilizationFactor, [Validators.min(0), Validators.max(100)]],
+      efficiencyAtAverageLoad: [operationData.efficiencyAtAverageLoad, [Validators.min(0), Validators.max(100)]],
+      powerFactorAtLoad: [operationData.powerFactorAtLoad, [Validators.min(0), Validators.max(100)]],
     });
   }
 

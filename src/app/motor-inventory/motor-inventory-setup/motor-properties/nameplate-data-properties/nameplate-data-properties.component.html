@@ -1,4 +1,4 @@
-<div class="d-flex w-100">
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
     <div class="d-flex flex-fill">
         <label class="group-label" (click)="toggleForm()">
             <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
@@ -15,76 +15,76 @@
 </div>
 
 <form class="p-1" *ngIf="displayForm">
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('manufacturer')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.manufacturer" name="manufacturer"
                 id="manufacturer">
             Manufacturer
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('model')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.model" name="model" id="model">
             Model
         </label>
     </div>
 
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('motorType')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.motorType" name="motorType"
                 id="motorType">
             Motor Type
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('enclosureType')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.enclosureType"
                 name="enclosureType" id="enclosureType">
             Enclosure Type
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('ratedVoltage')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.ratedVoltage" name="ratedVoltage"
                 id="ratedVoltage">
             Voltage Rating
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('serviceFactor')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.serviceFactor"
                 name="serviceFactor" id="serviceFactor">
             Service Factor
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('insulationClass')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.insulationClass"
                 name="insulationClass" id="insulationClass">
             Insulation Class
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('weight')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.weight" name="weight" id="weight">
             Weight
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('numberOfPhases')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.numberOfPhases"
                 name="numberOfPhases" id="numberOfPhases">
             Number of Phases
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('fullLoadSpeed')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadSpeed"
                 name="fullLoadSpeed" id="fullLoadSpeed">
             Full Load Speed
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('fullLoadAmps')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadAmps"
                 name="fullLoadAmps" id="fullLoadAmps">

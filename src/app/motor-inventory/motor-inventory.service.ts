@@ -11,6 +11,7 @@ export class MotorInventoryService {
   summaryTab: BehaviorSubject<string>;
   motorInventoryData: BehaviorSubject<MotorInventoryData>;
   focusedField: BehaviorSubject<string>;
+  focusedDataGroup: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   settings: BehaviorSubject<Settings>;
   constructor() {
@@ -19,6 +20,7 @@ export class MotorInventoryService {
     let inventoryData: MotorInventoryData = this.initInventoryData();
     this.motorInventoryData = new BehaviorSubject<MotorInventoryData>(inventoryData);
     this.focusedField = new BehaviorSubject<string>('default');
+    this.focusedDataGroup = new BehaviorSubject<string>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.summaryTab = new BehaviorSubject<string>('overview');
     this.settings = new BehaviorSubject<Settings>(undefined);
@@ -89,8 +91,6 @@ export class MotorInventoryService {
         rotorBars: undefined,
         statorSlots: undefined,
         ampsLockedRotor: undefined,
-        stalledRotorTimeHot: undefined,
-        stalledRotorTimeCold: undefined,
         poles: undefined,
         currentType: undefined,
         ratedSpeed: undefined    
@@ -172,8 +172,6 @@ export class MotorInventoryService {
         rotorBars: false,
         statorSlots: false,
         ampsLockedRotor: false,
-        stalledRotorTimeHot: false,
-        stalledRotorTimeCold: false,
         poles: false,
         currentType: false,
         ratedSpeed: false,

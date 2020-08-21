@@ -62,8 +62,6 @@ export interface ManualSpecificationData {
   rotorBars: number,
   statorSlots: number,
   ampsLockedRotor: number,
-  stalledRotorTimeHot: number,
-  stalledRotorTimeCold: number
   poles: number,
   currentType: number,
 }
@@ -161,8 +159,6 @@ export interface ManualSpecificationOptions {
   rotorBars: boolean,
   statorSlots: boolean,
   ampsLockedRotor: boolean,
-  stalledRotorTimeHot: boolean,
-  stalledRotorTimeCold: boolean,
   poles: boolean,
   currentType: boolean,
 }

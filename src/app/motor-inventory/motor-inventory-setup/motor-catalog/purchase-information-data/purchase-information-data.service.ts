@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PurchaseInformationData } from '../../../motor-inventory';
 
 @Injectable()
@@ -10,9 +10,9 @@ export class PurchaseInformationDataService {
   getFormFromPurchaseInformationData(purchaseInformationData: PurchaseInformationData): FormGroup {
     return this.formBuilder.group({
       catalogId: [purchaseInformationData.catalogId],
-      listPrice: [purchaseInformationData.listPrice],
+      listPrice: [purchaseInformationData.listPrice, [Validators.min(0)]],
       warranty: [purchaseInformationData.warranty],
-      directReplacementCost: [purchaseInformationData.directReplacementCost]
+      directReplacementCost: [purchaseInformationData.directReplacementCost, [Validators.min(0)]]
     });
   }
 

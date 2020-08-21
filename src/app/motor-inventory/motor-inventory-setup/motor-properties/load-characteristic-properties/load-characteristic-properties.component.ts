@@ -54,4 +54,12 @@ export class LoadCharacteristicPropertiesComponent implements OnInit {
       this.loadCharacteristicOptions.ampsIdle
     );
   }
+  focusField(str: string){
+    this.focusGroup();
+    this.motorInventoryService.focusedField.next(str);
+  }
+
+  focusGroup(){
+    this.motorInventoryService.focusedDataGroup.next('load-characteristics');
+  }
 }

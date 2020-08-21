@@ -37,6 +37,7 @@ export class MotorBasicsComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.motorInventoryService.focusedDataGroup.next('basics');
     this.motorInventoryService.focusedField.next(str);
   }
 }

@@ -1,4 +1,4 @@
-<div class="d-flex w-100">
+<div class="d-flex w-100" (mouseenter)="focusField('catalogId')">
     <div class="d-flex flex-fill">
         <label class="group-label" (click)="toggleForm()">
             <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
@@ -15,7 +15,7 @@
 </div>
 
 <form class="p-1" *ngIf="displayForm">
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('torqueFullLoad')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="torqueOptions.torqueFullLoad" name="torqueFullLoad"
                 id="torqueFullLoad">
@@ -23,14 +23,14 @@
         </label>
     </div>
 
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('torqueBreakDown')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="torqueOptions.torqueBreakDown" name="torqueBreakDown"
                 id="torqueBreakDown">
             Break Down Torque
         </label>
     </div>
-    <div class="checkbox">
+    <div class="checkbox" (mouseenter)="focusField('torqueLockedRotor')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="torqueOptions.torqueLockedRotor"
                 name="torqueLockedRotor" id="torqueLockedRotor">
