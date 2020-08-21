@@ -10,7 +10,7 @@ import { LogToolDbData } from '../log-tool/log-tool-models';
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 5,
+  version: 6,
   instance: {},
   storeNames: {
     assessments: 'assessments',

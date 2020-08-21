@@ -7,7 +7,7 @@
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div class="form-group"
-      [ngClass]="{'indicate-different': isBarometricPressureDifferent(), 'invalid':gasDensityForm.controls.barometricPressure.invalid}">
+      [ngClass]="{'indicate-different': isBarometricPressureDifferent(), 'invalid':gasDensityForm.controls.barometricPressure.invalid, 'error': warnings.barometricPressureError !== null}">
       <label for="{{'barometricPressure_'+idString}}">Barometric Pressure (P
         <sub>bo</sub>)</label>
       <div class="input-group">
@@ -25,6 +25,9 @@
             [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
           .</span>
       </span>
+      <span class="alert-warning pull-right small"
+        *ngIf="warnings.barometricPressureError !== null && !gasDensityForm.controls.barometricPressure.pristine && !gasDensityForm.controls.barometricPressure.invalid">
+        {{warnings.barometricPressureError}}</span>
     </div>
 
     <div class="form-group" [ngClass]="{'indicate-different': isGasTypeDifferent()}">
@@ -99,6 +102,9 @@
           *ngIf="gasDensityForm.controls.wetBulbTemp.invalid && !gasDensityForm.controls.wetBulbTemp.pristine">
           <span *ngIf="gasDensityForm.controls.wetBulbTemp.errors.required">Value
             Required</span>
+          <span *ngIf="gasDensityForm.controls.wetBulbTemp.errors.max">Value must be less than Dry Bulb
+            {{gasDensityForm.controls.wetBulbTemp.errors.max.max}} <span
+              [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span></span>
         </span>
       </div>
 
@@ -107,9 +113,8 @@
         <label for="{{'relativeHumidity_'+idString}}">Relative Humidity</label>
         <div class="input-group">
           <input name="relativeHumidity" type="number" step="any" class="form-control"
-            formControlName="relativeHumidity" id="{{'relativeHumidity_'+idString}}"
-            (input)="getResults()" (focus)="focusField('relativeHumidity')" onfocus="this.select();"
-            [readonly]="!selected">
+            formControlName="relativeHumidity" id="{{'relativeHumidity_'+idString}}" (input)="getResults()"
+            (focus)="focusField('relativeHumidity')" onfocus="this.select();" [readonly]="!selected">
           <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -139,25 +144,28 @@
           *ngIf="gasDensityForm.controls.dewPoint.invalid && !gasDensityForm.controls.dewPoint.pristine">
           <span *ngIf="gasDensityForm.controls.dewPoint.errors.required">Value
             Required</span>
+          <span *ngIf="gasDensityForm.controls.dewPoint.errors.max">Value must be less than Dry Bulb
+            {{gasDensityForm.controls.dewPoint.errors.max.max}} <span
+              [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span></span>
         </span>
       </div>
 
     </div>
 
     <div class="form-group" *ngIf="gasDensityForm.controls.gasType.value == 'OTHER'"
-        [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':gasDensityForm.controls.specificGravity.invalid}">
-        <label for="{{'specificGravity_'+idString}}">Gas Relative Density (G)</label>
-        <div class="input-group">
-          <input name="specificGravity" type="number" step="any" class="form-control" formControlName="specificGravity"
-            id="{{'specificGravity_'+idString}}" (input)="getResults()" (focus)="focusField('specificGravity')"
-            onfocus="this.select();" [readonly]="!selected">
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="gasDensityForm.controls.specificGravity.invalid && !gasDensityForm.controls.specificGravity.pristine">
-          <span *ngIf="gasDensityForm.controls.specificGravity.errors.required">Value
-            Required</span>
-        </span>
+      [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':gasDensityForm.controls.specificGravity.invalid}">
+      <label for="{{'specificGravity_'+idString}}">Gas Relative Density (G)</label>
+      <div class="input-group">
+        <input name="specificGravity" type="number" step="any" class="form-control" formControlName="specificGravity"
+          id="{{'specificGravity_'+idString}}" (input)="getResults()" (focus)="focusField('specificGravity')"
+          onfocus="this.select();" [readonly]="!selected">
       </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="gasDensityForm.controls.specificGravity.invalid && !gasDensityForm.controls.specificGravity.pristine">
+        <span *ngIf="gasDensityForm.controls.specificGravity.errors.required">Value
+          Required</span>
+      </span>
+    </div>
 
     <div class="form-group"
       [ngClass]="{'indicate-different': isGasDensityDifferent(), 'invalid':gasDensityForm.controls.gasDensity.invalid}">

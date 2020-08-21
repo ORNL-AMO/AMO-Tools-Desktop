@@ -47,7 +47,7 @@ export class FsatFluidService {
       specificGravityValidators = [Validators.required];
     }
     if (obj.inputType === 'wetBulb') {
-      wetBulbTempValidators = [Validators.required];
+      wetBulbTempValidators = [Validators.required, Validators.max(obj.dryBulbTemp)];
       // Not sure if specificHeatGas is necessary since it has been removed from user input in fans
       specificHeatGasValidators = [GreaterThanValidator.greaterThan(0), Validators.required];
     }
@@ -55,7 +55,7 @@ export class FsatFluidService {
       relativeHumidityValidators = [GreaterThanValidator.greaterThan(0), Validators.max(100), Validators.required];
     }
     if (obj.inputType === 'dewPoint') {
-      dewPointValidators = [Validators.required];
+      dewPointValidators = [Validators.required, Validators.max(obj.dryBulbTemp)];
     }
 
     return {

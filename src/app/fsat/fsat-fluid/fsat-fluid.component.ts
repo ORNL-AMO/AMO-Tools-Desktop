@@ -2,11 +2,12 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { FsatService } from '../fsat.service';
 import { FormGroup } from '@angular/forms';
 import { FSAT, BaseGasDensity, PsychrometricResults } from '../../shared/models/fans';
-import { FsatFluidService } from './fsat-fluid.service';
+import { FsatFluidService, GasDensityValidators } from './fsat-fluid.service';
 import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { CompareService } from '../compare.service';
 import { GasDensityFormService } from '../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
+import { FanFluidWarnings, FsatWarningService } from '../fsat-warning.service';
 
 @Component({
   selector: 'app-fsat-fluid',
@@ -48,11 +49,13 @@ export class FsatFluidComponent implements OnInit {
   ];
 
   idString: string;
+  warnings: FanFluidWarnings;
   constructor(private compareService: CompareService,
     private fsatService: FsatService,
     private fsatFluidService: FsatFluidService,
     private helpPanelService: HelpPanelService,
-    private gasDensityFormService: GasDensityFormService) { }
+    private gasDensityFormService: GasDensityFormService,
+    private fsatWarningService: FsatWarningService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -107,7 +110,25 @@ export class FsatFluidComponent implements OnInit {
   save() {
     //save is always called on input so add check for warnings call here
     this.baseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
+    this.updateFormValidators();
+    this.checkForWarnings();
     this.emitSave.emit(this.baseGasDensity);
+  }
+
+  updateFormValidators(){
+    if(this.baseGasDensity.inputType == 'dewPoint'){
+      let validators: GasDensityValidators = this.fsatFluidService.getValidators(this.baseGasDensity);
+      this.gasDensityForm.controls.dewPoint.setValidators(validators.dewPointValidators);
+      this.gasDensityForm.controls.dewPoint.updateValueAndValidity();
+    }else if(this.baseGasDensity.inputType == 'wetBulb'){
+      let validators: GasDensityValidators = this.fsatFluidService.getValidators(this.baseGasDensity);
+      this.gasDensityForm.controls.wetBulbTemp.setValidators(validators.wetBulbTempValidators);
+      this.gasDensityForm.controls.wetBulbTemp.updateValueAndValidity();
+    }
+  }
+
+  checkForWarnings() {
+    this.warnings = this.fsatWarningService.checkFanFluidWarnings(this.baseGasDensity, this.settings);
   }
 
   focusField(str: string) {
