@@ -17,6 +17,8 @@ import { ImportExportModule } from './import-export/import-export.module';
 import { DirectoryDashboardModule } from './directory-dashboard/directory-dashboard.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { DragBarComponent } from './drag-bar/drag-bar.component';
+import { CreateInventoryComponent } from './create-inventory/create-inventory.component';
+import { InventoryService } from './inventory.service';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { DragBarComponent } from './drag-bar/drag-bar.component';
     AcknowledgmentsPageComponent,
     ContactPageComponent,
     DragBarComponent,
+    CreateInventoryComponent,
   ],
   imports: [
     CommonModule,
@@ -42,7 +45,8 @@ import { DragBarComponent } from './drag-bar/drag-bar.component';
     ToastModule
   ],
   providers: [
-    DashboardService
+    DashboardService,
+    InventoryService
   ]
 })
 export class DashboardModule { }

@@ -1,0 +1,43 @@
+<div class="section-title">
+    Other
+</div>
+<div class="row no-gutters section">
+    <div class="col-12">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.driveType">
+                <div class="label-item">
+                    Drive Type:
+                </div>
+                <div class="flex-fill">
+                    {{otherData.driveType}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.isVFD">
+                <div class="label-item">
+                    Is VFD?:
+                </div>
+                <div class="flex-fill">
+                    <span *ngIf="otherData.isVFD">Yes</span>
+                    <span *ngIf="!otherData.isVFD">No</span>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.hasLoggerData">
+                <div class="label-item">
+                    Has Logger Data?:
+                </div>
+                <div class="flex-fill">
+                    <span *ngIf="otherData.hasLoggerData">Yes</span>
+                    <span *ngIf="!otherData.hasLoggerData">No</span>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.voltageConnectionType">
+                <div class="label-item">
+                    Voltage Connection Type:
+                </div>
+                <div class="flex-fill">
+                    {{otherData.voltageConnectionType}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

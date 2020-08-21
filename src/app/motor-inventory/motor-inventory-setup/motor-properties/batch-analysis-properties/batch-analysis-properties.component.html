@@ -1,0 +1,60 @@
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
+    <div class="d-flex flex-fill">
+        <label class="group-label" (click)="toggleForm()">
+            <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+            <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+            Replacement Information
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
+            [(ngModel)]="batchAnalysisOptions.displayBatchAnalysis" name="displayBatchAnalysis"
+            id="displayBatchAnalysis">
+        <label class="custom-control-label" for="displayBatchAnalysis"></label>
+    </div>
+</div>
+
+<form class="p-1" *ngIf="displayForm">
+    <div class="checkbox" (mouseenter)="focusField('modifiedCost')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.modifiedCost" name="modifiedCost"
+                id="modifiedCost">
+            Modified Cost
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('modifiedPower')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.modifiedPower"
+                name="modifiedPower" id="modifiedPower">
+            Modified Power
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('modifiedEfficiency')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.modifiedEfficiency"
+                name="modifiedEfficiency" id="modifiedEfficiency">
+            Modified Efficiency
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('modifiedPercentLoad')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.modifiedPercentLoad"
+                name="modifiedPercentLoad" id="modifiedPercentLoad">
+            Modified Percent Load
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('rewindCost')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.rewindCost" name="rewindCost"
+                id="rewindCost">
+            Rewind Cost
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('rewindEfficiencyLoss')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="batchAnalysisOptions.rewindEfficiencyLoss"
+                name="rewindEfficiencyLoss" id="rewindEfficiencyLoss">
+            Rewind Efficiency Loss
+        </label>
+    </div>
+</form>

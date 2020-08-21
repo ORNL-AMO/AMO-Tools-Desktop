@@ -107,6 +107,10 @@
     border-bottom: #2E4053 solid 2px;
 }
 
+.motor-inventory .header{
+    border-bottom: #84b641 solid 2px;
+}
+
 
 .psat .disabled .header{
     border-bottom-color: gray;
@@ -156,6 +160,11 @@
 
 .ssmt .btn-secondary:not([disabled]):not(.disabled).active{
     background: #F39C12;
+    transition: all .5s ease-in-out;
+    color: black;
+}
+.motor-inventory .btn-secondary:not([disabled]):not(.disabled).active{
+    background: #84b641;
     transition: all .5s ease-in-out;
     color: black;
 }
@@ -290,6 +299,10 @@
 
 .log-tool .group-label{
     border-bottom: #117A65 solid 2px;
+}
+
+.motor-inventory .group-label{
+    border-bottom: #84b641 solid 2px;
 }
 
 .loss-label{
@@ -454,5 +467,10 @@
 
     .treasure-hunt .scroll-item::-webkit-scrollbar-thumb{
         background-color: #2E4053;
+        outline: 1px solid slategrey;
+    }
+
+    .motor-inventory .scroll-item::-webkit-scrollbar-thumb{
+        background-color: #84b641;
         outline: 1px solid slategrey;
     }

@@ -24,9 +24,6 @@ export class AssessmentCreateComponent implements OnInit {
 
   @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
   newAssessmentForm: FormGroup;
-  selectedEquip: string = 'new';
-  showDropdown: boolean = false;
-  selectedAssessment: string = 'Select Pump';
   canCreate: boolean;
   directories: Array<Directory>;
   showNewFolder: boolean = false;
@@ -77,7 +74,6 @@ export class AssessmentCreateComponent implements OnInit {
   }
 
   hideCreateModal(bool?: boolean) {
-    this.showDropdown = false;
     this.createModal.hide();
     this.dashboardService.newAssessmentType = undefined;
     this.dashboardService.createAssessment.next(false);

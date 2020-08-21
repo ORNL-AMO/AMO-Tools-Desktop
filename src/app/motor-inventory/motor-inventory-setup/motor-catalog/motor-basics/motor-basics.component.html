@@ -1,0 +1,13 @@
+<form class="p-0" [formGroup]="motorForm">
+    <!--name-->
+    <div class="form-group">
+        <label>Motor Name</label>
+        <input class="form-control" type="text" id="name" formControlName="name" (input)="save()">
+    </div>
+    <!--description-->
+    <div class="form-group">
+        <label>Description</label>
+        <textarea class="form-control" type="text" id="description" formControlName="description"
+            (input)="save()"></textarea>
+    </div>
+</form>

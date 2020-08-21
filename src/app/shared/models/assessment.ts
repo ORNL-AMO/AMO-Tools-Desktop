@@ -12,6 +12,7 @@ export interface Assessment {
   fsat?: FSAT,
   ssmt?: SSMT,
   treasureHunt?: TreasureHunt,
+  // motorInventory?: MotorInventoryData,
   createdDate?: Date,
   modifiedDate?: Date,
   type: string;

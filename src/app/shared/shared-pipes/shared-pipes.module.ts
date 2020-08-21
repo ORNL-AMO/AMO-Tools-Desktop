@@ -4,6 +4,7 @@ import { PhonePipe } from './phone.pipe';
 import { SettingsLabelPipe } from './settings-label.pipe';
 import { SigFigsPipe } from './sig-figs.pipe';
 import { OptionDisplayValuePipe } from './option-display-value.pipe';
+import { MotorEfficiencyClassPipe } from './motor-efficiency-class.pipe';
 
 
 
@@ -12,7 +13,8 @@ import { OptionDisplayValuePipe } from './option-display-value.pipe';
     PhonePipe,
     SettingsLabelPipe,
     SigFigsPipe,
-    OptionDisplayValuePipe
+    OptionDisplayValuePipe,
+    MotorEfficiencyClassPipe
   ],
   imports: [
     CommonModule
@@ -21,7 +23,8 @@ import { OptionDisplayValuePipe } from './option-display-value.pipe';
     PhonePipe,
     SettingsLabelPipe,
     SigFigsPipe,
-    OptionDisplayValuePipe
+    OptionDisplayValuePipe,
+    MotorEfficiencyClassPipe
   ]
 })
 export class SharedPipesModule { }

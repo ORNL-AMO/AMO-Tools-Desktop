@@ -1,0 +1,55 @@
+<label class="group-label" (click)="toggleForm()">
+    <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+    Torque
+</label>
+<form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
+    <!-- torqueFullLoad -->
+    <div class="form-group" *ngIf="displayOptions.torqueFullLoad">
+        <label for="torqueFullLoad">Full Load Torque</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('torqueFullLoad')"
+                (input)="save()" formControlName="torqueFullLoad" id="torqueFullLoad">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.torqueFullLoad.invalid">
+            <span *ngIf="motorForm.controls.torqueFullLoad.errors.min">Value can't be less than
+                {{motorForm.controls.torqueFullLoad.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>.</span>
+        </span>
+    </div>
+    <!-- torqueBreakDown -->
+    <div class="form-group" *ngIf="displayOptions.torqueBreakDown">
+        <label for="torqueBreakDown">Break Down Torque</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('torqueBreakDown')"
+                (input)="save()" formControlName="torqueBreakDown" id="torqueBreakDown">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.torqueBreakDown.invalid">
+            <span *ngIf="motorForm.controls.torqueBreakDown.errors.min">Value can't be less than
+                {{motorForm.controls.torqueBreakDown.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>.</span>
+        </span>
+    </div>
+    <!-- torqueLockedRotor -->
+    <div class="form-group" *ngIf="displayOptions.torqueLockedRotor">
+        <label for="torqueLockedRotor">Locked Rotor Torque</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('torqueLockedRotor')"
+                (input)="save()" formControlName="torqueLockedRotor" id="torqueLockedRotor">
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.torqueLockedRotor.invalid">
+            <span *ngIf="motorForm.controls.torqueLockedRotor.errors.min">Value can't be less than
+                {{motorForm.controls.torqueLockedRotor.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft-lb</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">N-m</span>.</span>
+        </span>
+    </div>
+</form>

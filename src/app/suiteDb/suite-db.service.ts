@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, WallLossesSurface } from '../shared/models/materials';
+import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, WallLossesSurface, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 
 declare var db: any;
@@ -175,8 +175,43 @@ export class SuiteDbService {
     return db.selectWallLossesSurfaceById(id);
   }
 
+
+  //motors
+  deleteMotor(id: number) {
+    return db.deleteMotor(id);
+  }
+  insertMotor(motor: SuiteDbMotor) {
+    return db.insertMotor(motor);
+  }
+  selectMotors(): Array<SuiteDbMotor> {
+    return db.selectMotors();
+  }
+  selectMotorById(id: number): SuiteDbMotor {
+    return db.selectMotorById(id);
+  }
+  updateMotor(motor: SuiteDbMotor): SuiteDbMotor {
+    return db.updateMotor(motor);
+  }
+  //pumps
+  deletePump(id: number) {
+    return db.deletePump(id);
+  }
+  insertPump(pump: SuiteDbPump) {
+    return db.insertPump(pump);
+  }
+  selectPumps(): Array<SuiteDbPump> {
+    return db.selectPumps();
+  }
+  selectPumpById(id: number): SuiteDbPump {
+    return db.selectPumpById(id);
+  }
+  updatePump(pump: SuiteDbPump): SuiteDbPump {
+    return db.updatePump(pump);
+  }
+
+  //insert custom materials held in indexedDb into suite db
   initCustomDbMaterials() {
-    //this.test();
+    // this.test();
     this.indexedDbService.getAllGasLoadChargeMaterial().then(results => {
       let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = results;
       customGasLoadChargeMaterials.forEach(material => {
