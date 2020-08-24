@@ -135,12 +135,16 @@ export class UpdateDataService {
     }
 
     updateLightingReplacementTreasureHunt(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt): LightingReplacementTreasureHunt {
-        lightingReplacementTreasureHunt.baseline.forEach(replacement => {
-            replacement = this.updateLightingReplacement(replacement);
-        });
-        lightingReplacementTreasureHunt.modifications.forEach(replacement => {
-            replacement = this.updateLightingReplacement(replacement);
-        });
+        if (lightingReplacementTreasureHunt.baseline) {
+            lightingReplacementTreasureHunt.baseline.forEach(replacement => {
+                replacement = this.updateLightingReplacement(replacement);
+            });
+        }
+        if (lightingReplacementTreasureHunt.modifications) {
+            lightingReplacementTreasureHunt.modifications.forEach(replacement => {
+                replacement = this.updateLightingReplacement(replacement);
+            });
+        }
         return lightingReplacementTreasureHunt;
     }
 
