@@ -80,7 +80,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       if (val == true) {
         this.isSystemCurveShown = (this.systemAndEquipmentCurveService.systemCurveCollapsed.getValue() == 'open');
         this.isEquipmentCurveShown = (this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open');
-        this.setIsModificationShown();
+        this.isEquipmentModificationShown = (this.systemAndEquipmentCurveService.pumpModificationCollapsed.getValue() == 'open' || this.systemAndEquipmentCurveService.fanModificationCollapsed.getValue() == 'open');
         this.createSVG();
         this.setAxisLabels();
         this.setAxis();
@@ -90,13 +90,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     });
   }
 
-  setIsModificationShown() {
-    if (this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open' && this.systemAndEquipmentCurveService.equipmentInputs.getValue() != undefined) {
-      this.isEquipmentModificationShown = this.systemAndEquipmentCurveService.equipmentInputs.getValue().baselineMeasurement != this.systemAndEquipmentCurveService.equipmentInputs.getValue().modifiedMeasurement;
-    } else {
-      this.isEquipmentModificationShown = false;
-    }
-  }
 
   createGraph() {
     if (this.createGraphTimer != undefined) {
@@ -226,7 +219,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   addIntersectionPoints() {
     d3.select(this.ngChart.nativeElement).selectAll('#intersectBaseline').remove();
     d3.select(this.ngChart.nativeElement).selectAll('#intersectModification').remove();
-    let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.systemAndEquipmentCurveService.systemCurveRegressionData);
+    let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs);
     if (baselineIntersectionPoint != undefined) {
       this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.next(baselineIntersectionPoint);
     }

@@ -56,12 +56,14 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     if (this.equipmentType == 'pump') {
       this.curveDataSubscription = this.systemAndEquipmentCurveService.pumpSystemCurveData.subscribe(val => {
         if (val != undefined) {
+          debugger;
           this.updateSystemCurveResultData();
         }
       });
     } else {
       this.curveDataSubscription = this.systemAndEquipmentCurveService.fanSystemCurveData.subscribe(val => {
         if (val != undefined) {
+          debugger;
           this.updateSystemCurveResultData();
         }
       });
@@ -135,11 +137,17 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
 
   updateSystemCurveResultData() {
     let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
+    debugger;
     this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
     if (newMaxFlow != this.maxFlowRate) {
+      debugger;
+      // Do we ever get here?
       this.maxFlowRate = newMaxFlow;
       this.updateEquipmentCurveResultData();
     } else {
+      debugger;
+      // this.updateEquipmentCurveResultData();
+      // this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
       this.systemAndEquipmentCurveService.updateGraph.next(true);
     }
   }
@@ -165,11 +173,14 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
 
   updateByDataResultData() {
     let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
+    debugger;
     this.systemAndEquipmentCurveService.calculateByDataRegression(this.equipmentType, newMaxFlow);
     if (newMaxFlow != this.maxFlowRate) {
+      debugger;
       this.maxFlowRate = newMaxFlow;
       this.updateSystemCurveResultData();
     } else {
+      debugger;
       this.systemAndEquipmentCurveService.updateGraph.next(true);
     }
   }

@@ -17,10 +17,7 @@ export class EquipmentCurveService {
       measurementOption: [obj.measurementOption, Validators.required],
       baselineMeasurement: [obj.baselineMeasurement, [Validators.required, Validators.min(0)]],
       modificationMeasurementOption: [obj.modificationMeasurementOption, Validators.required],
-      modifiedMeasurement: [obj.modifiedMeasurement, [Validators.required, Validators.min(0)]],
     });
-    form.controls.modificationMeasurementOption.disable();
-    form = this.setModifiedMeasurementMinMax(form);
     return form;
   }
 
@@ -30,7 +27,6 @@ export class EquipmentCurveService {
       measurementOption: 0,
       baselineMeasurement: 1800,
       modificationMeasurementOption: 0,
-      modifiedMeasurement: 1800
     };
     return exampleEquipment;
   }
@@ -40,7 +36,6 @@ export class EquipmentCurveService {
       measurementOption: 0,
       baselineMeasurement: 0,
       modificationMeasurementOption: 0,
-      modifiedMeasurement: 0
     };
     return exampleEquipment;
   }
@@ -49,22 +44,8 @@ export class EquipmentCurveService {
     return {
       measurementOption: form.controls.measurementOption.value,
       baselineMeasurement: form.controls.baselineMeasurement.value,
-      modificationMeasurementOption: form.controls.modificationMeasurementOption.value,
-      modifiedMeasurement: form.controls.modifiedMeasurement.value
+      modificationMeasurementOption: form.controls.measurementOption.value
     }
-  }
-
-  setModifiedMeasurementMinMax(form: FormGroup): FormGroup {
-    if (form.controls.baselineMeasurement.value) {
-      let min: number = form.controls.baselineMeasurement.value * .5;
-      let max: number = form.controls.baselineMeasurement.value * 1.5;
-      form.controls.modifiedMeasurement.setValidators([Validators.required, Validators.min(min), Validators.max(max)]);
-      form.controls.modifiedMeasurement.updateValueAndValidity();
-      return form;
-    } else {
-      return form;
-    }
-
   }
 
   //by equation
@@ -172,14 +153,13 @@ export class EquipmentCurveService {
 
   getFanByDataExample(settings: Settings): ByDataInputs {
     let dataRows: Array<{ flow: number, yValue: number }> = [
-      { flow: 0, yValue: 22.3 },
+      { flow: 28800, yValue: 22.3 },
       { flow: 43200, yValue: 21.8 },
+      { flow: 57640, yValue: 21.2 },
       { flow: 72050, yValue: 20.3 },
       { flow: 100870, yValue: 18 },
       { flow: 129700, yValue: 14.8 },
       { flow: 158500, yValue: 10.2 },
-      { flow: 172900, yValue: 7.3 },
-      { flow: 187300, yValue: 3.7 }
     ];
 
     dataRows.forEach(row => {
@@ -193,7 +173,7 @@ export class EquipmentCurveService {
 
     let exampleByDataInputs: ByDataInputs = {
       dataRows: dataRows,
-      dataOrder: 2
+      dataOrder: 3
     };
     return exampleByDataInputs;
   }

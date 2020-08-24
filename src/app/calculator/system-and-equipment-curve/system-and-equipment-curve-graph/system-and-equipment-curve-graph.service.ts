@@ -7,6 +7,7 @@ import { RegressionEquationsService } from '../regression-equations.service';
 import { BehaviorSubject } from 'rxjs';
 import { SvgToPngService } from '../../../shared/helper-services/svg-to-png.service';
 import { PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../../../shared/models/system-and-equipment-curve';
+import { intersection } from 'lodash';
 @Injectable()
 export class SystemAndEquipmentCurveGraphService {
 
@@ -129,9 +130,11 @@ export class SystemAndEquipmentCurveGraphService {
     return { xDomain: xDomain, yDomain: yDomain, xRange: xRange, yRange: yRange }
   }
 
-
-  getIntersectionPoint(equipmentType: string, settings: Settings, curveDataPairs: Array<{ x: number, y: number }>, systemCurveRegressionData: Array<{ x: number, y: number, fluidPower: number }>) {
-    let intersectionPoint: { x: number, y: number } = this.calculateIntersectionPoint(JSON.parse(JSON.stringify(systemCurveRegressionData)), JSON.parse(JSON.stringify(curveDataPairs)));
+  getIntersectionPoint(equipmentType: string, settings: Settings, curveDataPairs: Array<{ x: number, y: number }>) {
+    let intersectionPoint = this.systemAndEquipmentCurveService.systemCurveIntersectionData.getValue();
+    if (!intersectionPoint) {
+      intersectionPoint = this.systemAndEquipmentCurveService.calculateIntersectionPoint(curveDataPairs);
+    }
     if (intersectionPoint != undefined) {
       let fluidPower: number = this.getFluidPowerFromIntersectionPoint(intersectionPoint.x, intersectionPoint.y, settings, equipmentType);
       return {
@@ -145,7 +148,9 @@ export class SystemAndEquipmentCurveGraphService {
   }
 
   getModifiedIntersectionPoint(baselinePoint: { x: number, y: number }, settings: Settings, equipmentType: string, equipmentInputs: EquipmentInputs): { x: number, y: number, fluidPower: number } {
-    let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
+    // Don't have modificationEquipment for fan from initial load, but do for pump
+    debugger;
+    let ratio = this.systemAndEquipmentCurveService.modificationEquipment.getValue().speed / equipmentInputs.baselineMeasurement;
     let x: number = baselinePoint.x * ratio;
     let y: number = baselinePoint.y * Math.pow(ratio, 2);
     let fluidPower: number = this.getFluidPowerFromIntersectionPoint(x, y, settings, equipmentType);
@@ -169,56 +174,7 @@ export class SystemAndEquipmentCurveGraphService {
     }
     return fluidPower;
   }
-
-  calculateIntersectionPoint(
-    systemCurve: Array<{ x: number, y: number, fluidPower: number }>,
-    equipmentCurve: Array<{ x: number, y: number }>
-  ): { x: number, y: number } {
-    let intersected: boolean = false;
-    let equipmentStartGreater: boolean = false;
-    let intersectPoint: number = 0;
-    if (equipmentCurve[0].y > systemCurve[0].y) {
-      equipmentStartGreater = true;
-    }
-    let iterateMax: number;
-    if (systemCurve.length <= equipmentCurve.length) {
-      iterateMax = systemCurve.length;
-    } else {
-      iterateMax = equipmentCurve.length;
-    }
-    if (equipmentStartGreater) {
-      for (let i = 1; i < iterateMax; i++) {
-        if (equipmentCurve[i].y < systemCurve[i].y) {
-          intersectPoint = i;
-          intersected = true;
-          break;
-        }
-      };
-    }
-    else {
-      for (let i = 1; i < iterateMax; i++) {
-        if (equipmentCurve[i].y > systemCurve[i].y) {
-          intersectPoint = i;
-          intersected = true;
-          break;
-        }
-      };
-    }
-
-    if (intersected) {
-      let equipmentVal1 = equipmentCurve[intersectPoint - 1];
-      let equipmentVal2 = equipmentCurve[intersectPoint];
-      let systemVal1 = systemCurve[intersectPoint - 1];
-      let systemVal2 = systemCurve[intersectPoint];
-      let avgYVal = (equipmentVal1.y + equipmentVal2.y + systemVal1.y + systemVal2.y) / 4;
-      let avgXVal = (equipmentVal1.x + equipmentVal2.x + systemVal1.x + systemVal2.x) / 4;
-
-      return { x: avgXVal, y: avgYVal };
-    } else {
-      return undefined;
-    }
-  }
-
+  
   // calculateXValFromY(yVal: number, staticVal: number, coefficient: number, systemLossExponent: number) {
   //   return Math.pow((yVal - staticVal) / coefficient, 1 / systemLossExponent);
   // }

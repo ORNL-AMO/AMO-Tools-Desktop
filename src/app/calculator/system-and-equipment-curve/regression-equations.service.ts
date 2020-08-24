@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as regression from 'regression';
 import * as _ from 'lodash';
-import { FanSystemCurveData, PumpSystemCurveData, ByDataInputs, EquipmentInputs, ByEquationInputs } from '../../shared/models/system-and-equipment-curve';
+import { FanSystemCurveData, PumpSystemCurveData, ByDataInputs, EquipmentInputs, ByEquationInputs, ModificationEquipment } from '../../shared/models/system-and-equipment-curve';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
@@ -31,7 +31,7 @@ export class RegressionEquationsService {
     this.systemCurveRegressionEquation = new BehaviorSubject<string>(undefined);
   }
 
-  getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, yValue: string, maxFlowRate: number): {
+  getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, modificationEquipment: ModificationEquipment, yValue: string, maxFlowRate: number): {
     baselineRegressionEquation: string,
     baselineRSquared: number,
     modificationRegressionEquation: string,
@@ -43,7 +43,6 @@ export class RegressionEquationsService {
     byData.dataRows.forEach(row => {
       baselineData.push([row.flow, row.yValue]);
     })
-
     let baselineResults = regression.polynomial(baselineData, { order: byData.dataOrder, precision: 50 });
     this.setSigFigs(baselineResults);
     let baselineRegressionEquation: string = baselineResults.string;
@@ -51,29 +50,42 @@ export class RegressionEquationsService {
     baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, yValue);
     let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
 
-    let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
+    let ratio: number;
     let modifiedDataPairs: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     let modificationData: Array<Array<number>> = new Array();
-    baselineData = new Array();
+    if (modificationEquipment) {
+      ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
+      console.log('ratio', ratio);
+      debugger;
+    }
     for (let i = 0; i <= maxFlowRate; i += 10) {
+    // TODO increment by 2 for accurate intersections - check if needed with Plotly
+    // for (let i = 0; i <= maxFlowRate; i += 2) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
         let xBaseline: number = i;
+        // if (modificationEquipment) {
+        //   // Match x increments of modification
+        //   xBaseline = i * ratio;
+        // }
         let yBaseline: number = yVal[1];
-        let xModified: number = i * ratio;
-        let yModified: number = yVal[1] * Math.pow(ratio, 2);
-        if (xModified <= maxFlowRate) {
-          modifiedDataPairs.push({
-            x: xModified,
-            y: yModified
-          });
-          modificationData.push([xModified, yModified]);
-        }
         baselineDataPairs.push({
           x: xBaseline,
           y: yBaseline
         });
         baselineData.push([xBaseline, yBaseline]);
+        if (modificationEquipment) {
+          let xModified: number = i * ratio;
+          let yModified: number = yVal[1] * Math.pow(ratio, 2);
+          // TODO check if condition is needed in plotly chart
+          if (xModified <= maxFlowRate) {
+            modifiedDataPairs.push({
+              x: xModified,
+              y: yModified
+            });
+            modificationData.push([xModified, yModified]);
+          }
+        }
       }
     }
     let modificationResults = regression.polynomial(modificationData, { order: byData.dataOrder, precision: 50 });
@@ -115,7 +127,7 @@ export class RegressionEquationsService {
     return regressionEquation;
   }
 
-  getEquipmentCurveRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, secondValueLabel: string, maxFlowRate: number): {
+  getEquipmentCurveRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, modificationEquipment: ModificationEquipment, secondValueLabel: string, maxFlowRate: number): {
     baselineRegressionEquation: string,
     modificationRegressionEquation: string,
     baselineDataPairs: Array<{ x: number, y: number }>,
@@ -143,7 +155,11 @@ export class RegressionEquationsService {
     let baselineDataPairs: Array<{ x: number, y: number }> = this.calculateByEquationData(byEquationInputs, 1, maxFlowRate).dataPairs;
 
     //modification
-    let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
+    let ratio: number;
+    if (modificationEquipment) {
+      ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
+    }
+    debugger;
     let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio, maxFlowRate);
     let modificationResults = regression.polynomial(modifiedData.calculationData, { order: byEquationInputs.equationOrder, precision: 50 });
     this.setSigFigs(modificationResults);
@@ -243,6 +259,8 @@ export class RegressionEquationsService {
       fanSystemCurveData.systemLossExponent
     );
     for (var i = 0; i <= maxFlowRate; i += 10) {
+    // TODO increment by 2 for accurate intersections - check if needed with Plotly
+    // for (var i = 0; i <= maxFlowRate; i += 2) {
       let pressureAndFluidPower: { pressure: number, fluidPower: number } = this.calculateFanPressureAndFluidPower(staticPressure, lossCoefficient, i, fanSystemCurveData.systemLossExponent, fanSystemCurveData.compressibilityFactor, settings);
       if (pressureAndFluidPower.pressure >= 0) {
         data.push({ x: i, y: pressureAndFluidPower.pressure, fluidPower: pressureAndFluidPower.fluidPower })
@@ -250,6 +268,7 @@ export class RegressionEquationsService {
         data.push({ x: i, y: 0, fluidPower: 0 });
       }
     }
+    debugger;
     return data;
   }
 
@@ -270,8 +289,9 @@ export class RegressionEquationsService {
       pumpSystemCurveData.pointTwoHead,
       pumpSystemCurveData.systemLossExponent
     );
-
     for (var i = 0; i <= maxFlowRate; i += 10) {
+    // TODO increment by 2 for accurate intersections - check if needed with Plotly
+    // for (var i = 0; i <= maxFlowRate; i += 2) {
       let headAndFluidPower: { head: number, fluidPower: number } = this.calculatePumpHeadAndFluidPower(staticHead, lossCoefficient, i, pumpSystemCurveData.systemLossExponent, pumpSystemCurveData.specificGravity, settings);
       if (headAndFluidPower.head >= 0) {
         data.push({ x: i, y: headAndFluidPower.head, fluidPower: headAndFluidPower.fluidPower });

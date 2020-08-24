@@ -121,4 +121,104 @@
             </small>
         </div>
     </div>
+
+    <div class="d-block pt-3">
+        <h5 class="group-label group-mod-label" (click)="togglePumpModification()">Pump Modification Data
+            <span *ngIf="pumpModificationCollapsed == 'open'"
+                class="remove-curve fa fa-minus pull-right"></span>
+            <span *ngIf="pumpModificationCollapsed == 'closed'"
+                class="add-curve fa fa-plus pull-right"></span>
+        </h5>
+        <div class="mb-3 d-block" *ngIf="pumpModificationCollapsed == 'open'">
+            <label class="group-label w-auto mb-1">Modified Condition</label>
+            <div class="row no-gutters">
+                <div class="col-6 form-group">
+                    <select id="modificationMeasurementOption" name="modificationMeasurementOption" class="form-control"
+                        (change)="saveChanges()" formControlName="modificationMeasurementOption"
+                        (focus)="focusField('measurementOption')">
+                        <option *ngFor="let option of modificationOptions" [ngValue]="option.value">{{option.display}}</option>
+                    </select>
+                </div>
+                <div *ngIf="pumpSystemCurveForm.controls.modificationMeasurementOption.value == 0" class="col-6 form-group">
+                    <div class="input-group">
+                        <input type="number" step="any" class="form-control addon-input" id="modifiedFlow"
+                            formControlName="modifiedFlow" (input)="saveChanges()" onfocus="this.select();"
+                            (focus)="focusField('modifiedFlow')">
+                        <span class="input-group-addon units" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="pumpSystemCurveForm.controls.modifiedFlow.invalid && !pumpSystemCurveForm.controls.modifiedFlow.pristine">
+                        <span *ngIf="pumpSystemCurveForm.controls.modifiedFlow.errors.required">Value required.</span>
+                        <span *ngIf="pumpSystemCurveForm.controls.modifiedFlow.errors.min">Value can't be less than
+                            {{pumpSystemCurveForm.controls.modifiedFlow.errors.min.min}}.</span>
+                    </span>
+                </div>
+                <div *ngIf="pumpSystemCurveForm.controls.modificationMeasurementOption.value == 1" class="col-6 no-gutters form-group">
+                <div class="input-group">
+                    <input type="number" step="any" class="form-control addon-input" id="modifiedHead"
+                    formControlName="modifiedHead" (input)="saveChanges()" onfocus="this.select();"
+                    (focus)="focusField('modifiedHead')">
+                    <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
+                </div>
+                <span class="alert-danger pull-right small"
+                    *ngIf="pumpSystemCurveForm.controls.modifiedHead.invalid && !pumpSystemCurveForm.controls.modifiedHead.pristine">
+                    <span *ngIf="pumpSystemCurveForm.controls.modifiedHead.errors.required">Value required.</span>
+                    <span *ngIf="pumpSystemCurveForm.controls.modifiedHead.errors.min">Value can't be less than
+                        {{pumpSystemCurveForm.controls.modifiedHead.errors.min.min}}.</span>
+                    </span>
+                </div>
+            </div>
+                <div> 
+                    <div class="row">
+                        <div class="col-6">
+                      <label class="small">Modification Head</label>
+                    </div>
+                    <div class="col-6 text-center small bold">
+                      <span *ngIf="modificationEquipment.head">{{modificationEquipment.head | number: '1.0-2'}} </span>
+                      <span *ngIf="!modificationEquipment.head">&mdash; &mdash; </span>
+                    <span class="ml-1" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-6">
+                        <label class="small">Modification Flow</label>
+                    </div>
+                    <div class="col-6 text-center small bold">
+                      <span *ngIf="modificationEquipment.flow">{{modificationEquipment.flow | number: '1.0-2'}} </span>
+                      <span *ngIf="!modificationEquipment.flow">&mdash; &mdash; </span>
+                      <span class="ml-1" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
+                    </div>
+                </div>
+                <div *ngIf="displaySpeed" class="row" >
+                    <div class="col-6">
+                        <label class="small">Modification Speed</label>
+                    </div>
+                    <div class="col-6 text-center small bold">
+                      <span *ngIf="modificationEquipment.speed">{{modificationEquipment.speed | number: '1.0-0'}} </span>
+                      <span *ngIf="!modificationEquipment.speed">&mdash; &mdash; </span>
+                      <span class="ml-1">rpm</span>
+                    </div>
+                </div>
+                <div *ngIf="!displaySpeed" class="row">
+                    <!--  Speed and diameter represent the same calculation. -->
+                    <div class="col-6">
+                        <label class="small">Modification Diameter</label>
+                    </div>
+                    <div class="col-6 text-center small bold">
+                      <span *ngIf="modificationEquipment.speed" >{{modificationEquipment.speed | number: '1.0-0'}} </span>
+                      <span *ngIf="!modificationEquipment.speed" >&mdash; &mdash; </span>
+                      <span class="ml-1">
+                          <span *ngIf="settings.fanFlowrate == 'ft3/min'">
+                            in
+                          </span>
+                          <span *ngIf="settings.fanFlowrate != 'ft3/min'">
+                            cm
+                          </span>
+                      </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </form>
