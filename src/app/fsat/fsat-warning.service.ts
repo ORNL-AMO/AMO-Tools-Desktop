@@ -73,7 +73,7 @@ export class FsatWarningService {
         if (settings.fanPowerMeasurement === 'hp') {
           val = this.convertUnitsService.value(tmpVal).from(settings.fanPowerMeasurement).to('kW');
           if (isModification) {
-            let isModValid: boolean = this.fsatService.checkValid(fsat, isModification).isValid;
+            let isModValid: boolean = this.fsatService.checkValid(fsat, isModification, settings).isValid;
             if (isModValid) {
               let fsatInput: FsatInput = this.fsatService.getInput(fsat, settings);
               let fsatOutput: FsatOutput = this.fsatService.fanResultsModified(fsatInput);
@@ -89,7 +89,7 @@ export class FsatWarningService {
         } else {
           val = tmpVal;
           if (isModification) {
-            let isModValid: boolean = this.fsatService.checkValid(fsat, isModification).isValid;
+            let isModValid: boolean = this.fsatService.checkValid(fsat, isModification, settings).isValid;
             if (isModValid) {
               let fsatInput: FsatInput = this.fsatService.getInput(fsat, settings);
               let fsatOutput: FsatOutput = this.fsatService.fanResultsModified(fsatInput);
@@ -256,40 +256,40 @@ export class FsatWarningService {
   }
 
   
-  //FAN FLUID
-  checkFanFluidWarnings(baseGasDensity: BaseGasDensity, settings: Settings): FanFluidWarnings {
-    let barometricPressureError: string = this.checkBarometricPressure(baseGasDensity, settings);
-    return {
-      barometricPressureError: barometricPressureError
-    }
-  }
+  // //FAN FLUID
+  // checkFanFluidWarnings(baseGasDensity: BaseGasDensity, settings: Settings): FanFluidWarnings {
+  //   let barometricPressureError: string = this.checkBarometricPressure(baseGasDensity, settings);
+  //   return {
+  //     barometricPressureError: barometricPressureError
+  //   }
+  // }
 
-  //TODO: NOT Imperial || Other
-  checkBarometricPressure(baseGasDensity: BaseGasDensity, settings: Settings) {
-    let barometricMin: number = this.convertUnitsService.value(25.5).from('inHg').to(settings.fanBarometricPressure);
-    let barometricMax: number = this.convertUnitsService.value(32.5).from('inHg').to(settings.fanBarometricPressure);
-    if (baseGasDensity.barometricPressure) {
-      if(baseGasDensity.barometricPressure > barometricMax){
-        return 'Barometirc pressure is high, please check your value.';
-      }else if(baseGasDensity.barometricPressure < barometricMin){
-        return 'Barometirc pressure is low, please check your value.'
-      }else{
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
+  // //TODO: NOT Imperial || Other
+  // checkBarometricPressure(baseGasDensity: BaseGasDensity, settings: Settings) {
+  //   let barometricMin: number = this.convertUnitsService.value(25.5).from('inHg').to(settings.fanBarometricPressure);
+  //   let barometricMax: number = this.convertUnitsService.value(32.5).from('inHg').to(settings.fanBarometricPressure);
+  //   if (baseGasDensity.barometricPressure) {
+  //     if(baseGasDensity.barometricPressure > barometricMax){
+  //       return 'Barometirc pressure is high, please check your value.';
+  //     }else if(baseGasDensity.barometricPressure < barometricMin){
+  //       return 'Barometirc pressure is low, please check your value.'
+  //     }else{
+  //       return null;
+  //     }
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
-  checkRelativeHumidity(baseGasDensity: BaseGasDensity) {
-    if (baseGasDensity.relativeHumidity < 0) {
-      return 'Value should be greater than or equal to 0';
-    } else if (baseGasDensity.relativeHumidity > 100) {
-      return 'Value should be less than or equal to 100';
-    } else {
-      return null;
-    }
-  }
+  // checkRelativeHumidity(baseGasDensity: BaseGasDensity) {
+  //   if (baseGasDensity.relativeHumidity < 0) {
+  //     return 'Value should be greater than or equal to 0';
+  //   } else if (baseGasDensity.relativeHumidity > 100) {
+  //     return 'Value should be less than or equal to 100';
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   checkWarningsExist(warnings: FanFieldDataWarnings | FanMotorWarnings | { fanSpeedError: string }): boolean {
     let hasWarning: boolean = false;
@@ -318,6 +318,6 @@ export interface FanMotorWarnings {
   ratedPowerError: string;
 }
 
-export interface FanFluidWarnings {
-  barometricPressureError: string;
-}
+// export interface FanFluidWarnings {
+//   barometricPressureError: string;
+// }

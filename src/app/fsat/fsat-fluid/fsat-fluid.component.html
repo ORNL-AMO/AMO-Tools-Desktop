@@ -7,7 +7,7 @@
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div class="form-group"
-      [ngClass]="{'indicate-different': isBarometricPressureDifferent(), 'invalid':gasDensityForm.controls.barometricPressure.invalid, 'error': warnings.barometricPressureError !== null}">
+      [ngClass]="{'indicate-different': isBarometricPressureDifferent(), 'invalid':gasDensityForm.controls.barometricPressure.invalid}">
       <label for="{{'barometricPressure_'+idString}}">Barometric Pressure (P
         <sub>bo</sub>)</label>
       <div class="input-group">
@@ -24,10 +24,11 @@
           {{gasDensityForm.controls.barometricPressure.errors.min.min}} <span
             [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
           .</span>
+        <span *ngIf="gasDensityForm.controls.barometricPressure.errors.max">Value can't be greater than
+          {{gasDensityForm.controls.barometricPressure.errors.max.max}} <span
+            [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
+          .</span>
       </span>
-      <span class="alert-warning pull-right small"
-        *ngIf="warnings.barometricPressureError !== null && !gasDensityForm.controls.barometricPressure.pristine && !gasDensityForm.controls.barometricPressure.invalid">
-        {{warnings.barometricPressureError}}</span>
     </div>
 
     <div class="form-group" [ngClass]="{'indicate-different': isGasTypeDifferent()}">

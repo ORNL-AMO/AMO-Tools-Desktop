@@ -7,7 +7,6 @@ import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { CompareService } from '../compare.service';
 import { GasDensityFormService } from '../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
-import { FanFluidWarnings, FsatWarningService } from '../fsat-warning.service';
 
 @Component({
   selector: 'app-fsat-fluid',
@@ -49,13 +48,12 @@ export class FsatFluidComponent implements OnInit {
   ];
 
   idString: string;
-  warnings: FanFluidWarnings;
+  // warnings: FanFluidWarnings;
   constructor(private compareService: CompareService,
     private fsatService: FsatService,
     private fsatFluidService: FsatFluidService,
     private helpPanelService: HelpPanelService,
-    private gasDensityFormService: GasDensityFormService,
-    private fsatWarningService: FsatWarningService) { }
+    private gasDensityFormService: GasDensityFormService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -92,7 +90,7 @@ export class FsatFluidComponent implements OnInit {
   }
 
   init() {
-    this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(this.baseGasDensity);
+    this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(this.baseGasDensity, this.settings);
   }
 
   disableForm() {
@@ -111,7 +109,6 @@ export class FsatFluidComponent implements OnInit {
     //save is always called on input so add check for warnings call here
     this.baseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
     this.updateFormValidators();
-    this.checkForWarnings();
     this.emitSave.emit(this.baseGasDensity);
   }
 
@@ -125,10 +122,6 @@ export class FsatFluidComponent implements OnInit {
       this.gasDensityForm.controls.wetBulbTemp.setValidators(validators.wetBulbTempValidators);
       this.gasDensityForm.controls.wetBulbTemp.updateValueAndValidity();
     }
-  }
-
-  checkForWarnings() {
-    this.warnings = this.fsatWarningService.checkFanFluidWarnings(this.baseGasDensity, this.settings);
   }
 
   focusField(str: string) {

@@ -123,7 +123,7 @@ export class FsatSankeyComponent implements OnInit {
       isBaseline = true;
     }
 
-    this.fsat.valid = this.fsatService.checkValid(this.fsat, isBaseline);
+    this.fsat.valid = this.fsatService.checkValid(this.fsat, isBaseline, this.settings);
     this.cd.detectChanges();
     let tmpOutput = this.fsatService.getResults(this.fsat, isBaseline, this.settings);
 
