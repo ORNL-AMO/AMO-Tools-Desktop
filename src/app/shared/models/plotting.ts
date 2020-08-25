@@ -1,11 +1,9 @@
 //Shared objects for Plotly data visualizations
 
-export interface DataPoint {
-    pointColor?: string;
-    pointOutlineColor?: string;
-    pointTraceIndex?: number;
-    x: number;
-    y: number;
+export interface SelectedDataPoint {
+    pointColor: string;
+    pointX: number;
+    pointY: number;
 }
 
 export interface SimpleChart {
@@ -15,7 +13,10 @@ export interface SimpleChart {
     layout: {
         barmode?: string,
         legend?: {
-            orientation: string
+            orientation: string,
+            font?: {
+                size: number,
+              },
         }
         title?: {
             text: string,
@@ -46,8 +47,8 @@ export interface SimpleChart {
 }
 
 export interface AxisObj {
-    autorange: boolean,
-    type: string,
+    autorange?: boolean,
+    type?: string,
     showgrid: boolean,
     showspikes?: boolean,
     spikemode?: string,
@@ -55,7 +56,9 @@ export interface AxisObj {
         text: string
     },
     tickvals?: Array<number | string>,
+    ticktext?: Array<number | string>,
     tickmode?: string,
+    autotick?: boolean,
     ticksuffix?: string,
     tickangle?: number,
     tick0?: number,
@@ -115,4 +118,13 @@ export interface ChartConfig {
     xName?: string,
     yUnits?: string,
     xUnits?: string,
+}
+
+export interface DataPoint {
+    pointColor?: string;
+    pointOutlineColor?: string;
+    pointTraceIndex?: number;
+    name?: string;
+    x: number;
+    y: number;
 }

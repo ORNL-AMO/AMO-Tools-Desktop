@@ -155,7 +155,18 @@ export class O2EnrichmentFormService {
       },
     ];
 
+    if (settings.unitsOfMeasure == 'Metric') {
+      exampleInputs = this.convertExampleInputs(exampleInputs);
+    }
     return exampleInputs;
+  }
+
+  convertExampleInputs(inputs: Array<EnrichmentInput>): Array<EnrichmentInput> {
+    inputs.map((input: EnrichmentInput)  => {
+      input.inputData.combAirTemp = this.convertUnitsService.roundVal(this.convertUnitsService.value(input.inputData.combAirTemp).from('F').to('C'), 2);
+      input.inputData.name = `T = ${this.convertUnitsService.roundVal(input.inputData.combAirTemp, 0)}C`;
+    });
+    return inputs;
   }
 
   getResetData(): EnrichmentInputData {

@@ -344,7 +344,7 @@ export class O2EnrichmentService {
       x: [],
       y: [],
       name: '',
-      showlegend: false,
+      showlegend: true,
       type: 'scatter',
       hovertemplate: `O<sub>2</sub> in Air: %{x}%<br>Fuel Savings: %{y:.2r}%<br>`,
       line: {
@@ -389,9 +389,6 @@ export class O2EnrichmentService {
           showgrid: showGrid,
           showspikes: true,
           spikemode: 'across',
-          // title: {
-          //   text: "O<sub>2</sub> in Air (%)"
-          // },
           range: [20, 40, 60, 80, 100],
           showticksuffix: 'all',
           tickangle: -60

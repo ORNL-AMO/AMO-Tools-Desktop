@@ -7,7 +7,8 @@ import { FSAT } from '../../../shared/models/fans';
 @Injectable()
 export class MotorPerformanceService {
   motorPerformanceInputs: MotorPerformanceInputs;
-  constructor(private formBuilder: FormBuilder) { }
+
+  constructor(private formBuilder: FormBuilder) {}
 
   initFormFromPsat(psat: PSAT): FormGroup {
     return this.formBuilder.group({
@@ -86,8 +87,8 @@ export class MotorPerformanceService {
       efficiency: form.controls.efficiency.value,
     };
   }
-}
 
+}
 
 export interface MotorPerformanceInputs {
   frequency: number;
