@@ -69,10 +69,9 @@ export class NameplateDataComponent implements OnInit {
     this.motorInventoryService.focusedField.next('default');
   }
 
-  //TODO: Update nominalEfficiency?
-  changeEfficiencyClass() {
-
+  estimateEfficiency() {
+    let efficiency: number = this.motorCatalogService.estimateEfficiency(1);
+    this.motorForm.controls.nominalEfficiency.patchValue(efficiency);
     this.save();
   }
-
 }

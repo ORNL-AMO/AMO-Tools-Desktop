@@ -426,6 +426,32 @@ export class PsatService {
     };
     return this.roundVal(psatAddon.nema(tmpInputs), 2);
   }
+
+  //motor efficiency (nema without hard coded load factor)
+  motorEfficiency(
+    lineFreq: number,
+    motorRPM: number,
+    efficiencyClass: number,
+    // efficiency: number,
+    motorPower: number,
+    loadFactor: number,
+    settings: Settings
+  ) {
+    if (settings.unitsOfMeasure != 'Imperial') {
+      motorPower = this.convertUnitsService.value(motorPower).from(settings.powerMeasurement).to('hp');
+    }
+    //efficiency unused, calced from efficiencyClass
+    let tmpInputs = {
+      line_frequency: lineFreq,
+      motor_rated_speed: motorRPM,
+      efficiency_class: efficiencyClass,
+      efficiency: 90,
+      motor_rated_power: motorPower,
+      load_factor: loadFactor
+    };
+    return this.roundVal(psatAddon.nema(tmpInputs), 2);
+  }
+
   //ENUM Helpers
   getPumpStyleFromEnum(num: number): string {
     let pumpStyle: { display: string, value: number } = _.find(pumpTypesConstant, (pumpStyle) => { return pumpStyle.value == num });

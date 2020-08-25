@@ -5,6 +5,8 @@ import { LoadCharacteristicOptions, MotorItem } from '../../../motor-inventory';
 import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { LoadCharacteristicDataService } from './load-characteristic-data.service';
+import { PsatService } from '../../../../psat/psat.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-load-characteristic-data',
@@ -17,11 +19,13 @@ export class LoadCharacteristicDataComponent implements OnInit {
   selectedMotorItemSub: Subscription;
   displayOptions: LoadCharacteristicOptions;
   displayForm: boolean = true;
+  selectedMotorItem: MotorItem;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private loadCharacteristicsDataService: LoadCharacteristicDataService) { }
 
   ngOnInit(): void {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
+      this.selectedMotorItem = selectedMotor;
       if (selectedMotor) {
         this.motorForm = this.loadCharacteristicsDataService.getFormFromLoadCharacteristicData(selectedMotor.loadCharacteristicData);
       }
@@ -44,7 +48,7 @@ export class LoadCharacteristicDataComponent implements OnInit {
     this.motorInventoryService.focusedField.next(str);
   }
 
-  toggleForm(){
+  toggleForm() {
     this.displayForm = !this.displayForm;
     this.focusOut();
   }
@@ -54,4 +58,20 @@ export class LoadCharacteristicDataComponent implements OnInit {
     this.motorInventoryService.focusedField.next('default');
   }
 
+  calculateEfficiency75() {
+    let efficiency: number = this.motorCatalogService.estimateEfficiency(.75);
+    this.motorForm.controls.efficiency75.patchValue(efficiency);
+    this.save();
+  }
+
+  calculateEfficiency50() {
+    let efficiency: number = this.motorCatalogService.estimateEfficiency(.50);
+    this.motorForm.controls.efficiency50.patchValue(efficiency);
+    this.save();
+  }
+  calculateEfficiency25() {
+    let efficiency: number = this.motorCatalogService.estimateEfficiency(.25);
+    this.motorForm.controls.efficiency25.patchValue(efficiency);
+    this.save();
+  }
 }

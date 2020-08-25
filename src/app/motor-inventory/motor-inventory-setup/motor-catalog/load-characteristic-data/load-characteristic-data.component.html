@@ -6,7 +6,9 @@
 <form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
     <!-- efficiency75 -->
     <div class="form-group" *ngIf="displayOptions.efficiency75">
-        <label for="efficiency75">Efficiency at 75% Load</label>
+        <label for="efficiency75">Efficiency at 75% Load
+            <a class="form-text small click-link" (click)="calculateEfficiency75()">Estimate Efficiency</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('efficiency75')"
                 (input)="save()" formControlName="efficiency75" id="efficiency75">
@@ -21,7 +23,9 @@
     </div>
     <!-- efficiency50 -->
     <div class="form-group" *ngIf="displayOptions.efficiency50">
-        <label for="efficiency50">Efficiency at 50% Load</label>
+        <label for="efficiency50">Efficiency at 50% Load
+            <a class="form-text small click-link" (click)="calculateEfficiency50()">Estimate Efficiency</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('efficiency50')"
                 (input)="save()" formControlName="efficiency50" id="efficiency50">
@@ -36,7 +40,9 @@
     </div>
     <!-- efficiency25 -->
     <div class="form-group" *ngIf="displayOptions.efficiency25">
-        <label for="efficiency25">Efficiency at 25% Load</label>
+        <label for="efficiency25">Efficiency at 25% Load
+            <a class="form-text small click-link" (click)="calculateEfficiency25()">Estimate Efficiency</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('efficiency25')"
                 (input)="save()" formControlName="efficiency25" id="efficiency25">
