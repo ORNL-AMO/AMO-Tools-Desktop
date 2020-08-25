@@ -30,25 +30,13 @@
       </div>
     </div>
   </div>
-  <!-- <div class="form-section" *ngIf="!inCalc">
-    <label>
-								Total Electricity Consumption (Auxiliary Equipment)
-							</label>
-    <div class="form-group">
-      <label for="electricityUsed">Electricity Used During Data Collection</label>
-      <div class="input-group">
-        <input name="electricityUsed" type="number" step="any" id="electricityUsed" class="form-control" (focus)="focusField('steamElectricityUsed')"
-          [(ngModel)]="inputs.electricityUsed" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">kWh</span>
-      </div>
+  <div class="form-group">
+    <label for="operatingHours">Operating Hours</label>
+    <div class="input-group">
+      <input name="operatingHours" type="number" step="any" id="operatingHours" class="form-control"
+        (focus)="changeField('operatingHours')" [(ngModel)]="inputs.operatingHours" (input)="calculate()"
+        onfocus="this.select();" />
+      <span class="input-group-addon units">hrs/yr</span>
     </div>
-    <div class="form-group">
-      <label for="electricityCollectionTime">Data Collection Time</label>
-      <div class="input-group">
-        <input name="electricityCollectionTime" type="number" step="any" id="electricityCollectionTime" class="form-control" (focus)="focusField('steamElectricityCollectionTime')"
-          [(ngModel)]="inputs.collectionTime" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">hrs</span>
-      </div>
-    </div>
-  </div> -->
+  </div>
 </form>

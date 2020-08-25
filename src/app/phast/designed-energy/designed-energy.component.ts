@@ -98,7 +98,7 @@ export class DesignedEnergyComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
+    this.results = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings, false);
   }
 
   setTab(str: string) {

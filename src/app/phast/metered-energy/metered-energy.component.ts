@@ -65,24 +65,6 @@ export class MeteredEnergyComponent implements OnInit {
     };
   }
 
-  // initializeExisting() {
-  //   if (!this.phast.meteredEnergy.meteredEnergyElectricity) {
-  //     this.phast.meteredEnergy.meteredEnergyElectricity = this.getEmptyElectricityInput();
-  //   } else if (!this.phast.meteredEnergy.electricity) {
-  //     this.setElectricity();
-  //   }
-  //   if (!this.phast.meteredEnergy.meteredEnergyFuel) {
-  //     this.phast.meteredEnergy.meteredEnergyFuel = this.getEmptyFuelInput();
-  //   } else if (!this.phast.meteredEnergy.fuel) {
-  //     this.setFuel();
-  //   }
-  //   if (!this.phast.meteredEnergy.meteredEnergySteam) {
-  //     this.phast.meteredEnergy.meteredEnergySteam = this.getEmptySteamInput();
-  //   } else if (!this.phast.meteredEnergy.steam) {
-  //     this.setSteam();
-  //   }
-  // }
-
   emitSave() {
     this.save.emit(true);
   }
@@ -112,7 +94,7 @@ export class MeteredEnergyComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings);
+    this.results = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings, false);
   }
 
   setTab(str: string) {
@@ -133,7 +115,8 @@ export class MeteredEnergyComponent implements OnInit {
       flowRate: 0,
       collectionTime: 0,
       electricityUsed: 0,
-      electricityCollectionTime: 0
+      electricityCollectionTime: 0,
+      operatingHours: 0
     };
   }
 
@@ -145,7 +128,8 @@ export class MeteredEnergyComponent implements OnInit {
       collectionTime: 0,
       electricityUsed: 0,
       electricityCollectionTime: 0,
-      fuelEnergy: 0
+      fuelEnergy: 0,
+      operatingHours: 0
     };
   }
 
@@ -154,7 +138,8 @@ export class MeteredEnergyComponent implements OnInit {
       electricityCollectionTime: 0,
       electricityUsed: 0,
       auxElectricityUsed: 0,
-      auxElectricityCollectionTime: 0
+      auxElectricityCollectionTime: 0,
+      operatingHours: 0
     };
   }
 }

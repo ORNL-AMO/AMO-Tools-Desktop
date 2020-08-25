@@ -18,6 +18,7 @@ export interface MeteredEnergyFuel {
     electricityCollectionTime: number;
     fuelEnergy: number;
     userDefinedMeteredEnergy?: boolean;
+    operatingHours: number;
 }
 export interface MeteredEnergyResults {
     meteredEnergyUsed: number;
@@ -33,6 +34,7 @@ export interface MeteredEnergySteam {
     collectionTime: number;
     electricityUsed: number;
     electricityCollectionTime: number;
+    operatingHours: number;
 }
 
 export interface MeteredEnergyElectricity {
@@ -40,4 +42,5 @@ export interface MeteredEnergyElectricity {
     electricityUsed: number;
     auxElectricityUsed: number;
     auxElectricityCollectionTime: number;
+    operatingHours: number;
 }

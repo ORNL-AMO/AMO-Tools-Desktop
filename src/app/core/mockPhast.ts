@@ -983,7 +983,7 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 60,
                         totalBurnerCapacity: 169,
-                        operatingHours: 88
+                        operatingHours: 7708
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
@@ -1003,7 +1003,7 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 60,
                         totalBurnerCapacity: 169,
-                        operatingHours: 88
+                        operatingHours: 7708
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
@@ -1023,7 +1023,7 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 80,
                         totalBurnerCapacity: 81.6,
-                        operatingHours: 88
+                        operatingHours: 7708
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
@@ -1043,7 +1043,7 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 80,
                         totalBurnerCapacity: 102,
-                        operatingHours: 88
+                        operatingHours: 7708
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
@@ -1063,7 +1063,7 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 40,
                         totalBurnerCapacity: 41.4,
-                        operatingHours: 88
+                        operatingHours: 7708
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
@@ -1083,7 +1083,7 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 40,
                         totalBurnerCapacity: 34.8,
-                        operatingHours: 88
+                        operatingHours: 7708
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
@@ -1107,7 +1107,8 @@ export const MockPhast: Assessment = {
                 electricityCollectionTime: 0,
                 electricityUsed: 0,
                 auxElectricityUsed: 0,
-                auxElectricityCollectionTime: 0
+                auxElectricityCollectionTime: 0,
+                operatingHours: 0
             },
             meteredEnergyFuel: {
                 fuelDescription: "gas",
@@ -1116,14 +1117,16 @@ export const MockPhast: Assessment = {
                 collectionTime: 0,
                 electricityUsed: 0,
                 electricityCollectionTime: 0,
-                fuelEnergy: 0
+                fuelEnergy: 0,
+                operatingHours: 0
             },
             meteredEnergySteam: {
                 totalHeatSteam: 0,
                 flowRate: 0,
                 collectionTime: 0,
                 electricityUsed: 0,
-                electricityCollectionTime: 0
+                electricityCollectionTime: 0,
+                operatingHours: 0
             }
         },
         auxEquipment: [
