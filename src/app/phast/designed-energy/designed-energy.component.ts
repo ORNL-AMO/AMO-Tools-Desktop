@@ -131,7 +131,7 @@ export class DesignedEnergyComponent implements OnInit {
       totalHeat: 0,
       steamFlow: 0,
       percentCapacityUsed: 0,
-      percentOperatingHours: 0
+      operatingHours: 0
     };
   }
 
@@ -140,7 +140,7 @@ export class DesignedEnergyComponent implements OnInit {
       fuelType: 0,
       percentCapacityUsed: 0,
       totalBurnerCapacity: 0,
-      percentOperatingHours: 0
+      operatingHours: 0
     };
   }
 
@@ -148,7 +148,7 @@ export class DesignedEnergyComponent implements OnInit {
     return {
       kwRating: 0,
       percentCapacityUsed: 0,
-      percentOperatingHours: 0
+      operatingHours: 0
     };
   }
 

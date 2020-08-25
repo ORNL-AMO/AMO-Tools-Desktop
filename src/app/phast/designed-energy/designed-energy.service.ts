@@ -53,15 +53,15 @@ export class DesignedEnergyService {
   }
 
   calculateSteamZoneEnergyUsed(designedEnergySteam: DesignedEnergySteam): number {
-    return (designedEnergySteam.totalHeat) * (designedEnergySteam.steamFlow) * (designedEnergySteam.percentCapacityUsed / 100) * (designedEnergySteam.percentOperatingHours / 100);
+    return designedEnergySteam.totalHeat * designedEnergySteam.steamFlow * (designedEnergySteam.percentCapacityUsed / 100) * designedEnergySteam.operatingHours;
   }
 
   calculateFuelZoneEnergyUsed(designedEnergyFuel: DesignedEnergyFuel): number {
-    return ((designedEnergyFuel.totalBurnerCapacity) * (designedEnergyFuel.percentCapacityUsed / 100) * (designedEnergyFuel.percentOperatingHours / 100));
+    return designedEnergyFuel.totalBurnerCapacity * (designedEnergyFuel.percentCapacityUsed / 100) * designedEnergyFuel.operatingHours;
   }
 
   calculateElectricityZoneEnergyUsed(designedEnergyElectricity: DesignedEnergyElectricity): number {
-    return (designedEnergyElectricity.kwRating) * (designedEnergyElectricity.percentCapacityUsed / 100) * (designedEnergyElectricity.percentOperatingHours / 100);
+    return designedEnergyElectricity.kwRating * (designedEnergyElectricity.percentCapacityUsed / 100) * designedEnergyElectricity.operatingHours;
   }
 
   convertIntensity(num: number, settings: Settings): number {

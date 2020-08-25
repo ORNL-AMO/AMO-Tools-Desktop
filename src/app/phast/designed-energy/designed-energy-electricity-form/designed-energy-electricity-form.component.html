@@ -2,25 +2,36 @@
   <div class="form-group">
     <label for="kwRating">kW Rating for all sections</label>
     <div class="input-group">
-      <input name="kwRating" type="number" step="any" id="heatingValue" class="form-control" (focus)="changeField('electricitykwRating')" [(ngModel)]="inputs.kwRating"
-        (input)="calculate()" onfocus="this.select();" />
+      <input name="kwRating" type="number" step="any" id="heatingValue" class="form-control"
+        (focus)="changeField('electricitykwRating')" [(ngModel)]="inputs.kwRating" (input)="calculate()"
+        onfocus="this.select();" />
       <span class="input-group-addon units">kW</span>
     </div>
   </div>
   <div class="form-group">
     <label for="percentCapacityUsed">% of Rated Capacity Used</label>
     <div class="input-group">
-      <input name="percentCapacityUsed" type="number" step="any" id="percentCapacityUsed" class="form-control" (focus)="changeField('electricityPercentCapacityUsed')"
-        [(ngModel)]="inputs.percentCapacityUsed" (input)="calculate()" onfocus="this.select();" />
+      <input name="percentCapacityUsed" type="number" step="any" id="percentCapacityUsed" class="form-control"
+        (focus)="changeField('electricityPercentCapacityUsed')" [(ngModel)]="inputs.percentCapacityUsed"
+        (input)="calculate()" onfocus="this.select();" />
       <span class="input-group-addon units">%</span>
     </div>
   </div>
-  <div class="form-group">
+  <!-- <div class="form-group">
     <label for="percentOperatingHours">% of Operating Hours</label>
     <div class="input-group">
       <input name="percentOperatingHours" type="number" step="any" id="percentOperatingHours" class="form-control" (focus)="changeField('electricityPercentOperatingHours')"
         [(ngModel)]="inputs.percentOperatingHours" (input)="calculate()" onfocus="this.select();" />
       <span class="input-group-addon units">%</span>
+    </div>
+  </div> -->
+  <div class="form-group">
+    <label for="operatingHours">Operating Hours</label>
+    <div class="input-group">
+      <input name="operatingHours" type="number" step="any" id="operatingHours" class="form-control"
+        (focus)="changeField('operatingHours')" [(ngModel)]="inputs.operatingHours" (input)="calculate()"
+        onfocus="this.select();" />
+      <span class="input-group-addon units">hrs/yr</span>
     </div>
   </div>
 </div>

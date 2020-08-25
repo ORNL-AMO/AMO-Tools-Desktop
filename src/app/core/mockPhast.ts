@@ -983,18 +983,18 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 60,
                         totalBurnerCapacity: 169,
-                        percentOperatingHours: 88
+                        operatingHours: 88
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     },
                     designedEnergySteam: {
                         totalHeat: 0,
                         steamFlow: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     }
                 },
                 {
@@ -1003,18 +1003,18 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 60,
                         totalBurnerCapacity: 169,
-                        percentOperatingHours: 88
+                        operatingHours: 88
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     },
                     designedEnergySteam: {
                         totalHeat: 0,
                         steamFlow: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     }
                 },
                 {
@@ -1023,18 +1023,18 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 80,
                         totalBurnerCapacity: 81.6,
-                        percentOperatingHours: 88
+                        operatingHours: 88
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     },
                     designedEnergySteam: {
                         totalHeat: 0,
                         steamFlow: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     }
                 },
                 {
@@ -1043,18 +1043,18 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 80,
                         totalBurnerCapacity: 102,
-                        percentOperatingHours: 88
+                        operatingHours: 88
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     },
                     designedEnergySteam: {
                         totalHeat: 0,
                         steamFlow: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     }
                 },
                 {
@@ -1063,18 +1063,18 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 40,
                         totalBurnerCapacity: 41.4,
-                        percentOperatingHours: 88
+                        operatingHours: 88
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     },
                     designedEnergySteam: {
                         totalHeat: 0,
                         steamFlow: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     }
                 },
                 {
@@ -1083,18 +1083,18 @@ export const MockPhast: Assessment = {
                         fuelType: 0,
                         percentCapacityUsed: 40,
                         totalBurnerCapacity: 34.8,
-                        percentOperatingHours: 88
+                        operatingHours: 88
                     },
                     designedEnergyElectricity: {
                         kwRating: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     },
                     designedEnergySteam: {
                         totalHeat: 0,
                         steamFlow: 0,
                         percentCapacityUsed: 0,
-                        percentOperatingHours: 0
+                        operatingHours: 0
                     }
                 },
             ]

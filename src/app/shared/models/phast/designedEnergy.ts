@@ -9,18 +9,21 @@ export interface DesignedEnergyFuel {
     fuelType: number;
     percentCapacityUsed: number;
     totalBurnerCapacity: number;
-    percentOperatingHours: number;
+    // percentOperatingHours: number;
+    operatingHours: number;
 }
 export interface DesignedEnergySteam {
     totalHeat: number;
     steamFlow: number;
     percentCapacityUsed: number;
-    percentOperatingHours: number;
+    // percentOperatingHours: number;
+    operatingHours: number;
 }
 export interface DesignedEnergyElectricity {
     kwRating: number;
     percentCapacityUsed: number;
-    percentOperatingHours: number;
+    // percentOperatingHours: number;
+    operatingHours: number;
 }
 
 export interface DesignedEnergyResults {

@@ -165,7 +165,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 60,
               totalBurnerCapacity: 169,
-              percentOperatingHours: 88
+              operatingHours: 88
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -176,7 +176,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 60,
               totalBurnerCapacity: 169,
-              percentOperatingHours: 88
+              operatingHours: 88
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -187,7 +187,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 80,
               totalBurnerCapacity: 81.6,
-              percentOperatingHours: 88
+              operatingHours: 88
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -198,7 +198,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 80,
               totalBurnerCapacity: 102,
-              percentOperatingHours: 88
+              operatingHours: 88
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -209,7 +209,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 40,
               totalBurnerCapacity: 41.4,
-              percentOperatingHours: 88
+              operatingHours: 88
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -220,7 +220,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 40,
               totalBurnerCapacity: 34.8,
-              percentOperatingHours: 88
+              operatingHours: 88
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
