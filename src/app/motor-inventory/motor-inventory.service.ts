@@ -119,7 +119,8 @@ export class MotorInventoryService {
         averageLoadFactor: undefined,
         utilizationFactor: undefined,
         efficiencyAtAverageLoad: undefined,
-        powerFactorAtLoad: undefined
+        powerFactorAtLoad: undefined,
+        currentAtLoad: undefined,
       },
       otherData:  {
         driveType: undefined,
@@ -197,7 +198,8 @@ export class MotorInventoryService {
         averageLoadFactor: false,
         utilizationFactor: false,
         efficiencyAtAverageLoad: false,
-        powerFactorAtLoad: false
+        powerFactorAtLoad: false,
+        currentAtLoad: false
       },
       otherOptions: {
         displayOther: false,

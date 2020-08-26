@@ -93,7 +93,8 @@ export interface OperationData {
   averageLoadFactor: number,
   utilizationFactor: number,
   efficiencyAtAverageLoad: number,
-  powerFactorAtLoad: number
+  powerFactorAtLoad: number,
+  currentAtLoad: number
 }
 
 export interface OtherData {
@@ -185,7 +186,8 @@ export interface OperationDataOptions {
   averageLoadFactor: boolean,
   utilizationFactor: boolean,
   efficiencyAtAverageLoad: boolean,
-  powerFactorAtLoad: boolean
+  powerFactorAtLoad: boolean,
+  currentAtLoad: boolean
 }
 
 export interface OtherOptions {

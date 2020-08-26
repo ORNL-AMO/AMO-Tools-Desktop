@@ -50,6 +50,13 @@
             Efficiency at Average Load
         </label>
     </div>
+    <div class="checkbox" (mouseenter)="focusField('currentAtLoad')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="operationDataOptions.currentAtLoad"
+                name="currentAtLoad" id="currentAtLoad">
+            Current at Load
+        </label>
+    </div>
     <div class="checkbox" (mouseenter)="focusField('powerFactorAtLoad')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="operationDataOptions.powerFactorAtLoad"

@@ -59,7 +59,9 @@
     </div>
     <!-- efficiencyAtAverageLoad -->
     <div class="form-group" *ngIf="displayOptions.efficiencyAtAverageLoad">
-        <label for="efficiencyAtAverageLoad">Efficiency at Average Load</label>
+        <label for="efficiencyAtAverageLoad">Efficiency at Average Load
+            <a class="form-text small click-link" (click)="calculateEfficiency()">Estimate Efficiency</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()"
                 (focus)="focusField('efficiencyAtAverageLoad')" (input)="save()"
@@ -73,9 +75,28 @@
                 {{motorForm.controls.efficiencyAtAverageLoad.errors.min.min}} %.</span>
         </span>
     </div>
-    <!-- utilizationFactor -->
+    <!-- currentAtLoad -->
+    <div class="form-group" *ngIf="displayOptions.currentAtLoad">
+        <label for="currentAtLoad">Current at Load
+            <a class="form-text small click-link" (click)="calculateCurrent()">Estimate Current</a>
+        </label>
+        <div class="input-group">
+            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('currentAtLoad')"
+                (input)="save()" formControlName="currentAtLoad" id="currentAtLoad">
+            <span class="input-group-addon units">A</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small" *ngIf="motorForm.controls.currentAtLoad.invalid">
+            <span *ngIf="motorForm.controls.powerFactorAtLoad.errors.max">Value can't be greater than
+                {{motorForm.controls.powerFactorAtLoad.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.powerFactorAtLoad.errors.min">Value can't be less than
+                {{motorForm.controls.powerFactorAtLoad.errors.min.min}} %.</span>
+        </span> -->
+    </div>
+    <!-- powerFactorAtLoad -->
     <div class="form-group" *ngIf="displayOptions.powerFactorAtLoad">
-        <label for="powerFactorAtLoad">Power Factor at Load</label>
+        <label for="powerFactorAtLoad">Power Factor at Load
+            <a class="form-text small click-link" (click)="calculatePowerFactor()">Estimate Power Factor</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('powerFactorAtLoad')"
                 (input)="save()" formControlName="powerFactorAtLoad" id="powerFactorAtLoad">

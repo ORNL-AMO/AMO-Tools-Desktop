@@ -436,7 +436,7 @@ export class PsatService {
     motorPower: number,
     loadFactor: number,
     settings: Settings
-  ) {
+  ): number {
     if (settings.unitsOfMeasure != 'Imperial') {
       motorPower = this.convertUnitsService.value(motorPower).from(settings.powerMeasurement).to('hp');
     }
@@ -451,6 +451,56 @@ export class PsatService {
     };
     return this.roundVal(psatAddon.nema(tmpInputs), 2);
   }
+
+  motorPowerFactor(
+    motorRatedPower: number,
+    loadFactor: number,
+    motorCurrent: number,
+    motorEfficiency: number,
+    ratedVoltage: number,
+    settings: Settings
+  ): number {
+    if (settings.unitsOfMeasure != 'Imperial') {
+      motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
+    }
+    let inp = {
+      motorRatedPower: motorRatedPower,
+      loadFactor: loadFactor,
+      motorCurrent: motorCurrent,
+      motorEfficiency: motorEfficiency,
+      ratedVoltage: ratedVoltage
+    };
+    return this.roundVal(psatAddon.motorPowerFactor(inp), 2);
+  }
+
+  motorCurrent(
+    motorRatedPower: number,
+    motorRpm: number,
+    lineFrequency: number,
+    efficiencyClass: number,
+    loadFactor: number,
+    ratedVoltage: number,
+    fullLoadAmps: number,
+    specifiedEfficiency: number,
+    settings: Settings
+  ): number{
+    if (settings.unitsOfMeasure != 'Imperial') {
+      motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
+    }
+    let inp = {
+      motorRatedPower: motorRatedPower,
+      loadFactor: loadFactor,
+      motorRPM: motorRpm,
+      line_frequency: lineFrequency,
+      efficiency_class: efficiencyClass,
+      fullLoadAmps: fullLoadAmps,
+      ratedVoltage: ratedVoltage,
+      specifiedEfficiency: specifiedEfficiency
+    };
+    return this.roundVal(psatAddon.motorCurrent(inp), 2);
+
+  }
+
 
   //ENUM Helpers
   getPumpStyleFromEnum(num: number): string {

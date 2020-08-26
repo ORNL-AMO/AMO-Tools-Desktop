@@ -32,7 +32,7 @@ export class MotorCatalogService {
     return motorItem;
   }
 
-  estimateEfficiency(loadFactor: number){
+  estimateEfficiency(loadFactor: number): number {
     let settings: Settings = this.motorInventoryService.settings.getValue();
     let motorInventoryData = this.motorInventoryService.motorInventoryData.getValue()
     let selectedMotorItem = this.selectedMotorItem.getValue();
