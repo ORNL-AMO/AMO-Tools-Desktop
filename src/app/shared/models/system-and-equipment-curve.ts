@@ -49,5 +49,7 @@ export interface SystemAndEquipmentCurveData {
   
   export interface ByDataInputs {
     dataRows: Array<{ flow: number, yValue: number }>,
-    dataOrder: number
+    powerRows?: Array<{ flow: number, power: number }>,
+    dataOrder: number,
+    powerDataOrder?: number,
   }

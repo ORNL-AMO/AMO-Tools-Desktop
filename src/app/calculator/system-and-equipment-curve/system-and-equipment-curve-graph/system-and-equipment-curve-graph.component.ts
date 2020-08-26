@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, Hos
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import * as Plotly from 'plotly.js';
-import { DataPoint, SimpleChart, ChartConfig } from '../../../shared/models/plotting';
+import { SimpleChart, ChartConfig } from '../../../shared/models/plotting';
 import { Settings } from '../../../shared/models/settings';
 import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
-import { SystemAndEquipmentCurveGraphService, HoverGroupData } from './system-and-equipment-curve-graph.service';
+import { SystemAndEquipmentCurveGraphService, HoverGroupData, SystemCurveDataPoint } from './system-and-equipment-curve-graph.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { CurveDataService } from '../curve-data.service';
 
@@ -53,8 +53,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   createGraphTimer: NodeJS.Timeout;
 
   // Graphing
-  selectedDataPoints: Array<DataPoint>;
-  userDataPoints: Array<DataPoint> = [];
+  selectedDataPoints: Array<SystemCurveDataPoint>;
+  userDataPoints: Array <SystemCurveDataPoint> = [];
   pointColors: Array<string>;
   curveEquipmentChart: SimpleChart;
   currentHoverData: HoverGroupData;
@@ -74,6 +74,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     'baselineIntersect': 2,
     'modification': 3,
     'modificationIntersect': 4,
+    'power': 5,
   };
 
   // Update conditions/data
@@ -84,6 +85,9 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   fluidPowerData: Array<number>;
   showHoverGroupData: boolean;
 
+  selectedAxisOptions = Array<{display: string, value: number}>();
+  selectedAxis: number = 0;
+
   constructor(
     private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
@@ -92,6 +96,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.initAxisOptions();
     this.setChartUnits();
     // Force resize during tab change
     this.triggerInitialResize();
@@ -130,6 +135,25 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       }
       this.ignoreReset = false;
     });
+  }
+
+  initAxisOptions() {
+    this.selectedAxisOptions = [];
+    if (this.equipmentType == 'fan') {
+      this.selectedAxisOptions.push(
+        {display: 'Pressure ' + `(${this.settings.fanPressureMeasurement})`, value: 0}
+      );
+      this.selectedAxisOptions.push(
+        {display: 'Power ' + `(${this.settings.fanPowerMeasurement})`, value: 1}
+      );
+    } else {
+      this.selectedAxisOptions.push(
+        {display: 'Head ' + `(${this.settings.distanceMeasurement})`, value: 0}
+      );
+      this.selectedAxisOptions.push(
+        {display: 'Power ' + `(${this.settings.powerMeasurement})`, value: 1}
+      );
+    }
   }
 
   ngOnDestroy() {
@@ -241,31 +265,40 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.selectedDataPoints = this.systemAndEquipmentCurveGraphService.selectedDataPoints.getValue();
     this.curveEquipmentChart.layout.xaxis.title.text = `Flow (${this.chartConfig.xUnits})`;
     this.curveEquipmentChart.layout.yaxis.title.text = `${this.chartConfig.yName} (${this.chartConfig.yUnits})`;
+    if (this.selectedAxis == 1) {
+      this.curveEquipmentChart.layout.yaxis.title.text = `Power (${this.settings.fanPowerMeasurement})`;
+    } 
     this.isChartSetup = true;
   }
 
   drawTraceData() {
-    if (this.isSystemCurveShown == true && this.systemAndEquipmentCurveService.systemCurveRegressionData != undefined) {
+    if (this.isSystemCurveShown == true && this.systemAndEquipmentCurveService.systemCurveRegressionData != undefined && this.selectedAxis != 1) {
       this.showHoverGroupData = true;
       this.drawSystemCurve();
     } 
-    if (this.isEquipmentCurveShown == true) {
+    if (this.isEquipmentCurveShown == true && this.selectedAxis != 1) {
       if (this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs != undefined && this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs != undefined) {
         this.drawEquipmentCurve(this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.traces.baseline, 'Baseline');
         if (this.isEquipmentModificationShown == true) {
           this.drawEquipmentCurve(this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs, this.traces.modification, 'Modification');
         } 
       }
-    } 
+    } else if (this.selectedAxis == 1) {
+      // Draw Power axis
+      if (this.systemAndEquipmentCurveService.baselinePowerDataPairs != undefined) {
+        this.drawEquipmentCurve(this.systemAndEquipmentCurveService.baselinePowerDataPairs, this.traces.power, 'Power');
+      }
+    }
 
     if (this.isSystemCurveShown && this.isEquipmentCurveShown
       && this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs != undefined
       && this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.length != 0
       && this.systemAndEquipmentCurveService.systemCurveRegressionData != undefined
       && this.systemAndEquipmentCurveService.systemCurveRegressionData.length != 0
-    ) {
-      this.addIntersectionPoints();
-    }
+      && this.selectedAxis != 1
+      ) {
+        this.addIntersectionPoints();
+      }
   }
 
   drawSystemCurve() {
@@ -275,8 +308,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     let fluidTmp = [];
 
     curveTraceData.forEach(coordinate => {
-      xTmp.push(Math.round(coordinate.x));
-      yTmp.push(Math.round(coordinate.y));
+      xTmp.push(coordinate.x);
+      yTmp.push(coordinate.y);
       fluidTmp.push(coordinate.fluidPower);
     });
     this.curveEquipmentChart.data[this.traces.system].x = xTmp;
@@ -285,12 +318,12 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.setHoverTemplate('System Curve', this.traces.system);
   }
 
-  drawEquipmentCurve(traceData: Array<DataPoint>, traceIndex: number, traceTitle: string) {
+  drawEquipmentCurve(traceData: Array <SystemCurveDataPoint>, traceIndex: number, traceTitle: string) {
     let xTmp = [];
     let yTmp = [];
     traceData.forEach(coordinate => {
-      xTmp.push(Math.round(coordinate.x));
-      yTmp.push(Math.round(coordinate.y));
+      xTmp.push(coordinate.x);
+      yTmp.push(coordinate.y);
     });
     this.curveEquipmentChart.data[traceIndex].x = xTmp;
     this.curveEquipmentChart.data[traceIndex].y = yTmp;
@@ -304,6 +337,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
   addIntersectionPoints() {
+    // TODO add pointEfficiency to incoming intersection from 3756
     let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.systemAndEquipmentCurveService.systemCurveRegressionData);
     if (baselineIntersectionPoint != undefined) {
       this.chartConfig.defaultPointCount = 1;
@@ -378,7 +412,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  setIntersectionTrace(point: DataPoint, traceDataIndex: number, name: string) {
+  setIntersectionTrace(point: SystemCurveDataPoint, traceDataIndex: number, name: string) {
     let intersectionTrace = this.curveEquipmentChart.data[traceDataIndex];
     intersectionTrace.x = [Math.round(point.x)];
     intersectionTrace.y = [Math.round(point.y)];
@@ -386,7 +420,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     
     this.curveEquipmentChart.data[traceDataIndex] = intersectionTrace;
 
-    let selectedPoint: DataPoint = {
+    let selectedPoint: SystemCurveDataPoint = {
       pointColor: this.chartConfig.defaultPointBackgroundColor,
       pointOutlineColor: this.chartConfig.defaultPointOutlineColor,
       pointTraceIndex: traceDataIndex,
@@ -412,7 +446,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.save();
   }
 
-  createDataPoint(graphData, existingPoint?: DataPoint) {
+  createDataPoint(graphData, existingPoint?: SystemCurveDataPoint) {
     let selectedPoint = existingPoint;
     if (!selectedPoint) {
       selectedPoint = {
@@ -432,7 +466,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.save();
   }
 
-  deleteDataPoint(point: DataPoint, index: number) {
+  deleteDataPoint(point: SystemCurveDataPoint, index: number) {
     let traceCount: number = this.curveEquipmentChart.data.length;
     let deleteTraceIndex: number = this.curveEquipmentChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
     // ignore default traces

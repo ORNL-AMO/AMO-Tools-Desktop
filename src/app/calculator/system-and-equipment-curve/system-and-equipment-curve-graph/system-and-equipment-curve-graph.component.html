@@ -10,11 +10,21 @@
     </div>
   </div>
   <div *ngIf="expanded" class="w-100 p-3">
+    <div class="col-md-12">
+      <form class="w-75 mx-auto">
+        <div class="form-group">
+            <div class="input-group">
+              <select class="form-control" name="selectedAxis" id="selectedAxis"
+              [(ngModel)]="selectedAxis" (change)=" initRenderChart()">
+              <option *ngFor="let axis of selectedAxisOptions" [ngValue]="axis.value" [innerHTML]="axis.display"></option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
     <div #expandedChartDiv id="expandedChartDiv"></div>
 
     <div class="w-100 tab-panel-background">
-      <div class="w-100" #tabPanelDiv id="tabPanelDiv">
-      </div>
       <!--  Hover Data -->
       <div class="w-100 tab-panel-background">
         <app-chart-hover-data *ngIf="showHoverGroupData" [showHoverGroupData]="showHoverGroupData" [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
@@ -36,6 +46,18 @@
 </div>
   
   <div class="w-100 p-2 tab-panel-background">
+    <div class="col-md-12">
+      <form class="w-75 mx-auto">
+        <div class="form-group">
+            <div class="input-group">
+              <select class="form-control" name="selectedAxis" id="selectedAxis"
+              [(ngModel)]="selectedAxis" (change)=" initRenderChart()">
+              <option *ngFor="let axis of selectedAxisOptions" [ngValue]="axis.value" [innerHTML]="axis.display"></option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
     <div class="w-100" #tabPanelDiv id="tabPanelDiv">
     </div>
     <!--  Hover Data -->
@@ -65,6 +87,7 @@
         <th class="bold w-25">Key</th>
         <th class="bold w-25"> Flow ({{ chartConfig.xUnits }})</th>
         <th class="bold w-25">{{ chartConfig.yName }} ({{ chartConfig.yUnits}})</th>
+        <th class="bold w-25">Efficiency (%)</th>
         <th class="bold w-25"></th>
       </tr>
       <tr *ngFor="let point of selectedDataPoints; let index = index">
@@ -76,6 +99,7 @@
         </td>
         <td class="text-center">{{point.x | number: '1.0-0'}}</td>
         <td class="text-center">{{point.y | number: '1.0-0'}}</td>
+        <td class="text-center">{{point.efficiency | number: '1.0-2'}}</td>
         <td class='delete-row text-center'>
           <a *ngIf="index >= chartConfig.defaultPointCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
             Delete

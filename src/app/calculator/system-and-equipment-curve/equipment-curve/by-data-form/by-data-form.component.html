@@ -55,4 +55,67 @@
     <div class="form-group">
         <span class="add-link small pull-right" (click)="addRow()">+Add Row</span>
     </div>
+
+    <div class="d-block mt-1 mb-3">
+        <label class="group-label w-100" (click)="toggleCollapse()">Power Data
+            <span *ngIf="powerDataCollapsed == 'open'"
+                class="remove-curve fa fa-minus pull-right"></span>
+            <span *ngIf="powerDataCollapsed == 'closed'"
+                class="add-curve fa fa-plus pull-right"></span>
+        </label>
+        <div class="mb-3 d-block" *ngIf="powerDataCollapsed == 'open'">
+            <div class="form-group mt-1">
+                <label for="powerDataOrder">Order</label>
+                <select id="powerDataOrder" name="powerDataOrder" class="form-control" formControlName="powerDataOrder"
+                    (focus)="focusField('powerDataOrder')" (change)="save()">
+                    <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
+                </select>
+            </div>
+            <div *ngFor="let control of byDataForm.controls.powerRows.value.controls; let index = index;">
+                <form [formGroup]="control">
+                    <div class="row align-items-end">
+                        <div class="form-group col-5">
+                            <label class="section-label" *ngIf="index == 0" for="flow">Flow</label>
+                            <div class="input-group">
+                                <input name="flow" formControlName="flow" type="number" step="any" class="form-control"
+                                    id="flow" onfocus="this.select();" (focus)="focusField('flow')" (input)="save()">
+                                <span class="input-group-addon units" [innerHTML]="flowUnit | settingsLabel"></span>
+                            </div>
+                            <span class="alert-danger pull-right small"
+                                *ngIf="control.controls.flow.invalid && !control.controls.flow.pristine">
+                                <span *ngIf="control.controls.flow.errors.required">Value required.</span>
+                                <span *ngIf="control.controls.flow.errors.max">Value cannot be greater than 1,000,000
+                                    <span [innerHTML]="flowUnit | settingsLabel"></span>.
+                                </span>
+                            </span>
+                        </div>
+                        <div class="form-group col-5">
+                            <label class="section-label" *ngIf="index == 0" for="power">Power</label>
+                            <div class="input-group">
+                                <input name="power" formControlName="power" type="number" step="any" class="form-control"
+                                    id="power" onfocus="this.select();" (focus)="focusField('power')" (input)="save()">
+                                <span class="input-group-addon units" [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>
+                            </div>
+                            <span class="alert-danger pull-right small"
+                                *ngIf="control.controls.power.invalid && !control.controls.power.pristine">
+                                <span *ngIf="control.controls.power.errors.required">Value required.</span>
+                                <span *ngIf="control.controls.power.errors.min">Value must be greater than
+                                    {{control.controls.power.errors.min.min}}
+                                    <span [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>.
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col-2">
+                            <span class="float-right" *ngIf="byDataForm.controls.powerRows.value.controls.length > 1">
+                                <i class="fa fa-times-circle" (click)="removePowerRow(index)"></i>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>  
+            <div class="form-group">
+                <span class="add-link small pull-right" (click)="addPowerRow()">+Add Row</span>
+            </div>
+        </div>
+    </div>
 </form>

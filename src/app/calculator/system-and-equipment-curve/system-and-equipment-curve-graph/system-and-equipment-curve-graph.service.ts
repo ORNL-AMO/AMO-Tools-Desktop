@@ -390,7 +390,7 @@ export class SystemAndEquipmentCurveGraphService {
             color: 'rgba(0, 0, 0, 0)',
             line: {
               color: 'rgba(0, 0, 0, .6)',
-              width: 4
+              width: 4,
             },
             size: 12,
           },
@@ -423,6 +423,19 @@ export class SystemAndEquipmentCurveGraphService {
             },
             size: 12,
           },
+        },
+        // Power
+        {
+          x: [],
+          y: [],
+          name: '',
+          showlegend: false,
+          type: 'scatter',
+          line: {
+            shape: 'spline',
+            color: undefined,
+            smoothing: 1.3
+          }
         },
       ],
       layout: {
@@ -470,3 +483,8 @@ export interface HoverGroupData {
   system: DataPoint,
   fluidPower?: number
 };
+
+
+export interface SystemCurveDataPoint extends DataPoint {
+  pointEfficiency?: number
+}

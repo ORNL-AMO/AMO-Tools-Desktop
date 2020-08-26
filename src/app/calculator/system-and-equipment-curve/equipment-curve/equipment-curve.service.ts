@@ -145,6 +145,11 @@ export class EquipmentCurveService {
     let yValue2 = 294;
     let yValue3 = 202;
     let yValueConstant = 356.96;
+    // powerRows
+    let power0 = 0;
+    let power1 = 0;
+    let power2 = 0;
+    let power3 = 0;
     if (settings.flowMeasurement !== 'gpm') {
       tmpMaxFlow = Math.round(this.convertUnitsService.value(tmpMaxFlow).from('gpm').to(settings.flowMeasurement) * 100) / 100;
       tmpFlow1 = Math.round(this.convertUnitsService.value(tmpFlow1).from('gpm').to(settings.flowMeasurement) * 100) / 100;
@@ -158,6 +163,12 @@ export class EquipmentCurveService {
       yValue2 = Math.round(this.convertUnitsService.value(yValue2).from('ft').to(settings.distanceMeasurement) * 100) / 100;
       yValue3 = Math.round(this.convertUnitsService.value(yValue3).from('ft').to(settings.distanceMeasurement) * 100) / 100;
     }
+    if (settings.fanPowerMeasurement !== 'hp') {
+      power0 = Math.round(this.convertUnitsService.value(power0).from('hp').to(settings.fanPowerMeasurement) * 100) / 100;
+      power1 = Math.round(this.convertUnitsService.value(power1).from('hp').to(settings.fanPowerMeasurement) * 100) / 100;
+      power2 = Math.round(this.convertUnitsService.value(power2).from('hp').to(settings.fanPowerMeasurement) * 100) / 100;
+      power3 = Math.round(this.convertUnitsService.value(power3).from('hp').to(settings.fanPowerMeasurement) * 100) / 100;
+    }
     return {
       dataRows: [
         { flow: 0, yValue: yValue0 },
@@ -165,7 +176,14 @@ export class EquipmentCurveService {
         { flow: tmpFlow2, yValue: yValue2 },
         { flow: tmpFlow3, yValue: yValue3 }
       ],
-      dataOrder: 3
+      powerRows: [
+        { flow: 0, power: power0 },
+        { flow: tmpFlow1, power: power1 },
+        { flow: tmpFlow2, power: power2 },
+        { flow: tmpFlow3, power: power3 }
+      ],
+      dataOrder: 3,
+      powerDataOrder: 1
     }
   }
 
@@ -182,8 +200,21 @@ export class EquipmentCurveService {
       { flow: 187300, yValue: 3.7 }
     ];
 
+    let powerRows: Array<{ flow: number, power: number }> = [
+      { flow: 0, power: 0 },
+      { flow: 43200, power: 241 },
+      { flow: 72050, power: 349 },
+      { flow: 100870, power: 462 },
+      { flow: 129700, power: 566 },
+      { flow: 158500, power: 667 },
+      { flow: 172900, power: 770 },
+      { flow: 187300, power: 871 }
+    ];
+
     dataRows.forEach(row => {
       if (settings.fanFlowRate != 'ft3/min') {
+        // TODO row.yValue here should be row.flow
+        // row.flow = Math.round(this.convertUnitsService.value(row.yValue).from('ft3/min').to(settings.fanFlowRate) * 100) / 100;
         row.flow = Math.round(this.convertUnitsService.value(row.yValue).from('ft3/min').to(settings.fanFlowRate) * 100) / 100;
       }
       if (settings.fanPressureMeasurement != 'inH2o') {
@@ -191,9 +222,20 @@ export class EquipmentCurveService {
       }
     })
 
+    powerRows.forEach(row => {
+      if (settings.fanFlowRate != 'ft3/min') {
+        row.flow = Math.round(this.convertUnitsService.value(row.flow).from('ft3/min').to(settings.fanFlowRate) * 100) / 100;
+      }
+      if (settings.fanPressureMeasurement != 'inH2o') {
+        row.power = Math.round(this.convertUnitsService.value(row.power).from('hp').to(settings.fanPowerMeasurement) * 100) / 100;
+      }
+    })
+
     let exampleByDataInputs: ByDataInputs = {
       dataRows: dataRows,
-      dataOrder: 2
+      powerRows: powerRows,
+      dataOrder: 2,
+      powerDataOrder: 1
     };
     return exampleByDataInputs;
   }
@@ -204,6 +246,13 @@ export class EquipmentCurveService {
       { flow: 100, yValue: 351 },
       { flow: 630, yValue: 294 },
       { flow: 1020, yValue: 202 }
+    ];
+
+    let powerRows: Array<{ flow: number, power: number }> = [
+      { flow: 0, power: 0 },
+      { flow: 100, power: 215 },
+      { flow: 630, power: 430 },
+      { flow: 1020, power: 602 }
     ]
 
     dataRows.forEach(row => {
@@ -213,10 +262,22 @@ export class EquipmentCurveService {
       if (settings.distanceMeasurement !== 'ft') {
         row.yValue = Math.round(this.convertUnitsService.value(row.yValue).from('ft').to(settings.distanceMeasurement) * 100) / 100;
       }
-    })
+    });
+
+    powerRows.forEach(row => {
+      if (settings.flowMeasurement !== 'gpm') {
+        row.flow = Math.round(this.convertUnitsService.value(row.flow).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+      }
+      if (settings.powerMeasurement !== 'hp') {
+        row.power = Math.round(this.convertUnitsService.value(row.power).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+      }
+    });
     let exampleByDataInputs: ByDataInputs = {
       dataRows: dataRows,
-      dataOrder: 3
+      // TODO
+      powerRows: powerRows,
+      dataOrder: 3,
+      powerDataOrder: 1
     };
     return exampleByDataInputs;
   }
@@ -230,7 +291,14 @@ export class EquipmentCurveService {
         { flow: 0, yValue: 0 },
         { flow: 0, yValue: 0 }
       ],
-      dataOrder: 3
+      powerRows: [
+        { flow: 0, power: 0 },
+        { flow: 0, power: 0 },
+        { flow: 0, power: 0 },
+        { flow: 0, power: 0 }
+      ],
+      dataOrder: 3,
+      powerDataOrder: 1,
     }
   }
 
@@ -246,20 +314,37 @@ export class EquipmentCurveService {
         tmpFormArray.push(tmpDataRowForm);
       });
     }
+    let tmpPowerFormArray: FormArray = new FormArray([]);
+    if (inputObj.powerRows !== undefined && inputObj.powerRows !== null) {
+      //iterate through powerRows and create controls for them
+      inputObj.powerRows.forEach(dataRow => {
+        let tmpPowerRowForm = this.formBuilder.group({
+          flow: [dataRow.flow, [Validators.required, Validators.max(1000000)]],
+          power: [dataRow.power, [Validators.required, Validators.min(0)]]
+        });
+        tmpPowerFormArray.push(tmpPowerRowForm);
+      });
+    }
 
     let tmpForm: FormGroup = this.formBuilder.group({
       dataRows: [tmpFormArray],
-      dataOrder: [inputObj.dataOrder, Validators.required]
+      powerRows: [tmpPowerFormArray],
+      dataOrder: [inputObj.dataOrder, Validators.required],
+      powerDataOrder: [inputObj.powerDataOrder, Validators.required],
     });
     return tmpForm;
   }
 
   getByDataObjFromForm(form: FormGroup): ByDataInputs {
     let tmpFormArray: FormArray = form.controls.dataRows.value;
+    let tmpPowerFormArray: FormArray = form.controls.powerRows.value;
     let dataRows: Array<{ flow: number, yValue: number }> = tmpFormArray.value;
+    let powerRows: Array<{ flow: number, power: number }> = tmpPowerFormArray.value;
     return {
       dataRows: dataRows,
-      dataOrder: form.controls.dataOrder.value
+      powerRows: powerRows,
+      dataOrder: form.controls.dataOrder.value,
+      powerDataOrder: form.controls.powerDataOrder.value
     }
   }
 }

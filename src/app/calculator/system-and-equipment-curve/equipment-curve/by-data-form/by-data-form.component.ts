@@ -24,9 +24,10 @@ export class ByDataFormComponent implements OnInit {
   flowUnit: string;
   formLabel: string;
   orderOptions: Array<number> = [
-    2, 3, 4, 5, 6
+    1, 2, 3, 4, 5, 6
   ];
   resetFormsSub: Subscription;
+  powerDataCollapsed: string = 'closed';
   constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private formBuilder: FormBuilder,
     private curveDataService: CurveDataService, private cd: ChangeDetectorRef) { }
 
@@ -101,5 +102,35 @@ export class ByDataFormComponent implements OnInit {
     this.byDataForm.controls.dataRows.setValue(tmpFormArray);
     this.byDataForm.controls.dataRows.updateValueAndValidity();
     this.save();
+  }
+
+  addPowerRow() {
+    let tmpDataRowForm = this.formBuilder.group({
+      flow: [0, [Validators.required, Validators.max(1000000)]],
+      power: [0, [Validators.required, Validators.min(0)]]
+    });
+    let tmpFormArray: FormArray = this.byDataForm.controls.powerRows.value;
+    tmpFormArray.push(tmpDataRowForm);
+    this.byDataForm.controls.powerRows.patchValue(tmpFormArray);
+    this.byDataForm.controls.powerRows.updateValueAndValidity();
+    this.save();
+  }
+
+  removePowerRow(index: number) {
+    let tmpFormArray: FormArray = this.byDataForm.controls.powerRows.value;
+    tmpFormArray.value.splice(index, 1);
+    tmpFormArray.controls.splice(index, 1);
+    this.byDataForm.controls.powerRows.setValue(tmpFormArray);
+    this.byDataForm.controls.powerRows.updateValueAndValidity();
+    this.save();
+  }
+
+
+  toggleCollapse() {
+      if (this.powerDataCollapsed == 'closed') {
+        this.powerDataCollapsed = 'open';
+      } else {
+        this.powerDataCollapsed = 'closed';
+      }
   }
 }
