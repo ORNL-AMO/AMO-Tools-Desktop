@@ -110,8 +110,7 @@ export class MotorInventoryService {
         weight: undefined,
         numberOfPhases: undefined,
         fullLoadSpeed: undefined,
-        fullLoadAmps: undefined,
-        motorRpm: 1780
+        fullLoadAmps: undefined
       },
       operationData:  {
         location: undefined,

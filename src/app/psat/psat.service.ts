@@ -296,15 +296,19 @@ export class PsatService {
       // horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
-    let inputs: any = {
-      motor_rated_power: horsePower,
-      motor_rated_speed: motorRPM,
-      line_frequency: frequency,
-      efficiency_class: efficiencyClass,
-      efficiency: efficiency,
-      motor_rated_voltage: motorVoltage
+    if (motorRPM > 0) {
+      let inputs: any = {
+        motor_rated_power: horsePower,
+        motor_rated_speed: motorRPM,
+        line_frequency: frequency,
+        efficiency_class: efficiencyClass,
+        efficiency: efficiency,
+        motor_rated_voltage: motorVoltage
+      }
+      return this.roundVal(psatAddon.estFLA(inputs), 2);
+    } else {
+      return 0;
     }
-    return this.roundVal(psatAddon.estFLA(inputs), 2);
 
   }
 
@@ -483,7 +487,7 @@ export class PsatService {
     fullLoadAmps: number,
     specifiedEfficiency: number,
     settings: Settings
-  ): number{
+  ): number {
     if (settings.unitsOfMeasure != 'Imperial') {
       motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
     }

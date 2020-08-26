@@ -7,6 +7,7 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 import { NameplateDataService } from './nameplate-data.service';
 import { Settings } from '../../../../shared/models/settings';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
+import { PsatService } from '../../../../psat/psat.service';
 
 @Component({
   selector: 'app-nameplate-data',
@@ -25,7 +26,7 @@ export class NameplateDataComponent implements OnInit {
   efficiencyClasses: Array<{ value: number, display: string }>;
   voltageRatingOptions: Array<number> = [200, 208, 220, 230, 440, 460, 575, 796, 2300, 4000, 6600];
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
-    private nameplateDataService: NameplateDataService) { }
+    private nameplateDataService: NameplateDataService, private psatService: PsatService) { }
 
   ngOnInit(): void {
     //TODO: add warnings for FLA
@@ -72,6 +73,18 @@ export class NameplateDataComponent implements OnInit {
   estimateEfficiency() {
     let efficiency: number = this.motorCatalogService.estimateEfficiency(1);
     this.motorForm.controls.nominalEfficiency.patchValue(efficiency);
+    this.save();
+  }
+
+  calculateFullLoadAmps() {
+    let motorPower: number = this.motorForm.controls.ratedMotorPower.value;
+    let motorRPM: number = this.motorForm.controls.fullLoadSpeed.value;
+    let lineFrequency: number = this.motorForm.controls.lineFrequency.value;
+    let efficiencyClass: number = this.motorForm.controls.efficiencyClass.value;
+    let efficiency: number = this.motorForm.controls.nominalEfficiency.value;
+    let motorVoltage: number = this.motorForm.controls.ratedVoltage.value;
+    let fla: number = this.psatService.estFLA(motorPower, motorRPM, lineFrequency, efficiencyClass, efficiency, motorVoltage, this.settings);
+    this.motorForm.controls.fullLoadAmps.patchValue(fla);
     this.save();
   }
 }

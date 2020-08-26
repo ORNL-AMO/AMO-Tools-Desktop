@@ -72,7 +72,6 @@ export interface NameplateData {
   efficiencyClass: number,
   nominalEfficiency: number,
   lineFrequency: number,
-  motorRpm: number
   //optional
   manufacturer: string,
   model: string,

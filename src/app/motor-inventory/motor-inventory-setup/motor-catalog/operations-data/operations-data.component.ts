@@ -73,7 +73,7 @@ export class OperationsDataComponent implements OnInit {
 
       let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
       let ratedVoltage: number = selectedMotorItem.nameplateData.ratedVoltage;
-      let motorRpm: number = selectedMotorItem.nameplateData.motorRpm;
+      let motorRpm: number = selectedMotorItem.nameplateData.fullLoadSpeed;
       let lineFrequency: number = selectedMotorItem.nameplateData.lineFrequency;
       let efficiencyClass: number = selectedMotorItem.nameplateData.efficiencyClass;
       let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;

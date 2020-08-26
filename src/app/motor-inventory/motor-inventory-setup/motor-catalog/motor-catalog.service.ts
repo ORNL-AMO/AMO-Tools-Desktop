@@ -39,7 +39,7 @@ export class MotorCatalogService {
     let department = motorInventoryData.departments.find(department => { return department.id = selectedMotorItem.departmentId });
     selectedMotorItem = department.catalog.find(motorItem => { return motorItem.id == selectedMotorItem.id });
     let lineFreq: number = selectedMotorItem.nameplateData.lineFrequency;
-    let motorRPM: number = selectedMotorItem.nameplateData.motorRpm;
+    let motorRPM: number = selectedMotorItem.nameplateData.fullLoadSpeed;
     let efficiencyClass: number = selectedMotorItem.nameplateData.efficiencyClass;
     let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
     return this.psatService.motorEfficiency(lineFreq, motorRPM, efficiencyClass, motorPower, loadFactor, settings);
