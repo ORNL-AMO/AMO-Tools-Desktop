@@ -1,0 +1,63 @@
+<div class="p-2">
+    <table class="table table-sm table-striped table-hover" *ngIf="selectedMotorDepartment">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Op. Hours
+                </th>
+                <th>
+                    Eff. Class
+                </th>
+                <th>
+                    Est. Efficiency
+                </th>
+                <th>
+                    Rated Power
+                </th>
+                <th>
+                    Line Frequency
+                </th>
+                <th>
+                    Sync. Speed
+                </th>
+                <th>
+                    Full Load Amps
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let motor of selectedMotorDepartment.catalog">
+                <td>
+                    <a class="click-link" (click)="selectMotor(motor)">{{motor.name}}</a>
+                </td>
+                <td>
+                    {{motor.operationData.annualOperatingHours}} hrs/yr
+                </td>
+                <td>
+                    {{motor.nameplateData.efficiencyClass | motorEfficiencyClass}}
+                </td>
+                <td>
+                    {{motor.nameplateData.nominalEfficiency}} %
+                </td>
+                <td>
+                    {{motor.nameplateData.ratedMotorPower}}
+                </td>
+                <td>
+                    {{motor.nameplateData.lineFrequency}} Hz
+                </td>
+                <td>
+                    {{motor.manualSpecificationData.synchronousSpeed}} rpm
+                </td>
+                <td>
+                    {{motor.nameplateData.fullLoadAmps}} A
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="p-2 w-100 text-center">
+    <a class="click-link" (click)="addNewMotor()">+Add New Motor</a>
+</div>

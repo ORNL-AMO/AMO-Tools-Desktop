@@ -43,7 +43,7 @@ export class BinDataComponent implements OnInit {
       this.checkBinError();
       if (this.binError == undefined) {
         this.calculatingData = setTimeout(() => {
-          this.selectedGraphObj = this.visualizeMenuService.setNumberOfBins(this.selectedGraphObj);
+          this.selectedGraphObj = this.visualizeMenuService.setNumberOfBins(this.selectedGraphObj, this.selectedGraphObj.bins[0].min);
           this.save();
         }, 500);
       }
@@ -58,7 +58,7 @@ export class BinDataComponent implements OnInit {
       this.checkBinError();
       if (this.binError == undefined) {
         this.calculatingData = setTimeout(() => {
-          this.selectedGraphObj = this.visualizeMenuService.setBins(this.selectedGraphObj);
+          this.selectedGraphObj = this.visualizeMenuService.setBins(this.selectedGraphObj, this.selectedGraphObj.bins[0].min);
           this.save();
         }, 500);
       }

@@ -68,14 +68,74 @@
 
   <div class="my-2" *ngIf="currentField == 'surfaceEmissivity'">
     <h6>
-      Surface Emissivity
+      Emissivity of the Source
       <br>
       <small class="text-muted">
-        Emissivity of the radiation source (usually interior of the furnace). The default or suggested value is 0.9.
+        The emissivity of a material is a measure of its effectiveness in emitting thermal radiation (heat). It is a
+        non-dimensional ratio of the radiant exitance of the surface to the radiant exitance of a black body.
+        <hr>
+        Many unpainted furnaces are made of materials with an emissivity of 0.9, this is a good first estimate. A
+        good rule of thumb: the darker the material - the higher the emissivity.
         <hr>
       </small>
     </h6>
     <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Material</th>
+            <th class="text-center">Finish</th>
+            <th class="text-center">Value</th>
+          </tr>
+          <tr>
+            <td class="text-center">Aluminum</td>
+            <td class="text-center">Polished</td>
+            <td class="text-center">0.04 - 0.06</td>
+          </tr>
+          <tr>
+            <td class="text-center">Aluminum</td>
+            <td class="text-center">Oxidized</td>
+            <td class="text-center">0.5</td>
+          </tr>
+          <tr>
+            <td class="text-center">Iron</td>
+            <td class="text-center">Polished</td>
+            <td class="text-center">0.14 - 0.38</td>
+          </tr>
+          <tr>
+            <td class="text-center">Iron</td>
+            <td class="text-center">Oxidized</td>
+            <td class="text-center">0.7</td>
+          </tr>
+          <tr>
+            <td class="text-center">Steel</td>
+            <td class="text-center">Polished</td>
+            <td class="text-center">0.07</td>
+          </tr>
+          <tr>
+            <td class="text-center">Steel</td>
+            <td class="text-center">Oxidized</td>
+            <td class="text-center">0.8</td>
+          </tr>
+          <tr>
+            <td class="text-center">Nickel</td>
+            <td class="text-center">Electroplated</td>
+            <td class="text-center">0.03</td>
+          </tr>
+          <tr>
+            <td class="text-center">Nickel</td>
+            <td class="text-center">Polished</td>
+            <td class="text-center">0.07</td>
+          </tr>
+          <tr>
+            <td class="text-center">Nickel</td>
+            <td class="text-center">Electroplated</td>
+            <td class="text-center">0.6 - 0.85</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="w-100 justify-content-center pt-2">
       <table class="table table-hover table-striped">
         <tbody>
           <tr>
@@ -90,6 +150,7 @@
       </table>
     </div>
   </div>
+
 
 
   <div class="my-2" *ngIf="currentField == 'default'">

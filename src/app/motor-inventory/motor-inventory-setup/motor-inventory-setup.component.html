@@ -1,0 +1,29 @@
+<div class="d-flex flex-column h-100 w-100">
+    <div class="d-flex w-100 h-100 tab-content">
+        <div class="w-50 panel-column panel-container modification scroll-item"
+            [ngClass]="{'modal-open': isModalOpen == true}">
+            <app-plant-setup *ngIf="setupTab == 'plant-setup'"></app-plant-setup>
+            <app-motor-properties *ngIf="setupTab == 'motor-properties'"></app-motor-properties>
+            <app-motor-catalog *ngIf="setupTab == 'motor-catalog'"></app-motor-catalog>
+            <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup>
+        </div>
+        <div class="d-flex flex-column w-50 mh-100 scroll-item">
+            <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" *ngIf="setupTab == 'motor-catalog'">
+                <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                    <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                        (click)="setTab('results')">
+                        <div>Department Catalog</div>
+                    </a>
+                </div>
+                <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                    <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                        <div>Help</div>
+                    </a>
+                </div>
+            </div>
+            <app-help-panel *ngIf="tabSelect == 'help' || setupTab != 'motor-catalog' || setupTab == 'motor-properties'"></app-help-panel>
+            <app-department-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'motor-catalog'">
+            </app-department-catalog-table>
+        </div>
+    </div>
+</div>

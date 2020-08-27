@@ -51,7 +51,7 @@ export class FsatSummaryCardComponent implements OnInit {
   }
 
   getResults(fsat: FSAT, settings: Settings, isModification?: boolean): FsatOutput {
-    fsat.valid = this.fsatService.checkValid(fsat, !isModification);
+    fsat.valid = this.fsatService.checkValid(fsat, !isModification, settings);
     if (fsat.valid.isValid) {
       return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), !isModification, settings);
     } else {

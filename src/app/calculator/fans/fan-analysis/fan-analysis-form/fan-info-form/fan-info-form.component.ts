@@ -37,6 +37,7 @@ export class FanInfoFormComponent implements OnInit {
     }
   }
 
+
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
   }

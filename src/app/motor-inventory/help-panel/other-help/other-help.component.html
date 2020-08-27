@@ -1,0 +1,62 @@
+<hr class="my-1 hr-spacer">
+<div class="my-2">
+    <h6>
+        Other Data
+        <br>
+        <small class="text-muted">
+            Enter information regarding motor connection and attatchments.
+            <hr>
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'driveType'">
+    <h6>
+        Drive Type
+        <br>
+        <small class="text-muted"> This drop-down selection menu allows the user to define whether the equipment is
+            direct driven by the motor or
+            belt-driven. There
+            are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three,
+            V-Belt
+            drives
+            are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most
+            efficient
+            belts.
+            <br> This value is used in the Load Estimation calculation. Note: The current estimating method should
+            NOT be
+            used if
+            adjustable frequency drives are used.
+            <hr> Drive options include
+            <u>Direct Drive</u>,
+            <u>V-Belt Drive</u>,
+            <u>Notched V-Belt</u>, or
+            <u>Synchronous Drive</u>.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'isVFD'">
+    <h6>
+        Is VFD?
+        <br>
+        <small class="text-muted"> Does this motor have a variable frequency drive VFD attached to it?
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'hasLoggerData'">
+    <h6>
+        Has Logger Data?
+        <br>
+        <small class="text-muted"> Does your motor have a permanent datalogging equipment attached?
+
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'voltageConnectionType'">
+    <h6>
+        Voltage Connection Type
+        <br>
+        <small class="text-muted"> Referring to the electrical wiring of the motor 3-phase voltage source.
+            <hr>Options are <u>Wye</u> or <u>Delta</u>.
+        </small>
+    </h6>
+</div>
