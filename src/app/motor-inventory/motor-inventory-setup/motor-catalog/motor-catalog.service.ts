@@ -19,7 +19,18 @@ export class MotorCatalogService {
     this.filterMotorOptions = new BehaviorSubject<FilterMotorOptions>(undefined);
   }
 
-  setSuiteDbMotorProperties(motor: SuiteDbMotor, motorItem: MotorItem) {
+  //forms update motorInventoryData, 
+  //selectedMotorItem selected by table not always update with latest form changes
+  //use function to get most recently updated motorItem
+  getUpdatedSelectedMotorItem(): MotorItem {
+    let motorInventoryData = this.motorInventoryService.motorInventoryData.getValue()
+    let selectedMotorItem = this.selectedMotorItem.getValue();
+    let department = motorInventoryData.departments.find(department => { return department.id == selectedMotorItem.departmentId });
+    selectedMotorItem = department.catalog.find(motorItem => { return motorItem.id == selectedMotorItem.id });
+    return selectedMotorItem;
+  }
+
+  setSuiteDbMotorProperties(motor: SuiteDbMotor, motorItem: MotorItem): MotorItem {
     motorItem.nameplateData.efficiencyClass = motor.efficiencyClass;
     motorItem.nameplateData.ratedMotorPower = motor.hp;
     motorItem.nameplateData.lineFrequency = motor.lineFrequency;
@@ -34,10 +45,7 @@ export class MotorCatalogService {
 
   estimateEfficiency(loadFactor: number): number {
     let settings: Settings = this.motorInventoryService.settings.getValue();
-    let motorInventoryData = this.motorInventoryService.motorInventoryData.getValue()
-    let selectedMotorItem = this.selectedMotorItem.getValue();
-    let department = motorInventoryData.departments.find(department => { return department.id = selectedMotorItem.departmentId });
-    selectedMotorItem = department.catalog.find(motorItem => { return motorItem.id == selectedMotorItem.id });
+    let selectedMotorItem: MotorItem = this.getUpdatedSelectedMotorItem();
     let lineFreq: number = selectedMotorItem.nameplateData.lineFrequency;
     let motorRPM: number = selectedMotorItem.nameplateData.fullLoadSpeed;
     let efficiencyClass: number = selectedMotorItem.nameplateData.efficiencyClass;

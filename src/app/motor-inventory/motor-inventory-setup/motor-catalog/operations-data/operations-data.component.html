@@ -3,7 +3,7 @@
     <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
     Field Measurements
 </label>
-<form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
+<form *ngIf="displayForm" class="p-1" [formGroup]="motorForm" #formElement>
 
     <!-- location -->
     <div class="form-group" *ngIf="displayOptions.location">
@@ -14,8 +14,13 @@
 
     <!-- annualOperatingHours -->
     <div class="form-group" *ngIf="displayOptions.annualOperatingHours">
-        <label for="annualOperatingHours">Operating Hours</label>
+        <label for="annualOperatingHours">Operating Hours
+
+        </label>
         <div class="input-group">
+            <span class="input-group-addon op-hour-addon units">
+                <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('annualOperatingHours')"
                 (input)="save()" formControlName="annualOperatingHours" id="annualOperatingHours">
             <span class="input-group-addon units">hrs/yr</span>
@@ -110,3 +115,9 @@
         </span>
     </div>
 </form>
+
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="operationsOperatingHours">
+</app-operating-hours-modal>

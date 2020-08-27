@@ -65,7 +65,7 @@
     <div class="d-flex tabs subtabs progress-tabs flex-wrap motor-inventory">
         <div *ngFor="let department of motorInventoryData.departments"
             [ngClass]="{'active': selectedDepartmentId == department.id}" (click)="selectedDepartment(department.id)">
-            <a>{{department.name}}
+            <a>{{department.name}} {{department.id}}
                 <span class="badge gray-badge">
                     <strong>{{department.catalog.length}}</strong>
                 </span>

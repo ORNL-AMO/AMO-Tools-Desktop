@@ -1,3 +1,4 @@
+import { OperatingHours } from "../shared/models/operations";
 
 export interface MotorInventoryData {
   departments: Array<MotorInventoryDepartment>,
@@ -93,7 +94,8 @@ export interface OperationData {
   utilizationFactor: number,
   efficiencyAtAverageLoad: number,
   powerFactorAtLoad: number,
-  currentAtLoad: number
+  currentAtLoad: number,
+  operatingHours: OperatingHours
 }
 
 export interface OtherData {

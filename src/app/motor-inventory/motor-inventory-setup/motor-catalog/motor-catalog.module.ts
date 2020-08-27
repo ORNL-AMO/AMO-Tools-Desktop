@@ -27,6 +27,7 @@ import { LoadCharacteristicDataService } from './load-characteristic-data/load-c
 import { MotorBasicsService } from './motor-basics/motor-basics.service';
 import { ModalModule } from 'ngx-bootstrap';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     ReactiveFormsModule,
     FormsModule,
     ModalModule,
-    SharedPipesModule
+    SharedPipesModule,
+    OperatingHoursModalModule
   ],
   providers: [
     BatchAnalysisDataService,

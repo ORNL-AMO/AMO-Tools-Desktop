@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { SettingsService } from '../settings/settings.service';
+import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
 
 declare const packageJson;
 
@@ -35,14 +36,13 @@ export class MotorInventoryComponent implements OnInit {
   motorInventoryItem: InventoryItem;
   constructor(private motorInventoryService: MotorInventoryService, private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private inventoryDbService: InventoryDbService,
-    private settingsService: SettingsService) { }
+    private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       let tmpItemId = Number(params['id']);
       this.motorInventoryItem = this.inventoryDbService.getById(tmpItemId);
       let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
-      console.log(settings);
       this.motorInventoryService.settings.next(settings);
       this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
     });
@@ -63,6 +63,9 @@ export class MotorInventoryComponent implements OnInit {
     this.setupTabSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.motorInventoryDataSub.unsubscribe();
+    this.motorCatalogService.selectedMotorItem.next(undefined);
+    this.motorCatalogService.selectedDepartmentId.next(undefined);
+    this.motorCatalogService.filterMotorOptions.next(undefined);
   }
 
   ngAfterViewInit() {

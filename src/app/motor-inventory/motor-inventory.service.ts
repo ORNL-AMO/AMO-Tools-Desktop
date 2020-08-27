@@ -83,7 +83,7 @@ export class MotorInventoryService {
         powerFactor25: undefined,
         ampsIdle: undefined,
       },
-      manualSpecificationData:  {
+      manualSpecificationData: {
         synchronousSpeed: undefined,
         frame: undefined,
         shaftPosiion: undefined,
@@ -93,9 +93,9 @@ export class MotorInventoryService {
         ampsLockedRotor: undefined,
         poles: undefined,
         currentType: undefined,
-        ratedSpeed: undefined    
+        ratedSpeed: undefined
       },
-      nameplateData:  {
+      nameplateData: {
         ratedMotorPower: undefined,
         efficiencyClass: 1,
         lineFrequency: 60,
@@ -112,7 +112,7 @@ export class MotorInventoryService {
         fullLoadSpeed: undefined,
         fullLoadAmps: undefined
       },
-      operationData:  {
+      operationData: {
         location: undefined,
         annualOperatingHours: 8760,
         averageLoadFactor: undefined,
@@ -120,21 +120,29 @@ export class MotorInventoryService {
         efficiencyAtAverageLoad: undefined,
         powerFactorAtLoad: undefined,
         currentAtLoad: undefined,
+        operatingHours: {
+          weeksPerYear: 52.14,
+          daysPerWeek: 7,
+          hoursPerDay: 24,
+          minutesPerHour: 60,
+          secondsPerMinute: 60,
+          hoursPerYear: 8760
+        }
       },
-      otherData:  {
+      otherData: {
         driveType: undefined,
         isVFD: undefined,
         hasLoggerData: undefined,
         voltageConnectionType: undefined,
       },
-      purchaseInformationData:  {
+      purchaseInformationData: {
         catalogId: undefined,
         listPrice: undefined,
         warranty: undefined,
         //Add
         directReplacementCost: undefined
       },
-      torqueData:  {
+      torqueData: {
         torqueFullLoad: undefined,
         torqueBreakDown: undefined,
         torqueLockedRotor: undefined,

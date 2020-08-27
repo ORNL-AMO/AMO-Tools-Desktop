@@ -28,7 +28,12 @@ export class MotorCatalogComponent implements OnInit {
         this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);
       } else {
         let findDepartment: MotorInventoryDepartment = this.motorInventoryData.departments.find(department => { return department.id == val });
-        this.motorCatalogService.selectedMotorItem.next(findDepartment.catalog[0]);
+        if(findDepartment){
+          this.motorCatalogService.selectedMotorItem.next(findDepartment.catalog[0]);
+        }else{
+          this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);
+          this.motorCatalogService.selectedMotorItem.next(this.motorInventoryData.departments[0].catalog[0]);
+        }
       }
     });
   }
