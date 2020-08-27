@@ -19,7 +19,7 @@ export class NameplateDataService {
       motorType: [nameplateData.motorType],
       enclosureType: [nameplateData.enclosureType],
       ratedVoltage: [nameplateData.ratedVoltage, [Validators.min(0)]],
-      serviceFactor: [nameplateData.serviceFactor, [Validators.min(0), Validators.max(100)]],
+      serviceFactor: [nameplateData.serviceFactor, [Validators.min(0), Validators.max(125)]],
       insulationClass: [nameplateData.insulationClass],
       weight: [nameplateData.weight, [Validators.min(0)]],
       numberOfPhases: [nameplateData.numberOfPhases],

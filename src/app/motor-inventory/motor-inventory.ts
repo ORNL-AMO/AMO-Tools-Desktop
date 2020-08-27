@@ -1,4 +1,5 @@
 import { OperatingHours } from "../shared/models/operations";
+import { SlipMethod, FieldMeasurementInputs } from "../calculator/motors/percent-load-estimation/percent-load-estimation.service";
 
 export interface MotorInventoryData {
   departments: Array<MotorInventoryDepartment>,
@@ -95,7 +96,7 @@ export interface OperationData {
   efficiencyAtAverageLoad: number,
   powerFactorAtLoad: number,
   currentAtLoad: number,
-  operatingHours: OperatingHours
+  operatingHours?: OperatingHours
 }
 
 export interface OtherData {

@@ -50,6 +50,7 @@ export class MotorCatalogService {
     let motorRPM: number = selectedMotorItem.nameplateData.fullLoadSpeed;
     let efficiencyClass: number = selectedMotorItem.nameplateData.efficiencyClass;
     let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
-    return this.psatService.motorEfficiency(lineFreq, motorRPM, efficiencyClass, motorPower, loadFactor, settings);
+    //load factor comes in as %, /100 to convert to decimal
+    return this.psatService.motorEfficiency(lineFreq, motorRPM, efficiencyClass, motorPower, (loadFactor / 100), settings);
   }
 }

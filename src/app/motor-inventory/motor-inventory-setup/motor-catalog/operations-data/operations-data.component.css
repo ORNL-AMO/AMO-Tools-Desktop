@@ -2,3 +2,19 @@
     border-left: solid 1px;
     border-right: none;
   }
+
+  .btn{
+    padding: 6px;
+}
+
+.modal-dialog{
+    top: 1rem;
+}
+
+.modal-header, .modal-footer{
+    padding: 6px;
+}
+
+.modal-content{
+    height: 85vh;
+}

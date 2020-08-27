@@ -34,7 +34,9 @@
     </div>
     <!-- averageLoadFactor -->
     <div class="form-group" *ngIf="displayOptions.averageLoadFactor">
-        <label for="averageLoadFactor">Average Load Factor</label>
+        <label for="averageLoadFactor">Average Load Factor
+            <a class="form-text small click-link" (click)="showLoadFactorModal()">Calculate Load Factor</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('averageLoadFactor')"
                 (input)="save()" formControlName="averageLoadFactor" id="averageLoadFactor">
@@ -118,6 +120,30 @@
 
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
-  [operatingHours]="operationsOperatingHours">
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+    [operatingHours]="operationsOperatingHours">
 </app-operating-hours-modal>
+
+
+<div bsModal #loadFactorModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="loadFactorLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" *ngIf="loadFactorModal.isShown">
+            <div class="modal-header">
+                <button class="close" aria-label="Close" (click)="hideLoadFactorModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div #modalBody class="modal-body p-0">
+                <app-percent-load-estimation [settings]="settings">
+                </app-percent-load-estimation>
+            </div>
+            <div class="modal-footer fsat justify-content-between">
+                <button class="btn btn-default pull-left" (click)="hideLoadFactorModal()">Cancel</button>
+                <span>
+                    <button class="ml-2 btn btn-primary" (click)="applyModalData()">Apply Data</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

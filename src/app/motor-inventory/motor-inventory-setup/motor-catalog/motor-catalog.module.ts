@@ -28,6 +28,7 @@ import { MotorBasicsService } from './motor-basics/motor-basics.service';
 import { ModalModule } from 'ngx-bootstrap';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { PercentLoadEstimationModule } from '../../../calculator/motors/percent-load-estimation/percent-load-estimation.module';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
     FormsModule,
     ModalModule,
     SharedPipesModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    PercentLoadEstimationModule
   ],
   providers: [
     BatchAnalysisDataService,

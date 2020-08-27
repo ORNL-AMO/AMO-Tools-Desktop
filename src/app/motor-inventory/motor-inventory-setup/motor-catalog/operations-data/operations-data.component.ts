@@ -8,6 +8,8 @@ import { OperationsDataService } from './operations-data.service';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { ModalDirective } from 'ngx-bootstrap';
+import { PercentLoadEstimationService } from '../../../../calculator/motors/percent-load-estimation/percent-load-estimation.service';
 
 @Component({
   selector: 'app-operations-data',
@@ -23,6 +25,7 @@ export class OperationsDataComponent implements OnInit {
     this.setOpHoursModalWidth();
   }
 
+  @ViewChild('loadFactorModal', { static: false }) public loadFactorModal: ModalDirective;
 
 
   motorForm: FormGroup;
@@ -32,8 +35,9 @@ export class OperationsDataComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
   operationsOperatingHours: OperatingHours;
   formWidth: number;
+  selectedMotor: MotorItem;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
-    private operationsDataService: OperationsDataService, private psatService: PsatService) { }
+    private operationsDataService: OperationsDataService, private psatService: PsatService, private percentLoadEstimationService: PercentLoadEstimationService) { }
 
   ngOnInit(): void {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
@@ -95,7 +99,7 @@ export class OperationsDataComponent implements OnInit {
     let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
     let fullLoadAmps: number = selectedMotorItem.nameplateData.fullLoadAmps;
     //90 for specified efficiency isn't used in calc with efficiency class set
-    let motorCurrent: number = this.psatService.motorCurrent(motorPower, motorRpm, lineFrequency, efficiencyClass, loadFactor, ratedVoltage, fullLoadAmps, 90, settings);
+    let motorCurrent: number = this.psatService.motorCurrent(motorPower, motorRpm, lineFrequency, efficiencyClass, (loadFactor / 100), ratedVoltage, fullLoadAmps, 90, settings);
     this.motorForm.controls.currentAtLoad.patchValue(motorCurrent);
     this.save();
   }
@@ -139,4 +143,39 @@ export class OperationsDataComponent implements OnInit {
     }
   }
 
+  showLoadFactorModal() {
+    let selectedMotorItem = this.motorCatalogService.getUpdatedSelectedMotorItem();
+    this.percentLoadEstimationService.loadEstimationMethod = 1;
+    this.percentLoadEstimationService.fieldMeasurementInputs = {
+      phase1Voltage: 0,
+      phase1Amps: 0,
+      phase2Voltage: 0,
+      phase2Amps: 0,
+      phase3Voltage: 0,
+      phase3Amps: 0,
+      ratedVoltage: selectedMotorItem.nameplateData.ratedVoltage,
+      ratedCurrent: 0,
+      powerFactor: this.motorForm.controls.averageLoadFactor.value
+    }
+    this.selectedMotor = this.motorCatalogService.getUpdatedSelectedMotorItem();
+    this.motorInventoryService.modalOpen.next(true);
+    this.loadFactorModal.show();
+  }
+
+  hideLoadFactorModal() {
+    this.loadFactorModal.hide();
+    this.motorInventoryService.modalOpen.next(false);
+  }
+
+  applyModalData() {
+    let percentLoad: number;
+    if (this.percentLoadEstimationService.loadEstimationMethod == 1) {
+      percentLoad = this.percentLoadEstimationService.getResults(this.percentLoadEstimationService.fieldMeasurementInputs).percentLoad;
+    } else if (this.percentLoadEstimationService.loadEstimationMethod == 0) {
+      percentLoad = this.percentLoadEstimationService.calculateSlipMethod(this.percentLoadEstimationService.slipMethodInputs);
+    }
+    this.motorForm.controls.averageLoadFactor.patchValue(Number(percentLoad.toFixed(1)));
+    this.save();
+    this.hideLoadFactorModal();
+  }
 }
