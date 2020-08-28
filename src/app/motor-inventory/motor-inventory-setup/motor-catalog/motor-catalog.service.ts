@@ -43,14 +43,19 @@ export class MotorCatalogService {
     return motorItem;
   }
 
-  estimateEfficiency(loadFactor: number): number {
-    let settings: Settings = this.motorInventoryService.settings.getValue();
+  estimateEfficiency(loadFactor: number, useNominalEfficiency: boolean): number {
     let selectedMotorItem: MotorItem = this.getUpdatedSelectedMotorItem();
+    let efficiencyClass: number = selectedMotorItem.nameplateData.efficiencyClass;
+    let efficiency: number = selectedMotorItem.nameplateData.nominalEfficiency;
+    if (useNominalEfficiency) {
+      efficiencyClass = 3;
+    }
+
+    let settings: Settings = this.motorInventoryService.settings.getValue();
     let lineFreq: number = selectedMotorItem.nameplateData.lineFrequency;
     let motorRPM: number = selectedMotorItem.nameplateData.fullLoadSpeed;
-    let efficiencyClass: number = selectedMotorItem.nameplateData.efficiencyClass;
     let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
     //load factor comes in as %, /100 to convert to decimal
-    return this.psatService.motorEfficiency(lineFreq, motorRPM, efficiencyClass, motorPower, (loadFactor / 100), settings);
+    return this.psatService.motorEfficiency(lineFreq, motorRPM, efficiencyClass, efficiency, motorPower, (loadFactor / 100), settings);
   }
 }

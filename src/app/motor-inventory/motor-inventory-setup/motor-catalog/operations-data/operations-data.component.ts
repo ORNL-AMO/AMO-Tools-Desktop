@@ -82,7 +82,7 @@ export class OperationsDataComponent implements OnInit {
 
   calculateEfficiency() {
     let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
-    let efficiency: number = this.motorCatalogService.estimateEfficiency(loadFactor);
+    let efficiency: number = this.motorCatalogService.estimateEfficiency(loadFactor, true);
     this.motorForm.controls.efficiencyAtAverageLoad.patchValue(efficiency);
     this.save();
   }

@@ -436,7 +436,7 @@ export class PsatService {
     lineFreq: number,
     motorRPM: number,
     efficiencyClass: number,
-    // efficiency: number,
+    efficiency: number,
     motorPower: number,
     loadFactor: number,
     settings: Settings
@@ -449,7 +449,7 @@ export class PsatService {
       line_frequency: lineFreq,
       motor_rated_speed: motorRPM,
       efficiency_class: efficiencyClass,
-      efficiency: 90,
+      efficiency: efficiency,
       motor_rated_power: motorPower,
       load_factor: loadFactor
     };

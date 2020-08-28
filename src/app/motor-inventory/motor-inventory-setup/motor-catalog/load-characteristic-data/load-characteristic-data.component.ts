@@ -59,18 +59,18 @@ export class LoadCharacteristicDataComponent implements OnInit {
   }
 
   calculateEfficiency75() {
-    let efficiency: number = this.motorCatalogService.estimateEfficiency(.75);
+    let efficiency: number = this.motorCatalogService.estimateEfficiency(75, true);
     this.motorForm.controls.efficiency75.patchValue(efficiency);
     this.save();
   }
 
   calculateEfficiency50() {
-    let efficiency: number = this.motorCatalogService.estimateEfficiency(.50);
+    let efficiency: number = this.motorCatalogService.estimateEfficiency(50, true);
     this.motorForm.controls.efficiency50.patchValue(efficiency);
     this.save();
   }
   calculateEfficiency25() {
-    let efficiency: number = this.motorCatalogService.estimateEfficiency(.25);
+    let efficiency: number = this.motorCatalogService.estimateEfficiency(25, true);
     this.motorForm.controls.efficiency25.patchValue(efficiency);
     this.save();
   }
