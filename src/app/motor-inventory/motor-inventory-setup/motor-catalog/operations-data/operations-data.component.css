@@ -8,7 +8,7 @@
 }
 
 .modal-dialog{
-    top: 1rem;
+    top: auto;
 }
 
 .modal-header, .modal-footer{
@@ -16,5 +16,5 @@
 }
 
 .modal-content{
-    height: 85vh;
+    height: 95vh;
 }

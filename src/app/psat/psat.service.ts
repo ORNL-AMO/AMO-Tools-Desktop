@@ -467,11 +467,12 @@ export class PsatService {
     if (settings.unitsOfMeasure != 'Imperial') {
       motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
     }
+    //efficiency and load factor need to be decimal
     let inp = {
       motorRatedPower: motorRatedPower,
-      loadFactor: loadFactor,
+      loadFactor: loadFactor / 100,
       motorCurrent: motorCurrent,
-      motorEfficiency: motorEfficiency,
+      motorEfficiency: motorEfficiency / 100,
       ratedVoltage: ratedVoltage
     };
     console.log(inp);
