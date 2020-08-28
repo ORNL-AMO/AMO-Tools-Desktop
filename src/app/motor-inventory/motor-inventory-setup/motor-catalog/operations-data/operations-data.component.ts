@@ -95,7 +95,8 @@ export class OperationsDataComponent implements OnInit {
     let ratedVoltage: number = selectedMotorItem.nameplateData.ratedVoltage;
     let motorRpm: number = selectedMotorItem.nameplateData.fullLoadSpeed;
     let lineFrequency: number = selectedMotorItem.nameplateData.lineFrequency;
-    let efficiencyClass: number = selectedMotorItem.nameplateData.efficiencyClass;
+    //use specified efficiency class
+    let efficiencyClass: number = 3;
     let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
     let fullLoadAmps: number = selectedMotorItem.nameplateData.fullLoadAmps;
     //90 for specified efficiency isn't used in calc with efficiency class set

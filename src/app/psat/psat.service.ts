@@ -474,6 +474,7 @@ export class PsatService {
       motorEfficiency: motorEfficiency,
       ratedVoltage: ratedVoltage
     };
+    console.log(inp);
     return this.roundVal(psatAddon.motorPowerFactor(inp), 2);
   }
 
