@@ -135,21 +135,32 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     }
   }
 
+  // updateSystemCurveResultData() {
+  //   let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
+  //   debugger;
+  //   this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
+  //   if (newMaxFlow != this.maxFlowRate) {
+  //     debugger;
+  //     this.maxFlowRate = newMaxFlow;
+  //     this.updateEquipmentCurveResultData();
+  //   } else {
+  //     debugger;
+  //     // this.updateEquipmentCurveResultData();
+  //     // this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
+  //     this.systemAndEquipmentCurveService.updateGraph.next(true);
+  //   }
+  // }
+
   updateSystemCurveResultData() {
     let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
     debugger;
     this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
-    if (newMaxFlow != this.maxFlowRate) {
-      debugger;
-      // Do we ever get here?
-      this.maxFlowRate = newMaxFlow;
-      this.updateEquipmentCurveResultData();
-    } else {
-      debugger;
-      // this.updateEquipmentCurveResultData();
-      // this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
-      this.systemAndEquipmentCurveService.updateGraph.next(true);
-    }
+    this.maxFlowRate = newMaxFlow;
+    this.updateEquipmentCurveResultData();
+    debugger;
+    // this.updateEquipmentCurveResultData();
+    // this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
+    this.systemAndEquipmentCurveService.updateGraph.next(true);
   }
 
   updateEquipmentCurveResultData() {

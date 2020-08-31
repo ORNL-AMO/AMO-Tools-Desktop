@@ -40,7 +40,7 @@ export class SystemAndEquipmentCurveService {
 
   //data points for system curve dropdown in assessment
   systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }>;
-  systemCurveIntersectionData: BehaviorSubject<DataPoint>;
+  systemCurveIntersectionData: BehaviorSubject<IntersectionData>;
   modificationEquipment: BehaviorSubject<ModificationEquipment>;
 
   constructor(private regressionEquationsService: RegressionEquationsService) {
@@ -57,7 +57,7 @@ export class SystemAndEquipmentCurveService {
     this.pumpModificationCollapsed = new BehaviorSubject<string>('closed');
     this.fanModificationCollapsed = new BehaviorSubject<string>('closed');
     this.updateGraph = new BehaviorSubject<boolean>(false);
-    this.systemCurveIntersectionData = new BehaviorSubject<DataPoint>(undefined);
+    this.systemCurveIntersectionData = new BehaviorSubject<IntersectionData>(undefined);
     this.modificationEquipment = new BehaviorSubject<ModificationEquipment>(undefined);
   }
 
@@ -123,6 +123,8 @@ export class SystemAndEquipmentCurveService {
       if (this.selectedEquipmentCurveFormView.getValue() == 'Data') {
         this.baselineEquipmentCurveDataPairs = results.baselineDataPairs;
         this.modifiedEquipmentCurveDataPairs = results.modifiedDataPairs;
+        console.log('baseline', this.baselineEquipmentCurveDataPairs);
+        console.log('modification', this.baselineEquipmentCurveDataPairs);
       }
     }
   }
@@ -153,20 +155,30 @@ export class SystemAndEquipmentCurveService {
       let systemCurveRegressionEquation: string = this.regressionEquationsService.getFanSystemCurveRegressionEquation(this.fanSystemCurveData.getValue());
       this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
       this.systemCurveRegressionData = this.regressionEquationsService.calculateFanSystemCurveData(this.fanSystemCurveData.getValue(), maxFlowRate, settings);
+      console.log('system', this.systemCurveRegressionData);
       this.calculateModificationEquipment(true);
     }
   }
 
   calculateModificationEquipment(isFanEquipment = false) {
     let equipmentInputs = this.equipmentInputs.getValue();
-    let intersection;
     let modificationEquipment: ModificationEquipment = {head: 0, flow: 0, speed: 0};
     
     // No pairs on reset
     if (this.baselineEquipmentCurveDataPairs.length > 0) {
-      intersection = this.calculateIntersectionPoint(this.baselineEquipmentCurveDataPairs);
+      let intersection;
+      let modificationIntersection;
+
+      intersection = this.calculateBaselineIntersectionPoint(this.baselineEquipmentCurveDataPairs);
+      if (this.modifiedEquipmentCurveDataPairs.length > 0) {
+        modificationIntersection = this.calculateModificationIntersectionPoint(this.modifiedEquipmentCurveDataPairs);
+      }
       if (intersection) {
-        let systemCurveIntersectionData = intersection;
+        let systemCurveIntersectionData: IntersectionData = 
+        { 
+          baseline: intersection,
+          modification: modificationIntersection
+        };
         this.systemCurveIntersectionData.next(systemCurveIntersectionData)
         let systemCurveData: FanSystemCurveData | PumpSystemCurveData;
         if (isFanEquipment) {
@@ -280,7 +292,7 @@ export class SystemAndEquipmentCurveService {
     return modificationEquipment;
   }
 
-  calculateIntersectionPoint(equipmentCurve: Array<{ x: number, y: number }>): { x: number, y: number } {
+  calculateBaselineIntersectionPoint(equipmentCurve: Array<{ x: number, y: number }>): { x: number, y: number } {
     let systemCurve: Array<{ x: number, y: number, fluidPower: number }> = this.systemCurveRegressionData;
     let intersected: boolean = false;
     let equipmentStartGreater: boolean = false;
@@ -321,10 +333,72 @@ export class SystemAndEquipmentCurveService {
       
       let avgYVal = (equipmentVal1.y + equipmentVal2.y + systemVal1.y + systemVal2.y) / 4;
       let avgXVal = (equipmentVal1.x + equipmentVal2.x + systemVal1.x + systemVal2.x) / 4;
+
       return { x: avgXVal, y: avgYVal };      
     } else {
       return undefined;
     }
   }
 
+  calculateModificationIntersectionPoint(equipmentCurve: Array<{ x: number, y: number }>): { x: number, y: number } {
+    let systemCurve: Array<{ x: number, y: number, fluidPower: number }> = this.systemCurveRegressionData;
+    let intersected: boolean = false;
+    let equipmentStartGreater: boolean = false;
+    let intersectPoint: number = 0;
+    if (equipmentCurve[0].y > systemCurve[0].y) {
+      equipmentStartGreater = true;
+    }
+    let iterateMax: number;
+    if (systemCurve.length <= equipmentCurve.length) {
+      iterateMax = systemCurve.length;
+    } else {
+      iterateMax = equipmentCurve.length;
+    }
+    // let match;
+    // let key;
+    let intersectedX: number;
+    if (equipmentStartGreater) {
+      for (let i = 1; i < iterateMax; i++) {
+        let equip = equipmentCurve[i].x;
+        let system = systemCurve[i].x;
+        if (equipmentCurve[i].y < systemCurve[i].y) {
+          intersectPoint = i;
+          intersected = true;
+          break;
+        }
+      };
+    }
+    else {
+      for (let i = 1; i < iterateMax; i++) {
+        if (equipmentCurve[i].y > systemCurve[i].y) {
+          intersectPoint = i;
+          intersected = true;
+          break;
+        }
+      };
+    }
+
+    if (intersected) {
+      let equipmentVal1 = equipmentCurve[intersectPoint - 1];
+      let equipmentVal2 = equipmentCurve[intersectPoint];
+      let systemVal1 = systemCurve[intersectPoint - 1];
+      let systemVal2 = systemCurve[intersectPoint];
+      
+      
+      let avgYVal = (equipmentVal1.y + equipmentVal2.y + systemVal1.y + systemVal2.y) / 4;
+      let avgXVal = (equipmentVal1.x + equipmentVal2.x + systemVal1.x + systemVal2.x) / 4;
+
+      // return { x: intersectedX, y: intersectedY }; 
+      return { x: avgXVal, y: avgYVal };
+      debugger;
+    } else {
+      return undefined;
+    }
+  }
+
 }
+
+export interface IntersectionData {
+  baseline: DataPoint;
+  modification: DataPoint;
+};

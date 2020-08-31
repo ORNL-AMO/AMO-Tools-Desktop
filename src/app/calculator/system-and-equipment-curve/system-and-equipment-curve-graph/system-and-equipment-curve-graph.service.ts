@@ -133,28 +133,30 @@ export class SystemAndEquipmentCurveGraphService {
   getIntersectionPoint(equipmentType: string, settings: Settings, curveDataPairs: Array<{ x: number, y: number }>) {
     let intersectionPoint = this.systemAndEquipmentCurveService.systemCurveIntersectionData.getValue();
     if (!intersectionPoint) {
-      intersectionPoint = this.systemAndEquipmentCurveService.calculateIntersectionPoint(curveDataPairs);
-    }
-    if (intersectionPoint != undefined) {
-      let fluidPower: number = this.getFluidPowerFromIntersectionPoint(intersectionPoint.x, intersectionPoint.y, settings, equipmentType);
-      return {
-        x: intersectionPoint.x,
-        y: intersectionPoint.y,
-        fluidPower: fluidPower
+      intersectionPoint = {
+        baseline: {x: 0, y: 0},
+        modification: undefined
       };
+      intersectionPoint.baseline = this.systemAndEquipmentCurveService.calculateBaselineIntersectionPoint(curveDataPairs);
+    }
+
+    let fluidPower: number = this.getFluidPowerFromIntersectionPoint(intersectionPoint.baseline.x, intersectionPoint.baseline.y, settings, equipmentType);
+    return {
+      x: intersectionPoint.baseline.x,
+      y: intersectionPoint.baseline.y,
+      fluidPower: fluidPower
+    };
+  }
+
+  getModifiedIntersectionPoint(equipmentType: string, settings: Settings, curveDataPairs: Array<{ x: number, y: number }>): { x: number, y: number, fluidPower: number } {
+    let intersectionPoint = this.systemAndEquipmentCurveService.systemCurveIntersectionData.getValue();
+    if (intersectionPoint && intersectionPoint.modification) {
+      let fluidPower: number = this.getFluidPowerFromIntersectionPoint(intersectionPoint.modification.x, intersectionPoint.modification.y, settings, equipmentType);
+      debugger;
+      return { x: intersectionPoint.modification.x, y: intersectionPoint.modification.y, fluidPower: fluidPower };
     } else {
       return undefined;
     }
-  }
-
-  getModifiedIntersectionPoint(baselinePoint: { x: number, y: number }, settings: Settings, equipmentType: string, equipmentInputs: EquipmentInputs): { x: number, y: number, fluidPower: number } {
-    // Don't have modificationEquipment for fan from initial load, but do for pump
-    debugger;
-    let ratio = this.systemAndEquipmentCurveService.modificationEquipment.getValue().speed / equipmentInputs.baselineMeasurement;
-    let x: number = baselinePoint.x * ratio;
-    let y: number = baselinePoint.y * Math.pow(ratio, 2);
-    let fluidPower: number = this.getFluidPowerFromIntersectionPoint(x, y, settings, equipmentType);
-    return { x: x, y: y, fluidPower: fluidPower };
   }
 
   getFluidPowerFromIntersectionPoint(x: number, y: number, settings: Settings, equipmentType: string): number {

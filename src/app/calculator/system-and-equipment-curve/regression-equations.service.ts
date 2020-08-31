@@ -55,8 +55,6 @@ export class RegressionEquationsService {
     let modificationData: Array<Array<number>> = new Array();
     if (modificationEquipment) {
       ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
-      console.log('ratio', ratio);
-      debugger;
     }
     for (let i = 0; i <= maxFlowRate; i += 10) {
     // TODO increment by 2 for accurate intersections - check if needed with Plotly
@@ -159,7 +157,6 @@ export class RegressionEquationsService {
     if (modificationEquipment) {
       ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
     }
-    debugger;
     let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio, maxFlowRate);
     let modificationResults = regression.polynomial(modifiedData.calculationData, { order: byEquationInputs.equationOrder, precision: 50 });
     this.setSigFigs(modificationResults);
@@ -268,7 +265,6 @@ export class RegressionEquationsService {
         data.push({ x: i, y: 0, fluidPower: 0 });
       }
     }
-    debugger;
     return data;
   }
 
