@@ -97,10 +97,10 @@ export class OperationsDataComponent implements OnInit {
     let lineFrequency: number = selectedMotorItem.nameplateData.lineFrequency;
     //use specified efficiency class
     let efficiencyClass: number = 3;
+    let efficiency: number = selectedMotorItem.nameplateData.nominalEfficiency;
     let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
     let fullLoadAmps: number = selectedMotorItem.nameplateData.fullLoadAmps;
-    //90 for specified efficiency isn't used in calc with efficiency class set
-    let motorCurrent: number = this.psatService.motorCurrent(motorPower, motorRpm, lineFrequency, efficiencyClass, (loadFactor / 100), ratedVoltage, fullLoadAmps, 90, settings);
+    let motorCurrent: number = this.psatService.motorCurrent(motorPower, motorRpm, lineFrequency, efficiencyClass, (loadFactor / 100), ratedVoltage, fullLoadAmps, efficiency, settings);
     this.motorForm.controls.currentAtLoad.patchValue(motorCurrent);
     this.save();
   }

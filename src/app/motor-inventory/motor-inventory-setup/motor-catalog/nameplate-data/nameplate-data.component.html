@@ -152,7 +152,7 @@
     </div>
     <!-- fullLoadSpeed -->
     <div class="form-group" *ngIf="displayOptions.fullLoadSpeed">
-        <label for="fullLoadSpeed">Full Load Speed</label>
+        <label for="fullLoadSpeed">Full-Load Speed</label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('fullLoadSpeed')"
                 (input)="save()" formControlName="fullLoadSpeed" id="fullLoadSpeed">
@@ -167,8 +167,8 @@
     </div>
     <!--full load amps: fullLoadAmps-->
     <div class="form-group" *ngIf="displayOptions.fullLoadAmps">
-        <label for="fullLoadAmps">Full Load Amps
-            <a class="form-text small click-link" (click)="calculateFullLoadAmps()">Estimate Full Load Amps</a>
+        <label for="fullLoadAmps">Full-Load Amps
+            <a class="form-text small click-link" (click)="calculateFullLoadAmps()">Estimate Full-Load Amps</a>
         </label>
         <div class="input-group">
             <input type="number" name="fullLoadAmps" class="form-control" id="fullLoadAmps" (blur)="focusOut()"
