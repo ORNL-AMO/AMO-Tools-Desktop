@@ -134,8 +134,9 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div #modalBody class="modal-body p-0">
-                <app-percent-load-estimation *ngIf="loadFactorModal.isShown" [settings]="settings">
+            <div #modalBody class="modal-body p-0 d-flex h-100 w-100">
+                <app-percent-load-estimation class="w-100 h-100" *ngIf="loadFactorModal.isShown"
+                    [settings]="settings">
                 </app-percent-load-estimation>
             </div>
             <div class="modal-footer fsat justify-content-between">
