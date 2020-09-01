@@ -1,4 +1,4 @@
-<div class="form-section">
+<div class="form-section" #formElement>
   <div class="form-group">
     <label for="kwRating">kW Rating for all sections</label>
     <div class="input-group">
@@ -17,17 +17,12 @@
       <span class="input-group-addon units">%</span>
     </div>
   </div>
-  <!-- <div class="form-group">
-    <label for="percentOperatingHours">% of Operating Hours</label>
-    <div class="input-group">
-      <input name="percentOperatingHours" type="number" step="any" id="percentOperatingHours" class="form-control" (focus)="changeField('electricityPercentOperatingHours')"
-        [(ngModel)]="inputs.percentOperatingHours" (input)="calculate()" onfocus="this.select();" />
-      <span class="input-group-addon units">%</span>
-    </div>
-  </div> -->
   <div class="form-group">
     <label for="operatingHours">Operating Hours</label>
     <div class="input-group">
+      <span class="input-group-addon op-hour-addon units">
+        <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+      </span>
       <input name="operatingHours" type="number" step="any" id="operatingHours" class="form-control"
         (focus)="changeField('operatingHours')" [(ngModel)]="inputs.operatingHours" (input)="calculate()"
         onfocus="this.select();" />
@@ -35,3 +30,9 @@
     </div>
   </div>
 </div>
+
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="inputs.operatingHoursCalc">
+</app-operating-hours-modal>

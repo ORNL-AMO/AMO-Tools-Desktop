@@ -3,6 +3,8 @@ import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
 import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedEnergyResults, DesignedZone } from '../../shared/models/phast/designedEnergy';
 import { DesignedEnergyService } from './designed-energy.service';
+import { PhastService } from '../phast.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-designed-energy',
   templateUrl: './designed-energy.component.html',
@@ -32,13 +34,24 @@ export class DesignedEnergyComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string;
   energySource: string;
-  constructor(private designedEnergyService: DesignedEnergyService) { }
+
+  isModalOpenSub: Subscription;
+  isModalOpen: boolean;
+  constructor(private designedEnergyService: DesignedEnergyService, private phastService: PhastService) { }
 
   ngOnInit() {
+    this.isModalOpenSub = this.phastService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    })
+
     if (!this.phast.designedEnergy) {
       this.initializeNew();
     }
     this.calculate();
+  }
+
+  ngOnDestroy() {
+
   }
 
   initializeNew() {

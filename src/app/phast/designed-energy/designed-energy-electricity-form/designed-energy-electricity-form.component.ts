@@ -1,5 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { DesignedEnergyElectricity } from '../../../shared/models/phast/designedEnergy';
+import { OperatingHours } from '../../../shared/models/operations';
+import { PhastService } from '../../phast.service';
 
 @Component({
   selector: 'app-designed-energy-electricity-form',
@@ -16,9 +18,21 @@ export class DesignedEnergyElectricityFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-  constructor() { }
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  showOperatingHoursModal: boolean = false;
+  formWidth: number;
+  constructor(private phastService: PhastService) { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    this.setOpHoursModalWidth();
   }
 
   changeField(str: string) {
@@ -30,4 +44,26 @@ export class DesignedEnergyElectricityFormComponent implements OnInit {
     this.emitCalculate.emit(true);
   }
 
+  openOperatingHoursModal() {
+    this.phastService.modalOpen.next(true);
+    this.showOperatingHoursModal = true;
+  }
+
+  closeOperatingHoursModal() {
+    this.phastService.modalOpen.next(false);
+    this.showOperatingHoursModal = false;
+  }
+
+  updateOperatingHours(newOppHours: OperatingHours) {
+    this.inputs.operatingHoursCalc = newOppHours;
+    this.inputs.operatingHours = newOppHours.hoursPerYear;
+    this.calculate();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
+  }
 }
