@@ -71,20 +71,29 @@ export class NameplateDataComponent implements OnInit {
   }
 
   estimateEfficiency() {
-    let efficiency: number = this.motorCatalogService.estimateEfficiency(100, false);
-    this.motorForm.controls.nominalEfficiency.patchValue(efficiency);
-    this.save();
+    if (this.displayOptions.fullLoadSpeed) {
+      let efficiency: number = this.motorCatalogService.estimateEfficiency(100, false);
+      this.motorForm.controls.nominalEfficiency.patchValue(efficiency);
+      this.save();
+    }
   }
 
   calculateFullLoadAmps() {
-    let motorPower: number = this.motorForm.controls.ratedMotorPower.value;
-    let motorRPM: number = this.motorForm.controls.fullLoadSpeed.value;
-    let lineFrequency: number = this.motorForm.controls.lineFrequency.value;
-    let efficiencyClass: number = this.motorForm.controls.efficiencyClass.value;
-    let efficiency: number = this.motorForm.controls.nominalEfficiency.value;
-    let motorVoltage: number = this.motorForm.controls.ratedVoltage.value;
-    let fla: number = this.psatService.estFLA(motorPower, motorRPM, lineFrequency, efficiencyClass, efficiency, motorVoltage, this.settings);
-    this.motorForm.controls.fullLoadAmps.patchValue(fla);
-    this.save();
+    if (this.displayOptions.fullLoadSpeed && this.displayOptions.ratedVoltage) {
+      let motorPower: number = this.motorForm.controls.ratedMotorPower.value;
+      let motorRPM: number = this.motorForm.controls.fullLoadSpeed.value;
+      let lineFrequency: number = this.motorForm.controls.lineFrequency.value;
+      //use specified and nominal efficiency
+      let efficiencyClass: number = 3;
+      let efficiency: number = this.motorForm.controls.nominalEfficiency.value;
+      let motorVoltage: number = this.motorForm.controls.ratedVoltage.value;
+      let fla: number = this.psatService.estFLA(motorPower, motorRPM, lineFrequency, efficiencyClass, efficiency, motorVoltage, this.settings);
+      this.motorForm.controls.fullLoadAmps.patchValue(fla);
+      this.save();
+    }
+  }
+  focusHelp(str: string) {
+    this.focusField(str);
+    this.motorInventoryService.helpPanelTab.next('help');
   }
 }

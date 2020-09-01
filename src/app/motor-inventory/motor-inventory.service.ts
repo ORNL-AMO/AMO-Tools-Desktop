@@ -14,6 +14,7 @@ export class MotorInventoryService {
   focusedDataGroup: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   settings: BehaviorSubject<Settings>;
+  helpPanelTab: BehaviorSubject<string>;
   constructor() {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
@@ -24,6 +25,7 @@ export class MotorInventoryService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.summaryTab = new BehaviorSubject<string>('overview');
     this.settings = new BehaviorSubject<Settings>(undefined);
+    this.helpPanelTab = new BehaviorSubject<string>(undefined);
   }
 
   updateMotorItem(selectedMotor: MotorItem) {

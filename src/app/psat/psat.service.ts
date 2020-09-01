@@ -467,16 +467,19 @@ export class PsatService {
     if (settings.unitsOfMeasure != 'Imperial') {
       motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
     }
-    //efficiency and load factor need to be decimal
-    let inp = {
-      motorRatedPower: motorRatedPower,
-      loadFactor: loadFactor / 100,
-      motorCurrent: motorCurrent,
-      motorEfficiency: motorEfficiency / 100,
-      ratedVoltage: ratedVoltage
-    };
-    console.log(inp);
-    return this.roundVal(psatAddon.motorPowerFactor(inp), 2);
+    if (motorRatedPower && motorCurrent && ratedVoltage) {
+      //efficiency and load factor need to be decimal
+      let inp = {
+        motorRatedPower: motorRatedPower,
+        loadFactor: loadFactor / 100,
+        motorCurrent: motorCurrent,
+        motorEfficiency: motorEfficiency / 100,
+        ratedVoltage: ratedVoltage
+      };
+      return this.roundVal(psatAddon.motorPowerFactor(inp), 2);
+    } else {
+      return 0;
+    }
   }
 
   motorCurrent(
@@ -493,18 +496,21 @@ export class PsatService {
     if (settings.unitsOfMeasure != 'Imperial') {
       motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
     }
-    let inp = {
-      motorRatedPower: motorRatedPower,
-      loadFactor: loadFactor,
-      motorRPM: motorRpm,
-      line_frequency: lineFrequency,
-      efficiency_class: efficiencyClass,
-      fullLoadAmps: fullLoadAmps,
-      ratedVoltage: ratedVoltage,
-      specifiedEfficiency: specifiedEfficiency
-    };
-    return this.roundVal(psatAddon.motorCurrent(inp), 2);
-
+    if (motorRatedPower && motorRpm && ratedVoltage && fullLoadAmps) {
+      let inp = {
+        motorRatedPower: motorRatedPower,
+        loadFactor: loadFactor,
+        motorRPM: motorRpm,
+        line_frequency: lineFrequency,
+        efficiency_class: efficiencyClass,
+        fullLoadAmps: fullLoadAmps,
+        ratedVoltage: ratedVoltage,
+        specifiedEfficiency: specifiedEfficiency
+      };
+      return this.roundVal(psatAddon.motorCurrent(inp), 2);
+    } else {
+      return 0;
+    }
   }
 
 

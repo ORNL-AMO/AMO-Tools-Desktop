@@ -15,7 +15,7 @@ export class OperationsDataService {
       utilizationFactor: [operationData.utilizationFactor, [Validators.min(0), Validators.max(100)]],
       efficiencyAtAverageLoad: [operationData.efficiencyAtAverageLoad, [Validators.min(0), Validators.max(100)]],
       powerFactorAtLoad: [operationData.powerFactorAtLoad, [Validators.min(0), Validators.max(100)]],
-      currentAtLoad: [operationData.currentAtLoad]
+      currentAtLoad: [operationData.currentAtLoad, [Validators.min(0)]]
     });
   }
 

@@ -18,3 +18,21 @@
 .modal-content{
     height: 85vh;
 }
+
+.click-link.disabled{
+    color: gray !important;
+}
+
+.click-link.disabled:hover{
+    text-decoration: none;
+}
+
+.fa.fa-question-circle{
+    padding-left: .25rem;
+    font-size: 80%;
+    font-weight: 400;
+}
+
+.fa.fa.fa-question-circle:hover{
+    cursor: pointer;
+}

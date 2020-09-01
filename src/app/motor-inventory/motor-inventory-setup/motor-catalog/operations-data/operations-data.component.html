@@ -67,7 +67,11 @@
     <!-- efficiencyAtAverageLoad -->
     <div class="form-group" *ngIf="displayOptions.efficiencyAtAverageLoad">
         <label for="efficiencyAtAverageLoad">Efficiency at Average Load
-            <a class="form-text small click-link" (click)="calculateEfficiency()">Estimate Efficiency</a>
+            <span class="form-text">
+                <a class="small click-link" (click)="calculateEfficiency()"
+                    [ngClass]="{'disabled': disableEstimateEfficiency}">Estimate Efficiency</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('efficiencyAtAverageLoad')"></span>
+            </span>
         </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()"
@@ -85,24 +89,30 @@
     <!-- currentAtLoad -->
     <div class="form-group" *ngIf="displayOptions.currentAtLoad">
         <label for="currentAtLoad">Current at Load
-            <a class="form-text small click-link" (click)="calculateCurrent()">Estimate Current</a>
+            <span class="form-text">
+                <a class="small click-link" (click)="calculateCurrent()"
+                    [ngClass]="{'disabled': disableEstimateCurrent}">Estimate Current</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('currentAtLoad')"></span>
+            </span>
         </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('currentAtLoad')"
                 (input)="save()" formControlName="currentAtLoad" id="currentAtLoad">
             <span class="input-group-addon units">A</span>
         </div>
-        <!-- <span class="alert-danger pull-right small" *ngIf="motorForm.controls.currentAtLoad.invalid">
-            <span *ngIf="motorForm.controls.powerFactorAtLoad.errors.max">Value can't be greater than
-                {{motorForm.controls.powerFactorAtLoad.errors.max.max}} %.</span>
-            <span *ngIf="motorForm.controls.powerFactorAtLoad.errors.min">Value can't be less than
-                {{motorForm.controls.powerFactorAtLoad.errors.min.min}} %.</span>
-        </span> -->
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.currentAtLoad.invalid">
+            <span *ngIf="motorForm.controls.currentAtLoad.errors.min">Value can't be less than
+                {{motorForm.controls.currentAtLoad.errors.min.min}} A.</span>
+        </span>
     </div>
     <!-- powerFactorAtLoad -->
     <div class="form-group" *ngIf="displayOptions.powerFactorAtLoad">
         <label for="powerFactorAtLoad">Power Factor at Load
-            <a class="form-text small click-link" (click)="calculatePowerFactor()">Estimate Power Factor</a>
+            <span class="form-text">
+                <a class="small click-link" (click)="calculatePowerFactor()"
+                    [ngClass]="{'disabled': disableEstimateLoadFactor}">Estimate Power Factor</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('powerFactorAtLoad')"></span>
+            </span>
         </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('powerFactorAtLoad')"
@@ -135,8 +145,7 @@
                 </button>
             </div>
             <div #modalBody class="modal-body p-0 d-flex h-100 w-100">
-                <app-percent-load-estimation class="w-100 h-100" *ngIf="loadFactorModal.isShown"
-                    [settings]="settings">
+                <app-percent-load-estimation class="w-100 h-100" *ngIf="loadFactorModal.isShown" [settings]="settings">
                 </app-percent-load-estimation>
             </div>
             <div class="modal-footer fsat justify-content-between">

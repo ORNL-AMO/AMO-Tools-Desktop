@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { OperationDataOptions, MotorItem } from '../../../motor-inventory';
+import { OperationDataOptions, MotorItem, MotorPropertyDisplayOptions } from '../../../motor-inventory';
 import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { OperationsDataService } from './operations-data.service';
@@ -36,6 +36,9 @@ export class OperationsDataComponent implements OnInit {
   operationsOperatingHours: OperatingHours;
   formWidth: number;
   selectedMotor: MotorItem;
+  disableEstimateCurrent: boolean;
+  disableEstimateLoadFactor: boolean;
+  disableEstimateEfficiency: boolean;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private operationsDataService: OperationsDataService, private psatService: PsatService, private percentLoadEstimationService: PercentLoadEstimationService) { }
 
@@ -45,7 +48,11 @@ export class OperationsDataComponent implements OnInit {
         this.motorForm = this.operationsDataService.getFormFromOperationData(selectedMotor.operationData);
       }
     });
-    this.displayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.operationDataOptions;
+    let allDisplayOptions: MotorPropertyDisplayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions;
+    this.displayOptions = allDisplayOptions.operationDataOptions;
+    this.disableEstimateCurrent = !(allDisplayOptions.nameplateDataOptions.fullLoadSpeed && allDisplayOptions.nameplateDataOptions.ratedVoltage && allDisplayOptions.nameplateDataOptions.fullLoadAmps && allDisplayOptions.operationDataOptions.averageLoadFactor);
+    this.disableEstimateLoadFactor = !(allDisplayOptions.nameplateDataOptions.ratedVoltage && allDisplayOptions.operationDataOptions.averageLoadFactor && allDisplayOptions.operationDataOptions.efficiencyAtAverageLoad && allDisplayOptions.operationDataOptions.currentAtLoad);
+    this.disableEstimateEfficiency = !(allDisplayOptions.operationDataOptions.averageLoadFactor && allDisplayOptions.nameplateDataOptions.fullLoadSpeed);
   }
 
   ngOnDestroy() {
@@ -88,34 +95,38 @@ export class OperationsDataComponent implements OnInit {
   }
 
   calculateCurrent() {
-    let settings: Settings = this.motorInventoryService.settings.getValue();
-    let selectedMotorItem = this.motorCatalogService.getUpdatedSelectedMotorItem();
+    if (!this.disableEstimateCurrent) {
+      let settings: Settings = this.motorInventoryService.settings.getValue();
+      let selectedMotorItem = this.motorCatalogService.getUpdatedSelectedMotorItem();
 
-    let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
-    let ratedVoltage: number = selectedMotorItem.nameplateData.ratedVoltage;
-    let motorRpm: number = selectedMotorItem.nameplateData.fullLoadSpeed;
-    let lineFrequency: number = selectedMotorItem.nameplateData.lineFrequency;
-    //use specified efficiency class
-    let efficiencyClass: number = 3;
-    let efficiency: number = selectedMotorItem.nameplateData.nominalEfficiency;
-    let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
-    let fullLoadAmps: number = selectedMotorItem.nameplateData.fullLoadAmps;
-    let motorCurrent: number = this.psatService.motorCurrent(motorPower, motorRpm, lineFrequency, efficiencyClass, (loadFactor / 100), ratedVoltage, fullLoadAmps, efficiency, settings);
-    this.motorForm.controls.currentAtLoad.patchValue(motorCurrent);
-    this.save();
+      let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
+      let ratedVoltage: number = selectedMotorItem.nameplateData.ratedVoltage;
+      let motorRpm: number = selectedMotorItem.nameplateData.fullLoadSpeed;
+      let lineFrequency: number = selectedMotorItem.nameplateData.lineFrequency;
+      //use specified efficiency class
+      let efficiencyClass: number = 3;
+      let efficiency: number = selectedMotorItem.nameplateData.nominalEfficiency;
+      let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
+      let fullLoadAmps: number = selectedMotorItem.nameplateData.fullLoadAmps;
+      let motorCurrent: number = this.psatService.motorCurrent(motorPower, motorRpm, lineFrequency, efficiencyClass, (loadFactor / 100), ratedVoltage, fullLoadAmps, efficiency, settings);
+      this.motorForm.controls.currentAtLoad.patchValue(motorCurrent);
+      this.save();
+    }
   }
 
   calculatePowerFactor() {
-    let settings: Settings = this.motorInventoryService.settings.getValue();
-    let selectedMotorItem = this.motorCatalogService.getUpdatedSelectedMotorItem();
-    let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
-    let ratedVoltage: number = selectedMotorItem.nameplateData.ratedVoltage;
-    let efficiencyAtAverageLoad: number = this.motorForm.controls.efficiencyAtAverageLoad.value;
-    let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
-    let motorCurrent: number = this.motorForm.controls.currentAtLoad.value;
-    let powerFactorAtLoad: number = this.psatService.motorPowerFactor(motorPower, loadFactor, motorCurrent, efficiencyAtAverageLoad, ratedVoltage, settings);
-    this.motorForm.controls.powerFactorAtLoad.patchValue(powerFactorAtLoad);
-    this.save();
+    if (!this.disableEstimateLoadFactor) {
+      let settings: Settings = this.motorInventoryService.settings.getValue();
+      let selectedMotorItem = this.motorCatalogService.getUpdatedSelectedMotorItem();
+      let motorPower: number = selectedMotorItem.nameplateData.ratedMotorPower;
+      let ratedVoltage: number = selectedMotorItem.nameplateData.ratedVoltage;
+      let efficiencyAtAverageLoad: number = this.motorForm.controls.efficiencyAtAverageLoad.value;
+      let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
+      let motorCurrent: number = this.motorForm.controls.currentAtLoad.value;
+      let powerFactorAtLoad: number = this.psatService.motorPowerFactor(motorPower, loadFactor, motorCurrent, efficiencyAtAverageLoad, ratedVoltage, settings);
+      this.motorForm.controls.powerFactorAtLoad.patchValue(powerFactorAtLoad);
+      this.save();
+    }
   }
 
   closeOperatingHoursModal() {
@@ -178,5 +189,10 @@ export class OperationsDataComponent implements OnInit {
     this.motorForm.controls.averageLoadFactor.patchValue(Number(percentLoad.toFixed(1)));
     this.save();
     this.hideLoadFactorModal();
+  }
+
+  focusHelp(str: string) {
+    this.focusField(str);
+    this.motorInventoryService.helpPanelTab.next('help');
   }
 }
