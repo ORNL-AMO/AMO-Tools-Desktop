@@ -72,7 +72,14 @@ export class VisualizeDataComponent implements OnInit {
     this.axisSummaries = new Array();
     let graphObj: GraphObj = this.visualizeService.selectedGraphObj.getValue();
     if (graphObj.data[0].type == 'bar') {
-      this.axisRanges = undefined;
+      this.axisRanges = {
+        xMin: graphObj.bins[0].min,
+        xMax: graphObj.bins[graphObj.bins.length - 1].min,
+        yMin: undefined,
+        yMax: undefined,
+        y2Min: undefined,
+        y2Max: undefined
+      };
     }
     if (graphObj.selectedXAxisDataOption.dataField && graphObj.selectedXAxisDataOption.dataField.alias == 'Time Series') {
       this.setDataSummary();

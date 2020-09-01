@@ -20,7 +20,7 @@
                     [ngClass]="{'fa-chevron-right': !showHistogramBins, 'fa-chevron-down': showHistogramBins}"></span>
                 Histogram Bins</label>
             <app-bin-data
-                *ngIf="showHistogramBins && selectedGraphObj.data[0].type == 'bar' && !selectedGraphObj.useStandardDeviation">
+                *ngIf="selectedGraphObj.data[0].type == 'bar' && ((showHistogramBins && !selectedGraphObj.useStandardDeviation) || (showGraphBasics && selectedGraphObj.useStandardDeviation))">
             </app-bin-data>
 
 
