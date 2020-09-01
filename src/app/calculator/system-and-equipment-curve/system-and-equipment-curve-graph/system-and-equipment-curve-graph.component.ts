@@ -224,14 +224,48 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.next(baselineIntersectionPoint);
     }
     if (this.isEquipmentModificationShown && this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs != undefined) {
+      let modIntersectionPoint = this.calculateModificationIntersectionPoint();
+
       // let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(baselineIntersectionPoint, this.settings, this.equipmentType, this.systemAndEquipmentCurveService.equipmentInputs.getValue());
-      let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs);
-      
-      if (modifiedIntersectionPoint != undefined) {
-        this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(modifiedIntersectionPoint);
+      // let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs);
+
+      if (modIntersectionPoint != undefined) {
+        this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(modIntersectionPoint);
       }
     }
   }
+
+  calculateModificationIntersectionPoint(): {x: number, y: number, fluidPower: number} {
+    let closestSystemCurvePoint;
+    let closestModifiedDataPoint;
+    let smallestDistanceBetweenPoints = Infinity;
+    //system curve data pairs (assuming longer should code in a check to use the longest on the outside of the double loop)
+    this.systemAndEquipmentCurveService.systemCurveRegressionData.forEach(systemCurveDataPoint => {
+      //modification points
+      this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.forEach(modifiedDataPoint => {
+        //distance = (p1.x - p2.x)^2 + (p1.y - p2.y)^2
+        let distanceBetweenCurrentPoint = Math.pow((systemCurveDataPoint.x - modifiedDataPoint.x), 2) + Math.pow((systemCurveDataPoint.y - modifiedDataPoint.y), 2)
+        if(smallestDistanceBetweenPoints > distanceBetweenCurrentPoint){
+          smallestDistanceBetweenPoints = distanceBetweenCurrentPoint;
+          closestSystemCurvePoint = systemCurveDataPoint;
+          closestModifiedDataPoint = modifiedDataPoint;
+        }
+      })
+    });
+
+    console.log('SYSTEM = ');
+    console.log(closestSystemCurvePoint);
+    console.log('MODIFIED =');
+    console.log(closestModifiedDataPoint);
+    //find average between points
+    let x: number = (closestModifiedDataPoint.x + closestSystemCurvePoint.x) / 2;
+    let y: number = (closestModifiedDataPoint.y + closestSystemCurvePoint.y) / 2;
+    //TODO: calc fluid power
+    return {x: x, y: y, fluidPower: 0};
+  }
+
+
+
 
   initTooltipData() {
     this.tooltipData = new Array<{ label: string, value: number, unit: string, formatX: boolean }>();
