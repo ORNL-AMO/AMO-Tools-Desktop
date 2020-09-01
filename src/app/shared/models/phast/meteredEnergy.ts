@@ -1,3 +1,5 @@
+import { OperatingHours } from "../operations";
+
 export interface MeteredEnergy {
     meteredEnergyFuel?: MeteredEnergyFuel;
     meteredEnergyElectricity?: MeteredEnergyElectricity;
@@ -19,6 +21,7 @@ export interface MeteredEnergyFuel {
     fuelEnergy: number;
     userDefinedMeteredEnergy?: boolean;
     operatingHours: number;
+    operatingHoursCalc?: OperatingHours;
 }
 export interface MeteredEnergyResults {
     meteredEnergyUsed: number;
@@ -35,6 +38,7 @@ export interface MeteredEnergySteam {
     electricityUsed: number;
     electricityCollectionTime: number;
     operatingHours: number;
+    operatingHoursCalc?: OperatingHours;
 }
 
 export interface MeteredEnergyElectricity {
@@ -43,4 +47,5 @@ export interface MeteredEnergyElectricity {
     auxElectricityUsed: number;
     auxElectricityCollectionTime: number;
     operatingHours: number;
+    operatingHoursCalc?: OperatingHours;
 }

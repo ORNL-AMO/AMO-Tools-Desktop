@@ -3,6 +3,8 @@ import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
 import { MeteredEnergyResults, MeteredEnergySteam, MeteredEnergyFuel, MeteredEnergyElectricity } from '../../shared/models/phast/meteredEnergy';
 import { MeteredEnergyService } from './metered-energy.service';
+import { Subscription } from 'rxjs';
+import { PhastService } from '../phast.service';
 
 @Component({
   selector: 'app-metered-energy',
@@ -34,12 +36,21 @@ export class MeteredEnergyComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string;
   energySource: string;
-  constructor(private meteredEnergyService: MeteredEnergyService) { }
+  isModalOpenSub: Subscription;
+  isModalOpen: boolean;
+  constructor(private meteredEnergyService: MeteredEnergyService, private phastService: PhastService) { }
 
   ngOnInit() {
+    this.isModalOpenSub = this.phastService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    })
     if (!this.phast.meteredEnergy) {
       this.initializeNew();
     }
+  }
+
+  ngOnDestroy(){
+    this.isModalOpenSub.unsubscribe();
   }
 
   initializeNew() {

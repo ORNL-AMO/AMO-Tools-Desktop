@@ -1,4 +1,4 @@
-<form>
+<form #formElement>
   <div class="form-section">
     <label class="group-label">
 								Total Electricity Consumption (Process Equipment)
@@ -23,6 +23,9 @@
   <div class="form-group">
     <label for="operatingHours">Operating Hours</label>
     <div class="input-group">
+      <span class="input-group-addon op-hour-addon units">
+        <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+      </span>
       <input name="operatingHours" type="number" step="any" id="operatingHours" class="form-control"
         (focus)="changeField('operatingHours')" [(ngModel)]="inputs.operatingHours" (input)="calculate()"
         onfocus="this.select();" />
@@ -30,3 +33,8 @@
     </div>
   </div>
 </form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="inputs.operatingHoursCalc">
+</app-operating-hours-modal>

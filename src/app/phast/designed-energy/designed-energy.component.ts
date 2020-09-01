@@ -51,7 +51,7 @@ export class DesignedEnergyComponent implements OnInit {
   }
 
   ngOnDestroy() {
-
+    this.isModalOpenSub.unsubscribe();
   }
 
   initializeNew() {
