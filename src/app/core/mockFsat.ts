@@ -272,31 +272,38 @@ export const MockFsatCalculator: Calculator = {
             dataRows: [
                 {
                     yValue: 22.3,
-                    flow: 28800
+                    flow: 28800,
+                    power: 0
                 },
                 {
                     yValue: 21.8,
-                    flow: 43200
+                    flow: 43200,
+                    power: 0
                 },
                 {
                     yValue: 21.2,
-                    flow: 57640
+                    flow: 57640,
+                    power: 0
                 },
                 {
                     yValue: 20.3,
-                    flow: 72050
+                    flow: 72050,
+                    power: 0
                 },
                 {
                     yValue: 18,
-                    flow: 100871
+                    flow: 100871,
+                    power: 0
                 },
                 {
                     yValue: 14.8,
-                    flow: 129700
+                    flow: 129700,
+                    power: 0
                 },
                 {
                     yValue: 10.2,
-                    flow: 158500
+                    flow: 158500,
+                    power: 0
                 }
             ],
             dataOrder: 2

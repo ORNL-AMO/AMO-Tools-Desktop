@@ -92,7 +92,7 @@ export class RegressionEquationsService {
   getEquipmentPowerRegressionByData(byData: ByDataInputs, maxFlowRate: number): Array<{ x: number, y: number }> 
   {
     let baselineRegressionInputs: Array<Array<number>> = new Array();
-    byData.powerRows.forEach(row => {
+    byData.dataRows.forEach(row => {
       baselineRegressionInputs.push([row.flow, row.power]);
     });
 
@@ -195,6 +195,7 @@ export class RegressionEquationsService {
     modificationRegressionEquation: string,
     baselineDataPairs: Array<{ x: number, y: number }>,
     modifiedDataPairs: Array<{ x: number, y: number }>
+    baselinePowerDataPairs: Array<{ x: number, y: number }>,
   } {
     //baseline
     let baselineRegressionEquation = byEquationInputs.flowTwo + '(flow)&#x00B2; + ' + byEquationInputs.flow + ('(flow) +') + byEquationInputs.constant;
@@ -216,7 +217,7 @@ export class RegressionEquationsService {
     }
     //baseline
     let baselineDataPairs: Array<{ x: number, y: number }> = this.calculateByEquationData(byEquationInputs, 1, maxFlowRate).dataPairs;
-
+    let baselinePowerDataPairs;
     //modification
     let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
     let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio, maxFlowRate);
@@ -227,7 +228,8 @@ export class RegressionEquationsService {
       baselineRegressionEquation: baselineRegressionEquation,
       modificationRegressionEquation: modificationRegressionEquation,
       baselineDataPairs: baselineDataPairs,
-      modifiedDataPairs: modifiedData.dataPairs
+      modifiedDataPairs: modifiedData.dataPairs,
+      baselinePowerDataPairs: baselinePowerDataPairs
     };
   }
 

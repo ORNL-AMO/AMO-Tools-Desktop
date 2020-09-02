@@ -102,15 +102,15 @@ export class SystemAndEquipmentCurveService {
       
       // TODO Need intersection sub from merged 3756 branch
       // If intersection points exist and intersect.flow x is greater than 0
-      if(true) {
-        console.log(efficiencyResults);
+      // if(true) {
+        // console.log('efficiency results', efficiencyResults);
         // Add baseline/mod to intersections and call next
-      }
+      // }
       if (this.selectedEquipmentCurveFormView.getValue() == 'Data') {
         this.baselineEquipmentCurveDataPairs = results.baselineDataPairs;
         this.modifiedEquipmentCurveDataPairs = results.modifiedDataPairs;
-        this.baselinePowerDataPairs = baselinePowerDataPairs;
       }
+      this.baselinePowerDataPairs = baselinePowerDataPairs;
     }
   }
 
