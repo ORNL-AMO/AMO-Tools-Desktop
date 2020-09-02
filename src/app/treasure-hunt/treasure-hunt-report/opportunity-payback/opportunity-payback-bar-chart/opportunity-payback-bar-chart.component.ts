@@ -59,7 +59,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       showlegend: false,
       legend: { "orientation": "h" },
       font: {
-        size: 16,
+        size: 14,
       },
       yaxis: {
         hoverformat: '$.2s',
@@ -68,7 +68,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
           // text: this.yAxisLabel,
           font: {
             family: 'Arial',
-            size: 16
+            size: 14
           }
         },
         fixedrange: true
