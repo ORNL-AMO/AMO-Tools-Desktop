@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -17,9 +17,15 @@ export class ExecutiveSummaryTableComponent implements OnInit {
   @Input()
   title: string;
 
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
+  
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
 }

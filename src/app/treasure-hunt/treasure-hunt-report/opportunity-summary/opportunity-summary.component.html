@@ -1,4 +1,4 @@
-<table class="table table-hover">
+<table #copyTable class="table table-hover">
   <tbody>
     <tr class="table-header-row bold">
       <td *ngIf="inRollup">
@@ -195,3 +195,8 @@
     </tr>
   </tbody>
 </table>
+
+
+<app-opportunity-summary-copy-table class="hide-print" [settings]="settings"
+  [opportunitySummaries]="opportunitySummaries | sortSummaries:sortBy:sortByDirection">
+</app-opportunity-summary-copy-table>
