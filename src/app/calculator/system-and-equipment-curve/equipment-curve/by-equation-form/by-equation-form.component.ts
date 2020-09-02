@@ -22,9 +22,10 @@ export class ByEquationFormComponent implements OnInit {
   formLabel: string;
   flowUnit: string;
   orderOptions: Array<number> = [
-    2, 3, 4, 5, 6
+    1, 2, 3, 4, 5, 6
   ]
   resetFormsSub: Subscription;
+
   constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private curveDataService: CurveDataService) { }
 

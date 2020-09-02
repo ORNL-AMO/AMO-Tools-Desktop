@@ -11,7 +11,9 @@ export interface SimpleChart {
     currentEquipmentType?: string,
     data: Array<TraceData>,
     layout: {
+        grid?: any,
         barmode?: string,
+        height?: number,
         legend?: {
             orientation: string,
             font?: {
@@ -29,6 +31,10 @@ export interface SimpleChart {
         hovermode: string,
         xaxis: AxisObj,
         yaxis: AxisObj,
+        xaxis2?: AxisObj,
+        yaxis2?: AxisObj,
+        xaxis3?: AxisObj,
+        yaxis3?: AxisObj,
         margin: {
             t: number,
             b: number,
@@ -45,7 +51,8 @@ export interface SimpleChart {
     chartId?: string,
     inputCount?: number,
     removeIndex?: number,
-    existingPoint?: boolean
+    existingPoint?: boolean,
+    selectedAxis?: number
 }
 
 export interface AxisObj {

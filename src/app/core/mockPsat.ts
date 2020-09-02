@@ -249,25 +249,32 @@ export const MockPsatCalculator: Calculator = {
         "byDataInputs": {
             "dataRows": [{
                 "flow": 0,
-                "yValue": 560
+                "yValue": 560,
+                "power": 0
             }, {
                 "flow": 500,
-                "yValue": 540
+                "yValue": 540,
+                "power": 0
             }, {
                 "flow": 1000,
-                "yValue": 510
+                "yValue": 510,
+                "power": 0
             }, {
                 "flow": 1500,
-                "yValue": 480
+                "yValue": 480,
+                "power": 0
             }, {
                 "flow": 2000,
-                "yValue": 450
+                "yValue": 450,
+                "power": 0
             }, {
                 "flow": 2500,
-                "yValue": 400
+                "yValue": 400,
+                "power": 0
             }, {
                 "flow": 3000,
-                "yValue": 350
+                "yValue": 350,
+                "power": 0
             }],
             "dataOrder": 3
         },

@@ -20,6 +20,7 @@ export class SystemAndEquipmentCurveGraphService {
   svg: any;
 
   curveEquipmentChart: BehaviorSubject<SimpleChart>;
+  powerChart: BehaviorSubject<SimpleChart>;
   selectedDataPoints: BehaviorSubject<Array<DataPoint>>;
 
   constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private svgToPngService: SvgToPngService) {
@@ -33,9 +34,11 @@ export class SystemAndEquipmentCurveGraphService {
 
   initChartData() {
     let emptyChart: SimpleChart = this.getEmptyChart();
+    let emptyPowerChart: SimpleChart = this.getEmptyPowerChart();
     let dataPoints = new Array<DataPoint>();
     
     this.curveEquipmentChart = new BehaviorSubject<SimpleChart>(emptyChart);
+    this.powerChart = new BehaviorSubject<SimpleChart>(emptyPowerChart);
     this.selectedDataPoints = new BehaviorSubject<Array<DataPoint>>(dataPoints);
   }
 
@@ -390,7 +393,7 @@ export class SystemAndEquipmentCurveGraphService {
             color: 'rgba(0, 0, 0, 0)',
             line: {
               color: 'rgba(0, 0, 0, .6)',
-              width: 4
+              width: 4,
             },
             size: 12,
           },
@@ -459,7 +462,68 @@ export class SystemAndEquipmentCurveGraphService {
         displaylogo: false,
         displayModeBar: true,
         responsive: true
-      }
+      },
+      selectedAxis: 0
+    };
+  }
+
+  getEmptyPowerChart(): SimpleChart {
+    return {
+      name: 'Power',
+      currentEquipmentType: '',
+      data: [
+        // Power
+        {
+          x: [],
+          y: [],
+          name: '',
+          showlegend: false,
+          type: 'scatter',
+  
+          line: {
+            shape: 'spline',
+            color: undefined,
+            smoothing: 1.3
+          }
+        },
+      ],
+      layout: {
+        hovermode: 'closest',
+        height: 300,
+        xaxis: {
+          autorange: true,
+          type: 'auto',
+          showgrid: true,
+          title: {
+            text: ""
+          },
+          showticksuffix: 'all',
+          tickangle: -60
+        },
+        yaxis: {
+          autorange: true,
+          type: 'linear',
+          showgrid: true,
+          title: {
+            text: ""
+          },
+          rangemode: 'tozero',
+          showticksuffix: 'all'
+        },
+        margin: {
+          t: 50,
+          b: 75,
+          l: 75,
+          r: 50
+        }
+      },
+      config: {
+        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true
+      },
+      selectedAxis: 0
     };
   }
 }
@@ -470,3 +534,8 @@ export interface HoverGroupData {
   system: DataPoint,
   fluidPower?: number
 };
+
+
+export interface SystemCurveDataPoint extends DataPoint {
+  pointEfficiency?: number
+}
