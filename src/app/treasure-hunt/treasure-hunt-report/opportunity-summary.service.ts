@@ -17,6 +17,7 @@ import { CompressedAirPressureReductionService } from '../../calculator/compress
 import { SteamReductionService } from '../../calculator/steam/steam-reduction/steam-reduction.service';
 import { TankInsulationReductionService } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.service';
 import { AirLeakService } from '../../calculator/compressed-air/air-leak/air-leak.service';
+import { processEquipmentOptions } from '../calculators/opportunity-sheet/general-details-form/processEquipmentOptions';
 
 @Injectable()
 export class OpportunitySummaryService {
@@ -61,7 +62,7 @@ export class OpportunitySummaryService {
     return opportunitySummaries;
   }
 
-  getNewOpportunitySummary(opportunityName: string, utilityType: string, costSavings: number, totalEnergySavings: number, opportunityCost: OpportunityCost, baselineCost: number, modificationCost: number, mixedIndividualResults?: Array<OpportunitySummary>): OpportunitySummary {
+  getNewOpportunitySummary(opportunityName: string, utilityType: string, costSavings: number, totalEnergySavings: number, opportunityCost: OpportunityCost, baselineCost: number, modificationCost: number, team: string, equipment: string, owner: string, mixedIndividualResults?: Array<OpportunitySummary>): OpportunitySummary {
     let totalCost: number = this.opportunitySheetService.getOppSheetImplementationCost(opportunityCost)
     if (opportunityCost && opportunityCost.additionalAnnualSavings) {
       costSavings = costSavings + opportunityCost.additionalAnnualSavings.cost;
@@ -77,7 +78,10 @@ export class OpportunitySummaryService {
       mixedIndividualResults: mixedIndividualResults,
       selected: true,
       baselineCost: baselineCost,
-      modificationCost: modificationCost
+      modificationCost: modificationCost,
+      team: team,
+      equipment: equipment,
+      owner: owner
     }
   }
 
@@ -100,13 +104,19 @@ export class OpportunitySummaryService {
     let name: string = 'Lighting Replacement #' + index;
     let results: LightingReplacementResults = this.lightingReplacementService.getResults(replacement);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (replacement.opportunitySheet) {
       if (replacement.opportunitySheet.name) {
         name = replacement.opportunitySheet.name;
       }
       opportunityCost = replacement.opportunitySheet.opportunityCost;
+      team = replacement.opportunitySheet.owner;
+      owner = replacement.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(replacement.opportunitySheet.equipment);
     }
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.totalCostSavings, results.totalEnergySavings, opportunityCost, results.baselineResults.totalOperatingCosts, results.modificationResults.totalOperatingCosts);
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.totalCostSavings, results.totalEnergySavings, opportunityCost, results.baselineResults.totalOperatingCosts, results.modificationResults.totalOperatingCosts, team, equipment, owner);
     return oppSummary;
   }
 
@@ -129,13 +139,19 @@ export class OpportunitySummaryService {
     let name: string = 'Replace Existing Motor #' + index;
     let results: ReplaceExistingResults = this.replaceExistingService.getResults(replacement.replaceExistingData, settings);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (replacement.opportunitySheet) {
       if (replacement.opportunitySheet.name) {
         name = replacement.opportunitySheet.name;
       }
       opportunityCost = replacement.opportunitySheet.opportunityCost;
+      team = replacement.opportunitySheet.owner;
+      owner = replacement.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(replacement.opportunitySheet.equipment);
     }
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.costSavings, results.annualEnergySavings, opportunityCost, results.existingEnergyCost, results.newEnergyCost);
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.costSavings, results.annualEnergySavings, opportunityCost, results.existingEnergyCost, results.newEnergyCost, team, equipment, owner);
     return oppSummary;
   }
 
@@ -158,13 +174,19 @@ export class OpportunitySummaryService {
     let name: string = 'Motor Drive #' + index;
     let results: MotorDriveOutputs = this.motorDriveService.getResults(drive.motorDriveInputs);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (drive.opportunitySheet) {
       if (drive.opportunitySheet.name) {
         name = drive.opportunitySheet.name;
       }
       opportunityCost = drive.opportunitySheet.opportunityCost;
+      team = drive.opportunitySheet.owner;
+      owner = drive.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(drive.opportunitySheet.equipment);
     }
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResult.energyCost, results.modificationResult.energyCost);
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResult.energyCost, results.modificationResult.energyCost, team, equipment, owner);
     return oppSummary;
   }
   //electricity reduction
@@ -186,13 +208,19 @@ export class OpportunitySummaryService {
     let name: string = 'Electricity Reduction #' + index;
     let results: ElectricityReductionResults = this.electricityReductionService.getResults(settings, electricityReduction.baseline, electricityReduction.modification);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (electricityReduction.opportunitySheet) {
       if (electricityReduction.opportunitySheet.name) {
         name = electricityReduction.opportunitySheet.name;
       }
       opportunityCost = electricityReduction.opportunitySheet.opportunityCost;
+      team = electricityReduction.opportunitySheet.owner;
+      owner = electricityReduction.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(electricityReduction.opportunitySheet.equipment);
     }
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
     return oppSummary;
   }
 
@@ -215,13 +243,19 @@ export class OpportunitySummaryService {
     let name: string = 'Natural Gas Reduction #' + index;
     let results: NaturalGasReductionResults = this.naturalGasReductionService.getResults(settings, ngReduction.baseline, ngReduction.modification);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (ngReduction.opportunitySheet) {
       if (ngReduction.opportunitySheet.name) {
         name = ngReduction.opportunitySheet.name;
       }
       opportunityCost = ngReduction.opportunitySheet.opportunityCost;
+      team = ngReduction.opportunitySheet.owner;
+      owner = ngReduction.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(ngReduction.opportunitySheet.equipment);
     }
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Natural Gas', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Natural Gas', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
 
     return oppSummary;
   }
@@ -245,18 +279,24 @@ export class OpportunitySummaryService {
     let name: string = 'Compressed Air Reduction #' + index;
     let results: CompressedAirReductionResults = this.compressedAirReductionService.getResults(settings, compressedAirReduction.baseline, compressedAirReduction.modification);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (compressedAirReduction.opportunitySheet) {
       if (compressedAirReduction.opportunitySheet.name) {
         name = compressedAirReduction.opportunitySheet.name;
       }
       opportunityCost = compressedAirReduction.opportunitySheet.opportunityCost;
+      team = compressedAirReduction.opportunitySheet.owner;
+      owner = compressedAirReduction.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(compressedAirReduction.opportunitySheet.equipment);
     }
     let oppSummary: OpportunitySummary;
     if (compressedAirReduction.baseline[0].utilityType == 0) {
-      oppSummary = this.getNewOpportunitySummary(name, 'Compressed Air', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+      oppSummary = this.getNewOpportunitySummary(name, 'Compressed Air', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
     }
     else {
-      oppSummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+      oppSummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
     }
     return oppSummary;
   }
@@ -280,13 +320,19 @@ export class OpportunitySummaryService {
     let name: string = 'Compressed Air Pressure Reduction #' + index;
     let results: CompressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(settings, compressedAirPressureReduction.baseline, compressedAirPressureReduction.modification);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (compressedAirPressureReduction.opportunitySheet) {
       if (compressedAirPressureReduction.opportunitySheet.name) {
         name = compressedAirPressureReduction.opportunitySheet.name;
       }
       opportunityCost = compressedAirPressureReduction.opportunitySheet.opportunityCost;
+      team = compressedAirPressureReduction.opportunitySheet.owner;
+      owner = compressedAirPressureReduction.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(compressedAirPressureReduction.opportunitySheet.equipment);
     }
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
     return oppSummary;
   }
 
@@ -309,18 +355,24 @@ export class OpportunitySummaryService {
     let name: string = 'Water Reduction #' + index;
     let results: WaterReductionResults = this.waterReductionService.getResults(settings, waterReduction.baseline, waterReduction.modification);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (waterReduction.opportunitySheet) {
       if (waterReduction.opportunitySheet.name) {
         name = waterReduction.opportunitySheet.name;
       }
       opportunityCost = waterReduction.opportunitySheet.opportunityCost;
+      team = waterReduction.opportunitySheet.owner;
+      owner = waterReduction.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(waterReduction.opportunitySheet.equipment);
     }
     let oppSummary: OpportunitySummary;
     if (waterReduction.baseline[0].isWastewater == true) {
-      oppSummary = this.getNewOpportunitySummary(name, 'Waste Water', results.annualCostSavings, results.annualWaterSavings, opportunityCost, results.baselineResults.waterCost, results.modificationResults.waterCost);
+      oppSummary = this.getNewOpportunitySummary(name, 'Waste Water', results.annualCostSavings, results.annualWaterSavings, opportunityCost, results.baselineResults.waterCost, results.modificationResults.waterCost, team, equipment, owner);
     }
     else {
-      oppSummary = this.getNewOpportunitySummary(name, 'Water', results.annualCostSavings, results.annualWaterSavings, opportunityCost, results.baselineResults.waterCost, results.modificationResults.waterCost);
+      oppSummary = this.getNewOpportunitySummary(name, 'Water', results.annualCostSavings, results.annualWaterSavings, opportunityCost, results.baselineResults.waterCost, results.modificationResults.waterCost, team, equipment, owner);
     }
     return oppSummary;
   }
@@ -344,11 +396,17 @@ export class OpportunitySummaryService {
     let name: string = 'Steam Reduction #' + index;
     let results: SteamReductionResults = this.steamReductionService.getResults(settings, steamReduction.baseline, steamReduction.modification);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (steamReduction.opportunitySheet) {
       if (steamReduction.opportunitySheet.name) {
         name = steamReduction.opportunitySheet.name;
       }
       opportunityCost = steamReduction.opportunitySheet.opportunityCost;
+      team = steamReduction.opportunitySheet.owner;
+      owner = steamReduction.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(steamReduction.opportunitySheet.equipment);
     }
     let energySavings: number = results.annualSteamSavings;
     let utilityTypeStr: string = 'Steam';
@@ -360,7 +418,7 @@ export class OpportunitySummaryService {
       energySavings = results.annualEnergySavings;
     }
 
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
     return oppSummary;
   }
 
@@ -383,11 +441,17 @@ export class OpportunitySummaryService {
     let name: string = 'Pipe Insulation Reduction #' + index;
     let results: PipeInsulationReductionResults = this.pipeInsulationReductionService.getResults(settings, pipeInsulationReduction.baseline, pipeInsulationReduction.modification);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (pipeInsulationReduction.opportunitySheet) {
       if (pipeInsulationReduction.opportunitySheet.name) {
         name = pipeInsulationReduction.opportunitySheet.name;
       }
       opportunityCost = pipeInsulationReduction.opportunitySheet.opportunityCost;
+      team = pipeInsulationReduction.opportunitySheet.owner;
+      owner = pipeInsulationReduction.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(pipeInsulationReduction.opportunitySheet.equipment);
     }
     let energySavings: number = results.annualHeatSavings;
     let utilityTypeStr: string;
@@ -397,7 +461,7 @@ export class OpportunitySummaryService {
       utilityTypeStr = 'Other Fuel';
     }
 
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
     return oppSummary;
   }
 
@@ -420,11 +484,17 @@ export class OpportunitySummaryService {
     let name: string = 'Tank Insulation Reduction #' + index;
     let results: TankInsulationReductionResults = this.tankInsulationReductionService.getResults(settings, tankInsulationReduction.baseline, tankInsulationReduction.modification);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (tankInsulationReduction.opportunitySheet) {
       if (tankInsulationReduction.opportunitySheet.name) {
         name = tankInsulationReduction.opportunitySheet.name;
       }
       opportunityCost = tankInsulationReduction.opportunitySheet.opportunityCost;
+      team = tankInsulationReduction.opportunitySheet.owner;
+      owner = tankInsulationReduction.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(tankInsulationReduction.opportunitySheet.equipment);
     }
     let energySavings: number = results.annualHeatSavings;
     let utilityTypeStr: string;
@@ -434,7 +504,7 @@ export class OpportunitySummaryService {
       utilityTypeStr = 'Other Fuel';
     }
 
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
     return oppSummary;
   }
 
@@ -457,11 +527,17 @@ export class OpportunitySummaryService {
     let name: string = 'Air Leak Survey #' + index;
     let results: AirLeakSurveyOutput = this.airLeakService.getResults(settings, airLeakSurvey.airLeakSurveyInput);
     let opportunityCost: OpportunityCost;
+    let team: string;
+    let equipment: string;
+    let owner: string;
     if (airLeakSurvey.opportunitySheet) {
       if (airLeakSurvey.opportunitySheet.name) {
         name = airLeakSurvey.opportunitySheet.name;
       }
       opportunityCost = airLeakSurvey.opportunitySheet.opportunityCost;
+      team = airLeakSurvey.opportunitySheet.owner;
+      owner = airLeakSurvey.opportunitySheet.businessUnits;
+      equipment = this.getEquipmentDisplay(airLeakSurvey.opportunitySheet.equipment);
     }
     //utility type: 0 = compressed air, 1 = electric
     let energySavings: number;
@@ -473,7 +549,7 @@ export class OpportunitySummaryService {
       energySavings = results.savingsData.annualTotalElectricity;
       utilityTypeStr = 'Electricity';
     }
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.savingsData.annualTotalElectricityCost, energySavings, opportunityCost, results.baselineData.annualTotalElectricityCost, results.modificationData.annualTotalElectricityCost);
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.savingsData.annualTotalElectricityCost, energySavings, opportunityCost, results.baselineData.annualTotalElectricityCost, results.modificationData.annualTotalElectricityCost, team, equipment, owner);
     return oppSummary;
   }
 
@@ -499,6 +575,9 @@ export class OpportunitySummaryService {
     let numEnergyTypes: number = 0;
     let totalEnergySavings: number = 0;
     let energyTypeLabel: string;
+    let team: string = oppSheet.owner;
+    let owner: string = oppSheet.businessUnits;
+    let equipment: string = this.getEquipmentDisplay(oppSheet.equipment);
     for (let key in oppSheetResults) {
       if (oppSheetResults[key].baselineItems != 0 || oppSheetResults[key].modificationItems != 0 && oppSheetResults[key].baselineItems != undefined) {
         numEnergyTypes = numEnergyTypes + 1;
@@ -508,49 +587,49 @@ export class OpportunitySummaryService {
     if (oppSheetResults.electricityResults.baselineItems != 0 || oppSheetResults.electricityResults.modificationItems != 0) {
       energyTypeLabel = 'Electricity';
       totalEnergySavings = totalEnergySavings + oppSheetResults.electricityResults.energySavings;
-      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.electricityResults.energyCostSavings, oppSheetResults.electricityResults.energySavings, oppSheet.opportunityCost, oppSheetResults.electricityResults.baselineEnergyCost, oppSheetResults.electricityResults.modificationEnergyCost)
+      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.electricityResults.energyCostSavings, oppSheetResults.electricityResults.energySavings, oppSheet.opportunityCost, oppSheetResults.electricityResults.baselineEnergyCost, oppSheetResults.electricityResults.modificationEnergyCost, team, equipment, owner)
       mixedIndividualSummaries.push(oppSummary);
     }
     //compressed air
     if (oppSheetResults.compressedAirResults.baselineItems != 0 || oppSheetResults.compressedAirResults.modificationItems != 0) {
       energyTypeLabel = 'Compressed Air';
       totalEnergySavings = totalEnergySavings + oppSheetResults.compressedAirResults.energySavings;
-      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.compressedAirResults.energyCostSavings, oppSheetResults.compressedAirResults.energySavings, oppSheet.opportunityCost, oppSheetResults.compressedAirResults.baselineEnergyCost, oppSheetResults.compressedAirResults.modificationEnergyCost)
+      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.compressedAirResults.energyCostSavings, oppSheetResults.compressedAirResults.energySavings, oppSheet.opportunityCost, oppSheetResults.compressedAirResults.baselineEnergyCost, oppSheetResults.compressedAirResults.modificationEnergyCost, team, equipment, owner)
       mixedIndividualSummaries.push(oppSummary);
     }
     //natural gas
     if (oppSheetResults.gasResults.baselineItems != 0 || oppSheetResults.gasResults.modificationItems != 0) {
       energyTypeLabel = 'Natural Gas';
       totalEnergySavings = totalEnergySavings + oppSheetResults.gasResults.energySavings;
-      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.gasResults.energyCostSavings, oppSheetResults.gasResults.energySavings, oppSheet.opportunityCost, oppSheetResults.gasResults.baselineEnergyCost, oppSheetResults.gasResults.modificationEnergyCost)
+      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.gasResults.energyCostSavings, oppSheetResults.gasResults.energySavings, oppSheet.opportunityCost, oppSheetResults.gasResults.baselineEnergyCost, oppSheetResults.gasResults.modificationEnergyCost, team, equipment, owner)
       mixedIndividualSummaries.push(oppSummary);
     }
     //water
     if (oppSheetResults.waterResults.baselineItems != 0 || oppSheetResults.waterResults.modificationItems != 0) {
       energyTypeLabel = 'Water';
       totalEnergySavings = totalEnergySavings + oppSheetResults.waterResults.energySavings;
-      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.waterResults.energyCostSavings, oppSheetResults.waterResults.energySavings, oppSheet.opportunityCost, oppSheetResults.waterResults.baselineEnergyCost, oppSheetResults.waterResults.modificationEnergyCost)
+      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.waterResults.energyCostSavings, oppSheetResults.waterResults.energySavings, oppSheet.opportunityCost, oppSheetResults.waterResults.baselineEnergyCost, oppSheetResults.waterResults.modificationEnergyCost, team, equipment, owner)
       mixedIndividualSummaries.push(oppSummary);
     }
     //waste water
     if (oppSheetResults.wasteWaterResults.baselineItems != 0 || oppSheetResults.wasteWaterResults.modificationItems != 0) {
       energyTypeLabel = 'Waste Water';
       totalEnergySavings = totalEnergySavings + oppSheetResults.wasteWaterResults.energySavings;
-      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.wasteWaterResults.energyCostSavings, oppSheetResults.wasteWaterResults.energySavings, oppSheet.opportunityCost, oppSheetResults.wasteWaterResults.baselineEnergyCost, oppSheetResults.wasteWaterResults.modificationEnergyCost)
+      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.wasteWaterResults.energyCostSavings, oppSheetResults.wasteWaterResults.energySavings, oppSheet.opportunityCost, oppSheetResults.wasteWaterResults.baselineEnergyCost, oppSheetResults.wasteWaterResults.modificationEnergyCost, team, equipment, owner)
       mixedIndividualSummaries.push(oppSummary);
     }
     //steam
     if (oppSheetResults.steamResults.baselineItems != 0 || oppSheetResults.steamResults.modificationItems != 0) {
       energyTypeLabel = 'Steam';
       totalEnergySavings = totalEnergySavings + oppSheetResults.steamResults.energySavings;
-      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.steamResults.energyCostSavings, oppSheetResults.steamResults.energySavings, oppSheet.opportunityCost, oppSheetResults.steamResults.baselineEnergyCost, oppSheetResults.steamResults.modificationEnergyCost)
+      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.steamResults.energyCostSavings, oppSheetResults.steamResults.energySavings, oppSheet.opportunityCost, oppSheetResults.steamResults.baselineEnergyCost, oppSheetResults.steamResults.modificationEnergyCost, team, equipment, owner)
       mixedIndividualSummaries.push(oppSummary);
     }
     //other fuel
     if (oppSheetResults.otherFuelResults.baselineItems != 0 || oppSheetResults.otherFuelResults.modificationItems != 0) {
       energyTypeLabel = 'Other Fuel';
       totalEnergySavings = totalEnergySavings + oppSheetResults.otherFuelResults.energySavings;
-      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.otherFuelResults.energyCostSavings, oppSheetResults.otherFuelResults.energySavings, oppSheet.opportunityCost, oppSheetResults.otherFuelResults.baselineEnergyCost, oppSheetResults.otherFuelResults.modificationEnergyCost)
+      let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.otherFuelResults.energyCostSavings, oppSheetResults.otherFuelResults.energySavings, oppSheet.opportunityCost, oppSheetResults.otherFuelResults.baselineEnergyCost, oppSheetResults.otherFuelResults.modificationEnergyCost, team, equipment, owner)
       mixedIndividualSummaries.push(oppSummary);
     }
     let oppSummary: OpportunitySummary;
@@ -559,11 +638,21 @@ export class OpportunitySummaryService {
       oppSummary = mixedIndividualSummaries[0];
     } else if (numEnergyTypes > 1) {
       //more then one energy source in opp sheet, implemenetation cost in other
-      oppSummary = this.getNewOpportunitySummary(oppSheet.name, 'Mixed', oppSheetResults.totalCostSavings, oppSheetResults.totalEnergySavings, oppSheet.opportunityCost, 0, 0, mixedIndividualSummaries);
+      oppSummary = this.getNewOpportunitySummary(oppSheet.name, 'Mixed', oppSheetResults.totalCostSavings, oppSheetResults.totalEnergySavings, oppSheet.opportunityCost, 0, 0, team, equipment, owner, mixedIndividualSummaries);
     } else {
       //no energy savings
-      oppSummary = this.getNewOpportunitySummary(oppSheet.name, 'None', 0, 0, undefined, 0, 0);
+      oppSummary = this.getNewOpportunitySummary(oppSheet.name, 'None', 0, 0, undefined, 0, 0, team, equipment, owner);
     }
     return oppSummary;
+  }
+
+  getEquipmentDisplay(equipment): string {
+    if (equipment) {
+      let findEquipment = processEquipmentOptions.find(option => { return option.value == equipment });
+      if (findEquipment) {
+        return findEquipment.display;
+      }
+    }
+    return
   }
 }
