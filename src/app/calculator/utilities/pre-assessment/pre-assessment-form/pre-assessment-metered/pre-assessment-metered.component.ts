@@ -27,20 +27,23 @@ export class PreAssessmentMeteredComponent implements OnInit {
           collectionTime: 0,
           electricityUsed: 0,
           electricityCollectionTime: 0,
-          fuelEnergy: 0
+          fuelEnergy: 0,
+          operatingHours: 0
         },
         meteredEnergyElectricity: {
           electricityCollectionTime: 0,
           electricityUsed: 0,
           auxElectricityUsed: 0,
-          auxElectricityCollectionTime: 0
+          auxElectricityCollectionTime: 0,
+          operatingHours: 0
         },
         meteredEnergySteam: {
           totalHeatSteam: 0,
           flowRate: 0,
           collectionTime: 0,
           electricityUsed: 0,
-          electricityCollectionTime: 0
+          electricityCollectionTime: 0,
+          operatingHours: 0
         }
       };
     }

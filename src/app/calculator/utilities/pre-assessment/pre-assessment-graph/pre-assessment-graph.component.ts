@@ -109,7 +109,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   getValuesAndLabels(): Array<{ name: string, percent: number, value: number, color: string, energyCost: number }> {
     let valuesAndLabels: Array<{ name: string, percent: number, value: number, color: string, energyCost: number }> = new Array();
     if (this.preAssessments) {
-      valuesAndLabels = this.preAssessmentService.getResults(this.preAssessments, this.settings, this.resultType);
+      valuesAndLabels = this.preAssessmentService.getResults(this.preAssessments, this.settings, this.resultType, false);
     }
     return valuesAndLabels;
   }
