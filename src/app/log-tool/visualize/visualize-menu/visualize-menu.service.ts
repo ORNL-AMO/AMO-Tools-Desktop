@@ -158,7 +158,7 @@ export class VisualizeMenuService {
   setBarHistogramData(selectedGraphObj: GraphObj) {
     if (selectedGraphObj.useStandardDeviation == true) {
       //get std deviation
-      let stdDeviationBarData = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField, selectedGraphObj.usePercentForBins);
+      let stdDeviationBarData = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.selectedXAxisDataOption.dataField, selectedGraphObj.usePercentForBins, selectedGraphObj.bins[0].min);
       //set data
       selectedGraphObj.data[0].x = stdDeviationBarData.xLabels;
       selectedGraphObj.data[0].y = stdDeviationBarData.yValues;
@@ -310,7 +310,7 @@ export class VisualizeMenuService {
 
   initializeBinData(selectedGraphObj: GraphObj): GraphObj {
     selectedGraphObj.binnedField = selectedGraphObj.selectedXAxisDataOption.dataField;
-    selectedGraphObj.binSize = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.binnedField, selectedGraphObj.usePercentForBins).standardDeviation;
+    selectedGraphObj.binSize = this.visualizeService.getStandardDevBarChartData(selectedGraphObj.binnedField, selectedGraphObj.usePercentForBins, undefined).standardDeviation;
     selectedGraphObj.binSize = Number((selectedGraphObj.binSize).toFixed(0));
     selectedGraphObj = this.setBins(selectedGraphObj);
     selectedGraphObj.numberOfBins = selectedGraphObj.bins.length;
