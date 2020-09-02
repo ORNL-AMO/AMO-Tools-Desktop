@@ -1,3 +1,5 @@
+import { OperatingHours } from "../shared/models/operations";
+import { SlipMethod, FieldMeasurementInputs } from "../calculator/motors/percent-load-estimation/percent-load-estimation.service";
 
 export interface MotorInventoryData {
   departments: Array<MotorInventoryDepartment>,
@@ -72,7 +74,6 @@ export interface NameplateData {
   efficiencyClass: number,
   nominalEfficiency: number,
   lineFrequency: number,
-  motorRpm: number
   //optional
   manufacturer: string,
   model: string,
@@ -93,7 +94,9 @@ export interface OperationData {
   averageLoadFactor: number,
   utilizationFactor: number,
   efficiencyAtAverageLoad: number,
-  powerFactorAtLoad: number
+  powerFactorAtLoad: number,
+  currentAtLoad: number,
+  operatingHours?: OperatingHours
 }
 
 export interface OtherData {
@@ -185,7 +188,8 @@ export interface OperationDataOptions {
   averageLoadFactor: boolean,
   utilizationFactor: boolean,
   efficiencyAtAverageLoad: boolean,
-  powerFactorAtLoad: boolean
+  powerFactorAtLoad: boolean,
+  currentAtLoad: boolean
 }
 
 export interface OtherOptions {

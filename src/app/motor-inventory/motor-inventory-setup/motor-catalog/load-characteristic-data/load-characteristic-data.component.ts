@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { LoadCharacteristicOptions, MotorItem } from '../../../motor-inventory';
+import { LoadCharacteristicOptions, MotorItem, MotorPropertyDisplayOptions } from '../../../motor-inventory';
 import { MotorCatalogService } from '../motor-catalog.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { LoadCharacteristicDataService } from './load-characteristic-data.service';
@@ -17,16 +17,21 @@ export class LoadCharacteristicDataComponent implements OnInit {
   selectedMotorItemSub: Subscription;
   displayOptions: LoadCharacteristicOptions;
   displayForm: boolean = true;
+  selectedMotorItem: MotorItem;
+  disableEstimateLoadEfficiency: boolean;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private loadCharacteristicsDataService: LoadCharacteristicDataService) { }
 
   ngOnInit(): void {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
+      this.selectedMotorItem = selectedMotor;
       if (selectedMotor) {
         this.motorForm = this.loadCharacteristicsDataService.getFormFromLoadCharacteristicData(selectedMotor.loadCharacteristicData);
       }
     });
-    this.displayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions.loadCharactersticOptions;
+    let allDisplayOptions: MotorPropertyDisplayOptions = this.motorInventoryService.motorInventoryData.getValue().displayOptions;
+    this.displayOptions = allDisplayOptions.loadCharactersticOptions;
+    this.disableEstimateLoadEfficiency = !allDisplayOptions.nameplateDataOptions.fullLoadSpeed;
   }
 
   ngOnDestroy() {
@@ -44,7 +49,7 @@ export class LoadCharacteristicDataComponent implements OnInit {
     this.motorInventoryService.focusedField.next(str);
   }
 
-  toggleForm(){
+  toggleForm() {
     this.displayForm = !this.displayForm;
     this.focusOut();
   }
@@ -54,4 +59,29 @@ export class LoadCharacteristicDataComponent implements OnInit {
     this.motorInventoryService.focusedField.next('default');
   }
 
+  calculateEfficiency75() {
+    if (!this.disableEstimateLoadEfficiency) {
+      let efficiency: number = this.motorCatalogService.estimateEfficiency(75, true);
+      this.motorForm.controls.efficiency75.patchValue(efficiency);
+      this.save();
+    }
+  }
+  calculateEfficiency50() {
+    if (!this.disableEstimateLoadEfficiency) {
+      let efficiency: number = this.motorCatalogService.estimateEfficiency(50, true);
+      this.motorForm.controls.efficiency50.patchValue(efficiency);
+      this.save();
+    }
+  }
+  calculateEfficiency25() {
+    if (!this.disableEstimateLoadEfficiency) {
+      let efficiency: number = this.motorCatalogService.estimateEfficiency(25, true);
+      this.motorForm.controls.efficiency25.patchValue(efficiency);
+      this.save();
+    }
+  }
+  focusHelp(str: string) {
+    this.focusField(str);
+    this.motorInventoryService.helpPanelTab.next('help');
+  }
 }

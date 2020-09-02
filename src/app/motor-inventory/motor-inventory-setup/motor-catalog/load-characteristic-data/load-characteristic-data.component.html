@@ -6,7 +6,13 @@
 <form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
     <!-- efficiency75 -->
     <div class="form-group" *ngIf="displayOptions.efficiency75">
-        <label for="efficiency75">Efficiency at 75% Load</label>
+        <label for="efficiency75">Efficiency at 75% Load
+            <span class="form-text">
+                <a class="small click-link" (click)="calculateEfficiency75()"
+                    [ngClass]="{'disabled': disableEstimateLoadEfficiency}">Estimate Efficiency</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('efficiency75')"></span>
+            </span>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('efficiency75')"
                 (input)="save()" formControlName="efficiency75" id="efficiency75">
@@ -21,7 +27,13 @@
     </div>
     <!-- efficiency50 -->
     <div class="form-group" *ngIf="displayOptions.efficiency50">
-        <label for="efficiency50">Efficiency at 50% Load</label>
+        <label for="efficiency50">Efficiency at 50% Load
+            <span class="form-text">
+                <a class="small click-link" (click)="calculateEfficiency50()"
+                    [ngClass]="{'disabled': disableEstimateLoadEfficiency}">Estimate Efficiency</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('efficiency50')"></span>
+            </span>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('efficiency50')"
                 (input)="save()" formControlName="efficiency50" id="efficiency50">
@@ -36,7 +48,13 @@
     </div>
     <!-- efficiency25 -->
     <div class="form-group" *ngIf="displayOptions.efficiency25">
-        <label for="efficiency25">Efficiency at 25% Load</label>
+        <label for="efficiency25">Efficiency at 25% Load
+            <span class="form-text">
+                <a class="small click-link" (click)="calculateEfficiency25()"
+                    [ngClass]="{'disabled': disableEstimateLoadEfficiency}">Estimate Efficiency</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('efficiency25')"></span>
+            </span>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('efficiency25')"
                 (input)="save()" formControlName="efficiency25" id="efficiency25">

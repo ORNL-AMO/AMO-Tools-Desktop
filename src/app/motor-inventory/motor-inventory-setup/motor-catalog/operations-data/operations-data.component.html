@@ -3,7 +3,7 @@
     <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
     Field Measurements
 </label>
-<form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
+<form *ngIf="displayForm" class="p-1" [formGroup]="motorForm" #formElement>
 
     <!-- location -->
     <div class="form-group" *ngIf="displayOptions.location">
@@ -14,8 +14,13 @@
 
     <!-- annualOperatingHours -->
     <div class="form-group" *ngIf="displayOptions.annualOperatingHours">
-        <label for="annualOperatingHours">Operating Hours</label>
+        <label for="annualOperatingHours">Operating Hours
+
+        </label>
         <div class="input-group">
+            <span class="input-group-addon op-hour-addon units">
+                <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+            </span>
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('annualOperatingHours')"
                 (input)="save()" formControlName="annualOperatingHours" id="annualOperatingHours">
             <span class="input-group-addon units">hrs/yr</span>
@@ -29,7 +34,9 @@
     </div>
     <!-- averageLoadFactor -->
     <div class="form-group" *ngIf="displayOptions.averageLoadFactor">
-        <label for="averageLoadFactor">Average Load Factor</label>
+        <label for="averageLoadFactor">Average Load Factor
+            <a class="form-text small click-link" (click)="showLoadFactorModal()">Calculate Load Factor</a>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('averageLoadFactor')"
                 (input)="save()" formControlName="averageLoadFactor" id="averageLoadFactor">
@@ -59,7 +66,13 @@
     </div>
     <!-- efficiencyAtAverageLoad -->
     <div class="form-group" *ngIf="displayOptions.efficiencyAtAverageLoad">
-        <label for="efficiencyAtAverageLoad">Efficiency at Average Load</label>
+        <label for="efficiencyAtAverageLoad">Efficiency at Average Load
+            <span class="form-text">
+                <a class="small click-link" (click)="calculateEfficiency()"
+                    [ngClass]="{'disabled': disableEstimateEfficiency}">Estimate Efficiency</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('efficiencyAtAverageLoad')"></span>
+            </span>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()"
                 (focus)="focusField('efficiencyAtAverageLoad')" (input)="save()"
@@ -73,9 +86,34 @@
                 {{motorForm.controls.efficiencyAtAverageLoad.errors.min.min}} %.</span>
         </span>
     </div>
-    <!-- utilizationFactor -->
+    <!-- currentAtLoad -->
+    <div class="form-group" *ngIf="displayOptions.currentAtLoad">
+        <label for="currentAtLoad">Current at Load
+            <span class="form-text">
+                <a class="small click-link" (click)="calculateCurrent()"
+                    [ngClass]="{'disabled': disableEstimateCurrent}">Estimate Current</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('currentAtLoad')"></span>
+            </span>
+        </label>
+        <div class="input-group">
+            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('currentAtLoad')"
+                (input)="save()" formControlName="currentAtLoad" id="currentAtLoad">
+            <span class="input-group-addon units">A</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.currentAtLoad.invalid">
+            <span *ngIf="motorForm.controls.currentAtLoad.errors.min">Value can't be less than
+                {{motorForm.controls.currentAtLoad.errors.min.min}} A.</span>
+        </span>
+    </div>
+    <!-- powerFactorAtLoad -->
     <div class="form-group" *ngIf="displayOptions.powerFactorAtLoad">
-        <label for="powerFactorAtLoad">Power Factor at Load</label>
+        <label for="powerFactorAtLoad">Power Factor at Load
+            <span class="form-text">
+                <a class="small click-link" (click)="calculatePowerFactor()"
+                    [ngClass]="{'disabled': disableEstimateLoadFactor}">Estimate Power Factor</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('powerFactorAtLoad')"></span>
+            </span>
+        </label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('powerFactorAtLoad')"
                 (input)="save()" formControlName="powerFactorAtLoad" id="powerFactorAtLoad">
@@ -89,3 +127,33 @@
         </span>
     </div>
 </form>
+
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+    [operatingHours]="operationsOperatingHours">
+</app-operating-hours-modal>
+
+
+<div bsModal #loadFactorModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="loadFactorLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" aria-label="Close" (click)="hideLoadFactorModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div #modalBody class="modal-body p-0 d-flex h-100 w-100">
+                <app-percent-load-estimation class="w-100 h-100" *ngIf="loadFactorModal.isShown" [settings]="settings">
+                </app-percent-load-estimation>
+            </div>
+            <div class="modal-footer fsat justify-content-between">
+                <button class="btn btn-default pull-left" (click)="hideLoadFactorModal()">Cancel</button>
+                <span>
+                    <button class="ml-2 btn btn-primary" (click)="applyModalData()">Apply Data</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,13 +9,13 @@
         </div>
         <div class="d-flex flex-column w-50 mh-100 scroll-item">
             <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" *ngIf="setupTab == 'motor-catalog'">
-                <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
                     <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                         (click)="setTab('results')">
                         <div>Department Catalog</div>
                     </a>
                 </div>
-                <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
                     <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
                         <div>Help</div>
                     </a>
