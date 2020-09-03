@@ -60,12 +60,12 @@ export class EnergyInputService {
 
   calculateHeatInputFromFlowRate(flowRate: number, settings: Settings) {
     if (settings.unitsOfMeasure == 'Imperial') {
-      return flowRate * (1020 / (Math.pow(10, 6)));
+      return this.convertUnitsService.roundVal(flowRate * (1020 / (Math.pow(10, 6))), 3);
     } else {
       let convertedFlowRate: number = this.convertUnitsService.value(flowRate).from('m3').to('ft3');
       let heatInput: number = convertedFlowRate * (1020 / (Math.pow(10, 6)));
       let convertedHeatInput: number = this.convertUnitsService.value(heatInput).from('MMBtu').to('GJ');
-      return convertedHeatInput;
+      return this.convertUnitsService.roundVal(convertedHeatInput, 3);
     }
   }
 }
