@@ -33,7 +33,6 @@ export class NameplateDataComponent implements OnInit {
 
     this.settingsSub = this.motorInventoryService.settings.subscribe(val => {
       this.settings = val;
-      console.log(this.settings);
     });
     this.efficiencyClasses = JSON.parse(JSON.stringify(motorEfficiencyConstants));
     this.efficiencyClasses.pop();
