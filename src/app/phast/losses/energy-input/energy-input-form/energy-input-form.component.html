@@ -12,9 +12,12 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="small" for="{{'flowRateInput_'+idString}}"><a class="form-text small click-link"
-          (click)="showHideInputField()">Calculate
-          using flow rate</a></label>
+      <label class="small" for="{{'flowRateInput_'+idString}}">
+        <a class="form-text small click-link" (click)="showHideInputField()">
+          <span *ngIf="!flowInput">Calculate using flow rate</span>
+          <span *ngIf="flowInput">Hide Flow Rate</span>
+        </a>
+      </label>
       <div *ngIf="flowInput" class="input-group"
         [ngClass]="{'indicate-different': compareFlowRateInput(), 'invalid': energyInputForm.controls.flowRateInput.invalid}">
         <input [readonly]="!baselineSelected" class="form-control" type="number" formControlName="flowRateInput"
