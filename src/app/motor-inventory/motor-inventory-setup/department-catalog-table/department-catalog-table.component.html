@@ -34,25 +34,59 @@
                     <a class="click-link" (click)="selectMotor(motor)">{{motor.name}}</a>
                 </td>
                 <td>
-                    {{motor.operationData.annualOperatingHours}} hrs/yr
+                    <span *ngIf="motor.operationData.annualOperatingHours">
+                        {{motor.operationData.annualOperatingHours}} hrs/yr
+                    </span>
+                    <span *ngIf="!motor.operationData.annualOperatingHours">
+                        &mdash; hrs/yr
+                    </span>
                 </td>
                 <td>
                     {{motor.nameplateData.efficiencyClass | motorEfficiencyClass}}
                 </td>
                 <td>
-                    {{motor.nameplateData.nominalEfficiency}} %
+                    <span *ngIf="motor.nameplateData.nominalEfficiency">
+                        {{motor.nameplateData.nominalEfficiency}} %
+                    </span>
+                    <span *ngIf="!motor.nameplateData.nominalEfficiency">
+                        &mdash; %
+                    </span>
                 </td>
                 <td>
-                    {{motor.nameplateData.ratedMotorPower}}
+                    <span *ngIf="motor.nameplateData.ratedMotorPower">
+                        {{motor.nameplateData.ratedMotorPower}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                    </span>
+                    <span *ngIf="!motor.nameplateData.ratedMotorPower">
+                        &mdash;
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                    </span>
                 </td>
                 <td>
-                    {{motor.nameplateData.lineFrequency}} Hz
+                    <span *ngIf="motor.nameplateData.lineFrequency">
+                        {{motor.nameplateData.lineFrequency}} Hz
+                    </span>
+                    <span *ngIf="!motor.nameplateData.lineFrequency">
+                        &mdash;
+                    </span>
                 </td>
                 <td>
-                    {{motor.manualSpecificationData.synchronousSpeed}} rpm
+                    <span *ngIf="motor.manualSpecificationData.synchronousSpeed">
+                        {{motor.manualSpecificationData.synchronousSpeed}} rpm
+                    </span>
+                    <span *ngIf="!motor.manualSpecificationData.synchronousSpeed">
+                        &mdash; rpm
+                    </span>
                 </td>
                 <td>
-                    {{motor.nameplateData.fullLoadAmps}} A
+                    <span *ngIf="motor.nameplateData.fullLoadAmps">
+                        {{motor.nameplateData.fullLoadAmps}} A
+                    </span>
+                    <span *ngIf="!motor.nameplateData.fullLoadAmps">
+                        &mdash; A
+                    </span>
                 </td>
             </tr>
         </tbody>
