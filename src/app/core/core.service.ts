@@ -7,6 +7,7 @@ import { MockPsat, MockPsatCalculator, MockPsatSettings } from './mockPsat';
 import { MockFsat, MockFsatSettings, MockFsatCalculator } from './mockFsat';
 import { MockSsmt, MockSsmtSettings } from './mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from './mockTreasureHunt';
+import { MockMotorInventory } from './mockMotorInventoryData';
 import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class CoreService {
@@ -19,7 +20,8 @@ export class CoreService {
   exampleFsatId: number;
   exampleSsmtId: number;
   exampleTreasureHuntId: number;
-  constructor(private indexedDbService: IndexedDbService) { 
+  exampleMotorInventoryId: number;
+  constructor(private indexedDbService: IndexedDbService) {
     this.showTranslateModal = new BehaviorSubject<boolean>(false);
   }
 
@@ -51,7 +53,11 @@ export class CoreService {
                   MockTreasureHunt.directoryId = this.exampleDirectoryId;
                   this.indexedDbService.addAssessment(MockTreasureHunt).then(tHuntId => {
                     this.exampleTreasureHuntId = tHuntId;
-                    resolve(true);
+                    MockMotorInventory.directoryId = this.exampleDirectoryId;
+                    this.indexedDbService.addInventoryItem(MockMotorInventory).then(inventoryId => {
+                      this.exampleMotorInventoryId = inventoryId;
+                      resolve(true);
+                    })
                   })
                 });
               });
@@ -91,10 +97,15 @@ export class CoreService {
                 MockSsmtSettings.assessmentId = this.exampleSsmtId;
 
                 this.indexedDbService.addSettings(MockSsmtSettings).then(() => {
-                  
+
                   MockTreasureHuntSettings.assessmentId = this.exampleTreasureHuntId;
                   this.indexedDbService.addSettings(MockTreasureHuntSettings).then(() => {
-                    resolve(true);
+
+                    delete MockPsatSettings.assessmentId;
+                    MockPsatSettings.inventoryId = this.exampleMotorInventoryId;
+                    this.indexedDbService.addSettings(MockPsatSettings).then(() => {
+                      resolve(true);
+                    })
                   })
                 });
               });
