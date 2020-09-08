@@ -2,57 +2,19 @@ import { Injectable } from '@angular/core';
 import { MotorPropertyDisplayOptions, OtherOptions, TorqueOptions, PurchaseInformationOptions, BatchAnalysisOptions, OperationDataOptions, LoadCharacteristicOptions, ManualSpecificationOptions, NameplateDataOptions, MotorInventoryData, MotorInventoryDepartment, MotorItem, FilterInventorySummary } from '../motor-inventory';
 import { MotorField } from './inventory-summary-table/inventory-summary-table.service';
 import { Settings } from '../../shared/models/settings';
-import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
 @Injectable()
 export class MotorInventorySummaryService {
 
-  filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
-  constructor() {
-    this.filterInventorySummary = new BehaviorSubject({
-      selectedDepartmentIds: new Array(),
-      efficiencyClasses: new Array(),
-      ratedPower: new Array(),
-      ratedVoltage: new Array()
-    });
-  }
 
+  constructor() {
+  }
 
   getAllMotors(inventoryData: MotorInventoryData): Array<MotorItem> {
     let allMotors: Array<MotorItem> = _.flatMap(inventoryData.departments, (department) => { return department.catalog });
     return allMotors;
   }
 
-  filterMotorInventoryData(inventoryData: MotorInventoryData, filterInventorySummary: FilterInventorySummary): MotorInventoryData {
-    let filteredInventoryData: MotorInventoryData = JSON.parse(JSON.stringify(inventoryData));
-    if (filterInventorySummary.selectedDepartmentIds.length != 0) {
-      filteredInventoryData.departments = _.filter(filteredInventoryData.departments, (department) => {
-        return _.find(filterInventorySummary.selectedDepartmentIds, (id) => { return department.id == id }) != undefined;
-      });
-    }
-    if (filterInventorySummary.efficiencyClasses.length != 0) {
-      filteredInventoryData.departments.forEach(department => {
-        department.catalog = _.filter(department.catalog, (motorItem) => {
-          return _.includes(filterInventorySummary.efficiencyClasses, motorItem.nameplateData.efficiencyClass);
-        })
-      });
-    }
-    if (filterInventorySummary.ratedPower.length != 0) {
-      filteredInventoryData.departments.forEach(department => {
-        department.catalog = _.filter(department.catalog, (motorItem) => {
-          return _.includes(filterInventorySummary.ratedPower, motorItem.nameplateData.ratedMotorPower);
-        })
-      });
-    }
-    if (filterInventorySummary.ratedVoltage.length != 0) {
-      filteredInventoryData.departments.forEach(department => {
-        department.catalog = _.filter(department.catalog, (motorItem) => {
-          return _.includes(filterInventorySummary.ratedVoltage, motorItem.nameplateData.ratedVoltage);
-        })
-      });
-    }
-    return filteredInventoryData;
-  }
 
   getFields(displayOptions: MotorPropertyDisplayOptions, settings: Settings): Array<MotorField> {
     let fields: Array<MotorField> = [{

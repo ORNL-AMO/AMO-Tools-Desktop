@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MotorItem, MotorInventoryDepartment, MotorInventoryData, MotorPropertyDisplayOptions } from './motor-inventory';
+import { MotorItem, MotorInventoryDepartment, MotorInventoryData, MotorPropertyDisplayOptions, FilterInventorySummary } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
-
+import * as _ from 'lodash';
 @Injectable()
 export class MotorInventoryService {
 
@@ -15,6 +15,7 @@ export class MotorInventoryService {
   modalOpen: BehaviorSubject<boolean>;
   settings: BehaviorSubject<Settings>;
   helpPanelTab: BehaviorSubject<string>;
+  filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
   constructor() {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
@@ -26,6 +27,12 @@ export class MotorInventoryService {
     this.summaryTab = new BehaviorSubject<string>('overview');
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
+    this.filterInventorySummary = new BehaviorSubject({
+      selectedDepartmentIds: new Array(),
+      efficiencyClasses: new Array(),
+      ratedPower: new Array(),
+      ratedVoltage: new Array()
+    });
   }
 
   updateMotorItem(selectedMotor: MotorItem) {
@@ -231,6 +238,36 @@ export class MotorInventoryService {
         torqueLockedRotor: false,
       }
     }
+  }
+  filterMotorInventoryData(inventoryData: MotorInventoryData, filterInventorySummary: FilterInventorySummary): MotorInventoryData {
+    let filteredInventoryData: MotorInventoryData = JSON.parse(JSON.stringify(inventoryData));
+    if (filterInventorySummary.selectedDepartmentIds.length != 0) {
+      filteredInventoryData.departments = _.filter(filteredInventoryData.departments, (department) => {
+        return _.find(filterInventorySummary.selectedDepartmentIds, (id) => { return department.id == id }) != undefined;
+      });
+    }
+    if (filterInventorySummary.efficiencyClasses.length != 0) {
+      filteredInventoryData.departments.forEach(department => {
+        department.catalog = _.filter(department.catalog, (motorItem) => {
+          return _.includes(filterInventorySummary.efficiencyClasses, motorItem.nameplateData.efficiencyClass);
+        })
+      });
+    }
+    if (filterInventorySummary.ratedPower.length != 0) {
+      filteredInventoryData.departments.forEach(department => {
+        department.catalog = _.filter(department.catalog, (motorItem) => {
+          return _.includes(filterInventorySummary.ratedPower, motorItem.nameplateData.ratedMotorPower);
+        })
+      });
+    }
+    if (filterInventorySummary.ratedVoltage.length != 0) {
+      filteredInventoryData.departments.forEach(department => {
+        department.catalog = _.filter(department.catalog, (motorItem) => {
+          return _.includes(filterInventorySummary.ratedVoltage, motorItem.nameplateData.ratedVoltage);
+        })
+      });
+    }
+    return filteredInventoryData;
   }
 }
 

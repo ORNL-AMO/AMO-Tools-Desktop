@@ -1,8 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { MotorInventoryData } from '../../motor-inventory';
-import { MotorInventorySummaryService } from '../motor-inventory-summary.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -16,12 +15,12 @@ export class InventorySummaryMotorDetailsComponent implements OnInit {
   settingsSub: Subscription;
   motorInventoryData: MotorInventoryData;
   filterInventorySummarySub: Subscription;
-  constructor(private motorInventoryService: MotorInventoryService, private motorInventorySummaryService: MotorInventorySummaryService) { }
+  constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
-    this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
+    this.filterInventorySummarySub = this.motorInventoryService.filterInventorySummary.subscribe(val => {
       let inventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.value;
-      this.motorInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(inventoryData, val);
+      this.motorInventoryData = this.motorInventoryService.filterMotorInventoryData(inventoryData, val);
     });
 
     this.settingsSub = this.motorInventoryService.settings.subscribe(val => {

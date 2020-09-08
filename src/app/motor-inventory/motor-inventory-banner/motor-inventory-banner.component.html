@@ -30,10 +30,10 @@
         </div>
     </div>
     <div class="d-flex ml-auto pr-2 h-100">
-		<div class="pl-2 pr-2 border-right border-left home-nav-item"
-			[routerLink]="['/directory-dashboard', motorInventoryItem.directoryId]">
-			<span class="fa fa-folder-open"></span>
-		</div>
+        <div class="pl-2 pr-2 border-right border-left home-nav-item"
+            [routerLink]="['/directory-dashboard', motorInventoryItem.directoryId]">
+            <span class="fa fa-folder-open"></span>
+        </div>
         <div class="pl-2 pr-2 border-left home-nav-item" [routerLink]="['/landing-screen']">
             <span class="fa fa-home"></span>
         </div>
@@ -74,7 +74,7 @@
     </div>
 </nav>
 
-<app-summary-filter *ngIf="mainTab == 'summary'"></app-summary-filter>
+<app-summary-filter *ngIf="mainTab == 'summary' || mainTab == 'analysis'"></app-summary-filter>
 
 <nav class="hide-print" *ngIf="mainTab == 'summary'">
     <div class="d-flex tabs subtabs progress-tabs flex-wrap motor-inventory">

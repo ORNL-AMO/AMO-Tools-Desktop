@@ -16,12 +16,12 @@ export class InventorySummaryTableComponent implements OnInit {
   sortByField: string = 'name';
   sortByDirection: string = 'desc';
   filterInventorySummarySub: Subscription;
-  constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryTableService: InventorySummaryTableService, private motorInventorySummaryService: MotorInventorySummaryService) { }
+  constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryTableService: InventorySummaryTableService) { }
 
   ngOnInit(): void {
-    this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
+    this.filterInventorySummarySub = this.motorInventoryService.filterInventorySummary.subscribe(val => {
       let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.value;
-      let filteredInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(motorInventoryData, val);
+      let filteredInventoryData = this.motorInventoryService.filterMotorInventoryData(motorInventoryData, val);
       let settings: Settings = this.motorInventoryService.settings.getValue();
       this.inventorySummaryData = this.inventorySummaryTableService.getInventorySummaryData(filteredInventoryData, settings);
     });

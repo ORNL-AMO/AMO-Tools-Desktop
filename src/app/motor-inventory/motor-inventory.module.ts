@@ -19,6 +19,7 @@ import { MotorPropertiesModule } from './motor-inventory-setup/motor-properties/
 import { MotorInventorySummaryModule } from './motor-inventory-summary/motor-inventory-summary.module';
 import { SummaryFilterModule } from './motor-inventory-banner/summary-filter/summary-filter.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
+import { BatchAnalysisTableComponent } from './batch-analysis/batch-analysis-table/batch-analysis-table.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
     PlantSetupComponent,
     MotorInventoryCalculatorsComponent,
     BatchAnalysisComponent,
-    DepartmentCatalogTableComponent
+    DepartmentCatalogTableComponent,
+    BatchAnalysisTableComponent
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Settings } from '../../../shared/models/settings';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-inventory-summary-graphs',

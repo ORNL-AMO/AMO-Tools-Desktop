@@ -3,7 +3,6 @@ import * as Plotly from 'plotly.js';
 import { InventorySummaryGraphsService } from '../inventory-summary-graphs.service';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { Subscription } from 'rxjs';
-import { MotorInventorySummaryService } from '../../motor-inventory-summary.service';
 
 @Component({
   selector: 'app-inventory-summary-graph',
@@ -16,15 +15,15 @@ export class InventorySummaryGraphComponent implements OnInit {
 
   selectedFieldSub: Subscription;
   constructor(private inventorySummaryGraphsService: InventorySummaryGraphsService, private motorInventoryService: MotorInventoryService,
-    private inventorySummaryGraphService: InventorySummaryGraphsService, private motorInventorySummaryService: MotorInventorySummaryService) { }
+    private inventorySummaryGraphService: InventorySummaryGraphsService) { }
 
   ngOnInit(): void {
     this.selectedFieldSub = this.inventorySummaryGraphService.selectedField.subscribe(val => {
       Plotly.purge('inventoryGraph');
       if (val) {
         let motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
-        let filterInventorySummary = this.motorInventorySummaryService.filterInventorySummary.getValue();
-        let filteredMotorInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(motorInventoryData, filterInventorySummary);
+        let filterInventorySummary = this.motorInventoryService.filterInventorySummary.getValue();
+        let filteredMotorInventoryData = this.motorInventoryService.filterMotorInventoryData(motorInventoryData, filterInventorySummary);
         let calcedData = this.inventorySummaryGraphsService.getBinData(filteredMotorInventoryData, val);
         let type: string = this.inventorySummaryGraphService.graphType.getValue();
         let data = [

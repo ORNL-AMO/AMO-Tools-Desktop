@@ -20,7 +20,7 @@ export class EfficiencyClassDropdownComponent implements OnInit {
   constructor(private motorInventoryService: MotorInventoryService, private motorInventorySummaryService: MotorInventorySummaryService, private inventorySummaryGraphService: InventorySummaryGraphsService) { }
 
   ngOnInit(): void {
-    this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
+    this.filterInventorySummarySub = this.motorInventoryService.filterInventorySummary.subscribe(val => {
       this.filterInventorySummary = val;
       this.setOptions();
     });
@@ -47,7 +47,7 @@ export class EfficiencyClassDropdownComponent implements OnInit {
   }
 
   save() {
-    this.motorInventorySummaryService.filterInventorySummary.next(this.filterInventorySummary);
+    this.motorInventoryService.filterInventorySummary.next(this.filterInventorySummary);
     let selectedField = this.inventorySummaryGraphService.selectedField.getValue();
     this.inventorySummaryGraphService.selectedField.next(selectedField);
   }
