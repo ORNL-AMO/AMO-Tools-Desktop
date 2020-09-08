@@ -37,12 +37,12 @@ export class BatchAnalysisTableComponent implements OnInit {
             let batchAnalysisResults: BatchAnalysisResults = this.getBatchAnalysisResultObject(motorItem, department.name, replaceExistingResults);
             this.batchAnalysisDataItems.push(batchAnalysisResults);
           }
-        })
+        });
       });
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.filterInventorySub.unsubscribe();
   }
 
@@ -132,15 +132,23 @@ export class BatchAnalysisTableComponent implements OnInit {
         replacementEfficiency: motorItem.batchAnalysisData.modifiedEfficiency,
         replacementPurchaseCost: motorItem.batchAnalysisData.modifiedCost,
         isBatchAnalysisValid: true,
-        currentEnergyUse: replaceExistingResults.existingEnergyUse,
-        currentEnergyCost: replaceExistingResults.existingEnergyCost,
-        rewindEnergyUse: replaceExistingResults.rewoundEnergyUse,
-        rewindEnergyCost: replaceExistingResults.rewoundEnergyCost,
-        replacementEnergyUse: replaceExistingResults.newEnergyUse,
-        replacementEnergyCost: replaceExistingResults.newEnergyCost,
-        replacementNowPayback: replaceExistingResults.simplePayback,
-        replacementFailPayback: replaceExistingResults.incrementalSimplePayback
+        currentEnergyUse: this.checkInfinity(replaceExistingResults.existingEnergyUse),
+        currentEnergyCost: this.checkInfinity(replaceExistingResults.existingEnergyCost),
+        rewindEnergyUse: this.checkInfinity(replaceExistingResults.rewoundEnergyUse),
+        rewindEnergyCost: this.checkInfinity(replaceExistingResults.rewoundEnergyCost),
+        replacementEnergyUse: this.checkInfinity(replaceExistingResults.newEnergyUse),
+        replacementEnergyCost: this.checkInfinity(replaceExistingResults.newEnergyCost),
+        replacementNowPayback: this.checkInfinity(replaceExistingResults.simplePayback),
+        replacementFailPayback: this.checkInfinity(replaceExistingResults.incrementalSimplePayback)
       }
+    }
+  }
+
+  checkInfinity(val: number): number {
+    if (val == Infinity) {
+      return undefined;
+    } else {
+      return val;
     }
   }
 

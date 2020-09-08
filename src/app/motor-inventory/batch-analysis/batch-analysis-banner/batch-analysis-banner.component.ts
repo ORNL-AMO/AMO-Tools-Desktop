@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { BatchAnalysisService } from './batch-analysis.service';
 import { Subscription } from 'rxjs';
+import { BatchAnalysisService } from '../batch-analysis.service';
 
 @Component({
-  selector: 'app-batch-analysis',
-  templateUrl: './batch-analysis.component.html',
-  styleUrls: ['./batch-analysis.component.css']
+  selector: 'app-batch-analysis-banner',
+  templateUrl: './batch-analysis-banner.component.html',
+  styleUrls: ['./batch-analysis-banner.component.css']
 })
-export class BatchAnalysisComponent implements OnInit {
-
+export class BatchAnalysisBannerComponent implements OnInit {
+  
   selectedTab: string;
   selectedTabSub: Subscription;
   constructor(private batchAnalysisService: BatchAnalysisService) { }
@@ -22,6 +22,8 @@ export class BatchAnalysisComponent implements OnInit {
   ngOnDestroy(){
     this.selectedTabSub.unsubscribe();
   }
+
+  setTab(str: string){
+    this.batchAnalysisService.selectedTab.next(str);
+  }
 }
-
-
