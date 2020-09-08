@@ -15,6 +15,8 @@ export class BatchAnalysisTableComponent implements OnInit {
 
   batchAnalysisDataItems: Array<BatchAnalysisResults>;
   filterInventorySub: Subscription;
+  sortByField: string = 'motorName';
+  sortByDirection: string = 'desc';
   constructor(private motorInventoryService: MotorInventoryService, private replaceExistingervice: ReplaceExistingService) { }
 
   ngOnInit(): void {
@@ -140,7 +142,17 @@ export class BatchAnalysisTableComponent implements OnInit {
         replacementFailPayback: replaceExistingResults.incrementalSimplePayback
       }
     }
+  }
 
+  setSortByField(str: string) {
+    if (this.sortByField == str) {
+      if (this.sortByDirection == 'desc') {
+        this.sortByDirection = 'asc';
+      } else {
+        this.sortByDirection = 'desc';
+      }
+    }
+    this.sortByField = str;
   }
 
 }

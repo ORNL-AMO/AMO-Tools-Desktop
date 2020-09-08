@@ -1,64 +1,119 @@
 <table class="table table-sm table-bordered table-hover">
     <thead>
         <tr>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'motorName' == sortByField}"
+                (click)="setSortByField('motorName')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'motorName' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'motorName' && sortByDirection == 'asc'"></span>
                 Motor Name
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'departmentName' == sortByField}"
+                (click)="setSortByField('departmentName')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'departmentName' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'departmentName' && sortByDirection == 'asc'"></span>
                 Department
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'operatingHours' == sortByField}"
+                (click)="setSortByField('operatingHours')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'operatingHours' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'operatingHours' && sortByDirection == 'asc'"></span>
                 Operating Hours
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'motorSize' == sortByField}"
+                (click)="setSortByField('motorSize')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'motorSize' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'motorSize' && sortByDirection == 'asc'"></span>
                 Motor Size
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'averageLoadFactor' == sortByField}"
+                (click)="setSortByField('averageLoadFactor')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'averageLoadFactor' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'averageLoadFactor' && sortByDirection == 'asc'"></span>
                 Average Load Factor
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'currentEfficiency' == sortByField}"
+                (click)="setSortByField('currentEfficiency')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'currentEfficiency' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'currentEfficiency' && sortByDirection == 'asc'"></span>
                 Current Efficiency
             </th>
-            <!-- <th class="header-cell">
+            <!-- <th class="header-cell" [ngClass]="{'sort-by-active': 'motorName' == sortByField}"
+                (click)="setSortByField('motorName')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'motorName' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'motorName' && sortByDirection == 'asc'"></span>
                 Rewind Efficiency Loss
             </th> -->
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'rewindCost' == sortByField}"
+                (click)="setSortByField('rewindCost')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'rewindCost' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'rewindCost' && sortByDirection == 'asc'"></span>
                 Rewind Cost
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'replacementEfficiency' == sortByField}"
+                (click)="setSortByField('replacementEfficiency')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'replacementEfficiency' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'replacementEfficiency' && sortByDirection == 'asc'"></span>
                 Replacement Efficiency
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'replacementPurchaseCost' == sortByField}"
+                (click)="setSortByField('replacementPurchaseCost')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'replacementPurchaseCost' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'replacementPurchaseCost' && sortByDirection == 'asc'"></span>
                 Replacement Purchase Cost
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'currentEnergyUse' == sortByField}"
+                (click)="setSortByField('currentEnergyUse')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'currentEnergyUse' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'currentEnergyUse' && sortByDirection == 'asc'"></span>
                 Current Energy Use
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'currentEnergyCost' == sortByField}"
+                (click)="setSortByField('currentEnergyCost')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'currentEnergyCost' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'currentEnergyCost' && sortByDirection == 'asc'"></span>
                 Current Energy Cost
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'rewindEnergyUse' == sortByField}"
+                (click)="setSortByField('rewindEnergyUse')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'rewindEnergyUse' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'rewindEnergyUse' && sortByDirection == 'asc'"></span>
                 Rewind Energy Use
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'rewindEnergyCost' == sortByField}"
+                (click)="setSortByField('rewindEnergyCost')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'rewindEnergyCost' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'rewindEnergyCost' && sortByDirection == 'asc'"></span>
                 Rewind Energy Cost
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'replacementEnergyUse' == sortByField}"
+                (click)="setSortByField('replacementEnergyUse')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'replacementEnergyUse' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'replacementEnergyUse' && sortByDirection == 'asc'"></span>
                 Replacement Energy Use
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'replacementEnergyCost' == sortByField}"
+                (click)="setSortByField('replacementEnergyCost')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'replacementEnergyCost' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'replacementEnergyCost' && sortByDirection == 'asc'"></span>
                 Replacement Energy Cost
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'replacementNowPayback' == sortByField}"
+                (click)="setSortByField('replacementNowPayback')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'replacementNowPayback' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'replacementNowPayback' && sortByDirection == 'asc'"></span>
                 Replacement Now Payback
             </th>
-            <th class="header-cell">
+            <th class="header-cell" [ngClass]="{'sort-by-active': 'replacementFailPayback' == sortByField}"
+                (click)="setSortByField('replacementFailPayback')">
+                <span class="fa fa-chevron-up" *ngIf="sortByField == 'replacementFailPayback' && sortByDirection == 'desc'"></span>
+                <span class="fa fa-chevron-down" *ngIf="sortByField == 'replacementFailPayback' && sortByDirection == 'asc'"></span>
                 Replacement Fail Payback
             </th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let batchAnalysisDataItem of batchAnalysisDataItems">
+        <tr
+            *ngFor="let batchAnalysisDataItem of batchAnalysisDataItems | batchAnalysisTable:sortByField:sortByDirection">
             <td class="sticky-left name-cell">
                 {{batchAnalysisDataItem.motorName}}
             </td>
@@ -131,7 +186,8 @@
             </td>
             <td colspan="8" *ngIf="!batchAnalysisDataItem.isBatchAnalysisValid">
                 Unable to run batch analysis on motor, data missing:
-                <span class="bold" *ngFor="let missing of batchAnalysisDataItem.missingData; let last=last"> {{missing}}<span *ngIf="!last">,</span><span *ngIf="last">.</span>
+                <span class="bold" *ngFor="let missing of batchAnalysisDataItem.missingData; let last=last">
+                    {{missing}}<span *ngIf="!last">,</span><span *ngIf="last">.</span>
                 </span>
                 Update the motor item with the proper data to run batch analysis.
             </td>

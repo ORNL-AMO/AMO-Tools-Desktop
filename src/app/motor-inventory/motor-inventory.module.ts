@@ -20,6 +20,7 @@ import { MotorInventorySummaryModule } from './motor-inventory-summary/motor-inv
 import { SummaryFilterModule } from './motor-inventory-banner/summary-filter/summary-filter.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 import { BatchAnalysisTableComponent } from './batch-analysis/batch-analysis-table/batch-analysis-table.component';
+import { BatchAnalysisTablePipe } from './batch-analysis/batch-analysis-table/batch-analysis-table.pipe';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { BatchAnalysisTableComponent } from './batch-analysis/batch-analysis-tab
     MotorInventoryCalculatorsComponent,
     BatchAnalysisComponent,
     DepartmentCatalogTableComponent,
-    BatchAnalysisTableComponent
+    BatchAnalysisTableComponent,
+    BatchAnalysisTablePipe
   ],
   imports: [
     CommonModule,
