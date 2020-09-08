@@ -42,14 +42,15 @@
         <div class="input-group">
             <input type="number" name="ratedMotorPower" class="form-control" id="ratedMotorPower" (blur)="focusOut()"
                 (focus)="focusField('ratedMotorPower')" (input)="save()" formControlName="ratedMotorPower">
-            <span class="input-group-addon units" *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
-            <span class="input-group-addon units" *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.ratedMotorPower.invalid">
             <span *ngIf="motorForm.controls.ratedMotorPower.errors.min">Value can't be less than
                 {{motorForm.controls.ratedMotorPower.errors.min.min}}
-                <span *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
-                <span *ngIf="settings.unitOfMeasure == 'Metric'">kW</span></span>
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+            </span>
         </span>
     </div>
     <!--line frequency: lineFrequency-->
@@ -141,8 +142,8 @@
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.weight.invalid">
             <span *ngIf="motorForm.controls.weight.errors.min">Value can't be less than
                 {{motorForm.controls.weight.errors.min.min}}
-                <span *ngIf="settings.unitOfMeasure != 'Metric'">lb</span>
-                <span *ngIf="settings.unitOfMeasure == 'Metric'">kg</span></span>
+                <span *ngIf="settings.unitsOfMeasure != 'Metric'">lb</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg</span></span>
         </span>
     </div>
     <!-- numberOfPhases -->

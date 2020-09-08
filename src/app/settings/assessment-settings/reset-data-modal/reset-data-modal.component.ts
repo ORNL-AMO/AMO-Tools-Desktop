@@ -16,6 +16,8 @@ import { MockSsmt, MockSsmtSettings } from '../../../core/mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from '../../../core/mockTreasureHunt';
 import { DashboardService } from '../../../dashboard/dashboard.service';
 import { InventoryDbService } from '../../../indexedDb/inventory-db.service';
+import { InventoryItem } from '../../../shared/models/inventory/inventory';
+import { MockMotorInventory } from '../../../core/mockMotorInventoryData';
 @Component({
   selector: 'app-reset-data-modal',
   templateUrl: './reset-data-modal.component.html',
@@ -218,7 +220,7 @@ export class ResetDataModalComponent implements OnInit {
       this.createSsmtExample(id);
     }
 
-    //ssmt
+    //treasureHunt
     let treasureHuntExample: Assessment = this.assessmentDbService.getTreasureHuntExample();
     if (treasureHuntExample) {
       //exists
@@ -230,6 +232,18 @@ export class ResetDataModalComponent implements OnInit {
     } else {
       //create
       this.createTreasureHuntExample(id);
+    }
+
+    //motorInventory
+    let motorInventoryExample: InventoryItem = this.inventoryDbService.getMotorInventoryExample();
+    if (motorInventoryExample) {
+      //exists 
+      //delete
+      this.indexedDbService.deleteInventoryItem(motorInventoryExample.id).then(() => {
+        this.createMotorInventoryExample(id);
+      })
+    } else {
+      this.createMotorInventoryExample(id);
     }
 
   }
@@ -305,6 +319,22 @@ export class ResetDataModalComponent implements OnInit {
         MockTreasureHuntSettings.assessmentId = assessmentId;
         //add settings
         this.indexedDbService.addSettings(MockTreasureHuntSettings).then(() => {
+          resolve(true);
+        });
+      });
+    });
+  }
+
+  createMotorInventoryExample(dirId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      MockMotorInventory.directoryId = dirId;
+      //add example
+      this.indexedDbService.addInventoryItem(MockMotorInventory).then((mockInventoryId) => {
+        delete MockPsatSettings.directoryId;
+        delete MockPsatSettings.assessmentId;
+        MockPsatSettings.inventoryId = mockInventoryId;
+        //add settings
+        this.indexedDbService.addSettings(MockPsatSettings).then(() => {
           resolve(true);
         });
       });

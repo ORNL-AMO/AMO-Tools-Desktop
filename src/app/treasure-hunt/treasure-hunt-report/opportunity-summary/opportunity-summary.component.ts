@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { OpportunitySummary, OpportunityCost } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
@@ -24,6 +24,7 @@ export class OpportunitySummaryComponent implements OnInit {
 
   sortBy: string = 'utilityType';
   sortByDirection: string = 'asc';
+
   constructor() { }
 
   ngOnInit() {
@@ -82,4 +83,5 @@ export class OpportunitySummaryComponent implements OnInit {
       this.sortByDirection = 'desc';
     }
   }
+
 }

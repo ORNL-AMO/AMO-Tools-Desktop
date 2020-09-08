@@ -236,7 +236,10 @@ export interface OpportunitySummary {
     mixedIndividualResults?: Array<OpportunitySummary>,
     selected: boolean,
     baselineCost: number,
-    modificationCost: number
+    modificationCost: number,
+    team: string,
+    equipment: string,
+    owner: string
 }
 
 export interface UtilityUsageData {

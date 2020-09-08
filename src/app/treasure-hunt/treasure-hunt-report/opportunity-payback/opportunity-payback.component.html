@@ -6,11 +6,11 @@
 </div>
 
 <div class="row">
-  <div class="d-flex justify-content-center" [ngClass]="{'col-6': !showPrint, 'col-12': showPrint}">
+  <div class="justify-content-center" [ngClass]="{'col-6': !showPrint, 'col-12': showPrint}">
     <app-opportunity-payback-bar-chart [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [showPrint]="showPrint">
     </app-opportunity-payback-bar-chart>
   </div>
-  <div class="d-flex justify-content-center" [ngClass]="{'col-6': !showPrint, 'col-12': showPrint}">
+  <div class="justify-content-center" [ngClass]="{'col-6': !showPrint, 'col-12': showPrint}">
     <app-opportunity-payback-donut [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [showPrint]="showPrint">
     </app-opportunity-payback-donut>
   </div>

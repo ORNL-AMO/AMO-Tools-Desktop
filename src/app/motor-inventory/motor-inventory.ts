@@ -16,12 +16,12 @@ export interface MotorInventoryDepartment {
 
 export interface MotorItem {
   id: string,
-  suiteDbItemId: number,
-  nemaTable: string,
+  suiteDbItemId?: number,
+  nemaTable?: string,
   departmentId: string,
   name: string,
   description: string,
-  voltageLimit: number,
+  voltageLimit?: number,
 
   batchAnalysisData: BatchAnalysisData,
   loadCharacteristicData: LoadCharacteristicData,
@@ -65,7 +65,7 @@ export interface ManualSpecificationData {
   statorSlots: number,
   ampsLockedRotor: number,
   poles: number,
-  currentType: number,
+  currentType: string,
 }
 
 export interface NameplateData {
@@ -81,7 +81,7 @@ export interface NameplateData {
   enclosureType: string,
   ratedVoltage: number,
   serviceFactor: number,
-  insulationClass: number,
+  insulationClass: string,
   weight: number,
   numberOfPhases: number,
   fullLoadSpeed: number,

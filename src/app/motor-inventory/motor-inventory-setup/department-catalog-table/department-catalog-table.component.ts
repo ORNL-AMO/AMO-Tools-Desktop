@@ -3,6 +3,7 @@ import { MotorInventoryService } from '../../motor-inventory.service';
 import { MotorCatalogService } from '../motor-catalog/motor-catalog.service';
 import { Subscription } from 'rxjs';
 import { MotorInventoryDepartment, MotorInventoryData, MotorItem } from '../../motor-inventory';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-department-catalog-table',
@@ -18,9 +19,14 @@ export class DepartmentCatalogTableComponent implements OnInit {
 
   selectedDepartmentId: string;
   selectedDepartmentIdSub: Subscription;
+  settings: Settings;
+  settingsSub: Subscription;
   constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
+    this.settingsSub = this.motorInventoryService.settings.subscribe(val => {
+      this.settings = val;
+    })
     this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(val => {
       this.motorInventoryData = val;
       this.setSelectedMotorDepartment();
@@ -32,9 +38,10 @@ export class DepartmentCatalogTableComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.motorInventoryDataSub.unsubscribe();
     this.selectedDepartmentIdSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   setSelectedMotorDepartment() {
@@ -43,10 +50,10 @@ export class DepartmentCatalogTableComponent implements OnInit {
     }
   }
 
-  addNewMotor(){
+  addNewMotor() {
     let newMotor: MotorItem = this.motorInventoryService.getNewMotor(this.selectedDepartmentId);
     this.motorInventoryData.departments.forEach(department => {
-      if(department.id == this.selectedDepartmentId){
+      if (department.id == this.selectedDepartmentId) {
         department.catalog.push(newMotor);
       }
     });
@@ -54,7 +61,7 @@ export class DepartmentCatalogTableComponent implements OnInit {
     this.motorCatalogService.selectedMotorItem.next(newMotor);
   }
 
-  selectMotor(motor: MotorItem){
+  selectMotor(motor: MotorItem) {
     this.motorCatalogService.selectedMotorItem.next(motor);
   }
 }

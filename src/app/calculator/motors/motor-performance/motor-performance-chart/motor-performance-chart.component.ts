@@ -147,13 +147,11 @@ export class MotorPerformanceChartComponent implements OnInit {
           y: Number(trace.y[currentPointIndex])
         };
         let pointTrace = this.performanceChartService.getTraceDataFromPoint(point);
-        let yMeasureTitle = this.traceNames[i];
-        let hoverTemplate = 'Motor Shaft Load' + ': %{x}%<br>' + yMeasureTitle + ': %{y:.2r}%';
-        pointTrace.hovertemplate = hoverTemplate;
         Plotly.addTraces(this.currentChartId, pointTrace);
       }
     });
     selectedMotorPoint.pointColor = currentColor;
+    selectedMotorPoint.shaftLoad = Number((selectedMotorPoint.shaftLoad * 100).toFixed(0));
     this.selectedDataPoints.push(selectedMotorPoint);
     this.cd.detectChanges();
     this.save();

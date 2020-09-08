@@ -133,7 +133,7 @@
     "ngx-bootstrap": "5.1.1",
     "ngx-clipboard": "12.2.1",
     "papaparse": "^5.1.0",
-    "plotly.js": "^1.51.3",
+    "plotly.js": "1.54.7",
     "popper.js": "1.15.0",
     "protractor": "^5.4.1",
     "ts-node": "8.0.3",
