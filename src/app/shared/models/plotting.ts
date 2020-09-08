@@ -58,6 +58,7 @@ export interface AxisObj {
     },
     tickvals?: Array<number | string>,
     ticktext?: Array<number | string>,
+    hoverformat?: string,
     tickmode?: string,
     autotick?: boolean,
     tick0?: number,
@@ -82,6 +83,7 @@ export interface TraceData {
     fill?: string,
     fillcolor?: string,
     mode?: string,
+    hoverinfo?: string,
     marker?: {
         color?: string | Array<string>,
         line?: {

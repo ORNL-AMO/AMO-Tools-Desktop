@@ -77,6 +77,7 @@ export class MotorPerformanceChartService {
       name: '',
       showlegend: false,
       mode: 'markers',
+      hoverinfo: 'skip',
       marker: {
         color: selectedPoint.pointColor,
         size: 14,
@@ -118,22 +119,25 @@ export class MotorPerformanceChartService {
           autorange: false,
           showgrid: true,
           title: {
-            text: "Motor Shaft Load (%)"
+            text: "Motor Shaft Load"
           },
           showticksuffix: 'all',
           tickangle: -60,
           tickmode: 'array',
+          hoverformat: '%{x}%',
           range: [0, 1.4],
-          tickvals: [0, .2, .4, .6, .8, 1, 1.2],
-          ticktext: [0, 20, 40, 60, 80, 100, 120],
+          tickvals: [0, .20, .40, .60, .80, 1, 1.2],
         },
         yaxis: {
           autorange: true,
           type: 'linear',
           showgrid: true,
           title: {
-            text: "Current (%), Power (%), Efficiency (%)"
+            text: "Current, Power, Efficiency"
           },
+          range: [0, 140],
+          tickvals: [0, 20, 40, 60, 80, 100, 120],
+          ticktext: ['0', '20%', '40%', '60%', '80%', '100%', '120%'],
           rangemode: 'tozero',
           showticksuffix: 'all'
         },
