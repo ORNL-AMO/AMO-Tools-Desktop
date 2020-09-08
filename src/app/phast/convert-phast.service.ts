@@ -312,6 +312,7 @@ export class ConvertPhastService {
       loss.coalHeatingValue = this.convertVal(loss.coalHeatingValue, 'kJkg', 'btuLb');
       loss.electrodeHeatingValue = this.convertVal(loss.electrodeHeatingValue, 'kJkg', 'btuLb');
       loss.electrodeUse = this.convertVal(loss.electrodeUse, 'kg', 'lb');
+      loss.flowRateInput = this.convertVal(loss.flowRateInput, 'm3', 'ft3');
     }
     else if (oldSettings.unitsOfMeasure === 'Imperial' && newSettings.unitsOfMeasure === 'Metric') {
       loss.naturalGasHeatInput = this.convertVal(loss.naturalGasHeatInput, 'MMBtu', 'GJ');
@@ -320,6 +321,7 @@ export class ConvertPhastService {
       loss.coalHeatingValue = this.convertVal(loss.coalHeatingValue, 'btuLb', 'kJkg');
       loss.electrodeHeatingValue = this.convertVal(loss.electrodeHeatingValue, 'btuLb', 'kJkg');
       loss.electrodeUse = this.convertVal(loss.electrodeUse, 'lb', 'kg');
+      loss.flowRateInput = this.convertVal(loss.flowRateInput, 'ft3', 'm3');
     }
     return loss;
   }
