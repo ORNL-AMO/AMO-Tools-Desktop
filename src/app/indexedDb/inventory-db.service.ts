@@ -35,4 +35,19 @@ export class InventoryDbService {
     let selectedInventoryItem: Array<InventoryItem> = _.filter(this.allInventoryItems, (inventoryItem) => { return inventoryItem.directoryId == id; });
     return selectedInventoryItem;
   }
+
+  getMotorInventoryExample(): InventoryItem {
+    let examples: Array<InventoryItem> = _.filter(JSON.parse(JSON.stringify(this.allInventoryItems)), (inventoryItem: InventoryItem) => {
+      return inventoryItem.isExample
+    });
+    let tmpExample: InventoryItem;
+    if (examples) {
+      examples.forEach(example => {
+        if (example.type == 'motorInventory') {
+          tmpExample = example;
+        }
+      })
+    }
+    return tmpExample;
+  }
 }
