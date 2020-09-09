@@ -34,3 +34,11 @@ th, td{
     text-decoration: underline;
     cursor: pointer;
 }
+
+.table-hover tbody tr:hover{
+    background-color: white;
+}
+
+tbody{
+    background-color: rgba(0, 0, 0, 0.075);
+}

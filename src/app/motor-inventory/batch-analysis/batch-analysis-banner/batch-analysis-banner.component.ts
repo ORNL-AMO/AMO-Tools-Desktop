@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { BatchAnalysisService } from '../batch-analysis.service';
+import { BatchAnalysisService, BatchAnalysisSettings } from '../batch-analysis.service';
 
 @Component({
   selector: 'app-batch-analysis-banner',
@@ -8,22 +8,38 @@ import { BatchAnalysisService } from '../batch-analysis.service';
   styleUrls: ['./batch-analysis-banner.component.css']
 })
 export class BatchAnalysisBannerComponent implements OnInit {
-  
+
   selectedTab: string;
   selectedTabSub: Subscription;
+  showDataOptions: boolean;
+  batchAnalysisSettings: BatchAnalysisSettings;
+  batchAnalysisSettingsSub: Subscription;
   constructor(private batchAnalysisService: BatchAnalysisService) { }
 
   ngOnInit(): void {
     this.selectedTabSub = this.batchAnalysisService.selectedTab.subscribe(val => {
       this.selectedTab = val;
-    })
+    });
+
+    this.batchAnalysisSettingsSub = this.batchAnalysisService.batchAnalysisSettings.subscribe(val => {
+      this.batchAnalysisSettings = val;
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectedTabSub.unsubscribe();
+    this.batchAnalysisSettingsSub.unsubscribe();
   }
 
-  setTab(str: string){
+  setTab(str: string) {
     this.batchAnalysisService.selectedTab.next(str);
+  }
+
+  toggleDataOptions() {
+    this.showDataOptions = !this.showDataOptions;
+  }
+
+  saveSettings(){
+    this.batchAnalysisService.batchAnalysisSettings.next(this.batchAnalysisSettings);
   }
 }

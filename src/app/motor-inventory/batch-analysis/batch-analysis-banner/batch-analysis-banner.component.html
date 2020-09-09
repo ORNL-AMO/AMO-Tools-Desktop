@@ -1,10 +1,40 @@
 <nav class="hide-print">
-    <div class="d-flex tabs subtabs progress-tabs flex-wrap motor-inventory">
-        <div class="fixed-tab-size" [ngClass]="{'active': selectedTab == 'table'}" (click)="setTab('table')">
-            <a>Table</a>
+    <div class="d-flex justify-content-between tabs subtabs motor-inventory">
+        <div class="d-flex progress-tabs flex-wrap">
+            <div class="fixed-tab-size" [ngClass]="{'active': selectedTab == 'table'}" (click)="setTab('table')">
+                <a>Table</a>
+            </div>
+            <div class="fixed-tab-size" [ngClass]="{'active': selectedTab == 'graphs'}" (click)="setTab('graphs')">
+                <a>Graphs</a>
+            </div>
         </div>
-        <div class="fixed-tab-size" [ngClass]="{'active': selectedTab == 'graphs'}" (click)="setTab('graphs')">
-            <a>Graphs</a>
+        <div class="nav-item dropdown pull-right p-1">
+            <a class="nav-link dropdown-toggle" (click)="toggleDataOptions()">
+                Data Options
+            </a>
+            <div class="dropdown-menu p-0" [ngClass]="{'show': showDataOptions == true}">
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" name="displayIncompleteMotors"
+                                id="displayIncompleteMotors" [(ngModel)]="batchAnalysisSettings.displayIncompleteMotors"
+                                (change)="saveSettings()">
+                            <label class="custom-control-label" for="displayIncompleteMotors">Display Incomplete
+                                Motors</label>
+                        </div>
+                    </div>
+                    <div class="list-group-item tab-content">
+                        <div class="form-group">
+                            <label>Payback Threshold</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control"
+                                    [(ngModel)]="batchAnalysisSettings.paybackThreshold" (input)="saveSettings()">
+                                <div class="input-group-addon units">yrs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </nav>

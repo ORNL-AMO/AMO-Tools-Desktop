@@ -5,6 +5,7 @@ import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/mod
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { ReplaceExistingService } from '../../../calculator/motors/replace-existing/replace-existing.service';
 import { Subscription } from 'rxjs';
+import { BatchAnalysisService, BatchAnalysisSettings } from '../batch-analysis.service';
 
 @Component({
   selector: 'app-batch-analysis-table',
@@ -17,9 +18,17 @@ export class BatchAnalysisTableComponent implements OnInit {
   filterInventorySub: Subscription;
   sortByField: string = 'motorName';
   sortByDirection: string = 'desc';
-  constructor(private motorInventoryService: MotorInventoryService, private replaceExistingervice: ReplaceExistingService) { }
+  batchAnalysisSettings: BatchAnalysisSettings;
+  batchAnalysisSettingsSub: Subscription;
+  constructor(private motorInventoryService: MotorInventoryService, private replaceExistingervice: ReplaceExistingService, private batchAnalysisService: BatchAnalysisService) { }
 
   ngOnInit(): void {
+    this.batchAnalysisSettingsSub = this.batchAnalysisService.batchAnalysisSettings.subscribe(val => {
+      this.batchAnalysisSettings = val;
+      this.updateReplaceMotorDecision();
+    });
+
+
     this.filterInventorySub = this.motorInventoryService.filterInventorySummary.subscribe(filterData => {
       this.batchAnalysisDataItems = new Array();
       let inventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.value;
@@ -44,6 +53,7 @@ export class BatchAnalysisTableComponent implements OnInit {
 
   ngOnDestroy() {
     this.filterInventorySub.unsubscribe();
+    this.batchAnalysisSettingsSub.unsubscribe();
   }
 
   checkBatchAnalysisDataValid(data: ReplaceExistingData): Array<string> {
@@ -116,10 +126,20 @@ export class BatchAnalysisTableComponent implements OnInit {
         replacementEnergyUse: undefined,
         replacementEnergyCost: undefined,
         replacementNowPayback: undefined,
-        replacementFailPayback: undefined
+        replacementFailPayback: undefined,
+        replaceMotor: undefined
       }
-
     } else {
+      let replaceNowDecision: string;
+      if (this.batchAnalysisSettings) {
+        if (this.batchAnalysisSettings.paybackThreshold > replaceExistingResults.simplePayback) {
+          replaceNowDecision = 'Replace';
+        } else if (this.batchAnalysisSettings.paybackThreshold > replaceExistingResults.incrementalSimplePayback) {
+          replaceNowDecision = 'Replace When Fail';
+        } else {
+          replaceNowDecision = 'Rewind';
+        }
+      }
       return {
         motorName: motorItem.name,
         departmentName: departmentName,
@@ -139,8 +159,27 @@ export class BatchAnalysisTableComponent implements OnInit {
         replacementEnergyUse: this.checkInfinity(replaceExistingResults.newEnergyUse),
         replacementEnergyCost: this.checkInfinity(replaceExistingResults.newEnergyCost),
         replacementNowPayback: this.checkInfinity(replaceExistingResults.simplePayback),
-        replacementFailPayback: this.checkInfinity(replaceExistingResults.incrementalSimplePayback)
+        replacementFailPayback: this.checkInfinity(replaceExistingResults.incrementalSimplePayback),
+        replaceMotor: replaceNowDecision
       }
+    }
+  }
+
+
+  updateReplaceMotorDecision() {
+    if (this.batchAnalysisDataItems && this.batchAnalysisSettings) {
+      this.batchAnalysisDataItems.forEach(dataItem => {
+        if (dataItem.isBatchAnalysisValid) {
+          (this.batchAnalysisSettings.paybackThreshold > dataItem.replacementNowPayback)
+          if (this.batchAnalysisSettings.paybackThreshold > dataItem.replacementNowPayback) {
+            dataItem.replaceMotor = 'Replace';
+          } else if (this.batchAnalysisSettings.paybackThreshold > dataItem.replacementFailPayback) {
+            dataItem.replaceMotor = 'Replace When Fail';
+          } else {
+            dataItem.replaceMotor = 'Rewind';
+          }
+        }
+      });
     }
   }
 
@@ -186,6 +225,7 @@ export interface BatchAnalysisResults {
   replacementEnergyUse: number,
   replacementEnergyCost: number,
   replacementNowPayback: number,
-  replacementFailPayback: number
+  replacementFailPayback: number,
+  replaceMotor: string
 
 }

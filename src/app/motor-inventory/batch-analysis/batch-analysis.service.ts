@@ -5,7 +5,15 @@ import { BehaviorSubject } from 'rxjs';
 export class BatchAnalysisService {
 
   selectedTab: BehaviorSubject<string>;
-  constructor() { 
+  batchAnalysisSettings: BehaviorSubject<BatchAnalysisSettings>;
+  constructor() {
     this.selectedTab = new BehaviorSubject<string>('table');
+    this.batchAnalysisSettings = new BehaviorSubject<BatchAnalysisSettings>({ displayIncompleteMotors: true, paybackThreshold: 2 })
   }
+}
+
+
+export interface BatchAnalysisSettings {
+  displayIncompleteMotors: boolean;
+  paybackThreshold: number
 }

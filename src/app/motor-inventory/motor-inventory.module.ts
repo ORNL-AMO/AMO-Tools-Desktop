@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { MotorInventorySetupComponent } from './motor-inventory-setup/motor-inventory-setup.component';
 import { DepartmentSetupComponent } from './motor-inventory-setup/department-setup/department-setup.component';
 import { PlantSetupComponent } from './motor-inventory-setup/plant-setup/plant-setup.component';
-import { MotorInventoryCalculatorsComponent } from './motor-inventory-calculators/motor-inventory-calculators.component';
 import { SettingsModule } from '../settings/settings.module';
 import { MotorInventoryService } from './motor-inventory.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,7 +25,6 @@ import { BatchAnalysisModule } from './batch-analysis/batch-analysis.module';
     MotorInventorySetupComponent,
     DepartmentSetupComponent,
     PlantSetupComponent,
-    MotorInventoryCalculatorsComponent,
     DepartmentCatalogTableComponent
   ],
   imports: [

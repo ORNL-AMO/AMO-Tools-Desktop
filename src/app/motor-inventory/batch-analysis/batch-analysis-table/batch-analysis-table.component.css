@@ -34,3 +34,44 @@ th, td{
     text-decoration: underline;
     cursor: pointer;
 }
+tbody tr:hover{
+    background-color: white;
+}
+
+/* tbody{
+    background-color: rgba(0, 0, 0, 0.075);
+} */
+
+
+
+
+
+td.replace{
+    background-color: #117A65;
+    color: white;
+}
+
+tr.replace{
+    background-color: #73C6B6;
+    /* color: white; */
+}
+
+td.rewind{
+    background-color: #7D3C98;
+    color: white;
+}
+
+tr.rewind{
+    background-color: #BB8FCE;
+}
+
+
+td.replace-when-fail{
+    background-color: #2874A6;
+    color: white;
+}
+
+tr.replace-when-fail{
+    background-color: #7FB3D5;
+    /* color: white; */
+}

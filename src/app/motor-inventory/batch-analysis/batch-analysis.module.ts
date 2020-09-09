@@ -5,6 +5,7 @@ import { BatchAnalysisTableComponent } from './batch-analysis-table/batch-analys
 import { BatchAnalysisTablePipe } from './batch-analysis-table/batch-analysis-table.pipe';
 import { BatchAnalysisBannerComponent } from './batch-analysis-banner/batch-analysis-banner.component';
 import { BatchAnalysisService } from './batch-analysis.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { BatchAnalysisService } from './batch-analysis.service';
     BatchAnalysisBannerComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   exports: [
     BatchAnalysisComponent
