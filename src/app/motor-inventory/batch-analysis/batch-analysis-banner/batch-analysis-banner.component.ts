@@ -41,5 +41,6 @@ export class BatchAnalysisBannerComponent implements OnInit {
 
   saveSettings(){
     this.batchAnalysisService.batchAnalysisSettings.next(this.batchAnalysisSettings);
+    this.batchAnalysisService.updateReplaceMotorDecision();
   }
 }

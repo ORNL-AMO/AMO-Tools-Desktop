@@ -6,13 +6,15 @@ import { BatchAnalysisTablePipe } from './batch-analysis-table/batch-analysis-ta
 import { BatchAnalysisBannerComponent } from './batch-analysis-banner/batch-analysis-banner.component';
 import { BatchAnalysisService } from './batch-analysis.service';
 import { FormsModule } from '@angular/forms';
+import { BatchAnalysisGraphsComponent } from './batch-analysis-graphs/batch-analysis-graphs.component';
 
 @NgModule({
   declarations: [
     BatchAnalysisComponent,
     BatchAnalysisTableComponent,
     BatchAnalysisTablePipe,
-    BatchAnalysisBannerComponent
+    BatchAnalysisBannerComponent,
+    BatchAnalysisGraphsComponent
   ],
   imports: [
     CommonModule,

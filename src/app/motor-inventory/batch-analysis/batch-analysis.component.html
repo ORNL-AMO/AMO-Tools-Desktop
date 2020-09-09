@@ -1,4 +1,7 @@
-<div class="d-flex flex-column w-100 scroll-item max-height h-100">
+<div class="d-flex flex-column w-100 max-height h-100">
     <app-batch-analysis-banner></app-batch-analysis-banner>
-    <app-batch-analysis-table></app-batch-analysis-table>
+    <div class="d-flex w-100 h-100 scroll-item">
+        <app-batch-analysis-table *ngIf="selectedTab == 'table'"></app-batch-analysis-table>
+        <app-batch-analysis-graphs *ngIf="selectedTab == 'graphs'"></app-batch-analysis-graphs>
+    </div>
 </div>
