@@ -1,20 +1,18 @@
-<label *ngIf="selectedFormView == 'Data'" class="group-label">{{formLabel}}</label>
-<label *ngIf="selectedFormView == 'Equation'" class="group-label mt-3">Power Data</label>
+<label class="group-label">{{formLabel}}</label>
 
-<!-- Flow/Power rows input are shared with Equation view -->
 <form [formGroup]="byDataForm">
     <div>
         <div class="row align-items-end">
-            <div class="form-group col-4 w-100 text-right" [ngClass]="{'col-6': selectedFormView == 'Equation'}">
+            <div class="form-group col-4 w-100 text-right">
                 <label class="w-100" for="dataOrder">Order</label>
             </div>
-            <div *ngIf="selectedFormView == 'Data'" class="form-group col-4" >
+            <div class="form-group col-4" >
                 <select id="dataOrder" name="dataOrder" class="form-control w-100" formControlName="dataOrder"
                     (focus)="focusField('dataOrder')" (change)="save()">
                     <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
                 </select>
             </div>
-            <div class="form-group col-4 padding-offset" [ngClass]="{'col-6': selectedFormView == 'Equation'}">
+            <div class="form-group col-4 padding-offset">
                 <select id="powerDataOrder" name="powerDataOrder" class="form-control w-100" formControlName="powerDataOrder"
                     (focus)="focusField('powerDataOrder')" (change)="save()">
                     <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
@@ -24,7 +22,7 @@
     <div *ngFor="let control of byDataForm.controls.dataRows.value.controls; let index = index;">
         <form [formGroup]="control">
             <div class="row align-items-end">
-                <div class="form-group col-4" [ngClass]="{'col-6': selectedFormView == 'Equation'}">
+                <div class="form-group col-4">
                     <label class="section-label" *ngIf="index == 0" for="flow">Flow</label>
                     <div class="input-group">
                         <input name="flow" formControlName="flow" type="number" step="any" class="form-control"
@@ -39,7 +37,7 @@
                         </span>
                     </span>
                 </div>
-                <div *ngIf="selectedFormView == 'Data'" class="form-group col-4">
+                <div class="form-group col-4">
                     <label class="section-label" *ngIf="index == 0" for="yValue">{{yValueLabel}}</label>
                     <div class="input-group">
                         <input name="yValue" formControlName="yValue" type="number" step="any" class="form-control"
@@ -55,7 +53,7 @@
                         </span>
                     </span>
                 </div>
-                <div class="form-group col-4" [ngClass]="{'col-6': selectedFormView == 'Equation'}">
+                <div class="form-group col-4">
                     <label class="section-label" *ngIf="index == 0" for="power">Power</label>
                     <div class="input-group">
                         <input name="power" formControlName="power" type="number" step="any" class="form-control"

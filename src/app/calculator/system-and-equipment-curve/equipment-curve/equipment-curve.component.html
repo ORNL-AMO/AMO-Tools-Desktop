@@ -16,7 +16,7 @@
         </div>
         <app-by-equation-form *ngIf="selectedFormView == 'Equation'" [equipmentType]="equipmentType"
             [settings]="settings"></app-by-equation-form>
-        <app-by-data-form [selectedFormView]="selectedFormView" [equipmentType]="equipmentType" [settings]="settings">
+        <app-by-data-form [selectedFormView]="selectedFormView" *ngIf="selectedFormView == 'Data'" [equipmentType]="equipmentType" [settings]="settings">
         </app-by-data-form>
         <app-equipment-curve-form [equipmentType]="equipmentType" [settings]="settings"></app-equipment-curve-form>
     </div>

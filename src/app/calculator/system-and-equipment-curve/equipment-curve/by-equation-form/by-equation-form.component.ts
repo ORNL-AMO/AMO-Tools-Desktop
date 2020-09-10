@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { EquipmentCurveService } from '../equipment-curve.service';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
@@ -21,12 +21,14 @@ export class ByEquationFormComponent implements OnInit {
   byEquationForm: FormGroup;
   formLabel: string;
   flowUnit: string;
+  powerUnit: string;
   orderOptions: Array<number> = [
     1, 2, 3, 4, 5, 6
   ]
   resetFormsSub: Subscription;
 
-  constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
+  constructor(private equipmentCurveService: EquipmentCurveService,
+    private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private curveDataService: CurveDataService) { }
 
   ngOnInit() {
@@ -47,9 +49,9 @@ export class ByEquationFormComponent implements OnInit {
     let defaultData: ByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
     if (defaultData == undefined) {
       if (this.equipmentType == 'fan') {
-        defaultData = this.equipmentCurveService.getByEquationDefault(this.flowUnit, this.settings.fanPressureMeasurement, 'inH2o');
+        defaultData = this.equipmentCurveService.getFanByEquationDefault(this.flowUnit, this.settings.fanPressureMeasurement, 'inH2o');
       } else if (this.equipmentType == 'pump') {
-        defaultData = this.equipmentCurveService.getByEquationDefault(this.flowUnit, this.settings.distanceMeasurement, 'ft');
+        defaultData = this.equipmentCurveService.getPumpByEquationDefault(this.flowUnit, this.settings.distanceMeasurement, 'ft');
       }
     }
     this.systemAndEquipmentCurveService.byEquationInputs.next(defaultData);
@@ -65,9 +67,11 @@ export class ByEquationFormComponent implements OnInit {
     if (this.equipmentType == 'fan') {
       this.formLabel = 'Pressure Equation Coefficients';
       this.flowUnit = this.settings.fanFlowRate;
+      this.powerUnit = this.settings.fanPowerMeasurement;
     } else if (this.equipmentType == 'pump') {
       this.formLabel = 'Head Equation Coefficients';
       this.flowUnit = this.settings.flowMeasurement;
+      this.powerUnit = this.settings.powerMeasurement;
     }
   }
 
@@ -85,4 +89,5 @@ export class ByEquationFormComponent implements OnInit {
     this.systemAndEquipmentCurveService.focusedCalculator.next(this.equipmentType + '-curve');
     this.systemAndEquipmentCurveService.currentField.next(str);
   }
+
 }
