@@ -5,7 +5,7 @@ import { EquipmentCurveService } from '../equipment-curve.service';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { CurveDataService } from '../../curve-data.service';
-import { EquipmentInputs } from '../../../../shared/models/system-and-equipment-curve';
+import { EquipmentInputs, ModificationEquipment } from '../../../../shared/models/system-and-equipment-curve';
 
 @Component({
   selector: 'app-equipment-curve-form',
@@ -25,8 +25,15 @@ export class EquipmentCurveFormComponent implements OnInit {
     { display: 'Diameter', value: 0 },
     { display: 'Speed', value: 1 }
   ];
+  modificationOptions: Array<{ display: string, value: number }> = [
+    { display: 'Flow Rate', value: 0 },
+    { display: 'Head', value: 1 },
+  ];
+
   modWarning: string = null;
   resetFormsSub: Subscription;
+  flowUnit: string;
+  yValueUnit: string;
   constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private curveDataService: CurveDataService) { }
 
@@ -74,11 +81,6 @@ export class EquipmentCurveFormComponent implements OnInit {
         this.smallUnit = 'cm';
       }
     }
-  }
-
-  setModifiedMeasurementValidator() {
-    this.equipmentCurveForm = this.equipmentCurveService.setModifiedMeasurementMinMax(this.equipmentCurveForm);
-    this.save();
   }
 
   focusField(str: string) {

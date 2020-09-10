@@ -16,7 +16,16 @@ export interface SystemAndEquipmentCurveData {
     pointTwo: string,
     pointTwoFlowRate: number,
     pointTwoHead: number,
+    modificationCurve?: ModificationCurve
   }
+
+  export interface ModificationCurve {
+    modificationMeasurementOption?: number,
+    modifiedHead?: number,
+    modifiedFlow?: number
+    modifiedPressure?: number
+  }
+  
   
   export interface FanSystemCurveData {
     compressibilityFactor: number,
@@ -25,7 +34,8 @@ export interface SystemAndEquipmentCurveData {
     pointOnePressure: number,
     pointTwo: string,
     pointTwoFlowRate: number,
-    pointTwoPressure: number
+    pointTwoPressure: number,
+    modificationCurve?: ModificationCurve
   }
   
   export interface ByEquationInputs {
@@ -53,11 +63,18 @@ export interface SystemAndEquipmentCurveData {
     measurementOption: number,
     baselineMeasurement: number,
     modificationMeasurementOption: number,
-    modifiedMeasurement: number
+    modifiedMeasurement?: number,
   }
   
   export interface ByDataInputs {
     dataRows: Array<{ flow: number, yValue: number, power: number }>,
     dataOrder: number,
     powerDataOrder?: number,
+  }
+
+  export interface ModificationEquipment {
+    head?: number,
+    flow?: number,
+    pressure?: number,
+    speed?: number,
   }

@@ -16,10 +16,7 @@ export class EquipmentCurveService {
       measurementOption: [obj.measurementOption, Validators.required],
       baselineMeasurement: [obj.baselineMeasurement, [Validators.required, Validators.min(0)]],
       modificationMeasurementOption: [obj.modificationMeasurementOption, Validators.required],
-      modifiedMeasurement: [obj.modifiedMeasurement, [Validators.required, Validators.min(0)]],
     });
-    form.controls.modificationMeasurementOption.disable();
-    form = this.setModifiedMeasurementMinMax(form);
     return form;
   }
 
@@ -29,7 +26,6 @@ export class EquipmentCurveService {
       measurementOption: 0,
       baselineMeasurement: 1800,
       modificationMeasurementOption: 0,
-      modifiedMeasurement: 1800
     };
     return exampleEquipment;
   }
@@ -39,7 +35,6 @@ export class EquipmentCurveService {
       measurementOption: 0,
       baselineMeasurement: 0,
       modificationMeasurementOption: 0,
-      modifiedMeasurement: 0
     };
     return exampleEquipment;
   }
@@ -48,22 +43,8 @@ export class EquipmentCurveService {
     return {
       measurementOption: form.controls.measurementOption.value,
       baselineMeasurement: form.controls.baselineMeasurement.value,
-      modificationMeasurementOption: form.controls.modificationMeasurementOption.value,
-      modifiedMeasurement: form.controls.modifiedMeasurement.value
+      modificationMeasurementOption: form.controls.measurementOption.value
     }
-  }
-
-  setModifiedMeasurementMinMax(form: FormGroup): FormGroup {
-    if (form.controls.baselineMeasurement.value) {
-      let min: number = form.controls.baselineMeasurement.value * .5;
-      let max: number = form.controls.baselineMeasurement.value * 1.5;
-      form.controls.modifiedMeasurement.setValidators([Validators.required, Validators.min(min), Validators.max(max)]);
-      form.controls.modifiedMeasurement.updateValueAndValidity();
-      return form;
-    } else {
-      return form;
-    }
-
   }
 
   //by equation
@@ -95,6 +76,8 @@ export class EquipmentCurveService {
     let tmpMaxFlow = 1020;
     let tmpConstant = 356.96;
     let powerConstant = 47.68;
+
+    debugger;
     if (flowUnit !== 'gpm') {
       tmpMaxFlow = Math.round(this.convertUnitsService.value(tmpMaxFlow).from('gpm').to(flowUnit) * 100) / 100;
     }

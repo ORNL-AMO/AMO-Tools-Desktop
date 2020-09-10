@@ -28,12 +28,14 @@ export class CurveDataService {
     if (equipmentType == 'pump') {
       let byDataInputs: ByDataInputs = this.equipmentCurveService.getPumpByDataExample(settings);
       this.systemAndEquipmentCurveService.byDataInputs.next(byDataInputs);
-      let pumpSystemCurveData: PumpSystemCurveData = this.pumpSystemCurveFormService.getPumpSystemCurveDefaults(settings);
+      let pumpSystemCurveData: PumpSystemCurveData = this.pumpSystemCurveFormService.getPumpSystemCurveExample(settings);
+      this.systemAndEquipmentCurveService.resetModificationEquipment();
       this.systemAndEquipmentCurveService.pumpSystemCurveData.next(pumpSystemCurveData);
     } else if (equipmentType == 'fan') {
       let byDataInputs: ByDataInputs = this.equipmentCurveService.getFanByDataExample(settings);
       this.systemAndEquipmentCurveService.byDataInputs.next(byDataInputs);
-      let fanSystemCurveData: FanSystemCurveData = this.fanSystemCurveFormService.getFanSystemCurveDefaults(settings);
+      let fanSystemCurveData: FanSystemCurveData = this.fanSystemCurveFormService.getFanSystemCurveExample(settings);
+      this.systemAndEquipmentCurveService.resetModificationEquipment();
       this.systemAndEquipmentCurveService.fanSystemCurveData.next(fanSystemCurveData);
     }
     let flowUnit: string;

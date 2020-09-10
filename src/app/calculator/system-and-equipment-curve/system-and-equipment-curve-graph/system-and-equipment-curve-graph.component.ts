@@ -118,6 +118,19 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.initSubscriptions();
   }
 
+  // ngAfterViewInit() {
+  //   this.setGraphSize();
+  //   this.updateGraphSub = this.systemAndEquipmentCurveService.updateGraph.subscribe(val => {
+  //     if (val == true) {
+  //       this.isSystemCurveShown = (this.systemAndEquipmentCurveService.systemCurveCollapsed.getValue() == 'open');
+  //       this.isEquipmentCurveShown = (this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open');
+  //       this.isEquipmentModificationShown = (this.systemAndEquipmentCurveService.pumpModificationCollapsed.getValue() == 'open' || this.systemAndEquipmentCurveService.fanModificationCollapsed.getValue() == 'open');
+  //       this.createSVG();
+  //       this.setAxisLabels();
+  //       this.setAxis();
+  //       this.createGraph();
+  //     }
+
   initSubscriptions() {
     this.updateGraphSub = this.systemAndEquipmentCurveService.updateGraph.subscribe(updateGraph => {
       if (updateGraph == true) {
@@ -289,8 +302,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
     if (this.displayPowerChart) {
       let powerChartLayout = JSON.parse(JSON.stringify(this.powerChart.layout));
-      // Plotly.newPlot(this.currentPowerChartId, this.powerChart.data, powerChartLayout, this.powerChart.config);
-      Plotly.update(this.currentPowerChartId, this.powerChart.data, powerChartLayout);
+      Plotly.newPlot(this.currentPowerChartId, this.powerChart.data, powerChartLayout, this.powerChart.config);
+      // Plotly.update(this.currentPowerChartId, this.powerChart.data, powerChartLayout);
 
     }
   }
@@ -409,23 +422,66 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
   addIntersectionPoints() {
-    // TODO add efficiency to incoming intersection from 3756
-    let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.systemAndEquipmentCurveService.systemCurveRegressionData);
+    // let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs);
+    // TODO add pointEfficiency to incoming intersection from 3756
+    // let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.systemAndEquipmentCurveService.systemCurveRegressionData);
+    let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.systemCurveRegressionData);
     if (baselineIntersectionPoint != undefined) {
       this.chartConfig.defaultPointCount = 1;
       this.setIntersectionTrace(baselineIntersectionPoint, this.traces.baselineIntersect, 'Baseline');
       this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.next(baselineIntersectionPoint);
     }
     if (this.isEquipmentModificationShown && this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs != undefined) {
-      let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(baselineIntersectionPoint, this.settings, this.equipmentType, this.systemAndEquipmentCurveService.equipmentInputs.getValue());
-      if (modifiedIntersectionPoint != undefined) {
+      let modIntersectionPoint = this.calculateModificationIntersectionPoint();
+
+      // let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(baselineIntersectionPoint, this.settings, this.equipmentType, this.systemAndEquipmentCurveService.equipmentInputs.getValue());
+      // let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs);
+      // let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(this.settings, this.equipmentType, this.systemAndEquipmentCurveService.equipmentInputs.getValue());
+
+      if (modIntersectionPoint != undefined) {
+        this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(modIntersectionPoint);
         this.chartConfig.defaultPointCount = 2;
-        this.setIntersectionTrace(modifiedIntersectionPoint, this.traces.modificationIntersect, 'Modification');
-        this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(modifiedIntersectionPoint);
+        this.setIntersectionTrace(modIntersectionPoint, this.traces.modificationIntersect, 'Modification');
       }
     }
   }
 
+  calculateModificationIntersectionPoint(): {x: number, y: number, fluidPower: number} {
+    let closestSystemCurvePoint;
+    let closestModifiedDataPoint;
+    let smallestDistanceBetweenPoints = Infinity;
+    //system curve data pairs (assuming longer should code in a check to use the longest on the outside of the double loop)
+    this.systemAndEquipmentCurveService.systemCurveRegressionData.forEach(systemCurveDataPoint => {
+      //modification points
+      this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.forEach(modifiedDataPoint => {
+        //distance = (p1.x - p2.x)^2 + (p1.y - p2.y)^2
+        let distanceBetweenCurrentPoint = Math.pow((systemCurveDataPoint.x - modifiedDataPoint.x), 2) + Math.pow((systemCurveDataPoint.y - modifiedDataPoint.y), 2)
+        if(smallestDistanceBetweenPoints > distanceBetweenCurrentPoint){
+          smallestDistanceBetweenPoints = distanceBetweenCurrentPoint;
+          closestSystemCurvePoint = systemCurveDataPoint;
+          closestModifiedDataPoint = modifiedDataPoint;
+        }
+      })
+    });
+
+    console.log('SYSTEM = ');
+    console.log(closestSystemCurvePoint);
+    console.log('MODIFIED =');
+    console.log(closestModifiedDataPoint);
+    //find average between points
+    let x: number = (closestModifiedDataPoint.x + closestSystemCurvePoint.x) / 2;
+    let y: number = (closestModifiedDataPoint.y + closestSystemCurvePoint.y) / 2;
+    //TODO: calc fluid power
+    return {x: x, y: y, fluidPower: 0};
+  }
+
+
+  // initTooltipData() {
+  //   this.tooltipData = new Array<{ label: string, value: number, unit: string, formatX: boolean }>();
+  //   this.tooltipData = this.systemAndEquipmentCurveGraphService.initTooltipData(this.settings, this.equipmentType, this.isEquipmentCurveShown, this.isEquipmentModificationShown, this.isSystemCurveShown);
+  // }
+  
+  // TODO this may be eliminated for separate hover tags
   displayHoverGroupData(plotlyHoverEvent) {
     let currentPointIndex = plotlyHoverEvent.points[0].pointIndex;
     let baselineX = this.curveEquipmentChart.data[this.traces.baseline].x;

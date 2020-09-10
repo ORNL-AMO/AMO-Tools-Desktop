@@ -56,12 +56,14 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     if (this.equipmentType == 'pump') {
       this.curveDataSubscription = this.systemAndEquipmentCurveService.pumpSystemCurveData.subscribe(val => {
         if (val != undefined) {
+          debugger;
           this.updateSystemCurveResultData();
         }
       });
     } else {
       this.curveDataSubscription = this.systemAndEquipmentCurveService.fanSystemCurveData.subscribe(val => {
         if (val != undefined) {
+          debugger;
           this.updateSystemCurveResultData();
         }
       });
@@ -133,15 +135,32 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     }
   }
 
+  // updateSystemCurveResultData() {
+  //   let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
+  //   debugger;
+  //   this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
+  //   if (newMaxFlow != this.maxFlowRate) {
+  //     debugger;
+  //     this.maxFlowRate = newMaxFlow;
+  //     this.updateEquipmentCurveResultData();
+  //   } else {
+  //     debugger;
+  //     // this.updateEquipmentCurveResultData();
+  //     // this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
+  //     this.systemAndEquipmentCurveService.updateGraph.next(true);
+  //   }
+  // }
+
   updateSystemCurveResultData() {
     let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
+    debugger;
     this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
-    if (newMaxFlow != this.maxFlowRate) {
-      this.maxFlowRate = newMaxFlow;
-      this.updateEquipmentCurveResultData();
-    } else {
-      this.systemAndEquipmentCurveService.updateGraph.next(true);
-    }
+    this.maxFlowRate = newMaxFlow;
+    this.updateEquipmentCurveResultData();
+    debugger;
+    // this.updateEquipmentCurveResultData();
+    // this.systemAndEquipmentCurveService.calculateSystemCurveRegressionData(this.equipmentType, this.settings, newMaxFlow);
+    this.systemAndEquipmentCurveService.updateGraph.next(true);
   }
 
   updateEquipmentCurveResultData() {
@@ -167,9 +186,11 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
     this.systemAndEquipmentCurveService.calculateByDataRegression(this.equipmentType, newMaxFlow, this.settings);
     if (newMaxFlow != this.maxFlowRate) {
+      debugger;
       this.maxFlowRate = newMaxFlow;
       this.updateSystemCurveResultData();
     } else {
+      debugger;
       this.systemAndEquipmentCurveService.updateGraph.next(true);
     }
   }

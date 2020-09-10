@@ -19,6 +19,34 @@ export class PumpSystemCurveFormService {
     if (settings.distanceMeasurement !== 'ft') {
       pumpSystemCurveHead = Math.round(this.convertUnitsService.value(pumpSystemCurveHead).from('ft').to(settings.distanceMeasurement) * 100) / 100;
     }
+    let defaultPumpSystemCurveData: PumpSystemCurveData = {
+      specificGravity: 1.0,
+      systemLossExponent: 1.9,
+      pointOneFlowRate: 0,
+      pointOneHead: 0,
+      pointTwo: '',
+      pointTwoFlowRate: systemCurveFlowRate,
+      pointTwoHead: pumpSystemCurveHead,
+      modificationCurve: {
+        modificationMeasurementOption: 0,
+        modifiedFlow: 0,
+        modifiedHead: 0,
+      }
+    };
+    return defaultPumpSystemCurveData;
+  }
+
+  getPumpSystemCurveExample(settings: Settings): PumpSystemCurveData {
+    let systemCurveFlowRate: number = 600;
+    let pumpSystemCurveHead: number = 1000;
+    let modifiedCurveHead = 275;
+    if (settings.flowMeasurement !== 'gpm') {
+      systemCurveFlowRate = Math.round(this.convertUnitsService.value(systemCurveFlowRate).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+    }
+    if (settings.distanceMeasurement !== 'ft') {
+      modifiedCurveHead = Math.round(this.convertUnitsService.value(modifiedCurveHead).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+      pumpSystemCurveHead = Math.round(this.convertUnitsService.value(pumpSystemCurveHead).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+    }
     let examplePumpSystemCurveData: PumpSystemCurveData = {
       specificGravity: 1.0,
       systemLossExponent: 1.9,
@@ -27,9 +55,15 @@ export class PumpSystemCurveFormService {
       pointTwo: '',
       pointTwoFlowRate: systemCurveFlowRate,
       pointTwoHead: pumpSystemCurveHead,
+      modificationCurve: {
+        modificationMeasurementOption: 1,
+        modifiedFlow: 0,
+        modifiedHead: modifiedCurveHead,
+      }
     };
     return examplePumpSystemCurveData;
   }
+
 
   getResetPumpSystemCurveInputs(): PumpSystemCurveData {
     let pumpSystemCurveData: PumpSystemCurveData = {
@@ -40,6 +74,11 @@ export class PumpSystemCurveFormService {
       pointTwo: '',
       pointTwoFlowRate: 0,
       pointTwoHead: 0,
+      modificationCurve: {
+        modificationMeasurementOption: 0,
+        modifiedFlow: 0,
+        modifiedHead: 0,
+      }
     };
     return pumpSystemCurveData;
   }
@@ -53,6 +92,9 @@ export class PumpSystemCurveFormService {
       pointTwo: [obj.pointTwo],
       pointTwoFlowRate: [obj.pointTwoFlowRate, [Validators.required, Validators.min(0)]],
       pointTwoHead: [obj.pointTwoHead, [Validators.required, Validators.min(0)]],
+      modificationMeasurementOption: [obj.modificationCurve.modificationMeasurementOption, Validators.required],
+      modifiedFlow: [obj.modificationCurve.modifiedFlow, [Validators.required, Validators.min(0)]],
+      modifiedHead: [obj.modificationCurve.modifiedHead, [Validators.required, Validators.min(0)]],
     })
     return form;
   }
@@ -65,7 +107,12 @@ export class PumpSystemCurveFormService {
       pointOneHead: form.controls.pointOneHead.value,
       pointTwo: form.controls.pointTwo.value,
       pointTwoFlowRate: form.controls.pointTwoFlowRate.value,
-      pointTwoHead: form.controls.pointTwoHead.value
+      pointTwoHead: form.controls.pointTwoHead.value,
+      modificationCurve: {
+        modificationMeasurementOption: form.controls.modificationMeasurementOption.value,
+        modifiedFlow: form.controls.modifiedFlow.value,
+        modifiedHead: form.controls.modifiedHead.value,
+      }
     }
     return data;
   }
