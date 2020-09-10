@@ -31,6 +31,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   powerPanelChartId: string = 'powerPanelChartDiv';
   expandedPowerChartId: string = 'expandedPowerChartDiv';
   currentPowerChartId: string = 'powerPanelChartDiv';
+  powerUnits: string;
   
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
@@ -70,7 +71,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     defaultPointBackgroundColor: 'rgba(0, 0, 0, 0)',
     yName: 'Pressure',
     yUnits: '',
-    xUnits: ''
+    xUnits: '',
+    powerUnits: '',
   };
 
   // Default traces
@@ -89,7 +91,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   isChartSetup: boolean = false;
   displayPowerChart: boolean = false;
   fluidPowerData: Array<number>;
-  showHoverGroupData: boolean;
 
   constructor(
     private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
@@ -133,6 +134,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.resetSub = this.curveDataService.resetForms.subscribe(reset => {
       if (reset && !this.ignoreReset) {
         this.displayPowerChart = false;
+        this.curveEquipmentChart.layout.xaxis.title.text = `Flow (${this.chartConfig.xUnits})`;
         this.systemAndEquipmentCurveGraphService.initChartData();
         this.initRenderChart();
       }
@@ -161,16 +163,39 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       this.chartConfig.yName = 'Head';
       this.chartConfig.yUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.distanceMeasurement);
       this.chartConfig.xUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.flowMeasurement);
+      this.chartConfig.powerUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.powerMeasurement);
     } else {
       this.chartConfig.yUnits = this.settings.fanPressureMeasurement;
       this.chartConfig.xUnits = this.settings.fanFlowRate;
+      this.chartConfig.powerUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.fanPowerMeasurement);
     }
+  }
+
+  resetHoverData() {
+    this.currentHoverData = {
+      system: {
+        x: 0,
+        y: 0,
+        pointColor: ''
+      },
+      baseline: {
+        x: 0,
+        y: 0,
+        pointColor: ''
+      },
+      modification: {
+        x: 0,
+        y: 0,
+        pointColor: ''
+      },
+      fluidPower: 0
+    };
   }
 
   triggerInitialResize() {
     window.dispatchEvent(new Event('resize'));
     setTimeout(() => {
-      this.initRenderChart();
+      this.initRenderChart(true);
     }, 25)
   }
 
@@ -214,14 +239,12 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
           this.createDataPoint(graphData);
         });
           chart.on('plotly_hover', hoverData => {
-            if (hoverData.points[0].pointIndex != 0 && this.showHoverGroupData) {
-                this.initHoverGroupData(hoverData);
-            }
+                this.displayHoverGroupData(hoverData);
+                this.displayDualHover(hoverData);
           });
           chart.on('plotly_unhover', unhoverData => {
-            if (this.showHoverGroupData) {
               this.removeHoverGroupData();
-            }
+              this.removeDualHover();
           });
     });
 
@@ -244,19 +267,17 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
   initChartSetup(isResize) {
-    this.showHoverGroupData = false;
     this.pointColors = graphColors;
-    this.currentHoverData = undefined;
+    this.resetHoverData();
     this.fluidPowerData = [];
 
     if (this.curveEquipmentChart && !isResize) {
       this.systemAndEquipmentCurveGraphService.initChartData();
     }
-
     let currentSystemChart = this.systemAndEquipmentCurveGraphService.curveEquipmentChart.getValue();
     let currentPowerChart = this.systemAndEquipmentCurveGraphService.powerChart.getValue();
-    if (currentSystemChart.currentEquipmentType != this.equipmentType) {
 
+    if (currentSystemChart.currentEquipmentType != this.equipmentType) {
       this.systemAndEquipmentCurveGraphService.initChartData();
       this.curveEquipmentChart = this.systemAndEquipmentCurveGraphService.curveEquipmentChart.getValue();
       this.curveEquipmentChart.currentEquipmentType = this.equipmentType;
@@ -270,14 +291,16 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     }
 
     this.selectedDataPoints = this.systemAndEquipmentCurveGraphService.selectedDataPoints.getValue();
-    this.curveEquipmentChart.layout.xaxis.title.text = `Flow (${this.chartConfig.xUnits})`;
     this.curveEquipmentChart.layout.yaxis.title.text = `${this.chartConfig.yName} (${this.chartConfig.yUnits})`;
+    let powerChartHeight = this.powerExpanded? undefined : 250;
+    let curveEquipmentChartHeight = this.expanded? undefined : 350;
+    this.powerChart.layout.height = powerChartHeight;
+    this.curveEquipmentChart.layout.height = curveEquipmentChartHeight;
     this.isChartSetup = true;
   }
 
   drawTraceData() {
     if (this.isSystemCurveShown == true && this.systemAndEquipmentCurveService.systemCurveRegressionData != undefined) {
-      this.showHoverGroupData = true;
       this.drawSystemCurve();
     } 
     if (this.isEquipmentCurveShown == true) {
@@ -291,8 +314,10 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     if (this.systemAndEquipmentCurveService.baselinePowerDataPairs && this.systemAndEquipmentCurveService.baselinePowerDataPairs.length > 0) {
       this.drawPowerLine(this.systemAndEquipmentCurveService.baselinePowerDataPairs);
       this.displayPowerChart = true;
+      this.curveEquipmentChart.layout.xaxis.title.text = '';
     } else {
       this.displayPowerChart = false;
+      this.curveEquipmentChart.layout.xaxis.title.text = `Flow (${this.chartConfig.xUnits})`;
     }
 
     if (this.isSystemCurveShown && this.isEquipmentCurveShown
@@ -319,45 +344,43 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.curveEquipmentChart.data[this.traces.system].x = xTmp;
     this.curveEquipmentChart.data[this.traces.system].y = yTmp;
     this.fluidPowerData = fluidTmp;
-    this.setHoverTemplate('System Curve', this.traces.system);
+    let template = `${'System Curve'} ${this.chartConfig.yName}: %{y:.0f} ${this.chartConfig.yUnits}`;
+    this.curveEquipmentChart.data[this.traces.system].hovertemplate = template;
   }
 
-  drawEquipmentCurve(traceData: Array <SystemCurveDataPoint>, traceIndex: number, traceTitle: string) {
+  drawEquipmentCurve(systemCurveData: Array <SystemCurveDataPoint>, traceIndex: number, traceTitle: string) {
     let xTmp = [];
     let yTmp = [];
-    traceData.forEach(coordinate => {
+    systemCurveData.forEach(coordinate => {
       xTmp.push(coordinate.x);
       yTmp.push(coordinate.y);
     });
     this.curveEquipmentChart.data[traceIndex].x = xTmp;
     this.curveEquipmentChart.data[traceIndex].y = yTmp;
     this.curveEquipmentChart.data[traceIndex].line.color = this.pointColors[traceIndex - 1];
-    this.setHoverTemplate(traceTitle, traceIndex);
+    let template = `${traceTitle} ${this.chartConfig.yName}: %{y:.0f} ${this.chartConfig.yUnits}<br>`;
+    this.curveEquipmentChart.data[traceIndex].hovertemplate = template;
   }
 
-  drawPowerLine(traceData: Array <SystemCurveDataPoint>) {
+  drawPowerLine(powerData: Array <SystemCurveDataPoint>) {
     let xTmp = [];
     let yTmp = [];
-    traceData.forEach(coordinate => {
+    powerData.forEach(coordinate => {
       xTmp.push(coordinate.x);
       yTmp.push(coordinate.y);
     });
     this.powerChart.data[0].x = xTmp;
     this.powerChart.data[0].y = yTmp;
     this.powerChart.layout.xaxis.title.text = `Flow (${this.chartConfig.xUnits})`;
-    this.powerChart.layout.yaxis.title.text = 'Power ' + `(${this.settings.fanPowerMeasurement})`;
+    this.powerChart.layout.yaxis.title.text = 'Power ' + `(${this.chartConfig.powerUnits})`;
 
-    this.powerChart.data[0].line.color = this.pointColors[this.curveEquipmentChart.data.length - 1];
-    this.setHoverTemplate('Power', 0);
-  }
-
-  setHoverTemplate(traceTitle: string, traceIndex) {
-    let template = `${traceTitle}<br>Flow: %{x} ${this.chartConfig.xUnits}<br>${this.chartConfig.yName}: %{y} ${this.chartConfig.yUnits}<br>`;
-    this.curveEquipmentChart.data[traceIndex].hovertemplate = template;
+    this.powerChart.data[0].line.color = this.pointColors[0];
+    let template = `Power %{y:.1f} ${this.chartConfig.powerUnits}`;
+    this.powerChart.data[0].hovertemplate = template;
   }
 
   addIntersectionPoints() {
-    // TODO add pointEfficiency to incoming intersection from 3756
+    // TODO add efficiency to incoming intersection from 3756
     let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.systemAndEquipmentCurveService.systemCurveRegressionData);
     if (baselineIntersectionPoint != undefined) {
       this.chartConfig.defaultPointCount = 1;
@@ -374,20 +397,12 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     }
   }
 
-  // TODO this may be eliminated for separate hover tags
-  initHoverGroupData(hoverEventData) {
-    let currentPointIndex = hoverEventData.points[0].pointIndex;
-    let systemX = this.curveEquipmentChart.data[this.traces.system].x;
-    let systemY = this.curveEquipmentChart.data[this.traces.system].y;
+  displayHoverGroupData(plotlyHoverEvent) {
+    let currentPointIndex = plotlyHoverEvent.points[0].pointIndex;
     let baselineX = this.curveEquipmentChart.data[this.traces.baseline].x;
     let baselineY = this.curveEquipmentChart.data[this.traces.baseline].y;
 
     this.currentHoverData = {
-      system: {
-        x: Number(systemX[currentPointIndex]),
-        y: Number(systemY[currentPointIndex]),
-        pointColor: 'red'
-      },
       baseline: {
         x: Number(baselineX[currentPointIndex]),
         y: Number(baselineY[currentPointIndex]),
@@ -396,41 +411,50 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       fluidPower: this.fluidPowerData[currentPointIndex]
     };
 
-    if (this.isEquipmentModificationShown) {
-      let modificationX = this.curveEquipmentChart.data[this.traces.modification].x;
-      let modificationY = this.curveEquipmentChart.data[this.traces.modification].y;
-      this.currentHoverData.modification = {
-        x: Number(modificationX[currentPointIndex]),
-        y: Number(modificationY[currentPointIndex]),
-        pointColor: this.pointColors[this.traces.modification - 1]
-      };
-    }
+    let systemX = this.curveEquipmentChart.data[this.traces.system].x;
+    let systemY = this.curveEquipmentChart.data[this.traces.system].y;
+    this.currentHoverData.system = {
+      x: Number(systemX[currentPointIndex]),
+      y: Number(systemY[currentPointIndex]),
+      pointColor: 'red'
+    };
+    
+    let modificationX = this.curveEquipmentChart.data[this.traces.modification].x;
+    let modificationY = this.curveEquipmentChart.data[this.traces.modification].y;
+    this.currentHoverData.modification = {
+      x: Number(modificationX[currentPointIndex]),
+      y: Number(modificationY[currentPointIndex]),
+      pointColor: this.pointColors[this.traces.modification - 1]
+    };
     this.cd.detectChanges();
   }
 
-  removeHoverGroupData() {
-    this.currentHoverData = {
-      system: {
-        x: 0,
-        y: 0,
-        pointColor: ''
-      },
-      baseline: {
-        x: 0,
-        y: 0,
-        pointColor: ''
-      },
-      fluidPower: 0
-    };
-
-    if (this.isEquipmentModificationShown) {
-      this.currentHoverData.modification = {
-        x: 0,
-        y: 0,
-        pointColor: ''
-      }
+  displayDualHover(plotlyHoverEvent) {
+    let points = plotlyHoverEvent.points[0];
+    let pointIndex: number;
+    if (points.curveNumber == this.traces.modification) {
+      // Round up or down to nearest 10 - (mod coordinates are offset by a ratio)
+      let pointX = Math.round(points.x/10) * 10;
+      pointIndex = this.powerChart.data[0].x.findIndex(x => x == pointX);
+    } else {
+      pointIndex = this.powerChart.data[0].x.findIndex(x => x == points.x);
     }
+    let powerTraces = [
+      { curveNumber: 0, pointNumber: pointIndex },
+    ]
+    if (this.powerChart.data[1]) {
+      powerTraces.push({ curveNumber: 1, pointNumber: pointIndex });
+    }
+    Plotly.Fx.hover(this.currentPowerChartId, powerTraces);
+  }
+
+  removeHoverGroupData() {
+    this.resetHoverData();
     this.cd.detectChanges();
+  }
+
+  removeDualHover() {
+    Plotly.Fx.hover(this.currentPowerChartId, []);
   }
 
   setIntersectionTrace(point: SystemCurveDataPoint, traceDataIndex: number, name: string) {
@@ -446,7 +470,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       pointOutlineColor: this.chartConfig.defaultPointOutlineColor,
       pointTraceIndex: traceDataIndex,
       x: point.x,
-      y: point.y
+      y: point.y,
     }
 
     let updatedPoint = false;
@@ -468,17 +492,27 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
   createDataPoint(graphData, existingPoint?: SystemCurveDataPoint) {
+    let pointIndex = graphData.points[0].pointIndex;
     let selectedPoint = existingPoint;
+    let powerAtPoint = this.powerChart.data[0]? this.powerChart.data[0].y[pointIndex] : 0;
+    let modPowerAtPoint = this.powerChart.data[1]? this.powerChart.data[1].y[pointIndex] : 0;
+    let fluidPower = 0;
+    if (graphData.points[0].curveNumber != this.traces.system) {
+      fluidPower = this.fluidPowerData[pointIndex];
+    }
     if (!selectedPoint) {
       selectedPoint = {
         pointColor: this.getNextColor(),
         x: graphData.points[0].x,
-        y: graphData.points[0].y
+        y: graphData.points[0].y,
+        fluidPower: fluidPower,
+        power: Number(powerAtPoint),
+        modPower: Number(modPowerAtPoint),
+        efficiency: 0,
       }
     }
     let selectedPointTrace = this.systemAndEquipmentCurveGraphService.getTraceDataFromPoint(selectedPoint);
-    let hoverTemplate = `Flow: ${selectedPoint.x} ${this.chartConfig.xUnits}<br>${this.chartConfig.yName}: ${selectedPoint.y}  ${this.chartConfig.yUnits}<br>`;
-    selectedPointTrace.hovertemplate = hoverTemplate;
+    selectedPointTrace.hoverinfo = 'skip';
 
     Plotly.addTraces(this.currentSystemChartId, selectedPointTrace);
     this.selectedDataPoints.push(selectedPoint);
@@ -595,8 +629,12 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   toggleGrid() {
     let showingGridX: boolean = this.curveEquipmentChart.layout.xaxis.showgrid;
     let showingGridY: boolean = this.curveEquipmentChart.layout.yaxis.showgrid;
+    let powerGridX: boolean = this.powerChart.layout.xaxis.showgrid;
+    let powerGridY: boolean = this.powerChart.layout.yaxis.showgrid;
     this.curveEquipmentChart.layout.xaxis.showgrid = !showingGridX;
     this.curveEquipmentChart.layout.yaxis.showgrid = !showingGridY;
+    this.powerChart.layout.xaxis.showgrid = !powerGridX;
+    this.powerChart.layout.yaxis.showgrid = !powerGridY;
     this.updateChart();
   }
 

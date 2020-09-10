@@ -114,6 +114,8 @@ export class RegressionEquationsService {
     return baselineDataPairs;
   }
 
+
+  // Also calculates Mod power
   // TODO replace equipmentInput speeds with ModificationEquipment from merged 3756 branch
   calculateFanEfficiency(baselinePowerDataPairs: Array<{x: number, y: number}>, fanSystemCurveData: FanSystemCurveData, equipmentInputs: EquipmentInputs, settings: Settings): {baseline: number, modification: number} {
     let efficiencyResult = {
@@ -139,6 +141,7 @@ export class RegressionEquationsService {
     return efficiencyResult;
   }
 
+  // Also calculates Mod power
    // TODO replace equipmentInput speeds with ModificationEquipment from merged 3756 branch
    calculatePumpEfficiency(baselinePowerDataPairs: Array<{x: number, y: number}>, pumpSystemCurveData: PumpSystemCurveData, equipmentInputs: EquipmentInputs, settings: Settings): {baseline: number, modification: number} {
     let efficiencyResult = {
@@ -195,7 +198,6 @@ export class RegressionEquationsService {
     modificationRegressionEquation: string,
     baselineDataPairs: Array<{ x: number, y: number }>,
     modifiedDataPairs: Array<{ x: number, y: number }>
-    baselinePowerDataPairs: Array<{ x: number, y: number }>,
   } {
     //baseline
     let baselineRegressionEquation = byEquationInputs.flowTwo + '(flow)&#x00B2; + ' + byEquationInputs.flow + ('(flow) +') + byEquationInputs.constant;
@@ -217,7 +219,6 @@ export class RegressionEquationsService {
     }
     //baseline
     let baselineDataPairs: Array<{ x: number, y: number }> = this.calculateByEquationData(byEquationInputs, 1, maxFlowRate).dataPairs;
-    let baselinePowerDataPairs;
     //modification
     let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
     let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio, maxFlowRate);
@@ -229,7 +230,6 @@ export class RegressionEquationsService {
       modificationRegressionEquation: modificationRegressionEquation,
       baselineDataPairs: baselineDataPairs,
       modifiedDataPairs: modifiedData.dataPairs,
-      baselinePowerDataPairs: baselinePowerDataPairs
     };
   }
 
@@ -254,6 +254,27 @@ export class RegressionEquationsService {
   calculateY(data: ByEquationInputs, flow: number): number {
     let result = data.constant + (data.flow * flow) + (data.flowTwo * Math.pow(flow, 2)) + (data.flowThree * Math.pow(flow, 3)) + (data.flowFour * Math.pow(flow, 4)) + (data.flowFive * Math.pow(flow, 5)) + (data.flowSix * Math.pow(flow, 6));
     return result;
+  }
+
+  getEquipmentPowerRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, maxFlowRate: number): Array<{ x: number, y: number }> {
+    let baselinePowerDataPairs: Array<{ x: number, y: number }> = [];
+    for (let i = 0; i <= maxFlowRate; i += 10) {
+      let yVal = this.calculateYPower(byEquationInputs, i);
+      if (yVal > 0) {
+        let x: number = i * 1;
+        let y: number = yVal * Math.pow(1, 2);
+        if (x <= maxFlowRate) {
+          baselinePowerDataPairs.push({ x: x, y: y });
+        }
+      }
+    }
+    return baselinePowerDataPairs;
+    
+  }
+
+  calculateYPower(data: ByEquationInputs, flow: number): number {
+    let power = data.powerConstant + (data.powerFlow * flow) + (data.powerFlowTwo * Math.pow(flow, 2)) + (data.powerFlowThree * Math.pow(flow, 3)) + (data.powerFlowFour * Math.pow(flow, 4)) + (data.powerFlowFive * Math.pow(flow, 5)) + (data.powerFlowSix * Math.pow(flow, 6));
+    return power;
   }
 
   getPumpSystemCurveRegressionEquation(data: PumpSystemCurveData): string {

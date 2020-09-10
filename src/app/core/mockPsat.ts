@@ -244,7 +244,15 @@ export const MockPsatCalculator: Calculator = {
             "flowThree": -2.22e-9,
             "flowFour": 0,
             "flowFive": 0,
-            "flowSix": 0
+            "flowSix": 0,
+            "powerConstant": 0,
+            "powerOrder": 0,
+            "powerFlow": -0.0447,
+            "powerFlowTwo": -0.0000019,
+            "powerFlowThree": -2.22e-9,
+            "powerFlowFour": 0,
+            "powerFlowFive": 0,
+            "powerFlowSix": 0,
         },
         "byDataInputs": {
             "dataRows": [{

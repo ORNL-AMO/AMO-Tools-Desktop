@@ -154,7 +154,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
 
   updateByEquationResultData() {
     let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
-    this.systemAndEquipmentCurveService.calculateByEquationRegressions(this.equipmentType, newMaxFlow);
+    this.systemAndEquipmentCurveService.calculateByEquationRegressions(this.equipmentType, newMaxFlow, this.settings);
     if (newMaxFlow != this.maxFlowRate) {
       this.maxFlowRate = newMaxFlow;
       this.updateSystemCurveResultData();

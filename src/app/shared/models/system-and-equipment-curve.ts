@@ -39,6 +39,13 @@ export interface SystemAndEquipmentCurveData {
     flowFive: number,
     flowSix: number,
     powerDataRows?: Array<{ flow: number, yValue: number, power: number }>,
+    powerConstant: number,
+    powerFlow: number,
+    powerFlowTwo: number,
+    powerFlowThree: number,
+    powerFlowFour: number,
+    powerFlowFive: number,
+    powerFlowSix: number,
   }
   
   export interface EquipmentInputs {

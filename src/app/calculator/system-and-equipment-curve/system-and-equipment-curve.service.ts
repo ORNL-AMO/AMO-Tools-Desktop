@@ -89,9 +89,9 @@ export class SystemAndEquipmentCurveService {
     if (this.byDataInputs.getValue() != undefined && this.equipmentInputs.getValue() != undefined) {
       let secondValueLabel: string = 'Head';
       let baselinePowerDataPairs = this.regressionEquationsService.getEquipmentPowerRegressionByData(this.byDataInputs.getValue(), maxFlowRate);
-      let efficiencyResults = this.regressionEquationsService.calculatePumpEfficiency(baselinePowerDataPairs, this.pumpSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
+      // let efficiencyResults = this.regressionEquationsService.calculatePumpEfficiency(baselinePowerDataPairs, this.pumpSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
       if (equipmentType == 'fan') {
-        efficiencyResults = this.regressionEquationsService.calculateFanEfficiency(baselinePowerDataPairs, this.fanSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
+        // efficiencyResults = this.regressionEquationsService.calculateFanEfficiency(baselinePowerDataPairs, this.fanSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
         secondValueLabel = 'Pressure';
       }
       let results = this.regressionEquationsService.getEquipmentCurveRegressionByData(this.byDataInputs.getValue(), this.equipmentInputs.getValue(), secondValueLabel, maxFlowRate);
@@ -109,23 +109,35 @@ export class SystemAndEquipmentCurveService {
       if (this.selectedEquipmentCurveFormView.getValue() == 'Data') {
         this.baselineEquipmentCurveDataPairs = results.baselineDataPairs;
         this.modifiedEquipmentCurveDataPairs = results.modifiedDataPairs;
+        this.baselinePowerDataPairs = baselinePowerDataPairs;
       }
-      this.baselinePowerDataPairs = baselinePowerDataPairs;
     }
   }
 
-  calculateByEquationRegressions(equipmentType: string, maxFlowRate: number) {
+  calculateByEquationRegressions(equipmentType: string, maxFlowRate: number, settings: Settings) {
     if (this.byEquationInputs.getValue() != undefined && this.equipmentInputs.getValue() != undefined) {
       let secondValueLabel: string = 'Head';
+      let baselinePowerDataPairs = this.regressionEquationsService.getEquipmentPowerRegressionByEquation(this.byEquationInputs.getValue(), this.equipmentInputs.getValue(), maxFlowRate);
+      // let efficiencyResults = this.regressionEquationsService.calculatePumpEfficiency(baselinePowerDataPairs, this.pumpSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
       if (equipmentType == 'fan') {
+        // efficiencyResults = this.regressionEquationsService.calculateFanEfficiency(baselinePowerDataPairs, this.fanSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
         secondValueLabel = 'Pressure';
       }
       let results = this.regressionEquationsService.getEquipmentCurveRegressionByEquation(this.byEquationInputs.getValue(), this.equipmentInputs.getValue(), secondValueLabel, maxFlowRate);
       this.regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation.next(results.baselineRegressionEquation);
       this.regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation.next(results.modificationRegressionEquation);
+      
+      // TODO Need intersection sub from merged 3756 branch
+      // If intersection points exist and intersect.flow x is greater than 0
+      // if(true) {
+        // console.log('efficiency results', efficiencyResults);
+        // Add baseline/mod to intersections and call next
+      // }
+      
       if (this.selectedEquipmentCurveFormView.getValue() == 'Equation') {
         this.baselineEquipmentCurveDataPairs = results.baselineDataPairs;
         this.modifiedEquipmentCurveDataPairs = results.modifiedDataPairs;
+        this.baselinePowerDataPairs = baselinePowerDataPairs;
       }
     }
   }

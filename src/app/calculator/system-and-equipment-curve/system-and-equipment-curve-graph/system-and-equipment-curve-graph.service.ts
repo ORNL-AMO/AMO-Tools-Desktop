@@ -430,35 +430,38 @@ export class SystemAndEquipmentCurveGraphService {
       ],
       layout: {
         hovermode: 'closest',
+        height: 350,
         xaxis: {
           autorange: true,
           type: 'auto',
           showgrid: true,
           title: {
-            text: ""
+            text: "",
           },
+          showspikes: true,
+          spikemode: 'across',
           showticksuffix: 'all',
-          tickangle: -60
+          tickangle: 30
         },
         yaxis: {
           autorange: true,
           type: 'linear',
           showgrid: true,
           title: {
-            text: ""
+            text: "",
           },
           rangemode: 'tozero',
           showticksuffix: 'all'
         },
         margin: {
-          t: 50,
-          b: 75,
+          t: 25,
+          b: 50,
           l: 75,
           r: 50
         }
       },
       config: {
-        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
         displaylogo: false,
         displayModeBar: true,
         responsive: true
@@ -489,16 +492,16 @@ export class SystemAndEquipmentCurveGraphService {
       ],
       layout: {
         hovermode: 'closest',
-        height: 300,
+        height: 250,
         xaxis: {
           autorange: true,
           type: 'auto',
           showgrid: true,
           title: {
-            text: ""
+            text: "",
           },
           showticksuffix: 'all',
-          tickangle: -60
+          tickangle: 30
         },
         yaxis: {
           autorange: true,
@@ -511,14 +514,14 @@ export class SystemAndEquipmentCurveGraphService {
           showticksuffix: 'all'
         },
         margin: {
-          t: 50,
-          b: 75,
+          t: 25,
+          b: 50,
           l: 75,
           r: 50
         }
       },
       config: {
-        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
         displaylogo: false,
         displayModeBar: true,
         responsive: true
@@ -531,11 +534,14 @@ export class SystemAndEquipmentCurveGraphService {
 export interface HoverGroupData {
   baseline: DataPoint,
   modification?: DataPoint,
-  system: DataPoint,
+  system?: DataPoint,
   fluidPower?: number
 };
 
 
 export interface SystemCurveDataPoint extends DataPoint {
-  pointEfficiency?: number
+  power?: number,
+  modPower?: number,
+  efficiency?: number,
+  fluidPower?: number
 }

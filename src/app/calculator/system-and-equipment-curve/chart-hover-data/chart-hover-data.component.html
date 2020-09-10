@@ -1,4 +1,4 @@
-<table class="table pt-2 d-flex justify-content-center">
+<table class="table pt-1 d-flex justify-content-center">
     <tbody>
       <tr class="bold small text-center">
         <th class="">Current Point Data</th>
@@ -6,7 +6,7 @@
         <th class="small">{{ chartConfig.yName }} ({{ chartConfig.yUnits}})</th>
         <th class="small">Fluid Power ({{ this.settings.powerMeasurement }})</th>
       </tr>
-      <tr *ngIf="currentHoverData && currentHoverData.baseline" 
+      <tr *ngIf="currentHoverData" 
       class="bold small text-center no-border"
       [ngStyle]="{'color': currentHoverData.baseline.pointColor}">
         <td class="text-left">Baseline</td>
@@ -18,7 +18,10 @@
           <span *ngIf="currentHoverData.baseline.y">{{currentHoverData.baseline.y | number: '1.0-0'}}</span>
           <span *ngIf="!currentHoverData.baseline.y">&mdash; &mdash;</span>
         </td>
-        <td></td>
+        <td>
+          <span *ngIf="currentHoverData.fluidPower">{{currentHoverData.fluidPower | number: '1.0-1'}}</span>
+          <span *ngIf="!currentHoverData.fluidPower">&mdash; &mdash;</span>
+        </td>
       </tr>
       <tr *ngIf="currentHoverData && currentHoverData.modification" 
       class="bold small text-center no-border" 
@@ -32,9 +35,12 @@
           <span *ngIf="currentHoverData.modification.y">{{currentHoverData.modification.y | number: '1.0-0'}}</span>
           <span *ngIf="!currentHoverData.modification.y">&mdash; &mdash;</span>
         </td>
-        <td></td>
+        <td>
+          <span *ngIf="currentHoverData.modification.x && currentHoverData.fluidPower">{{currentHoverData.fluidPower | number: '1.0-1'}}</span>
+          <span *ngIf="!currentHoverData.modification.x || !currentHoverData.fluidPower">&mdash; &mdash;</span>
+        </td>
       </tr>
-      <tr *ngIf="currentHoverData && currentHoverData.system" 
+      <tr *ngIf="currentHoverData && currentHoverData.system"
       class="bold small text-center no-border"
       [ngStyle]="{'color': currentHoverData.system.pointColor}">
         <td class="text-left">System Curve</td>
@@ -47,7 +53,6 @@
           <span *ngIf="!currentHoverData.system.y">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="currentHoverData.fluidPower">{{currentHoverData.fluidPower | number: '1.0-0'}}</span>
           <span *ngIf="!currentHoverData.fluidPower">&mdash; &mdash;</span>
         </td>
       </tr>

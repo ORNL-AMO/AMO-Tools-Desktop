@@ -1,4 +1,4 @@
-  <div #ngChartContainer class="panel-chart-container" [ngClass]="{'expanded-chart': expanded, 'expanded-power-chart': powerExpanded}">
+  <div #ngChartContainer class="tab-panel-background panel-chart-container" [ngClass]="{'expanded-chart': expanded, 'expanded-power-chart': powerExpanded}">
   <div *ngIf="expanded || powerExpanded" class="row">
     <div class="col-12">
       <div class="graph-btn-container">
@@ -15,21 +15,20 @@
   <div *ngIf="expanded" class="w-100 p-3">
     <div #expandedSystemChartDiv id="expandedSystemChartDiv"></div>
     <div class="w-100 tab-panel-background">
-      <!--  Hover Data -->
       <div>
-        <app-chart-hover-data *ngIf="showHoverGroupData" [showHoverGroupData]="showHoverGroupData" [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
         <div class="col-md-12">
           <div class="graph-btn-container">
             <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
             <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip"
-              [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
+            [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
           </div>
           <div class="graph-btn-container">
             <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
             <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
-              [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
+            [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
           </div>
         </div>
+        <app-chart-hover-data [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
       </div>
     </div>
   </div>
@@ -37,8 +36,6 @@
   <div *ngIf="powerExpanded" class="w-100 p-3">
     <div #expandedPowerChartDiv id="expandedPowerChartDiv"></div>
     <div class="w-100 tab-panel-background">
-      <!--  Hover Data -->
-      <div>
         <div class="col-md-12">
           <div class="graph-btn-container">
             <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
@@ -51,18 +48,12 @@
               [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
           </div>
         </div>
-      </div>
     </div>
   </div>
 </div>
   
 <!--  System Chart -->
   <div class="w-100 p-2 tab-panel-background">
-    <div class="w-100" #systemPanelDiv id="systemPanelChartDiv">
-    </div>
-    <!--  Hover Data -->
-    <div class="">
-      <app-chart-hover-data *ngIf="showHoverGroupData" [showHoverGroupData]="showHoverGroupData" [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
       <div class="col-md-12">
         <div class="graph-btn-container">
           <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
@@ -75,11 +66,11 @@
             [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
         </div>
       </div>
+    <div class="w-100" #systemPanelDiv id="systemPanelChartDiv">
     </div>
-  </div>
 
   <!--  Power chart -->
-  <div class="w-100 mt-2 p-2" [ngClass]="{'tab-panel-background': displayPowerChart}">
+  <div class="w-100" [ngClass]="{'tab-panel-background': displayPowerChart}">
     <div class="w-100" #powerPanelChartDiv id="powerPanelChartDiv">
     </div>
     <div>
@@ -97,8 +88,9 @@
       </div>
     </div>
   </div>
+  <app-chart-hover-data [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
+</div>
 
-  
   <div class="d-flex flex-column my-2 p-2 scroll-item data-summary">
   <label class="group-label bold">Data Summary</label>
   <table class="table pt-2">
@@ -108,6 +100,8 @@
         <th class="bold w-25"> Flow ({{ chartConfig.xUnits }})</th>
         <th class="bold w-25">{{ chartConfig.yName }} ({{ chartConfig.yUnits}})</th>
         <th class="bold w-25">Efficiency (%)</th>
+        <th class="bold w-25">Power ({{ chartConfig.powerUnits }})</th>
+        <th class="bold w-25">Mod Power ({{ chartConfig.powerUnits }})</th>
         <th class="bold w-25"></th>
       </tr>
       <tr *ngFor="let point of selectedDataPoints; let index = index">
@@ -119,7 +113,18 @@
         </td>
         <td class="text-center">{{point.x | number: '1.0-0'}}</td>
         <td class="text-center">{{point.y | number: '1.0-0'}}</td>
-        <td class="text-center">{{point.efficiency | number: '1.0-2'}}</td>
+        <td class="text-center">
+          <span *ngIf="point.efficiency">{{point.efficiency | number: '1.0-0'}}</span>
+          <span *ngIf="!point.efficiency">&mdash; &mdash;</span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="point.power">{{point.power | number: '1.0-1'}}</span>
+          <span *ngIf="!point.power">&mdash; &mdash;</span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="point.modPower">{{point.modPower | number: '1.0-1'}}</span>
+          <span *ngIf="!point.modPower">&mdash; &mdash;</span>
+        </td>
         <td class='delete-row text-center'>
           <a *ngIf="index >= chartConfig.defaultPointCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
             Delete

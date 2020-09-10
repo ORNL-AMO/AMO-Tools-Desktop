@@ -61,8 +61,11 @@ export interface AxisObj {
     showgrid: boolean,
     showspikes?: boolean,
     spikemode?: string,
+    hoverinfo?: string,
+    hoverformat?: string,
     title?: {
-        text: string
+        text: string,
+        standoff?: number
     },
     tickvals?: Array<number | string>,
     ticktext?: Array<number | string>,
@@ -85,6 +88,7 @@ export interface TraceData {
     id?: string,
     showlegend?: boolean,
     hovertemplate?: string,
+    hoverinfo?: string,
     customdata?: Array<number | string>,
     text?: Array<string>,
     xaxis?: any,
@@ -127,6 +131,7 @@ export interface ChartConfig {
     xName?: string,
     yUnits?: string,
     xUnits?: string,
+    powerUnits: string
 }
 
 export interface DataPoint {
