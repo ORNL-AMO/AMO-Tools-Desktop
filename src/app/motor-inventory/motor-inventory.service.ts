@@ -36,6 +36,13 @@ export class MotorInventoryService {
     this.motorInventoryData.next(motorInventoryData);
   }
 
+  deleteMotorItem(selectedMotor: MotorItem) {
+    let motorInventoryData: MotorInventoryData = this.motorInventoryData.getValue();
+    let selectedDepartmentIndex: number = motorInventoryData.departments.findIndex(department => { return department.id == selectedMotor.departmentId });
+    let motorItemIndex: number = motorInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(motorItem => {return motorItem.id == selectedMotor.id});
+    motorInventoryData.departments[selectedDepartmentIndex].catalog.splice(motorItemIndex, 1);
+    this.motorInventoryData.next(motorInventoryData);
+  }
 
   initInventoryData(): MotorInventoryData {
     let initialDepartment: MotorInventoryDepartment = this.getNewDepartment(1);

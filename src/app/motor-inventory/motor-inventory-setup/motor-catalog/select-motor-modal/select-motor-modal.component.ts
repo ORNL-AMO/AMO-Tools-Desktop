@@ -2,8 +2,8 @@ import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/cor
 import { SuiteDbMotor } from '../../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { MotorInventoryService } from '../../../motor-inventory.service';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
+
 @Component({
   selector: 'app-select-motor-modal',
   templateUrl: './select-motor-modal.component.html',
@@ -18,7 +18,7 @@ export class SelectMotorModalComponent implements OnInit {
   @ViewChild('motorModal', { static: false }) public motorModal: ModalDirective;
 
 
-  constructor(private motorInventoryService: MotorInventoryService, ) { }
+  constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit() {
     this.motorInventoryService.modalOpen.next(true);

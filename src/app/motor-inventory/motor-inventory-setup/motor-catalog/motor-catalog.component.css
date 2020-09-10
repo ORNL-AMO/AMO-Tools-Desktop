@@ -6,3 +6,8 @@
 label.group-label{
       width: auto;
   }
+
+a.click-link.danger{
+  color: red;
+  margin-top: 10px;
+}

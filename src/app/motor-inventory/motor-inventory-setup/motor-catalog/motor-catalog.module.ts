@@ -29,6 +29,7 @@ import { ModalModule } from 'ngx-bootstrap';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentLoadEstimationModule } from '../../../calculator/motors/percent-load-estimation/percent-load-estimation.module';
+import { DeleteMotorModalComponent } from './delete-motor-modal/delete-motor-modal.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { PercentLoadEstimationModule } from '../../../calculator/motors/percent-
     OperationsDataComponent,
     TorqueDataComponent,
     OtherDataComponent,
-    PurchaseInformationDataComponent
+    PurchaseInformationDataComponent,
+    DeleteMotorModalComponent
   ],
   imports: [
     CommonModule,
