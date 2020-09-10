@@ -2,6 +2,8 @@
     <div class="col-12">
         <div class="header">
             <div class="h3">Edit Motor</div>
+            <a *ngIf="showDeleteMotorButton" class="click-link danger small pull-right"
+                (click)="openDeleteMotorModal()">Delete</a>
         </div>
     </div>
     <div class="col-12">
@@ -39,3 +41,6 @@
 
 <app-select-motor-modal *ngIf="showSelectMotorModal" (emitClose)="closeMotorSelectionModal()"
     (emitSelect)="setMotorSelection($event)"></app-select-motor-modal>
+
+<app-delete-motor-modal *ngIf="showDeleteMotorModal" (emitClose)="closeDeleteMotorModal()" (emitDelete)="deleteMotor()">
+</app-delete-motor-modal>

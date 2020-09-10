@@ -17,20 +17,31 @@ export class MotorCatalogComponent implements OnInit {
 
   selectedDepartmentIdSub: Subscription;
   showSelectMotorModal: boolean = false;
+  showDeleteMotorModal: boolean = false;
+  showDeleteMotorButton: boolean = false;
   constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
     this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(val => {
       this.motorInventoryData = val;
+      let selectedDepartmentId: string = this.motorCatalogService.selectedDepartmentId.getValue();
+      if (selectedDepartmentId) {
+        let findDepartment: MotorInventoryDepartment = this.motorInventoryData.departments.find(department => { return department.id == selectedDepartmentId });
+        if (findDepartment) {
+          this.showDeleteMotorButton = (findDepartment.catalog.length != 1);
+        }
+      }
     });
     this.selectedDepartmentIdSub = this.motorCatalogService.selectedDepartmentId.subscribe(val => {
       if (!val) {
         this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);
       } else {
         let findDepartment: MotorInventoryDepartment = this.motorInventoryData.departments.find(department => { return department.id == val });
-        if(findDepartment){
+        if (findDepartment) {
+          this.showDeleteMotorButton = (findDepartment.catalog.length != 1);
           this.motorCatalogService.selectedMotorItem.next(findDepartment.catalog[0]);
-        }else{
+        } else {
+          this.showDeleteMotorButton = (this.motorInventoryData.departments[0].catalog.length != 1);
           this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);
           this.motorCatalogService.selectedMotorItem.next(this.motorInventoryData.departments[0].catalog[0]);
         }
@@ -57,5 +68,23 @@ export class MotorCatalogComponent implements OnInit {
     let updatedMotorItem: MotorItem = this.motorCatalogService.setSuiteDbMotorProperties(dbMotor, selectedMotor);
     this.motorInventoryService.updateMotorItem(updatedMotorItem);
     this.motorCatalogService.selectedMotorItem.next(updatedMotorItem);
+  }
+
+  openDeleteMotorModal() {
+    this.showDeleteMotorModal = true;
+  }
+
+  closeDeleteMotorModal() {
+    this.showDeleteMotorModal = false;
+  }
+
+  deleteMotor() {
+    let selectedMotor: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
+    //delete
+    this.motorInventoryService.deleteMotorItem(selectedMotor)
+    //re-select department to reset data process after deleting
+    let selectedDepartmentId: string = this.motorCatalogService.selectedDepartmentId.getValue();
+    this.motorCatalogService.selectedDepartmentId.next(selectedDepartmentId);
+    this.closeDeleteMotorModal();
   }
 }
