@@ -260,7 +260,15 @@ export const MockFsatCalculator: Calculator = {
             flowThree: 0,
             flowFour: 0,
             flowFive: 0,
-            flowSix: 0
+            flowSix: 0,
+            powerConstant: 0,
+            powerOrder: 1,
+            powerFlow: 0.0000164575,
+            powerFlowTwo: -6e-10,
+            powerFlowThree: 0,
+            powerFlowFour: 0,
+            powerFlowFive: 0,
+            powerFlowSix: 0,
         },
         equipmentInputs: {
             measurementOption: 1,

@@ -13,8 +13,6 @@ export class ChartHoverDataComponent implements OnInit {
   @Input()
   currentHoverData: HoverGroupData;
   @Input()
-  showHoverGroupData: boolean;
-  @Input()
   settings: Settings;
   @Input()
   chartConfig: ChartConfig;
