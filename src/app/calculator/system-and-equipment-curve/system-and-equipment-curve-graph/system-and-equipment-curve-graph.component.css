@@ -1,3 +1,64 @@
 .hidden{
     display: none;
 }
+
+.point-key-circle {
+    width: 16px;
+      height: 16px;
+      margin: auto;
+    border-radius: 50%;
+  }
+
+  td{
+    font-size: small;
+  }
+  
+  th {
+    border-top: none;
+    padding: .25rem;
+  }
+  
+  td{
+    font-size: small;
+    padding: .25rem;
+  }
+  
+  table {
+    margin-bottom: .5rem;
+    background: white;
+  }
+
+  .tab-panel-background {
+    background: white;
+  }
+  
+  .data-summary{
+    background-color: white;
+  }
+  
+  .xsmall {
+    font-size: 1rem;
+  }
+  
+  .hidden-copy-table {
+    z-index: -10;
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    height: 0;
+    width: 0;
+  }
+
+  /*  Can't apply .expanded-chart with multiple conditions for ngClass */
+  .expanded-power-chart {
+    position: fixed;
+    top: 75px;
+    bottom: 75px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+    height: auto;
+    background-color: rgba(236, 236, 236, 1);
+    z-index: 10000;
+    box-shadow: 0px 0px 20px #000;
+  }

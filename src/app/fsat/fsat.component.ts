@@ -347,7 +347,7 @@ export class FsatComponent implements OnInit {
   }
 
   checkSetupDone(fsat: FSAT): boolean {
-    return this.fsatService.checkValid(fsat, true).isValid;
+    return this.fsatService.checkValid(fsat, true, this.settings).isValid;
   }
 
   selectModificationModal() {
@@ -365,7 +365,7 @@ export class FsatComponent implements OnInit {
     if (this.stepTab === 'system-basics') {
       return true;
     } else if (this.stepTab === 'fsat-fluid') {
-      let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity);
+      let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity, this.settings);
       if (isValid) {
         return true;
       } else {

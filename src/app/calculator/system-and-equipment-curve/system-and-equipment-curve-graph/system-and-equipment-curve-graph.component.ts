@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, HostListener } from '@angular/core';
-import * as d3 from 'd3';
-import { LineChartHelperService } from '../../../shared/helper-services/line-chart-helper.service';
-import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph.service';
-import { Settings } from '../../../shared/models/settings';
-import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
-import { RegressionEquationsService } from '../regression-equations.service';
-import { EquipmentInputs, FanSystemCurveData, PumpSystemCurveData } from '../../../shared/models/system-and-equipment-curve';
+import * as Plotly from 'plotly.js';
+import { SimpleChart, ChartConfig } from '../../../shared/models/plotting';
+import { Settings } from '../../../shared/models/settings';
+import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveGraphService, HoverGroupData, SystemCurveDataPoint } from './system-and-equipment-curve-graph.service';
+import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { CurveDataService } from '../curve-data.service';
 
 @Component({
   selector: 'app-system-and-equipment-curve-graph',
@@ -19,208 +19,363 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   settings: Settings;
   @Input()
   equipmentType: string;
-
-  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
+  
+  // DOM
   @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setGraphSize();
-    this.createSVG();
-    this.setAxisLabels();
-    this.setAxis();
-    this.createGraph();
-  }
+  @ViewChild('dataSummaryTable', { static: false }) dataSummaryTable: ElementRef;
+  dataSummaryTableString: any;
+  systemPanelChartId: string = 'systemPanelChartDiv';
+  expandedSystemChartId: string = 'expandedSystemChartDiv';
+  currentSystemChartId: string = 'systemPanelChartDiv';
 
-  expanded: boolean;
-  width: number;
-  height: number;
-  margin: { top: number, right: number, bottom: number, left: number };
+  powerPanelChartId: string = 'powerPanelChartDiv';
+  expandedPowerChartId: string = 'expandedPowerChartDiv';
+  currentPowerChartId: string = 'powerPanelChartDiv';
+  
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code === 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
+  updateGraphSub: Subscription;
+  resetSub: Subscription;
+  generateExampleSub: Subscription;
+  ignoreReset: boolean = false;
+  
+  // Tooltips
+  firstChange: boolean = true;
+  hoverBtnGridLines: boolean = false;
+  displayGridLinesTooltip: boolean = false;
+  hoverBtnExpand: boolean = false;
+  displayExpandTooltip: boolean = false;
+  hoverBtnCollapse: boolean = false;
+  displayCollapseTooltip: boolean = false;
+  expanded: boolean = false;
+  powerExpanded: boolean = false;
+  createGraphTimer: NodeJS.Timeout;
+
+  // Graphing
+  selectedDataPoints: Array<SystemCurveDataPoint>;
+  userDataPoints: Array <SystemCurveDataPoint> = [];
+  pointColors: Array<string>;
+  curveEquipmentChart: SimpleChart;
+  powerChart: SimpleChart;
+  currentHoverData: HoverGroupData;
+  chartConfig: ChartConfig = {
+    defaultPointCount: 0,
+    defaultPointOutlineColor: 'rgba(0, 0, 0, .6)',
+    defaultPointBackgroundColor: 'rgba(0, 0, 0, 0)',
+    yName: 'Pressure',
+    yUnits: '',
+    xUnits: ''
+  };
+
+  // Default traces
+  traces = {
+    'system': 0,
+    'baseline': 1,
+    'baselineIntersect': 2,
+    'modification': 3,
+    'modificationIntersect': 4,
+  };
+
+  // Update conditions/data
   isSystemCurveShown: boolean;
   isEquipmentCurveShown: boolean;
   isEquipmentModificationShown: boolean;
+  isChartSetup: boolean = false;
+  displayPowerChart: boolean = false;
+  fluidPowerData: Array<number>;
+  showHoverGroupData: boolean;
 
-  //subs
-  updateGraphSub: Subscription;
+  constructor(
+    private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
+    private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
+    private curveDataService: CurveDataService,
+    private cd: ChangeDetectorRef
+  ) { }
 
-  baselineEquipmentLine: d3.Selection<any>;
-  modificationEquipmentLine: d3.Selection<any>;
-  systemCurveLine: d3.Selection<any>;
+  ngOnInit(): void {
+    this.setChartUnits();
+    // Force resize during tab change
+    this.triggerInitialResize();
+    this.initSubscriptions();
+  }
 
-  isGridToggled: boolean = false;
-  xDomain: { min: number, max: number };
-  yDomain: { min: number, max: number };
-  focusBaselineEquipmentCurve: d3.Selection<any>;
-  focusModificationEquipmentCurve: d3.Selection<any>;
-  focusSystemCurve: d3.Selection<any>;
-  tooltipData: Array<{ label: string, value: number, unit: string, formatX: boolean }>;
-  canvasWidth: number;
+  // ngAfterViewInit() {
+  //   this.setGraphSize();
+  //   this.updateGraphSub = this.systemAndEquipmentCurveService.updateGraph.subscribe(val => {
+  //     if (val == true) {
+  //       this.isSystemCurveShown = (this.systemAndEquipmentCurveService.systemCurveCollapsed.getValue() == 'open');
+  //       this.isEquipmentCurveShown = (this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open');
+  //       this.isEquipmentModificationShown = (this.systemAndEquipmentCurveService.pumpModificationCollapsed.getValue() == 'open' || this.systemAndEquipmentCurveService.fanModificationCollapsed.getValue() == 'open');
+  //       this.createSVG();
+  //       this.setAxisLabels();
+  //       this.setAxis();
+  //       this.createGraph();
+  //     }
 
-  createGraphTimer: any;
-  hoverBtnExport: boolean = false;
-  hoverBtnGridLines: boolean = false;
-  hoverBtnExpand: boolean = false;
-  hoverBtnCollapse: boolean = false;
-  displayExportTooltip: boolean = false;
-  displayGridLinesTooltip: boolean = false;
-  displayExpandTooltip: boolean = false;
-  displayCollapseTooltip: boolean = false;
-  constructor(private lineChartHelperService: LineChartHelperService, public systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
-    private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private cd: ChangeDetectorRef) { }
+  initSubscriptions() {
+    this.updateGraphSub = this.systemAndEquipmentCurveService.updateGraph.subscribe(updateGraph => {
+      if (updateGraph == true) {
+        if (this.createGraphTimer != undefined) {
+          clearTimeout(this.createGraphTimer);
+        }
+        this.createGraphTimer = setTimeout(() => {
+          if (this.isChartSetup) {
+            this.updateChart();
+          } else {
+            this.initRenderChart();
+          }
+        }, 100);
+        this.systemAndEquipmentCurveService.updateGraph.next(false);
+      }
+    });
+    
+    // btnGenerateExample() emits both reset and updateGraph subjects
+    // This causes jumping graph visuals - ignore reset if also generateExample
+    this.generateExampleSub = this.curveDataService.generateExample.subscribe(example => {
+      if (example) {
+        this.ignoreReset = true;
+      }
+    });
 
-  ngOnInit() {
+    this.resetSub = this.curveDataService.resetForms.subscribe(reset => {
+      if (reset && !this.ignoreReset) {
+        this.displayPowerChart = false;
+        this.systemAndEquipmentCurveGraphService.initChartData();
+        this.initRenderChart();
+      }
+      this.ignoreReset = false;
+    });
   }
 
   ngOnDestroy() {
     this.updateGraphSub.unsubscribe();
+    this.generateExampleSub.unsubscribe();
+    this.resetSub.unsubscribe();
   }
 
-  ngAfterViewInit() {
-    this.setGraphSize();
-    this.updateGraphSub = this.systemAndEquipmentCurveService.updateGraph.subscribe(val => {
-      if (val == true) {
-        this.isSystemCurveShown = (this.systemAndEquipmentCurveService.systemCurveCollapsed.getValue() == 'open');
-        this.isEquipmentCurveShown = (this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open');
-        this.isEquipmentModificationShown = (this.systemAndEquipmentCurveService.pumpModificationCollapsed.getValue() == 'open' || this.systemAndEquipmentCurveService.fanModificationCollapsed.getValue() == 'open');
-        this.createSVG();
-        this.setAxisLabels();
-        this.setAxis();
-        this.createGraph();
-        this.systemAndEquipmentCurveService.updateGraph.next(false);
-      }
-    });
-  }
-
-
-  createGraph() {
-    if (this.createGraphTimer != undefined) {
-      clearTimeout(this.createGraphTimer);
-    }
-    this.createGraphTimer = setTimeout(() => {
-      this.drawSystemCurve();
-      this.drawEquipmentCurve();
-      if (this.isSystemCurveShown && this.isEquipmentCurveShown && this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs != undefined && this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.length != 0 && this.systemAndEquipmentCurveService.systemCurveRegressionData != undefined && this.systemAndEquipmentCurveService.systemCurveRegressionData.length != 0) {
-        this.addIntersectionPoints();
-      } else {
-        d3.select(this.ngChart.nativeElement).selectAll('#intersectBaseline').remove();
-        d3.select(this.ngChart.nativeElement).selectAll('#intersectModification').remove();
-      }
-      this.updateMouseOverDriver();
-    }, 100);
-  }
-
-  //setup
-  setGraphSize() {
-    this.canvasWidth = this.ngChartContainer.nativeElement.clientWidth;
-    let canvasHeight: number = this.canvasWidth * (3 / 5);
-    //conditional sizing if graph is expanded/compressed
-    if (this.expanded) {
-      canvasHeight = this.ngChartContainer.nativeElement.clientHeight * 0.9;
-    }
-    if (this.canvasWidth < 400) {
-      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
+  setDisplayDataOptions() {
+    this.isSystemCurveShown = (this.systemAndEquipmentCurveService.systemCurveCollapsed.getValue() == 'open');
+    this.isEquipmentCurveShown = (this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open');
+    if (this.isEquipmentCurveShown && this.systemAndEquipmentCurveService.equipmentInputs.getValue() != undefined) {
+      this.isEquipmentModificationShown = this.systemAndEquipmentCurveService.equipmentInputs.getValue().baselineMeasurement != this.systemAndEquipmentCurveService.equipmentInputs.getValue().modifiedMeasurement;
     } else {
-      if (!this.expanded) {
-        this.margin = { top: 10, right: 50, bottom: 75, left: 120 };
+      this.isEquipmentModificationShown = false;
+    }
+  }
+
+  setChartUnits() {
+    if (this.equipmentType == 'pump') {
+      this.chartConfig.yName = 'Head';
+      this.chartConfig.yUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.distanceMeasurement);
+      this.chartConfig.xUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.flowMeasurement);
+    } else {
+      this.chartConfig.yUnits = this.settings.fanPressureMeasurement;
+      this.chartConfig.xUnits = this.settings.fanFlowRate;
+    }
+  }
+
+  triggerInitialResize() {
+    window.dispatchEvent(new Event('resize'));
+    setTimeout(() => {
+      this.initRenderChart();
+    }, 25)
+  }
+
+  resizeGraph() {
+    let expandedChart = this.ngChartContainer.nativeElement;
+    if (expandedChart) {
+      if (this.expanded) {
+        this.currentSystemChartId = this.expandedSystemChartId;
       }
       else {
-        this.margin = { top: 10, right: 120, bottom: 75, left: 120 };
+        this.currentSystemChartId = this.systemPanelChartId;
       }
+      
+      if (this.powerExpanded) {
+        this.currentPowerChartId = this.expandedPowerChartId;
+      }
+      else {
+        this.currentPowerChartId = this.powerPanelChartId;
+      } 
+      this.initRenderChart(true);
     }
-    this.width = this.canvasWidth - this.margin.left - this.margin.right;
-    this.height = canvasHeight - this.margin.top - this.margin.bottom;
-  }
-  //setup
-  createSVG() {
-    this.ngChart = this.lineChartHelperService.clearSvg(this.ngChart);
-    this.systemAndEquipmentCurveGraphService.svg = this.lineChartHelperService.initSvg(this.ngChart, this.width, this.height, this.margin);
-    this.systemAndEquipmentCurveGraphService.svg = this.lineChartHelperService.applyFilter(this.systemAndEquipmentCurveGraphService.svg);
-    this.systemAndEquipmentCurveGraphService.svg = this.lineChartHelperService.appendRect(this.systemAndEquipmentCurveGraphService.svg, this.width, this.height);
-    this.cd.detectChanges();
   }
 
-  setAxisLabels() {
-    let xAxisLabel: string = "Flow (" + this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.fanFlowRate) + ")";
-    let yAxisLabel: string = "Pressure (" + this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.fanPressureMeasurement) + ")";
-    if (this.equipmentType == 'pump') {
-      xAxisLabel = "Flow (" + this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.flowMeasurement) + ")";
-      yAxisLabel = "Head (" + this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.distanceMeasurement) + ")";
+  save() {
+    this.systemAndEquipmentCurveGraphService.curveEquipmentChart.next(this.curveEquipmentChart);
+    this.systemAndEquipmentCurveGraphService.powerChart.next(this.powerChart);
+    this.systemAndEquipmentCurveGraphService.selectedDataPoints.next(this.selectedDataPoints);
+  }
+
+  initRenderChart(isResize = false) {
+    Plotly.purge(this.currentSystemChartId);
+    Plotly.purge(this.currentPowerChartId);
+    this.setDisplayDataOptions();
+    this.initChartSetup(isResize);
+    this.drawTraceData();
+
+    let chartLayout = JSON.parse(JSON.stringify(this.curveEquipmentChart.layout));
+    Plotly.newPlot(this.currentSystemChartId, this.curveEquipmentChart.data, chartLayout, this.curveEquipmentChart.config)
+      .then(chart => {
+        chart.on('plotly_click', (graphData) => {
+          this.createDataPoint(graphData);
+        });
+          chart.on('plotly_hover', hoverData => {
+            if (hoverData.points[0].pointIndex != 0 && this.showHoverGroupData) {
+                this.initHoverGroupData(hoverData);
+            }
+          });
+          chart.on('plotly_unhover', unhoverData => {
+            if (this.showHoverGroupData) {
+              this.removeHoverGroupData();
+            }
+          });
+    });
+
+    if (this.displayPowerChart) {
+      let powerChartLayout = JSON.parse(JSON.stringify(this.powerChart.layout));
+      Plotly.newPlot(this.currentPowerChartId, this.powerChart.data, powerChartLayout, this.powerChart.config);
     }
-    this.lineChartHelperService.setXAxisLabel(this.systemAndEquipmentCurveGraphService.svg, this.width, this.height, 0, 70, xAxisLabel);
-    this.lineChartHelperService.setYAxisLabel(this.systemAndEquipmentCurveGraphService.svg, this.width, this.height, -60, 0, yAxisLabel);
+    this.save();
   }
 
-  setAxis() {
-    d3.select(this.ngChart.nativeElement).selectAll('.axis-label').remove();
-    let maxFlowRate: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
-    let domainAndRanges = this.systemAndEquipmentCurveGraphService.getGraphDomainAndRange(
-      this.isEquipmentCurveShown,
-      this.isSystemCurveShown,
-      this.equipmentType,
-      this.width,
-      this.height,
-      this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs,
-      this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs,
-      this.systemAndEquipmentCurveService.pumpSystemCurveData.getValue(),
-      this.systemAndEquipmentCurveService.fanSystemCurveData.getValue(),
-      maxFlowRate
-    );
-    this.xDomain = domainAndRanges.xDomain;
-    this.yDomain = domainAndRanges.yDomain;
-    this.systemAndEquipmentCurveGraphService.xRef = this.lineChartHelperService.setScale("linear", domainAndRanges.xRange, this.xDomain);
-    this.systemAndEquipmentCurveGraphService.yRef = this.lineChartHelperService.setScale("linear", domainAndRanges.yRange, this.yDomain);
-    let tickFormat = d3.format("d")
-    this.lineChartHelperService.setXAxis(this.systemAndEquipmentCurveGraphService.svg, this.systemAndEquipmentCurveGraphService.xRef, this.height, this.isGridToggled, 5, null, null, null, tickFormat);
-    this.lineChartHelperService.setYAxis(this.systemAndEquipmentCurveGraphService.svg, this.systemAndEquipmentCurveGraphService.yRef, this.width, this.isGridToggled, 6, 0, 0, 15, null);
+  updateChart() {
+    this.setDisplayDataOptions();
+    this.drawTraceData();
+    let chartLayout = JSON.parse(JSON.stringify(this.curveEquipmentChart.layout));
+    Plotly.update(this.currentSystemChartId, this.curveEquipmentChart.data, chartLayout);
+    if (this.displayPowerChart) {
+      let powerChartLayout = JSON.parse(JSON.stringify(this.powerChart.layout));
+      Plotly.newPlot(this.currentPowerChartId, this.powerChart.data, powerChartLayout, this.powerChart.config);
+    }
   }
 
-  //equipment curves
-  drawEquipmentCurve() {
+  initChartSetup(isResize) {
+    this.showHoverGroupData = false;
+    this.pointColors = graphColors;
+    this.currentHoverData = undefined;
+    this.fluidPowerData = [];
+
+    if (this.curveEquipmentChart && !isResize) {
+      this.systemAndEquipmentCurveGraphService.initChartData();
+    }
+
+    let currentSystemChart = this.systemAndEquipmentCurveGraphService.curveEquipmentChart.getValue();
+    let currentPowerChart = this.systemAndEquipmentCurveGraphService.powerChart.getValue();
+    if (currentSystemChart.currentEquipmentType != this.equipmentType) {
+
+      this.systemAndEquipmentCurveGraphService.initChartData();
+      this.curveEquipmentChart = this.systemAndEquipmentCurveGraphService.curveEquipmentChart.getValue();
+      this.curveEquipmentChart.currentEquipmentType = this.equipmentType;
+      this.systemAndEquipmentCurveGraphService.curveEquipmentChart.next(this.curveEquipmentChart);
+
+      this.powerChart = this.systemAndEquipmentCurveGraphService.powerChart.getValue();
+      this.systemAndEquipmentCurveGraphService.powerChart.next(this.powerChart);
+    } else {
+      this.curveEquipmentChart = currentSystemChart;
+      this.powerChart = currentPowerChart;
+    }
+
+    this.selectedDataPoints = this.systemAndEquipmentCurveGraphService.selectedDataPoints.getValue();
+    this.curveEquipmentChart.layout.xaxis.title.text = `Flow (${this.chartConfig.xUnits})`;
+    this.curveEquipmentChart.layout.yaxis.title.text = `${this.chartConfig.yName} (${this.chartConfig.yUnits})`;
+    this.isChartSetup = true;
+  }
+
+  drawTraceData() {
+    if (this.isSystemCurveShown == true && this.systemAndEquipmentCurveService.systemCurveRegressionData != undefined) {
+      this.showHoverGroupData = true;
+      this.drawSystemCurve();
+    } 
     if (this.isEquipmentCurveShown == true) {
       if (this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs != undefined && this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs != undefined) {
-        this.drawBaselineEquipmentCurve(this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs);
+        this.drawEquipmentCurve(this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.traces.baseline, 'Baseline');
         if (this.isEquipmentModificationShown == true) {
-          this.drawModificationEquipmentCurve(this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs);
-        } else {
-          d3.select(this.ngChart.nativeElement).selectAll('.modification-equipment-curve').remove();
-        }
+          this.drawEquipmentCurve(this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs, this.traces.modification, 'Modification');
+        } 
       }
-    } else if (this.ngChart) {
-      d3.select(this.ngChart.nativeElement).selectAll('.modification-equipment-curve').remove();
-      d3.select(this.ngChart.nativeElement).selectAll('.baseline-equipment-curve').remove();
+    } 
+    if (this.systemAndEquipmentCurveService.baselinePowerDataPairs && this.systemAndEquipmentCurveService.baselinePowerDataPairs.length > 0) {
+      this.drawPowerLine(this.systemAndEquipmentCurveService.baselinePowerDataPairs);
+      this.displayPowerChart = true;
+    } else {
+      this.displayPowerChart = false;
     }
+
+    if (this.isSystemCurveShown && this.isEquipmentCurveShown
+      && this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs != undefined
+      && this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.length != 0
+      && this.systemAndEquipmentCurveService.systemCurveRegressionData != undefined
+      && this.systemAndEquipmentCurveService.systemCurveRegressionData.length != 0
+      ) {
+        this.addIntersectionPoints();
+      }
   }
 
-  drawBaselineEquipmentCurve(baselineData: Array<{ x: number, y: number }>) {
-    d3.select(this.ngChart.nativeElement).selectAll('#focusBaselineEquipmentCurve').remove();
-    d3.select(this.ngChart.nativeElement).selectAll('.baseline-equipment-curve').remove();
-    this.baselineEquipmentLine = this.lineChartHelperService.appendLine(this.systemAndEquipmentCurveGraphService.svg, "#145A32", "2px");
-    this.baselineEquipmentLine = this.lineChartHelperService.drawLine(this.baselineEquipmentLine, this.systemAndEquipmentCurveGraphService.xRef, this.systemAndEquipmentCurveGraphService.yRef, baselineData, 'baseline-equipment-curve');
-    this.focusBaselineEquipmentCurve = this.lineChartHelperService.appendFocus(this.systemAndEquipmentCurveGraphService.svg, "focusBaselineEquipmentCurve");
-  }
-
-  drawModificationEquipmentCurve(modificationData: Array<{ x: number, y: number }>) {
-    d3.select(this.ngChart.nativeElement).selectAll('#focusModificationEquipmentCurve').remove();
-    d3.select(this.ngChart.nativeElement).selectAll('.modification-equipment-curve').remove();
-    this.modificationEquipmentLine = this.lineChartHelperService.appendLine(this.systemAndEquipmentCurveGraphService.svg, "#3498DB", "2px");
-    this.modificationEquipmentLine = this.lineChartHelperService.drawLine(this.modificationEquipmentLine, this.systemAndEquipmentCurveGraphService.xRef, this.systemAndEquipmentCurveGraphService.yRef, modificationData, 'modification-equipment-curve');
-    this.focusModificationEquipmentCurve = this.lineChartHelperService.appendFocus(this.systemAndEquipmentCurveGraphService.svg, "focusModificationEquipmentCurve");
-  }
-
-  //system curve
   drawSystemCurve() {
-    d3.select(this.ngChart.nativeElement).selectAll('.system-curve').remove();
-    if (this.isSystemCurveShown == true && this.systemAndEquipmentCurveService.systemCurveRegressionData != undefined) {
-      this.systemCurveLine = this.lineChartHelperService.appendLine(this.systemAndEquipmentCurveGraphService.svg, "red", "2px", "stroke-dasharray", "3, 3");
-      this.systemCurveLine = this.lineChartHelperService.drawLine(this.systemCurveLine, this.systemAndEquipmentCurveGraphService.xRef, this.systemAndEquipmentCurveGraphService.yRef, this.systemAndEquipmentCurveService.systemCurveRegressionData, 'system-curve');
-      this.focusSystemCurve = this.lineChartHelperService.appendFocus(this.systemAndEquipmentCurveGraphService.svg, "focusSystemCurve");
-    }
+    let curveTraceData: Array<any> = this.systemAndEquipmentCurveService.systemCurveRegressionData;
+    let xTmp = [];
+    let yTmp = [];
+    let fluidTmp = [];
+
+    curveTraceData.forEach(coordinate => {
+      xTmp.push(coordinate.x);
+      yTmp.push(coordinate.y);
+      fluidTmp.push(coordinate.fluidPower);
+    });
+    this.curveEquipmentChart.data[this.traces.system].x = xTmp;
+    this.curveEquipmentChart.data[this.traces.system].y = yTmp;
+    this.fluidPowerData = fluidTmp;
+    this.setHoverTemplate('System Curve', this.traces.system);
+  }
+
+  drawEquipmentCurve(traceData: Array <SystemCurveDataPoint>, traceIndex: number, traceTitle: string) {
+    let xTmp = [];
+    let yTmp = [];
+    traceData.forEach(coordinate => {
+      xTmp.push(coordinate.x);
+      yTmp.push(coordinate.y);
+    });
+    this.curveEquipmentChart.data[traceIndex].x = xTmp;
+    this.curveEquipmentChart.data[traceIndex].y = yTmp;
+    this.curveEquipmentChart.data[traceIndex].line.color = this.pointColors[traceIndex - 1];
+    this.setHoverTemplate(traceTitle, traceIndex);
+  }
+
+  drawPowerLine(traceData: Array <SystemCurveDataPoint>) {
+    let xTmp = [];
+    let yTmp = [];
+    traceData.forEach(coordinate => {
+      xTmp.push(coordinate.x);
+      yTmp.push(coordinate.y);
+    });
+    this.powerChart.data[0].x = xTmp;
+    this.powerChart.data[0].y = yTmp;
+    this.powerChart.layout.xaxis.title.text = `Flow (${this.chartConfig.xUnits})`;
+    this.powerChart.layout.yaxis.title.text = 'Power ' + `(${this.settings.fanPowerMeasurement})`;
+
+    this.powerChart.data[0].line.color = this.pointColors[this.curveEquipmentChart.data.length - 1];
+    this.setHoverTemplate('Power', 0);
+  }
+
+  setHoverTemplate(traceTitle: string, traceIndex) {
+    let template = `${traceTitle}<br>Flow: %{x} ${this.chartConfig.xUnits}<br>${this.chartConfig.yName}: %{y} ${this.chartConfig.yUnits}<br>`;
+    this.curveEquipmentChart.data[traceIndex].hovertemplate = template;
   }
 
   addIntersectionPoints() {
-    d3.select(this.ngChart.nativeElement).selectAll('#intersectBaseline').remove();
-    d3.select(this.ngChart.nativeElement).selectAll('#intersectModification').remove();
-    let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs);
+    // let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs);
+    // TODO add pointEfficiency to incoming intersection from 3756
+    let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.systemCurveRegressionData);
     if (baselineIntersectionPoint != undefined) {
+      this.chartConfig.defaultPointCount = 1;
+      this.setIntersectionTrace(baselineIntersectionPoint, this.traces.baselineIntersect, 'Baseline');
       this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.next(baselineIntersectionPoint);
     }
     if (this.isEquipmentModificationShown && this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs != undefined) {
@@ -228,9 +383,12 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
       // let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(baselineIntersectionPoint, this.settings, this.equipmentType, this.systemAndEquipmentCurveService.equipmentInputs.getValue());
       // let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(this.equipmentType, this.settings, this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs);
+      // let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(this.settings, this.equipmentType, this.systemAndEquipmentCurveService.equipmentInputs.getValue());
 
       if (modIntersectionPoint != undefined) {
         this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(modIntersectionPoint);
+        this.chartConfig.defaultPointCount = 2;
+        this.setIntersectionTrace(modIntersectionPoint, this.traces.modificationIntersect, 'Modification');
       }
     }
   }
@@ -265,100 +423,174 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
 
+  // initTooltipData() {
+  //   this.tooltipData = new Array<{ label: string, value: number, unit: string, formatX: boolean }>();
+  //   this.tooltipData = this.systemAndEquipmentCurveGraphService.initTooltipData(this.settings, this.equipmentType, this.isEquipmentCurveShown, this.isEquipmentModificationShown, this.isSystemCurveShown);
+  // }
+  
+  // TODO this may be eliminated for separate hover tags
+  initHoverGroupData(hoverEventData) {
+    let currentPointIndex = hoverEventData.points[0].pointIndex;
+    let systemX = this.curveEquipmentChart.data[this.traces.system].x;
+    let systemY = this.curveEquipmentChart.data[this.traces.system].y;
+    let baselineX = this.curveEquipmentChart.data[this.traces.baseline].x;
+    let baselineY = this.curveEquipmentChart.data[this.traces.baseline].y;
 
+    this.currentHoverData = {
+      system: {
+        x: Number(systemX[currentPointIndex]),
+        y: Number(systemY[currentPointIndex]),
+        pointColor: 'red'
+      },
+      baseline: {
+        x: Number(baselineX[currentPointIndex]),
+        y: Number(baselineY[currentPointIndex]),
+        pointColor: this.pointColors[this.traces.baseline - 1]
+      },
+      fluidPower: this.fluidPowerData[currentPointIndex]
+    };
 
-  initTooltipData() {
-    this.tooltipData = new Array<{ label: string, value: number, unit: string, formatX: boolean }>();
-    this.tooltipData = this.systemAndEquipmentCurveGraphService.initTooltipData(this.settings, this.equipmentType, this.isEquipmentCurveShown, this.isEquipmentModificationShown, this.isSystemCurveShown);
+    if (this.isEquipmentModificationShown) {
+      let modificationX = this.curveEquipmentChart.data[this.traces.modification].x;
+      let modificationY = this.curveEquipmentChart.data[this.traces.modification].y;
+      this.currentHoverData.modification = {
+        x: Number(modificationX[currentPointIndex]),
+        y: Number(modificationY[currentPointIndex]),
+        pointColor: this.pointColors[this.traces.modification - 1]
+      };
+    }
+    this.cd.detectChanges();
   }
 
-  updateMouseOverDriver() {
-    this.initTooltipData();
-    //get all data
-    let allData: Array<Array<any>> = new Array<Array<any>>();
-    if (this.isEquipmentCurveShown && this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs != undefined) {
-      allData.push(this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs)
-      if (this.isEquipmentModificationShown && this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs != undefined) {
-        allData.push(this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs);
+  removeHoverGroupData() {
+    this.currentHoverData = {
+      system: {
+        x: 0,
+        y: 0,
+        pointColor: ''
+      },
+      baseline: {
+        x: 0,
+        y: 0,
+        pointColor: ''
+      },
+      fluidPower: 0
+    };
+
+    if (this.isEquipmentModificationShown) {
+      this.currentHoverData.modification = {
+        x: 0,
+        y: 0,
+        pointColor: ''
       }
     }
-    if (this.isSystemCurveShown) {
-      if (this.equipmentType == 'pump' && this.systemAndEquipmentCurveService.systemCurveRegressionData != undefined) {
-        allData.push(this.systemAndEquipmentCurveService.systemCurveRegressionData);
-      } else if (this.equipmentType == 'fan' && this.systemAndEquipmentCurveService.systemCurveRegressionData != undefined) {
-        allData.push(this.systemAndEquipmentCurveService.systemCurveRegressionData);
+    this.cd.detectChanges();
+  }
+
+  setIntersectionTrace(point: SystemCurveDataPoint, traceDataIndex: number, name: string) {
+    let intersectionTrace = this.curveEquipmentChart.data[traceDataIndex];
+    intersectionTrace.x = [Math.round(point.x)];
+    intersectionTrace.y = [Math.round(point.y)];
+    intersectionTrace.hovertemplate = `${name} Intersection<br>Flow: %{x} ${this.chartConfig.xUnits}<br>${this.chartConfig.yName}: %{y} ${this.chartConfig.yUnits}`;
+    
+    this.curveEquipmentChart.data[traceDataIndex] = intersectionTrace;
+
+    let selectedPoint: SystemCurveDataPoint = {
+      pointColor: this.chartConfig.defaultPointBackgroundColor,
+      pointOutlineColor: this.chartConfig.defaultPointOutlineColor,
+      pointTraceIndex: traceDataIndex,
+      x: point.x,
+      y: point.y
+    }
+
+    let updatedPoint = false;
+    this.selectedDataPoints.forEach(point => {
+      if (point.pointTraceIndex == traceDataIndex) {
+        point = selectedPoint;
+        updatedPoint = true;
+      }
+    });
+    if (!updatedPoint) {
+      if (name == 'Modification') {
+        this.selectedDataPoints.splice(1, 0, selectedPoint);
+      } else {
+        this.selectedDataPoints.push(selectedPoint);
       }
     }
-    let allD: Array<any> = new Array<any>();
-    let allFocus: Array<d3.Selection<any>> = new Array<d3.Selection<any>>();
-    if (this.focusBaselineEquipmentCurve != undefined) {
-      allFocus.push(this.focusBaselineEquipmentCurve)
-    }
-    if (this.focusModificationEquipmentCurve != undefined) {
-      allFocus.push(this.focusModificationEquipmentCurve)
-    }
-    if (this.focusSystemCurve != undefined) {
-      allFocus.push(this.focusSystemCurve)
-    }
-
-    let detailBox = this.lineChartHelperService.appendDetailBox(this.ngChart);
-    let detailBoxPointer = this.lineChartHelperService.appendDetailBoxPointer(this.ngChart);
-    let format = d3.format(",.2f");
-    this.lineChartHelperService.mouseOverDriver(
-      this.systemAndEquipmentCurveGraphService.svg,
-      detailBox,
-      detailBoxPointer,
-      this.margin,
-      allD,
-      allFocus,
-      allData,
-      this.systemAndEquipmentCurveGraphService.xRef,
-      this.systemAndEquipmentCurveGraphService.yRef,
-      format,
-      format,
-      this.tooltipData,
-      this.canvasWidth,
-      ["fluidPower"]
-    );
+    this.cd.detectChanges();
+    this.save();
   }
 
-  addDataPoint() {
-    let dArray: Array<any> = this.lineChartHelperService.getDArray();
-    this.systemAndEquipmentCurveGraphService.selectedDataPoint.next(dArray);
+  createDataPoint(graphData, existingPoint?: SystemCurveDataPoint) {
+    let selectedPoint = existingPoint;
+    if (!selectedPoint) {
+      selectedPoint = {
+        pointColor: this.getNextColor(),
+        x: graphData.points[0].x,
+        y: graphData.points[0].y
+      }
+    }
+    let selectedPointTrace = this.systemAndEquipmentCurveGraphService.getTraceDataFromPoint(selectedPoint);
+    let hoverTemplate = `Flow: ${selectedPoint.x} ${this.chartConfig.xUnits}<br>${this.chartConfig.yName}: ${selectedPoint.y}  ${this.chartConfig.yUnits}<br>`;
+    selectedPointTrace.hovertemplate = hoverTemplate;
+
+    Plotly.addTraces(this.currentSystemChartId, selectedPointTrace);
+    this.selectedDataPoints.push(selectedPoint);
+    
+    this.cd.detectChanges();
+    this.save();
   }
 
-  // ========== export/gridline tooltip functions ==========
-  // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
-  // for example, check motor-performance-graph.module.ts
-  initTooltip(btnType: string) {
-    if (btnType === 'btnExportChart') {
-      this.hoverBtnExport = true;
+  deleteDataPoint(point: SystemCurveDataPoint, index: number) {
+    let traceCount: number = this.curveEquipmentChart.data.length;
+    let deleteTraceIndex: number = this.curveEquipmentChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
+    // ignore default traces
+    if (traceCount > this.chartConfig.defaultPointCount && deleteTraceIndex != -1) {
+      Plotly.deleteTraces(this.currentSystemChartId, [deleteTraceIndex]);
+      this.selectedDataPoints.splice(index, 1);
+      this.cd.detectChanges();
+      this.save();
     }
-    else if (btnType === 'btnGridLines') {
-      this.hoverBtnGridLines = true;
+  }
+
+  updateTableString() {
+    this.dataSummaryTableString = this.dataSummaryTable.nativeElement.innerText;
+  }
+
+  getNextColor(): string {
+    return this.pointColors[(this.curveEquipmentChart.data.length + 1) % this.pointColors.length];
+  }
+
+  expandChart(chart = 'system') {
+    if (chart == 'power') {
+      this.powerExpanded = true;
+    } else {
+      this.expanded = true;
     }
-    else if (btnType === 'btnExpandChart') {
-      this.hoverBtnExpand = true;
-    }
-    else if (btnType === 'btnCollapseChart') {
-      this.hoverBtnCollapse = true;
-    }
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.checkHover(btnType);
-    }, 700);
+      this.resizeGraph();
+    }, 100);
   }
+
+  contractChart(chart = 'system') {
+    if (chart == 'power') {
+      this.powerExpanded = false;
+    } else {
+      this.expanded = false;
+    }
+    
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100);
+  }
+  
 
   hideTooltip(btnType: string) {
-
-    if (btnType === 'btnExportChart') {
-      this.hoverBtnExport = false;
-      this.displayExportTooltip = false;
-    }
-    else if (btnType === 'btnGridLines') {
-      this.hoverBtnGridLines = false;
-      this.displayGridLinesTooltip = false;
-    }
-    else if (btnType === 'btnExpandChart') {
+    if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = false;
       this.displayExpandTooltip = false;
     }
@@ -366,15 +598,34 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
+    else if (btnType === 'btnGridLines') {
+      this.hoverBtnGridLines = false;
+      this.displayGridLinesTooltip = false;
+    }
+  }
+
+  initTooltip(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType === 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
+    }
+    else if (btnType === 'btnGridLines') {
+      this.hoverBtnGridLines = true;
+    }
+    setTimeout(() => {
+      this.checkHover(btnType);
+    }, 200);
   }
 
   checkHover(btnType: string) {
-    if (btnType === 'btnExportChart') {
-      if (this.hoverBtnExport) {
-        this.displayExportTooltip = true;
+    if (btnType === 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
       }
       else {
-        this.displayExportTooltip = false;
+        this.displayExpandTooltip = false;
       }
     }
     else if (btnType === 'btnGridLines') {
@@ -383,14 +634,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       }
       else {
         this.displayGridLinesTooltip = false;
-      }
-    }
-    else if (btnType === 'btnExpandChart') {
-      if (this.hoverBtnExpand) {
-        this.displayExpandTooltip = true;
-      }
-      else {
-        this.displayExpandTooltip = false;
       }
     }
     else if (btnType === 'btnCollapseChart') {
@@ -403,43 +646,13 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     }
   }
 
-
-  downloadChart() {
-    this.systemAndEquipmentCurveGraphService.downloadChart(this.ngChart, this.equipmentType);
-  }
-
   toggleGrid() {
-    this.isGridToggled = !this.isGridToggled;
-    this.setAxis();
-    this.createGraph();
+    let showingGridX: boolean = this.curveEquipmentChart.layout.xaxis.showgrid;
+    let showingGridY: boolean = this.curveEquipmentChart.layout.yaxis.showgrid;
+    this.curveEquipmentChart.layout.xaxis.showgrid = !showingGridX;
+    this.curveEquipmentChart.layout.yaxis.showgrid = !showingGridY;
+    this.updateChart();
   }
 
-  expandChart() {
-    this.expanded = true;
-    this.hideTooltip('btnExpandChart');
-    this.hideTooltip('btnCollapseChart');
-    setTimeout(() => {
-      this.setGraphSize();
-      this.createSVG();
-      this.setAxisLabels();
-      this.setAxis();
-      this.createGraph();
-    }, 200);
-  }
-
-  contractChart() {
-    this.expanded = false;
-    this.hideTooltip('btnExpandChart');
-    this.hideTooltip('btnCollapseChart');
-    setTimeout(() => {
-      this.setGraphSize();
-      this.createSVG();
-      this.setAxisLabels();
-      this.setAxis();
-      this.createGraph();
-    }, 200);
-  }
-  // ========== end tooltip functions ==========
 }
-
 

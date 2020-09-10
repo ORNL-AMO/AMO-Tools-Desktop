@@ -130,7 +130,7 @@ export class FsatService {
 
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
-    let fsatValid: FsatValid = this.checkValid(fsat, isBaseline)
+    let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
     if (fsatValid.isValid) {
       if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
         fsat.fieldData.operatingHours = fsat.fieldData.operatingFraction * 8760;
@@ -190,8 +190,8 @@ export class FsatService {
     return tmpSavingsPercent;
   }
 
-  checkValid(fsat: FSAT, isBaseline: boolean): FsatValid {
-    let fsatFluidValid: boolean = this.fsatFluidService.isFanFluidValid(fsat.baseGasDensity);
+  checkValid(fsat: FSAT, isBaseline: boolean, settings): FsatValid {
+    let fsatFluidValid: boolean = this.fsatFluidService.isFanFluidValid(fsat.baseGasDensity, settings);
     let fieldDataValid: boolean = this.fanFieldDataService.isFanFieldDataValid(fsat.fieldData);
     let fanSetupValid: boolean = this.fanSetupService.isFanSetupValid(fsat.fanSetup, !isBaseline);
     let fanMotorValid: boolean = this.fanMotorService.isFanMotorValid(fsat.fanMotor);
@@ -240,7 +240,6 @@ export class FsatService {
 
   compressibilityFactor(inputs: CompressibilityFactor, settings: Settings) {
     let inputCpy: CompressibilityFactor = JSON.parse(JSON.stringify(inputs));
-    console.log(inputCpy);
     inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from(settings.fanFlowRate).to('ft3/min');
     inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
     inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');

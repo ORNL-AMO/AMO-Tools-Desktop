@@ -37,6 +37,7 @@ export class SystemAndEquipmentCurveService {
   baselineEquipmentCurveDataPairs: Array<{ x: number, y: number }>;
   modifiedEquipmentCurveDataPairs: Array<{ x: number, y: number }>;
   systemCurveRegressionData: Array<{ x: number, y: number, fluidPower: number }>;
+  baselinePowerDataPairs: Array<{ x: number, y: number }>;
 
   //data points for system curve dropdown in assessment
   systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }>;
@@ -107,11 +108,13 @@ export class SystemAndEquipmentCurveService {
   }
 
 
-  calculateByDataRegression(equipmentType: string, maxFlowRate: number) {
-    if (this.byDataInputs.getValue() != undefined 
-        && this.equipmentInputs.getValue() != undefined) {
+  calculateByDataRegression(equipmentType: string, maxFlowRate: number, settings: Settings) {
+    if (this.byDataInputs.getValue() != undefined && this.equipmentInputs.getValue() != undefined) {
       let secondValueLabel: string = 'Head';
+      let baselinePowerDataPairs = this.regressionEquationsService.getEquipmentPowerRegressionByData(this.byDataInputs.getValue(), maxFlowRate);
+      let efficiencyResults = this.regressionEquationsService.calculatePumpEfficiency(baselinePowerDataPairs, this.pumpSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
       if (equipmentType == 'fan') {
+        efficiencyResults = this.regressionEquationsService.calculateFanEfficiency(baselinePowerDataPairs, this.fanSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
         secondValueLabel = 'Pressure';
       }
       let results = this.regressionEquationsService.getEquipmentCurveRegressionByData(this.byDataInputs.getValue(), this.equipmentInputs.getValue(), this.modificationEquipment.getValue(), secondValueLabel, maxFlowRate);
@@ -120,12 +123,20 @@ export class SystemAndEquipmentCurveService {
       this.regressionEquationsService.baselineEquipmentCurveByDataRSquared.next(results.baselineRSquared);
       this.regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation.next(results.modificationRegressionEquation);
       this.regressionEquationsService.modificationEquipmentCurveRSquared.next(results.modificationRSquared);
+      
+      // TODO Need intersection sub from merged 3756 branch
+      // If intersection points exist and intersect.flow x is greater than 0
+      // if(true) {
+        // console.log('efficiency results', efficiencyResults);
+        // Add baseline/mod to intersections and call next
+      // }
       if (this.selectedEquipmentCurveFormView.getValue() == 'Data') {
         this.baselineEquipmentCurveDataPairs = results.baselineDataPairs;
         this.modifiedEquipmentCurveDataPairs = results.modifiedDataPairs;
         console.log('baseline', this.baselineEquipmentCurveDataPairs);
         console.log('modification', this.baselineEquipmentCurveDataPairs);
       }
+      this.baselinePowerDataPairs = baselinePowerDataPairs;
     }
   }
 

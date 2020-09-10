@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { SvgToPngService } from '../../../shared/helper-services/svg-to-png.service';
 import { PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../../../shared/models/system-and-equipment-curve';
 import { intersection } from 'lodash';
+import { SimpleChart, DataPoint, TraceData } from '../../../shared/models/plotting';
 @Injectable()
 export class SystemAndEquipmentCurveGraphService {
 
@@ -18,12 +19,30 @@ export class SystemAndEquipmentCurveGraphService {
   xRef: any;
   yRef: any;
   svg: any;
+
+  curveEquipmentChart: BehaviorSubject<SimpleChart>;
+  powerChart: BehaviorSubject<SimpleChart>;
+  selectedDataPoints: BehaviorSubject<Array<DataPoint>>;
+
   constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private svgToPngService: SvgToPngService) {
     this.selectedDataPoint = new BehaviorSubject(undefined);
     this.baselineIntersectionPoint = new BehaviorSubject(undefined);
     this.modificationIntersectionPoint = new BehaviorSubject(undefined);
     this.clearDataPoints = new BehaviorSubject<boolean>(false);
+
+    this.initChartData();
   }
+
+  initChartData() {
+    let emptyChart: SimpleChart = this.getEmptyChart();
+    let emptyPowerChart: SimpleChart = this.getEmptyPowerChart();
+    let dataPoints = new Array<DataPoint>();
+    
+    this.curveEquipmentChart = new BehaviorSubject<SimpleChart>(emptyChart);
+    this.powerChart = new BehaviorSubject<SimpleChart>(emptyPowerChart);
+    this.selectedDataPoints = new BehaviorSubject<Array<DataPoint>>(dataPoints);
+  }
+
 
   initColumnTitles(settings: Settings, equipmentType: string, displayEquipmentCurve: boolean, displayModificationCurve: boolean, displaySystemCurve: boolean): Array<string> {
     let columnTitles: Array<string> = new Array<string>();
@@ -273,4 +292,208 @@ export class SystemAndEquipmentCurveGraphService {
     }
     return exportName;
   }
+
+  getTraceDataFromPoint(selectedPoint: DataPoint): TraceData {
+    let trace: TraceData = {
+      x: [selectedPoint.x],
+      y: [selectedPoint.y],
+      type: 'scatter',
+      name: '',
+      showlegend: false,
+      mode: 'markers',
+      marker: {
+        color: selectedPoint.pointColor,
+        size: 14,
+      },
+    };
+    return trace;
+  }
+
+  getEmptyChart(): SimpleChart {
+    return {
+      name: 'System and Equipment Curve',
+      currentEquipmentType: '',
+      data: [
+        // System
+        {
+          x: [],
+          y: [],
+          name: '',
+          showlegend: false,
+          type: 'scatter',
+          line: {
+            shape: 'spline',
+            color: 'red',
+            dash: 'dot',
+          }
+        },
+        // Baseline
+        {
+          x: [],
+          y: [],
+          name: '',
+          showlegend: false,
+          type: 'scatter',
+          line: {
+            shape: 'spline',
+            color: undefined,
+          }
+        },
+        // Baseline Intersect
+        {
+          x: [],
+          y: [],
+          type: 'scatter',
+          showlegend: false,
+          mode: 'markers',
+          name: '',
+          marker: {
+            color: 'rgba(0, 0, 0, 0)',
+            line: {
+              color: 'rgba(0, 0, 0, .6)',
+              width: 4,
+            },
+            size: 12,
+          },
+        },
+        // Modification
+        {
+          x: [],
+          y: [],
+          name: '',
+          showlegend: false,
+          type: 'scatter',
+          line: {
+            shape: 'spline',
+            color: undefined,
+          }
+        },
+        // Modification Intersect
+        {
+          x: [],
+          y: [],
+          type: 'scatter',
+          showlegend: false,
+          mode: 'markers',
+          name: '',
+          marker: {
+            color: 'rgba(0, 0, 0, 0)',
+            line: {
+              color: 'rgba(0, 0, 0, .6)',
+              width: 4
+            },
+            size: 12,
+          },
+        },
+      ],
+      layout: {
+        hovermode: 'closest',
+        xaxis: {
+          autorange: true,
+          type: 'auto',
+          showgrid: true,
+          title: {
+            text: ""
+          },
+          showticksuffix: 'all',
+          tickangle: -60
+        },
+        yaxis: {
+          autorange: true,
+          type: 'linear',
+          showgrid: true,
+          title: {
+            text: ""
+          },
+          rangemode: 'tozero',
+          showticksuffix: 'all'
+        },
+        margin: {
+          t: 50,
+          b: 75,
+          l: 75,
+          r: 50
+        }
+      },
+      config: {
+        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true
+      },
+      selectedAxis: 0
+    };
+  }
+
+  getEmptyPowerChart(): SimpleChart {
+    return {
+      name: 'Power',
+      currentEquipmentType: '',
+      data: [
+        // Power
+        {
+          x: [],
+          y: [],
+          name: '',
+          showlegend: false,
+          type: 'scatter',
+  
+          line: {
+            shape: 'spline',
+            color: undefined,
+            smoothing: 1.3
+          }
+        },
+      ],
+      layout: {
+        hovermode: 'closest',
+        height: 300,
+        xaxis: {
+          autorange: true,
+          type: 'auto',
+          showgrid: true,
+          title: {
+            text: ""
+          },
+          showticksuffix: 'all',
+          tickangle: -60
+        },
+        yaxis: {
+          autorange: true,
+          type: 'linear',
+          showgrid: true,
+          title: {
+            text: ""
+          },
+          rangemode: 'tozero',
+          showticksuffix: 'all'
+        },
+        margin: {
+          t: 50,
+          b: 75,
+          l: 75,
+          r: 50
+        }
+      },
+      config: {
+        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true
+      },
+      selectedAxis: 0
+    };
+  }
+}
+
+export interface HoverGroupData {
+  baseline: DataPoint,
+  modification?: DataPoint,
+  system: DataPoint,
+  fluidPower?: number
+};
+
+
+export interface SystemCurveDataPoint extends DataPoint {
+  pointEfficiency?: number
 }

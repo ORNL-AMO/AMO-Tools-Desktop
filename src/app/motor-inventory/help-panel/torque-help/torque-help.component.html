@@ -1,0 +1,36 @@
+<hr class="my-1 hr-spacer">
+<div class="my-2">
+    <h6>
+        Torque Data
+        <br>
+        <small class="text-muted">
+            Enter torque details given specific conditions.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'torqueFullLoad'">
+    <h6>
+        Full Load Torque
+        <br>
+        <small class="text-muted">The rated or nameplate torque for a motor.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'torqueBreakDown'">
+    <h6>
+        Break Down Torque
+        <br>
+        <small class="text-muted">The maximum torque a motor is capable of achieving.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField == 'torqueLockedRotor'">
+    <h6>
+        Locked Rotor Torque
+        <br>
+        <small class="text-muted">AKA starting torque, the torque developed by a motor standstill.
+        </small>
+    </h6>
+</div>

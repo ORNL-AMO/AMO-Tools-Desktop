@@ -1,0 +1,11 @@
+<div class="row no-gutters">
+    <div class=" col-12 pr-2 pl-2">
+        <div class="header">
+            <div class="h3">Settings</div>
+        </div>
+    </div>
+    <div class="col-12">
+        <app-application-settings [settingsForm]="settingsForm" [inPhast]="true" [inTreasureHunt]="true" (startSavePolling)="save()">
+        </app-application-settings>
+    </div>
+</div>

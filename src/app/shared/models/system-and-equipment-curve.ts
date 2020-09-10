@@ -47,7 +47,8 @@ export interface SystemAndEquipmentCurveData {
     flowThree: number,
     flowFour: number,
     flowFive: number,
-    flowSix: number
+    flowSix: number,
+    powerDataRows?: Array<{ flow: number, yValue: number, power: number }>,
   }
   
   export interface EquipmentInputs {
@@ -58,8 +59,9 @@ export interface SystemAndEquipmentCurveData {
   }
   
   export interface ByDataInputs {
-    dataRows: Array<{ flow: number, yValue: number }>,
-    dataOrder: number
+    dataRows: Array<{ flow: number, yValue: number, power: number }>,
+    dataOrder: number,
+    powerDataOrder?: number,
   }
 
   export interface ModificationEquipment {

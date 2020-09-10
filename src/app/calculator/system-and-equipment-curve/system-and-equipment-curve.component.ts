@@ -96,7 +96,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       if (val != 'open') {
         this.updateSystemCurveResultData();
       }
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -184,8 +184,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
 
   updateByDataResultData() {
     let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
-    debugger;
-    this.systemAndEquipmentCurveService.calculateByDataRegression(this.equipmentType, newMaxFlow);
+    this.systemAndEquipmentCurveService.calculateByDataRegression(this.equipmentType, newMaxFlow, this.settings);
     if (newMaxFlow != this.maxFlowRate) {
       debugger;
       this.maxFlowRate = newMaxFlow;
@@ -228,6 +227,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
 
   btnGenerateExample() {
     this.curveDataService.setExample(this.settings, this.equipmentType);
+    this.curveDataService.generateExample.next(true);
     this.curveDataService.resetForms.next(true);
     this.curveDataService.resetForms.next(false);
   }

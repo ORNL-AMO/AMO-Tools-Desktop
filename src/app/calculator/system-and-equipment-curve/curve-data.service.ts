@@ -16,12 +16,13 @@ import { ByEquationInputs, EquipmentInputs, ByDataInputs, FanSystemCurveData, Pu
 export class CurveDataService {
 
   resetForms: BehaviorSubject<boolean>;
+  generateExample: BehaviorSubject<boolean>;
   constructor(private equipmentCurveService: EquipmentCurveService, private fanSystemCurveFormService: FanSystemCurveFormService,
     private pumpSystemCurveFormService: PumpSystemCurveFormService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private calculatorDbService: CalculatorDbService) {
     this.resetForms = new BehaviorSubject<boolean>(false);
+    this.generateExample = new BehaviorSubject<boolean>(false);
   }
-
 
   setExample(settings: Settings, equipmentType: string) {
     if (equipmentType == 'pump') {

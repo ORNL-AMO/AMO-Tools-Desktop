@@ -97,8 +97,83 @@ export class RegressionEquationsService {
       baselineDataPairs: baselineDataPairs,
       modifiedDataPairs: modifiedDataPairs
     }
-
   }
+
+  getEquipmentPowerRegressionByData(byData: ByDataInputs, maxFlowRate: number): Array<{ x: number, y: number }> 
+  {
+    let baselineRegressionInputs: Array<Array<number>> = new Array();
+    byData.dataRows.forEach(row => {
+      baselineRegressionInputs.push([row.flow, row.power]);
+    });
+
+    let baselineResults = regression.polynomial(baselineRegressionInputs, { order: byData.powerDataOrder, precision: 50 });
+    this.setSigFigs(baselineResults);
+
+    let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
+    for (let i = 0; i <= maxFlowRate; i += 10) {
+      let yVal = baselineResults.predict(i);
+      if (yVal[1] > 0) {
+        let xBaseline: number = i;
+        let yBaseline: number = yVal[1];
+        baselineDataPairs.push({
+          x: xBaseline,
+          y: yBaseline
+        });
+      }
+    }
+    return baselineDataPairs;
+  }
+
+  // TODO replace equipmentInput speeds with ModificationEquipment from merged 3756 branch
+  calculateFanEfficiency(baselinePowerDataPairs: Array<{x: number, y: number}>, fanSystemCurveData: FanSystemCurveData, equipmentInputs: EquipmentInputs, settings: Settings): {baseline: number, modification: number} {
+    let efficiencyResult = {
+      baseline: 0,
+      modification: 0 
+    };
+    // Replace with intersection point
+    let baselineOpFlow: number = 300;
+    let baselinePower = baselinePowerDataPairs.find(pair => {
+      pair.x == baselineOpFlow;
+    });
+
+    if (baselinePower) {
+      // Power|mod = Power|BL * (Speed|mod / Speed|BL) ^3
+      let modificationPower = baselinePower.y * Math.pow((equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement), 3);
+      
+      let fluidPower: number = this.getFanFluidPower(fanSystemCurveData.pointOneFlowRate, fanSystemCurveData.pointOnePressure, fanSystemCurveData.compressibilityFactor, settings);
+      
+      // Efficiency (either baseline or mod)|at OP = (fluidPower|OP/power|OP) * 100%
+      efficiencyResult.baseline = (fluidPower / baselinePower.y) * 100;
+      efficiencyResult.modification = (fluidPower / modificationPower) * 100;
+    }
+    return efficiencyResult;
+  }
+
+   // TODO replace equipmentInput speeds with ModificationEquipment from merged 3756 branch
+   calculatePumpEfficiency(baselinePowerDataPairs: Array<{x: number, y: number}>, pumpSystemCurveData: PumpSystemCurveData, equipmentInputs: EquipmentInputs, settings: Settings): {baseline: number, modification: number} {
+    let efficiencyResult = {
+      baseline: 0,
+      modification: 0 
+    };
+    // Replace with intersection point
+    let baselineOpFlow: number = 300;
+    let baselinePower = baselinePowerDataPairs.find(pair => {
+      pair.x == baselineOpFlow;
+    });
+
+    if (baselinePower) {
+      // Power|mod = Power|BL * (Speed|mod / Speed|BL) ^3
+      let modificationPower = baselinePower.y * Math.pow((equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement), 3);
+      
+      let fluidPower: number = this.getPumpFluidPower(pumpSystemCurveData.pointOneHead, pumpSystemCurveData.pointOneFlowRate, pumpSystemCurveData.specificGravity, settings);
+      
+      // Efficiency (either baseline or mod)|at OP = (fluidPower|OP/power|OP) * 100%
+      efficiencyResult.baseline = (fluidPower / baselinePower.y) * 100;
+      efficiencyResult.modification = (fluidPower / modificationPower) * 100;
+    }
+    return efficiencyResult;
+  }
+
 
   setSigFigs(data: { equation: Array<number>, string: string }) {
     data.equation.forEach(val => {
@@ -130,6 +205,7 @@ export class RegressionEquationsService {
     modificationRegressionEquation: string,
     baselineDataPairs: Array<{ x: number, y: number }>,
     modifiedDataPairs: Array<{ x: number, y: number }>
+    baselinePowerDataPairs: Array<{ x: number, y: number }>,
   } {
     //baseline
     let baselineRegressionEquation = byEquationInputs.flowTwo + '(flow)&#x00B2; + ' + byEquationInputs.flow + ('(flow) +') + byEquationInputs.constant;
@@ -151,7 +227,7 @@ export class RegressionEquationsService {
     }
     //baseline
     let baselineDataPairs: Array<{ x: number, y: number }> = this.calculateByEquationData(byEquationInputs, 1, maxFlowRate).dataPairs;
-
+    let baselinePowerDataPairs;
     //modification
     let ratio: number;
     if (modificationEquipment) {
@@ -165,7 +241,8 @@ export class RegressionEquationsService {
       baselineRegressionEquation: baselineRegressionEquation,
       modificationRegressionEquation: modificationRegressionEquation,
       baselineDataPairs: baselineDataPairs,
-      modifiedDataPairs: modifiedData.dataPairs
+      modifiedDataPairs: modifiedData.dataPairs,
+      baselinePowerDataPairs: baselinePowerDataPairs
     };
   }
 

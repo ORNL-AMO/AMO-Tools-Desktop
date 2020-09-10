@@ -156,10 +156,10 @@ export class FsatReportComponent implements OnInit {
   }
 
   setOutputs() {
-    this.assessment.fsat.valid = this.fsatService.checkValid(this.assessment.fsat, true);
+    this.assessment.fsat.valid = this.fsatService.checkValid(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.outputs = this.fsatService.getResults(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.modifications.forEach(modification => {
-      modification.fsat.valid = this.fsatService.checkValid(modification.fsat, false);
+      modification.fsat.valid = this.fsatService.checkValid(modification.fsat, false, this.settings);
       modification.fsat.outputs = this.fsatService.getResults(modification.fsat, false, this.settings);
       modification.fsat.outputs.percentSavings = this.fsatService.getSavingsPercentage(this.assessment.fsat.outputs.annualCost, modification.fsat.outputs.annualCost);
       modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;

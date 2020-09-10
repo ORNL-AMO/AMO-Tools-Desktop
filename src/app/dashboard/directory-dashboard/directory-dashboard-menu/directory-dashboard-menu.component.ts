@@ -10,6 +10,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { ExportService } from '../../import-export/export.service';
 import { DashboardService } from '../../dashboard.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
+import { InventoryItem } from '../../../shared/models/inventory/inventory';
 @Component({
   selector: 'app-directory-dashboard-menu',
   templateUrl: './directory-dashboard-menu.component.html',
@@ -54,19 +55,17 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     });
     this.directory.calculators.forEach(calculator => {
       calculator.selected = this.isAllSelected;
+    });
+    this.directory.inventories.forEach(inventory => {
+      inventory.selected = this.isAllSelected;
     })
   }
 
-
-
   checkSelected() {
     let assessmentSelectedTest: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
-    let directorySelectedTest: Directory = _.find(this.directory.subDirectory, (value) => {
-      if (value.selected == true) {
-        return true;
-      }
-    });
-    let checkAssessmentDirectorySelected: boolean = (assessmentSelectedTest != undefined) || (directorySelectedTest != undefined);
+    let directorySelectedTest: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
+    let inventorySelectedTest: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
+    let checkAssessmentDirectorySelected: boolean = (assessmentSelectedTest != undefined) || (directorySelectedTest != undefined) || (inventorySelectedTest != undefined);
     let calculatorSelectedTest: Calculator
     if (this.directory.calculators) {
       calculatorSelectedTest = _.find(this.directory.calculators, (value) => { return value.selected == true });
@@ -100,6 +99,10 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
   showImportModal() {
     this.directoryDashboardService.showImportModal.next(true);
+  }
+
+  showAddInventory() {
+    this.dashboardService.createInventory.next(true);
   }
 
   showExportModal() {

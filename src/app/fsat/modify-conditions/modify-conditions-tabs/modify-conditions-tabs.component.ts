@@ -126,11 +126,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setFluidBadgeClass(baseline: FSAT, modification?: FSAT) {
     let badgeStr: string = 'success';
-    let validBaselineTest = this.fsatFluidService.isFanFluidValid(baseline.baseGasDensity);
+    let validBaselineTest = this.fsatFluidService.isFanFluidValid(baseline.baseGasDensity, this.settings);
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
-      validModTest = this.fsatFluidService.isFanFluidValid(modification.baseGasDensity);
+      validModTest = this.fsatFluidService.isFanFluidValid(modification.baseGasDensity, this.settings);
       isDifferent = this.compareService.checkFluidDifferent();
     }
     //let inputError = this.checkFanFluidWarnings();

@@ -1,12 +1,14 @@
 import { Calculator } from "./calculators";
 import { Directory } from "./directory";
 import { Assessment } from "./assessment";
+import { InventoryItem } from "./inventory/inventory";
 
 export interface DirectoryItem {
     calculator?: Calculator;
     calculatorIndex?: number;
     subDirectory?: Directory;
     assessment?: Assessment;
+    inventoryItem?: InventoryItem,
     type: string;
     isShown: boolean;
     createdDate: Date,
@@ -23,5 +25,6 @@ export interface FilterDashboardBy {
     showTreasureHunt: boolean,
     showSubFolders: boolean,
     showPreAssessments: boolean,
-    showPhast: boolean
+    showPhast: boolean,
+    showMotorInventory: boolean
 }

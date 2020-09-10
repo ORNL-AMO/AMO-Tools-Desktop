@@ -6,7 +6,7 @@ import { graphColors } from '../../../../phast/phast-report/report-graphs/graphC
 import { FormGroup } from '../../../../../../node_modules/@angular/forms';
 
 import * as Plotly from 'plotly.js';
-import { SelectedDataPoint, SimpleChart, TraceData, TraceCoordinates, DataPoint } from '../../../../shared/models/plotting';
+import { DataPoint, SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/models/plotting';
 import { AchievableEfficiencyService } from '../achievable-efficiency.service';
 import { pumpTypeRanges } from '../../../../psat/psatConstants';
 
@@ -44,8 +44,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
   
-  validEfficiency: boolean = false;
-  firstChange: boolean = true;
+  // Tooltips
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
   hoverBtnExpand: boolean = false;
@@ -54,10 +53,13 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   displayCollapseTooltip: boolean = false;
   expanded: boolean = false;
   
-  selectedDataPoints: Array<SelectedDataPoint>;
+  validEfficiency: boolean = false;
+  firstChange: boolean = true;
+  
+  // Graphing / Defaults
+  selectedDataPoints: Array<DataPoint>;
   pointColors: Array<string>;
   efficiencyChart: SimpleChart;
-
   xAxisTitle: string = "Flow Rate (gpm)";
   currentPumpType: any;
   defaultTraceCount: number = 2;
@@ -132,7 +134,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     Plotly.newPlot(this.currentChartId, this.efficiencyChart.data, chartLayout, this.efficiencyChart.config)
       .then(chart => {
         chart.on('plotly_click', (graphData) => {
-          this.createSelectedDataPoints(graphData);
+          this.createDataPoints(graphData);
         });
       });
     this.save();
@@ -196,10 +198,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (!isInvalidPlot) {
       this.validEfficiency = true;
       currentPoints.forEach((point, i) => {
-        let calculatedPoint: SelectedDataPoint = {
+        let calculatedPoint: DataPoint = {
           pointColor: this.pointColors[i],
-          pointX: point.x,
-          pointY: point.y
+          x: point.x,
+          y: point.y
         }
         let resultCoordinateTrace: TraceData = this.achievableEfficiencyService.getTraceDataFromPoint(calculatedPoint);
         let yMeasureTitle = i == 0? 'Maximum' : 'Average';
@@ -220,14 +222,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
 
-  createSelectedDataPoints(graphData) {
+  createDataPoints(graphData) {
     let dataPoints: DataPoint[] = this.getCurrentPoints(true, graphData.points[0].x);
     
     dataPoints.forEach((point, i) => {
-      let selectedPoint: SelectedDataPoint = {
+      let selectedPoint: DataPoint = {
         pointColor: this.pointColors[(this.efficiencyChart.data.length + 1) % this.pointColors.length],
-        pointX: point.x,
-        pointY: point.y
+        x: point.x,
+        y: point.y
       }
       let selectedPointTrace = this.achievableEfficiencyService.getTraceDataFromPoint(selectedPoint);
       let yMeasureTitle = i == 0? 'Maximum' : 'Average';
@@ -252,9 +254,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
 
-  deleteDataPoint(point: SelectedDataPoint) {
+  deleteDataPoint(point: DataPoint) {
     let traceCount: number = this.efficiencyChart.data.length;
-    let deleteTraceIndex: number = this.efficiencyChart.data.findIndex(trace => trace.x[0] == point.pointX && trace.y[0] == point.pointY);
+    let deleteTraceIndex: number = this.efficiencyChart.data.findIndex(trace => trace.x[0] == point.x && trace.y[0] == point.y);
     
     // ignore default traces
     if (traceCount > this.defaultTraceCount && deleteTraceIndex != -1) {

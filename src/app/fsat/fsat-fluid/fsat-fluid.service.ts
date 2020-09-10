@@ -2,21 +2,28 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { BaseGasDensity } from '../../shared/models/fans';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
+import { Settings } from '../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class FsatFluidService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
 
-  getGasDensityFormFromObj(obj: BaseGasDensity): FormGroup {
+  getGasDensityFormFromObj(obj: BaseGasDensity, settings: Settings): FormGroup {
+    let barometricMin: number = this.convertUnitsService.value(10).from('inHg').to(settings.fanBarometricPressure);
+    let barometricMax: number = this.convertUnitsService.value(60).from('inHg').to(settings.fanBarometricPressure);
+    barometricMin = this.convertUnitsService.roundVal(barometricMin, 2);
+    barometricMax = this.convertUnitsService.roundVal(barometricMax, 2);
+    
     let gasDensityValidators: GasDensityValidators = this.getValidators(obj);
     let form = this.formBuilder.group({
       inputType: [obj.inputType, Validators.required],
       gasType: [obj.gasType, Validators.required],
       dryBulbTemp: [obj.dryBulbTemp, gasDensityValidators.dryBulbTempValidators],
       staticPressure: [obj.staticPressure, gasDensityValidators.staticPressureValidators],
-      barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(0)]],
+      barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(barometricMin), Validators.max(barometricMax)]],
       specificGravity: [obj.specificGravity, gasDensityValidators.specificGravityValidators],
       wetBulbTemp: [obj.wetBulbTemp, gasDensityValidators.wetBulbTempValidators],
       relativeHumidity: [obj.relativeHumidity, gasDensityValidators.relativeHumidityValidators],
@@ -47,7 +54,7 @@ export class FsatFluidService {
       specificGravityValidators = [Validators.required];
     }
     if (obj.inputType === 'wetBulb') {
-      wetBulbTempValidators = [Validators.required];
+      wetBulbTempValidators = [Validators.required, Validators.max(obj.dryBulbTemp)];
       // Not sure if specificHeatGas is necessary since it has been removed from user input in fans
       specificHeatGasValidators = [GreaterThanValidator.greaterThan(0), Validators.required];
     }
@@ -55,7 +62,7 @@ export class FsatFluidService {
       relativeHumidityValidators = [GreaterThanValidator.greaterThan(0), Validators.max(100), Validators.required];
     }
     if (obj.inputType === 'dewPoint') {
-      dewPointValidators = [Validators.required];
+      dewPointValidators = [Validators.required, Validators.max(obj.dryBulbTemp)];
     }
 
     return {
@@ -136,8 +143,8 @@ export class FsatFluidService {
     return fanGasDensity;
   }
 
-  isFanFluidValid(obj: BaseGasDensity): boolean {
-    let form: FormGroup = this.getGasDensityFormFromObj(obj);
+  isFanFluidValid(obj: BaseGasDensity, settings: Settings): boolean {
+    let form: FormGroup = this.getGasDensityFormFromObj(obj, settings);
     return form.valid;
   }
 }

@@ -8,6 +8,7 @@ import { DirectoryItemComponent } from './directory-item/directory-item.componen
 import { VersionModalComponent } from './version-modal/version-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
+import { InventoryItemComponent } from './inventory-item/inventory-item.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
     AssessmentItemComponent,
     CalculatorListComponent,
     DirectoryItemComponent,
-    VersionModalComponent
+    VersionModalComponent,
+    InventoryItemComponent
   ],
   imports: [
     CommonModule,

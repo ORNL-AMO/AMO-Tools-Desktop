@@ -1,0 +1,13 @@
+.group-label{
+    font-size: 22px;
+    /* width: 100%; */
+}
+
+hr.hr-spacer{
+    border: dashed 1px lightgray;
+    width: 100%;
+}
+
+hr.hr-spacer.last-spacer{
+    border: dashed 2px gray;
+}

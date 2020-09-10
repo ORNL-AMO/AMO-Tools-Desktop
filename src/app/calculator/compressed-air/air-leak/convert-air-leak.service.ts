@@ -30,7 +30,8 @@ export class ConvertAirLeakService {
         inputArray[i].orificeMethodData.orificeDiameter = this.convertUnitsService.value(inputArray[i].orificeMethodData.orificeDiameter).from('cm').to('in');
         inputArray[i].orificeMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.supplyPressure).from('kPaa').to('psia');
         let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
-        inputArray[i].compressorElectricityData.compressorSpecificPower = conversionHelper / inputArray[i].compressorElectricityData.compressorSpecificPower;
+        inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / conversionHelper;
+        console.log(inputArray[i].compressorElectricityData.compressorSpecificPower);
       }
     }
     return inputArray;
@@ -38,7 +39,7 @@ export class ConvertAirLeakService {
 
   convertSpecificPower(specificPower: number): number {
     let conversionHelper = this.convertUnitsService.value(1).from('ft3').to('m3');
-    specificPower = conversionHelper / specificPower;
+    specificPower = specificPower / conversionHelper;
     return specificPower;
   }
 
@@ -60,7 +61,7 @@ export class ConvertAirLeakService {
     inputData.bagMethodData.diameter = this.roundVal(inputData.bagMethodData.diameter);
 
     inputData.estimateMethodData.leakRateEstimate = this.convertUnitsService.value(inputData.estimateMethodData.leakRateEstimate).from('ft3').to('m3');
-    inputData.bagMethodData.height = this.roundVal(inputData.bagMethodData.height);
+    inputData.estimateMethodData.leakRateEstimate = this.roundVal(inputData.estimateMethodData.leakRateEstimate);
 
     inputData.decibelsMethodData.linePressure = this.convertUnitsService.value(inputData.decibelsMethodData.linePressure).from('psig').to('kPag');
     inputData.decibelsMethodData.pressureA = this.convertUnitsService.value(inputData.decibelsMethodData.pressureA).from('psig').to('kPag');
