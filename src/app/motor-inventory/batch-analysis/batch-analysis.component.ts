@@ -13,7 +13,6 @@ export class BatchAnalysisComponent implements OnInit {
   selectedTab: string;
   selectedTabSub: Subscription;
   filterInventorySummarySub: Subscription;
-  batchAnalysisSettingsSub: Subscription;
   constructor(private batchAnalysisService: BatchAnalysisService, private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {
@@ -28,7 +27,6 @@ export class BatchAnalysisComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedTabSub.unsubscribe();
-    this.batchAnalysisSettingsSub.unsubscribe();
     this.filterInventorySummarySub.unsubscribe();
   }
 }
