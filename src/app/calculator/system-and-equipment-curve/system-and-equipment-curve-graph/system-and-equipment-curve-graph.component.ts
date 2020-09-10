@@ -41,6 +41,18 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       }
     }
   }
+
+  // @HostListener('resize', ['$event'])
+  // resizeCurveEquipmentChart(event) {
+  //   Plotly.Plots.resize(this.currentSystemChartId);
+  // }
+
+  // @HostListener('document:keyup', ['$event'])
+  // resizePowerChart(event) {
+  //   Plotly.Plots.resize(this.currentPowerChartId);
+  // }
+
+
   updateGraphSub: Subscription;
   resetSub: Subscription;
   generateExampleSub: Subscription;
@@ -247,7 +259,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
               this.removeDualHover();
           });
     });
-
     if (this.displayPowerChart) {
       let powerChartLayout = JSON.parse(JSON.stringify(this.powerChart.layout));
       Plotly.newPlot(this.currentPowerChartId, this.powerChart.data, powerChartLayout, this.powerChart.config);
@@ -259,10 +270,28 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.setDisplayDataOptions();
     this.drawTraceData();
     let chartLayout = JSON.parse(JSON.stringify(this.curveEquipmentChart.layout));
+
     Plotly.update(this.currentSystemChartId, this.curveEquipmentChart.data, chartLayout);
+    // Plotly.newPlot(this.currentSystemChartId, this.curveEquipmentChart.data, chartLayout, this.curveEquipmentChart.config)
+    //   .then(chart => {
+    //     chart.on('plotly_click', (graphData) => {
+    //       this.createDataPoint(graphData);
+    //     });
+    //       chart.on('plotly_hover', hoverData => {
+    //             this.displayHoverGroupData(hoverData);
+    //             this.displayDualHover(hoverData);
+    //       });
+    //       chart.on('plotly_unhover', unhoverData => {
+    //           this.removeHoverGroupData();
+    //           this.removeDualHover();
+    //       });
+    // });
+
     if (this.displayPowerChart) {
       let powerChartLayout = JSON.parse(JSON.stringify(this.powerChart.layout));
-      Plotly.newPlot(this.currentPowerChartId, this.powerChart.data, powerChartLayout, this.powerChart.config);
+      // Plotly.newPlot(this.currentPowerChartId, this.powerChart.data, powerChartLayout, this.powerChart.config);
+      Plotly.update(this.currentPowerChartId, this.powerChart.data, powerChartLayout);
+
     }
   }
 

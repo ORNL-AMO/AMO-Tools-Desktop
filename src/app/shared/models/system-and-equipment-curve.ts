@@ -40,6 +40,7 @@ export interface SystemAndEquipmentCurveData {
     flowSix: number,
     powerDataRows?: Array<{ flow: number, yValue: number, power: number }>,
     powerConstant: number,
+    powerOrder: number,
     powerFlow: number,
     powerFlowTwo: number,
     powerFlowThree: number,
