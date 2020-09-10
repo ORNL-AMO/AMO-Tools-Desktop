@@ -19,27 +19,35 @@ export class BatchAnalysisService {
   }
 
   setBatchAnalysisDataItems() {
-    let batchAnalysisDataItems = new Array();
     let inventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.value;
     let filterData: FilterInventorySummary = this.motorInventoryService.filterInventorySummary.value;
     let motorInventoryData: MotorInventoryData = this.motorInventoryService.filterMotorInventoryData(inventoryData, filterData);
+    let settings: Settings = this.motorInventoryService.settings.getValue();
+    let batchAnalysisSettings: BatchAnalysisSettings = this.batchAnalysisSettings.getValue();
+    let batchAnalysisDataItems = this.getBatchAnalysisDataItems(motorInventoryData, settings, batchAnalysisSettings);
+    this.batchAnalysisDataItems.next(batchAnalysisDataItems);
+  }
+
+
+  getBatchAnalysisDataItems(motorInventoryData: MotorInventoryData, settings: Settings, batchAnalysisSettings: BatchAnalysisSettings): Array<BatchAnalysisResults> {
+    let batchAnalysisDataItems = new Array();
     motorInventoryData.departments.forEach(department => {
       department.catalog.forEach(motorItem => {
-        let settings: Settings = this.motorInventoryService.settings.getValue();
         let replaceExistingData: ReplaceExistingData = this.getReplaceExistingInputsFromMotorItem(motorItem, settings);
         let missingData: Array<string> = this.checkBatchAnalysisDataValid(replaceExistingData);
         if (missingData.length != 0) {
-          let batchAnalysisResults: BatchAnalysisResults = this.getBatchAnalysisResultObject(motorItem, department.name, undefined, missingData);
+          let batchAnalysisResults: BatchAnalysisResults = this.getBatchAnalysisResultObject(motorItem, department.name, undefined, batchAnalysisSettings, missingData);
           batchAnalysisDataItems.push(batchAnalysisResults);
         } else {
           let replaceExistingResults: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingData, settings);
-          let batchAnalysisResults: BatchAnalysisResults = this.getBatchAnalysisResultObject(motorItem, department.name, replaceExistingResults);
+          let batchAnalysisResults: BatchAnalysisResults = this.getBatchAnalysisResultObject(motorItem, department.name, replaceExistingResults, batchAnalysisSettings);
           batchAnalysisDataItems.push(batchAnalysisResults);
         }
       });
     });
-    this.batchAnalysisDataItems.next(batchAnalysisDataItems);
+    return batchAnalysisDataItems;
   }
+
 
   checkBatchAnalysisDataValid(data: ReplaceExistingData): Array<string> {
     let missingData: Array<string> = new Array();
@@ -89,7 +97,7 @@ export class BatchAnalysisService {
     return data;
   }
 
-  getBatchAnalysisResultObject(motorItem: MotorItem, departmentName: string, replaceExistingResults: ReplaceExistingResults, missingData?: Array<string>): BatchAnalysisResults {
+  getBatchAnalysisResultObject(motorItem: MotorItem, departmentName: string, replaceExistingResults: ReplaceExistingResults, batchAnalysisSettings: BatchAnalysisSettings, missingData?: Array<string>): BatchAnalysisResults {
     if (missingData) {
       return {
         motorName: motorItem.name,
@@ -116,7 +124,6 @@ export class BatchAnalysisService {
       }
     } else {
       let replaceNowDecision: string;
-      let batchAnalysisSettings: BatchAnalysisSettings = this.batchAnalysisSettings.value;
       if (batchAnalysisSettings) {
         if (batchAnalysisSettings.paybackThreshold > replaceExistingResults.simplePayback) {
           replaceNowDecision = 'Replace';
