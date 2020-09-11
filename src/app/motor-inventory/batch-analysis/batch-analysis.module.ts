@@ -7,6 +7,9 @@ import { BatchAnalysisBannerComponent } from './batch-analysis-banner/batch-anal
 import { BatchAnalysisService } from './batch-analysis.service';
 import { FormsModule } from '@angular/forms';
 import { BatchAnalysisGraphsComponent } from './batch-analysis-graphs/batch-analysis-graphs.component';
+import { TotalMotorsBarChartComponent } from './batch-analysis-graphs/total-motors-bar-chart/total-motors-bar-chart.component';
+import { EnergyCostBarChartComponent } from './batch-analysis-graphs/energy-cost-bar-chart/energy-cost-bar-chart.component';
+import { EnergyCostPieChartComponent } from './batch-analysis-graphs/energy-cost-pie-chart/energy-cost-pie-chart.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +17,10 @@ import { BatchAnalysisGraphsComponent } from './batch-analysis-graphs/batch-anal
     BatchAnalysisTableComponent,
     BatchAnalysisTablePipe,
     BatchAnalysisBannerComponent,
-    BatchAnalysisGraphsComponent
+    BatchAnalysisGraphsComponent,
+    TotalMotorsBarChartComponent,
+    EnergyCostBarChartComponent,
+    EnergyCostPieChartComponent
   ],
   imports: [
     CommonModule,

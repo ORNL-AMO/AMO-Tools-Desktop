@@ -126,7 +126,7 @@ export class BatchAnalysisService {
       let replaceNowDecision: string;
       if (batchAnalysisSettings) {
         if (batchAnalysisSettings.paybackThreshold > replaceExistingResults.simplePayback) {
-          replaceNowDecision = 'Replace';
+          replaceNowDecision = 'Replace Now';
         } else if (batchAnalysisSettings.paybackThreshold > replaceExistingResults.incrementalSimplePayback) {
           replaceNowDecision = 'Replace When Fail';
         } else {
@@ -167,7 +167,7 @@ export class BatchAnalysisService {
         if (dataItem.isBatchAnalysisValid) {
           (batchAnalysisSettings.paybackThreshold > dataItem.replacementNowPayback)
           if (batchAnalysisSettings.paybackThreshold > dataItem.replacementNowPayback) {
-            dataItem.replaceMotor = 'Replace';
+            dataItem.replaceMotor = 'Replace Now';
           } else if (batchAnalysisSettings.paybackThreshold > dataItem.replacementFailPayback) {
             dataItem.replaceMotor = 'Replace When Fail';
           } else {
