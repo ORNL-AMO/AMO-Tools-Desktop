@@ -23,11 +23,11 @@ export class TotalMotorsBarChartComponent implements OnInit {
       let data = this.getTraceData(val);
       let layout = {
         title: {
-          text: 'Motor Analysis Breakdown'
+          text: 'Replace/Rewind Summary'
         },
         showlegend: false,
         font: {
-          size: 16,
+          size: 14,
         },
         yaxis: {
           // hoverformat: '.0r',
@@ -60,7 +60,7 @@ export class TotalMotorsBarChartComponent implements OnInit {
     this.batchAnalysisDataItemsSub.unsubscribe();
   }
 
-  getTraceData(batchAnalysisDataItems: Array<BatchAnalysisResults>): { x: Array<any>, y: Array<any>, type: string, marker: { color: Array<string> } } {
+  getTraceData(batchAnalysisDataItems: Array<BatchAnalysisResults>): { x: Array<any>, y: Array<any>, type: string, marker: { color: Array<string> }, text: Array<string>, textposition: string } {
     let batchAnalysisSettings: BatchAnalysisSettings = this.batchAnalysisService.batchAnalysisSettings.getValue();
     let counts = _.countBy(batchAnalysisDataItems, 'replaceMotor');
     let xVals = new Array();
@@ -86,6 +86,6 @@ export class TotalMotorsBarChartComponent implements OnInit {
       }
     }
 
-    return { x: xVals, y: yVals, type: 'bar', marker: { color: colors } }
+    return { x: xVals, y: yVals, type: 'bar', marker: { color: colors }, text: yVals.map(String), textposition: 'auto' }
   }
 }

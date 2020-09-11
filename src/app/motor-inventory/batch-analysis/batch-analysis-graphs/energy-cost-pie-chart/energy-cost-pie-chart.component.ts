@@ -42,12 +42,12 @@ export class EnergyCostPieChartComponent implements OnInit {
         type: 'pie',
         textposition: 'auto',
         insidetextorientation: "horizontal",
-        textinfo: 'label+percent',
-        // texttemplate: this.textTemplate,
+        textinfo: 'label+value',
+        texttemplate: '%{label}<br>%{value:$,.0f}',
         hoverinfo: 'label+value',
         // direction: "clockwise",
         // rotation: 90,
-        hovertemplate: '%{value:$,.2f} <extra></extra>'
+        hovertemplate: '%{percent:,.2f} <extra></extra>'
       }];
       let layout = {
         title: {
@@ -55,7 +55,7 @@ export class EnergyCostPieChartComponent implements OnInit {
         },
         showlegend: false,
         font: {
-          size: 16,
+          size: 14,
         },
       };
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { BatchAnalysisService, BatchAnalysisSettings, BatchAnalysisResults } from '../../batch-analysis.service';
+import { BatchAnalysisService } from '../../batch-analysis.service';
 import * as Plotly from 'plotly.js';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -20,68 +20,98 @@ export class EnergyCostBarChartComponent implements OnInit {
 
   ngAfterViewInit() {
     this.batchAnalysisDataItemsSub = this.batchAnalysisService.batchAnalysisDataItems.subscribe(batchAnalysisDataItems => {
-      let groups = _.groupBy(batchAnalysisDataItems, "replaceMotor");
       let dataArr = new Array();
-      for (let key in groups) {
-        if (key == 'Replace Now') {
-          groups[key].forEach(dataItem => {
-            dataArr.push({
-              x: ['Current', 'Modified'],
-              y: [dataItem.currentEnergyUse, dataItem.replacementEnergyUse],
-              type: "bar",
-              name: dataItem.motorName,
-              textinfo: 'value',
-              textposition: 'auto',
-              xaxis: 'x1',
-              barmode: 'stack',
-              marker: { color: '#117A65', line: { width: 2 } },
-              // hoverinfo: 'name+value',
-              // hovertemplate: '%{name}: %{value:,.2f} kWh<extra></extra>'
-            })
+
+      //rewind
+      let rewindItems = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Rewind' });
+      if (rewindItems.length != 0) {
+        let rewindOpacity: number = 1;
+        let opacityInterval: number = 1 / (rewindItems.length + 1);
+        let totalCurrentEnergyCost: number = _.sumBy(rewindItems, 'currentEnergyCost');
+        let totalModifiedEnergyCost: number = _.sumBy(rewindItems, 'rewindEnergyCost');
+        for (let i = 0; i < rewindItems.length; i++) {
+          let markerColor: string = 'rgba(125, 60, 152,' + rewindOpacity + ')';
+          let text;
+          if (i == rewindItems.length - 1) {
+            text = [this.getFormatedCurrencyValue(totalCurrentEnergyCost), this.getFormatedCurrencyValue(totalModifiedEnergyCost)];
+          }
+          dataArr.push({
+            x: ['Current', 'Modified'],
+            y: [rewindItems[i].currentEnergyCost, rewindItems[i].rewindEnergyCost],
+            type: "bar",
+            name: rewindItems[i].motorName,
+            text: text,
+            textposition: 'auto',
+            xaxis: 'x1',
+            barmode: 'stack',
+            marker: { color: markerColor, line: { width: 2 } },
           });
-        } else if (key == 'Rewind') {
-          groups[key].forEach(dataItem => {
-            dataArr.push({
-              x: ['Current', 'Modified'],
-              y: [dataItem.currentEnergyUse, dataItem.rewindEnergyUse],
-              type: "bar",
-              name: dataItem.motorName,
-              textinfo: 'value',
-              textposition: 'auto',
-              xaxis: 'x2',
-              barmode: 'stack',
-              marker: { color: '#7D3C98', line: { width: 2 } },
-              // hoverinfo: 'name+value',
-              // hovertemplate: '%{name}: %{value:,.2f} kWh<extra></extra>'
-            })
-          });
-        } else if (key == 'Replace When Fail') {
-          groups[key].forEach(dataItem => {
-            dataArr.push({
-              x: ['Current', 'Modified'],
-              y: [dataItem.currentEnergyUse, dataItem.replacementEnergyUse],
-              type: "bar",
-              name: dataItem.motorName,
-              textinfo: 'value',
-              textposition: 'auto',
-              xaxis: 'x3',
-              barmode: 'stack',
-              marker: { color: '#2874A6', line: { width: 2 } },
-              // hoverinfo: 'name+value',
-              // hovertemplate: '%{name}: %{value:,.2f} kWh<extra></extra>'
-            })
-          });
+          rewindOpacity = rewindOpacity - opacityInterval;
         }
       }
-      // let data = this.getTraceData(val);
+
+      //replace when fail
+      let replaceWhenFailItems = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Replace When Fail' });
+      if (replaceWhenFailItems.length != 0) {
+        let replaceWhenFailOpacity: number = 1;
+        let opacityInterval = 1 / (replaceWhenFailItems.length + 1);
+        let totalCurrentEnergyCost: number = _.sumBy(replaceWhenFailItems, 'currentEnergyCost');
+        let totalModifiedEnergyCost: number = _.sumBy(replaceWhenFailItems, 'replacementEnergyCost');
+        for (let i = 0; i < replaceWhenFailItems.length; i++) {
+          let text;
+          if (i == replaceWhenFailItems.length - 1) {
+            text = [this.getFormatedCurrencyValue(totalCurrentEnergyCost), this.getFormatedCurrencyValue(totalModifiedEnergyCost)];
+          }
+          let markerColor: string = 'rgba(40, 116, 166,' + replaceWhenFailOpacity + ')';
+          dataArr.push({
+            x: ['Current', 'Modified'],
+            y: [replaceWhenFailItems[i].currentEnergyCost, replaceWhenFailItems[i].replacementEnergyCost],
+            type: "bar",
+            name: replaceWhenFailItems[i].motorName,
+            text: text,
+            textposition: 'auto',
+            xaxis: 'x2',
+            barmode: 'stack',
+            marker: { color: markerColor, line: { width: 2 } },
+          });
+          replaceWhenFailOpacity = replaceWhenFailOpacity - opacityInterval;
+        };
+      }
+      //replace now
+      let replaceNowItems = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Replace Now' });
+      if (replaceNowItems.length != 0) {
+        let replaceNowOpacity: number = 1;
+        let opacityInterval: number = 1 / (replaceNowItems.length + 1);
+        let totalCurrentEnergyCost: number = _.sumBy(replaceNowItems, 'currentEnergyCost');
+        let totalModifiedEnergyCost: number = _.sumBy(replaceNowItems, 'replacementEnergyCost');
+        for (let i = 0; i < replaceNowItems.length; i++) {
+          let text;
+          if (i == replaceNowItems.length - 1) {
+            text = [this.getFormatedCurrencyValue(totalCurrentEnergyCost), this.getFormatedCurrencyValue(totalModifiedEnergyCost)];
+          }
+          let markerColor: string = 'rgba(17, 122, 101,' + replaceNowOpacity + ')';
+          dataArr.push({
+            x: ['Current', 'Modified'],
+            y: [replaceNowItems[i].currentEnergyCost, replaceNowItems[i].replacementEnergyCost],
+            type: "bar",
+            name: replaceNowItems[i].motorName,
+            text: text,
+            textposition: 'auto',
+            xaxis: 'x3',
+            barmode: 'stack',
+            marker: { color: markerColor, line: { width: 2 } },
+          });
+          replaceNowOpacity = replaceNowOpacity - opacityInterval;
+        };
+      }
       let layout = {
         barmode: "stack",
         title: {
-          text: 'Motor Analysis Energy Usage Modifications'
+          text: 'Motor Energy Costs',
         },
         yaxis: {
           title: {
-            text: 'Energy Usage (kWh)',
+            text: 'Energy Cost ($/yr)',
             font: {
               family: 'Arial',
               size: 16
@@ -91,7 +121,7 @@ export class EnergyCostBarChartComponent implements OnInit {
         xaxis: {
           domain: [0, 0.33],
           anchor: 'x1',
-          title: 'Replace Now'
+          title: 'Rewind'
         },
         xaxis2: {
           domain: [0.33, 0.66],
@@ -99,7 +129,7 @@ export class EnergyCostBarChartComponent implements OnInit {
         },
         xaxis3: {
           domain: [0.67, 1.0],
-          anchor: 'x3', title: 'Rewind'
+          anchor: 'x3', title: 'Replace Now'
         }
       };
 
@@ -116,5 +146,9 @@ export class EnergyCostBarChartComponent implements OnInit {
 
   ngOnDestroy() {
     this.batchAnalysisDataItemsSub.unsubscribe();
+  }
+
+  getFormatedCurrencyValue(num: number): string {
+    return '$' + (num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
   }
 }
