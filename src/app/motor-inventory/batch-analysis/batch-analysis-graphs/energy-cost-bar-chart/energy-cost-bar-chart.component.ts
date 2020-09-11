@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { BatchAnalysisService } from '../../batch-analysis.service';
+import { BatchAnalysisService, BatchAnalysisResults } from '../../batch-analysis.service';
 import * as Plotly from 'plotly.js';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -20,90 +20,29 @@ export class EnergyCostBarChartComponent implements OnInit {
 
   ngAfterViewInit() {
     this.batchAnalysisDataItemsSub = this.batchAnalysisService.batchAnalysisDataItems.subscribe(batchAnalysisDataItems => {
-      let dataArr = new Array();
-
+      let dataArray = new Array();
       //rewind
-      let rewindItems = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Rewind' });
+      let rewindItems: Array<BatchAnalysisResults> = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Rewind' });
       if (rewindItems.length != 0) {
-        let rewindOpacity: number = 1;
-        let opacityInterval: number = 1 / (rewindItems.length + 1);
         let totalCurrentEnergyCost: number = _.sumBy(rewindItems, 'currentEnergyCost');
         let totalModifiedEnergyCost: number = _.sumBy(rewindItems, 'rewindEnergyCost');
-        for (let i = 0; i < rewindItems.length; i++) {
-          let markerColor: string = 'rgba(125, 60, 152,' + rewindOpacity + ')';
-          let text;
-          if (i == rewindItems.length - 1) {
-            text = [this.getFormatedCurrencyValue(totalCurrentEnergyCost), this.getFormatedCurrencyValue(totalModifiedEnergyCost)];
-          }
-          dataArr.push({
-            x: ['Current', 'Modified'],
-            y: [rewindItems[i].currentEnergyCost, rewindItems[i].rewindEnergyCost],
-            type: "bar",
-            name: rewindItems[i].motorName,
-            text: text,
-            textposition: 'auto',
-            xaxis: 'x1',
-            barmode: 'stack',
-            marker: { color: markerColor, line: { width: 2 } },
-          });
-          rewindOpacity = rewindOpacity - opacityInterval;
-        }
+        this.addTraceGroupDataToDataArray(dataArray, rewindItems, totalCurrentEnergyCost, totalModifiedEnergyCost, 'rgba(125, 60, 152,', 'x1');
       }
-
       //replace when fail
-      let replaceWhenFailItems = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Replace When Fail' });
+      let replaceWhenFailItems: Array<BatchAnalysisResults> = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Replace When Fail' });
       if (replaceWhenFailItems.length != 0) {
-        let replaceWhenFailOpacity: number = 1;
-        let opacityInterval = 1 / (replaceWhenFailItems.length + 1);
         let totalCurrentEnergyCost: number = _.sumBy(replaceWhenFailItems, 'currentEnergyCost');
         let totalModifiedEnergyCost: number = _.sumBy(replaceWhenFailItems, 'replacementEnergyCost');
-        for (let i = 0; i < replaceWhenFailItems.length; i++) {
-          let text;
-          if (i == replaceWhenFailItems.length - 1) {
-            text = [this.getFormatedCurrencyValue(totalCurrentEnergyCost), this.getFormatedCurrencyValue(totalModifiedEnergyCost)];
-          }
-          let markerColor: string = 'rgba(40, 116, 166,' + replaceWhenFailOpacity + ')';
-          dataArr.push({
-            x: ['Current', 'Modified'],
-            y: [replaceWhenFailItems[i].currentEnergyCost, replaceWhenFailItems[i].replacementEnergyCost],
-            type: "bar",
-            name: replaceWhenFailItems[i].motorName,
-            text: text,
-            textposition: 'auto',
-            xaxis: 'x2',
-            barmode: 'stack',
-            marker: { color: markerColor, line: { width: 2 } },
-          });
-          replaceWhenFailOpacity = replaceWhenFailOpacity - opacityInterval;
-        };
+        this.addTraceGroupDataToDataArray(dataArray, replaceWhenFailItems, totalCurrentEnergyCost, totalModifiedEnergyCost, 'rgba(40, 116, 166,', 'x2');
       }
       //replace now
-      let replaceNowItems = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Replace Now' });
+      let replaceNowItems: Array<BatchAnalysisResults> = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Replace Now' });
       if (replaceNowItems.length != 0) {
-        let replaceNowOpacity: number = 1;
-        let opacityInterval: number = 1 / (replaceNowItems.length + 1);
         let totalCurrentEnergyCost: number = _.sumBy(replaceNowItems, 'currentEnergyCost');
         let totalModifiedEnergyCost: number = _.sumBy(replaceNowItems, 'replacementEnergyCost');
-        for (let i = 0; i < replaceNowItems.length; i++) {
-          let text;
-          if (i == replaceNowItems.length - 1) {
-            text = [this.getFormatedCurrencyValue(totalCurrentEnergyCost), this.getFormatedCurrencyValue(totalModifiedEnergyCost)];
-          }
-          let markerColor: string = 'rgba(17, 122, 101,' + replaceNowOpacity + ')';
-          dataArr.push({
-            x: ['Current', 'Modified'],
-            y: [replaceNowItems[i].currentEnergyCost, replaceNowItems[i].replacementEnergyCost],
-            type: "bar",
-            name: replaceNowItems[i].motorName,
-            text: text,
-            textposition: 'auto',
-            xaxis: 'x3',
-            barmode: 'stack',
-            marker: { color: markerColor, line: { width: 2 } },
-          });
-          replaceNowOpacity = replaceNowOpacity - opacityInterval;
-        };
+        this.addTraceGroupDataToDataArray(dataArray, replaceNowItems, totalCurrentEnergyCost, totalModifiedEnergyCost, 'rgba(17, 122, 101,', 'x3');
       }
+      let xAxisDomains = this.getXAxisDomains(rewindItems.length != 0, replaceNowItems.length != 0, replaceWhenFailItems.length != 0);
       let layout = {
         barmode: "stack",
         title: {
@@ -119,17 +58,19 @@ export class EnergyCostBarChartComponent implements OnInit {
           },
         },
         xaxis: {
-          domain: [0, 0.33],
+          domain: xAxisDomains.rewindDomain,
           anchor: 'x1',
           title: 'Rewind'
         },
         xaxis2: {
-          domain: [0.33, 0.66],
-          anchor: 'x2', title: 'Replace When Fail'
+          domain: xAxisDomains.replaceWhenFailDomain,
+          anchor: 'x2',
+          title: 'Replace When Fail'
         },
         xaxis3: {
-          domain: [0.67, 1.0],
-          anchor: 'x3', title: 'Replace Now'
+          domain: xAxisDomains.replaceDomain,
+          anchor: 'x3',
+          title: 'Replace Now'
         }
       };
 
@@ -139,16 +80,86 @@ export class EnergyCostBarChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.react(this.energyBarChart.nativeElement, dataArr, layout, configOptions);
+      Plotly.react(this.energyBarChart.nativeElement, dataArray, layout, configOptions);
     });
   }
-
 
   ngOnDestroy() {
     this.batchAnalysisDataItemsSub.unsubscribe();
   }
 
+  addTraceGroupDataToDataArray(dataArray: Array<any>, dataItems: Array<BatchAnalysisResults>, totalCurrentCost: number, totalModifedCost: number, markerColorStr: string, xAxis: string) {
+    let rewindOpacity: number = 1;
+    let opacityInterval: number = 1 / (dataItems.length + 1);
+    for (let i = 0; i < dataItems.length; i++) {
+      let markerColor: string = markerColorStr + rewindOpacity + ')';
+      let text;
+      if (i == dataItems.length - 1) {
+        text = [this.getFormatedCurrencyValue(totalCurrentCost), this.getFormatedCurrencyValue(totalModifedCost)];
+      }
+      dataArray.push({
+        x: ['Current', 'Modified'],
+        y: [dataItems[i].currentEnergyCost, dataItems[i].rewindEnergyCost],
+        type: "bar",
+        name: dataItems[i].motorName,
+        text: text,
+        textposition: 'auto',
+        xaxis: xAxis,
+        barmode: 'stack',
+        marker: { color: markerColor, line: { width: 2 } },
+        hoverinfo: 'label+value',
+        hovertemplate: '%{label}: %{value:$,.0f} <extra></extra>'
+      });
+      rewindOpacity = rewindOpacity - opacityInterval;
+    }
+  }
+
+  getTraceObject(currentEnergyCost: number, modifiedEnergyCost: number, motorName: string, markerColor: string, text: Array<number>) {
+    return {
+      x: ['Current', 'Modified'],
+      y: [currentEnergyCost, modifiedEnergyCost],
+      type: "bar",
+      name: motorName,
+      text: text,
+      textposition: 'auto',
+      xaxis: 'x3',
+      barmode: 'stack',
+      marker: { color: markerColor, line: { width: 2 } },
+      hoverinfo: 'label+value',
+      hovertemplate: '%{label}: %{value:$,.0f} <extra></extra>'
+    }
+  }
+  
   getFormatedCurrencyValue(num: number): string {
-    return '$' + (num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    let formattedWithDecimal = '$' + (num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    return formattedWithDecimal.substring(0, formattedWithDecimal.length - 3);
+  }
+
+  getXAxisDomains(hasRewind: boolean, hasReplace: boolean, hasReplaceWhenFail: boolean): { rewindDomain: Array<number>, replaceDomain: Array<number>, replaceWhenFailDomain: Array<number> } {
+    let numTypes: number = 0;
+    if (hasRewind) { numTypes++ }
+    if (hasReplace) { numTypes++ }
+    if (hasReplaceWhenFail) { numTypes++ }
+    let domainInterval: number = 1 / numTypes;
+    let start: number = 0;
+    //rewind
+    let rewindDomain: Array<number>;
+    //replace when fail
+    let replaceWhenFailDomain: Array<number>;
+    //replace now
+    let replaceDomain: Array<number>;
+    if (hasRewind) {
+      rewindDomain = [start, start + domainInterval];
+      start = start + domainInterval;
+    }
+    if (hasReplaceWhenFail) {
+      replaceWhenFailDomain = [start, start + domainInterval];
+      start = start + domainInterval;
+    }
+    if (hasReplace) {
+      replaceDomain = [start, start + domainInterval];
+      start = start + domainInterval;
+    }
+    return { rewindDomain: rewindDomain, replaceDomain: replaceDomain, replaceWhenFailDomain: replaceWhenFailDomain };
   }
 }
