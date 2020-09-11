@@ -44,10 +44,8 @@ export class EnergyCostPieChartComponent implements OnInit {
         insidetextorientation: "horizontal",
         textinfo: 'label+value',
         texttemplate: '%{label}<br>%{value:$,.0f}',
-        hoverinfo: 'label+value',
-        // direction: "clockwise",
-        // rotation: 90,
-        hovertemplate: '%{percent:,.2f} <extra></extra>'
+        hoverinfo: 'label+percent',
+        hovertemplate: '%{percent:%,.2f} <extra></extra>'
       }];
       let layout = {
         title: {
@@ -65,7 +63,7 @@ export class EnergyCostPieChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.react(this.costPieChart.nativeElement, data, layout, configOptions);
+      Plotly.newPlot(this.costPieChart.nativeElement, data, layout, configOptions);
     });
   }
 

@@ -80,7 +80,7 @@ export class EnergyCostBarChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.react(this.energyBarChart.nativeElement, dataArray, layout, configOptions);
+      Plotly.newPlot(this.energyBarChart.nativeElement, dataArray, layout, configOptions);
     });
   }
 
@@ -129,7 +129,7 @@ export class EnergyCostBarChartComponent implements OnInit {
       hovertemplate: '%{label}: %{value:$,.0f} <extra></extra>'
     }
   }
-  
+
   getFormatedCurrencyValue(num: number): string {
     let formattedWithDecimal = '$' + (num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     return formattedWithDecimal.substring(0, formattedWithDecimal.length - 3);
