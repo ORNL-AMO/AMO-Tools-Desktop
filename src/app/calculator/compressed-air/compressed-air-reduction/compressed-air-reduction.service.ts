@@ -265,8 +265,6 @@ export class CompressedAirReductionService {
 
   calculate(input: Array<CompressedAirReductionData>, settings: Settings): CompressedAirReductionResult {
     let inputArray: Array<CompressedAirReductionData> = this.convertCompressedAirReductionService.convertInputs(input, settings);
-    console.log(settings.unitsOfMeasure);
-    console.log(inputArray);
     let inputObj: CompressedAirReductionInput = {
       compressedAirReductionInputVec: inputArray
     };
