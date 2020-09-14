@@ -1,5 +1,5 @@
 <!--grid view-->
-<div *ngIf="dashboardView == 'grid'" class="card card-item">
+<div *ngIf="dashboardView == 'grid'" class="card card-item motor-inventory">
     <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
         <input type="checkbox" [(ngModel)]="inventoryItem.selected">
         <div class="d-flex align-items-center">
@@ -19,32 +19,7 @@
         </div>
     </div>
     <div class="card-body scroll-item summary-card-body">
-        <table class="table">
-            <tr>
-                <td>
-                    Number of Departments:
-                </td>
-                <td>
-                    {{numberOfDepartments}}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Number of Motors:
-                </td>
-                <td>
-                    {{numberOfMotors}}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Total Energy Use:
-                </td>
-                <td>
-                    &mdash;
-                </td>
-            </tr>
-        </table>
+        <app-motor-inventory-card [inventoryItem]="inventoryItem"></app-motor-inventory-card>
     </div>
     <div class="card-footer summary-card-footer">
         <div class="last-updated pull-right">Last updated {{inventoryItem.modifiedDate | date }}</div>
@@ -83,7 +58,6 @@
             <a (click)="goToInventoryItem('setup')">Inventory Setup</a>
             <a (click)="goToInventoryItem('summary')">Summary</a>
             <a (click)="goToInventoryItem('analysis')">Anaylsis</a>
-            <a class="mr-0" (click)="goToInventoryItem('calculators')">Calculators</a>
         </div>
     </div>
 </div>

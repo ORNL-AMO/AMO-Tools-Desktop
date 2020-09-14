@@ -14,6 +14,7 @@ import { InventoryItem } from '../../shared/models/inventory/inventory';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsService } from '../../settings/settings.service';
+import { MotorInventoryService } from '../../motor-inventory/motor-inventory.service';
 @Component({
   selector: 'app-create-inventory',
   templateUrl: './create-inventory.component.html',
@@ -39,7 +40,8 @@ export class CreateInventoryComponent implements OnInit {
     private dashboardService: DashboardService,
     private inventoryDbService: InventoryDbService,
     private inventoryService: InventoryService,
-    private settingsService: SettingsService) { }
+    private settingsService: SettingsService,
+    private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit() {
     this.directories = this.directoryDbService.getAll();
@@ -79,6 +81,8 @@ export class CreateInventoryComponent implements OnInit {
       this.hideCreateModal();
       this.createInventoryItemModal.onHidden.subscribe(() => {
         if (this.newInventoryItemForm.controls.inventoryType.value === 'motorInventory') {
+          this.motorInventoryService.mainTab.next('setup');
+          this.motorInventoryService.setupTab.next('plant-setup');
           let tmpInventoryItem: InventoryItem = this.inventoryService.getNewMotorInventoryItem();
           tmpInventoryItem.name = this.newInventoryItemForm.controls.inventoryName.value;
           tmpInventoryItem.directoryId = this.newInventoryItemForm.controls.directoryId.value;
