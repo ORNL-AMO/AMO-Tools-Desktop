@@ -6,7 +6,6 @@
         <app-motor-inventory-setup *ngIf="mainTab == 'setup'"></app-motor-inventory-setup>
         <app-motor-inventory-summary *ngIf="mainTab == 'summary'"></app-motor-inventory-summary>
         <app-batch-analysis *ngIf="mainTab == 'analysis'"></app-batch-analysis>
-        <app-motor-inventory-calculators *ngIf="mainTab == 'calculators'"></app-motor-inventory-calculators>
     </div>
     <div *ngIf="mainTab == 'setup'" #footer id="logToolFooter" class="footer hide-print">
         <div class="pull-left" *ngIf="currentTab == 'clean-data'">

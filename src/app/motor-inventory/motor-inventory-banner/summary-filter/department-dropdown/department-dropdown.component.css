@@ -39,3 +39,8 @@ a.list-group-item.active:hover{
     background-color: white;
     color: black;
 }
+
+label.group-label{
+    padding-bottom: 0px;
+}
+
