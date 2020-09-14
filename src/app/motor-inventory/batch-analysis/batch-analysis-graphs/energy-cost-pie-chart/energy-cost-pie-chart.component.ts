@@ -57,7 +57,7 @@ export class EnergyCostPieChartComponent implements OnInit {
         },
       };
 
-      var configOptions = {
+      let configOptions = {
         modeBarButtonsToRemove: ['hoverClosestPie'],
         displaylogo: false,
         displayModeBar: true,
