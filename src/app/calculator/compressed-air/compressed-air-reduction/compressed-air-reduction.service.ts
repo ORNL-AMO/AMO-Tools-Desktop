@@ -43,11 +43,17 @@ export class CompressedAirReductionService {
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
+    let utilityCost: number = settings && settings.electricityCost ? settings.electricityCost : 0.066;
+    if(utilityType == 0){
+      utilityCost = settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12;
+    }
+
+
     let obj: CompressedAirReductionData = {
       name: 'Equipment #' + (index + 1),
       hoursPerYear: hoursPerYear,
       utilityType: utilityType ? utilityType : 0,
-      utilityCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
+      utilityCost: utilityCost,
       compressedAirCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
       electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.066,
       measurementMethod: 0,
@@ -73,9 +79,9 @@ export class CompressedAirReductionService {
       name: 'Equipment #1',
       hoursPerYear: 8760,
       utilityType: 0,
-      utilityCost: 0.12,
-      compressedAirCost: 0.022,
-      electricityCost: settings.electricityCost,
+      utilityCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
+      compressedAirCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
+      electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.066,
       measurementMethod: 0,
       flowMeterMethodData: {
         meterReading: meterReading
