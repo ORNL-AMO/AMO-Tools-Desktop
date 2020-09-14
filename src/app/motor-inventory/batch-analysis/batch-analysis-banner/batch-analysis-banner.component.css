@@ -69,3 +69,17 @@ label.custom-control-label, .tab-content .form-group label, .tab-content .form-g
 .list-group{
     width: 450px;
 }
+
+.btn-sm{
+    /* font-size: small; */
+    padding: 4px;
+}
+
+.btn-sm.active{
+    color: white;
+    background-color: #84b641;
+}
+
+.navbar{
+    border-bottom: solid 4px #84b641;
+}

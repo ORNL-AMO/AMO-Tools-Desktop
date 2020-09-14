@@ -1,40 +1,27 @@
-<nav class="hide-print">
-    <div class="d-flex justify-content-between tabs subtabs motor-inventory">
-        <div class="d-flex progress-tabs flex-wrap">
-            <div class="fixed-tab-size" [ngClass]="{'active': selectedTab == 'table'}" (click)="setTab('table')">
-                <a>Table</a>
-            </div>
-            <div class="fixed-tab-size" [ngClass]="{'active': selectedTab == 'graphs'}" (click)="setTab('graphs')">
-                <a>Graphs</a>
-            </div>
+<nav class="navbar hide-print motor-inventory">
+    <div class="d-flex justify-content-between align-items-center w-100 flex-wrap">
+        <div class="btn-group btn-group-sm align-self-center">
+            <button type="button" class="btn btn-sm" (click)="setTab('table')"
+                [ngClass]="{'active': selectedTab == 'table'}">Table</button>
+            <button type="button" class="btn btn-sm" (click)="setTab('graphs')"
+                [ngClass]="{'active': selectedTab == 'graphs'}">Graphs</button>
         </div>
-        <div class="nav-item dropdown pull-right p-1">
-            <a class="nav-link dropdown-toggle" (click)="toggleDataOptions()">
-                Data Options
-            </a>
-            <div class="dropdown-menu p-0" [ngClass]="{'show': showDataOptions == true}">
-                <div class="list-group">
-                    <div class="list-group-item">
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" name="displayIncompleteMotors"
-                                id="displayIncompleteMotors" [(ngModel)]="batchAnalysisSettings.displayIncompleteMotors"
-                                (change)="saveSettings()">
-                            <label class="custom-control-label" for="displayIncompleteMotors">Display Incomplete
-                                Motors</label>
-                        </div>
-                    </div>
-                    <div class="list-group-item tab-content">
-                        <div class="form-group">
-                            <label>Payback Threshold</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control"
-                                    [(ngModel)]="batchAnalysisSettings.paybackThreshold" (input)="saveSettings()">
-                                <div class="input-group-addon units">yrs</div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="tab-content pl-2 pr-2">
+            <div class="form-group">
+                <label>Payback Threshold</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" [(ngModel)]="batchAnalysisSettings.paybackThreshold"
+                        (input)="saveSettings()">
+                    <div class="input-group-addon units">yrs</div>
                 </div>
             </div>
+        </div>
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" name="displayIncompleteMotors"
+                id="displayIncompleteMotors" [(ngModel)]="batchAnalysisSettings.displayIncompleteMotors"
+                (change)="saveSettings()">
+            <label class="custom-control-label" for="displayIncompleteMotors">Display Incomplete
+                Motors</label>
         </div>
     </div>
 </nav>
