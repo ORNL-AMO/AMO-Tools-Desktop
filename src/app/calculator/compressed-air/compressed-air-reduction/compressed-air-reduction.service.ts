@@ -225,22 +225,26 @@ export class CompressedAirReductionService {
   getResults(settings: Settings, baseline: Array<CompressedAirReductionData>, modification?: Array<CompressedAirReductionData>): CompressedAirReductionResults {
     let baselineInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(baseline));
     let baselineResults: CompressedAirReductionResult = this.calculate(baselineInpCpy, settings);
-    let modificationResults: CompressedAirReductionResult;
-    let annualEnergySavings: number = 0;
-    let annualCostSavings: number = 0;
-    let flowRateReduction: number = 0;
-    let annualConsumptionReduction: number = 0;
+    let modificationResults: CompressedAirReductionResult = {
+      energyUse: 0,
+      energyCost: 0,
+      flowRate: 0,
+      singleNozzeFlowRate: 0,
+      consumption: 0
+    };
     if (modification) {
       let modificationInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(modification));
       modificationResults = this.calculate(modificationInpCpy, settings);
+    } else{
+      modificationResults = baselineResults;
     }
     let compressedAirReductionResults: CompressedAirReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
-      annualCostSavings: annualCostSavings,
-      annualEnergySavings: annualEnergySavings,
-      annualFlowRateReduction: flowRateReduction,
-      annualConsumptionReduction: annualConsumptionReduction
+      annualCostSavings: 0,
+      annualEnergySavings: 0,
+      annualFlowRateReduction: 0,
+      annualConsumptionReduction: 0
     }
     if (modificationResults) {
       if (baselineInpCpy[0].utilityType == 0) {

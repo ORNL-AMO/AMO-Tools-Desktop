@@ -79,20 +79,21 @@ export class CompressedAirPressureReductionService {
   getResults(settings: Settings, baseline: Array<CompressedAirPressureReductionData>, modification?: Array<CompressedAirPressureReductionData>) {
     let baselineInpCpy: Array<CompressedAirPressureReductionData> = JSON.parse(JSON.stringify(baseline));
     let baselineResults: CompressedAirPressureReductionResult = this.calculate(baselineInpCpy, settings);
-    let modificationResults: CompressedAirPressureReductionResult;
-    let annualEnergySavings: number = 0;
-    let annualCostSavings: number = 0;
-
+    let modificationResults: CompressedAirPressureReductionResult = {
+      energyUse: 0,
+      energyCost: 0
+    };
     if (modification) {
       let modificationInpCpy: Array<CompressedAirPressureReductionData> = JSON.parse(JSON.stringify(modification));
       modificationResults = this.calculate(modificationInpCpy, settings);
+    }else{
+      modificationResults = baselineResults;
     }
-
     let compressedAirPressureReductionResults: CompressedAirPressureReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
-      annualEnergySavings: annualEnergySavings,
-      annualCostSavings: annualCostSavings
+      annualEnergySavings: 0,
+      annualCostSavings: 0
     };
 
     if (modificationResults) {
