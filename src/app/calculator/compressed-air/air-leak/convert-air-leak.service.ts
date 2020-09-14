@@ -31,7 +31,6 @@ export class ConvertAirLeakService {
         inputArray[i].orificeMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.supplyPressure).from('kPaa').to('psia');
         let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
         inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / conversionHelper;
-        console.log(inputArray[i].compressorElectricityData.compressorSpecificPower);
       }
     }
     return inputArray;
