@@ -192,7 +192,7 @@
             </td>
             <td>
                 <span *ngIf="batchAnalysisDataItem.rewindCost">
-                    {{batchAnalysisDataItem.rewindCost | currency}}
+                    {{batchAnalysisDataItem.rewindCost | currency:'USD':'symbol':'2.0-0'}}
                 </span>
                 <span *ngIf="!batchAnalysisDataItem.rewindCost">
                     &mdash;
@@ -208,7 +208,7 @@
             </td>
             <td>
                 <span *ngIf="batchAnalysisDataItem.replacementPurchaseCost">
-                    {{batchAnalysisDataItem.replacementPurchaseCost | currency }}
+                    {{batchAnalysisDataItem.replacementPurchaseCost | currency:'USD':'symbol':'2.0-0' }}
                 </span>
                 <span *ngIf="!batchAnalysisDataItem.replacementPurchaseCost">
                     &mdash;
@@ -224,7 +224,7 @@
             </td>
             <td>
                 <span *ngIf="batchAnalysisDataItem.currentEnergyCost">
-                    {{batchAnalysisDataItem.currentEnergyCost | currency}}
+                    {{batchAnalysisDataItem.currentEnergyCost | currency:'USD':'symbol':'2.0-0'}}
                 </span>
                 <span *ngIf="!batchAnalysisDataItem.currentEnergyCost">
                     &mdash;
@@ -247,7 +247,7 @@
             </td>
             <td *ngIf="batchAnalysisDataItem.isBatchAnalysisValid">
                 <span *ngIf="batchAnalysisDataItem.rewindEnergyCost">
-                    {{batchAnalysisDataItem.rewindEnergyCost | currency}}
+                    {{batchAnalysisDataItem.rewindEnergyCost | currency:'USD':'symbol':'2.0-0'}}
                 </span>
                 <span *ngIf="!batchAnalysisDataItem.rewindEnergyCost">
                     &mdash;
@@ -263,7 +263,7 @@
             </td>
             <td *ngIf="batchAnalysisDataItem.isBatchAnalysisValid">
                 <span *ngIf="batchAnalysisDataItem.replacementEnergyCost">
-                    {{batchAnalysisDataItem.replacementEnergyCost | currency}}
+                    {{batchAnalysisDataItem.replacementEnergyCost | currency:'USD':'symbol':'2.0-0'}}
                 </span>
                 <span *ngIf="!batchAnalysisDataItem.replacementEnergyCost">
                     &mdash;

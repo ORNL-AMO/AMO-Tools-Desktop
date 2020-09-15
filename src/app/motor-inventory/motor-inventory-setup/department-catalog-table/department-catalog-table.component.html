@@ -73,7 +73,7 @@
                 </td>
                 <td>
                     <span *ngIf="tableDataItem.energyCost">
-                        {{tableDataItem.energyCost | currency}}
+                        {{tableDataItem.energyCost | currency:'USD':'symbol':'2.0-0'}}
                     </span>
                     <span *ngIf="!tableDataItem.energyCost">
                         $ &mdash;

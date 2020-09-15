@@ -21,6 +21,8 @@ export class MotorInventoryCardComponent implements OnInit {
   numReplaceNow: number = 0;
   numReplaceWhenFail: number = 0;
   showBatchSummary: boolean = false;
+  totalEnergyUse: number = 0;
+  totalEnergyCost: number = 0;
   constructor(private batchAnalysisService: BatchAnalysisService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
@@ -40,6 +42,12 @@ export class MotorInventoryCardComponent implements OnInit {
           this.numReplaceWhenFail++;
         } else if (result.replaceMotor == 'Rewind') {
           this.numRewind++;
+        }
+        if (isNaN(result.currentEnergyUse) == false) {
+          this.totalEnergyUse = this.totalEnergyUse + result.currentEnergyUse;
+        }
+        if(isNaN(result.currentEnergyCost) == false){
+          this.totalEnergyCost = this.totalEnergyCost + result.currentEnergyCost;
         }
       });
       this.showBatchSummary = (this.numRewind != 0 || this.numReplaceNow != 0 || this.numReplaceWhenFail != 0);
