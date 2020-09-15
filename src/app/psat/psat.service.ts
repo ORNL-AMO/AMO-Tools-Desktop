@@ -441,19 +441,23 @@ export class PsatService {
     loadFactor: number,
     settings: Settings
   ): number {
-    if (settings.unitsOfMeasure != 'Imperial') {
-      motorPower = this.convertUnitsService.value(motorPower).from(settings.powerMeasurement).to('hp');
+    if (motorPower != undefined && lineFreq != undefined && motorRPM != undefined && efficiencyClass != undefined && loadFactor != undefined) {
+      if (settings.unitsOfMeasure != 'Imperial') {
+        motorPower = this.convertUnitsService.value(motorPower).from(settings.powerMeasurement).to('hp');
+      }
+      //efficiency unused, calced from efficiencyClass
+      let tmpInputs = {
+        line_frequency: lineFreq,
+        motor_rated_speed: motorRPM,
+        efficiency_class: efficiencyClass,
+        efficiency: efficiency,
+        motor_rated_power: motorPower,
+        load_factor: loadFactor
+      };
+      return this.roundVal(psatAddon.nema(tmpInputs), 2);
+    } else {
+      return 0;
     }
-    //efficiency unused, calced from efficiencyClass
-    let tmpInputs = {
-      line_frequency: lineFreq,
-      motor_rated_speed: motorRPM,
-      efficiency_class: efficiencyClass,
-      efficiency: efficiency,
-      motor_rated_power: motorPower,
-      load_factor: loadFactor
-    };
-    return this.roundVal(psatAddon.nema(tmpInputs), 2);
   }
 
   motorPowerFactor(
