@@ -1,0 +1,49 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { InventoryItem } from '../../../../../shared/models/inventory/inventory';
+import { MotorInventoryService } from '../../../../../motor-inventory/motor-inventory.service';
+import { BatchAnalysisService, BatchAnalysisResults } from '../../../../../motor-inventory/batch-analysis/batch-analysis.service';
+import { Settings } from '../../../../../shared/models/settings';
+import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
+
+@Component({
+  selector: 'app-motor-inventory-card',
+  templateUrl: './motor-inventory-card.component.html',
+  styleUrls: ['./motor-inventory-card.component.css']
+})
+export class MotorInventoryCardComponent implements OnInit {
+  @Input()
+  inventoryItem: InventoryItem;
+
+  numberOfDepartments: number;
+  numberOfMotors: number = 0;
+  paybackThreshold: number;
+  numRewind: number = 0;
+  numReplaceNow: number = 0;
+  numReplaceWhenFail: number = 0;
+  showBatchSummary: boolean = false;
+  constructor(private batchAnalysisService: BatchAnalysisService, private settingsDbService: SettingsDbService) { }
+
+  ngOnInit(): void {
+    this.numberOfDepartments = this.inventoryItem.motorInventoryData.departments.length;
+    this.inventoryItem.motorInventoryData.departments.forEach(department => {
+      this.numberOfMotors = this.numberOfMotors + department.catalog.length;
+    });
+
+    if (this.inventoryItem.batchAnalysisSettings) {
+      this.paybackThreshold = this.inventoryItem.batchAnalysisSettings.paybackThreshold;
+      let settings: Settings = this.settingsDbService.getByInventoryId(this.inventoryItem);
+      let analysisResults: Array<BatchAnalysisResults> = this.batchAnalysisService.getBatchAnalysisDataItems(this.inventoryItem.motorInventoryData, settings, this.inventoryItem.batchAnalysisSettings);
+      analysisResults.forEach(result => {
+        if (result.replaceMotor == 'Replace Now') {
+          this.numReplaceNow++;
+        } else if (result.replaceMotor == 'Replace When Fail') {
+          this.numReplaceWhenFail++;
+        } else if (result.replaceMotor == 'Rewind') {
+          this.numRewind++;
+        }
+      });
+      this.showBatchSummary = (this.numRewind != 0 || this.numReplaceNow != 0 || this.numReplaceWhenFail != 0);
+    }
+  }
+
+}

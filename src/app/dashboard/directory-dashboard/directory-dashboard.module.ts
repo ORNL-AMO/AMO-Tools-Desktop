@@ -30,6 +30,7 @@ import { AddPreAssessmentItemComponent } from './directory-items/add-pre-assessm
 import { ContentControlsComponent } from './directory-dashboard-menu/content-controls/content-controls.component';
 import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
 import { InventoryItemComponent } from './directory-items/inventory-item/inventory-item.component';
+import { MotorInventoryCardComponent } from './directory-items/inventory-item/motor-inventory-card/motor-inventory-card.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { InventoryItemComponent } from './directory-items/inventory-item/invento
      PreAssessmentItemComponent,
      AddPreAssessmentItemComponent,
      ContentControlsComponent,
-     InventoryItemComponent
+     InventoryItemComponent,
+     MotorInventoryCardComponent
     ],
   imports: [
     CommonModule,
