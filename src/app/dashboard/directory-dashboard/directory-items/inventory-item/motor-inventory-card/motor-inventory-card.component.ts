@@ -40,7 +40,7 @@ export class MotorInventoryCardComponent implements OnInit {
           this.numReplaceNow++;
         } else if (result.replaceMotor == 'Replace When Fail') {
           this.numReplaceWhenFail++;
-        } else if (result.replaceMotor == 'Rewind') {
+        } else if (result.replaceMotor == 'Rewind When Fail') {
           this.numRewind++;
         }
         if (isNaN(result.currentEnergyUse) == false) {

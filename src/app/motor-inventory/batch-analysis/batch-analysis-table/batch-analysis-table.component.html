@@ -151,7 +151,7 @@
     <tbody>
         <tr *ngFor="let batchAnalysisDataItem of batchAnalysisDataItems | batchAnalysisTable:sortByField:sortByDirection:batchAnalysisSettings"
             [ngClass]="{'replace': batchAnalysisDataItem.replaceMotor == 'Replace Now', 'replace-when-fail': batchAnalysisDataItem.replaceMotor == 'Replace When Fail',
-            'rewind': batchAnalysisDataItem.replaceMotor == 'Rewind'}">
+            'rewind': batchAnalysisDataItem.replaceMotor == 'Rewind When Fail'}">
             <td class="sticky-left name-cell" (click)="goToMotorItem(batchAnalysisDataItem)">
                 {{batchAnalysisDataItem.motorName}}
             </td>
@@ -286,7 +286,7 @@
                 </span>
             </td>
             <td *ngIf="batchAnalysisDataItem.isBatchAnalysisValid" [ngClass]="{'replace': batchAnalysisDataItem.replaceMotor == 'Replace Now', 'replace-when-fail': batchAnalysisDataItem.replaceMotor == 'Replace When Fail',
-            'rewind': batchAnalysisDataItem.replaceMotor == 'Rewind'}">
+            'rewind': batchAnalysisDataItem.replaceMotor == 'Rewind When Fail'}">
                 {{batchAnalysisDataItem.replaceMotor}}
             </td>
         </tr>

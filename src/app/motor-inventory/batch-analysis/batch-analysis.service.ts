@@ -108,7 +108,7 @@ export class BatchAnalysisService {
       } else if (batchAnalysisSettings.paybackThreshold > replaceExistingResults.incrementalSimplePayback) {
         replaceNowDecision = 'Replace When Fail';
       } else {
-        replaceNowDecision = 'Rewind';
+        replaceNowDecision = 'Rewind When Fail';
       }
     }
     let operatingHours: number;
@@ -157,7 +157,7 @@ export class BatchAnalysisService {
           } else if (batchAnalysisSettings.paybackThreshold > dataItem.replacementFailPayback) {
             dataItem.replaceMotor = 'Replace When Fail';
           } else {
-            dataItem.replaceMotor = 'Rewind';
+            dataItem.replaceMotor = 'Rewind When Fail';
           }
         }
       });

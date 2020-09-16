@@ -24,33 +24,25 @@ export class EnergyCostBarChartComponent implements OnInit {
 
       let dataArray = new Array();
       //rewind
-      let rewindItems: Array<BatchAnalysisResults> = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Rewind' });
+      let rewindItems: Array<BatchAnalysisResults> = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Rewind When Fail' });
       if (rewindItems.length != 0) {
-        let totalCurrentEnergyCost: number = _.sumBy(rewindItems, 'currentEnergyCost');
-        let totalModifiedEnergyCost: number = _.sumBy(rewindItems, 'rewindEnergyCost');
-        this.addTraceGroupDataToDataArray(dataArray, rewindItems, totalCurrentEnergyCost, totalModifiedEnergyCost, 'rgba(125, 60, 152,', 'x1', 'Rewind');
+        this.addTraceGroupDataToDataArray(dataArray, rewindItems, 'rgba(125, 60, 152,', 'x1', 'Rewind When Fail');
       }
       //replace when fail
       let replaceWhenFailItems: Array<BatchAnalysisResults> = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Replace When Fail' });
       if (replaceWhenFailItems.length != 0) {
-        let totalCurrentEnergyCost: number = _.sumBy(replaceWhenFailItems, 'currentEnergyCost');
-        let totalModifiedEnergyCost: number = _.sumBy(replaceWhenFailItems, 'replacementEnergyCost');
-        this.addTraceGroupDataToDataArray(dataArray, replaceWhenFailItems, totalCurrentEnergyCost, totalModifiedEnergyCost, 'rgba(40, 116, 166,', 'x2', 'Replace When Fail');
+        this.addTraceGroupDataToDataArray(dataArray, replaceWhenFailItems, 'rgba(40, 116, 166,', 'x2', 'Replace When Fail');
       }
       //replace now
       let replaceNowItems: Array<BatchAnalysisResults> = batchAnalysisDataItems.filter(item => { return item.replaceMotor == 'Replace Now' });
       if (replaceNowItems.length != 0) {
-        let totalCurrentEnergyCost: number = _.sumBy(replaceNowItems, 'currentEnergyCost');
-        let totalModifiedEnergyCost: number = _.sumBy(replaceNowItems, 'replacementEnergyCost');
-        this.addTraceGroupDataToDataArray(dataArray, replaceNowItems, totalCurrentEnergyCost, totalModifiedEnergyCost, 'rgba(17, 122, 101,', 'x3', 'Replace Now');
+        this.addTraceGroupDataToDataArray(dataArray, replaceNowItems, 'rgba(17, 122, 101,', 'x3', 'Replace Now');
       }
 
       //N/A (left over batch analysis items)
       let incompleteItems: Array<BatchAnalysisResults> = batchAnalysisDataItems.filter(item => { return item.isBatchAnalysisValid == false && item.currentEnergyCost });
       if (batchAnalysisSettings.displayIncompleteMotors && incompleteItems.length != 0) {
-        let totalCurrentEnergyCost: number = _.sumBy(incompleteItems, 'currentEnergyCost');
-        let totalModifiedEnergyCost: number = _.sumBy(incompleteItems, 'replacementEnergyCost');
-        this.addTraceGroupDataToDataArray(dataArray, incompleteItems, totalCurrentEnergyCost, totalModifiedEnergyCost, 'rgba(112, 123, 124,', 'x4', 'N/A');
+        this.addTraceGroupDataToDataArray(dataArray, incompleteItems, 'rgba(112, 123, 124,', 'x4', 'Incomplete');
       }
 
 
@@ -58,7 +50,7 @@ export class EnergyCostBarChartComponent implements OnInit {
       let layout = {
         barmode: "stack",
         title: {
-          text: 'Motor Energy Costs',
+          text: 'Motor Annual Energy Costs',
         },
         yaxis: {
           title: {
@@ -72,7 +64,7 @@ export class EnergyCostBarChartComponent implements OnInit {
         xaxis: {
           domain: xAxisDomains.rewindDomain,
           anchor: 'x1',
-          title: 'Rewind'
+          title: 'Rewind When Fail'
         },
         xaxis2: {
           domain: xAxisDomains.replaceWhenFailDomain,
@@ -87,7 +79,7 @@ export class EnergyCostBarChartComponent implements OnInit {
         xaxis4: {
           domain: xAxisDomains.incompleteDomain,
           anchor: 'x4',
-          title: 'N/A'
+          title: 'Incomplete'
         }
       };
 
@@ -105,28 +97,36 @@ export class EnergyCostBarChartComponent implements OnInit {
     this.batchAnalysisDataItemsSub.unsubscribe();
   }
 
-  addTraceGroupDataToDataArray(dataArray: Array<any>, dataItems: Array<BatchAnalysisResults>, totalCurrentCost: number, totalModifedCost: number, markerColorStr: string, xAxis: string, replaceRewindVal: string) {
+  addTraceGroupDataToDataArray(dataArray: Array<any>, dataItems: Array<BatchAnalysisResults>, markerColorStr: string, xAxis: string, replaceRewindVal: string) {
     let rewindOpacity: number = 1;
     let opacityInterval: number = 1 / (dataItems.length + 1);
     for (let i = 0; i < dataItems.length; i++) {
       let markerColor: string = markerColorStr + rewindOpacity + ')';
       let text;
       if (i == dataItems.length - 1) {
-        if (totalModifedCost) {
-          text = [this.getFormatedCurrencyValue(totalCurrentCost), this.getFormatedCurrencyValue(totalModifedCost)];
+        let totalCurrentCost: number = _.sumBy(dataItems, 'currentEnergyCost');
+        if (replaceRewindVal == 'Rewind When Fail') {
+          let totalRewindCost: number = _.sumBy(dataItems, 'rewindEnergyCost');
+          text = [this.getFormatedCurrencyValue(totalCurrentCost), this.getFormatedCurrencyValue(totalRewindCost)];
+        } else if (replaceRewindVal != 'Incomplete') {
+
+          let totalReplaceCost: number = _.sumBy(dataItems, 'replacementEnergyCost');
+          text = [this.getFormatedCurrencyValue(totalCurrentCost), this.getFormatedCurrencyValue(totalReplaceCost)];
         } else {
           text = [this.getFormatedCurrencyValue(totalCurrentCost)];
         }
       }
       let yData: Array<number>;
       let xData: Array<string>;
-      if (replaceRewindVal == 'Rewind') {
-        yData = [dataItems[i].currentEnergyCost, dataItems[i].rewindEnergyCost];
-        xData = ['Current', 'Modified'];
-      } else if (replaceRewindVal == 'Replace Now' || replaceRewindVal == 'Replace When Fail') {
-        yData = [dataItems[i].currentEnergyCost, dataItems[i].replacementEnergyCost];
-        xData = ['Current', 'Modified'];
-      } else if (replaceRewindVal == 'N/A') {
+      if (replaceRewindVal != 'Incomplete') {
+        if (replaceRewindVal == 'Rewind When Fail') {
+          yData = [dataItems[i].currentEnergyCost, dataItems[i].replacementEnergyCost];
+          xData = ['Current', 'Rewind'];
+        } else {
+          yData = [dataItems[i].currentEnergyCost, dataItems[i].rewindEnergyCost];
+          xData = ['Current', 'Replace'];
+        }
+      } else if (replaceRewindVal == 'Incomplete') {
         yData = [dataItems[i].currentEnergyCost]
         xData = ['Current'];
       }
@@ -173,15 +173,15 @@ export class EnergyCostBarChartComponent implements OnInit {
     //incomplete
     let incompleteDomain: Array<number>;
     if (hasRewind) {
-      rewindDomain = [start, start + domainInterval + incompleteInterval];
+      rewindDomain = [start, start + domainInterval + incompleteInterval - .05];
       start = start + domainInterval + incompleteInterval;
     }
     if (hasReplaceWhenFail) {
-      replaceWhenFailDomain = [start, start + domainInterval + incompleteInterval];
+      replaceWhenFailDomain = [start, start + domainInterval + incompleteInterval - .05];
       start = start + domainInterval + incompleteInterval;
     }
     if (hasReplace) {
-      replaceDomain = [start, start + domainInterval + incompleteInterval];
+      replaceDomain = [start, start + domainInterval + incompleteInterval - .05];
       start = start + domainInterval + incompleteInterval;
     }
     if (hasIncomplete) {

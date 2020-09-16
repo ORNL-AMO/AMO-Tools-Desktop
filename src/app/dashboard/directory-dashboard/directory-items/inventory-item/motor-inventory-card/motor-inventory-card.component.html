@@ -23,7 +23,7 @@
             Annual Energy Use:
         </td>
         <td>
-            {{totalEnergyUse | number:'1.0-0'}} kWh
+            {{totalEnergyUse | number:'1.0-0'}} kWh/yr
         </td>
     </tr>
     <tr>
@@ -64,7 +64,7 @@
     </tr>
     <tr *ngIf="showBatchSummary">
         <td>
-            Rewind:
+            Rewind When Fail:
         </td>
         <td>
             {{numRewind}}

@@ -29,7 +29,7 @@ export class EnergyCostPieChartComponent implements OnInit {
         labels: batchAnalysisData.map(val => { return val.motorName }),
         marker: {
           colors: batchAnalysisData.map(val => {
-            if (val.replaceMotor == 'Rewind') {
+            if (val.replaceMotor == 'Rewind When Fail') {
               return '#7D3C98';
             } else if (val.replaceMotor == 'Replace Now') {
               return '#117A65';
