@@ -21,7 +21,8 @@ export class DepartmentSetupComponent implements OnInit {
   }
 
   deleteDepartment(id: string) {
-    this.motorInventoryData.departments.filter((department) => { return department.id == id });
+    let departmentIndex: number = this.motorInventoryData.departments.findIndex((department) => { return department.id == id })
+    this.motorInventoryData.departments.splice(departmentIndex, 1);
     this.motorInventoryService.motorInventoryData.next(this.motorInventoryData);
   }
 
