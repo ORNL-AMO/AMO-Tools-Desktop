@@ -155,8 +155,8 @@ export class SystemAndEquipmentCurveService {
 
     if (isIntersectionReady) {
       let baselineOperatingFlow = intersectionData.baseline.x;
-      // roundoff flow offset to find match
-      let match = Math.round(baselineOperatingFlow / 10) * 10;
+      // roundoff flow (value being avg'd in intersection calc) to find match
+      let match = Math.round(baselineOperatingFlow / 10000) * 10000;
 
       let baselinePower = baselinePowerDataPairs.find(pair => {
         return pair.x == match;
