@@ -42,12 +42,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     }
   }
 
-  // @HostListener('window:resize', ['$event'])
-  // resizeCharts(event) {
-  //   Plotly.Plots.resize(this.currentSystemChartId);
-  //   Plotly.Plots.resize(this.currentPowerChartId);
-  // }
-
   updateGraphSub: Subscription;
   resetSub: Subscription;
   generateExampleSub: Subscription;
@@ -122,11 +116,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
           clearTimeout(this.createGraphTimer);
         }
         this.createGraphTimer = setTimeout(() => {
-          // if (this.isChartSetup) {
-          //   // this.updateChart();
-          // } else {
-          //   this.initRenderChart();
-          // }
           this.initRenderChart();
         }, 100);
         this.systemAndEquipmentCurveService.updateGraph.next(false);
@@ -255,42 +244,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     }
     this.save();
   }
-
-  // updateChart() {
-  //   this.setDisplayDataOptions();
-  //   this.drawTraceData();
-  //   let chartLayout = JSON.parse(JSON.stringify(this.curveEquipmentChart.layout));
-
-  //   // Plotly.update(this.currentSystemChartId, this.curveEquipmentChart.data, chartLayout);
-  //   Plotly.newPlot(this.currentSystemChartId, this.curveEquipmentChart.data, chartLayout, this.curveEquipmentChart.config)
-  //     .then(chart => {
-  //       chart.on('plotly_click', (graphData) => {
-  //         this.createDataPoint(graphData);
-  //       });
-  //       chart.on('plotly_hover', hoverData => {
-  //             this.displayHoverData(hoverData);
-  //       });
-  //       chart.on('plotly_unhover', unhoverData => {
-  //           this.removeHoverData(this.currentPowerChartId);
-  //       });
-  //   });
-
-  //   if (this.displayPowerChart) {
-  //     let powerChartLayout = JSON.parse(JSON.stringify(this.powerChart.layout));
-  //     Plotly.newPlot(this.currentPowerChartId, this.powerChart.data, powerChartLayout, this.powerChart.config)
-  //       .then(chart => {
-  //         chart.on('plotly_hover', powerHoverData => {
-  //           this.displayHoverData(powerHoverData, true);
-  //         });
-  //         chart.on('plotly_unhover', unhoverData => {
-  //           this.removeHoverData(this.currentSystemChartId);
-  //         });
-  //       });
-  //     // Plotly.update(this.currentPowerChartId, this.powerChart.data, powerChartLayout);
-  //   } else {
-  //     Plotly.purge(this.currentPowerChartId);
-  //   }
-  // }
 
   initChartSetup(isResize) {
     this.pointColors = graphColors;
@@ -425,11 +378,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       this.chartConfig.defaultPointCount = 1;
       this.setIntersectionTrace(baselineIntersectionPoint, this.traces.baselineIntersect, 'Baseline');
     } else {
-      this.chartConfig.defaultPointCount = 0;
-      this.setEmptyTrace(this.curveEquipmentChart, this.traces.baselineIntersect);
-      this.selectedDataPoints.splice(0, 1);
-      this.cd.detectChanges();
-      this.save();
+      this.removeIntersectionPoint(0, this.traces.baselineIntersect);
     }
     if (this.isEquipmentModificationShown && this.isSystemCurveShown && this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs != undefined) {
       let modIntersectionPoint = this.systemAndEquipmentCurveGraphService.calculateModificationIntersectionPoint();
@@ -438,12 +387,16 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
         this.setIntersectionTrace(modIntersectionPoint, this.traces.modificationIntersect, 'Modification');
       }
     } else {
-      this.chartConfig.defaultPointCount = 1;
-      this.setEmptyTrace(this.curveEquipmentChart, this.traces.modificationIntersect);
-      this.selectedDataPoints.splice(1, 1);
-      this.cd.detectChanges();
-      this.save();
+      this.removeIntersectionPoint(1, this.traces.modificationIntersect);
     }
+  }
+
+  removeIntersectionPoint(selectedDataPointIndex: number, traceIndex: number) {
+    this.chartConfig.defaultPointCount = selectedDataPointIndex;
+    this.setEmptyTrace(this.curveEquipmentChart, traceIndex);
+    this.selectedDataPoints.splice(selectedDataPointIndex, 1);
+    this.cd.detectChanges();
+    this.save();
   }
   
   buildHoverGroupData(plotlyHoverEvent) {
@@ -481,42 +434,42 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
   displayHoverData(plotlyHoverEvent, onPowerChart: boolean = false) {
     this.buildHoverGroupData(plotlyHoverEvent);
-    let points = plotlyHoverEvent.points[0];
-    let hoverPointIndex: number = this.powerChart.data[0].x.findIndex(x => x == points.x);
-    let flowValue = this.powerChart.data[0].x[hoverPointIndex];
-    this.hoverChartId = this.displayPowerChart? this.currentPowerChartId : undefined;
-    let hoverTraces = [{ curveNumber: 0, pointNumber: hoverPointIndex }];
 
-    if (points.curveNumber == this.traces.modification) {
+    let hoveredPoint = plotlyHoverEvent.points[0];
+    let hoveredPointIndex: number = this.powerChart.data[0].x.findIndex(x => x == hoveredPoint.x);
+    let flowValue = this.powerChart.data[0].x[hoveredPointIndex];
+    this.hoverChartId = this.displayPowerChart? this.currentPowerChartId : undefined;
+    let hoverTraces = [{ curveNumber: 0, pointNumber: hoveredPointIndex }];
+
+    if (hoveredPoint.curveNumber == this.traces.modification) {
       // Hovering on equipment mod
-      // Round up or down to nearest 10 - (mod coordinates are offset by a ratio)
-      let pointX = Math.round(points.x/10) * 10;
-      hoverPointIndex = this.powerChart.data[0].x.findIndex(x => x == pointX);
-      hoverTraces[0].pointNumber = hoverPointIndex;
+      // Round up or down to nearest 10 - (mod x coordinates are offset by the base/mod speed ratio)
+      let pointX = Math.round(hoveredPoint.x/10) * 10;
+      hoveredPointIndex = this.powerChart.data[0].x.findIndex(x => x == pointX);
+      hoverTraces[0].pointNumber = hoveredPointIndex;
     }
 
     if (!onPowerChart && this.powerChart.data[1]) {
       // hovertag for power chart modification
-      if (points.curveNumber != this.traces.modification) {
-
+      if (hoveredPoint.curveNumber != this.traces.modification) {
         let matchFunction = JSON.parse(JSON.stringify(this.powerChart.data[1].x)).map(x => Math.round(x/10) * 10);
-        hoverPointIndex = matchFunction.findIndex(x => x == flowValue);
+        hoveredPointIndex = matchFunction.findIndex(x => x == flowValue);
       } else {
         // Modification lines are same length - use index
-        hoverPointIndex = points.pointIndex;
+        hoveredPointIndex = hoveredPoint.pointIndex;
       }
-      hoverTraces.push({ curveNumber: 1, pointNumber: hoverPointIndex });
-    } else if (onPowerChart && points.curveNumber == 0) {
+      hoverTraces.push({ curveNumber: 1, pointNumber: hoveredPointIndex });
+    } else if (onPowerChart && hoveredPoint.curveNumber == 0) {
       // Hovering on power baseline
-      hoverPointIndex = this.curveEquipmentChart.data[this.traces.baseline].x.findIndex(x => x == points.x);
+      hoveredPointIndex = this.curveEquipmentChart.data[this.traces.baseline].x.findIndex(x => x == hoveredPoint.x);
       this.hoverChartId = this.currentSystemChartId;
       hoverTraces[0].curveNumber = this.traces.baseline;
-    } else if (onPowerChart && points.curveNumber == 1) {
+    } else if (onPowerChart && hoveredPoint.curveNumber == 1) {
       // Hovering on power modification
-      hoverPointIndex = points.pointIndex;
+      hoveredPointIndex = hoveredPoint.pointIndex;
       this.hoverChartId = this.currentSystemChartId;
       hoverTraces[0].curveNumber = this.traces.modification;
-      hoverTraces[0].pointNumber = hoverPointIndex;
+      hoverTraces[0].pointNumber = hoveredPointIndex;
     }
 
     if (this.hoverChartId) {
@@ -724,7 +677,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.curveEquipmentChart.layout.yaxis.showgrid = !showingGridY;
     this.powerChart.layout.xaxis.showgrid = !powerGridX;
     this.powerChart.layout.yaxis.showgrid = !powerGridY;
-    // this.updateChart();
     this.initRenderChart(true);
   }
 

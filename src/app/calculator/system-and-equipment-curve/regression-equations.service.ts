@@ -18,7 +18,7 @@ export class RegressionEquationsService {
   modificationEquipmentCurveByEquationRegressionEquation: BehaviorSubject<string>;
 
   systemCurveRegressionEquation: BehaviorSubject<string>;
-  coordinateIncrement: number = 2;
+  dataPairCoordinateIncrement: number = 2;
   constructor(private convertUnitsService: ConvertUnitsService) {
     this.baselineEquipmentCurveByDataRegressionEquation = new BehaviorSubject<string>(undefined);
     this.baselineEquipmentCurveByDataRSquared = new BehaviorSubject<number>(undefined);
@@ -57,7 +57,7 @@ export class RegressionEquationsService {
     if (modificationEquipment) {
       ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
     }
-    for (let i = 0; i <= maxFlowRate; i += this.coordinateIncrement) {
+    for (let i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
         let xBaseline: number = i;
@@ -115,7 +115,7 @@ export class RegressionEquationsService {
     }
 
     let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
-    for (let i = 0; i <= maxFlowRate; i += this.coordinateIncrement) {
+    for (let i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
         let xBaseline: number = i;
@@ -237,7 +237,7 @@ export class RegressionEquationsService {
   calculateByEquationData(byEquationInputs: ByEquationInputs, ratio: number, maxFlowRate: number, calculatePower = false): { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } {
     let calculationData: Array<Array<number>> = new Array();
     let dataPairs: Array<{ x: number, y: number }> = new Array();
-    for (let i = 0; i <= maxFlowRate; i += this.coordinateIncrement) {
+    for (let i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
       let yVal;
       if (calculatePower) {
         yVal = this.calculateYPower(byEquationInputs, i);
@@ -330,7 +330,7 @@ export class RegressionEquationsService {
       fanSystemCurveData.pointTwoPressure,
       fanSystemCurveData.systemLossExponent
     );
-    for (var i = 0; i <= maxFlowRate; i += this.coordinateIncrement) {
+    for (var i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
       let pressureAndFluidPower: { pressure: number, fluidPower: number } = this.calculateFanPressureAndFluidPower(staticPressure, lossCoefficient, i, fanSystemCurveData.systemLossExponent, fanSystemCurveData.compressibilityFactor, settings);
       if (pressureAndFluidPower.pressure >= 0) {
         data.push({ x: i, y: pressureAndFluidPower.pressure, fluidPower: pressureAndFluidPower.fluidPower })
@@ -358,7 +358,7 @@ export class RegressionEquationsService {
       pumpSystemCurveData.pointTwoHead,
       pumpSystemCurveData.systemLossExponent
     );
-    for (var i = 0; i <= maxFlowRate; i += this.coordinateIncrement) {
+    for (var i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
       let headAndFluidPower: { head: number, fluidPower: number } = this.calculatePumpHeadAndFluidPower(staticHead, lossCoefficient, i, pumpSystemCurveData.systemLossExponent, pumpSystemCurveData.specificGravity, settings);
       if (headAndFluidPower.head >= 0) {
         data.push({ x: i, y: headAndFluidPower.head, fluidPower: headAndFluidPower.fluidPower });
