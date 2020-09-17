@@ -4,6 +4,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirReductionService } from '../compressed-air-reduction.service';
 import { CompressedAirReductionResult, CompressedAirReductionData } from '../../../../shared/models/standalone';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { ConvertCompressedAirReductionService } from '../convert-compressed-air-reduction.service';
 
 @Component({
   selector: 'app-compressed-air-reduction-form',
@@ -89,7 +90,7 @@ export class CompressedAirReductionFormComponent implements OnInit {
   idString: string;
   individualResults: CompressedAirReductionResult;
   isEditingName: boolean = false;
-  constructor(private compressedAirReductionService: CompressedAirReductionService) { }
+  constructor(private compressedAirReductionService: CompressedAirReductionService, private convertCompressedAirReductionService: ConvertCompressedAirReductionService) { }
 
   ngOnInit() {
     if (this.isBaseline) {
@@ -121,7 +122,7 @@ export class CompressedAirReductionFormComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     setTimeout(() => {
       this.setOpHoursModalWidth();
     }, 100)
@@ -132,11 +133,24 @@ export class CompressedAirReductionFormComponent implements OnInit {
       if (this.form.controls.compressorSpecificPowerControl.value == 4) {
         this.compressorCustomSpecificPower = true;
       }
-      this.form.patchValue({ compressorSpecificPower: this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower });
+      let specificPower: number = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower;
+
+      if (this.settings.unitsOfMeasure != 'Imperial') {
+        specificPower = this.convertCompressedAirReductionService.convertSpecificPower(specificPower);
+        specificPower = this.convertCompressedAirReductionService.roundVal(specificPower);
+      }
+      this.form.patchValue({ compressorSpecificPower: specificPower });
     }
     else if (this.form.controls.compressorSpecificPowerControl.value != 4) {
       this.compressorCustomSpecificPower = false;
-      this.form.patchValue({ compressorSpecificPower: this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower });
+      let specificPower: number = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower;
+
+      if (this.settings.unitsOfMeasure != 'Imperial') {
+        specificPower = this.convertCompressedAirReductionService.convertSpecificPower(specificPower);
+        specificPower = this.convertCompressedAirReductionService.roundVal(specificPower);
+      }
+
+      this.form.patchValue({ compressorSpecificPower: specificPower });
     }
     else {
       if (this.form.controls.compressorSpecificPower.value) {
@@ -210,22 +224,22 @@ export class CompressedAirReductionFormComponent implements OnInit {
   focusOut() {
   }
 
-  closeOperatingHoursModal(){
+  closeOperatingHoursModal() {
     this.showOperatingHoursModal = false;
   }
 
-  openOperatingHoursModal(){
+  openOperatingHoursModal() {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: OperatingHours){
+  updateOperatingHours(oppHours: OperatingHours) {
     this.compressedAirReductionService.operatingHours = oppHours;
     this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
     this.calculate();
     this.closeOperatingHoursModal();
   }
 
-  setOpHoursModalWidth(){
+  setOpHoursModalWidth() {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
