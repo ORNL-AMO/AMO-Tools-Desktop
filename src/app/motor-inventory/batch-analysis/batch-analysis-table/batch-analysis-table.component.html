@@ -1,4 +1,4 @@
-<table class="table table-sm table-bordered">
+<table #copyTable class="table table-sm table-bordered">
     <thead>
         <tr>
             <th class="header-cell" [ngClass]="{'sort-by-active': 'motorName' == sortByField}"
@@ -144,7 +144,7 @@
                 <span class="fa fa-chevron-down"
                     *ngIf="sortByField == 'replaceMotor' && sortByDirection == 'asc'"></span>
                 Replace or Rewind
-                <br><span class="small help-text">({{batchAnalysisSettings.paybackThreshold}} yr. payback)</span>
+                <span class="small help-text">({{batchAnalysisSettings.paybackThreshold}} yr. payback)</span>
             </th>
         </tr>
     </thead>
@@ -292,3 +292,7 @@
         </tr>
     </tbody>
 </table>
+
+
+<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>
