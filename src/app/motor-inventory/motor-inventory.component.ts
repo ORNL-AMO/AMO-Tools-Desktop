@@ -29,6 +29,7 @@ export class MotorInventoryComponent implements OnInit {
   containerHeight: number;
 
   setupTabSub: Subscription;
+  setupTab: string;
   mainTab: string;
   mainTabSub: Subscription;
 
@@ -46,7 +47,7 @@ export class MotorInventoryComponent implements OnInit {
       let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
       this.motorInventoryService.settings.next(settings);
       this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
-      if(this.motorInventoryItem.batchAnalysisSettings){
+      if (this.motorInventoryItem.batchAnalysisSettings) {
         this.batchAnalysisService.batchAnalysisSettings.next(this.motorInventoryItem.batchAnalysisSettings);
       }
     });
@@ -55,6 +56,7 @@ export class MotorInventoryComponent implements OnInit {
       this.getContainerHeight();
     });
     this.setupTabSub = this.motorInventoryService.setupTab.subscribe(val => {
+      this.setupTab = val;
       this.getContainerHeight();
     });
     this.motorInventoryDataSub = this.motorInventoryService.motorInventoryData.subscribe(data => {
@@ -103,5 +105,27 @@ export class MotorInventoryComponent implements OnInit {
     this.indexedDbService.putInventoryItem(this.motorInventoryItem).then(() => {
       this.inventoryDbService.setAll();
     });
+  }
+
+  continue() {
+    if (this.setupTab == 'plant-setup') {
+      this.motorInventoryService.setupTab.next('department-setup');
+    } else if (this.setupTab == 'department-setup') {
+      this.motorInventoryService.setupTab.next('motor-properties');
+    } else if (this.setupTab == 'motor-properties') {
+      this.motorInventoryService.setupTab.next('motor-catalog');
+    } else if (this.setupTab == 'motor-catalog') {
+      this.motorInventoryService.mainTab.next('summary');
+    }
+  }
+
+  back(){
+    if (this.setupTab == 'department-setup') {
+      this.motorInventoryService.setupTab.next('plant-setup');
+    } else if (this.setupTab == 'motor-properties') {
+      this.motorInventoryService.setupTab.next('department-setup');
+    } else if (this.setupTab == 'motor-catalog') {
+      this.motorInventoryService.setupTab.next('motor-properties');
+    }
   }
 }

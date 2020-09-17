@@ -87,9 +87,6 @@ Buttons
   border-color: #717171;
 }
 
-.btn.disabled, .btn:disabled {
-    opacity: 1;
-}
 .btn-primary.disabled, .btn-primary:disabled,
 .btn-secondary.disabled, .btn-secondary:disabled {
     color: #c5c5c5;
