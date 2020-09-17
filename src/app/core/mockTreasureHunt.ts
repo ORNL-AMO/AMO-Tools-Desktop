@@ -52,7 +52,7 @@ export const MockTreasureHunt: Assessment = {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 9.999999999999998
+                        "airVelocity": 10
                     },
                     "airMassFlowNameplateData": {
                         "airFlow": 50
@@ -84,7 +84,7 @@ export const MockTreasureHunt: Assessment = {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 9.999999999999998
+                        "airVelocity": 10
                     },
                     "airMassFlowNameplateData": {
                         "airFlow": 50
@@ -128,7 +128,7 @@ export const MockTreasureHunt: Assessment = {
             "baseline": [{
                 "name": "Equipment #1",
                 "operatingHours": 8760,
-                "fuelCost": 3.999999999999999,
+                "fuelCost": 4.0,
                 "measurementMethod": 3,
                 "flowMeterMethodData": {
                     "flowRate": 5
@@ -140,7 +140,7 @@ export const MockTreasureHunt: Assessment = {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 9.999999999999998
+                        "airVelocity": 10
                     },
                     "airMassFlowNameplateData": {
                         "airFlow": 50
@@ -160,7 +160,7 @@ export const MockTreasureHunt: Assessment = {
             "modification": [{
                 "name": "Equipment #1",
                 "operatingHours": 8760,
-                "fuelCost": 3.999999999999999,
+                "fuelCost": 4.0,
                 "measurementMethod": 3,
                 "flowMeterMethodData": {
                     "flowRate": 5
@@ -172,7 +172,7 @@ export const MockTreasureHunt: Assessment = {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 9.999999999999998
+                        "airVelocity": 10
                     },
                     "airMassFlowNameplateData": {
                         "airFlow": 50
@@ -228,7 +228,7 @@ export const MockTreasureHunt: Assessment = {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 9.999999999999998
+                        "airVelocity": 10
                     },
                     "airMassFlowNameplateData": {
                         "airFlow": 50
@@ -260,7 +260,7 @@ export const MockTreasureHunt: Assessment = {
                     "isNameplate": true,
                     "airMassFlowMeasuredData": {
                         "areaOfDuct": 5,
-                        "airVelocity": 9.999999999999998
+                        "airVelocity": 10
                     },
                     "airMassFlowNameplateData": {
                         "airFlow": 50
@@ -407,7 +407,7 @@ export const MockTreasureHunt: Assessment = {
                 "numberOfFixtures": 4,
                 "lumensPerLamp": 0,
                 "totalLighting": 0,
-                "electricityUse": 700.8000000000001,
+                "electricityUse": 700.8,
                 "ballastFactor": 1,
                 "lumenDegradationFactor": 1,
                 "coefficientOfUtilization": 1,
@@ -806,7 +806,7 @@ export const MockTreasureHunt: Assessment = {
                 "electricityCost": 0.05,
                 "measurementMethod": 0,
                 "flowMeterMethodData": {
-                    "meterReading": 5600.000000000002
+                    "meterReading": 5600
                 },
                 "bagMethodData": {
                     "height": 8,
@@ -865,7 +865,7 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 199.99999999999997,
+                    "ratedMotorPower": 200,
                     "variableSpeedMotor": true,
                     "operationalFrequency": 50,
                     "lineFrequency": 60,
@@ -892,7 +892,7 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 99.99999999999999,
+                    "ratedMotorPower": 100,
                     "variableSpeedMotor": true,
                     "operationalFrequency": 50,
                     "lineFrequency": 60,
@@ -919,7 +919,7 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 199.99999999999997,
+                    "ratedMotorPower": 200,
                     "variableSpeedMotor": true,
                     "operationalFrequency": 50,
                     "lineFrequency": 60,
@@ -946,7 +946,7 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 99.99999999999999,
+                    "ratedMotorPower": 100,
                     "variableSpeedMotor": true,
                     "operationalFrequency": 50,
                     "lineFrequency": 60,
@@ -1001,7 +1001,7 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 29.999999999999996,
+                    "ratedMotorPower": 30,
                     "variableSpeedMotor": false,
                     "operationalFrequency": 60,
                     "lineFrequency": 60,
@@ -1028,7 +1028,7 @@ export const MockTreasureHunt: Assessment = {
                     "powerFactor": 0.85
                 },
                 "nameplateData": {
-                    "ratedMotorPower": 29.999999999999996,
+                    "ratedMotorPower": 30,
                     "variableSpeedMotor": false,
                     "operationalFrequency": 50,
                     "lineFrequency": 60,
@@ -1102,7 +1102,7 @@ export const MockTreasureHunt: Assessment = {
         "replaceExistingMotors": [{
             "replaceExistingData": {
                 "operatingHours": 8760,
-                "motorSize": 249.99999999999997,
+                "motorSize": 250,
                 "existingEfficiency": 88,
                 "load": 90,
                 "electricityCost": 0.05,
@@ -1173,7 +1173,7 @@ export const MockTreasureHunt: Assessment = {
             "baseline": [{
                 "name": "Equipment #1",
                 "hoursPerYear": 8760,
-                "waterCost": 0.0024999999999999996,
+                "waterCost": 0.0025,
                 "measurementMethod": 2,
                 "meteredFlowMethodData": {
                     "meterReading": 100
@@ -1188,17 +1188,17 @@ export const MockTreasureHunt: Assessment = {
                     "bucketFillTime": 20
                 },
                 "otherMethodData": {
-                    "consumption": 15000.000000000004
+                    "consumption": 15000
                 },
                 "isWastewater": false
             }],
             "modification": [{
                 "name": "Equipment #1",
                 "hoursPerYear": 8760,
-                "waterCost": 0.0024999999999999996,
+                "waterCost": 0.0025,
                 "measurementMethod": 0,
                 "meteredFlowMethodData": {
-                    "meterReading": 28.000000000000007
+                    "meterReading": 28
                 },
                 "volumeMeterMethodData": {
                     "initialMeterReading": 4235,
@@ -1210,7 +1210,7 @@ export const MockTreasureHunt: Assessment = {
                     "bucketFillTime": 20
                 },
                 "otherMethodData": {
-                    "consumption": 15000.000000000004
+                    "consumption": 15000
                 },
                 "isWastewater": false
             }],
@@ -1244,7 +1244,7 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "electricityCost": 0.05,
                 "compressorPower": 300,
-                "pressure": 119.99999999999999,
+                "pressure": 120,
                 "proposedPressure": 0
             }],
             "modification": [{
@@ -1253,7 +1253,7 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "electricityCost": 0.05,
                 "compressorPower": 300,
-                "pressure": 119.99999999999999,
+                "pressure": 120,
                 "proposedPressure": 110
             }],
             "opportunitySheet": {
