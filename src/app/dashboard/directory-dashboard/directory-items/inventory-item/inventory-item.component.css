@@ -30,13 +30,13 @@
 }
 
   a:not([href]):not([tabindex]):hover {
-    /* color: blue; */
+    color: blue;
     text-decoration: underline;
     cursor: pointer;
   }
   
   a:not([href]):not([tabindex]){
-    color: white;
+    color: blue;
   }
   
   .last-updated {
@@ -91,18 +91,18 @@
   background-color: #84b641;
 }
 
-.card, .card-header, .list-row{
+/* .card, .card-header, .list-row{
   background-color: #17202A;
   color: white;
-}
+} */
 
 .list-row{
   border-bottom: #84b641 groove 6px;
   border-image: linear-gradient(to right,#F0F3F4, #84b641) 80 / 2;
 }
 
-span.fa.fa-clipboard{
+/* span.fa.fa-clipboard{
   padding: 4px;
   font-size: 15px;
   color: white;
-}
+} */

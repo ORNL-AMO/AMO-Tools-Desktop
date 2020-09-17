@@ -4,6 +4,7 @@ import { MotorCatalogService } from '../motor-catalog/motor-catalog.service';
 import { Subscription } from 'rxjs';
 import { MotorInventoryDepartment, MotorInventoryData, MotorItem } from '../../motor-inventory';
 import { Settings } from '../../../shared/models/settings';
+import { BatchAnalysisService } from '../../batch-analysis/batch-analysis.service';
 
 @Component({
   selector: 'app-department-catalog-table',
@@ -21,7 +22,11 @@ export class DepartmentCatalogTableComponent implements OnInit {
   selectedDepartmentIdSub: Subscription;
   settings: Settings;
   settingsSub: Subscription;
-  constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService) { }
+  tableDataItems: Array<DepartmentCatalogTableDataItem>;
+
+  selectedMotorItem: MotorItem;
+  selectedMotorItemSub: Subscription;
+  constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService, private batchAnalysisService: BatchAnalysisService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.motorInventoryService.settings.subscribe(val => {
@@ -36,17 +41,23 @@ export class DepartmentCatalogTableComponent implements OnInit {
       this.selectedDepartmentId = val;
       this.setSelectedMotorDepartment();
     });
+
+    this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(val => {
+      this.selectedMotorItem = val;
+    });
   }
 
   ngOnDestroy() {
     this.motorInventoryDataSub.unsubscribe();
     this.selectedDepartmentIdSub.unsubscribe();
     this.settingsSub.unsubscribe();
+    this.selectedMotorItemSub.unsubscribe();
   }
 
   setSelectedMotorDepartment() {
     if (this.motorInventoryData && this.selectedDepartmentId) {
       this.selectedMotorDepartment = this.motorInventoryData.departments.find(department => { return department.id == this.selectedDepartmentId });
+      this.setTableData();
     }
   }
 
@@ -64,4 +75,41 @@ export class DepartmentCatalogTableComponent implements OnInit {
   selectMotor(motor: MotorItem) {
     this.motorCatalogService.selectedMotorItem.next(motor);
   }
+
+
+  setTableData() {
+    let tableDataItems: Array<DepartmentCatalogTableDataItem> = new Array();
+    this.selectedMotorDepartment.catalog.forEach(motorItem => {
+      let motorItemData: DepartmentCatalogTableDataItem = this.getMotorItemData(motorItem);
+      tableDataItems.push(motorItemData);
+    });
+    this.tableDataItems = tableDataItems;
+  }
+
+  getMotorItemData(motorItem: MotorItem): DepartmentCatalogTableDataItem {
+    let batchAnalysisDataAndResults = this.batchAnalysisService.getDataAndResultsFromMotorItem(motorItem, this.settings);
+    let tableDataItem: DepartmentCatalogTableDataItem = {
+      name: motorItem.name,
+      operatingHours: batchAnalysisDataAndResults.data.operatingHours,
+      efficiencyClass: motorItem.nameplateData.efficiencyClass,
+      estimatedEfficiency: motorItem.nameplateData.nominalEfficiency,
+      ratedPower: motorItem.nameplateData.ratedMotorPower,
+      energyUsage: batchAnalysisDataAndResults.results.existingEnergyUse,
+      energyCost: batchAnalysisDataAndResults.results.existingEnergyCost,
+      motorItem: motorItem
+    }
+    return tableDataItem;
+  }
+
+}
+
+export interface DepartmentCatalogTableDataItem {
+  name: string,
+  operatingHours: number,
+  efficiencyClass: number,
+  estimatedEfficiency: number,
+  ratedPower: number,
+  energyUsage: number,
+  energyCost: number,
+  motorItem: MotorItem
 }

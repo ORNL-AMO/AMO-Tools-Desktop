@@ -69,14 +69,14 @@ export class TotalMotorsBarChartComponent implements OnInit {
     for (let key in counts) {
       if (key == 'undefined') {
         if (batchAnalysisSettings.displayIncompleteMotors == true) {
-          xVals.push('N/A');
+          xVals.push('Incomplete');
           yVals.push(counts[key]);
           colors.push('#707B7C');
         }
       } else {
         xVals.push(key);
         yVals.push(counts[key]);
-        if (key == 'Rewind') {
+        if (key == 'Rewind When Fail') {
           colors.push('#7D3C98')
         } else if (key == 'Replace Now') {
           colors.push('#117A65')

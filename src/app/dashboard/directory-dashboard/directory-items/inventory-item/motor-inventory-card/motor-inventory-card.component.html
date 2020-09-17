@@ -20,10 +20,18 @@
     </tr>
     <tr>
         <td>
-            Total Energy Use:
+            Annual Energy Use:
         </td>
         <td>
-            &mdash;
+            {{totalEnergyUse | number:'1.0-0'}} kWh/yr
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Annual Energy Cost:
+        </td>
+        <td>
+            {{totalEnergyCost | currency:'USD':'symbol':'2.0-0'}}
         </td>
     </tr>
 
@@ -56,7 +64,7 @@
     </tr>
     <tr *ngIf="showBatchSummary">
         <td>
-            Rewind:
+            Rewind When Fail:
         </td>
         <td>
             {{numRewind}}

@@ -28,26 +28,24 @@ export class BatchAnalysisService {
     this.batchAnalysisDataItems.next(batchAnalysisDataItems);
   }
 
-
   getBatchAnalysisDataItems(motorInventoryData: MotorInventoryData, settings: Settings, batchAnalysisSettings: BatchAnalysisSettings): Array<BatchAnalysisResults> {
     let batchAnalysisDataItems = new Array();
     motorInventoryData.departments.forEach(department => {
       department.catalog.forEach(motorItem => {
-        let replaceExistingData: ReplaceExistingData = this.getReplaceExistingInputsFromMotorItem(motorItem, settings);
-        let missingData: Array<string> = this.checkBatchAnalysisDataValid(replaceExistingData);
-        if (missingData.length != 0) {
-          let batchAnalysisResults: BatchAnalysisResults = this.getBatchAnalysisResultObject(motorItem, department.name, undefined, batchAnalysisSettings, missingData);
-          batchAnalysisDataItems.push(batchAnalysisResults);
-        } else {
-          let replaceExistingResults: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingData, settings);
-          let batchAnalysisResults: BatchAnalysisResults = this.getBatchAnalysisResultObject(motorItem, department.name, replaceExistingResults, batchAnalysisSettings);
-          batchAnalysisDataItems.push(batchAnalysisResults);
-        }
+        let dataAndResults: { data: ReplaceExistingData, results: ReplaceExistingResults } = this.getDataAndResultsFromMotorItem(motorItem, settings);
+        let missingData: Array<string> = this.checkBatchAnalysisDataValid(dataAndResults.data);
+        let batchAnalysisResults: BatchAnalysisResults = this.getBatchAnalysisResultObject(motorItem, department.name, dataAndResults.results, batchAnalysisSettings, missingData);
+        batchAnalysisDataItems.push(batchAnalysisResults);
       });
     });
     return batchAnalysisDataItems;
   }
 
+  getDataAndResultsFromMotorItem(motorItem: MotorItem, settings: Settings): { data: ReplaceExistingData, results: ReplaceExistingResults } {
+    let replaceExistingData: ReplaceExistingData = this.getReplaceExistingInputsFromMotorItem(motorItem, settings);
+    let replaceExistingResults: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingData, settings);
+    return { data: replaceExistingData, results: replaceExistingResults };
+  }
 
   checkBatchAnalysisDataValid(data: ReplaceExistingData): Array<string> {
     let missingData: Array<string> = new Array();
@@ -81,10 +79,15 @@ export class BatchAnalysisService {
     return missingData
   }
 
-
   getReplaceExistingInputsFromMotorItem(motorItem: MotorItem, settings: Settings): ReplaceExistingData {
+    let operatingHours: number;
+    if (motorItem.operationData.utilizationFactor) {
+      operatingHours = motorItem.operationData.annualOperatingHours * (motorItem.operationData.utilizationFactor / 100);
+    } else {
+      operatingHours = motorItem.operationData.annualOperatingHours;
+    }
     let data: ReplaceExistingData = {
-      operatingHours: motorItem.operationData.annualOperatingHours,
+      operatingHours: operatingHours,
       motorSize: motorItem.nameplateData.ratedMotorPower,
       existingEfficiency: motorItem.operationData.efficiencyAtAverageLoad,
       load: motorItem.operationData.averageLoadFactor,
@@ -98,63 +101,46 @@ export class BatchAnalysisService {
   }
 
   getBatchAnalysisResultObject(motorItem: MotorItem, departmentName: string, replaceExistingResults: ReplaceExistingResults, batchAnalysisSettings: BatchAnalysisSettings, missingData?: Array<string>): BatchAnalysisResults {
-    if (missingData) {
-      return {
-        motorName: motorItem.name,
-        departmentName: departmentName,
-        operatingHours: motorItem.operationData.annualOperatingHours,
-        motorSize: motorItem.nameplateData.ratedMotorPower,
-        averageLoadFactor: motorItem.operationData.averageLoadFactor,
-        currentEfficiency: motorItem.operationData.efficiencyAtAverageLoad,
-        rewindEfficiencyLoss: motorItem.batchAnalysisData.rewindEfficiencyLoss,
-        rewindCost: motorItem.batchAnalysisData.rewindCost,
-        replacementEfficiency: motorItem.batchAnalysisData.modifiedEfficiency,
-        replacementPurchaseCost: motorItem.batchAnalysisData.modifiedCost,
-        isBatchAnalysisValid: false,
-        missingData: missingData,
-        currentEnergyUse: undefined,
-        currentEnergyCost: undefined,
-        rewindEnergyUse: undefined,
-        rewindEnergyCost: undefined,
-        replacementEnergyUse: undefined,
-        replacementEnergyCost: undefined,
-        replacementNowPayback: undefined,
-        replacementFailPayback: undefined,
-        replaceMotor: undefined
+    let replaceNowDecision: string;
+    if (batchAnalysisSettings && missingData.length == 0) {
+      if (batchAnalysisSettings.paybackThreshold > replaceExistingResults.simplePayback) {
+        replaceNowDecision = 'Replace Now';
+      } else if (batchAnalysisSettings.paybackThreshold > replaceExistingResults.incrementalSimplePayback) {
+        replaceNowDecision = 'Replace When Fail';
+      } else {
+        replaceNowDecision = 'Rewind When Fail';
       }
+    }
+    let operatingHours: number;
+    if (motorItem.operationData.utilizationFactor) {
+      operatingHours = motorItem.operationData.annualOperatingHours * (motorItem.operationData.utilizationFactor / 100);
     } else {
-      let replaceNowDecision: string;
-      if (batchAnalysisSettings) {
-        if (batchAnalysisSettings.paybackThreshold > replaceExistingResults.simplePayback) {
-          replaceNowDecision = 'Replace Now';
-        } else if (batchAnalysisSettings.paybackThreshold > replaceExistingResults.incrementalSimplePayback) {
-          replaceNowDecision = 'Replace When Fail';
-        } else {
-          replaceNowDecision = 'Rewind';
-        }
-      }
-      return {
-        motorName: motorItem.name,
-        departmentName: departmentName,
-        operatingHours: motorItem.operationData.annualOperatingHours,
-        motorSize: motorItem.nameplateData.ratedMotorPower,
-        averageLoadFactor: motorItem.operationData.averageLoadFactor,
-        currentEfficiency: motorItem.operationData.efficiencyAtAverageLoad,
-        rewindEfficiencyLoss: motorItem.batchAnalysisData.rewindEfficiencyLoss,
-        rewindCost: motorItem.batchAnalysisData.rewindCost,
-        replacementEfficiency: motorItem.batchAnalysisData.modifiedEfficiency,
-        replacementPurchaseCost: motorItem.batchAnalysisData.modifiedCost,
-        isBatchAnalysisValid: true,
-        currentEnergyUse: this.checkInfinity(replaceExistingResults.existingEnergyUse),
-        currentEnergyCost: this.checkInfinity(replaceExistingResults.existingEnergyCost),
-        rewindEnergyUse: this.checkInfinity(replaceExistingResults.rewoundEnergyUse),
-        rewindEnergyCost: this.checkInfinity(replaceExistingResults.rewoundEnergyCost),
-        replacementEnergyUse: this.checkInfinity(replaceExistingResults.newEnergyUse),
-        replacementEnergyCost: this.checkInfinity(replaceExistingResults.newEnergyCost),
-        replacementNowPayback: this.checkInfinity(replaceExistingResults.simplePayback),
-        replacementFailPayback: this.checkInfinity(replaceExistingResults.incrementalSimplePayback),
-        replaceMotor: replaceNowDecision
-      }
+      operatingHours = motorItem.operationData.annualOperatingHours;
+    }
+    return {
+      motorItem: motorItem,
+      departmentId: motorItem.departmentId,
+      motorName: motorItem.name,
+      departmentName: departmentName,
+      operatingHours: operatingHours,
+      motorSize: motorItem.nameplateData.ratedMotorPower,
+      averageLoadFactor: motorItem.operationData.averageLoadFactor,
+      currentEfficiency: motorItem.operationData.efficiencyAtAverageLoad,
+      rewindEfficiencyLoss: motorItem.batchAnalysisData.rewindEfficiencyLoss,
+      rewindCost: motorItem.batchAnalysisData.rewindCost,
+      replacementEfficiency: motorItem.batchAnalysisData.modifiedEfficiency,
+      replacementPurchaseCost: motorItem.batchAnalysisData.modifiedCost,
+      isBatchAnalysisValid: missingData.length == 0,
+      missingData: missingData,
+      currentEnergyUse: this.checkInfinity(replaceExistingResults.existingEnergyUse),
+      currentEnergyCost: this.checkInfinity(replaceExistingResults.existingEnergyCost),
+      rewindEnergyUse: this.checkInfinity(replaceExistingResults.rewoundEnergyUse),
+      rewindEnergyCost: this.checkInfinity(replaceExistingResults.rewoundEnergyCost),
+      replacementEnergyUse: this.checkInfinity(replaceExistingResults.newEnergyUse),
+      replacementEnergyCost: this.checkInfinity(replaceExistingResults.newEnergyCost),
+      replacementNowPayback: this.checkInfinity(replaceExistingResults.simplePayback),
+      replacementFailPayback: this.checkInfinity(replaceExistingResults.incrementalSimplePayback),
+      replaceMotor: replaceNowDecision
     }
   }
 
@@ -171,7 +157,7 @@ export class BatchAnalysisService {
           } else if (batchAnalysisSettings.paybackThreshold > dataItem.replacementFailPayback) {
             dataItem.replaceMotor = 'Replace When Fail';
           } else {
-            dataItem.replaceMotor = 'Rewind';
+            dataItem.replaceMotor = 'Rewind When Fail';
           }
         }
       });
@@ -194,6 +180,8 @@ export interface BatchAnalysisSettings {
 }
 
 export interface BatchAnalysisResults {
+  motorItem: MotorItem,
+  departmentId: string,
   motorName: string,
   departmentName: string,
   operatingHours: number,

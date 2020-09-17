@@ -18,6 +18,7 @@
     font-weight: bold;
 }
 
+
 th, td{
     min-width: 75px;
 }
@@ -30,7 +31,7 @@ th, td{
     text-decoration: underline;
 }
 
-.header-cell:hover{
+.header-cell:hover, .name-cell:hover{
     text-decoration: underline;
     cursor: pointer;
 }

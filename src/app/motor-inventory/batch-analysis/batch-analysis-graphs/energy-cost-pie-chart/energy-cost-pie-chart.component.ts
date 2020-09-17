@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { BatchAnalysisService } from '../../batch-analysis.service';
+import { BatchAnalysisService, BatchAnalysisSettings } from '../../batch-analysis.service';
 import * as Plotly from 'plotly.js';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -20,12 +20,16 @@ export class EnergyCostPieChartComponent implements OnInit {
 
   ngAfterViewInit() {
     this.batchAnalysisDataItemsSub = this.batchAnalysisService.batchAnalysisDataItems.subscribe(batchAnalysisData => {
+      let batchAnalysisSettings: BatchAnalysisSettings = this.batchAnalysisService.batchAnalysisSettings.getValue();
+      if (batchAnalysisSettings.displayIncompleteMotors == false) {
+        batchAnalysisData = batchAnalysisData.filter(dataItem => { return dataItem.isBatchAnalysisValid == true });
+      }
       var data = [{
         values: batchAnalysisData.map(val => { return val.currentEnergyCost }),
         labels: batchAnalysisData.map(val => { return val.motorName }),
         marker: {
           colors: batchAnalysisData.map(val => {
-            if (val.replaceMotor == 'Rewind') {
+            if (val.replaceMotor == 'Rewind When Fail') {
               return '#7D3C98';
             } else if (val.replaceMotor == 'Replace Now') {
               return '#117A65';
@@ -45,7 +49,10 @@ export class EnergyCostPieChartComponent implements OnInit {
         textinfo: 'label+value',
         texttemplate: '%{label}<br>%{value:$,.0f}',
         hoverinfo: 'label+percent',
-        hovertemplate: '%{percent:%,.2f} <extra></extra>'
+        hovertemplate: '%{percent:%,.2f} <extra></extra>',
+        direction: "clockwise",
+        rotation: -45,
+
       }];
       let layout = {
         title: {

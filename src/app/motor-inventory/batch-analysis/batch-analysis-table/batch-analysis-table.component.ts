@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { BatchAnalysisService, BatchAnalysisSettings, BatchAnalysisResults } from '../batch-analysis.service';
+import { MotorInventoryService } from '../../motor-inventory.service';
+import { MotorCatalogService } from '../../motor-inventory-setup/motor-catalog/motor-catalog.service';
 
 @Component({
   selector: 'app-batch-analysis-table',
@@ -15,7 +17,7 @@ export class BatchAnalysisTableComponent implements OnInit {
   sortByDirection: string = 'desc';
   batchAnalysisSettings: BatchAnalysisSettings;
   batchAnalysisSettingsSub: Subscription;
-  constructor(private batchAnalysisService: BatchAnalysisService) { }
+  constructor(private batchAnalysisService: BatchAnalysisService, private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
     this.batchAnalysisSettingsSub = this.batchAnalysisService.batchAnalysisSettings.subscribe(val => {
@@ -24,6 +26,7 @@ export class BatchAnalysisTableComponent implements OnInit {
 
     this.batchAnalysisDataItemsSub = this.batchAnalysisService.batchAnalysisDataItems.subscribe(val => {
       this.batchAnalysisDataItems = val;
+      console.log(this.batchAnalysisDataItems);
     });
   }
 
@@ -43,5 +46,11 @@ export class BatchAnalysisTableComponent implements OnInit {
     this.sortByField = str;
   }
 
+  goToMotorItem(batchAnalysisItem: BatchAnalysisResults){
+    this.motorCatalogService.selectedDepartmentId.next(batchAnalysisItem.departmentId);
+    this.motorCatalogService.selectedMotorItem.next(batchAnalysisItem.motorItem);
+    this.motorInventoryService.setupTab.next('motor-catalog');
+    this.motorInventoryService.mainTab.next('setup');
+  }
 }
 
