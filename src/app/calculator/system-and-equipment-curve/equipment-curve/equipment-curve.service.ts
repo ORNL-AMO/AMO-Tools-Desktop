@@ -77,7 +77,6 @@ export class EquipmentCurveService {
     let tmpConstant = 356.96;
     let powerConstant = 47.68;
 
-    debugger;
     if (flowUnit !== 'gpm') {
       tmpMaxFlow = Math.round(this.convertUnitsService.value(tmpMaxFlow).from('gpm').to(flowUnit) * 100) / 100;
     }

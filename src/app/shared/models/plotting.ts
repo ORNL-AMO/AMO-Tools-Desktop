@@ -131,7 +131,8 @@ export interface ChartConfig {
     xName?: string,
     yUnits?: string,
     xUnits?: string,
-    powerUnits: string
+    powerUnits: string,
+    systemColor: string
 }
 
 export interface DataPoint {

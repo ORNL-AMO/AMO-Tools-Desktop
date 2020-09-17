@@ -4,7 +4,7 @@ import { Settings } from '../../shared/models/settings';
 import { ByDataInputs, ByEquationInputs, EquipmentInputs, PumpSystemCurveData, FanSystemCurveData, ModificationEquipment } from '../../shared/models/system-and-equipment-curve';
 import { RegressionEquationsService } from './regression-equations.service';
 import * as _ from 'lodash';
-import { DataPoint } from '../../shared/models/plotting';
+import { SystemCurveDataPoint } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
 
 @Injectable()
 export class SystemAndEquipmentCurveService {
@@ -38,6 +38,7 @@ export class SystemAndEquipmentCurveService {
   modifiedEquipmentCurveDataPairs: Array<{ x: number, y: number }>;
   systemCurveRegressionData: Array<{ x: number, y: number, fluidPower: number }>;
   baselinePowerDataPairs: Array<{ x: number, y: number }>;
+  modificationPowerDataPairs: Array<{ x: number, y: number }>;
 
   //data points for system curve dropdown in assessment
   systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }>;
@@ -93,6 +94,7 @@ export class SystemAndEquipmentCurveService {
         ratio = this.modificationEquipment.getValue().speed / this.equipmentInputs.getValue().baselineMeasurement;
       }
     }
+
     maxFlowRate = _.max([maxFlowRate, maxEquipmentCurve, maxSystemCurve]) * ratio;
     return maxFlowRate;
   }
@@ -107,33 +109,108 @@ export class SystemAndEquipmentCurveService {
     this.modificationEquipment.next(modificationEquipment);
   }
 
+  calculatePumpEfficiency(baselinePowerDataPairs: Array<{ x: number, y: number }>, settings: Settings) {
+    let pumpSystemCurveData = this.pumpSystemCurveData.getValue();
+    let modificationEquipment = this.modificationEquipment.getValue();
+    let equipmentInputs = this.equipmentInputs.getValue();
+    let intersectionData = this.systemCurveIntersectionData.getValue();
+    let isIntersectionReady = pumpSystemCurveData && modificationEquipment && equipmentInputs && intersectionData && intersectionData.baseline.x > 0;
+    
+    if (isIntersectionReady) {
+      let baselineOperatingFlow = intersectionData.baseline.x;
+      // roundoff flow offset to find match
+      let match = Math.round(baselineOperatingFlow / 10) * 10;
+
+      let baselinePower = baselinePowerDataPairs.find(pair => {
+        return pair.x == match;
+      });
+
+      if (baselinePower) {
+        let fluidPower: number = this.regressionEquationsService.getPumpFluidPower(intersectionData.baseline.y, intersectionData.baseline.x, pumpSystemCurveData.specificGravity, settings);
+        // Efficiency (either baseline or mod)|at OP = (fluidPower|OP/power|OP) * 100%
+        intersectionData.baseline.power = baselinePower.y;
+        intersectionData.baseline.efficiency = (fluidPower / baselinePower.y) * 100;
+
+        if (modificationEquipment.speed > 0) {
+          // Power|mod = Power|BL * (Speed|mod / Speed|BL) ^3
+          let modificationPower = baselinePower.y * Math.pow((modificationEquipment.speed / equipmentInputs.baselineMeasurement), 3);
+          intersectionData.modification = {
+            x: 0,
+            y: 0,
+            power: modificationPower,
+            efficiency: (fluidPower / modificationPower) * 100
+          }
+        }
+        this.systemCurveIntersectionData.next(intersectionData);
+      }
+    }
+  }
+
+  calculateFanEfficiency(baselinePowerDataPairs: Array<{ x: number, y: number }>, settings: Settings) {
+    let fanSystemCurveData: FanSystemCurveData = this.fanSystemCurveData.getValue();
+    let equipmentInputs: EquipmentInputs = this.equipmentInputs.getValue();
+    let modificationEquipment = this.modificationEquipment.getValue();
+    let intersectionData = this.systemCurveIntersectionData.getValue();
+    let isIntersectionReady = fanSystemCurveData && modificationEquipment && equipmentInputs && intersectionData && intersectionData.baseline.x > 0;
+
+    if (isIntersectionReady) {
+      let baselineOperatingFlow = intersectionData.baseline.x;
+      // roundoff flow (value being avg'd in intersection calc) to find match
+      let match = Math.round(baselineOperatingFlow / 10000) * 10000;
+
+      let baselinePower = baselinePowerDataPairs.find(pair => {
+        return pair.x == match;
+      });
+
+      if (baselinePower) {
+        // Power|mod = Power|BL * (Speed|mod / Speed|BL) ^3
+        let fluidPower: number = this.regressionEquationsService.getFanFluidPower(intersectionData.baseline.y, intersectionData.baseline.x, fanSystemCurveData.compressibilityFactor, settings);
+
+        // Efficiency (either baseline or mod)|at OP = (fluidPower|OP/power|OP) * 100%
+        intersectionData.baseline.power = baselinePower.y;
+        intersectionData.baseline.efficiency = (fluidPower / baselinePower.y) * 100;
+
+        if (modificationEquipment.speed > 0) {
+          // Power|mod = Power|BL * (Speed|mod / Speed|BL) ^3
+          let modificationPower = baselinePower.y * Math.pow((modificationEquipment.speed / equipmentInputs.baselineMeasurement), 3);
+          intersectionData.modification = {
+            x: 0,
+            y: 0,
+            power: modificationPower,
+            efficiency: (fluidPower / modificationPower) * 100
+          }
+        }
+        this.systemCurveIntersectionData.next(intersectionData);
+      }
+    }
+  }
+
 
   calculateByDataRegression(equipmentType: string, maxFlowRate: number, settings: Settings) {
     if (this.byDataInputs.getValue() != undefined && this.equipmentInputs.getValue() != undefined) {
       let secondValueLabel: string = 'Head';
-      let baselinePowerDataPairs = this.regressionEquationsService.getEquipmentPowerRegressionByData(this.byDataInputs.getValue(), maxFlowRate);
-      // let efficiencyResults = this.regressionEquationsService.calculatePumpEfficiency(baselinePowerDataPairs, this.pumpSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
+      let powerDataPairs = this.regressionEquationsService.getEquipmentPowerRegressionByData(this.byDataInputs.getValue(), this.modificationEquipment.getValue(), this.equipmentInputs.getValue(), maxFlowRate);
       if (equipmentType == 'fan') {
-        // efficiencyResults = this.regressionEquationsService.calculateFanEfficiency(baselinePowerDataPairs, this.fanSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
+        if (maxFlowRate > 10000) {
+        this.regressionEquationsService.coordinateIncrement = 100;
+        }
+        this.calculateFanEfficiency(powerDataPairs.baseline, settings);
         secondValueLabel = 'Pressure';
+      } else {
+        this.calculatePumpEfficiency(powerDataPairs.baseline, settings);
       }
+
       let results = this.regressionEquationsService.getEquipmentCurveRegressionByData(this.byDataInputs.getValue(), this.equipmentInputs.getValue(), this.modificationEquipment.getValue(), secondValueLabel, maxFlowRate);
-      console.log(results);
       this.regressionEquationsService.baselineEquipmentCurveByDataRegressionEquation.next(results.baselineRegressionEquation);
       this.regressionEquationsService.baselineEquipmentCurveByDataRSquared.next(results.baselineRSquared);
       this.regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation.next(results.modificationRegressionEquation);
       this.regressionEquationsService.modificationEquipmentCurveRSquared.next(results.modificationRSquared);
       
-      // TODO Need intersection sub from merged 3756 branch
-      // If intersection points exist and intersect.flow x is greater than 0
-      // if(true) {
-        // console.log('efficiency results', efficiencyResults);
-        // Add baseline/mod to intersections and call next
-      // }
       if (this.selectedEquipmentCurveFormView.getValue() == 'Data') {
         this.baselineEquipmentCurveDataPairs = results.baselineDataPairs;
         this.modifiedEquipmentCurveDataPairs = results.modifiedDataPairs;
-        this.baselinePowerDataPairs = baselinePowerDataPairs;
+        this.baselinePowerDataPairs = powerDataPairs.baseline;
+        this.modificationPowerDataPairs = powerDataPairs.modification;
       }
     }
   }
@@ -141,42 +218,43 @@ export class SystemAndEquipmentCurveService {
   calculateByEquationRegressions(equipmentType: string, maxFlowRate: number, settings: Settings) {
     if (this.byEquationInputs.getValue() != undefined && this.equipmentInputs.getValue() != undefined) {
       let secondValueLabel: string = 'Head';
-      let baselinePowerDataPairs = this.regressionEquationsService.getEquipmentPowerRegressionByEquation(this.byEquationInputs.getValue(), this.equipmentInputs.getValue(), maxFlowRate);
-      // let efficiencyResults = this.regressionEquationsService.calculatePumpEfficiency(baselinePowerDataPairs, this.pumpSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
+      let powerDataPairs = this.regressionEquationsService.getEquipmentPowerRegressionByEquation(this.byEquationInputs.getValue(), this.equipmentInputs.getValue(), this.modificationEquipment.getValue(),  maxFlowRate);
       if (equipmentType == 'fan') {
-        // efficiencyResults = this.regressionEquationsService.calculateFanEfficiency(baselinePowerDataPairs, this.fanSystemCurveData.getValue(), this.equipmentInputs.getValue(), settings);
+        if (maxFlowRate > 10000) {
+          this.regressionEquationsService.coordinateIncrement = 100;
+        }
+        this.calculateFanEfficiency(powerDataPairs.baseline, settings);
         secondValueLabel = 'Pressure';
+      } else {
+        this.calculatePumpEfficiency(powerDataPairs.baseline, settings);
       }
+
       let results = this.regressionEquationsService.getEquipmentCurveRegressionByEquation(this.byEquationInputs.getValue(), this.equipmentInputs.getValue(), this.modificationEquipment.getValue(), secondValueLabel, maxFlowRate);
       this.regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation.next(results.baselineRegressionEquation);
       this.regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation.next(results.modificationRegressionEquation);
-      
-      // TODO Need intersection sub from merged 3756 branch
-      // If intersection points exist and intersect.flow x is greater than 0
-      // if(true) {
-        // console.log('efficiency results', efficiencyResults);
-        // Add baseline/mod to intersections and call next
-      // }
-      
       if (this.selectedEquipmentCurveFormView.getValue() == 'Equation') {
         this.baselineEquipmentCurveDataPairs = results.baselineDataPairs;
         this.modifiedEquipmentCurveDataPairs = results.modifiedDataPairs;
-        this.baselinePowerDataPairs = baselinePowerDataPairs;
+        this.baselinePowerDataPairs = powerDataPairs.baseline;
+        this.modificationPowerDataPairs = powerDataPairs.modification;
       }
     }
   }
 
   calculateSystemCurveRegressionData(equipmentType: string, settings: Settings, maxFlowRate: number) {
     if (equipmentType == 'pump' && this.pumpSystemCurveData.getValue() != undefined) {
+      this.regressionEquationsService.coordinateIncrement = 2;
       let systemCurveRegressionEquation: string = this.regressionEquationsService.getPumpSystemCurveRegressionEquation(this.pumpSystemCurveData.getValue());
       this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
       this.systemCurveRegressionData = this.regressionEquationsService.calculatePumpSystemCurveData(this.pumpSystemCurveData.getValue(), maxFlowRate, settings);
       this.calculateModificationEquipment();
     } else if (equipmentType == 'fan' && this.fanSystemCurveData.getValue() != undefined) {
+      if (maxFlowRate > 10000) {
+        this.regressionEquationsService.coordinateIncrement = 100;
+      }
       let systemCurveRegressionEquation: string = this.regressionEquationsService.getFanSystemCurveRegressionEquation(this.fanSystemCurveData.getValue());
       this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
       this.systemCurveRegressionData = this.regressionEquationsService.calculateFanSystemCurveData(this.fanSystemCurveData.getValue(), maxFlowRate, settings);
-      console.log('system', this.systemCurveRegressionData);
       this.calculateModificationEquipment(true);
     }
   }
@@ -185,21 +263,11 @@ export class SystemAndEquipmentCurveService {
     let equipmentInputs = this.equipmentInputs.getValue();
     let modificationEquipment: ModificationEquipment = {head: 0, flow: 0, speed: 0};
     
-    // No pairs on reset
+    // check if no pairs on reset
     if (this.baselineEquipmentCurveDataPairs.length > 0) {
-      let intersection;
-      let modificationIntersection;
-
-      intersection = this.calculateBaselineIntersectionPoint(this.baselineEquipmentCurveDataPairs);
-      if (this.modifiedEquipmentCurveDataPairs.length > 0) {
-        modificationIntersection = this.calculateModificationIntersectionPoint(this.modifiedEquipmentCurveDataPairs);
-      }
+      let intersection = this.calculateBaselineIntersectionPoint(this.baselineEquipmentCurveDataPairs);
       if (intersection) {
-        let systemCurveIntersectionData: IntersectionData = 
-        { 
-          baseline: intersection,
-          modification: modificationIntersection
-        };
+        let systemCurveIntersectionData: IntersectionData = { baseline: intersection };
         this.systemCurveIntersectionData.next(systemCurveIntersectionData)
         let systemCurveData: FanSystemCurveData | PumpSystemCurveData;
         if (isFanEquipment) {
@@ -208,10 +276,10 @@ export class SystemAndEquipmentCurveService {
           systemCurveData = this.pumpSystemCurveData.getValue();
         }
         if (systemCurveData.modificationCurve.modificationMeasurementOption == 0) {
-          // We have flow input
+          // Flow input
           modificationEquipment = this.calculateModifiedYValue(modificationEquipment, systemCurveData)
         } else {
-          // We have Head input
+          // Head input
           modificationEquipment = this.calculateModifiedFlow(modificationEquipment, systemCurveData)
         }
         let baselineFlow = intersection.x;
@@ -313,6 +381,33 @@ export class SystemAndEquipmentCurveService {
     return modificationEquipment;
   }
 
+  // Accurate point but Creates infinite loop in fan equipment ???
+
+  // calculateBaselineIntersectionPoint(equipmentCurve: Array<{ x: number, y: number }>): { x: number, y: number } {
+  //   let closestSystemCurvePoint;
+  //   let closestBaselineDataPoint;
+  //   let smallestDistanceBetweenPoints = Infinity;
+  //   this.systemCurveRegressionData.forEach(systemCurveDataPoint => {
+  //     this.baselineEquipmentCurveDataPairs.forEach(baselineDataPoint => {
+  //       //distance = (p1.x - p2.x)^2 + (p1.y - p2.y)^2
+  //       let distanceBetweenCurrentPoint = Math.pow((systemCurveDataPoint.x - baselineDataPoint.x), 2) + Math.pow((systemCurveDataPoint.y - baselineDataPoint.y), 2)
+  //       if(smallestDistanceBetweenPoints > distanceBetweenCurrentPoint){
+  //         smallestDistanceBetweenPoints = distanceBetweenCurrentPoint;
+  //         closestSystemCurvePoint = systemCurveDataPoint;
+  //         closestBaselineDataPoint = baselineDataPoint;
+  //       }
+  //     })
+  //   });
+  //   //find average between points
+  //   let x: number = (closestBaselineDataPoint.x + closestSystemCurvePoint.x) / 2;
+  //   let y: number = (closestBaselineDataPoint.y + closestSystemCurvePoint.y) / 2;
+  //   debugger;
+  //   return {
+  //     x: x, 
+  //     y: y,
+  //   };
+  // }
+
   calculateBaselineIntersectionPoint(equipmentCurve: Array<{ x: number, y: number }>): { x: number, y: number } {
     let systemCurve: Array<{ x: number, y: number, fluidPower: number }> = this.systemCurveRegressionData;
     let intersected: boolean = false;
@@ -354,64 +449,7 @@ export class SystemAndEquipmentCurveService {
       
       let avgYVal = (equipmentVal1.y + equipmentVal2.y + systemVal1.y + systemVal2.y) / 4;
       let avgXVal = (equipmentVal1.x + equipmentVal2.x + systemVal1.x + systemVal2.x) / 4;
-
       return { x: avgXVal, y: avgYVal };      
-    } else {
-      return undefined;
-    }
-  }
-
-  calculateModificationIntersectionPoint(equipmentCurve: Array<{ x: number, y: number }>): { x: number, y: number } {
-    let systemCurve: Array<{ x: number, y: number, fluidPower: number }> = this.systemCurveRegressionData;
-    let intersected: boolean = false;
-    let equipmentStartGreater: boolean = false;
-    let intersectPoint: number = 0;
-    if (equipmentCurve[0].y > systemCurve[0].y) {
-      equipmentStartGreater = true;
-    }
-    let iterateMax: number;
-    if (systemCurve.length <= equipmentCurve.length) {
-      iterateMax = systemCurve.length;
-    } else {
-      iterateMax = equipmentCurve.length;
-    }
-    // let match;
-    // let key;
-    let intersectedX: number;
-    if (equipmentStartGreater) {
-      for (let i = 1; i < iterateMax; i++) {
-        let equip = equipmentCurve[i].x;
-        let system = systemCurve[i].x;
-        if (equipmentCurve[i].y < systemCurve[i].y) {
-          intersectPoint = i;
-          intersected = true;
-          break;
-        }
-      };
-    }
-    else {
-      for (let i = 1; i < iterateMax; i++) {
-        if (equipmentCurve[i].y > systemCurve[i].y) {
-          intersectPoint = i;
-          intersected = true;
-          break;
-        }
-      };
-    }
-
-    if (intersected) {
-      let equipmentVal1 = equipmentCurve[intersectPoint - 1];
-      let equipmentVal2 = equipmentCurve[intersectPoint];
-      let systemVal1 = systemCurve[intersectPoint - 1];
-      let systemVal2 = systemCurve[intersectPoint];
-      
-      
-      let avgYVal = (equipmentVal1.y + equipmentVal2.y + systemVal1.y + systemVal2.y) / 4;
-      let avgXVal = (equipmentVal1.x + equipmentVal2.x + systemVal1.x + systemVal2.x) / 4;
-
-      // return { x: intersectedX, y: intersectedY }; 
-      return { x: avgXVal, y: avgYVal };
-      debugger;
     } else {
       return undefined;
     }
@@ -420,6 +458,6 @@ export class SystemAndEquipmentCurveService {
 }
 
 export interface IntersectionData {
-  baseline: DataPoint;
-  modification: DataPoint;
+  baseline: SystemCurveDataPoint;
+  modification?: SystemCurveDataPoint;
 };
