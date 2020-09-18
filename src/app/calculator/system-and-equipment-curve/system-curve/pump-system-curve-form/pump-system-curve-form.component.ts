@@ -83,7 +83,7 @@ export class PumpSystemCurveFormComponent implements OnInit {
   initSystemCurveForm() {
     let dataObj: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.value;
     if (dataObj == undefined) {
-      dataObj = this.pumpSystemCurveFormService.getPumpSystemCurveDefaults(this.settings);
+      dataObj = this.pumpSystemCurveFormService.getResetPumpSystemCurveInputs();
     }
     this.systemAndEquipmentCurveService.pumpSystemCurveData.next(dataObj);
     this.pumpSystemCurveForm = this.pumpSystemCurveFormService.getFormFromObj(dataObj);

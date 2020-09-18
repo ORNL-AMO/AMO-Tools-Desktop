@@ -60,7 +60,7 @@ export class ByDataFormComponent implements OnInit {
   initForm() {
     let defaultData: ByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
     if (defaultData == undefined) {
-      defaultData = this.equipmentCurveService.getByDataDefault(this.settings);
+      defaultData = this.equipmentCurveService.getResetByDataInputs();
     }
     this.systemAndEquipmentCurveService.byDataInputs.next(defaultData);
     this.byDataForm = this.equipmentCurveService.getByDataFormFromObj(defaultData);

@@ -2,9 +2,25 @@
     <tbody>
       <tr class="bold small text-center">
         <th class="">Current Point Data</th>
-        <th class="small"> Flow ({{ chartConfig.xUnits }})</th>
-        <th class="small">{{ chartConfig.yName }} ({{ chartConfig.yUnits}})</th>
-        <th class="small">Fluid Power ({{ this.settings.powerMeasurement }})</th>
+        <th class="small"> Flow 
+          (
+            <span *ngIf="equipmentType != 'pump'" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+            <span *ngIf="equipmentType == 'pump'" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
+          )
+        </th>
+        <th class="small">
+          <span *ngIf="equipmentType == 'pump'">Head</span>
+          <span *ngIf="equipmentType != 'pump'">Pressure</span>
+          (
+            <span *ngIf="equipmentType != 'pump'" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+            <span *ngIf="equipmentType == 'pump'" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
+          )
+        </th>
+        <th class="small">Fluid Power
+          (
+            <span [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
+          )
+        </th>
       </tr>
       <tr *ngIf="currentHoverData" 
       class="bold small text-center no-border"

@@ -11,7 +11,7 @@
       </div>
     </div>
   </div>
-  <!-- System Chart -->
+  <!-- Expanded System Chart -->
   <div *ngIf="expanded" class="w-100 p-3">
     <div #expandedSystemChartDiv id="expandedSystemChartDiv"></div>
     <div class="w-100 tab-panel-background">
@@ -28,11 +28,11 @@
             [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
           </div>
         </div>
-        <app-chart-hover-data [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
+        <app-chart-hover-data [equipmentType]="equipmentType" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
       </div>
     </div>
   </div>
-  <!--  Power chart -->
+  <!-- Expanded Power chart -->
   <div *ngIf="powerExpanded" class="w-100 p-3">
     <div #expandedPowerChartDiv id="expandedPowerChartDiv"></div>
     <div class="w-100 tab-panel-background">
@@ -88,7 +88,7 @@
       </div>
     </div>
   </div>
-  <app-chart-hover-data [chartConfig]="chartConfig" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
+  <app-chart-hover-data [equipmentType]="equipmentType" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
 </div>
 
   <div class="d-flex flex-column my-2 p-2 scroll-item data-summary">
@@ -97,10 +97,26 @@
     <tbody class="w-100">
       <tr class="bold small text-center no-border">
         <th class="bold w-25">Key</th>
-        <th class="bold w-25"> Flow ({{ chartConfig.xUnits }})</th>
-        <th class="bold w-25">{{ chartConfig.yName }} ({{ chartConfig.yUnits}})</th>
+        <th class="bold w-25"> Flow 
+          (
+            <span *ngIf="equipmentType != 'pump'" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+            <span *ngIf="equipmentType == 'pump'" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
+          )
+        </th>
+        <th class="bold w-25">
+          <span *ngIf="equipmentType == 'pump'">Head</span>
+          <span *ngIf="equipmentType != 'pump'">Pressure</span>
+          (
+            <span *ngIf="equipmentType != 'pump'" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+            <span *ngIf="equipmentType == 'pump'" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
+          )
+        </th>
         <th class="bold w-25">Efficiency (%)</th>
-        <th class="bold w-25">Power ({{ chartConfig.powerUnits }})</th>
+        <th class="bold w-25">Power 
+          (
+            <span [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
+          )
+        </th>
         <th class="bold w-25"></th>
       </tr>
       <tr *ngFor="let point of selectedDataPoints; let index = index">
@@ -121,7 +137,7 @@
           <span *ngIf="!point.power">&mdash; &mdash;</span>
         </td>
         <td class='delete-row text-center'>
-          <a *ngIf="index >= chartConfig.defaultPointCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
+          <a *ngIf="index >= defaultPointCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
             Delete
           </a>
         </td>
@@ -138,10 +154,26 @@
   <table #dataSummaryTable class="table pt-2 d-flex">
     <tbody class="w-100">
       <tr class="bold small text-center no-border">
-        <th class="bold w-25"> Flow ({{ chartConfig.xUnits}})</th>
-        <th class="bold w-25">{{ chartConfig.yName }} ({{ chartConfig.yUnits}})</th>
+        <th class="bold w-25"> Flow 
+          (
+            <span *ngIf="equipmentType != 'pump'" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+            <span *ngIf="equipmentType == 'pump'" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
+          )
+        </th>
+        <th class="bold w-25">
+          <span *ngIf="equipmentType == 'pump'">Head</span>
+          <span *ngIf="equipmentType != 'pump'">Pressure</span>
+          (
+            <span *ngIf="equipmentType != 'pump'" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+            <span *ngIf="equipmentType == 'pump'" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
+          )
+        </th>
         <th class="bold w-25">Efficiency (%)</th>
-        <th class="bold w-25">Power ({{ chartConfig.powerUnits }})</th>
+        <th class="bold w-25">Power 
+          (
+            <span [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
+          )
+        </th>
       </tr>
       <tr *ngFor="let point of selectedDataPoints; let index = index">
         <td class="text-center">{{point.x}}</td>

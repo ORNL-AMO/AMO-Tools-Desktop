@@ -9,42 +9,15 @@ export class PumpSystemCurveFormService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  //example/defaults same
-  getPumpSystemCurveDefaults(settings: Settings): PumpSystemCurveData {
-    let systemCurveFlowRate: number = 600;
-    let pumpSystemCurveHead: number = 1000;
-    if (settings.flowMeasurement !== 'gpm') {
-      systemCurveFlowRate = Math.round(this.convertUnitsService.value(systemCurveFlowRate).from('gpm').to(settings.flowMeasurement) * 100) / 100;
-    }
-    if (settings.distanceMeasurement !== 'ft') {
-      pumpSystemCurveHead = Math.round(this.convertUnitsService.value(pumpSystemCurveHead).from('ft').to(settings.distanceMeasurement) * 100) / 100;
-    }
-    let defaultPumpSystemCurveData: PumpSystemCurveData = {
-      specificGravity: 1.0,
-      systemLossExponent: 1.9,
-      pointOneFlowRate: 0,
-      pointOneHead: 0,
-      pointTwo: '',
-      pointTwoFlowRate: systemCurveFlowRate,
-      pointTwoHead: pumpSystemCurveHead,
-      modificationCurve: {
-        modificationMeasurementOption: 0,
-        modifiedFlow: 0,
-        modifiedHead: 0,
-      }
-    };
-    return defaultPumpSystemCurveData;
-  }
-
   getPumpSystemCurveExample(settings: Settings): PumpSystemCurveData {
     let systemCurveFlowRate: number = 600;
-    let pumpSystemCurveHead: number = 1000;
-    let modifiedCurveHead = 275;
+    let pumpSystemCurveHead: number = 300;
+    let modifiedCurveFlow = 500;
     if (settings.flowMeasurement !== 'gpm') {
       systemCurveFlowRate = Math.round(this.convertUnitsService.value(systemCurveFlowRate).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+      modifiedCurveFlow = Math.round(this.convertUnitsService.value(modifiedCurveFlow).from('gpm').to(settings.flowMeasurement) * 100) / 100;
     }
     if (settings.distanceMeasurement !== 'ft') {
-      modifiedCurveHead = Math.round(this.convertUnitsService.value(modifiedCurveHead).from('ft').to(settings.distanceMeasurement) * 100) / 100;
       pumpSystemCurveHead = Math.round(this.convertUnitsService.value(pumpSystemCurveHead).from('ft').to(settings.distanceMeasurement) * 100) / 100;
     }
     let examplePumpSystemCurveData: PumpSystemCurveData = {
@@ -56,9 +29,9 @@ export class PumpSystemCurveFormService {
       pointTwoFlowRate: systemCurveFlowRate,
       pointTwoHead: pumpSystemCurveHead,
       modificationCurve: {
-        modificationMeasurementOption: 1,
-        modifiedFlow: 0,
-        modifiedHead: modifiedCurveHead,
+        modificationMeasurementOption: 0,
+        modifiedFlow: modifiedCurveFlow,
+        modifiedHead: 0,
       }
     };
     return examplePumpSystemCurveData;
@@ -67,8 +40,8 @@ export class PumpSystemCurveFormService {
 
   getResetPumpSystemCurveInputs(): PumpSystemCurveData {
     let pumpSystemCurveData: PumpSystemCurveData = {
-      specificGravity: 1.0,
-      systemLossExponent: 1.9,
+      specificGravity: 0,
+      systemLossExponent: 0,
       pointOneFlowRate: 0,
       pointOneHead: 0,
       pointTwo: '',

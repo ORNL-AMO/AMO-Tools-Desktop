@@ -140,7 +140,7 @@
                 <div class="col-6 form-group">
                     <select id="modificationMeasurementOption" name="modificationMeasurementOption" class="form-control"
                         (change)="saveChanges()" formControlName="modificationMeasurementOption"
-                        (focus)="focusField('measurementOption')">
+                        (focus)="focusField('modifiedFlow')">
                         <option *ngFor="let option of modificationOptions" [ngValue]="option.value">{{option.display}}</option>
                     </select>
                 </div>
@@ -174,7 +174,7 @@
                 </div>
             </div>
             <div *ngIf="modificationEquipment"> 
-                <div class="row">
+                <div *ngIf="fanSystemCurveForm.controls.modificationMeasurementOption.value == 0" class="row">
                     <div class="col-6">
                   <label class="small">Modification Pressure</label>
                 </div>
@@ -184,7 +184,7 @@
                   <span class="ml-1" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
                 </div>
             </div>
-            <div class="row" >
+            <div *ngIf="fanSystemCurveForm.controls.modificationMeasurementOption.value == 1" class="row">
                 <div class="col-6">
                     <label class="small">Modification Flow</label>
                 </div>
@@ -213,10 +213,10 @@
                   <span *ngIf="modificationEquipment.speed" >{{modificationEquipment.speed | number: '1.0-0'}} </span>
                   <span *ngIf="!modificationEquipment.speed" >&mdash; &mdash; </span>
                   <span class="ml-1">
-                      <span *ngIf="settings.fanFlowrate == 'ft3/min'">
+                      <span *ngIf="settings.fanFlowRate == 'ft3/min'">
                         in
                       </span>
-                      <span *ngIf="settings.fanFlowrate != 'ft3/min'">
+                      <span *ngIf="settings.fanFlowRate != 'ft3/min'">
                         cm
                       </span>
                   </span>

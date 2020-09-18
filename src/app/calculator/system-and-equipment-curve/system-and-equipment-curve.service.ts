@@ -45,6 +45,10 @@ export class SystemAndEquipmentCurveService {
   systemCurveIntersectionData: BehaviorSubject<IntersectionData>;
   modificationEquipment: BehaviorSubject<ModificationEquipment>;
 
+  // Keep data pairs length performant
+  fanPairRenderLimit: number = 10000;
+  fanDataPairIncrement: number = 100;
+
   constructor(private regressionEquationsService: RegressionEquationsService) {
     this.currentField = new BehaviorSubject<string>('default');
     this.pumpSystemCurveData = new BehaviorSubject<PumpSystemCurveData>(undefined);
@@ -191,8 +195,8 @@ export class SystemAndEquipmentCurveService {
       let secondValueLabel: string = 'Head';
       let powerDataPairs = this.regressionEquationsService.getEquipmentPowerRegressionByData(this.byDataInputs.getValue(), this.modificationEquipment.getValue(), this.equipmentInputs.getValue(), maxFlowRate);
       if (equipmentType == 'fan') {
-        if (maxFlowRate > 10000) {
-        this.regressionEquationsService.coordinateIncrement = 100;
+        if (maxFlowRate > this.fanPairRenderLimit) {
+        this.regressionEquationsService.dataPairCoordinateIncrement = this.fanDataPairIncrement;
         }
         this.calculateFanEfficiency(powerDataPairs.baseline, settings);
         secondValueLabel = 'Pressure';
@@ -220,8 +224,8 @@ export class SystemAndEquipmentCurveService {
       let secondValueLabel: string = 'Head';
       let powerDataPairs = this.regressionEquationsService.getEquipmentPowerRegressionByEquation(this.byEquationInputs.getValue(), this.equipmentInputs.getValue(), this.modificationEquipment.getValue(),  maxFlowRate);
       if (equipmentType == 'fan') {
-        if (maxFlowRate > 10000) {
-          this.regressionEquationsService.coordinateIncrement = 100;
+        if (maxFlowRate > this.fanPairRenderLimit) {
+          this.regressionEquationsService.dataPairCoordinateIncrement = this.fanDataPairIncrement;
         }
         this.calculateFanEfficiency(powerDataPairs.baseline, settings);
         secondValueLabel = 'Pressure';
@@ -243,14 +247,14 @@ export class SystemAndEquipmentCurveService {
 
   calculateSystemCurveRegressionData(equipmentType: string, settings: Settings, maxFlowRate: number) {
     if (equipmentType == 'pump' && this.pumpSystemCurveData.getValue() != undefined) {
-      this.regressionEquationsService.coordinateIncrement = 2;
+      this.regressionEquationsService.dataPairCoordinateIncrement = 2;
       let systemCurveRegressionEquation: string = this.regressionEquationsService.getPumpSystemCurveRegressionEquation(this.pumpSystemCurveData.getValue());
       this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
       this.systemCurveRegressionData = this.regressionEquationsService.calculatePumpSystemCurveData(this.pumpSystemCurveData.getValue(), maxFlowRate, settings);
       this.calculateModificationEquipment();
     } else if (equipmentType == 'fan' && this.fanSystemCurveData.getValue() != undefined) {
-      if (maxFlowRate > 10000) {
-        this.regressionEquationsService.coordinateIncrement = 100;
+      if (maxFlowRate > this.fanPairRenderLimit) {
+        this.regressionEquationsService.dataPairCoordinateIncrement = this.fanDataPairIncrement;
       }
       let systemCurveRegressionEquation: string = this.regressionEquationsService.getFanSystemCurveRegressionEquation(this.fanSystemCurveData.getValue());
       this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);

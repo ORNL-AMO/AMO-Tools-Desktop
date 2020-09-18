@@ -20,7 +20,6 @@ export class EquipmentCurveService {
     return form;
   }
 
-  //example/default same
   getEquipmentCurveDefault(): EquipmentInputs {
     let exampleEquipment: EquipmentInputs = {
       measurementOption: 0,
@@ -30,9 +29,19 @@ export class EquipmentCurveService {
     return exampleEquipment;
   }
 
-  getResetEquipmentInputs(): EquipmentInputs {
+  getEquipmentCurveExample(): EquipmentInputs {
     let exampleEquipment: EquipmentInputs = {
-      measurementOption: 0,
+      measurementOption: 1,
+      baselineMeasurement: 1800,
+      modificationMeasurementOption: 0,
+    };
+    return exampleEquipment;
+  }
+
+  getResetEquipmentInputs(equipment: string): EquipmentInputs {
+    let option = equipment == 'fan'? 1 : 0;
+    let exampleEquipment: EquipmentInputs = {
+      measurementOption: option,
       baselineMeasurement: 0,
       modificationMeasurementOption: 0,
     };
@@ -106,36 +115,26 @@ export class EquipmentCurveService {
   }
 
   getFanByEquationDefault(flowUnit: string, yValueUnit: string, yImperial: string): ByEquationInputs {
-    let tmpMaxFlow = 136000;
-    let constant = 22.1;
-    let powerConstant = 0;
-
-    if (flowUnit !== 'gpm') {
-      tmpMaxFlow = Math.round(this.convertUnitsService.value(tmpMaxFlow).from('gpm').to(flowUnit) * 100) / 100;
-    }
-    if (yValueUnit !== yImperial) {
-      constant = Math.round(this.convertUnitsService.value(constant).from(yImperial).to(yValueUnit) * 100) / 100;
-    }
-
     return {
-      maxFlow: tmpMaxFlow,
-      equationOrder: 2,
-      constant: constant,
-      flow: -0.01711438537767709,
-      flowTwo: -0.0002941915448609,
+      maxFlow: 0,
+      equationOrder: 1,
+      constant: 0,
+      flow: 0,
+      flowTwo: 0,
       flowThree: 0,
       flowFour: 0,
       flowFive: 0,
       flowSix: 0,
-      powerConstant: powerConstant,
+      powerConstant: 0,
       powerOrder: 1,
-      powerFlow: 0.0044,
+      powerFlow: 0,
       powerFlowTwo: 0,
       powerFlowThree: 0,
       powerFlowFour: 0,
       powerFlowFive: 0,
       powerFlowSix: 0,
     }
+
   }
 
   getResetByEquationInputs(): ByEquationInputs {
@@ -173,17 +172,17 @@ export class EquipmentCurveService {
       flowSix: form.controls.flowSix.value,
       powerConstant: form.controls.powerConstant.value,
       powerOrder: form.controls.powerOrder.value,
-      powerFlow: form.controls.flow.value,
-      powerFlowTwo: form.controls.flowTwo.value,
-      powerFlowThree: form.controls.flowThree.value,
-      powerFlowFour: form.controls.flowFour.value,
-      powerFlowFive: form.controls.flowFive.value,
-      powerFlowSix: form.controls.flowSix.value,
+      powerFlow: form.controls.powerFlow.value,
+      powerFlowTwo: form.controls.powerFlowTwo.value,
+      powerFlowThree: form.controls.powerFlowThree.value,
+      powerFlowFour: form.controls.powerFlowFour.value,
+      powerFlowFive: form.controls.powerFlowFive.value,
+      powerFlowSix: form.controls.powerFlowSix.value,
     }
   }
 
   //by data
-  getByDataDefault(settings: Settings): ByDataInputs {
+  getByDataPumpDefault(settings: Settings): ByDataInputs {
     let tmpMaxFlow = 1020;
     let tmpFlow1 = 100;
     let tmpFlow2 = 630;
