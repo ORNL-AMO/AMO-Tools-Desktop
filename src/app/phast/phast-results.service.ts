@@ -103,12 +103,13 @@ export class PhastResultsService {
       results.grossHeatInput = results.totalInput - Math.abs(results.exothermicHeat);
     }
 
-
+    //EAF
     if (resultCats.showEnInput1 && this.checkLoss(phast.losses.energyInputEAF)) {
       let tmpForm = this.energyInputService.getFormFromLoss(phast.losses.energyInputEAF[0]);
       if (tmpForm.status === 'VALID') {
         let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
         results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
+        //use grossHeatInput here because it will be updated if exhaustGasEAF exists
         results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.totalChemicalEnergyInput;
         results.energyInputTotal = results.grossHeatInput;
       }
@@ -116,7 +117,8 @@ export class PhastResultsService {
       if (!this.checkLoss(phast.losses.exhaustGasEAF)) {
         results.energyInputTotal = phast.losses.energyInputEAF[0].electricityInput + results.energyInputTotalChemEnergy;
         results.energyInputHeatDelivered = phast.losses.energyInputEAF[0].electricityInput;
-        results.totalExhaustGasEAF = phast.losses.energyInputEAF[0].electricityInput - results.grossHeatInput;
+        results.totalExhaustGasEAF = phast.losses.energyInputEAF[0].electricityInput - results.totalInput - results.exothermicHeat;
+        results.grossHeatInput = results.totalInput + results.totalExhaustGasEAF;
       }
     }
 
