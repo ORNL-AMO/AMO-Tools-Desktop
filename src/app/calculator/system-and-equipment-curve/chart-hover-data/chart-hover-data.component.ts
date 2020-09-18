@@ -15,7 +15,7 @@ export class ChartHoverDataComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  chartConfig: ChartConfig;
+  equipmentType: string;
   constructor() { }
 
   ngOnInit(): void {

@@ -42,22 +42,23 @@ export class CurveDataService {
     let yValueUnit: string;
     let yImperialUnit: string;
     let exampleByEquationInputs: ByEquationInputs;
+    let exampleEquipment;
     if (equipmentType == 'fan') {
       flowUnit = settings.fanFlowRate;
       yValueUnit = settings.fanPressureMeasurement;
       yImperialUnit = 'inH2o';
       exampleByEquationInputs = this.equipmentCurveService.getFanByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
+      this.systemAndEquipmentCurveService.byEquationInputs.next(exampleByEquationInputs);
     } else {
       flowUnit = settings.flowMeasurement;
       yValueUnit = settings.distanceMeasurement;
       yImperialUnit = 'ft';
       exampleByEquationInputs = this.equipmentCurveService.getPumpByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
     }
-
+    
+    exampleEquipment = this.equipmentCurveService.getEquipmentCurveExample();
     this.systemAndEquipmentCurveService.byEquationInputs.next(exampleByEquationInputs);
-    let exampleEquipment: EquipmentInputs = this.equipmentCurveService.getEquipmentCurveDefault();
     this.systemAndEquipmentCurveService.equipmentInputs.next(exampleEquipment);
-
     this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.next('Data');
     this.systemAndEquipmentCurveService.systemCurveCollapsed.next('open');
     this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next('open');
@@ -67,15 +68,17 @@ export class CurveDataService {
   resetData(equipmentType: string) {
     let exampleByEquationInputs: ByEquationInputs = this.equipmentCurveService.getResetByEquationInputs();
     this.systemAndEquipmentCurveService.byEquationInputs.next(exampleByEquationInputs);
-    let exampleEquipment: EquipmentInputs = this.equipmentCurveService.getResetEquipmentInputs();
-    this.systemAndEquipmentCurveService.equipmentInputs.next(exampleEquipment);
     let byDataInputs: ByDataInputs = this.equipmentCurveService.getResetByDataInputs();
     this.systemAndEquipmentCurveService.byDataInputs.next(byDataInputs);
 
     if (equipmentType == 'fan') {
-      let fanSystemCurveData: FanSystemCurveData = this.fanSystemCurveFormService.getResetFanSystemCurveInputs();
+      let exampleEquipment: EquipmentInputs = this.equipmentCurveService.getResetEquipmentInputs('fan');
+      this.systemAndEquipmentCurveService.equipmentInputs.next(exampleEquipment);
+      let fanSystemCurveData: FanSystemCurveData = this.fanSystemCurveFormService.getFanSystemCurveDefaults();
       this.systemAndEquipmentCurveService.fanSystemCurveData.next(fanSystemCurveData);
     } else if (equipmentType == 'pump') {
+      let exampleEquipment: EquipmentInputs = this.equipmentCurveService.getResetEquipmentInputs('pump');
+      this.systemAndEquipmentCurveService.equipmentInputs.next(exampleEquipment);
       let pumpSystemCurveData: PumpSystemCurveData = this.pumpSystemCurveFormService.getResetPumpSystemCurveInputs();
       this.systemAndEquipmentCurveService.pumpSystemCurveData.next(pumpSystemCurveData);
     }

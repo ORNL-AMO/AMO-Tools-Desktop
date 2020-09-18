@@ -51,7 +51,7 @@ export class ByEquationFormComponent implements OnInit {
       if (this.equipmentType == 'fan') {
         defaultData = this.equipmentCurveService.getFanByEquationDefault(this.flowUnit, this.settings.fanPressureMeasurement, 'inH2o');
       } else if (this.equipmentType == 'pump') {
-        defaultData = this.equipmentCurveService.getPumpByEquationDefault(this.flowUnit, this.settings.distanceMeasurement, 'ft');
+        defaultData = this.equipmentCurveService.getResetByEquationInputs();
       }
     }
     this.systemAndEquipmentCurveService.byEquationInputs.next(defaultData);

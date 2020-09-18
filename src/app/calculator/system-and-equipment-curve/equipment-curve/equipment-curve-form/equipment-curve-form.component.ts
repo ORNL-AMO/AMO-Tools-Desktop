@@ -54,7 +54,11 @@ export class EquipmentCurveFormComponent implements OnInit {
   initForm() {
     let defaultData: EquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
     if (defaultData == undefined) {
-      defaultData = this.equipmentCurveService.getEquipmentCurveDefault();
+      if (this.equipmentType == 'fan') {
+        defaultData = this.equipmentCurveService.getResetEquipmentInputs('fan');
+      } else {
+        defaultData = this.equipmentCurveService.getResetEquipmentInputs('pump');
+      }
     }
     this.systemAndEquipmentCurveService.equipmentInputs.next(defaultData);
     this.equipmentCurveForm = this.equipmentCurveService.getEquipmentCurveFormFromObj(defaultData);
