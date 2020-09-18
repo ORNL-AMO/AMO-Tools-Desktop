@@ -118,7 +118,7 @@ export class PhastResultsService {
         results.energyInputTotal = phast.losses.energyInputEAF[0].electricityInput + results.energyInputTotalChemEnergy;
         results.energyInputHeatDelivered = phast.losses.energyInputEAF[0].electricityInput;
         results.totalExhaustGasEAF = phast.losses.energyInputEAF[0].electricityInput - results.totalInput - results.exothermicHeat;
-        results.grossHeatInput = results.totalInput + results.totalExhaustGasEAF;
+        results.grossHeatInput = results.energyInputTotal - results.exothermicHeat;
       }
     }
 
