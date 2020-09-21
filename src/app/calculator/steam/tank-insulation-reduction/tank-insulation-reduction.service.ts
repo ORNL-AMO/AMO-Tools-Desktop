@@ -184,7 +184,11 @@ export class TankInsulationReductionService {
   getResults(settings: Settings, baseline: TankInsulationReductionInput, modification?: TankInsulationReductionInput) {
     let baselineCopy: TankInsulationReductionInput = JSON.parse(JSON.stringify(baseline));
     let baselineResults: TankInsulationReductionResult = this.calculate(baselineCopy, settings);
-    let modificationResults: TankInsulationReductionResult;
+    let modificationResults: TankInsulationReductionResult = {
+      heatLoss: 0,
+      annualHeatLoss: 0,
+      energyCost: 0
+    };
     let annualHeatLossReduction: number = 0;
     let annualCostSavings: number = 0;
     if (modification) {
@@ -192,6 +196,8 @@ export class TankInsulationReductionService {
       modificationResults = this.calculate(modificationCopy, settings);
       annualHeatLossReduction = baselineResults.annualHeatLoss - modificationResults.annualHeatLoss;
       annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
+    }else{
+      modificationResults = baselineResults;
     }
     let tankInsulationReductionResults: TankInsulationReductionResults = {
       baselineResults: baselineResults,
