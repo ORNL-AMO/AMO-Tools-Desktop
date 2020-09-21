@@ -173,7 +173,11 @@ export class PipeInsulationReductionService {
   getResults(settings: Settings, baseline: PipeInsulationReductionInput, modification?: PipeInsulationReductionInput) {
     let baselineCopy: PipeInsulationReductionInput = JSON.parse(JSON.stringify(baseline));
     let baselineResults: PipeInsulationReductionResult = this.calculate(baselineCopy, settings);
-    let modificationResults: PipeInsulationReductionResult;
+    let modificationResults: PipeInsulationReductionResult = {
+      heatLength: 0,
+      annualHeatLoss: 0,
+      energyCost: 0
+    };
     let annualHeatLossReduction: number = 0;
     let annualCostSavings: number = 0;
     if (modification) {
@@ -181,6 +185,8 @@ export class PipeInsulationReductionService {
       modificationResults = this.calculate(modificationCopy, settings);
       annualHeatLossReduction = baselineResults.annualHeatLoss - modificationResults.annualHeatLoss;
       annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
+    } else {
+      modificationResults = baselineResults;
     }
     let pipeInsulationReductionResults: PipeInsulationReductionResults = {
       baselineResults: baselineResults,
