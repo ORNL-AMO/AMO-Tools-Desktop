@@ -121,6 +121,7 @@ export interface PhastResults {
   totalExhaustGas: number;
   totalExhaustGasEAF: number;
   totalSystemLosses: number;
+  energyInputTotal: number;
   exothermicHeat: number;
   energyInputTotalChemEnergy: number;
   energyInputHeatDelivered: number;
