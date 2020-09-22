@@ -8,8 +8,8 @@
   "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
   "engines": {
-    "node": "10.13.0",
-    "npm": "6.4.1"
+    "node": "12.8.0",
+    "npm": "6.10.2"
   },
   "scripts": {
     "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --prod --aot",
@@ -25,11 +25,8 @@
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "postinstall": "electron-builder install-app-deps",
     "e2e": "ng e2e",
-    "pack": "build --dir",
-    "dist": "electron-builder",
-    "windows": "./node_modules/.bin/build -w --x64 --ia32",
-    "linux": "./node_modules/.bin/build -l --x64",
-    "mac": "./node_modules/.bin/build -m --x64"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "private": true,
   "dependencies": {
