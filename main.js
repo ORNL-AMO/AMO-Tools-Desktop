@@ -10,6 +10,7 @@ function isDev() {
   return process.mainModule.filename.indexOf('app.asar') === -1;
 };
 
+app.allowRendererProcessReuse = false
 // Logger for autoUpdater
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
@@ -37,9 +38,9 @@ app.on('ready', function () {
     slashes: true
   }));
 
-  if (isDev()) {
+  // if (isDev()) {
     win.toggleDevTools();
-  }
+  // }
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
