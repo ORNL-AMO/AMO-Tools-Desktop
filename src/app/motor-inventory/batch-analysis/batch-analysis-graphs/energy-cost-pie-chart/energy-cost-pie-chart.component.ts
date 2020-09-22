@@ -50,9 +50,9 @@ export class EnergyCostPieChartComponent implements OnInit {
         texttemplate: '%{label}<br>%{value:$,.0f}',
         hoverinfo: 'label+percent',
         hovertemplate: '%{percent:%,.2f} <extra></extra>',
-        direction: "clockwise",
-        rotation: -45,
-
+        // direction: "clockwise",
+        // rotation: -45,
+        automargin: true
       }];
       let layout = {
         title: {
