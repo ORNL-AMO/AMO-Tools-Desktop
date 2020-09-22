@@ -7,12 +7,10 @@
         <app-motor-inventory-summary *ngIf="mainTab == 'summary'"></app-motor-inventory-summary>
         <app-batch-analysis *ngIf="mainTab == 'analysis'"></app-batch-analysis>
     </div>
-    <div *ngIf="mainTab == 'setup'" #footer id="logToolFooter" class="footer hide-print">
-        <div class="pull-left" *ngIf="currentTab == 'clean-data'">
-            <button class="btn btn-default" (click)="back()">Back</button>
-        </div>
-        <div class="pull-right">
-            <button class="btn btn-primary" (click)="continue()" [disabled]="true">Next</button>
+    <div *ngIf="mainTab == 'setup'" #footer id="motorInventoryFooter" class="footer hide-print">
+        <div class="d-flex w-100 justify-content-between">
+            <button class="btn btn-default" (click)="back()" [disabled]="setupTab == 'plant-setup'">Back</button>
+            <button class="btn btn-primary" (click)="continue()">Next</button>
         </div>
     </div>
 </div>

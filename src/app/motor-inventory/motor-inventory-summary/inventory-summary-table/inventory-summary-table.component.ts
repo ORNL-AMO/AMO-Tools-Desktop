@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MotorInventoryData } from '../../motor-inventory';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { Settings } from '../../../shared/models/settings';
 import { InventorySummaryTableService, InventorySummaryData } from './inventory-summary-table.service';
-import { MotorInventorySummaryService } from '../motor-inventory-summary.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -16,6 +15,9 @@ export class InventorySummaryTableComponent implements OnInit {
   sortByField: string = 'name';
   sortByDirection: string = 'desc';
   filterInventorySummarySub: Subscription;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
   constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryTableService: InventorySummaryTableService) { }
 
   ngOnInit(): void {
@@ -41,4 +43,9 @@ export class InventorySummaryTableComponent implements OnInit {
     }
     this.sortByField = str;
   }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
+
 }

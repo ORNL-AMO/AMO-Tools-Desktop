@@ -4,6 +4,13 @@
     left: 0;
 }
 
+.sticky-right{
+    position: -webkit-sticky;
+    position: sticky;
+    right: 0;
+}
+
+
 .table{
     font-size: small;
     margin-bottom: 0px;
@@ -75,4 +82,12 @@ td.replace-when-fail{
 tr.replace-when-fail{
     background-color: #7FB3D5;
     /* color: white; */
+}
+
+td{
+    white-space: nowrap;
+}
+
+td.incomplete-cell{
+    white-space: inherit;
 }
