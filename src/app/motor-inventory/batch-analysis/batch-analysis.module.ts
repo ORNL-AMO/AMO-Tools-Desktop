@@ -10,6 +10,7 @@ import { BatchAnalysisGraphsComponent } from './batch-analysis-graphs/batch-anal
 import { TotalMotorsBarChartComponent } from './batch-analysis-graphs/total-motors-bar-chart/total-motors-bar-chart.component';
 import { EnergyCostBarChartComponent } from './batch-analysis-graphs/energy-cost-bar-chart/energy-cost-bar-chart.component';
 import { EnergyCostPieChartComponent } from './batch-analysis-graphs/energy-cost-pie-chart/energy-cost-pie-chart.component';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { EnergyCostPieChartComponent } from './batch-analysis-graphs/energy-cost
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    ExportableResultsTableModule
   ],
   exports: [
     BatchAnalysisComponent

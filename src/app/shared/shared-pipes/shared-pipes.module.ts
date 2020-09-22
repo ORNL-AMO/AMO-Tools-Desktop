@@ -5,6 +5,7 @@ import { SettingsLabelPipe } from './settings-label.pipe';
 import { SigFigsPipe } from './sig-figs.pipe';
 import { OptionDisplayValuePipe } from './option-display-value.pipe';
 import { MotorEfficiencyClassPipe } from './motor-efficiency-class.pipe';
+import { MotorDriveTypePipe } from './motor-drive-type.pipe';
 
 
 
@@ -14,7 +15,8 @@ import { MotorEfficiencyClassPipe } from './motor-efficiency-class.pipe';
     SettingsLabelPipe,
     SigFigsPipe,
     OptionDisplayValuePipe,
-    MotorEfficiencyClassPipe
+    MotorEfficiencyClassPipe,
+    MotorDriveTypePipe
   ],
   imports: [
     CommonModule
@@ -24,7 +26,8 @@ import { MotorEfficiencyClassPipe } from './motor-efficiency-class.pipe';
     SettingsLabelPipe,
     SigFigsPipe,
     OptionDisplayValuePipe,
-    MotorEfficiencyClassPipe
+    MotorEfficiencyClassPipe,
+    MotorDriveTypePipe
   ]
 })
 export class SharedPipesModule { }

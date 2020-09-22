@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { BatchAnalysisService, BatchAnalysisSettings, BatchAnalysisResults } from '../batch-analysis.service';
 import { MotorInventoryService } from '../../motor-inventory.service';
@@ -10,6 +10,8 @@ import { MotorCatalogService } from '../../motor-inventory-setup/motor-catalog/m
   styleUrls: ['./batch-analysis-table.component.css']
 })
 export class BatchAnalysisTableComponent implements OnInit {
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
 
   batchAnalysisDataItems: Array<BatchAnalysisResults>;
   batchAnalysisDataItemsSub: Subscription;
@@ -17,6 +19,7 @@ export class BatchAnalysisTableComponent implements OnInit {
   sortByDirection: string = 'desc';
   batchAnalysisSettings: BatchAnalysisSettings;
   batchAnalysisSettingsSub: Subscription;
+
   constructor(private batchAnalysisService: BatchAnalysisService, private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
@@ -26,7 +29,6 @@ export class BatchAnalysisTableComponent implements OnInit {
 
     this.batchAnalysisDataItemsSub = this.batchAnalysisService.batchAnalysisDataItems.subscribe(val => {
       this.batchAnalysisDataItems = val;
-      console.log(this.batchAnalysisDataItems);
     });
   }
 
@@ -51,6 +53,10 @@ export class BatchAnalysisTableComponent implements OnInit {
     this.motorCatalogService.selectedMotorItem.next(batchAnalysisItem.motorItem);
     this.motorInventoryService.setupTab.next('motor-catalog');
     this.motorInventoryService.mainTab.next('setup');
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 }
 

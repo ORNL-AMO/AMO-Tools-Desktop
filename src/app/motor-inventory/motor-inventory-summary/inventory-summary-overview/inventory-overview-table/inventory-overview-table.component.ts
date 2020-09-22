@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InventorySummaryOverviewService, InventorySummary } from '../inventory-summary-overview.service';
 
@@ -8,7 +8,8 @@ import { InventorySummaryOverviewService, InventorySummary } from '../inventory-
   styleUrls: ['./inventory-overview-table.component.css']
 })
 export class InventoryOverviewTableComponent implements OnInit {
-
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
   inventorySummary: InventorySummary;
   invetorySummarySub: Subscription;
   constructor(private inventorySummaryOverviewService: InventorySummaryOverviewService) { }
@@ -23,6 +24,9 @@ export class InventoryOverviewTableComponent implements OnInit {
     this.invetorySummarySub.unsubscribe();
   }
 
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
   
 }
 

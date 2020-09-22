@@ -20,6 +20,7 @@
 
 th, td{
     min-width: 75px;
+    white-space: nowrap;
 }
 
 .max-height{

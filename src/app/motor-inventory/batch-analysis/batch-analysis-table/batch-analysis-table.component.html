@@ -1,7 +1,7 @@
-<table class="table table-sm table-bordered">
+<table #copyTable class="table table-sm table-bordered">
     <thead>
         <tr>
-            <th class="header-cell" [ngClass]="{'sort-by-active': 'motorName' == sortByField}"
+            <th class="header-cell sticky-left" [ngClass]="{'sort-by-active': 'motorName' == sortByField}"
                 (click)="setSortByField('motorName')">
                 <span class="fa fa-chevron-up" *ngIf="sortByField == 'motorName' && sortByDirection == 'desc'"></span>
                 <span class="fa fa-chevron-down" *ngIf="sortByField == 'motorName' && sortByDirection == 'asc'"></span>
@@ -137,14 +137,15 @@
                     *ngIf="sortByField == 'replacementFailPayback' && sortByDirection == 'asc'"></span>
                 Failure Replacement Payback
             </th>
-            <th class="header-cell" [ngClass]="{'sort-by-active': 'replaceMotor' == sortByField}"
+            <th class="header-cell sticky-right" [ngClass]="{'sort-by-active': 'replaceMotor' == sortByField}"
                 (click)="setSortByField('replaceMotor')">
                 <span class="fa fa-chevron-up"
                     *ngIf="sortByField == 'replaceMotor' && sortByDirection == 'desc'"></span>
                 <span class="fa fa-chevron-down"
                     *ngIf="sortByField == 'replaceMotor' && sortByDirection == 'asc'"></span>
                 Replace or Rewind
-                <br><span class="small help-text">({{batchAnalysisSettings.paybackThreshold}} yr. payback)</span>
+                <br>
+                <span class="small help-text">({{batchAnalysisSettings.paybackThreshold}} yr. payback)</span>
             </th>
         </tr>
     </thead>
@@ -230,7 +231,7 @@
                     &mdash;
                 </span>
             </td>
-            <td colspan="7" *ngIf="!batchAnalysisDataItem.isBatchAnalysisValid">
+            <td class="incomplete-cell" colspan="7" *ngIf="!batchAnalysisDataItem.isBatchAnalysisValid">
                 Unable to run batch analysis on motor, data missing:
                 <span class="bold" *ngFor="let missing of batchAnalysisDataItem.missingData; let last=last">
                     {{missing}}<span *ngIf="!last">,</span><span *ngIf="last">.</span>
@@ -285,10 +286,15 @@
                     &mdash;
                 </span>
             </td>
-            <td *ngIf="batchAnalysisDataItem.isBatchAnalysisValid" [ngClass]="{'replace': batchAnalysisDataItem.replaceMotor == 'Replace Now', 'replace-when-fail': batchAnalysisDataItem.replaceMotor == 'Replace When Fail',
+            <td class="sticky-right" *ngIf="batchAnalysisDataItem.isBatchAnalysisValid" [ngClass]="{'replace': batchAnalysisDataItem.replaceMotor == 'Replace Now', 'replace-when-fail': batchAnalysisDataItem.replaceMotor == 'Replace When Fail',
             'rewind': batchAnalysisDataItem.replaceMotor == 'Rewind When Fail'}">
                 {{batchAnalysisDataItem.replaceMotor}}
             </td>
         </tr>
     </tbody>
 </table>
+<div class="sticky-left">
+    <app-exportable-results-table class="pull-right" [tableString]="tableString"
+        (updateTableString)="updateTableString()">
+    </app-exportable-results-table>
+</div>
