@@ -90,7 +90,8 @@
     },
     "mac": {
       "target": [
-        "dmg"
+        "dmg",
+        "zip"
       ],
       "icon": "src/assets/icons/mac/icon.icns",
       "hardenedRuntime": true,
