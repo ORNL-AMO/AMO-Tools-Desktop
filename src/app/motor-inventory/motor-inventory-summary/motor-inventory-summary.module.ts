@@ -16,6 +16,7 @@ import { InventorySummaryMotorDetailsModule } from './inventory-summary-motor-de
 import { InventoryOverviewTableComponent } from './inventory-summary-overview/inventory-overview-table/inventory-overview-table.component';
 import { InventoryOverviewBarChartComponent } from './inventory-summary-overview/inventory-overview-bar-chart/inventory-overview-bar-chart.component';
 import { InventoryOverviewPieChartComponent } from './inventory-summary-overview/inventory-overview-pie-chart/inventory-overview-pie-chart.component';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { InventoryOverviewPieChartComponent } from './inventory-summary-overview
   imports: [
     CommonModule,
     SharedPipesModule,
-    InventorySummaryMotorDetailsModule
+    InventorySummaryMotorDetailsModule,
+    ExportableResultsTableModule
   ],
   exports: [
     MotorInventorySummaryComponent

@@ -39,7 +39,15 @@ export class MotorCatalogComponent implements OnInit {
         let findDepartment: MotorInventoryDepartment = this.motorInventoryData.departments.find(department => { return department.id == val });
         if (findDepartment) {
           this.showDeleteMotorButton = (findDepartment.catalog.length != 1);
-          this.motorCatalogService.selectedMotorItem.next(findDepartment.catalog[0]);
+          let selectedMotorItem: MotorItem = this.motorCatalogService.selectedMotorItem.getValue();
+          if (selectedMotorItem) {
+            let findItemInDepartment: MotorItem = findDepartment.catalog.find(motorItem => { return motorItem.id == selectedMotorItem.id });
+            if (!findItemInDepartment) {
+              this.motorCatalogService.selectedMotorItem.next(findDepartment.catalog[0]);
+            }
+          } else {
+            this.motorCatalogService.selectedMotorItem.next(findDepartment.catalog[0]);
+          }
         } else {
           this.showDeleteMotorButton = (this.motorInventoryData.departments[0].catalog.length != 1);
           this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);

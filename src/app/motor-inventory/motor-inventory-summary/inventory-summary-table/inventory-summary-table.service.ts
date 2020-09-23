@@ -276,7 +276,7 @@ export class InventorySummaryTableService {
     let motorData: Array<SummaryMotorData> = [];
     if (otherOptions.displayOther) {
       if (otherOptions.driveType) {
-        motorData.push({ value: otherData.driveType, fieldStr: 'driveType' });
+        motorData.push({ value: otherData.driveType, fieldStr: 'driveType', pipe: 'motorDriveType' });
       }
       if (otherOptions.isVFD) {
         if (otherData.isVFD) {
