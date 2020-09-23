@@ -18,8 +18,8 @@
                 </div>
                 <div class="flex-fill">
                     {{batchAnalysisData.modifiedPower}}
-                    <span *ngIf="settings.unitOfMeasure != 'Metric'">hp</span>
-                    <span *ngIf="settings.unitOfMeasure == 'Metric'">kW</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
                 </div>
             </div>
             <div class="d-flex flex-wrap" *ngIf="displayOptions.modifiedEfficiency">

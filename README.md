@@ -11,13 +11,13 @@
 ## Build
 - To remove all project-related node modules: `npm run clean` from the root project directory
 - To install all required packages: `npm install`
-- To build the angular project: `npm run build` \(or `npm run build-prod` for a production build)
+- To build the angular project: `npm run build` \(or `npm run ng-high-memory` for a production build)
 - To start the electron app: `npm run electron`
 
 ## Package
-- To build a package:`npm install && npm run build` and then: `npm run OS` where `OS` is either `mac`, `linux` or `windows`
+- To build a package:`npm install && npm run ng-high-memory` and then: `npm run dist`
 - The packages will be placed in `../output`
-- Example: `npm install && npm run build-prod && npm run windows` will make a production-build installer for Windows
+- Example: `npm install && npm run build-prod && npm run dist` will make a production-build installer for Windows
 
 ## For Developers
 - To generate a new angular module: `npm run ng g module path/to/module`
