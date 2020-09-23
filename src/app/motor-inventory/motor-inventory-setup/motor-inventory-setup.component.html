@@ -30,8 +30,7 @@
                 </div>
                 <div class="row no-gutters">
                     <div class="col-12">
-                        <app-help-panel
-                            *ngIf="tabSelect == 'help' || setupTab != 'motor-catalog' || setupTab == 'motor-properties'">
+                        <app-help-panel *ngIf="(tabSelect == 'help' && setupTab == 'motor-catalog') || setupTab != 'motor-catalog'">
                         </app-help-panel>
                         <app-department-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'motor-catalog'">
                         </app-department-catalog-table>
