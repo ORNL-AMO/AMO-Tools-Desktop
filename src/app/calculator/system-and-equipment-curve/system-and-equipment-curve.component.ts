@@ -107,20 +107,27 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     if (this.assessment != undefined) {
       this.saveCalculator();
     }
-    if (this.equipmentType == 'fan' && this.assessment == undefined) {
-      this.systemAndEquipmentCurveService.fanByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
-      this.systemAndEquipmentCurveService.fanByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
-      this.systemAndEquipmentCurveService.fanEquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
+    if (this.assessment == undefined) {
+      if (this.equipmentType == 'fan') {
+        this.systemAndEquipmentCurveService.fanByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
+        this.systemAndEquipmentCurveService.fanByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
+        this.systemAndEquipmentCurveService.fanEquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
+        this.systemAndEquipmentCurveService.fanModificationCollapsed.next(undefined);
+      } else {
+        this.systemAndEquipmentCurveService.pumpByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
+        this.systemAndEquipmentCurveService.pumpByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
+        this.systemAndEquipmentCurveService.pumpEquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
+        this.systemAndEquipmentCurveService.pumpModificationCollapsed.next(undefined);
+      }
       this.systemAndEquipmentCurveService.byDataInputs.next(undefined);
       this.systemAndEquipmentCurveService.byEquationInputs.next(undefined);
       this.systemAndEquipmentCurveService.equipmentInputs.next(undefined);
-    } else if (this.equipmentType == 'pump' && this.assessment == undefined) {
-      this.systemAndEquipmentCurveService.pumpByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
-      this.systemAndEquipmentCurveService.pumpByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
-      this.systemAndEquipmentCurveService.pumpEquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
-      this.systemAndEquipmentCurveService.byDataInputs.next(undefined);
-      this.systemAndEquipmentCurveService.byEquationInputs.next(undefined);
-      this.systemAndEquipmentCurveService.equipmentInputs.next(undefined);
+      this.systemAndEquipmentCurveService.fanModificationCollapsed.next(undefined);
+      this.systemAndEquipmentCurveService.modificationEquipment.next(undefined);
+      this.systemAndEquipmentCurveService.modificationPowerDataPairs = undefined;
+      this.systemAndEquipmentCurveService.baselinePowerDataPairs = undefined;
+      this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs = undefined;
+      this.systemAndEquipmentCurveService.existingInputUnits = this.settings.unitsOfMeasure;
     }
     this.systemAndEquipmentCurveService.systemCurveDataPoints = undefined;
   }
@@ -163,7 +170,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
 
   updateByDataResultData() {
     let newMaxFlow: number = this.systemAndEquipmentCurveService.getMaxFlowRate(this.equipmentType);
-    this.systemAndEquipmentCurveService.calculateByDataRegression(this.equipmentType, newMaxFlow, this.settings);
+    this.systemAndEquipmentCurveService.calculateByDataRegression(this.equipmentType, newMaxFlow);
     if (newMaxFlow != this.maxFlowRate) {
       this.maxFlowRate = newMaxFlow;
       this.updateSystemCurveResultData();
@@ -174,13 +181,21 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
 
   setPersistantData() {
     if (this.equipmentType == 'fan' && this.assessment == undefined) {
-      this.systemAndEquipmentCurveService.byDataInputs.next(this.systemAndEquipmentCurveService.fanByDataInputs);
-      this.systemAndEquipmentCurveService.byEquationInputs.next(this.systemAndEquipmentCurveService.fanByEquationInputs);
-      this.systemAndEquipmentCurveService.equipmentInputs.next(this.systemAndEquipmentCurveService.fanEquipmentInputs);
+      if (this.systemAndEquipmentCurveService.existingInputUnits == this.settings.unitsOfMeasure) {
+        this.systemAndEquipmentCurveService.byDataInputs.next(this.systemAndEquipmentCurveService.fanByDataInputs);
+        this.systemAndEquipmentCurveService.byEquationInputs.next(this.systemAndEquipmentCurveService.fanByEquationInputs);
+        this.systemAndEquipmentCurveService.equipmentInputs.next(this.systemAndEquipmentCurveService.fanEquipmentInputs);
+      } else {
+        this.btnResetDefaults();
+      }
     } else if (this.equipmentType == 'pump' && this.assessment == undefined) {
-      this.systemAndEquipmentCurveService.byDataInputs.next(this.systemAndEquipmentCurveService.pumpByDataInputs);
-      this.systemAndEquipmentCurveService.byEquationInputs.next(this.systemAndEquipmentCurveService.pumpByEquationInputs);
-      this.systemAndEquipmentCurveService.equipmentInputs.next(this.systemAndEquipmentCurveService.pumpEquipmentInputs);
+      if (this.systemAndEquipmentCurveService.existingInputUnits == this.settings.unitsOfMeasure) {
+        this.systemAndEquipmentCurveService.byDataInputs.next(this.systemAndEquipmentCurveService.pumpByDataInputs);
+        this.systemAndEquipmentCurveService.byEquationInputs.next(this.systemAndEquipmentCurveService.pumpByEquationInputs);
+        this.systemAndEquipmentCurveService.equipmentInputs.next(this.systemAndEquipmentCurveService.pumpEquipmentInputs);
+      } else {
+        this.btnResetDefaults();
+      }
     }
   }
 

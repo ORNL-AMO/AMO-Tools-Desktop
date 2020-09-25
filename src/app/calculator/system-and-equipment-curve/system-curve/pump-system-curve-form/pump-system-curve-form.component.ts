@@ -38,6 +38,7 @@ export class PumpSystemCurveFormComponent implements OnInit {
 
   displaySpeed: boolean = true;
   equipmentInputsSub: Subscription;
+  pumpModificationCollapsedSub: Subscription;
 
   constructor(private pumpSystemCurveFormService: PumpSystemCurveFormService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private curveDataService: CurveDataService) { }
@@ -60,6 +61,7 @@ export class PumpSystemCurveFormComponent implements OnInit {
     this.resetFormsSub.unsubscribe();
     this.modificationEquipmentSub.unsubscribe();
     this.equipmentInputsSub.unsubscribe();
+    this.pumpModificationCollapsedSub.unsubscribe();
   }
 
   initSubscriptions() {
@@ -76,6 +78,11 @@ export class PumpSystemCurveFormComponent implements OnInit {
     this.modificationEquipmentSub = this.systemAndEquipmentCurveService.modificationEquipment.subscribe(equipment => {
       if (equipment) {
         this.modificationEquipment = equipment;
+      }
+    });
+    this.pumpModificationCollapsedSub = this.systemAndEquipmentCurveService.pumpModificationCollapsed.subscribe(val => {
+      if (val) {
+        this.pumpModificationCollapsed = val;
       }
     });
   }

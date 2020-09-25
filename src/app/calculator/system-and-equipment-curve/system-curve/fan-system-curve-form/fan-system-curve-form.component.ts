@@ -33,6 +33,7 @@ export class FanSystemCurveFormComponent implements OnInit {
   ];
   equipmentInputsSub: Subscription;
   displaySpeed: boolean = true;
+  fanModificationCollapsedSub: Subscription;
 
   constructor(private fanSystemCurveFormService: FanSystemCurveFormService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private curveDataService: CurveDataService) { }
@@ -55,6 +56,7 @@ export class FanSystemCurveFormComponent implements OnInit {
     this.resetFormsSub.unsubscribe();
     this.modificationEquipmentSub.unsubscribe();
     this.equipmentInputsSub.unsubscribe();
+    this.fanModificationCollapsedSub.unsubscribe();
   }
 
   initSubscriptions() {
@@ -71,6 +73,11 @@ export class FanSystemCurveFormComponent implements OnInit {
     this.equipmentInputsSub = this.systemAndEquipmentCurveService.equipmentInputs.subscribe(inputs => {
       if (inputs) {
         this.displaySpeed = Boolean(inputs.measurementOption);
+      }
+    });
+    this.fanModificationCollapsedSub = this.systemAndEquipmentCurveService.fanModificationCollapsed.subscribe(val => {
+      if (val) {
+        this.fanModificationCollapsed = val;
       }
     });
   }

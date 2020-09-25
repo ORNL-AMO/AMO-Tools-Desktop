@@ -74,6 +74,15 @@ export class FanSystemCurveFormService {
   }
 
   getFormFromObj(obj: FanSystemCurveData): FormGroup {
+    let modificationMeasurementOption = [0, Validators.required];
+    let modifiedFlow = [0, [Validators.required, Validators.min(0)]];
+    let modifiedPressure = [0, [Validators.required, Validators.min(0)]];
+
+    if (obj.modificationCurve) {
+      modificationMeasurementOption = [obj.modificationCurve.modificationMeasurementOption, Validators.required];
+      modifiedFlow = [obj.modificationCurve.modifiedFlow, [Validators.required, Validators.min(0)]];
+      modifiedPressure = [obj.modificationCurve.modifiedPressure, [Validators.required, Validators.min(0)]];
+    }
     let form: FormGroup = this.formBuilder.group({
       compressibilityFactor: [obj.compressibilityFactor, [Validators.required, Validators.min(0)]],
       systemLossExponent: [obj.systemLossExponent, [Validators.required, Validators.min(0)]],
@@ -82,9 +91,9 @@ export class FanSystemCurveFormService {
       pointTwo: [obj.pointTwo],
       pointTwoFlowRate: [obj.pointTwoFlowRate, [Validators.required, Validators.min(0)]],
       pointTwoPressure: [obj.pointTwoPressure, [Validators.required, Validators.min(0)]],
-      modificationMeasurementOption: [obj.modificationCurve.modificationMeasurementOption, Validators.required],
-      modifiedFlow: [obj.modificationCurve.modifiedFlow, [Validators.required, Validators.min(0)]],
-      modifiedPressure: [obj.modificationCurve.modifiedPressure, [Validators.required, Validators.min(0)]],
+      modificationMeasurementOption: modificationMeasurementOption,
+      modifiedFlow: modifiedFlow,
+      modifiedPressure: modifiedPressure,
     });
     return form;
 

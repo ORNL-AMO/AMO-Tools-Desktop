@@ -371,7 +371,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
   addIntersectionPoints() {
-    let baselineIntersectionPoint: SystemCurveDataPoint = this.systemAndEquipmentCurveGraphService.getBaselineIntersectionPoint(this.systemAndEquipmentCurveService.systemCurveRegressionData);
+    let baselineIntersectionPoint: SystemCurveDataPoint = this.systemAndEquipmentCurveGraphService.getBaselineIntersectionPoint(this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.equipmentType, this.settings);
     if (baselineIntersectionPoint != undefined && this.isSystemCurveShown) {
       this.defaultPointCount = 1;
       this.setIntersectionTrace(baselineIntersectionPoint, this.traces.baselineIntersect, 'Baseline');
@@ -379,7 +379,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       this.removeIntersectionPoint(0, this.traces.baselineIntersect);
     }
     if (this.isEquipmentModificationShown && this.isSystemCurveShown && this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs != undefined) {
-      let modIntersectionPoint = this.systemAndEquipmentCurveGraphService.calculateModificationIntersectionPoint();
+      let modIntersectionPoint = this.systemAndEquipmentCurveGraphService.calculateModificationIntersectionPoint(this.equipmentType, this.settings);
       if (modIntersectionPoint != undefined) {
         this.defaultPointCount = 2;
         this.setIntersectionTrace(modIntersectionPoint, this.traces.modificationIntersect, 'Modification');
@@ -519,7 +519,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   createDataPoint(graphData, existingPoint?: SystemCurveDataPoint) {
     let pointIndex = graphData.points[0].pointIndex;
     let selectedPoint = existingPoint;
-    let powerAtPoint = this.powerChart.data[0]? this.powerChart.data[0].y[pointIndex] : 0;
     let fluidPower = 0;
     if (graphData.points[0].curveNumber != this.traces.system) {
       fluidPower = this.fluidPowerData[pointIndex];
@@ -530,7 +529,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
         x: graphData.points[0].x,
         y: graphData.points[0].y,
         fluidPower: fluidPower,
-        power: Number(powerAtPoint),
+        power: 0,
         efficiency: 0,
       }
     }
