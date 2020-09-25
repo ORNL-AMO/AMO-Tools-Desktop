@@ -1,3 +1,5 @@
+import { OperatingHours } from "../operations";
+
 export interface DesignedEnergy {
     zones: Array<DesignedZone>;
     steam?: boolean;
@@ -9,18 +11,24 @@ export interface DesignedEnergyFuel {
     fuelType: number;
     percentCapacityUsed: number;
     totalBurnerCapacity: number;
-    percentOperatingHours: number;
+    // percentOperatingHours: number;
+    operatingHours: number;
+    operatingHoursCalc?: OperatingHours;
 }
 export interface DesignedEnergySteam {
     totalHeat: number;
     steamFlow: number;
     percentCapacityUsed: number;
-    percentOperatingHours: number;
+    // percentOperatingHours: number;
+    operatingHours: number;
+    operatingHoursCalc?: OperatingHours;
 }
 export interface DesignedEnergyElectricity {
     kwRating: number;
     percentCapacityUsed: number;
-    percentOperatingHours: number;
+    // percentOperatingHours: number;
+    operatingHours: number;
+    operatingHoursCalc?: OperatingHours;
 }
 
 export interface DesignedEnergyResults {

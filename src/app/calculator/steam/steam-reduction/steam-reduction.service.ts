@@ -237,22 +237,24 @@ export class SteamReductionService {
   getResults(settings: Settings, baseline: Array<SteamReductionData>, modification?: Array<SteamReductionData>): SteamReductionResults {
     let baselineInpCpy: Array<SteamReductionData> = JSON.parse(JSON.stringify(baseline));
     let baselineResults: SteamReductionResult = this.calculate(baselineInpCpy, settings);
-    let modificationResults: SteamReductionResult;
-    let annualEnergySavings: number = 0;
-    let annualCostSavings: number = 0;
-    let annualSteamSavings: number = 0;
+    let modificationResults: SteamReductionResult = {
+      energyCost: 0,
+      energyUse: 0,
+      steamUse: 0
+    };
     if (modification) {
       let modificationInpCpy: Array<SteamReductionData> = JSON.parse(JSON.stringify(modification));
       modificationResults = this.calculate(modificationInpCpy, settings);
+    }else{
+      modificationResults = baselineResults;
     }
     let steamReductionResults: SteamReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
-      annualCostSavings: annualCostSavings,
-      annualEnergySavings: annualEnergySavings,
-      annualSteamSavings: annualSteamSavings
+      annualCostSavings: 0,
+      annualEnergySavings: 0,
+      annualSteamSavings: 0
     };
-    // steamReductionResults = this.convertResults(steamReductionResults, settings);
     if (modificationResults) {
       steamReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
       steamReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;

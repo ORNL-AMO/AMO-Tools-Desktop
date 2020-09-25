@@ -27,6 +27,9 @@ import { LoadCharacteristicDataService } from './load-characteristic-data/load-c
 import { MotorBasicsService } from './motor-basics/motor-basics.service';
 import { ModalModule } from 'ngx-bootstrap';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { PercentLoadEstimationModule } from '../../../calculator/motors/percent-load-estimation/percent-load-estimation.module';
+import { DeleteMotorModalComponent } from './delete-motor-modal/delete-motor-modal.component';
 
 @NgModule({
   declarations: [
@@ -43,14 +46,17 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     OperationsDataComponent,
     TorqueDataComponent,
     OtherDataComponent,
-    PurchaseInformationDataComponent
+    PurchaseInformationDataComponent,
+    DeleteMotorModalComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     ModalModule,
-    SharedPipesModule
+    SharedPipesModule,
+    OperatingHoursModalModule,
+    PercentLoadEstimationModule
   ],
   providers: [
     BatchAnalysisDataService,

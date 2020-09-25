@@ -39,8 +39,7 @@ export class FanFieldDataComponent implements OnInit {
   @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
   @ViewChild('amcaModal', { static: false }) public amcaModal: ModalDirective;
   @ViewChild('pressureModal', { static: false }) public pressureModal: ModalDirective;
-
-  @HostListener('window:resize', ['$event'])
+  
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {

@@ -23,7 +23,7 @@ export class RatedPowerDropdownComponent implements OnInit {
 
   ngOnInit(): void {
     this.settings = this.motorInventoryService.settings.getValue();
-    this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
+    this.filterInventorySummarySub = this.motorInventoryService.filterInventorySummary.subscribe(val => {
       this.filterInventorySummary = val;
       this.setOptions();
     });
@@ -49,7 +49,7 @@ export class RatedPowerDropdownComponent implements OnInit {
   }
 
   save() {
-    this.motorInventorySummaryService.filterInventorySummary.next(this.filterInventorySummary);
+    this.motorInventoryService.filterInventorySummary.next(this.filterInventorySummary);
     let selectedField = this.inventorySummaryGraphService.selectedField.getValue();
     this.inventorySummaryGraphService.selectedField.next(selectedField);
   }

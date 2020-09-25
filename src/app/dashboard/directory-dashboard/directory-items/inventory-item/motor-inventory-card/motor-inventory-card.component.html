@@ -1,0 +1,73 @@
+<table class="table">
+    <tr>
+        <td class="bold no-border-top" colspan="2">Inventory Summary:</td>
+    </tr>
+    <tr>
+        <td>
+            Number of Departments:
+        </td>
+        <td>
+            {{numberOfDepartments}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Number of Motors:
+        </td>
+        <td>
+            {{numberOfMotors}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Annual Energy Use:
+        </td>
+        <td>
+            {{totalEnergyUse | number:'1.0-0'}} kWh/yr
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Annual Energy Cost:
+        </td>
+        <td>
+            {{totalEnergyCost | currency:'USD':'symbol':'2.0-0'}}
+        </td>
+    </tr>
+
+    <tr *ngIf="showBatchSummary">
+        <td class="bold" colspan="2">Analysis:</td>
+    </tr>
+    <tr *ngIf="showBatchSummary">
+        <td>
+            Payback Threshold:
+        </td>
+        <td>
+            {{paybackThreshold}} yrs
+        </td>
+    </tr>
+    <tr *ngIf="showBatchSummary">
+        <td>
+            Replace Now:
+        </td>
+        <td>
+            {{numReplaceNow}}
+        </td>
+    </tr>
+    <tr *ngIf="showBatchSummary">
+        <td>
+            Replace When Fail:
+        </td>
+        <td>
+            {{numReplaceWhenFail}}
+        </td>
+    </tr>
+    <tr *ngIf="showBatchSummary">
+        <td>
+            Rewind When Fail:
+        </td>
+        <td>
+            {{numRewind}}
+        </td>
+    </tr>
+</table>

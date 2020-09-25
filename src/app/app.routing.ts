@@ -19,4 +19,4 @@ const routerOptions: ExtraOptions = {
   scrollPositionRestoration: 'enabled',
   // paramsInheritanceStrategy: 'always'
 };
-export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes, routerOptions);
+export const routing: ModuleWithProviders<RouterModule> = RouterModule.forRoot(appRoutes, routerOptions);

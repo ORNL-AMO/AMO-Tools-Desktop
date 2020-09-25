@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MotorInventoryData } from '../../motor-inventory';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { Settings } from '../../../shared/models/settings';
 import { InventorySummaryTableService, InventorySummaryData } from './inventory-summary-table.service';
-import { MotorInventorySummaryService } from '../motor-inventory-summary.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -16,12 +15,15 @@ export class InventorySummaryTableComponent implements OnInit {
   sortByField: string = 'name';
   sortByDirection: string = 'desc';
   filterInventorySummarySub: Subscription;
-  constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryTableService: InventorySummaryTableService, private motorInventorySummaryService: MotorInventorySummaryService) { }
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
+  constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryTableService: InventorySummaryTableService) { }
 
   ngOnInit(): void {
-    this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
+    this.filterInventorySummarySub = this.motorInventoryService.filterInventorySummary.subscribe(val => {
       let motorInventoryData: MotorInventoryData = this.motorInventoryService.motorInventoryData.value;
-      let filteredInventoryData = this.motorInventorySummaryService.filterMotorInventoryData(motorInventoryData, val);
+      let filteredInventoryData = this.motorInventoryService.filterMotorInventoryData(motorInventoryData, val);
       let settings: Settings = this.motorInventoryService.settings.getValue();
       this.inventorySummaryData = this.inventorySummaryTableService.getInventorySummaryData(filteredInventoryData, settings);
     });
@@ -41,4 +43,9 @@ export class InventorySummaryTableComponent implements OnInit {
     }
     this.sortByField = str;
   }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
+
 }

@@ -188,9 +188,14 @@ export class VisualizeService {
     return { xLabels: xLabels, yValues: yValues };
   }
 
-  getStandardDevBarChartData(dataField: LogToolField, calculatePercentage: boolean): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
+  getStandardDevBarChartData(dataField: LogToolField, calculatePercentage: boolean, binStart: number): { xLabels: Array<string>, yValues: Array<number>, standardDeviation: number, average: number } {
     let graphData: Array<number> = this.logToolDataService.getAllFieldData(dataField.fieldName);
-    let graphDataMin: number = _.min(graphData);
+    let graphDataMin: number;
+    if (binStart != undefined) {
+      graphDataMin = binStart;
+    } else {
+      graphDataMin = _.min(graphData);
+    }
     let graphDataMax: number = _.max(graphData);
     let graphRange: number = graphDataMax - graphDataMin;
     let mean: number = _.mean(graphData);

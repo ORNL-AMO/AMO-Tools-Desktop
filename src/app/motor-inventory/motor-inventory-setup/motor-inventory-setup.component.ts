@@ -12,13 +12,20 @@ export class MotorInventorySetupComponent implements OnInit {
 
   setupTab: string;
   setupTabSubscription: Subscription;
-  tabSelect: string = 'department-catalog';
+  tabSelect: string;
   modalOpenSub: Subscription;
   isModalOpen: boolean;
+  helpPanelTabSub: Subscription;
   constructor(private motorInventoryService: MotorInventoryService, private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
-    this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    this.helpPanelTabSub = this.motorInventoryService.helpPanelTab.subscribe(val => {
+      if (val) {
+        this.tabSelect = val;
+      } else {
+        this.setTab(this.settingsDbService.globalSettings.defaultPanelTab);
+      }
+    });
     this.setupTabSubscription = this.motorInventoryService.setupTab.subscribe(val => {
       this.setupTab = val;
     });
@@ -31,9 +38,10 @@ export class MotorInventorySetupComponent implements OnInit {
   ngOnDestroy() {
     this.setupTabSubscription.unsubscribe();
     this.modalOpenSub.unsubscribe();
+    this.helpPanelTabSub.unsubscribe();
   }
 
   setTab(str: string) {
-    this.tabSelect = str;
+    this.motorInventoryService.helpPanelTab.next(str);
   }
 }

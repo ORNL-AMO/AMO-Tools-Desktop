@@ -1,3 +1,4 @@
+import { OperatingHours } from "../shared/models/operations";
 
 export interface MotorInventoryData {
   departments: Array<MotorInventoryDepartment>,
@@ -14,12 +15,12 @@ export interface MotorInventoryDepartment {
 
 export interface MotorItem {
   id: string,
-  suiteDbItemId: number,
-  nemaTable: string,
+  suiteDbItemId?: number,
+  nemaTable?: string,
   departmentId: string,
   name: string,
   description: string,
-  voltageLimit: number,
+  voltageLimit?: number,
 
   batchAnalysisData: BatchAnalysisData,
   loadCharacteristicData: LoadCharacteristicData,
@@ -63,7 +64,7 @@ export interface ManualSpecificationData {
   statorSlots: number,
   ampsLockedRotor: number,
   poles: number,
-  currentType: number,
+  currentType: string,
 }
 
 export interface NameplateData {
@@ -72,7 +73,6 @@ export interface NameplateData {
   efficiencyClass: number,
   nominalEfficiency: number,
   lineFrequency: number,
-  motorRpm: number
   //optional
   manufacturer: string,
   model: string,
@@ -80,7 +80,7 @@ export interface NameplateData {
   enclosureType: string,
   ratedVoltage: number,
   serviceFactor: number,
-  insulationClass: number,
+  insulationClass: string,
   weight: number,
   numberOfPhases: number,
   fullLoadSpeed: number,
@@ -93,7 +93,9 @@ export interface OperationData {
   averageLoadFactor: number,
   utilizationFactor: number,
   efficiencyAtAverageLoad: number,
-  powerFactorAtLoad: number
+  powerFactorAtLoad: number,
+  currentAtLoad: number,
+  operatingHours?: OperatingHours
 }
 
 export interface OtherData {
@@ -185,7 +187,8 @@ export interface OperationDataOptions {
   averageLoadFactor: boolean,
   utilizationFactor: boolean,
   efficiencyAtAverageLoad: boolean,
-  powerFactorAtLoad: boolean
+  powerFactorAtLoad: boolean,
+  currentAtLoad: boolean
 }
 
 export interface OtherOptions {

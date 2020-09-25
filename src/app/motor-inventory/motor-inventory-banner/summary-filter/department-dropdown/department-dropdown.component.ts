@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MotorInventoryData, FilterInventorySummary } from '../../../motor-inventory';
 import { Subscription } from 'rxjs';
 import { MotorInventoryService } from '../../../motor-inventory.service';
-import { MotorInventorySummaryService } from '../../../motor-inventory-summary/motor-inventory-summary.service';
 import { InventorySummaryGraphsService } from '../../../motor-inventory-summary/inventory-summary-graphs/inventory-summary-graphs.service';
 import * as _ from 'lodash';
 
@@ -17,13 +16,12 @@ export class DepartmentDropdownComponent implements OnInit {
   motorInventoryData: MotorInventoryData
   filterInventorySummarySub: Subscription;
   filterInventorySummary: FilterInventorySummary;
-  constructor(private motorInventoryService: MotorInventoryService, private motorInventorySummaryService: MotorInventorySummaryService,
-    private inventorySummaryGraphService: InventorySummaryGraphsService) { }
+  constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryGraphService: InventorySummaryGraphsService) { }
 
   ngOnInit(): void {
     this.motorInventoryData = this.motorInventoryService.motorInventoryData.value;
 
-    this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
+    this.filterInventorySummarySub = this.motorInventoryService.filterInventorySummary.subscribe(val => {
       this.filterInventorySummary = val;
     });
   }
@@ -37,7 +35,7 @@ export class DepartmentDropdownComponent implements OnInit {
   }
 
   save() {
-    this.motorInventorySummaryService.filterInventorySummary.next(this.filterInventorySummary);
+    this.motorInventoryService.filterInventorySummary.next(this.filterInventorySummary);
     let selectedField = this.inventorySummaryGraphService.selectedField.getValue();
     this.inventorySummaryGraphService.selectedField.next(selectedField);
   }

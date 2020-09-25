@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.7.0-beta",
+  "version": "0.8.0-beta",
   "main": "main.js",
   "license": "MIT",
   "description": "MEASUR",
@@ -8,8 +8,8 @@
   "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
   "engines": {
-    "node": "10.13.0",
-    "npm": "6.4.1"
+    "node": "12.8.0",
+    "npm": "6.10.2"
   },
   "scripts": {
     "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --prod --aot",
@@ -25,41 +25,38 @@
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "postinstall": "electron-builder install-app-deps",
     "e2e": "ng e2e",
-    "pack": "build --dir",
-    "dist": "build",
-    "windows": "./node_modules/.bin/build -w --x64 --ia32",
-    "linux": "./node_modules/.bin/build -l --x64",
-    "mac": "./node_modules/.bin/build -m --x64"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "9.0.0",
-    "@angular/common": "9.0.0",
-    "@angular/compiler": "9.0.0",
-    "@angular/compiler-cli": "9.0.0",
-    "@angular/core": "9.0.0",
-    "@angular/forms": "9.0.0",
-    "@angular/localize": "^9.0.2",
-    "@angular/platform-browser": "9.0.0",
-    "@angular/platform-browser-dynamic": "9.0.0",
-    "@angular/platform-server": "9.0.0",
-    "@angular/router": "9.0.0",
-    "@ng-bootstrap/ng-bootstrap": "6.0.0",
-    "ajv": "^5.2.2",
-    "amo-tools-suite": "0.7.0",
+    "@angular/animations": "10.1.2",
+    "@angular/common": "10.1.2",
+    "@angular/compiler": "10.1.2",
+    "@angular/compiler-cli": "10.1.2",
+    "@angular/core": "10.1.2",
+    "@angular/forms": "10.1.2",
+    "@angular/localize": "10.1.2",
+    "@angular/platform-browser": "10.1.2",
+    "@angular/platform-browser-dynamic": "10.1.2",
+    "@angular/platform-server": "10.1.2",
+    "@angular/router": "10.1.2",
+    "@ng-bootstrap/ng-bootstrap": "7.0.0",
+    "ajv": "6.12.5",
+    "amo-tools-suite": "0.8.0",
     "bootstrap": "4.3.1",
     "c3": "^0.4.18",
-    "core-js": "2.5.7",
+    "core-js": "3.6.5",
     "d3": "4.5.0",
-    "electron-log": "3.0.1",
-    "electron-updater": "4.0.6",
+    "electron-log": "4.2.4",
+    "electron-updater": "4.3.5",
     "font-awesome": "^4.7.0",
     "ngx-electron": "2.1.1",
     "regression": "^2.0.0",
-    "rxjs": "6.5.4",
-    "rxjs-compat": "^6.4.0",
+    "rxjs": "6.6.3",
+    "rxjs-compat": "6.6.3",
     "save-svg-as-png": "1.2.0",
-    "zone.js": "0.10.2"
+    "zone.js": "0.11.1"
   },
   "build": {
     "appId": "com.electron.amo-tools-desktop",
@@ -93,7 +90,8 @@
     },
     "mac": {
       "target": [
-        "dmg"
+        "dmg",
+        "zip"
       ],
       "icon": "src/assets/icons/mac/icon.icns",
       "hardenedRuntime": true,
@@ -103,20 +101,19 @@
     }
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.900.1",
-    "@angular-devkit/core": "9.0.1",
-    "@angular-devkit/schematics": "9.0.1",
-    "@angular/cli": "9.0.1",
+    "@angular-devkit/build-angular": "0.1001.2",
+    "@angular-devkit/core": "10.1.2",
+    "@angular-devkit/schematics": "10.1.2",
+    "@angular/cli": "10.1.2",
     "@types/jasmine": "2.5.38",
     "@types/lodash": "4.14.100",
     "@types/node": "11.11.1",
-    "angular-plotly.js": "^1.4.2",
     "chart.js": "^2.7.0",
-    "codelyzer": "5.2.1",
-    "electron": "4.0.8",
-    "electron-builder": "20.43.0",
+    "codelyzer": "6.0.0",
+    "electron": "10.1.2",
+    "electron-builder": "22.8.1",
     "electron-download-tf": "^4.3.4",
-    "electron-packager": "13.1.1",
+    "electron-packager": "15.1.0",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "jquery": "3.5.0",
@@ -134,10 +131,9 @@
     "ngx-clipboard": "12.2.1",
     "papaparse": "^5.1.0",
     "plotly.js": "1.54.7",
-    "popper.js": "1.15.0",
     "protractor": "^5.4.1",
     "ts-node": "8.0.3",
     "tslint": "^5.13.1",
-    "typescript": "3.7.5"
+    "typescript": "3.9.7"
   }
 }

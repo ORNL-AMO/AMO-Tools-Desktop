@@ -25,6 +25,7 @@ export class InventorySummaryGraphsMenuComponent implements OnInit {
   constructor(private motorInventoryService: MotorInventoryService, private inventorySummaryGraphService: InventorySummaryGraphsService, private motorInventorySummaryService: MotorInventorySummaryService) { }
 
   ngOnInit(): void {
+    this.setOptions();
     this.selectedFieldSub = this.inventorySummaryGraphService.selectedField.subscribe(val => {
       if (val) {
         this.selectedField = val;

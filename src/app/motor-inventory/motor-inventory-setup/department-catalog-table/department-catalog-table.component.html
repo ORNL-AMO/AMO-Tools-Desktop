@@ -18,41 +18,66 @@
                     Rated Power
                 </th>
                 <th>
-                    Line Frequency
+                    Energy Usage
                 </th>
                 <th>
-                    Sync. Speed
-                </th>
-                <th>
-                    Full Load Amps
+                    Energy Cost
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let motor of selectedMotorDepartment.catalog">
+            <tr *ngFor="let tableDataItem of tableDataItems"
+                [ngClass]="{'selected-item':tableDataItem.motorItem.id == selectedMotorItem.id}">
                 <td>
-                    <a class="click-link" (click)="selectMotor(motor)">{{motor.name}}</a>
+                    <span *ngIf="tableDataItem.motorItem.id == selectedMotorItem.id" class="fa fa-chevron-right"></span>
+                    <a class="click-link" (click)="selectMotor(tableDataItem.motorItem)">{{tableDataItem.name}}</a>
                 </td>
                 <td>
-                    {{motor.operationData.annualOperatingHours}} hrs/yr
+                    <span *ngIf="tableDataItem.operatingHours">
+                        {{tableDataItem.operatingHours}} hrs/yr
+                    </span>
+                    <span *ngIf="!tableDataItem.operatingHours">
+                        &mdash; hrs/yr
+                    </span>
                 </td>
                 <td>
-                    {{motor.nameplateData.efficiencyClass | motorEfficiencyClass}}
+                    {{tableDataItem.efficiencyClass | motorEfficiencyClass}}
                 </td>
                 <td>
-                    {{motor.nameplateData.nominalEfficiency}} %
+                    <span *ngIf="tableDataItem.estimatedEfficiency">
+                        {{tableDataItem.estimatedEfficiency}} %
+                    </span>
+                    <span *ngIf="!tableDataItem.estimatedEfficiency">
+                        &mdash; %
+                    </span>
                 </td>
                 <td>
-                    {{motor.nameplateData.ratedMotorPower}}
+                    <span *ngIf="tableDataItem.ratedPower">
+                        {{tableDataItem.ratedPower}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                    </span>
+                    <span *ngIf="!tableDataItem.ratedPower">
+                        &mdash;
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                    </span>
                 </td>
                 <td>
-                    {{motor.nameplateData.lineFrequency}} Hz
+                    <span *ngIf="tableDataItem.energyUsage">
+                        {{tableDataItem.energyUsage | number:'1.0-0'}} kWh/yr
+                    </span>
+                    <span *ngIf="!tableDataItem.energyUsage">
+                        &mdash; kWh/yr
+                    </span>
                 </td>
                 <td>
-                    {{motor.manualSpecificationData.synchronousSpeed}} rpm
-                </td>
-                <td>
-                    {{motor.nameplateData.fullLoadAmps}} A
+                    <span *ngIf="tableDataItem.energyCost">
+                        {{tableDataItem.energyCost | currency:'USD':'symbol':'2.0-0'}}
+                    </span>
+                    <span *ngIf="!tableDataItem.energyCost">
+                        $ &mdash;
+                    </span>
                 </td>
             </tr>
         </tbody>

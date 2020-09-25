@@ -1,0 +1,85 @@
+.nav-item .dropdown-toggle{
+    color: white;
+    background: #84b641;
+}
+
+.nav-link{
+    padding: 4px;
+}
+
+.list-group-item{
+    padding: 8px;
+    font-size: small;
+}
+
+/* .list-group-item.active{
+    color: white;
+    background: #84b641;
+}
+
+a.list-group-item:hover, .nav-link{
+    cursor: pointer;
+}
+
+a.list-group-item.active:hover{
+    color: white;
+} */
+
+.nav-link.dropdown-toggle:hover, .nav-btn:hover{
+    background-color: #808B96;
+}
+
+/* .badge-pill{
+    background-color: #84b641;
+    color: white;
+    font-weight: bold;
+  } */
+
+/* .active .badge-pill{
+    background-color: white;
+    color: black;
+} */
+
+a.nav-link.dropdown-toggle{
+    padding: 4px !important;
+    font-size: small !important;
+}
+
+.dropdown-menu{
+    right: 10px;
+    left: inherit;
+    top: inherit;
+}
+
+label.group-label:hover, .checkbox:hover{
+    background-color: #efefef;
+    cursor: pointer;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #84b641;
+    background-color: #84b641;
+}
+
+label.custom-control-label, .tab-content .form-group label, .tab-content .form-group .form-control,
+.tab-content .form-group .input-group-addon.units{
+    font-size: 18px;
+}
+
+.list-group{
+    width: 450px;
+}
+
+.btn-sm{
+    /* font-size: small; */
+    padding: 4px;
+}
+
+.btn-sm.active{
+    color: white;
+    background-color: #84b641;
+}
+
+.navbar{
+    border-bottom: solid 4px #84b641;
+}

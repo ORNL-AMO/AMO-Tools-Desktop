@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
-import { ElectronService } from 'ngx-electron';
 import { Directory } from '../../shared/models/directory';
 
 import { BehaviorSubject } from 'rxjs';
@@ -14,7 +13,7 @@ export class ImportExportService {
 
   toggleDownload: BehaviorSubject<boolean>;
 
-  constructor(private windowRefService: WindowRefService, private electronService: ElectronService) {
+  constructor(private windowRefService: WindowRefService) {
     this.toggleDownload = new BehaviorSubject<boolean>(null);
    }
 
@@ -93,17 +92,6 @@ export class ImportExportService {
     let dlLink = doc.createElement("a");
     dlLink.setAttribute("href", mailToString);
     dlLink.click();
-  }
-
-  takeScreenShot() {
-    this.electronService.desktopCapturer.getSources({ types: ['window', 'screen'], thumbnailSize: { width: 1400, height: 1000 } }, (error, sources) => {
-      sources.forEach(source => {
-        if (source.name === "AMOToolsDesktop") {
-          let dataUrl = source.thumbnail.toDataURL();
-          this.downloadImage(dataUrl);
-        }
-      });
-    });
   }
 
   createFile(dataUrl) {

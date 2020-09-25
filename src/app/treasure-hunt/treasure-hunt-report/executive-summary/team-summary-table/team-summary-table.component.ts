@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-team-summary-table',
@@ -9,9 +9,15 @@ export class TeamSummaryTableComponent implements OnInit {
   @Input()
   teamData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
   
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
+  
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
 }

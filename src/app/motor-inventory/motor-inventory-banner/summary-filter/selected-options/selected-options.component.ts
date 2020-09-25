@@ -19,13 +19,13 @@ export class SelectedOptionsComponent implements OnInit {
   filterInventorySummary: FilterInventorySummary;
 
   motorInventoryData: MotorInventoryData;
-  constructor(private motorInventorySummaryService: MotorInventorySummaryService, private motorInventoryService: MotorInventoryService,
+  constructor(private motorInventoryService: MotorInventoryService,
     private inventorySummaryGraphService: InventorySummaryGraphsService) { }
 
   ngOnInit(): void {
     this.settings = this.motorInventoryService.settings.getValue();
     this.motorInventoryData = this.motorInventoryService.motorInventoryData.getValue();
-    this.filterInventorySummarySub = this.motorInventorySummaryService.filterInventorySummary.subscribe(val => {
+    this.filterInventorySummarySub = this.motorInventoryService.filterInventorySummary.subscribe(val => {
       this.filterInventorySummary = val;
     });
   }
@@ -35,7 +35,7 @@ export class SelectedOptionsComponent implements OnInit {
   }
 
   save() {
-    this.motorInventorySummaryService.filterInventorySummary.next(this.filterInventorySummary);
+    this.motorInventoryService.filterInventorySummary.next(this.filterInventorySummary);
     let selectedField = this.inventorySummaryGraphService.selectedField.getValue();
     this.inventorySummaryGraphService.selectedField.next(selectedField);
   }

@@ -20,8 +20,8 @@ export class PreAssessmentTableComponent implements OnInit {
   constructor(private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
-    let costResults: Array<PreAssessmentResult> = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'energyCost');
-    let energyResults: Array<PreAssessmentResult> = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'value');
+    let costResults: Array<PreAssessmentResult> = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'energyCost', false);
+    let energyResults: Array<PreAssessmentResult> = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'value', false);
     this.tableData = new Array();
     let resultIndex: number = 0;
     costResults.forEach(result => {

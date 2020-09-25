@@ -20,6 +20,7 @@
 
 th, td{
     min-width: 75px;
+    white-space: nowrap;
 }
 
 .max-height{
@@ -33,4 +34,12 @@ th, td{
 .header-cell:hover{
     text-decoration: underline;
     cursor: pointer;
+}
+
+.table-hover tbody tr:hover{
+    background-color: white;
+}
+
+tbody{
+    background-color: rgba(0, 0, 0, 0.075);
 }

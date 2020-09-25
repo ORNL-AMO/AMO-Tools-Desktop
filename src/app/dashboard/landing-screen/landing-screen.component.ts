@@ -19,4 +19,8 @@ export class LandingScreenComponent implements OnInit {
     }
     this.dashboardService.createAssessment.next(true);
   }
+
+  createInventory() {
+    this.dashboardService.createInventory.next(true);
+  }
 }

@@ -450,6 +450,7 @@ export class PhastService {
       inputs.coalHeatingValue = this.convertUnitsService.value(inputs.coalHeatingValue).from('kJkg').to('btuLb');
       inputs.electrodeHeatingValue = this.convertUnitsService.value(inputs.electrodeHeatingValue).from('kJkg').to('btuLb');
       inputs.electrodeUse = this.convertUnitsService.value(inputs.electrodeUse).from('kg').to('lb');
+      inputs.flowRateInput = this.convertUnitsService.value(inputs.flowRateInput).from('m3').to('ft3');
       results = phastAddon.energyInputEAF(inputs);
     } else {
       results = phastAddon.energyInputEAF(inputs);

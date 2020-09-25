@@ -6,9 +6,6 @@ import { RouterModule } from '@angular/router';
 import { MotorInventorySetupComponent } from './motor-inventory-setup/motor-inventory-setup.component';
 import { DepartmentSetupComponent } from './motor-inventory-setup/department-setup/department-setup.component';
 import { PlantSetupComponent } from './motor-inventory-setup/plant-setup/plant-setup.component';
-import { MotorInventoryCalculatorsComponent } from './motor-inventory-calculators/motor-inventory-calculators.component';
-import { BatchAnalysisComponent } from './batch-analysis/batch-analysis.component';
-import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { SettingsModule } from '../settings/settings.module';
 import { MotorInventoryService } from './motor-inventory.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,6 +16,7 @@ import { MotorPropertiesModule } from './motor-inventory-setup/motor-properties/
 import { MotorInventorySummaryModule } from './motor-inventory-summary/motor-inventory-summary.module';
 import { SummaryFilterModule } from './motor-inventory-banner/summary-filter/summary-filter.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
+import { BatchAnalysisModule } from './batch-analysis/batch-analysis.module';
 
 @NgModule({
   declarations: [
@@ -27,8 +25,6 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
     MotorInventorySetupComponent,
     DepartmentSetupComponent,
     PlantSetupComponent,
-    MotorInventoryCalculatorsComponent,
-    BatchAnalysisComponent,
     DepartmentCatalogTableComponent
   ],
   imports: [
@@ -42,7 +38,8 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
     MotorPropertiesModule,
     MotorInventorySummaryModule,
     SummaryFilterModule,
-    HelpPanelModule
+    HelpPanelModule,
+    BatchAnalysisModule
   ],
   providers: [
     MotorInventoryService

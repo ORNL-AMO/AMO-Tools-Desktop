@@ -1,9 +1,13 @@
 <label class="group-label">{{title}}</label>
-<table class="table table-striped table-hover">
+<table #copyTable class="table table-striped table-hover">
     <tbody>
         <tr class="bold">
-            <td colspan="2" *ngIf="showFullSummary">
+            <!--cant use colspan with copy table button (need 2)-->
+            <td *ngIf="showFullSummary">
                 Utility
+            </td>
+            <td *ngIf="showFullSummary">
+
             </td>
             <td *ngIf="!showFullSummary">
                 Utility
@@ -296,9 +300,30 @@
         </tr>
         <!--Other -->
         <tr *ngIf="treasureHuntResults.other.implementationCost != 0">
-            <td colspan="7" class="bold" *ngIf="showFullSummary">
+            <!--cant use colspan with copy table button (need 7)-->
+            <td class="bold" *ngIf="showFullSummary">
                 Mixed
             </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+
+
             <td class="bold" *ngIf="!showFullSummary">
                 Mixed
             </td>
@@ -317,8 +342,21 @@
         </tr>
         <!--Total-->
         <tr>
-            <td colspan="5" class="bold" *ngIf="showFullSummary">
+            <!--cant use colspan with copy table button (need 5)-->
+            <td class="bold" *ngIf="showFullSummary">
                 Total
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
             </td>
             <td class="bold" *ngIf="!showFullSummary">
                 Total
@@ -344,3 +382,8 @@
         </tr>
     </tbody>
 </table>
+
+
+<app-exportable-results-table class="hide-print" *ngIf="showFullSummary" [tableString]="tableString"
+    (updateTableString)="updateTableString()">
+</app-exportable-results-table>
