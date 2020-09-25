@@ -12,7 +12,7 @@
             *ngIf="byEquationForm.controls.maxFlow.invalid && !byEquationForm.controls.maxFlow.pristine">
             <span *ngIf="byEquationForm.controls.maxFlow.errors.required">Value required.</span>
             <span *ngIf="byEquationForm.controls.maxFlow.errors.max">Value can't be greater than
-                {{byEquationForm.controls.maxFlow.max.max}} <span [innerHTML]="flowUnit | settingsLabel"></span>.
+                {{byEquationForm.controls.maxFlow.errors.max.max}} <span [innerHTML]="flowUnit | settingsLabel"></span>.
             </span>
             <span *ngIf="byEquationForm.controls.maxFlow.errors.min">Value can't be less than
                 {{byEquationForm.controls.maxFlow.min.min}} <span [innerHTML]="flowUnit | settingsLabel"></span>.

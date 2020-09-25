@@ -6,6 +6,8 @@ import { RegressionEquationsService } from '../regression-equations.service';
 import { BehaviorSubject } from 'rxjs';
 import { SvgToPngService } from '../../../shared/helper-services/svg-to-png.service';
 import { SimpleChart, DataPoint, TraceData } from '../../../shared/models/plotting';
+import { Settings } from '../../../shared/models/settings';
+
 @Injectable()
 export class SystemAndEquipmentCurveGraphService {
 
@@ -49,20 +51,31 @@ export class SystemAndEquipmentCurveGraphService {
     }
   }
 
-  getBaselineIntersectionPoint(curveDataPairs: Array<{ x: number, y: number }>): SystemCurveDataPoint {
-    let intersectionPoint = this.systemAndEquipmentCurveService.systemCurveIntersectionData.getValue();
-    if (!intersectionPoint) {
-      intersectionPoint = {
-        baseline: {x: 0, y: 0},
-        modification: {x: 0, y: 0}
-      };
-
-      intersectionPoint.baseline = this.systemAndEquipmentCurveService.calculateBaselineIntersectionPoint(curveDataPairs);
+  getBaselineIntersectionPoint(curveDataPairs: Array<{ x: number, y: number }>, equipmentType: string, settings: Settings): SystemCurveDataPoint {
+    let calculatedIntersection = this.systemAndEquipmentCurveService.calculateBaselineIntersectionPoint(curveDataPairs);
+    let intersection: SystemCurveDataPoint = {
+      x: 0, 
+      y: 0,
+    };
+    if (calculatedIntersection) {
+      intersection.x = calculatedIntersection.x; 
+      intersection.y = calculatedIntersection.y;
+      let baselinePowerPairs = this.systemAndEquipmentCurveService.baselinePowerDataPairs;
+      if (equipmentType == 'fan') {
+        intersection = this.systemAndEquipmentCurveService.calculateFanEfficiency(baselinePowerPairs, intersection, settings);
+      } else {
+        intersection = this.systemAndEquipmentCurveService.calculatePumpEfficiency(baselinePowerPairs, intersection, settings);
+      }
     }
-    return intersectionPoint.baseline;
+    return intersection;
   }
 
-  calculateModificationIntersectionPoint(): SystemCurveDataPoint {
+  calculateModificationIntersectionPoint(equipmentType: string, settings: Settings): SystemCurveDataPoint {
+    let intersection: SystemCurveDataPoint = {
+      x: 0,
+      y: 0
+    }
+
     let closestSystemCurvePoint;
     let closestModifiedDataPoint;
     let smallestDistanceBetweenPoints = Infinity;
@@ -70,7 +83,7 @@ export class SystemAndEquipmentCurveGraphService {
       this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.forEach(modifiedDataPoint => {
         //distance = (p1.x - p2.x)^2 + (p1.y - p2.y)^2
         let distanceBetweenCurrentPoint = Math.pow((systemCurveDataPoint.x - modifiedDataPoint.x), 2) + Math.pow((systemCurveDataPoint.y - modifiedDataPoint.y), 2)
-        if(smallestDistanceBetweenPoints > distanceBetweenCurrentPoint){
+        if (smallestDistanceBetweenPoints > distanceBetweenCurrentPoint) {
           smallestDistanceBetweenPoints = distanceBetweenCurrentPoint;
           closestSystemCurvePoint = systemCurveDataPoint;
           closestModifiedDataPoint = modifiedDataPoint;
@@ -78,15 +91,17 @@ export class SystemAndEquipmentCurveGraphService {
       })
     });
     //find average between points
-    let x: number = (closestModifiedDataPoint.x + closestSystemCurvePoint.x) / 2;
-    let y: number = (closestModifiedDataPoint.y + closestSystemCurvePoint.y) / 2;
-    let modificationData = this.systemAndEquipmentCurveService.systemCurveIntersectionData.getValue().modification;
-    return {
-      x: x, 
-      y: y,
-      power: modificationData? modificationData.power : 0,
-      efficiency: modificationData? modificationData.efficiency : 0
-    };
+    if (closestModifiedDataPoint && closestSystemCurvePoint) {
+      intersection.x = (closestModifiedDataPoint.x + closestSystemCurvePoint.x) / 2;
+      intersection.y = (closestModifiedDataPoint.y + closestSystemCurvePoint.y) / 2;
+      let baselinePowerPairs = this.systemAndEquipmentCurveService.baselinePowerDataPairs;
+      if (equipmentType == 'fan') {
+        intersection = this.systemAndEquipmentCurveService.calculateFanEfficiency(baselinePowerPairs, intersection, settings, true);
+      } else {
+        intersection = this.systemAndEquipmentCurveService.calculatePumpEfficiency(baselinePowerPairs, intersection, settings, true);
+      }
+    } 
+    return intersection;
   }
 
   getTraceDataFromPoint(selectedPoint: DataPoint): TraceData {

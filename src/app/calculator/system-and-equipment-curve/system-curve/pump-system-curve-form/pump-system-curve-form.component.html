@@ -72,7 +72,7 @@
     <!--Point 2-->
     <label class="group-label" for="pointTwo">Point 2</label>
     <div class="form-group">
-        <select class="form-control" *ngIf="showDataPointOptions" (change)="setFormValues()" formControlName="pointTwo"
+        <select class="form-control w-50 float-right" *ngIf="showDataPointOptions" (change)="setFormValues()" formControlName="pointTwo"
             id="pointTwo" (focus)="focusField('pointTwo')">
             <option *ngFor="let dataPoint of assessmentDataPoints" [ngValue]="dataPoint.pointName">
                 {{dataPoint.pointName}}
