@@ -5,13 +5,13 @@ import { SpecificSpeedInputs } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { BehaviorSubject } from 'rxjs';
-import { SimpleChart, SelectedDataPoint, TraceData } from '../../../shared/models/plotting';
+import { SimpleChart, DataPoint, TraceData } from '../../../shared/models/plotting';
 
 @Injectable()
 export class SpecificSpeedService {
   specificSpeedInputs: SpecificSpeedInputs;
   specificSpeedChart: BehaviorSubject<SimpleChart>;
-  selectedDataPoints: BehaviorSubject<Array<SelectedDataPoint>>;
+  selectedDataPoints: BehaviorSubject<Array<DataPoint>>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { 
     this.initChartData();
   }
@@ -37,9 +37,9 @@ export class SpecificSpeedService {
 
   initChartData() {
     let emptyChart: SimpleChart = this.getEmptyChart();
-    let dataPoints = new Array<SelectedDataPoint>();
+    let dataPoints = new Array<DataPoint>();
     this.specificSpeedChart = new BehaviorSubject<SimpleChart>(emptyChart);
-    this.selectedDataPoints = new BehaviorSubject<Array<SelectedDataPoint>>(dataPoints);
+    this.selectedDataPoints = new BehaviorSubject<Array<DataPoint>>(dataPoints);
   }
 
   resetForm(settings: Settings): FormGroup {
@@ -89,13 +89,13 @@ export class SpecificSpeedService {
     };
   }
 
-  getTraceDataFromPoint(selectedPoint: SelectedDataPoint): TraceData {
+  getTraceDataFromPoint(selectedPoint: DataPoint): TraceData {
     let hoverTemplate = 'Specific Speed' + ': %{x:.2r} <br>' + 'Efficiency Correction' + ': %{y:.2r}%' + '<extra></extra>';
     let trace: TraceData = {
-      x: [selectedPoint.pointX],
-      y: [selectedPoint.pointY],
+      x: [selectedPoint.x],
+      y: [selectedPoint.y],
       type: 'scatter',
-      name: `${selectedPoint.pointX}, ${selectedPoint.pointY}`,
+      name: `${selectedPoint.x}, ${selectedPoint.y}`,
       hovertemplate: hoverTemplate,
       mode: 'markers',
       showlegend: false,

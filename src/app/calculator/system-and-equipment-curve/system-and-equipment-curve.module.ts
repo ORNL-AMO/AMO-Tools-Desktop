@@ -6,7 +6,7 @@ import { SystemCurveComponent } from './system-curve/system-curve.component';
 import { EquipmentCurveComponent } from './equipment-curve/equipment-curve.component';
 import { FanSystemCurveFormComponent } from './system-curve/fan-system-curve-form/fan-system-curve-form.component';
 import { PumpSystemCurveFormComponent } from './system-curve/pump-system-curve-form/pump-system-curve-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { PumpSystemCurveFormService } from './system-curve/pump-system-curve-form.service';
 import { FanSystemCurveFormService } from './system-curve/fan-system-curve-form.service';
@@ -23,10 +23,10 @@ import { RegressionEquationsComponent } from './regression-equations/regression-
 import { RegressionEquationsService } from './regression-equations.service';
 import { SystemAndEquipmentCurveGraphComponent } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.component';
 import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
-import { DataPointTableComponent } from './system-and-equipment-curve-graph/data-point-table/data-point-table.component';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 import { CurveDataService } from './curve-data.service';
+import { ChartHoverDataComponent } from './chart-hover-data/chart-hover-data.component';
 
 @NgModule({
   declarations: [
@@ -45,10 +45,11 @@ import { CurveDataService } from './curve-data.service';
     EquipmentCurveFormComponent,
     RegressionEquationsComponent,
     SystemAndEquipmentCurveGraphComponent,
-    DataPointTableComponent
+    ChartHoverDataComponent,
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     SharedPipesModule,
     ExportableResultsTableModule,

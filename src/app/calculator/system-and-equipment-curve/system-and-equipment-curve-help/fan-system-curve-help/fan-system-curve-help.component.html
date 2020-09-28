@@ -77,6 +77,15 @@
             </small>
         </h6>
     </div>
+    <div class="my-2" *ngIf="currentField == 'modifiedPressure' || currentField == 'modifiedFlow'">
+        <h6>
+            Modified Condition: Pressure / Flow Rate
+            <br>
+            <small class="text-muted">
+                These calculations use your system curve to estimate your new operating point.
+            </small>
+        </h6>
+    </div>
 
     <!--CURVE BASIS-->
     <hr class="my-1 hr-spacer">

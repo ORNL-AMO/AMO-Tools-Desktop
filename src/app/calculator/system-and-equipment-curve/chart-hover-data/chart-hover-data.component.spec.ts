@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DataPointTableComponent } from './data-point-table.component';
+import { ChartHoverDataComponent } from './chart-hover-data.component';
 
-describe('DataPointTableComponent', () => {
-  let component: DataPointTableComponent;
-  let fixture: ComponentFixture<DataPointTableComponent>;
+describe('ChartHoverDataComponent', () => {
+  let component: ChartHoverDataComponent;
+  let fixture: ComponentFixture<ChartHoverDataComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DataPointTableComponent ]
+      declarations: [ ChartHoverDataComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DataPointTableComponent);
+    fixture = TestBed.createComponent(ChartHoverDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
