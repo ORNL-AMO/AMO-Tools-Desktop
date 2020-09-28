@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../../../../shared/models/phast/efficiencyImprovement';
 import { Settings } from '../../../../shared/models/settings';
 import { EfficiencyImprovementService } from '../efficiency-improvement.service';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
+import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
   selector: 'app-efficiency-improvement-form',
   templateUrl: './efficiency-improvement-form.component.html',
@@ -20,10 +21,18 @@ export class EfficiencyImprovementFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+  showOperatingHoursModal: boolean = false;
+  operatingHoursControl: AbstractControl;
+  formWidth: number;
+
   constructor(private efficiencyImprovementService: EfficiencyImprovementService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   calc() {
     let efficiencyImprovementInputs: EfficiencyImprovementInputs = this.efficiencyImprovementService.getObjFromForm(this.form);
@@ -40,5 +49,27 @@ export class EfficiencyImprovementFormComponent implements OnInit {
   }
   focusOut() {
     this.changeField.emit('default');
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal(opHoursControl: AbstractControl) {
+    this.operatingHoursControl = opHoursControl;
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.efficiencyImprovementService.operatingHours = oppHours;
+    this.operatingHoursControl.patchValue(oppHours.hoursPerYear);
+    this.calc();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 }
