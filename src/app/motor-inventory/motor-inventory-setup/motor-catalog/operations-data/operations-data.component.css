@@ -36,3 +36,8 @@
 .fa.fa.fa-question-circle:hover{
     cursor: pointer;
 }
+
+.fa-asterisk{
+    padding-right: 4px;
+    font-size: 12px;
+}

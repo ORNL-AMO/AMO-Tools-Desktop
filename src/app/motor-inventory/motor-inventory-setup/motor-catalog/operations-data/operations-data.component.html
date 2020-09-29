@@ -14,8 +14,8 @@
 
     <!-- annualOperatingHours -->
     <div class="form-group" *ngIf="displayOptions.annualOperatingHours">
-        <label for="annualOperatingHours">Operating Hours
-
+        <label for="annualOperatingHours"><span class="fa fa-asterisk"></span>Operating Hours
+            
         </label>
         <div class="input-group">
             <span class="input-group-addon op-hour-addon units">
@@ -34,7 +34,7 @@
     </div>
     <!-- averageLoadFactor -->
     <div class="form-group" *ngIf="displayOptions.averageLoadFactor">
-        <label for="averageLoadFactor">Average Load Factor
+        <label for="averageLoadFactor"><span class="fa fa-asterisk"></span>Average Load Factor
             <a class="form-text small click-link" (click)="showLoadFactorModal()">Calculate Load Factor</a>
         </label>
         <div class="input-group">
@@ -51,7 +51,7 @@
     </div>
     <!-- utilizationFactor -->
     <div class="form-group" *ngIf="displayOptions.utilizationFactor">
-        <label for="utilizationFactor">Utilization Factor</label>
+        <label for="utilizationFactor"><span class="fa fa-asterisk"></span>Utilization Factor</label>
         <div class="input-group">
             <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('utilizationFactor')"
                 (input)="save()" formControlName="utilizationFactor" id="utilizationFactor">
@@ -66,7 +66,7 @@
     </div>
     <!-- efficiencyAtAverageLoad -->
     <div class="form-group" *ngIf="displayOptions.efficiencyAtAverageLoad">
-        <label for="efficiencyAtAverageLoad">Efficiency at Average Load
+        <label for="efficiencyAtAverageLoad"><span class="fa fa-asterisk"></span>Efficiency at Average Load            
             <span class="form-text">
                 <a class="small click-link" (click)="calculateEfficiency()"
                     [ngClass]="{'disabled': disableEstimateEfficiency}">Estimate Efficiency</a>
