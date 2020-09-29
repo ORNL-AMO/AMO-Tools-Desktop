@@ -34,6 +34,10 @@ export class EfficiencyImprovementFormComponent implements OnInit {
 
   ngOnInit() {}
 
+  ngAfterViewInit() {
+    this.setOpHoursModalWidth();
+  }
+
   calc() {
     let efficiencyImprovementInputs: EfficiencyImprovementInputs = this.efficiencyImprovementService.getObjFromForm(this.form);
     this.efficiencyImprovementService.updateFormValidators(this.form, efficiencyImprovementInputs);

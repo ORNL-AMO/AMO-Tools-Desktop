@@ -66,7 +66,7 @@ export class EfficiencyImprovementGraphComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.efficiencyImprovementInputs.firstChange && !this.reset) {
+    if (changes.efficiencyImprovementInputs && !changes.efficiencyImprovementInputs.firstChange && !this.reset) {
       this.updateChart();
     } else {
       this.initRenderChart();
