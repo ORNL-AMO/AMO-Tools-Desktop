@@ -8,7 +8,7 @@ export const MockMotorInventory: InventoryItem = {
             {
                 "name": "Design and Paint",
                 "operatingHours": 8760,
-                "description": "This department decprates and packs toys for shipment ",
+                "description": "This department designs and decorates the product",
                 "id": "a2jd7ua9i",
                 "catalog": [
                     {
@@ -814,7 +814,7 @@ export const MockMotorInventory: InventoryItem = {
             {
                 "name": "Testing and Quality",
                 "operatingHours": 2000,
-                "description": "This department physically tests the toys for defects and to confirm saftey ratings.",
+                "description": "This department physically tests the toys for defects and to confirm safety ratings.",
                 "id": "x262ugdp5",
                 "catalog": [
                     {
