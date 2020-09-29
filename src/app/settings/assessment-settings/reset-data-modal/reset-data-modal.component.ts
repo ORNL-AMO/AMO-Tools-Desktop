@@ -2,22 +2,22 @@ import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/cor
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../../shared/models/settings';
-import { MockPhastSettings, MockPhast } from '../../../core/mockPhast';
+import { MockPhastSettings, MockPhast } from '../../../examples/mockPhast';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { MockPsat, MockPsatCalculator, MockPsatSettings } from '../../../core/mockPsat';
-import { MockFsat, MockFsatSettings } from '../../../core/mockFsat';
+import { MockPsat, MockPsatCalculator, MockPsatSettings } from '../../../examples/mockPsat';
+import { MockFsat, MockFsatSettings } from '../../../examples/mockFsat';
 import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
 import { Directory } from '../../../shared/models/directory';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { CoreService } from '../../../core/core.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { MockSsmt, MockSsmtSettings } from '../../../core/mockSsmt';
-import { MockTreasureHunt, MockTreasureHuntSettings } from '../../../core/mockTreasureHunt';
+import { MockSsmt, MockSsmtSettings } from '../../../examples/mockSsmt';
+import { MockTreasureHunt, MockTreasureHuntSettings } from '../../../examples/mockTreasureHunt';
 import { DashboardService } from '../../../dashboard/dashboard.service';
 import { InventoryDbService } from '../../../indexedDb/inventory-db.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
-import { MockMotorInventory } from '../../../core/mockMotorInventoryData';
+import { MockMotorInventory } from '../../../examples/mockMotorInventoryData';
 @Component({
   selector: 'app-reset-data-modal',
   templateUrl: './reset-data-modal.component.html',
