@@ -84,6 +84,10 @@ export interface TraceData {
     fillcolor?: string,
     mode?: string,
     hoverinfo?: string,
+    hoverlabel?: {
+        namelength: number
+    },
+    text?: string[],
     marker?: {
         color?: string | Array<string>,
         line?: {
@@ -95,7 +99,10 @@ export interface TraceData {
             ticksuffix: string,
             showticksuffix: string
         }
-        size?: number,
+        size?: number | number[],
+        sizeref?: number,
+        sizemin?: number,
+        sizemode?: string,
     },
     line?: {
         shape: string,

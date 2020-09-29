@@ -13,9 +13,11 @@ export class CostsFormComponent implements OnInit {
   emitChangefield = new EventEmitter<string>();
   // otherCosts: Array<OtherCostItem> = [];
   // additionalSavings: OtherCostItem;
+  effortLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   constructor() { }
 
   ngOnInit() {
+    console.log(this.opportunityCost);
   }
 
   addOtherCost() {
