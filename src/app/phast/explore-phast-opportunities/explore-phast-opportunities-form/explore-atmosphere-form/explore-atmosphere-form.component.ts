@@ -23,7 +23,6 @@ export class ExploreAtmosphereFormComponent implements OnInit {
   @Output('changeTab')
   changeTab = new EventEmitter<LossTab>();
 
-  showAtmosphere: boolean = false;
   showFlowRate: Array<boolean>;
   showInletTemp: Array<boolean>;
 
@@ -37,29 +36,30 @@ export class ExploreAtmosphereFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showAtmosphere = false;
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere = { hasOpportunity: false, display: 'Optimize Furnace Atmosphere Makeup System' }; 
         this.initData();
       }
     }
   }
-
+  
   initData() {
     this.showFlowRate = new Array<boolean>();
     this.baselineWarnings = new Array<AtmosphereLossWarnings>();
     this.modificationWarnings = new Array<AtmosphereLossWarnings>();
     this.showInletTemp = new Array<boolean>();
+    
     let index: number = 0;
     this.phast.losses.atmosphereLosses.forEach(loss => {
       let check: boolean = (loss.flowRate !== this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].flowRate);
-      if (!this.showAtmosphere && check) {
-        this.showAtmosphere = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere = { hasOpportunity: check, display: 'Optimize Furnace Atmosphere Makeup System' }; 
       }
       this.showFlowRate.push(check);
 
       check = (loss.inletTemperature !== this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].inletTemperature ||
         loss.outletTemperature !== this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].outletTemperature);
-      if (!this.showAtmosphere && check) {
-        this.showAtmosphere = check;
+      if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere.hasOpportunity && check) {
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere = { hasOpportunity: check, display: 'Optimize Furnace Atmosphere Makeup System' }; 
       }
       this.showInletTemp.push(check);
       let baselineWarningsCheck: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
@@ -71,7 +71,7 @@ export class ExploreAtmosphereFormComponent implements OnInit {
   }
 
   toggleAtmosphere() {
-    if (this.showAtmosphere === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowAtmosphere.hasOpportunity === false) {
       let index: number = 0;
       this.phast.losses.atmosphereLosses.forEach(loss => {
         this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].flowRate = loss.flowRate;

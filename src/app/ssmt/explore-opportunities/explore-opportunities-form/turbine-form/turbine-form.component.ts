@@ -20,12 +20,6 @@ export class TurbineFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<SSMT>();
 
-
-  showCondensingTurbine: boolean = false;
-  showHighToLowPressureTurbine: boolean = false;
-  showHighToMediumPressureTurbine: boolean = false;
-  showMediumToLowPressureTurbine: boolean = false;
-  
   baselineCondensingTurbineForm: FormGroup;
   modificationCondensingTurbineForm: FormGroup;
   
@@ -44,15 +38,16 @@ export class TurbineFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()) {
-      this.showCondensingTurbine = false;
-      this.showHighToLowPressureTurbine = false;
-      this.showHighToMediumPressureTurbine = false;
-      this.showMediumToLowPressureTurbine = false;
       this.initForm();
     }
   }
 
   initForm() {
+    this.ssmt.modifications[this.exploreModIndex].exploreOppsShowCondensingTurbine = {hasOpportunity: false, display: "Modify High Pressure to Condensing Steam Turbine"};
+    this.ssmt.modifications[this.exploreModIndex].exploreOppsShowHighToLowPressureTurbine = {hasOpportunity: false, display: "Modify High to Low Pressure Steam Turbine"};
+    this.ssmt.modifications[this.exploreModIndex].exploreOppsShowHighToMediumPressureTurbine = {hasOpportunity: false, display: "Modify High to Medium Pressure Steam Turbine"};
+    this.ssmt.modifications[this.exploreModIndex].exploreOppsShowMediumToLowPressureTurbine = {hasOpportunity: false, display: "Modify Medium to Low Pressure Steam Turbine"};
+    
     if (this.ssmt.turbineInput.condensingTurbine) {
       this.baselineCondensingTurbineForm = this.turbineService.getCondensingFormFromObj(this.ssmt.turbineInput.condensingTurbine, this.settings);
       this.modificationCondensingTurbineForm = this.turbineService.getCondensingFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine, this.settings);
@@ -130,22 +125,22 @@ export class TurbineFormComponent implements OnInit {
   }
 
   setShowCondensingTurbine(showTurbine: boolean) {
-    this.showCondensingTurbine = showTurbine;
+    this.ssmt.modifications[this.exploreModIndex].exploreOppsShowCondensingTurbine = {hasOpportunity: showTurbine, display: "Modify High Pressure to Condensing Steam Turbine"};
     this.cd.detectChanges();
   }
 
   setShowHighLowTurbine(showTurbine: boolean) {
-    this.showHighToLowPressureTurbine = showTurbine;
+    this.ssmt.modifications[this.exploreModIndex].exploreOppsShowHighToLowPressureTurbine = {hasOpportunity: showTurbine, display: "Modify High to Low Pressure Steam Turbine"};
     this.cd.detectChanges();
   }
 
   setShowHighMediumTurbine(showTurbine: boolean) {
-    this.showHighToMediumPressureTurbine = showTurbine;
+    this.ssmt.modifications[this.exploreModIndex].exploreOppsShowHighToMediumPressureTurbine = {hasOpportunity: showTurbine, display: "Modify High to Medium Pressure Steam Turbine"};
     this.cd.detectChanges();
   }
 
   setShowMediumLowTurbine(showTurbine: boolean) {
-    this.showMediumToLowPressureTurbine = showTurbine;
+    this.ssmt.modifications[this.exploreModIndex].exploreOppsShowMediumToLowPressureTurbine = {hasOpportunity: showTurbine, display: "Modify Medium to Low Pressure Steam Turbine"};
     this.cd.detectChanges();
   }
 

@@ -3,13 +3,13 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SettingsService } from '../../settings/settings.service';
-import { PhastReportService } from './phast-report.service';
-import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import * as d3 from 'd3';
+import { Subscription } from 'rxjs';
+import { PrintOptions } from '../../shared/models/printing';
+import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
+import { PhastValidService } from '../phast-valid.service';
 
 @Component({
   selector: 'app-phast-report',
@@ -32,41 +32,31 @@ export class PhastReportComponent implements OnInit {
   quickReport: boolean;
   @Input()
   containerHeight: number;
-  @Input()
-  printView: boolean;
-  @Input()
-  printInputSummary: boolean;
-  @Input()
-  printResultsData: boolean;
-  @Input()
-  printReportGraphs: boolean;
-  @Input()
-  printReportSankey: boolean;
-  @Input()
-  printEnergyUsed: boolean;
-  @Input()
-  printExecutiveSummary: boolean;
 
   @ViewChild('reportTemplate', { static: false }) reportTemplate: TemplateRef<any>;
-
-  @ViewChild('printMenuModal', { static: false }) public printMenuModal: ModalDirective;
-
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
   createdDate: Date;
-  showPrint: boolean = false;
+  showPrintView: boolean = false;
   showPrintMenu: boolean = false;
   showPrintDiv: boolean = false;
 
   selectAll: boolean = false;
   reportContainerHeight: number;
-  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private phastReportService: PhastReportService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
+  showPrintMenuSub: Subscription;
+  printOptions: PrintOptions;
+  showPrintViewSub: Subscription;
+  constructor(private settingsDbService: SettingsDbService, 
+              private directoryDbService: DirectoryDbService, 
+              private printOptionsMenuService: PrintOptionsMenuService, 
+              private phastValidService: PhastValidService,
+              private settingsService: SettingsService) { }
 
   ngOnInit() {
-    this.initPrintLogic();
+    // this.initPrintLogic();
     this.createdDate = new Date();
     if (this.settings) {
       if (!this.settings.energyResultUnit) {
@@ -91,24 +81,26 @@ export class PhastReportComponent implements OnInit {
       this.phast.operatingHours.hoursPerYear = 8760;
     }
 
-    if (this.inRollup) {
-      this.showPrint = this.printView;
-    }
-    else {
-      //subscribe to print event
-      this.phastReportService.showPrint.subscribe(printVal => {
-        //shows loading print view
-        this.showPrintDiv = printVal;
-        if (printVal === true) {
-          //use delay to show loading before print payload starts
-          setTimeout(() => {
-            this.showPrint = printVal;
-          }, 20);
-        } else {
-          this.showPrint = printVal;
-        }
+    this.setPhastValidity();
+
+    if (!this.inRollup) {
+      this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
+        this.showPrintMenu = val;
       });
     }
+
+    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
+      this.printOptions = this.printOptionsMenuService.printOptions.getValue();
+      this.showPrintDiv = val;
+      if (val == true) {
+        //use delay to show loading before print payload starts
+        setTimeout(() => {
+          this.showPrintView = val;
+        }, 20)
+      } else {
+        this.showPrintView = val;
+      }
+    })
 
   }
 
@@ -125,28 +117,30 @@ export class PhastReportComponent implements OnInit {
     }, 100);
   }
 
-  getContainerHeight() {
-    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
-    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+  ngOnDestroy() {
+    if (this.showPrintMenuSub) {
+      this.showPrintMenuSub.unsubscribe();
+    }
+    this.showPrintViewSub.unsubscribe();
   }
 
-  initPrintLogic() {
-    if (!this.inRollup) {
-      this.printEnergyUsed = false;
-      this.printExecutiveSummary = false;
-      this.printResultsData = false;
-      this.printReportGraphs = false;
-      this.printReportSankey = false;
-      this.printInputSummary = false;
+  getContainerHeight() {
+    if (this.reportBtns && this.reportHeader) {
+      let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+      let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
     }
   }
 
   setTab(str: string): void {
     this.currentTab = str;
-    setTimeout(() => {
-      d3.selectAll('.tick text').style('display', 'initial');
-    }, 50);
+  }
+
+  setPhastValidity() {
+    this.phast.valid = this.phastValidService.checkValid(this.phast);
+    this.phast.modifications.forEach(modification => {
+      modification.phast.valid = this.phastValidService.checkValid(modification.phast);
+    });
   }
 
 
@@ -157,23 +151,6 @@ export class PhastReportComponent implements OnInit {
         tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);
       }
       this.settings = tmpSettings;
-    } else {
-      this.getParentDirectorySettings(this.assessment.directoryId);
-    }
-  }
-
-
-  getParentDirectorySettings(dirId: number): void {
-    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(dirId);
-    if (tmpSettings) {
-      if (!tmpSettings.energyResultUnit) {
-        tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);
-      }
-      this.settings = tmpSettings;
-    } else {
-      let parentDirectory = this.directoryDbService.getById(dirId);
-      //get parent directory settings
-      this.getParentDirectorySettings(parentDirectory.parentDirectoryId);
     }
   }
 
@@ -189,88 +166,8 @@ export class PhastReportComponent implements OnInit {
     }
   }
 
-  showModal(): void {
-    this.showPrintMenu = true;
-  }
-
-  closeModal(reset: boolean): void {
-    if (reset) {
-      this.resetPrintSelection();
-    }
-    this.showPrintMenu = false;
-  }
-
-  resetPrintSelection() {
-    this.selectAll = false;
-    this.printEnergyUsed = false;
-    this.printExecutiveSummary = false;
-    this.printResultsData = false;
-    this.printReportGraphs = false;
-    this.printReportSankey = false;
-    this.printInputSummary = false;
-  }
-
-  togglePrint(section: string): void {
-    switch (section) {
-      case "selectAll": {
-        this.selectAll = !this.selectAll;
-        if (this.selectAll) {
-          this.printEnergyUsed = true;
-          this.printExecutiveSummary = true;
-          this.printResultsData = true;
-          this.printReportGraphs = true;
-          this.printReportSankey = true;
-        }
-        else {
-          this.printEnergyUsed = false;
-          this.printExecutiveSummary = false;
-          this.printResultsData = false;
-          this.printReportGraphs = false;
-          this.printReportSankey = false;
-        }
-        break;
-      }
-      case "energyUsed": {
-        this.printEnergyUsed = !this.printEnergyUsed;
-        break;
-      }
-      case "executiveSummary": {
-        this.printExecutiveSummary = !this.printExecutiveSummary;
-        break;
-      }
-      case "results": {
-        this.printResultsData = !this.printResultsData;
-        break;
-      }
-      case "reportGraphs": {
-        this.printReportGraphs = !this.printReportGraphs;
-        break;
-      }
-      case "reportSankey": {
-        this.printReportSankey = !this.printReportSankey;
-        break;
-      }
-      case "inputData": {
-        this.printInputSummary = !this.printInputSummary;
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  }
-
-
-  print(): void {
-    this.closeModal(false);
-    //when print clicked set show print value to true
-    this.phastReportService.showPrint.next(true);
-    setTimeout(() => {
-      let win = this.windowRefService.nativeWindow;
-      win.print();
-      //after printing hide content again
-      this.phastReportService.showPrint.next(false);
-      this.resetPrintSelection();
-    }, 2000);
+  print() {
+    this.printOptionsMenuService.printContext.next('phast');
+    this.printOptionsMenuService.showPrintMenu.next(true);
   }
 }

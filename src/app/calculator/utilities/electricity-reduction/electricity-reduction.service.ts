@@ -243,18 +243,22 @@ export class ElectricityReductionService {
   getResults(settings: Settings, baseline: Array<ElectricityReductionData>, modification?: Array<ElectricityReductionData>): ElectricityReductionResults {
     let baselineInpCpy: Array<ElectricityReductionData> = JSON.parse(JSON.stringify(baseline));
     let baselineResults: ElectricityReductionResult = this.calculate(baselineInpCpy, settings);
-    let modificationResults: ElectricityReductionResult;
-    let annualEnergySavings: number = 0;
-    let annualCostSavings: number = 0;
+    let modificationResults: ElectricityReductionResult = {
+      energyUse: 0,
+      energyCost: 0,
+      power: 0
+    };
     if (modification) {
       let modificationInpCpy: Array<ElectricityReductionData> = JSON.parse(JSON.stringify(modification));
       modificationResults = this.calculate(modificationInpCpy, settings);
+    }else{
+      modificationResults = baselineResults;
     }
     let naturalGasReductionResults: ElectricityReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
-      annualCostSavings: annualCostSavings,
-      annualEnergySavings: annualEnergySavings
+      annualCostSavings: 0,
+      annualEnergySavings: 0
     }
     if (modificationResults) {
       naturalGasReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;

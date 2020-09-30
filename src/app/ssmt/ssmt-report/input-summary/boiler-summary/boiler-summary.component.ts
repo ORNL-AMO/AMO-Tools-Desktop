@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
-import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
+import { SSMTInputs, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
@@ -13,7 +13,7 @@ export class BoilerSummaryComponent implements OnInit {
   @Input()
   baselineInputData: SSMTInputs;
   @Input()
-  modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
+  modificationInputData: Array<{ name: string, inputData: SSMTInputs, valid: SsmtValid }>;
   @Input()
   settings: Settings;
   @Input()

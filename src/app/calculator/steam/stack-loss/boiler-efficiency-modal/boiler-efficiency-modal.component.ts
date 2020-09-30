@@ -14,7 +14,8 @@ export class BoilerEfficiencyModalComponent implements OnInit {
   emitClose = new EventEmitter<boolean>();
   @Output('emitSave')
   emitSave = new EventEmitter<number>();
-
+  @Input()
+  baselineSelected: boolean = false;
   @ViewChild('boilerEfficiencyModal', { static: false }) public boilerEfficiencyModal: ModalDirective;
   calcualtedCombustionEfficiency: number;
   constructor() { }

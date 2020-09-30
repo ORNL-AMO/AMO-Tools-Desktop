@@ -72,7 +72,7 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
         WallLossesSurfaceComponent,
         FlueGasMaterialHelpComponent,
         SolidLiquidFlueGasMaterialHelpComponent,
-        CustomMaterialsComponent
+        CustomMaterialsComponent,
     ]
 })
 

@@ -1,0 +1,15 @@
+<div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleUtilityType()">
+        Utility Type
+    </a>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': displayUtilityTypeDropdown == true}">
+        <div class="list-group">
+            <a class="list-group-item list-group-item-action" *ngFor="let option of utilityTypeOptions"
+                [ngClass]="{'active': option.selected}" (click)="setSelectedUtilityType(option)">{{option.display}}
+                <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': option.numCalcs > 0}">
+                    {{option.numCalcs}}
+                </span>
+            </a>
+        </div>
+    </div>
+</div>

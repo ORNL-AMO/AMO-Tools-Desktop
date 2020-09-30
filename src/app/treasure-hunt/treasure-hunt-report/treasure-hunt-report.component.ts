@@ -1,16 +1,19 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
 import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, TreasureHunt } from '../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from './treasure-hunt-report.service';
 import { OpportunityPaybackService } from './opportunity-payback.service';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Subscription } from 'rxjs';
 import { OpportunityCardsService, OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import { TreasureChestMenuService } from '../treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 import { SortCardsService } from '../treasure-chest/opportunity-cards/sort-cards.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
+import { PrintOptions } from '../../shared/models/printing';
+import { ReportRollupService } from '../../report-rollup/report-rollup.service';
+import { TreasureHuntResultsData } from '../../report-rollup/report-rollup-models';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -27,24 +30,16 @@ export class TreasureHuntReportComponent implements OnInit {
   containerHeight: number;
   @Input()
   inRollup: boolean = false;
-  @Input()
-  printView: boolean;
-  @Input()
-  printReportGraphs: boolean;
-  @Input()
-  printExecutiveSummary: boolean;
-  @Input()
-  printReportOpportunityPayback: boolean;
-  @Input()
-  printReportOpportunitySummary: boolean;
 
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
   reportContainerHeight: number;
 
   //print logic
-  showPrint: boolean = false;
+  showPrintView: boolean = false;
+  showPrintViewSub: Subscription;
   showPrintMenu: boolean = false;
+  showPrintMenuSub: Subscription;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
 
@@ -56,10 +51,13 @@ export class TreasureHuntReportComponent implements OnInit {
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
   showPrintSub: Subscription;
   sortBySub: Subscription;
-  constructor(private treasureHuntReportService: TreasureHuntReportService,
-    private opportunityPaybackService: OpportunityPaybackService, private windowRefService: WindowRefService,
+  printOptions: PrintOptions;
+  allTreasureHuntResultsSub: Subscription;
+  constructor(private printOptionsMenuService: PrintOptionsMenuService, private treasureHuntReportService: TreasureHuntReportService,
+    private opportunityPaybackService: OpportunityPaybackService,
     private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
-    private sortCardsService: SortCardsService, private directoryDbService: DirectoryDbService) { }
+    private sortCardsService: SortCardsService, private directoryDbService: DirectoryDbService, private cd: ChangeDetectorRef,
+    private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     if (this.assessment) {
@@ -78,57 +76,61 @@ export class TreasureHuntReportComponent implements OnInit {
           this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
         }
       });
+      this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
+        this.showPrintMenu = val;
+      });
     } else {
-      this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.assessment.treasureHunt, this.settings);
-      this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.assessment.treasureHunt, this.settings);
-      this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
-    }
-
-    if (this.inRollup) {
       this.setTab('opportunitySummary');
+      this.allTreasureHuntResultsSub = this.reportRollupService.allTreasureHuntResults.subscribe(allResults => {
+        let assessmentResult: TreasureHuntResultsData = allResults.find(result => { return result.assessment.id == this.assessment.id });
+        this.treasureHuntResults = assessmentResult.treasureHuntResults;
+        this.opportunityCardsData = assessmentResult.opportunityCardsData;
+        this.opportunitiesPaybackDetails = assessmentResult.opportunitiesPaybackDetails;
+      });
     }
 
-    //subscribe to print event
-    this.showPrintSub = this.treasureHuntReportService.showPrint.subscribe(printVal => {
-      //shows loading print view
-      this.showPrintDiv = printVal;
-      if (printVal == true) {
+    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
+      this.printOptions = this.printOptionsMenuService.printOptions.getValue();
+      this.showPrintDiv = val;
+      if (val == true) {
         //use delay to show loading before print payload starts
         setTimeout(() => {
-          this.showPrint = printVal;
+          this.showPrintView = val;
         }, 20)
       } else {
-        this.showPrint = printVal;
+        this.showPrintView = val;
       }
-    });
+    })
+  }
 
-    if (this.printView !== undefined) {
-      if (this.printView) {
-        this.showPrint = true;
-      }
-    }
+  ngAfterViewInit() {
+    this.getContainerHeight();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
       this.getContainerHeight();
     }
-    if (changes.printViewSelection && !changes.printViewSelection.firstChange) {
-      this.initPrintLogic();
-    }
   }
 
   ngOnDestroy() {
-    this.showPrintSub.unsubscribe();
-    if (!this.inRollup) {
+    if (this.sortBySub) {
       this.sortBySub.unsubscribe();
     }
+    if (this.allTreasureHuntResultsSub) {
+      this.allTreasureHuntResultsSub.unsubscribe();
+    }
+    if (this.showPrintMenuSub) {
+      this.showPrintMenuSub.unsubscribe();
+    }
+    this.showPrintViewSub.unsubscribe();
   }
 
   getContainerHeight() {
     let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
     let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
     this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    this.cd.detectChanges();
   }
 
   setTab(str: string) {
@@ -146,90 +148,21 @@ export class TreasureHuntReportComponent implements OnInit {
   }
 
   updateResults(opportunitySummaries: Array<OpportunitySummary>) {
-    this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, this.assessment.treasureHunt.currentEnergyUsage);
-    this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.assessment.treasureHunt, this.settings);
-    this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
+    if(!this.inRollup){
+      this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, this.assessment.treasureHunt.currentEnergyUsage);
+      this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.assessment.treasureHunt, this.settings);
+      this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);  
+    }else{
+      let treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, this.assessment.treasureHunt.currentEnergyUsage);
+      let opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.assessment.treasureHunt, this.settings);
+      let opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);  
+      this.reportRollupService.updateTreasureHuntResults(treasureHuntResults, opportunityCardsData, opportunitiesPaybackDetails, this.assessment.id);
+    }  
   }
 
-
-  initPrintLogic() {
-    if (!this.inRollup) {
-      this.printReportGraphs = false;
-      this.printReportOpportunitySummary = false;
-      this.printReportOpportunityPayback = false;
-      this.printExecutiveSummary = false;
-    }
+  print() {
+    this.printOptionsMenuService.printContext.next('treasureHunt');
+    this.printOptionsMenuService.showPrintMenu.next(true);
   }
 
-  showModal(): void {
-    this.showPrintMenu = true;
-  }
-
-  closeModal(reset: boolean): void {
-    if (reset) {
-      this.resetPrintSelection();
-    }
-    this.showPrintMenu = false;
-  }
-
-  resetPrintSelection() {
-    this.selectAll = false;
-    this.printReportGraphs = false;
-    this.printReportOpportunitySummary = false;
-    this.printReportOpportunityPayback = false;
-    this.printExecutiveSummary = false;
-  }
-
-  togglePrint(section: string): void {
-    switch (section) {
-      case "selectAll": {
-        this.selectAll = !this.selectAll;
-        if (this.selectAll) {
-          this.printReportGraphs = true;
-          this.printReportOpportunitySummary = true;
-          this.printReportOpportunityPayback = true;
-          this.printExecutiveSummary = true;
-        }
-        else {
-          this.printReportGraphs = false;
-          this.printReportOpportunitySummary = false;
-          this.printReportOpportunityPayback = false;
-          this.printExecutiveSummary = false;
-        }
-        break;
-      }
-      case "reportGraphs": {
-        this.printReportGraphs = !this.printReportGraphs;
-        break;
-      }
-      case "opportunitySummary": {
-        this.printReportOpportunitySummary = !this.printReportOpportunitySummary;
-        break;
-      }
-      case "opportunityPayback": {
-        this.printReportOpportunityPayback = !this.printReportOpportunityPayback;
-        break;
-      }
-      case "executiveSummary": {
-        this.printExecutiveSummary = !this.printExecutiveSummary;
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  }
-
-  print(): void {
-    this.closeModal(false);
-    //when print clicked set show print value to true
-    this.treasureHuntReportService.showPrint.next(true);
-    setTimeout(() => {
-      let win = this.windowRefService.nativeWindow;
-      win.print();
-      //after printing hide content again
-      this.treasureHuntReportService.showPrint.next(false);
-      this.resetPrintSelection();
-    }, 2000);
-  }
 }

@@ -42,7 +42,7 @@ export class SaturatedPropertiesComponent implements OnInit {
 
   graphToggle: string = '0';
   graphToggleForm: FormGroup;
-  plotReady: boolean = false;
+  validPlot: boolean = false;
   toggleResetData: boolean = true;
   toggleExampleData: boolean = true;
 
@@ -67,6 +67,10 @@ export class SaturatedPropertiesComponent implements OnInit {
     this.calculate(this.saturatedPropertiesForm);
   }
 
+  ngOnDestroy() {
+    
+  }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.getChartWidth();
@@ -77,7 +81,7 @@ export class SaturatedPropertiesComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
@@ -145,7 +149,7 @@ export class SaturatedPropertiesComponent implements OnInit {
     };
     if (form.status === 'VALID') {
       this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
-      this.plotReady = true;
+      this.validPlot = true;
     }
   }
 

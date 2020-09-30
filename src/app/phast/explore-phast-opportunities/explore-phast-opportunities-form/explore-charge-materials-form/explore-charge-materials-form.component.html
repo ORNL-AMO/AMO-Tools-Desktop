@@ -1,37 +1,48 @@
 <div class="checkbox">
   <label class="group-label" for="exploreMaterials">
     <input type="checkbox" id="exploreMaterials" value="true" (focus)="focusField('initialTemperature')" (change)="toggleMaterials()"
-      [(ngModel)]="showMaterial" /> Preheat Charge Material
+      [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowMaterial.hasOpportunity" /> 
+      {{phast.modifications[exploreModIndex].exploreOppsShowMaterial.display}}
   </label>
 </div>
-<div *ngIf="showMaterial">
+
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowMaterial.hasOpportunity">
   <ul *ngFor="let material of materials; let index = index">
-    <li>
-      <div class="checkbox form-group">
-        <label for="{{'modifyInitTemp_'+index}}">
+
+    <li class="explore-opps-item">
+      <div class="checkbox form-group mt-2">
+        <label for="{{'modifyInitTemp_'+index}}" class="w-100 phast-check-label">
           <input type="checkbox" id="{{'modifyInitTemp_'+index}}" (focus)="focusField('initialTemperature')" (change)="toggleInitialTemp(index, material)"
-            [(ngModel)]="showTemp[index]" /> Modify Initial Temperature
-        </label>
-        <label>
-          {{material.name}}
+            [(ngModel)]="showTemp[index]" /> Modify Initial Temperature: 
+            <span class="text-muted">
+              {{material.name}}
+            </span>
         </label>
       </div>
-      <form *ngIf="showTemp[index]">
-        <div class="form-group">
-          <label for="{{'baselineInTemp_'+index}}">Baseline Initial Temperature</label>
-          <div class="input-group">
-            <input name="{{'baselineInTemp_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control"
-              [(ngModel)]="material.baseline.initialTemperature" id="{{'baselineInTemp_'+index}}" onfocus="this.select();"
-              (input)="checkBaselineWarnings(material.baseline, index)" (focus)="focusField('initialTemperature')"
-              (blur)="focusOut()">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+    </li>
+    <hr class="mt-0 mb-0">
+
+<div *ngIf="showTemp[index]">
+    <li class="explore-opps-header">
+      <span class="explore-opps-title text-muted">Baseline</span>
+      <span class="explore-opps-title text-muted">Modifications</span>
+    </li>
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="{{'baselineInTemp_'+index}}" class="baseline-value-label">Initial Temperature</label>
+          <div class="text-muted text-center baseline-value-input ">{{ material.baseline.initialTemperature }}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
           </div>
           <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index] !== null">{{baselineWarnings[index]}}</span>
         </div>
-        <div class="form-group">
-          <label for="{{'modifiedInTemp_'+index}}">Modification Initial Temperature</label>
-          <div class="input-group">
+      </form>
+
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="{{'modifiedInTemp_'+index}}" class="mod-value-label">Initial Temperature</label>
+          <div class="input-group mod-max-width">
             <input name="{{'modifiedInTemp_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="material.modification.initialTemperature"
               id="{{'modifiedInTemp_'+index}}" onfocus="this.select();" (input)="checkModificationWarning(material.modification, index)"
               (focus)="focusField('initialTemperature')" (blur)="focusOut()">
@@ -42,5 +53,5 @@
         </div>
       </form>
     </li>
+  </div>
   </ul>
-</div>

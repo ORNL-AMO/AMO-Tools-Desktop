@@ -32,14 +32,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
     'Oxygen in Flue Gas'
   ];
 
-
   baselineFlueGas: FlueGasByMass | FlueGasByVolume;
   modifiedFlueGas: FlueGasByMass | FlueGasByVolume;
 
-  showFlueGas: boolean = false;
   showExcessAir: boolean = false;
   showO2: boolean = false;
-  showAirTemp: boolean = false;
 
   baselineWarnings: { excessAirWarning: string, o2Warning: string };
   modificationWarnings: { excessAirWarning: string, o2Warning: string };
@@ -53,7 +50,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showFlueGas = false;
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas = { hasOpportunity: false, display: 'Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas' }; 
         this.initData();
       }
     }
@@ -96,24 +93,24 @@ export class ExploreFlueGasFormComponent implements OnInit {
 
   initAirTemp() {
     if (this.baselineFlueGas.combustionAirTemperature !== this.modifiedFlueGas.combustionAirTemperature) {
-      this.showAirTemp = true;
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp = { hasOpportunity: true, display: 'Preheat Combustion Air' }; 
     } else {
-      this.showAirTemp = false;
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp = { hasOpportunity: false, display: 'Preheat Combustion Air' }; 
     }
   }
 
   initFlueGas() {
-    if (this.showAirTemp || this.showO2 || this.showExcessAir) {
-      this.showFlueGas = true;
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp.hasOpportunity || this.showO2 || this.showExcessAir) {
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas = { hasOpportunity: true, display: 'Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas' }; 
     } else {
-      this.showFlueGas = false;
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas = { hasOpportunity: false, display: 'Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas' }; 
     }
   }
 
   toggleFlueGas() {
-    if (this.showFlueGas === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowFlueGas.hasOpportunity === false) {
+      this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp = { hasOpportunity: false, display: 'Preheat Combustion Air' }; 
       this.showExcessAir = false;
-      this.showAirTemp = false;
       this.showO2 = false;
       this.toggleAirTemp();
       this.toggleExcessAir();
@@ -122,7 +119,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   toggleAirTemp() {
-    if (this.showAirTemp === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowAirTemp.hasOpportunity === false) {
       this.modifiedFlueGas.combustionAirTemperature = this.baselineFlueGas.combustionAirTemperature;
       this.checkModificationWarnings(this.modifiedFlueGas);
     }

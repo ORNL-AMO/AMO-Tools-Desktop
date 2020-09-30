@@ -2,7 +2,8 @@
   <div class="d-flex stripe my-table-bg border-top-0">
     <div [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
     </div>
-    <div class= "bold table-text d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="bold table-text d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       Baseline
     </div>
     <div class="col-4 bold table-text d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
@@ -11,21 +12,36 @@
     </div>
   </div>
   <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Percent Savings (%)</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text"> &mdash; &mdash;</span>
     </div>
     <div class="col-4" *ngIf="showModification">
-      <app-percent-graph *ngIf="modificationResults.percentSavings" [value]="modificationResults.percentSavings"></app-percent-graph>
+      <app-percent-graph
+        *ngIf="fsat.modifications[modificationIndex].fsat.valid.isValid && modificationResults.percentSavings"
+        [value]="modificationResults.percentSavings"></app-percent-graph>
+      <div class="alert-danger small" *ngIf="!fsat.modifications[modificationIndex].fsat.valid.isValid">
+        Invalid modification<br>
+        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fluidValid">Errors found in Fluid<br></span>
+        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fieldDataValid">Errors found in Field
+          Data<br></span>
+        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fanValid">Errors found in Fan
+          Setup<br></span>
+        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.motorValid">Errors found in Motor<br></span>
+      </div>
     </div>
   </div>
   <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Fan Energy Index</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.fanEnergyIndex | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
@@ -33,10 +49,12 @@
     </div>
   </div>
   <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Fan efficiency (%)</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.fanEfficiency | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
@@ -44,10 +62,12 @@
     </div>
   </div>
   <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Motor rated power ({{settings.fanPowerMeasurement}})</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.motorRatedPower | number:'2.0-0'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
@@ -55,10 +75,12 @@
     </div>
   </div>
   <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Motor shaft power ({{settings.fanPowerMeasurement}})</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.motorShaftPower | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
@@ -66,10 +88,12 @@
     </div>
   </div>
   <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Fan shaft power ({{settings.fanPowerMeasurement}})</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.fanShaftPower | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
@@ -77,27 +101,33 @@
     </div>
   </div>
   <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Motor efficiency (%)</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.motorEfficiency | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text" *ngIf="modificationResults.motorEfficiency">{{modificationResults.motorEfficiency | number:'2.0-1'}}</span>
+      <span class="table-text"
+        *ngIf="modificationResults.motorEfficiency">{{modificationResults.motorEfficiency | number:'2.0-1'}}</span>
       <span class="table-text" *ngIf="!modificationResults.motorEfficiency">&mdash;</span>
     </div>
   </div>
 
   <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Motor power factor (%)</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.motorPowerFactor | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text" *ngIf="modificationResults.motorPowerFactor">{{modificationResults.motorPowerFactor | number:'2.0-1'}}</span>
+      <span class="table-text"
+        *ngIf="modificationResults.motorPowerFactor">{{modificationResults.motorPowerFactor | number:'2.0-1'}}</span>
       <span class="table-text" *ngIf="!modificationResults.motorPowerFactor">&mdash;</span>
     </div>
   </div>
@@ -105,108 +135,132 @@
 
 
   <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Percent Loaded (%)</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.loadFactor*100 | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text" *ngIf="modificationResults.loadFactor">{{modificationResults.loadFactor*100 | number:'2.0-1'}}</span>
+      <span class="table-text"
+        *ngIf="modificationResults.loadFactor">{{modificationResults.loadFactor*100 | number:'2.0-1'}}</span>
       <span class="table-text" *ngIf="!modificationResults.loadFactor">&mdash;</span>
     </div>
   </div>
 
 
   <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Drive efficiency (%)</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.driveEfficiency | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text" *ngIf="modificationResults.driveEfficiency">{{modificationResults.driveEfficiency | number:'2.0-1'}}</span>
+      <span class="table-text"
+        *ngIf="modificationResults.driveEfficiency">{{modificationResults.driveEfficiency | number:'2.0-1'}}</span>
       <span class="table-text" *ngIf="!modificationResults.driveEfficiency">&mdash;</span>
     </div>
   </div>
 
 
   <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Motor current (amps)</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.motorCurrent | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text" *ngIf="modificationResults.motorCurrent">{{modificationResults.motorCurrent | number:'2.0-1'}}</span>
+      <span class="table-text"
+        *ngIf="modificationResults.motorCurrent">{{modificationResults.motorCurrent | number:'2.0-1'}}</span>
       <span class="table-text" *ngIf="!modificationResults.motorCurrent">&mdash;</span>
     </div>
   </div>
 
 
   <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">Motor power (kW)</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="table-text">{{baselineResults.motorPower | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text" *ngIf="modificationResults.motorPower">{{modificationResults.motorPower | number:'2.0-1'}}</span>
+      <span class="table-text"
+        *ngIf="modificationResults.motorPower">{{modificationResults.motorPower | number:'2.0-1'}}</span>
       <span class="table-text" *ngIf="!modificationResults.motorPower">&mdash;</span>
     </div>
   </div>
 
   <div class="d-flex my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="bold table-text">Annual Energy (MWh)</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="bold  table-text">{{baselineResults.annualEnergy | number:'2.0-0'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="bold table-text" *ngIf="modificationResults.annualEnergy" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualEnergy | number:'2.0-0'}}</span>
+      <span class="bold table-text" *ngIf="modificationResults.annualEnergy"
+        [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualEnergy | number:'2.0-0'}}</span>
       <span class="bold table-text" *ngIf="!modificationResults.annualEnergy">&mdash;</span>
     </div>
   </div>
 
   <div class="d-flex stripe my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="bold table-text">Annual Energy Savings (MWh)</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="bold table-text">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="bold table-text" *ngIf="modificationResults.energySavings" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.energySavings | number:'2.0-0'}}</span>
+      <span class="bold table-text" *ngIf="modificationResults.energySavings"
+        [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.energySavings | number:'2.0-0'}}</span>
       <span class="bold table-text" *ngIf="!modificationResults.energySavings">&mdash;</span>
     </div>
   </div>
 
   <div class="d-flex my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="bold table-text">Annual Cost</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="bold table-text">{{baselineResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="bold table-text" *ngIf="modificationResults.annualCost" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</span>
+      <span class="bold table-text" *ngIf="modificationResults.annualCost"
+        [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</span>
       <span class="bold table-text" *ngIf="!modificationResults.annualCost">&mdash;</span>
     </div>
   </div>
 
   <div class="d-flex stripe my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="bold table-text">Annual Savings</span>
     </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    <div class="d-flex align-items-center pl-1 pr-1"
+      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       <span class="bold table-text">&mdash;</span>
     </div>
     <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="bold table-text" *ngIf="modificationResults.annualSavings" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">
+      <span class="bold table-text" *ngIf="modificationResults.annualSavings"
+        [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">
         {{modificationResults.annualSavings | currency:'USD':'symbol':'2.0-0'}}</span>
       <span class="bold table-text" *ngIf="!modificationResults.annualSavings">&mdash;</span>
     </div>

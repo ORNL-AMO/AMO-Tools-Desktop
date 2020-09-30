@@ -35,9 +35,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   annualSavings: number = 0;
   percentSavings: number = 0;
-  title: string;
-  unit: string;
-  titlePlacement: string;
+  // title: string;
+  // unit: string;
+  // titlePlacement: string;
   baselineResults: PsatOutputs;
   modificationResults: PsatOutputs;
   sankeyView: string = 'Baseline';
@@ -56,9 +56,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.tabSelect = globalSettings.defaultPanelTab;
       }
     }
-    this.title = 'Potential Adjustment';
-    this.unit = '%';
-    this.titlePlacement = 'top';
+    // this.title = 'Potential Adjustment';
+    // this.unit = '%';
+    // this.titlePlacement = 'top';
     this.getResults();
   }
 
@@ -75,7 +75,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.getContainerHeight();
       }
     }
-    if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
       this.getResults();
       this.checkExploreOpps();
     }
@@ -92,10 +92,12 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.compareService.openNewModal.next(true);
   }
   getResults() {
-    let psatResults: {baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number};
-    if(this.modificationExists){
+    let psatResults: { baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number };
+    this.psat.valid = this.psatService.isPsatValid(this.psat.inputs, false);
+    if (this.modificationExists) {
+      this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, false);
       psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings, this.psat.modifications[this.modificationIndex].psat.inputs)
-    }else{
+    } else {
       psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings);
     }
     this.baselineResults = psatResults.baselineResults;
@@ -126,7 +128,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
         this.openToast(title, body);
         this.exploreOppsToast.emit(false);
-      }else if(this.showToast){
+      } else if (this.showToast) {
         this.hideToast();
       }
     }

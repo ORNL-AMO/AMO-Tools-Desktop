@@ -100,7 +100,7 @@ export class PsatSankeyComponent implements OnInit {
     let isPsatValid: boolean = this.psatService.isPsatValid(
       this.selectedInputs,
       this.isBaseline
-    );
+    ).isValid;
     if (isPsatValid) {
       if (this.isBaseline) {
         this.selectedResults = this.psatService.resultsExisting(

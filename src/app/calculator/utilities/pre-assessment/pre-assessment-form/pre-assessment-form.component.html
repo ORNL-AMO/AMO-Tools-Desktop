@@ -1,4 +1,4 @@
-<div class="d-flex flex-column pr-2">
+<div class="d-flex flex-column">
   <div class="d-flex w-100" [ngStyle]="{'color': assessment.borderColor}">
     <label *ngIf="!isEditingName" class="group-label">
       <span *ngIf="assessment.collapsed" class="fa fa-caret-down" (click)="collapsePreAssessment()"></span>
@@ -54,8 +54,8 @@
               <td class="bold w-50 text-center">Energy Used</td>
               <td class="text-center w-50">
                 {{getEnergyUsed(assessment) | sigFigs:'6'}}
-                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
               </td>
             </tr>
             <tr>

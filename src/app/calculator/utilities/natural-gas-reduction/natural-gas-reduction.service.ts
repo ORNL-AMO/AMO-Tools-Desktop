@@ -239,18 +239,23 @@ export class NaturalGasReductionService {
   getResults(settings: Settings, baseline: Array<NaturalGasReductionData>, modification?: Array<NaturalGasReductionData>): NaturalGasReductionResults {
     let baselineInpCpy: Array<NaturalGasReductionData> = JSON.parse(JSON.stringify(baseline));
     let baselineResults: NaturalGasReductionResult = this.calculate(baselineInpCpy, settings);
-    let modificationResults: NaturalGasReductionResult;
-    let annualEnergySavings: number = 0;
-    let annualCostSavings: number = 0;
+    let modificationResults: NaturalGasReductionResult = {
+      energyUse: 0,
+      energyCost: 0,
+      heatFlow: 0,
+      totalFlow: 0
+    };
     if (modification) {
       let modificationInpCpy: Array<NaturalGasReductionData> = JSON.parse(JSON.stringify(modification));
       modificationResults = this.calculate(modificationInpCpy, settings);
+    }else{
+      modificationResults = baselineResults;
     }
     let naturalGasReductionResults: NaturalGasReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
-      annualCostSavings: annualCostSavings,
-      annualEnergySavings: annualEnergySavings
+      annualCostSavings: 0,
+      annualEnergySavings: 0
     }
     naturalGasReductionResults = this.convertResults(naturalGasReductionResults, settings);
     if (modificationResults) {

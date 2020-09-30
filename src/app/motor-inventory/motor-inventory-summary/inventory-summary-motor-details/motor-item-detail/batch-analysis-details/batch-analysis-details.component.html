@@ -1,0 +1,59 @@
+<div class="section-title">
+    Replacement Info
+</div>
+<div class="row no-gutters section">
+    <div class="col-12">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.modifiedCost">
+                <div class="label-item">
+                    Modified Cost:
+                </div>
+                <div class="flex-fill">
+                    {{batchAnalysisData.modifiedCost | currency}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.modifiedPower">
+                <div class="label-item">
+                    Modified Power:
+                </div>
+                <div class="flex-fill">
+                    {{batchAnalysisData.modifiedPower}}
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.modifiedEfficiency">
+                <div class="label-item">
+                    Modified Efficiency:
+                </div>
+                <div class="flex-fill">
+                    {{batchAnalysisData.modifiedEfficiency}} %
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.modifiedPercentLoad">
+                <div class="label-item">
+                    Modified Percent Load:
+                </div>
+                <div class="flex-fill">
+                    {{batchAnalysisData.modifiedPercentLoad}} %
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.rewindCost">
+                <div class="label-item">
+                    Redwind Cost:
+                </div>
+                <div class="flex-fill">
+                    {{batchAnalysisData.rewindCost | currency}}
+                </div>
+            </div>
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.rewindEfficiencyLoss">
+                <div class="label-item">
+                    Rewind Efficiency Loss:
+                </div>
+                <div class="flex-fill">
+                    {{batchAnalysisData.rewindEfficiencyLoss}} %
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

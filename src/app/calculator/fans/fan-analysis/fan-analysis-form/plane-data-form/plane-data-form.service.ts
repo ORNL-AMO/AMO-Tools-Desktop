@@ -26,6 +26,11 @@ export class PlaneDataFormService {
       inletSEF: [obj.inletSEF, Validators.required],
       outletSEF: [obj.outletSEF, Validators.required]
     });
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 
@@ -46,6 +51,11 @@ export class PlaneDataFormService {
       numTraverseHoles: [obj.numTraverseHoles, [Validators.required, Validators.min(1), Validators.max(10)]],
       numInsertionPoints: [obj.numInsertionPoints, [Validators.min(1), Validators.max(10)]]
     });
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 
@@ -70,6 +80,11 @@ export class PlaneDataFormService {
       numInletBoxes: [obj.numInletBoxes]
     });
     this.setPlaneValidators(form, planeNum, obj.planeType, ranges);
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 

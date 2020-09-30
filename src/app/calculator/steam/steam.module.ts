@@ -15,6 +15,11 @@ import { ConvertSteamService } from './convert-steam.service';
 import { BoilerBlowdownRateModule } from './boiler-blowdown-rate/boiler-blowdown-rate.module';
 import { SteamListComponent } from './steam-list/steam-list.component';
 import { RouterModule } from '@angular/router';
+import { SteamReductionModule } from './steam-reduction/steam-reduction.module';
+import { PipeInsulationReductionModule } from './pipe-insulation-reduction/pipe-insulation-reduction.module';
+import { TankInsulationReductionModule } from './tank-insulation-reduction/tank-insulation-reduction.module';
+import { SaturatedPropertiesConversionService } from './saturated-properties-conversion.service';
+import { SaturatedPropertiesService } from './saturated-properties.service';
 
 
 @NgModule({
@@ -31,7 +36,10 @@ import { RouterModule } from '@angular/router';
     HeaderModule,
     TurbineModule,
     BoilerBlowdownRateModule,
-    RouterModule
+    SteamReductionModule,
+    RouterModule,
+    PipeInsulationReductionModule,
+    TankInsulationReductionModule
   ],
   declarations: [
     SteamListComponent
@@ -41,7 +49,9 @@ import { RouterModule } from '@angular/router';
   ],
   providers: [
     SteamService,
-    ConvertSteamService
+    ConvertSteamService,
+    SaturatedPropertiesConversionService,
+    SaturatedPropertiesService
   ]
 })
 export class SteamModule { }

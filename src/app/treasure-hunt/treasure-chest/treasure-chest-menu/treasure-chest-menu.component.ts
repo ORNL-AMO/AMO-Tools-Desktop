@@ -1,15 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
-import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { TreasureChestMenuService } from './treasure-chest-menu.service';
 import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
-import { OpportunityCardsService, OpportunityCardData } from '../opportunity-cards/opportunity-cards.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { processEquipmentOptions } from '../../calculators/opportunity-sheet/general-details-form/processEquipmentOptions';
-import { TreasureHuntService } from '../../treasure-hunt.service';
-import { SortCardsService } from '../opportunity-cards/sort-cards.service';
 
 @Component({
   selector: 'app-treasure-chest-menu',
@@ -40,56 +34,22 @@ export class TreasureChestMenuComponent implements OnInit {
     this.getNavbarWidth();
   }
 
-
-
-  displayEnergyType: string;
-  displayCalculatorType: string;
-
-  energyTypeOptions: Array<{ value: string, numCalcs: number }> = [];
-  calculatorTypeOptions: Array<{ display: string, value: string, numCalcs: number }> = [];
-  treasureHuntSub: Subscription;
-
-  displayUtilityTypeDropdown: boolean = false;
-  displayCalculatorTypeDropdown: boolean = false;
-  displayTeamDropdown: boolean = false;
-  displayEquipment: boolean = false;
   displayAdditionalFiltersDropdown: string = 'hide';
   sortByDropdown: boolean = false;
-  treasureHunt: TreasureHunt;
   sortCardsData: SortCardsData;
   sortBySub: Subscription;
   sortByLabel: string;
-  teams: Array<{ name: string, selected: boolean }>;
-  equipments: Array<{ value: string, display: string, selected: boolean }>;
-  opportunityCardsSub: Subscription;
-  opportunityCardsData: Array<OpportunityCardData>;
 
   showImportModal: boolean;
   showImportModalSub: Subscription;
   showExportModal: boolean;
   showExportModalSub: Subscription;
-  constructor(private opportuntityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
-    private treasureHuntService: TreasureHuntService, private sortCardsService: SortCardsService) { }
+  constructor(private treasureChestMenuService: TreasureChestMenuService) { }
 
   ngOnInit() {
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortCardsData = val;
       this.setSortByLabel();
-      if (this.opportunityCardsData) {
-        this.setEnergyTypeOptions(this.opportunityCardsData);
-        this.setCalculatorOptions(this.opportunityCardsData);
-      }
-    });
-
-    let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-    let oppData = this.opportuntityCardsService.getOpportunityCardsData(treasureHunt, this.settings);
-    this.setTeams(oppData);
-    this.setEquipments(oppData);
-
-    this.opportunityCardsSub = this.opportuntityCardsService.opportunityCards.subscribe(val => {
-      this.opportunityCardsData = val;
-      this.setEnergyTypeOptions(val);
-      this.setCalculatorOptions(val);
     });
 
     this.showImportModalSub = this.treasureChestMenuService.showImportModal.subscribe(val => {
@@ -99,37 +59,17 @@ export class TreasureChestMenuComponent implements OnInit {
     this.showExportModalSub = this.treasureChestMenuService.showExportModal.subscribe(val => {
       this.showExportModal = val;
     });
-    let initSortByData: SortCardsData = this.treasureChestMenuService.sortBy.getValue();
-    this.displayEnergyType = initSortByData.utilityType;
-    this.displayCalculatorType = this.calculatorTypeOptions.find(item => { return item.value == initSortByData.calculatorType }).display;
+
   }
 
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
-    this.opportunityCardsSub.unsubscribe();
-    // this.clearAllFilters();
     this.showImportModalSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
     this.getNavbarWidth();
-  }
-
-  toggleUtilityType() {
-    this.displayUtilityTypeDropdown = !this.displayUtilityTypeDropdown;
-  }
-
-  toggleCalculatorType() {
-    this.displayCalculatorTypeDropdown = !this.displayCalculatorTypeDropdown;
-  }
-
-  toggleTeams() {
-    this.displayTeamDropdown = !this.displayTeamDropdown;
-  }
-
-  toggleEquipment() {
-    this.displayEquipment = !this.displayEquipment;
   }
 
   toggleAdditionalFilters() {
@@ -154,80 +94,26 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.deselectAll.next(false);
   }
 
-  setTeams(oppData: Array<OpportunityCardData>) {
-    let teamNames: Array<string> = this.treasureChestMenuService.getAllTeams(oppData);
-    this.teams = new Array();
-    teamNames.forEach(name => {
-      let existingTeam: string = this.sortCardsData.teams.find(team => { return team == name });
-      let isTeamSelected: boolean = false;
-      if (existingTeam != undefined) {
-        isTeamSelected = true;
-      }
-      this.teams.push({ name: name, selected: isTeamSelected });
-    });
-    this.sortCardsData.teams = _.intersection(this.sortCardsData.teams, teamNames);
-  }
-
-  setEquipments(oppData: Array<OpportunityCardData>) {
-    let equipmentNames: Array<string> = this.treasureChestMenuService.getAllEquipment(oppData);
-    this.equipments = new Array();
-    equipmentNames.forEach(equipment => {
-      let equipmentVal: { value: string, display: string } = processEquipmentOptions.find(option => { return option.value == equipment });
-      let equipmentSelected: { value: string, display: string } = this.sortCardsData.equipments.find(existingEquipment => { return existingEquipment.value == equipment });
-      let isEquipmentSelected: boolean = false;
-      if (equipmentSelected != undefined) {
-        isEquipmentSelected = true;
-      }
-      if (equipmentVal) {
-        this.equipments.push({ display: equipmentVal.display, value: equipmentVal.value, selected: isEquipmentSelected });
-      }
-    });
-    this.sortCardsData.equipments = _.intersection(this.sortCardsData.equipments, equipmentNames['value']);
-  }
-
-  setSelectedTeam(team: { name: string, selected: boolean }) {
-    team.selected = !team.selected;
-    let selectedNames: Array<string> = new Array();
-    this.teams.forEach(team => {
-      if (team.selected == true) {
-        selectedNames.push(team.name);
-      }
-    })
-    this.sortCardsData.teams = selectedNames;
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  }
-
-  setSelectedEquipment(equipment: { display: string, value: string, selected: boolean }) {
-    equipment.selected = !equipment.selected;
-    let selectedEquipment: Array<{ display: string, value: string }> = new Array();
-    this.equipments.forEach(equipment => {
-      if (equipment.selected == true) {
-        selectedEquipment.push({ value: equipment.value, display: equipment.display });
-      }
-    })
-    this.sortCardsData.equipments = selectedEquipment;
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  }
-
-  removeTeam(teamName: string, index: number) {
+  removeTeam(index: number) {
     this.sortCardsData.teams.splice(index, 1);
-    this.teams.forEach(team => {
-      if (team.name == teamName) {
-        team.selected = false;
-      }
-    });
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
-  removeEquipment(equipmentItem: { display: string, value: string }, index: number) {
+  removeEquipment(index: number) {
     this.sortCardsData.equipments.splice(index, 1);
-    this.equipments.forEach(equipment => {
-      if (equipment.value == equipmentItem.value) {
-        equipment.selected = false;
-      }
-    });
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
+
+  removeCalculator(index: number) {
+    this.sortCardsData.calculatorTypes.splice(index, 1);
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
+
+  removeUtilityType(index: number) {
+    this.sortCardsData.utilityTypes.splice(index, 1);
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
+
 
   setSortBy(str: string) {
     this.sortCardsData.sortBy = str;
@@ -250,17 +136,10 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   clearAllFilters() {
-    this.teams.forEach(team => {
-      team.selected = false;
-    })
-    this.equipments.forEach(equipment => {
-      equipment.selected = false;
-    })
     this.sortCardsData.teams = [];
     this.sortCardsData.equipments = [];
-    this.sortCardsData.utilityType = 'All';
-    this.sortCardsData.calculatorType = 'All';
-    this.displayCalculatorType = 'All';
+    this.sortCardsData.utilityTypes = [];
+    this.sortCardsData.calculatorTypes = [];
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
     this.treasureChestMenuService.showImportModal.next(false);
     this.treasureChestMenuService.showExportModal.next(false);
@@ -272,134 +151,6 @@ export class TreasureChestMenuComponent implements OnInit {
         this.navbarWidth = this.navbar.nativeElement.clientWidth * .95;
       }, 100);
     }
-  }
-
-  setEnergyType(str: string) {
-    this.sortCardsData.utilityType = str;
-    this.sortCardsData.calculatorType = 'All';
-    this.displayCalculatorType = 'All';
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-    this.setCalculatorOptions(this.opportunityCardsData);
-    this.toggleUtilityType();
-  }
-
-  setEnergyTypeOptions(oppData: Array<OpportunityCardData>) {
-    oppData = this.sortCardsService.sortCards(oppData, this.sortCardsData);
-    this.energyTypeOptions = new Array();
-    let numSteam: number = this.getFilteredCalcsByUtility(oppData, 'Steam').length;
-    let numElectricity: number = this.getFilteredCalcsByUtility(oppData, 'Electricity').length;
-    let numNaturalGas: number = this.getFilteredCalcsByUtility(oppData, 'Natural Gas').length;
-    let numWater: number = this.getFilteredCalcsByUtility(oppData, 'Water').length;
-    let numWasteWater: number = this.getFilteredCalcsByUtility(oppData, 'Waste Water').length;
-    let numOtherFuel: number = this.getFilteredCalcsByUtility(oppData, 'Other Fuel').length;
-    let numCompressedAir: number = this.getFilteredCalcsByUtility(oppData, 'Compressed Air').length;
-
-    //electricity
-    if (numElectricity != 0) {
-      this.energyTypeOptions.push({ value: 'Electricity', numCalcs: numElectricity });
-    }
-    // naturalGas
-    if (numNaturalGas != 0) {
-      this.energyTypeOptions.push({ value: 'Natural Gas', numCalcs: numNaturalGas });
-    }
-    // water
-    if (numWater != 0) {
-      this.energyTypeOptions.push({ value: 'Water', numCalcs: numWater });
-    }
-    // wasteWater
-    if (numWasteWater != 0) {
-      this.energyTypeOptions.push({ value: 'Waste Water', numCalcs: numWasteWater });
-    }
-    // otherFuel
-    if (numOtherFuel != 0) {
-      this.energyTypeOptions.push({ value: 'Other Fuel', numCalcs: numOtherFuel });
-    }
-    // compressedAir
-    if (numCompressedAir != 0) {
-      this.energyTypeOptions.push({ value: 'Compressed Air', numCalcs: numCompressedAir });
-    }
-    // steam
-    if (numSteam != 0) {
-      this.energyTypeOptions.push({ value: 'Steam', numCalcs: numSteam });
-    }
-    this.energyTypeOptions.unshift({ value: 'All', numCalcs: oppData.length });
-  }
-
-  setCalculatorType(calcOption: { display: string, value: string, numCalcs: number }) {
-    this.displayCalculatorType = calcOption.display;
-    this.sortCardsData.calculatorType = calcOption.value;
-    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-    this.toggleCalculatorType();
-  }
-
-  setCalculatorOptions(oppData: Array<OpportunityCardData>) {
-    oppData = this.sortCardsService.sortCards(oppData, this.sortCardsData);
-    this.calculatorTypeOptions = new Array();
-    let filteredCalcs: Array<OpportunityCardData> = oppData;
-    if (this.sortCardsData.utilityType != 'All') {
-      filteredCalcs = this.getFilteredCalcsByUtility(oppData, this.sortCardsData.utilityType)
-    }
-    this.calculatorTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: filteredCalcs.length });
-    //lighting
-    let numLighting: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'lighting-replacement' }).length;
-    if (numLighting != 0) {
-      this.calculatorTypeOptions.push({ display: 'Lighting Replacement', value: 'lighting-replacement', numCalcs: numLighting });
-    }
-    //opportunitySheets
-    let numOppSheets: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'opportunity-sheet' }).length;
-    if (numOppSheets != 0) {
-      this.calculatorTypeOptions.push({ display: 'Opportunity Sheet', value: 'opportunity-sheet', numCalcs: numOppSheets });
-    }
-    //replaceExistingMotors
-    let numReplaceExisting: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'replace-existing' }).length;
-    if (numReplaceExisting != 0) {
-      this.calculatorTypeOptions.push({ display: 'Replace Existing Motor', value: 'replace-existing', numCalcs: numReplaceExisting });
-    }
-    //motorDrives
-    let numMotorDrives: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'motor-drive' }).length;
-    if (numMotorDrives != 0) {
-      this.calculatorTypeOptions.push({ display: 'Motor Drive', value: 'motor-drive', numCalcs: numMotorDrives });
-    }
-    //naturalGasReductions
-    let numNgReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'natural-gas-reduction' }).length;
-    if (numNgReductions != 0) {
-      this.calculatorTypeOptions.push({ display: 'Natural Gas Reduction', value: 'natural-gas-reduction', numCalcs: numNgReductions });
-    }
-    //electricityReductions
-    let electricityReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'electricity-reduction' }).length;
-    if (electricityReductions != 0) {
-      this.calculatorTypeOptions.push({ display: 'Electricity Reduction', value: 'electricity-reduction', numCalcs: electricityReductions });
-    }
-    //compressedAirReductions
-    let compressedAirReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'compressed-air-reduction' }).length;
-    if (compressedAirReductions != 0) {
-      this.calculatorTypeOptions.push({ display: 'Compressed Air Reduction', value: 'compressed-air-reduction', numCalcs: compressedAirReductions });
-    }
-    //compressedAirPressureReductions
-    let compressedAirPressureReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'compressed-air-pressure-reduction' }).length;
-    if (compressedAirPressureReductions != 0) {
-      this.calculatorTypeOptions.push({ display: 'Compressed Air Pressure Reduction', value: 'compressed-air-pressure-reduction', numCalcs: compressedAirPressureReductions });
-    }
-    //waterReductions
-    let waterReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'water-reduction' }).length;
-    if (waterReductions != 0) {
-      this.calculatorTypeOptions.push({ display: 'Water Reduction', value: 'water-reduction', numCalcs: waterReductions });
-    }
-    //steamReductions
-    let steamReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'steam-reduction' }).length;
-    if (steamReductions != 0) {
-      this.calculatorTypeOptions.push({ display: 'Steam Reduction', value: 'steam-reduction', numCalcs: steamReductions });
-    }
-    //pipe insulation reduction
-    let pipeInsulationReduction: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'pipe-insulation-reduction' }).length;
-    if (pipeInsulationReduction != 0) {
-      this.calculatorTypeOptions.push({ display: 'Pipe Insulation Reduction', value: 'pipe-insulation-reduction', numCalcs: pipeInsulationReduction });
-    }
-  }
-
-  getFilteredCalcsByUtility(opData: Array<OpportunityCardData>, utilityType: string): Array<OpportunityCardData> {
-    let filteredCards: Array<OpportunityCardData> = _.filter(opData, (data) => { return _.includes(data.utilityType, utilityType) });
-    return filteredCards;
   }
 
   openImportModal() {

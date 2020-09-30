@@ -35,7 +35,6 @@ export class BoilerFormComponent implements OnInit {
   baselineFuelOptions: any;
   modificationFuelOptions: any;
 
-  showBoilerData: boolean = false;
   showCombustionEfficiency: boolean = false;
   showFuelType: boolean = false;
   showBlowdownRate: boolean = false;
@@ -58,14 +57,6 @@ export class BoilerFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showBoilerData = false;
-        this.showCombustionEfficiency = false;
-        this.showFuelType = false;
-        this.showBlowdownRate = false;
-        this.showBlowdownFlashed = false;
-        this.showPreheatBlowdownWater = false;
-        this.showInitialSteamTemperature = false;
-        this.showDeaeratorConditions = false;
         this.init();
       }
     }
@@ -105,14 +96,19 @@ export class BoilerFormComponent implements OnInit {
     this.initPreheatMakeupWater();
     this.initInitialSteamTemperature();
     this.initDeaeratorConditions();
+
     if (this.showCombustionEfficiency || this.showFuelType || this.showBlowdownRate || this.showBlowdownFlashed || this.showPreheatBlowdownWater || this.showInitialSteamTemperature || this.showDeaeratorConditions) {
-      this.showBoilerData = true;
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowBoilerData = {hasOpportunity: true, display: "Adjust Boiler Operations"};      
+    } else {
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowBoilerData = {hasOpportunity: false, display: "Adjust Boiler Operations"};      
     }
   }
 
   initCombustionEfficiency() {
     if (this.baselineForm.controls.combustionEfficiency.value !== this.modificationForm.controls.combustionEfficiency.value) {
       this.showCombustionEfficiency = true;
+    } else {
+      this.showCombustionEfficiency = false;
     }
   }
 
@@ -120,18 +116,24 @@ export class BoilerFormComponent implements OnInit {
     if (this.baselineForm.controls.fuel.value !== this.modificationForm.controls.fuel.value ||
       this.baselineForm.controls.fuelType.value !== this.modificationForm.controls.fuelType.value) {
       this.showFuelType = true;
+    } else {
+      this.showFuelType = false;
     }
   }
 
   initBlowdownRate() {
     if (this.baselineForm.controls.blowdownRate.value !== this.modificationForm.controls.blowdownRate.value) {
       this.showBlowdownRate = true;
+    } else {
+      this.showBlowdownRate = false
     }
   }
 
   initBlowdownFlashed() {
     if (this.baselineForm.controls.blowdownFlashed.value !== this.modificationForm.controls.blowdownFlashed.value) {
       this.showBlowdownFlashed = true;
+    } else {
+      this.showBlowdownFlashed = false
     }
   }
 
@@ -139,12 +141,16 @@ export class BoilerFormComponent implements OnInit {
     if (this.baselineForm.controls.preheatMakeupWater.value !== this.modificationForm.controls.preheatMakeupWater.value ||
       this.baselineForm.controls.approachTemperature.value !== this.modificationForm.controls.approachTemperature.value) {
       this.showPreheatBlowdownWater = true;
+    } else {
+      this.showPreheatBlowdownWater = false
     }
   }
 
   initInitialSteamTemperature() {
     if (this.baselineForm.controls.steamTemperature.value !== this.modificationForm.controls.steamTemperature.value) {
       this.showInitialSteamTemperature = true;
+    } else {
+      this.showInitialSteamTemperature = false
     }
   }
 
@@ -152,11 +158,13 @@ export class BoilerFormComponent implements OnInit {
     if (this.baselineForm.controls.deaeratorPressure.value !== this.modificationForm.controls.deaeratorPressure.value ||
       this.baselineForm.controls.deaeratorVentRate.value !== this.modificationForm.controls.deaeratorVentRate.value) {
       this.showDeaeratorConditions = true;
+    } else {
+      this.showDeaeratorConditions = false;
     }
   }
 
   toggleBoilerData() {
-    if (this.showBoilerData === false) {
+    if (this.ssmt.modifications[this.exploreModIndex].exploreOppsShowBoilerData.hasOpportunity === false) {
       this.showCombustionEfficiency = false;
       this.showFuelType = false;
       this.showBlowdownRate = false;

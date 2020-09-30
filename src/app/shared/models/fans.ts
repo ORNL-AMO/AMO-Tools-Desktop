@@ -1,4 +1,5 @@
 import { OperatingHours } from "./operations";
+import { SavingsOpportunity } from "./explore-opps";
 
 export interface FSAT {
   name?: string;
@@ -13,12 +14,31 @@ export interface FSAT {
   setupDone?: boolean;
   isVFD?: boolean;
   operatingHours?: OperatingHours;
+  outputs?: FsatOutput;
+  valid?: FsatValid;
+  tempFsatCopy?: FSAT;
+}
+
+export interface FsatValid {
+  isValid: boolean;
+  fluidValid: boolean;
+  fanValid: boolean;
+  motorValid: boolean;
+  fieldDataValid: boolean;
 }
 
 export interface Modification {
   notes?: Notes;
   fsat?: FSAT;
   exploreOpportunities?: boolean;
+  exploreOppsShowVfd?: SavingsOpportunity,
+  exploreOppsShowDrive?: SavingsOpportunity,
+  exploreOppsShowFanType?: SavingsOpportunity,
+  exploreOppsShowMotor?: SavingsOpportunity,
+  exploreOppsShowMotorEff?: SavingsOpportunity,
+  exploreOppsShowFlowRate?: SavingsOpportunity,
+  exploreOppsShowReducePressure?: SavingsOpportunity,
+  exploreOppsShowOpData?: SavingsOpportunity
 }
 
 export interface Notes {
@@ -84,6 +104,7 @@ export interface FanRatedInfo {
 
 export interface Plane {
   planeType: string;
+  // Height (displayed to the user) and length, refer to the same dimension
   length: number;
   width: number;
   area: number;
@@ -122,6 +143,7 @@ export interface PlaneData {
 export interface BaseGasDensity {
   dryBulbTemp?: number;
   staticPressure?: number;
+  altitude?: number;
   barometricPressure?: number;
   gasDensity?: number;
   gasType?: string;
@@ -132,6 +154,23 @@ export interface BaseGasDensity {
   relativeHumidity?: number;
   wetBulbTemp?: number;
   specificHeatGas?: number; //used with wetBulb
+}
+
+
+export interface PsychrometricResults {
+  gasDensity: number;
+  absolutePressure: number;
+  saturatedHumidity: number;
+  saturationDegree: number;
+  humidityRatio: number;
+  specificVolume: number;
+  enthalpy: number;
+  dewPoint: number;
+  relativeHumidity: number;
+  saturationPressure: number;
+  wetBulbTemp: number;
+  barometricPressure?: number,
+  dryBulbTemp?: number;
 }
 
 export interface FanShaftPower {
@@ -315,6 +354,7 @@ export interface InletPressureData {
   airTreatmentLoss: number;
   flowMeasurementLoss: number;
   inletDamperLoss: number;
+  processRequirementsFixed: number;
   processRequirements: number;
   inletSystemEffectLoss: number;
   calculatedInletPressure: number;
@@ -325,6 +365,8 @@ export interface OutletPressureData {
   outletDamperLoss: number;
   airTreatmentLoss: number;
   systemDamperLoss: number;
+  outletDuctworkLoss: number;
+  processRequirementsFixed: number;
   processRequirements: number;
   calculatedOutletPressure: number;
 }

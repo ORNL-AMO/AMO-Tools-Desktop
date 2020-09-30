@@ -102,7 +102,7 @@
         <span class="alert-danger pull-right small" *ngIf="fanMotorForm.controls.fullLoadAmps.errors.required">Value
           Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.flaError !== null && !fanMotorForm.controls.fullLoadAmps.pristine && !fanMotorForm.controls.fullLoadAmps.invalid">{{warnings.flaError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.flaError !== null && !fanMotorForm.controls.fullLoadAmps.invalid">{{warnings.flaError}}</span>
     </div>
   </div>
 </form>

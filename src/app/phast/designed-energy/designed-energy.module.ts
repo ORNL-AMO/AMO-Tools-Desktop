@@ -8,11 +8,13 @@ import { DesignedEnergyHelpComponent } from './designed-energy-help/designed-ene
 import { DesignedEnergyFuelFormComponent } from './designed-energy-fuel-form/designed-energy-fuel-form.component';
 import { DesignedEnergyElectricityFormComponent } from './designed-energy-electricity-form/designed-energy-electricity-form.component';
 import { DesignedEnergyService } from './designed-energy.service';
+import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     DesignedEnergyComponent,

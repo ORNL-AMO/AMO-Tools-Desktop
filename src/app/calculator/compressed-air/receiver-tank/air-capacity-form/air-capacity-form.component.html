@@ -15,8 +15,8 @@
         <div class="input-group">
           <input name="airPressureIn" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureIn" id="airPressureIn"
             (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureIn')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
         </div>
       </div>
       <div class="form-group">
@@ -24,10 +24,30 @@
         <div class="input-group">
           <input name="airPressureOut" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureOut" id="airPressureOut"
             (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureOut')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
         </div>
       </div>
+    </div>
+    <div class="form-section pt-1">
+      <label class="group-label"> Leak Rate Calculator</label>
+      <div class="form-group">
+          <label for="dischargeTime">Discharge Time</label>
+          <div class="input-group">
+            <input name="dischargeTime" [(ngModel)]="inputs.leakRateInput.dischargeTime" class="form-control" type="number" step="any" id="dischargeTime"
+              (input)="getLeakRate()" onfocus="this.select();" (focus)="changeField('dischargeTime')">
+            <span class="input-group-addon units">s</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="atmosphericPressure">Atmospheric Pressure</label>
+          <div class="input-group">
+            <input name="atmosphericPressure" [(ngModel)]="inputs.leakRateInput.atmosphericPressure" class="form-control" type="number" step="any" id="atmosphericPressure"
+              (input)="getLeakRate()" onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+          </div>
+        </div>
     </div>
     <div class="form-section">
       <div class="form-group">
@@ -54,6 +74,18 @@
           <span *ngIf="!airCapacity">
             <strong>&mdash; &mdash;</strong>
           </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-section pt-1">
+      <div class="form-group">
+        <label class="bold">Leak Rate</label>
+        <div class="text-center small">
+          <strong *ngIf="leakRate">{{leakRate | number: '1.0-2'}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ACFM</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+          </strong>
+          <strong class="pr-1" *ngIf="!leakRate">&mdash; &mdash; </strong>
         </div>
       </div>
     </div>

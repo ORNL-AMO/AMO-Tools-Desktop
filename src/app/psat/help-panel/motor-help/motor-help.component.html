@@ -111,6 +111,10 @@
         <u>Energy Efficient</u>,
         <u>Premium Efficient</u>, or
         <u>Specified</u>.
+        <br><br>
+        The Premium (IE3) and Energy Efficient (IE2) classes are based on motors that match those NEMA classes. 
+        Standard motors should be used if the efficiency is below Energy Efficient (IE2). 
+        Efficiency values can also be directly input using User Specified.
       </small>
     </h6>
   </div>
@@ -179,9 +183,11 @@
         Full Load Amps represent either the known or estimated amps. This value will be used as a normalizing value in the Field
         Data section if Current is the selected Load estimation method.
         <br> If the Full-Load Amps is not known, an estimate can be made by clicking the
-        <strong>"Estimate Full-Load Amps"
-        </strong> button. Note that the correct Rated Voltage, Rated Motor Power, and Motor RPM should be entered before
-        the button is pressed.
+        <u>"Estimate Full-Load Amps"
+        </u> button. 
+        <br><br>
+        <span class="bold">Note:</span> The correct Rated Voltage, Rated Motor Power, and Motor RPM should be entered before the button
+        is pressed. If any of these values change (either in the baseline or when creating a scenario), this button should be used again.
         <hr>
       </small>
     </h6>

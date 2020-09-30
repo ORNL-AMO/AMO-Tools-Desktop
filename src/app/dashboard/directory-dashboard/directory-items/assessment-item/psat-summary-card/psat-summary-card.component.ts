@@ -33,16 +33,18 @@ export class PsatSummaryCardComponent implements OnInit {
         this.setupDone = this.assessment.psat.setupDone;
         if (this.setupDone) {
             this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
-            this.psatResults = this.getResults(JSON.parse(JSON.stringify(this.assessment.psat)), this.settings, true);
+            this.psatResults = this.getResults(this.assessment.psat, this.settings, true);
             if (this.assessment.psat.modifications) {
                 this.numMods = this.assessment.psat.modifications.length;
                 this.assessment.psat.modifications.forEach(mod => {
-                    mod.psat.outputs = this.getResults(JSON.parse(JSON.stringify(mod.psat)), this.settings, false);
-                    let tmpSavingCalc = this.psatResults.annual_cost - mod.psat.outputs.annual_cost;
-                    let tmpSavingEnergy = this.psatResults.annual_energy - mod.psat.outputs.annual_energy;
-                    if (tmpSavingCalc > this.maxCostSavings) {
-                        this.maxCostSavings = tmpSavingCalc;
-                        this.maxEnergySavings = tmpSavingEnergy;
+                    mod.psat.outputs = this.getResults(mod.psat, this.settings, false);
+                    if (mod.psat.valid.isValid) {
+                        let tmpSavingCalc = this.psatResults.annual_cost - mod.psat.outputs.annual_cost;
+                        let tmpSavingEnergy = this.psatResults.annual_energy - mod.psat.outputs.annual_energy;
+                        if (tmpSavingCalc > this.maxCostSavings) {
+                            this.maxCostSavings = tmpSavingCalc;
+                            this.maxEnergySavings = tmpSavingEnergy;
+                        }
                     }
                 });
             }
@@ -52,8 +54,8 @@ export class PsatSummaryCardComponent implements OnInit {
 
 
     getResults(psat: PSAT, settings: Settings, isBaseline: boolean): PsatOutputs {
-        let isPsatValid: boolean = this.psatService.isPsatValid(psat.inputs, isBaseline);
-        if (isPsatValid) {
+        psat.valid = this.psatService.isPsatValid(psat.inputs, isBaseline);
+        if (psat.valid.isValid) {
             if (isBaseline) {
                 return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
             } else {

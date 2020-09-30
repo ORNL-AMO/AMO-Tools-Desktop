@@ -8,15 +8,15 @@
         <h3>O<sub>2</sub> Enrichment</h3>
       </div>
     </div>
-    <div class="d-flex flex-column m-4">
-      <app-o2-enrichment-form [o2Form]="o2Form" [o2EnrichmentOutput]="o2EnrichmentOutput" (calculate)="calculate()"
-        (changeFieldEmit)="changeField($event)" [settings]="settings"></app-o2-enrichment-form>
-      <br>
+    <div class="d-flex flex-column m-4" *ngIf="enrichmentInputs">
+      <app-o2-enrichment-form [settings]="settings"></app-o2-enrichment-form>
+      <app-o2-enrichment-results [settings]="settings"></app-o2-enrichment-results>
+      <app-o2-enrichment-copy-table [settings]="settings"></app-o2-enrichment-copy-table>
+    <br>
       <div class="w-100 justify-content-center btn-group btn-group-sm">
         <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
           Reset Data
         </button>
-        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
         <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
           Generate Example
         </button>
@@ -37,12 +37,11 @@
       </div>
     </div>
     <div class="d-flex mr-2 ml-2">
-      <app-o2-enrichment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-o2-enrichment-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'"
+      <app-o2-enrichment-help *ngIf="tabSelect == 'help'"></app-o2-enrichment-help>
+      <div class="d-flex flex-column w-100 align-items-center p-2 pt-4" *ngIf="tabSelect == 'results'"
         id="o2EnrichmentGraph">
-        <app-o2-enrichment-graph *ngIf="tabSelect == 'results'" class="w-100" [toggleResetData]="toggleResetData"
-          [o2Enrichment]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput" [lines]="lines" [settings]="settings">
-        </app-o2-enrichment-graph>
+        <app-enrichment-graph *ngIf="tabSelect == 'results'" class="w-100" [settings]="settings">
+        </app-enrichment-graph>
         <div class="alert alert-info alert-disclaimer">
           <strong>Note:</strong> Current limitation of the program would result in an error of about 2% to 5% for the
           value of available
@@ -52,86 +51,3 @@
     </div>
   </div>
 </div>
-
-
-
-<!-- <div class="modify-conditions panel-container row phast" *ngIf="settings">
-  <div class="col-12">
-    <div class="row align-items-top calculator-panel">
-      <div class="modification panel-column col-6 align-top">
-        <div #leftPanelHeader class="row header">
-          <div class="col-md-auto ico-col">
-            <img src="assets/images/o2.png" class="ico-size2">
-          </div>
-          <div class="col">
-            <h3>O
-              <sub>2</sub> Enrichment Calculator</h3>
-          </div>
-        </div>
-        <div class="losses-container tab-content">
-          <div class="card-form">
-            <div class="row">
-              <div class="col-12">
-                <app-o2-enrichment-form [(o2Enrichment)]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput" [lines]="lines" (calculate)="calculate()"
-                  (changeFieldEmit)="changeField($event)" [settings]="settings"></app-o2-enrichment-form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 align-top">
-        <div class="help-panel">
-          <div class="row">
-            <ul class="tabs primary tab-row">
-              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
-              </li>
-              <!--
-              --
-              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-            <div class="col-11" id="o2EnrichmentGraph">
-              <app-o2-enrichment-graph *ngIf="tabSelect == 'results'" [o2Enrichment]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput"
-                [lines]="lines" [settings]="settings"></app-o2-enrichment-graph>
-
-              <table class="table table-bordered" style="margin-top: 50px;">
-                <thead>
-                  <tr>
-                    <th class="text-center">Key</th>
-                    <th class="text-center">O
-                      <sub>2</sub> in Air</th>
-                    <th class="text-center">Fuel Savings</th>
-                    <th class="text-center">Combustion Temp</th>
-                    <th class="text-center">Flue O
-                      <sub>2</sub>
-                    </th>
-                    <th class="text-center">Flue Temp</th>
-                  </tr>
-                </thead>
-                <tbody id="lineDetails">
-                </tbody>
-              </table>
-
-              <div class="alert alert-info alert-disclaimer">
-                <strong>Note:</strong> Current limitation of the program would result in an error of about 2% to 5% for the value
-                of available heat calculations for oxygen enriched air case.
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-            <div class="col-11">
-              <div class="calc-help">
-                <app-o2-enrichment-help [currentField]="currentField"></app-o2-enrichment-help>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->

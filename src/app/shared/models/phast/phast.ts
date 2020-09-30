@@ -17,6 +17,8 @@ import { MeteredEnergy } from './meteredEnergy';
 import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
 import { OperatingHours, OperatingCosts } from '../operations';
+import { SavingsOpportunity } from '../explore-opps';
+
 export interface PHAST {
   name?: string;
   //phastInputs?: PhastInputs,
@@ -32,6 +34,7 @@ export interface PHAST {
   implementationCost?: number;
   disableSetupDialog?: boolean;
   equipmentNotes?: string;
+  valid?: PhastValid;
 }
 
 
@@ -63,6 +66,21 @@ export interface Modification {
   phast?: PHAST;
   notes?: Notes;
   exploreOpportunities?: boolean;
+  exploreOppsShowFlueGas?: SavingsOpportunity;
+  exploreOppsShowAirTemp?: SavingsOpportunity;
+  exploreOppsShowMaterial?: SavingsOpportunity;
+  exploreOppsShowAllTimeOpen?: SavingsOpportunity;
+  exploreOppsShowOpening?: SavingsOpportunity;
+  exploreOppsShowAllEmissivity?: SavingsOpportunity;
+  exploreOppsShowCooling?: SavingsOpportunity;
+  exploreOppsShowAtmosphere?: SavingsOpportunity;
+  exploreOppsShowOperations?: SavingsOpportunity;
+  exploreOppsShowLeakage?: SavingsOpportunity;
+  exploreOppsShowSlag?: SavingsOpportunity;
+  exploreOppsShowEfficiencyData?: SavingsOpportunity;
+  exploreOppsShowWall?: SavingsOpportunity;
+  exploreOppsShowAllTemp?: SavingsOpportunity;
+  exploreOppsShowFixtures?: SavingsOpportunity;
 }
 
 export interface Notes {
@@ -103,6 +121,7 @@ export interface PhastResults {
   totalExhaustGas: number;
   totalExhaustGasEAF: number;
   totalSystemLosses: number;
+  energyInputTotal: number;
   exothermicHeat: number;
   energyInputTotalChemEnergy: number;
   energyInputHeatDelivered: number;
@@ -141,4 +160,25 @@ export interface CalculatedByPhast {
   fuelEnergyUsed: number;
   energyIntensity: number;
   electricityUsed: number;
+}
+
+export interface PhastValid {
+  isValid: boolean;
+  chargeMaterialValid: boolean;
+  flueGasValid: boolean;
+  fixtureValid: boolean;
+  wallValid: boolean;
+  coolingValid: boolean;
+  atmosphereValid: boolean;
+  openingValid: boolean;
+  leakageValid: boolean;
+  extendedSurfaceValid: boolean;
+  otherValid: boolean;
+  operationsValid: boolean;
+  systemEfficiencyValid: boolean;
+  slagValid: boolean;
+  energyInputValid: boolean;
+  exhaustGasValid: boolean;
+  inputExhaustValid: boolean
+  auxPowerValid: boolean;
 }

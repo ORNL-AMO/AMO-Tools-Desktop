@@ -10,6 +10,7 @@ function isDev() {
   return process.mainModule.filename.indexOf('app.asar') === -1;
 };
 
+app.allowRendererProcessReuse = false
 // Logger for autoUpdater
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';

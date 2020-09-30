@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PSAT, Modification } from '../../../../shared/models/psat';
+import { Modification, PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
+import { ScenarioSummary } from '../../../../shared/models/reports';
 
 @Component({
   selector: 'app-psat-report-graphs-print',
@@ -11,79 +12,95 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  graphColors: Array<string>;
-  @Input()
-  psatOptions: Array<{ name: string, psat: PSAT }>;
-
-  @Input()
-  pieChartWidth: number;
-  @Input()
-  printView: boolean;
-  @Input()
-  modExists: boolean;
-  @Input()
   printSankey: boolean;
   @Input()
   printGraphs: boolean;
   @Input()
-  allChartData: { pieLabels: Array<Array<string>>, pieValues: Array<Array<number>>, barLabels: Array<string>, barValues: Array<Array<number>> }
+  allChartData: Array<{
+    name: string,
+    valuesAndLabels: Array<{ value: number, label: string }>,
+    barChartLabels: Array<string>,
+    barChartValues: Array<number>,
+    modification?: Modification,
+    isValid: boolean
+  }>;
   @Input()
-  assessmentName: string;
-  // @Input()
-  // allPieLabels: Array<Array<string>>;
-  // @Input()
-  // allPieValues: Array<Array<number>>;
+  psat: PSAT;
 
-  baselinePsat: { name: string, psat: PSAT };
-  allNotes: Array<Array<string>>;
-  modifications: Array<Modification>;
+  scenarioSummaries: Array<ScenarioSummary>;
 
 
   constructor() { }
 
   ngOnInit() {
-    this.assessmentName = this.assessmentName.replace(/ /g, "-");
-    this.modifications = new Array<Modification>();
-    this.allNotes = new Array<Array<string>>();
-    if (this.psatOptions === null || this.psatOptions === undefined) {
-      console.error('psat print error');
-      return;
-    }
-    this.setBaseline();
-    if (this.modExists) {
-      this.getAllModifications();
-      this.getAllNotes();
-    }
+    this.setScenarioSummaries();
   }
 
-
-  setBaseline(): void {
-    this.baselinePsat = this.psatOptions[0];
-  }
-
-  getAllModifications() {
-    this.modifications = (JSON.parse(JSON.stringify(this.baselinePsat.psat.modifications)))
-  }
-
-  getAllNotes() {
-    for (let i = 0; i < this.modifications.length; i++) {
-      let notes = new Array<string>();
-
-      if (this.modifications[i].notes) {
-        if (this.modifications[i].notes.systemBasicsNotes) {
-          notes.push("System Basics - " + this.modifications[i].notes.systemBasicsNotes);
-        }
-        if (this.modifications[i].notes.pumpFluidNotes) {
-          notes.push("Pump Fluid - " + this.modifications[i].notes.pumpFluidNotes);
-        }
-        if (this.modifications[i].notes.motorNotes) {
-          notes.push("Motor- " + this.modifications[i].notes.motorNotes);
-        }
-        if (this.modifications[i].notes.fieldDataNotes) {
-          notes.push("Field Data - " + this.modifications[i].notes.fieldDataNotes);
-        }
+  setScenarioSummaries() {
+    this.scenarioSummaries = new Array();
+    if (this.allChartData.length > 1) {
+      //modificaitons exist
+      for (let i = 1; i < this.allChartData.length; i++) {
+        let modificationScenarioSummary: ScenarioSummary = this.getScenarioSummary(this.allChartData[i]);
+        this.scenarioSummaries.push(modificationScenarioSummary);
       }
-      this.allNotes.push(notes);
+    } else {
+      //no modifications
+      let baselineGraphData = this.baselineGraphData();
+      this.scenarioSummaries = [
+        {
+          notes: new Array(),
+          baselineGraphData: baselineGraphData,
+          modificationGraphData: undefined
+        }
+      ]
+    }
+  }
+
+  getScenarioSummary(chartDataObj: {
+    name: string,
+    valuesAndLabels: Array<{ value: number, label: string }>,
+    barChartLabels: Array<string>,
+    barChartValues: Array<number>,
+    modification?: Modification,
+    isValid: boolean
+  }): ScenarioSummary {
+    let notes: Array<string> = this.getModificationNotes(chartDataObj.modification);
+    let baselineGraphData = this.baselineGraphData();
+    return {
+      notes: notes,
+      baselineGraphData: baselineGraphData,
+      modificationGraphData: chartDataObj
+    }
+  }
+
+  getModificationNotes(modification: Modification): Array<string> {
+    let notes: Array<string> = new Array();
+    if (modification.notes.systemBasicsNotes) {
+      notes.push("System Basics - " + modification.notes.systemBasicsNotes);
+    } else if (modification.notes.pumpFluidNotes) {
+      notes.push("Pump Fluid - " + modification.notes.pumpFluidNotes);
+
+    } else if (modification.notes.motorNotes) {
+      notes.push("Motor- " + modification.notes.motorNotes);
+
+    } else if (modification.notes.fieldDataNotes) {
+      notes.push("Field Data - " + modification.notes.fieldDataNotes);
+    }
+    return notes;
+  }
+
+  baselineGraphData(): {
+    name: string,
+    valuesAndLabels: Array<{ value: number, label: string }>,
+    barChartLabels: Array<string>,
+    barChartValues: Array<number>
+  } {
+    return {
+      name: 'Baseline',
+      valuesAndLabels: this.allChartData[0].valuesAndLabels,
+      barChartLabels: this.allChartData[0].barChartLabels,
+      barChartValues: this.allChartData[0].barChartValues
     }
   }
 }

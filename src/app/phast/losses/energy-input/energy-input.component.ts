@@ -40,8 +40,6 @@ export class EnergyInputComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  energyInputTotal: number = 0;
-  electricalHeatDelivered: number = 0;
   constructor(private energyInputService: EnergyInputService, private phastResultsService: PhastResultsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -101,7 +99,7 @@ export class EnergyInputComponent implements OnInit {
 
   addLoss() {
     this._energyInputs.push({
-      form: this.energyInputService.initForm(this._energyInputs.length + 1),
+      form: this.energyInputService.initForm(this._energyInputs.length + 1, this.settings),
       results: {
         energyInputHeatDelivered: 0,
         energyInputTotalChemEnergy: 0,
@@ -122,24 +120,18 @@ export class EnergyInputComponent implements OnInit {
   }
   calculate(loss: EnInputObj) {
     if (loss.form.status === 'VALID') {
-      // let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
       let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       loss.results = {
         energyInputHeatDelivered: tmpResults.energyInputHeatDelivered,
         energyInputTotalChemEnergy: tmpResults.energyInputTotalChemEnergy,
-        grossHeatInput: tmpResults.grossHeatInput
+        grossHeatInput: tmpResults.energyInputTotal
       };
-      // let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
-      // this.energyInputTotal = tmpResults.grossHeatInput;
-      // this.electricalHeatDelivered = this.energyInputTotal - loss.results.heatDelivered;
     } else {
       loss.results = {
         energyInputHeatDelivered: null,
         energyInputTotalChemEnergy: null,
         grossHeatInput: null
       };
-      this.energyInputTotal = 0;
-      this.electricalHeatDelivered = 0;
     }
   }
 

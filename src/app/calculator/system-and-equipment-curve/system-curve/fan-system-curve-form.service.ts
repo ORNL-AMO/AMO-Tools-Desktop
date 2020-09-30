@@ -9,38 +9,50 @@ export class FanSystemCurveFormService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  getFanSystemCurveDefaults(settings: Settings): FanSystemCurveData {
-    let systemCurveFlowRate: number = 115280;
-    let fanSystemCurvePressure: number = 16.5;
-    if (settings.fanFlowRate != 'ft3/min') {
-      systemCurveFlowRate = Math.round(this.convertUnitsService.value(systemCurveFlowRate).from('ft3/min').to(settings.fanFlowRate) * 100) / 100;
-    }
-    if (settings.fanPressureMeasurement != 'inH2o') {
-      fanSystemCurvePressure = Math.round(this.convertUnitsService.value(fanSystemCurvePressure).from('inH2o').to(settings.fanPressureMeasurement) * 100) / 100;
-    }
-    let exampleFanSystemCurveData: FanSystemCurveData = {
-      compressibilityFactor: .98,
-      systemLossExponent: 1.9,
-      pointOneFlowRate: 0,
-      pointOnePressure: 0,
-      pointTwo: '',
-      pointTwoFlowRate: systemCurveFlowRate,
-      pointTwoPressure: fanSystemCurvePressure
-    };
-    return exampleFanSystemCurveData;
-  }
-
-  getResetFanSystemCurveInputs(): FanSystemCurveData {
-    let fanSystemCurveData: FanSystemCurveData = {
-      compressibilityFactor: .98,
-      systemLossExponent: 1.9,
+  getFanSystemCurveDefaults(): FanSystemCurveData {
+    let defaultFanSystemCurveData: FanSystemCurveData = {
+      compressibilityFactor: 0,
+      systemLossExponent: 0,
       pointOneFlowRate: 0,
       pointOnePressure: 0,
       pointTwo: '',
       pointTwoFlowRate: 0,
-      pointTwoPressure: 0
+      pointTwoPressure: 0,
+      modificationCurve: {
+        modificationMeasurementOption: 0,
+        modifiedFlow: 0,
+        modifiedPressure: 0,
+      }
     };
-    return fanSystemCurveData;
+    return defaultFanSystemCurveData;
+  }
+
+  getFanSystemCurveExample(settings: Settings): FanSystemCurveData {
+    let systemCurveFlowRate: number = 129691;
+    let fanSystemCurvePressure: number = 17.46;
+    let modifiedCurvePressure = 12;
+    if (settings.fanFlowRate != 'ft3/min') {
+      systemCurveFlowRate = Math.round(this.convertUnitsService.value(systemCurveFlowRate).from('ft3/min').to(settings.fanFlowRate) * 100) / 100;
+    }
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      modifiedCurvePressure = Math.round(this.convertUnitsService.value(modifiedCurvePressure).from('inH2o').to(settings.fanPressureMeasurement) * 100) / 100;
+      fanSystemCurvePressure = Math.round(this.convertUnitsService.value(fanSystemCurvePressure).from('inH2o').to(settings.fanPressureMeasurement) * 100) / 100;
+    }
+    let defaultFanSystemCurveData: FanSystemCurveData = {
+      compressibilityFactor: .98,
+      systemLossExponent: 2,
+      pointOneFlowRate: 0,
+      pointOnePressure: 0,
+      pointTwo: '',
+      pointTwoFlowRate: systemCurveFlowRate,
+      pointTwoPressure: fanSystemCurvePressure,
+      modificationCurve: {
+        modificationMeasurementOption: 1,
+        modifiedFlow: 0,
+        modifiedPressure: modifiedCurvePressure,
+      }
+    };
+    return defaultFanSystemCurveData;
   }
 
   getObjFromForm(form: FormGroup): FanSystemCurveData {
@@ -51,12 +63,26 @@ export class FanSystemCurveFormService {
       pointOnePressure: form.controls.pointOnePressure.value,
       pointTwo: form.controls.pointTwo.value,
       pointTwoFlowRate: form.controls.pointTwoFlowRate.value,
-      pointTwoPressure: form.controls.pointTwoPressure.value
-    }
+      pointTwoPressure: form.controls.pointTwoPressure.value,
+      modificationCurve: {
+        modificationMeasurementOption: form.controls.modificationMeasurementOption.value,
+        modifiedFlow: form.controls.modifiedFlow.value,
+        modifiedPressure: form.controls.modifiedPressure.value,
+      }
+    };
     return data;
   }
 
   getFormFromObj(obj: FanSystemCurveData): FormGroup {
+    let modificationMeasurementOption = [0, Validators.required];
+    let modifiedFlow = [0, [Validators.required, Validators.min(0)]];
+    let modifiedPressure = [0, [Validators.required, Validators.min(0)]];
+
+    if (obj.modificationCurve) {
+      modificationMeasurementOption = [obj.modificationCurve.modificationMeasurementOption, Validators.required];
+      modifiedFlow = [obj.modificationCurve.modifiedFlow, [Validators.required, Validators.min(0)]];
+      modifiedPressure = [obj.modificationCurve.modifiedPressure, [Validators.required, Validators.min(0)]];
+    }
     let form: FormGroup = this.formBuilder.group({
       compressibilityFactor: [obj.compressibilityFactor, [Validators.required, Validators.min(0)]],
       systemLossExponent: [obj.systemLossExponent, [Validators.required, Validators.min(0)]],
@@ -65,7 +91,10 @@ export class FanSystemCurveFormService {
       pointTwo: [obj.pointTwo],
       pointTwoFlowRate: [obj.pointTwoFlowRate, [Validators.required, Validators.min(0)]],
       pointTwoPressure: [obj.pointTwoPressure, [Validators.required, Validators.min(0)]],
-    })
+      modificationMeasurementOption: modificationMeasurementOption,
+      modifiedFlow: modifiedFlow,
+      modifiedPressure: modifiedPressure,
+    });
     return form;
 
   }

@@ -76,23 +76,74 @@
       Coal Heating Value
       <br>
       <small class="text-muted">
-        Heating value for the coal or carbon injected.
+        Higher heating value for the coal or carbon injected. 
+        The HHV of coal is dependent on the type and source. The default value represents 
+        the average coal HHV. Below is a table of HHV for the various grades of coal.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
+    <div class="w-100 d-flex justify-content-center">
       <table class="table table-hover table-striped">
-        <tbody>
+        <thead>
           <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
+            <td class="w-50 text-center bold" rowspan="2">Coal Grade</td>
+            <td class="w-50 text-center bold" colspan="2">Heating Value</td>
           </tr>
           <tr>
-            <td class="text-center">0
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/lb</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
-            </td>
-            <td class="text-center">&mdash;</td>
+            <td class="w-25 text-center bold">(Btu/lb)</td>
+            <td class="w-25 text-center bold">(kJ/kg)</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="w-50 text-center">Anthracite</td>
+            <td class="w-25 text-center">12910</td>
+            <td class="w-25 text-center">30080</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Semi-Anthracite</td>
+            <td class="w-25 text-center">13770</td>
+            <td class="w-25 text-center">32084</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Low-volatile bituminous</td>
+            <td class="w-25 text-center">14340</td>
+            <td class="w-25 text-center">33412</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Medium-volatile bituminous</td>
+            <td class="w-25 text-center">13840</td>
+            <td class="w-25 text-center">32247</td>
+          </tr>
+          <tr class="highlighted">
+            <td class="w-50 text-center">High-volatile bituminous A</td>
+            <td class="w-25 text-center">13090</td>
+            <td class="w-25 text-center">30499</td>
+          </tr>
+          <tr class="highlighted">
+            <td class="w-50 text-center">High-volatile bituminous B</td>
+            <td class="w-25 text-center">12130</td>
+            <td class="w-25 text-center">28262</td>
+          </tr>
+          <tr class="highlighted">
+            <td class="w-50 text-center">High-volatile bituminous C</td>
+            <td class="w-25 text-center">10750</td>
+            <td class="w-25 text-center">25047</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Sub-bituminous B</td>
+            <td class="w-25 text-center">9150</td>
+            <td class="w-25 text-center">21319</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Sub-bituminous C</td>
+            <td class="w-25 text-center">8940</td>
+            <td class="w-25 text-center">20830</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Lignite</td>
+            <td class="w-25 text-center">6900</td>
+            <td class="w-25 text-center">16077</td>
           </tr>
         </tbody>
       </table>
@@ -135,7 +186,7 @@
       Electrode Heating Value
       <br>
       <small class="text-muted">
-        Heating value for the electrode material - graphite.
+        Higher heating value for the graphite electrode material.
         <hr>
       </small>
     </h6>

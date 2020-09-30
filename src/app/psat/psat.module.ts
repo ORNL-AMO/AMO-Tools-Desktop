@@ -34,10 +34,8 @@ import { ExploreOpportunitiesModule } from './explore-opportunities/explore-oppo
 // import { OldPsatSankeyComponent } from './psat-sankey/psat-sankey.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
-import { PsatReportService } from './psat-report/psat-report.service';
 import { PsatReportSankeyComponent } from './psat-report/psat-report-sankey/psat-report-sankey.component';
 import { PsatReportGraphsComponent } from './psat-report/psat-report-graphs/psat-report-graphs.component';
-import { PsatBarChartComponent } from './psat-report/psat-report-graphs/psat-bar-chart/psat-bar-chart.component';
 import { PsatReportGraphsPrintComponent } from './psat-report/psat-report-graphs/psat-report-graphs-print/psat-report-graphs-print.component';
 import { PsatWarningService } from './psat-warning.service';
 import { PsatTabService } from './psat-tab.service';
@@ -80,8 +78,7 @@ import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
     AddModificationComponent,
     PsatReportSankeyComponent,
     PsatReportGraphsComponent,
-    PsatBarChartComponent,
-    PsatReportGraphsPrintComponent,
+    PsatReportGraphsPrintComponent
   ],
   exports: [
     PsatReportComponent
@@ -117,7 +114,6 @@ import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
   providers: [
     PsatService,
     CompareService,
-    PsatReportService,
     PsatWarningService,
     PsatTabService,
     PumpFluidService,

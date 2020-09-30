@@ -1,0 +1,24 @@
+<div class="d-flex flex-wrap">
+    <div class="nav-item" *ngFor="let departmentId of filterInventorySummary.selectedDepartmentIds; let index = index;">
+        <button type="button" class="nav-btn" (click)="removeDepartment(index)"><span aria-hidden="true"
+                class="pr-1">&times;</span>{{getDepartmentName(departmentId)}}</button>
+    </div>
+
+    <div class="nav-item" *ngFor="let effClass of filterInventorySummary.efficiencyClasses; let index = index;">
+        <button type="button" class="nav-btn" (click)="removeEfficiencyClass(index)"><span aria-hidden="true"
+                class="pr-1">&times;</span>{{effClass | motorEfficiencyClass}}</button>
+    </div>
+
+    <div class="nav-item" *ngFor="let power of filterInventorySummary.ratedPower; let index = index;">
+        <button type="button" class="nav-btn" (click)="removeRatedPower(index)"><span aria-hidden="true"
+                class="pr-1">&times;</span>{{power}}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+        </button>
+    </div>
+
+    <div class="nav-item" *ngFor="let voltage of filterInventorySummary.ratedVoltage; let index = index;">
+        <button type="button" class="nav-btn" (click)="removeRatedVoltage(index)"><span aria-hidden="true"
+                class="pr-1">&times;</span>{{voltage}} V</button>
+    </div>
+</div>

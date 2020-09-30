@@ -31,6 +31,9 @@ import { ToastModule } from '../shared/toast/toast.module';
 import { TutorialsModule } from '../tutorials/tutorials.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { UpdateToastComponent } from '../update-toast/update-toast.component';
+import { LogToolModule } from '../log-tool/log-tool.module';
+import { MotorInventoryModule } from '../motor-inventory/motor-inventory.module';
+import { InventoryDbService } from '../indexedDb/inventory-db.service';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,9 @@ import { UpdateToastComponent } from '../update-toast/update-toast.component';
     HelperServicesModule,
     ToastModule,
     TutorialsModule,
-    DashboardModule
+    DashboardModule,
+    LogToolModule,
+    MotorInventoryModule
   ],
   providers: [
     AssessmentService,
@@ -68,7 +73,8 @@ import { UpdateToastComponent } from '../update-toast/update-toast.component';
     DirectoryDbService,
     SettingsDbService,
     CalculatorDbService,
-    DeleteDataService
+    DeleteDataService,
+    InventoryDbService
   ]
 })
 

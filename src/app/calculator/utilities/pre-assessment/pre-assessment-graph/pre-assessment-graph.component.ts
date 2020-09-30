@@ -1,16 +1,9 @@
-import { Component, OnInit, Input, SimpleChange, ViewChild, ElementRef, SimpleChanges, OnChanges, ChangeDetectorRef } from '@angular/core';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
-import * as d3 from 'd3';
-import * as c3 from 'c3';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnChanges } from '@angular/core';
 import { PreAssessment } from '../pre-assessment';
 import { PreAssessmentService } from '../pre-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
-import { Calculator } from '../../../../shared/models/calculators';
 import * as _ from 'lodash';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
-import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
+import * as Plotly from 'plotly.js';
 
 @Component({
   selector: 'app-pre-assessment-graph',
@@ -23,118 +16,102 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   @Input()
   preAssessments: Array<PreAssessment>;
   @Input()
-  graphColors: Array<string>;
-  @Input()
   printView: boolean;
   @Input()
   inRollup: boolean;
   @Input()
-  toggleCalculate: boolean;
-  @Input()
   resultType: string;
   @Input()
-  directoryId: number;
+  toggleCalculate: boolean;
 
-  @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
+  @ViewChild('preAssessmentPieChart', { static: false }) preAssessmentPieChart: ElementRef;
 
-  directorySettings: Settings;
-
-  exportName: string;
-  values: Array<number>;
-  labels: Array<string>;
-  destroy: boolean;
-
-  chartContainerWidth: number;
-  chartContainerHeight: number;
-
-
-  constructor(private cd: ChangeDetectorRef, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService, private settingsDbService: SettingsDbService) { }
+  showPieChart: boolean;
+  constructor(private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
-    this.values = new Array<number>();
-    this.labels = new Array<string>();
-    this.graphColors = graphColors;
     if (!this.resultType) {
-      this.resultType = 'value';
+      this.resultType = this.preAssessmentService.resultType;
     }
-
-    this.setExportName();
-
-    this.destroy = false;
-    if (!this.printView) {
-      this.printView = false;
-    }
-
-    if (this.directoryId !== undefined) {
-      this.getDirectorySettings();
-    }
-    this.getData();
   }
 
   ngAfterViewInit() {
-    if (this.inRollup) {
-      this.chartContainerHeight = 220;
-      this.cd.detectChanges();
-    }
-    else {
-      this.chartContainerHeight = 300;
-      this.cd.detectChanges();
-    }
+    this.drawPlot();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.toggleCalculate) {
-      this.getData();
-    }
-    if (changes.resultType) {
-      this.setExportName();
-    }
-  }
-
-  getDirectorySettings() {
-    this.directorySettings = this.settingsDbService.getByDirectoryId(this.directoryId);
-  }
-
-  getWidth(): number {
-    if (this.pieChartContainer) {
-      let containerPadding = 30;
-      return this.pieChartContainer.nativeElement.clientWidth - containerPadding;
-    }
-    else {
-      return 0;
+  ngOnChanges() {
+    if (this.preAssessmentPieChart) {
+      this.drawPlot();
     }
   }
 
   setGraphType(type: string): void {
     this.resultType = type;
-    this.getData();
+    this.drawPlot();
   }
 
-  //invoke preAssessment service to calculate result data from Array<PreAssessment>
-  getData(): void {
-    this.values = new Array<number>();
-    this.labels = new Array<string>();
-    if (this.preAssessments) {
-      let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
-      if (this.directorySettings === undefined) {
-        tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings, this.resultType);
-      }
-      else {
-        tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, this.resultType);
-      }
-      tmpArray.forEach(val => {
-        if (isNaN(val.percent) === false && val.percent !== 0) {
-          this.values.unshift(val.percent);
-          this.labels.unshift(val.name + ": " + val.percent.toFixed(2) + "%");
+  drawPlot() {
+    let valuesAndLabels = this.getValuesAndLabels();
+    Plotly.purge(this.preAssessmentPieChart.nativeElement);
+    if (valuesAndLabels.length != 0) {
+      let values: Array<number> = new Array();
+      let textTemplate: string;
+      if (this.resultType == 'value') {
+        values = valuesAndLabels.map(val => { return val.value });
+        textTemplate = '<b>%{label}: </b>%{value:,.0f}';
+        if (this.settings.unitsOfMeasure != 'Metric') {
+          textTemplate = textTemplate + ' MMBtu';
+        } else {
+          textTemplate = textTemplate + ' GJ';
         }
-      });
-      if (this.values.length > 0) {
-        this.destroy = true;
+      } else {
+        values = valuesAndLabels.map(val => { return val.energyCost });
+        textTemplate = '<b>%{label}: </b>%{value:$,.0f}';
       }
+      var data = [{
+        values: values,
+        labels: valuesAndLabels.map(val => { return val.name }),
+        marker: {
+          colors: valuesAndLabels.map(val => { return val.color })
+        },
+        type: 'pie',
+        textposition: 'auto',
+        insidetextorientation: "horizontal",
+        // automargin: true,
+        // textinfo: 'label+value',
+        hoverformat: '.2r',
+        texttemplate: textTemplate,
+        hoverinfo: 'label+percent',
+        direction: "clockwise",
+        rotation: 125
+      }];
+
+      var layout = {
+        font: {
+          size: 12,
+        },
+        showlegend: false,
+        margin: { t: 30, b: 40, l: 40, r: 40 },
+        // paper_bgcolor: 'rgba(0,0,0,0)',
+        // plot_bgcolor: 'rgba(0,0,0,0)',
+      };
+
+      var modebarBtns = {
+        modeBarButtonsToRemove: ['hoverClosestPie'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true
+      };
+      Plotly.react(this.preAssessmentPieChart.nativeElement, data, layout, modebarBtns);
     }
   }
 
-  setExportName(): void {
-    this.exportName = 'pre-assessment-' + this.resultType + '-pie-chart';
+  getValuesAndLabels(): Array<{ name: string, percent: number, value: number, color: string, energyCost: number }> {
+    let valuesAndLabels: Array<{ name: string, percent: number, value: number, color: string, energyCost: number }> = new Array();
+    if (this.preAssessments) {
+      valuesAndLabels = this.preAssessmentService.getResults(this.preAssessments, this.settings, this.resultType, false);
+    }
+    return valuesAndLabels;
   }
+
 }

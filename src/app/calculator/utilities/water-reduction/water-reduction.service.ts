@@ -161,20 +161,24 @@ export class WaterReductionService {
   getResults(settings: Settings, baseline: Array<WaterReductionData>, modification?: Array<WaterReductionData>) {
     let baselineInpCpy: Array<WaterReductionData> = JSON.parse(JSON.stringify(baseline));
     let baselineResults: WaterReductionResult = this.calculate(baselineInpCpy, settings);
-    let modificationResults: WaterReductionResult;
-    let annualWaterSavings: number = 0;
-    let annualCostSavings: number = 0;
-
+    let modificationResults: WaterReductionResult = {
+      waterUse: 0,
+      waterCost: 0,
+      annualWaterSavings: 0,
+      costSavings: 0
+    };
     if (modification) {
       let modificationInpCpy: Array<WaterReductionData> = JSON.parse(JSON.stringify(modification));
       modificationResults = this.calculate(modificationInpCpy, settings);
+    } else {
+      modificationResults = baselineResults;
     }
 
     let waterReductionResults: WaterReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
-      annualWaterSavings: annualWaterSavings,
-      annualCostSavings: annualCostSavings
+      annualWaterSavings: 0,
+      annualCostSavings: 0
     };
 
     if (modificationResults) {
