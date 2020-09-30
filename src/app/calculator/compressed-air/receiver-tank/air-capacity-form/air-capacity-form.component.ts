@@ -16,6 +16,7 @@ export class AirCapacityFormComponent implements OnInit {
   settings: Settings;
 
   inputs: CalculateUsableCapacity;
+  leakRate: number;
   airCapacity: number;
   tankCubicFoot: number;
   setFormSub: Subscription;
@@ -37,6 +38,7 @@ export class AirCapacityFormComponent implements OnInit {
   getAirCapacity() {
     this.airCapacity = this.standaloneService.usableAirCapacity(this.inputs, this.settings);
     this.getTankSize();
+    this.getLeakRate();
   }
 
   getTankSize() {
@@ -45,6 +47,12 @@ export class AirCapacityFormComponent implements OnInit {
     } else {
       this.tankCubicFoot = this.convertUnitsService.value(this.inputs.tankSize).from('gal').to('ft3');
     }
+  }
+  
+  getLeakRate() {
+    let numerator = this.airCapacity * (this.inputs.airPressureIn - this.inputs.airPressureOut);
+    let denominator = (this.inputs.leakRateInput.dischargeTime / 60) * this.inputs.leakRateInput.atmosphericPressure;
+    this.leakRate = numerator/denominator;
   }
 
   changeField(str: string) {

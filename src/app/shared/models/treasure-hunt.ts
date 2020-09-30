@@ -1,7 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput } from "./standalone";
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput } from "./standalone";
 
 export interface TreasureHunt {
     name: string,
@@ -16,9 +16,18 @@ export interface TreasureHunt {
     waterReductions?: Array<WaterReductionTreasureHunt>;
     steamReductions?: Array<SteamReductionTreasureHunt>;
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
+    tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
+    airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     setupDone: boolean;
+}
+
+export interface FilterOption {
+    value: string,
+    selected: boolean, 
+    numCalcs: number, 
+    display: string 
 }
 
 export interface EnergyUsage {
@@ -70,7 +79,8 @@ export interface OpportunityCost {
     labor?: number
     otherCosts?: Array<OtherCostItem>,
     costDescription?: string
-    additionalSavings?: OtherCostItem
+    additionalSavings?: OtherCostItem,
+    additionalAnnualSavings?: OtherCostItem
 }
 
 export interface OtherCostItem {
@@ -137,6 +147,12 @@ export interface PipeInsulationReductionTreasureHunt {
     selected?: boolean;
 }
 
+export interface TankInsulationReductionTreasureHunt {
+    baseline: TankInsulationReductionInput;
+    modification: TankInsulationReductionInput;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
 
 export interface WaterReductionTreasureHunt {
     baseline: Array<WaterReductionData>;
@@ -152,6 +168,11 @@ export interface WastewaterReductionTreasureHunt {
     selected?: boolean;
 }
 
+export interface AirLeakSurveyTreasureHunt {
+    airLeakSurveyInput: AirLeakSurveyInput,
+    opportunitySheet?: OpportunitySheet,
+    selected?: boolean
+}
 
 export interface OpportunitySheetResults {
     electricityResults: OpportunitySheetResult,
@@ -215,7 +236,10 @@ export interface OpportunitySummary {
     mixedIndividualResults?: Array<OpportunitySummary>,
     selected: boolean,
     baselineCost: number,
-    modificationCost: number
+    modificationCost: number,
+    team: string,
+    equipment: string,
+    owner: string
 }
 
 export interface UtilityUsageData {
@@ -252,4 +276,6 @@ export interface ImportExportOpportunities {
     compressedAirPressureReductions?: Array<CompressedAirPressureReductionTreasureHunt>;
     steamReductions?: Array<SteamReductionTreasureHunt>;
     pipeInsulationReductions?: Array<PipeInsulationReductionTreasureHunt>;
+    tankInsulationReductions?: Array<TankInsulationReductionTreasureHunt>;
+    airLeakSurveys?: Array<AirLeakSurveyTreasureHunt>;
 }

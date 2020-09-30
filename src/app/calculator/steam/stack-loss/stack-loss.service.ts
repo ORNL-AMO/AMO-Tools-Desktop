@@ -4,6 +4,7 @@ import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { StackLossInput } from '../../../shared/models/steam/steam-inputs';
+import { BehaviorSubject } from 'rxjs';
 declare var phastAddon: any;
 
 @Injectable()
@@ -14,7 +15,10 @@ export class StackLossService {
     flueGasByMass: undefined,
     name: undefined
   };
+
+  modalOpen: BehaviorSubject<boolean>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
+    this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
   initFormVolume(): FormGroup {

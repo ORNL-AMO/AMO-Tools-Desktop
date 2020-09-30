@@ -36,6 +36,16 @@
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'outletDuctworkLoss'">
+    <h6>
+      Outlet Ductwork Loss
+      <br>
+      <small class="text-muted">
+        Pressure losses resulting from outlet ductwork.
+      </small>
+    </h6>
+  </div>
+
   <div class="my-2" *ngIf="currentField == 'airTreatmentLoss'">
     <h6>
       Air Treatment Loss
@@ -56,9 +66,19 @@
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'processRequirementsFixed'">
+    <h6>
+      Process Requirements (Discharge Side - Fixed)
+      <br>
+      <small class="text-muted">
+        Pressure losses due to system components downstream of the fan, such as hoods, louvers, diffusers.
+      </small>
+    </h6>
+  </div>
+
   <div class="my-2" *ngIf="currentField == 'processRequirements'">
     <h6>
-      Process Requirements (Discharge Side)
+      Process Requirements (Discharge Side - Variable)
       <br>
       <small class="text-muted">
         Pressure losses due to system components downstream of the fan, such as hoods, louvers, diffusers.

@@ -1,4 +1,4 @@
-<form>
+<form #formElement>
   <div class="form-section">
     <label class="group-label">
       Total Fuel Consumption
@@ -38,7 +38,7 @@
       <div class="input-group">
         <input id="fuelFlowRateInput" name="fuelFlowRateInput" type="number" step="any" class="form-control" (focus)="changeField('fuelFlowRateInput')"
           [(ngModel)]="inputs.fuelFlowRateInput" (input)="calculate()" onfocus="this.select();">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scf</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scf/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
           <sup>3</sup>/hr</span>
       </div>
@@ -71,25 +71,21 @@
       </div>
     </div>
   </div>
-  <!-- <div class="form-section" *ngIf="!inCalc && !inElectricity">
-    <label>
-      Total Electricity Consumption (Aux. Equipment)
-    </label>
-    <div class="form-group">
-      <label for="electricityUsed">Electricity Used During Data Collection</label>
-      <div class="input-group">
-        <input name="electricityUsed" type="number" step="any" id="electricityUsed" class="form-control" (focus)="focusField('fuelElectricityUsed')"
-          [(ngModel)]="inputs.electricityUsed" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">kWh</span>
-      </div>
+  <div class="form-group">
+    <label for="operatingHours">Operating Hours</label>
+    <div class="input-group">
+      <span class="input-group-addon op-hour-addon units">
+        <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+      </span>
+      <input name="operatingHours" type="number" step="any" id="operatingHours" class="form-control"
+        (focus)="changeField('operatingHours')" [(ngModel)]="inputs.operatingHours" (input)="calculate()"
+        onfocus="this.select();" />
+      <span class="input-group-addon units">hrs/yr</span>
     </div>
-    <div class="form-group">
-      <label for="electricityCollectionTime">Data Collection Time</label>
-      <div class="input-group">
-        <input name="electricityCollectionTime" type="number" step="any" id="electricityCollectionTime" class="form-control" (focus)="focusField('fuelElectricityCollectionTime')"
-          [(ngModel)]="inputs.electricityCollectionTime" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">hrs</span>
-      </div>
-    </div>
-  </div> -->
+  </div>
 </form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="inputs.operatingHoursCalc">
+</app-operating-hours-modal>

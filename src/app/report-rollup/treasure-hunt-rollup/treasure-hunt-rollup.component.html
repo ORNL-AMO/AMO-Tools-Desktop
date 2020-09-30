@@ -1,0 +1,52 @@
+<div class="treasure-hunt" *ngIf="!printView">
+    <div class="row">
+        <div class="col-6">
+            <label class="group-label w-100">Current Cost Status</label>
+            <app-cost-pie-chart [isBaseline]="true" [treasureHuntResults]="combinedTreasureHuntResults">
+            </app-cost-pie-chart>
+        </div>
+        <div class="col-6">
+            <label class="group-label w-100">Projected Cost Status</label>
+            <app-cost-pie-chart [isBaseline]="false" [treasureHuntResults]="combinedTreasureHuntResults">
+            </app-cost-pie-chart>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <label class="group-label w-100">Utility Cost Savings</label>
+        </div>
+        <div class="col-md-6 col-sm-12 pb-5">
+            <app-executive-summary-table [treasureHuntResults]="combinedTreasureHuntResults" [showFullSummary]="false"
+                [settings]="settings">
+            </app-executive-summary-table>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <app-utility-bar-chart class="h-100" [treasureHuntResults]="combinedTreasureHuntResults">
+            </app-utility-bar-chart>
+        </div>
+        <div class="col-12" *ngIf="combinedTreasureHuntResults.hasMixed == true">
+            <div class="alert-warning small mb-2">
+                <span class="fa fa-asterisk"></span>
+                Savings for opportunities with mixed utilities are under their respective utilities; implementation
+                costs and
+                payback are under "Mixed."
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label class="group-label w-100">Opportunity Payback</label>
+            <app-opportunity-payback-bar-chart [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
+            </app-opportunity-payback-bar-chart>
+        </div>
+        <div class="col-6">
+            <label class="group-label w-100">Team Summary</label>
+            <app-team-summary-pie-chart class="w-100" [teamData]="allTeamsData"></app-team-summary-pie-chart>
+        </div>
+    </div>
+</div>
+
+<app-treasure-hunt-rollup-print *ngIf="printView" [settings]="settings"
+    [combinedTreasureHuntResults]="combinedTreasureHuntResults"
+    [opportunitiesPaybackDetails]="opportunitiesPaybackDetails" [allTeamsData]="allTeamsData">
+</app-treasure-hunt-rollup-print>

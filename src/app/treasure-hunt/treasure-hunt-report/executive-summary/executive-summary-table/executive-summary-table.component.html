@@ -1,0 +1,389 @@
+<label class="group-label">{{title}}</label>
+<table #copyTable class="table table-striped table-hover">
+    <tbody>
+        <tr class="bold">
+            <!--cant use colspan with copy table button (need 2)-->
+            <td *ngIf="showFullSummary">
+                Utility
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="!showFullSummary">
+                Utility
+            </td>
+            <td *ngIf="showFullSummary">
+                Current Use
+            </td>
+            <td *ngIf="showFullSummary">
+                Projected Use
+            </td>
+            <td *ngIf="showFullSummary">
+                Utility Savings
+            </td>
+            <td *ngIf="showFullSummary">
+                Current Cost
+            </td>
+            <td *ngIf="showFullSummary">
+                Projected Cost
+            </td>
+            <td>
+                Cost Savings
+            </td>
+            <td>
+                Implementation Cost
+            </td>
+            <td>
+                Payback
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true">
+
+            </td>
+        </tr>
+        <!--Electricity-->
+        <tr *ngIf="treasureHuntResults.electricity.baselineEnergyUsage != 0">
+            <td class="bold">
+                Electricity
+            </td>
+            <td *ngIf="showFullSummary">
+                kWh
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.electricity.baselineEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.electricity.modifiedEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.electricity.energySavings | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.electricity.baselineEnergyCost | number:'.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.electricity.modifiedEnergyCost | number:'.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.electricity.costSavings | number:'.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.electricity.implementationCost | number:'.0-0'}}
+            </td>
+            <td>
+                {{treasureHuntResults.electricity.paybackPeriod | number:'1.0-2'}}
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true">
+                <span *ngIf="treasureHuntResults.electricity.hasMixed == true" class="fa fa-asterisk"></span>
+            </td>
+        </tr>
+        <!--Natural Gas-->
+        <tr *ngIf="treasureHuntResults.naturalGas.baselineEnergyUsage != 0">
+            <td class="bold">
+                Natural Gas
+            </td>
+            <td *ngIf="showFullSummary">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.naturalGas.baselineEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.naturalGas.modifiedEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.naturalGas.energySavings | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.naturalGas.baselineEnergyCost | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.naturalGas.modifiedEnergyCost | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.naturalGas.costSavings | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.naturalGas.implementationCost | number:'1.0-0'}}
+            </td>
+            <td>
+                {{treasureHuntResults.naturalGas.paybackPeriod | number:'1.0-2'}}
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true">
+                <span *ngIf="treasureHuntResults.naturalGas.hasMixed == true" class="fa fa-asterisk"></span>
+            </td>
+        </tr>
+        <!--Water-->
+        <tr *ngIf="treasureHuntResults.water.baselineEnergyUsage != 0">
+            <td class="bold">
+                Water
+            </td>
+            <td *ngIf="showFullSummary">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.water.baselineEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.water.modifiedEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.water.energySavings | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.water.baselineEnergyCost | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.water.modifiedEnergyCost | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.water.costSavings | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.water.implementationCost | number:'1.0-0'}}
+            </td>
+            <td>
+                {{treasureHuntResults.water.paybackPeriod | number:'1.0-2'}}
+            </td>
+            <td *ngIf="treasureHuntResults.water.hasMixed == true">
+                <span *ngIf="treasureHuntResults.hasMixed == true" class="fa fa-asterisk"></span>
+            </td>
+        </tr>
+        <!--Waste Water-->
+        <tr *ngIf="treasureHuntResults.wasteWater.baselineEnergyUsage != 0">
+            <td class="bold">
+                Waste Water
+            </td>
+            <td *ngIf="showFullSummary">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.wasteWater.baselineEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.wasteWater.modifiedEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.wasteWater.energySavings | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.wasteWater.baselineEnergyCost | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.wasteWater.modifiedEnergyCost | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.wasteWater.costSavings | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.wasteWater.implementationCost | number:'1.0-0'}}
+            </td>
+            <td>
+                {{treasureHuntResults.wasteWater.paybackPeriod | number:'1.0-2'}}
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true">
+                <span *ngIf="treasureHuntResults.wasteWater.hasMixed == true" class="fa fa-asterisk"></span>
+            </td>
+        </tr>
+        <!--Other Fuel-->
+        <tr *ngIf="treasureHuntResults.otherFuel.baselineEnergyUsage != 0">
+            <td class="bold">
+                Other Fuel
+            </td>
+            <td *ngIf="showFullSummary">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.otherFuel.baselineEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.otherFuel.modifiedEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.otherFuel.energySavings | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.otherFuel.baselineEnergyCost | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.otherFuel.modifiedEnergyCost | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.otherFuel.costSavings | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.otherFuel.implementationCost | number:'1.0-0'}}
+            </td>
+            <td>
+                {{treasureHuntResults.otherFuel.paybackPeriod | number:'1.0-2'}}
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true">
+                <span *ngIf="treasureHuntResults.otherFuel.hasMixed == true" class="fa fa-asterisk"></span>
+            </td>
+        </tr>
+        <!--Compressed Air-->
+        <tr *ngIf="treasureHuntResults.compressedAir.baselineEnergyUsage != 0">
+            <td class="bold">
+                Compressed Air
+            </td>
+            <td *ngIf="showFullSummary">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.compressedAir.baselineEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.compressedAir.modifiedEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.compressedAir.energySavings | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.compressedAir.baselineEnergyCost | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.compressedAir.modifiedEnergyCost | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.compressedAir.costSavings | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.compressedAir.implementationCost | number:'1.0-0'}}
+            </td>
+            <td>
+                {{treasureHuntResults.compressedAir.paybackPeriod | number:'1.0-2'}}
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true">
+                <span *ngIf="treasureHuntResults.compressedAir.hasMixed == true" class="fa fa-asterisk"></span>
+            </td>
+        </tr>
+        <!--Steam-->
+        <tr *ngIf="treasureHuntResults.steam.baselineEnergyUsage != 0">
+            <td class="bold">
+                Steam
+            </td>
+            <td *ngIf="showFullSummary">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.steam.baselineEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.steam.modifiedEnergyUsage | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                {{treasureHuntResults.steam.energySavings | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.steam.baselineEnergyCost | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.steam.modifiedEnergyCost | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.steam.costSavings | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.steam.implementationCost | number:'1.0-0'}}
+            </td>
+            <td>
+                {{treasureHuntResults.steam.paybackPeriod | number:'1.0-2'}}
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true">
+                <span *ngIf="treasureHuntResults.steam.hasMixed == true" class="fa fa-asterisk"></span>
+            </td>
+        </tr>
+        <!--Other -->
+        <tr *ngIf="treasureHuntResults.other.implementationCost != 0">
+            <!--cant use colspan with copy table button (need 7)-->
+            <td class="bold" *ngIf="showFullSummary">
+                Mixed
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+
+
+            <td class="bold" *ngIf="!showFullSummary">
+                Mixed
+            </td>
+            <td>
+                <!-- ${{treasureHuntResults.other.costSavings | number:'.0-0'}} -->
+            </td>
+            <td>
+                ${{treasureHuntResults.other.implementationCost | number:'.0-0'}}
+            </td>
+            <td>
+                {{treasureHuntResults.other.paybackPeriod | number:'1.0-2'}}
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true">
+                <span class="fa fa-asterisk"></span>
+            </td>
+        </tr>
+        <!--Total-->
+        <tr>
+            <!--cant use colspan with copy table button (need 5)-->
+            <td class="bold" *ngIf="showFullSummary">
+                Total
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td *ngIf="showFullSummary">
+
+            </td>
+            <td class="bold" *ngIf="!showFullSummary">
+                Total
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.totalBaselineCost | number:'1.0-0'}}
+            </td>
+            <td *ngIf="showFullSummary">
+                ${{treasureHuntResults.totalModificationCost | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.totalSavings | number:'1.0-0'}}
+            </td>
+            <td>
+                ${{treasureHuntResults.totalImplementationCost | number:'1.0-0'}}
+            </td>
+            <td>
+                {{treasureHuntResults.paybackPeriod | number:'1.0-2'}}
+            </td>
+            <td *ngIf="treasureHuntResults.hasMixed == true">
+
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<app-exportable-results-table class="hide-print" *ngIf="showFullSummary" [tableString]="tableString"
+    (updateTableString)="updateTableString()">
+</app-exportable-results-table>

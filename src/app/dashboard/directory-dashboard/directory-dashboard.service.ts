@@ -32,7 +32,8 @@ export class DirectoryDashboardService {
       showSubFolders: true,
       showPreAssessments: true,
       showPhast: true,
-      showAll: true
+      showAll: true,
+      showMotorInventory: true
     });
 
     this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'desc' });
@@ -40,10 +41,8 @@ export class DirectoryDashboardService {
 
   getDirectoryItems(directory: Directory): Array<DirectoryItem> {
     let directoryItems = new Array<DirectoryItem>();
-    // this.displayAddPreAssessment = true;
     let calculatorIndex: number = 0;
     directory.calculators.forEach(calculator => {
-      // this.displayAddPreAssessment = false;
       directoryItems.push({
         type: 'calculator',
         calculator: calculator,
@@ -74,7 +73,17 @@ export class DirectoryDashboardService {
         createdDate: subDirectory.createdDate,
         modifiedDate: subDirectory.modifiedDate,
         name: subDirectory.name
-      })
+      });
+    });
+    directory.inventories.forEach(inventoryItem => {
+      directoryItems.push({
+        type: 'inventory',
+        inventoryItem: inventoryItem,
+        isShown: true,
+        createdDate: inventoryItem.createdDate,
+        modifiedDate: inventoryItem.modifiedDate,
+        name: inventoryItem.name
+      });
     });
     return directoryItems;
   }
@@ -83,7 +92,7 @@ export class DirectoryDashboardService {
   filterDirectoryItems(directoryItems: Array<DirectoryItem>, filterDashboardBy: FilterDashboardBy): Array<DirectoryItem> {
     let assessmentItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'assessment' });
     let preAssessmentItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'calculator' });
-    // let subDirectoryItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'directory' });
+    let inventoryItems: Array<DirectoryItem> = _.filter(directoryItems, (item) => { return item.type == 'inventory' });
     assessmentItems.forEach(item => {
       if (item.assessment.type == 'PSAT' && filterDashboardBy.showPumps == false && filterDashboardBy.showAll == false) {
         item.isShown = false;
@@ -99,15 +108,16 @@ export class DirectoryDashboardService {
         item.isShown = true;
       }
     })
-    // if (filterDashboardBy.showSubFolders == false && filterDashboardBy.showAll == false) {
-    //   subDirectoryItems.forEach(item => { item.isShown = false; });
-    // } else {
-    //   subDirectoryItems.forEach(item => { item.isShown = true });
-    // }
     if (filterDashboardBy.showPreAssessments == false && filterDashboardBy.showAll == false) {
       preAssessmentItems.forEach(item => { item.isShown = false });
     } else {
       preAssessmentItems.forEach(item => { item.isShown = true });
+    }
+
+    if (filterDashboardBy.showMotorInventory == false && filterDashboardBy.showAll == false) {
+      inventoryItems.forEach(item => { item.isShown = false });
+    } else {
+      inventoryItems.forEach(item => { item.isShown = true });
     }
     return directoryItems;
   }

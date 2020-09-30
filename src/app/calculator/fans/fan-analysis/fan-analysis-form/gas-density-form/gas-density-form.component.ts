@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
-import { BaseGasDensity } from '../../../../../shared/models/fans';
+import { BaseGasDensity, PsychrometricResults } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { GasDensityFormService, GasDensityRanges } from './gas-density-form.service';
@@ -38,6 +38,7 @@ export class GasDensityFormComponent implements OnInit {
 
   ngOnInit() {
     this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings);
+    this.getResults();
     this.gasDensity = this.fanAnalysisService.inputData.BaseGasDensity.gasDensity;
     this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
       if (val == true) {
@@ -45,9 +46,11 @@ export class GasDensityFormComponent implements OnInit {
       }
     })
   }
-  
+
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
+    this.gasDensityFormService.baselinePsychrometricResults.next(undefined);
+    this.gasDensityFormService.baselineCalculationType.next(undefined);
   }
 
   resetData() {
@@ -64,61 +67,85 @@ export class GasDensityFormComponent implements OnInit {
     this.fanAnalysisService.currentField.next(str);
   }
 
-  getDensity() {
+  getResults() {
+    let psychrometricResults: PsychrometricResults;
     if (this.gasDensityForm.controls.inputType.value === 'relativeHumidity') {
-      this.calcDensityRelativeHumidity();
+      psychrometricResults = this.calcPsychrometricRelativeHumidity();
     } else if (this.gasDensityForm.controls.inputType.value === 'wetBulb') {
-      this.calcDensityWetBulb();
+      psychrometricResults = this.calcPsychrometricWetBulb();
     } else if (this.gasDensityForm.controls.inputType.value === 'dewPoint') {
-      this.calcDensityDewPoint();
-    } else {
-      this.save();
+      psychrometricResults = this.calcPsychrometricDewPoint();
     }
-  }
 
-  calcDensityWetBulb() {
-    let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityWetBulb(tmpObj, this.settings);
-    if (isNaN(newDensity) === false) {
-      this.gasDensityForm.patchValue({
-        gasDensity: newDensity
-      });
-    } else {
-      this.gasDensityForm.patchValue({
-        gasDensity: undefined
-      });
+    if (this.gasDensityForm.controls.inputType.value != 'custom') {
+      if (psychrometricResults && isNaN(psychrometricResults.gasDensity) === false) {
+        this.gasDensityForm.patchValue({
+          gasDensity: psychrometricResults.gasDensity
+        });
+      } else {
+        this.gasDensityForm.patchValue({
+          gasDensity: undefined
+        });
+      }
     }
+
+    this.gasDensityFormService.baselinePsychrometricResults.next(psychrometricResults);
+    this.gasDensityFormService.baselineCalculationType.next(this.gasDensityForm.controls.inputType.value);
     this.save();
   }
 
-  calcDensityRelativeHumidity() {
-    let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj, this.settings);
-    if (isNaN(newDensity) === false) {
-      this.gasDensityForm.patchValue({
-        gasDensity: newDensity
-      });
-    } else {
-      this.gasDensityForm.patchValue({
-        gasDensity: undefined
-      });
+  calcPsychrometricWetBulb(): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults;
+    if (this.isWetBulbValid()) {
+      let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
+      psychrometricResults = this.fsatService.getPsychrometricWetBulb(tmpObj, this.settings);
     }
-    this.save();
+    return psychrometricResults;
   }
 
-  calcDensityDewPoint() {
-    let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityDewPoint(tmpObj, this.settings);
-    if (isNaN(newDensity) === false) {
-      this.gasDensityForm.patchValue({
-        gasDensity: newDensity
-      });
-    } else {
-      this.gasDensityForm.patchValue({
-        gasDensity: undefined
-      });
+  isWetBulbValid(): boolean {
+    //dry bulb
+    //static pressure
+    //specific gravity
+    //wet bulb temp
+    return (this.gasDensityForm.controls.dryBulbTemp.valid && this.gasDensityForm.controls.staticPressure.valid
+      && this.gasDensityForm.controls.specificGravity.valid && this.gasDensityForm.controls.wetBulbTemp.valid);
+  }
+
+  calcPsychrometricRelativeHumidity(): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults;
+    if (this.isRelativeHumidityValid()) {
+      let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
+      psychrometricResults = this.fsatService.getPsychrometricRelativeHumidity(tmpObj, this.settings);
     }
-    this.save();
+    return psychrometricResults;
+  }
+
+  isRelativeHumidityValid(): boolean {
+    //dry bulb
+    //static pressure
+    //specific gravity
+    //relativeHumidity
+    return (this.gasDensityForm.controls.dryBulbTemp.valid && this.gasDensityForm.controls.staticPressure.valid
+      && this.gasDensityForm.controls.specificGravity.valid && this.gasDensityForm.controls.relativeHumidity.valid);
+  }
+
+  calcPsychrometricDewPoint(): PsychrometricResults {
+    let psychrometricResults: PsychrometricResults;
+    if (this.isDewPointValid()) {
+      let tmpObj: BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
+      psychrometricResults = this.fsatService.getPsychrometricDewPoint(tmpObj, this.settings);
+    }
+    return psychrometricResults;
+  }
+
+  isDewPointValid() {
+    //dry bulb
+    //static pressure
+    //specific gravity
+    //dewPoint
+    return (this.gasDensityForm.controls.dryBulbTemp.valid && this.gasDensityForm.controls.staticPressure.valid
+      && this.gasDensityForm.controls.specificGravity.valid && this.gasDensityForm.controls.dewPoint.valid);
   }
 
   getDisplayUnit(unit: any) {
@@ -131,11 +158,11 @@ export class GasDensityFormComponent implements OnInit {
   }
 
   setValidators() {
-    let ranges: GasDensityRanges = this.gasDensityFormService.getGasDensityRanges(this.settings);
+    let ranges: GasDensityRanges = this.gasDensityFormService.getGasDensityRanges(this.settings, this.gasDensityForm.controls.dryBulbTemp.value);
     this.gasDensityFormService.setRelativeHumidityValidators(this.gasDensityForm);
     this.gasDensityFormService.setWetBulbValidators(this.gasDensityForm, ranges);
     this.gasDensityFormService.setDewPointValidators(this.gasDensityForm, ranges);
     this.gasDensityFormService.setCustomValidators(this.gasDensityForm, ranges);
-    this.getDensity();
+    this.getResults();
   }
 }

@@ -29,21 +29,31 @@ export class CostsFormComponent implements OnInit {
 
   addAdditionalSavings() {
     this.opportunityCost.additionalSavings = {
-      description: 'Other Savings',
+      description: 'Rebate Savings',
       cost: 0.0
     }
   }
 
-  removeOtherCostItem(index: number){
+  removeOtherCostItem(index: number) {
     this.opportunityCost.otherCosts.splice(index, 1);
   }
 
-
-  removeAdditionalSavings(){
+  removeAdditionalSavings() {
     this.opportunityCost.additionalSavings = undefined;
   }
 
-  focusField(str: string){
+  addAdditionalAnnualSavings() {
+    this.opportunityCost.additionalAnnualSavings = {
+      description: 'Other Annual Savings',
+      cost: 0.0
+    }
+  }
+
+  removeAdditionalAnnualSavings() {
+    this.opportunityCost.additionalAnnualSavings = undefined;
+  }
+
+  focusField(str: string) {
     this.emitChangefield.emit(str);
   }
 }

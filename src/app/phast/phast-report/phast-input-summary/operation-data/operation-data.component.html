@@ -16,6 +16,10 @@
               Baseline
             </th>
             <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+              <div class="alert-danger" *ngIf="!mod.phast.valid.operationsValid">
+                Invalid Modification<br>
+                <span>Errors found in Operations<br></span>
+              </div>
               {{mod.phast.name}}
             </th>
           </tr>

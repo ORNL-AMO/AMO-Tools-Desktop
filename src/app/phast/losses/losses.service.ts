@@ -145,12 +145,6 @@ export class LossesService {
   }
 
   checkSetupDone(phast: PHAST, settings: Settings) {
-    let modExists = false;
-    if (phast.modifications) {
-      if (phast.modifications.length !== 0) {
-        modExists = true;
-      }
-    }
     //used to check if setup is done for an assessment
     let isDone, grossHeat = false;
     if (phast.losses) {
@@ -190,15 +184,15 @@ export class LossesService {
     }
 
     grossHeat = (this.efficiencyDone || this.enInput1Done || this.enInput2Done || this.flueGasDone);
-    isDone = (grossHeat && this.chargeDone) || modExists;
+    isDone = grossHeat && this.chargeDone;
     return isDone;
   }
 
   checkChargeMaterials(phast: PHAST, settings: Settings) {
     if (phast.losses.chargeMaterials) {
       if (phast.losses.chargeMaterials.length !== 0) {
-        let test = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings);
-        if (test !== 0) {
+        let sumChargeLosses = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings);
+        if (sumChargeLosses !== 0) {
           this.chargeDone = true;
         } else {
           this.chargeDone = false;

@@ -1,0 +1,45 @@
+.sticky-left{
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+}
+
+.table{
+    font-size: small;
+    margin-bottom: 0px;
+}
+
+
+.name-cell, .header-cell{
+    background-color: white;
+}
+
+.name-cell{
+    font-weight: bold;
+}
+
+th, td{
+    min-width: 75px;
+    white-space: nowrap;
+}
+
+.max-height{
+    max-height: 100%;
+}
+
+.sort-by-active{
+    text-decoration: underline;
+}
+
+.header-cell:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.table-hover tbody tr:hover{
+    background-color: white;
+}
+
+tbody{
+    background-color: rgba(0, 0, 0, 0.075);
+}

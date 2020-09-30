@@ -9,23 +9,40 @@ import { Assessment } from '../shared/models/assessment';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { Calculator } from '../shared/models/calculators';
+import { InventoryItem } from '../shared/models/inventory/inventory';
+import { InventoryDbService } from './inventory-db.service';
 @Injectable()
 export class DeleteDataService {
 
-  constructor(private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService) { }
+  constructor(private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
+    private inventoryDbService: InventoryDbService) { }
 
   deleteDirectory(directory: Directory, isWorkingDir?: boolean) {
     let assessments: Array<Assessment>;
+    let inventories: Array<InventoryItem>;
     if (!isWorkingDir) {
       assessments = this.assessmentDbService.getByDirectoryId(directory.id);
-    } else if (directory.assessments) {
-      assessments = _.filter(directory.assessments, (assessment) => { return assessment.selected === true; });
+      inventories = this.inventoryDbService.getByDirectoryId(directory.id);
+    } else {
+      if (directory.assessments) {
+        assessments = _.filter(directory.assessments, (assessment) => { return assessment.selected === true; });
+      }
+      if (directory.inventories) {
+        inventories = _.filter(directory.inventories, (inventory) => { return inventory.selected === true; });
+      }
     }
     if (assessments) {
       assessments.forEach(assessment => {
         this.deleteAssessment(assessment);
       });
     }
+
+    if(inventories){
+      inventories.forEach(inventory => {
+        this.deleteInventory(inventory)
+      })
+    }
+
     if (!isWorkingDir) {
       let dirSettings: Settings = this.settingsDbService.getByDirectoryId(directory.id);
       if (dirSettings) {
@@ -86,6 +103,18 @@ export class DeleteDataService {
     this.indexedDbService.deleteAssessment(assessment.id).then(() => {
       this.assessmentDbService.setAll();
     });
+  }
+
+  deleteInventory(inventory: InventoryItem){
+    let settings: Settings = this.settingsDbService.getByInventoryId(inventory);
+    if (settings && settings.inventoryId === inventory.id) {
+      this.indexedDbService.deleteSettings(settings.id).then(() => {
+        this.settingsDbService.setAll();
+      });
+    }
+    this.indexedDbService.deleteInventoryItem(inventory.id).then(() => {
+      this.inventoryDbService.setAll();
+    })
   }
 
 }

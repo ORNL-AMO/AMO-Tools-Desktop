@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
 import { FlueGasByVolume, FlueGasByMass } from '../../../shared/models/phast/losses/flueGas';
 import { StackLossService } from './stack-loss.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-stack-loss-calculator',
@@ -36,6 +37,8 @@ export class StackLossComponent implements OnInit {
 
   stackLossPercent: number = 0;
   boilerEfficiency: number = 0;
+  modalOpenSubscription: Subscription;
+  isModalOpen: boolean = false;
 
   constructor(private settingsDbService: SettingsDbService, private stackLossService: StackLossService) {
   }
@@ -47,6 +50,9 @@ export class StackLossComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    this.modalOpenSubscription = this.stackLossService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    }); 
     this.setStackLossForm();
   }
 
@@ -55,7 +61,10 @@ export class StackLossComponent implements OnInit {
       this.resizeTabs();
     }, 200);
   }
-
+  
+  ngOnDestroy() {
+    this.modalOpenSubscription.unsubscribe();
+  }
 
   resizeTabs() {
     if (this.leftPanelHeader) {

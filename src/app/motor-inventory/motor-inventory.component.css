@@ -1,0 +1,8 @@
+.motor-inventory-container{
+    height: 100vh;
+}
+
+.motor-inventory .btn-primary{
+    background: #84b641;
+    color: white;
+}

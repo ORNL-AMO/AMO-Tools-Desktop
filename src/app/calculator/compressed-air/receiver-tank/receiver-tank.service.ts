@@ -117,7 +117,7 @@ export class ReceiverTankService {
     if (settings.unitsOfMeasure == 'Metric') {
       tmpInputs.distanceToCompressorRoom = Math.round(this.convertUnitsService.value(tmpInputs.distanceToCompressorRoom).from('ft').to('m') * 100) / 100;
       tmpInputs.speedOfAir = Math.round(this.convertUnitsService.value(tmpInputs.speedOfAir).from('ft').to('m') * 100) / 100;
-      tmpInputs.allowablePressureDrop = Math.round(this.convertUnitsService.value(tmpInputs.allowablePressureDrop).from('psi').to('kPa') * 100) / 100;
+      tmpInputs.allowablePressureDrop = Math.round(this.convertUnitsService.value(tmpInputs.allowablePressureDrop).from('psig').to('kPa') * 100) / 100;
       tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
       tmpInputs.airDemand = Math.round(this.convertUnitsService.value(tmpInputs.airDemand).from('ft3').to('m3') * 100) / 100;
     }
@@ -197,6 +197,10 @@ export class ReceiverTankService {
       tankSize: 0,
       airPressureIn: 0,
       airPressureOut: 0,
+      leakRateInput: {
+        dischargeTime: 0,
+        atmosphericPressure: 0
+      }
     };
   }
 
@@ -204,7 +208,11 @@ export class ReceiverTankService {
     return {
       tankSize: 1000,
       airPressureIn: 110,
-      airPressureOut: 100
+      airPressureOut: 100,
+      leakRateInput: {
+        dischargeTime: 120,
+        atmosphericPressure: 14.7
+      }
     };
   }
 

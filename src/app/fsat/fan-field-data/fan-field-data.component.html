@@ -175,29 +175,38 @@
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.specificHeatRatio.invalid && !fieldDataForm.controls.specificHeatRatio.pristine">
         <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.required">Value Required</span>
-        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.min">Value can't be less than
-          {{fieldDataForm.controls.specificHeatRatio.errors.min.min}}.</span>
+        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.max">Value can't be less than
+          {{fieldDataForm.controls.specificHeatRatio.errors.max.max}}.</span>
+        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.greaterThan">Value must be greater than 1.</span>
       </span>
     </div>
 
-    <!--min-->
-    <div class="form-group"
-      [ngClass]="{'indicate-different': isCompressibilityFactorDifferent(), 'invalid': fieldDataForm.controls.compressibilityFactor.invalid}">
+    <div class="form-group">
       <label for="{{'compressibilityFactor_'+idString}}">Compressibility Factor
-        <a class="form-text small click-link" *ngIf="baseline" (click)="calculateCompressibility()"
-          [ngClass]="{'disabled-link':!selected}">Calculate
-          Compressibility Factor</a>
+        <a class="form-text small click-link" *ngIf="userDefinedCompressibilityFactor" (click)="showHideInputField()"
+          [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a>
+        <a class="form-text small click-link" *ngIf="!userDefinedCompressibilityFactor" (click)="showHideInputField()"
+          [ngClass]="{'disabled-link':!selected}">Define Compressibility Factor</a>
       </label>
-      <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control"
-        formControlName="compressibilityFactor" id="{{'compressibilityFactor_'+idString}}" (input)="save()"
-        (focus)="focusField('compressibilityFactor')" onfocus="this.select();" [readonly]="!selected">
-      <span class="alert-danger pull-right small"
-        *ngIf="fieldDataForm.controls.compressibilityFactor.invalid && !fieldDataForm.controls.compressibilityFactor.pristine">
-        <span *ngIf="fieldDataForm.controls.compressibilityFactor.errors.required">Value Required</span>
-        <span *ngIf="fieldDataForm.controls.compressibilityFactor.errors.min">Value can't be less than
-          {{fieldDataForm.controls.compressibilityFactor.errors.min.min}}.</span>
-      </span>
+      <div class="input-group" *ngIf="userDefinedCompressibilityFactor">
+        <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control"
+          formControlName="compressibilityFactor" id="{{'compressibilityFactor_'+idString}}" (input)="save()"
+          (focus)="focusField('compressibilityFactor')" onfocus="this.select();" [readonly]="!selected">
+        <span class="alert-danger pull-right small"
+          *ngIf="fieldDataForm.controls.compressibilityFactor.invalid && !fieldDataForm.controls.compressibilityFactor.pristine">
+          <span *ngIf="fieldDataForm.controls.compressibilityFactor.errors.required">Value Required</span>
+          <span *ngIf="fieldDataForm.controls.compressibilityFactor.errors.min">Value can't be less than
+            {{fieldDataForm.controls.compressibilityFactor.errors.min.min}}.</span>
+        </span>
+      </div>
+      <div class="input-group d-flex justify-content-center small bold" *ngIf="!userDefinedCompressibilityFactor">
+        <span class="mr-2" *ngIf="fieldDataForm.controls.compressibilityFactor.value">
+          {{fieldDataForm.controls.compressibilityFactor.value | number:'1.0-3'}}
+        </span>
+        <span class="mr-2" *ngIf="!fieldDataForm.controls.compressibilityFactor.value">&mdash; &mdash;</span>
+      </div>
     </div>
+
   </div>
 </form>
 
@@ -223,14 +232,16 @@
           [outletPressureData]="outletPressureCopy" (emitSave)="saveOutletPressureCopy($event)"
           [bodyHeight]="bodyHeight"></app-calculate-outlet-pressure>
         <app-calculate-flow-pressure *ngIf="pressureCalcType == 'flow' && bodyHeight" [settings]="settings"
-          [bodyHeight]="bodyHeight" [fsat]="fsatCopy" (emitInvalid)="setCalcInvalid()"
-          (saveFlowAndPressure)="saveFsatCopy($event)">
+          [bodyHeight]="bodyHeight" [fsat]="modalFsatCopy" 
+          (emitInvalid)="setCalcInvalid($event)" (updateFsatCopy)="updateTempFsatCopy($event)">
         </app-calculate-flow-pressure>
       </div>
       <div class="modal-footer fsat justify-content-between">
-        <button class="btn btn-default pull-left" (click)="hidePressureModal()">Cancel</button>
-        <button class="btn btn-primary" (click)="saveAndClose()" [disabled]="disableApplyData == true">Apply
-          Data</button>
+        <button class="btn btn-default pull-left" (click)="resetModalData()">Cancel</button>
+        <span>
+          <button [disabled]="disableApplyData != true" class="btn btn-primary" (click)="hidePressureModal()">Save and Exit</button>
+          <button [disabled]="disableApplyData == true" class="ml-2 btn btn-primary" (click)="applyModalData()">Apply Data</button>
+          </span>
       </div>
     </div>
   </div>

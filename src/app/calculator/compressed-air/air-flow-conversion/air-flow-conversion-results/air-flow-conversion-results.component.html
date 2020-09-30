@@ -1,0 +1,21 @@
+<label class="group-label pt-3 pb-2 bold w-100">Results</label>
+<div class="mt-2 mb-5 justify-content-center">
+    <div *ngIf="airFlowConversionOutput.acfm" class="col-12 text-right">
+        <label class="col-6 small bold">Airflow</label>
+        <span class="col-6 small bold">{{ airFlowConversionOutput.acfm | number:'1.0-2'}}
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" >acfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" >m<sup>3</sup>/min</span>
+        </span>
+    </div>
+    <div *ngIf="airFlowConversionOutput.scfm" class="col-12 text-right">
+        <label class="col-6 small bold">Airflow</label>
+        <span class="col-6 small bold">{{ airFlowConversionOutput.scfm | number:'1.0-2'}}
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup>/min</span>
+        </span>
+    </div>
+    <div *ngIf="!airFlowConversionOutput.scfm && !airFlowConversionOutput.acfm" class="col-12 text-right">
+            <label class="col-6 small bold">Airflow</label>
+            <span class="col-6 small bold">&mdash; &mdash;</span>
+    </div>
+</div>  

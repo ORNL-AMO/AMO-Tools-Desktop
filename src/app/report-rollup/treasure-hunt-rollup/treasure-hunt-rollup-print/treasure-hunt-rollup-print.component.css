@@ -1,0 +1,14 @@
+.group-label{
+    font-size: 22px;
+}
+
+@media print {
+    .page-break-before{
+        page-break-before: always;
+    }
+
+    .print-page-title {
+        font-size: 40px !important;
+        font-weight: bold;
+    }
+}

@@ -11,23 +11,24 @@ import { DesignedZone } from '../../../shared/models/phast/designedEnergy';
 export class PreAssessmentService {
 
   standaloneInputData: Array<PreAssessment>;
+  resultType: string = 'value';
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService) { }
 
 
-  getResults(preAssessments: Array<PreAssessment>, settings: Settings, resultType: string): Array<{ name: string, percent: number, value: number, color: string, energyCost: number }> {
-    let results = new Array<{ name: string, percent: number, value: number, color: string, energyCost: number }>();
+  getResults(preAssessments: Array<PreAssessment>, settings: Settings, resultType: string, isHourlyResult: boolean): Array<PreAssessmentResult> {
+    let results = new Array<PreAssessmentResult>();
     //calculation logic to get results (in pre-assessment.component.ts)
     preAssessments.forEach(assessment => {
       if (assessment.type === 'Metered') {
         if (assessment.meteredEnergy) {
-          let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.calculateMetered(assessment, settings);
+          let result: PreAssessmentResult = this.calculateMetered(assessment, settings, isHourlyResult);
           if (result) {
             results.push(result);
           }
         }
       } else if (assessment.type === 'Designed') {
         if (assessment.designedEnergy) {
-          let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.calculateDesigned(assessment, settings);
+          let result: PreAssessmentResult = this.calculateDesigned(assessment, settings, isHourlyResult);
           if (result) {
             results.push(result);
           }
@@ -43,7 +44,7 @@ export class PreAssessmentService {
     return results;
   }
 
-  calculateMetered(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number } {
+  calculateMetered(assessment: PreAssessment, settings: Settings, isHourlyResult: boolean): PreAssessmentResult {
     let fuelResults: number = 0;
     let fuelCost: number = 0;
     let steamResults: number = 0;
@@ -54,27 +55,27 @@ export class PreAssessmentService {
     let totalCost: number = 0;
     if (assessment.meteredEnergy) {
       if (assessment.fuel) {
-        fuelResults = this.meteredEnergyService.calcFuelEnergyUsed(assessment.meteredEnergy.meteredEnergyFuel);
+        fuelResults = this.meteredEnergyService.calcFuelEnergyUsed(assessment.meteredEnergy.meteredEnergyFuel, isHourlyResult);
         fuelCost = fuelResults * assessment.fuelCost;
       }
       if (assessment.steam) {
-        steamResults = this.meteredEnergyService.calcSteamEnergyUsed(assessment.meteredEnergy.meteredEnergySteam);
+        steamResults = this.meteredEnergyService.calcSteamEnergyUsed(assessment.meteredEnergy.meteredEnergySteam, isHourlyResult);
         steamResults = this.convertSteamResults(steamResults, settings);
         steamCost = steamResults * assessment.steamCost;
       }
       if (assessment.electric) {
-        electricityResults = this.meteredEnergyService.calcElectricEnergyUsed(assessment.meteredEnergy.meteredEnergyElectricity);
+        electricityResults = this.meteredEnergyService.calcElectricEnergyUsed(assessment.meteredEnergy.meteredEnergyElectricity, isHourlyResult);
         electricityCost = electricityResults * assessment.electricityCost;
         electricityResults = this.convertElectrotechResults(electricityResults, settings);
       }
     }
     totalResults = electricityResults + steamResults + fuelResults;
     totalCost = electricityCost + steamCost + fuelCost;
-    let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.buildResult(totalResults, assessment.name, assessment.borderColor, totalCost);
+    let result: PreAssessmentResult = this.buildResult(totalResults, assessment.name, assessment.borderColor, totalCost, 'Metered');
     return result;
   }
 
-  calculateDesigned(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number } {
+  calculateDesigned(assessment: PreAssessment, settings: Settings, isHourlyResult: boolean): PreAssessmentResult {
     let fuelResults: number = 0;
     let fuelCost: number = 0;
     let steamResults: number = 0;
@@ -83,17 +84,19 @@ export class PreAssessmentService {
     let electricityResults: number = 0;
     let totalResults: number = 0;
     let totalCost: number = 0;
-    assessment.designedEnergy.zones.forEach(zone => {
-      if (assessment.designedEnergy.steam) {
-        steamResults += this.designedEnergyService.calculateSteamZoneEnergyUsed(zone.designedEnergySteam);
-      }
-      if (assessment.designedEnergy.fuel) {
-        fuelResults += this.designedEnergyService.calculateFuelZoneEnergyUsed(zone.designedEnergyFuel);
-      }
-      if (assessment.designedEnergy.electricity) {
-        electricityResults += this.designedEnergyService.calculateElectricityZoneEnergyUsed(zone.designedEnergyElectricity);
-      }
-    });
+    if (assessment.designedEnergy) {
+      assessment.designedEnergy.zones.forEach(zone => {
+        if (assessment.designedEnergy.steam) {
+          steamResults += this.designedEnergyService.calculateSteamZoneEnergyUsed(zone.designedEnergySteam, isHourlyResult);
+        }
+        if (assessment.designedEnergy.fuel) {
+          fuelResults += this.designedEnergyService.calculateFuelZoneEnergyUsed(zone.designedEnergyFuel, isHourlyResult);
+        }
+        if (assessment.designedEnergy.electricity) {
+          electricityResults += this.designedEnergyService.calculateElectricityZoneEnergyUsed(zone.designedEnergyElectricity, isHourlyResult);
+        }
+      });
+    }
     fuelCost = fuelResults * assessment.fuelCost;
     steamResults = this.convertSteamResults(steamResults, settings);
     steamCost = steamResults * assessment.steamCost;
@@ -101,7 +104,7 @@ export class PreAssessmentService {
     electricityResults = this.convertElectrotechResults(electricityResults, settings);
     totalResults = electricityResults + steamResults + fuelResults;
     totalCost = electricityCost + steamCost + fuelCost;
-    let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.buildResult(totalResults, assessment.name, assessment.borderColor, totalCost);
+    let result: PreAssessmentResult = this.buildResult(totalResults, assessment.name, assessment.borderColor, totalCost, 'Designed');
     return result;
   }
 
@@ -127,14 +130,15 @@ export class PreAssessmentService {
     return val;
   }
 
-  buildResult(num: number, name: string, color: string, energyCost: number): { name: string, percent: number, value: number, color: string, energyCost: number } {
+  buildResult(num: number, name: string, color: string, energyCost: number, type: string): PreAssessmentResult {
     if (isNaN(num) !== true) {
-      let result: { name: string, percent: number, value: number, color: string, energyCost: number } = {
+      let result: PreAssessmentResult = {
         name: name,
         percent: null,
         value: num,
         color: color,
-        energyCost: energyCost
+        energyCost: energyCost,
+        type: type
       };
       return result;
     }
@@ -161,7 +165,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 60,
               totalBurnerCapacity: 169,
-              percentOperatingHours: 88
+              operatingHours: 7708
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -172,7 +176,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 60,
               totalBurnerCapacity: 169,
-              percentOperatingHours: 88
+              operatingHours: 7708
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -183,7 +187,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 80,
               totalBurnerCapacity: 81.6,
-              percentOperatingHours: 88
+              operatingHours: 7708
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -194,7 +198,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 80,
               totalBurnerCapacity: 102,
-              percentOperatingHours: 88
+              operatingHours: 7708
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -205,7 +209,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 40,
               totalBurnerCapacity: 41.4,
-              percentOperatingHours: 88
+              operatingHours: 7708
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -216,7 +220,7 @@ export class PreAssessmentService {
               fuelType: 0,
               percentCapacityUsed: 40,
               totalBurnerCapacity: 34.8,
-              percentOperatingHours: 88
+              operatingHours: 7708
             },
             designedEnergySteam: null,
             designedEnergyElectricity: null
@@ -253,20 +257,23 @@ export class PreAssessmentService {
           electricityUsed: 0,
           electricityCollectionTime: 0,
           fuelEnergy: 0,
-          userDefinedMeteredEnergy: false
+          userDefinedMeteredEnergy: false,
+          operatingHours: 0
         },
         meteredEnergyElectricity: {
           electricityCollectionTime: 1,
           electricityUsed: 80000,
           auxElectricityUsed: 0,
-          auxElectricityCollectionTime: 0
+          auxElectricityCollectionTime: 0,
+          operatingHours: 0
         },
         meteredEnergySteam: {
           totalHeatSteam: 0,
           flowRate: 0,
           collectionTime: 0,
           electricityUsed: 0,
-          electricityCollectionTime: 0
+          electricityCollectionTime: 0,
+          operatingHours: 0
         },
         fuel: false,
         steam: false,
@@ -289,4 +296,14 @@ export class PreAssessmentService {
     examples = [example2, example1];
     return examples;
   }
+}
+
+
+export interface PreAssessmentResult { 
+  name: string, 
+  percent: number, 
+  value: number, 
+  color: string, 
+  energyCost: number,
+  type: string
 }

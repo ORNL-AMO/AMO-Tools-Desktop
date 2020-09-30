@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../models/settings';
 import { FSAT } from '../models/fans';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -55,18 +55,24 @@ export class FsatSankeyComponent implements OnInit {
               private renderer: Renderer2) { }
 
   ngOnInit() {
+    this.fsat.valid = this.fsatService.checkValid(this.fsat, this.isBaseline, this.settings);
   }
 
   ngAfterViewInit() {
-    this.getResults();
-    this.sankey();
+    if (this.fsat.valid.isValid) {
+      this.getResults();
+      this.sankey();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.fsat) {
       if (!changes.fsat.firstChange) {
-        this.getResults();
-        this.sankey();
+        this.fsat.valid = this.fsatService.checkValid(this.fsat, this.isBaseline, this.settings);
+        if (this.fsat.valid.isValid) {
+          this.getResults();
+          this.sankey();
+        }
       }
     }
   }
@@ -74,16 +80,16 @@ export class FsatSankeyComponent implements OnInit {
   getResults() {
     let energyInput: number, motorLoss: number, driveLoss: number, fanLoss: number, usefulOutput: number;
   //  let motorShaftPower: number, fanShaftPower: number;
-    let isBaseline: boolean;
+    // let isBaseline: boolean;
 
-    if (this.fsat.name === undefined || this.fsat.name === null || this.fsat.name === 'Baseline') {
-      isBaseline = true;
-    }
-    else {
-      isBaseline = true;
-    }
-
-    let tmpOutput = this.fsatService.getResults(this.fsat, isBaseline, this.settings);
+    // if (this.fsat.name === undefined || this.fsat.name === null || this.fsat.name === 'Baseline') {
+    //   isBaseline = true;
+    // }
+    // else {
+    //   isBaseline = true;
+    // }
+    
+    let tmpOutput = this.fsatService.getResults(this.fsat, this.isBaseline, this.settings);
 
     if (this.settings.fanPowerMeasurement === 'hp') {
       // motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');

@@ -1,0 +1,153 @@
+<div class="section-title">
+    Nameplate Data
+</div>
+<div class="row no-gutters section">
+    <div class="col-md-6 col-sm-12">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap">
+                <!--Efficiency type: efficiencyClass-->
+                <div class="label-item">
+                    Efficiency Class:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.efficiencyClass | motorEfficiencyClass}}
+                </div>
+            </div>
+            <!--nominal efficiency: nominalEfficiency-->
+            <div class="d-flex flex-wrap">
+                <div class="label-item">
+                    Nominal Efficiency:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.nominalEfficiency}} %
+                </div>
+            </div>
+            <!--motor power: ratedMotorPower-->
+            <div class="d-flex flex-wrap">
+                <div class="label-item">
+                    Rated Motor Power:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.ratedMotorPower}}
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                </div>
+            </div>
+            <!--line frequency: lineFrequency-->
+            <div class="d-flex flex-wrap">
+                <div class="label-item">
+                    Line Frequency:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.lineFrequency}} hZ
+                </div>
+            </div>
+
+            <!-- manufacturer -->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.manufacturer">
+                <div class="label-item">
+                    Manufacturer:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.manufacturer}}
+                </div>
+            </div>
+            <!-- model -->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.model">
+                <div class="label-item">
+                    Model:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.model}}
+                </div>
+            </div>
+            <!-- motorType -->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.motorType">
+                <div class="label-item">
+                    Motor Type:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.motorType}}
+                </div>
+            </div>
+            <!-- enclosureType -->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.enclosureType">
+                <div class="label-item">
+                    Enclosure Type:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.enclosureType}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="d-flex flex-column w-100 card-text">
+            <!-- ratedVoltage -->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.ratedVoltage">
+                <div class="label-item">
+                    Rated Voltage:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.ratedVoltage}} V
+                </div>
+            </div>
+            <!-- serviceFactor -->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.serviceFactor">
+                <div class="label-item">
+                    Service Factor:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.serviceFactor}}
+                </div>
+            </div>
+            <!-- insulationClass -->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.insulationClass">
+                <div class="label-item">
+                    Insulation Class:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.insulationClass}}
+                </div>
+            </div>
+            <!-- weight -->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.weight">
+                <div class="label-item">
+                    Weight:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.weight}}
+                    <span *ngIf="settings.unitsOfMeasure != 'Metric'">lb</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg</span>
+                </div>
+            </div>
+            <!-- numberOfPhases -->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.numberOfPhases">
+                <div class="label-item">
+                    Number of Phases:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.numberOfPhases}}
+                </div>
+            </div>
+            <!-- fullLoadSpeed -->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.fullLoadSpeed">
+                <div class="label-item">
+                    Full Load Speed:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.fullLoadSpeed}}
+                </div>
+            </div>
+            <!--full load amps: fullLoadAmps-->
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.fullLoadAmps">
+                <div class="label-item">
+                    Full Load Amps:
+                </div>
+                <div class="flex-fill">
+                    {{nameplateData.fullLoadAmps}} A
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<div #ssmtPieChart [ngStyle]="{'display': ssmt.valid.isValid? 'block' : 'none'}"></div>
+<div class="w-100 text-center" *ngIf="noData && ssmt.valid.isValid">
+    No Data for Scenario
+</div>
+<div class="w-100 text-center alert-danger" [ngStyle]="{'display': !ssmt.valid.isValid? 'block' : 'none'}">
+        Invalid Modification<br>
+        <span *ngIf="!ssmt.valid.boilerValid">Errors found in Boiler<br></span>
+        <span *ngIf="!ssmt.valid.headerValid">Errors found in Header<br></span>
+        <span *ngIf="!ssmt.valid.turbineValid">Errors found in Turbine<br></span>
+        <span *ngIf="!ssmt.valid.operationsValid">Errors found in Operations<br></span>
+</div>

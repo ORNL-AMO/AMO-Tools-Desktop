@@ -1,5 +1,5 @@
 <div class="d-flex h-100 modify-conditions steam standalone-calculator">
-  <div class="d-flex flex-column modification w-50 scroll-item mh-100">
+  <div class="d-flex flex-column modification w-50 scroll-item mh-100" [ngClass]="{'modal-open': isModalOpen == true}">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="col-md-auto">
         <img src="assets/images/calculator-icons/steam-icons/stack-loss.png" class="ico-size steam pr-3 pl-3">
@@ -9,14 +9,15 @@
     <div class="d-flex flex-column m-4">
       <div class="form-group">
         <label class="small" for="method">Type of fuel</label>
-        <select class="form-control" id="method" [(ngModel)]="method" (focus)="changeField('measurementType')" (blur)="changeField('default')"
-          (change)="changeFuelType()">
+        <select class="form-control" id="method" [(ngModel)]="method" (focus)="changeField('measurementType')"
+          (blur)="changeField('default')" (change)="changeFuelType()">
           <option [ngValue]="1">Gas</option>
           <option [ngValue]="0">Solid/Liquid</option>
         </select>
       </div>
       <app-stack-loss-form *ngIf="stackLossForm" [method]="method" [stackLossForm]="stackLossForm" [settings]="settings"
-        (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-stack-loss-form>
+        [inModal]="inModal" (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)">
+      </app-stack-loss-form>
       <div class="form-group">
         <label class="small bold">Stack Loss</label>
         <div class="small bold text-center">{{stackLossPercent | sigFigs:'3'}} %</div>
@@ -35,7 +36,7 @@
       </div>
     </div>
   </div>
-  <div class="d-flex flex-column w-50 scroll-item mh-100">
+  <div class="d-flex flex-column w-50 scroll-item mh-100" [ngClass]="{'modal-open': isModalOpen == true}">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
@@ -49,7 +50,8 @@
       </div>
     </div>
     <div class="d-flex">
-      <app-stack-loss-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-stack-loss-help>
+      <app-stack-loss-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField">
+      </app-stack-loss-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
         <h3 class="text-center mb-0">Stack Loss (%)</h3>
         <app-percent-graph [value]="stackLossPercent" [width]="200"></app-percent-graph>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
 import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedZone } from '../../../../../shared/models/phast/designedEnergy';
 
@@ -88,7 +88,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
       totalHeat: 0,
       steamFlow: 0,
       percentCapacityUsed: 0,
-      percentOperatingHours: 0
+      operatingHours: 0
     };
   }
 
@@ -97,7 +97,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
       fuelType: 0,
       percentCapacityUsed: 0,
       totalBurnerCapacity: 0,
-      percentOperatingHours: 0
+      operatingHours: 0
     };
   }
 
@@ -105,7 +105,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
     return {
       kwRating: 0,
       percentCapacityUsed: 0,
-      percentOperatingHours: 0
+      operatingHours: 0
     };
   }
 

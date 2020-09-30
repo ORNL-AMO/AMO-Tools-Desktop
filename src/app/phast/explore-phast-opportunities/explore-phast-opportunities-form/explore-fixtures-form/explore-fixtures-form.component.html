@@ -1,67 +1,90 @@
 <div class="checkbox">
   <label class="group-label" for="exploreFixtures">
-    <input type="checkbox" id="exploreFixtures" value="true" (focus)="focusField('feedRate')" (change)="toggleFixtures()" [(ngModel)]="showFixtures"
-    /> Improve Materials Handling
+    <input type="checkbox" id="exploreFixtures" value="true" (focus)="focusField('feedRate')" (change)="toggleFixtures()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowFixtures.hasOpportunity"
+    /> 
+    {{phast.modifications[exploreModIndex].exploreOppsShowFixtures.display}}
   </label>
 </div>
-<div *ngIf="showFixtures">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowFixtures.hasOpportunity">
   <ul *ngFor="let loss of phast.losses.fixtureLosses; let index = index">
-    <li>
-      <div class="checkbox form-group">
-        <label for="{{'modifyFeedRate_'+index}}">
+
+    <li class="explore-opps-item">
+      <div class="checkbox mt-2 form-group">
+        <label for="{{'modifyFeedRate_'+index}}" class="w-100 phast-check-label">
           <input type="checkbox" id="{{'modifyFeedRate_'+index}}" (focus)="focusField('feedRate')" (change)="toggleFeedRate(index, loss.feedRate)"
-            [(ngModel)]="showFeedRate[index]" /> Modify Fixture Weight Feed Rate
-        </label>
-        <label>
-          {{loss.name}}
+            [(ngModel)]="showFeedRate[index]" /> Modify Fixture Weight Feed Rate: 
+            <span class="text-muted">
+              {{loss.name}}
+            </span>
         </label>
       </div>
-      <form *ngIf="showFeedRate[index]">
-        <div class="form-group">
-          <label for="{{'feedRate_'+index}}">Baseline Feed Rate</label>
-          <div class="input-group">
-            <input name="{{'feedRate_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.feedRate"
-              id="{{feedRate_+index}}" onfocus="this.select();" (input)="checkBaselineWarnings(index)" (focus)="focusField('feedRate')"
-              (blur)="focusOut()">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
+    </li>
+    <hr class="mt-0 mb-0">
+
+    <div *ngIf="showFeedRate[index]">
+      <li class="explore-opps-header">
+        <span class="explore-opps-title text-muted">Baseline</span>
+        <span class="explore-opps-title text-muted">Modifications</span>
+      </li>
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="{{'feedRate_'+index}}" class="baseline-value-label">Feed Rate</label>
+          <div class="text-muted text-center baseline-value-input">{{ loss.feedRate }}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
+            <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].feedRateWarning !== null">{{baselineWarnings[index].feedRateWarning}}</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].feedRateWarning !== null">{{baselineWarnings[index].feedRateWarning}}</span>
         </div>
-        <div class="form-group">
-          <label for="{{feedRateMod_+index}}">Modification Feed Rate</label>
-          <div class="input-group">
+      </form>
+        <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="{{feedRateMod_+index}}" class="mod-value-label">Feed Rate</label>
+          <div class="input-group mod-max-width">
             <input name="{{'feedRateMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{feedRateMod_+index}}"
               onfocus="this.select();" (input)="checkModificationWarnings(index)"
               (focus)="focusField('feedRate')" (blur)="focusOut()" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].feedRate">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
+            <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].feedRateWarning !== null">{{modificationWarnings[index].feedRateWarning}}</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].feedRateWarning !== null">{{modificationWarnings[index].feedRateWarning}}</span>
         </div>
       </form>
     </li>
-    <li>
-      <div class="checkbox form-group">
-        <label for="{{'modifyMaterial_'+index}}">
+  </div>
+
+    <li class="explore-opps-item">
+      <div class="checkbox mt-2 form-group">
+        <label for="{{'modifyMaterial_'+index}}" class="w-100 phast-check-label">
           <input type="checkbox" id="{{'modifyMaterial_'+index}}" (focus)="focusField('materialName')" (change)="toggleMaterial(index, loss.materialName)"
             [(ngModel)]="showMaterial[index]" /> Modify Material Type
-        </label>
-        <label>
-          {{loss.name}}
+            <span class="text-muted">
+              {{loss.name}}
+            </span>
         </label>
       </div>
-      <form *ngIf="showMaterial[index]">
-        <div class="form-group">
-          <label for="baselineMaterial">Baseline Material</label>
-          <select name="{{'materialName_'+lossIndex}}" class="form-control" [(ngModel)]="loss.materialName" id="materialName1" (change)="setSpecificHeat(loss)"
-            (focus)="focusField('materialName')" (blur)="focusOut()" [disabled]="true">
-            <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
-          </select>
+    </li>
+    <hr class="mt-0 mb-0">
+
+    <div *ngIf="showMaterial[index]">
+      <li class="explore-opps-header">
+        <span class="explore-opps-title text-muted">Baseline</span>
+        <span class="explore-opps-title text-muted">Modifications</span>
+      </li>
+      <li class="explore-opps-item">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baselineMaterial" class="baseline-value-label"> Material</label>
+          <div class="text-muted text-center baseline-value-input">
+            {{ loss.materialName | optionDisplayValue : materials : 'id' : 'substance'}}
+          </div>
         </div>
-        <div class="form-group">
-          <label for="materialName2">Modification Material</label>
-          <select name="{{'materialName2_'+lossIndex}}" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].materialName"
+      </form>
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="materialName2" class="mod-value-label">Material</label>
+          <select name="{{'materialName2_'+lossIndex}}" class="form-control w-75 ml-auto mr-auto" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].materialName"
             id="materialName" (change)="setSpecificHeat(phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index])"
             (focus)="focusField('materialName')" (blur)="focusOut()">
             <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
@@ -69,42 +92,53 @@
         </div>
       </form>
     </li>
+
+  </div>
   </ul>
 </div>
 
 
 <div class="checkbox">
   <label class="group-label" for="expoloreTemp">
-    <input type="checkbox" id="expoloreTemp" value="true" (focus)="focusField('initialTemp')" (change)="toggleAllTemp()" [(ngModel)]="showAllTemp"
-    /> Avoid Fixture Cooling
+    <input type="checkbox" id="expoloreTemp" value="true" (focus)="focusField('initialTemp')" (change)="toggleAllTemp()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowAllTemp.hasOpportunity"
+    /> {{phast.modifications[exploreModIndex].exploreOppsShowAllTemp.display}}
   </label>
 </div>
-<div *ngIf="showAllTemp">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowAllTemp.hasOpportunity">
   <ul *ngFor="let loss of phast.losses.fixtureLosses; let index = index">
-    <li>
-      <div class="checkbox form-group">
-        <label for="{{'initialTemp_'+index}}">
+    <li class="explore-opps-item">
+      <div class="checkbox mt-2 form-group">
+        <label for="{{'initialTemp_'+index}}" class="w-100 phast-check-label">
           <input type="checkbox" id="{{'initialTemp_'+index}}" (focus)="focusField('initialTemp')" (change)="toggleInletTemp(index, loss.initialTemp)"
             [(ngModel)]="showInitialTemp[index]" /> Modify Initial Temperature
-        </label>
-        <label>
-          {{loss.name}}
+            <span class="text-muted">
+              {{loss.name}}
+            </span>
         </label>
       </div>
-      <form *ngIf="showInitialTemp[index]">
-        <div class="form-group">
-          <label for="baselineTemp">Baseline Initial Temperature</label>
-          <div class="input-group">
-            <input name="{{'initialTemp1_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.initialTemperature"
-              id="{{initialTemp1_+index}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('initialTemp')"
-              (blur)="focusOut()">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+    </li>
+    <hr class="mt-0 mb-0">
+
+  <div *ngIf="showInitialTemp[index]">
+      <li class="explore-opps-header">
+        <span class="explore-opps-title text-muted">Baseline</span>
+        <span class="explore-opps-title text-muted">Modifications</span>
+      </li>
+      <li class="explore-opps-item">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baselineTemp" class="baseline-value-label">Initial Temperature</label>
+          <div class="text-muted text-center baseline-value-input">{{ loss.initialTemperature }}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
           </div>
         </div>
-        <div class="form-group">
-          <label for="{{'initialTemp2_'+index}}">Modification Initial Temperature</label>
-          <div class="input-group">
+      </form>
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="{{'initialTemp2_'+index}}" class="mod-value-label">Initial Temperature</label>
+          <div class="input-group mod-max-width">
             <input name="{{'initialTemp2_'+index}}" type="number" step="any" min="0" class="form-control" id="{{initialTemp2_+index}}"
               onfocus="this.select();" (input)="calculate()" (focus)="focusField('initialTemp')" (blur)="focusOut()" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].initialTemperature">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -113,5 +147,7 @@
         </div>
       </form>
     </li>
+
+  </div>
   </ul>
 </div>

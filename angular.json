@@ -34,6 +34,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "plotly.js",
+              "c3",
+              "regression"
+            ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -59,11 +65,10 @@
               "src/assets/styles/c3-charts.css",
               "src/assets/styles/directory-dashboard.css",
               "src/assets/styles/sidebar.css",
-              "src/assets/styles/plotly-overrides.css"
+              "src/assets/styles/plotly-overrides.css",
+              "src/assets/styles/explore-opps.css"
             ],
-            "scripts": [
-
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -109,9 +114,7 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [
-
-            ],
+            "scripts": [],
             "styles": [
               "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.css",
@@ -155,5 +158,8 @@
     "@schematics/angular:directive": {
       "prefix": "app"
     }
+  },
+  "cli": {
+    "analytics": "c7c821ee-29e2-4918-ab71-1e94bd66b1fb"
   }
 }

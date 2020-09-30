@@ -1,0 +1,66 @@
+<div class="section-title">
+    Field Measurements
+</div>
+<div class="row no-gutters section">
+    <div class="col-md-6 col-sm-12"
+        *ngIf="displayOptions.location || displayOptions.annualOperatingHours || displayOptions.averageLoadFactor">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.location">
+                <div class="label-item">
+                    Location:
+                </div>
+                <div class="flex-fill">
+                    {{operationData.location}}
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.annualOperatingHours">
+                <div class="label-item">
+                    Operating Hours:
+                </div>
+                <div class="flex-fill">
+                    {{operationData.annualOperatingHours}} hrs/yr
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.averageLoadFactor">
+                <div class="label-item">
+                    Average Load Factor:
+                </div>
+                <div class="flex-fill">
+                    {{operationData.averageLoadFactor}} %
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="d-flex flex-column w-100 card-text">
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.utilizationFactor">
+                <div class="label-item">
+                    Utilization Factor:
+                </div>
+                <div class="flex-fill">
+                    {{operationData.utilizationFactor}} %
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.efficiencyAtAverageLoad">
+                <div class="label-item">
+                    Efficiency at Average Load:
+                </div>
+                <div class="flex-fill">
+                    {{operationData.efficiencyAtAverageLoad}} %
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap" *ngIf="displayOptions.powerFactorAtLoad">
+                <div class="label-item">
+                    Power Factor at Load:
+                </div>
+                <div class="flex-fill">
+                    {{operationData.powerFactorAtLoad}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

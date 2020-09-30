@@ -1,50 +1,73 @@
-<div class="row justify-content-center" *ngIf="settings">
-  <div class="col-lg-11 col-md-11 col-sm-12">
-    <div class="card">
-      <div class="header">
-        <h3>Summary of Energy Sources Used</h3>
+<!--not print view-->
+<div *ngIf="!inPrintView">
+  <!--Pre Assessment calcs-->
+  <div class="row" *ngFor="let calculator of calculators">
+    <div class="col-12 pt-2">
+      <label class="group-label">{{calculator.name}} Pre Assessment Summary</label>
+    </div>
+    <div class="col-lg-5 col-md-6">
+      <app-pre-assessment-graph [printView]="false" [settings]="settings" [preAssessments]="calculator.preAssessments"
+        [directoryId]="calculator.directoryId" [inRollup]="true"></app-pre-assessment-graph>
+    </div>
+    <div class="col-lg-7 col-md-11">
+      <app-pre-assessment-table [settings]="settings" [calculator]="calculator">
+      </app-pre-assessment-table>
+    </div>
+  </div>
+  <!--rollup energy table-->
+  <div class="row">
+    <div class="col-12 pt-2">
+      <label class="group-label">Summary of Energy Sources Used</label>
+      <app-phast-rollup-energy-table class="pt-2" [printView]="false" [settings]="settings">
+      </app-phast-rollup-energy-table>
+    </div>
+  </div>
+  <!--energy use pie and table-->
+  <div class="row">
+    <div class="col-12 pt-2">
+      <label class="group-label">Furnace Systems Energy Use</label>
+    </div>
+    <div class="col-5">
+      <div class="btn-group btn-group-sm pt-2 pb-2 w-100">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setPieChartOption('energy')"
+          [ngClass]="{'active': pieChartDataOption == 'energy'}">Energy Use</button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setPieChartOption('cost')"
+          [ngClass]="{'active': pieChartDataOption == 'cost'}">Energy Cost</button>
       </div>
-      <div class="card-body">
-        <app-phast-rollup-energy-table [printView]="false" [settings]="settings"></app-phast-rollup-energy-table>
+      <app-rollup-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="pieChartDataOption"
+        [energyUnit]="settings.phastRollupUnit"></app-rollup-summary-pie-chart>
+    </div>
+    <div class="col-7">
+      <app-phast-rollup-energy-use-table [settings]="settings" [pieChartData]="pieChartData">
+      </app-phast-rollup-energy-use-table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <label class="group-label">Furnace Systems Summary</label>
+      <div class="btn-group btn-group-sm pt-2 pb-2 w-100">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setBarChartOption('energy')"
+          [ngClass]="{'active': barChartDataOption == 'energy'}">Energy Use</button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setBarChartOption('cost')"
+          [ngClass]="{'active': barChartDataOption == 'cost'}">Energy Cost</button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setBarChartOption('energyIntensity')"
+          [ngClass]="{'active': barChartDataOption == 'energyIntensity'}">Energy Intensity</button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setBarChartOption('availableHeat')"
+          [ngClass]="{'active': barChartDataOption == 'availableHeat'}">Available Heat %</button>
       </div>
     </div>
-
-    <!-- Right here you are doing an *ngFor that iterates calculators-->
-    <div class="card" *ngFor="let calculator of calculators; let i = index">
-      <div *ngIf="calculator.preAssessments">
-        <div class="header">
-          <h3>Pre Assessment Summary</h3>
-        </div>
-        <div class="card-body">
-          <div class="row justify-content-center">
-            <div class="col-lg-5 col-md-6">
-              <!--you have the calculator object, just pass it's preAssessment with calculator.preAssessments -->
-              <app-pre-assessment-graph [printView]="false" [settings]="settings" [preAssessments]="calculator.preAssessments" [directoryId]="calculator.directoryId" [inRollup]="true"></app-pre-assessment-graph>
-            </div>
-            <div class="col-lg-7 col-md-11">
-              <app-pre-assessment-table [printView]="false" [settings]="settings" [calculator]="calculator"></app-pre-assessment-table>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="col-12 pt-2">
+      <app-rollup-summary-bar-chart [barChartData]="barChartData" [yAxisLabel]="yAxisLabel" [tickFormat]="tickFormat">
+      </app-rollup-summary-bar-chart>
     </div>
-
-    <div class="card">
-      <div class="header">
-        <h3>Energy Use Graph</h3>
-      </div>
-      <div class="card-body">
-        <app-phast-rollup-graphs [printView]="false" [settings]="settings"></app-phast-rollup-graphs>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="header">
-        <h3>Scenario Summary</h3>
-      </div>
-      <div class="card-body">
-        <app-phast-rollup-furnace-summary [printView]="false" [settings]="settings"></app-phast-rollup-furnace-summary>
-      </div>
+    <div class="col-12 pt-2">
+      <app-phast-rollup-furnace-summary-table [settings]="settings"></app-phast-rollup-furnace-summary-table>
     </div>
   </div>
 </div>
+
+<app-phast-rollup-print *ngIf="inPrintView" [settings]="settings" [calculators]="calculators"
+  [energyBarChartData]="energyBarChartData" [costBarChartData]="costBarChartData"
+  [energyIntensityBarChartData]="energyIntensityBarChartData" [availableHeatBarChartData]="availableHeatBarChartData"
+  [pieChartData]="pieChartData">
+</app-phast-rollup-print>

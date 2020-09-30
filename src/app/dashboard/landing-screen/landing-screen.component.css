@@ -164,3 +164,17 @@ img.treasure-hunt-image {
     height: 85px;
     padding-bottom: 25px;
 }
+
+
+.motor-inventory-icon{
+	width: 78px;
+    height: 60px;
+}
+
+
+.motor-inventory-background{
+    background-image: linear-gradient(white, rgb(132, 182, 64));
+    border-radius: 12px;
+    padding: 3px;
+    box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
+}

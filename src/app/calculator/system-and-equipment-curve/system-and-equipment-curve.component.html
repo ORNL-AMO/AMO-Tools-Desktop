@@ -3,25 +3,22 @@
     <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
         <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
             <div class="col-md-auto">
-                <img src="assets/images/calculator-icons/pump-curve.png" class="ico-size">
+                <img src="assets/images/calculator-icons/system-curve-tran.png" class="ico-size">
             </div>
             <div class="pl-2">
                 <h3>{{calculatorTitle}}</h3>
             </div>
         </div>
         <div class="d-flex flex-column pt-2 pr-4 pl-4 pb-4">
-            <app-system-curve [ngClass]="{'order-2': isEquipmentCurvePrimary == true}" [equipmentType]="equipmentType"
-                [isPrimaryCalculator]="!isEquipmentCurvePrimary" [settings]="settings">
-            </app-system-curve>
-            <app-equipment-curve [ngClass]="{'order-1': isEquipmentCurvePrimary == true}"
-                [equipmentType]="equipmentType" [isPrimaryCalculator]="isEquipmentCurvePrimary" [settings]="settings">
+            <app-equipment-curve [equipmentType]="equipmentType" [isPrimaryCalculator]="true" [settings]="settings">
             </app-equipment-curve>
+            <app-system-curve [equipmentType]="equipmentType" [isPrimaryCalculator]="false" [settings]="settings">
+            </app-system-curve>
             <div *ngIf="!assessment" class="w-100 justify-content-center btn-group btn-group-sm order-3">
                 <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
                     (click)="btnResetDefaults()">
                     Reset Data
                 </button>
-                <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
                 <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
                     (click)="btnGenerateExample()">
                     Generate Example
@@ -43,11 +40,11 @@
                 </a>
             </div>
         </div>
-        <div class="mr-2 ml-2">
-            <app-system-and-equipment-curve-help *ngIf="tabSelect == 'help'"></app-system-and-equipment-curve-help>
-            <app-system-and-equipment-curve-graph *ngIf="tabSelect == 'results'" [equipmentType]="equipmentType"
+        <div class="d-flex flex-column w-100 align-items-center pt-3 p-2">
+            <app-system-and-equipment-curve-help class="w-100" *ngIf="tabSelect == 'help'"></app-system-and-equipment-curve-help>
+            <app-system-and-equipment-curve-graph class="w-100" *ngIf="tabSelect == 'results'" [equipmentType]="equipmentType"
                 [settings]="settings"></app-system-and-equipment-curve-graph>
-            <app-regression-equations *ngIf="tabSelect == 'results'" [equipmentType]="equipmentType"
+            <app-regression-equations class="w-100" *ngIf="tabSelect == 'results'" [equipmentType]="equipmentType"
                 [isEquipmentCurvePrimary]="isEquipmentCurvePrimary"></app-regression-equations>
         </div>
     </div>

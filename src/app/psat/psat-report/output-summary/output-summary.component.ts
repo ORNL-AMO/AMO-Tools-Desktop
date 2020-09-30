@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PSAT, PsatOutputs, PsatInputs } from '../../../shared/models/psat';
+import { Component, OnInit, Input } from '@angular/core';
+import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
-import { PsatService } from '../../psat.service';
-import * as _ from 'lodash';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
+import { CompareService } from '../../compare.service';
 
 @Component({
   selector: 'app-output-summary',
@@ -13,34 +12,18 @@ import { ReportRollupService } from '../../../report-rollup/report-rollup.servic
 })
 export class OutputSummaryComponent implements OnInit {
   @Input()
-  psat: PSAT;
-  @Input()
   settings: Settings;
   @Input()
   inRollup: boolean;
   @Input()
   assessment: Assessment;
 
-  unit: string;
-  titlePlacement: string;
-  maxAnnualSavings: number = 0;
   selectedModificationIndex: number;
-  constructor(private psatService: PsatService, private reportRollupService: ReportRollupService) { }
+  psat: PSAT;
+  constructor(private reportRollupService: ReportRollupService, private compareService: CompareService) { }
 
   ngOnInit() {
-    this.unit = '%';
-    this.titlePlacement = 'top';
-    this.psat.outputs = this.getResults(JSON.parse(JSON.stringify(this.psat)), this.settings, true);
-    this.psat.outputs.percent_annual_savings = 0;
-    if (this.psat.modifications) {
-      this.psat.modifications.forEach(mod => {
-        mod.psat.outputs = this.getResults(JSON.parse(JSON.stringify(mod.psat)), this.settings, false);
-        mod.psat.outputs.percent_annual_savings = this.getSavingsPercentage(this.psat, mod.psat);
-      })
-      if (this.inRollup) {
-        this.getMaxAnnualSavings();
-      }
-    }
+    this.psat = this.assessment.psat;
     if (this.inRollup) {
       this.reportRollupService.selectedPsats.forEach(val => {
         if (val) {
@@ -54,34 +37,22 @@ export class OutputSummaryComponent implements OnInit {
     }
   }
 
-  checkSavings(num: number): number {
-    return this.psat.outputs.annual_cost - num;
-  }
+  getModificationsMadeList(modifiedPsat: PSAT): Array<string> {
+    let modificationsMadeList: Array<string> = new Array();
 
-  getSavingsPercentage(baseline: PSAT, modification: PSAT): number {
-    let tmpSavingsPercent: number = Number(Math.round(((((baseline.outputs.annual_cost - modification.outputs.annual_cost) * 100) / baseline.outputs.annual_cost) * 100) / 100).toFixed(0));
-    return tmpSavingsPercent;
-  }
-
-  getResults(psat: PSAT, settings: Settings, isBaseline: boolean): PsatOutputs {
-    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
-    let isPsatValid: boolean = this.psatService.isPsatValid(psatInputs, isBaseline);
-    if (isPsatValid) {
-      if (isBaseline) {
-        return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
-      } else {
-        return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings);
-      }
-    } else {
-      return this.psatService.emptyResults();
+    let isPumpAndFluidDifferent: boolean = this.compareService.checkPumpDifferent(this.settings, this.psat, modifiedPsat);
+    if(isPumpAndFluidDifferent == true){
+      modificationsMadeList.push('Pump and Fluid');
     }
-  }
-
-  getMaxAnnualSavings() {
-    let minCost = _.minBy(this.psat.modifications, (mod) => { return mod.psat.outputs.annual_cost })
-    if (minCost) {
-      this.maxAnnualSavings = this.psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
+    let isMotorDifferent: boolean = this.compareService.checkMotorDifferent(this.psat, modifiedPsat);
+    if(isMotorDifferent == true){
+      modificationsMadeList.push('Motor');
     }
+    let isFieldDataDifferent: boolean = this.compareService.checkFieldDataDifferent(this.psat, modifiedPsat);
+    if(isFieldDataDifferent == true){
+      modificationsMadeList.push('Field Data');
+    }
+    return modificationsMadeList;
   }
 
   useModification() {

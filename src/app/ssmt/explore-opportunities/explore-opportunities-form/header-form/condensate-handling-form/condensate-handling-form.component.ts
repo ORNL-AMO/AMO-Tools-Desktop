@@ -33,7 +33,6 @@ export class CondensateHandlingFormComponent implements OnInit {
   modificationMediumPressureForm: FormGroup;
 
 
-  showCondensateHandling: boolean = false;
   showHighPressureCondensateRecovery: boolean = false;
   showMediumPressureCondensateRecovery: boolean = false;
   showLowPressureCondensateRecovery: boolean = false;
@@ -49,19 +48,17 @@ export class CondensateHandlingFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showCondensateHandling = false;
-        this.showHighPressureCondensateRecovery = false;
-        this.showMediumPressureCondensateRecovery = false;
-        this.showLowPressureCondensateRecovery = false;
-        this.showReturnTemperature = false;
-        this.showFlashCondensateMediumPressure = false;
-        this.showFlashCondensateLowPressure = false;
         this.initCondensateHandling();
       }
     }
   }
 
   initCondensateHandling() {
+    this.showMediumPressureCondensateRecovery = false;
+    this.showLowPressureCondensateRecovery = false;
+    this.showFlashCondensateMediumPressure = false;
+    this.showFlashCondensateLowPressure = false;
+    
     this.initHighPressureCondensateRecovery();
     this.initReturnTemperature();
     if (this.baselineMediumPressureForm) {
@@ -73,7 +70,9 @@ export class CondensateHandlingFormComponent implements OnInit {
       this.initFlashCondensateLowPressure();
     }
     if (this.showHighPressureCondensateRecovery || this.showMediumPressureCondensateRecovery || this.showLowPressureCondensateRecovery || this.showReturnTemperature || this.showFlashCondensateLowPressure || this.showFlashCondensateMediumPressure) {
-      this.showCondensateHandling = true;
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowCondensateHandling = {hasOpportunity: true, display: "Adjust Condensate Handling"};
+    } else {
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowCondensateHandling = {hasOpportunity: false, display: "Adjust Condensate Handling"};
     }
   }
 
@@ -100,16 +99,22 @@ export class CondensateHandlingFormComponent implements OnInit {
   initHighPressureCondensateRecovery() {
     if (this.baselineHighPressureForm.controls.condensationRecoveryRate.value !== this.modificationHighPressureForm.controls.condensationRecoveryRate.value) {
       this.showHighPressureCondensateRecovery = true;
+    } else {
+      this.showHighPressureCondensateRecovery = false;
     }
   }
   initMediumPressureCondensateRecovery() {
     if (this.baselineMediumPressureForm.controls.condensationRecoveryRate.value !== this.modificationMediumPressureForm.controls.condensationRecoveryRate.value) {
       this.showMediumPressureCondensateRecovery = true;
+    } else {
+      this.showMediumPressureCondensateRecovery = false;
     }
   }
   initLowPressureCondensateRecovery() {
     if (this.baselineLowPressureForm.controls.condensationRecoveryRate.value !== this.modificationLowPressureForm.controls.condensationRecoveryRate.value) {
       this.showLowPressureCondensateRecovery = true;
+    } else {
+      this.showLowPressureCondensateRecovery = false;
     }
   }
 
@@ -138,6 +143,8 @@ export class CondensateHandlingFormComponent implements OnInit {
   initReturnTemperature() {
     if (this.modificationHighPressureForm.controls.condensateReturnTemperature.value !== this.baselineHighPressureForm.controls.condensateReturnTemperature.value) {
       this.showReturnTemperature = true;
+    } else {
+      this.showReturnTemperature = false;
     }
   }
 
@@ -153,6 +160,8 @@ export class CondensateHandlingFormComponent implements OnInit {
   initFlashCondensateLowPressure() {
     if (this.modificationLowPressureForm.controls.flashCondensateIntoHeader.value !== this.baselineLowPressureForm.controls.flashCondensateIntoHeader.value) {
       this.showFlashCondensateLowPressure = true;
+    } else {
+      this.showFlashCondensateLowPressure = false;
     }
   }
 
@@ -166,6 +175,8 @@ export class CondensateHandlingFormComponent implements OnInit {
   initFlashCondensateMediumPressure() {
     if (this.modificationMediumPressureForm.controls.flashCondensateIntoHeader.value !== this.baselineMediumPressureForm.controls.flashCondensateIntoHeader.value) {
       this.showFlashCondensateMediumPressure = true;
+    } else {
+      this.showFlashCondensateMediumPressure = false;
     }
   }
 

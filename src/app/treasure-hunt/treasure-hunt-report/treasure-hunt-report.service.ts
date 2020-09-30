@@ -3,14 +3,13 @@ import { TreasureHuntResults, UtilityUsageData, OpportunitySummary, EnergyUsage,
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { OpportunitySummaryService } from './opportunity-summary.service';
-import { BehaviorSubject } from 'rxjs';
+import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import { TreasureChestMenuService } from '../treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
+
 @Injectable()
 export class TreasureHuntReportService {
 
-  showPrint: BehaviorSubject<boolean>;
-
-  constructor(private opportunitySummaryService: OpportunitySummaryService) {
-    this.showPrint = new BehaviorSubject<boolean>(false);
+  constructor(private opportunitySummaryService: OpportunitySummaryService, private treasureChestMenuService: TreasureChestMenuService) {
   }
 
   calculateTreasureHuntResults(treasureHunt: TreasureHunt, settings: Settings): TreasureHuntResults {
@@ -47,7 +46,7 @@ export class TreasureHuntReportService {
     let otherFuelSummaries: Array<OpportunitySummary> = opportunitySummaries.filter(summary => { return summary.utilityType == 'Other Fuel' && summary.selected == true });
     let otherFuelUtilityUsage: UtilityUsageData = this.getUtilityUsageData(otherFuelSummaries, 'Other Fuel', currentEnergyUsage.otherFuelUsage, currentEnergyUsage.otherFuelCosts, mixedSummaries)
 
-    let utilityArr: Array<UtilityUsageData> = [electricityUtilityUsage, compressedAirUtilityUsage, naturalGasUtilityUsage, waterUtilityUsage, steamUtilityUsage, otherFuelUtilityUsage];
+    let utilityArr: Array<UtilityUsageData> = [electricityUtilityUsage, compressedAirUtilityUsage, naturalGasUtilityUsage, waterUtilityUsage, wasteWaterUtilityUsage, steamUtilityUsage, otherFuelUtilityUsage];
     let totalImplementationCost: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.implementationCost }) + otherUtilityUsage.implementationCost;
     let totalCostSavings: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.costSavings });
 
@@ -110,5 +109,25 @@ export class TreasureHuntReportService {
 
   getTotalBaselineCost(currentEnergyUsage: EnergyUsage) {
     return currentEnergyUsage.electricityCosts + currentEnergyUsage.naturalGasCosts + currentEnergyUsage.otherFuelCosts + currentEnergyUsage.waterCosts + currentEnergyUsage.wasteWaterCosts + currentEnergyUsage.compressedAirCosts + currentEnergyUsage.steamCosts;
+  }
+
+  getTeamData(opportunityCardsData: Array<OpportunityCardData>): Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>{
+    let teams: Array<string> = this.treasureChestMenuService.getAllTeams(opportunityCardsData);
+    let teamData = new Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>();
+    teams.forEach(team => {
+      let teamOpps: Array<OpportunityCardData> = opportunityCardsData.filter(cardData => { return cardData.teamName == team && cardData.selected == true });
+      let teamName: string = team;
+      let costSavings: number = _.sumBy(teamOpps, 'annualCostSavings');
+      let implementationCost: number = _.sumBy(teamOpps, 'implementationCost');
+      let paybackPeriod: number = implementationCost / costSavings;
+      teamData.push({
+        team: teamName,
+        costSavings: costSavings,
+        implementationCost: implementationCost,
+        paybackPeriod: paybackPeriod
+      });
+    });
+    teamData = _.orderBy(teamData, 'costSavings', 'desc');
+    return teamData;
   }
 }

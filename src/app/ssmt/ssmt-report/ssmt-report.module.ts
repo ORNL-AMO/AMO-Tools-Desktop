@@ -15,7 +15,6 @@ import { BoilerSummaryComponent } from './input-summary/boiler-summary/boiler-su
 import { HeaderInputTableComponent } from './input-summary/header-summary/header-input-table/header-input-table.component';
 import { TurbineInputTableComponent } from './input-summary/turbine-summary/turbine-input-table/turbine-input-table.component';
 import { FormsModule } from '@angular/forms';
-import { SsmtReportService } from './ssmt-report.service';
 import { ModalModule } from 'ngx-bootstrap';
 import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
 import { ReportGraphsService } from './report-graphs/report-graphs.service';
@@ -25,6 +24,8 @@ import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.mod
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { WaterfallGraphModule } from '../../shared/waterfall-graph/waterfall-graph.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { SsmtPieChartComponent } from './report-graphs/ssmt-pie-chart/ssmt-pie-chart.component';
+import { SsmtWaterfallComponent } from './report-graphs/ssmt-waterfall/ssmt-waterfall.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -52,13 +53,14 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     BoilerSummaryComponent,
     HeaderInputTableComponent,
     TurbineInputTableComponent,
-    ReportGraphsPrintComponent
+    ReportGraphsPrintComponent,
+    SsmtPieChartComponent,
+    SsmtWaterfallComponent
   ],
   exports: [
     SsmtReportComponent
   ],
   providers: [
-    SsmtReportService,
     ReportGraphsService
   ]
 })

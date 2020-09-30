@@ -26,7 +26,7 @@
       <input name="nameplateFullLoadSpeed" type="number" step="10" min="0" max="3600" class="form-control"
         formControlName="nameplateFullLoadSpeed" id="nameplateFullLoadSpeed" (input)="calculate()"
         onfocus="this.select();">
-      <span class="input-group-addon units">RPM</span>
+      <span class="input-group-addon units">rpm</span>
     </div>
     <span class="alert-danger pull-right small"
       *ngIf="form.controls.nameplateFullLoadSpeed.invalid && !form.controls.nameplateFullLoadSpeed.pristine">
@@ -41,7 +41,7 @@
     <div class="input-group">
       <input name="measuredSpeed" type="number" step="10" min="0" class="form-control" formControlName="measuredSpeed"
         id="measuredSpeed" (input)="calculate()" onfocus="this.select();" autofocus>
-      <span class="input-group-addon units">RPM</span>
+      <span class="input-group-addon units">rpm</span>
     </div>
     <span class="alert-danger pull-right small"
       *ngIf="form.controls.measuredSpeed.invalid && !form.controls.measuredSpeed.pristine">
@@ -54,7 +54,7 @@
     <label class="bold" for="synchronousSpeed">Synchronous Speed</label>
     <div class="text-center small"
       *ngIf="form.controls.synchronousSpeed.value && form.controls.nameplateFullLoadSpeed.valid">
-      <strong>{{form.controls.synchronousSpeed.value}} RPM</strong>
+      <strong>{{form.controls.synchronousSpeed.value}} rpm</strong>
     </div>
     <div class="text-center small"
       *ngIf="!form.controls.synchronousSpeed.value || !form.controls.nameplateFullLoadSpeed.valid">

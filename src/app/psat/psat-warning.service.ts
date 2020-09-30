@@ -13,6 +13,7 @@ import { fluidProperties } from './psatConstants';
 @Injectable()
 export class PsatWarningService {
 
+  updateFla: boolean = false;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
   //FIELD DATA
   //warnings for field data form
@@ -31,27 +32,21 @@ export class PsatWarningService {
   }
   //Field data warning: flowError
   checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings) {
-    let tmpFlowRate: number;
-    //convert
     //get min max
     let flowRateRange = this.getFlowRateMinMax(pumpStyle);
-
+    //convert
     if (settings.flowMeasurement != 'gpm') {
-      tmpFlowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
-      flowRateRange.min = this.convertUnitsService.value(flowRateRange.min).from(settings.flowMeasurement).to('gpm');
+      flowRateRange.min = this.convertUnitsService.value(flowRateRange.min).from('gpm').to(settings.flowMeasurement);
       flowRateRange.min = this.convertUnitsService.roundVal(flowRateRange.min, 2);
-      flowRateRange.max = this.convertUnitsService.value(flowRateRange.max).from(settings.flowMeasurement).to('gpm');
+      flowRateRange.max = this.convertUnitsService.value(flowRateRange.max).from('gpm').to(settings.flowMeasurement);
       flowRateRange.max = this.convertUnitsService.roundVal(flowRateRange.max, 2);
-
-    } else {
-      tmpFlowRate = flowRate;
     }
     //check in range
-    if (tmpFlowRate >= flowRateRange.min && tmpFlowRate <= flowRateRange.max) {
+    if (flowRate >= flowRateRange.min && flowRate <= flowRateRange.max) {
       return null;
-    } else if (tmpFlowRate < flowRateRange.min) {
+    } else if (flowRate < flowRateRange.min) {
       return 'Flow rate is too small for selected pump style, should be greater than ' + flowRateRange.min;
-    } else if (tmpFlowRate > flowRateRange.max) {
+    } else if (flowRate > flowRateRange.max) {
       return 'Flow rate is too large for selected pump style, should be less than ' + flowRateRange.max;
     } else {
       return null;
@@ -140,12 +135,14 @@ export class PsatWarningService {
     let rpmError: string = this.checkMotorRpm(psat);
     let voltageError: string = this.checkMotorVoltage(psat);
     let flaError: string = this.checkFLA(psat, settings);
+    let recalculateFla: string = this.updateFla ? "Inputs to this calculated value have changed. Consider re-estimating" : null;
     let ratedPowerError: string;
     ratedPowerError = this.checkMotorRatedPower(psat, settings, isModification);
     return {
       rpmError: rpmError,
       voltageError: voltageError,
       flaError: flaError,
+      recalculateFla: recalculateFla,
       ratedPowerError: ratedPowerError
     }
   }
@@ -204,7 +201,7 @@ export class PsatWarningService {
 
     let min: number = 5;
     let max: number = 10000;
-    let isModificationValid: boolean;
+    // let isModificationValid: boolean;
     if (psat.inputs.motor_rated_power < this.convertUnitsService.value(min).from('hp').to(settings.powerMeasurement)) {
       return 'Rated motor power is too small.';
     } else if (psat.inputs.motor_rated_power > this.convertUnitsService.value(max).from('hp').to(settings.powerMeasurement)) {
@@ -216,8 +213,8 @@ export class PsatWarningService {
         if (settings.powerMeasurement == 'hp') {
           val = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(settings.powerMeasurement).to('kW');
           if (isModification) {
-            isModificationValid = this.psatService.isPsatValid(psat.inputs, false);
-            if (isModificationValid) {
+            psat.valid = this.psatService.isPsatValid(psat.inputs, false);
+            if (psat.valid.isValid) {
               let modificationResults: PsatOutputs = this.psatService.resultsModified(psat.inputs, settings);
               compare = modificationResults.motor_power;
             } else {
@@ -230,8 +227,8 @@ export class PsatWarningService {
         } else {
           val = psat.inputs.motor_rated_power;
           if (isModification) {
-            isModificationValid = this.psatService.isPsatValid(psat.inputs, false);
-            if (isModificationValid) {
+            psat.valid = this.psatService.isPsatValid(psat.inputs, false);
+            if (psat.valid.isValid) {
               let modificationResults: PsatOutputs = this.psatService.resultsModified(psat.inputs, settings);
               compare = modificationResults.motor_power;
             } else {
@@ -282,6 +279,11 @@ export class PsatWarningService {
       } else if (psat.inputs.motor_rated_fla > this.psatService.flaRange.flaMax) {
         return 'Value should be less than ' + Math.round(this.psatService.flaRange.flaMax);
       } else {
+        if (psat.inputs.motor_rated_fla != estEfficiency) {
+          this.updateFla = true;
+        } else {
+          this.updateFla = false;
+        }
         return null;
       }
     } else {
@@ -378,6 +380,7 @@ export interface MotorWarnings {
   voltageError: string;
   flaError: string;
   ratedPowerError: string;
+  recalculateFla: string;
 }
 
 export interface PumpFluidWarnings {

@@ -13,3 +13,7 @@
 .btn-form {
   border-radius: 4px !important;
 }
+
+.modal-open {
+  z-index: initial !important;
+}

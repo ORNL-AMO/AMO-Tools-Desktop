@@ -1,24 +1,31 @@
 <div class="checkbox">
   <label class="group-label" for="exploreSlag">
-    <input type="checkbox" id="exploreSlag" (focus)="focusField('weight')" (change)="toggleSlag()" [(ngModel)]="showSlag" /> Reduce Slag
+    <input type="checkbox" id="exploreSlag" (focus)="focusField('weight')" (change)="toggleSlag()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowSlag.hasOpportunity" /> 
+    {{phast.modifications[exploreModIndex].exploreOppsShowSlag.display}}
   </label>
 </div>
-<div *ngIf="showSlag">
+
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowSlag.hasOpportunity">
   <ul>
-    <li>
-      <form>
-        <div class="form-group">
-          <label for="baselineWeight">Baseline Weight</label>
-          <div class="input-group">
-            <input name="baselineWeight" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.losses.slagLosses[0].weight"
-              id="baselineWeight" onfocus="this.select();" (input)="calculate()" (focus)="focusField('weight')" (blur)="focusOut()">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Lb/hr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
+    <li class="explore-opps-header mb-2">
+      <span class="explore-opps-title text-muted">Baseline</span>
+      <span class="explore-opps-title text-muted">Modifications</span>
+    </li>
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baselineWeight" class="baseline-value-label">Weight</label>
+            <div class="text-muted text-center baseline-value-input ">{{phast.losses.slagLosses[0].weight }}
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'" >Lb/hr</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="modifiedWeight">Modified Weight</label>
-          <div class="input-group">
+      </form>
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="modifiedWeight" class="mod-value-label">Weight</label>
+          <div class="input-group mod-max-width">
             <input name="modifiedWeight" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.slagLosses[0].weight"
               id="modifiedWeight" onfocus="this.select();" (input)="calculate()" (focus)="focusField('weight')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Lb/hr</span>

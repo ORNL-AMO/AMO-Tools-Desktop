@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ReportItem } from '../report-rollup-models';
 import { ReportRollupService } from '../report-rollup.service';
-import { RollupPrintService, RollupPrintOptions } from '../rollup-print.service';
 import { Calculator } from '../../shared/models/calculators';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDashboardService } from '../../dashboard/directory-dashboard/directory-dashboard.service';
 import { Settings } from '../../shared/models/settings';
+import { PrintOptions } from '../../shared/models/printing';
+import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 
 @Component({
   selector: 'app-assessment-reports',
@@ -27,7 +28,7 @@ export class AssessmentReportsComponent implements OnInit {
   treasureHuntAssesmentsSub: Subscription;
   printView: boolean;
   printViewSub: Subscription;
-  rollupPrintOptions: RollupPrintOptions;
+  rollupPrintOptions: PrintOptions;
   rollupPrintOptionsSub: Subscription;
 
   selectedCalcsSub: Subscription;
@@ -36,7 +37,7 @@ export class AssessmentReportsComponent implements OnInit {
   selectedPhastCalcs: Array<Calculator>;
   settings: Settings;
 
-  constructor(private reportRollupService: ReportRollupService, private rollupPrintService: RollupPrintService, private settingsDbService: SettingsDbService,
+  constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService,
     private directoryDashboardService: DirectoryDashboardService) { }
 
   ngOnInit(): void {
@@ -71,11 +72,11 @@ export class AssessmentReportsComponent implements OnInit {
       }
     });
 
-    this.printViewSub = this.rollupPrintService.showPrintView.subscribe(val => {
+    this.printViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
       this.printView = val;
     });
 
-    this.rollupPrintOptionsSub = this.rollupPrintService.rollupPrintOptions.subscribe(val => {
+    this.rollupPrintOptionsSub = this.printOptionsMenuService.printOptions.subscribe(val => {
       this.rollupPrintOptions = val;
     });
 

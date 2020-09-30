@@ -1,0 +1,18 @@
+<form [formGroup]="estimateMethodForm">
+    <div class="form-group">
+        <label for="leakRateEstimate">Leak Rate Estimate</label>
+        <div class="input-group">
+            <input name="leakRateEstimate" class="form-control" type="number" step="any"
+                formControlName="leakRateEstimate" id="leakRateEstimate" onfocus="this.select();"
+                (input)="save()"
+                (focus)="changeField('leakRateEstimate')">
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">CFM</span>
+                <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
+                <span class="alert-danger pull-right small"
+                *ngIf="estimateMethodForm.controls.leakRateEstimate.invalid && !estimateMethodForm.controls.leakRateEstimate.pristine">
+                <span *ngIf="estimateMethodForm.controls.leakRateEstimate.errors.required">Value required.</span>
+                <span *ngIf="estimateMethodForm.controls.leakRateEstimate.errors.greaterThan">Value must be greater than 0.</span>
+            </span>
+        </div>
+    </div>
+</form>

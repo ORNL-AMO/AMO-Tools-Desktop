@@ -19,8 +19,6 @@ export class ExploreSlagFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
 
-  showSlag: boolean = false;
-
   constructor() { }
 
   ngOnInit() {
@@ -37,11 +35,12 @@ export class ExploreSlagFormComponent implements OnInit {
 
   initData() {
     let check = (this.phast.losses.slagLosses[0].weight !== this.phast.modifications[this.exploreModIndex].phast.losses.slagLosses[0].weight);
-    this.showSlag = check;
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowSlag = { hasOpportunity: check, display: 'Reduce Slag' };
+
   }
 
   toggleSlag() {
-    if (this.showSlag === false) {
+    if (this.phast.modifications[this.exploreModIndex].exploreOppsShowSlag.hasOpportunity === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.slagLosses[0].weight = this.phast.losses.slagLosses[0].weight;
     }
   }

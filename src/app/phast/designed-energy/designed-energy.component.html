@@ -1,5 +1,6 @@
 <div class="d-flex modify-conditions">
-    <div class="flex-column w-50 modification scroll-item pb-3" [ngStyle]="{'height.px': containerHeight}">
+    <div class="flex-column w-50 modification scroll-item pb-3" [ngStyle]="{'height.px': containerHeight}"
+        [ngClass]="{'modal-open': isModalOpen}">
         <div class="header ml-2 mr-2">
             <h3>Designed Energy</h3>
             <h5 class="pull-right panel-add">

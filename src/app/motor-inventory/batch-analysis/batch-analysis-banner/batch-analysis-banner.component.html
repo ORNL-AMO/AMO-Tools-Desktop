@@ -1,0 +1,27 @@
+<nav class="navbar hide-print motor-inventory">
+    <div class="d-flex justify-content-between align-items-center w-100 flex-wrap">
+        <div class="btn-group btn-group-sm align-self-center">
+            <button type="button" class="btn btn-sm" (click)="setTab('table')"
+                [ngClass]="{'active': selectedTab == 'table'}">Table</button>
+            <button type="button" class="btn btn-sm" (click)="setTab('graphs')"
+                [ngClass]="{'active': selectedTab == 'graphs'}">Graphs</button>
+        </div>
+        <div class="tab-content pl-2 pr-2">
+            <div class="form-group">
+                <label>Payback Threshold</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" [(ngModel)]="batchAnalysisSettings.paybackThreshold"
+                        (input)="saveSettings()">
+                    <div class="input-group-addon units">yrs</div>
+                </div>
+            </div>
+        </div>
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" name="displayIncompleteMotors"
+                id="displayIncompleteMotors" [(ngModel)]="batchAnalysisSettings.displayIncompleteMotors"
+                (change)="saveSettings()">
+            <label class="custom-control-label" for="displayIncompleteMotors">Display Incomplete
+                Motors</label>
+        </div>
+    </div>
+</nav>

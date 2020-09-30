@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../../shared/models/standalone";
 import { Settings } from '../../../../shared/models/settings';
+import { standardSizesConstant, metricSizesConstant } from '../../compressed-air-constants';
 
 @Component({
   selector: 'app-system-capacity-form',
@@ -18,9 +19,17 @@ export class SystemCapacityFormComponent implements OnInit {
   calculate = new EventEmitter<AirSystemCapacityInput>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+
+  pipeSizeOptions: Array<{ display: string, size: string }>;
+
   constructor() { }
 
   ngOnInit() {
+    let sizeOptions = this.settings.unitsOfMeasure == 'Metric'? metricSizesConstant : standardSizesConstant;  
+    this.pipeSizeOptions = JSON.parse(JSON.stringify(sizeOptions));
+    if(!this.inputs.allPipes){
+      this.addPipe();
+    }
   }
 
   emitChange() {
@@ -37,26 +46,27 @@ export class SystemCapacityFormComponent implements OnInit {
     this.emitChange();
   }
 
-  //function used by *ngFor with data binding
   trackByFn(index: any, item: any) {
     return index;
   }
 
-  addCustomPipe() {
-    let customPipe = {
-      pipeSize: 0,
-      pipeLength: 0
+  addPipe() {
+    let newPipe = {
+      pipeSize: this.pipeSizeOptions[1].size,
+      customPipeSize: 0,
+      pipeLength: 0,
     };
-    if (!this.inputs.customPipes) {
-      this.inputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
+    if (!this.inputs.allPipes) {
+      this.inputs.allPipes = new Array<{ pipeSize: string, customPipeSize: number, pipeLength: number }>();
     }
-    this.inputs.customPipes.push(customPipe);
+    this.inputs.allPipes.push(newPipe);
   }
 
-  deleteCustomPipe(i: number) {
-    this.inputs.customPipes.splice(i, 1);
+  deletePipe(i: number) {
+    this.inputs.allPipes.splice(i, 1);
     this.emitChange();
   }
+  
   changeField(str: string) {
     this.emitChangeField.emit(str);
   }
