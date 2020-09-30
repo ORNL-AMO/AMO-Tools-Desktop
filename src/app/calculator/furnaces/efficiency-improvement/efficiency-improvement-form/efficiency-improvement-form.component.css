@@ -11,3 +11,8 @@
 .form-group label{
     width: 100% !important;
 }
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }
