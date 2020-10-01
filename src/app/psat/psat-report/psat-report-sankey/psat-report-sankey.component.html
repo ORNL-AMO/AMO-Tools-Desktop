@@ -2,7 +2,7 @@
   <div class="d-flex flex-column">
     <div class="d-flex">
       <div class="d-flex flex-column w-25 align-items-center justify-content-center">
-        <select name="psatSelect" class="form-control mx-auto" id="psatSelect" (change)="setPsat1Savings()"
+        <select name="psatSelect" class="form-control mx-auto" id="psatSelect" (change)="setPsat1()"
           [(ngModel)]="psat1">
           <option [ngValue]="assessment.psat">Baseline</option>
           <option *ngFor="let modification of assessment.psat.modifications" [ngValue]="modification.psat">
@@ -18,7 +18,7 @@
         [psat]="psat1"
         [assessmentName]="assessmentName"
         [settings]="settings"
-        [isBaseline]="true"
+        [isBaseline]="psat1Baseline"
       ></app-psat-sankey>
         <div *ngIf="psat1.valid.isValid == false" class="alert-danger">Invalid System Setup</div>
       </div>
@@ -26,7 +26,7 @@
     <hr>
     <div class="d-flex" *ngIf="psat2">
       <div class="d-flex flex-column w-25 align-items-center justify-content-center">
-        <select name="psatSelect" class="form-control mx-auto" id="psatSelect2" (change)="setPsat2Savings()"
+        <select name="psatSelect" class="form-control mx-auto" id="psatSelect2" (change)="setPsat2()"
           [(ngModel)]="psat2">
           <option [ngValue]="assessment.psat">Baseline</option>
           <option *ngFor="let modification of assessment.psat.modifications" [ngValue]="modification.psat">
@@ -43,7 +43,7 @@
         [psat]="psat2"
         [assessmentName]="assessmentName"
         [settings]="settings"
-        [isBaseline]="false"
+        [isBaseline]="psat2Baseline"
       ></app-psat-sankey>
         <div *ngIf="psat2.valid.isValid == false" class="alert-danger">Invalid System Setup</div>
       </div>

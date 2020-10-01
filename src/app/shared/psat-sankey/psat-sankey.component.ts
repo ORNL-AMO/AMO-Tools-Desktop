@@ -32,6 +32,8 @@ export class PsatSankeyComponent implements OnInit {
   modIndex: number;
   @Input()
   assessmentName: string;
+  @Input()
+  appBackground: boolean;
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
 
   @Input()
@@ -72,9 +74,8 @@ export class PsatSankeyComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (!this.baseline && !this.isBaseline) {
-      this.baseline = this.compareService.baselinePSAT;
-    }
+    this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+    this.psat.valid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
   }
 
   ngAfterViewInit() {
@@ -89,6 +90,8 @@ export class PsatSankeyComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.psat) {
       if (!changes.psat.firstChange) {
+        this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+        this.psat.valid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
         this.getResults();
         this.sankey(this.selectedResults);
       }
@@ -97,21 +100,11 @@ export class PsatSankeyComponent implements OnInit {
 
   getResults() {
     this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let isPsatValid: boolean = this.psatService.isPsatValid(
-      this.selectedInputs,
-      this.isBaseline
-    ).isValid;
-    if (isPsatValid) {
+    if (this.psat.valid) {
       if (this.isBaseline) {
-        this.selectedResults = this.psatService.resultsExisting(
-          this.selectedInputs,
-          this.settings
-        );
+        this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
       } else {
-        this.selectedResults = this.psatService.resultsModified(
-          this.selectedInputs,
-          this.settings
-        );
+        this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings);
       }
     } else {
       this.selectedResults = this.psatService.emptyResults();
@@ -150,7 +143,7 @@ export class PsatSankeyComponent implements OnInit {
       ids: nodes.map(node => node.id),
       textfont: {
         color: 'rgba(0, 0, 0)',
-        size: 16
+        size: 14
       },
       arrangement: 'freeform',
       node: {
@@ -167,7 +160,7 @@ export class PsatSankeyComponent implements OnInit {
         hovertemplate: '%{value}<extra></extra>',
         hoverlabel: {
           font: {
-            size: 16,
+            size: 14,
             color: 'rgba(255, 255, 255)'
           },
           align: 'auto',
@@ -177,16 +170,9 @@ export class PsatSankeyComponent implements OnInit {
     };
 
     const layout = {
-      title: "",
       autosize: true,
-      yaxis: {
-        automargin: true,
-      },
-      xaxis: {
-        automargin: true,
-      },
-      paper_bgcolor: 'rgba(0,0,0,0)',
-      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: undefined,
+      plot_bgcolor: undefined,
       margin: {
         l: 50,
         t: 100,
@@ -194,14 +180,42 @@ export class PsatSankeyComponent implements OnInit {
       }
     };
 
+    if (this.appBackground) {
+      layout.paper_bgcolor = 'ececec';
+      layout.plot_bgcolor = 'ececec';
+    }
+
     const config = {
       modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
       responsive: true
     };
 
-    Plotly.react(this.ngChart.nativeElement, [sankeyData], layout, config);
+    Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config);
     this.addGradientElement();
     this.buildSvgArrows();
+  }
+
+  calcLosses(results) {
+    var motorShaftPower;
+    var pumpShaftPower;
+    if (this.settings.powerMeasurement === "hp") {
+      motorShaftPower = this.convertUnitsService
+        .value(results.motor_shaft_power)
+        .from("hp")
+        .to("kW");
+      pumpShaftPower = this.convertUnitsService
+        .value(results.pump_shaft_power)
+        .from("hp")
+        .to("kW");
+    } else {
+      motorShaftPower = results.motor_shaft_power;
+      pumpShaftPower = results.pump_shaft_power;
+    }
+    this.motor = results.motor_power * (1 - results.motor_efficiency / 100);
+    this.drive = motorShaftPower - pumpShaftPower;
+    this.pump =
+      (results.motor_power - this.motor - this.drive) *
+      (1 - results.pump_efficiency / 100);
   }
 
   buildNodes(results: PsatOutputs, nodes): Array<PsatSankeyNode> {
@@ -231,7 +245,7 @@ export class PsatSankeyComponent implements OnInit {
       {
         name: "",
         value: 0,
-        x: .25,
+        x: .4,
         y: .6,
         source: 1,
         target: [2, 3],
@@ -368,26 +382,4 @@ export class PsatSankeyComponent implements OnInit {
     this.renderer.appendChild(mainSVG, svgDefs);
   }
 
-  calcLosses(results) {
-    var motorShaftPower;
-    var pumpShaftPower;
-    if (this.settings.powerMeasurement === "hp") {
-      motorShaftPower = this.convertUnitsService
-        .value(results.motor_shaft_power)
-        .from("hp")
-        .to("kW");
-      pumpShaftPower = this.convertUnitsService
-        .value(results.pump_shaft_power)
-        .from("hp")
-        .to("kW");
-    } else {
-      motorShaftPower = results.motor_shaft_power;
-      pumpShaftPower = results.pump_shaft_power;
-    }
-    this.motor = results.motor_power * (1 - results.motor_efficiency / 100);
-    this.drive = motorShaftPower - pumpShaftPower;
-    this.pump =
-      (results.motor_power - this.motor - this.drive) *
-      (1 - results.pump_efficiency / 100);
-  }
 }

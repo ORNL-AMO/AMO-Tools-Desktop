@@ -1,4 +1,4 @@
-<div *ngIf="psat.valid.isValid" #ngChart [attr.id]="location"></div>
+<div *ngIf="psat.valid.isValid" #ngChart id="sankeyChart"></div>
 <div class="alert-danger" *ngIf="!psat.valid.isValid">
     Invalid System Setup:<br>
     <span *ngIf="!psat.valid.pumpFluidValid">Errors found in Pump Fluid Data<br></span>

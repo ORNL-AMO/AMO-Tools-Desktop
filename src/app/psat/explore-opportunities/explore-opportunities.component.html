@@ -46,12 +46,14 @@
 				<app-psat-sankey *ngIf="sankeyView === 'Baseline'"
 					[psat]="psat"
 					[settings]="settings"
+					[appBackground]="true"
 					[baselineResults]="baselineResults"
 					[isBaseline]="true">
 				</app-psat-sankey>
 				<app-psat-sankey *ngIf="sankeyView === 'Modified'"
 				  [settings]="settings"
 				  [psat]="psat"
+				  [appBackground]="true"
 				  [modResults]="modificationResults"
 				  [isBaseline]="false">
 				</app-psat-sankey>
