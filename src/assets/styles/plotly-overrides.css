@@ -11,10 +11,36 @@ svg.main-svg >
 g.sankey >
 g.sankey-links >
 path.sankey-link {
-    fill: #1F1EDC !important;
+    fill: #268ade !important;
     fill-opacity: .9 !important;
 }
 
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-node-set >
+g.sankey-node >
+g.node-entered >
+text.node-label {
+    text-shadow: none !important;
+  }
+
+
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link {
+    fill: #268ade !important;
+    fill-opacity: .9 !important;
+}
 
 /*  Motor loss link color */
 app-psat-sankey > 

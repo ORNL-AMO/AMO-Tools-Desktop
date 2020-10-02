@@ -57,10 +57,15 @@ export class PsatSankeyComponent implements OnInit {
   drive: number;
   pump: number;
 
-  gradientStartColor: string = '#1F1EDC';
-  gradientEndColor: string = '#3390DE';
-  nodeStartColor: string = 'rgba(31, 30, 220, .9)';
-  nodeArrowColor: string = 'rgba(51, 144, 222, .9)';
+  // gradientStartColor: string = '#1F1EDC';
+  // gradientEndColor: string = '#3390DE';
+  // nodeStartColor: string = 'rgba(31, 30, 220, .9)';
+  // nodeArrowColor: string = 'rgba(51, 144, 222, .9)';
+  gradientStartColor: string = '#268ade';
+  gradientEndColor: string = '#90c0e8';
+
+  nodeStartColor: string = 'rgba(38, 138, 222, .9)';
+  nodeArrowColor: string = 'rgba(144, 192, 232, .9)';
   connectingNodes: Array<number> = [];
   connectingLinkPaths: Array<number> = [];
 
