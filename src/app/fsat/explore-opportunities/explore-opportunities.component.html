@@ -43,11 +43,11 @@
 					  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Baseline'" [ngClass]="{'active': sankeyView == 'Baseline'}">Baseline</button>
 					  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Modified'" [ngClass]="{'active': sankeyView == 'Modified'}">Modification</button>
 					</div>
-					<app-fsat-sankey *ngIf="sankeyView == 'Baseline'" [fsat]="baselineSankey" [settings]="settings" [location]="'explore-opportunities-sankey'"
-					  [printView]="false" [isBaseline]="true" [assessmentName]="assessmentName"></app-fsat-sankey>
+					<app-fsat-sankey *ngIf="sankeyView == 'Baseline'" [appBackground]="true" [fsat]="baselineSankey" [settings]="settings"
+					  [isBaseline]="true"></app-fsat-sankey>
 				  
-					<app-fsat-sankey *ngIf="sankeyView == 'Modified'" [fsat]="modificationSankey" [settings]="settings" [location]="'explore-opportunities-sankey'"
-					  [printView]="false" [isBaseline]="false" [assessmentName]="assessmentName"></app-fsat-sankey>
+					<app-fsat-sankey *ngIf="sankeyView == 'Modified'" [appBackground]="true" [fsat]="modificationSankey" [settings]="settings"
+					  [isBaseline]="false"></app-fsat-sankey>
 				  </div>
 		</div>
 

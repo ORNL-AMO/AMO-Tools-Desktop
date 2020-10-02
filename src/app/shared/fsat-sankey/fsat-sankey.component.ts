@@ -19,32 +19,21 @@ export class FsatSankeyComponent implements OnInit {
   @Input()
   fsat: FSAT;
   @Input()
-  location: string;
-  @Input()
-  printView: boolean;
-  @Input()
-  modIndex: number;
-  @Input()
-  assessmentName: string;
-  @Input()
   isBaseline: boolean;
+  @Input()
+  appBackground: boolean;
 
   @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
-  width: number;
-  height: number;
-
-  firstChange: boolean = true;
-
   energyInput: number;
   motorLosses: number;
   driveLosses: number;
   fanLosses: number;
   usefulOutput: number;
 
-  gradientStartColor: string = '#D4B904'; 
-  gradientEndColor: string = '#E8D952';
-  nodeStartColor: string = 'rgba(214, 185, 0, 1)';
-  nodeArrowColor: string = 'rgba(232, 217, 82, 1)';
+  gradientStartColor: string = 'rgba(214, 185, 0, 1)'; 
+  gradientEndColor: string = 'rgba(232, 217, 82, 1)';
+  nodeStartColor: string = 'rgba(214, 185, 0, .9)';
+  nodeArrowColor: string = 'rgba(232, 217, 82, .9)';
   connectingNodes: Array<number> = [];
   connectingLinkPaths: Array<number> = [];
 
@@ -79,30 +68,21 @@ export class FsatSankeyComponent implements OnInit {
 
   getResults() {
     let energyInput: number, motorLoss: number, driveLoss: number, fanLoss: number, usefulOutput: number;
-  //  let motorShaftPower: number, fanShaftPower: number;
-    // let isBaseline: boolean;
-
-    // if (this.fsat.name === undefined || this.fsat.name === null || this.fsat.name === 'Baseline') {
-    //   isBaseline = true;
-    // }
-    // else {
-    //   isBaseline = true;
-    // }
-    
+    let motorShaftPower: number, fanShaftPower: number;
     let tmpOutput = this.fsatService.getResults(this.fsat, this.isBaseline, this.settings);
 
     if (this.settings.fanPowerMeasurement === 'hp') {
-      // motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
-      // fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
+      motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
+      fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
       energyInput = tmpOutput.motorPower;
-      motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
+      motorLoss = energyInput - motorShaftPower;
       driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');
-      fanLoss = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (1 - (tmpOutput.fanEfficiency / 100));
-      usefulOutput = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (tmpOutput.fanEfficiency / 100);
+      fanLoss = fanShaftPower * (1 - (tmpOutput.fanEfficiency / 100));
+      usefulOutput = fanShaftPower * (tmpOutput.fanEfficiency / 100);
     }
     else {
-      // motorShaftPower = tmpOutput.motorShaftPower;
-      // fanShaftPower = tmpOutput.fanShaftPower;
+      motorShaftPower = tmpOutput.motorShaftPower;
+      fanShaftPower = tmpOutput.fanShaftPower;
       energyInput = tmpOutput.motorPower;
       motorLoss = tmpOutput.motorPower - tmpOutput.motorShaftPower;
       driveLoss = tmpOutput.motorShaftPower - tmpOutput.fanShaftPower;
@@ -116,20 +96,9 @@ export class FsatSankeyComponent implements OnInit {
     this.motorLosses = motorLoss;
     this.usefulOutput = usefulOutput;
   }
-
-
-  closeSankey() {
-    Plotly.purge(this.ngChart.nativeElement);
-  }
-
+  
   sankey() {
-    if (this.energyInput === undefined || this.energyInput === null) {
-      return;
-    }
-    if (this.usefulOutput === undefined || this.energyInput === null) {
-      return;
-    }
-    this.closeSankey();
+    Plotly.purge(this.ngChart.nativeElement);
 
     const links: Array<{source: number, target: number}> = [];
     let nodes: Array<FsatSankeyNode> = [];
@@ -155,7 +124,6 @@ export class FsatSankeyComponent implements OnInit {
         { source: 2, target: 5 }
       )   
     }
-      
     const sankeyLink = {
       value: nodes.map(node => node.value),
       source: links.map(link => link.source),
@@ -174,7 +142,7 @@ export class FsatSankeyComponent implements OnInit {
       ids: nodes.map(node => node.id),
       textfont: {
         color: 'rgb(0, 0, 0)',
-        size: 16
+        size: 14
       },
       arrangement: 'freeform',
       node: {
@@ -191,7 +159,7 @@ export class FsatSankeyComponent implements OnInit {
         hovertemplate: '%{value}<extra></extra>',
         hoverlabel: {
           font: {
-            size: 16,
+            size: 14,
             color: 'rgba(255, 255, 255)'
           },
           align: 'auto',
@@ -213,8 +181,8 @@ export class FsatSankeyComponent implements OnInit {
       xaxis: {
         automargin: true,
       },
-      paper_bgcolor: 'rgba(0,0,0,0)',
-      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: undefined,
+      plot_bgcolor: undefined,
       margin: {
         l: 50,
         t: 100,
@@ -222,12 +190,17 @@ export class FsatSankeyComponent implements OnInit {
       }
     };
 
+    if (this.appBackground) {
+      layout.paper_bgcolor = 'ececec';
+      layout.plot_bgcolor = 'ececec';
+    }
+
     const config = {
       modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
       responsive: true
     };
 
-    Plotly.react(this.ngChart.nativeElement, [sankeyData], layout, config);
+    Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config);
     this.addGradientElement();
     this.buildSvgArrows();
 
@@ -262,7 +235,7 @@ export class FsatSankeyComponent implements OnInit {
       {
         name: "",
         value: 0,
-        x: .25,
+        x: .4,
         y: .6, 
         nodeColor: this.nodeStartColor,
         id: 'InputConnector'
