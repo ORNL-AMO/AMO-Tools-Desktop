@@ -12,7 +12,6 @@ import { ConvertUnitsService } from "../convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 import { PsatService } from "../../psat/psat.service";
 import * as Plotly from "plotly.js";
-import { CompareService } from "../../psat/compare.service";
 import { DecimalPipe } from "@angular/common";
 import { PsatSankeyNode } from '../../shared/models/psat/sankey.model';
 
@@ -23,19 +22,11 @@ import { PsatSankeyNode } from '../../shared/models/psat/sankey.model';
 })
 export class PsatSankeyComponent implements OnInit {
   @Input()
-  psat: PSAT; //baseline
+  psat: PSAT;
   @Input()
   settings: Settings;
   @Input()
-  printView: boolean;
-  @Input()
-  modIndex: number;
-  @Input()
-  assessmentName: string;
-  @Input()
   appBackground: boolean;
-  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
-
   @Input()
   isBaseline: boolean;
   @Input()
@@ -45,24 +36,19 @@ export class PsatSankeyComponent implements OnInit {
   @Input()
   modResults: PsatInputs;
 
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
+
   selectedResults: PsatOutputs;
   selectedInputs: PsatInputs;
 
   width: number;
   height: number;
-
-  firstChange: boolean = true;
-
   motor: number;
   drive: number;
   pump: number;
 
-  // gradientStartColor: string = '#1F1EDC';
-  // gradientEndColor: string = '#3390DE';
-  // nodeStartColor: string = 'rgba(31, 30, 220, .9)';
-  // nodeArrowColor: string = 'rgba(51, 144, 222, .9)';
-  gradientStartColor: string = '#268ade';
-  gradientEndColor: string = '#90c0e8';
+  gradientStartColor: string = 'rgb(38, 138, 222)';
+  gradientEndColor: string = 'rgb(144, 192, 232)';
 
   nodeStartColor: string = 'rgba(38, 138, 222, .9)';
   nodeArrowColor: string = 'rgba(144, 192, 232, .9)';
@@ -72,7 +58,6 @@ export class PsatSankeyComponent implements OnInit {
   constructor(
     private psatService: PsatService,
     private convertUnitsService: ConvertUnitsService,
-    private compareService: CompareService,
     private _dom: ElementRef,
     private renderer: Renderer2,
     private decimalPipe: DecimalPipe
@@ -116,17 +101,13 @@ export class PsatSankeyComponent implements OnInit {
     }
   }
 
-  closeSankey() {
-    Plotly.purge(this.ngChart.nativeElement);
-  }
-
   sankey(results: PsatOutputs) {
     const links: Array<{ source: number, target: number }> = [];
     let nodes: Array<PsatSankeyNode> = [];
 
-    this.closeSankey();
-    this.calcLosses(results);
+    Plotly.purge(this.ngChart.nativeElement);
 
+    this.calcLosses(results);
     this.buildNodes(results, nodes);
     this.buildLinks(nodes, links);
 

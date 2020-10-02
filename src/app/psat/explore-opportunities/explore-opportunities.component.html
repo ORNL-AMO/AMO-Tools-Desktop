@@ -58,15 +58,6 @@
 				  [isBaseline]="false">
 				</app-psat-sankey>
 			  </div>
-			<div class="alert-danger small" *ngIf="!psat.modifications[modificationIndex].psat.valid.isValid">
-				Invalid System Setup:<br>
-				<span *ngIf="!psat.modifications[modificationIndex].psat.valid.pumpFluidValid">Errors found in Pump Fluid
-					Data<br></span>
-				<span *ngIf="!psat.modifications[modificationIndex].psat.valid.motorValid">Errors found in Motor
-					Data<br></span>
-				<span *ngIf="!psat.modifications[modificationIndex].psat.valid.fieldDataValid">Errors found in Field
-					Data<br></span>
-			</div>
 		</div>
 		<div class="scroll-item" [ngStyle]="{'height.px': helpHeight}"
 			*ngIf="modificationExists && tabSelect == 'results'">

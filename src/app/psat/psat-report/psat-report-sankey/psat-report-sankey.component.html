@@ -13,14 +13,12 @@
           'positive-savings': psat1CostSavings > 0
         }">Cost Savings: {{ psat1CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
       </div>
-      <div class="w-75">
+      <div class="w-75 m-3">
           <app-psat-sankey
         [psat]="psat1"
-        [assessmentName]="assessmentName"
         [settings]="settings"
         [isBaseline]="psat1Baseline"
       ></app-psat-sankey>
-        <div *ngIf="psat1.valid.isValid == false" class="alert-danger">Invalid System Setup</div>
       </div>
     </div>
     <hr>
@@ -37,15 +35,12 @@
           'positive-savings': psat2CostSavings > 0
         }">Cost Savings: {{ psat2CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
       </div>
-      <div class="w-75">
+      <div class="w-75 m-3">
           <app-psat-sankey
-        [baseline]="psat2"
         [psat]="psat2"
-        [assessmentName]="assessmentName"
         [settings]="settings"
         [isBaseline]="psat2Baseline"
       ></app-psat-sankey>
-        <div *ngIf="psat2.valid.isValid == false" class="alert-danger">Invalid System Setup</div>
       </div>
 
     </div>
