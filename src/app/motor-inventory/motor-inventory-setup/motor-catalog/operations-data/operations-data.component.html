@@ -8,21 +8,21 @@
     <!-- location -->
     <div class="form-group" *ngIf="displayOptions.location">
         <label for="location">Location</label>
-        <input type="text" class="form-control" (blur)="focusOut()" (focus)="focusField('location')" (input)="save()"
+        <input type="text" class="form-control" (focus)="focusField('location')" (input)="save()"
             formControlName="location" id="location">
     </div>
 
     <!-- annualOperatingHours -->
     <div class="form-group" *ngIf="displayOptions.annualOperatingHours">
         <label for="annualOperatingHours"><span class="fa fa-asterisk"></span>Operating Hours
-            
+
         </label>
         <div class="input-group">
             <span class="input-group-addon op-hour-addon units">
                 <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
             </span>
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('annualOperatingHours')"
-                (input)="save()" formControlName="annualOperatingHours" id="annualOperatingHours">
+            <input type="number" class="form-control" (focus)="focusField('annualOperatingHours')" (input)="save()"
+                formControlName="annualOperatingHours" id="annualOperatingHours">
             <span class="input-group-addon units">hrs/yr</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.annualOperatingHours.invalid">
@@ -38,8 +38,8 @@
             <a class="form-text small click-link" (click)="showLoadFactorModal()">Calculate Load Factor</a>
         </label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('averageLoadFactor')"
-                (input)="save()" formControlName="averageLoadFactor" id="averageLoadFactor">
+            <input type="number" class="form-control" (focus)="focusField('averageLoadFactor')" (input)="save()"
+                formControlName="averageLoadFactor" id="averageLoadFactor">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.averageLoadFactor.invalid">
@@ -53,8 +53,8 @@
     <div class="form-group" *ngIf="displayOptions.utilizationFactor">
         <label for="utilizationFactor"><span class="fa fa-asterisk"></span>Utilization Factor</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('utilizationFactor')"
-                (input)="save()" formControlName="utilizationFactor" id="utilizationFactor">
+            <input type="number" class="form-control" (focus)="focusField('utilizationFactor')" (input)="save()"
+                formControlName="utilizationFactor" id="utilizationFactor">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.utilizationFactor.invalid">
@@ -66,7 +66,7 @@
     </div>
     <!-- efficiencyAtAverageLoad -->
     <div class="form-group" *ngIf="displayOptions.efficiencyAtAverageLoad">
-        <label for="efficiencyAtAverageLoad"><span class="fa fa-asterisk"></span>Efficiency at Average Load            
+        <label for="efficiencyAtAverageLoad"><span class="fa fa-asterisk"></span>Efficiency at Average Load
             <span class="form-text">
                 <a class="small click-link" (click)="calculateEfficiency()"
                     [ngClass]="{'disabled': disableEstimateEfficiency}">Estimate Efficiency</a>
@@ -74,8 +74,7 @@
             </span>
         </label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()"
-                (focus)="focusField('efficiencyAtAverageLoad')" (input)="save()"
+            <input type="number" class="form-control" (focus)="focusField('efficiencyAtAverageLoad')" (input)="save()"
                 formControlName="efficiencyAtAverageLoad" id="efficiencyAtAverageLoad">
             <span class="input-group-addon units">%</span>
         </div>
@@ -96,8 +95,8 @@
             </span>
         </label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('currentAtLoad')"
-                (input)="save()" formControlName="currentAtLoad" id="currentAtLoad">
+            <input type="number" class="form-control" (focus)="focusField('currentAtLoad')" (input)="save()"
+                formControlName="currentAtLoad" id="currentAtLoad">
             <span class="input-group-addon units">A</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.currentAtLoad.invalid">
@@ -115,8 +114,8 @@
             </span>
         </label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('powerFactorAtLoad')"
-                (input)="save()" formControlName="powerFactorAtLoad" id="powerFactorAtLoad">
+            <input type="number" class="form-control" (focus)="focusField('powerFactorAtLoad')" (input)="save()"
+                formControlName="powerFactorAtLoad" id="powerFactorAtLoad">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactorAtLoad.invalid">
