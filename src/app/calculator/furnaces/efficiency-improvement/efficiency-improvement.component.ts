@@ -36,6 +36,8 @@ export class EfficiencyImprovementComponent implements OnInit {
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
 
   currentField: string = 'default';
+  tabSelect: string = 'results';
+  resetForm: boolean = true;
 
   calcExists: boolean;
   saving: boolean;
@@ -53,6 +55,9 @@ export class EfficiencyImprovementComponent implements OnInit {
 
     if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
+    }
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
     if (this.inAssessment) {
       this.getCalculator();
@@ -79,6 +84,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.efficiencyImprovementInputs = this.efficiencyImprovementService.getResetData();
     }
     this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
+    this.resetForm = true;
     this.calculate(this.efficiencyImprovementInputs);
   }
 
@@ -89,10 +95,15 @@ export class EfficiencyImprovementComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
 
   calculate(data: EfficiencyImprovementInputs) {
     this.efficiencyImprovementInputs = data;

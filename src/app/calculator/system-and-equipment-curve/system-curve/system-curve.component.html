@@ -7,6 +7,6 @@
     </h5>
     <div class="mb-3 d-block" *ngIf="systemCurveCollapsed == 'open'">
         <app-fan-system-curve-form *ngIf="equipmentType == 'fan'" [settings]="settings"></app-fan-system-curve-form>
-        <app-pump-system-curve-form *ngIf="equipmentType == 'pump'" [settings]="settings"></app-pump-system-curve-form>
+        <app-pump-system-curve-form *ngIf="equipmentType == 'pump'" [equipmentType]="equipmentType" [settings]="settings"></app-pump-system-curve-form>
     </div>
 </div>

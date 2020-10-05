@@ -34,6 +34,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "plotly.js",
+              "c3",
+              "regression"
+            ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",

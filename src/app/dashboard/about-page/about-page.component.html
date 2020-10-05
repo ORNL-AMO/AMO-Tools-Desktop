@@ -302,6 +302,49 @@
           </ul>
         </div>
       </div>
+
+
+      <div class="card">
+        <div class="card-header bold" (click)="toggleInventory()">
+          Inventory Management
+          <span class="pull-right" *ngIf="!showInventory"><i class="fa fa-chevron-down"></i></span>
+          <span class="pull-right" *ngIf="showInventory"><i class="fa fa-chevron-up"></i></span>
+        </div>
+        <div *ngIf="showInventory" class="card-body small">
+          <p>
+            MEASUR's Inventory Management tools allow users to create and manage equipment inventory and maintenance
+            logs, allowing them to evaluate their energy efficiency and identify opportunities to reduce energy use.
+            These tools are based on the MotorMaster+ (originally developed by the U.S. Department of Energy’s
+            Industrial Technologies Program) and AirMaster's compressor database.
+          </p>
+          <p>
+            Users can create inventories for several different equipment types:</p>
+          <ul>
+            <li>Motors</li>
+            <li>Pumps (in development)</li>
+            <li>Fans (in development)</li>
+            <li>Compressors (in development)</li>
+            <li>Maintenance Logs (in development)</li>
+          </ul>
+          <hr>
+          <div class="content-subheader">Inputs</div>
+          <p>Inputs vary for each equipment type, but often are related to</p>
+          <ul>
+            <li>Equipment Rated Power/Capacity</li>
+            <li>Nameplate Data</li>
+            <li>Load Characteristics</li>
+            <li>Field Measurements</li>
+            <li>Purchase / Replacement Information</li>
+          </ul>
+          <div class="content-subheader">Outputs</div>
+          <p>Based on inputs, MEASUR will provide the following:</p>
+          <ul>
+            <li>Inventory Summary/Overview</li>
+            <li>Inventory Breakdown</li>
+            <li>Simple Batch Analysis</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -158,7 +158,7 @@ export class GasDensityFormComponent implements OnInit {
   }
 
   setValidators() {
-    let ranges: GasDensityRanges = this.gasDensityFormService.getGasDensityRanges(this.settings);
+    let ranges: GasDensityRanges = this.gasDensityFormService.getGasDensityRanges(this.settings, this.gasDensityForm.controls.dryBulbTemp.value);
     this.gasDensityFormService.setRelativeHumidityValidators(this.gasDensityForm);
     this.gasDensityFormService.setWetBulbValidators(this.gasDensityForm, ranges);
     this.gasDensityFormService.setDewPointValidators(this.gasDensityForm, ranges);

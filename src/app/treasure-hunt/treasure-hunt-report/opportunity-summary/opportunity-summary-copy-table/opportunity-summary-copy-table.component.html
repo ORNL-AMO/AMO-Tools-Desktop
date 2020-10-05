@@ -1,0 +1,152 @@
+<table #copyTable class="table table-hover">
+    <tbody>
+        <tr class="table-header-row bold">
+            <td>
+                Opportunity Name
+            </td>
+            <td>
+                Utility
+            </td>
+            <td>
+                Team
+            </td>
+            <td>
+                Equipment
+            </td>
+            <td>
+                Owner/Lead
+            </td>
+            <td>
+                Utility Savings
+            </td>
+            <td></td>
+            <td>
+                Cost Savings
+            </td>
+            <td>
+                Material Cost
+            </td>
+            <td>
+                Labor Cost
+            </td>
+            <td>
+                Engineering Cost
+            </td>
+            <td>
+                Other Cost
+            </td>
+            <td>
+                Total Cost
+            </td>
+            <td>
+                Simple Payback
+            </td>
+        </tr>
+        <tr *ngFor="let opportunity of individualOpportunitySummaries">
+            <!--name-->
+            <td>
+                {{ opportunity.opportunityName }}
+            </td>
+            <!--type-->
+            <td>
+                {{ opportunity.utilityType }}
+            </td>
+            <td>
+                {{ opportunity.team }}
+            </td>
+            <td>
+                {{ opportunity.equipment }}
+            </td>
+            <td>
+                {{ opportunity.owner }}
+            </td>
+            <!--energy savings-->
+            <td *ngIf="opportunity.utilityType != 'Mixed'">
+                {{ opportunity.totalEnergySavings | number: "1.0-0" }}
+            </td>
+            <!--unit-->
+            <td>
+                <span *ngIf="opportunity.utilityType == 'Electricity'">kWh</span>
+
+                <span *ngIf="opportunity.utilityType == 'Compressed Air'">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+                </span>
+
+                <span *ngIf="opportunity.utilityType == 'Water' || opportunity.utilityType == 'Waste Water'">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                </span>
+
+                <span *ngIf="opportunity.utilityType == 'Steam'">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+                </span>
+
+                <span *ngIf="opportunity.utilityType == 'Natural Gas' || opportunity.utilityType == 'Other Fuel'">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+                </span>
+                <!--mixed-->
+                <span *ngIf="opportunity.utilityType == 'Mixed'">
+                    <span *ngFor="let result of opportunity.mixedIndividualResults">
+                        <span *ngIf="result.utilityType == 'Electricity'">kWh</span>
+
+                        <span *ngIf="result.utilityType == 'Compressed Air'">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+                        </span>
+
+                        <span *ngIf="result.utilityType == 'Steam'">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+                        </span>
+
+                        <span *ngIf="result.utilityType == 'Water' || result.utilityType == 'Waste Water'">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                        </span>
+
+                        <span *ngIf="result.utilityType == 'Natural Gas' || result.utilityType == 'Other Fuel'">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+                        </span>
+                        <br />
+                    </span>
+                </span>
+            </td>
+            <!--cost savings-->
+            <td>
+                {{ opportunity.costSavings | currency: "USD":"symbol":"1.0-0" }}
+            </td>
+            <!--material cost-->
+            <td>
+                {{getMaterialCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0"}}
+            </td>
+            <!--labor cost-->
+            <td>
+                {{getLaborCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0" }}
+            </td>
+            <!--engineering cost-->
+            <td>
+                {{getEngineeringCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0"}}
+            </td>
+            <!--other cost-->
+            <td>
+                {{getOtherCost(opportunity.opportunityCost) | currency: "USD":"symbol":"1.0-0"}}
+            </td>
+            <!--total cost-->
+            <td>
+                {{ opportunity.totalCost | currency: "USD":"symbol":"1.0-0" }}
+            </td>
+            <!--payback-->
+            <td>
+                {{ opportunity.payback | number: "1.0-2" }}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>

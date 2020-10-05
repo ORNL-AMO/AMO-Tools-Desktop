@@ -1,0 +1,119 @@
+<!--CREATE inventory MODAL-->
+<div bsModal #createInventoryItemModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="createModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md create-inventory-modal">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h3>Create New Inventory</h3>
+        <button class="close" (click)="hideCreateModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- End .modal-header -->
+
+      <form [formGroup]="newInventoryItemForm" (ngSubmit)="create()" *ngIf="!showNewFolder">
+
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label class="form-control-label" for="inventoryName">Inventory Name</label>
+            <input #inventoryName class="form-control" formControlName="inventoryName" id="inventoryName" type="text" />
+            <div class="help-text">
+              <p *ngIf="newInventoryItemForm.controls.inventoryType.value == 'motorInventory'">Example: "Inventory123"
+                or "ORNL Motor Inventory"</p>
+
+            </div>
+          </div>
+          <!-- End .form-group -->
+
+          <div class="form-group">
+            <label>Inventory Type</label>
+            <select class="form-control type-select" formControlName="inventoryType">
+              <option [ngValue]="'motorInventory'">Motor</option>
+            </select>
+          </div>
+
+          <div class="form-group" *ngIf="directories">
+            <label>Folder Location</label>
+            <select class="form-control w-100" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+            <div class="help-text">
+              <a class="click-link" (click)="addFolder()">Add a new folder for this inventory</a>
+            </div>
+          </div>
+        </div>
+        <!-- End .modal-body -->
+
+        <div class="d-flex justify-content-between" [ngClass]="{
+          'motor-inventory': newInventoryItemForm.controls.inventoryType.value == 'motorInventory'}">
+          <div class="p-2">
+            <button class="btn btn-secondary" type="button" (click)="hideCreateModal()">Close</button>
+          </div>
+          <div class="p-2">
+            <button class="btn btn-primary" type="submit" [disabled]="!newInventoryItemForm.valid"
+              (click)="create()">Add Inventory</button>
+          </div>
+        </div>
+
+      </form>
+
+      <form [formGroup]="newFolderForm" *ngIf="showNewFolder">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-control-label" for="folderName">Folder Name</label>
+            <div class="input-group">
+              <input class="form-control input-group" formControlName="folderName" id="folderName" />
+            </div>
+            <!-- <div class="help-text">
+            <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
+          </div> -->
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="companyName">Company Name</label>
+            <div class="input-group">
+              <input class="form-control input-group" formControlName="companyName" id="companyName" />
+            </div>
+            <!-- <div class="help-text">
+              <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
+            </div> -->
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="facilityName">Facility Name</label>
+            <div class="input-group">
+              <input class="form-control input-group" formControlName="facilityName" id="facilityName" />
+            </div>
+            <!-- <div class="help-text">
+                <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
+              </div> -->
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>New Folder Location</label>
+            <select class="form-control w-100" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <div class="p-2">
+              <button class="btn btn-secondary" type="button" (click)="cancelNewFolder()">Cancel</button>
+            </div>
+
+            <div class="p-2">
+              <button class="btn btn-secondary" type="button" [disabled]="!newFolderForm.valid"
+                (click)="createFolder()">Create Folder</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

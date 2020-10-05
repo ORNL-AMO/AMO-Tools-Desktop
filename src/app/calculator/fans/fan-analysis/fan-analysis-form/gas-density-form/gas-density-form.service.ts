@@ -21,7 +21,7 @@ export class GasDensityFormService {
   }
 
   getGasDensityFormFromObj(obj: BaseGasDensity, settings: Settings): FormGroup {
-    let ranges: GasDensityRanges = this.getGasDensityRanges(settings);
+    let ranges: GasDensityRanges = this.getGasDensityRanges(settings, obj.dryBulbTemp);
     let form = this.formBuilder.group({
       inputType: [obj.inputType, Validators.required],
       gasType: [obj.gasType, Validators.required],
@@ -44,7 +44,7 @@ export class GasDensityFormService {
     return form;
   }
 
-  getGasDensityRanges(settings: Settings): GasDensityRanges {
+  getGasDensityRanges(settings: Settings, dryBulbTemp: number): GasDensityRanges {
     let ranges: GasDensityRanges = {
       barPressureMin: 10,
       barPressureMax: 60,
@@ -53,9 +53,9 @@ export class GasDensityFormService {
       staticPressureMin: -400,
       staticPressureMax: 400,
       wetBulbTempMin: 32,
-      wetBulbTempMax: 1000,
+      wetBulbTempMax: dryBulbTemp,
       dewPointMin: -30,
-      dewPointMax: 1000,
+      dewPointMax: dryBulbTemp,
       gasDensityMax: .2
     };
     if (settings.fanBarometricPressure !== 'inHg') {
@@ -71,12 +71,12 @@ export class GasDensityFormService {
       ranges.dryBulbTempMax = Number(ranges.dryBulbTempMax.toFixed(0));
       ranges.wetBulbTempMin = this.convertUnitsService.value(ranges.wetBulbTempMin).from('F').to(settings.fanTemperatureMeasurement);
       ranges.wetBulbTempMin = Number(ranges.wetBulbTempMin.toFixed(0));
-      ranges.wetBulbTempMax = this.convertUnitsService.value(ranges.wetBulbTempMax).from('F').to(settings.fanTemperatureMeasurement);
-      ranges.wetBulbTempMax = Number(ranges.wetBulbTempMax.toFixed(0));
+      // ranges.wetBulbTempMax = this.convertUnitsService.value(ranges.wetBulbTempMax).from('F').to(settings.fanTemperatureMeasurement);
+      // ranges.wetBulbTempMax = Number(ranges.wetBulbTempMax.toFixed(0));
       ranges.dewPointMin = this.convertUnitsService.value(ranges.dewPointMin).from('F').to(settings.fanTemperatureMeasurement);
       ranges.dewPointMin = Number(ranges.dewPointMin.toFixed(0));
-      ranges.dewPointMax = this.convertUnitsService.value(ranges.dewPointMax).from('F').to(settings.fanTemperatureMeasurement);
-      ranges.dewPointMax = Number(ranges.dewPointMax.toFixed(0));
+      // ranges.dewPointMax = this.convertUnitsService.value(ranges.dewPointMax).from('F').to(settings.fanTemperatureMeasurement);
+      // ranges.dewPointMax = Number(ranges.dewPointMax.toFixed(0));
     }
     if (settings.densityMeasurement !== 'lbscf') {
       ranges.gasDensityMax = this.convertUnitsService.value(ranges.gasDensityMax).from('lbscf').to(settings.densityMeasurement);
@@ -222,7 +222,7 @@ export class GasDensityFormService {
   }
 
   setValidators(gasDensityForm: FormGroup, settings: Settings) {
-    let ranges: GasDensityRanges = this.getGasDensityRanges(settings);
+    let ranges: GasDensityRanges = this.getGasDensityRanges(settings, gasDensityForm.controls.dryBulbTemp.value);
     this.setRelativeHumidityValidators(gasDensityForm);
     this.setWetBulbValidators(gasDensityForm, ranges);
     this.setDewPointValidators(gasDensityForm, ranges);

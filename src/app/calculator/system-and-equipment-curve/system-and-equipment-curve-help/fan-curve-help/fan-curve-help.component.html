@@ -326,16 +326,39 @@
             </div>
         </h6>
     </div>
-    <div class="my-2" *ngIf="currentField == 'modifiedMeasurement'">
-        <h6>
-            Modified Condition
-            <br>
-            <small class="text-muted">
-                The impeller diameter/speed of the system in the modified fan curve.
-                <hr>
-            </small>
-        </h6>
-    </div>
+  <div class="my-2" *ngIf="currentField == 'modifiedFlow'">
+    <h6>
+      Modified Flow
+      <sup>5</sup>
+      <br>
+      <small class="text-muted">
+        These calculations use your system curve to estimate your new operating point. Please enter data in the System Curve Section below.  
+          <hr>
+      </small>
+  </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'modifiedPressure'">
+  <h6>
+    Modified Pressure
+    <sup>5</sup>
+    <br>
+    <small class="text-muted">
+      These calculations use your system curve to estimate your new operating point. Please enter data in the System Curve Section below.  
+        <hr>
+    </small>
+</h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'modifiedHead'">
+  <h6>
+    Modified Head
+    <sup>5</sup>
+    <br>
+    <small class="text-muted">
+      These calculations use your system curve to estimate your new operating point. Please enter data in the System Curve Section below.  
+        <hr>
+    </small>
+</h6>
+</div>
     <!-- <div class="my-2" *ngIf="currentField == 'exploreFlow'">
           <h6>
             Explore Flow

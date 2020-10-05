@@ -25,7 +25,7 @@ export class EnergyInputService {
       electrodeHeatingValue: [electrodeHeatingDefault, Validators.required],
       otherFuels: ['', Validators.required],
       electricityInput: ['', Validators.required],
-      name: ['Loss #'+lossNum]
+      name: ['Loss #' + lossNum]
     })
   }
 
@@ -56,5 +56,16 @@ export class EnergyInputService {
       electricityInput: [loss.electricityInput, Validators.required],
       name: [loss.name]
     })
+  }
+
+  calculateHeatInputFromFlowRate(flowRate: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      return this.convertUnitsService.roundVal(flowRate * (1020 / (Math.pow(10, 6))), 3);
+    } else {
+      let convertedFlowRate: number = this.convertUnitsService.value(flowRate).from('m3').to('ft3');
+      let heatInput: number = convertedFlowRate * (1020 / (Math.pow(10, 6)));
+      let convertedHeatInput: number = this.convertUnitsService.value(heatInput).from('MMBtu').to('GJ');
+      return this.convertUnitsService.roundVal(convertedHeatInput, 3);
+    }
   }
 }

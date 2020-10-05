@@ -16,6 +16,7 @@ export interface FSAT {
   operatingHours?: OperatingHours;
   outputs?: FsatOutput;
   valid?: FsatValid;
+  tempFsatCopy?: FSAT;
 }
 
 export interface FsatValid {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FanAnalysisService } from '../../../calculator/fans/fan-analysis/fan-analysis.service';
 import { ConvertFanAnalysisService } from '../../../calculator/fans/fan-analysis/convert-fan-analysis.service';
@@ -19,15 +19,19 @@ export class CalculateFlowPressureComponent implements OnInit {
   bodyHeight: number;
   @Input()
   fsat: FSAT;
-  @Output('saveFlowAndPressure')
-  saveFlowAndPressure = new EventEmitter<FSAT>();
+  @Output('updateFsatCopy')
+  updateFsatCopy = new EventEmitter<FSAT>();
   @Output('emitInvalid')
   emitInvalid = new EventEmitter<boolean>();
 
   stepTab: string;
   stepTabSubscription: Subscription;
   getResultsSubscription: Subscription;
-  constructor(private fanAnalysisService: FanAnalysisService, private convertFanAnalysisService: ConvertFanAnalysisService, private fanInfoFormService: FanInfoFormService, private planeDataFormService: PlaneDataFormService) { }
+  constructor(private fanAnalysisService: FanAnalysisService, 
+              private convertFanAnalysisService: ConvertFanAnalysisService, 
+              private fanInfoFormService: FanInfoFormService, 
+              private planeDataFormService: PlaneDataFormService,
+              ) { }
 
   ngOnInit() {
     this.fanAnalysisService.inAssessmentModal = true;
@@ -47,7 +51,7 @@ export class CalculateFlowPressureComponent implements OnInit {
     this.fanAnalysisService.inputData.FanRatedInfo.fanSpeed = this.fsat.fanSetup.fanSpeed;
     this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure = this.fsat.baseGasDensity.barometricPressure;
     this.fanAnalysisService.inputData.FanRatedInfo.motorSpeed = this.fsat.fanMotor.motorRpm;
-
+    
     this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
       this.stepTab = val;
     });
@@ -79,10 +83,10 @@ export class CalculateFlowPressureComponent implements OnInit {
         this.fsat.fieldData.inletPressure = Number(planeResults.FanInletFlange.gasTotalPressure.toFixed(3));
         this.fsat.fieldData.outletPressure = Number(planeResults.FanOrEvaseOutletFlange.gasTotalPressure.toFixed(3));
       }
-      this.saveFlowAndPressure.emit(this.fsat);
+      this.emitInvalid.emit(false);
     } else {
-      // this.planeResults = undefined;
       this.emitInvalid.emit(true);
     }
+    this.updateFsatCopy.emit(this.fsat);
   }
 }

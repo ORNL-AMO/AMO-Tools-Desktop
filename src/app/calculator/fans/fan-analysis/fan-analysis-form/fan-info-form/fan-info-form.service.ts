@@ -30,6 +30,11 @@ export class FanInfoFormService {
       globalBarometricPressure: [obj.globalBarometricPressure, [Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]]
       //planarBarometricPressure: [obj.planarBarometricPressure, Validators.required]
     });
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 

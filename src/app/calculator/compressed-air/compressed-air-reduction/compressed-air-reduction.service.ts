@@ -43,11 +43,17 @@ export class CompressedAirReductionService {
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
+    let utilityCost: number = settings && settings.electricityCost ? settings.electricityCost : 0.066;
+    if(utilityType == 0){
+      utilityCost = settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12;
+    }
+
+
     let obj: CompressedAirReductionData = {
       name: 'Equipment #' + (index + 1),
       hoursPerYear: hoursPerYear,
       utilityType: utilityType ? utilityType : 0,
-      utilityCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
+      utilityCost: utilityCost,
       compressedAirCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
       electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.066,
       measurementMethod: 0,
@@ -73,9 +79,9 @@ export class CompressedAirReductionService {
       name: 'Equipment #1',
       hoursPerYear: 8760,
       utilityType: 0,
-      utilityCost: 0.12,
-      compressedAirCost: 0.022,
-      electricityCost: settings.electricityCost,
+      utilityCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
+      compressedAirCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
+      electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.066,
       measurementMethod: 0,
       flowMeterMethodData: {
         meterReading: meterReading
@@ -225,22 +231,26 @@ export class CompressedAirReductionService {
   getResults(settings: Settings, baseline: Array<CompressedAirReductionData>, modification?: Array<CompressedAirReductionData>): CompressedAirReductionResults {
     let baselineInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(baseline));
     let baselineResults: CompressedAirReductionResult = this.calculate(baselineInpCpy, settings);
-    let modificationResults: CompressedAirReductionResult;
-    let annualEnergySavings: number = 0;
-    let annualCostSavings: number = 0;
-    let flowRateReduction: number = 0;
-    let annualConsumptionReduction: number = 0;
+    let modificationResults: CompressedAirReductionResult = {
+      energyUse: 0,
+      energyCost: 0,
+      flowRate: 0,
+      singleNozzeFlowRate: 0,
+      consumption: 0
+    };
     if (modification) {
       let modificationInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(modification));
       modificationResults = this.calculate(modificationInpCpy, settings);
+    } else{
+      modificationResults = baselineResults;
     }
     let compressedAirReductionResults: CompressedAirReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
-      annualCostSavings: annualCostSavings,
-      annualEnergySavings: annualEnergySavings,
-      annualFlowRateReduction: flowRateReduction,
-      annualConsumptionReduction: annualConsumptionReduction
+      annualCostSavings: 0,
+      annualEnergySavings: 0,
+      annualFlowRateReduction: 0,
+      annualConsumptionReduction: 0
     }
     if (modificationResults) {
       if (baselineInpCpy[0].utilityType == 0) {

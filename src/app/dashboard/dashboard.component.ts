@@ -20,6 +20,9 @@ export class DashboardComponent implements OnInit {
   createAssessment: boolean;
   createAssessmentSub: Subscription;
 
+  createInventory: boolean;
+  createInventorySub: Subscription;
+
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
 
@@ -68,6 +71,10 @@ export class DashboardComponent implements OnInit {
         this.contentWidth = this.dashboardContent.nativeElement.clientWidth - this.sidebarWidth;
       }
     });
+
+    this.createInventorySub = this.dashboardService.createInventory.subscribe(val => {
+      this.createInventory = val;
+    })
   }
 
   ngOnDestroy() {
@@ -76,6 +83,7 @@ export class DashboardComponent implements OnInit {
     this.createFolderSub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.sidebarWidthSub.unsubscribe();
+    this.createInventorySub.unsubscribe();
   }
 
   ngAfterViewInit() {

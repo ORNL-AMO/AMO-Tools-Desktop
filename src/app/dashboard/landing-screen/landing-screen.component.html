@@ -27,7 +27,7 @@
 		<div class="row justify-content-center no-gutters">
 			<div class="col-sm-12 col-md-11 col-lg-9">
 				<div class="card landing-menu">
-					<div class="card-header">
+					<!-- <div class="card-header">
 						<div class="row">
 							<div class="col-6 text-center">
 								<a class="click-link" (click)="createAssessment()">Create Assessment</a>
@@ -35,17 +35,26 @@
 								</p>
 							</div>
 							<div class="col-6 text-center">
-								<a class="click-link" [routerLink]="['/calculators/calculators-list']">Properties &amp; Equipment
+								<a class="click-link" [routerLink]="['/calculators/calculators-list']">Properties &amp;
+									Equipment
 									Calculators</a>
 								<p class="text-help small">Generate detailed properties and test a variety of
 									adjustments.</p>
 							</div>
 						</div>
 
-					</div>
+					</div> -->
 					<div class="card-body">
 						<div class="row">
+							<!--assessments-->
 							<div class="col-6 border-right">
+								<div class="p-2 text-center">
+									<a class="click-link" (click)="createAssessment()">Create Assessment</a>
+									<p class="text-help small mb-0">Model a system and explore multiple optimization
+										scenarios.
+									</p>
+									<hr class="my-2">
+								</div>
 								<div class="d-flex">
 									<div class="p-2">
 										<div class="d-flex flex-column">
@@ -134,48 +143,106 @@
 								</div>
 							</div>
 							<div class="col-6">
-								<div class="p-2">
-									<a class="icon click-link" [routerLink]="['/calculators/motors-list']">
-										<i class="fa fa-calculator"></i> Motors
-									</a>
+								<!--calculators-->
+								<div class="row no-gutters h-50">
+									<div class="col-12">
+										<div class="text-center p-2">
+											<a class="click-link"
+												[routerLink]="['/calculators/calculators-list']">Properties &amp;
+												Equipment Calculators</a>
+											<p class="text-help small mb-0">Generate detailed properties and test a
+												variety
+												of
+												adjustments.</p>
+											<hr class="my-2">
+										</div>
+										<div class="row no-gutters">
+											<div class="col-6">
+												<div class="p-1">
+													<a class="icon click-link"
+														[routerLink]="['/calculators/motors-list']">
+														<i class="fa fa-calculator"></i> Motors
+													</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link"
+														[routerLink]="['/calculators/process-cooling-list']">
+														<i class="fa fa-calculator"></i> Process Cooling
+													</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link"
+														[routerLink]="['/calculators/pumps-list']">
+														<i class="fa fa-calculator"></i> Pumps</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link"
+														[routerLink]="['/calculators/fans-list']">
+														<i class="fa fa-calculator"></i> Fans</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link furnace"
+														[routerLink]="['/calculators/process-heating-list']">
+														<i class="fa fa-calculator"></i> Process Heating
+													</a>
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="p-1">
+													<a class="icon click-link furnace"
+														[routerLink]="['/calculators/steam-list']">
+														<i class="fa fa-calculator"></i> Steam
+													</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link"
+														[routerLink]="['/calculators/compressed-air-list']">
+														<i class="fa fa-calculator"></i> Compressed Air
+													</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link"
+														[routerLink]="['/calculators/lighting-list']">
+														<i class="fa fa-calculator"></i> Lighting
+													</a>
+												</div>
+												<div class="p-1">
+													<a class="icon click-link"
+														[routerLink]="['/calculators/general-list']">
+														<i class="fa fa-calculator"></i> General
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="p-2">
-									<a class="icon click-link" [routerLink]="['/calculators/process-cooling-list']">
-										<i class="fa fa-calculator"></i> Process Cooling
-									</a>
-								</div>
-								<div class="p-2">
-									<a class="icon click-link" [routerLink]="['/calculators/pumps-list']">
-										<i class="fa fa-calculator"></i> Pumps</a>
-								</div>
-								<div class="p-2">
-									<a class="icon click-link" [routerLink]="['/calculators/fans-list']">
-										<i class="fa fa-calculator"></i> Fans</a>
-								</div>
-								<div class="p-2">
-									<a class="icon click-link furnace" [routerLink]="['/calculators/process-heating-list']">
-										<i class="fa fa-calculator"></i> Process Heating
-									</a>
-								</div>
-								<div class="p-2">
-									<a class="icon click-link furnace" [routerLink]="['/calculators/steam-list']">
-										<i class="fa fa-calculator"></i> Steam
-									</a>
-								</div>
-								<div class="p-2">
-									<a class="icon click-link" [routerLink]="['/calculators/compressed-air-list']">
-										<i class="fa fa-calculator"></i> Compressed Air
-									</a>
-								</div>
-								<div class="p-2">
-									<a class="icon click-link" [routerLink]="['/calculators/lighting-list']">
-										<i class="fa fa-calculator"></i> Lighting
-									</a>
-								</div>
-								<div class="p-2">
-									<a class="icon click-link" [routerLink]="['/calculators/general-list']">
-										<i class="fa fa-calculator"></i> General
-									</a>
+								<!--inventory-->
+								<div class="row no-gutters">
+									<div class="col-12">
+										<div class="text-center p-2">
+											<a class="click-link" (click)="createInventory()">Inventory Management</a>
+											<p class="text-help small mb-0">Create and manage equipment inventory.</p>
+											<hr class="my-2">
+										</div>
+
+										<div class="d-flex">
+											<div class="p-2">
+												<div class="d-flex flex-column">
+													<div class="motor-inventory-background align-self-center">
+														<img class="motor-inventory-icon "
+															src="assets/images/motor-inventory-icon.png">
+													</div>
+												</div>
+											</div>
+											<div class="p-2 d-flex">
+												<div class="d-flex flex-column">
+													<a (click)="createInventory()" class="p-0 click-link">Create
+														Motor Inventory</a>
+													<span class="former-name">based on DOE's MotorMaster+ tool</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

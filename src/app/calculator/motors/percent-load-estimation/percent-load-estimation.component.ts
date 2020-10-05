@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FieldMeasurementInputs, SlipMethod, FieldMeasurementOutputs, PercentLoadEstimationService } from './percent-load-estimation.service';
+import { MotorItem } from '../../../motor-inventory/motor-inventory';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -13,7 +14,6 @@ export class PercentLoadEstimationComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
@@ -72,8 +72,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   calculateSlipMethod(data: SlipMethod) {
     this.slipMethodData = data;
     this.percentLoadEstimationService.slipMethodInputs = this.slipMethodData;
-    this.percentLoadEstimation = ((this.slipMethodData.synchronousSpeed - this.slipMethodData.measuredSpeed)
-      / (this.slipMethodData.synchronousSpeed - this.slipMethodData.nameplateFullLoadSpeed)) * 100;
+    this.percentLoadEstimation = this.percentLoadEstimationService.calculateSlipMethod(data);
   }
 
   calculateFieldMeasurementMethod(data: FieldMeasurementInputs) {

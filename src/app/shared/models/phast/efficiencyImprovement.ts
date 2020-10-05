@@ -1,4 +1,6 @@
 export interface EfficiencyImprovementInputs {
+    currentOperatingHours: number;
+    newOperatingHours: number;
     currentFlueGasOxygen: number;
     newFlueGasOxygen: number;
     currentFlueGasTemp: number;
@@ -6,6 +8,9 @@ export interface EfficiencyImprovementInputs {
     currentCombustionAirTemp: number;
     newCombustionAirTemp: number;
     currentEnergyInput: number;
+    currentO2CombAir?: number;
+    newO2CombAir?: number;
+    fuelCost?: number;
 }
 
 export interface EfficiencyImprovementOutputs {
