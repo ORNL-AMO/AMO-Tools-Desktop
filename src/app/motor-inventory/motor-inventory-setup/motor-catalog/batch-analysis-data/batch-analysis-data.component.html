@@ -8,8 +8,8 @@
     <div class="form-group" *ngIf="displayOptions.modifiedCost">
         <label for="modifiedCost">Modified Cost</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('modifiedCost')"
-                (input)="save()" formControlName="modifiedCost" id="modifiedCost">
+            <input type="number" class="form-control" (focus)="focusField('modifiedCost')" (input)="save()"
+                formControlName="modifiedCost" id="modifiedCost">
             <span class="input-group-addon units">$</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.modifiedCost.invalid">
@@ -21,8 +21,8 @@
     <div class="form-group" *ngIf="displayOptions.modifiedPower">
         <label for="modifiedPower">Modified Power</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('modifiedPower')"
-                (input)="save()" formControlName="modifiedPower" id="modifiedPower">
+            <input type="number" class="form-control" (focus)="focusField('modifiedPower')" (input)="save()"
+                formControlName="modifiedPower" id="modifiedPower">
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
         </div>
@@ -38,8 +38,8 @@
     <div class="form-group" *ngIf="displayOptions.modifiedEfficiency">
         <label for="modifiedEfficiency">Modified Efficiency</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('modifiedEfficiency')"
-                (input)="save()" formControlName="modifiedEfficiency" id="modifiedEfficiency">
+            <input type="number" class="form-control" (focus)="focusField('modifiedEfficiency')" (input)="save()"
+                formControlName="modifiedEfficiency" id="modifiedEfficiency">
             <span class="input-group-addon units">%</span>
         </div>
 
@@ -54,8 +54,8 @@
     <div class="form-group" *ngIf="displayOptions.modifiedPercentLoad">
         <label for="modifiedPercentLoad">Modified Percent Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('modifiedPercentLoad')"
-                (input)="save()" formControlName="modifiedPercentLoad" id="modifiedPercentLoad">
+            <input type="number" class="form-control" (focus)="focusField('modifiedPercentLoad')" (input)="save()"
+                formControlName="modifiedPercentLoad" id="modifiedPercentLoad">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.modifiedPercentLoad.invalid">
@@ -69,8 +69,8 @@
     <div class="form-group" *ngIf="displayOptions.rewindCost">
         <label for="rewindCost">Rewind Cost</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('rewindCost')"
-                (input)="save()" formControlName="rewindCost" id="rewindCost">
+            <input type="number" class="form-control" (focus)="focusField('rewindCost')" (input)="save()"
+                formControlName="rewindCost" id="rewindCost">
             <span class="input-group-addon units">$</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.rewindCost.invalid">
@@ -82,8 +82,8 @@
     <div class="form-group" *ngIf="displayOptions.rewindEfficiencyLoss">
         <label for="rewindEfficiencyLoss">Rewind Efficiency Loss</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('rewindEfficiencyLoss')"
-                (input)="save()" formControlName="rewindEfficiencyLoss" id="rewindEfficiencyLoss">
+            <input type="number" class="form-control" (focus)="focusField('rewindEfficiencyLoss')" (input)="save()"
+                formControlName="rewindEfficiencyLoss" id="rewindEfficiencyLoss">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.rewindEfficiencyLoss.invalid">
