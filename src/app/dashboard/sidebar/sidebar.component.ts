@@ -61,13 +61,24 @@ export class SidebarComponent implements OnInit {
   }
 
   showCreateAssessment() {
+    this.directoryDashboardService.createFolder.next(false);
     this.dashboardService.createInventory.next(false);
+    this.showNewDropdown = false;
     this.dashboardService.createAssessment.next(true);
   }
 
   showCreateInventory(){
     this.dashboardService.createAssessment.next(false);
+    this.directoryDashboardService.createFolder.next(false);
+    this.showNewDropdown = false;
     this.dashboardService.createInventory.next(true);
+  }
+
+  showCreateFolder(){
+    this.dashboardService.createAssessment.next(false);
+    this.dashboardService.createInventory.next(false);
+    this.showNewDropdown = false;
+    this.directoryDashboardService.createFolder.next(true);
   }
 
   openUpdateModal() {
