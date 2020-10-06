@@ -1,2 +1,14 @@
     <div class="w-100" id="effortChartDiv"></div>
+    <div class="col-md-12 pb-3">
+        <div class="graph-btn-container">
+          <span class="fa fa-comment-o" (click)="toggleLabels()" (mouseenter)="initTooltip('btnLabels')" (mouseleave)="hideTooltip('btnLabels')"></span>
+          <app-simple-tooltip [direction]="'top'" [message]="'Toggle bubble labels'" [hover]="hoverBtnLabels" [display]="displayLabelsTooltip"
+            [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
+        </div>
+        <div class="graph-btn-container">
+            <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
+            <app-simple-tooltip [direction]="'top'" [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip"
+              [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
+          </div>
+</div>
   

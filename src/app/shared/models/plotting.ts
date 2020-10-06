@@ -11,6 +11,7 @@ export interface SimpleChart {
     data: Array<TraceData>,
     layout: {
         barmode?: string,
+        height?: number,
         legend?: {
             orientation: string,
             font?: {
@@ -85,7 +86,8 @@ export interface TraceData {
     mode?: string,
     hoverinfo?: string,
     hoverlabel?: {
-        namelength: number
+        namelength?: number,
+        bordercolor?: string
     },
     text?: string[],
     marker?: {

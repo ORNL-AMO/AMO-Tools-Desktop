@@ -25,6 +25,7 @@ import { TeamSummaryPieChartComponent } from './executive-summary/team-summary-p
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 import { OpportunitySummaryCopyTableComponent } from './opportunity-summary/opportunity-summary-copy-table/opportunity-summary-copy-table.component';
 import { EffortSavingsChartComponent } from './report-graphs/effort-savings-chart/effort-savings-chart.component';
+import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { EffortSavingsChartComponent } from './report-graphs/effort-savings-char
     PrintOptionsMenuModule,
     PieChartModule,
     TreasureChestMenuModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SimpleTooltipModule,
   ],
   declarations: [
     TreasureHuntReportComponent,
