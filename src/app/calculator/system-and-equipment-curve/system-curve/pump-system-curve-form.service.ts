@@ -9,12 +9,13 @@ export class PumpSystemCurveFormService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  //example/defaults same
-  getPumpSystemCurveDefaults(settings: Settings): PumpSystemCurveData {
+  getPumpSystemCurveExample(settings: Settings): PumpSystemCurveData {
     let systemCurveFlowRate: number = 600;
-    let pumpSystemCurveHead: number = 1000;
+    let pumpSystemCurveHead: number = 300;
+    let modifiedCurveFlow = 500;
     if (settings.flowMeasurement !== 'gpm') {
       systemCurveFlowRate = Math.round(this.convertUnitsService.value(systemCurveFlowRate).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+      modifiedCurveFlow = Math.round(this.convertUnitsService.value(modifiedCurveFlow).from('gpm').to(settings.flowMeasurement) * 100) / 100;
     }
     if (settings.distanceMeasurement !== 'ft') {
       pumpSystemCurveHead = Math.round(this.convertUnitsService.value(pumpSystemCurveHead).from('ft').to(settings.distanceMeasurement) * 100) / 100;
@@ -27,24 +28,45 @@ export class PumpSystemCurveFormService {
       pointTwo: '',
       pointTwoFlowRate: systemCurveFlowRate,
       pointTwoHead: pumpSystemCurveHead,
+      modificationCurve: {
+        modificationMeasurementOption: 0,
+        modifiedFlow: modifiedCurveFlow,
+        modifiedHead: 0,
+      }
     };
     return examplePumpSystemCurveData;
   }
 
+
   getResetPumpSystemCurveInputs(): PumpSystemCurveData {
     let pumpSystemCurveData: PumpSystemCurveData = {
-      specificGravity: 1.0,
-      systemLossExponent: 1.9,
+      specificGravity: 0,
+      systemLossExponent: 0,
       pointOneFlowRate: 0,
       pointOneHead: 0,
       pointTwo: '',
       pointTwoFlowRate: 0,
       pointTwoHead: 0,
+      modificationCurve: {
+        modificationMeasurementOption: 0,
+        modifiedFlow: 0,
+        modifiedHead: 0,
+      }
     };
     return pumpSystemCurveData;
   }
 
   getFormFromObj(obj: PumpSystemCurveData): FormGroup {
+    let modificationMeasurementOption = [0, Validators.required];
+    let modifiedFlow = [0, [Validators.required, Validators.min(0)]];
+    let modifiedHead = [0, [Validators.required, Validators.min(0)]];
+
+    if (obj.modificationCurve) {
+      modificationMeasurementOption = [obj.modificationCurve.modificationMeasurementOption, Validators.required];
+      modifiedFlow = [obj.modificationCurve.modifiedFlow, [Validators.required, Validators.min(0)]];
+      modifiedHead = [obj.modificationCurve.modifiedHead, [Validators.required, Validators.min(0)]];
+    }
+    
     let form: FormGroup = this.formBuilder.group({
       specificGravity: [obj.specificGravity, [Validators.required, Validators.min(0)]],
       systemLossExponent: [obj.systemLossExponent, [Validators.required, Validators.min(0)]],
@@ -53,6 +75,9 @@ export class PumpSystemCurveFormService {
       pointTwo: [obj.pointTwo],
       pointTwoFlowRate: [obj.pointTwoFlowRate, [Validators.required, Validators.min(0)]],
       pointTwoHead: [obj.pointTwoHead, [Validators.required, Validators.min(0)]],
+      modificationMeasurementOption: modificationMeasurementOption,
+      modifiedFlow: modifiedFlow,
+      modifiedHead: modifiedHead,
     })
     return form;
   }
@@ -65,7 +90,12 @@ export class PumpSystemCurveFormService {
       pointOneHead: form.controls.pointOneHead.value,
       pointTwo: form.controls.pointTwo.value,
       pointTwoFlowRate: form.controls.pointTwoFlowRate.value,
-      pointTwoHead: form.controls.pointTwoHead.value
+      pointTwoHead: form.controls.pointTwoHead.value,
+      modificationCurve: {
+        modificationMeasurementOption: form.controls.modificationMeasurementOption.value,
+        modifiedFlow: form.controls.modifiedFlow.value,
+        modifiedHead: form.controls.modifiedHead.value,
+      }
     }
     return data;
   }

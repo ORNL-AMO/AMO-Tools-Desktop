@@ -20,19 +20,19 @@ export class FilterMotorOptionsPipe implements PipeTransform {
   checkFilterMotorOption(motorOption: SuiteDbMotor, filterMotorOptions: FilterMotorOptions): boolean {
     let isInRange: boolean = true;
     // enclosureTypes
-    if (filterMotorOptions.enclosureType && filterMotorOptions.enclosureType != motorOption.enclosureType) {
+    if (filterMotorOptions.enclosureType != undefined && filterMotorOptions.enclosureType != motorOption.enclosureType) {
       isInRange = false;
     }
     // efficiencyClass
-    if (filterMotorOptions.efficiencyClass && filterMotorOptions.efficiencyClass != motorOption.efficiencyClass) {
+    if (filterMotorOptions.efficiencyClass != undefined && filterMotorOptions.efficiencyClass != motorOption.efficiencyClass) {
       isInRange = false;
     }
     // lineFrequencies
-    if (filterMotorOptions.lineFrequency && filterMotorOptions.lineFrequency != motorOption.lineFrequency) {
+    if (filterMotorOptions.lineFrequency != undefined && filterMotorOptions.lineFrequency != motorOption.lineFrequency) {
       isInRange = false;
     }
     // poles
-    if (filterMotorOptions.poles && filterMotorOptions.poles != motorOption.poles) {
+    if (filterMotorOptions.poles != undefined && filterMotorOptions.poles != motorOption.poles) {
       isInRange = false;
     }
     // efficiency

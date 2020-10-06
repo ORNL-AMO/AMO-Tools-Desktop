@@ -65,6 +65,7 @@
               "src/assets/styles/c3-charts.css",
               "src/assets/styles/directory-dashboard.css",
               "src/assets/styles/sidebar.css",
+              "src/assets/styles/plotly-overrides.css",
               "src/assets/styles/explore-opps.css"
             ],
             "scripts": []

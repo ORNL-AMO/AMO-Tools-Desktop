@@ -7,7 +7,7 @@
     margin: 5px;
 }
 
-.modal-content{
+.modal-content, .card{
     height: 99vh;
     width: 99vw;
 }

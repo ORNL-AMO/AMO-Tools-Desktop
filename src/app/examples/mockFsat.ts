@@ -260,7 +260,15 @@ export const MockFsatCalculator: Calculator = {
             flowThree: 0,
             flowFour: 0,
             flowFive: 0,
-            flowSix: 0
+            flowSix: 0,
+            powerConstant: 0,
+            powerOrder: 1,
+            powerFlow: 0.0000164575,
+            powerFlowTwo: -6e-10,
+            powerFlowThree: 0,
+            powerFlowFour: 0,
+            powerFlowFive: 0,
+            powerFlowSix: 0,
         },
         equipmentInputs: {
             measurementOption: 1,
@@ -272,31 +280,38 @@ export const MockFsatCalculator: Calculator = {
             dataRows: [
                 {
                     yValue: 22.3,
-                    flow: 28800
+                    flow: 28800,
+                    power: 0
                 },
                 {
                     yValue: 21.8,
-                    flow: 43200
+                    flow: 43200,
+                    power: 0
                 },
                 {
                     yValue: 21.2,
-                    flow: 57640
+                    flow: 57640,
+                    power: 0
                 },
                 {
                     yValue: 20.3,
-                    flow: 72050
+                    flow: 72050,
+                    power: 0
                 },
                 {
                     yValue: 18,
-                    flow: 100871
+                    flow: 100871,
+                    power: 0
                 },
                 {
                     yValue: 14.8,
-                    flow: 129700
+                    flow: 129700,
+                    power: 0
                 },
                 {
                     yValue: 10.2,
-                    flow: 158500
+                    flow: 158500,
+                    power: 0
                 }
             ],
             dataOrder: 2

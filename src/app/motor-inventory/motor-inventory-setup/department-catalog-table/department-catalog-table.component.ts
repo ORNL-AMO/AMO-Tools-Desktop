@@ -90,7 +90,7 @@ export class DepartmentCatalogTableComponent implements OnInit {
     let batchAnalysisDataAndResults = this.batchAnalysisService.getDataAndResultsFromMotorItem(motorItem, this.settings);
     let tableDataItem: DepartmentCatalogTableDataItem = {
       name: motorItem.name,
-      operatingHours: batchAnalysisDataAndResults.data.operatingHours,
+      operatingHours: motorItem.operationData.annualOperatingHours,
       efficiencyClass: motorItem.nameplateData.efficiencyClass,
       estimatedEfficiency: motorItem.nameplateData.nominalEfficiency,
       ratedPower: motorItem.nameplateData.ratedMotorPower,

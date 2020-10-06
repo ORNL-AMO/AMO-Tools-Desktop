@@ -8,8 +8,10 @@ export interface SelectedDataPoint {
 
 export interface SimpleChart {
     name: string,
+    currentEquipmentType?: string,
     data: Array<TraceData>,
     layout: {
+        grid?: any,
         barmode?: string,
         height?: number,
         legend?: {
@@ -29,6 +31,10 @@ export interface SimpleChart {
         hovermode: string,
         xaxis: AxisObj,
         yaxis: AxisObj,
+        xaxis2?: AxisObj,
+        yaxis2?: AxisObj,
+        xaxis3?: AxisObj,
+        yaxis3?: AxisObj,
         margin: {
             t: number,
             b: number,
@@ -45,7 +51,8 @@ export interface SimpleChart {
     chartId?: string,
     inputCount?: number,
     removeIndex?: number,
-    existingPoint?: boolean
+    existingPoint?: boolean,
+    selectedAxis?: number
 }
 
 export interface AxisObj {
@@ -54,18 +61,20 @@ export interface AxisObj {
     showgrid: boolean,
     showspikes?: boolean,
     spikemode?: string,
+    hoverinfo?: string,
+    hoverformat?: string,
     title?: {
-        text: string
+        text: string,
+        standoff?: number
     },
     tickvals?: Array<number | string>,
     ticktext?: Array<number | string>,
-    hoverformat?: string,
     tickmode?: string,
     autotick?: boolean,
-    tick0?: number,
-    dtick?: number,
     ticksuffix?: string,
     tickangle?: number,
+    tick0?: number,
+    dtick?: number,
     showticksuffix: string,
     rangemode?: string,
     range?: Array<number>
@@ -75,10 +84,11 @@ export interface TraceData {
     x: Array<number | string>,
     y: Array<number | string>,
     type: string,
-    name: string,
+    name?: string,
     id?: string,
     showlegend?: boolean,
     hovertemplate?: string,
+    customdata?: Array<number | string>,
     xaxis?: any,
     yaxis?: any,
     fill?: string,
@@ -109,6 +119,8 @@ export interface TraceData {
     line?: {
         shape: string,
         color?: string,
+        dash?: string,
+        smoothing?: number
         width?: number
     }
 }
@@ -117,6 +129,18 @@ export interface TraceCoordinates {
     x: Array<number>,
     y: Array<number>,
 };
+
+export interface ChartConfig {
+    defaultPointCount: number,
+    defaultPointOutlineColor?: string,
+    defaultPointBackgroundColor?: string,
+    yName?: string,
+    xName?: string,
+    yUnits?: string,
+    xUnits?: string,
+    powerUnits: string,
+    systemColor: string
+}
 
 export interface DataPoint {
     pointColor?: string;
