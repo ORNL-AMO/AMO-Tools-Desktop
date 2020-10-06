@@ -21,3 +21,11 @@
 .header .click-link{
     margin-top: 10px;
 }
+
+.table{
+    font-size: small;
+}
+
+.select-header{
+    font-size: 16px;
+}

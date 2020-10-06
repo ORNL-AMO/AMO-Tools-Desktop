@@ -19,12 +19,28 @@ export class SetupDataComponent implements OnInit {
   validFile: boolean;
   importData: any = null;
   importDataFromCsv: CsvImportData;
+  previewDataFromCsv: CsvImportData;
   importingData: boolean = false;
   dataExists: boolean = false;
   importSuccesful: boolean = false;
   individualDataFromCsv: Array<IndividualDataFromCsv>;
   previousDataAvailableSub: Subscription;
   previousDataAvailable: Date;
+  headerRowOptions: Array<{ value: number, display: number }> = [
+    { value: 0, display: 1 },
+    { value: 1, display: 2 },
+    { value: 2, display: 3 },
+    { value: 3, display: 4 },
+    { value: 4, display: 5 },
+    { value: 5, display: 6 },
+    { value: 6, display: 7 },
+    { value: 7, display: 8 },
+    { value: 8, display: 9 },
+    { value: 9, display: 10 },
+    { value: 10, display: 11 }
+  ];
+  itemIndexes: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  selectedHeaderRow: string = "0";
   constructor(private csvToJsonService: CsvToJsonService, private logToolService: LogToolService, private cd: ChangeDetectorRef,
     private dayTypeAnalysisService: DayTypeAnalysisService, private visualizeService: VisualizeService, private dayTypeGraphService: DayTypeGraphService,
     private logToolDataService: LogToolDataService, private logToolDbService: LogToolDbService) { }
@@ -68,14 +84,21 @@ export class SetupDataComponent implements OnInit {
     fr.readAsText(this.fileReference);
     fr.onloadend = (e) => {
       this.importData = JSON.parse(JSON.stringify(fr.result));
+      this.parsePreviewData();
     };
+  }
+
+
+  parsePreviewData() {
+    this.previewDataFromCsv = this.csvToJsonService.parseCsvWithoutHeaders(this.importData);
   }
 
   parseImportData() {
     this.importingData = true;
+    this.previewDataFromCsv = undefined;
     this.cd.detectChanges();
     setTimeout(() => {
-      this.importDataFromCsv = this.csvToJsonService.parseCSV(this.importData);
+      this.importDataFromCsv = this.csvToJsonService.parseCsvWithHeaders(this.importData, Number(this.selectedHeaderRow));
       this.logToolService.addCsvData(this.importDataFromCsv, this.fileReference.name);
       this.importSuccesful = true;
       this.importData = undefined;
@@ -94,11 +117,12 @@ export class SetupDataComponent implements OnInit {
     this.logToolService.resetData();
     this.logToolDataService.resetData();
     this.dataExists = false;
+    this.importSuccesful = false;
     this.logToolDbService.saveData()
     this.cd.detectChanges();
   }
 
-  usePreviousData(){
+  usePreviousData() {
     this.logToolDbService.setLogToolData();
     this.previousDataAvailable = undefined;
     if (this.dayTypeAnalysisService.dayTypesCalculated == true || this.visualizeService.visualizeDataInitialized == true) {
