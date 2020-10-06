@@ -159,7 +159,7 @@
       <div class="form-group">
         <label class="small" for="{{'variableSpeedMotor_'+idString}}">Variable Speed Motor?</label>
         <select class="form-control" name="variableSpeedMotor" id="{{'variableSpeedMotor_'+idString}}"
-          formControlName="variableSpeedMotor" (change)="calculate()" (focus)="focusField('variableSpeedMotor')"
+          formControlName="variableSpeedMotor" (change)="changeLineFrequency()" (focus)="focusField('variableSpeedMotor')"
           (blur)="focusOut()">
           <option [ngValue]="true">Yes</option>
           <option [ngValue]="false">No</option>
@@ -167,6 +167,16 @@
       </div>
 
       <div class="form-group">
+        <label class="small" for="{{'lineFrequency_'+idString}}">Line Frequency</label>
+        <select class="form-control" name="lineFrequency" id="{{'lineFrequency_'+idString}}"
+          formControlName="lineFrequency" (change)="changeLineFrequency()" (focus)="focusField('lineFrequency')"
+          (blur)="focusOut()">
+          <option [ngValue]="60">60 Hz</option>
+          <option [ngValue]="50">50 Hz</option>
+        </select>
+      </div>
+
+      <div class="form-group" *ngIf="form.controls.variableSpeedMotor.value == true">
         <label class="small" for="{{'operationalFrequency_'+idString}}">Operational Frequency</label>
         <div class="input-group">
           <input class="form-control" name="operationalFrequency" id="{{'operationalFrequency_'+idString}}"
@@ -180,16 +190,6 @@
           <span *ngIf="form.controls.operationalFrequency.errors.min">Value can't be less than
             {{form.controls.operationalFrequency.errors.min.min}}.</span>
         </span>
-      </div>
-
-      <div class="form-group">
-        <label class="small" for="{{'lineFrequency_'+idString}}">Line Frequency</label>
-        <select class="form-control" name="lineFrequency" id="{{'lineFrequency_'+idString}}"
-          formControlName="lineFrequency" (change)="calculate()" (focus)="focusField('lineFrequency')"
-          (blur)="focusOut()">
-          <option [ngValue]="60">60 Hz</option>
-          <option [ngValue]="50">50 Hz</option>
-        </select>
       </div>
 
       <div class="form-group">
