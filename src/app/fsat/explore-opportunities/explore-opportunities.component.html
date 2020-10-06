@@ -38,8 +38,17 @@
 
 		<div *ngIf="tabSelect == 'sankey' && modificationExists" class="scroll-item"
 			[ngStyle]="{'height.px': helpHeight}">
-			<app-explore-opportunities-sankey [assessmentName]="assessment.name" [baselineSankey]="baselineSankey"
-				[modificationSankey]="modificationSankey" [settings]="settings"></app-explore-opportunities-sankey>
+				<div class="d-flex flex-column w-100">
+					<div class="btn-group mt-2 justify-content-center">
+					  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Baseline'" [ngClass]="{'active': sankeyView == 'Baseline'}">Baseline</button>
+					  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Modified'" [ngClass]="{'active': sankeyView == 'Modified'}">Modification</button>
+					</div>
+					<app-fsat-sankey *ngIf="sankeyView == 'Baseline'" [appBackground]="true" [fsat]="baselineSankey" [settings]="settings"
+					  [isBaseline]="true"></app-fsat-sankey>
+				  
+					<app-fsat-sankey *ngIf="sankeyView == 'Modified'" [appBackground]="true" [fsat]="modificationSankey" [settings]="settings"
+					  [isBaseline]="false"></app-fsat-sankey>
+				  </div>
 		</div>
 
 		<div class="scroll-item" *ngIf="modificationExists && tabSelect == 'results'"

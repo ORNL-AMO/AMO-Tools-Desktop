@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { FsatSankeyComponent } from './fsat-sankey.component';
-import { FormsModule } from '@angular/forms';
+
+
 
 @NgModule({
+  declarations: [FsatSankeyComponent],
   imports: [
-    CommonModule,
-    FormsModule
-  ],
-  declarations: [
-    FsatSankeyComponent
+    CommonModule
   ],
   exports: [
     FsatSankeyComponent
+  ],
+  providers: [
+    DecimalPipe
   ]
 })
 export class FsatSankeyModule { }

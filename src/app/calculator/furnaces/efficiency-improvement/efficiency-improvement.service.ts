@@ -4,14 +4,18 @@ import { Settings } from '../../../shared/models/settings';
 import { EfficiencyImprovementInputs } from '../../../shared/models/phast/efficiencyImprovement';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LessThanValidator } from '../../../shared/validators/less-than';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class EfficiencyImprovementService {
   efficiencyImprovementInputs: EfficiencyImprovementInputs;
+  operatingHours: OperatingHours;
   constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
 
   getFormFromObj(inputObj: EfficiencyImprovementInputs): FormGroup {
     let tmpForm: FormGroup = this.formBuilder.group({
+      currentOperatingHours: [inputObj.currentOperatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      newOperatingHours: [inputObj.newOperatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       currentFlueGasOxygen: [inputObj.currentFlueGasOxygen, [Validators.required, Validators.min(0), Validators.max(100)]],
       newFlueGasOxygen: [inputObj.newFlueGasOxygen, [Validators.required, Validators.min(0), Validators.max(100)]],
       currentFlueGasTemp: [inputObj.currentFlueGasTemp, [Validators.required]],
@@ -25,6 +29,8 @@ export class EfficiencyImprovementService {
 
   getObjFromForm(form: FormGroup): EfficiencyImprovementInputs {
     this.efficiencyImprovementInputs = {
+      currentOperatingHours: form.controls.currentOperatingHours.value,
+      newOperatingHours: form.controls.newOperatingHours.value,
       currentFlueGasOxygen: form.controls.currentFlueGasOxygen.value,
       newFlueGasOxygen: form.controls.newFlueGasOxygen.value,
       currentFlueGasTemp: form.controls.currentFlueGasTemp.value,
@@ -46,6 +52,8 @@ export class EfficiencyImprovementService {
       return {
         currentFlueGasOxygen: 6,
         newFlueGasOxygen: 2,
+        currentOperatingHours: 8640,
+        newOperatingHours: 8760,
         currentFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(1600).from('F').to('C'), 2),
         currentCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to('C'), 2),
         newCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(750).from('F').to('C'), 2),
@@ -57,6 +65,8 @@ export class EfficiencyImprovementService {
       return {
         currentFlueGasOxygen: 6,
         newFlueGasOxygen: 2,
+        currentOperatingHours: 8640,
+        newOperatingHours: 8760,
         currentFlueGasTemp: 1600,
         currentCombustionAirTemp: 80,
         newCombustionAirTemp: 750,
@@ -68,6 +78,8 @@ export class EfficiencyImprovementService {
 
   getResetData(): EfficiencyImprovementInputs {
     return {
+      currentOperatingHours: 8640,
+      newOperatingHours: 8640,
       currentFlueGasOxygen: 0,
       newFlueGasOxygen: 0,
       currentFlueGasTemp: 0,
