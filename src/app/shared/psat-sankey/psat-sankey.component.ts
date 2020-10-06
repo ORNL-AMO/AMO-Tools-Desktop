@@ -55,6 +55,8 @@ export class PsatSankeyComponent implements OnInit {
   connectingNodes: Array<number> = [];
   connectingLinkPaths: Array<number> = [];
 
+  validLosses: boolean;
+
   constructor(
     private psatService: PsatService,
     private convertUnitsService: ConvertUnitsService,
@@ -64,28 +66,31 @@ export class PsatSankeyComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    this.psat.valid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
+    this.getChartData();
   }
 
   ngAfterViewInit() {
-    if (!this.baselineResults && !this.modResults) {
-      this.getResults();
-    } else {
-      this.selectedResults = this.baselineResults || this.modResults;
-    }
     this.sankey(this.selectedResults);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.psat) {
       if (!changes.psat.firstChange) {
-        this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-        this.psat.valid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
-        this.getResults();
+        this.getChartData();
         this.sankey(this.selectedResults);
       }
     }
+  }
+
+  getChartData() {
+    this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+    this.psat.valid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
+    if (!this.baselineResults && !this.modResults) {
+      this.getResults();
+    } else {
+      this.selectedResults = this.baselineResults || this.modResults;
+    }
+    this.calcLosses(this.selectedResults);
   }
 
   getResults() {
@@ -107,7 +112,6 @@ export class PsatSankeyComponent implements OnInit {
 
     Plotly.purge(this.ngChart.nativeElement);
 
-    this.calcLosses(results);
     this.buildNodes(results, nodes);
     this.buildLinks(nodes, links);
 
@@ -202,9 +206,14 @@ export class PsatSankeyComponent implements OnInit {
     this.pump =
       (results.motor_power - this.motor - this.drive) *
       (1 - results.pump_efficiency / 100);
+    
+    [this.motor, this.drive, this.pump].forEach(loss => {
+      this.validLosses = loss > 0;
+    });
+
   }
 
-  buildNodes(results: PsatOutputs, nodes): Array<PsatSankeyNode> {
+    buildNodes(results: PsatOutputs, nodes): Array<PsatSankeyNode> {
     const motorConnectorValue: number = results.motor_power - this.motor;
     let driveConnectorValue: number = 0;
     let usefulOutput: number = 0;
@@ -215,6 +224,7 @@ export class PsatSankeyComponent implements OnInit {
     } else {
       usefulOutput = motorConnectorValue - this.pump;
     }
+
 
     nodes.push(
       {
@@ -281,7 +291,7 @@ export class PsatSankeyComponent implements OnInit {
           x: .7,
           y: .6,
           source: 5,
-          target: [6,7],
+          target: [6, 7],
           isConnector: true,
           nodeColor: this.nodeStartColor,
           id: 'driveConnector'
@@ -291,7 +301,7 @@ export class PsatSankeyComponent implements OnInit {
     nodes.push(
       {
         name: "Pump Losses " + this.decimalPipe.transform(this.pump, '1.0-0') + "kW",
-        value: (this.pump / results.motor_power) * 100,
+        value: (this.pump / results.motor_power) * 100 < 0 ? 0.01 : (this.pump / results.motor_power) * 100,
         x: .8,
         y: .15,
         source: this.drive > 0 ? 6 : 4,
@@ -312,28 +322,27 @@ export class PsatSankeyComponent implements OnInit {
         id: 'usefulOutput'
       }
     );
-
     return nodes;
   }
 
   buildLinks(nodes, links) {
     this.connectingLinkPaths.push(0);
-    
+
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].isConnector) {
-          this.connectingNodes.push(i); 
-          if (i !== 0 && i-1 !== 0) {
-            this.connectingLinkPaths.push(i - 1);
-          }
+        this.connectingNodes.push(i);
+        if (i !== 0 && i - 1 !== 0) {
+          this.connectingLinkPaths.push(i - 1);
+        }
       }
       for (let j = 0; j < nodes[i].target.length; j++) {
-          links.push(
-            {
-              source: nodes[i].source,
-              target: nodes[i].target[j]
-            }
-          )
-        }
+        links.push(
+          {
+            source: nodes[i].source,
+            target: nodes[i].target[j]
+          }
+        )
+      }
     }
   }
 

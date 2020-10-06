@@ -1,7 +1,19 @@
+<div class="alert-danger small m-3" *ngIf="!validLosses && psat.valid.isValid">
+    <span *ngIf="!validLosses">
+        Cannot generate
+        <span *ngIf="isBaseline">System</span>
+        <span *ngIf="!isBaseline">Modification</span>
+        Sankey: 
+        <br>
+        Pump or Motor efficiency is greater than 100%
+    </span>
+</div>
 <div class="alert-danger small m-3" *ngIf="!psat.valid.isValid">
-    Invalid System Setup:<br>
+    <span *ngIf="isBaseline">Invalid System Setup</span>
+    <span *ngIf="!isBaseline">Invalid Modification</span>
+    <br>
     <span *ngIf="!psat.valid.pumpFluidValid">Errors found in Pump Fluid Data<br></span>
     <span *ngIf="!psat.valid.motorValid">Errors found in Motor Data<br></span>
     <span *ngIf="!psat.valid.fieldDataValid">Errors found in Field Data<br></span>
 </div>
-<div [ngClass]="{'chart-hide': !psat.valid.isValid, 'chart-show': psat.valid.isValid}" #ngChart id="sankeyChart"></div>
+<div [ngClass]="{'chart-hide': !psat.valid.isValid || !validLosses, 'chart-show': psat.valid.isValid && validLosses}" #ngChart id="sankeyChart"></div>
