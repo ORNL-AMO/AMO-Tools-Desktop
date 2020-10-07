@@ -29,7 +29,7 @@ export const MockPsat: Assessment = {
             "flow_rate": 2500,
             "head": 410,
             "motor_field_power": 88.2,
-            "motor_field_current": 187,
+            "motor_field_current": 370,
             "motor_field_voltage": 460,
             "cost_kw_hour": 0.066,
             "fluidType": "Water",

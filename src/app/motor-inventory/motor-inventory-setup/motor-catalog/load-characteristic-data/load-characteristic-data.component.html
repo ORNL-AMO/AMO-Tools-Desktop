@@ -14,8 +14,8 @@
             </span>
         </label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('efficiency75')"
-                (input)="save()" formControlName="efficiency75" id="efficiency75">
+            <input type="number" class="form-control" (focus)="focusField('efficiency75')" (input)="save()"
+                formControlName="efficiency75" id="efficiency75">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.efficiency75.invalid">
@@ -35,8 +35,8 @@
             </span>
         </label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('efficiency50')"
-                (input)="save()" formControlName="efficiency50" id="efficiency50">
+            <input type="number" class="form-control" (focus)="focusField('efficiency50')" (input)="save()"
+                formControlName="efficiency50" id="efficiency50">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.efficiency50.invalid">
@@ -56,8 +56,8 @@
             </span>
         </label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('efficiency25')"
-                (input)="save()" formControlName="efficiency25" id="efficiency25">
+            <input type="number" class="form-control" (focus)="focusField('efficiency25')" (input)="save()"
+                formControlName="efficiency25" id="efficiency25">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.efficiency25.invalid">
@@ -72,8 +72,8 @@
     <div class="form-group" *ngIf="displayOptions.powerFactor100">
         <label for="powerFactor100">Power Factor at Full Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('powerFactor100')"
-                (input)="save()" formControlName="powerFactor100" id="powerFactor100">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor100')" (input)="save()"
+                formControlName="powerFactor100" id="powerFactor100">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor100.invalid">
@@ -87,8 +87,8 @@
     <div class="form-group" *ngIf="displayOptions.powerFactor75">
         <label for="powerFactor75">Power Factor at 75% Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('powerFactor75')"
-                (input)="save()" formControlName="powerFactor75" id="powerFactor75">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor75')" (input)="save()"
+                formControlName="powerFactor75" id="powerFactor75">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor75.invalid">
@@ -102,8 +102,8 @@
     <div class="form-group" *ngIf="displayOptions.powerFactor50">
         <label for="powerFactor50">Power Factor at 50% Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('powerFactor50')"
-                (input)="save()" formControlName="powerFactor50" id="powerFactor50">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor50')" (input)="save()"
+                formControlName="powerFactor50" id="powerFactor50">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor50.invalid">
@@ -117,8 +117,8 @@
     <div class="form-group" *ngIf="displayOptions.powerFactor25">
         <label for="powerFactor25">Power Factor at 25% Load</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('powerFactor25')"
-                (input)="save()" formControlName="powerFactor25" id="powerFactor25">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor25')" (input)="save()"
+                formControlName="powerFactor25" id="powerFactor25">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor25.invalid">
@@ -132,8 +132,8 @@
     <div class="form-group" *ngIf="displayOptions.ampsIdle">
         <label for="ampsIdle">Idle Amps</label>
         <div class="input-group">
-            <input type="number" class="form-control" (blur)="focusOut()" (focus)="focusField('ampsIdle')"
-                (input)="save()" formControlName="ampsIdle" id="ampsIdle">
+            <input type="number" class="form-control" (focus)="focusField('ampsIdle')" (input)="save()"
+                formControlName="ampsIdle" id="ampsIdle">
             <span class="input-group-addon units">A</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="motorForm.controls.ampsIdle.invalid">

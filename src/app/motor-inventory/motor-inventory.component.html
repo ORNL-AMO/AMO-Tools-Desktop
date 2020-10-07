@@ -2,7 +2,7 @@
     <div #header class="w-100 hide-print sticky-top">
         <app-motor-inventory-banner [motorInventoryItem]="motorInventoryItem"></app-motor-inventory-banner>
     </div>
-    <div [ngStyle]="{'height.px': containerHeight}">
+    <div [ngClass]="{'scroll-item': mainTab != 'setup'}" [ngStyle]="{'height.px': containerHeight}">
         <app-motor-inventory-setup *ngIf="mainTab == 'setup'"></app-motor-inventory-setup>
         <app-motor-inventory-summary *ngIf="mainTab == 'summary'"></app-motor-inventory-summary>
         <app-batch-analysis *ngIf="mainTab == 'analysis'"></app-batch-analysis>
