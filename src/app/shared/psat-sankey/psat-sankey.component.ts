@@ -70,14 +70,18 @@ export class PsatSankeyComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.sankey(this.selectedResults);
+    if (this.psat.valid.isValid) {
+      this.sankey(this.selectedResults);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.psat) {
       if (!changes.psat.firstChange) {
         this.getChartData();
-        this.sankey(this.selectedResults);
+        if (this.psat.valid.isValid) {
+          this.sankey(this.selectedResults);
+        }
       }
     }
   }
@@ -146,8 +150,8 @@ export class PsatSankeyComponent implements OnInit {
         x: nodes.map(node => node.x),
         y: nodes.map(node => node.y),
         color: nodes.map(node => node.nodeColor),
-        hoverinfo: 'all',
-        hovertemplate: '%{value}<extra></extra>',
+        customdata: nodes.map(node => `${this.decimalPipe.transform(node.loss, '1.0-0')} kW`),
+        hovertemplate: '%{customdata}',
         hoverlabel: {
           font: {
             size: 14,
@@ -207,7 +211,6 @@ export class PsatSankeyComponent implements OnInit {
       (results.motor_power - this.motor - this.drive) *
       (1 - results.pump_efficiency / 100);
     
-    this.motor = 0;
     let invalidLosses = [this.motor, this.drive, this.pump].filter(loss => loss <= 0);
     this.validLosses = invalidLosses.length > 0? false : true;
 
@@ -233,6 +236,7 @@ export class PsatSankeyComponent implements OnInit {
         x: .1,
         y: .6,
         source: 0,
+        loss: results.motor_power,
         target: [1,2],
         isConnector: true,
         nodeColor: this.nodeStartColor,
@@ -244,6 +248,7 @@ export class PsatSankeyComponent implements OnInit {
         x: .4,
         y: .6,
         source: 1,
+        loss: results.motor_power,
         target: [2, 3],
         isConnector: true,
         nodeColor: this.nodeStartColor,
@@ -255,6 +260,7 @@ export class PsatSankeyComponent implements OnInit {
         x: .5,
         y: .6,
         source: 2,
+        loss: motorConnectorValue,
         target: [4, 5],
         isConnector: true,
         nodeColor: this.nodeStartColor,
@@ -266,6 +272,7 @@ export class PsatSankeyComponent implements OnInit {
         x: .5,
         y: .10,
         source: 3,
+        loss: this.motor,
         target: [],
         isConnector: false,
         nodeColor: this.nodeArrowColor,
@@ -275,11 +282,12 @@ export class PsatSankeyComponent implements OnInit {
     if (this.drive > 0) {
       nodes.push(
         {
-          name: "Drive Losses " + this.decimalPipe.transform(this.drive, '1.0-0') + "kW",
+          name: "Drive Losses " + this.decimalPipe.transform(this.drive, '1.0-0') + " kW",
           value: (this.drive / results.motor_power) * 100,
           x: .6,
           y: .25,
           source: 4,
+          loss: this.drive,
           target: [],
           isConnector: false,
           nodeColor: this.nodeArrowColor,
@@ -291,6 +299,7 @@ export class PsatSankeyComponent implements OnInit {
           x: .7,
           y: .6,
           source: 5,
+          loss: driveConnectorValue,
           target: [6, 7],
           isConnector: true,
           nodeColor: this.nodeStartColor,
@@ -300,12 +309,13 @@ export class PsatSankeyComponent implements OnInit {
     }
     nodes.push(
       {
-        name: "Pump Losses " + this.decimalPipe.transform(this.pump, '1.0-0') + "kW",
-        value: (this.pump / results.motor_power) * 100 < 0 ? 0.01 : (this.pump / results.motor_power) * 100,
+        name: "Pump Losses " + this.decimalPipe.transform(this.pump, '1.0-0') + " kW",
+        value: (this.pump / results.motor_power) * 100,
         x: .8,
         y: .15,
         source: this.drive > 0 ? 6 : 4,
         target: [],
+        loss: this.pump,
         isConnector: false,
         nodeColor: this.nodeArrowColor,
         id: 'pumpLosses'
@@ -316,6 +326,7 @@ export class PsatSankeyComponent implements OnInit {
         x: .85,
         y: .65,
         source: this.drive > 0 ? 7 : 5,
+        loss: usefulOutput,
         target: [],
         isConnector: false,
         nodeColor: this.nodeArrowColor,

@@ -4,6 +4,7 @@ export interface PsatSankeyNode {
     x: number,
     y: number,
     nodeColor: string,
+    loss: number,
     source: number,
     target: number[],
     isConnector: boolean,

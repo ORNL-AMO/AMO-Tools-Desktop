@@ -36,6 +36,7 @@ export class FsatSankeyComponent implements OnInit {
   nodeArrowColor: string = 'rgba(232, 217, 82, .9)';
   connectingNodes: Array<number> = [];
   validLosses: boolean;
+  connectingLinkPaths: Array<number> = [];
 
   constructor(private convertUnitsService: ConvertUnitsService, 
               private fsatService: FsatService,
@@ -44,7 +45,6 @@ export class FsatSankeyComponent implements OnInit {
               private renderer: Renderer2) { }
 
   ngOnInit() {
-    this.fsat.valid = this.fsatService.checkValid(this.fsat, this.isBaseline, this.settings);
     this.getResults();
   }
 
@@ -57,7 +57,6 @@ export class FsatSankeyComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.fsat) {
       if (!changes.fsat.firstChange) {
-        this.fsat.valid = this.fsatService.checkValid(this.fsat, this.isBaseline, this.settings);
         this.getResults();
         if (this.fsat.valid.isValid) {
           this.sankey();
@@ -67,6 +66,7 @@ export class FsatSankeyComponent implements OnInit {
   }
 
   getResults() {
+    this.fsat.valid = this.fsatService.checkValid(this.fsat, this.isBaseline, this.settings);
     let energyInput: number, motorLoss: number, driveLoss: number, fanLoss: number, usefulOutput: number;
     let motorShaftPower: number, fanShaftPower: number;
     let tmpOutput = this.fsatService.getResults(this.fsat, this.isBaseline, this.settings);
@@ -107,26 +107,8 @@ export class FsatSankeyComponent implements OnInit {
     let nodes: Array<FsatSankeyNode> = [];
 
     nodes = this.buildNodes();
+    this.buildLinks(nodes, links);
 
-    links.push(
-      { source: 0, target: 1},
-      { source: 0, target: 2},
-      { source: 1, target: 2 },
-      { source: 1, target: 3 },
-    );
-    if (this.driveLosses > 0) {
-      links.push(
-        { source: 2, target: 4 },
-        { source: 2, target: 5 },
-        { source: 5, target: 6 },
-        { source: 5, target: 7 }
-      ); 
-    } else {
-      links.push(
-        { source: 2, target: 4 },
-        { source: 2, target: 5 }
-      )   
-    }
     const sankeyLink = {
       value: nodes.map(node => node.value),
       source: links.map(link => link.source),
@@ -148,7 +130,6 @@ export class FsatSankeyComponent implements OnInit {
         size: 14
       },
       arrangement: 'freeform',
-      text: nodes.map(node => `${node.loss} kW (${node.value}%)`),
       node: {
         pad: 50,
         line: {
@@ -210,20 +191,36 @@ export class FsatSankeyComponent implements OnInit {
 
   }
 
+  buildLinks(nodes, links) {
+    this.connectingLinkPaths.push(0);
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].isConnector) {
+        this.connectingNodes.push(i);
+        if (i !== 0 && i - 1 !== 0) {
+          this.connectingLinkPaths.push(i - 1);
+        }
+      }
+      for (let j = 0; j < nodes[i].target.length; j++) {
+        links.push(
+          {
+            source: nodes[i].source,
+            target: nodes[i].target[j]
+          }
+        )
+      }
+    }
+  }
+
   buildNodes(): Array<FsatSankeyNode> {
     let nodes: Array<FsatSankeyNode> = [];
-    let motorConnectorValue: number = 0;
+    let motorConnectorValue = this.energyInput - this.motorLosses;
     let driveConnectorValue: number = 0;
     let usefulOutput: number = 0;
 
     if (this.driveLosses > 0 ) {
-      motorConnectorValue = this.energyInput - this.driveLosses;
       driveConnectorValue = motorConnectorValue - this.driveLosses;
-      this.connectingNodes = [0,1,2,5];
       usefulOutput = driveConnectorValue - this.fanLosses;
     } else {
-      motorConnectorValue = this.energyInput - this.motorLosses;
-      this.connectingNodes = [0,1,2,];
       usefulOutput = motorConnectorValue - this.fanLosses;
     }
     
@@ -233,25 +230,34 @@ export class FsatSankeyComponent implements OnInit {
         value: 100,
         loss: this.energyInput,
         x: .1,
-        y: .6, 
+        y: .6,
+        source: 0,
+        target: [1, 2], 
         nodeColor: this.nodeStartColor,
-        id: 'OriginConnector'
+        id: 'OriginConnector',
+        isConnector: true,
       },
       {
-        name: "",
+        name: ``,
         value: 0,
         loss: this.energyInput,
         x: .4,
         y: .6, 
+        source: 1,
+        target: [2, 3], 
+        isConnector: true,
         nodeColor: this.nodeStartColor,
         id: 'InputConnector'
       },
       {
-        name: "",
-        value: (motorConnectorValue / this.energyInput ) * 100,
+        name: ``,
+        value: (motorConnectorValue / this.energyInput) * 100,
         loss: motorConnectorValue,
         x: .5,
         y: .6, 
+        source: 2,
+        target: [4, 5], 
+        isConnector: true,
         nodeColor: this.nodeStartColor,
         id: 'motorConnector'
       },
@@ -261,6 +267,9 @@ export class FsatSankeyComponent implements OnInit {
         loss: this.motorLosses,
         x: .5,
         y: .10, 
+        source: 3,
+        target: [], 
+        isConnector: false,
         nodeColor: this.nodeArrowColor,
         id: 'motorLosses'
       },
@@ -273,6 +282,9 @@ export class FsatSankeyComponent implements OnInit {
           loss: this.driveLosses,
           x: .6,
           y: .25,
+          source: 4,
+          target: [], 
+          isConnector: false,
           nodeColor: this.nodeArrowColor,
           id: 'driveLosses'
         },
@@ -282,6 +294,9 @@ export class FsatSankeyComponent implements OnInit {
           loss: driveConnectorValue,
           x: .7,
           y: .6, 
+          source: 5,
+          target: [6, 7], 
+          isConnector: true,
           nodeColor: this.nodeStartColor,
           id: 'driveConnector'
         },
@@ -295,6 +310,9 @@ export class FsatSankeyComponent implements OnInit {
         x: .8,
         y: .15, 
         nodeColor: this.nodeArrowColor,
+        isConnector: false,
+        source: this.driveLosses > 0 ? 6 : 4,
+        target: [],
         id: 'fanLosses'
       },
       {
@@ -303,14 +321,16 @@ export class FsatSankeyComponent implements OnInit {
         loss: usefulOutput,
         x: .85,
         y: .65, 
+        source: this.driveLosses > 0 ? 7 : 5,
+        target: [],
+        isConnector: false,
         nodeColor: this.nodeArrowColor,
         id: 'usefulOutput'
       }
     );
-
+    
     return nodes;
   }
-
 
   buildSvgArrows() {
     const rects = this._dom.nativeElement.querySelectorAll('.node-rect');
