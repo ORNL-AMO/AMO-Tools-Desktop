@@ -35,7 +35,7 @@ export class FsatSankeyComponent implements OnInit {
   nodeStartColor: string = 'rgba(214, 185, 0, .9)';
   nodeArrowColor: string = 'rgba(232, 217, 82, .9)';
   connectingNodes: Array<number> = [];
-  connectingLinkPaths: Array<number> = [];
+  validLosses: boolean;
 
   constructor(private convertUnitsService: ConvertUnitsService, 
               private fsatService: FsatService,
@@ -45,11 +45,11 @@ export class FsatSankeyComponent implements OnInit {
 
   ngOnInit() {
     this.fsat.valid = this.fsatService.checkValid(this.fsat, this.isBaseline, this.settings);
+    this.getResults();
   }
 
   ngAfterViewInit() {
     if (this.fsat.valid.isValid) {
-      this.getResults();
       this.sankey();
     }
   }
@@ -58,8 +58,8 @@ export class FsatSankeyComponent implements OnInit {
     if (changes.fsat) {
       if (!changes.fsat.firstChange) {
         this.fsat.valid = this.fsatService.checkValid(this.fsat, this.isBaseline, this.settings);
+        this.getResults();
         if (this.fsat.valid.isValid) {
-          this.getResults();
           this.sankey();
         }
       }
@@ -95,6 +95,9 @@ export class FsatSankeyComponent implements OnInit {
     this.driveLosses = driveLoss;
     this.motorLosses = motorLoss;
     this.usefulOutput = usefulOutput;
+
+    let invalidLosses = [this.energyInput, this.fanLosses, this.motorLosses].filter(loss => loss <= 0);
+    this.validLosses = invalidLosses.length > 0? false : true;
   }
   
   sankey() {
@@ -145,6 +148,7 @@ export class FsatSankeyComponent implements OnInit {
         size: 14
       },
       arrangement: 'freeform',
+      text: nodes.map(node => `${node.loss} kW (${node.value}%)`),
       node: {
         pad: 50,
         line: {
@@ -155,8 +159,8 @@ export class FsatSankeyComponent implements OnInit {
         x: nodes.map(node => node.x),
         y: nodes.map(node => node.y),
         color: nodes.map(node => node.nodeColor),
-        hoverinfo: 'all',
-        hovertemplate: '%{value}<extra></extra>',
+        customdata: nodes.map(node => `${this.decimalPipe.transform(node.loss, '1.0-0')} kW`),
+        hovertemplate: '%{customdata}',
         hoverlabel: {
           font: {
             size: 14,
@@ -208,17 +212,17 @@ export class FsatSankeyComponent implements OnInit {
 
   buildNodes(): Array<FsatSankeyNode> {
     let nodes: Array<FsatSankeyNode> = [];
-    const motorConnectorValue: number = this.energyInput - this.driveLosses;
+    let motorConnectorValue: number = 0;
     let driveConnectorValue: number = 0;
     let usefulOutput: number = 0;
 
     if (this.driveLosses > 0 ) {
+      motorConnectorValue = this.energyInput - this.driveLosses;
       driveConnectorValue = motorConnectorValue - this.driveLosses;
-      this.connectingLinkPaths = [0,1,4];
       this.connectingNodes = [0,1,2,5];
       usefulOutput = driveConnectorValue - this.fanLosses;
     } else {
-      this.connectingLinkPaths = [0,1,5];
+      motorConnectorValue = this.energyInput - this.motorLosses;
       this.connectingNodes = [0,1,2,];
       usefulOutput = motorConnectorValue - this.fanLosses;
     }
@@ -227,6 +231,7 @@ export class FsatSankeyComponent implements OnInit {
       {
         name: 'Energy Input ' + this.decimalPipe.transform(this.energyInput, '1.0-0') + ' kW',
         value: 100,
+        loss: this.energyInput,
         x: .1,
         y: .6, 
         nodeColor: this.nodeStartColor,
@@ -235,6 +240,7 @@ export class FsatSankeyComponent implements OnInit {
       {
         name: "",
         value: 0,
+        loss: this.energyInput,
         x: .4,
         y: .6, 
         nodeColor: this.nodeStartColor,
@@ -243,6 +249,7 @@ export class FsatSankeyComponent implements OnInit {
       {
         name: "",
         value: (motorConnectorValue / this.energyInput ) * 100,
+        loss: motorConnectorValue,
         x: .5,
         y: .6, 
         nodeColor: this.nodeStartColor,
@@ -251,6 +258,7 @@ export class FsatSankeyComponent implements OnInit {
       {
         name: 'Motor Losses ' + this.decimalPipe.transform(this.motorLosses, '1.0-0') + ' kW',
         value: (this.motorLosses / this.energyInput) * 100,
+        loss: this.motorLosses,
         x: .5,
         y: .10, 
         nodeColor: this.nodeArrowColor,
@@ -262,6 +270,7 @@ export class FsatSankeyComponent implements OnInit {
         {
           name: 'Drive Losses ' + this.decimalPipe.transform(this.driveLosses, '1.0-0') + ' kW',
           value: (this.driveLosses / this.energyInput) * 100,
+          loss: this.driveLosses,
           x: .6,
           y: .25,
           nodeColor: this.nodeArrowColor,
@@ -270,6 +279,7 @@ export class FsatSankeyComponent implements OnInit {
         {
           name: "",
           value: (driveConnectorValue / this.energyInput) * 100,
+          loss: driveConnectorValue,
           x: .7,
           y: .6, 
           nodeColor: this.nodeStartColor,
@@ -281,6 +291,7 @@ export class FsatSankeyComponent implements OnInit {
       {
         name: 'Fan Losses ' + this.decimalPipe.transform(this.fanLosses, '1.0-0') + ' kW',
         value: (this.fanLosses / this.energyInput) * 100,
+        loss: this.fanLosses,
         x: .8,
         y: .15, 
         nodeColor: this.nodeArrowColor,
@@ -289,6 +300,7 @@ export class FsatSankeyComponent implements OnInit {
       {
         name: 'Useful Output ' + this.decimalPipe.transform(usefulOutput, '1.0-0') + ' kW',
         value: (usefulOutput / this.energyInput) * 100,
+        loss: usefulOutput,
         x: .85,
         y: .65, 
         nodeColor: this.nodeArrowColor,
