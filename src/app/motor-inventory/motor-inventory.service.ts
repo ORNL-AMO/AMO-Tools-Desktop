@@ -211,7 +211,7 @@ export class MotorInventoryService {
         insulationClass: false,
         weight: false,
         numberOfPhases: false,
-        fullLoadSpeed: false,
+        fullLoadSpeed: true,
         fullLoadAmps: true
       },
       operationDataOptions: {
