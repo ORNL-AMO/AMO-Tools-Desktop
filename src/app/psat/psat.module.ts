@@ -31,7 +31,6 @@ import { SettingsModule } from '../settings/settings.module';
 import { CompareService } from './compare.service';
 import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
 import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
-// import { OldPsatSankeyComponent } from './psat-sankey/psat-sankey.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
 import { PsatReportSankeyComponent } from './psat-report/psat-report-sankey/psat-report-sankey.component';
@@ -55,7 +54,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
-// import { PsatSankeyComponent } from '../shared/psat-sankey/psat-sankey/psat-sankey.component';
 
 @NgModule({
   declarations: [
@@ -72,8 +70,6 @@ import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
     OutputSummaryComponent,
     ModifyConditionsTabsComponent,
     PsatDiagramComponent,
-    // OldPsatSankeyComponent,
-    // PsatSankeyComponent,
     ModificationListComponent,
     AddModificationComponent,
     PsatReportSankeyComponent,
