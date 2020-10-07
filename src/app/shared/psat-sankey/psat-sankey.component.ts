@@ -207,9 +207,9 @@ export class PsatSankeyComponent implements OnInit {
       (results.motor_power - this.motor - this.drive) *
       (1 - results.pump_efficiency / 100);
     
-    [this.motor, this.drive, this.pump].forEach(loss => {
-      this.validLosses = loss > 0;
-    });
+    this.motor = 0;
+    let invalidLosses = [this.motor, this.drive, this.pump].filter(loss => loss <= 0);
+    this.validLosses = invalidLosses.length > 0? false : true;
 
   }
 
