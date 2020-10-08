@@ -7,3 +7,7 @@ p {
     padding-top: .25rem;
 }
 
+.btn.btn-secondary{
+    background-color: #2980b9;
+    padding: 6px;
+}

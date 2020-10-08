@@ -2,7 +2,7 @@
   <div class="d-flex flex-column">
     <div class="d-flex">
       <div class="d-flex flex-column w-25 align-items-center justify-content-center">
-        <select name="psatSelect" class="form-control mx-auto" id="psatSelect" (change)="setPsat1Savings()"
+        <select name="psatSelect" class="form-control mx-auto" id="psatSelect" (change)="setPsat1()"
           [(ngModel)]="psat1">
           <option [ngValue]="assessment.psat">Baseline</option>
           <option *ngFor="let modification of assessment.psat.modifications" [ngValue]="modification.psat">
@@ -13,16 +13,18 @@
           'positive-savings': psat1CostSavings > 0
         }">Cost Savings: {{ psat1CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
       </div>
-      <div class="w-75">
-        <app-psat-sankey *ngIf="psat1.valid.isValid" [psat]="psat1" [location]="'baseline'" [assessmentName]="assessmentName"
-          [settings]="settings" [isBaseline]="true"></app-psat-sankey>
-        <div *ngIf="psat1.valid.isValid == false" class="alert-danger">Invalid System Setup</div>
+      <div class="w-75 m-3">
+          <app-psat-sankey
+        [psat]="psat1"
+        [settings]="settings"
+        [isBaseline]="psat1Baseline"
+      ></app-psat-sankey>
       </div>
     </div>
     <hr>
     <div class="d-flex" *ngIf="psat2">
       <div class="d-flex flex-column w-25 align-items-center justify-content-center">
-        <select name="psatSelect" class="form-control mx-auto" id="psatSelect2" (change)="setPsat2Savings()"
+        <select name="psatSelect" class="form-control mx-auto" id="psatSelect2" (change)="setPsat2()"
           [(ngModel)]="psat2">
           <option [ngValue]="assessment.psat">Baseline</option>
           <option *ngFor="let modification of assessment.psat.modifications" [ngValue]="modification.psat">
@@ -33,11 +35,14 @@
           'positive-savings': psat2CostSavings > 0
         }">Cost Savings: {{ psat2CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
       </div>
-      <div class="w-75">
-        <app-psat-sankey *ngIf="psat2.valid.isValid" [psat]="psat2" [location]="'modification'"
-          [assessmentName]="assessmentName" [settings]="settings" [isBaseline]="false"></app-psat-sankey>
-        <div *ngIf="psat2.valid.isValid == false" class="alert-danger">Invalid System Setup</div>
+      <div class="w-75 m-3">
+          <app-psat-sankey
+        [psat]="psat2"
+        [settings]="settings"
+        [isBaseline]="psat2Baseline"
+      ></app-psat-sankey>
       </div>
+
     </div>
   </div>
 </div>
