@@ -53,16 +53,19 @@ export class FacilityCompressorDataFormComponent implements OnInit {
     { display: 'Orifice Method', value: 3 },
   ];
 
-  compressorControlTypes: Array<{ value: number, display: string, adjustment: number }> = [
-    { value: 0, display: 'Modulation (Poor)', adjustment: 25 },
-    { value: 1, display: 'Load-Unload (Short-Cycle)', adjustment: 40 },
-    { value: 2, display: 'Load-Unload (2+ Minute Cycle)', adjustment: 75 },
-    { value: 3, display: 'Centrifugal (Venting)', adjustment: 0 },
-    { value: 4, display: 'Centrifugal (Non-Venting)', adjustment: 75 },
-    { value: 5, display: 'Reciprocrating Unloaders', adjustment: 80 },
-    { value: 6, display: 'Variable Speed', adjustment: 60 },
-    { value: 7, display: 'Variable Displacement', adjustment: 60 },
-    { value: 8, display: 'Custom', adjustment: 0 }
+  compressorControlTypes: Array<{ value: number, name: string, adjustment: number }> = [
+    { value: 100, name: 'Screw Compressor - Inlet Modulation', adjustment: 30 },
+    { value: 101, name: 'Screw Compressor - Variable Displacement', adjustment: 60 },
+    { value: 102, name: 'Screw Compressor – Variable Speed Drives', adjustment: 97 },
+    { value: 103, name: 'Oil Injected Screw - Load/Unload (short cycle)', adjustment: 48 },
+    { value: 104, name: 'Oil Injected Screw - Load/Unload (2+ minutes cycle)', adjustment: 68 },
+    { value: 105, name: 'Oil Free Screw - Load/Unload', adjustment: 73 },
+    { value: 106, name: 'Reciprocating Compressor - Load/Unload', adjustment: 74 },
+    { value: 107, name: 'Reciprocating Compressor - On/Off', adjustment: 100 },
+    { value: 108, name: 'Centrifugal Compressor – In blowoff (Venting)', adjustment: 0 },
+    { value: 109, name: 'Centrifugal – Modulating (IBV) in throttle range (Non-Venting)', adjustment: 67 },
+    { value: 110, name: 'Centrifugal– Modulating (IGV) in throttle range (Non-Venting)', adjustment: 86 },
+    { value: 8, name: 'Custom', adjustment: 0 }
   ];
   compressorTypes: Array<{ value: number, display: string, specificPower: number }> = [
     { value: 0, display: 'Reciprocating', specificPower: 0.16 },
@@ -132,15 +135,18 @@ export class FacilityCompressorDataFormComponent implements OnInit {
       if (compressorElectricityForm.controls.compressorControl.value == 8) {
         this.compressorCustomControl = true;
       }
-      compressorElectricityForm.patchValue({ compressorControlAdjustment: this.compressorControlTypes[compressorElectricityForm.controls.compressorControl.value].adjustment });
+      let control = this.compressorControlTypes.find(controlItem => { return controlItem.value == compressorElectricityForm.controls.compressorControl.value });
+      compressorElectricityForm.patchValue({ compressorControlAdjustment: control.adjustment });
     }
     else if (compressorElectricityForm.controls.compressorControl.value !== 8) {
       this.compressorCustomControl = false;
-      compressorElectricityForm.patchValue({ compressorControlAdjustment: this.compressorControlTypes[compressorElectricityForm.controls.compressorControl.value].adjustment });
+      let control = this.compressorControlTypes.find(controlItem => { return controlItem.value == compressorElectricityForm.controls.compressorControl.value });
+      compressorElectricityForm.patchValue({ compressorControlAdjustment: control.adjustment });
     }
     else {
       if (compressorElectricityForm.controls.compressorControlAdjustment.valid) {
-        this.compressorControlTypes[7].adjustment = compressorElectricityForm.controls.compressorControlAdjustment.value;
+        //custom
+        this.compressorControlTypes[11].adjustment = compressorElectricityForm.controls.compressorControlAdjustment.value;
       }
     }
     this.airLeakFormService.setCompressorDataValidators(this.facilityCompressorDataForm);
