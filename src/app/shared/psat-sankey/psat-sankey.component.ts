@@ -76,8 +76,36 @@ export class PsatSankeyComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.checkPsatChanges(changes);
+    this.checkExploreOppsBaselineChanges(changes);
+    this.checkExploreOppsModChanges(changes);
+  }
+
+  checkPsatChanges(changes: SimpleChanges) {
     if (changes.psat) {
       if (!changes.psat.firstChange) {
+        this.getChartData();
+        if (this.psat.valid.isValid) {
+          this.sankey(this.selectedResults);
+        }
+      }
+    }
+  }
+
+  checkExploreOppsBaselineChanges(changes: SimpleChanges) {
+    if (changes.baselineResults) {
+      if (!changes.baselineResults.firstChange) {
+        this.getChartData();
+        if (this.psat.valid.isValid) {
+          this.sankey(this.selectedResults);
+        }
+      }
+    }
+  }
+
+  checkExploreOppsModChanges(changes: SimpleChanges) {
+    if (changes.modResults) {
+      if (!changes.modResults.firstChange) {
         this.getChartData();
         if (this.psat.valid.isValid) {
           this.sankey(this.selectedResults);

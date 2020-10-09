@@ -43,14 +43,14 @@
 				  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Baseline'" [ngClass]="{'active': sankeyView == 'Baseline'}">Baseline</button>
 				  <button type="button" class="btn btn-secondary" (click)="sankeyView = 'Modified'" [ngClass]="{'active': sankeyView == 'Modified'}">Modification</button>
 				</div>
-				<app-psat-sankey *ngIf="sankeyView === 'Baseline'"
+				<app-psat-sankey *ngIf="sankeyView == 'Baseline'"
 					[psat]="psat"
 					[settings]="settings"
 					[appBackground]="true"
 					[baselineResults]="baselineResults"
 					[isBaseline]="true">
 				</app-psat-sankey>
-				<app-psat-sankey *ngIf="sankeyView === 'Modified'"
+				<app-psat-sankey *ngIf="sankeyView == 'Modified'"
 				  [settings]="settings"
 				  [psat]="psat"
 				  [appBackground]="true"

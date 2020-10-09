@@ -79,6 +79,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
       this.getResults();
       this.checkExploreOpps();
     }
+    if (changes.psat) {
+      this.getResults();
+      this.checkExploreOpps();
+    }
   }
 
   getContainerHeight() {
