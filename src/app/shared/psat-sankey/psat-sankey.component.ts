@@ -7,7 +7,7 @@ import {
   ElementRef,
   Renderer2,
 } from "@angular/core";
-import { PSAT, PsatOutputs, PsatInputs } from "../models/psat";
+import { PSAT, PsatOutputs, PsatInputs, PsatValid } from "../models/psat";
 import { ConvertUnitsService } from "../convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 import { PsatService } from "../../psat/psat.service";
@@ -30,12 +30,11 @@ export class PsatSankeyComponent implements OnInit {
   @Input()
   isBaseline: boolean;
   @Input()
-  baseline: PSAT;
+  baselineResults: PsatOutputs;
   @Input()
-  baselineResults: PsatInputs;
+  modResults: PsatOutputs;
   @Input()
-  modResults: PsatInputs;
-
+  validPsat: PsatValid;
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
 
   selectedResults: PsatOutputs;
@@ -70,7 +69,7 @@ export class PsatSankeyComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (this.psat.valid.isValid) {
+    if (this.validPsat.isValid) {
       this.sankey(this.selectedResults);
     }
   }
@@ -85,7 +84,7 @@ export class PsatSankeyComponent implements OnInit {
     if (changes.psat) {
       if (!changes.psat.firstChange) {
         this.getChartData();
-        if (this.psat.valid.isValid) {
+        if (this.validPsat.isValid) {
           this.sankey(this.selectedResults);
         }
       }
@@ -96,7 +95,7 @@ export class PsatSankeyComponent implements OnInit {
     if (changes.baselineResults) {
       if (!changes.baselineResults.firstChange) {
         this.getChartData();
-        if (this.psat.valid.isValid) {
+        if (this.validPsat.isValid) {
           this.sankey(this.selectedResults);
         }
       }
@@ -107,7 +106,7 @@ export class PsatSankeyComponent implements OnInit {
     if (changes.modResults) {
       if (!changes.modResults.firstChange) {
         this.getChartData();
-        if (this.psat.valid.isValid) {
+        if (this.validPsat.isValid) {
           this.sankey(this.selectedResults);
         }
       }
@@ -118,6 +117,7 @@ export class PsatSankeyComponent implements OnInit {
     this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
     this.psat.valid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
     if (!this.baselineResults && !this.modResults) {
+      this.validPsat = this.psat.valid;
       this.getResults();
     } else {
       this.selectedResults = this.baselineResults || this.modResults;
@@ -143,9 +143,27 @@ export class PsatSankeyComponent implements OnInit {
     let nodes: Array<PsatSankeyNode> = [];
 
     Plotly.purge(this.ngChart.nativeElement);
-
     this.buildNodes(results, nodes);
-    this.buildLinks(nodes, links);
+
+    links.push(
+      { source: 0, target: 1},
+      { source: 0, target: 2},
+      { source: 1, target: 2 },
+      { source: 1, target: 3 },
+    );
+    if (this.drive > 0) {
+      links.push(
+        { source: 2, target: 4 },
+        { source: 2, target: 5 },
+        { source: 5, target: 6 },
+        { source: 5, target: 7 }
+      ); 
+    } else {
+      links.push(
+        { source: 2, target: 4 },
+        { source: 2, target: 5 }
+      )   
+    }
 
     const sankeyLink = {
       value: nodes.map(node => node.value),
@@ -239,9 +257,10 @@ export class PsatSankeyComponent implements OnInit {
       (results.motor_power - this.motor - this.drive) *
       (1 - results.pump_efficiency / 100);
     
-    let invalidLosses = [this.motor, this.drive, this.pump].filter(loss => loss <= 0);
+    let invalidLosses = [this.motor, this.drive, this.pump].filter(loss => {
+      return loss < 0 || !isFinite(loss) || isNaN(loss) ;
+    });
     this.validLosses = invalidLosses.length > 0? false : true;
-
   }
 
     buildNodes(results: PsatOutputs, nodes): Array<PsatSankeyNode> {
@@ -251,11 +270,12 @@ export class PsatSankeyComponent implements OnInit {
 
     if (this.drive > 0) {
       driveConnectorValue = motorConnectorValue - this.drive;
+      this.connectingNodes = [0,1,2,5];
       usefulOutput = driveConnectorValue - this.pump;
     } else {
+      this.connectingNodes = [0,1,2];
       usefulOutput = motorConnectorValue - this.pump;
     }
-
 
     nodes.push(
       {
@@ -362,27 +382,6 @@ export class PsatSankeyComponent implements OnInit {
       }
     );
     return nodes;
-  }
-
-  buildLinks(nodes, links) {
-    this.connectingLinkPaths.push(0);
-
-    for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].isConnector) {
-        this.connectingNodes.push(i);
-        if (i !== 0 && i - 1 !== 0) {
-          this.connectingLinkPaths.push(i - 1);
-        }
-      }
-      for (let j = 0; j < nodes[i].target.length; j++) {
-        links.push(
-          {
-            source: nodes[i].source,
-            target: nodes[i].target[j]
-          }
-        )
-      }
-    }
   }
 
   buildSvgArrows() {

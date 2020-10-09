@@ -48,6 +48,7 @@
 					[settings]="settings"
 					[appBackground]="true"
 					[baselineResults]="baselineResults"
+					[validPsat]="opportunityPsatValid"
 					[isBaseline]="true">
 				</app-psat-sankey>
 				<app-psat-sankey *ngIf="sankeyView == 'Modified'"
@@ -55,6 +56,7 @@
 				  [psat]="psat"
 				  [appBackground]="true"
 				  [modResults]="modificationResults"
+			      [validPsat]="opportunityPsatValid"
 				  [isBaseline]="false">
 				</app-psat-sankey>
 			  </div>
