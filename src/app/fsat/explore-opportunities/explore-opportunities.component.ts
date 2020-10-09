@@ -59,6 +59,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
       this.getSankeyData();
       this.checkToasty();
     }
+    if (changes.fsat) {
+      this.getSankeyData();
+    }
   }
 
   ngAfterViewInit() {

@@ -107,7 +107,26 @@ export class FsatSankeyComponent implements OnInit {
     let nodes: Array<FsatSankeyNode> = [];
 
     nodes = this.buildNodes();
-    this.buildLinks(nodes, links);
+
+    links.push(
+      { source: 0, target: 1},
+      { source: 0, target: 2},
+      { source: 1, target: 2 },
+      { source: 1, target: 3 },
+    );
+    if (this.driveLosses > 0) {
+      links.push(
+        { source: 2, target: 4 },
+        { source: 2, target: 5 },
+        { source: 5, target: 6 },
+        { source: 5, target: 7 }
+      ); 
+    } else {
+      links.push(
+        { source: 2, target: 4 },
+        { source: 2, target: 5 }
+      )   
+    }
 
     const sankeyLink = {
       value: nodes.map(node => node.value),
@@ -191,26 +210,6 @@ export class FsatSankeyComponent implements OnInit {
 
   }
 
-  buildLinks(nodes, links) {
-    this.connectingLinkPaths.push(0);
-    for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].isConnector) {
-        this.connectingNodes.push(i);
-        if (i !== 0 && i - 1 !== 0) {
-          this.connectingLinkPaths.push(i - 1);
-        }
-      }
-      for (let j = 0; j < nodes[i].target.length; j++) {
-        links.push(
-          {
-            source: nodes[i].source,
-            target: nodes[i].target[j]
-          }
-        )
-      }
-    }
-  }
-
   buildNodes(): Array<FsatSankeyNode> {
     let nodes: Array<FsatSankeyNode> = [];
     let motorConnectorValue = this.energyInput - this.motorLosses;
@@ -219,8 +218,10 @@ export class FsatSankeyComponent implements OnInit {
 
     if (this.driveLosses > 0 ) {
       driveConnectorValue = motorConnectorValue - this.driveLosses;
+      this.connectingNodes = [0,1,2,5];
       usefulOutput = driveConnectorValue - this.fanLosses;
     } else {
+      this.connectingNodes = [0,1,2];
       usefulOutput = motorConnectorValue - this.fanLosses;
     }
     
@@ -328,7 +329,6 @@ export class FsatSankeyComponent implements OnInit {
         id: 'usefulOutput'
       }
     );
-    
     return nodes;
   }
 
