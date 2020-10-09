@@ -329,7 +329,6 @@ export class FsatSankeyComponent implements OnInit {
         id: 'usefulOutput'
       }
     );
-    console.log(nodes);
     return nodes;
   }
 
@@ -339,9 +338,7 @@ export class FsatSankeyComponent implements OnInit {
     const arrowShape = 'polygon(100% 50%, 0 0, 0 100%)'
 
     for (let i = 0; i < rects.length; i++) {  
-      console.log('building arrows, rects: ', i);
        if (!this.connectingNodes.includes(i)) {
-         console.log('connecting nodes includes ', i)
          const height = rects[i].getAttribute('height');
          const defaultY = rects[i].getAttribute('y');
 
