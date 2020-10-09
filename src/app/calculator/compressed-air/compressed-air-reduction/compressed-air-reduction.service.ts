@@ -34,7 +34,7 @@ export class CompressedAirReductionService {
       consumption: 1750
     };
     let defaultCompressorElectricityObj: CompressorElectricityData = {
-      compressorControl: 0,
+      compressorControl: 8,
       compressorControlAdjustment: 25,
       compressorSpecificPowerControl: 0,
       compressorSpecificPower: 0.16
@@ -100,7 +100,7 @@ export class CompressedAirReductionService {
         consumption: 0
       },
       compressorElectricityData: {
-        compressorControl: 0,
+        compressorControl: 8,
         compressorControlAdjustment: 0,
         compressorSpecificPowerControl: 0,
         compressorSpecificPower: 0

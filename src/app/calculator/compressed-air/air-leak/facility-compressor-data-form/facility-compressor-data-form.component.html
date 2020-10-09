@@ -56,8 +56,30 @@
         <select class="form-control" name="compressorControlType" id="compressorControlType"
           formControlName="compressorControl" (change)="changeCompressorControl()"
           (focus)="changeField('compressorControl')">
-          <option *ngFor="let control of compressorControlTypes" [ngValue]="control.value">{{control.display}}
-          </option>
+          <optgroup label="Screw Compressor">
+            <option [ngValue]="100">Inlet Modulation</option>
+            <option [ngValue]="101">Variable Displacement</option>
+            <option [ngValue]="102">Variable Speed Drives</option>
+          </optgroup>
+          <optgroup label="Oil Injected Screw">
+            <option [ngValue]="103">Load/Unload (short cycle)</option>
+            <option [ngValue]="104">Load/Unload (2+ minutes cycle)</option>
+          </optgroup>
+          <optgroup label="Oil Free Screw">
+            <option [ngValue]="105">Load/Unload</option>
+          </optgroup>
+          <optgroup label="Reciprocating Compressor">
+            <option [ngValue]="106">Load/Unload</option>
+            <option [ngValue]="107">On/Off</option>
+          </optgroup>
+          <optgroup label="Centrifugal Compressor">
+            <option [ngValue]="108">In blowoff (Venting)</option>
+            <option [ngValue]="109">Modulating (IBV) in throttle range (Non-Venting)</option>
+            <option [ngValue]="110">Modulating (IGV) in throttle range (Non-Venting)</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option [ngValue]="8">Custom</option>
+          </optgroup>
         </select>
       </div>
     </div>
