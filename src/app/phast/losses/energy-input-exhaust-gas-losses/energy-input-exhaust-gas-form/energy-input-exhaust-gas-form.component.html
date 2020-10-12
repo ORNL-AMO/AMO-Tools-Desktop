@@ -5,7 +5,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareTotalHeatInput(), 'invalid': exhaustGasForm.controls.totalHeatInput.invalid}">
         <input [readonly]="!baselineSelected" name="{{'totalHeatInput_'+lossIndex}}" type="number" step="any" min="0"
           class="form-control" formControlName="totalHeatInput" id="{{'totalHeatInput_'+idString}}" onfocus="this.select();"
-          (input)="save()" (focus)="focusField('totalHeatInput')" (blur)="focusOut()">
+          (input)="save()" (focus)="focusField('totalHeatInput')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ/hr</span>
       </div>
@@ -26,7 +26,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareExcessAir(), 'invalid': exhaustGasForm.controls.excessAir.invalid}">
         <input [readonly]="!baselineSelected" name="{{'excessAir_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
           formControlName="excessAir" id="{{'excessAir_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('excessAir')"
-          (blur)="focusOut()">
+          >
         <span class="input-group-addon units">%</span>
       </div>
     </div>
@@ -35,7 +35,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareCombustionAirTemp(), 'error': combustionTempWarning !== null, 'invalid': exhaustGasForm.controls.combustionAirTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'combustionAirTemp_'+lossIndex}}" type="number" step="10" class="form-control"
           formControlName="combustionAirTemp" id="{{'combustionAirTemp_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('combustionAirTemp')"
-          (blur)="focusOut()">
+          >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -47,7 +47,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareExhaustGasTemp(), 'error': heatWarning !== null || combustionTempWarning !== null, 'invalid': exhaustGasForm.controls.exhaustGasTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'exhaustGasTemp_'+lossIndex}}" type="number" step="10" class="form-control"
           formControlName="exhaustGasTemp" id="{{'exhaustGasTemp_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('exhaustGasTemp')"
-          (blur)="focusOut()">
+          >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
