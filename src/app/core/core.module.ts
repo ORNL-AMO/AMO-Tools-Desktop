@@ -34,6 +34,7 @@ import { UpdateToastComponent } from '../update-toast/update-toast.component';
 import { LogToolModule } from '../log-tool/log-tool.module';
 import { MotorInventoryModule } from '../motor-inventory/motor-inventory.module';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
+import { WasteWaterModule } from '../waste-water/waste-water.module';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
     TutorialsModule,
     DashboardModule,
     LogToolModule,
-    MotorInventoryModule
+    MotorInventoryModule,
+    WasteWaterModule
   ],
   providers: [
     AssessmentService,

@@ -111,6 +111,10 @@
     border-bottom: #84b641 solid 2px;
 }
 
+.waste-water .header{
+    border-bottom: #003087 solid 2px;
+}
+
 
 .psat .disabled .header{
     border-bottom-color: gray;
@@ -171,6 +175,12 @@
 
 .treasure-hunt .btn-secondary:not([disabled]):not(.disabled).active{
     background-origin: #2E4053;
+    transition: all .5s ease-in-out;
+    color: white;
+}
+
+.waste-water .btn-secondary:not([disabled]):not(.disabled).active{
+    background-origin: #003087;
     transition: all .5s ease-in-out;
     color: white;
 }

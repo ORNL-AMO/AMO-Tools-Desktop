@@ -58,6 +58,8 @@ export class AssessmentService {
         this.tab = 'treasure-chest';
       }
       this.router.navigateByUrl('/treasure-hunt/' + assessment.id);
+    } else if (assessment.type == 'WasteWater') {
+      this.router.navigateByUrl('/waste-water/' + assessment.id);
     }
   }
 

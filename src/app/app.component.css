@@ -1242,7 +1242,11 @@ Banner
     background: #84b641;
   }
 
-
+  .banner.waste-water{
+    background: #003087;
+    color: white;
+  }
+  
   .banner.fsat .btn-dashboard, .banner.fsat .title, 
   .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{
     color: #000;

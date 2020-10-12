@@ -83,6 +83,7 @@ import { CoolingTowerComponent } from '../calculator/process-cooling/cooling-tow
 import { FanPsychrometricComponent } from '../calculator/utilities/fan-psychrometric/fan-psychrometric.component';
 import { MotorInventoryComponent } from '../motor-inventory/motor-inventory.component';
 import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing';
+import { WasteWaterComponent } from '../waste-water/waste-water.component';
 
 export const coreRoutes: Routes = [
   {
@@ -436,4 +437,8 @@ export const coreRoutes: Routes = [
     path: 'motor-inventory/:id',
     children: motorInventoryRoutes
   },
+  {
+    component: WasteWaterComponent,
+    path: 'waste-water/:id',
+  }
 ];

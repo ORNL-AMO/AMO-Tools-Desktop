@@ -64,6 +64,11 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     border-color: #2E4053;
 }
 
+.waste-water .btn-primary{
+    background-color: #003087;
+    border-color: #003087;
+}
+
 .fan-block i{
     color:#FFE400
   }
