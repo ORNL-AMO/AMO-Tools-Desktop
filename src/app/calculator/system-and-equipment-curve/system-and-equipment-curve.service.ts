@@ -5,6 +5,7 @@ import { ByDataInputs, ByEquationInputs, EquipmentInputs, PumpSystemCurveData, F
 import { RegressionEquationsService } from './regression-equations.service';
 import * as _ from 'lodash';
 import { SystemCurveDataPoint } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class SystemAndEquipmentCurveService {
@@ -50,7 +51,7 @@ export class SystemAndEquipmentCurveService {
   highCoordinateLimit: number = 100000;
   existingInputUnits: string;
 
-  constructor(private regressionEquationsService: RegressionEquationsService) {
+  constructor(private regressionEquationsService: RegressionEquationsService, private convertUnitsService: ConvertUnitsService) {
     this.currentField = new BehaviorSubject<string>('default');
     this.pumpSystemCurveData = new BehaviorSubject<PumpSystemCurveData>(undefined);
     this.fanSystemCurveData = new BehaviorSubject<FanSystemCurveData>(undefined);
@@ -122,6 +123,7 @@ export class SystemAndEquipmentCurveService {
     let modificationEquipment = this.modificationEquipment.getValue();
     let equipmentInputs = this.equipmentInputs.getValue();
     let intersectionData = this.systemCurveIntersectionData.getValue();
+    let systemCurveData = this.pumpSystemCurveData.getValue();
     // roundoff flow offset to find match
     let match = Math.round(intersectionData.baseline.x / 10) * 10;
     let powerAtBaselineFlow = baselinePowerDataPairs.find(pair => {
@@ -135,7 +137,15 @@ export class SystemAndEquipmentCurveService {
         // Power|mod = Power|BL * (Speed|mod / Speed|BL) ^3
         point.power = powerAtBaselineFlow.y * Math.pow((modificationEquipment.speed / equipmentInputs.baselineMeasurement), 3);
       }
-      point.efficiency = (((point.x * point.y) / 3961.38) / point.power) * 100;
+      //copy for conversions
+      let pointCopy = JSON.parse(JSON.stringify(point));
+      //flow = gpm
+      let flow = this.convertUnitsService.value(pointCopy.x).from(settings.flowMeasurement).to('gpm');
+      //head = ft
+      let head = this.convertUnitsService.value(pointCopy.y).from(settings.distanceMeasurement).to('ft');
+      //power = hp
+      let hpPower = this.convertUnitsService.value(pointCopy.power).from(settings.powerMeasurement).to('hp');
+      point.efficiency = (((flow * head * systemCurveData.specificGravity) / 3961.38) / hpPower) * 100;
     }
     return point;
   }
@@ -144,11 +154,12 @@ export class SystemAndEquipmentCurveService {
     let equipmentInputs: EquipmentInputs = this.equipmentInputs.getValue();
     let modificationEquipment = this.modificationEquipment.getValue();
     let intersectionData = this.systemCurveIntersectionData.getValue();
-
+    let systemCurveData = this.fanSystemCurveData.getValue();
     if (intersectionData && intersectionData.baseline && baselinePowerDataPairs.length > 0) {
       let baselineOperatingFlow = intersectionData.baseline.x;
       let smallestDiff = baselinePowerDataPairs[baselinePowerDataPairs.length - 1].x;
       let closestPowerVal;
+
 
       // Approximate closest x value (off less than a 10th/100th of a percent)
       for (let i = 0; i < baselinePowerDataPairs.length; i++) {
@@ -166,7 +177,15 @@ export class SystemAndEquipmentCurveService {
           // Power|mod = Power|BL * (Speed|mod / Speed|BL) ^3
           point.power = closestPowerVal * Math.pow((modificationEquipment.speed / equipmentInputs.baselineMeasurement), 3);
         }
-        point.efficiency = (((point.x * point.y) / 6362) / point.power) * 100;
+        //copy for conversions
+        let pointCopy = JSON.parse(JSON.stringify(point));
+        //flow ft3/min
+        let flow = this.convertUnitsService.value(pointCopy.x).from(settings.fanFlowRate).to('ft3/min');
+        //pressure inH20
+        let pressure = this.convertUnitsService.value(pointCopy.y).from(settings.fanPressureMeasurement).to('inH2o');
+        //power hp
+        let power = this.convertUnitsService.value(pointCopy.power).from(settings.powerMeasurement).to('hp');
+        point.efficiency = (((flow * pressure * systemCurveData.compressibilityFactor) / 6362) / power) * 100;
       }
     }
     return point;
