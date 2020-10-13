@@ -209,6 +209,7 @@ export class AssessmentCreateComponent implements OnInit {
           let tmpAssessment = this.assessmentService.getNewAssessment('WasteWater');
           tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
           tmpAssessment.directoryId = this.directory.id;
+          tmpAssessment.wasteWater = this.assessmentService.getNewWasteWater();
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
             this.indexedDbService.getAssessment(assessmentId).then(assessment => {
               tmpAssessment = assessment;

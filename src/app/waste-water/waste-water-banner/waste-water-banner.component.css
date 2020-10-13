@@ -60,10 +60,6 @@
     color: initial;
 }
 
-.nav-link.active{
-    background: #808B96;
-    font-weight: bold;
-  }
 
 .nav-item{
     margin: .1rem;

@@ -1,25 +1,22 @@
-<!--all main psat content-->
 <div #content class="waste-water-container waste-water d-flex flex-column" *ngIf="assessment">
-    <!--header-->
-    <div #header class="w-100 hide-print sticky-top" id="wasteWaterBanner">
-        <app-waste-water-banner [assessment]="assessment"></app-waste-water-banner>
+  <!--header-->
+  <div #header class="w-100 hide-print sticky-top" id="wasteWaterBanner">
+    <app-waste-water-banner [assessment]="assessment"></app-waste-water-banner>
+  </div>
+  <!--end header-->
+  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
+    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <app-system-basics *ngIf="setupTab == 'system-basics'"></app-system-basics>
+      <app-activated-sludge-form *ngIf="setupTab == 'activated-sludge'" [inSetup]="true" [selected]="true">
+      </app-activated-sludge-form>
     </div>
-    <!--end header-->
-    <!-- <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
-      <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}"
-        [ngStyle]="{'height.px': containerHeight}">
-        <app-system-basics *ngIf="subTab == 'settings'" [(settings)]="settings" [assessment]="assessment"
-          (updateSettings)="getSettings()">
-        </app-system-basics>
-        <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings" (updateSettings)="getSettings()">
-        </app-operation-costs>
-  
-      </div>
-      <div class="w-50">
-        <app-help-panel [currentTab]="subTab"></app-help-panel>
-      </div>
+    <div class="w-50">
+      <app-help-panel></app-help-panel>
     </div>
-  
+  </div>
+
+  <!--
     <div *ngIf="mainTab == 'find-treasure'" class="w-100 d-flex tab-content justify-content-center scroll-item"
       [ngStyle]="{'height.px': containerHeight}">
       <app-find-treasure class="w-100" [settings]="settings"></app-find-treasure>
@@ -38,14 +35,14 @@
 
 
 
-    <!--footer-->
-    <div #footer id="wasteWaterFooter" class="footer hide-print">
-        <div class="pull-left">
-            <button class="btn btn-default" [disabled]="true" (click)="back()">Back</button>
-        </div>
-        <div class="pull-right">
-            <button class="btn btn-primary" [disabled]="true" (click)="continue()">Next</button>
-        </div>
+  <!--footer-->
+  <div #footer id="wasteWaterFooter" class="footer hide-print">
+    <div class="pull-left">
+      <button class="btn btn-default" [disabled]="true" (click)="back()">Back</button>
     </div>
-    <!--end footer-->
+    <div class="pull-right">
+      <button class="btn btn-primary" [disabled]="true" (click)="continue()">Next</button>
+    </div>
+  </div>
+  <!--end footer-->
 </div>

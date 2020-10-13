@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { Subscription } from 'rxjs';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { SettingsService } from '../settings/settings.service';
 import { Assessment } from '../shared/models/assessment';
-import { Directory } from '../shared/models/directory';
 import { Settings } from '../shared/models/settings';
+import { WasteWaterService } from './waste-water.service';
 
 @Component({
   selector: 'app-waste-water',
@@ -14,11 +13,25 @@ import { Settings } from '../shared/models/settings';
   styleUrls: ['./waste-water.component.css']
 })
 export class WasteWaterComponent implements OnInit {
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
+  containerHeight: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getContainerHeight();
+  }
+
 
   assessment: Assessment;
   settings: Settings;
+  mainTab: string;
+  mainTabSub: Subscription;
+  setupTab: string;
+  setupTabSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
-    private settingsDbService: SettingsDbService) { }
+    private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
     let tmpAssessmentId;
@@ -26,8 +39,44 @@ export class WasteWaterComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
-        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        this.wasteWaterService.wasteWater.next(this.assessment.wasteWater);
+        let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        this.wasteWaterService.settings.next(settings);
       });
     });
+
+    this.mainTabSub = this.wasteWaterService.mainTab.subscribe(val => {
+      this.mainTab = val;
+    });
+
+    this.setupTabSub = this.wasteWaterService.setupTab.subscribe(val => {
+      this.setupTab = val;
+    });
+  }
+
+  ngOnDestroy() {
+    this.mainTabSub.unsubscribe();
+    this.setupTabSub.unsubscribe();
+  } 
+  
+  ngAfterViewInit() {
+    setTimeout(() => {
+      // this.disclaimerToast();
+      this.getContainerHeight();
+    }, 100);
+  }
+
+  getContainerHeight() {
+    if (this.content) {
+      setTimeout(() => {
+        let contentHeight = this.content.nativeElement.offsetHeight;
+        let headerHeight = this.header.nativeElement.offsetHeight;
+        let footerHeight = 0;
+        if (this.footer) {
+          footerHeight = this.footer.nativeElement.offsetHeight;
+        }
+        this.containerHeight = contentHeight - headerHeight - footerHeight;
+      }, 100);
+    }
   }
 }

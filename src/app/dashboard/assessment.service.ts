@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
+import { WasteWater } from '../shared/models/waste-water';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -271,5 +272,45 @@ export class AssessmentService {
         lowPressureHeader: undefined
       }
     };
+  }
+
+  getNewWasteWater(): WasteWater {
+    return {
+      baselineData: {
+        activatedSludgeData: {
+          Temperature: undefined,
+          So: undefined,
+          Volume: undefined,
+          FlowRate: undefined,
+          InertVSS: undefined,
+          OxidizableN: undefined,
+          Biomass: undefined,
+          InfluentTSS: undefined,
+          InertInOrgTSS: undefined,
+          EffluentTSS: undefined,
+          RASTSS: undefined,
+          MLSSpar: undefined,
+          FractionBiomass: undefined,
+          BiomassYeild: undefined,
+          HalfSaturation: undefined,
+          MicrobialDecay: undefined,
+          MaxUtilizationRate: undefined,
+        },
+        aeratorPerformanceData: {
+          OperatingDO: undefined,
+          Alpha: undefined,
+          Beta: undefined,
+          SOTR: undefined,
+          Aeration: undefined,
+          Elevation: undefined,
+          OperatingTime: undefined,
+          TypeAerators: undefined,
+          Speed: undefined,
+          EnergyCostUnit: undefined,
+        },
+        MaxDays: undefined,
+        TimeIncrement: undefined,
+      }
+    }
   }
 }
