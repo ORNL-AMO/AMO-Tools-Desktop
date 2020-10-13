@@ -211,26 +211,30 @@ export class AssessmentCreateComponent implements OnInit {
           tmpAssessment.directoryId = this.directory.id;
           tmpAssessment.wasteWater = this.assessmentService.getNewWasteWater();
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-            this.indexedDbService.getAssessment(assessmentId).then(assessment => {
-              tmpAssessment = assessment;
-              if (this.directory.assessments) {
-                this.directory.assessments.push(tmpAssessment);
-              } else {
-                this.directory.assessments = new Array();
-                this.directory.assessments.push(tmpAssessment);
-              }
+            this.assessmentDbService.setAll().then(() => {
+              this.indexedDbService.getAssessment(assessmentId).then(assessment => {
+                tmpAssessment = assessment;
+                if (this.directory.assessments) {
+                  this.directory.assessments.push(tmpAssessment);
+                } else {
+                  this.directory.assessments = new Array();
+                  this.directory.assessments.push(tmpAssessment);
+                }
 
-              let tmpDirRef: DirectoryDbRef = {
-                name: this.directory.name,
-                id: this.directory.id,
-                parentDirectoryId: this.directory.parentDirectoryId,
-                createdDate: this.directory.createdDate,
-                modifiedDate: this.directory.modifiedDate
-              }
-              this.indexedDbService.putDirectory(tmpDirRef).then(results => {
-                this.router.navigateByUrl('/waste-water/' + tmpAssessment.id)
+                let tmpDirRef: DirectoryDbRef = {
+                  name: this.directory.name,
+                  id: this.directory.id,
+                  parentDirectoryId: this.directory.parentDirectoryId,
+                  createdDate: this.directory.createdDate,
+                  modifiedDate: this.directory.modifiedDate
+                }
+                this.indexedDbService.putDirectory(tmpDirRef).then(results => {
+                  this.directoryDbService.setAll().then(() => {
+                    this.router.navigateByUrl('/waste-water/' + tmpAssessment.id)
+                  })
+                });
               });
-            })
+            });
           });
         }
       });

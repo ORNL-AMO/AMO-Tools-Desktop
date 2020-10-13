@@ -11,6 +11,8 @@ import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sl
 import { AeratorPerformanceFormComponent } from './aerator-performance-form/aerator-performance-form.component';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ModelingOptionsFormComponent } from './modeling-options-form/modeling-options-form.component';
+import { ModelingOptionsFormService } from './modeling-options-form/modeling-options-form.service';
 
 
 
@@ -21,7 +23,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     SystemBasicsComponent, 
     HelpPanelComponent, 
     ActivatedSludgeFormComponent,
-     AeratorPerformanceFormComponent
+     AeratorPerformanceFormComponent,
+     ModelingOptionsFormComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +34,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   providers: [
     WasteWaterService,
     ActivatedSludgeFormService,
-    AeratorPerformanceFormService
+    AeratorPerformanceFormService,
+    ModelingOptionsFormService
   ]
 })
 export class WasteWaterModule { }

@@ -1,10 +1,12 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
+import { WasteWater } from '../shared/models/waste-water';
 import { WasteWaterService } from './waste-water.service';
 
 @Component({
@@ -23,26 +25,23 @@ export class WasteWaterComponent implements OnInit {
     this.getContainerHeight();
   }
 
-
   assessment: Assessment;
   settings: Settings;
   mainTab: string;
   mainTabSub: Subscription;
   setupTab: string;
   setupTabSub: Subscription;
+  wasteWaterSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
-    private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService) { }
+    private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService,
+    private assessmentDbService: AssessmentDbService) { }
 
   ngOnInit(): void {
-    let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
-      tmpAssessmentId = params['id'];
-      this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
-        this.assessment = dbAssessment;
-        this.wasteWaterService.wasteWater.next(this.assessment.wasteWater);
-        let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-        this.wasteWaterService.settings.next(settings);
-      });
+      this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
+      this.wasteWaterService.wasteWater.next(this.assessment.wasteWater);
+      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+      this.wasteWaterService.settings.next(settings);
     });
 
     this.mainTabSub = this.wasteWaterService.mainTab.subscribe(val => {
@@ -52,13 +51,20 @@ export class WasteWaterComponent implements OnInit {
     this.setupTabSub = this.wasteWaterService.setupTab.subscribe(val => {
       this.setupTab = val;
     });
+
+    this.wasteWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
+      if (val && this.assessment) {
+        this.saveWasteWater(val);
+      }
+    });
   }
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.setupTabSub.unsubscribe();
-  } 
-  
+    this.wasteWaterSub.unsubscribe();
+  }
+
   ngAfterViewInit() {
     setTimeout(() => {
       // this.disclaimerToast();
@@ -78,5 +84,12 @@ export class WasteWaterComponent implements OnInit {
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
     }
+  }
+
+  saveWasteWater(wasteWater: WasteWater) {
+    this.assessment.wasteWater = wasteWater;
+    this.indexedDbService.putAssessment(this.assessment).then(() => {
+      this.assessmentDbService.setAll();
+    });
   }
 }

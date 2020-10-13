@@ -55,4 +55,8 @@
         <a (click)="changeSetupTab('aerator-performance')">
             <span class="step-number">3</span>Aerator Performance</a>
     </li>
+    <li [ngClass]="{'active': setupTab == 'modeling-options'}">
+        <a (click)="changeSetupTab('modeling-options')">
+            <span class="step-number">4</span>Modeling Options</a>
+    </li>
 </ul>

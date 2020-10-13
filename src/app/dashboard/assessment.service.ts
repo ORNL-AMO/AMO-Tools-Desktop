@@ -307,7 +307,9 @@ export class AssessmentService {
           TypeAerators: undefined,
           Speed: undefined,
           EnergyCostUnit: undefined,
-        },
+        }
+      },
+      modelingOptions: {
         MaxDays: undefined,
         TimeIncrement: undefined,
       }

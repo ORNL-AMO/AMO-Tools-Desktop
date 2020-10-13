@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { WasteWater } from '../../shared/models/waste-water';
+import { ActivatedSludgeData, WasteWater } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
 import { ActivatedSludgeFormService } from './activated-sludge-form.service';
 
@@ -11,7 +11,7 @@ import { ActivatedSludgeFormService } from './activated-sludge-form.service';
 })
 export class ActivatedSludgeFormComponent implements OnInit {
   @Input()
-  isBaseline: boolean;
+  isModification: boolean;
   @Input()
   inSetup: boolean;
   @Input()
@@ -22,27 +22,27 @@ export class ActivatedSludgeFormComponent implements OnInit {
 
   ngOnInit(): void {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-    this.form = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
-    //TODO: Baseline/modification
-    // if(this.isBaseline){
-
-    // }else{
-    //   //TODO: Modification Logic
-    // }
+    if (this.isModification) {
+      //add logic when selecte mod index added
+      // this.form = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
+    } else {
+      this.form = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
+    }
   }
 
   save() {
-
-
-    //TODO: Baseline/modification
-    // if(this.isBaseline){
-
-    // }else{
-    //   //TODO: Modification Logic
-    // }
+    if (this.isModification) {
+      //add logic when selecte mod index added
+      // this.form = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
+    } else {
+      let activatedSludgeData: ActivatedSludgeData = this.activatedSludgeFormService.getObjFromForm(this.form);
+      let wastWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+      wastWater.baselineData.activatedSludgeData = activatedSludgeData;
+      this.wasteWaterService.wasteWater.next(wastWater);
+    }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
 
   }
 

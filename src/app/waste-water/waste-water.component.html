@@ -12,6 +12,8 @@
       </app-activated-sludge-form>
       <app-aerator-performance-form *ngIf="setupTab == 'aerator-performance'" [inSetup]="true" [selected]="true">
       </app-aerator-performance-form>
+      <app-modeling-options-form *ngIf="setupTab == 'modeling-options'" [inSetup]="true" [selected]="true">
+      </app-modeling-options-form>
     </div>
     <div class="w-50">
       <app-help-panel></app-help-panel>
