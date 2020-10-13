@@ -87,9 +87,6 @@ Buttons
   border-color: #717171;
 }
 
-.btn.disabled, .btn:disabled {
-    opacity: 1;
-}
 .btn-primary.disabled, .btn-primary:disabled,
 .btn-secondary.disabled, .btn-secondary:disabled {
     color: #c5c5c5;
@@ -117,7 +114,6 @@ Buttons
 .unsaved{
   background-color: #F5B7B1;
 }
-
 
 /*
 Badges
@@ -217,7 +213,9 @@ select.form-control:not([size]):not([multiple]) {
   }
 
 
-
+  .inheritWidth {
+    width: inherit;
+  }
 
 
 
@@ -368,9 +366,9 @@ select.form-control:not([size]):not([multiple]) {
 @media print {
   @page {
     margin-top: 10mm;
-    margin-bottom: 10mm;
-    margin-left: 5mm;
-    margin-right: 5mm;
+    margin-bottom: 5mm;
+    margin-left: 2mm;
+    margin-right: 2mm;
   }
 
   .indicate-report-field-different{
@@ -409,7 +407,7 @@ Pump Fluid CSS
 =============================================== */
 /**/
 
-canvas {
+/* canvas {
   display: block;
   float: left;
   height: 30px !important;
@@ -425,7 +423,7 @@ app-nema-energy-efficiency-graph h1 {
     top: 123px;
     left: 112px;
     font-size: 30px !important;
-}
+} */
 
 /*
 In-Assessment Calculators
@@ -1234,6 +1232,16 @@ Banner
     background: #2E4053;
     color: white;
   }
+
+  .banner.log-tool{
+    background: #117A65;
+    color: white;
+  }
+
+  .banner.motor-inventory{
+    background: #84b641;
+  }
+
 
   .banner.fsat .btn-dashboard, .banner.fsat .title, 
   .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{

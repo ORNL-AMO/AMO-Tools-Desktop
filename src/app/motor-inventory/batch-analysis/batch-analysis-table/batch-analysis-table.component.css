@@ -1,0 +1,93 @@
+.sticky-left{
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+}
+
+.sticky-right{
+    position: -webkit-sticky;
+    position: sticky;
+    right: 0;
+}
+
+
+.table{
+    font-size: small;
+    margin-bottom: 0px;
+}
+
+
+.name-cell, .header-cell{
+    background-color: white;
+}
+
+.name-cell{
+    font-weight: bold;
+}
+
+
+th, td{
+    min-width: 75px;
+}
+
+.max-height{
+    max-height: 100%;
+}
+
+.sort-by-active{
+    text-decoration: underline;
+}
+
+.header-cell:hover, .name-cell:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+tbody tr:hover{
+    background-color: white;
+}
+
+/* tbody{
+    background-color: rgba(0, 0, 0, 0.075);
+} */
+
+
+
+
+
+td.replace{
+    background-color: #117A65;
+    color: white;
+}
+
+tr.replace{
+    background-color: #73C6B6;
+    /* color: white; */
+}
+
+td.rewind{
+    background-color: #7D3C98;
+    color: white;
+}
+
+tr.rewind{
+    background-color: #BB8FCE;
+}
+
+
+td.replace-when-fail{
+    background-color: #2874A6;
+    color: white;
+}
+
+tr.replace-when-fail{
+    background-color: #7FB3D5;
+    /* color: white; */
+}
+
+td{
+    white-space: nowrap;
+}
+
+td.incomplete-cell{
+    white-space: inherit;
+}

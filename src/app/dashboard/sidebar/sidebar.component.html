@@ -6,8 +6,26 @@
 
 <div class="sidebar-group create-button">
   <div class="p-2">
-    <button type="button" class="btn btn-primary btn-block mx-auto max-width" (click)="showCreateAssessment()">Add
-      Assessment</button>
+    <div class="nav-item dropdown">
+      <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
+        <a class="dropdown-toggle">
+          Add New
+        </a>
+      </button>
+      <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showNewDropdown == true}">
+        <div class="list-group bold">
+          <a class="list-group-item list-group-item-action" (click)="showCreateAssessment()">
+            Add New Assessment
+          </a>
+          <a class="list-group-item list-group-item-action" (click)="showCreateInventory()">
+            Add New Inventory
+          </a>
+          <a class="list-group-item list-group-item-action" (click)="showCreateFolder()">
+            Add New Folder
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -17,6 +35,10 @@
 
 <div class="sidebar-group secondary pl-1 horizontal scroll-item">
   <app-directory-item [directory]="rootDirectory"></app-directory-item>
+</div>
+
+<div class="sidebar-group secondary">
+  <span routerLink="/log-tool" routerLinkActive="selected" class="sidebar-item">Data Exploration</span>
 </div>
 
 <div class="sidebar-group secondary">
@@ -30,7 +52,8 @@
   <span routerLink="/about" routerLinkActive="selected" class="sidebar-item">About</span>
   <span routerLink="/contact" routerLinkActive="selected" class="sidebar-item">Feedback</span>
   <span routerLink="/acknowledgments" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
-  <span *ngIf="googleTranslateAvailable" class="sidebar-item" (click)="emitTranslate()"><span class="fa fa-globe"></span> Translate</span>
+  <span *ngIf="googleTranslateAvailable" class="sidebar-item" (click)="emitTranslate()"><span
+      class="fa fa-globe"></span> Translate</span>
 </div>
 
 <div class="sidebar-group">

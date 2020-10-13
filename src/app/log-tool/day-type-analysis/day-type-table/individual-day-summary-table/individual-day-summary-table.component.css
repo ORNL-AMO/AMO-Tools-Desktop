@@ -1,0 +1,13 @@
+td{
+    font-size: small;
+    padding: 3px;
+}
+
+.scroll-item{
+    overflow-x: auto;
+}
+
+.day-type-header{
+    border-left: solid 10px;
+    padding: 8px;
+}

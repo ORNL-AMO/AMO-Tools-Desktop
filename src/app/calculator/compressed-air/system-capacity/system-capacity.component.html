@@ -47,13 +47,27 @@
         </h5>
         <hr class="my-1 hr-spacer">
 
-        <div class="my-2" *ngIf="currentField == 'pipeSize'">
+        <div class="my-2" *ngIf="currentField == 'pipeLength'">
           <h6>
             Pipe Length
             <br>
             <small class="text-muted">
-              Enter the length for different nominal pipe sizes.
-              Pipe sizes used are nominal schedule 40 pipe measured from the pipe’s inner diameter.
+              Enter the length of the specified pipe size.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'pipeSize'">
+          <h6>
+              Pipe Size
+              <br>
+            <small class="text-muted">
+              Select a pipe size from the list of nominal schedule 40 pipe inner diameters or enter a custom pipe size (inner diameter). For a quicker estimation,
+              ignore all pipe sizes 
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'">2"</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">50mm</span>  
+              or less (they do not add significant system capacity).
               <hr>
             </small>
           </h6>
@@ -69,15 +83,43 @@
             </small>
           </h6>
         </div>
-
-        <div class="my-2" *ngIf="currentField == 'customPipes'">
+        <div class="my-2" *ngIf="currentField == 'airPressureIn'">
           <h6>
-            Custom Pipes
+           Air Pressure - High
             <br>
             <small class="text-muted">
-              Enter the length and size of any custom pipe in the compressed air system.
-              The size of the pipe should be taken as the pipe’s inner diameter.
-              This feature can be used to consider any non-nominal schedule 40 pipe.
+              Pressure of air entering the tank in psi.
+              <hr>
+            </small>
+          </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'airPressureOut'">
+          <h6>
+           Air Pressure - Low
+            <br>
+            <small class="text-muted">
+              Pressure of air leaving the tank in psi.
+              <hr>
+            </small>
+          </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
+          <h6>
+           Atmospheric Pressure
+            <br>
+            <small class="text-muted">
+              General value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure
+              at that location can be given.
+              <hr>
+            </small>
+          </h6>
+        </div>
+        <div class="my-2" *ngIf="currentField == 'dischargeTime'">
+          <h6>
+            Discharge Time
+            <br>
+            <small class="text-muted">
+              Time required to fully discharge the system.
               <hr>
             </small>
           </h6>

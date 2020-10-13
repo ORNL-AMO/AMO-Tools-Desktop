@@ -17,6 +17,10 @@
                 {{phast.systemEfficiency}}
               </td>
               <td [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+                <div class="alert-danger" *ngIf="!mod.phast.valid.systemEfficiencyValid">
+                  Invalid Modification<br>
+                  <span>Errors found in Slag<br></span>
+                </div>
                 {{mod.phast.systemEfficiency}}
               </td>
             </tr>

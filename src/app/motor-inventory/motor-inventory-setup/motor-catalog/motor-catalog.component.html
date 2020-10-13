@@ -1,0 +1,46 @@
+<div class="row ml-0 mr-0">
+    <div class="col-12">
+        <div class="header">
+            <div class="h3">Edit Motor</div>
+            <a *ngIf="showDeleteMotorButton" class="click-link danger small pull-right"
+                (click)="openDeleteMotorModal()">Delete</a>
+        </div>
+    </div>
+    <div class="col-12">
+        <app-motor-basics></app-motor-basics>
+    </div>
+    <div class="col-12">
+        <a class="click-link small pull-right" (click)="openMotorSelectionModal()">Set Data From Existing Motor</a>
+    </div>
+    <div class="col-12">
+        <app-nameplate-data></app-nameplate-data>
+    </div>
+    <div class="col-12" *ngIf="motorInventoryData.displayOptions.loadCharactersticOptions.displayLoadCharacteristics">
+        <app-load-characteristic-data></app-load-characteristic-data>
+    </div>
+    <div class="col-12" *ngIf="motorInventoryData.displayOptions.operationDataOptions.displayOperationData">
+        <app-operations-data></app-operations-data>
+    </div>
+    <div class="col-12">
+        <app-manual-specification-data></app-manual-specification-data>
+    </div>
+    <div class="col-12" *ngIf="motorInventoryData.displayOptions.batchAnalysisOptions.displayBatchAnalysis">
+        <app-batch-analysis-data></app-batch-analysis-data>
+    </div>
+    <div class="col-12" *ngIf="motorInventoryData.displayOptions.purchaseInformationOptions.displayPurchaseInformation">
+        <app-purchase-information-data></app-purchase-information-data>
+    </div>
+    <div class="col-12" *ngIf="motorInventoryData.displayOptions.torqueOptions.displayTorque">
+        <app-torque-data></app-torque-data>
+    </div>
+    <div class="col-12" *ngIf="motorInventoryData.displayOptions.otherOptions.displayOther">
+        <app-other-data></app-other-data>
+    </div>
+</div>
+
+
+<app-select-motor-modal *ngIf="showSelectMotorModal" (emitClose)="closeMotorSelectionModal()"
+    (emitSelect)="setMotorSelection($event)"></app-select-motor-modal>
+
+<app-delete-motor-modal *ngIf="showDeleteMotorModal" (emitClose)="closeDeleteMotorModal()" (emitDelete)="deleteMotor()">
+</app-delete-motor-modal>

@@ -1,0 +1,34 @@
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>Unit Name</th>
+      <th>Category</th>
+      <th>Energy Use ({{ settings.energyResultUnit }})</th>
+      <th>% of Energy Use</th>
+      <th>Energy Cost ($/hr)</th>
+      <th>% of Energy Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let dataItem of tableData; let i = index">
+      <td class="name" [ngStyle]="{'border-left-color': dataItem.color}">
+        {{ dataItem.name }}
+      </td>
+      <td>
+        {{ dataItem.type }}
+      </td>
+      <td>
+        {{ dataItem.energyUse | number: 0 }}
+      </td>
+      <td>
+        {{ dataItem.percentEnergy | percent: ".2" }}
+      </td>
+      <td>
+        {{ dataItem.energyCost | currency: "USD":"symbol":".2-2" }}
+      </td>
+      <td>
+        {{ dataItem.percentEnergy | percent: ".2" }}
+      </td>
+    </tr>
+  </tbody>
+</table>

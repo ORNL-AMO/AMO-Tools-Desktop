@@ -1,0 +1,40 @@
+<div class="d-flex w-100 justify-content-center align-items-center pt-1 pb-1">
+  <button (click)="addResult()" class="btn-add-row" [disabled]="!psychrometricResults">Create Row</button>
+</div>
+
+<table #copyTable class="calculator-table mx-auto table-hover table-striped">
+    <thead>
+      <tr>
+        <th class="parent-col">T<sub class="pr-1">DB</sub>
+          <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
+        </th>
+        <th class="parent-col">RH %</th>
+        <th class="parent-col">T<sub class="pr-1">WB</sub>
+          <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
+
+        </th>
+        <th class="parent-col">T<sub class="pr-1">DP</sub>
+          <span [innerHTML]="settings.fanTemperatureMeasurement | settingsLabel"></span>
+
+        </th>
+        <th class="parent-col"><span class="pr-1">h</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">btu/lb</span>
+        </th>
+        <th class="pr-3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let result of resultData; let i = index">
+        <td>{{result.dryBulbTemp | number:'1.0-4'}}</td>
+        <td>{{result.relativeHumidity | number:'1.0-2' }}</td>
+        <td>{{result.wetBulbTemp | number:'1.0-4'}}</td>
+        <td>{{result.dewPoint | number:'1.0-1'}}</td>
+        <td>{{result.enthalpy | number:'1.0-1'}}</td>
+        <td class="delete-row pr-3" (click)="deleteResult(i)">Delete</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+  </app-exportable-results-table>

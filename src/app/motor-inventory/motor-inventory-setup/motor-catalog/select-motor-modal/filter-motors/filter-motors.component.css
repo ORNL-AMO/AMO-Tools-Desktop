@@ -1,0 +1,11 @@
+.disabled-input{
+    text-align: center;
+    border-top-left-radius: .25rem !important;
+    border-top-right-radius: .25rem !important;
+}
+
+.hide-text{
+    opacity: 0;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}

@@ -16,6 +16,8 @@ import { calculatorRoutes } from '../calculator/calculator-routing/calculators.r
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { DirectoryDashboardComponent } from '../dashboard/directory-dashboard/directory-dashboard.component';
 import { ReportRollupComponent } from '../report-rollup/report-rollup.component';
+import { LogToolComponent } from '../log-tool/log-tool.component';
+import { logToolRoutes } from '../log-tool/log-tool.routings';
 import { CalculatorsListComponent } from '../calculator/calculators-list/calculators-list.component';
 import { CompressedAirListComponent } from '../calculator/compressed-air/compressed-air-list/compressed-air-list.component';
 import { FansListComponent } from '../calculator/fans/fans-list/fans-list.component';
@@ -38,16 +40,13 @@ import { SystemAndEquipmentCurveComponent } from '../calculator/system-and-equip
 import { CashFlowComponent } from '../calculator/utilities/cash-flow/cash-flow.component';
 import { Co2SavingsComponent } from '../calculator/utilities/co2-savings/co2-savings.component';
 import { CombinedHeatPowerComponent } from '../calculator/utilities/combined-heat-power/combined-heat-power.component';
-import { CompressedAirPressureReductionComponent } from '../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
-import { CompressedAirReductionComponent } from '../calculator/utilities/compressed-air-reduction/compressed-air-reduction.component';
 import { ElectricityReductionComponent } from '../calculator/utilities/electricity-reduction/electricity-reduction.component';
 import { NaturalGasReductionComponent } from '../calculator/utilities/natural-gas-reduction/natural-gas-reduction.component';
-import { PipeInsulationReductionComponent } from '../calculator/utilities/pipe-insulation-reduction/pipe-insulation-reduction.component';
+import { PipeInsulationReductionComponent } from '../calculator/steam/pipe-insulation-reduction/pipe-insulation-reduction.component';
 import { PowerFactorCorrectionComponent } from '../calculator/utilities/power-factor-correction/power-factor-correction.component';
 import { PreAssessmentComponent } from '../calculator/utilities/pre-assessment/pre-assessment.component';
 import { UnitConverterComponent } from '../calculator/utilities/unit-converter/unit-converter.component';
 import { WaterReductionComponent } from '../calculator/utilities/water-reduction/water-reduction.component';
-import { SteamReductionComponent } from '../calculator/utilities/steam-reduction/steam-reduction.component';
 import { LightingReplacementComponent } from '../calculator/lighting/lighting-replacement/lighting-replacement.component';
 import { MotorDriveComponent } from '../calculator/motors/motor-drive/motor-drive.component';
 import { MotorPerformanceComponent } from '../calculator/motors/motor-performance/motor-performance.component';
@@ -72,8 +71,18 @@ import { SaturatedPropertiesComponent } from '../calculator/steam/saturated-prop
 import { StackLossComponent } from '../calculator/steam/stack-loss/stack-loss.component';
 import { SteamPropertiesComponent } from '../calculator/steam/steam-properties/steam-properties.component';
 import { TurbineComponent } from '../calculator/steam/turbine/turbine.component';
-import { TankInsulationReductionComponent } from '../calculator/utilities/tank-insulation-reduction/tank-insulation-reduction.component';
+import { TankInsulationReductionComponent } from '../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.component';
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
+import { AirLeakComponent } from '../calculator/compressed-air/air-leak/air-leak.component';
+import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
+import { CompressedAirPressureReductionComponent } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
+import { SteamReductionComponent } from '../calculator/steam/steam-reduction/steam-reduction.component';
+import { AirFlowConversionComponent } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.component';
+import { ProcessCoolingListComponent } from '../calculator/process-cooling/process-cooling-list/process-cooling-list.component';
+import { CoolingTowerComponent } from '../calculator/process-cooling/cooling-tower/cooling-tower.component';
+import { FanPsychrometricComponent } from '../calculator/utilities/fan-psychrometric/fan-psychrometric.component';
+import { MotorInventoryComponent } from '../motor-inventory/motor-inventory.component';
+import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing';
 
 export const coreRoutes: Routes = [
   {
@@ -139,6 +148,10 @@ export const coreRoutes: Routes = [
             component: FurnacesListComponent
           },
           {
+            path: 'process-cooling-list',
+            component: ProcessCoolingListComponent
+          },
+          {
             path: 'lighting-list',
             component: LightingListComponent
           },
@@ -161,6 +174,10 @@ export const coreRoutes: Routes = [
           {
             path: 'air-velocity',
             component: AirVelocityComponent
+          },
+          {
+            path: 'air-flow-conversion',
+            component: AirFlowConversionComponent
           },
           {
             path: 'bag-method',
@@ -191,16 +208,20 @@ export const coreRoutes: Routes = [
             component: SystemCapacityComponent
           },
           {
+            path: 'air-leak',
+            component: AirLeakComponent
+          },
+          {
+            path: 'fan-psychrometric',
+            component: FanPsychrometricComponent
+          },
+          {
             path: 'fan-analysis',
             component: FanAnalysisComponent
           },
           {
             path: 'fan-efficiency',
             component: FanEfficiencyComponent
-          },
-          {
-            path: 'fan-system-curve',
-            component: SystemAndEquipmentCurveComponent
           },
           {
             path: 'fan-curve',
@@ -311,10 +332,6 @@ export const coreRoutes: Routes = [
             component: SpecificSpeedComponent
           },
           {
-            path: 'pump-system-curve',
-            component: SystemAndEquipmentCurveComponent
-          },
-          {
             path: 'pump-curve',
             component: SystemAndEquipmentCurveComponent
           },
@@ -365,6 +382,10 @@ export const coreRoutes: Routes = [
           {
             path: 'tank-insulation-reduction',
             component: TankInsulationReductionComponent
+          },
+          {
+            path: 'cooling-tower',
+            component: CoolingTowerComponent
           }
         ]
       }
@@ -399,15 +420,20 @@ export const coreRoutes: Routes = [
     path: 'report-rollup',
     component: ReportRollupComponent,
     children: [
-      // {
-      //   path: '',
-      //   pathMatch: 'full',
-      //   redirectTo: 'assessment-reports'
-      // },
       {
         path: '',
         component: AssessmentReportsComponent
       }
     ]
-  }
+  },
+  {
+    path: 'log-tool',
+    component: LogToolComponent,
+    children: logToolRoutes
+  },
+  {
+    component: MotorInventoryComponent,
+    path: 'motor-inventory/:id',
+    children: motorInventoryRoutes
+  },
 ];

@@ -1,0 +1,255 @@
+<div class="mb-4 p-2 form-card">
+  <form [formGroup]="form" #formElement>
+    <label *ngIf="!isEditingName" class="group-label w-100 bold">
+      <span (click)="editCaseName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+      <span>{{form.controls.name.value}}</span>
+      <a *ngIf="isBaseline" class="click-link pull-right add-fixture text-danger small pl-2"
+        (click)="removeCase(index)">+Remove Case</a>
+    </label>
+    <label *ngIf="isEditingName" class="group-label w-100">
+      <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+      <span class="alert-danger small ml-2" *ngIf="form.controls.name.invalid && !form.controls.name.pristine">
+        <span *ngIf="form.controls.name.errors.required">Please enter a name.</span>
+      </span>
+    </label>
+
+    <div class="form-section pt-2" *ngIf="isBaseline">
+      <div class="form-group">
+        <label class="small" for="{{'flowRate_'+idString}}">Water Flow Rate</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="flowRate" id="{{'flowRate_'+idString}}"
+            formControlName="flowRate" (input)="calculate()" (focus)="focusField('flowRate')">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/s</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">gpm</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.flowRate.invalid && !form.controls.flowRate.pristine">
+          <span *ngIf="form.controls.flowRate.errors.greaterThan == 0">Value must be greater than 0.</span>
+          <span *ngIf="form.controls.flowRate.errors.required">Value required.</span>
+        </span>
+      </div>
+
+      <div class="form-group" *ngIf="!form.controls.userDefinedCoolingLoad.value">
+        <label for="temperatureDifference">Temperature Difference</label>
+        <div class="input-group">
+          <input class="form-control" name="temperatureDifference" id="temperatureDifference"
+            formControlName="temperatureDifference" type="number" (input)="calculate()"
+            (focus)="focusField('temperatureDifference')" onfocus="this.select();">
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          <span class="alert-danger pull-right small"
+            *ngIf="form.controls.temperatureDifference.invalid && !form.controls.temperatureDifference.pristine">
+            <span *ngIf="form.controls.temperatureDifference.errors.greaterThan == 0">Value must be greater than 0.
+              <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>.
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="form-group pt-1">
+        <label>Cooling Load
+          <a class="click-link small form-text" (click)="showHideInputField()"
+            *ngIf="form.controls.userDefinedCoolingLoad.value">Calculate Cooling Load</a>
+          <a class="click-link small form-text" (click)="showHideInputField()"
+            *ngIf="!form.controls.userDefinedCoolingLoad.value">Define Cooling Load</a>
+        </label>
+        <div class="input-group" *ngIf="form.controls.userDefinedCoolingLoad.value == true">
+          <input class="form-control" name="coolingLoad" id="coolingLoad" formControlName="coolingLoad" type="number"
+            (input)="calculate()" (focus)="focusField('coolingLoad')" onfocus="this.select();">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/h</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/h</span>
+          <span class="alert-danger pull-right small"
+            *ngIf="form.controls.coolingLoad.invalid && !form.controls.coolingLoad.pristine">
+            <span *ngIf="form.controls.coolingLoad.errors.required">Value required.</span>
+            <span *ngIf="form.controls.coolingLoad.errors.min">Value can't be less than
+              {{form.controls.coolingLoad.errors.min.min}}.</span>
+          </span>
+        </div>
+        <div class="input-group d-flex justify-content-center small bold"
+          *ngIf="!form.controls.userDefinedCoolingLoad.value">
+          <span class="mr-2" *ngIf="form.controls.coolingLoad.value">
+            {{form.controls.coolingLoad.value | number:'1.0-2'}}
+          </span>
+          <span class="mr-2" *ngIf="!form.controls.coolingLoad.value">&mdash; &mdash;</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/h</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/h</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'operationalHours_'+idString}}">Annual Operating Hours</label>
+        <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input class="form-control" name="operationalHours" id="{{'operationalHours_'+idString}}"
+            formControlName="operationalHours" type="number" (input)="calculate()"
+            (focus)="focusField('operationalHours')" onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.operationalHours.invalid && !form.controls.operationalHours.pristine">
+          <span *ngIf="form.controls.operationalHours.errors.required">Value required.</span>
+          <span *ngIf="form.controls.operationalHours.errors.max">Value can't be greater than
+            {{form.controls.operationalHours.errors.max.max}}.</span>
+          <span *ngIf="form.controls.operationalHours.errors.min">Value can't be less than
+            {{form.controls.operationalHours.errors.min.min}}.</span>
+        </span>
+      </div>
+
+
+    </div>
+    <div class="form-section pt-1" *ngIf="!isBaseline">
+      <div class="form-group">
+        <label class="bold">
+          Water Flow Rate
+        </label>
+        <div class="input-group d-flex justify-content-center small bold">
+          <span class="mr-2" *ngIf="form.controls.flowRate.value">
+            {{form.controls.flowRate.value | number:'1.0-2'}}
+          </span>
+          <span class="mr-2" *ngIf="!form.controls.flowRate.value">&mdash; &mdash;</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">gpm</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/s</span>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="!form.controls.userDefinedCoolingLoad.value">
+        <label for="temperatureDifference" class="bold">Temperature Difference</label>
+        <div class="input-group d-flex justify-content-center small bold">
+          <span class="mr-2" *ngIf="form.controls.temperatureDifference.value">
+            {{form.controls.temperatureDifference.value | number:'1.0-2'}}
+          </span>
+          <span class="mr-2" *ngIf="!form.controls.temperatureDifference.value">&mdash; &mdash;</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+        </div>
+      </div>
+      <div class="form-group py-1">
+        <label class="bold">Cooling Load
+          <span class="small form-text" *ngIf="form.controls.userDefinedCoolingLoad.value">Calculated Cooling
+            Load</span>
+          <span class="small form-text" *ngIf="!form.controls.userDefinedCoolingLoad.value">Defined Cooling Load</span>
+        </label>
+        <div class="input-group d-flex justify-content-center small bold">
+          <span class="mr-2" *ngIf="form.controls.coolingLoad.value">
+            {{form.controls.coolingLoad.value | number:'1.0-2'}}
+          </span>
+          <span class="mr-2" *ngIf="!form.controls.coolingLoad.value">&mdash; &mdash;</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/h</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/h</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="bold">
+          Annual Operating Hours
+        </label>
+        <div class="input-group d-flex justify-content-center small bold">
+          <span class="mr-2" *ngIf="form.controls.operationalHours.value">
+            {{form.controls.operationalHours.value | number:'1.0-2'}}
+          </span>
+          <span class="mr-2" *ngIf="!form.controls.operationalHours.value">&mdash; &mdash;</span>
+          <span>hrs/yr</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+
+      <div class="form-group">
+        <label class="small" for="{{'cyclesOfConcentration'+idString}}">Cycles of Concentration</label>
+        <div class="input-group">
+          <input class="form-control" type="number" step="1" name="cyclesOfConcentration"
+            id="{{'cyclesOfConcentration_'+idString}}" formControlName="cyclesOfConcentration" (input)="calculate()"
+            (focus)="focusField('cyclesOfConcentration')">
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.cyclesOfConcentration.invalid && !form.controls.cyclesOfConcentration.pristine">
+          <span *ngIf="form.controls.cyclesOfConcentration.errors.required">Value required.</span>
+          <span *ngIf="form.controls.cyclesOfConcentration.errors.greaterThan == 0">Value must be greater than 0.</span>
+
+        </span>
+      </div>
+      <div class="form-group">
+        <label class="small" for="{{'hasDriftEliminator_'+idString}}">Drift Eliminator</label>
+        <div class="input-group">
+          <select class="form-control" name="hasDriftEliminator" id="{{'hasDriftEliminator_'+idString}}"
+            formControlName="hasDriftEliminator" (change)="changeHasDriftEliminator()"
+            (focus)="focusField('hasDriftEliminator')">
+            <option *ngFor="let option of driftEliminatorOptions" [ngValue]="option.value">{{option.display}}</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="small" for="{{'driftLossFactor_'+idString}}">Drift Loss Factor</label>
+      <div class="input-group">
+        <input class="form-control" name="driftLossFactor" id="{{'driftLossFactor_'+idString}}"
+        formControlName="driftLossFactor" type="number" (input)="calculate()" (focus)="focusField('driftLossFactor')"
+        onfocus="this.select();">
+        <span class="units input-group-addon">%</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.driftLossFactor.invalid && !form.controls.driftLossFactor.pristine">
+        <span *ngIf="form.controls.driftLossFactor.errors.required">Value required.</span>
+        <span *ngIf="form.controls.driftLossFactor.errors.min">Value can't be less than
+          {{form.controls.driftLossFactor.errors.min.min}}.</span>
+          <span *ngIf="form.controls.driftLossFactor.errors.max">Value can't be greater than
+            {{form.controls.driftLossFactor.errors.max.max}}.</span>
+          </span>
+        </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'lossCorrectionFactor_'+idString}}">Evaporation Loss Correction Factor</label>
+      <div class="input-group">
+        <input class="form-control" type="number" name="lossCorrectionFactor" id="{{'lossCorrectionFactor_'+idString}}"
+        formControlName="lossCorrectionFactor" (input)="calculate()" (focus)="focusField('lossCorrectionFactor')">
+        <span class="units input-group-addon">%</span>
+        
+      </div>
+      <span class="alert-danger pull-right small"
+      *ngIf="form.controls.lossCorrectionFactor.invalid && !form.controls.lossCorrectionFactor.pristine">
+      <span *ngIf="form.controls.lossCorrectionFactor.errors.required">Value required.</span>
+      <span *ngIf="form.controls.lossCorrectionFactor.errors.min">Value can't be less than
+        {{form.controls.lossCorrectionFactor.errors.min.min}}.</span>
+        <span *ngIf="form.controls.lossCorrectionFactor.errors.max">Value can't be greater than
+          {{form.controls.lossCorrectionFactor.errors.max.max}}.</span>
+        </span>
+      </div>
+      </div>
+        
+        <div class="w-100 bold pt-2">
+          <label class="group-label w-100">
+            Results
+          </label>
+          <div class="small bold pt-2 pr-3 text-right">
+            <span class="px-3">
+              Water Consumption
+            </span>
+            <span *ngIf="isBaseline && caseResultData">
+              <span *ngIf="caseResultData.wcBaseline">
+                {{caseResultData.wcBaseline | number: '1.1-1' }}
+              </span>
+              <span *ngIf="!caseResultData.wcBaseline">
+                <strong>&mdash; &mdash;</strong>
+              </span>
+            </span>
+            <span *ngIf="!isBaseline && caseResultData">
+              <span *ngIf="caseResultData.wcModification">
+                {{caseResultData.wcModification | number: '1.1-1' }}
+              </span>
+              <span *ngIf="!caseResultData.wcBaseline">
+                <strong>&mdash; &mdash;</strong>
+              </span>
+            </span>
+            <span class="pl-2" *ngIf="settings.unitsOfMeasure != 'Metric'">kGal</span>
+            <span class="pl-2" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+          </div>
+        </div>
+    </form>
+  </div>
+  
+  <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
+    [operatingHours]="operatingHours">
+  </app-operating-hours-modal>

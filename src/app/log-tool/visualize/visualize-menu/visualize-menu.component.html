@@ -1,0 +1,52 @@
+<div class="sidebar scroll-item h-100 pt-2" [ngClass]="{'collapse-sidebar': !showSidebar}">
+    <div class="mx-2">
+        <a class="click-link small" (click)="toggleSidebar()" *ngIf="showSidebar"><span
+                class="fa fa-chevron-left"></span>Collapse</a>
+        <a class="click-link small link-padding" (click)="toggleSidebar()" *ngIf="!showSidebar"><span
+                class="fa fa-chevron-right"></span></a>
+        <hr class="mt-2 mb-1">
+        <div [ngClass]="{'collapse': !showSidebar}">
+            <!--Basics-->
+            <label class="group-label w-100 fa-chevron" (click)="toggleGraphBasics()">
+                <span class="fa"
+                    [ngClass]="{'fa-chevron-right': !showGraphBasics, 'fa-chevron-down': showGraphBasics}"></span>
+                Graph Basics</label>
+            <app-graph-basics *ngIf="showGraphBasics"></app-graph-basics>
+
+            <!--Histogram Bins-->
+            <label class="group-label w-100 fa-chevron mt-3" (click)="toggleHistogramBins()"
+                *ngIf="selectedGraphObj.data[0].type == 'bar' && !selectedGraphObj.useStandardDeviation">
+                <span class="fa"
+                    [ngClass]="{'fa-chevron-right': !showHistogramBins, 'fa-chevron-down': showHistogramBins}"></span>
+                Histogram Bins</label>
+            <app-bin-data
+                *ngIf="selectedGraphObj.data[0].type == 'bar' && ((showHistogramBins && !selectedGraphObj.useStandardDeviation) || (showGraphBasics && selectedGraphObj.useStandardDeviation))">
+            </app-bin-data>
+
+
+
+            <!-- X Axis -->
+            <label class="group-label w-100 mt-3" (click)="toggleXAxisOptions()">
+                <span class="fa"
+                    [ngClass]="{'fa-chevron-right': !showXAxisOptions, 'fa-chevron-down': showXAxisOptions}"></span>
+                X Axis</label>
+            <app-x-axis-data *ngIf="showXAxisOptions"></app-x-axis-data>
+            <!-- Y Axis -->
+            <label class="group-label w-100 mt-3" (click)="toggleYAxisOptions()">
+                <span class="fa"
+                    [ngClass]="{'fa-chevron-right': !showYAxisOptions, 'fa-chevron-down': showYAxisOptions}"></span>
+                Y Axis</label>
+            <app-y-axis-data *ngIf="showYAxisOptions"></app-y-axis-data>
+            <!--Annotations-->
+            <label class="group-label w-100 mt-3" (click)="toggleAnnotateGraph()">
+                <span class="fa"
+                    [ngClass]="{'fa-chevron-right': !showAnnotateGraph, 'fa-chevron-down': showAnnotateGraph}"></span>
+                Annotations</label>
+            <app-annotate-graph *ngIf="showAnnotateGraph"></app-annotate-graph>
+            <hr>
+            <!--delete-->
+            <a class="danger click-link small pull-right" (click)="deleteGraph()" *ngIf="numberOfGraphs != 1">Delete
+                Graph</a>
+        </div>
+    </div>
+</div>

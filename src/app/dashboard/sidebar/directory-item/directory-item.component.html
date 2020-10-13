@@ -13,5 +13,7 @@
     </app-assessment-item>
     <app-directory-item *ngIf="directoryItem.type == 'directory'" [directory]="directoryItem.subDirectory">
     </app-directory-item>
+    <app-inventory-item *ngIf="directoryItem.type == 'inventory'" [inventoryItem]="directoryItem.inventoryItem">
+    </app-inventory-item>
   </div>
 </div>

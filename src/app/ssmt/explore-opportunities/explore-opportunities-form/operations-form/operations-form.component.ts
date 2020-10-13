@@ -30,9 +30,7 @@ export class OperationsFormComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
 
   showHoursPerYear: boolean = false;
-  showOperationsData: boolean = false;
   showMakeupWaterTemp: boolean = false;
-  showUnitCosts: boolean = false;
   showElectricityCost: boolean = false;
   showFuelCost: boolean = false;
   showMakeupWaterCost: boolean = false;
@@ -47,13 +45,6 @@ export class OperationsFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.showHoursPerYear = false;
-        this.showOperationsData = false;
-        this.showMakeupWaterTemp = false;
-        this.showUnitCosts = false;
-        this.showElectricityCost = false;
-        this.showFuelCost = false;
-        this.showMakeupWaterCost = false;
         this.initGeneralOperations();
         this.initOperatingCosts();
 
@@ -88,14 +79,14 @@ export class OperationsFormComponent implements OnInit {
     this.initOperatingHours();
     this.initMakeupWaterTemp();
     if (this.showHoursPerYear || this.showMakeupWaterTemp) {
-      this.showOperationsData = true;
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowOperationsData = {hasOpportunity: true, display: "Adjust General Operations"};
     } else {
-      this.showOperationsData = false;
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowOperationsData = {hasOpportunity: false, display: "Adjust General Operations"};
     }
   }
 
   toggleOperationsData() {
-    if (this.showOperationsData === false) {
+    if (this.ssmt.modifications[this.exploreModIndex].exploreOppsShowOperationsData.hasOpportunity === false) {
       this.showMakeupWaterTemp = false;
       this.showHoursPerYear = false;
       this.toggleHoursPerYear();
@@ -133,7 +124,9 @@ export class OperationsFormComponent implements OnInit {
     this.initElectricityCost();
     this.initMakeupWaterCost();
     if (this.showFuelCost || this.showElectricityCost || this.showMakeupWaterCost) {
-      this.showUnitCosts = true;
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowUnitCosts = {hasOpportunity: true, display: "Adjust Unit Costs"};
+    } else {
+      this.ssmt.modifications[this.exploreModIndex].exploreOppsShowUnitCosts = {hasOpportunity: false, display: "Adjust Unit Costs"};
     }
   }
 
@@ -181,7 +174,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   toggleUnitCosts() {
-    if (this.showUnitCosts === false) {
+    if (this.ssmt.modifications[this.exploreModIndex].exploreOppsShowUnitCosts.hasOpportunity === false) {
       this.showElectricityCost = false;
       this.showMakeupWaterCost = false;
       this.showFuelCost = false;

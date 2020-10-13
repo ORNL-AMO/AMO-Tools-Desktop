@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { StepTab, stepTabs, specTabs } from '../tabs';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-phast-tabs',
   templateUrl: './phast-tabs.component.html',
@@ -25,21 +26,28 @@ export class PhastTabsComponent implements OnInit {
   display1: boolean;
   display2: boolean;
 
+  specTabSub: Subscription;
+  currentTabSub: Subscription;
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
     this.specTabs = specTabs;
     this.stepTabs = stepTabs;
     //subscribe here, other components can also change the tabs.
-    this.phastService.stepTab.subscribe(val => {
+    this.specTabSub = this.phastService.stepTab.subscribe(val => {
       this.currentTab = val;
     });
-    this.phastService.specTab.subscribe(val => {
+    this.currentTabSub = this.phastService.specTab.subscribe(val => {
       this.specTab = val;
     });
 
     this.badge1Hover = false;
     this.badge2Hover = false;
+  }
+
+  ngOnDestroy(){
+    this.specTabSub.unsubscribe();
+    this.currentTabSub.unsubscribe();
   }
 
   changeTab(stepNum: number) {

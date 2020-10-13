@@ -72,28 +72,15 @@
   <li [ngClass]="{'active': calcTab == 'fan-analysis'}">
     <a (click)="changeCalcTab('fan-analysis')">Fan Traverse Analysis</a>
   </li>
-  <!--
-  -->
-  <li [ngClass]="{'active': calcTab == 'system-curve'}">
-    <a (click)="changeCalcTab('system-curve')">System Curve</a>
-  </li>
-  <!--
-  -->
   <li [ngClass]="{'active': calcTab == 'fan-efficiency'}">
     <a (click)="changeCalcTab('fan-efficiency')">Optimal Fan Efficiency</a>
   </li>
-  <!--
--->
   <li [ngClass]="{'active': calcTab == 'motor-performance'}">
     <a (click)="changeCalcTab('motor-performance')">Motor Performance</a>
   </li>
-  <!--
-  -->
   <li [ngClass]="{'active': calcTab == 'nema-energy-efficiency'}">
     <a (click)="changeCalcTab('nema-energy-efficiency')">NEMA Energy Efficiency</a>
   </li>
-  <!--
-  -->
   <li [ngClass]="{'active': calcTab == 'fan-curve'}">
     <a (click)="changeCalcTab('fan-curve')">Fan Curve</a>
   </li>

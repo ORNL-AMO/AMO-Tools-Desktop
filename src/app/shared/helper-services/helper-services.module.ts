@@ -5,6 +5,7 @@ import { LineChartHelperService } from './line-chart-helper.service';
 import { SvgToPngService } from './svg-to-png.service';
 import { UpdateDataService } from './update-data.service';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
+import { CsvToJsonService } from './csv-to-json.service';
 
 
 
@@ -18,7 +19,8 @@ import { ConvertUnitsService } from '../convert-units/convert-units.service';
     LineChartHelperService,
     SvgToPngService,
     UpdateDataService,
-    ConvertUnitsService
+    ConvertUnitsService,
+    CsvToJsonService
   ]
 })
 export class HelperServicesModule { }

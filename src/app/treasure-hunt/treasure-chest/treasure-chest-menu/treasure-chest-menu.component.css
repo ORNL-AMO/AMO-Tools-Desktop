@@ -48,11 +48,6 @@
     background: #2E4053;
 }
 
-.dropdown-menu.filter-menu{
-    right: 0px;
-    left: inherit;
-}
-
 a.list-group-item:hover, .nav-link{
     cursor: pointer;
 }
@@ -93,25 +88,4 @@ a.list-group-item.active:hover{
   .navbar.second-nav .nav-item:not(:first-child){
       padding-left: 2px;
       padding-right: 2px;
-  }
-
-  .list-group.calc-width{
-      min-width: 250px;
-  }
-
-  .badge-pill{
-    background-color: #2E4053;
-    color: white;
-    font-weight: bold;
-  }
-
-  .active .badge-pill{
-      background-color: white;
-      color: black;
-  }
-
-  .teams-dropdown{
-      left: auto;
-      right: 0;
-      
   }

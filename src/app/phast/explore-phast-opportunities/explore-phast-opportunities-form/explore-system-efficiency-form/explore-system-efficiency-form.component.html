@@ -1,24 +1,29 @@
 <div class="checkbox">
   <label class="group-label" for="exploreSysEffeciency">
-    <input type="checkbox" id="exploreSysEffeciency" value="true" (focus)="focusField('efficiency')" (change)="toggleEfficiency()" [(ngModel)]="showEfficiencyData"
-    /> Improve Furnace Efficiency
+    <input type="checkbox" id="exploreSysEffeciency" value="true" (focus)="focusField('efficiency')" (change)="toggleEfficiency()" 
+    [(ngModel)]="phast.modifications[exploreModIndex].exploreOppsShowEfficiencyData.hasOpportunity"
+    /> {{ phast.modifications[exploreModIndex].exploreOppsShowEfficiencyData.display }}
   </label>
 </div>
-<div *ngIf="showEfficiencyData">
+<div *ngIf="phast.modifications[exploreModIndex].exploreOppsShowEfficiencyData.hasOpportunity">
   <ul>
-    <li>
-      <form>
-        <div class="form-group">
-          <label for="baseEfficiency">Baseline System Efficiency</label>
-          <div class="input-group">
-            <input name="baseEfficiency" disabled="true" type="number" step="any" min="0" max="100" class="form-control" [(ngModel)]="phast.systemEfficiency" id="baseEfficiency" onfocus="this.select();"
-              (input)="calculate()" (focus)="focusField('efficiency')">
-            <span class="input-group-addon units">%</span>
+      <li class="explore-opps-header mb-2">
+        <span class="explore-opps-title text-muted">Baseline</span>
+        <span class="explore-opps-title text-muted">Modifications</span>
+      </li>
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label for="baseEfficiency" class="baseline-value-label"> System Efficiency</label>
+          <div class="text-muted text-center baseline-value-input">{{ phast.systemEfficiency }}
+            <span>%</span>
           </div>
         </div>
-        <div class="form-group">
-          <label for="modEfficiency">Modification System Efficiency</label>
-          <div class="input-group">
+      </form>
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="modEfficiency" class="mod-value-label">System Efficiency</label>
+          <div class="input-group mod-max-width">
             <input name="modEfficiency" type="number" step="any" min="0" max="100" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.systemEfficiency" id="modEfficiency" onfocus="this.select();"
               (input)="calculate()" (focus)="focusField('efficiency')">
             <span class="input-group-addon units">%</span>

@@ -1,0 +1,12 @@
+.card{
+    box-shadow: 0 4px 8px 0 grey;
+}
+
+.hidden{
+    display: none;
+}
+
+.btn-secondary{
+    color: white;
+    background: #117A65;
+}

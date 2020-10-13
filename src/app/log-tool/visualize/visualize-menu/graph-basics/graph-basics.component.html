@@ -1,0 +1,36 @@
+<form>
+    <!--graph name-->
+    <div class="form-group">
+        <input class="form-control w-100" type="text" name="graphName" [(ngModel)]="selectedGraphObj.layout.title.text"
+            (input)="saveChanges()" (focus)="focusField()" (blur)="focusOut()">
+    </div>
+    <!--graph type-->
+    <div class="form-group pt-2">
+        <select class="form-control w-100" name="graphType" [(ngModel)]="selectedGraphObj.data[0].type"
+            (change)="setGraphType()" (focus)="focusField()" (blur)="focusOut()">
+            <option *ngFor="let graphType of graphTypes" [ngValue]="graphType.value">{{graphType.label}}
+            </option>
+        </select>
+    </div>
+    <!--% vs # of poitns-->
+    <div class="btn-group pt-2 pb-2 w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
+        <button type="button" class="btn btn-secondary w-50" (click)="setHistogramUsePercent(true)"
+            [ngClass]="{'active': selectedGraphObj.usePercentForBins == true}">% of Points</button>
+        <button type="button" class="btn btn-secondary w-50" (click)="setHistogramUsePercent(false)"
+            [ngClass]="{'active': selectedGraphObj.usePercentForBins == false}"># of Points</button>
+    </div>
+    <!--std deviation vs bins if histogram-->
+    <div class="btn-group pt-2 pb-2 w-100" *ngIf="selectedGraphObj.data[0].type == 'bar'">
+        <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(true)"
+            [ngClass]="{'active': selectedGraphObj.useStandardDeviation == true}">Std. Deviation</button>
+        <button type="button" class="btn btn-secondary w-50" (click)="setHistogramStdDeviation(false)"
+            [ngClass]="{'active': selectedGraphObj.useStandardDeviation == false}">Bins</button>
+    </div>
+    <!--help-->
+    <span class="form-text text-help" *ngIf="selectedGraphObj.data[0].type == 'bar'">
+        *Calculates
+        <span *ngIf="selectedGraphObj.usePercentForBins == false">#</span>
+        <span *ngIf="selectedGraphObj.usePercentForBins == true">%</span>
+        of data points within bin
+    </span>
+</form>

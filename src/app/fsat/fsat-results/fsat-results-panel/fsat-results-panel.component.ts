@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, Input, HostListener, SimpleChanges } from '@angular/core';
 import { FSAT, FsatOutput } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { FsatService } from '../../fsat.service';
@@ -42,11 +42,19 @@ export class FsatResultsPanelComponent implements OnInit {
     this.updateDataSub.unsubscribe();
   }
 
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.modificationIndex && !changes.modificationIndex.firstChange){
+      this.getResults();
+    }
+  }
+
   getResults() {
+    this.fsat.valid = this.fsatService.checkValid(this.fsat, true, this.settings);
     this.baselineResults = this.fsatService.getResults(this.fsat, true, this.settings);
     if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length !== 0) {
       this.showModification = true;
       this.modificationName = this.fsat.modifications[this.modificationIndex].fsat.name;
+      this.fsat.modifications[this.modificationIndex].fsat.valid = this.fsatService.checkValid(this.fsat.modifications[this.modificationIndex].fsat, false, this.settings);
       this.modificationResults = this.fsatService.getResults(this.fsat.modifications[this.modificationIndex].fsat, false, this.settings);
       this.modificationResults.energySavings = this.baselineResults.annualEnergy - this.modificationResults.annualEnergy;
       this.modificationResults.annualSavings = this.baselineResults.annualCost - this.modificationResults.annualCost;

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SSMTInputs } from '../../../shared/models/steam/ssmt';
+import { SSMTInputs, SsmtValid } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 
@@ -16,9 +16,9 @@ export class ReportDiagramComponent implements OnInit {
   @Input()
   baselineOutput: SSMTOutput;
   @Input()
-  modificationOutputs: Array<{name: string, outputData: SSMTOutput}>;
+  modificationOutputs: Array<{name: string, outputData: SSMTOutput, valid: SsmtValid}>;
   @Input()
-  modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
+  modificationInputData: Array<{ name: string, inputData: SSMTInputs, valid: SsmtValid }>;
   
   constructor() { }
 

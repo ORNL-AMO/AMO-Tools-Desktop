@@ -1,4 +1,3 @@
-<app-treasure-chest-menu class="hide-print" [settings]="settings" [inReport]="true" *ngIf="!inRollup"></app-treasure-chest-menu> 
 <div class="assessment-report treasure-hunt report-in-treasure-hunt" *ngIf="assessment && settings"
   [ngClass]="{'report-in-rollup': inRollup}">
 
@@ -8,16 +7,17 @@
     <div class="report-title">
       <h4>Treasure Hunt Report:</h4>
       <h4>{{assessment.name}}</h4>
-      <h5>{{settings.createdDate| date:'medium'}}</h5>
+      <h5>{{settings.createdDate| date:'short'}}</h5>
     </div>
 
     <!-- <p class="report-notes">{{reportNotes}}</p> -->
   </div>
 
   <div #reportHeader class="report-header" [ngClass]="{'hide-print': inTHunt}">
-
+    <app-treasure-chest-menu [settings]="settings" [inReport]="true" *ngIf="!inRollup && !showPrintView">
+    </app-treasure-chest-menu>
     <div *ngIf="!inRollup" class="btn-group hide-print">
-      <button class="btn btn-secondary" (click)="showModal()">Print</button>
+      <button class="btn btn-secondary" (click)="print()">Print</button>
       <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
     </div>
 
@@ -26,16 +26,18 @@
     <div *ngIf="assessment" class="row assessment-name">
       <div class="col-12">
         <h2 class="assessment-title">
-          <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
-            {{directory.name}} /
-          </span>
+          <div class="d-flex">
+            <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+              {{directory.name}} /
+            </span>
+          </div>
           {{assessment.name}}
 
         </h2>
       </div>
       <div class="col-12">
         <h2 class="date-modified">
-          <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+          <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
         </h2>
       </div>
     </div>
@@ -75,54 +77,44 @@
       </li>
     </ul>
 
-    <div class="results scroll-item print-height" *ngIf="(currentTab == 'facilityInfo' || showPrint) && dataCalculated"
+    <div class="results scroll-item print-height"
+      *ngIf="(currentTab == 'facilityInfo' || showPrintView) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'executiveSummary' && !showPrint) || (showPrint && printExecutiveSummary)) && dataCalculated"
+      *ngIf="((currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Executive Summary</h4>
       <div class="d-flex justify-content-center">
         <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"
-          [showFullSummary]="false" [title]="'Cost Summary'" [showPrint]="showPrint && printExecutiveSummary">
-        </app-executive-summary>
-      </div>
-      <div class="d-flex justify-content-center">
-        <app-executive-summary [treasureHuntResults]="treasureHuntResults" [opportunityCardsData]="opportunityCardsData"
-          [settings]="settings" [showFullSummary]="true" [title]="'Detailed Summary'"
-          [showPrint]="showPrint && printExecutiveSummary">
-        </app-executive-summary>
-      </div>
-      <div class="d-flex justify-content-center">
-        <app-executive-summary [treasureHuntResults]="treasureHuntResults" [opportunityCardsData]="opportunityCardsData"
-          [settings]="settings" [showFullSummary]="false" [title]="'Team Summary'"
-          [showPrint]="showPrint && printExecutiveSummary">
+          [showPrintView]="showPrintView && printOptions.printExecutiveSummary"
+          [opportunityCardsData]="opportunityCardsData">
         </app-executive-summary>
       </div>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'reportGraphs' && !showPrint) || (showPrint && printReportGraphs)) && dataCalculated"
+      *ngIf="((currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <h4 class="show-print">Report Graphs</h4>
-      <app-report-graphs [treasureHuntResults]="treasureHuntResults" [showPrint]="showPrint && printReportGraphs">
+      <app-report-graphs [treasureHuntResults]="treasureHuntResults"
+        [showPrint]="showPrintView && printOptions.printReportGraphs">
       </app-report-graphs>
     </div>
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'opportunitySummary' && !showPrint) || (showPrint && printReportOpportunitySummary)) && dataCalculated"
+      *ngIf="((currentTab == 'opportunitySummary' && !showPrintView) || (showPrintView && printOptions.printReportOpportunitySummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Opportunity Summary</h4>
       <app-opportunity-summary [opportunitySummaries]="treasureHuntResults.opportunitySummaries" [settings]="settings"
         [inRollup]="inRollup" (emitUpdateOpportunities)="updateResults($event)" [assessment]="assessment"
-        [showPrint]="showPrint">
+        [showPrint]="showPrintView">
       </app-opportunity-summary>
     </div>
 
     <div class="results scroll-item print-height print-break-before"
-      *ngIf="((currentTab == 'opportunityPayback' && !showPrint) || (showPrint && printReportOpportunityPayback)) && dataCalculated"
+      *ngIf="((currentTab == 'opportunityPayback' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <h4 class="show-print">Payback Details</h4>
-      <app-opportunity-payback [showPrint]="showPrint && printReportOpportunityPayback"
+      <app-opportunity-payback [showPrint]="showPrintView && printOptions.printReportOpportunityPayback"
         [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
       </app-opportunity-payback>
     </div>
@@ -137,9 +129,4 @@
 
 </div>
 
-<app-print-options-menu *ngIf="showPrintMenu && !inRollup" [showTHReportOptions]="true" [selectAll]="selectAll"
-  [printExecutiveSummary]="printExecutiveSummary" [printReportGraphs]="printReportGraphs"
-  [printReportOpportunitySummary]="printReportOpportunitySummary"
-  [printReportOpportunityPayback]="printReportOpportunityPayback" (emitClosePrintModal)="closeModal($event)"
-  (emitTogglePrint)="togglePrint($event)" (emitPrint)="print()">
-</app-print-options-menu>
+<app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>

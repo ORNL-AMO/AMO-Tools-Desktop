@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EnergyInputCompareService } from '../energy-input-compare.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { EnergyInputService } from '../energy-input.service';
 
 @Component({
   selector: 'app-energy-input-form',
@@ -30,7 +31,7 @@ export class EnergyInputFormComponent implements OnInit {
 
   flowInput: boolean;
   idString: string;
-  constructor(private energyInputCompareService: EnergyInputCompareService) { }
+  constructor(private energyInputCompareService: EnergyInputCompareService, private energyInputService: EnergyInputService) { }
 
 
   ngOnInit() {
@@ -41,12 +42,12 @@ export class EnergyInputFormComponent implements OnInit {
       this.idString = '_baseline_' + this.lossIndex;
     }
     if (this.energyInputForm.controls.flowRateInput.value) {
-      this.flowInput = false;
+      this.flowInput = true;
     }
   }
 
   setHeatInput() {
-    let heatVal = this.energyInputForm.controls.flowRateInput.value * (1020 / (Math.pow(10, 6)));
+    let heatVal: number = this.energyInputService.calculateHeatInputFromFlowRate(this.energyInputForm.controls.flowRateInput.value, this.settings)
     this.energyInputForm.patchValue({
       'naturalGasHeatInput': heatVal
     });
@@ -64,6 +65,10 @@ export class EnergyInputFormComponent implements OnInit {
 
   showHideInputField() {
     this.flowInput = !this.flowInput;
+    if (this.flowInput == false) {
+      this.energyInputForm.controls.flowRateInput.patchValue(undefined);
+    }
+    this.save();
   }
   canCompare() {
     if (this.energyInputCompareService.baselineEnergyInput && this.energyInputCompareService.modifiedEnergyInput && !this.inSetup) {
@@ -72,7 +77,7 @@ export class EnergyInputFormComponent implements OnInit {
       return false;
     }
   }
-  
+
   compareNaturalGasHeatInput(): boolean {
     if (this.canCompare()) {
       return this.energyInputCompareService.compareNaturalGasHeatInput(this.lossIndex);

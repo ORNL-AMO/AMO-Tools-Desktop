@@ -107,13 +107,25 @@
     border-bottom: #2E4053 solid 2px;
 }
 
+.motor-inventory .header{
+    border-bottom: #84b641 solid 2px;
+}
+
 
 .psat .disabled .header{
     border-bottom-color: gray;
 }
 
+.log-tool .header{
+    border-bottom: #117A65 solid 2px;
+}
+
 .compressed-air .header{
     border-bottom: #A569BD groove 2px;
+}
+
+.process-cooling .header{
+    border-bottom: #ADC8E2 groove 2px;
 }
 
 .steam .header{
@@ -148,6 +160,11 @@
 
 .ssmt .btn-secondary:not([disabled]):not(.disabled).active{
     background: #F39C12;
+    transition: all .5s ease-in-out;
+    color: black;
+}
+.motor-inventory .btn-secondary:not([disabled]):not(.disabled).active{
+    background: #84b641;
     transition: all .5s ease-in-out;
     color: black;
 }
@@ -206,7 +223,7 @@
 	padding-right: 15px;
 } */
 
-.header h3{
+.header h3, .header .h3{
 	margin: 10px 0 0px 10px;
     font-size: 15px;
     text-transform: uppercase;
@@ -264,6 +281,10 @@
     border-bottom: #A569BD groove 2px;
 }
 
+.process-cooling .group-label{
+    border-bottom: #ADC8E2 groove 2px;
+}
+
 .general .group-label{
     border-bottom: #145A32 solid 2px;
 }
@@ -274,6 +295,14 @@
 
 .lighting .group-label{
     border-bottom: #FFFF00 solid 2px;
+}
+
+.log-tool .group-label{
+    border-bottom: #117A65 solid 2px;
+}
+
+.motor-inventory .group-label{
+    border-bottom: #84b641 solid 2px;
 }
 
 .loss-label{
@@ -438,5 +467,10 @@
 
     .treasure-hunt .scroll-item::-webkit-scrollbar-thumb{
         background-color: #2E4053;
+        outline: 1px solid slategrey;
+    }
+
+    .motor-inventory .scroll-item::-webkit-scrollbar-thumb{
+        background-color: #84b641;
         outline: 1px solid slategrey;
     }

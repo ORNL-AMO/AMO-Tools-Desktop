@@ -7,3 +7,6 @@ p {
     padding-top: .25rem;
 }
 
+.btn.btn-secondary{
+    padding: 6px;
+}

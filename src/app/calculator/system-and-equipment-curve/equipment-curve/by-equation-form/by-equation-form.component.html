@@ -12,7 +12,7 @@
             *ngIf="byEquationForm.controls.maxFlow.invalid && !byEquationForm.controls.maxFlow.pristine">
             <span *ngIf="byEquationForm.controls.maxFlow.errors.required">Value required.</span>
             <span *ngIf="byEquationForm.controls.maxFlow.errors.max">Value can't be greater than
-                {{byEquationForm.controls.maxFlow.max.max}} <span [innerHTML]="flowUnit | settingsLabel"></span>.
+                {{byEquationForm.controls.maxFlow.errors.max.max}} <span [innerHTML]="flowUnit | settingsLabel"></span>.
             </span>
             <span *ngIf="byEquationForm.controls.maxFlow.errors.min">Value can't be less than
                 {{byEquationForm.controls.maxFlow.min.min}} <span [innerHTML]="flowUnit | settingsLabel"></span>.
@@ -125,4 +125,112 @@
             <span *ngIf="byEquationForm.controls.flowSix.errors.required">Value required.</span>
         </span>
     </div>
+
+    <div class="my-2">
+        <label class="group-label">Power Equation Coefficients</label>
+        
+        <div class="form-group">
+            <label class="section-label" for="powerOrder">Order</label>
+            <select id="powerOrder" name="powerOrder" class="form-control" formControlName="powerOrder"
+                (focus)="focusField('powerOrder')" (change)="save()">
+                <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="powerConstant">Constant</label>
+            <div class="input-group">
+                <input name="powerConstant" formControlName="powerConstant" type="number" step="any" class="form-control"
+                    (input)="save()" id="powerConstant" onfocus="this.select();"
+                    (focus)="focusField('powerConstant')">
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="byEquationForm.controls.powerConstant.invalid && !byEquationForm.controls.powerConstant.pristine">
+                <span *ngIf="byEquationForm.controls.powerConstant.errors.required">Value required.</span>
+                <span *ngIf="byEquationForm.controls.powerConstant.errors.min">Value can't be less than
+                    {{byEquationForm.controls.powerConstant.errors.min.min}}.</span>
+            </span>
+        </div>
+        <div class="form-group">
+            <label for="powerFlow">flow</label>
+            <div class="input-group">
+                <input name="powerFlow" formControlName="powerFlow" type="number" step="any" class="form-control"
+                    (input)="save()" id="powerFlow" onfocus="this.select();" (focus)="focusField('powerFlow')">
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="byEquationForm.controls.powerFlow.invalid && !byEquationForm.controls.powerFlow.pristine">
+                <span *ngIf="byEquationForm.controls.powerFlow.errors.required">Value required.</span>
+            </span>
+        </div>
+    
+    
+        <div class="form-group" *ngIf="byEquationForm.controls.powerOrder.value > 1">
+            <label for="powerFlowTwo">flow<sup>2</sup>
+            </label>
+            <div class="input-group">
+                <input name="powerFlowTwo" formControlName="powerFlowTwo" type="number" step="any" class="form-control"
+                    (input)="save()" id="powerFlowTwo" onfocus="this.select();" (focus)="focusField('powerFlowTwo')">
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="byEquationForm.controls.powerFlowTwo.invalid && !byEquationForm.controls.powerFlowTwo.pristine">
+                <span *ngIf="byEquationForm.controls.powerFlowTwo.errors.required">Value required.</span>
+            </span>
+        </div>
+    
+    
+        <div class="form-group" *ngIf="byEquationForm.controls.powerOrder.value > 2">
+            <label for="powerFlowThree">flow<sup>3</sup>
+            </label>
+            <div class="input-group">
+                <input name="powerFlowThree" formControlName="powerFlowThree" type="number" step="any" class="form-control"
+                    (input)="save()" id="powerFlowThree" onfocus="this.select();"
+                    (focus)="focusField('powerFlowThree')">
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="byEquationForm.controls.powerFlowThree.invalid && !byEquationForm.controls.powerFlowThree.pristine">
+                <span *ngIf="byEquationForm.controls.powerFlowThree.errors.required">Value required.</span>
+            </span>
+        </div>
+    
+        <div class="form-group" *ngIf="byEquationForm.controls.powerOrder.value > 3">
+            <label for="powerFlowFour">flow<sup>4</sup>
+            </label>
+            <div class="input-group">
+                <input name="powerFlowFour" formControlName="powerFlowFour" type="number" step="any" class="form-control"
+                    (input)="save()" id="powerFlowFour" onfocus="this.select();"
+                    (focus)="focusField('powerFlowFour')">
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="byEquationForm.controls.powerFlowFour.invalid && !byEquationForm.controls.powerFlowFour.pristine">
+                <span *ngIf="byEquationForm.controls.powerFlowFour.errors.required">Value required.</span>
+            </span>
+        </div>
+    
+        <div class="form-group" *ngIf="byEquationForm.controls.powerOrder.value > 4">
+            <label for="powerFlowFive">flow<sup>5</sup>
+            </label>
+            <div class="input-group">
+                <input name="powerFlowFive" formControlName="powerFlowFive" type="number" step="any" class="form-control"
+                    (input)="save()" id="powerFlowFive" onfocus="this.select();"
+                    (focus)="focusField('powerFlowFive')">
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="byEquationForm.controls.powerFlowFive.invalid && !byEquationForm.controls.powerFlowFive.pristine">
+                <span *ngIf="byEquationForm.controls.powerFlowFive.errors.required">Value required.</span>
+            </span>
+        </div>
+    
+        <div class="form-group" *ngIf="byEquationForm.controls.powerOrder.value > 5">
+            <label for="powerFlowSix">flow<sup>6</sup>
+            </label>
+            <div class="input-group">
+                <input name="powerFlowSix" formControlName="powerFlowSix" type="number" step="any" class="form-control"
+                    (input)="save()" id="powerFlowSix" onfocus="this.select();" (focus)="focusField('powerFlowSix')">
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="byEquationForm.controls.powerFlowSix.invalid && !byEquationForm.controls.powerFlowSix.pristine">
+                <span *ngIf="byEquationForm.controls.powerFlowSix.errors.required">Value required.</span>
+            </span>
+        </div>
+    </div>
+
 </form>

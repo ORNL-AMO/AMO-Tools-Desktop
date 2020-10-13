@@ -41,7 +41,7 @@ export class SteamPropertiesComponent implements OnInit {
   graphToggleForm: FormGroup;
   data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number};
 
-  plotReady: boolean = false;
+  validPlot: boolean = false;
   ranges: { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number };
   toggleResetData: boolean = false;
   toggleExampleData: boolean = false;
@@ -109,7 +109,7 @@ export class SteamPropertiesComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
@@ -143,7 +143,7 @@ export class SteamPropertiesComponent implements OnInit {
     this.steamService.steamPropertiesInput = input;
     if (form.status === 'VALID') {
       this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
-      this.plotReady = true;
+      this.validPlot = true;
     }
   }
 

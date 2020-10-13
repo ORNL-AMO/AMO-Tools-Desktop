@@ -14,10 +14,10 @@
                 [ngClass]="{'active': selectedFormView == 'Data'}">By
                 Data</button>
         </div>
-        <app-by-data-form *ngIf="selectedFormView == 'Data'" [equipmentType]="equipmentType" [settings]="settings">
-        </app-by-data-form>
         <app-by-equation-form *ngIf="selectedFormView == 'Equation'" [equipmentType]="equipmentType"
             [settings]="settings"></app-by-equation-form>
+        <app-by-data-form [selectedFormView]="selectedFormView" *ngIf="selectedFormView == 'Data'" [equipmentType]="equipmentType" [settings]="settings">
+        </app-by-data-form>
         <app-equipment-curve-form [equipmentType]="equipmentType" [settings]="settings"></app-equipment-curve-form>
     </div>
 </div>

@@ -1,5 +1,6 @@
 // @ts-ignore
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 declare var standaloneAddon: any;
 declare var calculatorAddon: any;
 import {
@@ -7,7 +8,10 @@ import {
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
   PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity,
-  ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput, PipeInsulationReductionInput, PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult
+  ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, 
+  CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, 
+  CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput, PipeInsulationReductionInput, 
+  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -103,7 +107,7 @@ export class StandaloneService {
       // metric: m3 imperial:scfm (ft3)
       inputCpy.airDemand = this.convertUnitsService.value(inputCpy.airDemand).from('m3').to('ft3');
       //metric:kPa imperial: psi
-      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPa').to('psi');
+      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPa').to('psig');
       //metric:kpaa imperial:psia
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
       //metric: m3 imperial: gal
@@ -145,6 +149,9 @@ export class StandaloneService {
 
   airSystemCapacity(input: AirSystemCapacityInput, settings: Settings): AirSystemCapacityOutput {
     let inputCpy: AirSystemCapacityInput = JSON.parse(JSON.stringify(input));
+    inputCpy = this.sumPipeInputs(inputCpy);
+    
+    let outputs: AirSystemCapacityOutput;
     if (settings.unitsOfMeasure === 'Metric') {
       //convert input data
       for (let key in inputCpy) {
@@ -166,29 +173,47 @@ export class StandaloneService {
           );
         });
       inputCpy.receiverCapacities = tmpCapacities;
-      //add custom volumes to calculated result
-      let outputs: AirSystemCapacityOutput = standaloneAddon.airSystemCapacity(inputCpy);
-
+      outputs = standaloneAddon.airSystemCapacity(inputCpy);
       outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
       outputs.totalPipeVolume += customPipeVolume;
-      //outputs.totalReceiverVolume += customReceiverVolume;
-      //convert result
       outputs.totalReceiverVolume = this.convertUnitsService.value(outputs.totalReceiverVolume).from('ft3').to('m3');
       outputs.totalPipeVolume = this.convertUnitsService.value(outputs.totalPipeVolume).from('ft3').to('m3');
       outputs.totalCapacityOfCompressedAirSystem = this.convertUnitsService.value(outputs.totalCapacityOfCompressedAirSystem).from('ft3').to('m3');
-      return outputs;
     } else {
       let customPipeVolume: number = 0;
       inputCpy.customPipes.forEach((pipe: { pipeSize: number, pipeLength: number }) => {
         customPipeVolume += this.calculatePipeVolume(pipe.pipeSize, pipe.pipeLength);
       });
-      //add custom volumes to calculated result
-      let outputs: AirSystemCapacityOutput = standaloneAddon.airSystemCapacity(inputCpy);
+      outputs = standaloneAddon.airSystemCapacity(inputCpy);
       outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
       outputs.totalPipeVolume += customPipeVolume;
-      return outputs;
     }
+    // Output airCap used to calculate leakRate
+    let numerator = outputs.totalCapacityOfCompressedAirSystem * (inputCpy.leakRateInput.airPressureIn - inputCpy.leakRateInput.airPressureOut);
+    let denominator = (inputCpy.leakRateInput.dischargeTime / 60) * inputCpy.leakRateInput.atmosphericPressure;
+    outputs.leakRate = numerator/denominator;
+
+    return outputs;
   }
+
+  sumPipeInputs(inputCpy: AirSystemCapacityInput): AirSystemCapacityInput {
+    inputCpy.customPipes = new Array();
+    inputCpy.allPipes.forEach(pipe => {
+      //if custom add to custom array
+      if (pipe.pipeSize == 'CUSTOM') {
+        inputCpy.customPipes.push({
+          pipeLength: pipe.pipeLength,
+          pipeSize: pipe.customPipeSize
+        });
+      } else {
+        //otherwise sum pipe size
+        inputCpy[pipe.pipeSize] += pipe.pipeLength;
+      }
+    });
+    return inputCpy;
+  }
+
+
   //imperial: (diameter: inches, length: ft)
   calculatePipeVolume(diameter: number, length: number): number {
     let volume: number = Math.pow((diameter / 24), 2) * Math.PI * length;
@@ -300,8 +325,8 @@ export class StandaloneService {
       //metric: m3 imperial: gal
       inputCpy.tankSize = this.convertUnitsService.value(inputCpy.tankSize).from('m3').to('gal');
       //metric:kPa imperial: psi
-      inputCpy.airPressureIn = this.convertUnitsService.value(inputCpy.airPressureIn).from('kPa').to('psi');
-      inputCpy.airPressureOut = this.convertUnitsService.value(inputCpy.airPressureOut).from('kPa').to('psi');
+      inputCpy.airPressureIn = this.convertUnitsService.value(inputCpy.airPressureIn).from('kPa').to('psig');
+      inputCpy.airPressureOut = this.convertUnitsService.value(inputCpy.airPressureOut).from('kPa').to('psig');
       //metric: m3 imperial: ft3
       let calcTankCapacity: number = standaloneAddon.usableAirCapacity(inputCpy);
       calcTankCapacity = this.convertUnitsService.value(calcTankCapacity).from('ft3').to('m3');
@@ -321,6 +346,11 @@ export class StandaloneService {
 
   compressedAirReduction(inputObj: CompressedAirReductionInput): CompressedAirReductionResult {
     let results: CompressedAirReductionResult = calculatorAddon.compressedAirReduction(inputObj);
+    return results;
+  }
+
+  airLeakSurvey(inputObj: AirLeakSurveyInput): AirLeakSurveyResult {
+    let results: AirLeakSurveyResult = calculatorAddon.compressedAirLeakSurvey(inputObj);
     return results;
   }
 

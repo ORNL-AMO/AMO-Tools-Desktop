@@ -75,7 +75,7 @@ export class MotorPerformanceComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }

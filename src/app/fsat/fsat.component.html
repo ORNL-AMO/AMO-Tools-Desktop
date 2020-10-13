@@ -23,7 +23,7 @@
       </app-fan-field-data>
     </div>
     <div class="w-50" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}">
-      <app-help-panel [settings]="settings" [inSetup]="true" [fsat]="_fsat"></app-help-panel>
+      <app-help-panel [modificationIndex]="modificationIndex" [settings]="settings" [inSetup]="true" [fsat]="_fsat"></app-help-panel>
     </div>
   </div>
   <!--Assessment-->
@@ -40,8 +40,8 @@
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
-      <app-fsat-report [fsat]="_fsat" [settings]="settings" [assessment]="assessment" [inFsat]="true"
-        (closeReport)="closeReport()" (exportData)="exportData()" [containerHeight]="containerHeight"></app-fsat-report>
+      <app-fsat-report [settings]="settings" [assessment]="assessment" [inFsat]="true" (closeReport)="closeReport()"
+        (exportData)="exportData()" [containerHeight]="containerHeight"></app-fsat-report>
     </div>
   </div>
 
@@ -52,17 +52,14 @@
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-fan-analysis *ngIf="calcTab == 'fan-analysis'" [assessment]="assessment" [settings]="settings">
     </app-fan-analysis>
-    <app-system-and-equipment-curve *ngIf="calcTab == 'system-curve'" [settings]="settings" [equipmentType]="'fan'"
-      [assessment]="assessment" [isEquipmentCurvePrimary]="false"></app-system-and-equipment-curve>
     <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment"
       [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings" [inAssessment]="true"
       [assessment]="assessment" [fsat]="_fsat"></app-motor-performance>
     <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inAssessment]="true"
       [assessment]="assessment" [settings]="settings" [fsat]="_fsat"></app-nema-energy-efficiency>
-
     <app-system-and-equipment-curve *ngIf="calcTab == 'fan-curve'" [settings]="settings" [equipmentType]="'fan'"
-      [assessment]="assessment" [isEquipmentCurvePrimary]="true"></app-system-and-equipment-curve>
+      [assessment]="assessment"></app-system-and-equipment-curve>
   </div>
   <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100"
     [ngStyle]="{'height.px': containerHeight}">
@@ -74,8 +71,8 @@
       </div>
     </div>
     <div class="sankey-padding w-100">
-      <app-fsat-sankey [fsat]="fsat1.fsat" [settings]="settings" [assessmentName]="assessment.name" [printView]="false"
-        [location]="'sankey-diagram'" [isBaseline]="fsat1.fsat.name == 'Baseline'"></app-fsat-sankey>
+      <app-fsat-sankey [fsat]="fsat1.fsat" [settings]="settings" [appBackground]="true"
+        [isBaseline]="fsat1.fsat.name == 'Baseline'"></app-fsat-sankey>
     </div>
   </div>
 
@@ -131,4 +128,5 @@
 
 
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true" (emitDisable)="disableDisclaimer()"></app-toast>
+  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'" [showDisableFooter]="true"
+  (emitDisable)="disableDisclaimer()"></app-toast>

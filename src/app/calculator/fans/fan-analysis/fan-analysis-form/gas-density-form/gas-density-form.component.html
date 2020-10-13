@@ -10,7 +10,7 @@
     <div class="form-group">
       <label for="gasType">Gas Type</label>
       <div class="input-group">
-        <select class="form-control" name="gasType" formControlName="gasType" id="gasType" (change)="getDensity()"
+        <select class="form-control" name="gasType" formControlName="gasType" id="gasType" (change)="getResults()"
           (focus)="focusField('gasType')">
           <option *ngFor="let gas of gasTypes" [ngValue]="gas.value">{{gas.display}}</option>
         </select>
@@ -27,7 +27,7 @@
       <label for="dryBulbTemp">Dry Bulb Temp (T<sub>do</sub>)</label>
       <div class="input-group">
         <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp"
-          id="dryBulbTemp" (input)="getDensity()" (focus)="focusField('dryBulbTemp')" onfocus="this.select();">
+          id="dryBulbTemp" (input)="setValidators()" (focus)="focusField('dryBulbTemp')" onfocus="this.select();">
         <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.fanTemperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
         <span *ngIf="settings.fanTemperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
@@ -46,7 +46,7 @@
       <label for="staticPressure">Static Pressure (P<sub>so</sub>)</label>
       <div class="input-group">
         <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure"
-          id="staticPressure" (input)="getDensity()" (focus)="focusField('staticPressure')" onfocus="this.select();">
+          id="staticPressure" (input)="getResults()" (focus)="focusField('staticPressure')" onfocus="this.select();">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
       </div>
       <span class="alert-danger pull-right"
@@ -62,7 +62,7 @@
       <label for="barometricPressure">Barometric Pressure (P<sub>bo</sub>)</label>
       <div class="input-group">
         <input name="barometricPressure" type="number" step="any" class="form-control"
-          formControlName="barometricPressure" id="barometricPressure" (input)="getDensity()"
+          formControlName="barometricPressure" id="barometricPressure" (input)="getResults()"
           (focus)="focusField('barometricPressure')" onfocus="this.select();">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
       </div>
@@ -77,10 +77,10 @@
       </span>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
-      <label for="specificGravity">Gas Specific Gravity (G)</label>
+      <label for="specificGravity">Gas Relative Density (G)</label>
       <div class="input-group">
         <input name="specificGravity" type="number" step="any" class="form-control" formControlName="specificGravity"
-          id="specificGravity" (input)="getDensity()" (focus)="focusField('specificGravity')" onfocus="this.select();">
+          id="specificGravity" (input)="getResults()" (focus)="focusField('specificGravity')" onfocus="this.select();">
       </div>
       <span class="alert-danger pull-right"
         *ngIf="gasDensityForm.controls.specificGravity.invalid && !gasDensityForm.controls.specificGravity.pristine">
@@ -96,7 +96,7 @@
       <label for="wetBulbTemp">Wet Bulb Temp (T<sub>wo</sub>)</label>
       <div class="input-group">
         <input name="wetBulbTemp" type="number" step="any" class="form-control" formControlName="wetBulbTemp"
-          id="wetBulbTemp" (input)="calcDensityWetBulb()" (focus)="focusField('wetBulbTemp')" onfocus="this.select();">
+          id="wetBulbTemp" (input)="getResults()" (focus)="focusField('wetBulbTemp')" onfocus="this.select();">
         <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.fanTemperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
         <span *ngIf="settings.fanTemperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
@@ -112,24 +112,11 @@
           {{gasDensityForm.controls.wetBulbTemp.errors.min.min}}.</span>
       </span>
     </div>
-    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'">
-      <label for="specificHeatGas">Specific Heat Gas</label>
-      <div class="input-group">
-        <input name="specificHeatGas" type="number" step="any" class="form-control" formControlName="specificHeatGas"
-          id="specificHeatGas" (input)="calcDensityWetBulb()" (focus)="focusField('specificHeatGas')"
-          onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanSpecificHeatGas)"></span>
-      </div>
-      <span class="alert-danger pull-right"
-        *ngIf="gasDensityForm.controls.specificHeatGas.invalid && !gasDensityForm.controls.specificHeatGas.pristine">
-        <span *ngIf="gasDensityForm.controls.specificHeatGas.errors.required">Value Required</span>
-      </span>
-    </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'relativeHumidity'">
       <label for="relativeHumidity">Relative Humidity</label>
       <div class="input-group">
         <input name="relativeHumidity" type="number" step="any" class="form-control" formControlName="relativeHumidity"
-          id="relativeHumidity" (input)="calcDensityRelativeHumidity()" (focus)="focusField('relativeHumidity')"
+          id="relativeHumidity" (input)="getResults()" (focus)="focusField('relativeHumidity')"
           onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
@@ -146,7 +133,7 @@
       <label for="dewPoint">Gas Dew Point (T<sub>dp</sub>)</label>
       <div class="input-group">
         <input name="dewPoint" type="number" step="any" class="form-control" formControlName="dewPoint" id="dewPoint"
-          (input)="calcDensityDewPoint()" (focus)="focusField('dewPoint')" onfocus="this.select();">
+          (input)="getResults()" (focus)="focusField('dewPoint')" onfocus="this.select();">
         <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.fanTemperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
         <span *ngIf="settings.fanTemperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
@@ -174,7 +161,7 @@
       </div>
       <div class="input-group" *ngIf="gasDensityForm.controls.inputType.value == 'custom'">
         <input name="gasDensity" type="number" step="any" class="form-control" formControlName="gasDensity"
-          id="gasDensity" (input)="getDensity()" (focus)="focusField('gasDensity')" onfocus="this.select();">
+          id="gasDensity" (input)="getResults()" (focus)="focusField('gasDensity')" onfocus="this.select();">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.densityMeasurement)"></span>
       </div>
       <span class="alert-danger pull-right" *ngIf="gasDensityForm.controls.gasDensity.invalid">

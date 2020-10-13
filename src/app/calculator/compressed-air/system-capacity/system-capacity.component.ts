@@ -24,18 +24,14 @@ export class SystemCapacityComponent implements OnInit {
   headerHeight: number;
 
   inputs: AirSystemCapacityInput;
-  outputs: AirSystemCapacityOutput = {
-    totalPipeVolume: 0,
-    totalReceiverVolume: 0,
-    totalCapacityOfCompressedAirSystem: 0,
-    receiverCapacities: [0],
-  };
+  outputs: AirSystemCapacityOutput;
   currentField: string = 'default';
 
   constructor(private standaloneService: StandaloneService, private systemCapacityService: SystemCapacityService, private settingsDbService: SettingsDbService) {
   }
 
   ngOnInit() {
+    this.outputs = this.systemCapacityService.getDefaultEmptyOutput();
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

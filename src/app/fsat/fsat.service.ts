@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor } from '../shared/models/fans';
+import { BehaviorSubject } from 'rxjs';
+import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, PsychrometricResults } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
-import { FormGroup } from '@angular/forms';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertFsatService } from './convert-fsat.service';
@@ -56,31 +55,25 @@ export class FsatService {
     return results;
   }
 
-  getBaseGasDensityDewPoint(inputs: BaseGasDensity, settings: Settings): number {
+  getPsychrometricDewPoint(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
-    let result: number = fanAddon.getBaseGasDensityDewPoint(inputs);
-    if (settings.densityMeasurement !== 'lbscf') {
-      result = this.convertUnitsService.value(result).from('lbscf').to(settings.densityMeasurement);
-    }
-    return result;
+    let psychrometricResults: PsychrometricResults = fanAddon.getBaseGasDensityDewPoint(inputs);
+    psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
+    return psychrometricResults;
   }
 
-  getBaseGasDensityRelativeHumidity(inputs: BaseGasDensity, settings: Settings): number {
+  getPsychrometricRelativeHumidity(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
-    let result: number = fanAddon.getBaseGasDensityRelativeHumidity(inputs);
-    if (settings.densityMeasurement !== 'lbscf') {
-      result = this.convertUnitsService.value(result).from('lbscf').to(settings.densityMeasurement);
-    }
-    return result;
+    let psychrometricResults: PsychrometricResults = fanAddon.getBaseGasDensityRelativeHumidity(inputs);
+    psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
+    return psychrometricResults;
   }
 
-  getBaseGasDensityWetBulb(inputs: BaseGasDensity, settings: Settings): number {
+  getPsychrometricWetBulb(inputs: BaseGasDensity, settings: Settings): PsychrometricResults {
     inputs = this.convertFanAnalysisService.convertGasDensityForCalculations(inputs, settings);
-    let result: number = fanAddon.getBaseGasDensityWetBulb(inputs);
-    if (settings.densityMeasurement !== 'lbscf') {
-      result = this.convertUnitsService.value(result).from('lbscf').to(settings.densityMeasurement);
-    }
-    return result;
+    let psychrometricResults: PsychrometricResults = fanAddon.getBaseGasDensityWetBulb(inputs);
+    psychrometricResults = this.convertFanAnalysisService.convertPsychrometricResults(psychrometricResults, settings);
+    return psychrometricResults;
   }
 
   getVelocityPressureData(inputs: Plane, settings: Settings): { pv3: number, percent75Rule: number } {
@@ -137,7 +130,8 @@ export class FsatService {
 
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
-    if (this.checkValid(fsat, isBaseline)) {
+    let fsatValid: FsatValid = this.checkValid(fsat, isBaseline, settings)
+    if (fsatValid.isValid) {
       if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
         fsat.fieldData.operatingHours = fsat.fieldData.operatingFraction * 8760;
       }
@@ -184,50 +178,32 @@ export class FsatService {
     }
   }
 
-
   fanResultsExisting(input: FsatInput): FsatOutput {
     return fanAddon.fanResultsExisting(input);
   }
   fanResultsModified(input: FsatInput): FsatOutput {
     return fanAddon.fanResultsModified(input);
   }
-  // fanResultsOptimal(input: FsatInput): FsatOutput {
-  //   return fanAddon.fanResultsOptimal(input);
-  // }
 
   getSavingsPercentage(baselineCost: number, modificationCost: number): number {
     let tmpSavingsPercent = Number(Math.round(((((baselineCost - modificationCost) * 100) / baselineCost) * 100) / 100).toFixed(0));
     return tmpSavingsPercent;
   }
 
-  checkValid(fsat: FSAT, isBaseline: boolean): boolean {
-    let fsatFluidValid: boolean = this.checkFsatFluidValid(fsat);
-    let fieldDataValid: boolean = this.checkFieldDataValid(fsat);
-    let fanSetupValid: boolean = this.checkFanSetupValid(fsat, isBaseline);
-    let fanMotorValid: boolean = this.checkFanMotorValid(fsat);
-    return (fieldDataValid && fanSetupValid && fanMotorValid && fsatFluidValid);
-  }
+  checkValid(fsat: FSAT, isBaseline: boolean, settings): FsatValid {
+    let fsatFluidValid: boolean = this.fsatFluidService.isFanFluidValid(fsat.baseGasDensity, settings);
+    let fieldDataValid: boolean = this.fanFieldDataService.isFanFieldDataValid(fsat.fieldData);
+    let fanSetupValid: boolean = this.fanSetupService.isFanSetupValid(fsat.fanSetup, !isBaseline);
+    let fanMotorValid: boolean = this.fanMotorService.isFanMotorValid(fsat.fanMotor);
+    return {
+      isValid: fieldDataValid && fanSetupValid && fanMotorValid && fsatFluidValid,
+      fluidValid: fsatFluidValid,
+      fanValid: fanSetupValid,
+      motorValid: fanMotorValid,
+      fieldDataValid: fieldDataValid
 
-  checkFieldDataValid(fsat: FSAT): boolean {
-    let fanFieldDataForm: FormGroup = this.fanFieldDataService.getFormFromObj(fsat.fieldData);
-    return (fanFieldDataForm.status === 'VALID');
+    };
   }
-
-  checkFanSetupValid(fsat: FSAT, isBaseline: boolean): boolean {
-    let fanSetupForm: FormGroup = this.fanSetupService.getFormFromObj(fsat.fanSetup, !isBaseline);
-    return (fanSetupForm.status === 'VALID');
-  }
-
-  checkFanMotorValid(fsat: FSAT): boolean {
-    let fanMotorForm: FormGroup = this.fanMotorService.getFormFromObj(fsat.fanMotor);
-    return (fanMotorForm.status === 'VALID');
-  }
-
-  checkFsatFluidValid(fsat: FSAT): boolean {
-    let fluidForm: FormGroup = this.fsatFluidService.getGasDensityFormFromObj(fsat.baseGasDensity);
-    return (fluidForm.status === 'VALID');
-  }
-
 
   optimalFanEfficiency(inputs: FanEfficiencyInputs, settings: Settings): number {
     if (settings.fanFlowRate !== 'ft3/min') {

@@ -1,0 +1,105 @@
+<form [formGroup]="orificeMethodForm">
+    <div class="form-group">
+      <label for="compressorAirTemp">Compressor Air Temperature</label>
+      <div class="input-group">
+        <input name="compressorAirTemp" class="form-control" type="number" step="any"
+          formControlName="compressorAirTemp" id="compressorAirTemp"
+          (input)="save()"
+          onfocus="this.select();" (focus)="changeField('compressorAirTemp')">
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="orificeMethodForm.controls.compressorAirTemp.invalid && !orificeMethodForm.controls.compressorAirTemp.pristine">
+        <span *ngIf="orificeMethodForm.controls.compressorAirTemp.errors.required">Value required.</span>
+        <span *ngIf="orificeMethodForm.controls.compressorAirTemp.errors.min">Value can't be less than
+          {{orificeMethodForm.controls.compressorAirTemp.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="atmosphericPressure">Atmospheric Pressure</label>
+      <div class="input-group">
+        <input name="atmosphericPressure" class="form-control" type="number" step="any"
+          formControlName="atmosphericPressure" id="atmosphericPressure"
+          (input)="save()"
+          onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="orificeMethodForm.controls.atmosphericPressure.invalid && !orificeMethodForm.controls.atmosphericPressure.pristine">
+        <span *ngIf="orificeMethodForm.controls.atmosphericPressure.errors.required">Value required.</span>
+        <span *ngIf="orificeMethodForm.controls.atmosphericPressure.errors.min">Value can't be less than
+          {{orificeMethodForm.controls.atmosphericPressure.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="dischargeCoefficient">Discharge Coefficient</label>
+      <div class="input-group">
+        <input name="dischargeCoefficient" class="form-control" type="number" step="any"
+          formControlName="dischargeCoefficient" id="dischargeCoefficient"
+          (input)="save()"
+          onfocus="this.select();" (focus)="changeField('dischargeCoefficient')">
+          <span class="alert-danger pull-right small"
+        *ngIf="orificeMethodForm.controls.dischargeCoefficient.invalid && !orificeMethodForm.controls.dischargeCoefficient.pristine">
+        <span *ngIf="orificeMethodForm.controls.dischargeCoefficient.errors.required">Value required.</span>
+        <span *ngIf="orificeMethodForm.controls.dischargeCoefficient.errors.min">Value can't be less than
+          {{orificeMethodForm.controls.dischargeCoefficient.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="orificeDiameter">Orifice Diameter</label>
+      <div class="input-group">
+        <input name="orificeDiameter" class="form-control" type="number" step="any"
+          formControlName="orificeDiameter" id="orificeDiameter" onfocus="this.select();"
+          (input)="save()"
+          (focus)="changeField('orificeDiameter')">
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="orificeMethodForm.controls.orificeDiameter.invalid && !orificeMethodForm.controls.orificeDiameter.pristine">
+        <span *ngIf="orificeMethodForm.controls.orificeDiameter.errors.required">Value required.</span>
+        <span *ngIf="orificeMethodForm.controls.orificeDiameter.errors.min">Value can't be less than
+          {{orificeMethodForm.controls.orificeDiameter.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="supplyPressure">Supply Pressure</label>
+      <div class="input-group">
+        <input name="supplyPressure" class="form-control" type="number" step="any"
+          formControlName="supplyPressure" id="supplyPressure" onfocus="this.select();"
+          (input)="save()"
+          (focus)="changeField('supplyPressure')">
+        <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="orificeMethodForm.controls.supplyPressure.invalid && !orificeMethodForm.controls.supplyPressure.pristine">
+        <span *ngIf="orificeMethodForm.controls.supplyPressure.errors.required">Value required.</span>
+        <span *ngIf="orificeMethodForm.controls.supplyPressure.errors.min">Value can't be less than
+          {{orificeMethodForm.controls.supplyPressure.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="numberOfOrifices">Number of Orifices</label>
+      <div class="input-group">
+        <input name="numberOfOrifices" class="form-control" type="number" step="any"
+          formControlName="numberOfOrifices" id="numberOfOrifices" onfocus="this.select();"
+          (input)="save()"
+          (focus)="changeField('numberOfOrifices')">
+          <span class="alert-danger pull-right small"
+        *ngIf="orificeMethodForm.controls.numberOfOrifices.invalid && !orificeMethodForm.controls.numberOfOrifices.pristine">
+        <span *ngIf="orificeMethodForm.controls.numberOfOrifices.errors.required">Value required.</span>
+        <span *ngIf="orificeMethodForm.controls.numberOfOrifices.errors.min">Value can't be less than
+          {{orificeMethodForm.controls.numberOfOrifices.errors.min.min}}.</span>
+      </span>
+      </div>
+    </div>
+</form>

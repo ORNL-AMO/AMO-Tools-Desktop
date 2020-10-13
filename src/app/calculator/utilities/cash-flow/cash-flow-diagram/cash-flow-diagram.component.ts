@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { CashFlowResults } from '../cash-flow';
 import { CashFlowForm } from '../cash-flow';
-import * as d3 from 'd3';
-import * as c3 from 'c3';
-import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
-import { Subscription } from '../../../../../../node_modules/rxjs';
+import { CashFlowService } from '../cash-flow.service';
+import { TraceData, SimpleChart } from '../../../../shared/models/plotting';
+
+import * as Plotly from 'plotly.js';
 
 
 @Component({
@@ -20,143 +20,142 @@ export class CashFlowDiagramComponent implements OnInit {
   @Input()
   cashFlowForm: CashFlowForm;
 
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
-  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
-  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.resizeGraph();
-  }
-  exportName: string;
+  tabPanelChartId: string = 'tabPanelDiv';
+  expandedChartId: string = 'expandedChartDiv';
+  currentChartId: string = 'tabPanelDiv';
+  
+  expanded: boolean;
+  hoverBtnExpand: boolean;
+  displayExpandTooltip: boolean;
+  hoverBtnCollapse: boolean;
+  hoverBtnGridLines: any;
+  displayGridLinesTooltip: boolean;
+  displayCollapseTooltip: boolean;
+  hoverBtnExport: boolean;
 
-  svg: any;
-  xAxis: any;
-  yAxis: any;
-  x: any;
-  y: any;
-  width: any;
-  height: any;
-  margin: any;
-
-  //tooltip container
-  legend: any;
-  detailBox: any;
-  axisTitle: any;
-
-  energySavingsColor: string = "#5fa469";
-  energySavingsHover: string = "#248232";
-  salvageSavingsColor: string = "#90bfcf";
-  salvageSavingsHover: string = "#348aa7";
-  fuelCostColor: string = "#ff7353";
-  fuelCostHover: string = "#ba4a31";
-  operationCostColor: string = "#fed02f";
-  operationCostHover: string = "#b99101";
-  installationCostColor: string = "#FF3842";
-  installationCostHover: string = "#A30810";
-  junkCostColor: string = "#FF5D17";
-  junkCostHover: string = "#BA4411";
-
-  firstChange: boolean = true;
-
-  canvasWidth: number;
-  canvasHeight: number;
-  doc: any;
-  window: any;
-
-  graphData: Array<any>;
-  chartContainerWidth: number;
-  chartContainerHeight: number;
-
-  chart: any;
-  annualSavings: Array<any>;
-  salvageSavings: Array<any>;
-  operationCost: Array<any>;
-  fuelCost: Array<any>;
-  junkCost: Array<any>;
-  installationCost: Array<any>;
+  cashFlowChart: SimpleChart;
+  cashFlowData: Array<any>;
   years: Array<any>;
-
-  //booleans for tooltip
-  hoverBtnExport: boolean = false;
-  displayExportTooltip: boolean = false;
-  hoverBtnGridLines: boolean = false;
-  displayGridLinesTooltip: boolean = false;
-  hoverBtnExpand: boolean = false;
-  displayExpandTooltip: boolean = false;
-  hoverBtnCollapse: boolean = false;
-  displayCollapseTooltip: boolean = false;
-
-  //add this boolean to keep track if graph has been expanded
-  expanded: boolean = false;
-  calcSub: Subscription;
-  constructor(private svgToPngService: SvgToPngService) {
-
-  }
+  constructor(private cashFlowService: CashFlowService) {}
 
   ngOnInit() {
-
+    this.triggerInitialResize(); 
   }
 
-  ngAfterViewInit() {
+  triggerInitialResize() {
+    window.dispatchEvent(new Event('resize'));
     setTimeout(() => {
-    this.chartContainerWidth = this.ngChartContainer.nativeElement.clientWidth;
-    this.chartContainerHeight = 500;
-    this.graphData = new Array<any>();
-    this.compileGraphData();
-    this.resizeGraph();
-    }, 50);
+      this.initRenderChart();
+    }, 100)
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.toggleCalculate) {
-        this.compileGraphData();
-        this.updateGraph();
+      if (changes.toggleCalculate && !changes.toggleCalculate.firstChange) {
+        this.initRenderChart();
       }
-    } else {
-      this.firstChange = false;
-    }
+  }
+
+  initRenderChart() {
+    Plotly.purge(this.currentChartId);
+    this.cashFlowChart = this.cashFlowService.getEmptyChart();
+    
+    this.compileGraphData();
+    let chartTraces = this.buildTraces();
+    this.cashFlowChart.data = chartTraces;
+    let chartLayout = JSON.parse(JSON.stringify(this.cashFlowChart.layout));
+    Plotly.newPlot(this.currentChartId, this.cashFlowChart.data, chartLayout, this.cashFlowChart.config);
+  }
+
+  buildTraces() {
+    let traces = Array<TraceData>();
+    this.cashFlowData.forEach((expense: Array<any> )=> {
+      let expenseTrace: TraceData = this.cashFlowService.getTrace(expense.shift(), expense.slice(0), this.years);
+      traces.push(expenseTrace);
+    });
+    return traces;
   }
 
   updateTableString() {
     this.tableString = this.copyTable.nativeElement.innerText;
   }
 
-  // ========== export/gridline tooltip functions ==========
-  // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
-  // for example, check motor-performance-graph.module.ts
-  initTooltip(btnType: string) {
+  compileGraphData() {
+    this.cashFlowData = new Array<any>();
+    let annualSavings = new Array<any>();
+    let operationCost = new Array<any>();
+    let junkCost = new Array<any>();
+    let salvageSavings = new Array<any>();
+    let fuelCost = new Array<any>();
+    let installationCost = new Array<any>();
+    this.years = new Array<any>();
 
-    if (btnType === 'btnExportChart') {
-      this.hoverBtnExport = true;
+    annualSavings.push("Energy Savings");
+    operationCost.push("Operation Cost");
+    junkCost.push("Disposal Cost");
+    fuelCost.push("Fuel Cost");
+    installationCost.push("Installation Cost");
+    salvageSavings.push("Salvage");
+
+    for (let i: number = 0; i <= this.cashFlowForm.lifeYears; i++) {
+      annualSavings.push(this.cashFlowForm.energySavings);
+      operationCost.push(0 - this.cashFlowForm.operationCost);
+      fuelCost.push(0 - this.cashFlowForm.fuelCost);
+      this.years.push(`${i}`);
+      if (i === 0) {
+        installationCost.push(0 - this.cashFlowForm.installationCost);
+      }
+      else {
+        installationCost.push(0);
+      }
+      if (i === (this.cashFlowForm.lifeYears)) {
+        salvageSavings.push(this.cashFlowForm.salvageInput);
+        junkCost.push(0 - this.cashFlowForm.junkCost);
+      }
+      else {
+        salvageSavings.push(0);
+        junkCost.push(0);
+      }
     }
-    else if (btnType === 'btnGridLines') {
-      this.hoverBtnGridLines = true;
+    this.cashFlowData.push(salvageSavings, fuelCost, annualSavings, operationCost, installationCost, junkCost);
+  }
+
+  resizeGraph() {
+    let expandedChart = this.ngChartContainer.nativeElement;
+    if (expandedChart) {
+      if (this.expanded) {
+        this.currentChartId = this.expandedChartId;
+      }
+      else {
+        this.currentChartId = this.tabPanelChartId;
+      }
+        this.initRenderChart();
     }
-    else if (btnType === 'btnExpandChart') {
-      this.hoverBtnExpand = true;
-    }
-    else if (btnType === 'btnCollapseChart') {
-      this.hoverBtnCollapse = true;
-    }
+  }
+
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
     setTimeout(() => {
-      this.checkHover(btnType);
-    }, 700);
+      this.resizeGraph();
+    }, 100);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100);
   }
 
   hideTooltip(btnType: string) {
-
-    if (btnType === 'btnExportChart') {
-      this.hoverBtnExport = false;
-      this.displayExportTooltip = false;
-    }
-    else if (btnType === 'btnGridLines') {
-      this.hoverBtnGridLines = false;
-      this.displayGridLinesTooltip = false;
-    }
-    else if (btnType === 'btnExpandChart') {
+    if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = false;
       this.displayExpandTooltip = false;
     }
@@ -164,15 +163,34 @@ export class CashFlowDiagramComponent implements OnInit {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
+    else if (btnType === 'btnGridLines') {
+      this.hoverBtnGridLines = false;
+      this.displayGridLinesTooltip = false;
+    }
+  }
+
+  initTooltip(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType === 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
+    }
+    else if (btnType === 'btnGridLines') {
+      this.hoverBtnGridLines = true;
+    }
+    setTimeout(() => {
+      this.checkHover(btnType);
+    }, 200);
   }
 
   checkHover(btnType: string) {
-    if (btnType === 'btnExportChart') {
-      if (this.hoverBtnExport) {
-        this.displayExportTooltip = true;
+    if (btnType === 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
       }
       else {
-        this.displayExportTooltip = false;
+        this.displayExpandTooltip = false;
       }
     }
     else if (btnType === 'btnGridLines') {
@@ -181,14 +199,6 @@ export class CashFlowDiagramComponent implements OnInit {
       }
       else {
         this.displayGridLinesTooltip = false;
-      }
-    }
-    else if (btnType === 'btnExpandChart') {
-      if (this.hoverBtnExpand) {
-        this.displayExpandTooltip = true;
-      }
-      else {
-        this.displayExpandTooltip = false;
       }
     }
     else if (btnType === 'btnCollapseChart') {
@@ -200,187 +210,7 @@ export class CashFlowDiagramComponent implements OnInit {
       }
     }
   }
-  // ========== end tooltip functions ==========
 
-
-
-  resizeGraph() {
-    //need to update curveGraph to grab a new containing element 'panelChartContainer'
-    //make sure to update html container in the graph component as well
-    let curveGraph = this.ngChartContainer.nativeElement;
-    if (curveGraph) {
-      if (!this.expanded) {
-        this.canvasWidth = curveGraph.clientWidth;
-        this.canvasHeight = this.canvasWidth * (9 / 10);
-      }
-      else {
-        this.canvasWidth = curveGraph.clientWidth * 0.9;
-        this.canvasHeight = curveGraph.clientHeight * 0.8;
-      }
-      if (this.canvasWidth < 400) {
-        this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
-      } else {
-        this.margin = { top: 20, right: 45, bottom: 75, left: 60 };
-      }
-      this.width = this.canvasWidth - this.margin.left - this.margin.right;
-      this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-      this.makeGraph();
-    }
-  }
-
-
-  compileGraphData() {
-    this.graphData = new Array<any>();
-    this.annualSavings = new Array<any>();
-    this.operationCost = new Array<any>();
-    this.junkCost = new Array<any>();
-    this.salvageSavings = new Array<any>();
-    this.fuelCost = new Array<any>();
-    this.installationCost = new Array<any>();
-    this.years = new Array<any>();
-
-    this.annualSavings.push("Energy Savings");
-    this.operationCost.push("Operation Cost");
-    this.junkCost.push("Disposal Cost");
-    this.fuelCost.push("Fuel Cost");
-    this.installationCost.push("Installation Cost");
-    this.salvageSavings.push("Salvage");
-
-    for (let i: number = 0; i <= this.cashFlowForm.lifeYears; i++) {
-      this.annualSavings.push(this.cashFlowForm.energySavings);
-      this.operationCost.push(0 - this.cashFlowForm.operationCost);
-      this.fuelCost.push(0 - this.cashFlowForm.fuelCost);
-      this.years.push(i);
-      if (i === 0) {
-        this.installationCost.push(0 - this.cashFlowForm.installationCost);
-      }
-      else {
-        this.installationCost.push(0);
-      }
-      if (i === (this.cashFlowForm.lifeYears)) {
-        this.salvageSavings.push(this.cashFlowForm.salvageInput);
-        this.junkCost.push(0 - this.cashFlowForm.junkCost);
-      }
-      else {
-        this.salvageSavings.push(0);
-        this.junkCost.push(0);
-      }
-    }
-    this.graphData.push(this.salvageSavings);
-    this.graphData.push(this.fuelCost);
-    this.graphData.push(this.annualSavings);
-    this.graphData.push(this.operationCost);
-    this.graphData.push(this.installationCost);
-    this.graphData.push(this.junkCost);
-  }
-
-  updateGraph() {
-    if (this.chart) {
-      this.chart.load({
-        columns: this.graphData,
-        type: 'bar'
-      });
-    }
-  }
-
-
-  makeGraph() {
-    let years = this.years;
-    let salvageSavings = this.cashFlowForm.salvageInput;
-    let annualSavings = this.cashFlowForm.energySavings;
-    let fuelCost = this.cashFlowForm.fuelCost;
-    let operationCost = this.cashFlowForm.operationCost;
-    let installationCost = this.cashFlowForm.installationCost;
-    let junkCost = this.cashFlowForm.junkCost;
-
-    d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
-    this.chart = c3.generate({
-      bindto: this.ngChart.nativeElement,
-      data: {
-        columns: this.graphData,
-        type: 'bar',
-        groups: [
-          ['Energy Savings', 'Operation Cost', 'Fuel Cost', 'Installation Cost', 'Salvage', 'Disposal Cost']
-        ]
-      },
-      axis: {
-        x: {
-          label: {
-            text: "Year"
-          }
-        },
-        y: {
-          label: {
-            text: "Value ($)",
-            position: 'outer-middle'
-          }
-        }
-      },
-      grid: {
-        y: {
-          show: true
-        }
-      },
-      size: {
-        width: this.canvasWidth,
-        height: this.height
-      },
-      legend: {
-        show: true,
-        position: 'bottom'
-      },
-      tooltip: {
-        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-          let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px; display: inline-block; white-space: nowrap;";
-          let html = "<div style='" + styling + "'>"
-            + "<table>"
-            + "<tr>"
-            + "<td>"
-            + "Net Savings: "
-            + "</td>"
-            + "<td>$"
-            + (d[0].value + d[1].value + d[2].value + d[3].value + d[4].value + d[5].value)
-            + "</td>"
-            + "</tr>"
-            + "</table>"
-            + "</div>";
-          return html;
-        }
-      }
-    });
-
-    d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
-    d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
-    d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
-    d3.selectAll(".c3-axis-x-label").style("fill", "#000").style("stroke", "#000");
-  }
-
-  downloadChart() {
-    if (!this.exportName) {
-      this.exportName = "cash-flow-graph";
-    }
-    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
-  }
-
-  //========= chart resize functions ==========
-  expandChart() {
-    this.expanded = true;
-    this.hideTooltip('btnExpandChart');
-    this.hideTooltip('btnCollapseChart');
-    setTimeout(() => {
-      this.resizeGraph();
-    }, 200);
-  }
-
-  contractChart() {
-    this.expanded = false;
-    this.hideTooltip('btnExpandChart');
-    this.hideTooltip('btnCollapseChart');
-    setTimeout(() => {
-      this.resizeGraph();
-    }, 200);
-  }
-  //========== end chart resize functions ==========
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
     if (this.expanded) {

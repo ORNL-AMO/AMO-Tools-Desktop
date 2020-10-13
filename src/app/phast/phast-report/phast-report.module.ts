@@ -8,8 +8,6 @@ import { ResultsDataComponent } from './results-data/results-data.component';
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { ReportSankeyComponent } from './report-sankey/report-sankey.component';
 import { SankeyModule } from '../sankey/sankey.module';
-import { PhastPieChartComponent } from './report-graphs/phast-pie-chart/phast-pie-chart.component';
-import { PhastBarChartComponent } from './report-graphs/phast-bar-chart/phast-bar-chart.component';
 import { PhastReportService } from './phast-report.service';
 import { ExecutiveSummaryService } from './executive-summary.service';
 import { PhastInputSummaryModule } from './phast-input-summary/phast-input-summary.module';
@@ -20,6 +18,7 @@ import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.mod
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { InvalidPhastModule } from '../invalid-phast/invalid-phast.module';
 
 @NgModule({
   imports: [
@@ -32,9 +31,18 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     PercentGraphModule,
     PieChartModule,
     SimpleTooltipModule,
-    SharedPipesModule
+    SharedPipesModule,
+    InvalidPhastModule
   ],
-  declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent, ReportGraphsPrintComponent],
+  declarations: [
+    PhastReportComponent, 
+    EnergyUsedComponent, 
+    ExecutiveSummaryComponent, 
+    ResultsDataComponent, 
+    ReportGraphsComponent, 
+    ReportSankeyComponent, 
+    ReportGraphsPrintComponent, 
+  ],
   exports: [PhastReportComponent, ResultsDataComponent],
   providers: [PhastReportService, ExecutiveSummaryService]
 })
