@@ -10,6 +10,8 @@
       <app-system-basics *ngIf="setupTab == 'system-basics'"></app-system-basics>
       <app-activated-sludge-form *ngIf="setupTab == 'activated-sludge'" [inSetup]="true" [selected]="true">
       </app-activated-sludge-form>
+      <app-aerator-performance-form *ngIf="setupTab == 'aerator-performance'" [inSetup]="true" [selected]="true">
+      </app-aerator-performance-form>
     </div>
     <div class="w-50">
       <app-help-panel></app-help-panel>
