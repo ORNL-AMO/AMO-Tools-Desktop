@@ -46,3 +46,38 @@ export interface AeratorPerformanceData {
     Speed: number,
     EnergyCostUnit: number,
 }
+
+
+export interface WasteWaterResults {
+     TotalAverageDailyFlowRate: number,
+     VolumeInService: number,
+     InfluentBOD5Concentration: number,
+     InfluentBOD5MassLoading: number,
+     SecWWOxidNLoad: number,
+     SecWWTSSLoad: number,
+     FM_ratio: number,
+     SolidsRetentionTime: number,
+     MLSS: number,
+     MLVSS: number,
+     TSSSludgeProduction: number,
+     TSSInActivatedSludgeEffluent: number,
+     TotalOxygenRequirements: number,
+     TotalOxygenReqWDenit: number,
+     TotalOxygenSupplied: number,
+     MixingIntensityInReactor: number,
+     RASFlowRate: number,
+     RASRecyclePercentage: number,
+     WASFlowRate: number,
+     RASTSSConcentration: number,
+     TotalSludgeProduction: number,
+     ReactorDetentionTime: number,
+     VOLR: number,
+     EffluentCBOD5: number,
+     EffluentTSS: number,
+     EffluentAmmonia_N: number,
+     EffluentNO3_N: number,
+     EffluentNO3_N_W_Denit: number,
+     AeEnergy: number,
+     AeCost: number,
+     FieldOTR: number
+}

@@ -5,7 +5,7 @@ import { WasteWaterBannerComponent } from './waste-water-banner/waste-water-bann
 import { RouterModule } from '@angular/router';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { WasteWaterService } from './waste-water.service';
-import { HelpPanelComponent } from './help-panel/help-panel.component';
+import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { ActivatedSludgeFormComponent } from './activated-sludge-form/activated-sludge-form.component';
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormComponent } from './aerator-performance-form/aerator-performance-form.component';
@@ -13,6 +13,8 @@ import { AeratorPerformanceFormService } from './aerator-performance-form/aerato
 import { ReactiveFormsModule } from '@angular/forms';
 import { ModelingOptionsFormComponent } from './modeling-options-form/modeling-options-form.component';
 import { ModelingOptionsFormService } from './modeling-options-form/modeling-options-form.service';
+import { ResultsPanelComponent } from './results-panel/results-panel.component';
+import { ResultsTableComponent } from './results-panel/results-table/results-table.component';
 
 
 
@@ -24,7 +26,9 @@ import { ModelingOptionsFormService } from './modeling-options-form/modeling-opt
     HelpPanelComponent, 
     ActivatedSludgeFormComponent,
      AeratorPerformanceFormComponent,
-     ModelingOptionsFormComponent
+     ModelingOptionsFormComponent,
+     ResultsPanelComponent,
+     ResultsTableComponent
   ],
   imports: [
     CommonModule,
