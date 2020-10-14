@@ -17,7 +17,6 @@ export class CostsFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.opportunityCost);
   }
 
   addOtherCost() {
