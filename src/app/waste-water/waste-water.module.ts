@@ -20,6 +20,7 @@ import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-o
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { ModifyConditionsTabsComponent } from './waste-water-banner/modify-conditions-tabs/modify-conditions-tabs.component';
 
 
 
@@ -37,7 +38,8 @@ import { ModalModule } from 'ngx-bootstrap';
      ModifyConditionsComponent,
      ExploreOpportunitiesComponent,
      AddModificationModalComponent,
-     ModificationListModalComponent
+     ModificationListModalComponent,
+     ModifyConditionsTabsComponent
   ],
   imports: [
     CommonModule,

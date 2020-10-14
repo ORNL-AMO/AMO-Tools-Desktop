@@ -1,7 +1,7 @@
 <div class="row modify-conditions no-gutters">
     <div class="scroll-item col-8" [ngStyle]="{'height.px': containerHeight}">
-        <div class="row row-min-height no-gutters">
-            <div class="modification baseline w-50 panel-column" (click)="togglePanel()"
+        <div class="row h-100 no-gutters">
+            <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
                 [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
                 <div class="header mr-2 ml-2">
                     <h3>Baseline</h3>
@@ -19,17 +19,17 @@
 
             <!-- Modifications Start -->
             <div *ngIf="modificationExists" class="modification w-50 panel-column"
-                (click)="togglePanel()"
-                [ngClass]="{'disabled': baselineSelected == true, 'modal-open': isModalOpen == true}">
+                (click)="togglePanel(modificationSelected)"
+                [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
                 <!-- Modification Header -->
                 <div class="header mr-2 ml-2">
                     <h3>{{selectedModification.name}}</h3>
                 </div>
                 <app-activated-sludge-form *ngIf="selectedTab == 'activated-sludge'" [inSetup]="false"
-                    [selected]="!baselineSelected" [isModification]="true">
+                    [selected]="modificationSelected" [isModification]="true">
                 </app-activated-sludge-form>
                 <app-aerator-performance-form *ngIf="selectedTab == 'aerator-performance'" [inSetup]="false"
-                    [selected]="!baselineSelected" [isModification]="true">
+                    [selected]="modificationSelected" [isModification]="true">
                 </app-aerator-performance-form>
                 <app-modeling-options-form *ngIf="selectedTab == 'modeling-options'" [inSetup]="false" [selected]="false">
                 </app-modeling-options-form>
@@ -53,7 +53,7 @@
     </div>
     <!-- Help Panel -->
     <div class="col-4 p-0 help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}">
-        <app-help-panel *ngIf="modificationExists"></app-help-panel>
+        <app-results-panel *ngIf="modificationExists"></app-results-panel>
         <div *ngIf="!modificationExists">
             <div class="header mr-2 ml-2">
                 <h3>Help</h3>

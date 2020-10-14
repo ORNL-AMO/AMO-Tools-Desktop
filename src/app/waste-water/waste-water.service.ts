@@ -73,7 +73,39 @@ export class WasteWaterService {
       );
       return wasteWaterResults;
     }
-    return undefined;
+    return {
+      TotalAverageDailyFlowRate: undefined,
+      VolumeInService: undefined,
+      InfluentBOD5Concentration: undefined,
+      InfluentBOD5MassLoading: undefined,
+      SecWWOxidNLoad: undefined,
+      SecWWTSSLoad: undefined,
+      FM_ratio: undefined,
+      SolidsRetentionTime: undefined,
+      MLSS: undefined,
+      MLVSS: undefined,
+      TSSSludgeProduction: undefined,
+      TSSInActivatedSludgeEffluent: undefined,
+      TotalOxygenRequirements: undefined,
+      TotalOxygenReqWDenit: undefined,
+      TotalOxygenSupplied: undefined,
+      MixingIntensityInReactor: undefined,
+      RASFlowRate: undefined,
+      RASRecyclePercentage: undefined,
+      WASFlowRate: undefined,
+      RASTSSConcentration: undefined,
+      TotalSludgeProduction: undefined,
+      ReactorDetentionTime: undefined,
+      VOLR: undefined,
+      EffluentCBOD5: undefined,
+      EffluentTSS: undefined,
+      EffluentAmmonia_N: undefined,
+      EffluentNO3_N: undefined,
+      EffluentNO3_N_W_Denit: undefined,
+      AeEnergy: undefined,
+      AeCost: undefined,
+      FieldOTR: undefined
+    };
   }
 
 
@@ -84,10 +116,10 @@ export class WasteWaterService {
     return activatedSludgeForm.valid && aeratorPerformanceForm.valid && modelingOptionsForm.valid;
   }
 
-  getModificationFromId(): WasteWaterData{
+  getModificationFromId(): WasteWaterData {
     let selectedModificationId: string = this.selectedModificationId.getValue();
     let wasteWater: WasteWater = this.wasteWater.getValue();
-    let selectedModification: WasteWaterData = wasteWater.modifications.find(modification => {return modification.id == selectedModificationId});
+    let selectedModification: WasteWaterData = wasteWater.modifications.find(modification => { return modification.id == selectedModificationId });
     return selectedModification;
   }
 }

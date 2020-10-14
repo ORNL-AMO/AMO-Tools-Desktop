@@ -98,4 +98,8 @@
                 Scenarios</button>
         </div>
     </div>
+
+    <nav *ngIf="assessmentTab == 'modify-conditions'" class="hide-print w-100">
+        <app-modify-conditions-tabs></app-modify-conditions-tabs>
+    </nav>
 </div>

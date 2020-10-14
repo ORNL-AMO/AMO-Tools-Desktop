@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { WasteWaterData } from '../../shared/models/waste-water';
+import { WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
 
 @Component({
@@ -15,6 +15,7 @@ export class ModifyConditionsComponent implements OnInit {
   wasteWaterSub: Subscription;
 
   baselineSelected: boolean = false;
+  modificationSelected: boolean = true;
   modificationExists: boolean;
 
   isModalOpen: boolean;
@@ -37,6 +38,12 @@ export class ModifyConditionsComponent implements OnInit {
     this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(() => {
       this.selectedModification = this.wasteWaterService.getModificationFromId();
       this.modificationExists = (this.selectedModification != undefined);
+      if (!this.modificationExists) {
+        let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+        if (wasteWater.modifications.length != 0) {
+          this.wasteWaterService.selectedModificationId.next(wasteWater.modifications[0].id);
+        }
+      }
     });
   }
 
@@ -55,7 +62,14 @@ export class ModifyConditionsComponent implements OnInit {
     this.wasteWaterService.showAddModificationModal.next(true);
   }
 
-  togglePanel() {
-    this.baselineSelected = !this.baselineSelected;
+  togglePanel(bool: boolean) {
+    if (bool === this.baselineSelected) {
+      this.baselineSelected = true;
+      this.modificationSelected = false;
+    }
+    else if (bool === this.modificationSelected) {
+      this.modificationSelected = true;
+      this.baselineSelected = false;
+    }
   }
 }

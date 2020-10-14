@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AeratorPerformanceData, WasteWater, WasteWaterData } from '../../shared/models/waste-water';
@@ -47,16 +47,33 @@ export class AeratorPerformanceFormComponent implements OnInit {
         this.modificationIndex = wasteWater.modifications.findIndex(modification => { return modification.id == val });
         let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
         this.form = this.aeratorPerformanceFormService.getFormFromObj(modificationData.aeratorPerformanceData);
+        if (this.selected === false) {
+          this.disableForm();
+        }
       });
     } else {
       this.form = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
+
+      if (this.selected === false) {
+        this.disableForm();
+      }
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (this.selected === true) {
+        this.enableForm();
+      } else if (this.selected === false) {
+        this.disableForm();
+      }
     }
   }
 
   ngOnDestroy() {
     if (this.selectedModificationIdSub) this.selectedModificationIdSub.unsubscribe();
   }
-  
+
   save() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     if (this.isModification) {
@@ -68,6 +85,15 @@ export class AeratorPerformanceFormComponent implements OnInit {
     }
     this.wasteWaterService.wasteWater.next(wasteWater);
   }
+
+  enableForm() {
+    this.form.controls.TypeAerators.enable();
+  }
+
+  disableForm() {
+    this.form.controls.TypeAerators.disable();
+  }
+
 
   focusField(str: string) {
 
