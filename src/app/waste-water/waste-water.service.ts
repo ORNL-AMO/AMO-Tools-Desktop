@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { ActivatedSludgeData, AeratorPerformanceData, ModelingOptions, WasteWater, WasteWaterResults } from '../shared/models/waste-water';
+import { ActivatedSludgeData, AeratorPerformanceData, ModelingOptions, WasteWater, WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
 import { ModelingOptionsFormService } from './modeling-options-form/modeling-options-form.service';
@@ -16,12 +16,22 @@ export class WasteWaterService {
   setupTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
   settings: BehaviorSubject<Settings>;
+  showAddModificationModal: BehaviorSubject<boolean>;
+  showModificationListModal: BehaviorSubject<boolean>;
+  isModalOpen: BehaviorSubject<boolean>;
+  modifyConditionsTab: BehaviorSubject<string>;
+  selectedModificationId: BehaviorSubject<string>;
   constructor(private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService, private modelingOptionsFormService: ModelingOptionsFormService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('modify-conditions');
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.wasteWater = new BehaviorSubject<WasteWater>(undefined);
+    this.showAddModificationModal = new BehaviorSubject<boolean>(false);
+    this.showModificationListModal = new BehaviorSubject<boolean>(false);
+    this.isModalOpen = new BehaviorSubject<boolean>(false);
+    this.modifyConditionsTab = new BehaviorSubject<string>('activated-sludge');
+    this.selectedModificationId = new BehaviorSubject<string>(undefined);
   }
 
 
@@ -72,5 +82,12 @@ export class WasteWaterService {
     let aeratorPerformanceForm: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(aeratorPerformanceData);
     let modelingOptionsForm: FormGroup = this.modelingOptionsFormService.getFormFromObj(modelingOptions);
     return activatedSludgeForm.valid && aeratorPerformanceForm.valid && modelingOptionsForm.valid;
+  }
+
+  getModificationFromId(): WasteWaterData{
+    let selectedModificationId: string = this.selectedModificationId.getValue();
+    let wasteWater: WasteWater = this.wasteWater.getValue();
+    let selectedModification: WasteWaterData = wasteWater.modifications.find(modification => {return modification.id == selectedModificationId});
+    return selectedModification;
   }
 }

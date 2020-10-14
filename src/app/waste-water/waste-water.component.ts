@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -34,9 +34,17 @@ export class WasteWaterComponent implements OnInit {
   wasteWaterSub: Subscription;
   assessmentTabSub: Subscription;
   assessmentTab: string;
+
+  showAddModification: boolean;
+  showAddModificationSub: Subscription;
+  showModificationList: boolean;
+  showModificationListSub: Subscription;
+
+  isModalOpen: boolean;
+  isModalOpenSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService,
-    private assessmentDbService: AssessmentDbService) { }
+    private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -48,6 +56,7 @@ export class WasteWaterComponent implements OnInit {
 
     this.mainTabSub = this.wasteWaterService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.getContainerHeight();
     });
 
     this.setupTabSub = this.wasteWaterService.setupTab.subscribe(val => {
@@ -62,13 +71,32 @@ export class WasteWaterComponent implements OnInit {
 
     this.assessmentTabSub = this.wasteWaterService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
+      this.cd.detectChanges();
     });
+    
+    this.showAddModificationSub = this.wasteWaterService.showAddModificationModal.subscribe(val => {
+      this.showAddModification = val;
+      this.cd.detectChanges();
+    });
+
+    this.showModificationListSub = this.wasteWaterService.showModificationListModal.subscribe(val =>{
+      this.showModificationList = val;
+    });
+
+    this.isModalOpenSub = this.wasteWaterService.isModalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    });
+
   }
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.setupTabSub.unsubscribe();
     this.wasteWaterSub.unsubscribe();
+    this.assessmentTabSub.unsubscribe();
+    this.showAddModificationSub.unsubscribe();
+    this.showModificationListSub.unsubscribe();
+    this.isModalOpenSub.unsubscribe();
   }
 
   ngAfterViewInit() {

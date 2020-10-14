@@ -277,6 +277,8 @@ export class AssessmentService {
   getNewWasteWater(): WasteWater {
     return {
       baselineData: {
+        name: 'Baseline',
+        id: Math.random().toString(36).substr(2, 9),
         activatedSludgeData: {
           Temperature: 20,
           So: 200,
@@ -309,6 +311,7 @@ export class AssessmentService {
           EnergyCostUnit: 0.09
         }
       },
+      modifications: new Array(),
       modelingOptions: {
         MaxDays: 72,
         TimeIncrement: 2,

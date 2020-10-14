@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedSludgeData, WasteWater } from '../../shared/models/waste-water';
+import { Subscription } from 'rxjs';
+import { ActivatedSludgeData, WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
 import { ActivatedSludgeFormService } from './activated-sludge-form.service';
 
@@ -18,28 +19,39 @@ export class ActivatedSludgeFormComponent implements OnInit {
   selected: boolean;
 
   form: FormGroup;
+
+  modificationIndex: number;
+  selectedModificationIdSub: Subscription;
   constructor(private wasteWaterService: WasteWaterService, private activatedSludgeFormService: ActivatedSludgeFormService) { }
 
   ngOnInit(): void {
-    let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     if (this.isModification) {
-      //add logic when selecte mod index added
-      // this.form = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
+      this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
+        let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+        this.modificationIndex = wasteWater.modifications.findIndex(modification => { return modification.id == val });
+        let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
+        this.form = this.activatedSludgeFormService.getFormFromObj(modificationData.activatedSludgeData);
+      });
     } else {
+      let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
       this.form = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
     }
   }
 
+  ngOnDestroy() {
+    if (this.selectedModificationIdSub) this.selectedModificationIdSub.unsubscribe();
+  }
+
   save() {
+    let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     if (this.isModification) {
-      //add logic when selecte mod index added
-      // this.form = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
+      let activatedSludgeData: ActivatedSludgeData = this.activatedSludgeFormService.getObjFromForm(this.form);
+      wasteWater.modifications[this.modificationIndex].activatedSludgeData = activatedSludgeData;
     } else {
       let activatedSludgeData: ActivatedSludgeData = this.activatedSludgeFormService.getObjFromForm(this.form);
-      let wastWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-      wastWater.baselineData.activatedSludgeData = activatedSludgeData;
-      this.wasteWaterService.wasteWater.next(wastWater);
+      wasteWater.baselineData.activatedSludgeData = activatedSludgeData;
     }
+    this.wasteWaterService.wasteWater.next(wasteWater);
   }
 
   focusField(str: string) {

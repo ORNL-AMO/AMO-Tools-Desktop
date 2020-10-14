@@ -24,7 +24,7 @@
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true}" class="tab-content"
     [ngStyle]="{'height.px': containerHeight}">
-    <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'"></app-modify-conditions>
+    <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [containerHeight]="containerHeight"></app-modify-conditions>
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'"></app-explore-opportunities>
   </div>
 
@@ -41,3 +41,7 @@
   </div>
   <!--end footer-->
 </div>
+
+
+<app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>
+<app-add-modification-modal *ngIf="showAddModification"></app-add-modification-modal>

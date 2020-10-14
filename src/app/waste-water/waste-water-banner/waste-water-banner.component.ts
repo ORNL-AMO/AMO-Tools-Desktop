@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
+import { WasteWaterData } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
 
 @Component({
@@ -22,6 +23,8 @@ export class WasteWaterBannerComponent implements OnInit {
   assessmentTabSub: Subscription;
   assessmentTab: string;
   isBaselineValid: boolean;
+  selectedModificationIdSub: Subscription;
+  selectedModification: WasteWaterData;
   constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
@@ -40,6 +43,10 @@ export class WasteWaterBannerComponent implements OnInit {
     this.assessmentTabSub = this.wasteWaterService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     });
+
+    this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(() => {
+      this.selectedModification = this.wasteWaterService.getModificationFromId();
+    });
   }
 
   ngOnDestroy() {
@@ -47,6 +54,7 @@ export class WasteWaterBannerComponent implements OnInit {
     this.setupTabSub.unsubscribe();
     this.wasteWaterSub.unsubscribe();
     this.assessmentTabSub.unsubscribe();
+    this.selectedModificationIdSub.unsubscribe();
   }
 
 
@@ -62,5 +70,9 @@ export class WasteWaterBannerComponent implements OnInit {
 
   changeAssessmentTab(str: string){
     this.wasteWaterService.assessmentTab.next(str);
+  }
+
+  selectModification(){
+    this.wasteWaterService.showModificationListModal.next(true);
   }
 }

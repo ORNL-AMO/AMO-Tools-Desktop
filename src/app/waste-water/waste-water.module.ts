@@ -10,13 +10,16 @@ import { ActivatedSludgeFormComponent } from './activated-sludge-form/activated-
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormComponent } from './aerator-performance-form/aerator-performance-form.component';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModelingOptionsFormComponent } from './modeling-options-form/modeling-options-form.component';
 import { ModelingOptionsFormService } from './modeling-options-form/modeling-options-form.service';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { ResultsTableComponent } from './results-panel/results-table/results-table.component';
 import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
+import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
+import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
+import { ModalModule } from 'ngx-bootstrap';
 
 
 
@@ -32,12 +35,16 @@ import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-o
      ResultsPanelComponent,
      ResultsTableComponent,
      ModifyConditionsComponent,
-     ExploreOpportunitiesComponent
+     ExploreOpportunitiesComponent,
+     AddModificationModalComponent,
+     ModificationListModalComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ModalModule,
+    FormsModule
   ],
   providers: [
     WasteWaterService,
