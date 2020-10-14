@@ -20,22 +20,13 @@
     </div>
   </div>
 
-  <!--
-    <div *ngIf="mainTab == 'find-treasure'" class="w-100 d-flex tab-content justify-content-center scroll-item"
-      [ngStyle]="{'height.px': containerHeight}">
-      <app-find-treasure class="w-100" [settings]="settings"></app-find-treasure>
-    </div>
-  
-    <div *ngIf="mainTab == 'treasure-chest'" class="d-flex tab-content h-100">
-      <app-treasure-chest class="w-100" [settings]="settings" [containerHeight]="containerHeight"></app-treasure-chest>
-    </div>
-  
-    <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
-      <div class="col-11 report-column">
-        <app-treasure-hunt-report [assessment]="assessment" [settings]="settings" [directory]="directory" [containerHeight]="containerHeight">
-        </app-treasure-hunt-report>
-      </div>
-    </div> -->
+
+  <!--Assessment-->
+  <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true}" class="tab-content"
+    [ngStyle]="{'height.px': containerHeight}">
+    <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'"></app-modify-conditions>
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'"></app-explore-opportunities>
+  </div>
 
 
 

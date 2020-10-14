@@ -15,6 +15,8 @@ import { ModelingOptionsFormComponent } from './modeling-options-form/modeling-o
 import { ModelingOptionsFormService } from './modeling-options-form/modeling-options-form.service';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { ResultsTableComponent } from './results-panel/results-table/results-table.component';
+import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
+import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 
 
 
@@ -28,7 +30,9 @@ import { ResultsTableComponent } from './results-panel/results-table/results-tab
      AeratorPerformanceFormComponent,
      ModelingOptionsFormComponent,
      ResultsPanelComponent,
-     ResultsTableComponent
+     ResultsTableComponent,
+     ModifyConditionsComponent,
+     ExploreOpportunitiesComponent
   ],
   imports: [
     CommonModule,

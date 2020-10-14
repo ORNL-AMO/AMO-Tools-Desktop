@@ -32,6 +32,8 @@ export class WasteWaterComponent implements OnInit {
   setupTab: string;
   setupTabSub: Subscription;
   wasteWaterSub: Subscription;
+  assessmentTabSub: Subscription;
+  assessmentTab: string;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService,
     private assessmentDbService: AssessmentDbService) { }
@@ -56,6 +58,10 @@ export class WasteWaterComponent implements OnInit {
       if (val && this.assessment) {
         this.saveWasteWater(val);
       }
+    });
+
+    this.assessmentTabSub = this.wasteWaterService.assessmentTab.subscribe(val => {
+      this.assessmentTab = val;
     });
   }
 

@@ -13,14 +13,22 @@ export class WasteWaterBannerComponent implements OnInit {
   assessment: Assessment;
 
 
-  
+
   mainTab: string;
   mainTabSub: Subscription;
   setupTab: string;
   setupTabSub: Subscription;
+  wasteWaterSub: Subscription;
+  assessmentTabSub: Subscription;
+  assessmentTab: string;
+  isBaselineValid: boolean;
   constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
+    this.wasteWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
+      this.isBaselineValid = this.wasteWaterService.checkWasteWaterValid(val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.modelingOptions);
+    });
+
     this.mainTabSub = this.wasteWaterService.mainTab.subscribe(val => {
       this.mainTab = val;
     });
@@ -28,19 +36,31 @@ export class WasteWaterBannerComponent implements OnInit {
     this.setupTabSub = this.wasteWaterService.setupTab.subscribe(val => {
       this.setupTab = val;
     });
+
+    this.assessmentTabSub = this.wasteWaterService.assessmentTab.subscribe(val => {
+      this.assessmentTab = val;
+    });
   }
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.setupTabSub.unsubscribe();
-  } 
-
-
-  changeTab(){
-
+    this.wasteWaterSub.unsubscribe();
+    this.assessmentTabSub.unsubscribe();
   }
 
-  changeSetupTab(str: string){
+
+  changeTab(str: string) {
+    if (str == 'system-setup' || this.isBaselineValid) {
+      this.wasteWaterService.mainTab.next(str);
+    }
+  }
+
+  changeSetupTab(str: string) {
     this.wasteWaterService.setupTab.next(str);
+  }
+
+  changeAssessmentTab(str: string){
+    this.wasteWaterService.assessmentTab.next(str);
   }
 }
