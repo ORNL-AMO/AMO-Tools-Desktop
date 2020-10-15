@@ -71,7 +71,6 @@ export class WasteWaterComponent implements OnInit {
 
     this.assessmentTabSub = this.wasteWaterService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
-      this.cd.detectChanges();
     });
     
     this.showAddModificationSub = this.wasteWaterService.showAddModificationModal.subscribe(val => {
@@ -81,6 +80,7 @@ export class WasteWaterComponent implements OnInit {
 
     this.showModificationListSub = this.wasteWaterService.showModificationListModal.subscribe(val =>{
       this.showModificationList = val;
+      this.cd.detectChanges();
     });
 
     this.isModalOpenSub = this.wasteWaterService.isModalOpen.subscribe(val => {
