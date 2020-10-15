@@ -21,6 +21,7 @@ import { AddModificationModalComponent } from './add-modification-modal/add-modi
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { ModifyConditionsTabsComponent } from './waste-water-banner/modify-conditions-tabs/modify-conditions-tabs.component';
+import { CompareService } from './modify-conditions/compare.service';
 
 
 
@@ -52,7 +53,8 @@ import { ModifyConditionsTabsComponent } from './waste-water-banner/modify-condi
     WasteWaterService,
     ActivatedSludgeFormService,
     AeratorPerformanceFormService,
-    ModelingOptionsFormService
+    ModelingOptionsFormService,
+    CompareService
   ]
 })
 export class WasteWaterModule { }
