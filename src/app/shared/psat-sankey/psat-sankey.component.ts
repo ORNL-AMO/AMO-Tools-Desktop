@@ -35,6 +35,8 @@ export class PsatSankeyComponent implements OnInit {
   modResults: PsatOutputs;
   @Input()
   validPsat: PsatValid;
+  @Input()
+  printView: boolean;
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
 
   selectedResults: PsatOutputs;
@@ -209,7 +211,7 @@ export class PsatSankeyComponent implements OnInit {
       link: sankeyLink
     };
 
-    const layout = {
+    let layout = {
       autosize: true,
       paper_bgcolor: undefined,
       plot_bgcolor: undefined,
@@ -225,10 +227,20 @@ export class PsatSankeyComponent implements OnInit {
       layout.plot_bgcolor = 'ececec';
     }
 
-    const config = {
-      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
-      responsive: true
-    };
+    let config;
+    if (this.printView) {
+      config = {
+        modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
+        displaylogo: false,
+        displayModeBar: false,
+        responsive: false
+      };
+    } else {
+      config = {
+        modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
+        responsive: true
+      };
+    }
 
     Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config);
     this.addGradientElement();
