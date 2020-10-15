@@ -114,7 +114,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 9000,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 300
+                    "labor": 300,
+                    "implementationEffort": 4
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -203,7 +204,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 300,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 200
+                    "labor": 200,
+                    "implementationEffort": 3
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -290,7 +292,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 0,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 0
+                    "labor": 0,
+                    "implementationEffort": 1
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -430,6 +433,7 @@ export const MockTreasureHunt: Assessment = {
                     "otherCosts": [],
                     "costDescription": "",
                     "labor": 1000,
+                    "implementationEffort": 8,
                     "additionalAnnualSavings": {
                         "description": "Other Annual Savings",
                         "cost": 1500
@@ -543,6 +547,7 @@ export const MockTreasureHunt: Assessment = {
                     "otherCosts": [],
                     "costDescription": "",
                     "labor": 1000,
+                    "implementationEffort": 3,
                     "additionalSavings": {
                         "description": "Rebate Savings",
                         "cost": 1000
@@ -605,6 +610,7 @@ export const MockTreasureHunt: Assessment = {
                     "otherCosts": [],
                     "costDescription": "",
                     "labor": 3000,
+                    "implementationEffort": 5,
                     "additionalSavings": {
                         "description": "Rebate Savings",
                         "cost": 1000
@@ -667,7 +673,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 6000,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 300
+                    "labor": 300,
+                    "implementationEffort": 1
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -754,7 +761,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 0,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 100
+                    "labor": 100,
+                    "implementationEffort": 1
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -842,7 +850,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 0,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 0
+                    "labor": 0,
+                    "implementationEffort": 1
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -976,6 +985,7 @@ export const MockTreasureHunt: Assessment = {
                     "otherCosts": [],
                     "costDescription": "",
                     "labor": 0,
+                    "implementationEffort": 1,
                     "additionalAnnualSavings": {
                         "description": "Other Annual Savings",
                         "cost": 200
@@ -1057,7 +1067,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 0,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 0
+                    "labor": 0,
+                    "implementationEffort": 1
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -1079,7 +1090,8 @@ export const MockTreasureHunt: Assessment = {
                 "material": 0,
                 "otherCosts": [],
                 "costDescription": "",
-                "labor": 0
+                "labor": 0,
+                "implementationEffort": 2
             },
             "baselineEnergyUseItems": [{
                 "type": "Gas",
@@ -1125,7 +1137,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 15000,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 1000
+                    "labor": 1000,
+                    "implementationEffort": 10
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -1159,7 +1172,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 30000,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 1000
+                    "labor": 1000,
+                    "implementationEffort": 3
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -1227,7 +1241,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 1000,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 1000
+                    "labor": 1000,
+                    "implementationEffort": 7
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",
@@ -1269,7 +1284,8 @@ export const MockTreasureHunt: Assessment = {
                     "material": 0,
                     "otherCosts": [],
                     "costDescription": "",
-                    "labor": 50
+                    "labor": 50,
+                    "implementationEffort": 2
                 },
                 "baselineEnergyUseItems": [{
                     "type": "Electricity",

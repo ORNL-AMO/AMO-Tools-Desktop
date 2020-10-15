@@ -76,7 +76,8 @@ export interface EnergyUseItem {
 export interface OpportunityCost {
     engineeringServices?: number,
     material?: number,
-    labor?: number
+    labor?: number,
+    implementationEffort?: number,
     otherCosts?: Array<OtherCostItem>,
     costDescription?: string
     additionalSavings?: OtherCostItem,
