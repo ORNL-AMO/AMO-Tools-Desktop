@@ -27,10 +27,12 @@ export class ActivatedSludgeFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.isModification) {
       this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
-        let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-        this.modificationIndex = wasteWater.modifications.findIndex(modification => { return modification.id == val });
-        let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
-        this.form = this.activatedSludgeFormService.getFormFromObj(modificationData.activatedSludgeData);
+        if (val) {
+          let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+          this.modificationIndex = wasteWater.modifications.findIndex(modification => { return modification.id == val });
+          let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
+          this.form = this.activatedSludgeFormService.getFormFromObj(modificationData.activatedSludgeData);
+        }
       });
     } else {
       let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();

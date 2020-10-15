@@ -43,12 +43,14 @@ export class AeratorPerformanceFormComponent implements OnInit {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     if (this.isModification) {
       this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
-        let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-        this.modificationIndex = wasteWater.modifications.findIndex(modification => { return modification.id == val });
-        let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
-        this.form = this.aeratorPerformanceFormService.getFormFromObj(modificationData.aeratorPerformanceData);
-        if (this.selected === false) {
-          this.disableForm();
+        if (val) {
+          let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+          this.modificationIndex = wasteWater.modifications.findIndex(modification => { return modification.id == val });
+          let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
+          this.form = this.aeratorPerformanceFormService.getFormFromObj(modificationData.aeratorPerformanceData);
+          if (this.selected === false) {
+            this.disableForm();
+          }
         }
       });
     } else {
