@@ -10,7 +10,7 @@ export class CompareService {
     this.wasteWaterDifferent = new BehaviorSubject<WasteWaterDifferent>(undefined);
   }
 
-  setWasteWaterDifferent(baselineData: WasteWaterData, modificationData?: WasteWaterData){
+  setWasteWaterDifferent(baselineData: WasteWaterData, modificationData?: WasteWaterData) {
     let wasteWaterDifferent: WasteWaterDifferent = this.compareBaselineModification(baselineData, modificationData);
     this.wasteWaterDifferent.next(wasteWaterDifferent);
   }
@@ -69,6 +69,27 @@ export class CompareService {
     }
   }
 
+  getBadges(baselineData: WasteWaterData, modificationData: WasteWaterData): Array<{ badge: string, componentStr: string }> {
+    let badges: Array<{ badge: string, componentStr: string }> = [];
+    let wasteWaterDifferent: WasteWaterDifferent = this.compareBaselineModification(baselineData, modificationData);
+    if (this.checkHasDifferent(wasteWaterDifferent.activatedSludgeDifferent)) {
+      badges.push({ badge: 'Activated Sludge', componentStr: 'activated-sludge' });
+    }
+    if (this.checkHasDifferent(wasteWaterDifferent.aeratorPerformanceDifferent)) {
+      badges.push({ badge: 'Aerator Performance', componentStr: 'aerator-performance' });
+    }
+    return badges;
+  }
+
+  checkHasDifferent(obj: any): boolean {
+    let hasDifferent: boolean = false;
+    for (let key in obj) {
+      if (obj[key] == true) {
+        hasDifferent = true;
+      }
+    }
+    return hasDifferent;
+  }
 
 }
 

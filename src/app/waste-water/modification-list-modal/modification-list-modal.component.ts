@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
 import * as _ from 'lodash';
+import { CompareService } from '../modify-conditions/compare.service';
 @Component({
   selector: 'app-modification-list-modal',
   templateUrl: './modification-list-modal.component.html',
@@ -22,7 +23,7 @@ export class ModificationListModalComponent implements OnInit {
   dropdownId: string;
   newModificationName: string;
   renameModificationName: string;
-  constructor(private wasteWaterService: WasteWaterService) { }
+  constructor(private wasteWaterService: WasteWaterService, private compareService: CompareService) { }
 
   ngOnInit(): void {
     this.wasteWaterService.isModalOpen.next(true);
@@ -119,5 +120,14 @@ export class ModificationListModalComponent implements OnInit {
     this.wasteWaterService.wasteWater.next(this.wasteWater);
     this.wasteWaterService.selectedModificationId.next(modification.id);
     this.closeModal();
+  }
+
+  getBadges(modificationData: WasteWaterData): Array<{ badge: string, componentStr: string }> {
+    return this.compareService.getBadges(this.wasteWater.baselineData, modificationData);
+  }
+
+  goToModification(modificationId: string, componentStr: string) {
+    this.wasteWaterService.modifyConditionsTab.next(componentStr);
+    this.selectModification(modificationId);
   }
 }
