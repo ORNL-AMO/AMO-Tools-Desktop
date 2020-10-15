@@ -83,6 +83,9 @@
       <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
         <a>Facility Info</a>
       </li>
+      <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
+        <a>Sankey</a>
+      </li>
     </ul>
 
     <div class="results scroll-item print-height"
@@ -126,6 +129,13 @@
         [printGraphs]="printOptions.printReportGraphs">
       </app-report-graphs>
     </div>
+    <div class="results scroll-item print-height" 
+      *ngIf="((currentTab == 'reportSankey') || (showPrintView && printOptions.printSankey)) && dataCalculated"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-ssmt-report-sankey [settings]="settings" [assessment]="assessment" [baselineOutput]="baselineOutput"
+            [modificationOutputs]="modificationOutputs">
+            </app-ssmt-report-sankey>
+        </div>
     <div class="results scroll-item input-data print-height print-break-before"
       *ngIf="((currentTab == 'inputData') || (showPrintView && printOptions.printInputData)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">

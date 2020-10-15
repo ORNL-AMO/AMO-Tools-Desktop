@@ -1,7 +1,19 @@
 /* SSMT sankey overrides */
 /* =========================== */
 
-/*  Starting link color */
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-node-set >
+g.sankey-node >
+g.node-entered >
+text.node-label {
+    text-shadow: none !important;
+}
+
 app-ssmt-sankey > 
 div.js-plotly-plot >
 div.plot-container.plotly >
@@ -14,6 +26,17 @@ path.sankey-link {
     fill-opacity: .9 !important;
 }
 
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(1) {
+    fill: #c77f0a !important;
+    fill-opacity: .9 !important;
+}
 
 app-ssmt-sankey > 
 div.js-plotly-plot >
@@ -23,7 +46,7 @@ svg.main-svg >
 g.sankey >
 g.sankey-links >
 path.sankey-link:nth-child(2) {
-    fill: url(#ssmtLinkGradient) !important;
+    fill: #c77f0a !important;
     fill-opacity: .9 !important;
 }
 
@@ -35,7 +58,7 @@ svg.main-svg >
 g.sankey >
 g.sankey-links >
 path.sankey-link:nth-child(3) {
-    fill: url(#ssmtLinkGradient) !important;
+    fill: url(#ssmtOrangeRedGradient) !important;
     fill-opacity: .9 !important;
 }
 
@@ -47,7 +70,19 @@ svg.main-svg >
 g.sankey >
 g.sankey-links >
 path.sankey-link:nth-child(4) {
-    fill: url(#ssmtLinkGradient) !important;
+    fill: url(#ssmtOrangeRedGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(5) {
+    fill: url(#ssmtOrangeRedGradient) !important;
     fill-opacity: .9 !important;
 }
 
@@ -59,7 +94,7 @@ svg.main-svg >
 g.sankey >
 g.sankey-links >
 path.sankey-link:nth-child(6) {
-    fill: url(#ssmtLinkGradient) !important;
+    fill: url(#ssmtOrangeGradient) !important;
     fill-opacity: .9 !important;
 }
 
@@ -71,7 +106,7 @@ svg.main-svg >
 g.sankey >
 g.sankey-links >
 path.sankey-link:nth-child(7) {
-    fill: url(#ssmtLinkGradient) !important;
+    fill: url(#ssmtOrangeGradient) !important;
     fill-opacity: .9 !important;
 }
 
@@ -83,7 +118,171 @@ svg.main-svg >
 g.sankey >
 g.sankey-links >
 path.sankey-link:nth-child(8) {
-    fill: url(#ssmtLinkGradient) !important;
+    fill: url(#ssmtOrangeRedGradient) !important;
     fill-opacity: .9 !important;
 }
 
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(9) {
+    fill: url(#ssmtOrangeBlueGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+/*  Can use same gradient for return to 0 (because the rendered element is reversed/upside down?) */
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(10) {
+    fill: url(#ssmtOrangeBlueGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link {
+    fill: #268ade !important;
+    fill-opacity: .9 !important;
+}
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-node-set >
+g.sankey-node >
+g.node-entered >
+text.node-label {
+    text-shadow: none !important;
+  }
+
+
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link {
+    fill: #268ade !important;
+    fill-opacity: .9 !important;
+}
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(3) {
+    fill: url(#psatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(4) {
+    fill: url(#psatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+
+app-psat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-last-child(-n+2) {
+    fill: url(#psatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link {
+    fill: rgba(214, 185, 0, 1) !important;
+    fill-opacity: .9 !important;
+}
+
+
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(3) {
+    fill: url(#fsatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-child(4) {
+    fill: url(#fsatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-links >
+path.sankey-link:nth-last-child(-n+2) {
+    fill: url(#fsatLinkGradient) !important;
+    fill-opacity: .9 !important;
+}
+
+app-fsat-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-node-set >
+g.sankey-node >
+g.node-entered >
+text.node-label {
+    text-shadow: none !important;
+  }

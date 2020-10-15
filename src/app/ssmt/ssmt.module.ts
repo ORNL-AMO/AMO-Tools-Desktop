@@ -75,7 +75,7 @@ import { RouterModule } from '@angular/router';
     ToastModule,
     SharedPipesModule,
     RouterModule,
-    SsmtSankeyModule
+    SsmtSankeyModule,
   ],
   declarations: [
     SsmtComponent,
