@@ -11,8 +11,6 @@ import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sl
 import { AeratorPerformanceFormComponent } from './aerator-performance-form/aerator-performance-form.component';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ModelingOptionsFormComponent } from './modeling-options-form/modeling-options-form.component';
-import { ModelingOptionsFormService } from './modeling-options-form/modeling-options-form.service';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { ResultsTableComponent } from './results-panel/results-table/results-table.component';
 import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
@@ -22,6 +20,8 @@ import { ModificationListModalComponent } from './modification-list-modal/modifi
 import { ModalModule } from 'ngx-bootstrap';
 import { ModifyConditionsTabsComponent } from './waste-water-banner/modify-conditions-tabs/modify-conditions-tabs.component';
 import { CompareService } from './modify-conditions/compare.service';
+import { SystemBasicsService } from './system-basics/system-basics.service';
+import { SettingsModule } from '../settings/settings.module';
 
 
 
@@ -33,7 +33,6 @@ import { CompareService } from './modify-conditions/compare.service';
     HelpPanelComponent, 
     ActivatedSludgeFormComponent,
      AeratorPerformanceFormComponent,
-     ModelingOptionsFormComponent,
      ResultsPanelComponent,
      ResultsTableComponent,
      ModifyConditionsComponent,
@@ -47,14 +46,15 @@ import { CompareService } from './modify-conditions/compare.service';
     RouterModule,
     ReactiveFormsModule,
     ModalModule,
-    FormsModule
+    FormsModule,
+    SettingsModule
   ],
   providers: [
     WasteWaterService,
     ActivatedSludgeFormService,
     AeratorPerformanceFormService,
-    ModelingOptionsFormService,
-    CompareService
+    CompareService,
+    SystemBasicsService
   ]
 })
 export class WasteWaterModule { }

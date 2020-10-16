@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { ActivatedSludgeData, AeratorPerformanceData, ModelingOptions, WasteWater, WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
+import { ActivatedSludgeData, AeratorPerformanceData, SystemBasics, WasteWater, WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
-import { ModelingOptionsFormService } from './modeling-options-form/modeling-options-form.service';
+import { SystemBasicsService } from './system-basics/system-basics.service';
 
 declare var wasteWaterAddon: any;
 @Injectable()
@@ -21,7 +21,7 @@ export class WasteWaterService {
   isModalOpen: BehaviorSubject<boolean>;
   modifyConditionsTab: BehaviorSubject<string>;
   selectedModificationId: BehaviorSubject<string>;
-  constructor(private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService, private modelingOptionsFormService: ModelingOptionsFormService) {
+  constructor(private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService, private systemBasicsService: SystemBasicsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('modify-conditions');
@@ -35,8 +35,8 @@ export class WasteWaterService {
   }
 
 
-  calculateResults(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, modelingOptions: ModelingOptions): WasteWaterResults {
-    let isDataValid: boolean = this.checkWasteWaterValid(activatedSludgeData, aeratorPerformanceData, modelingOptions);
+  calculateResults(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics): WasteWaterResults {
+    let isDataValid: boolean = this.checkWasteWaterValid(activatedSludgeData, aeratorPerformanceData, systemBasics);
     if (isDataValid) {
       let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(
         {
@@ -57,8 +57,8 @@ export class WasteWaterService {
           HalfSaturation: activatedSludgeData.HalfSaturation,
           MicrobialDecay: activatedSludgeData.MicrobialDecay,
           MaxUtilizationRate: activatedSludgeData.MaxUtilizationRate,
-          MaxDays: modelingOptions.MaxDays,
-          TimeIncrement: modelingOptions.TimeIncrement,
+          MaxDays: systemBasics.MaxDays,
+          TimeIncrement: systemBasics.TimeIncrement,
           OperatingDO: aeratorPerformanceData.OperatingDO,
           Alpha: aeratorPerformanceData.Alpha,
           Beta: aeratorPerformanceData.Beta,
@@ -109,11 +109,11 @@ export class WasteWaterService {
   }
 
 
-  checkWasteWaterValid(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, modelingOptions: ModelingOptions): boolean {
+  checkWasteWaterValid(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics): boolean {
     let activatedSludgeForm: FormGroup = this.activatedSludgeFormService.getFormFromObj(activatedSludgeData);
     let aeratorPerformanceForm: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(aeratorPerformanceData);
-    let modelingOptionsForm: FormGroup = this.modelingOptionsFormService.getFormFromObj(modelingOptions);
-    return activatedSludgeForm.valid && aeratorPerformanceForm.valid && modelingOptionsForm.valid;
+    let systemBasicsForm: FormGroup = this.systemBasicsService.getFormFromObj(systemBasics);
+    return activatedSludgeForm.valid && aeratorPerformanceForm.valid && systemBasicsForm.valid;
   }
 
   getModificationFromId(): WasteWaterData {

@@ -7,6 +7,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { WasteWater } from '../shared/models/waste-water';
+import { CompareService } from './modify-conditions/compare.service';
 import { WasteWaterService } from './waste-water.service';
 
 @Component({
@@ -44,18 +45,25 @@ export class WasteWaterComponent implements OnInit {
   isModalOpenSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService,
-    private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef) { }
+    private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
       this.wasteWaterService.wasteWater.next(this.assessment.wasteWater);
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+      if (!settings) {
+        settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+        this.addSettings(settings);
+      }
       this.wasteWaterService.settings.next(settings);
     });
 
     this.mainTabSub = this.wasteWaterService.mainTab.subscribe(val => {
       this.mainTab = val;
+      if (this.mainTab == 'system-setup') {
+        this.compareService.setWasteWaterDifferent(this.assessment.wasteWater.baselineData);
+      }
       this.getContainerHeight();
     });
 
@@ -72,13 +80,13 @@ export class WasteWaterComponent implements OnInit {
     this.assessmentTabSub = this.wasteWaterService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     });
-    
+
     this.showAddModificationSub = this.wasteWaterService.showAddModificationModal.subscribe(val => {
       this.showAddModification = val;
       this.cd.detectChanges();
     });
 
-    this.showModificationListSub = this.wasteWaterService.showModificationListModal.subscribe(val =>{
+    this.showModificationListSub = this.wasteWaterService.showModificationListModal.subscribe(val => {
       this.showModificationList = val;
       this.cd.detectChanges();
     });
@@ -124,6 +132,15 @@ export class WasteWaterComponent implements OnInit {
     this.assessment.wasteWater = wasteWater;
     this.indexedDbService.putAssessment(this.assessment).then(() => {
       this.assessmentDbService.setAll();
+    });
+  }
+
+  addSettings(settings: Settings) {
+    delete settings.id;
+    delete settings.directoryId;
+    settings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(settings).then(() => {
+      this.settingsDbService.setAll();
     });
   }
 }

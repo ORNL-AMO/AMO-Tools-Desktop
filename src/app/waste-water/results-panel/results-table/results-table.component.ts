@@ -19,11 +19,11 @@ export class ResultsTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.wastWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
-      this.baselineResults = this.wasteWaterService.calculateResults(val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.modelingOptions);
+      this.baselineResults = this.wasteWaterService.calculateResults(val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.systemBasics);
       let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
       if (modificationData) {
         this.modificationName = modificationData.name;
-        this.modificationResults = this.wasteWaterService.calculateResults(modificationData.activatedSludgeData, modificationData.aeratorPerformanceData, val.modelingOptions);
+        this.modificationResults = this.wasteWaterService.calculateResults(modificationData.activatedSludgeData, modificationData.aeratorPerformanceData, val.systemBasics);
         this.showModification = true;
       }else{
         this.modificationName = undefined;

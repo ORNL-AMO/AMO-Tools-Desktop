@@ -12,9 +12,6 @@
                 <app-aerator-performance-form *ngIf="selectedTab == 'aerator-performance'" [inSetup]="false"
                     [selected]="baselineSelected">
                 </app-aerator-performance-form>
-                <app-modeling-options-form *ngIf="selectedTab == 'modeling-options'" [inSetup]="false"
-                    [selected]="baselineSelected">
-                </app-modeling-options-form>
             </div>
 
             <!-- Modifications Start -->
@@ -31,9 +28,6 @@
                 <app-aerator-performance-form *ngIf="selectedTab == 'aerator-performance'" [inSetup]="false"
                     [selected]="modificationSelected" [isModification]="true">
                 </app-aerator-performance-form>
-                <app-modeling-options-form *ngIf="selectedTab == 'modeling-options'" [inSetup]="false" [selected]="false">
-                </app-modeling-options-form>
-
             </div>
             <!-- No content message -->
             <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()"

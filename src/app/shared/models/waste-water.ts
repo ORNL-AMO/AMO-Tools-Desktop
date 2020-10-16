@@ -1,12 +1,13 @@
 export interface WasteWater {
     baselineData: WasteWaterData,
     modifications?: Array<WasteWaterData>,
-    modelingOptions: ModelingOptions
+    systemBasics: SystemBasics
 }
 
-export interface ModelingOptions {
+export interface SystemBasics {
     MaxDays: number,
     TimeIncrement: number,
+    equipmentNotes: string
 }
 
 export interface WasteWaterData {
