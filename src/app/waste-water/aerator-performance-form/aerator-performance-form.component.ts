@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../shared/models/settings';
 import { AeratorPerformanceData, WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { AeratorPerformanceDifferent, CompareService } from '../modify-conditions/compare.service';
 import { WasteWaterService } from '../waste-water.service';
@@ -40,11 +41,12 @@ export class AeratorPerformanceFormComponent implements OnInit {
   selectedModificationIdSub: Subscription;
   aeratorPerformanceDifferent: AeratorPerformanceDifferent;
   wasteWaterDifferentSub: Subscription;
+  settings: Settings;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private compareService: CompareService) { }
 
   ngOnInit(): void {
-    let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+    this.settings = this.wasteWaterService.settings.getValue();
     if (this.isModification) {
       this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
         if (val) {
@@ -58,6 +60,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
         }
       });
     } else {
+      let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
       this.form = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
       if (this.selected === false) {
         this.disableForm();

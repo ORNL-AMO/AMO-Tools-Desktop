@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../shared/models/settings';
 import { ActivatedSludgeData, WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { ActivatedSludgeDifferent, CompareService } from '../modify-conditions/compare.service';
 import { WasteWaterService } from '../waste-water.service';
@@ -25,10 +26,12 @@ export class ActivatedSludgeFormComponent implements OnInit {
   selectedModificationIdSub: Subscription;
   wasteWaterDifferentSub: Subscription;
   activatedSludgeDifferent: ActivatedSludgeDifferent;
+  settings: Settings;
   constructor(private wasteWaterService: WasteWaterService, private activatedSludgeFormService: ActivatedSludgeFormService,
     private compareService: CompareService) { }
 
   ngOnInit(): void {
+    this.settings = this.wasteWaterService.settings.getValue();
     if (this.isModification) {
       this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
         if (val) {

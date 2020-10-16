@@ -32,12 +32,16 @@ export class SystemBasicsComponent implements OnInit {
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
   }
 
-  saveSystemBasics(){
+  saveSystemBasics() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let systemBasics: SystemBasics = this.systemBasicsService.getObjFromForm(this.systemBasicsForm);
     wasteWater.systemBasics = systemBasics;
     this.wasteWaterService.wasteWater.next(wasteWater);
   }
 
-  saveSettings(){}
+  saveSettings() {
+    let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    this.showUpdateData = newSettings.unitsOfMeasure != this.oldSettings.unitsOfMeasure;
+    this.wasteWaterService.settings.next(newSettings);
+  }
 }
