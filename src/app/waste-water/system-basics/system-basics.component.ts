@@ -4,6 +4,7 @@ import { SettingsService } from '../../settings/settings.service';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { SystemBasics, WasteWater } from '../../shared/models/waste-water';
+import { ConvertWasteWaterService } from '../convert-waste-water.service';
 import { WasteWaterService } from '../waste-water.service';
 import { SystemBasicsService } from './system-basics.service';
 
@@ -21,7 +22,8 @@ export class SystemBasicsComponent implements OnInit {
   showUpdateData: boolean = false;
   dataUpdated: boolean = false;
   systemBasicsForm: FormGroup;
-  constructor(private settingsService: SettingsService, private systemBasicsService: SystemBasicsService, private wasteWaterService: WasteWaterService) { }
+  constructor(private settingsService: SettingsService, private systemBasicsService: SystemBasicsService, 
+    private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService) { }
 
 
   ngOnInit() {
@@ -40,8 +42,19 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   saveSettings() {
+    this.showUpdateData = false;
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.showUpdateData = newSettings.unitsOfMeasure != this.oldSettings.unitsOfMeasure;
     this.wasteWaterService.settings.next(newSettings);
+  }
+
+  updateData(){
+    let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+    wasteWater = this.convertWasteWaterService.convertWasteWater(wasteWater, this.oldSettings, newSettings);
+    this.wasteWaterService.wasteWater.next(wasteWater);
+    this.oldSettings = newSettings;
+    this.dataUpdated = true;
+    this.showUpdateData = false;
   }
 }

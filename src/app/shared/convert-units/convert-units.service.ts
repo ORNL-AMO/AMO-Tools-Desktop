@@ -45,6 +45,7 @@ import { thermalConductivity } from './definitions/thermalConductivity';
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
+import { massPerPower } from './definitions/massPerPower';
 @Injectable()
 export class ConvertUnitsService {
   _measures = {
@@ -77,7 +78,8 @@ export class ConvertUnitsService {
     density: density,
     volumetricEnergy: volumetricEnergy,
     specificVolume: specificVolume,
-    thermalConductivity: thermalConductivity
+    thermalConductivity: thermalConductivity,
+    massPerPower: massPerPower
   };
   origin: any;
   destination: any;

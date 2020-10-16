@@ -22,6 +22,7 @@ import { ModifyConditionsTabsComponent } from './waste-water-banner/modify-condi
 import { CompareService } from './modify-conditions/compare.service';
 import { SystemBasicsService } from './system-basics/system-basics.service';
 import { SettingsModule } from '../settings/settings.module';
+import { ConvertWasteWaterService } from './convert-waste-water.service';
 
 
 
@@ -54,7 +55,8 @@ import { SettingsModule } from '../settings/settings.module';
     ActivatedSludgeFormService,
     AeratorPerformanceFormService,
     CompareService,
-    SystemBasicsService
+    SystemBasicsService,
+    ConvertWasteWaterService
   ]
 })
 export class WasteWaterModule { }
