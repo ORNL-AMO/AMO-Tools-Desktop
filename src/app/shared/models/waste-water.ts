@@ -1,6 +1,6 @@
 export interface WasteWater {
-    baselineData: WastewWaterData,
-    modifications?: Array<WastewWaterData>,
+    baselineData: WasteWaterData,
+    modifications?: Array<WasteWaterData>,
     modelingOptions: ModelingOptions
 }
 
@@ -9,9 +9,11 @@ export interface ModelingOptions {
     TimeIncrement: number,
 }
 
-export interface WastewWaterData {
+export interface WasteWaterData {
     activatedSludgeData: ActivatedSludgeData,
     aeratorPerformanceData: AeratorPerformanceData,
+    name: string,
+    id: string
 }
 
 export interface ActivatedSludgeData {

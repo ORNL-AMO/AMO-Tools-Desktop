@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { AeratorPerformanceData, WasteWater } from '../../shared/models/waste-water';
+import { Subscription } from 'rxjs';
+import { AeratorPerformanceData, WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
 import { AeratorPerformanceFormService } from './aerator-performance-form.service';
 
@@ -34,29 +35,67 @@ export class AeratorPerformanceFormComponent implements OnInit {
   ]
 
   form: FormGroup;
+  modificationIndex: number;
+  selectedModificationIdSub: Subscription;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService) { }
 
   ngOnInit(): void {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     if (this.isModification) {
-      //add logic when selecte mod index added
-      // this.form = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
+      this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
+        if (val) {
+          let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+          this.modificationIndex = wasteWater.modifications.findIndex(modification => { return modification.id == val });
+          let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
+          this.form = this.aeratorPerformanceFormService.getFormFromObj(modificationData.aeratorPerformanceData);
+          if (this.selected === false) {
+            this.disableForm();
+          }
+        }
+      });
     } else {
       this.form = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
+
+      if (this.selected === false) {
+        this.disableForm();
+      }
     }
   }
 
-  save() {
-    if (this.isModification) {
-      //add logic when selecte mod index added
-      // this.form = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
-    } else {
-      let aeratorPerformanceData: AeratorPerformanceData = this.aeratorPerformanceFormService.getObjFromForm(this.form);
-      let wastWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-      wastWater.baselineData.aeratorPerformanceData = aeratorPerformanceData;
-      this.wasteWaterService.wasteWater.next(wastWater);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (this.selected === true) {
+        this.enableForm();
+      } else if (this.selected === false) {
+        this.disableForm();
+      }
     }
   }
+
+  ngOnDestroy() {
+    if (this.selectedModificationIdSub) this.selectedModificationIdSub.unsubscribe();
+  }
+
+  save() {
+    let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+    if (this.isModification) {
+      let aeratorPerformanceData: AeratorPerformanceData = this.aeratorPerformanceFormService.getObjFromForm(this.form);
+      wasteWater.modifications[this.modificationIndex].aeratorPerformanceData = aeratorPerformanceData;
+    } else {
+      let aeratorPerformanceData: AeratorPerformanceData = this.aeratorPerformanceFormService.getObjFromForm(this.form);
+      wasteWater.baselineData.aeratorPerformanceData = aeratorPerformanceData;
+    }
+    this.wasteWaterService.wasteWater.next(wasteWater);
+  }
+
+  enableForm() {
+    this.form.controls.TypeAerators.enable();
+  }
+
+  disableForm() {
+    this.form.controls.TypeAerators.disable();
+  }
+
 
   focusField(str: string) {
 

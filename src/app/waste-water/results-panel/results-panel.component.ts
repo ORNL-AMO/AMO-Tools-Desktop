@@ -14,7 +14,10 @@ export class ResultsPanelComponent implements OnInit {
 
   setupTab: string;
   setupTabSub: Subscription;
+  mainTab: string;
+  mainTabSub: Subscription;
   tabSelect: string;
+  displayTabs: boolean;
   constructor(private wasteWaterService: WasteWaterService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
@@ -27,15 +30,26 @@ export class ResultsPanelComponent implements OnInit {
 
     this.setupTabSub = this.wasteWaterService.setupTab.subscribe(val => {
       this.setupTab = val;
+      this.checkDisplayTabs();
+    });
+
+    this.mainTabSub = this.wasteWaterService.mainTab.subscribe(val => {
+      this.mainTab = val;
+      this.checkDisplayTabs();
     });
   }
 
   ngOnDestroy() {
     this.setupTabSub.unsubscribe();
+    this.mainTabSub.unsubscribe();
   }
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  checkDisplayTabs() {
+    this.displayTabs = ((this.setupTab == 'modeling-options' && this.mainTab == 'system-setup') || this.mainTab == 'assessment')
   }
 
 }

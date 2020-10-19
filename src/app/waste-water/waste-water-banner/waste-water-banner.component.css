@@ -64,3 +64,35 @@
 .nav-item{
     margin: .1rem;
 }
+
+
+.btn{
+    padding: 6px;
+}
+
+.mod-name a:hover{
+    text-decoration: none !important;
+    cursor: default !important;
+}
+
+.btn-primary{
+   font-size: small;
+}
+
+.navbar.assessment-bar{
+    padding: 0px;
+    background-color: #e5e5e5;
+}
+
+.badge{
+    margin-left: .25rem;
+    margin-right: .25rem;
+}
+
+.click-link{
+    font-size: small;
+}
+
+.br-color-white{
+    background: #fff;
+}

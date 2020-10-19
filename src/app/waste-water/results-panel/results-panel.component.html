@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="row no-gutters">
             <div class="col-12">
-                <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" *ngIf="setupTab == 'modeling-options'">
+                <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" *ngIf="displayTabs">
                     <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
                         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                             (click)="setTab('results')">
@@ -15,7 +15,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="header mr-2 ml-2" *ngIf="setupTab != 'modeling-options'">
+                <div class="header mr-2 ml-2" *ngIf="!displayTabs">
                     <div class="h3">
                         Help
                     </div>
@@ -24,10 +24,9 @@
         </div>
         <div class="row no-gutters">
             <div class="col-12 pr-2 pl-2">
-                <app-help-panel
-                    *ngIf="(tabSelect == 'help' && setupTab == 'modeling-options') || setupTab != 'modeling-options'">
+                <app-help-panel *ngIf="(tabSelect == 'help' && displayTabs) || !displayTabs">
                 </app-help-panel>
-                <app-results-table *ngIf="tabSelect == 'results' && setupTab == 'modeling-options'">
+                <app-results-table *ngIf="tabSelect == 'results' && displayTabs">
                 </app-results-table>
             </div>
         </div>
