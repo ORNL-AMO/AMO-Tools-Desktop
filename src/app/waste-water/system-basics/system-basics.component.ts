@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
@@ -22,8 +24,9 @@ export class SystemBasicsComponent implements OnInit {
   showUpdateData: boolean = false;
   dataUpdated: boolean = false;
   systemBasicsForm: FormGroup;
-  constructor(private settingsService: SettingsService, private systemBasicsService: SystemBasicsService, 
-    private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService) { }
+  constructor(private settingsService: SettingsService, private systemBasicsService: SystemBasicsService,
+    private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
 
   ngOnInit() {
@@ -42,13 +45,25 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   saveSettings() {
+    let currentSettings: Settings = this.wasteWaterService.settings.getValue();
+    let id = currentSettings.id;
+    let createdDate = currentSettings.createdDate;
+    let assessmentId = currentSettings.assessmentId;
+
     this.showUpdateData = false;
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.showUpdateData = newSettings.unitsOfMeasure != this.oldSettings.unitsOfMeasure;
+    newSettings.id = id;
+    newSettings.createdDate = createdDate;
+    newSettings.assessmentId = assessmentId;
+    this.indexedDbService.putSettings(newSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
     this.wasteWaterService.settings.next(newSettings);
+
   }
 
-  updateData(){
+  updateData() {
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     wasteWater = this.convertWasteWaterService.convertWasteWater(wasteWater, this.oldSettings, newSettings);

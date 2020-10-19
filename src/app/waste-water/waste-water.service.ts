@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { ActivatedSludgeData, AeratorPerformanceData, SystemBasics, WasteWater, WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
+import { ActivatedSludgeData, AeratorPerformanceData, SystemBasics, WasteWater, WasteWaterData, WasteWaterResults, WasteWaterTreatmentInputData } from '../shared/models/waste-water';
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
 import { ConvertWasteWaterService } from './convert-waste-water.service';
@@ -42,47 +42,46 @@ export class WasteWaterService {
     if (isDataValid) {
       let activatedSludgeCopy: ActivatedSludgeData = JSON.parse(JSON.stringify(activatedSludgeData));
       let aeratorPerformanceCopy: AeratorPerformanceData = JSON.parse(JSON.stringify(aeratorPerformanceData));
-      if(settings.unitsOfMeasure != 'Imperial'){
+      if (settings.unitsOfMeasure != 'Imperial') {
+        console.log('convert');
         let settingsCopy: Settings = JSON.parse(JSON.stringify(settings));
         settingsCopy.unitsOfMeasure = 'Imperial';
         activatedSludgeCopy = this.convertWasteWaterService.convertActivatedSludgeData(activatedSludgeCopy, settings, settingsCopy);
         aeratorPerformanceCopy = this.convertWasteWaterService.convertAeratorPerformanceData(aeratorPerformanceCopy, settings, settingsCopy)
       }
-
-
-      let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(
-        {
-          Temperature: activatedSludgeCopy.Temperature,
-          So: activatedSludgeCopy.So,
-          Volume: activatedSludgeCopy.Volume,
-          FlowRate: activatedSludgeCopy.FlowRate,
-          InertVSS: activatedSludgeCopy.InertVSS,
-          OxidizableN: activatedSludgeCopy.OxidizableN,
-          Biomass: activatedSludgeCopy.Biomass,
-          InfluentTSS: activatedSludgeCopy.InfluentTSS,
-          InertInOrgTSS: activatedSludgeCopy.InertInOrgTSS,
-          EffluentTSS: activatedSludgeCopy.EffluentTSS,
-          RASTSS: activatedSludgeCopy.RASTSS,
-          MLSSpar: activatedSludgeCopy.MLSSpar,
-          FractionBiomass: activatedSludgeCopy.FractionBiomass,
-          BiomassYeild: activatedSludgeCopy.BiomassYeild,
-          HalfSaturation: activatedSludgeCopy.HalfSaturation,
-          MicrobialDecay: activatedSludgeCopy.MicrobialDecay,
-          MaxUtilizationRate: activatedSludgeCopy.MaxUtilizationRate,
-          MaxDays: systemBasics.MaxDays,
-          TimeIncrement: systemBasics.TimeIncrement,
-          OperatingDO: aeratorPerformanceCopy.OperatingDO,
-          Alpha: aeratorPerformanceCopy.Alpha,
-          Beta: aeratorPerformanceCopy.Beta,
-          SOTR: aeratorPerformanceCopy.SOTR,
-          Aeration: aeratorPerformanceCopy.Aeration,
-          Elevation: aeratorPerformanceCopy.Elevation,
-          OperatingTime: aeratorPerformanceCopy.OperatingTime,
-          TypeAerators: aeratorPerformanceCopy.TypeAerators,
-          Speed: aeratorPerformanceCopy.Speed,
-          EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit
-        }
-      );
+      let inputData: WasteWaterTreatmentInputData = {
+        Temperature: activatedSludgeCopy.Temperature,
+        So: activatedSludgeCopy.So,
+        Volume: activatedSludgeCopy.Volume,
+        FlowRate: activatedSludgeCopy.FlowRate,
+        InertVSS: activatedSludgeCopy.InertVSS,
+        OxidizableN: activatedSludgeCopy.OxidizableN,
+        Biomass: activatedSludgeCopy.Biomass,
+        InfluentTSS: activatedSludgeCopy.InfluentTSS,
+        InertInOrgTSS: activatedSludgeCopy.InertInOrgTSS,
+        EffluentTSS: activatedSludgeCopy.EffluentTSS,
+        RASTSS: activatedSludgeCopy.RASTSS,
+        MLSSpar: activatedSludgeCopy.MLSSpar,
+        FractionBiomass: activatedSludgeCopy.FractionBiomass,
+        BiomassYeild: activatedSludgeCopy.BiomassYeild,
+        HalfSaturation: activatedSludgeCopy.HalfSaturation,
+        MicrobialDecay: activatedSludgeCopy.MicrobialDecay,
+        MaxUtilizationRate: activatedSludgeCopy.MaxUtilizationRate,
+        MaxDays: systemBasics.MaxDays,
+        TimeIncrement: systemBasics.TimeIncrement,
+        OperatingDO: aeratorPerformanceCopy.OperatingDO,
+        Alpha: aeratorPerformanceCopy.Alpha,
+        Beta: aeratorPerformanceCopy.Beta,
+        SOTR: aeratorPerformanceCopy.SOTR,
+        Aeration: aeratorPerformanceCopy.Aeration,
+        Elevation: aeratorPerformanceCopy.Elevation,
+        OperatingTime: aeratorPerformanceCopy.OperatingTime,
+        TypeAerators: aeratorPerformanceCopy.TypeAerators,
+        Speed: aeratorPerformanceCopy.Speed,
+        EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit
+      }
+      console.log(inputData);
+      let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
       return wasteWaterResults;
     }
     return {
