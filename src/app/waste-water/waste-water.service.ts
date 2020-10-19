@@ -43,7 +43,6 @@ export class WasteWaterService {
       let activatedSludgeCopy: ActivatedSludgeData = JSON.parse(JSON.stringify(activatedSludgeData));
       let aeratorPerformanceCopy: AeratorPerformanceData = JSON.parse(JSON.stringify(aeratorPerformanceData));
       if (settings.unitsOfMeasure != 'Imperial') {
-        console.log('convert');
         let settingsCopy: Settings = JSON.parse(JSON.stringify(settings));
         settingsCopy.unitsOfMeasure = 'Imperial';
         activatedSludgeCopy = this.convertWasteWaterService.convertActivatedSludgeData(activatedSludgeCopy, settings, settingsCopy);
@@ -80,8 +79,10 @@ export class WasteWaterService {
         Speed: aeratorPerformanceCopy.Speed,
         EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit
       }
-      console.log(inputData);
       let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
+      if (settings.unitsOfMeasure != 'Imperial') {
+        wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
+      }
       return wasteWaterResults;
     }
     return {

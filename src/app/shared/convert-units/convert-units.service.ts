@@ -40,6 +40,7 @@ import { density } from './definitions/density';
 import { volumetricEnergy } from './definitions/volumetricEnergy';
 import { specificVolume } from './definitions/specificVolume';
 import { thermalConductivity } from './definitions/thermalConductivity';
+import { powerPerVolume } from './definitions/powerPerVolume';
 
 
 import * as _ from 'lodash';
@@ -79,7 +80,8 @@ export class ConvertUnitsService {
     volumetricEnergy: volumetricEnergy,
     specificVolume: specificVolume,
     thermalConductivity: thermalConductivity,
-    massPerPower: massPerPower
+    massPerPower: massPerPower,
+    powerPerVolume: powerPerVolume
   };
   origin: any;
   destination: any;
