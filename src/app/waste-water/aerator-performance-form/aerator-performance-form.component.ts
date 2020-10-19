@@ -2,6 +2,7 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AeratorPerformanceData, WasteWater, WasteWaterData } from '../../shared/models/waste-water';
+import { AeratorPerformanceDifferent, CompareService } from '../modify-conditions/compare.service';
 import { WasteWaterService } from '../waste-water.service';
 import { AeratorPerformanceFormService } from './aerator-performance-form.service';
 
@@ -37,7 +38,10 @@ export class AeratorPerformanceFormComponent implements OnInit {
   form: FormGroup;
   modificationIndex: number;
   selectedModificationIdSub: Subscription;
-  constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService) { }
+  aeratorPerformanceDifferent: AeratorPerformanceDifferent;
+  wasteWaterDifferentSub: Subscription;
+  constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
+    private compareService: CompareService) { }
 
   ngOnInit(): void {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
@@ -55,11 +59,14 @@ export class AeratorPerformanceFormComponent implements OnInit {
       });
     } else {
       this.form = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
-
       if (this.selected === false) {
         this.disableForm();
       }
     }
+
+    this.wasteWaterDifferentSub = this.compareService.wasteWaterDifferent.subscribe(val => {
+      this.aeratorPerformanceDifferent = val.aeratorPerformanceDifferent;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -74,6 +81,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.selectedModificationIdSub) this.selectedModificationIdSub.unsubscribe();
+    this.wasteWaterDifferentSub.unsubscribe();
   }
 
   save() {
@@ -96,25 +104,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
     this.form.controls.TypeAerators.disable();
   }
 
-
   focusField(str: string) {
 
   }
-  isOperatingDODifferent() { }
-  isAlphaDifferent() { }
-  isBetaDifferent() { }
-  isSOTRDifferent() { }
-  isAerationDifferent() { }
-  isElevationDifferent() { }
-  isOperatingTimeDifferent() { }
-  isTypeAeratorsDifferent() { }
-  isSpeedDifferent() { }
-  isEnergyCostUnitDifferent() { }
-
-
-
-
-
-
-
 }

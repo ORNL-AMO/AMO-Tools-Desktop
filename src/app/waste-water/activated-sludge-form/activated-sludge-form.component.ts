@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ActivatedSludgeData, WasteWater, WasteWaterData } from '../../shared/models/waste-water';
+import { ActivatedSludgeDifferent, CompareService } from '../modify-conditions/compare.service';
 import { WasteWaterService } from '../waste-water.service';
 import { ActivatedSludgeFormService } from './activated-sludge-form.service';
 
@@ -22,7 +23,10 @@ export class ActivatedSludgeFormComponent implements OnInit {
 
   modificationIndex: number;
   selectedModificationIdSub: Subscription;
-  constructor(private wasteWaterService: WasteWaterService, private activatedSludgeFormService: ActivatedSludgeFormService) { }
+  wasteWaterDifferentSub: Subscription;
+  activatedSludgeDifferent: ActivatedSludgeDifferent;
+  constructor(private wasteWaterService: WasteWaterService, private activatedSludgeFormService: ActivatedSludgeFormService,
+    private compareService: CompareService) { }
 
   ngOnInit(): void {
     if (this.isModification) {
@@ -38,10 +42,15 @@ export class ActivatedSludgeFormComponent implements OnInit {
       let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
       this.form = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
     }
+
+    this.wasteWaterDifferentSub = this.compareService.wasteWaterDifferent.subscribe(val => {
+      this.activatedSludgeDifferent = val.activatedSludgeDifferent;
+    });
   }
 
   ngOnDestroy() {
     if (this.selectedModificationIdSub) this.selectedModificationIdSub.unsubscribe();
+    this.wasteWaterDifferentSub.unsubscribe();
   }
 
   save() {
@@ -57,58 +66,6 @@ export class ActivatedSludgeFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-
-  }
-
-  isTemperatureDifferent() {
-
-  }
-  isSoDifferent() {
-
-  }
-  isVolumeDifferent() {
-
-  }
-  isFlowRateDifferent() {
-
-  }
-  isInertVSSDifferent() {
-
-  }
-  isOxidizableNDifferent() {
-
-  }
-  isBiomassDifferent() {
-
-  }
-  isInfluentTSSDifferent() {
-
-  }
-  isInertInOrgTSSDifferent() {
-
-  }
-  isEffluentTSSDifferent() {
-
-  }
-  isRASTSSDifferent() {
-
-  }
-  isMLSSparDifferent() {
-
-  }
-  isFractionBiomassDifferent() {
-
-  }
-  isBiomassYeildDifferent() {
-
-  }
-  isHalfSaturationDifferent() {
-
-  }
-  isMicrobialDecayDifferent() {
-
-  }
-  isMaxUtilizationRateDifferent() {
 
   }
 }

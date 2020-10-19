@@ -80,12 +80,12 @@
                                     </div>
                                     <div class="col-5">
                                         <!--todo: add badges-->
-                                        <!-- <div class="d-flex flex-wrap">
-                                            <div *ngFor="let badge of getBadges(modification.ssmt)"
+                                        <div class="d-flex flex-wrap">
+                                            <div *ngFor="let badge of getBadges(modification)"
                                                 class="badge badge-primary"
-                                                (click)="goToModification(index, badge.componentStr)">{{badge.badge}}
+                                                (click)="goToModification(modification.id, badge.componentStr)">{{badge.badge}}
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                 </div>
                             </li>

@@ -8,7 +8,7 @@
     <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
         <!--Temperature-->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isTemperatureDifferent(), 'invalid': form.controls.Temperature.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.Temperature, 'invalid': form.controls.Temperature.invalid}">
             <label for="{{'Temperature_'+idString}}">Temperature</label>
             <div class="input-group">
                 <input type="number" name="Temperature" class="form-control number-input-field"
@@ -25,7 +25,7 @@
         </div>
         <!-- So -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isSoDifferent(), 'invalid': form.controls.So.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.So, 'invalid': form.controls.So.invalid}">
             <label for="{{'So_'+idString}}">S<sub>o</sub></label>
             <div class="input-group">
                 <input type="number" name="So" class="form-control number-input-field" id="{{'So_'+idString}}"
@@ -41,7 +41,7 @@
         </div>
         <!-- Volume -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isVolumeDifferent(), 'invalid': form.controls.Volume.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.Volume, 'invalid': form.controls.Volume.invalid}">
             <label for="{{'Volume_'+idString}}">Volume</label>
             <div class="input-group">
                 <input type="number" name="Volume" class="form-control number-input-field" id="{{'Volume_'+idString}}"
@@ -57,7 +57,7 @@
         </div>
         <!-- FlowRate -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isFlowRateDifferent(), 'invalid': form.controls.FlowRate.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.FlowRate, 'invalid': form.controls.FlowRate.invalid}">
             <label for="{{'FlowRate_'+idString}}">Flow Rate</label>
             <div class="input-group">
                 <input type="number" name="FlowRate" class="form-control number-input-field"
@@ -74,7 +74,7 @@
         </div>
         <!-- InertVSS -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isInertVSSDifferent(), 'invalid': form.controls.InertVSS.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.InertVSS, 'invalid': form.controls.InertVSS.invalid}">
             <label for="{{'InertVSS_'+idString}}">Inert VSS</label>
             <div class="input-group">
                 <input type="number" name="InertVSS" class="form-control number-input-field"
@@ -91,7 +91,7 @@
         </div>
         <!-- OxidizableN -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isOxidizableNDifferent(), 'invalid': form.controls.OxidizableN.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.OxidizableN, 'invalid': form.controls.OxidizableN.invalid}">
             <label for="{{'OxidizableN_'+idString}}">Oxidizable N</label>
             <div class="input-group">
                 <input type="number" name="OxidizableN" class="form-control number-input-field"
@@ -108,7 +108,7 @@
         </div>
         <!-- Biomass -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isBiomassDifferent(), 'invalid': form.controls.Biomass.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.Biomass, 'invalid': form.controls.Biomass.invalid}">
             <label for="{{'Biomass_'+idString}}">Biomass Yield</label>
             <div class="input-group">
                 <input type="number" name="Biomass" class="form-control number-input-field" id="{{'Biomass_'+idString}}"
@@ -123,7 +123,7 @@
         </div>
         <!-- InfluentTSS -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isInfluentTSSDifferent(), 'invalid': form.controls.InfluentTSS.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.InfluentTSS, 'invalid': form.controls.InfluentTSS.invalid}">
             <label for="{{'InfluentTSS_'+idString}}">Influent TSS</label>
             <div class="input-group">
                 <input type="number" name="InfluentTSS" class="form-control number-input-field"
@@ -140,7 +140,7 @@
         </div>
         <!-- InertInOrgTSS -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isInertInOrgTSSDifferent(), 'invalid': form.controls.InertInOrgTSS.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.InertInOrgTSS, 'invalid': form.controls.InertInOrgTSS.invalid}">
             <label for="{{'InertInOrgTSS_'+idString}}">Inert Inorganic TSS</label>
             <div class="input-group">
                 <input type="number" name="InertInOrgTSS" class="form-control number-input-field"
@@ -158,7 +158,7 @@
         </div>
         <!-- EffluentTSS -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isEffluentTSSDifferent(), 'invalid': form.controls.EffluentTSS.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.EffluentTSS, 'invalid': form.controls.EffluentTSS.invalid}">
             <label for="{{'EffluentTSS_'+idString}}">Effluent TSS</label>
             <div class="input-group">
                 <input type="number" name="EffluentTSS" class="form-control number-input-field"
@@ -175,7 +175,7 @@
         </div>
         <!-- RASTSS -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isRASTSSDifferent(), 'invalid': form.controls.RASTSS.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.RASTSS, 'invalid': form.controls.RASTSS.invalid}">
             <label for="{{'RASTSS_'+idString}}">RAST TSS</label>
             <div class="input-group">
                 <input type="number" name="RASTSS" class="form-control number-input-field" id="{{'RASTSS_'+idString}}"
@@ -191,7 +191,7 @@
         </div>
         <!-- MLSSpar -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isMLSSparDifferent(), 'invalid': form.controls.MLSSpar.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.MLSSpar, 'invalid': form.controls.MLSSpar.invalid}">
             <label for="{{'MLSSpar_'+idString}}">MLSS</label>
             <div class="input-group">
                 <input type="number" name="MLSSpar" class="form-control number-input-field" id="{{'MLSSpar_'+idString}}"
@@ -207,7 +207,7 @@
         </div>
         <!-- FractionBiomass -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isFractionBiomassDifferent(), 'invalid': form.controls.FractionBiomass.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.FractionBiomass, 'invalid': form.controls.FractionBiomass.invalid}">
             <label for="{{'FractionBiomass_'+idString}}">Cell Debris Biomass Fraction</label>
             <div class="input-group">
                 <input type="number" name="FractionBiomass" class="form-control number-input-field"
@@ -223,7 +223,7 @@
         </div>
         <!-- BiomassYeild -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isBiomassYeildDifferent(), 'invalid': form.controls.BiomassYeild.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.BiomassYeild, 'invalid': form.controls.BiomassYeild.invalid}">
             <label for="{{'BiomassYeild_'+idString}}">Biomass Yield Constant</label>
             <div class="input-group">
                 <input type="number" name="BiomassYeild" class="form-control number-input-field"
@@ -239,7 +239,7 @@
         </div>
         <!-- HalfSaturation -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isHalfSaturationDifferent(), 'invalid': form.controls.HalfSaturation.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.HalfSaturation, 'invalid': form.controls.HalfSaturation.invalid}">
             <label for="{{'HalfSaturation_'+idString}}">Half-saturation Constant</label>
             <div class="input-group">
                 <input type="number" name="HalfSaturation" class="form-control HalfSaturation-input-field"
@@ -256,7 +256,7 @@
         </div>
         <!-- MicrobialDecay -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isMicrobialDecayDifferent(), 'invalid': form.controls.MicrobialDecay.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.MicrobialDecay, 'invalid': form.controls.MicrobialDecay.invalid}">
             <label for="{{'MicrobialDecay_'+idString}}">Endogenous Decay Coefficient</label>
             <div class="input-group">
                 <input type="number" name="MicrobialDecay" class="form-control HalfSaturation-input-field"
@@ -273,7 +273,7 @@
         </div>
         <!-- MaxUtilizationRate -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isMaxUtilizationRateDifferent(), 'invalid': form.controls.MaxUtilizationRate.invalid}">
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.MaxUtilizationRate, 'invalid': form.controls.MaxUtilizationRate.invalid}">
             <label for="{{'MaxUtilizationRate_'+idString}}">Max. Specific Substrate Utilization Rate</label>
             <div class="input-group">
                 <input type="number" name="MaxUtilizationRate" class="form-control HalfSaturation-input-field"

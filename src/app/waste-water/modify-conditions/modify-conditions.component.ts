@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
+import { CompareService, WasteWaterDifferent } from './compare.service';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -26,7 +27,7 @@ export class ModifyConditionsComponent implements OnInit {
 
   selectedModification: WasteWaterData;
   selectedModificationIdSub: Subscription;
-  constructor(private wasteWaterService: WasteWaterService) { }
+  constructor(private wasteWaterService: WasteWaterService, private compareService: CompareService) { }
 
   ngOnInit(): void {
     this.isModalOpenSub = this.wasteWaterService.isModalOpen.subscribe(val => {
@@ -37,13 +38,18 @@ export class ModifyConditionsComponent implements OnInit {
     });
     this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(() => {
       this.selectedModification = this.wasteWaterService.getModificationFromId();
+      let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+      this.compareService.setWasteWaterDifferent(wasteWater.baselineData, this.selectedModification);
       this.modificationExists = (this.selectedModification != undefined);
       if (!this.modificationExists) {
-        let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
         if (wasteWater.modifications.length != 0) {
           this.wasteWaterService.selectedModificationId.next(wasteWater.modifications[0].id);
         }
       }
+    });
+
+    this.wasteWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
+      this.compareService.setWasteWaterDifferent(val.baselineData, this.selectedModification);
     });
   }
 
@@ -51,6 +57,7 @@ export class ModifyConditionsComponent implements OnInit {
     this.isModalOpenSub.unsubscribe();
     this.selectedTabSub.unsubscribe();
     this.selectedModificationIdSub.unsubscribe();
+    this.wasteWaterSub.unsubscribe();
   }
 
 

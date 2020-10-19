@@ -8,7 +8,7 @@
     <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
         <!--OperatingDO-->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isOperatingDODifferent(), 'invalid': form.controls.OperatingDO.invalid}">
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.OperatingDO, 'invalid': form.controls.OperatingDO.invalid}">
             <label for="{{'OperatingDO_'+idString}}">Operating Disolved Oxygen</label>
             <div class="input-group">
                 <input type="number" name="OperatingDO" class="form-control number-input-field"
@@ -26,7 +26,7 @@
 
         <!-- Alpha -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isAlphaDifferent(), 'invalid': form.controls.Alpha.invalid}">
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Alpha, 'invalid': form.controls.Alpha.invalid}">
             <label for="{{'Alpha_'+idString}}">Oxygen Transfer Coefficient Ratio</label>
             <div class="input-group">
                 <input type="number" name="Alpha" class="form-control number-input-field" id="{{'Alpha_'+idString}}"
@@ -41,7 +41,7 @@
         </div>
         <!-- Beta -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isBetaDifferent(), 'invalid': form.controls.Beta.invalid}">
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Beta, 'invalid': form.controls.Beta.invalid}">
             <label for="{{'Beta_'+idString}}">Saturation DO Concentration Ratio</label>
             <div class="input-group">
                 <input type="number" name="Beta" class="form-control number-input-field" id="{{'Beta_'+idString}}"
@@ -56,7 +56,7 @@
         </div>
         <!-- SOTR -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isSOTRDifferent(), 'invalid': form.controls.SOTR.invalid}">
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.SOTR, 'invalid': form.controls.SOTR.invalid}">
             <label for="{{'SOTR_'+idString}}">Standard Oxygen Transfer Rate</label>
             <div class="input-group">
                 <input type="number" name="SOTR" class="form-control number-input-field" id="{{'SOTR_'+idString}}"
@@ -72,7 +72,7 @@
         </div>
         <!-- Aeration -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isAerationDifferent(), 'invalid': form.controls.Aeration.invalid}">
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Aeration, 'invalid': form.controls.Aeration.invalid}">
             <label for="{{'Aeration_'+idString}}">Aeration Operating Power</label>
             <div class="input-group">
                 <input type="number" name="Aeration" class="form-control number-input-field"
@@ -89,7 +89,7 @@
         </div>
         <!-- Elevation -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isElevationDifferent(), 'invalid': form.controls.Elevation.invalid}">
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Elevation, 'invalid': form.controls.Elevation.invalid}">
             <label for="{{'Elevation_'+idString}}">Site Elevation</label>
             <div class="input-group">
                 <input type="number" name="Elevation" class="form-control number-input-field"
@@ -106,7 +106,7 @@
         </div>
         <!-- OperatingTime -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isOperatingTimeDifferent(), 'invalid': form.controls.OperatingTime.invalid}">
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.OperatingTime, 'invalid': form.controls.OperatingTime.invalid}">
             <label for="{{'OperatingTime_'+idString}}">Aerator Operating Time</label>
             <div class="input-group">
                 <input type="number" name="OperatingTime" class="form-control number-input-field"
@@ -123,16 +123,16 @@
         </div>
         <!-- TypeAerators -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isTypeAeratorsDifferent(), 'invalid': form.controls.TypeAerators.invalid}">
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.TypeAerators, 'invalid': form.controls.TypeAerators.invalid}">
             <label for="{{'TypeAerators_'+idString}}">Aerator Operating Time</label>
-            <select class="form-control" formControlName="TypeAerators">
+            <select class="form-control" formControlName="TypeAerators" (change)="save()">
                 <option *ngFor="let areatorType of areatorTypes" [ngValue]="areatorType.value">{{areatorType.display}}
                 </option>
             </select>
         </div>
         <!-- Speed -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isSpeedDifferent(), 'invalid': form.controls.Speed.invalid}">
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Speed, 'invalid': form.controls.Speed.invalid}">
             <label for="{{'Speed_'+idString}}">Aerator Speed</label>
             <div class="input-group">
                 <input type="number" name="Speed" class="form-control number-input-field" id="{{'Speed_'+idString}}"
@@ -150,7 +150,7 @@
         </div>
         <!-- EnergyCostUnit -->
         <div class="form-group"
-            [ngClass]="{'indicate-different': isEnergyCostUnitDifferent(), 'invalid': form.controls.EnergyCostUnit.invalid}">
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.EnergyCostUnit, 'invalid': form.controls.EnergyCostUnit.invalid}">
             <label for="{{'EnergyCostUnit_'+idString}}">Electricity Cost</label>
             <div class="input-group">
                 <input type="number" name="EnergyCostUnit" class="form-control number-input-field"
@@ -165,8 +165,5 @@
                     be less than {{form.controls.EnergyCostUnit.errors.min.min | currency}}</span>
             </span>
         </div>
-
-
-
     </div>
 </form>
