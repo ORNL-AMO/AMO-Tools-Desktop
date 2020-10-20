@@ -11,30 +11,29 @@
 
         </div>
     </div>
-    <!-- <div class="d-flex my-table-item">
-      <div class="d-flex align-items-center pl-1 pr-1"
-        [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-        <span class="table-text">Percent Savings (%)</span>
-      </div>
-      <div class="d-flex align-items-center pl-1 pr-1"
-        [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-        <span class="table-text"> &mdash; &mdash;</span>
-      </div>
-      <div class="col-4" *ngIf="showModification">
-        <app-percent-graph
-          *ngIf="fsat.modifications[modificationIndex].fsat.valid.isValid && modificationResults.percentSavings"
-          [value]="modificationResults.percentSavings"></app-percent-graph>
-        <div class="alert-danger small" *ngIf="!fsat.modifications[modificationIndex].fsat.valid.isValid">
-          Invalid modification<br>
-          <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fluidValid">Errors found in Fluid<br></span>
+    <div class="d-flex my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">Percent Savings (%)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4" *ngIf="showModification">
+            <app-percent-graph *ngIf="modificationResults.TotalAverageDailyFlowRate != undefined"
+                [value]="modificationResults.percentCostSavings"></app-percent-graph>
+            <div class="alert-danger small" *ngIf="!modificationResults.TotalAverageDailyFlowRate == undefined">
+                Invalid modification<br>
+                <!-- <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fluidValid">Errors found in Fluid<br></span>
           <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fieldDataValid">Errors found in Field
             Data<br></span>
           <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fanValid">Errors found in Fan
             Setup<br></span>
-          <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.motorValid">Errors found in Motor<br></span>
+          <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.motorValid">Errors found in Motor<br></span> -->
+            </div>
         </div>
-      </div>
-    </div> -->
+    </div>
     <!-- TotalAverageDailyFlowRate -->
     <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
@@ -463,7 +462,7 @@
         </div>
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-            <span class="table-text">{{baselineResults.FieldOTR | number:'2.0-1'}}}</span>
+            <span class="table-text">{{baselineResults.FieldOTR | number:'2.0-1'}}</span>
         </div>
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.FieldOTR | number:'2.0-1'}}</span>

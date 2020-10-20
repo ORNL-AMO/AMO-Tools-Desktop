@@ -37,7 +37,7 @@ export class WasteWaterService {
   }
 
 
-  calculateResults(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics, settings: Settings): WasteWaterResults {
+  calculateResults(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics, settings: Settings, baselineResults?: WasteWaterResults): WasteWaterResults {
     let isDataValid: boolean = this.checkWasteWaterValid(activatedSludgeData, aeratorPerformanceData, systemBasics);
     if (isDataValid) {
       let activatedSludgeCopy: ActivatedSludgeData = JSON.parse(JSON.stringify(activatedSludgeData));
@@ -83,6 +83,9 @@ export class WasteWaterService {
       if (settings.unitsOfMeasure != 'Imperial') {
         wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
       }
+      if (baselineResults != undefined) {
+        wasteWaterResults = this.setSavingsResults(wasteWaterResults, baselineResults);
+      }
       return wasteWaterResults;
     }
     return {
@@ -116,8 +119,18 @@ export class WasteWaterService {
       EffluentNO3_N_W_Denit: undefined,
       AeEnergy: undefined,
       AeCost: undefined,
-      FieldOTR: undefined
+      FieldOTR: undefined,
+      costSavings: 0,
+      energySavings: 0,
+      percentCostSavings: 0
     };
+  }
+
+  setSavingsResults(modificationResults: WasteWaterResults, baselineResults: WasteWaterResults): WasteWaterResults {
+    modificationResults.costSavings = baselineResults.AeCost - modificationResults.AeCost;
+    modificationResults.energySavings = baselineResults.AeEnergy - modificationResults.AeEnergy;
+    modificationResults.percentCostSavings = (modificationResults.costSavings / baselineResults.AeCost) * 100;
+    return modificationResults;
   }
 
 
