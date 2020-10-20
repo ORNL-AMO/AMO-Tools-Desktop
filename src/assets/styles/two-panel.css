@@ -315,6 +315,10 @@
     border-bottom: #84b641 solid 2px;
 }
 
+.waste-water .group-label{
+    border-bottom: #003087 solid 2px;
+}
+
 .loss-label{
     width: 100%;
     margin-bottom: 10px;

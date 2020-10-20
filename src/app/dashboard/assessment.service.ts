@@ -312,9 +312,10 @@ export class AssessmentService {
         }
       },
       modifications: new Array(),
-      modelingOptions: {
+      systemBasics: {
         MaxDays: 72,
         TimeIncrement: 2,
+        equipmentNotes: ''
       }
     }
   }

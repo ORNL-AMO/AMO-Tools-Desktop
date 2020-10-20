@@ -46,7 +46,8 @@
             <div class="input-group">
                 <input type="number" name="Volume" class="form-control number-input-field" id="{{'Volume_'+idString}}"
                     (focus)="focusField('Volume')" (input)="save()" formControlName="Volume" [readonly]="!selected">
-                <span class="input-group-addon units">Mgal</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup></span>
             </div>
             <span *ngIf="form.controls.Volume.invalid && !form.controls.Volume.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.Volume.errors.required">Value
@@ -63,7 +64,7 @@
                 <input type="number" name="FlowRate" class="form-control number-input-field"
                     id="{{'FlowRate_'+idString}}" (focus)="focusField('FlowRate')" (input)="save()"
                     formControlName="FlowRate" [readonly]="!selected">
-                <span class="input-group-addon units">Mgal</span>
+                <span class="input-group-addon units">MGD</span>
             </div>
             <span *ngIf="form.controls.FlowRate.invalid && !form.controls.FlowRate.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.FlowRate.errors.required">Value
@@ -80,7 +81,7 @@
                 <input type="number" name="InertVSS" class="form-control number-input-field"
                     id="{{'InertVSS_'+idString}}" (focus)="focusField('InertVSS')" (input)="save()"
                     formControlName="InertVSS" [readonly]="!selected">
-                <span class="input-group-addon units">MGD</span>
+                <span class="input-group-addon units">mg/L</span>
             </div>
             <span *ngIf="form.controls.InertVSS.invalid && !form.controls.InertVSS.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.InertVSS.errors.required">Value

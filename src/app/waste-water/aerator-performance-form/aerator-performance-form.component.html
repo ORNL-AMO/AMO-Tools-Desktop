@@ -61,13 +61,19 @@
             <div class="input-group">
                 <input type="number" name="SOTR" class="form-control number-input-field" id="{{'SOTR_'+idString}}"
                     (focus)="focusField('SOTR')" (input)="save()" formControlName="SOTR" [readonly]="!selected">
-                <span class="input-group-addon units">lb O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb
+                    O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">kg
+                    O<sub>2</sub>/(kWh)</span>
             </div>
             <span *ngIf="form.controls.SOTR.invalid && !form.controls.SOTR.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.SOTR.errors.required">Value
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.SOTR.errors.min">Value can't be
-                    less than {{form.controls.SOTR.errors.min.min}} lb O<sub>2</sub>/(hp-hr)</span>
+                    less than {{form.controls.SOTR.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                </span>
             </span>
         </div>
         <!-- Aeration -->
@@ -78,13 +84,16 @@
                 <input type="number" name="Aeration" class="form-control number-input-field"
                     id="{{'Aeration_'+idString}}" (focus)="focusField('Aeration')" (input)="save()"
                     formControlName="Aeration" [readonly]="!selected">
-                <span class="input-group-addon units">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">kW</span>
             </div>
             <span *ngIf="form.controls.Aeration.invalid && !form.controls.Aeration.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.Aeration.errors.required">Value
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.Aeration.errors.min">Value can't be
-                    less than {{form.controls.Aeration.errors.min.min}} hp</span>
+                    less than {{form.controls.Aeration.errors.min.min}}
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span></span>
             </span>
         </div>
         <!-- Elevation -->
@@ -95,13 +104,16 @@
                 <input type="number" name="Elevation" class="form-control number-input-field"
                     id="{{'Elevation_'+idString}}" (focus)="focusField('Elevation')" (input)="save()"
                     formControlName="Elevation" [readonly]="!selected">
-                <span class="input-group-addon units">ft</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m</span>
             </div>
             <span *ngIf="form.controls.Elevation.invalid && !form.controls.Elevation.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.Elevation.errors.required">Value
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.Elevation.errors.min">Value can't be
-                    less than {{form.controls.Elevation.errors.min.min}} ft</span>
+                    less than {{form.controls.Elevation.errors.min.min}} 
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span></span>
             </span>
         </div>
         <!-- OperatingTime -->
@@ -156,7 +168,7 @@
                 <input type="number" name="EnergyCostUnit" class="form-control number-input-field"
                     id="{{'EnergyCostUnit_'+idString}}" (focus)="focusField('EnergyCostUnit')" (input)="save()"
                     formControlName="EnergyCostUnit" [readonly]="!selected">
-                <span class="input-group-addon units">$</span>
+                <span class="input-group-addon units">$/kWh</span>
             </div>
             <span *ngIf="form.controls.EnergyCostUnit.invalid && !form.controls.EnergyCostUnit.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.EnergyCostUnit.errors.required">Value

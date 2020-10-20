@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { ActivatedSludgeData, AeratorPerformanceData, ModelingOptions, WasteWater, WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
+import { ActivatedSludgeData, AeratorPerformanceData, SystemBasics, WasteWater, WasteWaterData, WasteWaterResults, WasteWaterTreatmentInputData } from '../shared/models/waste-water';
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
-import { ModelingOptionsFormService } from './modeling-options-form/modeling-options-form.service';
+import { ConvertWasteWaterService } from './convert-waste-water.service';
+import { SystemBasicsService } from './system-basics/system-basics.service';
 
 declare var wasteWaterAddon: any;
 @Injectable()
@@ -21,7 +22,8 @@ export class WasteWaterService {
   isModalOpen: BehaviorSubject<boolean>;
   modifyConditionsTab: BehaviorSubject<string>;
   selectedModificationId: BehaviorSubject<string>;
-  constructor(private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService, private modelingOptionsFormService: ModelingOptionsFormService) {
+  constructor(private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService, private systemBasicsService: SystemBasicsService,
+    private convertWasteWaterService: ConvertWasteWaterService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('modify-conditions');
@@ -35,42 +37,52 @@ export class WasteWaterService {
   }
 
 
-  calculateResults(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, modelingOptions: ModelingOptions): WasteWaterResults {
-    let isDataValid: boolean = this.checkWasteWaterValid(activatedSludgeData, aeratorPerformanceData, modelingOptions);
+  calculateResults(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics, settings: Settings): WasteWaterResults {
+    let isDataValid: boolean = this.checkWasteWaterValid(activatedSludgeData, aeratorPerformanceData, systemBasics);
     if (isDataValid) {
-      let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(
-        {
-          Temperature: activatedSludgeData.Temperature,
-          So: activatedSludgeData.So,
-          Volume: activatedSludgeData.Volume,
-          FlowRate: activatedSludgeData.FlowRate,
-          InertVSS: activatedSludgeData.InertVSS,
-          OxidizableN: activatedSludgeData.OxidizableN,
-          Biomass: activatedSludgeData.Biomass,
-          InfluentTSS: activatedSludgeData.InfluentTSS,
-          InertInOrgTSS: activatedSludgeData.InertInOrgTSS,
-          EffluentTSS: activatedSludgeData.EffluentTSS,
-          RASTSS: activatedSludgeData.RASTSS,
-          MLSSpar: activatedSludgeData.MLSSpar,
-          FractionBiomass: activatedSludgeData.FractionBiomass,
-          BiomassYeild: activatedSludgeData.BiomassYeild,
-          HalfSaturation: activatedSludgeData.HalfSaturation,
-          MicrobialDecay: activatedSludgeData.MicrobialDecay,
-          MaxUtilizationRate: activatedSludgeData.MaxUtilizationRate,
-          MaxDays: modelingOptions.MaxDays,
-          TimeIncrement: modelingOptions.TimeIncrement,
-          OperatingDO: aeratorPerformanceData.OperatingDO,
-          Alpha: aeratorPerformanceData.Alpha,
-          Beta: aeratorPerformanceData.Beta,
-          SOTR: aeratorPerformanceData.SOTR,
-          Aeration: aeratorPerformanceData.Aeration,
-          Elevation: aeratorPerformanceData.Elevation,
-          OperatingTime: aeratorPerformanceData.OperatingTime,
-          TypeAerators: aeratorPerformanceData.TypeAerators,
-          Speed: aeratorPerformanceData.Speed,
-          EnergyCostUnit: aeratorPerformanceData.EnergyCostUnit
-        }
-      );
+      let activatedSludgeCopy: ActivatedSludgeData = JSON.parse(JSON.stringify(activatedSludgeData));
+      let aeratorPerformanceCopy: AeratorPerformanceData = JSON.parse(JSON.stringify(aeratorPerformanceData));
+      if (settings.unitsOfMeasure != 'Imperial') {
+        let settingsCopy: Settings = JSON.parse(JSON.stringify(settings));
+        settingsCopy.unitsOfMeasure = 'Imperial';
+        activatedSludgeCopy = this.convertWasteWaterService.convertActivatedSludgeData(activatedSludgeCopy, settings, settingsCopy);
+        aeratorPerformanceCopy = this.convertWasteWaterService.convertAeratorPerformanceData(aeratorPerformanceCopy, settings, settingsCopy)
+      }
+      let inputData: WasteWaterTreatmentInputData = {
+        Temperature: activatedSludgeCopy.Temperature,
+        So: activatedSludgeCopy.So,
+        Volume: activatedSludgeCopy.Volume,
+        FlowRate: activatedSludgeCopy.FlowRate,
+        InertVSS: activatedSludgeCopy.InertVSS,
+        OxidizableN: activatedSludgeCopy.OxidizableN,
+        Biomass: activatedSludgeCopy.Biomass,
+        InfluentTSS: activatedSludgeCopy.InfluentTSS,
+        InertInOrgTSS: activatedSludgeCopy.InertInOrgTSS,
+        EffluentTSS: activatedSludgeCopy.EffluentTSS,
+        RASTSS: activatedSludgeCopy.RASTSS,
+        MLSSpar: activatedSludgeCopy.MLSSpar,
+        FractionBiomass: activatedSludgeCopy.FractionBiomass,
+        BiomassYeild: activatedSludgeCopy.BiomassYeild,
+        HalfSaturation: activatedSludgeCopy.HalfSaturation,
+        MicrobialDecay: activatedSludgeCopy.MicrobialDecay,
+        MaxUtilizationRate: activatedSludgeCopy.MaxUtilizationRate,
+        MaxDays: systemBasics.MaxDays,
+        TimeIncrement: systemBasics.TimeIncrement,
+        OperatingDO: aeratorPerformanceCopy.OperatingDO,
+        Alpha: aeratorPerformanceCopy.Alpha,
+        Beta: aeratorPerformanceCopy.Beta,
+        SOTR: aeratorPerformanceCopy.SOTR,
+        Aeration: aeratorPerformanceCopy.Aeration,
+        Elevation: aeratorPerformanceCopy.Elevation,
+        OperatingTime: aeratorPerformanceCopy.OperatingTime,
+        TypeAerators: aeratorPerformanceCopy.TypeAerators,
+        Speed: aeratorPerformanceCopy.Speed,
+        EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit
+      }
+      let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
+      if (settings.unitsOfMeasure != 'Imperial') {
+        wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
+      }
       return wasteWaterResults;
     }
     return {
@@ -109,11 +121,11 @@ export class WasteWaterService {
   }
 
 
-  checkWasteWaterValid(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, modelingOptions: ModelingOptions): boolean {
+  checkWasteWaterValid(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics): boolean {
     let activatedSludgeForm: FormGroup = this.activatedSludgeFormService.getFormFromObj(activatedSludgeData);
     let aeratorPerformanceForm: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(aeratorPerformanceData);
-    let modelingOptionsForm: FormGroup = this.modelingOptionsFormService.getFormFromObj(modelingOptions);
-    return activatedSludgeForm.valid && aeratorPerformanceForm.valid && modelingOptionsForm.valid;
+    let systemBasicsForm: FormGroup = this.systemBasicsService.getFormFromObj(systemBasics);
+    return activatedSludgeForm.valid && aeratorPerformanceForm.valid && systemBasicsForm.valid;
   }
 
   getModificationFromId(): WasteWaterData {

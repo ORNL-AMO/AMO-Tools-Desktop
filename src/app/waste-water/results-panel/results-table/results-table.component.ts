@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../shared/models/settings';
 import { WasteWaterData, WasteWaterResults } from '../../../shared/models/waste-water';
 import { WasteWaterService } from '../../waste-water.service';
 
@@ -15,17 +16,19 @@ export class ResultsTableComponent implements OnInit {
   modificationResults: WasteWaterResults;
   showModification: boolean;
   modificationName: string;
+  settings: Settings;
   constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
+    this.settings = this.wasteWaterService.settings.getValue();
     this.wastWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
-      this.baselineResults = this.wasteWaterService.calculateResults(val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.modelingOptions);
+      this.baselineResults = this.wasteWaterService.calculateResults(val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.systemBasics, this.settings);
       let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
       if (modificationData) {
         this.modificationName = modificationData.name;
-        this.modificationResults = this.wasteWaterService.calculateResults(modificationData.activatedSludgeData, modificationData.aeratorPerformanceData, val.modelingOptions);
+        this.modificationResults = this.wasteWaterService.calculateResults(modificationData.activatedSludgeData, modificationData.aeratorPerformanceData, val.systemBasics, this.settings);
         this.showModification = true;
-      }else{
+      } else {
         this.modificationName = undefined;
         this.showModification = false;
       }
