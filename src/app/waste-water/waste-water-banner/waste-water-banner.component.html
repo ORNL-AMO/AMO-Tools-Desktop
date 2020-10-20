@@ -27,7 +27,8 @@
             <a class="nav-link disabled" (click)="changeTab('treasure-chest')">Diagram</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link disabled" (click)="changeTab('report')">Report</a>
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
+                (click)="changeTab('report')">Report</a>
         </div>
     </div>
     <div class="d-flex ml-auto pr-2 h-100">

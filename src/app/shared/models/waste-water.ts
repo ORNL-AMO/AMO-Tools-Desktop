@@ -14,7 +14,8 @@ export interface WasteWaterData {
     activatedSludgeData: ActivatedSludgeData,
     aeratorPerformanceData: AeratorPerformanceData,
     name: string,
-    id: string
+    id: string,
+    outputs?: WasteWaterResults
 }
 
 export interface ActivatedSludgeData {

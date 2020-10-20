@@ -24,6 +24,7 @@ import { SystemBasicsService } from './system-basics/system-basics.service';
 import { SettingsModule } from '../settings/settings.module';
 import { ConvertWasteWaterService } from './convert-waste-water.service';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
+import { WasteWaterReportModule } from './waste-water-report/waste-water-report.module';
 
 
 
@@ -50,7 +51,8 @@ import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module
     ModalModule,
     FormsModule,
     SettingsModule,
-    PercentGraphModule
+    PercentGraphModule,
+    WasteWaterReportModule
   ],
   providers: [
     WasteWaterService,
