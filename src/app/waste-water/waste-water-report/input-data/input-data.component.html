@@ -1,1 +1,27 @@
-<p>input-data works!</p>
+<div class="row show-print break-before">
+    <div class="col-12">
+      <h4 class="show-print">Assessment Input Summary</h4>
+    </div>
+  </div>
+  
+  <!-- System Basic -->
+  <div class="row avoid-break">
+    <div class="col-12">
+        <app-system-data [wasteWater]="wasteWater"></app-system-data>
+    </div>
+  </div>
+  
+  <!-- Activated Sludge -->
+  <div class="row avoid-break">
+    <div class="col-12">
+        <app-activated-sludge-data [wasteWater]="wasteWater"></app-activated-sludge-data>
+    </div>
+  </div>
+  
+  
+  <!-- Fan Motor -->
+  <div class="row avoid-break">
+    <div class="col-12">
+        <app-aerator-performance-data [wasteWater]="wasteWater"></app-aerator-performance-data>
+    </div>
+  </div>

@@ -136,7 +136,7 @@
         <!-- TypeAerators -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.TypeAerators, 'invalid': form.controls.TypeAerators.invalid}">
-            <label for="{{'TypeAerators_'+idString}}">Aerator Operating Time</label>
+            <label for="{{'TypeAerators_'+idString}}">Type of Aerator</label>
             <select class="form-control" formControlName="TypeAerators" (change)="save()">
                 <option *ngFor="let areatorType of areatorTypes" [ngValue]="areatorType.value">{{areatorType.display}}
                 </option>

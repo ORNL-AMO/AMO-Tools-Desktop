@@ -1,0 +1,206 @@
+<div class="card summary-card">
+    <div class="card-header" (click)="toggleCollapse()">
+        <h5>Activated Sludge Data
+            <span class="pull-right fa hide-print"
+                [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+        </h5>
+    </div>
+
+    <div *ngIf="!collapse || printView">
+        <div class="card-body">
+            <div class="output-summary">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+                            <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                                Baseline
+                            </th>
+                            <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of wasteWater.modifications">
+                                {{mod.name}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Temperature
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.Temperature}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.Temperature}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                S<sub>o</sub>
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.So}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.So}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Flow Rate
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.FlowRate}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.FlowRate}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Inert VSS
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.InertVSS}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.InertVSS}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Oxidizable N
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.OxidizableN}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.OxidizableN}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Biomass Yield
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.Biomass}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.Biomass}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Influent TSS
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.InfluentTSS}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.InfluentTSS}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Inert Inorganic TSS
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.InertInOrgTSS}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.InertInOrgTSS}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Effluent TSS
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.EffluentTSS}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.EffluentTSS}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                RAST TSS
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.RASTSS}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.RASTSS}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                MLSS
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.MLSSpar}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.MLSSpar}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Cell Debris Biomass Fraction
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.FractionBiomass}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.FractionBiomass}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Biomass Yield Constant
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.BiomassYeild}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.BiomassYeild}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Half-saturation Constant
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.HalfSaturation}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.HalfSaturation}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Endogenous Decay Coefficient
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.MicrobialDecay}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.MicrobialDecay}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Max. Specific Substrate Utilization Rate
+                            </td>
+                            <td>
+                                {{wasteWater.baselineData.activatedSludgeData.MaxUtilizationRate}}
+                            </td>
+                            <td *ngFor="let mod of wasteWater.modifications">
+                                {{mod.activatedSludgeData.MaxUtilizationRate}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
