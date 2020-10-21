@@ -5,14 +5,10 @@ import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/fa
 import { ResultDataComponent } from './result-data/result-data.component';
 import { InputDataComponent } from './input-data/input-data.component';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
-import { AeratorPerformanceDataComponent } from './input-data/aerator-performance-data/aerator-performance-data.component';
-import { ActivatedSludgeDataComponent } from './input-data/activated-sludge-data/activated-sludge-data.component';
-import { SystemDataComponent } from './input-data/system-data/system-data.component';
-
 
 
 @NgModule({
-  declarations: [WasteWaterReportComponent, ResultDataComponent, InputDataComponent, AeratorPerformanceDataComponent, ActivatedSludgeDataComponent, SystemDataComponent],
+  declarations: [WasteWaterReportComponent, ResultDataComponent, InputDataComponent],
   imports: [
     CommonModule,
     FacilityInfoSummaryModule,
