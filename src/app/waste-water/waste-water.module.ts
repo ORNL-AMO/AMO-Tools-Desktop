@@ -23,24 +23,26 @@ import { CompareService } from './modify-conditions/compare.service';
 import { SystemBasicsService } from './system-basics/system-basics.service';
 import { SettingsModule } from '../settings/settings.module';
 import { ConvertWasteWaterService } from './convert-waste-water.service';
+import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
+import { WasteWaterReportModule } from './waste-water-report/waste-water-report.module';
 
 
 
 @NgModule({
   declarations: [
-    WasteWaterComponent, 
-    WasteWaterBannerComponent, 
-    SystemBasicsComponent, 
-    HelpPanelComponent, 
+    WasteWaterComponent,
+    WasteWaterBannerComponent,
+    SystemBasicsComponent,
+    HelpPanelComponent,
     ActivatedSludgeFormComponent,
-     AeratorPerformanceFormComponent,
-     ResultsPanelComponent,
-     ResultsTableComponent,
-     ModifyConditionsComponent,
-     ExploreOpportunitiesComponent,
-     AddModificationModalComponent,
-     ModificationListModalComponent,
-     ModifyConditionsTabsComponent
+    AeratorPerformanceFormComponent,
+    ResultsPanelComponent,
+    ResultsTableComponent,
+    ModifyConditionsComponent,
+    ExploreOpportunitiesComponent,
+    AddModificationModalComponent,
+    ModificationListModalComponent,
+    ModifyConditionsTabsComponent
   ],
   imports: [
     CommonModule,
@@ -48,7 +50,9 @@ import { ConvertWasteWaterService } from './convert-waste-water.service';
     ReactiveFormsModule,
     ModalModule,
     FormsModule,
-    SettingsModule
+    SettingsModule,
+    PercentGraphModule,
+    WasteWaterReportModule
   ],
   providers: [
     WasteWaterService,

@@ -488,3 +488,8 @@
         background-color: #84b641;
         outline: 1px solid slategrey;
     }
+
+    .waste-water .scroll-item::-webkit-scrollbar-thumb{
+        background-color: #003087;
+        outline: 1px solid slategrey;
+    }

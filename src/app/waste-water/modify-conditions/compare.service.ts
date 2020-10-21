@@ -18,9 +18,11 @@ export class CompareService {
   compareBaselineModification(baselineData: WasteWaterData, modificationData?: WasteWaterData): WasteWaterDifferent {
     let activatedSludgeDifferent: ActivatedSludgeDifferent;
     let aeratorPerformanceDifferent: AeratorPerformanceDifferent;
+    let isDifferent: boolean = false;
     if (modificationData) {
       activatedSludgeDifferent = this.compareActivatedSludge(baselineData.activatedSludgeData, modificationData.activatedSludgeData);
       aeratorPerformanceDifferent = this.compareAeratorPerformance(baselineData.aeratorPerformanceData, modificationData.aeratorPerformanceData);
+      isDifferent = this.checkHasDifferent(activatedSludgeDifferent) || this.checkHasDifferent(aeratorPerformanceDifferent);
     } else {
       //compare baseline with baseline, all will come back false
       activatedSludgeDifferent = this.compareActivatedSludge(baselineData.activatedSludgeData, baselineData.activatedSludgeData);
@@ -28,7 +30,8 @@ export class CompareService {
     }
     return {
       activatedSludgeDifferent: activatedSludgeDifferent,
-      aeratorPerformanceDifferent: aeratorPerformanceDifferent
+      aeratorPerformanceDifferent: aeratorPerformanceDifferent,
+      isDifferent: isDifferent
     }
   }
 
@@ -96,7 +99,8 @@ export class CompareService {
 
 export interface WasteWaterDifferent {
   activatedSludgeDifferent: ActivatedSludgeDifferent,
-  aeratorPerformanceDifferent: AeratorPerformanceDifferent
+  aeratorPerformanceDifferent: AeratorPerformanceDifferent,
+  isDifferent: boolean
 }
 
 

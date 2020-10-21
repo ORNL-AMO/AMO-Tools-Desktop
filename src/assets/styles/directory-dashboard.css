@@ -17,7 +17,7 @@ a:not([href]):not([tabindex]):hover {
     text-align: center;
   }
   
-  .summary-card{
+  .dashboard-content .summary-card{
     padding-top: 10px;
   }
   

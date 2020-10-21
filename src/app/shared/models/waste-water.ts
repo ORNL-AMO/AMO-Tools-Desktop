@@ -14,7 +14,8 @@ export interface WasteWaterData {
     activatedSludgeData: ActivatedSludgeData,
     aeratorPerformanceData: AeratorPerformanceData,
     name: string,
-    id: string
+    id: string,
+    outputs?: WasteWaterResults
 }
 
 export interface ActivatedSludgeData {
@@ -82,7 +83,10 @@ export interface WasteWaterResults {
     EffluentNO3_N_W_Denit: number,
     AeEnergy: number,
     AeCost: number,
-    FieldOTR: number
+    FieldOTR: number,
+    costSavings: number,
+    energySavings: number,
+    percentCostSavings: number
 }
 
 

@@ -11,30 +11,29 @@
 
         </div>
     </div>
-    <!-- <div class="d-flex my-table-item">
-      <div class="d-flex align-items-center pl-1 pr-1"
-        [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-        <span class="table-text">Percent Savings (%)</span>
-      </div>
-      <div class="d-flex align-items-center pl-1 pr-1"
-        [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-        <span class="table-text"> &mdash; &mdash;</span>
-      </div>
-      <div class="col-4" *ngIf="showModification">
-        <app-percent-graph
-          *ngIf="fsat.modifications[modificationIndex].fsat.valid.isValid && modificationResults.percentSavings"
-          [value]="modificationResults.percentSavings"></app-percent-graph>
-        <div class="alert-danger small" *ngIf="!fsat.modifications[modificationIndex].fsat.valid.isValid">
-          Invalid modification<br>
-          <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fluidValid">Errors found in Fluid<br></span>
+    <div class="d-flex my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">Percent Savings (%)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text"> &mdash; &mdash;</span>
+        </div>
+        <div class="col-4" *ngIf="showModification">
+            <app-percent-graph *ngIf="modificationResults.TotalAverageDailyFlowRate != undefined"
+                [value]="modificationResults.percentCostSavings"></app-percent-graph>
+            <div class="alert-danger small" *ngIf="!modificationResults.TotalAverageDailyFlowRate == undefined">
+                Invalid modification<br>
+                <!-- <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fluidValid">Errors found in Fluid<br></span>
           <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fieldDataValid">Errors found in Field
             Data<br></span>
           <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fanValid">Errors found in Fan
             Setup<br></span>
-          <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.motorValid">Errors found in Motor<br></span>
+          <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.motorValid">Errors found in Motor<br></span> -->
+            </div>
         </div>
-      </div>
-    </div> -->
+    </div>
     <!-- TotalAverageDailyFlowRate -->
     <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
@@ -50,7 +49,7 @@
         </div>
     </div>
     <!-- VolumeInService -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Aeration Volume in Service</span>
@@ -62,9 +61,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.VolumeInService | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- InfluentBOD5Concentration -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Influent BOD<sub>5</sub> Concentration</span>
@@ -76,9 +75,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.InfluentBOD5Concentration | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- InfluentBOD5MassLoading -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Influent BOD<sub>5</sub> Mass Loading</span>
@@ -90,9 +89,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.InfluentBOD5MassLoading | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- SecWWOxidNLoad -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">SEC WW Oxid N Load</span>
@@ -104,9 +103,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.SecWWOxidNLoad | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- SecWWTSSLoad -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">SEC WW TSS Load</span>
@@ -118,9 +117,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.SecWWTSSLoad | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- FM_ratio -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">F/M Ratio</span>
@@ -132,9 +131,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.FM_ratio | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- SolidsRetentionTime -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Solids Retention Time</span>
@@ -146,9 +145,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.SolidsRetentionTime | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- MLSS -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">MLSS Concentration</span>
@@ -160,9 +159,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.MLSS | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- MLVSS -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">MLVSS Concentration</span>
@@ -174,9 +173,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.MLVSS | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- TSSSludgeProduction -->
-    <div class="d-flex stripe my-table-item">
+    <div class="d-flex my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">TSS Sludge Production</span>
@@ -204,7 +203,7 @@
         </div>
     </div>
     <!-- TotalOxygenRequirements -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Total Oxygen Requirements</span>
@@ -216,9 +215,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.TotalOxygenRequirements | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- TotalOxygenReqWDenit -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Total Oxygen Req'd - Denitrification</span>
@@ -230,9 +229,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.TotalOxygenReqWDenit | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- TotalOxygenSupplied -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Total Oxygen Supplied</span>
@@ -244,9 +243,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.TotalOxygenSupplied | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- MixingIntensityInReactor -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Mixing Intensity in Reactor</span>
@@ -258,9 +257,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.MixingIntensityInReactor | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- RASFlowRate -->
-    <div class="d-flex stripe my-table-item">
+    <div class="d-flex my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">RAS Flow Rate</span>
@@ -281,14 +280,14 @@
         </div>
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-            <span class="table-text">{{baselineResults.RASRecyclePercentage | number:'2.0-1'}}</span>
+            <span class="table-text">{{baselineResults.RASRecyclePercentage | number:'2.0-1'}} %</span>
         </div>
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-            <span class="table-text">{{modificationResults.RASRecyclePercentage | number:'2.0-1'}}</span>
+            <span class="table-text">{{modificationResults.RASRecyclePercentage | number:'2.0-1'}} %</span>
         </div>
     </div>
     <!-- WASFlowRate -->
-    <div class="d-flex stripe my-table-item">
+    <div class="d-flex my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">WAS Flow Rate</span>
@@ -316,7 +315,7 @@
         </div>
     </div>
     <!-- TotalSludgeProduction -->
-    <div class="d-flex stripe my-table-item">
+    <div class="d-flex my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Total Sludge Production</span>
@@ -344,7 +343,7 @@
         </div>
     </div>
     <!-- VOLR -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">VOLR</span>
@@ -356,9 +355,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.VOLR | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- EffluentCBOD5 -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Effluent CBOD<sub>5</sub></span>
@@ -370,9 +369,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.EffluentCBOD5 | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- EffluentTSS -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Effluent TSS</span>
@@ -384,9 +383,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.EffluentTSS | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- EffluentAmmonia_N -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Effluent Ammonia-N</span>
@@ -398,9 +397,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.EffluentAmmonia_N | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- EffluentNO3_N -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Effluent NO<sub>3</sub>-N</span>
@@ -412,9 +411,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.EffluentNO3_N | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- EffluentNO3_N_W_Denit -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Effluent NO<sub>3</sub>-N - Denitrification</span>
@@ -426,9 +425,9 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.EffluentNO3_N_W_Denit | number:'2.0-1'}}</span>
         </div>
-    </div>
+    </div> -->
     <!-- AeEnergy -->
-    <div class="d-flex stripe my-table-item">
+    <div class="d-flex my-table-item my-table-bg bold">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Aerator Energy Use</span>
@@ -437,12 +436,13 @@
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">{{baselineResults.AeEnergy | number:'2.0-1'}}</span>
         </div>
-        <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
+        <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification"
+            [ngClass]="{'positive-savings': modificationResults.percentCostSavings > 10}">
             <span class="table-text">{{modificationResults.AeEnergy | number:'2.0-1'}}</span>
         </div>
     </div>
     <!-- AeCost -->
-    <div class="d-flex stripe my-table-item">
+    <div class="d-flex stripe my-table-item my-table-bg bold">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Aerator Energy Cost</span>
@@ -451,22 +451,53 @@
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">{{baselineResults.AeCost | currency}}</span>
         </div>
-        <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
+        <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification"
+            [ngClass]="{'positive-savings': modificationResults.percentCostSavings > 10}">
             <span class="table-text">{{modificationResults.AeCost | currency}}</span>
         </div>
     </div>
     <!-- FieldOTR -->
-    <div class="d-flex stripe my-table-item">
+    <!-- <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Field Oxygen Transfer Rate</span>
         </div>
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-            <span class="table-text">{{baselineResults.FieldOTR | number:'2.0-1'}}}</span>
+            <span class="table-text">{{baselineResults.FieldOTR | number:'2.0-1'}}</span>
         </div>
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
             <span class="table-text">{{modificationResults.FieldOTR | number:'2.0-1'}}</span>
+        </div>
+    </div> -->
+    <!-- costSavings -->
+    <div class="d-flex my-table-item my-table-bg bold">
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">Annual Cost Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">&mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification"
+            [ngClass]="{'positive-savings': modificationResults.percentCostSavings > 10}">
+            <span class="table-text">{{modificationResults.costSavings | currency}}</span>
+        </div>
+    </div>
+    <!-- energySavings -->
+    <div class="d-flex stripe my-table-item my-table-bg bold">
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">Annual Energy Savings</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">&mdash;</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification"
+            [ngClass]="{'positive-savings': modificationResults.percentCostSavings > 10}">
+            <span class="table-text">{{modificationResults.energySavings | number:'2.0-1'}}</span>
         </div>
     </div>
 </div>

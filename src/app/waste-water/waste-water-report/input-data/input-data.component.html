@@ -1,0 +1,398 @@
+<div class="output-summary break-before">
+
+  <h4 class="show-print">Assessment Input Data</h4>
+
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th [ngStyle]="{'width.%': 100 /(wasteWater.modifications.length+2)}"></th>
+        <th [ngStyle]="{'width.%': 100 /(wasteWater.modifications.length+2)}" class="section-header">Baseline</th>
+        <th [ngStyle]="{'width.%': 100 /(wasteWater.modifications.length+2)}"
+          *ngFor="let modification of wasteWater.modifications" class="section-header">{{modification.name}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th class="section-header">System Basics</th>
+        <th></th>
+        <th *ngFor="let modification of wasteWater.modifications">
+          <!-- <div class="alert-danger m-0"
+                *ngIf="!modification.psat.valid.isValid && !modification.psat.valid.pumpFluidValid">
+                Errors found in Pump Fluid setup
+            </div> -->
+        </th>
+      </tr>
+      <tr>
+        <td>
+          Max. Modeled Solids Retention Time "SRT" (days)
+        </td>
+        <td>
+          {{wasteWater.systemBasics.MaxDays}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications">
+          &mdash;
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Time Step for SRT Modeling (days)
+        </td>
+        <td>
+          {{wasteWater.systemBasics.TimeIncrement}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications">
+          &mdash;
+        </td>
+      </tr>
+      <tr>
+        <th class="section-header">Activated Sludge Data</th>
+        <th></th>
+        <th *ngFor="let modification of wasteWater.modifications">
+          <!-- <div class="alert-danger m-0"
+                                                                *ngIf="!modification.psat.valid.isValid && !modification.psat.valid.pumpFluidValid">
+                                                                Errors found in Pump Fluid setup
+                                                            </div> -->
+        </th>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('Temperature') == true}">
+          Temperature (&#8451;)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('Temperature') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.Temperature}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.Temperature == true}">
+          {{mod.activatedSludgeData.Temperature}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('So') == true}">
+          S<sub>o</sub> (mg/L)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('So') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.So}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.So == true}">
+          {{mod.activatedSludgeData.So}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('Volume') == true}">
+          Volume (
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup></span>)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('Volume') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.Volume}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.Volume == true}">
+          {{mod.activatedSludgeData.Volume}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('FlowRate') == true}">
+          Flow Rate (MGD)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('FlowRate') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.FlowRate}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.FlowRate == true}">
+          {{mod.activatedSludgeData.FlowRate}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('InertVSS') == true}">
+          Inert VSS (mg/L)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('InertVSS') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.InertVSS}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.InertVSS == true}">
+          {{mod.activatedSludgeData.InertVSS}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('OxidizableN') == true}">
+          Oxidizable N (mg/L)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('OxidizableN') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.OxidizableN}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.OxidizableN == true}">
+          {{mod.activatedSludgeData.OxidizableN}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('Biomass') == true}">
+          Biomass Yield
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('Biomass') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.Biomass}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.Biomass == true}">
+          {{mod.activatedSludgeData.Biomass}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('InfluentTSS') == true}">
+          Influent TSS (mg/L)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('InfluentTSS') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.InfluentTSS}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.InfluentTSS == true}">
+          {{mod.activatedSludgeData.InfluentTSS}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('InertInOrgTSS') == true}">
+          Inert Inorganic TSS (mg/L)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('InertInOrgTSS') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.InertInOrgTSS}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.InertInOrgTSS == true}">
+          {{mod.activatedSludgeData.InertInOrgTSS}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('EffluentTSS') == true}">
+          Effluent TSS (mg/L)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('EffluentTSS') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.EffluentTSS}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.EffluentTSS == true}">
+          {{mod.activatedSludgeData.EffluentTSS}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('RASTSS') == true}">
+          RAST TSS (mg/L)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('RASTSS') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.RASTSS}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.EffluentTSS == true}">
+          {{mod.activatedSludgeData.RASTSS}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MLSSpar') == true}">
+          MLSS (mg/L)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MLSSpar') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.MLSSpar}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.MLSSpar == true}">
+          {{mod.activatedSludgeData.MLSSpar}}
+        </td>
+      </tr>
+      <tr>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('FractionBiomass') == true}">
+          Cell Debris Biomass Fraction
+        </td>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('FractionBiomass') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.FractionBiomass}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.FractionBiomass == true}">
+          {{mod.activatedSludgeData.FractionBiomass}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('BiomassYeild') == true}">
+          Biomass Yield Constant
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('BiomassYeild') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.BiomassYeild}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.BiomassYeild == true}">
+          {{mod.activatedSludgeData.BiomassYeild}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('HalfSaturation') == true}">
+          Half-saturation Constant (mg/L)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('HalfSaturation') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.HalfSaturation}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.HalfSaturation == true}">
+          {{mod.activatedSludgeData.HalfSaturation}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MicrobialDecay') == true}">
+          Endogenous Decay Coefficient (1/day)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MicrobialDecay') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.MicrobialDecay}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.MicrobialDecay == true}">
+          {{mod.activatedSludgeData.MicrobialDecay}}
+        </td>
+      </tr>
+      <tr>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MaxUtilizationRate') == true}">
+          Max. Specific Substrate Utilization Rate (1/day)
+        </td>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MaxUtilizationRate') == true}">
+          {{wasteWater.baselineData.activatedSludgeData.MaxUtilizationRate}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.MaxUtilizationRate == true}">
+          {{mod.activatedSludgeData.MaxUtilizationRate}}
+        </td>
+      </tr>
+      <tr>
+        <th class="section-header">Aerator Performance Data</th>
+        <th></th>
+        <th *ngFor="let modification of wasteWater.modifications">
+          <!-- <div class="alert-danger m-0"
+                                      *ngIf="!modification.psat.valid.isValid && !modification.psat.valid.pumpFluidValid">
+                                      Errors found in Pump Fluid setup
+                                  </div> -->
+        </th>
+      </tr>
+      <tr>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingDO') == true}">
+          Operating Disolved Oxygen (mg/L)
+        </td>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingDO') == true}">
+          {{wasteWater.baselineData.aeratorPerformanceData.OperatingDO}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.OperatingDO == true}">
+          {{mod.aeratorPerformanceData.OperatingDO}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Alpha') == true}">
+          Oxygen Transfer Coefficient Ratio
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Alpha') == true}">
+          {{wasteWater.baselineData.aeratorPerformanceData.Alpha}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.Alpha == true}">
+          {{mod.aeratorPerformanceData.Alpha}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Beta') == true}">
+          Saturation DO Concentration Ratio
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Beta') == true}">
+          {{wasteWater.baselineData.aeratorPerformanceData.Beta}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.Beta == true}">
+          {{mod.aeratorPerformanceData.Beta}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('SOTR') == true}">
+          Standard Oxygen Transfer Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
+            O<sub>2</sub>/(hp-hr)</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+            O<sub>2</sub>/(kWh)</span>)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('SOTR') == true}">
+          {{wasteWater.baselineData.aeratorPerformanceData.SOTR}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.SOTR == true}">
+          {{mod.aeratorPerformanceData.SOTR}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Aeration') == true}">
+          Aeration Operating Power (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Aeration') == true}">
+          {{wasteWater.baselineData.aeratorPerformanceData.Aeration}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.Aeration == true}">
+          {{mod.aeratorPerformanceData.Aeration}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Elevation') == true}">
+          Site Elevation (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m</span>)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Elevation') == true}">
+          {{wasteWater.baselineData.aeratorPerformanceData.Elevation}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.Elevation == true}">
+          {{mod.aeratorPerformanceData.Elevation}}
+        </td>
+      </tr>
+      <tr>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingTime') == true}">
+          Aerator Operating Time (hr/day)
+        </td>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingTime') == true}">
+          {{wasteWater.baselineData.aeratorPerformanceData.OperatingTime}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.OperatingTime == true}">
+          {{mod.aeratorPerformanceData.OperatingTime}}
+        </td>
+      </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Speed') == true}">
+          Aerator Speed (%)
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Speed') == true}">
+          {{wasteWater.baselineData.aeratorPerformanceData.Speed}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.Speed == true}">
+          {{mod.aeratorPerformanceData.Speed}}
+        </td>
+      </tr>
+      <tr>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('EnergyCostUnit') == true}">
+          Electricity Cost ($/kWh)
+        </td>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('EnergyCostUnit') == true}">
+          {{wasteWater.baselineData.aeratorPerformanceData.EnergyCostUnit}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.EnergyCostUnit == true}">
+          {{mod.aeratorPerformanceData.EnergyCostUnit}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
