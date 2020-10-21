@@ -27,7 +27,6 @@ export class ResultsTableComponent implements OnInit {
       if (modificationData) {
         this.modificationName = modificationData.name;
         this.modificationResults = this.wasteWaterService.calculateResults(modificationData.activatedSludgeData, modificationData.aeratorPerformanceData, val.systemBasics, this.settings, this.baselineResults);
-        console.log(this.modificationResults);
         this.showModification = true;
       } else {
         this.modificationName = undefined;
