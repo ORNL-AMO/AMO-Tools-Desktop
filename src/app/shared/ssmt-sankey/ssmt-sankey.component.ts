@@ -36,10 +36,10 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   gradientRed: string = '#ff0000';
   gradientBlue: string = '#0000ff';
   
-  connectingNodes: Array<number> = [];
-  redLinkPaths: Array<number> = [];
-  blueLinkPaths: Array<number> = [];
-  orangeLinkPaths: Array<number> = [];
+  connectingNodes: Array<number>;
+  redLinkPaths: Array<number>;
+  blueLinkPaths: Array<number>;
+  orangeLinkPaths: Array<number>;
   units: string = 'MMBtu';
 
   constructor(private calculateLossesService: CalculateLossesService, private ssmtService: SsmtService,
@@ -73,7 +73,6 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
 
   setBaselineLosses() {
     this.results = this.ssmtService.calculateBaselineModel(this.ssmt, this.settings);
-    this.results.outputData = this.calculateResultsWithMarginalCosts(this.ssmt, this.results.outputData);
     this.ssmt.outputData = this.results.outputData;
     this.losses = this.calculateLossesService.calculateLosses(this.results.outputData, this.results.inputData, this.settings, this.ssmt);
   }
@@ -102,6 +101,11 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   buildSankey() {
     // ssmt service output already converting from kJ, just set label to current.
     this.units = this.settings.steamEnergyMeasurement;
+    this.redLinkPaths = [];
+    this.blueLinkPaths = [];
+    this.orangeLinkPaths = [];
+    this.connectingNodes = [];
+
     if (this.ngChart) {
       Plotly.purge(this.ngChart.nativeElement); 
     }
@@ -155,20 +159,13 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     };
 
     let layout = {
-      title: "",
       autosize: true,
       height: 500,
-      yaxis: {
-        automargin: true,
-      },
-      xaxis: {
-        automargin: true,
-      },
       paper_bgcolor: undefined,
       plot_bgcolor: undefined,
       margin: {
         l: 50,
-        t: 100,
+        t: 25,
         pad: 10,
       }
     };
@@ -176,6 +173,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.appBackground) {
       layout.paper_bgcolor = 'ececec';
       layout.plot_bgcolor = 'ececec';
+
+
     }
 
     let config = {
@@ -189,17 +188,20 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       chart.on('plotly_restyle', () => {
         this.setGradient();
       });
+      chart.on('plotly_afterplot', () => {
+        this.setGradient();
+      });
       chart.on('plotly_hover', (hoverData) => {
         this.setGradient(hoverData);
-        return false;
+        // return false;
       });
       chart.on('plotly_unhover', () => {
         this.setGradient();
-        return false;
+        // return false;
       });
       chart.on('plotly_relayout', () => {
         this.setGradient();
-        return false;
+        // return false;
       });
     });
     this.addGradientElement();
@@ -233,9 +235,10 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let processUsage = this.losses.highPressureProcessUsage + this.losses.mediumPressureProcessUsage + this.losses.lowPressureProcessUsage;
     let unreturnedCondensate = this.losses.lowPressureProcessLoss + this.losses.highPressureProcessLoss + this.losses.mediumPressureProcessLoss;
     
+    // Returned condensate and steam
     let returnedCondensate = 0;
-    if (this.results.outputData.returnCondensate.energyFlow) {
-      returnedCondensate = this.results.outputData.returnCondensate.energyFlow;
+    if (this.results.outputData.deaeratorOutput.feedwaterEnergyFlow) {
+      returnedCondensate = this.results.outputData.deaeratorOutput.feedwaterEnergyFlow;
     }
     // Return condensate loops back into energyInput
     energyInput = energyInput + returnedCondensate;
@@ -252,7 +255,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let usefulConnectorTargets = [];
     let totalLosses = 0;
     let usefulEnergy = 0;
-    
+
     // We will always have the first three connectors (0,1,2).
     let currentSourceIndex = 3;
     nodes.push(
@@ -442,7 +445,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
           name: "Remaining Energy " + this.decimalPipe.transform(remainingEnergy, '1.0-0') + `  ${this.units}/hr`,
           value: remainingEnergyValue,
           x: .8,
-          y: .75,
+          y: .8,
           source: currentSourceIndex,
           target: [],
           isConnector: false,
@@ -462,7 +465,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
           name: "Returned Condensate " + this.decimalPipe.transform(returnedCondensate, '1.0-0') + `  ${this.units}/hr`,
           value: returnedCondensateValue,
           x: .8,
-          y: .9,
+          y: .95,
           source: currentSourceIndex,
           target: [0],
           isConnector: true,
@@ -480,8 +483,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
         {
           name: '',
           value: returnedCondensateValue,
-          x: .6,
-          y: .95,
+          x: .4,
+          y: .9,
           source: currentSourceIndex,
           target: [0],
           isConnector: true,
@@ -534,6 +537,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   // Losses/paths aren't known ahead of time - set color after render events or plotly will override fill opacity.
   setGradient(hoverData?) {
     let links = this._dom.nativeElement.querySelectorAll('.sankey-link');
+    let nodes = this._dom.nativeElement.querySelectorAll('.sankey-node');
     let fillOpacity = 1;
     let fill: string;
 
@@ -552,7 +556,16 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
         fill = this.gradientStartColorOrange + ' !important';
       }
       links[i].setAttribute('style', `fill: ${fill}; opacity: 1; fill-opacity: ${fillOpacity};`);
+      
+      if (i == nodes.length - 1) {
+        this.setNodeLabelSpacing(nodes[i]);
+      }
     }
+  }
+
+  setNodeLabelSpacing(nodeLabel) {
+    let labelText = nodeLabel.querySelector('.node-label-text-path');
+    labelText.setAttribute('startOffset', '3%');
   }
 
   buildSvgArrows() {
@@ -572,6 +585,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
         } else if (this.blueLinkPaths.includes(i)) {
           arrowColor = this.gradientBlue;
         }
+
         sankeynodes[i].setAttribute('y', `${defaultY - (height / 2.75)}`);
         sankeynodes[i].setAttribute('style', `width: ${height}px; height: ${height * 1.75}px; clip-path:  ${arrowShape}; 
          stroke-width: 0.5; stroke: rgb(255, 255, 255); stroke-opacity: 0.5; fill: ${arrowColor}; fill-opacity: ${arrowOpacity};`);

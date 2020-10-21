@@ -68,9 +68,16 @@
   <!--sankey-->
   <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100"
     [ngStyle]="{'height.px': containerHeight}">
+    <div class="p-1 mx-auto">
+      <div class="form-group mt-3" *ngIf="ssmtOptions.length > 1">
+        <select name="ssmtSelect" class="form-control mx-auto" id="ssmtSelect" [(ngModel)]="selectedSSMT">
+          <option *ngFor="let ssmt of ssmtOptions" [ngValue]="ssmt">{{ssmt.name}}</option>
+        </select>
+      </div>
+    </div>
     <div class="sankey-padding w-100">
-      <app-ssmt-sankey [ssmt]="_ssmt" [settings]="settings" [assessment]="assessment"
-      [isBaseline]="_ssmt.name == 'Baseline'" [appBackground]="true"></app-ssmt-sankey>
+      <app-ssmt-sankey [ssmt]="selectedSSMT.ssmt" [settings]="settings" [assessment]="assessment"
+      [isBaseline]="selectedSSMT.ssmt.name == 'Baseline'" [appBackground]="true"></app-ssmt-sankey>
     </div>
   </div>
 
