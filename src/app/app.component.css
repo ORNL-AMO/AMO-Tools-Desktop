@@ -358,6 +358,10 @@ select.form-control:not([size]):not([multiple]) {
   color: #F39C12  !important;
 }
 
+.waste-water .indicate-report-field-different {
+  font-weight: bold;
+  color: #007bff  !important;
+}
 
 .input-error{
   color: red;
