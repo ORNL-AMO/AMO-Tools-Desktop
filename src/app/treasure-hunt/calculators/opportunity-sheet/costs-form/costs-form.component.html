@@ -33,6 +33,18 @@
     </div>
   </div>
 </div>
+<div class="col-12">
+  <div class="form-group">
+    <label for="material">Effort to Implement</label>
+    <div class="input-group">
+      <select class="form-control" [(ngModel)]="opportunityCost.implementationEffort" name="implementationEffort"
+        id="implementationEffort" (focus)="focusField('implementationEffort')">
+        <option *ngFor="let level of effortLevels" [ngValue]="level">{{level}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
 <div class="col-12" *ngFor="let otherCost of opportunityCost.otherCosts; let index = index;">
   <div class="form-group d-flex">
     <div class="w-50 input-group pr-2">
@@ -102,8 +114,6 @@
     </div>
   </div>
 </div>
-
-
 
 <div class="col-12">
   <label class="group-label" for="costDescription">Opportunity Notes</label>

@@ -7,6 +7,13 @@
       (Flue gas oxygen levels and temperature and combustion temperature).
     </small>
   </h5>
+  <div class="d-flex justify-content-center w-100">
+    <div class="alert alert-info">
+      <p class="mb-0">
+        Note: This calculator is only valid for natural gas fuels in North America.
+      </p>
+    </div>
+  </div>
   <hr class="my-1 hr-spacer">
 
   <div class="my-2" *ngIf="currentField == 'flueGasOxygen'">
@@ -72,13 +79,5 @@
         <hr>
       </small>
     </h6>
-  </div>
-
-  <div class="d-flex justify-content-center w-100" *ngIf="currentField == 'default'">
-    <div class="alert alert-info">
-      <p class="mb-0">
-        Note: This calculator is only valid for natural gas fuels in North America.
-      </p>
-    </div>
   </div>
 </div>

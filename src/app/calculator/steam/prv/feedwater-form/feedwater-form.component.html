@@ -4,7 +4,7 @@
     <label class="small" for="feedwaterPressure">Pressure</label>
     <div class="input-group">
       <input class="form-control" name="feedwaterPressure" id="feedwaterPressure" formControlName="feedwaterPressure"
-        type="number" (input)="calculate()" (focus)="focusField('feedwaterPressure')" (blur)="focusOut()"
+        type="number" (input)="calculate()" (focus)="focusField('feedwaterPressure')" 
         onfocus="this.select();">
       <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
     </div>
@@ -23,7 +23,7 @@
     <label class="small" for="feedwaterThermodynamicQuantity">Known Variable</label>
     <select name="feedwaterThermodynamicQuantity" class="form-control" formControlName="feedwaterThermodynamicQuantity"
       id="feedwaterThermodynamicQuantity" (change)="setQuantityRanges()"
-      (focus)="focusField('feedwaterThermodynamicQuantity')" (blur)="focusOut()">
+      (focus)="focusField('feedwaterThermodynamicQuantity')" >
       <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
     </select>
   </div>
@@ -33,7 +33,7 @@
     <div class="input-group">
       <input class="form-control" name="feedwaterQuantityValue" id="feedwaterQuantityValue"
         formControlName="feedwaterQuantityValue" type="number" (input)="calculate()"
-        (focus)="focusField('feedwaterQuantityValue')" (blur)="focusOut()" onfocus="this.select();">
+        (focus)="focusField('feedwaterQuantityValue')"  onfocus="this.select();">
       <span *ngIf="feedwaterForm.controls.feedwaterThermodynamicQuantity.value != 3" class="input-group-addon units"
         [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
     </div>
@@ -57,7 +57,7 @@
     <label class="small" for="desuperheatingTemp">Desuperheating Temperature</label>
     <div class="input-group">
       <input class="form-control" name="desuperheatingTemp" id="desuperheatingTemp" formControlName="desuperheatingTemp"
-        type="number" (input)="calculate()" (focus)="focusField('desuperheatingTemp')" (blur)="focusOut()"
+        type="number" (input)="calculate()" (focus)="focusField('desuperheatingTemp')" 
         onfocus="this.select();">
       <span class="input-group-addon units"><span
           [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>

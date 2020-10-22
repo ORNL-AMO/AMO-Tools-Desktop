@@ -32,7 +32,7 @@ export class CalculateLossesService {
       }
 
       if (inputCpy.headerInput.highPressureHeader.flashCondensateReturn === true) {
-        ssmtLosses.condensateFlashTankLoss = this.calculateCondensateFlashTankLoss(resultsCpy.condensateFlashTank);
+        ssmtLosses.condensateFlashTankLoss = this.calculateCondensateFlashTankLoss(resultsCpy.condensateFlashTank, settings);
       }
       if (inputCpy.headerInput.numberOfHeaders > 1) {
         //low pressure vent
@@ -72,6 +72,7 @@ export class CalculateLossesService {
       ssmtLosses.totalVentLosses = this.calculateTotalVentLoss(ssmtLosses);
       ssmtLosses.totalOtherLosses = this.calculateTotalOtherLosses(ssmtLosses);
       ssmtLosses.totalTurbineLosses = this.calculateTotalTurbineLosses(ssmtLosses);
+      ssmtLosses.returnedSteamAndCondensate = this.calculateReturnedSteamAndCondensate(resultsCpy.deaeratorOutput, ssmtLosses, settings);
     }
     return ssmtLosses;
   }
@@ -127,14 +128,16 @@ export class CalculateLossesService {
   calculateLowPressureVentLoss(lowPressureVentedSteam: SteamPropertiesOutput, settings: Settings): number {
     if (lowPressureVentedSteam) {
       let loss: number = this.calculateEnergy(lowPressureVentedSteam.massFlow, lowPressureVentedSteam.specificEnthalpy, settings);
+      loss = this.convertUnitsService.value(loss).from('MJ').to(settings.steamEnergyMeasurement);
       return loss;
     } else {
       return 0;
     }
   }
 
-  calculateCondensateFlashTankLoss(condensateFlashTank: FlashTankOutput): number {
-    let loss: number = condensateFlashTank.outletGasSpecificEnthalpy * condensateFlashTank.outletGasMassFlow;
+  calculateCondensateFlashTankLoss(condensateFlashTank: FlashTankOutput, settings: Settings): number {
+    let loss: number = this.calculateEnergy(condensateFlashTank.outletGasMassFlow, condensateFlashTank.outletGasSpecificEnthalpy, settings);
+    loss = this.convertUnitsService.value(loss).from('MJ').to(settings.steamEnergyMeasurement);
     return loss;
   }
 
@@ -198,6 +201,12 @@ export class CalculateLossesService {
     return loss;
   }
 
+  calculateReturnedSteamAndCondensate(deaeratorOutput: DeaeratorOutput, ssmtLosses: SSMTLosses, settings: Settings): number {
+    let loss: number = this.calculateEnergy(deaeratorOutput.feedwaterMassFlow, deaeratorOutput.feedwaterSpecificEnthalpy, settings);
+    loss = this.convertUnitsService.value(loss).from('MJ').to(settings.steamEnergyMeasurement);
+    return loss - ssmtLosses.makeupWaterEnergy;
+  }
+
   initLosses(): SSMTLosses {
     let losses: SSMTLosses = {
       stack: 0,
@@ -231,7 +240,8 @@ export class CalculateLossesService {
       totalProcessLosses: 0,
       totalVentLosses: 0,
       totalTurbineLosses: 0,
-      totalOtherLosses: 0
+      totalOtherLosses: 0,
+      returnedSteamAndCondensate: 0
     };
     return losses;
   }

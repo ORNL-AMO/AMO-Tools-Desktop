@@ -412,7 +412,6 @@ export class ConvertSteamService {
     ssmtOutput.highPressureProcessSteamUsage = this.convertProcessUsageOutput(ssmtOutput.highPressureProcessSteamUsage, settings);
     ssmtOutput.mediumPressureProcessSteamUsage = this.convertProcessUsageOutput(ssmtOutput.mediumPressureProcessSteamUsage, settings);
     ssmtOutput.lowPressureProcessSteamUsage = this.convertProcessUsageOutput(ssmtOutput.lowPressureProcessSteamUsage, settings);
-
     ssmtOutput.lowPressureVentedSteam = this.convertSteamPropertiesOutput(ssmtOutput.lowPressureVentedSteam, settings);
     ssmtOutput.heatExchanger = this.convertHeatExchangerOutput(ssmtOutput.heatExchanger, settings);
     ssmtOutput.operationsOutput = this.convertOperationsOutput(ssmtOutput.operationsOutput, settings);
