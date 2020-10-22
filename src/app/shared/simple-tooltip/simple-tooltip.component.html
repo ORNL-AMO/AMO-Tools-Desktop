@@ -1,7 +1,9 @@
 <!-- <div class="tooltip-box hidden-tooltip-box" [ngStyle]="{'display': (display ? 'initial' : 'none'), 'left': adjustLeftStr, 'top': adjustTopStr, 'bottom': adjustBottomStr}" [ngClass]="{'revealed-tooltip-box': hover}"> -->
 <!-- <div class="tooltip-box revealed-tooltip-box" [ngClass]="{'revealed-tooltip-box': reveal}"> -->
 <div class="tooltip-box hidden-tooltip-box" [ngStyle]="{'display': (display ? 'initial' : 'none'), 'left': adjustLeftStr}"
-  [ngClass]="{'revealed-tooltip-box': hover}">
+  [ngClass]="{'revealed-tooltip-box': hover,
+              'show-top': direction == 'top',
+              'show-bottom': direction == 'bottom'}">
 
   <span>{{message}}</span>
 </div>

@@ -1716,7 +1716,7 @@ No Data Messaging
   padding: 5px;
 }
 
-.fa-bar-chart {
+.fa-bar-chart, .fa-comment-o {
   opacity: 0.6;
   padding: 5px;
   border-radius: 2px;
@@ -1754,7 +1754,7 @@ No Data Messaging
   transition: ease-in-out 0.2s all;
 }
 
-.fa-bar-chart:hover {
+.fa-bar-chart:hover, .fa-comment-o:hover {
   cursor: pointer;
   opacity: 1;
   border-color: #212529;

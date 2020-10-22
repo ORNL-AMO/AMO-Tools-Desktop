@@ -6,7 +6,7 @@
       <div class="input-group">
         <input name="fuelCost" min="0" type="number" step="any" class="form-control" id="{{idString+'fuelCost'}}"
           (input)="save()" formControlName="fuelCost" [ngClass]="{'indicate-different': isFuelCostDifferent()}"
-          (focus)="focusField('fuelCost')" (blur)="focusOut()">
+          (focus)="focusField('fuelCost')" >
         <span class="units input-group-addon">$/{{settings.steamEnergyMeasurement}}</span>
       </div>
       <span class="alert-danger pull-right small"
@@ -22,7 +22,7 @@
         <input name="electricityCost" min="0" type="number" step="any" class="form-control" id="electricityCost"
           (input)="save()" formControlName="electricityCost"
           [ngClass]="{'indicate-different': isElectricityCostDifferent()}" (focus)="focusField('electricityCost')"
-          (blur)="focusOut()">
+          >
         <span class="units input-group-addon">$/kWh</span>
       </div>
       <span class="alert-danger pull-right small"
@@ -38,7 +38,7 @@
         <input name="makeUpWaterCost" min="0" type="number" step="any" class="form-control"
           id="{{idString+'makeUpWaterCost'}}" (input)="save()" formControlName="makeUpWaterCost"
           [ngClass]="{'indicate-different': isMakeUpWaterCostsDifferent()}" (focus)="focusField('makeUpWaterCost')"
-          (blur)="focusOut()">
+          >
         <span class="units input-group-addon">$/{{settings.steamVolumeMeasurement}}</span>
       </div>
       <span class="alert-danger pull-right small"
@@ -54,7 +54,7 @@
       <div class="input-group">
         <input name="implementationCosts" min="0" type="number" step="any" class="form-control"
           id="implementationCosts" (input)="save()" formControlName="implementationCosts" (focus)="focusField('implementationCosts')"
-          (blur)="focusOut()">
+          >
         <span class="units input-group-addon">$k</span>
       </div>
       <span class="alert-danger pull-right small"

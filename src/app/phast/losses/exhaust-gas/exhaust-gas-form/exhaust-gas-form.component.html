@@ -5,7 +5,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareOffGasTemp(), 'invalid': exhaustGasForm.controls.offGasTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'offGasTemp_'+lossIndex}}" type="number" step="10" class="form-control"
           formControlName="offGasTemp" id="{{'offGasTemp'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('offGasTemp')"
-          (blur)="focusOut()">
+          >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -17,7 +17,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareCO(), 'invalid': exhaustGasForm.controls.CO.invalid}">
         <input [readonly]="!baselineSelected" name="{{'CO_'+lossIndex}}" type="number" step="any" min="0" max="100"
           class="form-control" formControlName="CO" id="{{'CO'+idString}}" onfocus="this.select();" (input)="save()"
-          (focus)="focusField('CO')" (blur)="focusOut()">
+          (focus)="focusField('CO')" >
         <span class="input-group-addon units">%</span>
       </div>
     </div>
@@ -26,7 +26,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareH2(), 'invalid': exhaustGasForm.controls.H2.invalid}">
         <input [readonly]="!baselineSelected" name="{{'H2_'+lossIndex}}" type="number" step="any" min="0" max="100"
           class="form-control" formControlName="H2" id="{{'H2'+idString}}" onfocus="this.select();" (input)="save()"
-          (focus)="focusField('H2')" (blur)="focusOut()">
+          (focus)="focusField('H2')" >
         <span class="input-group-addon units">%</span>
       </div>
     </div>
@@ -35,7 +35,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareCombustibleGases(), 'invalid': exhaustGasForm.controls.combustibleGases.invalid}">
         <input [readonly]="!baselineSelected" name="{{'combustibleGases_'+lossIndex}}" type="number" step="any" min="0"
           max="100" class="form-control" formControlName="combustibleGases" id="{{'combustibleGases'+idString}}"
-          onfocus="this.select();" (input)="save()" (focus)="focusField('combustibleGases')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="save()" (focus)="focusField('combustibleGases')" >
         <span class="input-group-addon units">%</span>
       </div>
     </div>
@@ -46,7 +46,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareVfr(), 'invalid': exhaustGasForm.controls.vfr.invalid}">
         <input [readonly]="!baselineSelected" name="{{'vfr_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
           formControlName="vfr" id="{{'vfr'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('vfr')"
-          (blur)="focusOut()">
+          >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">cfm</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
       </div>
@@ -56,7 +56,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareDustLoading(), 'invalid': exhaustGasForm.controls.dustLoading.invalid}">
         <input [readonly]="!baselineSelected" name="{{'dustLoading_'+lossIndex}}" type="number" step="any" min="0"
           class="form-control" formControlName="dustLoading" id="{{'dustLoading'+idString}}" onfocus="this.select();"
-          (input)="save()" (focus)="focusField('dustLoading')" (blur)="focusOut()">
+          (input)="save()" (focus)="focusField('dustLoading')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/scf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/Nm<sup>3</sup></span>
       </div>

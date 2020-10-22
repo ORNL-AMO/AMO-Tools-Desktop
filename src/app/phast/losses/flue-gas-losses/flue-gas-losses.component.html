@@ -43,7 +43,7 @@
       <label class="small" for="{{'type_'+lossIndex+idString}}">Type of fuel</label>
       <select class="form-control" id="{{'type_'+lossIndex+idString}}" [(ngModel)]="loss.measurementType"
         [disabled]="(!baselineSelected || lossesLocked) && !inSetup" (focus)="changeField('measurementType')"
-        (blur)="focusOut()" (change)="saveLosses()" [ngClass]="{'indicate-different': compareLossType(lossIndex)}">
+         (change)="saveLosses()" [ngClass]="{'indicate-different': compareLossType(lossIndex)}">
         <option [ngValue]="'By Volume'">Gas</option>
         <option [ngValue]="'By Mass'">Solid/Liquid</option>
       </select>
