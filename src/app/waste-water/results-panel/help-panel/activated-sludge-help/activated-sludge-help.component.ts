@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WasteWaterService } from '../../../waste-water.service';
+import { concentrationRows } from './concentrationHelp';
 
 @Component({
   selector: 'app-activated-sludge-help',
@@ -11,15 +12,17 @@ export class ActivatedSludgeHelpComponent implements OnInit {
 
   focusedField: string;
   focusedFieldSub: Subscription;
+  concentrationRows: Array<{ influent: number, inert: number, inertInorg: number }>
   constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
+    this.concentrationRows = concentrationRows;
     this.focusedFieldSub = this.wasteWaterService.focusedField.subscribe(val => {
       this.focusedField = val;
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.focusedFieldSub.unsubscribe();
   }
 }

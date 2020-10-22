@@ -71,12 +71,21 @@
                 field conditions.
                 <br>
                 <hr class="my-1 hr-spacer">
-                Standard oxygen transfer rate in tap water at 20°C, zero DO, & sea level (lb O2/hp-hr)
+                Standard oxygen transfer rate in tap water at 20°C, zero DO, & sea level <span
+                    *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
                 <hr>
             </small>
             <div class="w-100 justify-content-center">
                 <table class="table table-hover table-striped">
                     <tbody>
+                        <tr>
+                            <th></th>
+                            <th class="text-center">
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                            </th>
+                        </tr>
                         <tr *ngFor="let standardSOTRValue of standardSOTRValues">
                             <td class="w-50 text-center">{{standardSOTRValue.label}}</td>
                             <td class="w-50 text-center">{{standardSOTRValue.value}}</td>
@@ -86,8 +95,11 @@
             </div>
             <div class="small alert-warning">
                 Please note that standard oxygen transfer capacity for diffused aeration systems is typically expressed
-                as a percent transfer efficiency and was converted to lb O2/hp-hr by assuming a compressor efficiency of
-                75%, tank depth of 15 ft, and diffusers at 1.5ft above tank bottom.
+                as a percent transfer efficiency and was converted to <span
+                    *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span> by assuming a
+                compressor efficiency of
+                75%, tank depth of 15 ft (4.572 m), and diffusers at 1.5 ft (0.4572 m) above tank bottom.
             </div>
         </h6>
     </div>
