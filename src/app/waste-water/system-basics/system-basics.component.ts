@@ -72,4 +72,8 @@ export class SystemBasicsComponent implements OnInit {
     this.dataUpdated = true;
     this.showUpdateData = false;
   }
+
+  focusField(str: string) {
+    this.wasteWaterService.focusedField.next(str);
+  }
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { WasteWaterService } from '../../../waste-water.service';
 
 @Component({
   selector: 'app-aerator-performance-help',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AeratorPerformanceHelpComponent implements OnInit {
 
-  constructor() { }
+  focusedField: string;
+  focusedFieldSub: Subscription;
+  constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
+    this.focusedFieldSub = this.wasteWaterService.focusedField.subscribe(val => {
+      this.focusedField = val;
+    });
   }
 
+  ngOnDestroy(){
+    this.focusedFieldSub.unsubscribe();
+  }
 }

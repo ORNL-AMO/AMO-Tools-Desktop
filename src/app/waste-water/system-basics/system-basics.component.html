@@ -50,7 +50,7 @@
         <div class="form-group pt-4">
             <label class="group-label w-100">Equipment Notes</label>
             <textarea name="equipmentNotes" rows="4" id="equipmentNotes" (input)="saveSystemBasics()"
-                formControlName="equipmentNotes" placeholder="Add additional information for your equipment"></textarea>
+                formControlName="equipmentNotes" placeholder="Add additional information for your equipment" (focus)="focusField('equipmentNotes')"></textarea>
         </div>
     </form>
 </div>
