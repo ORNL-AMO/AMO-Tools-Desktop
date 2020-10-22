@@ -51,10 +51,10 @@ export class ImportService {
       let tmpInventories: Array<ImportExportInventory> = _.xorBy(this.inventoriesAdded, data.inventories, 'inventoryItem.inventoryItem.id');
       this.addInventories(tmpInventories, workingDirectoryId);
     } else {
-      if (data.assessments.length !== 0) {
+      if (data.assessments && data.assessments.length !== 0) {
         this.addAssessments(data.assessments, workingDirectoryId);
       }
-      if (data.inventories.length !== 0) {
+      if (data.inventories && data.inventories.length !== 0) {
         this.addInventories(data.inventories, workingDirectoryId);
       }
     }
