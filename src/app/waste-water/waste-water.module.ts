@@ -25,6 +25,9 @@ import { SettingsModule } from '../settings/settings.module';
 import { ConvertWasteWaterService } from './convert-waste-water.service';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 import { WasteWaterReportModule } from './waste-water-report/waste-water-report.module';
+import { AeratorPerformanceHelpComponent } from './results-panel/help-panel/aerator-performance-help/aerator-performance-help.component';
+import { ActivatedSludgeHelpComponent } from './results-panel/help-panel/activated-sludge-help/activated-sludge-help.component';
+import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 
 
 
@@ -42,7 +45,10 @@ import { WasteWaterReportModule } from './waste-water-report/waste-water-report.
     ExploreOpportunitiesComponent,
     AddModificationModalComponent,
     ModificationListModalComponent,
-    ModifyConditionsTabsComponent
+    ModifyConditionsTabsComponent,
+    AeratorPerformanceHelpComponent,
+    ActivatedSludgeHelpComponent,
+    SystemBasicsHelpComponent
   ],
   imports: [
     CommonModule,

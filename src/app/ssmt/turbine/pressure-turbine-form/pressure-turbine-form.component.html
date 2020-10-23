@@ -2,7 +2,7 @@
   <label class="group-label w-100">
     <div class="form-group">
       <input type="checkbox" id="{{idString+pressureTurbineString+'_useTurbine'}}" formControlName="useTurbine"
-        (blur)="focusOut()" [ngClass]="{'indicate-different': isUseTurbineDifferent()}" (change)="save()">
+         [ngClass]="{'indicate-different': isUseTurbineDifferent()}" (change)="save()">
       <span class="pl-1" *ngIf="pressureTurbineString == 'highToLowTurbine'">High Pressure to Low Pressure</span>
       <span class="pl-1" *ngIf="pressureTurbineString == 'highToMediumTurbine'">High Pressure to Medium Pressure</span>
       <span class="pl-1" *ngIf="pressureTurbineString == 'mediumToLowTurbine'">Medium Pressure to Low Pressure</span>
@@ -14,7 +14,7 @@
       <div class="input-group">
         <input name="isentropicEfficiency" type="number" step="any" class="form-control"
           id="{{idString+pressureTurbineString+'_isentropicEfficiency'}}" (input)="save()" [readonly]="!selected"
-          formControlName="isentropicEfficiency" (focus)="focusField('isentropicEfficiency')" (blur)="focusOut()"
+          formControlName="isentropicEfficiency" (focus)="focusField('isentropicEfficiency')" 
           [ngClass]="{'indicate-different': isIsentropicEfficiencyDifferent()}">
         <span class="units input-group-addon">%</span>
       </div>
@@ -33,7 +33,7 @@
       <div class="input-group">
         <input name="generationEfficiency" type="number" step="any" class="form-control"
           id="{{idString+pressureTurbineString+'_generationEfficiency'}}" (input)="save()" [readonly]="!selected"
-          formControlName="generationEfficiency" (focus)="focusField('generationEfficiency')" (blur)="focusOut()"
+          formControlName="generationEfficiency" (focus)="focusField('generationEfficiency')" 
           [ngClass]="{'indicate-different': isGenerationEfficiencyDifferent()}">
         <span class="units input-group-addon">%</span>
       </div>
@@ -50,7 +50,7 @@
     <div class="form-group">
       <label for="{{idString+pressureTurbineString+'_operationType'}}">Operation Type</label>
       <select name="operationType" class="form-control" id="{{idString+pressureTurbineString+'_operationType'}}"
-        (change)="changeOperationValidators()" (focus)="focusField('operationType')" (blur)="focusOut()"
+        (change)="changeOperationValidators()" (focus)="focusField('operationType')" 
         formControlName="operationType" [ngClass]="{'indicate-different': isOperationTypeDifferent()}">
         <option *ngFor="let type of turbineTypeOptions" [ngValue]="type.value">{{type.display}}</option>
       </select>
@@ -67,7 +67,7 @@
         <input name="operationValue1" type="number" step="any" class="form-control"
           id="{{idString+pressureTurbineString+'_operationValue1'}}" (input)="changeOperation2Validators()"
           [readonly]="!selected" formControlName="operationValue1" (focus)="focusField('operationValue1')"
-          (blur)="focusOut()" [ngClass]="{'indicate-different': isOperationValue1Different()}">
+           [ngClass]="{'indicate-different': isOperationValue1Different()}">
         <span class="units input-group-addon">
           <span
             *ngIf="turbineForm.controls.operationType.value == 0 || turbineForm.controls.operationType.value == 4"><span
@@ -107,7 +107,7 @@
         <input name="operationValue2" type="number" step="any" class="form-control"
           id="{{idString+pressureTurbineString+'_operationValue2'}}" (input)="changeOperation1Validators()"
           [readonly]="!selected" formControlName="operationValue2" (focus)="focusField('operationValue2')"
-          (blur)="focusOut()" [ngClass]="{'indicate-different': isOperationValue2Different()}">
+           [ngClass]="{'indicate-different': isOperationValue2Different()}">
         <span class="units input-group-addon">
           <span
             *ngIf="turbineForm.controls.operationType.value == 0 || turbineForm.controls.operationType.value == 4"><span

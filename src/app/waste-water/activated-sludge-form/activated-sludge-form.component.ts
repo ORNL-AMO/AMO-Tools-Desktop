@@ -69,6 +69,6 @@ export class ActivatedSludgeFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-
+    this.wasteWaterService.focusedField.next(str);
   }
 }

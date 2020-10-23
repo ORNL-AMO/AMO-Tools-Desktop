@@ -24,7 +24,7 @@
           </span>
           <input class="form-control" name="operatingHours" id="{{'operatingHours_'+idString}}"
             formControlName="operatingHours" type="number" (input)="calculate()" (focus)="focusField('operatingHours')"
-            (blur)="focusOut()" onfocus="this.select();">
+             onfocus="this.select();">
           <span class="units input-group-addon">hrs/yr</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -40,7 +40,7 @@
       <div class="form-group">
         <label class="small" for="{{'utilityType_'+idString}}">Utility Type</label>
         <select class="form-control" name="utilityType" id="{{'utilityType_'+idString}}" formControlName="utilityType"
-          (change)="changeUtilityType()" (focus)="focusField('utilityType')" (blur)="focusOut()">
+          (change)="changeUtilityType()" (focus)="focusField('utilityType')" >
           <option *ngFor="let option of utilityOptions" [ngValue]="option.value">{{option.name}}</option>
         </select>
       </div>
@@ -49,7 +49,7 @@
         <label class="small" for="{{'utilityCost_'+idString}}">Utility Cost</label>
         <div class="input-group">
           <input class="form-control" name="utilityCost" id="{{'utilityCost_'+idString}}" formControlName="utilityCost"
-            type="number" (input)="calculate()" (focus)="focusField('utilityCost')" (blur)="focusOut()"
+            type="number" (input)="calculate()" (focus)="focusField('utilityCost')" 
             onfocus="this.select();">
           <span class="units input-group-addon">$/
             <span *ngIf="form.controls.utilityType.value == 0 && settings.unitsOfMeasure == 'Imperial'">klb</span>
@@ -71,7 +71,7 @@
         <label class="small" for="{{'pressure_'+idString}}">Pressure</label>
         <div class="input-group">
           <input class="form-control" name="pressure" id="{{'pressure_'+idString}}" formControlName="pressure"
-            type="number" (input)="calculate()" (focus)="focusField('pressure')" (blur)="focusOut()"
+            type="number" (input)="calculate()" (focus)="focusField('pressure')" 
             onfocus="this.select();">
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
           <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">barg</span>
@@ -90,7 +90,7 @@
         <div class="input-group">
           <input class="form-control" name="systemEfficiency" id="{{'systemEfficiency_'+idString}}"
             formControlName="systemEfficiency" type="number" (input)="calculate()"
-            (focus)="focusField('systemEfficiency')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('systemEfficiency')"  onfocus="this.select();">
           <span class="units input-group-addon">%</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -108,7 +108,7 @@
         <label class="small" for="{{'measurementMethod_'+idString}}">Measurement Method</label>
         <select class="form-control" name="measurementMethod" id="{{'measurementMethod_'+idString}}"
           formControlName="measurementMethod" (change)="changeMeasurementMethod()"
-          (focus)="focusField('measurementMethod')" (blur)="focusOut()">
+          (focus)="focusField('measurementMethod')" >
           <option *ngFor="let option of measurementOptions" [ngValue]="option.value">{{option.name}}</option>
         </select>
       </div>
@@ -122,7 +122,7 @@
         <div class="input-group">
           <input class="form-control" name="flowMeterFlowRate" id="{{'flowMeterFlowRate_'+idString}}"
             formControlName="flowMeterFlowRate" type="number" (input)="calculate()"
-            (focus)="focusField('flowMeterFlowRate')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('flowMeterFlowRate')"  onfocus="this.select();">
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">lb/hr</span>
           <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">kg/hr</span>
         </div>
@@ -143,7 +143,7 @@
         <label class="small" for="{{'airIsNameplate_'+idString}}">Air Flow Measurement</label>
         <select class="form-control" name="airIsNameplate" id="{{'airIsNameplate_'+idString}}"
           formControlName="airIsNameplate" (change)="calculate()" (focus)="focusField('isNameplate')"
-          (blur)="focusOut()">
+          >
           <option [ngValue]="false">Measured</option>
           <option [ngValue]="true">Nameplate</option>
         </select>
@@ -154,7 +154,7 @@
         <div class="input-group">
           <input class="form-control" name="airMeasuredAreaOfDuct" id="{{'areaOfDuct_'+idString}}"
             formControlName="airMeasuredAreaOfDuct" type="number" (input)="calculate()"
-            (focus)="focusField('areaOfDuct')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('areaOfDuct')"  onfocus="this.select();">
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft<sup>2</sup></span>
           <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">cm<sup>2</sup></span>
         </div>
@@ -170,7 +170,7 @@
         <div class="input-group">
           <input class="form-control" name="airMeasuredAirVelocity" id="{{'airVelocity_'+idString}}"
             formControlName="airMeasuredAirVelocity" type="number" (input)="calculate()"
-            (focus)="focusField('airVelocity')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('airVelocity')"  onfocus="this.select();">
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft/min</span>
           <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">m/min</span>
         </div>
@@ -187,7 +187,7 @@
         <div class="input-group">
           <input class="form-control" name="airNameplateFlowRate" id="{{'airFlow_'+idString}}"
             formControlName="airNameplateFlowRate" type="number" (input)="calculate()" (focus)="focusField('airFlow')"
-            (blur)="focusOut()" onfocus="this.select();">
+             onfocus="this.select();">
           <span class="units input-group-addon">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>3</sup>/min</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">L/s</span>
@@ -210,7 +210,7 @@
         <div class="input-group">
           <input class="form-control" name="airInletTemperature" id="{{'airInletTemperature_'+idString}}"
             formControlName="airInletTemperature" type="number" (input)="calculate()"
-            (focus)="focusField('airInletTemperature')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('airInletTemperature')"  onfocus="this.select();">
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</span>
         </div>
@@ -225,7 +225,7 @@
         <div class="input-group">
           <input class="form-control" name="airOutletTemperature" id="{{'airOutletTemperature_'+idString}}"
             formControlName="airOutletTemperature" type="number" (input)="calculate()"
-            (focus)="focusField('airOutletTemperature')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('airOutletTemperature')"  onfocus="this.select();">
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</span>
         </div>
@@ -255,7 +255,7 @@
         <div class="input-group">
           <input class="form-control" name="waterNameplateFlowRate" id="{{'waterNameplateFlowRate_'+idString}}"
             formControlName="waterNameplateFlowRate" type="number" (input)="calculate()"
-            (focus)="focusField('waterFlowRate')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('waterFlowRate')"  onfocus="this.select();">
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">gpm</span>
           <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">L/s</span>
         </div>
@@ -272,7 +272,7 @@
         <div class="input-group">
           <input class="form-control" name="waterInletTemperature" id="{{'waterInletTemperature_'+idString}}"
             formControlName="waterInletTemperature" type="number" (input)="calculate()"
-            (focus)="focusField('waterInletTemperature')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('waterInletTemperature')"  onfocus="this.select();">
 
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</span>
@@ -290,7 +290,7 @@
         <div class="input-group">
           <input class="form-control" name="waterOutletTemperature" id="{{'waterOutletTemperature_'+idString}}"
             formControlName="waterOutletTemperature" type="number" (input)="calculate()"
-            (focus)="focusField('waterOutletTemperature')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('waterOutletTemperature')"  onfocus="this.select();">
 
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
@@ -319,7 +319,7 @@
         <div class="input-group">
           <input class="form-control" name="waterSystemEfficiency" id="{{'waterSystemEfficiency_'+idString}}"
             formControlName="waterSystemEfficiency" type="number" (input)="calculate()"
-            (focus)="focusField('systemEfficiency')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('systemEfficiency')"  onfocus="this.select();">
           <span class="units input-group-addon">%</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -340,7 +340,7 @@
         <label class="small" for="{{'consumption'+idString}}">Consumption</label>
         <div class="input-group">
           <input class="form-control" name="consumption" id="{{'consumption_'+idString}}" formControlName="consumption"
-            type="number" (input)="calculate()" (focus)="focusField('consumption')" (blur)="focusOut()"
+            type="number" (input)="calculate()" (focus)="focusField('consumption')" 
             onfocus="this.select();">
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/yr</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">GJ/yr</span>
@@ -359,7 +359,7 @@
         <label class="small" for="{{'units_'+idString}}"># of Units</label>
         <div class="input-group">
           <input class="form-control" name="units" id="{{'units_'+idString}}" formControlName="units" type="number"
-            (input)="calculate()" (focus)="focusField('units')" (blur)="focusOut()" onfocus="this.select();">
+            (input)="calculate()" (focus)="focusField('units')"  onfocus="this.select();">
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.units.invalid && !form.controls.units.pristine">

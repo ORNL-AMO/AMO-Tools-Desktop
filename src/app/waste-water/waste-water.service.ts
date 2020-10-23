@@ -22,6 +22,7 @@ export class WasteWaterService {
   isModalOpen: BehaviorSubject<boolean>;
   modifyConditionsTab: BehaviorSubject<string>;
   selectedModificationId: BehaviorSubject<string>;
+  focusedField: BehaviorSubject<string>;
   constructor(private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService, private systemBasicsService: SystemBasicsService,
     private convertWasteWaterService: ConvertWasteWaterService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
@@ -34,6 +35,7 @@ export class WasteWaterService {
     this.isModalOpen = new BehaviorSubject<boolean>(false);
     this.modifyConditionsTab = new BehaviorSubject<string>('activated-sludge');
     this.selectedModificationId = new BehaviorSubject<string>(undefined);
+    this.focusedField = new BehaviorSubject<string>('default');
   }
 
 

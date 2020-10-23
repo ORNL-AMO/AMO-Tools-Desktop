@@ -108,6 +108,6 @@ export class AeratorPerformanceFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-
+    this.wasteWaterService.focusedField.next(str);
   }
 }

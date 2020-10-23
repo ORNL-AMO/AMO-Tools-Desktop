@@ -88,14 +88,18 @@ export interface TraceData {
     id?: string,
     showlegend?: boolean,
     hovertemplate?: string,
-    hoverinfo?: string,
     customdata?: Array<number | string>,
-    text?: Array<string>,
     xaxis?: any,
     yaxis?: any,
     fill?: string,
     fillcolor?: string,
     mode?: string,
+    hoverinfo?: string,
+    hoverlabel?: {
+        namelength?: number,
+        bordercolor?: string
+    },
+    text?: string[],
     marker?: {
         color?: string | Array<string>,
         line?: {
@@ -107,7 +111,10 @@ export interface TraceData {
             ticksuffix: string,
             showticksuffix: string
         }
-        size?: number,
+        size?: number | number[],
+        sizeref?: number,
+        sizemin?: number,
+        sizemode?: string,
     },
     line?: {
         shape: string,
