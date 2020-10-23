@@ -4,11 +4,8 @@ import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
-import { SettingsService } from '../settings/settings.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
@@ -51,9 +48,7 @@ export class TreasureHuntComponent implements OnInit {
     private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
-    private settingsService: SettingsService,
     private settingsDbService: SettingsDbService,
-    private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private treasureHuntService: TreasureHuntService,
     private cd: ChangeDetectorRef,
@@ -62,11 +57,8 @@ export class TreasureHuntComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
-      tmpAssessmentId = params['id'];
-      this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
-        this.assessment = dbAssessment;
+      this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
@@ -91,16 +83,13 @@ export class TreasureHuntComponent implements OnInit {
             hoursPerYear: 8760
           }
         }
-
         this.getSettings();
         let tmpTab = this.assessmentService.getTab();
         if (tmpTab) {
           this.treasureHuntService.mainTab.next(tmpTab);
         }
-
         this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
-      })
-    })
+    });
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -150,36 +139,10 @@ export class TreasureHuntComponent implements OnInit {
 
 
   getSettings() {
-    //get assessment settings
-    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-    if (tmpSettings) {
-      this.settings = tmpSettings;
-    } else {
-      //if no settings found for assessment, check directory settings
-      this.getParentDirectorySettings(this.assessment.directoryId);
-    }
-  }
-
-  getParentDirectorySettings(parentId: number) {
-    let dirSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
-    if (dirSettings) {
-      let settingsForm = this.settingsService.getFormFromSettings(dirSettings);
-      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-      tmpSettings.createdDate = new Date();
-      tmpSettings.modifiedDate = new Date();
-      tmpSettings.assessmentId = this.assessment.id;
-      //create settings for assessment
-      this.indexedDbService.addSettings(tmpSettings).then(
-        results => {
-          this.settingsDbService.setAll().then(() => {
-            this.getSettings();
-          })
-        })
-    }
-    else {
-      //if no settings for directory check parent directory
-      let tmpDir: Directory = this.directoryDbService.getById(parentId);
-      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    if (!this.settings) {
+      this.settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(this.settings);
     }
   }
 
@@ -290,5 +253,15 @@ export class TreasureHuntComponent implements OnInit {
         this.assessmentService.showTutorial.next('treasure-hunt-report-tutorial');
       }
     }
+  }
+
+  addSettings(settings: Settings) {
+    delete settings.id;
+    delete settings.directoryId;
+    settings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(settings).then(id => {
+      this.settings.id = id;
+      this.settingsDbService.setAll();
+    });
   }
 }
