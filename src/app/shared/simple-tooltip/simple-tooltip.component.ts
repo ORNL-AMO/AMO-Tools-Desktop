@@ -12,6 +12,8 @@ export class SimpleTooltipComponent implements OnInit {
   hover: boolean;
   @Input()
   display: boolean;
+  @Input()
+  direction: string;
 
   //these positions will need to be adjusted for the tooltip
   //depending on what type of graph it is being added to.

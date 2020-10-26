@@ -57,6 +57,7 @@ export class RegressionEquationsService {
     if (modificationEquipment) {
       ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
     }
+    let curveExponentVal = 2;
     for (let i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
@@ -69,7 +70,7 @@ export class RegressionEquationsService {
         baselineData.push([xBaseline, yBaseline]);
         if (modificationEquipment) {
           let xModified: number = i * ratio;
-          let yModified: number = yVal[1] * Math.pow(ratio, 2);
+          let yModified: number = yVal[1] * Math.pow(ratio, curveExponentVal);
           if (xModified <= maxFlowRate) {
             modifiedDataPairs.push({
               x: xModified,
@@ -114,6 +115,7 @@ export class RegressionEquationsService {
       ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
     }
 
+    let powerExponentVal = 3;
     let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
     for (let i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
       let yVal = baselineResults.predict(i);
@@ -126,7 +128,7 @@ export class RegressionEquationsService {
         });
         if (modificationEquipment) {
           let xModified: number = i * ratio;
-          let yModified: number = yVal[1] * Math.pow(ratio, 2);
+          let yModified: number = yVal[1] * Math.pow(ratio, powerExponentVal);
           if (xModified <= maxFlowRate) {
             modificationDataPairs.push({
               x: xModified,
