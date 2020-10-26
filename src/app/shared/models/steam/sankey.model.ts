@@ -7,7 +7,7 @@ export interface SSMTSankeyNode {
     source: number,
     target: number[],
     isConnector: boolean,
-    isConnectingPath: boolean,
+    isConnectingPath?: boolean,
     isCircularFlow?: boolean,
     id?: string,
 }
