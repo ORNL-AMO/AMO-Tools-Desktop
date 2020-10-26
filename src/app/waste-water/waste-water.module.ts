@@ -29,6 +29,7 @@ import { AeratorPerformanceHelpComponent } from './results-panel/help-panel/aera
 import { ActivatedSludgeHelpComponent } from './results-panel/help-panel/activated-sludge-help/activated-sludge-help.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.component';
 
 
 
@@ -49,7 +50,8 @@ import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
     ModifyConditionsTabsComponent,
     AeratorPerformanceHelpComponent,
     ActivatedSludgeHelpComponent,
-    SystemBasicsHelpComponent
+    SystemBasicsHelpComponent,
+    SetupTabsComponent
   ],
   imports: [
     CommonModule,
