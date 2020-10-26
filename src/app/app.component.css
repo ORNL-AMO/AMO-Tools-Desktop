@@ -571,8 +571,6 @@ Reports
 .output-summary .table th {
     border: none;
     padding: 0px;
-    text-align: left;
-    font-size: 12px;
 }
 .output-summary .table td {
     padding: 0px;
