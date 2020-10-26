@@ -36,7 +36,6 @@ export class SystemBasicsComponent implements OnInit {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     //phast need energyResultUnit
     if (this.settingsForm.controls.energyResultUnit.value === '' || !this.settingsForm.controls.energyResultUnit.value) {
-      console.log('missing');
       this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
       this.saveChanges(true);
     }
