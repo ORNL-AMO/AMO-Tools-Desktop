@@ -55,8 +55,10 @@ export class WasteWaterComponent implements OnInit {
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
         this.addSettings(settings);
+      } else {
+        this.settings = settings;
+        this.wasteWaterService.settings.next(settings);
       }
-      this.wasteWaterService.settings.next(settings);
     });
 
     this.mainTabSub = this.wasteWaterService.mainTab.subscribe(val => {
@@ -140,7 +142,10 @@ export class WasteWaterComponent implements OnInit {
     delete settings.directoryId;
     settings.assessmentId = this.assessment.id;
     this.indexedDbService.addSettings(settings).then(() => {
-      this.settingsDbService.setAll();
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        this.wasteWaterService.settings.next(this.settings);
+      });
     });
   }
 }
