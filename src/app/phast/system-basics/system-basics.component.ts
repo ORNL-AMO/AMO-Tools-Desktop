@@ -15,8 +15,6 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 export class SystemBasicsComponent implements OnInit {
   @Input()
   settings: Settings;
-  // @Input()
-  // isAssessmentSettings: boolean;
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
   @Input()
