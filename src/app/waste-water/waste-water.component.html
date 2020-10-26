@@ -1,4 +1,4 @@
-<div #content class="waste-water-container waste-water d-flex flex-column" *ngIf="assessment">
+<div #content class="waste-water-container waste-water d-flex flex-column" *ngIf="assessment && settings">
   <!--header-->
   <div #header class="w-100 hide-print sticky-top" id="wasteWaterBanner">
     <app-waste-water-banner [assessment]="assessment"></app-waste-water-banner>
