@@ -6,7 +6,6 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
-import { SettingsService } from '../settings/settings.service';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab } from './tabs';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -14,8 +13,6 @@ import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { Directory } from '../shared/models/directory';
-import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 
 @Component({
@@ -40,7 +37,6 @@ export class PhastComponent implements OnInit {
   assessment: Assessment;
   saveClicked: boolean = false;
   settings: Settings;
-  isAssessmentSettings: boolean;
   stepTab: StepTab;
   _phast: PHAST;
 
@@ -72,12 +68,10 @@ export class PhastComponent implements OnInit {
     private phastService: PhastService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
-    private settingsService: SettingsService,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,
     private cd: ChangeDetectorRef,
     private settingsDbService: SettingsDbService,
-    private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService) {
   }
 
@@ -89,57 +83,53 @@ export class PhastComponent implements OnInit {
     this.lossesService.initDone();
     //get assessmentId from route phast/:id
     this.actvatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
-      let tmpAssessmentId = params['id'];
-      //get assessment from iDb using assessmentId
-      this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
-        this.assessment = dbAssessment;
-        //use copy of phast object of as modal provided to forms
-        this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
-        if (this._phast.modifications) {
-          if (this._phast.modifications.length !== 0) {
-            if (!this._phast.modifications[0].exploreOpportunities) {
-              this.phastService.assessmentTab.next('modify-conditions');
-            }
-            if (this._phast.setupDone) {
-              this.phastCompareService.setCompareVals(this._phast, 0, false);
-            }
+      this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
+      //use copy of phast object of as modal provided to forms
+      this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
+      if (this._phast.modifications) {
+        if (this._phast.modifications.length !== 0) {
+          if (!this._phast.modifications[0].exploreOpportunities) {
+            this.phastService.assessmentTab.next('modify-conditions');
+          }
+          if (this._phast.setupDone) {
+            this.phastCompareService.setCompareVals(this._phast, 0, false);
           }
         }
-        //get settings
-        this.getSettings();
-      });
-      //check to see if we need to start on a specified tab
-      let tmpTab = this.assessmentService.getTab();
-      if (tmpTab) {
-        //set that tab
-        this.phastService.mainTab.next(tmpTab);
       }
-      //subscription for mainTab
-      this.mainTabSubscription = this.phastService.mainTab.subscribe(val => {
-        this.mainTab = val;
-        //on tab change get container height
-        this.getContainerHeight();
-        this.checkTutorials();
-      });
-      //subscription for stepTab
-      this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
-        this.stepTab = val;
-        //on tab change get container height
-        this.getContainerHeight();
-      });
-      //specTab used for: system basics, operating hours and operating costs
-      this.specTabSubscription = this.phastService.specTab.subscribe(val => {
-        this.specTab = val;
-      });
-      //tabs used for heat balance
-      this.lossesTabSubscription = this.lossesService.lossesTab.subscribe(tab => {
-        this.selectedLossTab = this.lossesService.getTab(tab);
-      });
-      //modify conditions or explore opps tab
-      this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(tab => {
-        this.assessmentTab = tab;
-        this.getContainerHeight();
-      });
+      //get settings
+      this.getSettings();
+    });
+    //check to see if we need to start on a specified tab
+    let tmpTab = this.assessmentService.getTab();
+    if (tmpTab) {
+      //set that tab
+      this.phastService.mainTab.next(tmpTab);
+    }
+    //subscription for mainTab
+    this.mainTabSubscription = this.phastService.mainTab.subscribe(val => {
+      this.mainTab = val;
+      //on tab change get container height
+      this.getContainerHeight();
+      this.checkTutorials();
+    });
+    //subscription for stepTab
+    this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
+      this.stepTab = val;
+      //on tab change get container height
+      this.getContainerHeight();
+    });
+    //specTab used for: system basics, operating hours and operating costs
+    this.specTabSubscription = this.phastService.specTab.subscribe(val => {
+      this.specTab = val;
+    });
+    //tabs used for heat balance
+    this.lossesTabSubscription = this.lossesService.lossesTab.subscribe(tab => {
+      this.selectedLossTab = this.lossesService.getTab(tab);
+    });
+    //modify conditions or explore opps tab
+    this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(tab => {
+      this.assessmentTab = tab;
+      this.getContainerHeight();
     });
     //calculator tab
     this.calcTabSubscription = this.phastService.calcTab.subscribe(val => {
@@ -264,46 +254,12 @@ export class PhastComponent implements OnInit {
   }
 
   getSettings() {
-    //get assessment settings
-    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-    if (tmpSettings) {
-      if (tmpSettings.unitsOfMeasure == 'Custom') {
-        tmpSettings.unitsOfMeasure = 'Imperial';
-      }
-      this.settings = tmpSettings;
-      //sets which tabs will be used based on settings
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    if (!this.settings) {
+      let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(tmpSettings);
+    }else{
       this.lossesService.setTabs(this.settings);
-      this.isAssessmentSettings = true;
-      this.checkSetupDone();
-      this.tab1Status = this.validateSettings();
-    } else {
-      //if no settings found for assessment, check directory settings
-      this.getParentDirectorySettings(this.assessment.directoryId);
-      this.tab1Status = this.validateSettings();
-    }
-  }
-  //assessment doesn't have it's own settings, get directory settings to start
-  getParentDirectorySettings(parentId: number) {
-    let tmpParentSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
-    if (tmpParentSettings) {
-      //create new settings for this assessment
-      let settingsForm = this.settingsService.getFormFromSettings(tmpParentSettings);
-      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-      tmpSettings.createdDate = new Date();
-      tmpSettings.modifiedDate = new Date();
-      tmpSettings.assessmentId = this.assessment.id;
-      this.indexedDbService.addSettings(tmpSettings).then(
-        results => {
-          this.settingsDbService.setAll().then(() => {
-            this.getSettings();
-          });
-        });
-    }
-    else {
-      //if no settings for directory check parent directory
-      let tmpDir: Directory = this.directoryDbService.getById(parentId);
-      //get parent directory and recursively call this function until you have settings
-      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
     }
   }
 
@@ -472,5 +428,17 @@ export class PhastComponent implements OnInit {
       this.settingsDbService.setAll();
     });
     this.hideToast();
+  }
+
+  addSettings(settings: Settings) {
+    delete settings.id;
+    delete settings.directoryId;
+    settings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(settings).then(id => {
+      settings.id = id;
+      this.settings = settings;      
+      this.lossesService.setTabs(this.settings);
+      this.settingsDbService.setAll();
+    });
   }
 }

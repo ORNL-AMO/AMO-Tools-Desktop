@@ -15,8 +15,8 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 export class SystemBasicsComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  isAssessmentSettings: boolean;
+  // @Input()
+  // isAssessmentSettings: boolean;
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
   @Input()
@@ -38,6 +38,7 @@ export class SystemBasicsComponent implements OnInit {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     //phast need energyResultUnit
     if (this.settingsForm.controls.energyResultUnit.value === '' || !this.settingsForm.controls.energyResultUnit.value) {
+      console.log('missing');
       this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
       this.saveChanges(true);
     }
@@ -65,6 +66,7 @@ export class SystemBasicsComponent implements OnInit {
     if (this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure) {
       if (this.phast.losses) {
         this.showUpdateData = true;
+        this.dataUpdated = false;
       }
     }
     //used to inform user data updated
@@ -72,34 +74,17 @@ export class SystemBasicsComponent implements OnInit {
       this.dataUpdated = true;
     }
     //if assessment already has settings, update them
-    if (this.isAssessmentSettings) {
-      this.indexedDbService.putSettings(this.settings).then(
-        results => {
-          this.settingsDbService.setAll().then(() => {
-            //get updated settings
-            this.updateSettings.emit(true);
-          });
-        }
-      );
-    }
-    //else if assessment does not have own settings create settings for assessment
-    //base on setup in phast.component this should probably not occur but keeping for now
-    else {
-      this.settings.createdDate = new Date();
-      this.settings.modifiedDate = new Date();
-      this.indexedDbService.addSettings(this.settings).then(
-        results => {
-          this.settingsDbService.setAll().then(() => {
-            this.isAssessmentSettings = true;
-            //get updated settings
-            this.updateSettings.emit(true);
-          });
-        }
-      );
-    }
+    // if (this.isAssessmentSettings) {
+    console.log('put');
+    this.indexedDbService.putSettings(this.settings).then(() => {
+      this.settingsDbService.setAll().then(() => {
+        //get updated settings
+        this.updateSettings.emit(true);
+      });
+    });
   }
   //update/convert assessment data for new units
-  updateData(bool?: boolean) {
+  updateData() {
     if (this.phast.losses) {
       this.phast.losses = this.convertPhastService.convertPhastLosses(this.phast.losses, this.oldSettings, this.settings);
       if (this.phast.meteredEnergy) {
