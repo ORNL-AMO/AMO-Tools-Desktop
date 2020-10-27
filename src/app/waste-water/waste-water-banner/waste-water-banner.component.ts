@@ -17,8 +17,6 @@ export class WasteWaterBannerComponent implements OnInit {
 
   mainTab: string;
   mainTabSub: Subscription;
-  setupTab: string;
-  setupTabSub: Subscription;
   wasteWaterSub: Subscription;
   assessmentTabSub: Subscription;
   assessmentTab: string;
@@ -36,10 +34,6 @@ export class WasteWaterBannerComponent implements OnInit {
       this.mainTab = val;
     });
 
-    this.setupTabSub = this.wasteWaterService.setupTab.subscribe(val => {
-      this.setupTab = val;
-    });
-
     this.assessmentTabSub = this.wasteWaterService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     });
@@ -51,7 +45,6 @@ export class WasteWaterBannerComponent implements OnInit {
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
-    this.setupTabSub.unsubscribe();
     this.wasteWaterSub.unsubscribe();
     this.assessmentTabSub.unsubscribe();
     this.selectedModificationIdSub.unsubscribe();
@@ -62,10 +55,6 @@ export class WasteWaterBannerComponent implements OnInit {
     if (str == 'system-setup' || this.isBaselineValid) {
       this.wasteWaterService.mainTab.next(str);
     }
-  }
-
-  changeSetupTab(str: string) {
-    this.wasteWaterService.setupTab.next(str);
   }
 
   changeAssessmentTab(str: string){
