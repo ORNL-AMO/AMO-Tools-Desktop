@@ -9,7 +9,7 @@
         <!--OperatingDO-->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.OperatingDO, 'invalid': form.controls.OperatingDO.invalid}">
-            <label for="{{'OperatingDO_'+idString}}">Operating Disolved Oxygen</label>
+            <label for="{{'OperatingDO_'+idString}}">Operating Disolved Oxygen (DO)</label>
             <div class="input-group">
                 <input type="number" name="OperatingDO" class="form-control number-input-field"
                     id="{{'OperatingDO_'+idString}}" (focus)="focusField('OperatingDO')" (input)="save()"
@@ -27,7 +27,7 @@
         <!-- Alpha -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Alpha, 'invalid': form.controls.Alpha.invalid}">
-            <label for="{{'Alpha_'+idString}}">Oxygen Transfer Coefficient Ratio</label>
+            <label for="{{'Alpha_'+idString}}">Oxygen Transfer Coefficient Ratio (&alpha;)</label>
             <div class="input-group">
                 <input type="number" name="Alpha" class="form-control number-input-field" id="{{'Alpha_'+idString}}"
                     (focus)="focusField('Alpha')" (input)="save()" formControlName="Alpha" [readonly]="!selected">
@@ -42,7 +42,7 @@
         <!-- Beta -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Beta, 'invalid': form.controls.Beta.invalid}">
-            <label for="{{'Beta_'+idString}}">Saturation DO Concentration Ratio</label>
+            <label for="{{'Beta_'+idString}}">Saturation DO Concentration Ratio (&beta;)</label>
             <div class="input-group">
                 <input type="number" name="Beta" class="form-control number-input-field" id="{{'Beta_'+idString}}"
                     (focus)="focusField('Beta')" (input)="save()" formControlName="Beta" [readonly]="!selected">
@@ -57,7 +57,7 @@
         <!-- SOTR -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.SOTR, 'invalid': form.controls.SOTR.invalid}">
-            <label for="{{'SOTR_'+idString}}">Standard Oxygen Transfer Rate</label>
+            <label for="{{'SOTR_'+idString}}">Standard Oxygen Transfer Rate (SOTR)</label>
             <div class="input-group">
                 <input type="number" name="SOTR" class="form-control number-input-field" id="{{'SOTR_'+idString}}"
                     (focus)="focusField('SOTR')" (input)="save()" formControlName="SOTR" [readonly]="!selected">

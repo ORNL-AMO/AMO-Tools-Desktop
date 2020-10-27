@@ -215,7 +215,7 @@
         <!-- FractionBiomass -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.FractionBiomass, 'invalid': form.controls.FractionBiomass.invalid}">
-            <label for="{{'FractionBiomass_'+idString}}">Cell Debris Biomass Fraction</label>
+            <label for="{{'FractionBiomass_'+idString}}">Cell Debris Biomass Fraction (f<sub>d</sub>)</label>
             <div class="input-group">
                 <input type="number" name="FractionBiomass" class="form-control number-input-field"
                     id="{{'FractionBiomass_'+idString}}" (focus)="focusField('FractionBiomass')" (input)="save()"
@@ -231,7 +231,7 @@
         <!-- BiomassYeild -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.BiomassYeild, 'invalid': form.controls.BiomassYeild.invalid}">
-            <label for="{{'BiomassYeild_'+idString}}">Biomass Yield Constant</label>
+            <label for="{{'BiomassYeild_'+idString}}">Biomass Yield Constant (Y)</label>
             <div class="input-group">
                 <input type="number" name="BiomassYeild" class="form-control number-input-field"
                     id="{{'BiomassYeild_'+idString}}" (focus)="focusField('BiomassYeild')" (input)="save()"
@@ -247,7 +247,7 @@
         <!-- HalfSaturation -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.HalfSaturation, 'invalid': form.controls.HalfSaturation.invalid}">
-            <label for="{{'HalfSaturation_'+idString}}">Half-saturation Constant</label>
+            <label for="{{'HalfSaturation_'+idString}}">Half-saturation Constant (K<sub>s</sub>)</label>
             <div class="input-group">
                 <input type="number" name="HalfSaturation" class="form-control HalfSaturation-input-field"
                     id="{{'HalfSaturation_'+idString}}" (focus)="focusField('HalfSaturation')" (input)="save()"
@@ -264,7 +264,7 @@
         <!-- MicrobialDecay -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.MicrobialDecay, 'invalid': form.controls.MicrobialDecay.invalid}">
-            <label for="{{'MicrobialDecay_'+idString}}">Endogenous Decay Coefficient</label>
+            <label for="{{'MicrobialDecay_'+idString}}">Endogenous Decay Coefficient (K<sub>d</sub>)</label>
             <div class="input-group">
                 <input type="number" name="MicrobialDecay" class="form-control HalfSaturation-input-field"
                     id="{{'MicrobialDecay_'+idString}}" (focus)="focusField('MicrobialDecay')" (input)="save()"
@@ -281,7 +281,7 @@
         <!-- MaxUtilizationRate -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.MaxUtilizationRate, 'invalid': form.controls.MaxUtilizationRate.invalid}">
-            <label for="{{'MaxUtilizationRate_'+idString}}">Max. Specific Substrate Utilization Rate</label>
+            <label for="{{'MaxUtilizationRate_'+idString}}">Max. Specific Substrate Utilization Rate (k)</label>
             <div class="input-group">
                 <input type="number" name="MaxUtilizationRate" class="form-control HalfSaturation-input-field"
                     id="{{'MaxUtilizationRate_'+idString}}" (focus)="focusField('MaxUtilizationRate')" (input)="save()"
