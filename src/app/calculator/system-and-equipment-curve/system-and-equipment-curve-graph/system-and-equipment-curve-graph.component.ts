@@ -553,10 +553,17 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
         fluidPower: fluidPower,
         power: 0,
         efficiency: 0,
+        isUserPoint: true
       }
     }
+    let isModification: boolean;
+    if (graphData.points[0].curveNumber == this.traces.modification || graphData.points[0].curveNumber == this.traces.modificationIntersect) {
+      isModification = true;
+    } else if (graphData.points[0].curveNumber == this.traces.baseline || graphData.points[0].curveNumber == this.traces.baselineIntersect) {
+      isModification = false;
+    }
+    selectedPoint = this.systemAndEquipmentCurveGraphService.getSelectedDataPointEfficiency(selectedPoint, this.equipmentType, this.settings, isModification); 
     let selectedPointTrace = this.systemAndEquipmentCurveGraphService.getTraceDataFromPoint(selectedPoint);
-
     Plotly.addTraces(this.currentSystemChartId, selectedPointTrace);
     this.selectedDataPoints.push(selectedPoint);
     
