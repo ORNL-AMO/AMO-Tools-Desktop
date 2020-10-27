@@ -6,6 +6,8 @@
     </div>
 
     <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
+        <!--FIELD DATA GROUP-->
+        <label class="group-label">Field Data</label>
         <!--Temperature-->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.Temperature, 'invalid': form.controls.Temperature.invalid}">
@@ -73,6 +75,8 @@
                     less than {{form.controls.FlowRate.errors.min.min}} Mgal</span>
             </span>
         </div>
+        <!--CONCENTRATIONS GROUP-->
+        <label class="group-label">Concentrations</label>
         <!-- InertVSS -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.InertVSS, 'invalid': form.controls.InertVSS.invalid}">
@@ -206,6 +210,8 @@
                     be less than {{form.controls.MLSSpar.errors.min.min}} mg/L</span>
             </span>
         </div>
+        <!--SYSTEM CONSTANTS-->
+        <label class="group-label">System Constants</label>
         <!-- FractionBiomass -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.FractionBiomass, 'invalid': form.controls.FractionBiomass.invalid}">
