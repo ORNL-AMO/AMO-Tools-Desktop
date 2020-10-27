@@ -1,6 +1,6 @@
 <!--grid view-->
 <div *ngIf="dashboardView == 'grid'" class="card card-item"
-    [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt'}">
+    [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt', 'waste-water': assessment.type == 'WasteWater'}">
     <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
         <input type="checkbox" [(ngModel)]="assessment.selected">
         <div class="d-flex align-items-center">
@@ -14,6 +14,8 @@
                 src="assets/images/ico-ssmt-diagram.png">
             <img *ngIf="assessment.type == 'TreasureHunt'" class="icon-image pl-1 pr-1"
                 src="assets/images/treasure-hunt.png">
+            <img *ngIf="assessment.type == 'WasteWater'" class="icon-image pl-1 pr-1"
+                src="assets/images/waste-water-icon.png">
             <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
         </div>
         <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
@@ -42,7 +44,7 @@
 
 <!--list view-->
 <div *ngIf="dashboardView == 'list'" class="list-row d-flex w-100"
-    [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt'}">
+    [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt', 'waste-water': assessment.type == 'WasteWater'}">
     <div class="d-flex">
         <div class="p-1">
             <input type="checkbox" [(ngModel)]="assessment.selected" />
@@ -59,6 +61,8 @@
                     src="assets/images/ico-ssmt-diagram.png">
                 <img *ngIf="assessment.type == 'TreasureHunt'" class="icon-image pl-1 pr-1"
                     src="assets/images/treasure-hunt.png">
+                <img *ngIf="assessment.type == 'WasteWater'" class="icon-image pl-1 pr-1"
+                    src="assets/images/waste-water-icon.png">
                 <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
                 <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
             </div>
