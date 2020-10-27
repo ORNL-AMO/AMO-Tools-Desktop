@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ActivatedSludgeData, AeratorPerformanceData, WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
 import { ActivatedSludgeFormService } from '../../activated-sludge-form/activated-sludge-form.service';
-import { AeratorPerformanceFormService } from '../../aerator-performance-form/aerator-performance-form.service';
+import { AeratorPerformanceFormService, AeratorPerformanceWarnings } from '../../aerator-performance-form/aerator-performance-form.service';
 import { CompareService, WasteWaterDifferent } from '../../modify-conditions/compare.service';
 import { WasteWaterService } from '../../waste-water.service';
 
@@ -77,16 +77,21 @@ export class ModifyConditionsTabsComponent implements OnInit {
   setAeratorPerformanceBadgeClass(baselineData: AeratorPerformanceData, wasteWaterDifferent: WasteWaterDifferent, modificationData?: WasteWaterData): string {
     let badgeStr: string = 'success';
     let baselineForm: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(baselineData);
+    let warnings: AeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(baselineData);
     let validBaselineTest = baselineForm.valid;
     let validModTest = true;
     let isDifferent = false;
+    let modificationWarnings: AeratorPerformanceWarnings = { Speed: null };
     if (modificationData) {
       let modificationForm: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(modificationData.aeratorPerformanceData);
+      modificationWarnings = this.aeratorPerformanceFormService.checkWarnings(modificationData.aeratorPerformanceData);
       validModTest = modificationForm.valid;
       isDifferent = this.compareService.checkHasDifferent(wasteWaterDifferent.aeratorPerformanceDifferent);
     }
     if (!validBaselineTest || !validModTest) {
       badgeStr = 'missing-data';
+    } else if (warnings.Speed || modificationWarnings.Speed) {
+      badgeStr = 'input-error';
     } else if (isDifferent) {
       badgeStr = 'loss-different';
     }
@@ -124,7 +129,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     } else {
       this.displayActivatedSludgeTooltip = false;
     }
-    
+
     if (this.aeratorPerformanceHover) {
       this.displayAeratorPerformanceTooltip = true;
     } else {
