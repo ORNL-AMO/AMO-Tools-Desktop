@@ -10,27 +10,24 @@
         </div>
     </div>
 
-    <!-- <div class="d-flex align-items-center tabs subtabs waste-water ml-auto"
-        [ngClass]="{'br-color-white': selectedModification}">
-        <div class="mod-name active border-right" *ngIf="selectedModification">
-            <a>{{selectedModification.name}}
-                <br>
-                <span class="help-text">Selected Scenario</span>
-            </a>
-        </div>
-        <div class="mod-name border-right" *ngIf="!selectedModification">
-            <a>&mdash; &mdash;
-                <br>
-                <span class="help-text">Selected Scenario</span>
-            </a>
-        </div>
-        <div class="pl-2 pr-2">
-            <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
-                Scenarios</button>
+    <div class="d-flex align-items-center tabs subtabs waste-water ml-auto br-color-white">
+        <div class="p-2">
+            <div class="nav-item dropdown">
+                <button type="button" class="btn btn-primary w-100" (click)="toggleDropdown()">
+                    <a class="dropdown-toggle">
+                        Select Properties
+                    </a>
+                </button>
+                <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showDropdown == true}">
+                    <div class="list-group">
+                        <a *ngFor="let analysisGraphItem of analysisGraphItems"
+                            class="list-group-item list-group-item-action" (click)="toggleSelected(analysisGraphItem)"
+                            [ngClass]="{'active': analysisGraphItem.selected}">
+                            {{analysisGraphItem.title}}
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <nav *ngIf="assessmentTab == 'modify-conditions'" class="hide-print w-100">
-        <app-modify-conditions-tabs></app-modify-conditions-tabs>
-    </nav> -->
 </div>

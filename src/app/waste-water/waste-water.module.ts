@@ -35,6 +35,7 @@ import { WasteWaterAnalysisComponent } from './waste-water-analysis/waste-water-
 import { WasteWaterCalculationsTableComponent } from './waste-water-analysis/waste-water-calculations-table/waste-water-calculations-table.component';
 import { AnalysisMenuComponent } from './waste-water-banner/analysis-menu/analysis-menu.component';
 import { WasteWaterAnalysisService } from './waste-water-analysis/waste-water-analysis.service';
+import { SrtGraphComponent } from './waste-water-analysis/waste-water-graphs/srt-graph/srt-graph.component';
 
 
 
@@ -60,7 +61,8 @@ import { WasteWaterAnalysisService } from './waste-water-analysis/waste-water-an
     SetupTabsComponent,
     WasteWaterAnalysisComponent,
     WasteWaterCalculationsTableComponent,
-    AnalysisMenuComponent
+    AnalysisMenuComponent,
+    SrtGraphComponent
   ],
   imports: [
     CommonModule,

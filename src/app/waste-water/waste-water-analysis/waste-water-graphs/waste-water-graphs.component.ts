@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Settings } from '../../../shared/models/settings';
-import { WasteWater, WasteWaterResults } from '../../../shared/models/waste-water';
-import { WasteWaterService } from '../../waste-water.service';
+import { Subscription } from 'rxjs';
+import { AnalysisGraphItem, WasteWaterAnalysisService } from '../waste-water-analysis.service';
 
 @Component({
   selector: 'app-waste-water-graphs',
@@ -10,13 +9,18 @@ import { WasteWaterService } from '../../waste-water.service';
 })
 export class WasteWaterGraphsComponent implements OnInit {
 
-  constructor(private wasteWaterService: WasteWaterService) { }
+  analysisGraphItemsSub: Subscription;
+  analysisGraphItems: Array<AnalysisGraphItem>;
+  constructor(private wasteWaterAnalysisService: WasteWaterAnalysisService) { }
 
   ngOnInit(): void {
-    let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
-    let settings: Settings = this.wasteWaterService.settings.getValue();
-    let results: WasteWaterResults = this.wasteWaterService.calculateResults(wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.systemBasics, settings);
-    console.log(results);
+    this.analysisGraphItemsSub = this.wasteWaterAnalysisService.analysisGraphItems.subscribe(val => {
+      this.analysisGraphItems = val.filter(item => { return item.selected });
+    });
+  }
+
+  ngOnDestroy() {
+    this.analysisGraphItemsSub.unsubscribe();
   }
 
 }

@@ -1,1 +1,5 @@
-<p>waste-water-graphs works!</p>
+<div class="row no-gutters">
+    <div class="col-3" *ngFor="let analysisGraphItem of analysisGraphItems">
+        <app-srt-graph [analysisGraphItem]="analysisGraphItem"></app-srt-graph>
+    </div>
+</div>
