@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ActivatedSludgeData, AeratorPerformanceData, SystemBasics, WasteWater } from '../../../shared/models/waste-water';
 import { ActivatedSludgeFormService } from '../../activated-sludge-form/activated-sludge-form.service';
-import { AeratorPerformanceFormService } from '../../aerator-performance-form/aerator-performance-form.service';
+import { AeratorPerformanceFormService, AeratorPerformanceWarnings } from '../../aerator-performance-form/aerator-performance-form.service';
 import { SystemBasicsService } from '../../system-basics/system-basics.service';
 import { WasteWaterService } from '../../waste-water.service';
 
@@ -84,10 +84,13 @@ export class SetupTabsComponent implements OnInit {
     let systemBasicsForm: FormGroup = this.systemBasicsService.getFormFromObj(systemBasics);
     let activatedSludgeForm: FormGroup = this.activatedSludgeFormService.getFormFromObj(activatedSludgeData);
     let form: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(aeratorPerformanceData);
+    let warnings: AeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(aeratorPerformanceData);
     if (systemBasicsForm.invalid || activatedSludgeForm.invalid) {
       this.aeratorPerformanceClassStatus = ['disabled'];
     } else if (form.invalid) {
       this.aeratorPerformanceClassStatus = ['missing-data'];
+    } else if (warnings.Speed) {
+      this.aeratorPerformanceClassStatus = ['input-error'];
     } else {
       this.aeratorPerformanceClassStatus = ['success'];
     }

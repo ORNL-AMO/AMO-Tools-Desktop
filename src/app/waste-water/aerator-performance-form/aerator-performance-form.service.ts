@@ -7,7 +7,7 @@ export class AeratorPerformanceFormService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getFormFromObj(obj: AeratorPerformanceData): FormGroup{
+  getFormFromObj(obj: AeratorPerformanceData): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       OperatingDO: [obj.OperatingDO, [Validators.required, Validators.min(0)]],
       Alpha: [obj.Alpha, [Validators.required, Validators.min(0)]],
@@ -23,7 +23,7 @@ export class AeratorPerformanceFormService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): AeratorPerformanceData{
+  getObjFromForm(form: FormGroup): AeratorPerformanceData {
     return {
       OperatingDO: form.controls.OperatingDO.value,
       Alpha: form.controls.Alpha.value,
@@ -37,4 +37,22 @@ export class AeratorPerformanceFormService {
       EnergyCostUnit: form.controls.EnergyCostUnit.value
     }
   }
+
+  checkWarnings(obj: AeratorPerformanceData): AeratorPerformanceWarnings {
+    let SpeedWarning: string = null;
+    if (obj.TypeAerators == 1 && (obj.Speed < 50 || obj.Speed > 100)) {
+      SpeedWarning = 'Mechanical Aerators Speed should be between 50% and 100%';
+    } else if (obj.TypeAerators == 2 && (obj.Speed < 50 || obj.Speed > 100)) {
+      SpeedWarning = 'Positive Displacement Blower Speed should be between 50% and 100%';
+    } else if (obj.TypeAerators == 3 && obj.Speed < 90) {
+      SpeedWarning = 'Cntrifugal Blowers typically run at 90% speed or greater';
+    }
+    return {
+      Speed: SpeedWarning
+    }
+  }
+}
+
+export interface AeratorPerformanceWarnings {
+  Speed: string
 }
