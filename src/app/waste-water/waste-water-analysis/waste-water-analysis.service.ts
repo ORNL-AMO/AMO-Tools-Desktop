@@ -16,7 +16,6 @@ export class WasteWaterAnalysisService {
   }
 
   setGraphGata(wasteWater: WasteWater, settings: Settings) {
-    debugger
     let baselineResults: WasteWaterResults = this.wasteWaterService.calculateResults(wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.systemBasics, settings);
     let modificationsResultsArr: Array<{
       name: string,
@@ -123,13 +122,15 @@ export class WasteWaterAnalysisService {
       name: 'Baseline',
       x: baselineXYData.x,
       y: baselineXYData.y,
+      mode: 'lines+markers'
     });
     modificationsResultsArr.forEach(modResult => {
       let modXYData = this.getXYData(modResult.results.calculationsTableMapped, analysisVariableName);
       traces.push({
         name: modResult.name,
         x: modXYData.x,
-        y: modXYData.y
+        y: modXYData.y,
+        mode: 'lines+markers'
       });
     });
     return {
@@ -164,5 +165,6 @@ export interface GraphItemTrace {
   // marker: {
   //   color: string
   // }
-  name: string
+  name: string,
+  mode: string
 }

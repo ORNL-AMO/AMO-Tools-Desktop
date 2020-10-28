@@ -10,13 +10,14 @@
 }
 
 
-.dropdown-menu.filter-menu{
+.dropdown-menu{
     right: 0px;
     left: inherit;
 }
 
 
 .nav-item .dropdown-toggle{
+    font-size: 12px;
     color: white;
     background: #003087;
     border-radius: 4px;
@@ -37,4 +38,8 @@
 
 .btn{
     padding: 4px;
+}
+
+.tabs.subtabs a{
+    font-size: 12px;
 }
