@@ -6,6 +6,8 @@
     </div>
 
     <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
+        <!--FIELD DATA GROUP-->
+        <label class="group-label">Field Data</label>
         <!--Temperature-->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.Temperature, 'invalid': form.controls.Temperature.invalid}">
@@ -73,6 +75,8 @@
                     less than {{form.controls.FlowRate.errors.min.min}} Mgal</span>
             </span>
         </div>
+        <!--CONCENTRATIONS GROUP-->
+        <label class="group-label">Concentrations</label>
         <!-- InertVSS -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.InertVSS, 'invalid': form.controls.InertVSS.invalid}">
@@ -206,10 +210,12 @@
                     be less than {{form.controls.MLSSpar.errors.min.min}} mg/L</span>
             </span>
         </div>
+        <!--SYSTEM CONSTANTS-->
+        <label class="group-label">System Constants</label>
         <!-- FractionBiomass -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.FractionBiomass, 'invalid': form.controls.FractionBiomass.invalid}">
-            <label for="{{'FractionBiomass_'+idString}}">Cell Debris Biomass Fraction</label>
+            <label for="{{'FractionBiomass_'+idString}}">Cell Debris Biomass Fraction (f<sub>d</sub>)</label>
             <div class="input-group">
                 <input type="number" name="FractionBiomass" class="form-control number-input-field"
                     id="{{'FractionBiomass_'+idString}}" (focus)="focusField('FractionBiomass')" (input)="save()"
@@ -225,7 +231,7 @@
         <!-- BiomassYeild -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.BiomassYeild, 'invalid': form.controls.BiomassYeild.invalid}">
-            <label for="{{'BiomassYeild_'+idString}}">Biomass Yield Constant</label>
+            <label for="{{'BiomassYeild_'+idString}}">Biomass Yield Constant (Y)</label>
             <div class="input-group">
                 <input type="number" name="BiomassYeild" class="form-control number-input-field"
                     id="{{'BiomassYeild_'+idString}}" (focus)="focusField('BiomassYeild')" (input)="save()"
@@ -241,7 +247,7 @@
         <!-- HalfSaturation -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.HalfSaturation, 'invalid': form.controls.HalfSaturation.invalid}">
-            <label for="{{'HalfSaturation_'+idString}}">Half-saturation Constant</label>
+            <label for="{{'HalfSaturation_'+idString}}">Half-saturation Constant (K<sub>s</sub>)</label>
             <div class="input-group">
                 <input type="number" name="HalfSaturation" class="form-control HalfSaturation-input-field"
                     id="{{'HalfSaturation_'+idString}}" (focus)="focusField('HalfSaturation')" (input)="save()"
@@ -258,7 +264,7 @@
         <!-- MicrobialDecay -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.MicrobialDecay, 'invalid': form.controls.MicrobialDecay.invalid}">
-            <label for="{{'MicrobialDecay_'+idString}}">Endogenous Decay Coefficient</label>
+            <label for="{{'MicrobialDecay_'+idString}}">Endogenous Decay Coefficient (K<sub>d</sub>)</label>
             <div class="input-group">
                 <input type="number" name="MicrobialDecay" class="form-control HalfSaturation-input-field"
                     id="{{'MicrobialDecay_'+idString}}" (focus)="focusField('MicrobialDecay')" (input)="save()"
@@ -275,7 +281,7 @@
         <!-- MaxUtilizationRate -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.MaxUtilizationRate, 'invalid': form.controls.MaxUtilizationRate.invalid}">
-            <label for="{{'MaxUtilizationRate_'+idString}}">Max. Specific Substrate Utilization Rate</label>
+            <label for="{{'MaxUtilizationRate_'+idString}}">Max. Specific Substrate Utilization Rate (k)</label>
             <div class="input-group">
                 <input type="number" name="MaxUtilizationRate" class="form-control HalfSaturation-input-field"
                     id="{{'MaxUtilizationRate_'+idString}}" (focus)="focusField('MaxUtilizationRate')" (input)="save()"

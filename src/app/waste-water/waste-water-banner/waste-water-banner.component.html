@@ -1,7 +1,7 @@
 <nav class="waste-water navbar banner d-flex mr-auto p-0 flex-nowrap">
     <div class="d-flex align-items-center p-1">
         <div class="img-col col-sm-auto col-md-auto col-lg-auto">
-            <!-- <img class="img-icon" src="assets/images/treasure-hunt.png"> -->
+            <img class="img-icon" src="assets/images/waste-water-icon.png">
         </div>
         <div class="d-flex flex-column pl-2">
             <div class="h2-name">
@@ -47,8 +47,8 @@
 </nav>
 
 
-
-<ul class="tabs subtabs progress-tabs waste-water" *ngIf="mainTab == 'system-setup'">
+<app-setup-tabs *ngIf="mainTab == 'system-setup'"></app-setup-tabs>
+<!-- <ul class="tabs subtabs progress-tabs waste-water" *ngIf="mainTab == 'system-setup'">
     <li [ngClass]="{'active': setupTab == 'system-basics'}">
         <a (click)="changeSetupTab('system-basics')">
             <span class="step-number">1</span>Assessment Basics</a>
@@ -61,7 +61,7 @@
         <a (click)="changeSetupTab('aerator-performance')">
             <span class="step-number">3</span>Aerator Performance</a>
     </li>
-</ul>
+</ul> -->
 
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">

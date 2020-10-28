@@ -5,7 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { AeratorPerformanceData, WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { AeratorPerformanceDifferent, CompareService } from '../modify-conditions/compare.service';
 import { WasteWaterService } from '../waste-water.service';
-import { AeratorPerformanceFormService } from './aerator-performance-form.service';
+import { AeratorPerformanceFormService, AeratorPerformanceWarnings } from './aerator-performance-form.service';
 
 @Component({
   selector: 'app-aerator-performance-form',
@@ -42,6 +42,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
   aeratorPerformanceDifferent: AeratorPerformanceDifferent;
   wasteWaterDifferentSub: Subscription;
   settings: Settings;
+  aeratorPerformanceWarnings: AeratorPerformanceWarnings;
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private compareService: CompareService) { }
 
@@ -53,6 +54,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
           let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
           this.modificationIndex = wasteWater.modifications.findIndex(modification => { return modification.id == val });
           let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
+          this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(modificationData.aeratorPerformanceData);
           this.form = this.aeratorPerformanceFormService.getFormFromObj(modificationData.aeratorPerformanceData);
           if (this.selected === false) {
             this.disableForm();
@@ -61,6 +63,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
       });
     } else {
       let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
+      this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(wasteWater.baselineData.aeratorPerformanceData);
       this.form = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
       if (this.selected === false) {
         this.disableForm();
@@ -91,9 +94,11 @@ export class AeratorPerformanceFormComponent implements OnInit {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     if (this.isModification) {
       let aeratorPerformanceData: AeratorPerformanceData = this.aeratorPerformanceFormService.getObjFromForm(this.form);
+      this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(aeratorPerformanceData);
       wasteWater.modifications[this.modificationIndex].aeratorPerformanceData = aeratorPerformanceData;
     } else {
       let aeratorPerformanceData: AeratorPerformanceData = this.aeratorPerformanceFormService.getObjFromForm(this.form);
+      this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(aeratorPerformanceData);
       wasteWater.baselineData.aeratorPerformanceData = aeratorPerformanceData;
     }
     this.wasteWaterService.wasteWater.next(wasteWater);

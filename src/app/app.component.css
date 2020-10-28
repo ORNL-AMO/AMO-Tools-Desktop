@@ -649,6 +649,16 @@ Reports
     padding: 0px 0 0px 55px;
 }
 
+.assessment-report.report-in-waste-water .assessment-name,
+.assessment-report.report-in-rollup.report-in-waste-water .assessment-name {
+  background-image: url('../assets/images/waste-water-icon.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 40px;
+  padding: 9px 0 0px 30px;
+}
+
+
 
 .assessment-report .report-header:after {
     display: table;

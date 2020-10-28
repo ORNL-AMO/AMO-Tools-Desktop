@@ -29,6 +29,8 @@ import { AeratorPerformanceHelpComponent } from './results-panel/help-panel/aera
 import { ActivatedSludgeHelpComponent } from './results-panel/help-panel/activated-sludge-help/activated-sludge-help.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { WasteWaterGraphsComponent } from './waste-water-graphs/waste-water-graphs.component';
+import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.component';
 
 
 
@@ -50,7 +52,8 @@ import { WasteWaterGraphsComponent } from './waste-water-graphs/waste-water-grap
     AeratorPerformanceHelpComponent,
     ActivatedSludgeHelpComponent,
     SystemBasicsHelpComponent,
-    WasteWaterGraphsComponent
+    WasteWaterGraphsComponent,
+    SetupTabsComponent
   ],
   imports: [
     CommonModule,
@@ -60,7 +63,8 @@ import { WasteWaterGraphsComponent } from './waste-water-graphs/waste-water-grap
     FormsModule,
     SettingsModule,
     PercentGraphModule,
-    WasteWaterReportModule
+    WasteWaterReportModule,
+    TabsTooltipModule
   ],
   providers: [
     WasteWaterService,
