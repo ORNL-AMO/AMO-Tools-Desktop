@@ -82,11 +82,10 @@ export class WasteWaterService {
         EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit
       }
       let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
-      wasteWaterResults.calculationsTableMapped = this.mapCalculationsTable(wasteWaterResults.calculationsTable);
-      console.log(wasteWaterResults);
       if (settings.unitsOfMeasure != 'Imperial') {
         wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
       }
+      wasteWaterResults.calculationsTableMapped = this.mapCalculationsTable(wasteWaterResults.calculationsTable, settings);
       if (baselineResults != undefined) {
         wasteWaterResults = this.setSavingsResults(wasteWaterResults, baselineResults);
       }
@@ -154,11 +153,14 @@ export class WasteWaterService {
     return selectedModification;
   }
 
-  mapCalculationsTable(calculationsTable: Array<Array<number>>): Array<CalculationsTableRow> {
+  mapCalculationsTable(calculationsTable: Array<Array<number>>, settings: Settings): Array<CalculationsTableRow> {
     let calculationsTableMapped: Array<CalculationsTableRow> = new Array();
     let index: number = 0
     calculationsTable.forEach(row => {
       let mappedRow: CalculationsTableRow = this.getCalculationsTableRow(row, index);
+      if (settings.unitsOfMeasure != 'Imperial') {
+        mappedRow = this.convertWasteWaterService.convertCalcTableRowResultToMetric(mappedRow);
+      }
       calculationsTableMapped.push(mappedRow);
       index++;
     });
