@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -7,7 +8,10 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { WasteWater } from '../shared/models/waste-water';
+import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
+import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
 import { CompareService } from './modify-conditions/compare.service';
+import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterService } from './waste-water.service';
 
 @Component({
@@ -43,9 +47,12 @@ export class WasteWaterComponent implements OnInit {
 
   isModalOpen: boolean;
   isModalOpenSub: Subscription;
+  disableNext: boolean;
   constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService,
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService,
-    private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService) { }
+    private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
+    private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
+    private systemBasicsService: SystemBasicsService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -76,6 +83,7 @@ export class WasteWaterComponent implements OnInit {
     this.wasteWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
       if (val && this.assessment) {
         this.saveWasteWater(val);
+        this.setDisableNext(val);
       }
     });
 
@@ -147,5 +155,38 @@ export class WasteWaterComponent implements OnInit {
         this.wasteWaterService.settings.next(this.settings);
       });
     });
+  }
+
+  setDisableNext(wasteWater: WasteWater) {
+    let systemBasicsForm: FormGroup = this.systemBasicsService.getFormFromObj(wasteWater.systemBasics);
+    let aeratorPerformanceForm: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(wasteWater.baselineData.aeratorPerformanceData);
+    let activatedSludgeForm: FormGroup = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
+    if (this.setupTab == 'system-basics' && systemBasicsForm.valid) {
+      this.disableNext = false;
+    } else if (this.setupTab == 'activated-sludge' && activatedSludgeForm.valid && systemBasicsForm.valid) {
+      this.disableNext = false;
+    } else if (this.setupTab == 'aerator-performance' && aeratorPerformanceForm.valid && activatedSludgeForm.valid && systemBasicsForm.valid) {
+      this.disableNext = false;
+    } else {
+      this.disableNext = true;
+    }
+  }
+
+  continue() {
+    if (this.setupTab == 'system-basics') {
+      this.wasteWaterService.setupTab.next('activated-sludge');
+    } else if (this.setupTab == 'activated-sludge') {
+      this.wasteWaterService.setupTab.next('aerator-performance');
+    } else if (this.setupTab == 'aerator-performance') {
+      this.wasteWaterService.mainTab.next('assessment');
+    }
+  }
+
+  back() {
+    if (this.setupTab == 'activated-sludge') {
+      this.wasteWaterService.setupTab.next('system-basics');
+    } else if (this.setupTab == 'aerator-performance') {
+      this.wasteWaterService.setupTab.next('activated-sludge');
+    }
   }
 }
