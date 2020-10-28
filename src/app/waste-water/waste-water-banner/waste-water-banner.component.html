@@ -24,6 +24,10 @@
                 (click)="changeTab('assessment')">Assessment</a>
         </div>
         <div class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
+                (click)="changeTab('graphs')">Graphs</a>
+        </div>
+        <div class="nav-item">
             <a class="nav-link disabled" (click)="changeTab('treasure-chest')">Diagram</a>
         </div>
         <div class="nav-item">

@@ -27,11 +27,17 @@
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'"></app-explore-opportunities>
   </div>
 
+  <!--Graphs-->
+  <div class="tab-content" *ngIf="mainTab == 'graphs'">
+    <app-waste-water-graphs></app-waste-water-graphs>
+  </div>
+
   <!--Report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
-      <app-waste-water-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight"></app-waste-water-report>
-    </div> 
+      <app-waste-water-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
+      </app-waste-water-report>
+    </div>
   </div>
 
 

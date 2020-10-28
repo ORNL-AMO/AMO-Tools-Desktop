@@ -28,6 +28,7 @@ import { WasteWaterReportModule } from './waste-water-report/waste-water-report.
 import { AeratorPerformanceHelpComponent } from './results-panel/help-panel/aerator-performance-help/aerator-performance-help.component';
 import { ActivatedSludgeHelpComponent } from './results-panel/help-panel/activated-sludge-help/activated-sludge-help.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
+import { WasteWaterGraphsComponent } from './waste-water-graphs/waste-water-graphs.component';
 
 
 
@@ -48,7 +49,8 @@ import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-bas
     ModifyConditionsTabsComponent,
     AeratorPerformanceHelpComponent,
     ActivatedSludgeHelpComponent,
-    SystemBasicsHelpComponent
+    SystemBasicsHelpComponent,
+    WasteWaterGraphsComponent
   ],
   imports: [
     CommonModule,
