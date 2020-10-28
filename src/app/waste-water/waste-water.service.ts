@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { ActivatedSludgeData, AeratorPerformanceData, SystemBasics, WasteWater, WasteWaterData, WasteWaterResults, WasteWaterTreatmentInputData } from '../shared/models/waste-water';
+import { ActivatedSludgeData, AeratorPerformanceData, CalculationsTableRow, SystemBasics, WasteWater, WasteWaterData, WasteWaterResults, WasteWaterTreatmentInputData } from '../shared/models/waste-water';
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
 import { AeratorPerformanceFormService } from './aerator-performance-form/aerator-performance-form.service';
 import { ConvertWasteWaterService } from './convert-waste-water.service';
@@ -82,6 +82,8 @@ export class WasteWaterService {
         EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit
       }
       let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
+      wasteWaterResults.calculationsTableMapped = this.mapCalculationsTable(wasteWaterResults.calculationsTable);
+      console.log(wasteWaterResults);
       if (settings.unitsOfMeasure != 'Imperial') {
         wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
       }
@@ -124,7 +126,9 @@ export class WasteWaterService {
       FieldOTR: undefined,
       costSavings: 0,
       energySavings: 0,
-      percentCostSavings: 0
+      percentCostSavings: 0,
+      calculationsTable: new Array(new Array()),
+      calculationsTableMapped: new Array()
     };
   }
 
@@ -148,5 +152,49 @@ export class WasteWaterService {
     let wasteWater: WasteWater = this.wasteWater.getValue();
     let selectedModification: WasteWaterData = wasteWater.modifications.find(modification => { return modification.id == selectedModificationId });
     return selectedModification;
+  }
+
+  mapCalculationsTable(calculationsTable: Array<Array<number>>): Array<CalculationsTableRow> {
+    let calculationsTableMapped: Array<CalculationsTableRow> = new Array();
+    let index: number = 0
+    calculationsTable.forEach(row => {
+      let mappedRow: CalculationsTableRow = this.getCalculationsTableRow(row, index);
+      calculationsTableMapped.push(mappedRow);
+      index++;
+    });
+    return calculationsTableMapped;
+  }
+
+
+  getCalculationsTableRow(row: Array<number>, index: number): CalculationsTableRow {
+    return {
+      index: index,
+      Se: row[0],
+      HeterBio: row[1],
+      CellDeb: row[2],
+      InterVes: row[3],
+      MLVSS: row[4],
+      MLSS: row[5],
+      BiomassProd: row[6],
+      SludgeProd: row[7],
+      SolidProd: row[8],
+      Effluent: row[9],
+      IntentWaste: row[10],
+      OxygenRqd: row[11],
+      FlowMgd: row[12],
+      NRemoved: row[13],
+      NRemovedMgl: row[14],
+      NitO2Dem: row[15],
+      O2Reqd: row[16],
+      EffNH3N: row[17],
+      EffNo3N: row[18],
+      TotalO2Rqd: row[19],
+      WAS: row[20],
+      EstimatedEff: row[21],
+      EstimRas: row[22],
+      FmRatio: row[23],
+      Diff_MLSS: row[24],
+      SRT: row[25]
+    }
   }
 }
