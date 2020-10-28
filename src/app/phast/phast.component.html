@@ -20,7 +20,7 @@
       [ngClass]="{'modal-open': isModalOpen}">
       <!--Step: 1 System Basics (Settings)-->
       <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [assessment]="assessment"
-        [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings()" (save)="saveDb()">
+        (updateSettings)="getSettings()" (save)="saveDb()">
       </app-system-basics>
     </div>
     <div class="w-50">

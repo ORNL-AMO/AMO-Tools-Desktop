@@ -401,31 +401,53 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     let currentPointIndex = plotlyHoverEvent.points[0].pointIndex;
     let baselineX = this.curveEquipmentChart.data[this.traces.baseline].x;
     let baselineY = this.curveEquipmentChart.data[this.traces.baseline].y;
+    
+    let hoverBaselineIntersect = plotlyHoverEvent.points[0].curveNumber == this.traces.baselineIntersect;
+    let hoverModificationIntersect = plotlyHoverEvent.points[0].curveNumber == this.traces.modificationIntersect;
+    
+    if (!hoverBaselineIntersect) {
+      this.currentHoverData.baseline.x = Number(baselineX[currentPointIndex]);
+      this.currentHoverData.baseline.y = Number(baselineY[currentPointIndex]);
+      this.currentHoverData.baseline.pointColor = this.pointColors[this.traces.baseline - 1];
 
-    this.currentHoverData = {
-      baseline: {
-        x: Number(baselineX[currentPointIndex]),
-        y: Number(baselineY[currentPointIndex]),
-        pointColor: this.pointColors[this.traces.baseline - 1]
-      },
-      fluidPower: this.fluidPowerData[currentPointIndex]
-    };
+    } else if (hoverBaselineIntersect) {
+      let approximateFlow = Math.round(plotlyHoverEvent.points[0].x / 10) * 10;
+      this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.forEach((coordinate, index) => {
+        if (coordinate.x == approximateFlow) {
+          currentPointIndex = index;
+        }
+      });
+      this.currentHoverData.baseline.x = Number(plotlyHoverEvent.points[0].x);
+      this.currentHoverData.baseline.y = Number(plotlyHoverEvent.points[0].y);
+      this.currentHoverData.baseline.pointColor = this.pointColors[this.traces.baseline - 1];
+    } 
+    
+    if (!hoverModificationIntersect) {
+      let modificationX = this.curveEquipmentChart.data[this.traces.modification].x;
+      let modificationY = this.curveEquipmentChart.data[this.traces.modification].y;
+      this.currentHoverData.modification.x = Number(modificationX[currentPointIndex]);
+      this.currentHoverData.modification.y = Number(modificationY[currentPointIndex]);
+      this.currentHoverData.modification.pointColor = this.pointColors[this.traces.modification - 1];
 
+    } else if (hoverModificationIntersect) {
+      currentPointIndex = this.systemAndEquipmentCurveGraphService.modifiedIntersectionIndex;
+
+      this.currentHoverData.modification.x = Number(plotlyHoverEvent.points[0].x);
+      this.currentHoverData.modification.y = Number(plotlyHoverEvent.points[0].y);
+      this.currentHoverData.modification.pointColor = this.pointColors[this.traces.modification - 1];
+
+      this.currentHoverData.baseline.x = Number(baselineX[currentPointIndex]);
+      this.currentHoverData.baseline.y = Number(baselineY[currentPointIndex]);
+      this.currentHoverData.baseline.pointColor = this.pointColors[this.traces.baseline - 1];
+    }
+    
     let systemX = this.curveEquipmentChart.data[this.traces.system].x;
     let systemY = this.curveEquipmentChart.data[this.traces.system].y;
-    this.currentHoverData.system = {
-      x: Number(systemX[currentPointIndex]),
-      y: Number(systemY[currentPointIndex]),
-      pointColor: this.systemColor
-    };
-    
-    let modificationX = this.curveEquipmentChart.data[this.traces.modification].x;
-    let modificationY = this.curveEquipmentChart.data[this.traces.modification].y;
-    this.currentHoverData.modification = {
-      x: Number(modificationX[currentPointIndex]),
-      y: Number(modificationY[currentPointIndex]),
-      pointColor: this.pointColors[this.traces.modification - 1]
-    };
+    this.currentHoverData.system.x = Number(systemX[currentPointIndex]);
+    this.currentHoverData.system.y = Number(systemY[currentPointIndex]);
+    this.currentHoverData.system.pointColor = this.systemColor;
+
+    this.currentHoverData.fluidPower = this.fluidPowerData[currentPointIndex];
     this.cd.detectChanges();
   }
 
@@ -531,10 +553,17 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
         fluidPower: fluidPower,
         power: 0,
         efficiency: 0,
+        isUserPoint: true
       }
     }
+    let isModification: boolean;
+    if (graphData.points[0].curveNumber == this.traces.modification || graphData.points[0].curveNumber == this.traces.modificationIntersect) {
+      isModification = true;
+    } else if (graphData.points[0].curveNumber == this.traces.baseline || graphData.points[0].curveNumber == this.traces.baselineIntersect) {
+      isModification = false;
+    }
+    selectedPoint = this.systemAndEquipmentCurveGraphService.getSelectedDataPointEfficiency(selectedPoint, this.equipmentType, this.settings, isModification); 
     let selectedPointTrace = this.systemAndEquipmentCurveGraphService.getTraceDataFromPoint(selectedPoint);
-
     Plotly.addTraces(this.currentSystemChartId, selectedPointTrace);
     this.selectedDataPoints.push(selectedPoint);
     

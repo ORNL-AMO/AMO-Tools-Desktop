@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
 import { WasteWater } from '../shared/models/waste-water';
+import { Settings } from '../shared/models/settings';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -75,7 +76,7 @@ export class AssessmentService {
     return newAssessment;
   }
 
-  getNewPsat(): PSAT {
+  getNewPsat(settings: Settings): PSAT {
     let newPsatInputs: PsatInputs = {
       pump_style: 6,
       pump_specified: null,
@@ -106,10 +107,13 @@ export class AssessmentService {
     let newPsat: PSAT = {
       inputs: newPsatInputs
     };
+    if (settings.powerMeasurement !== 'hp') {
+      newPsat.inputs.motor_rated_power = 150;
+    }
     return newPsat;
   }
 
-  getNewPhast(): PHAST {
+  getNewPhast(settings: Settings): PHAST {
     let newPhast: PHAST = {
       name: null,
       systemEfficiency: 90,
@@ -121,9 +125,9 @@ export class AssessmentService {
         hoursPerYear: 8760
       },
       operatingCosts: {
-        fuelCost: 8.00,
-        steamCost: 10.00,
-        electricityCost: .080
+        electricityCost: settings.electricityCost || .066,
+        steamCost: settings.steamCost || 4.69,
+        fuelCost: settings.fuelCost || 3.99
       },
       modifications: new Array()
     };

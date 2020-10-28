@@ -33,37 +33,14 @@
   </div>
   <div class="row print-avoid-break" *ngIf="printSankey">
     <div class="col-12">
-      <div class="row show-print">
-        <div align="center" class="print-graph-title print-center-title">
-          Baseline
-        </div>
-      </div>
-      <div class="row show-print">
-        <div class="col-12">
-          <app-psat-sankey [settings]="settings" [psat]="psat"
-            [printView]="true" [modIndex]="i" [isBaseline]="true"></app-psat-sankey>
-        </div>
-      </div>
-      <div class="row show-print print-pad-graph-title" *ngIf="modExists">
-        <div align="center" class="print-graph-title print-center-title">
-          Scenario: {{psatOption.name}}
-        </div>
-      </div>
-      <div class="row show-print" *ngIf="modExists">
-        <div class="col-12">
-          <app-psat-sankey [settings]="settings" [psat]="psat"
-            [printView]="true" [modIndex]="i" [isBaseline]="false" [baseline]="baselinePsat.psat"></app-psat-sankey>
-        </div>
-      </div>
+      <div class="h3 mb-0">Baseline</div>
+      <app-psat-sankey [psat]="psat" [settings]="settings"
+        [isBaseline]="true" [printView]="true"></app-psat-sankey>
     </div>
-
-
     <div class="col-12" *ngIf="scenarioSummary.modificationGraphData">
       <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
-      <app-psat-sankey [psat]="scenarioSummary.modificationGraphData.modification.psat"
-        [location]="scenarioSummary.modificationGraphData.name"
-        [assessmentName]="scenarioSummary.modificationGraphData.name" [settings]="settings" [isBaseline]="false"
-        [modIndex]="index" [printView]="true">
+      <app-psat-sankey [psat]="scenarioSummary.modificationGraphData.modification.psat" [settings]="settings" [isBaseline]="false"
+        [printView]="true">
       </app-psat-sankey>
     </div>
   </div>
