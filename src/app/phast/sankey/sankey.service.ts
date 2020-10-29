@@ -97,7 +97,7 @@ export class SankeyService {
 
     results.availableHeatPercent = (1 - ((results.totalSystemLosses + results.totalFlueGas + results.totalExhaustGas) / results.totalInput)) * 100;
 
-    results.nodes = this.getNodes(results, settings);
+    // results.nodes = this.getNodes(results, settings);
 
     return results;
   }
@@ -420,7 +420,7 @@ export interface FuelResults {
   totalExhaustGas: number;
   totalSystemLosses: number;
   availableHeatPercent: number;
-  nodes: Array<SankeyNode>;
+  nodes?: Array<SankeyNode>;
 }
 
 export interface SankeyNode {

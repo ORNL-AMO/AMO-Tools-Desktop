@@ -73,7 +73,8 @@
       </div>
     </div>
     <div *ngIf="sankeyPhast" class="sankey-padding">
-      <app-sankey [phast]="sankeyPhast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
+      <!-- <app-sankey [phast]="sankeyPhast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey> -->
+      <app-phast-sankey [phast]="sankeyPhast" [location]="'sankey-diagram'" [settings]="settings" [appBackground]="true"></app-phast-sankey>
     </div>
   </div>
 
