@@ -82,7 +82,6 @@ export class WasteWaterService {
         EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit
       }
       let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
-      console.log(wasteWaterResults.SolidsRetentionTime);
       if (settings.unitsOfMeasure != 'Imperial') {
         wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
       }

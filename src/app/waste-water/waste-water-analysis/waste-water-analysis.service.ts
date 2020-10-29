@@ -18,10 +18,12 @@ export class WasteWaterAnalysisService {
   }>;
 
   selectedTableData: BehaviorSubject<{ name: string, results: WasteWaterResults }>;
+  xAxisHover: BehaviorSubject<Array<{curveNumber: number, pointNumber: number}>>;
   constructor(private wasteWaterService: WasteWaterService) {
     this.analysisTab = new BehaviorSubject<string>('graphs');
     this.analysisGraphItems = new BehaviorSubject<Array<AnalysisGraphItem>>(new Array());
     this.selectedTableData = new BehaviorSubject<{ name: string, results: WasteWaterResults }>({ name: '', results: undefined });
+    this.xAxisHover = new BehaviorSubject<Array<{curveNumber: number, pointNumber: number}>>(new Array());
   }
 
   setResults(wasteWater: WasteWater, settings: Settings) {
