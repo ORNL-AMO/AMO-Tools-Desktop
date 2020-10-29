@@ -1,6 +1,8 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AnalysisGraphItem } from '../../waste-water-analysis.service';
 import * as Plotly from 'plotly.js';
+import { WasteWaterService } from '../../../waste-water.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-srt-graph',
@@ -13,12 +15,19 @@ export class SrtGraphComponent implements OnInit {
 
   @ViewChild('srtGraphItem', { static: false }) srtGraphItem: ElementRef;
 
-  constructor() { }
+  constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit() {
+    let settings: Settings = this.wasteWaterService.settings.getValue();
+    let unitSuffix: string = this.analysisGraphItem.dataVariable.imperialUnit;
+    if(settings.unitsOfMeasure == 'Metric'){
+      unitSuffix = this.analysisGraphItem.dataVariable.metricUnit;
+    }
+
+
     let layout = {
       title: this.analysisGraphItem.title,
       showlegend: false,
@@ -27,14 +36,15 @@ export class SrtGraphComponent implements OnInit {
       },
       yaxis: {
         hoverformat: '.3r',
-        title: {
-          text: this.analysisGraphItem.analysisVariableName,
-        },
+        // title: {
+        //   text: this.analysisGraphItem.title,
+        // },
+        showticksuffix: 'first',
+        ticksuffix: ' ' + unitSuffix
       },
       xaxis: {
         title: {
           text: 'SRT Days',
-
         }
       },
     };

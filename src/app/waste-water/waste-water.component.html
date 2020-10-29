@@ -28,8 +28,8 @@
   </div>
 
   <!--Analysis-->
-  <div class="tab-content" *ngIf="mainTab == 'analysis'">
-    <app-waste-water-analysis></app-waste-water-analysis>
+  <div class="tab-content" *ngIf="mainTab == 'analysis'" [ngStyle]="{'height.px': containerHeight}">
+    <app-waste-water-analysis [containerHeight]="containerHeight"></app-waste-water-analysis>
   </div>
 
   <!--Report-->

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AnalysisGraphItem, WasteWaterAnalysisService } from '../waste-water-analysis.service';
 
@@ -8,6 +8,9 @@ import { AnalysisGraphItem, WasteWaterAnalysisService } from '../waste-water-ana
   styleUrls: ['./waste-water-graphs.component.css']
 })
 export class WasteWaterGraphsComponent implements OnInit {
+  @Input()
+  containerHeight: number;
+
 
   analysisGraphItemsSub: Subscription;
   analysisGraphItems: Array<AnalysisGraphItem>;
@@ -16,11 +19,16 @@ export class WasteWaterGraphsComponent implements OnInit {
   ngOnInit(): void {
     this.analysisGraphItemsSub = this.wasteWaterAnalysisService.analysisGraphItems.subscribe(val => {
       this.analysisGraphItems = val.filter(item => { return item.selected });
+      window.dispatchEvent(new Event('resize'));
     });
   }
 
   ngOnDestroy() {
     this.analysisGraphItemsSub.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    window.dispatchEvent(new Event('resize'));
   }
 
 }

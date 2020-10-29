@@ -15,7 +15,7 @@
             <div class="nav-item dropdown">
                 <button type="button" class="btn btn-primary w-100" (click)="toggleDropdown()">
                     <a class="dropdown-toggle">
-                        Select Properties
+                        Select Graphs
                     </a>
                 </button>
                 <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showDropdown == true}">
@@ -23,7 +23,7 @@
                         <a *ngFor="let analysisGraphItem of analysisGraphItems"
                             class="list-group-item list-group-item-action" (click)="toggleSelected(analysisGraphItem)"
                             [ngClass]="{'active': analysisGraphItem.selected}">
-                            {{analysisGraphItem.title}}
+                            <span [innerHTML]="analysisGraphItem.title"></span>
                         </a>
                     </div>
                 </div>

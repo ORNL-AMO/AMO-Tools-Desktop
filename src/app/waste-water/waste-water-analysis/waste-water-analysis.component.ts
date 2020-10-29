@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 import { WasteWater } from '../../shared/models/waste-water';
@@ -11,6 +11,8 @@ import { WasteWaterAnalysisService } from './waste-water-analysis.service';
   styleUrls: ['./waste-water-analysis.component.css']
 })
 export class WasteWaterAnalysisComponent implements OnInit {
+  @Input()
+  containerHeight: number;
 
   analysisTab: string;
   analysisTabSub: Subscription;

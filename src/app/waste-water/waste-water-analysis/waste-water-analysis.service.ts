@@ -37,87 +37,17 @@ export class WasteWaterAnalysisService {
 
   getAnalysisGraphItems(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults }>): Array<AnalysisGraphItem> {
     let analysisGraphItems: Array<AnalysisGraphItem> = new Array();
-    // Se: number,
-    let graphItem: AnalysisGraphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'Se', true);
-    analysisGraphItems.push(graphItem);
-    // HeterBio: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'HeterBio', false);
-    analysisGraphItems.push(graphItem);
-    // CellDeb: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'CellDeb', false);
-    analysisGraphItems.push(graphItem);
-    // InterVes: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'InterVes', false);
-    analysisGraphItems.push(graphItem);
-    // MLVSS: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'MLVSS', true);
-    analysisGraphItems.push(graphItem);
-    // MLSS: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'MLSS', true);
-    analysisGraphItems.push(graphItem);
-    // BiomassProd: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'BiomassProd', false);
-    analysisGraphItems.push(graphItem);
-    // SludgeProd: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'SludgeProd', true);
-    analysisGraphItems.push(graphItem);
-    // SolidProd: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'SolidProd', true);
-    analysisGraphItems.push(graphItem);
-    // Effluent: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'Effluent', false);
-    analysisGraphItems.push(graphItem);
-    // IntentWaste: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'IntentWaste', false);
-    analysisGraphItems.push(graphItem);
-    // OxygenRqd: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'OxygenRqd', true);
-    analysisGraphItems.push(graphItem);
-    // FlowMgd: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'FlowMgd', false);
-    analysisGraphItems.push(graphItem);
-    // NRemoved: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'NRemoved', false);
-    analysisGraphItems.push(graphItem);
-    // NRemovedMgl: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'NRemovedMgl', false);
-    analysisGraphItems.push(graphItem);
-    // NitO2Dem: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'NitO2Dem', false);
-    analysisGraphItems.push(graphItem);
-    // O2Reqd: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'O2Reqd', false);
-    analysisGraphItems.push(graphItem);
-    // EffNH3N: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'EffNH3N', false);
-    analysisGraphItems.push(graphItem);
-    // EffNo3N: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'EffNo3N', false);
-    analysisGraphItems.push(graphItem);
-    // TotalO2Rqd: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'TotalO2Rqd', false);
-    analysisGraphItems.push(graphItem);
-    // WAS: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'WAS', false);
-    analysisGraphItems.push(graphItem);
-    // EstimatedEff: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'EstimatedEff', false);
-    analysisGraphItems.push(graphItem);
-    // EstimRas: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'EstimRas', false);
-    analysisGraphItems.push(graphItem);
-    // FmRatio: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'FmRatio', false);
-    analysisGraphItems.push(graphItem);
-    // Diff_MLSS: number,
-    graphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, 'Diff_MLSS', false);
-    analysisGraphItems.push(graphItem);
+
+    DataTableVariables.forEach(variable => {
+      let graphItem: AnalysisGraphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, variable);
+      analysisGraphItems.push(graphItem);
+    });
     return analysisGraphItems;
   }
 
-  getAnalysisGraphItem(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults }>, analysisVariableName: string, selected: boolean): AnalysisGraphItem {
+  getAnalysisGraphItem(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults }>, tableVariable: DataTableVariable): AnalysisGraphItem {
     let traces: Array<GraphItemTrace> = new Array();
-    let baselineXYData = this.getXYData(baselineResults.calculationsTableMapped, analysisVariableName);
+    let baselineXYData = this.getXYData(baselineResults.calculationsTableMapped, tableVariable.name);
     traces.push({
       name: 'Baseline',
       x: baselineXYData.x,
@@ -125,7 +55,7 @@ export class WasteWaterAnalysisService {
       mode: 'lines+markers'
     });
     modificationsResultsArr.forEach(modResult => {
-      let modXYData = this.getXYData(modResult.results.calculationsTableMapped, analysisVariableName);
+      let modXYData = this.getXYData(modResult.results.calculationsTableMapped, tableVariable.name);
       traces.push({
         name: modResult.name,
         x: modXYData.x,
@@ -134,10 +64,11 @@ export class WasteWaterAnalysisService {
       });
     });
     return {
-      title: analysisVariableName + ' vs SRT Days',
-      analysisVariableName: analysisVariableName,
+      title: tableVariable.label,
+      analysisVariableName: tableVariable.name,
       traces: traces,
-      selected: selected
+      selected: tableVariable.selected,
+      dataVariable: tableVariable
     }
   }
 
@@ -155,7 +86,8 @@ export interface AnalysisGraphItem {
   title: string,
   analysisVariableName: string,
   traces: Array<GraphItemTrace>,
-  selected: boolean
+  selected: boolean,
+  dataVariable: DataTableVariable
 }
 
 
@@ -168,3 +100,166 @@ export interface GraphItemTrace {
   name: string,
   mode: string
 }
+
+
+export interface DataTableVariable {
+  name: string,
+  label: string,
+  metricUnit: string,
+  imperialUnit: string,
+  selected: boolean
+
+}
+
+
+export const DataTableVariables: Array<DataTableVariable> = [{
+  name: 'Se',
+  label: 'Efffluent CBOD5 Concentration (S&#x2080;)',
+  metricUnit: 'mg/L',
+  imperialUnit: 'mg/L',
+  selected: true
+}, {
+  name: 'HeterBio',
+  label: 'Heterotrophic biomass concentration',
+  metricUnit: 'mg/L',
+  imperialUnit: 'mg/L',
+  selected: false
+}, {
+  name: 'CellDeb',
+  label: 'Cell Debris Concentration',
+  metricUnit: 'mg/L',
+  imperialUnit: 'mg/L',
+  selected: false
+}, {
+  name: 'InterVes',
+  label: 'Influent Inert VSS Concentration',
+  metricUnit: 'mg/L',
+  imperialUnit: 'mg/L',
+  selected: false
+}, {
+  name: 'MLVSS',
+  label: 'MLVSS Concentration',
+  metricUnit: 'mg/L',
+  imperialUnit: 'mg/L',
+  selected: true
+}, {
+  name: 'MLSS',
+  label: 'MLSS Concentration',
+  metricUnit: 'mg/L',
+  imperialUnit: 'mg/L',
+  selected: true
+}, {
+  name: 'BiomassProd',
+  label: 'BiomassProd',
+  metricUnit: 'lb/day',
+  imperialUnit: 'kg/day',
+  selected: false
+}, {
+  name: 'SludgeProd',
+  label: 'SludgeProd',
+  metricUnit: 'lb/day',
+  imperialUnit: 'kg/day',
+  selected: true
+}, {
+  name: 'SolidProd',
+  label: 'SolidProd',
+  metricUnit: 'lb/day',
+  imperialUnit: 'kg/day',
+  selected: true
+}, {
+  name: 'Effluent',
+  label: 'Effluent',
+  metricUnit: 'lb/day',
+  imperialUnit: 'kg/day',
+  selected: false
+}, {
+  name: 'IntentWaste',
+  label: 'IntentWaste',
+  metricUnit: 'lb/day',
+  imperialUnit: 'kg/day',
+  selected: false
+}, {
+  name: 'OxygenRqd',
+  label: 'OxygenRqd',
+  metricUnit: 'lb/day',
+  imperialUnit: 'kg/day',
+  selected: true
+}, {
+  name: 'FlowMgd',
+  label: 'FlowMgd',
+  metricUnit: 'mgd',
+  imperialUnit: 'm&#x00B3;/day',
+  selected: false
+}, {
+  name: 'NRemoved',
+  label: 'NRemoved',
+  metricUnit: '',
+  imperialUnit: '',
+  selected: false
+}, {
+  name: 'NRemovedMgl',
+  label: 'NRemovedMgl',
+  metricUnit: 'mgl',
+  imperialUnit: 'm&#x00B3;',
+  selected: false
+}, {
+  name: 'NitO2Dem',
+  label: 'NitO2Dem',
+  metricUnit: '',
+  imperialUnit: '',
+  selected: false
+}, {
+  name: 'O2Reqd',
+  label: 'O&#x2082; Required',
+  metricUnit: 'lb/day',
+  imperialUnit: 'kg/day',
+  selected: false
+}, {
+  name: 'EffNH3N',
+  label: 'Effluent NH&#x00B3;-N Concentration',
+  metricUnit: 'mg/L',
+  imperialUnit: 'mg/L',
+  selected: false
+}, {
+  name: 'EffNo3N',
+  label: 'Effluent NO&#x00B3;-N Concentration',
+  metricUnit: 'mg/L',
+  imperialUnit: 'mg/L',
+  selected: false
+}, {
+  name: 'TotalO2Rqd',
+  label: 'Total O&#x2082; Requirements',
+  metricUnit: 'lb/day',
+  imperialUnit: 'kg/day',
+  selected: false
+}, {
+  name: 'WAS',
+  label: 'WAS Flow',
+  metricUnit: 'mgd',
+  imperialUnit: 'm&#x00B3;/day',
+  selected: false
+}, {
+  name: 'EstimatedEff',
+  label: 'EstimatedEff',
+  metricUnit: '',
+  imperialUnit: '',
+  selected: false
+}, {
+  name: 'EstimRas',
+  label: 'EstimRas',
+  metricUnit: '',
+  imperialUnit: '',
+  selected: false
+}, {
+  name: 'FmRatio',
+  label: 'F/M Ratio',
+  metricUnit: '',
+  imperialUnit: '',
+  selected: false
+}, {
+  name: 'Diff_MLSS',
+  label: 'Diff_MLSS',
+  metricUnit: '',
+  imperialUnit: '',
+  selected: false
+}]
