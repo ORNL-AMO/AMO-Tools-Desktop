@@ -19,7 +19,9 @@ export class WasteWaterGraphsComponent implements OnInit {
   ngOnInit(): void {
     this.analysisGraphItemsSub = this.wasteWaterAnalysisService.analysisGraphItems.subscribe(val => {
       this.analysisGraphItems = val.filter(item => { return item.selected });
-      window.dispatchEvent(new Event('resize'));
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 200)
     });
   }
 
