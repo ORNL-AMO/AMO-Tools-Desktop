@@ -24,6 +24,10 @@
                 (click)="changeTab('assessment')">Assessment</a>
         </div>
         <div class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'analysis', 'disabled': !isBaselineValid}"
+                (click)="changeTab('analysis')">Analysis</a>
+        </div>
+        <div class="nav-item">
             <a class="nav-link disabled" (click)="changeTab('treasure-chest')">Diagram</a>
         </div>
         <div class="nav-item">
@@ -44,20 +48,6 @@
 
 
 <app-setup-tabs *ngIf="mainTab == 'system-setup'"></app-setup-tabs>
-<!-- <ul class="tabs subtabs progress-tabs waste-water" *ngIf="mainTab == 'system-setup'">
-    <li [ngClass]="{'active': setupTab == 'system-basics'}">
-        <a (click)="changeSetupTab('system-basics')">
-            <span class="step-number">1</span>Assessment Basics</a>
-    </li>
-    <li [ngClass]="{'active': setupTab == 'activated-sludge'}">
-        <a (click)="changeSetupTab('activated-sludge')">
-            <span class="step-number">2</span>Activated Sludge</a>
-    </li>
-    <li [ngClass]="{'active': setupTab == 'aerator-performance'}">
-        <a (click)="changeSetupTab('aerator-performance')">
-            <span class="step-number">3</span>Aerator Performance</a>
-    </li>
-</ul> -->
 
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
@@ -100,3 +90,5 @@
         <app-modify-conditions-tabs></app-modify-conditions-tabs>
     </nav>
 </div>
+
+<app-analysis-menu *ngIf="mainTab == 'analysis'"></app-analysis-menu>

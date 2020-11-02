@@ -124,10 +124,15 @@ export class SystemAndEquipmentCurveService {
     let equipmentInputs = this.equipmentInputs.getValue();
     let intersectionData = this.systemCurveIntersectionData.getValue();
     let systemCurveData = this.pumpSystemCurveData.getValue();
-    // roundoff flow offset to find match
-    let match = Math.round(intersectionData.baseline.x / 10) * 10;
+    // roundoff pointOperatingFlow offset to find match
+    let pointOperatingFlow;
+    if (point.isUserPoint && !isModification) {
+      pointOperatingFlow = Math.round(point.x / 10) * 10;
+    } else {
+      pointOperatingFlow = Math.round(intersectionData.baseline.x / 10) * 10;
+    }
     let powerAtBaselineFlow = baselinePowerDataPairs.find(pair => {
-      return pair.x == match;
+      return pair.x == pointOperatingFlow;
     });
 
     if (powerAtBaselineFlow) {
@@ -156,14 +161,18 @@ export class SystemAndEquipmentCurveService {
     let intersectionData = this.systemCurveIntersectionData.getValue();
     let systemCurveData = this.fanSystemCurveData.getValue();
     if (intersectionData && intersectionData.baseline && baselinePowerDataPairs.length > 0) {
-      let baselineOperatingFlow = intersectionData.baseline.x;
+      let pointOperatingFlow: number;
+      if (point.isUserPoint && !isModification) {
+        pointOperatingFlow = Math.round(point.x / 10) * 10;
+      } else {
+        pointOperatingFlow = Math.round(intersectionData.baseline.x / 10) * 10;
+      }
       let smallestDiff = baselinePowerDataPairs[baselinePowerDataPairs.length - 1].x;
       let closestPowerVal;
 
-
       // Approximate closest x value (off less than a 10th/100th of a percent)
       for (let i = 0; i < baselinePowerDataPairs.length; i++) {
-        let current = Math.abs(baselineOperatingFlow - baselinePowerDataPairs[i].x);
+        let current = Math.abs(pointOperatingFlow - baselinePowerDataPairs[i].x);
         if (current < smallestDiff) {
           smallestDiff = current;
           closestPowerVal = baselinePowerDataPairs[i].y;

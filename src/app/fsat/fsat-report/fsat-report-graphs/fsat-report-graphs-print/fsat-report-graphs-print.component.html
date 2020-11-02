@@ -39,15 +39,13 @@
   <div class="row print-avoid-break" *ngIf="printSankey">
     <div class="col-12">
       <div class="h3 mb-0">Baseline</div>
-      <app-fsat-sankey [fsat]="fsat" [location]="'baseline'" [assessmentName]="'Baseline'" [settings]="settings"
-        [isBaseline]="true" [modIndex]="index" [printView]="true"></app-fsat-sankey>
+      <app-fsat-sankey [fsat]="fsat" [settings]="settings"
+        [isBaseline]="true" [printView]="true"></app-fsat-sankey>
     </div>
     <div class="col-12" *ngIf="scenarioSummary.modificationGraphData">
       <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
       <app-fsat-sankey [fsat]="scenarioSummary.modificationGraphData.modification.fsat"
-        [location]="scenarioSummary.modificationGraphData.name"
-        [assessmentName]="scenarioSummary.modificationGraphData.name" [settings]="settings" [isBaseline]="false"
-        [modIndex]="index" [printView]="true">
+       [settings]="settings" [isBaseline]="false" [printView]="true">
       </app-fsat-sankey>
     </div>
   </div>

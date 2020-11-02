@@ -86,7 +86,39 @@ export interface WasteWaterResults {
     FieldOTR: number,
     costSavings: number,
     energySavings: number,
-    percentCostSavings: number
+    percentCostSavings: number,
+    calculationsTable: Array<Array<number>>,
+    calculationsTableMapped: Array<CalculationsTableRow>
+}
+
+export interface CalculationsTableRow {
+    index: number,
+    Se: number,
+    HeterBio: number,
+    CellDeb: number,
+    InterVes: number,
+    MLVSS: number,
+    MLSS: number,
+    BiomassProd: number,
+    SludgeProd: number,
+    SolidProd: number,
+    Effluent: number,
+    IntentWaste: number,
+    OxygenRqd: number,
+    FlowMgd: number,
+    NRemoved: number,
+    NRemovedMgl: number,
+    NitO2Dem: number,
+    O2Reqd: number,
+    EffNH3N: number,
+    EffNo3N: number,
+    TotalO2Rqd: number,
+    WAS: number,
+    EstimatedEff: number,
+    EstimRas: number,
+    FmRatio: number,
+    Diff_MLSS: number,
+    SRT: number
 }
 
 

@@ -19,6 +19,7 @@ export class ResultDataComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.wasteWater);
   }
 
 }

@@ -28,8 +28,14 @@ import { WasteWaterReportModule } from './waste-water-report/waste-water-report.
 import { AeratorPerformanceHelpComponent } from './results-panel/help-panel/aerator-performance-help/aerator-performance-help.component';
 import { ActivatedSludgeHelpComponent } from './results-panel/help-panel/activated-sludge-help/activated-sludge-help.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
+import { WasteWaterGraphsComponent } from './waste-water-analysis/waste-water-graphs/waste-water-graphs.component';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.component';
+import { WasteWaterAnalysisComponent } from './waste-water-analysis/waste-water-analysis.component';
+import { WasteWaterCalculationsTableComponent } from './waste-water-analysis/waste-water-calculations-table/waste-water-calculations-table.component';
+import { AnalysisMenuComponent } from './waste-water-banner/analysis-menu/analysis-menu.component';
+import { WasteWaterAnalysisService } from './waste-water-analysis/waste-water-analysis.service';
+import { SrtGraphComponent } from './waste-water-analysis/waste-water-graphs/srt-graph/srt-graph.component';
 
 
 
@@ -51,7 +57,12 @@ import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.c
     AeratorPerformanceHelpComponent,
     ActivatedSludgeHelpComponent,
     SystemBasicsHelpComponent,
-    SetupTabsComponent
+    WasteWaterGraphsComponent,
+    SetupTabsComponent,
+    WasteWaterAnalysisComponent,
+    WasteWaterCalculationsTableComponent,
+    AnalysisMenuComponent,
+    SrtGraphComponent
   ],
   imports: [
     CommonModule,
@@ -70,7 +81,8 @@ import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.c
     AeratorPerformanceFormService,
     CompareService,
     SystemBasicsService,
-    ConvertWasteWaterService
+    ConvertWasteWaterService,
+    WasteWaterAnalysisService
   ]
 })
 export class WasteWaterModule { }

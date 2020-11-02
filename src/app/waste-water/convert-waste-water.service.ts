@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import { ActivatedSludgeData, AeratorPerformanceData, WasteWater, WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
+import { ActivatedSludgeData, AeratorPerformanceData, CalculationsTableRow, WasteWater, WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
 
 @Injectable()
 export class ConvertWasteWaterService {
@@ -75,7 +75,7 @@ export class ConvertWasteWaterService {
     // TotalOxygenSupplied: metric = kg, imperial = lb
     wasteWaterResults.TotalOxygenSupplied = this.convertUnitsService.value(wasteWaterResults.TotalOxygenSupplied).from('lb').to('kg');
 
-    // MixingIntensityInReactor: metric = kW/m3, imperial = hp/Mgal  (TODO: Add units to converter before we can convert)
+    // MixingIntensityInReactor: metric = kW/m3, imperial = hp/Mgal
     wasteWaterResults.MixingIntensityInReactor = this.convertUnitsService.value(wasteWaterResults.MixingIntensityInReactor).from('hpMgal').to('kWm3');
 
     // RASFlowRate: metric = m3/day, imperial = mgd 
@@ -85,9 +85,25 @@ export class ConvertWasteWaterService {
     // TotalSludgeProduction: metric = kg, imperial = lb
     wasteWaterResults.TotalSludgeProduction = this.convertUnitsService.value(wasteWaterResults.TotalSludgeProduction).from('lb').to('kg');
 
-    // VOLR: metric = kg/m3, imperial = lb/kft3 (TODO: Add units to converter before we can convert)
+    // VOLR: metric = kg/m3, imperial = lb/kft3
     wasteWaterResults.VOLR = this.convertUnitsService.value(wasteWaterResults.VOLR).from('lbkft3').to('kgNm3');
     return wasteWaterResults;
+  }
+
+  convertCalcTableRowResultToMetric(row: CalculationsTableRow): CalculationsTableRow {
+    //metric = kg, imperial = lb
+    row.BiomassProd = this.convertUnitsService.value(row.BiomassProd).from('lb').to('kg');
+    row.SludgeProd = this.convertUnitsService.value(row.SludgeProd).from('lb').to('kg');
+    row.SolidProd = this.convertUnitsService.value(row.SolidProd).from('lb').to('kg');
+    row.Effluent = this.convertUnitsService.value(row.Effluent).from('lb').to('kg');
+    row.IntentWaste = this.convertUnitsService.value(row.IntentWaste).from('lb').to('kg');
+    row.OxygenRqd = this.convertUnitsService.value(row.OxygenRqd).from('lb').to('kg');
+    row.FlowMgd = this.convertUnitsService.value(row.FlowMgd).from('lb').to('kg');
+    row.TotalO2Rqd = this.convertUnitsService.value(row.TotalO2Rqd).from('lb').to('kg');
+    //metric = m3, imperial = Mgal
+    row.NRemovedMgl = this.convertUnitsService.value(row.NRemovedMgl).from('Mgal').to('m3');
+    row.WAS = this.convertUnitsService.value(row.WAS).from('Mgal').to('m3');
+    return row;
   }
 
 }
