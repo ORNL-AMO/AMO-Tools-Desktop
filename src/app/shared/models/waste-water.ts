@@ -7,7 +7,8 @@ export interface WasteWater {
 export interface SystemBasics {
     MaxDays: number,
     TimeIncrement: number,
-    equipmentNotes: string
+    equipmentNotes: string,
+    operatingMonths: number
 }
 
 export interface WasteWaterData {

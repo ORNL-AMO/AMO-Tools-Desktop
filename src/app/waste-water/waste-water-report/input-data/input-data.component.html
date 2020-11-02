@@ -45,6 +45,17 @@
         </td>
       </tr>
       <tr>
+        <td>
+          Operating Months
+        </td>
+        <td>
+          {{wasteWater.systemBasics.operatingMonths}}
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications">
+          &mdash;
+        </td>
+      </tr>
+      <tr>
         <th class="section-header">Activated Sludge Data</th>
         <th></th>
         <th *ngFor="let modification of wasteWater.modifications">
