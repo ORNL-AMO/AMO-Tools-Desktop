@@ -18,12 +18,12 @@ export class WasteWaterAnalysisService {
   }>;
 
   selectedTableData: BehaviorSubject<{ name: string, results: WasteWaterResults }>;
-  xAxisHover: BehaviorSubject<Array<{curveNumber: number, pointNumber: number}>>;
+  xAxisHover: BehaviorSubject<Array<{ curveNumber: number, pointNumber: number }>>;
   constructor(private wasteWaterService: WasteWaterService) {
     this.analysisTab = new BehaviorSubject<string>('graphs');
     this.analysisGraphItems = new BehaviorSubject<Array<AnalysisGraphItem>>(new Array());
     this.selectedTableData = new BehaviorSubject<{ name: string, results: WasteWaterResults }>({ name: '', results: undefined });
-    this.xAxisHover = new BehaviorSubject<Array<{curveNumber: number, pointNumber: number}>>(new Array());
+    this.xAxisHover = new BehaviorSubject<Array<{ curveNumber: number, pointNumber: number }>>(new Array());
   }
 
   setResults(wasteWater: WasteWater, settings: Settings) {
@@ -60,7 +60,8 @@ export class WasteWaterAnalysisService {
       name: 'Baseline',
       x: baselineXYData.x,
       y: baselineXYData.y,
-      mode: 'lines+markers'
+      mode: 'lines+markers',
+      hovertemplate: '%{y:.2f}'
     });
     modificationsResultsArr.forEach(modResult => {
       let modXYData = this.getXYData(modResult.results.calculationsTableMapped, tableVariable.name);
@@ -68,7 +69,8 @@ export class WasteWaterAnalysisService {
         name: modResult.name,
         x: modXYData.x,
         y: modXYData.y,
-        mode: 'lines+markers'
+        mode: 'lines+markers',
+        hovertemplate: '%{y:.2f}'
       });
     });
     return {
@@ -106,5 +108,6 @@ export interface GraphItemTrace {
   //   color: string
   // }
   name: string,
-  mode: string
+  mode: string,
+  hovertemplate: string
 }

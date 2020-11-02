@@ -3,7 +3,6 @@ import { AnalysisGraphItem, WasteWaterAnalysisService } from '../../waste-water-
 import * as Plotly from 'plotly.js';
 import { WasteWaterService } from '../../../waste-water.service';
 import { Settings } from '../../../../shared/models/settings';
-import { AnnotationData } from '../../../../log-tool/log-tool-models';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -68,12 +67,15 @@ export class SrtGraphComponent implements OnInit {
     Plotly.newPlot(this.srtGraphItem.nativeElement, this.analysisGraphItem.traces, layout, configOptions).then(chart => {
       chart.on('plotly_hover', (data) => {
         this.wasteWaterAnalysisService.xAxisHover.next(data.points);
-      })
+      });
+      chart.on('plotly_unhover', () => {
+        this.wasteWaterAnalysisService.xAxisHover.next([]);
+      });
     });
   }
 
   setHover(points: Array<{ curveNumber: number, pointNumber: number }>) {
-    if (this.srtGraphItem) {
+    if (this.srtGraphItem && points != undefined) {
       Plotly.Fx.hover(this.srtGraphItem.nativeElement, points)
     }
   }
