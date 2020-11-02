@@ -82,6 +82,9 @@ export class WasteWaterService {
         EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit
       }
       let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
+      //return per month, convert to years
+      wasteWaterResults.AeEnergy = wasteWaterResults.AeEnergy * systemBasics.operatingMonths;
+      wasteWaterResults.AeCost =  wasteWaterResults.AeCost * systemBasics.operatingMonths;
       if (settings.unitsOfMeasure != 'Imperial') {
         wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
       }

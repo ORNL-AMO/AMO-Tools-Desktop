@@ -319,7 +319,8 @@ export class AssessmentService {
       systemBasics: {
         MaxDays: 72,
         TimeIncrement: 2,
-        equipmentNotes: ''
+        equipmentNotes: '',
+        operatingMonths: 12
       }
     }
   }
