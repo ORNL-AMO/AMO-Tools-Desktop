@@ -39,7 +39,8 @@ export class SankeyService {
     if (phast.losses.energyInputEAF && !resultCats.showFlueGas && !resultCats.showEnInput2) {
       if (phast.losses.energyInputEAF.length > 0) {
         this.setChemicalEnergy(phastResults);
-        this.electricalEnergy = phastResults.grossHeatInput - phastResults.energyInputHeatDelivered;
+        // this.electricalEnergy = phastResults.grossHeatInput - phastResults.energyInputHeatDelivered;
+        this.electricalEnergy = phastResults.energyInputHeatDelivered;
       }
     }
 
@@ -97,7 +98,7 @@ export class SankeyService {
 
     results.availableHeatPercent = (1 - ((results.totalSystemLosses + results.totalFlueGas + results.totalExhaustGas) / results.totalInput)) * 100;
 
-    // results.nodes = this.getNodes(results, settings);
+    results.nodes = this.getNodes(results, settings);
 
     return results;
   }
