@@ -15,6 +15,7 @@ export class WasteWaterAnalysisService {
   modificationsResultsArr: Array<{
     name: string,
     results: WasteWaterResults,
+    color: string
   }>;
 
   selectedTableData: BehaviorSubject<{ name: string, results: WasteWaterResults }>;
@@ -29,12 +30,19 @@ export class WasteWaterAnalysisService {
   setResults(wasteWater: WasteWater, settings: Settings) {
     this.baselineResults = this.wasteWaterService.calculateResults(wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.systemBasics, settings);
     this.modificationsResultsArr = new Array();
+
+    let color: string = '0,48,135';
+    let stepVal: number = 1 / (wasteWater.modifications.length + 1);
+    let opacityVal: number = 1 - stepVal;
+
     wasteWater.modifications.forEach(modification => {
       let modificationResults: WasteWaterResults = this.wasteWaterService.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, this.baselineResults);
       this.modificationsResultsArr.push({
         name: modification.name,
         results: modificationResults,
+        color: '0,48,135,' + opacityVal
       });
+      opacityVal = opacityVal - stepVal;
     });
   }
 

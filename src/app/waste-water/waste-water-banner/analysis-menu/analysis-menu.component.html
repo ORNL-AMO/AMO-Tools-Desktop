@@ -1,11 +1,17 @@
 <div class="navbar assessment-bar tabs subtabs waste-water">
-    <div class="assessment-tab" [ngClass]="{'active': analysisTab == 'graphs'}">
-        <a (click)="changeTab('graphs')">Graphs
-        </a>
-    </div>
-    <div class="assessment-tab" [ngClass]="{'active': analysisTab == 'tables'}">
-        <a (click)="changeTab('tables')">Data Tables
-        </a>
+    <div class="d-flex">
+        <div class="assessment-tab" [ngClass]="{'active': analysisTab == 'graphs'}">
+            <a (click)="changeTab('graphs')">SRT Graphs
+            </a>
+        </div>
+        <div class="assessment-tab" [ngClass]="{'active': analysisTab == 'tables'}">
+            <a class="middle-tab" (click)="changeTab('tables')">SRT Data Tables
+            </a>
+        </div>
+        <div class="assessment-tab" [ngClass]="{'active': analysisTab == 'energy-analysis'}">
+            <a (click)="changeTab('energy-analysis')">Energy Analysis
+            </a>
+        </div>
     </div>
     <div *ngIf="analysisTab == 'graphs'" class="d-flex align-items-center ml-auto br-color-white">
         <div class="p-1">
