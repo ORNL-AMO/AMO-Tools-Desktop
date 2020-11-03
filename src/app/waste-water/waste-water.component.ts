@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChi
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -52,7 +53,7 @@ export class WasteWaterComponent implements OnInit {
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
     private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
-    private systemBasicsService: SystemBasicsService) { }
+    private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -65,6 +66,9 @@ export class WasteWaterComponent implements OnInit {
       } else {
         this.settings = settings;
         this.wasteWaterService.settings.next(settings);
+      }
+      if (this.assessmentService.tab) {
+        this.wasteWaterService.mainTab.next(this.assessmentService.tab);
       }
     });
 
@@ -140,6 +144,7 @@ export class WasteWaterComponent implements OnInit {
 
   saveWasteWater(wasteWater: WasteWater) {
     this.assessment.wasteWater = wasteWater;
+    this.assessment.wasteWater.setupDone = this.wasteWaterService.checkWasteWaterValid(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics);
     this.indexedDbService.putAssessment(this.assessment).then(() => {
       this.assessmentDbService.setAll();
     });

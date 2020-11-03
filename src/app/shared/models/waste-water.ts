@@ -1,7 +1,8 @@
 export interface WasteWater {
     baselineData: WasteWaterData,
     modifications?: Array<WasteWaterData>,
-    systemBasics: SystemBasics
+    systemBasics: SystemBasics,
+    setupDone?: boolean
 }
 
 export interface SystemBasics {

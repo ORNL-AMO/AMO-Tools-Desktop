@@ -38,7 +38,7 @@ export class WasteWaterSummaryCardComponent implements OnInit {
   }
 
 
-  goToAssessment(str?: string, str2?: string) {
-    this.assessmentService.goToAssessment(this.assessment, str, str2);
+  goToAssessment(str?: string) {
+    this.assessmentService.goToAssessment(this.assessment, str, undefined);
   }
 }

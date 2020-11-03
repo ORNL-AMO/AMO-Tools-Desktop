@@ -61,6 +61,9 @@ export class AssessmentService {
       }
       this.router.navigateByUrl('/treasure-hunt/' + assessment.id);
     } else if (assessment.type == 'WasteWater') {
+      if(assessment.wasteWater.setupDone && !str && !assessment.isExample){
+        this.tab = 'assessment';
+      }
       this.router.navigateByUrl('/waste-water/' + assessment.id);
     }
   }
