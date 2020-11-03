@@ -13,6 +13,8 @@ import { Subscription } from 'rxjs';
 export class SrtGraphComponent implements OnInit {
   @Input()
   analysisGraphItem: AnalysisGraphItem;
+  @Input()
+  hideActionsMenu: boolean;
 
   @ViewChild('srtGraphItem', { static: false }) srtGraphItem: ElementRef;
 
@@ -59,11 +61,16 @@ export class SrtGraphComponent implements OnInit {
     };
 
     var configOptions = {
-      // modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      modeBarButtonsToRemove: [],
       displaylogo: false,
       displayModeBar: true,
       responsive: true
     };
+
+    if(this.hideActionsMenu){
+      configOptions.modeBarButtonsToRemove = ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'];
+    }
+
     Plotly.newPlot(this.srtGraphItem.nativeElement, this.analysisGraphItem.traces, layout, configOptions).then(chart => {
       chart.on('plotly_hover', (data) => {
         this.wasteWaterAnalysisService.xAxisHover.next(data.points);

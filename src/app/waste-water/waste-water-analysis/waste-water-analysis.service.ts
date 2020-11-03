@@ -31,7 +31,6 @@ export class WasteWaterAnalysisService {
     this.baselineResults = this.wasteWaterService.calculateResults(wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.systemBasics, settings);
     this.modificationsResultsArr = new Array();
 
-    let color: string = '0,48,135';
     let stepVal: number = 1 / (wasteWater.modifications.length + 1);
     let opacityVal: number = 1 - stepVal;
 

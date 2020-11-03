@@ -59,8 +59,11 @@
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
                 <a>Result Data</a>
             </li>
-            <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
-                <a>Report Graphs</a>
+            <li (click)="setTab('srtGraphs')" [ngClass]="{'active': currentTab == 'srtGraphs'}">
+                <a>SRT Graphs</a>
+            </li>
+            <li (click)="setTab('energyAnalysis')" [ngClass]="{'active': currentTab == 'energyAnalysis'}">
+                <a>Energy Analysis</a>
             </li>
             <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
                 <a>Input Summary</a>
@@ -86,19 +89,13 @@
             <app-result-data [settings]="settings" [inRollup]="inRollup" [wasteWater]="assessment.wasteWater">
             </app-result-data>
         </div>
-        <!--<div class="results scroll-item print-height"
-            *ngIf="currentTab == 'reportGraphs' || (showPrintView && (printOptions.printReportGraphs || printOptions.printReportSankey))"
-            [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-fsat-report-graphs [fsat]="assessment.fsat" [settings]="settings" [printView]="showPrintView"
-                [printSankey]="printOptions.printReportSankey" [printGraphs]="printOptions.printReportGraphs">
-            </app-fsat-report-graphs>
+        <div class="results print-height" *ngIf="currentTab == 'energyAnalysis'">
+            <app-energy-analysis [containerHeight]="reportContainerHeight"></app-energy-analysis>
         </div>
-        <div class="results scroll-item print-height" *ngIf="currentTab == 'reportSankey' && !showPrintView"
+        <div class="results scroll-item print-height" *ngIf="currentTab == 'srtGraphs'"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-fsat-report-sankey [settings]="settings" [assessment]="assessment">
-            </app-fsat-report-sankey>
-        </div> -->
-
+            <app-srt-graphs></app-srt-graphs>
+        </div>
     </div>
     <!-- End .report-data -->
 

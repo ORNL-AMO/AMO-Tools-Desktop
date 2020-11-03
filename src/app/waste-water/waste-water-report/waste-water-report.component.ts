@@ -4,6 +4,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
 import { Settings } from '../../shared/models/settings';
+import { WasteWaterAnalysisService } from '../waste-water-analysis/waste-water-analysis.service';
 import { WasteWaterService } from '../waste-water.service';
 
 @Component({
@@ -28,7 +29,8 @@ export class WasteWaterReportComponent implements OnInit {
   currentTab: string = 'results';
   reportContainerHeight: number;
   settings: Settings;
-  constructor(private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService) { }
+  constructor(private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService,
+    private wasteWaterAnalysisService: WasteWaterAnalysisService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -41,6 +43,7 @@ export class WasteWaterReportComponent implements OnInit {
     this.assessment.wasteWater.modifications.forEach(mod => {
       mod.outputs = this.wasteWaterService.calculateResults(mod.activatedSludgeData, mod.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, this.settings, this.assessment.wasteWater.baselineData.outputs);
     });
+    this.wasteWaterAnalysisService.setResults(this.assessment.wasteWater, this.settings);
   }
 
   ngOnChanges(changes: SimpleChanges) {
