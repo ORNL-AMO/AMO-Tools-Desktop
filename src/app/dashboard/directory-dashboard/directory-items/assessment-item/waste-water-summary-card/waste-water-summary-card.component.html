@@ -7,7 +7,7 @@
             Annual Energy Use:
         </td>
         <td>
-            {{baselineResults.AeEnergy | number:'2.0-0'}} kWh/yr
+            {{baselineResults.AeEnergy | number:'2.0-0'}} MWh/yr
 
         </td>
     </tr>
@@ -37,7 +37,7 @@
             Max Energy Savings:
         </td>
         <td>
-            {{modificationResults.energySavings | number:'2.0-0'}} kWh/yr
+            {{modificationResults.energySavings | number:'2.0-0'}} MWh/yr
         </td>
     </tr>
     <tr *ngIf="numMods != 0">
@@ -79,8 +79,8 @@
 
 
 
-<!-- <div bsModal #reportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true"
-    [config]="{backdrop: 'static'}">
+<div bsModal #reportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header p-2">
@@ -89,8 +89,8 @@
                 </button>
             </div>
             <div class="modal-body scroll-item" *ngIf="showReport">
-                <app-ssmt-report [assessment]="assessment" [settings]="settings"></app-ssmt-report>
+                <app-waste-water-report [assessment]="assessment"></app-waste-water-report>
             </div>
         </div>
     </div>
-  </div> -->
+</div>

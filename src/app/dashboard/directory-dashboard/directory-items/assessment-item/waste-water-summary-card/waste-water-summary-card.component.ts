@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../../../shared/models/assessment';
 import { Settings } from '../../../../../shared/models/settings';
@@ -15,11 +16,13 @@ export class WasteWaterSummaryCardComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
+  @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
   baselineResults: WasteWaterResults;
   modificationResults: WasteWaterResults;
   setupDone: boolean;
   numMods: number = 0;
+  showReport: boolean = false;
   constructor(private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
@@ -40,5 +43,15 @@ export class WasteWaterSummaryCardComponent implements OnInit {
 
   goToAssessment(str?: string) {
     this.assessmentService.goToAssessment(this.assessment, str, undefined);
+  }
+
+  showReportModal() {
+    this.showReport = true;
+    this.reportModal.show();
+  }
+
+  hideReportModal() {
+    this.reportModal.hide();
+    this.showReport = false;
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 import { ActivatedSludgeData, AeratorPerformanceData, CalculationsTableRow, SystemBasics, WasteWater, WasteWaterData, WasteWaterResults, WasteWaterTreatmentInputData } from '../shared/models/waste-water';
 import { ActivatedSludgeFormService } from './activated-sludge-form/activated-sludge-form.service';
@@ -24,7 +25,7 @@ export class WasteWaterService {
   selectedModificationId: BehaviorSubject<string>;
   focusedField: BehaviorSubject<string>;
   constructor(private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService, private systemBasicsService: SystemBasicsService,
-    private convertWasteWaterService: ConvertWasteWaterService) {
+    private convertWasteWaterService: ConvertWasteWaterService, private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('modify-conditions');
@@ -85,6 +86,7 @@ export class WasteWaterService {
       //return per month, convert to years
       wasteWaterResults.AeEnergy = wasteWaterResults.AeEnergy * systemBasics.operatingMonths;
       wasteWaterResults.AeCost =  wasteWaterResults.AeCost * systemBasics.operatingMonths;
+      wasteWaterResults.AeEnergy = this.convertUnitsService.value(wasteWaterResults.AeEnergy).from('kWh').to('MWh');
       if (settings.unitsOfMeasure != 'Imperial') {
         wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
       }
