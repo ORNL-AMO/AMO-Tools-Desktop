@@ -36,6 +36,8 @@
         <app-ssmt-summary-card *ngIf="assessment.type == 'SSMT'" [assessment]="assessment"></app-ssmt-summary-card>
         <app-treasure-hunt-summary-card *ngIf="assessment.type == 'TreasureHunt'" [assessment]="assessment">
         </app-treasure-hunt-summary-card>
+        <app-waste-water-summary-card *ngIf="assessment.type == 'WasteWater'" [assessment]="assessment">
+        </app-waste-water-summary-card>
     </div>
     <div class="card-footer summary-card-footer">
         <div class="last-updated pull-right">Last updated {{assessment.modifiedDate | date }}</div>
