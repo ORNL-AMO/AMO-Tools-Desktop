@@ -12,7 +12,13 @@
                     Annual Energy Use
                 </th>
                 <th>
+                    Annual Energy Savings
+                </th>
+                <th>
                     Annual Energy Cost
+                </th>
+                <th>
+                    Annual Cost Savings
                 </th>
             </tr>
         </thead>
@@ -33,12 +39,18 @@
                     </span>
                 </td>
                 <td>
+                    &mdash;
+                </td>
+                <td>
                     <span *ngIf="baselineResults.AeCost">
                         {{baselineResults.AeCost | currency:'USD':'symbol':'2.0-0'}}
                     </span>
                     <span *ngIf="!baselineResults.AeCost">
                         $ &mdash;
                     </span>
+                </td>
+                <td>
+                    &mdash;
                 </td>
             </tr>
             <tr class="department-item-row" *ngFor="let modificationResults of modificationsResultsArr"
@@ -54,7 +66,15 @@
                         {{modificationResults.results.AeEnergy | number:'1.0-0'}} MWh/yr
                     </span>
                     <span *ngIf="!modificationResults.results.AeEnergy">
-                        &mdash; kWh/yr
+                        &mdash; MWh/yr
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="modificationResults.results.energySavings">
+                        {{modificationResults.results.energySavings | number:'1.0-0'}} MWh/yr
+                    </span>
+                    <span *ngIf="!modificationResults.results.energySavings">
+                        &mdash; MWh/yr
                     </span>
                 </td>
                 <td>
@@ -62,6 +82,14 @@
                         {{modificationResults.results.AeCost | currency:'USD':'symbol':'2.0-0'}}
                     </span>
                     <span *ngIf="!modificationResults.results.AeCost">
+                        $ &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="modificationResults.results.costSavings">
+                        {{modificationResults.results.costSavings | currency:'USD':'symbol':'2.0-0'}}
+                    </span>
+                    <span *ngIf="!modificationResults.results.costSavings">
                         $ &mdash;
                     </span>
                 </td>

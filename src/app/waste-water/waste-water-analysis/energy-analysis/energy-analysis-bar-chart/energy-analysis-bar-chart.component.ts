@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import * as Plotly from 'plotly.js';
+import { WasteWaterAnalysisService } from '../../waste-water-analysis.service';
 
 @Component({
   selector: 'app-energy-analysis-bar-chart',
@@ -6,10 +8,107 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./energy-analysis-bar-chart.component.css']
 })
 export class EnergyAnalysisBarChartComponent implements OnInit {
+  @Input()
+  chartInfo: string;
 
-  constructor() { }
+  @ViewChild('analysisBarChart', { static: false }) analysisBarChart: ElementRef;
+  constructor(private wasteWaterAnalysisService: WasteWaterAnalysisService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
+  ngAfterViewInit() {
+    let layout = {
+      title: {
+        text: 'Energy Usage',
+      },
+      yaxis: {
+        title: {
+          text: 'MWh/yr',
+          font: {
+            family: 'Arial',
+            size: 16
+          }
+        },
+        tickprefix: '$',
+      }
+    };
+    let traceData;
+    if (this.chartInfo == 'energyCost') {
+      traceData = this.getEnergyCostData();
+      layout.title.text = 'Energy Cost';
+      layout.yaxis.title.text = '$/yr';
+    } else if (this.chartInfo == 'energyUse') {
+      traceData = this.getEnergyUsageData();
+      layout.yaxis.tickprefix = '';
+    }
+    let configOptions = {
+      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      displaylogo: false,
+      displayModeBar: true,
+      responsive: true
+    };
+    Plotly.newPlot(this.analysisBarChart.nativeElement, traceData, layout, configOptions);
+  }
+
+  getEnergyCostData() {
+    let yVals: Array<number> = [this.wasteWaterAnalysisService.baselineResults.AeCost];
+    let xVals: Array<string> = ['Baseline'];
+    let markerColors: Array<string> = ['rgba(0,48,135,1)'];
+    this.wasteWaterAnalysisService.modificationsResultsArr.forEach(modification => {
+      xVals.push(modification.name);
+      yVals.push(modification.results.AeCost);
+      markerColors.push('rgba(' + modification.color + ')');
+    });
+    return [{
+      x: xVals,
+      y: yVals,
+      type: 'bar',
+      textposition: 'auto',
+      hoverinfo: 'text',
+      text: yVals.map(val => { return this.getFormatedValue(val, '$') }),
+      marker: {
+        color: markerColors,
+        line: {
+          width: 1
+        }
+      }
+    }]
+  }
+
+  getEnergyUsageData() {
+    let yVals: Array<number> = [this.wasteWaterAnalysisService.baselineResults.AeEnergy];
+    let xVals: Array<string> = ['Baseline'];
+    let markerColors: Array<string> = ['rgba(0,48,135,1)'];
+    this.wasteWaterAnalysisService.modificationsResultsArr.forEach(modification => {
+      xVals.push(modification.name);
+      yVals.push(modification.results.AeEnergy);
+      markerColors.push('rgba(' + modification.color + ')');
+    });
+    return [{
+      x: xVals,
+      y: yVals,
+      type: 'bar',
+      text: yVals.map(val => { return this.getFormatedValue(val, undefined, 'MWh') }),
+      textposition: 'auto',
+      hoverinfo: 'text',
+      marker: {
+        color: markerColors,
+        line: {
+          width: 1
+        }
+      }
+    }]
+  }
+
+  getFormatedValue(num: number, prefix?: string, suffix?: string): string {
+    let formattedWithDecimal = (num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    if (prefix) {
+      return prefix + formattedWithDecimal.substring(0, formattedWithDecimal.length - 3);
+    } else if (suffix) {
+      return formattedWithDecimal.substring(0, formattedWithDecimal.length - 3) + ' ' + suffix;
+    } else {
+      return formattedWithDecimal.substring(0, formattedWithDecimal.length - 3);
+    }
+  }
 }
