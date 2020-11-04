@@ -22,7 +22,7 @@ export class PrintOptionsMenuComponent implements OnInit {
   showPhastReportOptions: boolean = false;
   showSsmtReportOptions: boolean = false;
   showTHReportOptions: boolean = false;
-
+  showWasteWaterOptions: boolean = false;
   constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -52,6 +52,8 @@ export class PrintOptionsMenuComponent implements OnInit {
       this.showPhastReportOptions = true;
     } else if (printContext == 'treasureHunt') {
       this.showTHReportOptions = true;
+    } else if (printContext == 'wasteWater') {
+      this.showWasteWaterOptions = true;
     } else if (printContext == 'reportRollup') {
       this.showRollupReportOptions = true;
       this.showPsatReportOptions = (this.reportRollupService.numPsats != 0);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AnalysisGraphItem, WasteWaterAnalysisService } from '../../waste-water-analysis/waste-water-analysis.service';
 
 @Component({
@@ -7,6 +7,8 @@ import { AnalysisGraphItem, WasteWaterAnalysisService } from '../../waste-water-
   styleUrls: ['./srt-graphs.component.css']
 })
 export class SrtGraphsComponent implements OnInit {
+  @Input()
+  printView: boolean;
 
   analysisGraphItems: Array<AnalysisGraphItem>;
   constructor(private wasteWaterAnalysisService: WasteWaterAnalysisService) { }
