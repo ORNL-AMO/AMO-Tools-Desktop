@@ -47,7 +47,7 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
       layout.yaxis.tickprefix = '';
     }
 
-    if(this.printView){
+    if (this.printView) {
       layout.width = 900;
     }
 
@@ -63,11 +63,11 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
   getEnergyCostData() {
     let yVals: Array<number> = [this.wasteWaterAnalysisService.baselineResults.AeCost];
     let xVals: Array<string> = ['Baseline'];
-    let markerColors: Array<string> = ['rgba(0,48,135,1)'];
+    let markerColors: Array<string> = ['#1E7640'];
     this.wasteWaterAnalysisService.modificationsResultsArr.forEach(modification => {
       xVals.push(modification.name);
       yVals.push(modification.results.AeCost);
-      markerColors.push('rgba(' + modification.color + ')');
+      markerColors.push(modification.color);
     });
     return [{
       x: xVals,
@@ -88,11 +88,11 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
   getEnergyUsageData() {
     let yVals: Array<number> = [this.wasteWaterAnalysisService.baselineResults.AeEnergy];
     let xVals: Array<string> = ['Baseline'];
-    let markerColors: Array<string> = ['rgba(0,48,135,1)'];
+    let markerColors: Array<string> = ['#1E7640'];
     this.wasteWaterAnalysisService.modificationsResultsArr.forEach(modification => {
       xVals.push(modification.name);
       yVals.push(modification.results.AeEnergy);
-      markerColors.push('rgba(' + modification.color + ')');
+      markerColors.push(modification.color);
     });
     return [{
       x: xVals,

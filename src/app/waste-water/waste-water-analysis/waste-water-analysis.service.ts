@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 import { Settings } from '../../shared/models/settings';
 import { CalculationsTableRow, WasteWater, WasteWaterResults } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
@@ -28,20 +29,18 @@ export class WasteWaterAnalysisService {
   }
 
   setResults(wasteWater: WasteWater, settings: Settings) {
+    //baseline color: '#1E7640'
     this.baselineResults = this.wasteWaterService.calculateResults(wasteWater.baselineData.activatedSludgeData, wasteWater.baselineData.aeratorPerformanceData, wasteWater.systemBasics, settings);
     this.modificationsResultsArr = new Array();
-
-    let stepVal: number = 1 / (wasteWater.modifications.length + 1);
-    let opacityVal: number = 1 - stepVal;
-
+    let index: number = 1;
     wasteWater.modifications.forEach(modification => {
       let modificationResults: WasteWaterResults = this.wasteWaterService.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, this.baselineResults);
       this.modificationsResultsArr.push({
         name: modification.name,
         results: modificationResults,
-        color: '0,48,135,' + opacityVal
+        color: graphColors[index]
       });
-      opacityVal = opacityVal - stepVal;
+      index++;
     });
   }
 
@@ -50,7 +49,7 @@ export class WasteWaterAnalysisService {
     this.analysisGraphItems.next(analysisGraphItems);
   }
 
-  getAnalysisGraphItems(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults }>): Array<AnalysisGraphItem> {
+  getAnalysisGraphItems(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults, color: string }>): Array<AnalysisGraphItem> {
     let analysisGraphItems: Array<AnalysisGraphItem> = new Array();
 
     DataTableVariables.forEach(variable => {
@@ -60,22 +59,47 @@ export class WasteWaterAnalysisService {
     return analysisGraphItems;
   }
 
-  getAnalysisGraphItem(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults }>, tableVariable: DataTableVariable): AnalysisGraphItem {
+  getAnalysisGraphItem(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults, color: string }>, tableVariable: DataTableVariable): AnalysisGraphItem {
     let traces: Array<GraphItemTrace> = new Array();
     let baselineXYData = this.getXYData(baselineResults.calculationsTableMapped, tableVariable.name);
+    let markerSize: Array<number> = new Array();
+    baselineXYData.x.forEach(x => {
+      if (x == baselineResults.SolidsRetentionTime) {
+        markerSize.push(12);
+      } else {
+        markerSize.push(6);
+      }
+    });
     traces.push({
       name: 'Baseline',
       x: baselineXYData.x,
       y: baselineXYData.y,
+      marker: {
+        color: '#1E7640',
+        size: markerSize
+      },
       mode: 'lines+markers',
       hovertemplate: '%{y:.2f}'
     });
     modificationsResultsArr.forEach(modResult => {
       let modXYData = this.getXYData(modResult.results.calculationsTableMapped, tableVariable.name);
+
+      let markerSize: Array<number> = new Array();
+      modXYData.x.forEach(x => {
+        if (x == modResult.results.SolidsRetentionTime) {
+          markerSize.push(12);
+        } else {
+          markerSize.push(6);
+        }
+      });
       traces.push({
         name: modResult.name,
         x: modXYData.x,
         y: modXYData.y,
+        marker: {
+          color: modResult.color,
+          size: markerSize
+        },
         mode: 'lines+markers',
         hovertemplate: '%{y:.2f}'
       });
@@ -111,9 +135,10 @@ export interface AnalysisGraphItem {
 export interface GraphItemTrace {
   x: Array<number>,
   y: Array<number>,
-  // marker: {
-  //   color: string
-  // }
+  marker: {
+    color: string,
+    size: Array<number>
+  },
   name: string,
   mode: string,
   hovertemplate: string
