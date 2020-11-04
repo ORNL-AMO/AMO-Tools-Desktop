@@ -86,6 +86,10 @@ export class PrintOptionsMenuService {
         currentPrintOptions.printReportOpportunitySummary = !currentPrintOptions.printReportOpportunitySummary;
         break;
       }
+      case "printWWTAnalysis": {
+        currentPrintOptions.printWWTAnalysis = !currentPrintOptions.printWWTAnalysis;
+        break;
+      }
       default: {
         break;
       }
@@ -110,6 +114,7 @@ export class PrintOptionsMenuService {
       printReportOpportunityPayback: bool,
       printReportOpportunitySummary: bool,
       printSsmtRollup: bool,
+      printWWTAnalysis: bool,
       selectAll: bool
     }
   }

@@ -10,6 +10,8 @@ import { WasteWaterAnalysisService } from '../../waste-water-analysis.service';
 export class EnergyAnalysisBarChartComponent implements OnInit {
   @Input()
   chartInfo: string;
+  @Input()
+  printView: boolean;
 
   @ViewChild('analysisBarChart', { static: false }) analysisBarChart: ElementRef;
   constructor(private wasteWaterAnalysisService: WasteWaterAnalysisService) { }
@@ -19,10 +21,12 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
 
   ngAfterViewInit() {
     let layout = {
+      width: undefined,
       title: {
         text: 'Energy Usage',
       },
       yaxis: {
+        width: undefined,
         title: {
           text: 'MWh/yr',
           font: {
@@ -42,6 +46,11 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
       traceData = this.getEnergyUsageData();
       layout.yaxis.tickprefix = '';
     }
+
+    if(this.printView){
+      layout.width = 900;
+    }
+
     let configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       displaylogo: false,

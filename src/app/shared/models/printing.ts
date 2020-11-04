@@ -16,5 +16,6 @@ export interface PrintOptions {
     printReportOpportunityPayback: boolean;
     printReportOpportunitySummary: boolean;
     printSsmtRollup: boolean;
+    printWWTAnalysis: boolean;
     selectAll: boolean;
   }

@@ -61,6 +61,7 @@ export class PrintOptionsMenuComponent implements OnInit {
       this.showPhastReportOptions = (this.reportRollupService.numPhasts != 0);
       this.showSsmtReportOptions = (this.reportRollupService.numSsmt != 0);
       this.showTHReportOptions = (this.reportRollupService.numTreasureHunt != 0);
+      // this.showWasteWaterOptions = 
     }
   }
 

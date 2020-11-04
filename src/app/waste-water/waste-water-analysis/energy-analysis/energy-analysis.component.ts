@@ -8,7 +8,8 @@ import { Component, Input, OnInit } from '@angular/core';
 export class EnergyAnalysisComponent implements OnInit {
   @Input()
   containerHeight: number;
-
+  @Input()
+  printView: boolean;
   
   constructor() { }
 

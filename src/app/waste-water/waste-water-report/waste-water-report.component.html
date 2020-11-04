@@ -89,10 +89,13 @@
             <app-result-data [settings]="settings" [inRollup]="inRollup" [wasteWater]="assessment.wasteWater">
             </app-result-data>
         </div>
-        <div class="results print-height" *ngIf="currentTab == 'energyAnalysis'">
-            <app-energy-analysis [containerHeight]="reportContainerHeight"></app-energy-analysis>
+        <div class="results print-height"
+            *ngIf="currentTab == 'energyAnalysis' || (showPrintView && printOptions.printWWTAnalysis)">
+            <app-energy-analysis [containerHeight]="reportContainerHeight" [printView]="showPrintView">
+            </app-energy-analysis>
         </div>
-        <div class="results scroll-item print-height" *ngIf="currentTab == 'srtGraphs' || (showPrintView && printOptions.printReportGraphs)"
+        <div class="results scroll-item print-height"
+            *ngIf="currentTab == 'srtGraphs' || (showPrintView && printOptions.printReportGraphs)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-srt-graphs [printView]="showPrintView"></app-srt-graphs>
         </div>
