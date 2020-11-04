@@ -271,28 +271,28 @@
             </tr>
 
             <tr>
-                <th>Aerator Energy Use (kWh/year)</th>
+                <th>Aerator Energy Use (MWh/yr)</th>
                 <th>{{wasteWater.baselineData.outputs.AeEnergy | number:'1.0-0'}}</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.AeEnergy
             | number:'1.0-0'}}</th>
             </tr>
             <tr>
-                <th>Energy Savings (kWh/year)</th>
+                <th>Energy Savings (MWh/yr)</th>
                 <th>&mdash;</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'positive-savings': modification.outputs.percentCostSavings > 10, 'selected-modification': index == selectedModificationIndex}">{{modification.outputs.energySavings
             | number:'1.0-0'}}</th>
             </tr>
             <tr>
-                <th>Aerator Cost ($/year)</th>
+                <th>Aerator Cost ($/yr)</th>
                 <th>{{wasteWater.baselineData.outputs.AeCost | currency:'USD':'symbol':'1.0-0'}}</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'positive-savings': modification.outputs.percentCostSavings > 10,'selected-modification': index == selectedModificationIndex}">{{modification.outputs.AeCost
             | currency:'USD':'symbol':'1.0-0'}}</th>
             </tr>
             <tr>
-                <th>Cost Savings ($/year)</th>
+                <th>Cost Savings ($/yr)</th>
                 <th>&mdash;</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'positive-savings': modification.outputs.percentCostSavings > 10, 'selected-modification': index == selectedModificationIndex}">
