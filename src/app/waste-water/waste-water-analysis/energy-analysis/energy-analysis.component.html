@@ -17,6 +17,9 @@
 <div class="print-break-before" *ngIf="printView">
     <div class="row no-gutters w-100">
         <div class="col-12">
+            <h4 class="show-print">SRT Graphs</h4>
+        </div>
+        <div class="col-12">
             <app-energy-analysis-table></app-energy-analysis-table>
         </div>
     </div>
@@ -25,7 +28,8 @@
             <app-energy-analysis-bar-chart [chartInfo]="'energyUse'" [printView]="true"></app-energy-analysis-bar-chart>
         </div>
         <div class="col-12 min-row-height">
-            <app-energy-analysis-bar-chart [chartInfo]="'energyCost'" [printView]="true"></app-energy-analysis-bar-chart>
+            <app-energy-analysis-bar-chart [chartInfo]="'energyCost'" [printView]="true">
+            </app-energy-analysis-bar-chart>
         </div>
     </div>
 </div>
