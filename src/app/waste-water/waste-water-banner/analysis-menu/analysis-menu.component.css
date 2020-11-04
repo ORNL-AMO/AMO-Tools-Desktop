@@ -47,3 +47,8 @@
 .tabs.subtabs .assessment-tab a{
     font-size: 18px;
 }
+
+.middle-tab{
+    border-left: groove 2px;
+    border-right: groove 2px;
+}

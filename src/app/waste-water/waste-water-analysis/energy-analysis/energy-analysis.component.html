@@ -1,0 +1,15 @@
+<div class="scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="row no-gutters w-100">
+        <div class="col-12">
+            <app-energy-analysis-table></app-energy-analysis-table>
+        </div>
+    </div>
+    <div class="row no-gutters w-100 min-row-height">
+        <div class="col-6">
+            <app-energy-analysis-bar-chart [chartInfo]="'energyUse'"></app-energy-analysis-bar-chart>
+        </div>
+        <div class="col-6">
+            <app-energy-analysis-bar-chart [chartInfo]="'energyCost'"></app-energy-analysis-bar-chart>
+        </div>
+    </div>
+</div>
