@@ -2,7 +2,7 @@
     <div class="row no-gutters">
         <div class="col-12">
             <ul>
-                <li *ngIf="reportRollupService.numPsats != 0" [hidden]="showSummary == 'closed'" class="pump-summary"
+                <li *ngIf="showPsatSummary" [hidden]="showSummary == 'closed'" class="pump-summary"
                     (click)="showAssessmentModal('psat')">
                     <app-psat-summary></app-psat-summary>
                 </li>

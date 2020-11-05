@@ -46,6 +46,7 @@ import { RollupSummaryBarChartComponent } from './rollup-summary-bar-chart/rollu
 import { RollupSummaryTableComponent } from './rollup-summary-table/rollup-summary-table.component';
 import { RollupSummaryPieChartComponent } from './rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table/rollup-summary-energy-table.component';
+import { PsatReportRollupService } from './psat-report-rollup.service';
 
 @NgModule({
   imports: [
@@ -98,7 +99,10 @@ import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table
     RollupSummaryEnergyTableComponent,
 
   ],
-  providers: [ReportRollupService],
+  providers: [
+    ReportRollupService,
+    PsatReportRollupService
+  ],
   exports: [ReportRollupComponent]
 })
 export class ReportRollupModule { }

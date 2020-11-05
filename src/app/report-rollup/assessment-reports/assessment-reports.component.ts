@@ -8,6 +8,7 @@ import { DirectoryDashboardService } from '../../dashboard/directory-dashboard/d
 import { Settings } from '../../shared/models/settings';
 import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
+import { PsatReportRollupService } from '../psat-report-rollup.service';
 
 @Component({
   selector: 'app-assessment-reports',
@@ -38,12 +39,12 @@ export class AssessmentReportsComponent implements OnInit {
   settings: Settings;
 
   constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService,
-    private directoryDashboardService: DirectoryDashboardService) { }
+    private directoryDashboardService: DirectoryDashboardService, private psatReportRollupService: PsatReportRollupService) { }
 
   ngOnInit(): void {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
     this.settings = this.settingsDbService.getByDirectoryId(directoryId);
-    this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
+    this.psatAssessmentSub = this.psatReportRollupService.psatAssessments.subscribe(items => {
       if (items) {
         this._psatAssessments = items;
       }

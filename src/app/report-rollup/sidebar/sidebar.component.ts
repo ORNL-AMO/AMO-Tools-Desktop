@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ReportRollupService } from '../report-rollup.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { PsatReportRollupService } from '../psat-report-rollup.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -36,7 +37,7 @@ export class SidebarComponent implements OnInit {
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
   reportAssessmentsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService) { }
+  constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private psatReportRollupService: PsatReportRollupService) { }
 
   ngOnInit(): void {
     this._phastAssessments = new Array<ReportItem>();
@@ -44,7 +45,7 @@ export class SidebarComponent implements OnInit {
     this._fsatAssessments = new Array<ReportItem>();
     this._ssmtAssessments = new Array<ReportItem>();
     this._treasureHuntAssessments = new Array<ReportItem>();
-    this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
+    this.psatAssessmentSub = this.psatReportRollupService.psatAssessments.subscribe(items => {
       if (items) {
         this._psatAssessments = items;
       }

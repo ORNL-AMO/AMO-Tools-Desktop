@@ -25,6 +25,7 @@ import { OpportunitySummaryService } from '../treasure-hunt/treasure-hunt-report
 import { SsmtService } from '../ssmt/ssmt.service';
 import { OpportunityCardsService, OpportunityCardData } from '../treasure-hunt/treasure-chest/opportunity-cards/opportunity-cards.service';
 import { OpportunityPaybackService } from '../treasure-hunt/treasure-hunt-report/opportunity-payback.service';
+import { PsatReportRollupService } from './psat-report-rollup.service';
 
 
 @Injectable()
@@ -32,21 +33,16 @@ export class ReportRollupService {
 
   reportAssessments: BehaviorSubject<Array<ReportItem>>;
   phastAssessments: BehaviorSubject<Array<ReportItem>>;
-  psatAssessments: BehaviorSubject<Array<ReportItem>>;
   fsatAssessments: BehaviorSubject<Array<ReportItem>>;
   ssmtAssessments: BehaviorSubject<Array<ReportItem>>;
   treasureHuntAssessments: BehaviorSubject<Array<ReportItem>>;
 
   assessmentsArray: Array<ReportItem>;
   phastArray: Array<ReportItem>;
-  psatArray: Array<ReportItem>;
   fsatArray: Array<ReportItem>;
   ssmtArray: Array<ReportItem>;
   treasureHuntArray: Array<ReportItem>;
 
-  selectedPsats: BehaviorSubject<Array<PsatCompare>>;
-  psatResults: BehaviorSubject<Array<PsatResultsData>>;
-  allPsatResults: BehaviorSubject<Array<AllPsatResultsData>>;
 
   selectedPhasts: BehaviorSubject<Array<PhastCompare>>;
   phastResults: BehaviorSubject<Array<PhastResultsData>>;
@@ -65,13 +61,11 @@ export class ReportRollupService {
   calcsArray: Array<Calculator>;
   selectedCalcs: BehaviorSubject<Array<Calculator>>;
   numPhasts: number = 0;
-  numPsats: number = 0;
   numFsats: number = 0;
   numSsmt: number = 0;
   numTreasureHunt: number = 0;
   showSummaryModal: BehaviorSubject<string>;
   constructor(
-    private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService,
     private settingsService: SettingsService,
     private phastResultsService: PhastResultsService,
@@ -84,23 +78,22 @@ export class ReportRollupService {
     private treasureHuntReportService: TreasureHuntReportService,
     private opportunitySummaryService: OpportunitySummaryService,
     private opportunityCardsService: OpportunityCardsService,
-    private opportunityPaybackService: OpportunityPaybackService
+    private opportunityPaybackService: OpportunityPaybackService,
+    private psatReportRollupService: PsatReportRollupService
 
   ) {
     this.initSummary();
   }
 
   initSummary() {
+    this.psatReportRollupService.initSummary();
+
     this.reportAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.phastAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
-    this.psatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.fsatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.ssmtAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.treasureHuntAssessments = new BehaviorSubject<Array<ReportItem>>(Array<ReportItem>());
 
-    this.selectedPsats = new BehaviorSubject<Array<PsatCompare>>(new Array<PsatCompare>());
-    this.psatResults = new BehaviorSubject<Array<PsatResultsData>>(new Array<PsatResultsData>());
-    this.allPsatResults = new BehaviorSubject<Array<AllPsatResultsData>>(new Array<AllPsatResultsData>());
 
     this.selectedPhasts = new BehaviorSubject<Array<PhastCompare>>(new Array<PhastCompare>());
     this.phastResults = new BehaviorSubject<Array<PhastResultsData>>(new Array<PhastResultsData>());
@@ -126,9 +119,10 @@ export class ReportRollupService {
     let settings = this.settingsDbService.getByAssessmentId(assessment);
     let tmpSettings = this.checkSettings(settings);
     this.assessmentsArray.push({ assessment: assessment, settings: tmpSettings });
-    if (assessment.psat) {
-      this.psatArray.push({ assessment: assessment, settings: tmpSettings });
-    } else if (assessment.phast) {
+    // if (assessment.psat) {
+    //   this.psatArray.push({ assessment: assessment, settings: tmpSettings });
+    // } 
+    if (assessment.phast) {
       this.phastArray.push({ assessment: assessment, settings: tmpSettings });
     } else if (assessment.fsat) {
       this.fsatArray.push({ assessment: assessment, settings: tmpSettings });
@@ -150,7 +144,7 @@ export class ReportRollupService {
   getReportData(directory: Directory) {
     this.assessmentsArray = new Array<ReportItem>();
     this.phastArray = new Array<ReportItem>();
-    this.psatArray = new Array<ReportItem>();
+    // this.psatArray = new Array<ReportItem>();
     this.fsatArray = new Array<ReportItem>();
     this.ssmtArray = new Array<ReportItem>();
     this.treasureHuntArray = new Array<ReportItem>();
@@ -174,7 +168,8 @@ export class ReportRollupService {
       }
     });
     this.phastAssessments.next(this.phastArray);
-    this.psatAssessments.next(this.psatArray);
+    let psatArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.psat != undefined });
+    this.psatReportRollupService.psatAssessments.next(psatArray);
     this.fsatAssessments.next(this.fsatArray);
     this.ssmtAssessments.next(this.ssmtArray);
     this.treasureHuntAssessments.next(this.treasureHuntArray);
@@ -210,73 +205,6 @@ export class ReportRollupService {
   }
 
 
-  //USED FOR PSAT SUMMARY
-  initPsatCompare(resultsArr: Array<AllPsatResultsData>) {
-    let tmpResults: Array<PsatCompare> = new Array<PsatCompare>();
-    resultsArr.forEach(result => {
-      let minCost = _.minBy(result.modificationResults, (result) => { return result.annual_cost; });
-      let modIndex = _.findIndex(result.modificationResults, { annual_cost: minCost.annual_cost });
-      let psatAssessments = this.psatAssessments.value;
-      let assessmentIndex = _.findIndex(psatAssessments, (val) => { return val.assessment.id === result.assessmentId; });
-      let item = psatAssessments[assessmentIndex];
-      if (result.isBaseline) {
-        tmpResults.push({ baseline: item.assessment.psat, modification: item.assessment.psat, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
-      } else {
-        tmpResults.push({ baseline: item.assessment.psat, modification: item.assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
-      }
-    });
-    this.selectedPsats.next(tmpResults);
-  }
-
-  updateSelectedPsats(item: ReportItem, modIndex: number) {
-    let tmpSelected = this.selectedPsats.value;
-    if (modIndex !== -1) {
-      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: item.assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: item.assessment.psat, modification: item.assessment.psat.modifications[modIndex].psat, assessmentId: item.assessment.id, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
-    } else {
-      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: item.assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: item.assessment.psat, modification: item.assessment.psat, assessmentId: item.assessment.id, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
-    }
-    this.selectedPsats.next(tmpSelected);
-  }
-
-  initResultsArr(psatArr: Array<ReportItem>) {
-    let tmpResultsArr = new Array<AllPsatResultsData>();
-    psatArr.forEach(val => {
-      if (val.assessment.psat.setupDone) {
-        let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.assessment.psat.inputs)), val.settings);
-        if (val.assessment.psat.modifications) {
-          if (val.assessment.psat.modifications.length !== 0) {
-            let modResultsArr = new Array<PsatOutputs>();
-            val.assessment.psat.modifications.forEach(mod => {
-              let tmpResults: PsatOutputs = this.psatService.resultsModified(JSON.parse(JSON.stringify(mod.psat.inputs)), val.settings);
-              modResultsArr.push(tmpResults);
-            });
-            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
-          } else {
-            let modResultsArr = new Array<PsatOutputs>();
-            modResultsArr.push(baselineResults);
-            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
-          }
-        } else {
-          let modResultsArr = new Array<PsatOutputs>();
-          modResultsArr.push(baselineResults);
-          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
-        }
-      }
-    });
-    this.allPsatResults.next(tmpResultsArr);
-  }
-
-  getResultsFromSelected(selectedPsats: Array<PsatCompare>) {
-    let tmpResultsArr = new Array<PsatResultsData>();
-    selectedPsats.forEach(val => {
-      let baselineResults: PsatOutputs = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.baseline.inputs)), val.settings);
-      let modificationResults: PsatOutputs = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), val.settings);
-      tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
-    });
-    this.psatResults.next(tmpResultsArr);
-  }
 
   //USED FOR PHAST SUMMARY
   initPhastCompare(resultsArr: Array<AllPhastResultsData>) {

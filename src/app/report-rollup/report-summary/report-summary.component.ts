@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
+import { PsatReportRollupService } from '../psat-report-rollup.service';
 import { PhastResultsData } from '../report-rollup-models';
 import { ReportRollupService } from '../report-rollup.service';
 
@@ -14,9 +16,19 @@ export class ReportSummaryComponent implements OnInit {
   @Output('hideSummary')
   hideSummary = new EventEmitter<boolean>();
   showSummary: string = 'open';
-  constructor(public reportRollupService: ReportRollupService) { }
+
+  showPsatSummary: boolean;
+  psatAssessmentsSub: Subscription;
+  constructor(public reportRollupService: ReportRollupService, private psatReportRollupService: PsatReportRollupService) { }
 
   ngOnInit() {
+    this.psatAssessmentsSub = this.psatReportRollupService.psatAssessments.subscribe(val => {
+      this.showPsatSummary = val.length != 0;
+    });
+  }
+
+  ngOnDestroy(){
+    this.psatAssessmentsSub.unsubscribe();
   }
 
   showAssessmentModal(assessmentModalType: string){

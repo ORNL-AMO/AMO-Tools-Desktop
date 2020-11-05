@@ -18,7 +18,7 @@ export class ReportRollupComponent implements OnInit {
 
   _reportAssessments: Array<ReportItem>;
   _phastAssessments: Array<ReportItem>;
-  _psatAssessments: Array<ReportItem>;
+  // _psatAssessments: Array<ReportItem>;
   _fsatAssessments: Array<ReportItem>;
   _ssmtAssessments: Array<ReportItem>;
   _treasureHuntAssessments: Array<ReportItem>;
@@ -35,7 +35,7 @@ export class ReportRollupComponent implements OnInit {
   fsatAssessmentsSub: Subscription;
   allPhastSub: Subscription;
   selectedPhastSub: Subscription;
-  psatAssessmentSub: Subscription;
+  // psatAssessmentSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
   showPrintSub: Subscription;
@@ -47,7 +47,7 @@ export class ReportRollupComponent implements OnInit {
 
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();
-    this._psatAssessments = new Array<ReportItem>();
+    // this._psatAssessments = new Array<ReportItem>();
     this._fsatAssessments = new Array<ReportItem>();
     this._ssmtAssessments = new Array<ReportItem>();
     this._treasureHuntAssessments = new Array<ReportItem>();
@@ -82,14 +82,14 @@ export class ReportRollupComponent implements OnInit {
         this.reportRollupService.getPhastResultsFromSelected(val);
       }
     });
-    this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
-      if (items) {
-        this._psatAssessments = items;
-        this.reportRollupService.numPsats = this._psatAssessments.length;
-      } else {
-        this.reportRollupService.numPsats = 0;
-      }
-    });
+    // this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
+    //   if (items) {
+    //     this._psatAssessments = items;
+    //     this.reportRollupService.numPsats = this._psatAssessments.length;
+    //   } else {
+    //     this.reportRollupService.numPsats = 0;
+    //   }
+    // });
     this.phastAssessmentsSub = this.reportRollupService.phastAssessments.subscribe(items => {
       if (items) {
         this.reportRollupService.initPhastResultsArr(items);
@@ -138,7 +138,7 @@ export class ReportRollupComponent implements OnInit {
     if (this.phastAssessmentsSub) this.phastAssessmentsSub.unsubscribe();
     if (this.allPhastSub) this.allPhastSub.unsubscribe();
     if (this.selectedPhastSub) this.selectedPhastSub.unsubscribe();
-    if (this.psatAssessmentSub) this.psatAssessmentSub.unsubscribe();
+    // if (this.psatAssessmentSub) this.psatAssessmentSub.unsubscribe();
     if (this.fsatAssessmentsSub) this.fsatAssessmentsSub.unsubscribe();
     if (this.ssmtAssessmentsSub) this.ssmtAssessmentsSub.unsubscribe();
     if (this.treasureHuntAssesmentsSub) this.treasureHuntAssesmentsSub.unsubscribe();

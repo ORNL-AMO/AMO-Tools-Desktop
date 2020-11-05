@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ReportRollupService } from '../../report-rollup.service';
 import { Subscription } from 'rxjs';
 import { PsatResultsData } from '../../report-rollup-models';
+import { PsatReportRollupService } from '../../psat-report-rollup.service';
 
 @Component({
   selector: 'app-psat-summary',
@@ -18,27 +19,29 @@ export class PsatSummaryComponent implements OnInit {
   allSub: Subscription;
   selectedSub: Subscription;
   resultsSub: Subscription;
-  constructor(public reportRollupService: ReportRollupService) { }
+  numPsats: number;
+  constructor(public psatReportRollupService: PsatReportRollupService) { }
 
   ngOnInit() {
-    this.assessmentSub = this.reportRollupService.psatAssessments.subscribe(val => {
+    this.assessmentSub = this.psatReportRollupService.psatAssessments.subscribe(val => {
+      this.numPsats = val.length;
       if (val.length !== 0) {
-        this.reportRollupService.initResultsArr(val);
+        this.psatReportRollupService.initResultsArr(val);
       }
     });
 
-    this.allSub = this.reportRollupService.allPsatResults.subscribe(val => {
+    this.allSub = this.psatReportRollupService.allPsatResults.subscribe(val => {
       if (val.length !== 0) {
-        this.reportRollupService.initPsatCompare(val);
+        this.psatReportRollupService.initPsatCompare(val);
       }
     });
-    this.selectedSub = this.reportRollupService.selectedPsats.subscribe(val => {
+    this.selectedSub = this.psatReportRollupService.selectedPsats.subscribe(val => {
       if (val.length !== 0) {
-        this.reportRollupService.getResultsFromSelected(val);
+        this.psatReportRollupService.getResultsFromSelected(val);
       }
     });
 
-    this.resultsSub = this.reportRollupService.psatResults.subscribe(val => {
+    this.resultsSub = this.psatReportRollupService.psatResults.subscribe(val => {
       if (val.length !== 0) {
         this.calcPsatSums(val);
       }

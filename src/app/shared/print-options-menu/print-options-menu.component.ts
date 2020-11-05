@@ -5,6 +5,7 @@ import { PrintOptions } from '../models/printing';
 import { Subscription } from 'rxjs';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { ReportRollupService } from '../../report-rollup/report-rollup.service';
+import { PsatReportRollupService } from '../../report-rollup/psat-report-rollup.service';
 @Component({
   selector: 'app-print-options-menu',
   templateUrl: './print-options-menu.component.html',
@@ -23,7 +24,8 @@ export class PrintOptionsMenuComponent implements OnInit {
   showSsmtReportOptions: boolean = false;
   showTHReportOptions: boolean = false;
   showWasteWaterOptions: boolean = false;
-  constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private reportRollupService: ReportRollupService) { }
+  constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private reportRollupService: ReportRollupService,
+    private psatReportRollupService: PsatReportRollupService) { }
 
   ngOnInit() {
     this.setContext();
@@ -56,7 +58,7 @@ export class PrintOptionsMenuComponent implements OnInit {
       this.showWasteWaterOptions = true;
     } else if (printContext == 'reportRollup') {
       this.showRollupReportOptions = true;
-      this.showPsatReportOptions = (this.reportRollupService.numPsats != 0);
+      this.showPsatReportOptions = (this.psatReportRollupService.psatAssessments.getValue().length != 0);
       this.showFsatReportOptions = (this.reportRollupService.numFsats != 0);
       this.showPhastReportOptions = (this.reportRollupService.numPhasts != 0);
       this.showSsmtReportOptions = (this.reportRollupService.numSsmt != 0);
