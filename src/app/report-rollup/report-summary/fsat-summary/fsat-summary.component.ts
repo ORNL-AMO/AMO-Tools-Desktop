@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ReportRollupService } from '../../report-rollup.service';
 import { FsatResultsData } from '../../report-rollup-models';
+import { FsatReportRollupService } from '../../fsat-report-rollup.service';
 
 @Component({
   selector: 'app-fsat-summary',
@@ -18,27 +19,29 @@ export class FsatSummaryComponent implements OnInit {
   allSub: Subscription;
   selectedSub: Subscription;
   resultsSub: Subscription;
-  constructor(public reportRollupService: ReportRollupService) { }
+  numFsats: number;
+  constructor(public fsatReportRollupService: FsatReportRollupService) { }
 
   ngOnInit() {
-    this.assessmentSub = this.reportRollupService.fsatAssessments.subscribe(val => {
+    this.assessmentSub = this.fsatReportRollupService.fsatAssessments.subscribe(val => {
+      this.numFsats = val.length;
       if (val.length != 0) {
-        this.reportRollupService.initFsatResultsArr(val);
+        this.fsatReportRollupService.initFsatResultsArr(val);
       }
     })
 
-    this.allSub = this.reportRollupService.allFsatResults.subscribe(val => {
+    this.allSub = this.fsatReportRollupService.allFsatResults.subscribe(val => {
       if (val.length != 0) {
-        this.reportRollupService.initFsatCompare(val);
+        this.fsatReportRollupService.initFsatCompare(val);
       }
     })
-    this.selectedSub = this.reportRollupService.selectedFsats.subscribe(val => {
+    this.selectedSub = this.fsatReportRollupService.selectedFsats.subscribe(val => {
       if (val.length != 0) {
-        this.reportRollupService.getFsatResultsFromSelected(val);
+        this.fsatReportRollupService.getFsatResultsFromSelected(val);
       }
     })
 
-    this.resultsSub = this.reportRollupService.fsatResults.subscribe(val => {
+    this.resultsSub = this.fsatReportRollupService.fsatResults.subscribe(val => {
       if (val.length != 0) {
         this.calcFsatSums(val);
       }

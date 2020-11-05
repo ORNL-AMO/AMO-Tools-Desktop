@@ -10,7 +10,7 @@
                     class="furnace-summary" (click)="showAssessmentModal('phast')">
                     <app-phast-summary [settings]="settings"></app-phast-summary>
                 </li>
-                <li *ngIf="reportRollupService.numFsats != 0" [hidden]="showSummary == 'closed'" class="fan-summary"
+                <li *ngIf="showFsatSummary" [hidden]="showSummary == 'closed'" class="fan-summary"
                     (click)="showAssessmentModal('fsat')">
                     <app-fsat-summary></app-fsat-summary>
                 </li>

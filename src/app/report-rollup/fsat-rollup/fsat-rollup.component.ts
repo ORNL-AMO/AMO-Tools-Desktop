@@ -4,10 +4,10 @@ import { Calculator } from '../../shared/models/calculators';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
-import { ReportRollupService } from '../report-rollup.service';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 import { FsatResultsData } from '../report-rollup-models';
 import * as _ from 'lodash';
+import { FsatReportRollupService } from '../fsat-report-rollup.service';
 @Component({
   selector: 'app-fsat-rollup',
   templateUrl: './fsat-rollup.component.html',
@@ -30,7 +30,7 @@ export class FsatRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(private fsatReportRollupService: FsatReportRollupService) { }
 
   ngOnInit() {
     this.setTableData();
@@ -96,7 +96,7 @@ export class FsatRollupComponent implements OnInit {
   }
 
   getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
-    let fsatResults: Array<FsatResultsData> = this.reportRollupService.fsatResults.getValue();
+    let fsatResults: Array<FsatResultsData> = this.fsatReportRollupService.fsatResults.getValue();
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
@@ -121,7 +121,7 @@ export class FsatRollupComponent implements OnInit {
   }
 
   setPieChartData() {
-    let fsatResults: Array<FsatResultsData> = this.reportRollupService.fsatResults.getValue();
+    let fsatResults: Array<FsatResultsData> = this.fsatReportRollupService.fsatResults.getValue();
     this.pieChartData = new Array();
     let totalEnergyUse: number = _.sumBy(fsatResults, (result) => { return result.baselineResults.annualEnergy; });
     let totalCost: number = _.sumBy(fsatResults, (result) => { return result.baselineResults.annualCost; });
@@ -142,7 +142,7 @@ export class FsatRollupComponent implements OnInit {
 
   setTableData() {
     this.rollupSummaryTableData = new Array();
-    let fsatResults: Array<FsatResultsData> = this.reportRollupService.fsatResults.getValue();
+    let fsatResults: Array<FsatResultsData> = this.fsatReportRollupService.fsatResults.getValue();
     fsatResults.forEach(dataItem => {
       this.rollupSummaryTableData.push({
         equipmentName: dataItem.name,

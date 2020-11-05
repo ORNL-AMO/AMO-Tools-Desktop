@@ -68,17 +68,6 @@ export class ReportRollupComponent implements OnInit {
       this.printView = val;
     });
 
-
-    this.fsatAssessmentsSub = this.reportRollupService.fsatAssessments.subscribe(items => {
-      if (items) {
-        this._fsatAssessments = items;
-        this.reportRollupService.numFsats = this._fsatAssessments.length;
-        this.reportRollupService.initFsatResultsArr(items);
-      } else {
-        this.reportRollupService.numFsats = 0;
-      }
-    });
-
     this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
       if (items) {
         this._ssmtAssessments = items;

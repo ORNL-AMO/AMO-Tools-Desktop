@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
+import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { PsatReportRollupService } from '../psat-report-rollup.service';
 import { ReportRollupService } from '../report-rollup.service';
@@ -19,10 +20,12 @@ export class ReportSummaryComponent implements OnInit {
 
   showPsatSummary: boolean;
   showPhastSummary: boolean;
+  showFsatSummary: boolean;
   psatAssessmentsSub: Subscription;
   phastAssessmentsSub: Subscription;
+  fsatAssessmentsSub: Subscription;
   constructor(public reportRollupService: ReportRollupService, private psatReportRollupService: PsatReportRollupService,
-    private phastReportRollupService: PhastReportRollupService) { }
+    private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService) { }
 
   ngOnInit() {
     this.psatAssessmentsSub = this.psatReportRollupService.psatAssessments.subscribe(val => {
@@ -32,14 +35,19 @@ export class ReportSummaryComponent implements OnInit {
     this.phastAssessmentsSub = this.phastReportRollupService.phastAssessments.subscribe(val => {
       this.showPhastSummary = val.length != 0;
     });
+
+    this.fsatAssessmentsSub = this.fsatReportRollupService.fsatAssessments.subscribe(val => {
+      this.showFsatSummary = val.length != 0;
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.psatAssessmentsSub.unsubscribe();
     this.phastAssessmentsSub.unsubscribe();
+    this.fsatAssessmentsSub.unsubscribe();
   }
 
-  showAssessmentModal(assessmentModalType: string){
+  showAssessmentModal(assessmentModalType: string) {
     this.reportRollupService.showSummaryModal.next(assessmentModalType);
   }
 
