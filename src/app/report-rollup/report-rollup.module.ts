@@ -47,6 +47,7 @@ import { RollupSummaryTableComponent } from './rollup-summary-table/rollup-summa
 import { RollupSummaryPieChartComponent } from './rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table/rollup-summary-energy-table.component';
 import { PsatReportRollupService } from './psat-report-rollup.service';
+import { PhastReportRollupService } from './phast-report-rollup.service';
 
 @NgModule({
   imports: [
@@ -101,7 +102,8 @@ import { PsatReportRollupService } from './psat-report-rollup.service';
   ],
   providers: [
     ReportRollupService,
-    PsatReportRollupService
+    PsatReportRollupService,
+    PhastReportRollupService
   ],
   exports: [ReportRollupComponent]
 })

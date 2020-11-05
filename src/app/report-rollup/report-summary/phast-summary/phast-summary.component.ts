@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ReportRollupService } from '../../report-rollup.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
 import { PhastResultsData } from '../../report-rollup-models';
+import { PhastReportRollupService } from '../../phast-report-rollup.service';
 
 @Component({
   selector: 'app-phast-summary',
@@ -19,18 +19,41 @@ export class PhastSummaryComponent implements OnInit {
   totalCost: number = 0;
   totalEnergy: number = 0;
   resultsSub: Subscription;
-  constructor(public reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
+  numPhasts: number;
+  allPhastSub: Subscription;
+  selectedPhastSub: Subscription;
+  phastAssessmentsSub: Subscription;
+  constructor(public phastReportRollupService: PhastReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.resultsSub = this.reportRollupService.phastResults.subscribe(val => {
-       if (val.length !== 0) {
-         this.calcPhastSums(val);
-       }
-     });
+    this.resultsSub = this.phastReportRollupService.phastResults.subscribe(val => {
+      this.numPhasts = val.length;
+      if (val.length !== 0) {
+        this.calcPhastSums(val);
+      }
+    });
+    this.allPhastSub = this.phastReportRollupService.allPhastResults.subscribe(val => {
+      if (val.length !== 0) {
+        this.phastReportRollupService.initPhastCompare(val);
+      }
+    });
+    this.selectedPhastSub = this.phastReportRollupService.selectedPhasts.subscribe(val => {
+      if (val.length !== 0) {
+        this.phastReportRollupService.getPhastResultsFromSelected(val);
+      }
+    });
+    this.phastAssessmentsSub = this.phastReportRollupService.phastAssessments.subscribe(items => {
+      if (items) {
+        this.phastReportRollupService.initPhastResultsArr(items);
+      }
+    });
   }
 
   ngOnDestroy() {
     this.resultsSub.unsubscribe();
+    this.allPhastSub.unsubscribe();
+    this.selectedPhastSub.unsubscribe();
+    this.phastAssessmentsSub.unsubscribe();
   }
 
   calcPhastSums(resultsData: Array<PhastResultsData>) {
@@ -44,7 +67,7 @@ export class PhastSummaryComponent implements OnInit {
       sumCost += result.modificationResults.annualCost;
       let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
       sumEnergySavings += diffEnergy;
-      sumEnergy += this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit); ;
+      sumEnergy += this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);;
     });
     this.furnaceSavingsPotential = sumSavings;
     this.energySavingsPotential = sumEnergySavings;

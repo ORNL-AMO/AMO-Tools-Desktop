@@ -3,7 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PhastResultsService } from '../../../phast/phast-results.service';
 import { PhastResultsData } from '../../report-rollup-models';
-import { ReportRollupService } from '../../report-rollup.service';
+import { PhastReportRollupService } from '../../phast-report-rollup.service';
 
 @Component({
   selector: 'app-phast-rollup-furnace-summary-table',
@@ -17,11 +17,11 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
   tableData: Array<TableDataItem>;
 
   constructor(private convertUnitsService: ConvertUnitsService, private phastResultsService: PhastResultsService,
-    private reportRollupService: ReportRollupService) { }
+    private phastReportRollupService: PhastReportRollupService) { }
 
   ngOnInit() {
     this.tableData = new Array();
-    let phastResults: Array<PhastResultsData> = this.reportRollupService.phastResults.getValue();
+    let phastResults: Array<PhastResultsData> = this.phastReportRollupService.phastResults.getValue();
     //use copy for conversions
     let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(phastResults));
     phastResultsCpy.forEach(resultItem => {

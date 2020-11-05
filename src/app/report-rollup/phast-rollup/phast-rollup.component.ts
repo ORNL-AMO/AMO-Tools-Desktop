@@ -3,12 +3,12 @@ import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
 import { PhastResultsData } from '../report-rollup-models';
 import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
-import { ReportRollupService } from '../report-rollup.service';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { PhastResultsService } from '../../phast/phast-results.service';
+import { PhastReportRollupService } from '../phast-report-rollup.service';
 @Component({
   selector: 'app-phast-rollup',
   templateUrl: './phast-rollup.component.html',
@@ -35,7 +35,7 @@ export class PhastRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   // rollupSummaryTableData: Array<RollupSummaryTableData>;
-  constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService,
+  constructor(private phastReportRollupService: PhastReportRollupService, private convertUnitsService: ConvertUnitsService,
     private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
@@ -147,7 +147,7 @@ export class PhastRollupComponent implements OnInit {
   }
 
   getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
-    let phastResults: Array<PhastResultsData> = this.reportRollupService.phastResults.getValue();
+    let phastResults: Array<PhastResultsData> = this.phastReportRollupService.phastResults.getValue();
     //use copy for converting data
     let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(phastResults));
 
@@ -196,7 +196,7 @@ export class PhastRollupComponent implements OnInit {
 
   setPieChartData() {
     this.pieChartData = new Array();
-    let phastResults: Array<PhastResultsData> = this.reportRollupService.phastResults.getValue();
+    let phastResults: Array<PhastResultsData> = this.phastReportRollupService.phastResults.getValue();
     //Use copy to avoid changing original results, convert all data to a common unit for comparisons
     let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(phastResults));
     phastResultsCpy.forEach(result => {

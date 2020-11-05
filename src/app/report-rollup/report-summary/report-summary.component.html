@@ -6,7 +6,7 @@
                     (click)="showAssessmentModal('psat')">
                     <app-psat-summary></app-psat-summary>
                 </li>
-                <li *ngIf="reportRollupService.numPhasts != 0" [hidden]="showSummary == 'closed'"
+                <li *ngIf="showPhastSummary" [hidden]="showSummary == 'closed'"
                     class="furnace-summary" (click)="showAssessmentModal('phast')">
                     <app-phast-summary [settings]="settings"></app-phast-summary>
                 </li>

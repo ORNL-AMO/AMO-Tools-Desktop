@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { ReportRollupService } from '../report-rollup.service';
 import { Subscription } from 'rxjs';
 import { ReportItem } from '../report-rollup-models';
+import { PhastReportRollupService } from '../phast-report-rollup.service';
 
 @Component({
   selector: 'app-report-rollup-units',
@@ -29,14 +29,10 @@ export class ReportRollupUnitsComponent implements OnInit {
   phastAssessments: Array<ReportItem>;
   tmpSettings: Settings;
   assessmentsSub: Subscription;
-  constructor(private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private phastReportRollupService: PhastReportRollupService) { }
 
   ngOnInit() {
     this.tmpSettings = JSON.parse(JSON.stringify(this.settings));
-    this.assessmentsSub = this.reportRollupService.phastAssessments.subscribe(val => {
-      this.phastAssessments = val;
-    });
-
     this.energyResultOptions = new Array();
 
     this.energyOptions.forEach(val => {
@@ -75,6 +71,7 @@ export class ReportRollupUnitsComponent implements OnInit {
   }
 
   newUnit() {
-    this.reportRollupService.phastAssessments.next(this.phastAssessments);
+    let assessments = this.phastReportRollupService.phastAssessments.getValue();
+    this.phastReportRollupService.phastAssessments.next(assessments);
   }
 }

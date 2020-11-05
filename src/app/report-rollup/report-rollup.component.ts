@@ -31,11 +31,7 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('assessmentReportsDiv', { static: false }) assessmentReportsDiv: ElementRef;
   sidebarHeight: number = 0;
   printView: boolean = false;
-  phastAssessmentsSub: Subscription;
   fsatAssessmentsSub: Subscription;
-  allPhastSub: Subscription;
-  selectedPhastSub: Subscription;
-  // psatAssessmentSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
   showPrintSub: Subscription;
@@ -72,33 +68,6 @@ export class ReportRollupComponent implements OnInit {
       this.printView = val;
     });
 
-    this.allPhastSub = this.reportRollupService.allPhastResults.subscribe(val => {
-      if (val.length !== 0) {
-        this.reportRollupService.initPhastCompare(val);
-      }
-    });
-    this.selectedPhastSub = this.reportRollupService.selectedPhasts.subscribe(val => {
-      if (val.length !== 0) {
-        this.reportRollupService.getPhastResultsFromSelected(val);
-      }
-    });
-    // this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
-    //   if (items) {
-    //     this._psatAssessments = items;
-    //     this.reportRollupService.numPsats = this._psatAssessments.length;
-    //   } else {
-    //     this.reportRollupService.numPsats = 0;
-    //   }
-    // });
-    this.phastAssessmentsSub = this.reportRollupService.phastAssessments.subscribe(items => {
-      if (items) {
-        this.reportRollupService.initPhastResultsArr(items);
-        this._phastAssessments = items;
-        this.reportRollupService.numPhasts = this._phastAssessments.length;
-      } else {
-        this.reportRollupService.numPhasts = 0;
-      }
-    });
 
     this.fsatAssessmentsSub = this.reportRollupService.fsatAssessments.subscribe(items => {
       if (items) {
@@ -135,10 +104,6 @@ export class ReportRollupComponent implements OnInit {
   ngOnDestroy() {
     this.reportRollupService.initSummary();
     if (this.showPrintSub) this.showPrintSub.unsubscribe();
-    if (this.phastAssessmentsSub) this.phastAssessmentsSub.unsubscribe();
-    if (this.allPhastSub) this.allPhastSub.unsubscribe();
-    if (this.selectedPhastSub) this.selectedPhastSub.unsubscribe();
-    // if (this.psatAssessmentSub) this.psatAssessmentSub.unsubscribe();
     if (this.fsatAssessmentsSub) this.fsatAssessmentsSub.unsubscribe();
     if (this.ssmtAssessmentsSub) this.ssmtAssessmentsSub.unsubscribe();
     if (this.treasureHuntAssesmentsSub) this.treasureHuntAssesmentsSub.unsubscribe();
