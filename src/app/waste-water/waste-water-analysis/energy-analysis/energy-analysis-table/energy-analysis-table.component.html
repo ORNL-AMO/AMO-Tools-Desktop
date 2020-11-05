@@ -1,5 +1,5 @@
 <div class="p-2">
-    <table #copyTable class="table table-bordered">
+    <table #copyTable class="table table-bordered mb-0">
         <thead>
             <tr>
                 <th>
@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="department-item-row" [ngStyle]="{'background-color': 'rgb(0,48,135,1)'}">
+            <tr class="department-item-row" [ngStyle]="{'background-color': '#1E7640'}">
                 <td>
                     Baseline
                 </td>
@@ -54,7 +54,7 @@
                 </td>
             </tr>
             <tr class="department-item-row" *ngFor="let modificationResults of modificationsResultsArr"
-                [ngStyle]="{'background-color': 'rgb('+modificationResults.color+')'}">
+                [ngStyle]="{'background-color': modificationResults.color}">
                 <td>
                     {{modificationResults.name}}
                 </td>

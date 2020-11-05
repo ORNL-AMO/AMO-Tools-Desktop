@@ -5,14 +5,19 @@ import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/fa
 import { ResultDataComponent } from './result-data/result-data.component';
 import { InputDataComponent } from './input-data/input-data.component';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
+import { SrtGraphsComponent } from './srt-graphs/srt-graphs.component';
+import { WasteWaterAnalysisModule } from '../waste-water-analysis/waste-water-analysis.module';
+import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 
 
 @NgModule({
-  declarations: [WasteWaterReportComponent, ResultDataComponent, InputDataComponent],
+  declarations: [WasteWaterReportComponent, ResultDataComponent, InputDataComponent, SrtGraphsComponent],
   imports: [
     CommonModule,
     FacilityInfoSummaryModule,
-    PercentGraphModule
+    PercentGraphModule,
+    WasteWaterAnalysisModule,
+    PrintOptionsMenuModule
   ],
   exports: [
     WasteWaterReportComponent
