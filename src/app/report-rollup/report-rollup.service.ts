@@ -25,6 +25,7 @@ export class ReportRollupService {
   calcsArray: Array<Calculator>;
   selectedCalcs: BehaviorSubject<Array<Calculator>>;
   showSummaryModal: BehaviorSubject<string>;
+  settings: BehaviorSubject<Settings>;
   constructor(
     private settingsService: SettingsService,
     private directoryDbService: DirectoryDbService,
@@ -52,6 +53,7 @@ export class ReportRollupService {
     this.calcsArray = new Array<Calculator>();
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
     this.showSummaryModal = new BehaviorSubject<string>(undefined);
+    this.settings = new BehaviorSubject<Settings>(undefined);
   }
 
   pushAssessment(assessment: Assessment) {
@@ -92,7 +94,6 @@ export class ReportRollupService {
     let treasureHuntArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'TreasureHunt' });
     this.treasureHuntReportRollupService.treasureHuntAssessments.next(treasureHuntArray);
     this.reportAssessments.next(this.assessmentsArray);
-
   }
 
   getChildDirectories(subDir: Directory) {
@@ -114,15 +115,13 @@ export class ReportRollupService {
     }
   }
 
-
   getChildDirectoryAssessments(dirId: number) {
     let results = this.assessmentDbService.getByDirectoryId(dirId);
     results.forEach(assessment => {
       this.pushAssessment(assessment);
     });
   }
-  
- 
+
   checkSettings(settings: Settings) {
     if (!settings.energyResultUnit) {
       settings = this.settingsService.setEnergyResultUnitSetting(settings);
@@ -138,6 +137,12 @@ export class ReportRollupService {
       }
     }
     return settings;
+  }
+
+  setReportRollupSettings(directoryId: number) {
+    let settings: Settings = this.settingsDbService.getByDirectoryId(directoryId);
+    settings = this.checkSettings(settings);
+    this.settings.next(settings);
   }
 
   transform(value: number, sigFigs: number, scientificNotation?: boolean): any {

@@ -4,6 +4,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { Subscription } from 'rxjs';
 import { PhastResultsData } from '../../report-rollup-models';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 
 @Component({
   selector: 'app-phast-summary',
@@ -11,9 +12,8 @@ import { PhastReportRollupService } from '../../phast-report-rollup.service';
   styleUrls: ['./phast-summary.component.css', '../report-summary.component.css']
 })
 export class PhastSummaryComponent implements OnInit {
-  @Input()
-  settings: Settings;
 
+  settings: Settings;
   furnaceSavingsPotential: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
@@ -23,9 +23,11 @@ export class PhastSummaryComponent implements OnInit {
   allPhastSub: Subscription;
   selectedPhastSub: Subscription;
   phastAssessmentsSub: Subscription;
-  constructor(public phastReportRollupService: PhastReportRollupService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(public phastReportRollupService: PhastReportRollupService, private convertUnitsService: ConvertUnitsService,
+    private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.settings = this.reportRollupService.settings.getValue();
     this.resultsSub = this.phastReportRollupService.phastResults.subscribe(val => {
       this.numPhasts = val.length;
       if (val.length !== 0) {

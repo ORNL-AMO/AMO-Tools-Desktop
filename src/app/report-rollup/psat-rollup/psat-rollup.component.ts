@@ -8,6 +8,7 @@ import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
 import { PsatReportRollupService } from '../psat-report-rollup.service';
+import { ReportRollupService } from '../report-rollup.service';
 
 @Component({
   selector: 'app-psat-rollup',
@@ -15,8 +16,6 @@ import { PsatReportRollupService } from '../psat-report-rollup.service';
   styleUrls: ['./psat-rollup.component.css']
 })
 export class PsatRollupComponent implements OnInit {
-  @Input()
-  settings: Settings;
   @Input()
   calculators: Array<Calculator>;
   @Input()
@@ -32,9 +31,11 @@ export class PsatRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
-  constructor(private psatReportRollupService: PsatReportRollupService) { }
+  settings: Settings;
+  constructor(private psatReportRollupService: PsatReportRollupService, private reportRollupSettings: ReportRollupService) { }
 
   ngOnInit() {
+    this.settings = this.reportRollupSettings.settings.getValue();
     this.setTableData();
     this.setBarChartData();
     this.setBarChartOption('energy');

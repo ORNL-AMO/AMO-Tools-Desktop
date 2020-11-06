@@ -5,6 +5,7 @@ import { SsmtResultsData } from '../report-rollup-models';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
 import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
+import { ReportRollupService } from '../report-rollup.service';
 
 @Component({
   selector: 'app-ssmt-rollup',
@@ -12,8 +13,6 @@ import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
   styleUrls: ['./ssmt-rollup.component.css']
 })
 export class SsmtRollupComponent implements OnInit {
-  @Input()
-  settings: Settings;
   @Input()
   printView: boolean;
 
@@ -25,9 +24,11 @@ export class SsmtRollupComponent implements OnInit {
   yAxisLabel: string;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
   energyUnit: string;
-  constructor(private ssmtReportRollupService: SsmtReportRollupService) { }
+  settings: Settings;
+  constructor(private ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.settings = this.reportRollupService.settings.getValue();
     this.energyUnit = this.settings.steamEnergyMeasurement + '/hr';
     this.setTableData();
     this.setBarChartData();

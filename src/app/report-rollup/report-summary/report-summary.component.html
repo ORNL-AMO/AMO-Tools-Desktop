@@ -6,9 +6,9 @@
                     (click)="showAssessmentModal('psat')">
                     <app-psat-summary></app-psat-summary>
                 </li>
-                <li *ngIf="showPhastSummary" [hidden]="showSummary == 'closed'"
-                    class="furnace-summary" (click)="showAssessmentModal('phast')">
-                    <app-phast-summary [settings]="settings"></app-phast-summary>
+                <li *ngIf="showPhastSummary" [hidden]="showSummary == 'closed'" class="furnace-summary"
+                    (click)="showAssessmentModal('phast')">
+                    <app-phast-summary></app-phast-summary>
                 </li>
                 <li *ngIf="showFsatSummary" [hidden]="showSummary == 'closed'" class="fan-summary"
                     (click)="showAssessmentModal('fsat')">
@@ -16,10 +16,10 @@
                 </li>
                 <li *ngIf="showSsmtSummary" [hidden]="showSummary == 'closed'" class="ssmt-summary"
                     (click)="showAssessmentModal('ssmt')">
-                    <app-ssmt-summary [settings]="settings"></app-ssmt-summary>
+                    <app-ssmt-summary></app-ssmt-summary>
                 </li>
-                <li *ngIf="showTreasureHuntSummary" [hidden]="showSummary == 'closed'"
-                    class="treasure-hunt-summary" (click)="showAssessmentModal('treasureHunt')">
+                <li *ngIf="showTreasureHuntSummary" [hidden]="showSummary == 'closed'" class="treasure-hunt-summary"
+                    (click)="showAssessmentModal('treasureHunt')">
                     <app-treasure-hunt-summary></app-treasure-hunt-summary>
                 </li>
             </ul>

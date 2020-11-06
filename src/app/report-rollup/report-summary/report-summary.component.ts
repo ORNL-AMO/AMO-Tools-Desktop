@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Settings } from '../../shared/models/settings';
 import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { PsatReportRollupService } from '../psat-report-rollup.service';
@@ -14,10 +13,9 @@ import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.
   styleUrls: ['./report-summary.component.css']
 })
 export class ReportSummaryComponent implements OnInit {
-  @Input()
-  settings: Settings;
   @Output('hideSummary')
   hideSummary = new EventEmitter<boolean>();
+  
   showSummary: string = 'open';
 
   showPsatSummary: boolean;

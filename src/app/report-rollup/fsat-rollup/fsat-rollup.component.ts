@@ -8,14 +8,14 @@ import { graphColors } from '../../phast/phast-report/report-graphs/graphColors'
 import { FsatResultsData } from '../report-rollup-models';
 import * as _ from 'lodash';
 import { FsatReportRollupService } from '../fsat-report-rollup.service';
+import { ReportRollupService } from '../report-rollup.service';
 @Component({
   selector: 'app-fsat-rollup',
   templateUrl: './fsat-rollup.component.html',
   styleUrls: ['./fsat-rollup.component.css']
 })
 export class FsatRollupComponent implements OnInit {
-  @Input()
-  settings: Settings;
+
   @Input()
   calculators: Array<Calculator>;
   @Input()
@@ -30,9 +30,11 @@ export class FsatRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
-  constructor(private fsatReportRollupService: FsatReportRollupService) { }
+  settings: Settings;
+  constructor(private fsatReportRollupService: FsatReportRollupService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.settings = this.reportRollupService.settings.getValue();
     this.setTableData();
     this.setBarChartData();
     this.setBarChartOption('energy');

@@ -16,11 +16,9 @@ import { PrintOptionsMenuService } from '../shared/print-options-menu/print-opti
 })
 export class ReportRollupComponent implements OnInit {
 
-  _reportAssessments: Array<ReportItem>;
   bannerHeight: number;
   assessmentsGathered: boolean = false;
   createdDate: Date;
-  settings: Settings;
 
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
   @ViewChild('assessmentReportsDiv', { static: false }) assessmentReportsDiv: ElementRef;
@@ -30,12 +28,11 @@ export class ReportRollupComponent implements OnInit {
 
   gatheringAssessments: boolean = true;
   constructor(private viewportScroller: ViewportScroller, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService,
-    private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef, private directoryDashboardService: DirectoryDashboardService,
-    private printOptionsMenuService: PrintOptionsMenuService) { }
+    private cd: ChangeDetectorRef, private directoryDashboardService: DirectoryDashboardService, private printOptionsMenuService: PrintOptionsMenuService) { }
 
   ngOnInit() {
-    this.getSettings();
-
+    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
+    this.reportRollupService.setReportRollupSettings(directoryId);
     setTimeout(() => {
       this.gatheringAssessments = false;
       this.cd.detectChanges();
@@ -60,32 +57,6 @@ export class ReportRollupComponent implements OnInit {
   ngOnDestroy() {
     this.reportRollupService.initSummary();
     if (this.showPrintSub) this.showPrintSub.unsubscribe();
-  }
-
-  getSettings() {
-    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-    this.settings = this.settingsDbService.getByDirectoryId(directoryId);
-    this.checkSettings();
-  }
-
-  checkSettings() {
-    if (!this.settings.phastRollupElectricityUnit) {
-      this.settings.phastRollupElectricityUnit = 'kWh';
-    }
-    if (!this.settings.phastRollupFuelUnit) {
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        this.settings.phastRollupFuelUnit = 'GJ';
-      } else {
-        this.settings.phastRollupFuelUnit = 'MMBtu';
-      }
-    }
-    if (!this.settings.phastRollupSteamUnit) {
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        this.settings.phastRollupSteamUnit = 'GJ';
-      } else {
-        this.settings.phastRollupSteamUnit = 'MMBtu';
-      }
-    }
   }
 
   setSidebarHeight() {

@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ReportRollupService } from '../report-rollup.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
 import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
@@ -13,8 +12,6 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
   styleUrls: ['./report-rollup-modals.component.css']
 })
 export class ReportRollupModalsComponent implements OnInit {
-  @Input()
-  settings: Settings;
 
   @ViewChild('assessmentRollupModal', { static: false }) public assessmentRollupModal: ModalDirective;
   showPrintMenu: boolean = false;

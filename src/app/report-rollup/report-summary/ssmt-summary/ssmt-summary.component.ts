@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { SsmtResultsData } from '../../report-rollup-models';
 import { Settings } from '../../../shared/models/settings';
 import { SsmtReportRollupService } from '../../ssmt-report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 
 @Component({
   selector: 'app-ssmt-summary',
@@ -10,9 +11,8 @@ import { SsmtReportRollupService } from '../../ssmt-report-rollup.service';
   styleUrls: ['./ssmt-summary.component.css', '../report-summary.component.css']
 })
 export class SsmtSummaryComponent implements OnInit {
-  @Input()
-  settings: Settings;
 
+  settings: Settings;
   ssmtSavingPotential: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
@@ -22,9 +22,10 @@ export class SsmtSummaryComponent implements OnInit {
   selectedSub: Subscription;
   resultsSub: Subscription;
   numSsmt: number;
-  constructor(public ssmtReportRollupService: SsmtReportRollupService) { }
+  constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.settings = this.reportRollupService.settings.getValue();
     this.assessmentSub = this.ssmtReportRollupService.ssmtAssessments.subscribe(val => {
       this.numSsmt = val.length;
       if (val.length != 0) {

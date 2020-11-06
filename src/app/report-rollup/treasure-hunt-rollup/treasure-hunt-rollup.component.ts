@@ -15,19 +15,20 @@ import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.
   styleUrls: ['./treasure-hunt-rollup.component.css']
 })
 export class TreasureHuntRollupComponent implements OnInit {
-  @Input()
-  settings: Settings;
+
   @Input()
   printView: boolean;
 
   combinedTreasureHuntResults: TreasureHuntResults;
   allOpportunityCardsData: Array<OpportunityCardData>
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
+  settings: Settings;
   allTeamsData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
   constructor(private treasureHuntReportRollupService: TreasureHuntReportRollupService, private opportunityCardsService: OpportunityCardsService, private treasureHuntReportService: TreasureHuntReportService,
-    private opportunityPaybackService: OpportunityPaybackService) { }
+    private opportunityPaybackService: OpportunityPaybackService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit(): void {
+    this.settings = this.reportRollupService.settings.getValue();
     let allTreasureHuntResults: Array<TreasureHuntResultsData> = this.treasureHuntReportRollupService.allTreasureHuntResults.getValue();
     this.combinedTreasureHuntResults = this.getCombinedTreasureHuntResults(allTreasureHuntResults);
     this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.combinedTreasureHuntResults.opportunitySummaries);
