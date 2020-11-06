@@ -14,7 +14,7 @@
                     (click)="showAssessmentModal('fsat')">
                     <app-fsat-summary></app-fsat-summary>
                 </li>
-                <li *ngIf="reportRollupService.numSsmt != 0" [hidden]="showSummary == 'closed'" class="ssmt-summary"
+                <li *ngIf="showSsmtSummary" [hidden]="showSummary == 'closed'" class="ssmt-summary"
                     (click)="showAssessmentModal('ssmt')">
                     <app-ssmt-summary [settings]="settings"></app-ssmt-summary>
                 </li>

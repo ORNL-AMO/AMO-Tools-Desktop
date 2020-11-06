@@ -11,6 +11,7 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { PsatReportRollupService } from '../psat-report-rollup.service';
 import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { FsatReportRollupService } from '../fsat-report-rollup.service';
+import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 
 @Component({
   selector: 'app-assessment-reports',
@@ -42,7 +43,7 @@ export class AssessmentReportsComponent implements OnInit {
 
   constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService,
     private directoryDashboardService: DirectoryDashboardService, private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
-    private fsatReportRollupService: FsatReportRollupService) { }
+    private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService) { }
 
   ngOnInit(): void {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
@@ -64,7 +65,7 @@ export class AssessmentReportsComponent implements OnInit {
       }
     });
 
-    this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
+    this.ssmtAssessmentsSub = this.ssmtReportRollupService.ssmtAssessments.subscribe(items => {
       if (items) {
         this._ssmtAssessments = items;
       }

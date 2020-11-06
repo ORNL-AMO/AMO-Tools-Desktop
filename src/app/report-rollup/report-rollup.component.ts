@@ -17,10 +17,6 @@ import { PrintOptionsMenuService } from '../shared/print-options-menu/print-opti
 export class ReportRollupComponent implements OnInit {
 
   _reportAssessments: Array<ReportItem>;
-  _phastAssessments: Array<ReportItem>;
-  // _psatAssessments: Array<ReportItem>;
-  _fsatAssessments: Array<ReportItem>;
-  _ssmtAssessments: Array<ReportItem>;
   _treasureHuntAssessments: Array<ReportItem>;
   bannerHeight: number;
   assessmentsGathered: boolean = false;
@@ -31,8 +27,6 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('assessmentReportsDiv', { static: false }) assessmentReportsDiv: ElementRef;
   sidebarHeight: number = 0;
   printView: boolean = false;
-  fsatAssessmentsSub: Subscription;
-  ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
   showPrintSub: Subscription;
 
@@ -42,10 +36,6 @@ export class ReportRollupComponent implements OnInit {
     private printOptionsMenuService: PrintOptionsMenuService) { }
 
   ngOnInit() {
-    this._phastAssessments = new Array<ReportItem>();
-    // this._psatAssessments = new Array<ReportItem>();
-    this._fsatAssessments = new Array<ReportItem>();
-    this._ssmtAssessments = new Array<ReportItem>();
     this._treasureHuntAssessments = new Array<ReportItem>();
     this.getSettings();
 
@@ -68,16 +58,6 @@ export class ReportRollupComponent implements OnInit {
       this.printView = val;
     });
 
-    this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
-      if (items) {
-        this._ssmtAssessments = items;
-        this.reportRollupService.numSsmt = this._ssmtAssessments.length;
-        this.reportRollupService.initSsmtResultsArr(items);
-      } else {
-        this.reportRollupService.numSsmt = 0;
-      }
-    });
-
     this.treasureHuntAssesmentsSub = this.reportRollupService.treasureHuntAssessments.subscribe(items => {
       if (items) {
         this._treasureHuntAssessments = items;
@@ -93,8 +73,6 @@ export class ReportRollupComponent implements OnInit {
   ngOnDestroy() {
     this.reportRollupService.initSummary();
     if (this.showPrintSub) this.showPrintSub.unsubscribe();
-    if (this.fsatAssessmentsSub) this.fsatAssessmentsSub.unsubscribe();
-    if (this.ssmtAssessmentsSub) this.ssmtAssessmentsSub.unsubscribe();
     if (this.treasureHuntAssesmentsSub) this.treasureHuntAssesmentsSub.unsubscribe();
   }
 

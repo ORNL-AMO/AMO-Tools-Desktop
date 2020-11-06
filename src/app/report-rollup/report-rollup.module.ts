@@ -49,6 +49,7 @@ import { RollupSummaryEnergyTableComponent } from './rollup-summary-energy-table
 import { PsatReportRollupService } from './psat-report-rollup.service';
 import { PhastReportRollupService } from './phast-report-rollup.service';
 import { FsatReportRollupService } from './fsat-report-rollup.service';
+import { SsmtReportRollupService } from './ssmt-report-rollup.service';
 
 @NgModule({
   imports: [
@@ -105,7 +106,8 @@ import { FsatReportRollupService } from './fsat-report-rollup.service';
     ReportRollupService,
     PsatReportRollupService,
     PhastReportRollupService,
-    FsatReportRollupService
+    FsatReportRollupService,
+    SsmtReportRollupService
   ],
   exports: [ReportRollupComponent]
 })

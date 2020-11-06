@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { SsmtValid } from '../../../shared/models/steam/ssmt';
+import { SsmtReportRollupService } from '../../../report-rollup/ssmt-report-rollup.service';
 
 
 @Component({
@@ -35,11 +36,11 @@ export class LossesSummaryComponent implements OnInit {
   showCondensingLoss: boolean;
   showLowPressureVentedSteam: boolean;
   showCondensateFlashTank: boolean;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(private ssmtReportRollupService: SsmtReportRollupService) { }
 
   ngOnInit() {
     if (this.inRollup) {
-      this.reportRollupService.selectedSsmt.forEach(val => {
+      this.ssmtReportRollupService.selectedSsmt.forEach(val => {
         if (val) {
           val.forEach(assessment => {
             if (assessment.assessmentId === this.assessment.id) {
@@ -74,7 +75,7 @@ export class LossesSummaryComponent implements OnInit {
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+    this.ssmtReportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
   checkCondensingTurbine(loss: SSMTLosses) {

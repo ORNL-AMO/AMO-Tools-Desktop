@@ -7,6 +7,7 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { PsatReportRollupService } from '../psat-report-rollup.service';
 import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { FsatReportRollupService } from '../fsat-report-rollup.service';
+import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -40,7 +41,7 @@ export class SidebarComponent implements OnInit {
   treasureHuntAssesmentsSub: Subscription;
   reportAssessmentsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private psatReportRollupService: PsatReportRollupService,
-    private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService) { }
+    private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService) { }
 
   ngOnInit(): void {
     this._phastAssessments = new Array<ReportItem>();
@@ -65,7 +66,7 @@ export class SidebarComponent implements OnInit {
       }
     });
 
-    this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
+    this.ssmtAssessmentsSub = this.ssmtReportRollupService.ssmtAssessments.subscribe(items => {
       if (items) {
         this._ssmtAssessments = items;
       }

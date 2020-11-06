@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ReportRollupService } from '../../report-rollup.service';
 import { SsmtResultsData } from '../../report-rollup-models';
 import { Settings } from '../../../shared/models/settings';
+import { SsmtReportRollupService } from '../../ssmt-report-rollup.service';
 
 @Component({
   selector: 'app-ssmt-summary',
@@ -21,27 +21,29 @@ export class SsmtSummaryComponent implements OnInit {
   allSub: Subscription;
   selectedSub: Subscription;
   resultsSub: Subscription;
-  constructor(public reportRollupService: ReportRollupService) { }
+  numSsmt: number;
+  constructor(public ssmtReportRollupService: SsmtReportRollupService) { }
 
   ngOnInit() {
-    this.assessmentSub = this.reportRollupService.ssmtAssessments.subscribe(val => {
+    this.assessmentSub = this.ssmtReportRollupService.ssmtAssessments.subscribe(val => {
+      this.numSsmt = val.length;
       if (val.length != 0) {
-        this.reportRollupService.initSsmtResultsArr(val);
+        this.ssmtReportRollupService.initSsmtResultsArr(val);
       }
     })
 
-    this.allSub = this.reportRollupService.allSsmtResults.subscribe(val => {
+    this.allSub = this.ssmtReportRollupService.allSsmtResults.subscribe(val => {
       if (val.length != 0) {
-        this.reportRollupService.initSsmtCompare(val);
+        this.ssmtReportRollupService.initSsmtCompare(val);
       }
     })
-    this.selectedSub = this.reportRollupService.selectedSsmt.subscribe(val => {
+    this.selectedSub = this.ssmtReportRollupService.selectedSsmt.subscribe(val => {
       if (val.length != 0) {
-        this.reportRollupService.getSsmtResultsFromSelected(val);
+        this.ssmtReportRollupService.getSsmtResultsFromSelected(val);
       }
     })
 
-    this.resultsSub = this.reportRollupService.ssmtResults.subscribe(val => {
+    this.resultsSub = this.ssmtReportRollupService.ssmtResults.subscribe(val => {
       if (val.length != 0) {
         this.calcSsmtSums(val);
       }

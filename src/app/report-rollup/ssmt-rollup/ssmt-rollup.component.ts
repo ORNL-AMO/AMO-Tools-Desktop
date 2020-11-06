@@ -2,9 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 import { SsmtResultsData } from '../report-rollup-models';
-import { ReportRollupService } from '../report-rollup.service';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
+import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 
 @Component({
   selector: 'app-ssmt-rollup',
@@ -25,7 +25,7 @@ export class SsmtRollupComponent implements OnInit {
   yAxisLabel: string;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
   energyUnit: string;
-  constructor(private reportRollupService: ReportRollupService) { }
+  constructor(private ssmtReportRollupService: SsmtReportRollupService) { }
 
   ngOnInit() {
     this.energyUnit = this.settings.steamEnergyMeasurement + '/hr';
@@ -88,7 +88,7 @@ export class SsmtRollupComponent implements OnInit {
   }
 
   getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
-    let ssmtResults: Array<SsmtResultsData> = this.reportRollupService.ssmtResults.getValue();
+    let ssmtResults: Array<SsmtResultsData> = this.ssmtReportRollupService.ssmtResults.getValue();
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
@@ -113,7 +113,7 @@ export class SsmtRollupComponent implements OnInit {
   }
 
   setTableData() {
-    let ssmtResults: Array<SsmtResultsData> = this.reportRollupService.ssmtResults.getValue();
+    let ssmtResults: Array<SsmtResultsData> = this.ssmtReportRollupService.ssmtResults.getValue();
     this.rollupSummaryTableData = new Array();
     ssmtResults.forEach(resultItem => {
       let paybackPeriod: number = this.getPayback(resultItem.modificationResults.operationsOutput.totalOperatingCost, resultItem.baselineResults.operationsOutput.totalOperatingCost, resultItem.modification.operatingCosts.implementationCosts);
