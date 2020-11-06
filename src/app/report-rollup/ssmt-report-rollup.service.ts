@@ -7,8 +7,8 @@ import { SSMTOutput } from '../shared/models/steam/steam-outputs';
 
 @Injectable()
 export class SsmtReportRollupService {
+  
   ssmtAssessments: BehaviorSubject<Array<ReportItem>>;
-  ssmtArray: Array<ReportItem>;
   selectedSsmt: BehaviorSubject<Array<SsmtCompare>>;
   ssmtResults: BehaviorSubject<Array<SsmtResultsData>>;
   allSsmtResults: BehaviorSubject<Array<AllSsmtResultsData>>;

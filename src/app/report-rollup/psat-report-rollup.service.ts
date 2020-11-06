@@ -8,9 +8,7 @@ import * as _ from 'lodash';
 @Injectable()
 export class PsatReportRollupService {
   psatAssessments: BehaviorSubject<Array<ReportItem>>;
-
   selectedPsats: BehaviorSubject<Array<PsatCompare>>;
-  psatArray: Array<ReportItem>;
   psatResults: BehaviorSubject<Array<PsatResultsData>>;
   allPsatResults: BehaviorSubject<Array<AllPsatResultsData>>;
   constructor(private psatService: PsatService) {

@@ -147,9 +147,8 @@ export class PhastRollupComponent implements OnInit {
   }
 
   getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
-    let phastResults: Array<PhastResultsData> = this.phastReportRollupService.phastResults.getValue();
     //use copy for converting data
-    let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(phastResults));
+    let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(this.phastReportRollupService.selectedPhastResults));
 
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
@@ -196,9 +195,8 @@ export class PhastRollupComponent implements OnInit {
 
   setPieChartData() {
     this.pieChartData = new Array();
-    let phastResults: Array<PhastResultsData> = this.phastReportRollupService.phastResults.getValue();
     //Use copy to avoid changing original results, convert all data to a common unit for comparisons
-    let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(phastResults));
+    let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(this.phastReportRollupService.selectedPhastResults));
     phastResultsCpy.forEach(result => {
       result.baselineResults.annualEnergyUsed = this.getConvertedEnergyValue(result.baselineResults.annualEnergyUsed, result.settings);
       result.modificationResults.annualEnergyUsed = this.getConvertedEnergyValue(result.modificationResults.annualEnergyUsed, result.settings);

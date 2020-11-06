@@ -9,10 +9,9 @@ import { ReportItem, TreasureHuntResultsData } from './report-rollup-models';
 
 @Injectable()
 export class TreasureHuntReportRollupService {
+  
   treasureHuntAssessments: BehaviorSubject<Array<ReportItem>>;
-  treasureHuntArray: Array<ReportItem>;
   allTreasureHuntResults: BehaviorSubject<Array<TreasureHuntResultsData>>;
-
   constructor(    
     private treasureHuntReportService: TreasureHuntReportService,
     private opportunitySummaryService: OpportunitySummaryService,

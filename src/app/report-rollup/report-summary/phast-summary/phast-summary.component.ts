@@ -1,8 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
-import { PhastResultsData } from '../../report-rollup-models';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
 import { ReportRollupService } from '../../report-rollup.service';
 
@@ -18,9 +17,7 @@ export class PhastSummaryComponent implements OnInit {
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
-  resultsSub: Subscription;
   numPhasts: number;
-  allPhastSub: Subscription;
   selectedPhastSub: Subscription;
   phastAssessmentsSub: Subscription;
   constructor(public phastReportRollupService: PhastReportRollupService, private convertUnitsService: ConvertUnitsService,
@@ -28,42 +25,32 @@ export class PhastSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.settings = this.reportRollupService.settings.getValue();
-    this.resultsSub = this.phastReportRollupService.phastResults.subscribe(val => {
-      this.numPhasts = val.length;
-      if (val.length !== 0) {
-        this.calcPhastSums(val);
-      }
-    });
-    this.allPhastSub = this.phastReportRollupService.allPhastResults.subscribe(val => {
-      if (val.length !== 0) {
-        this.phastReportRollupService.initPhastCompare(val);
+    this.phastAssessmentsSub = this.phastReportRollupService.phastAssessments.subscribe(items => {
+      this.numPhasts = items.length;
+      if (items) {
+        this.phastReportRollupService.setAllPhastResults(items);
+        this.phastReportRollupService.initPhastCompare();
       }
     });
     this.selectedPhastSub = this.phastReportRollupService.selectedPhasts.subscribe(val => {
       if (val.length !== 0) {
-        this.phastReportRollupService.getPhastResultsFromSelected(val);
-      }
-    });
-    this.phastAssessmentsSub = this.phastReportRollupService.phastAssessments.subscribe(items => {
-      if (items) {
-        this.phastReportRollupService.initPhastResultsArr(items);
+        this.phastReportRollupService.setPhastResultsFromSelected(val);
+        this.calcPhastSums();
       }
     });
   }
 
   ngOnDestroy() {
-    this.resultsSub.unsubscribe();
-    this.allPhastSub.unsubscribe();
     this.selectedPhastSub.unsubscribe();
     this.phastAssessmentsSub.unsubscribe();
   }
 
-  calcPhastSums(resultsData: Array<PhastResultsData>) {
+  calcPhastSums() {
     let sumSavings = 0;
     let sumEnergy = 0;
     let sumCost = 0;
     let sumEnergySavings = 0;
-    resultsData.forEach(result => {
+    this.phastReportRollupService.selectedPhastResults.forEach(result => {
       let diffCost = result.modificationResults.annualCostSavings;
       sumSavings += diffCost;
       sumCost += result.modificationResults.annualCost;

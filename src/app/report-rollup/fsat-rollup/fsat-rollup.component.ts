@@ -5,7 +5,6 @@ import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar
 import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
-import { FsatResultsData } from '../report-rollup-models';
 import * as _ from 'lodash';
 import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { ReportRollupService } from '../report-rollup.service';
@@ -98,18 +97,17 @@ export class FsatRollupComponent implements OnInit {
   }
 
   getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
-    let fsatResults: Array<FsatResultsData> = this.fsatReportRollupService.fsatResults.getValue();
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
     if (dataOption == 'cost') {
-      fsatResults.forEach(result => {
+      this.fsatReportRollupService.selectedFsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annualCost - result.modificationResults.annualCost);
         projectedCosts.push(result.modificationResults.annualCost);
       })
     } else if (dataOption == 'energy') {
-      fsatResults.forEach(result => {
+      this.fsatReportRollupService.selectedFsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annualEnergy - result.modificationResults.annualEnergy);
         projectedCosts.push(result.modificationResults.annualEnergy);
@@ -123,13 +121,12 @@ export class FsatRollupComponent implements OnInit {
   }
 
   setPieChartData() {
-    let fsatResults: Array<FsatResultsData> = this.fsatReportRollupService.fsatResults.getValue();
     this.pieChartData = new Array();
-    let totalEnergyUse: number = _.sumBy(fsatResults, (result) => { return result.baselineResults.annualEnergy; });
-    let totalCost: number = _.sumBy(fsatResults, (result) => { return result.baselineResults.annualCost; });
+    let totalEnergyUse: number = _.sumBy(this.fsatReportRollupService.selectedFsatResults, (result) => { return result.baselineResults.annualEnergy; });
+    let totalCost: number = _.sumBy(this.fsatReportRollupService.selectedFsatResults, (result) => { return result.baselineResults.annualCost; });
     //starting with 2, summary table uses 0 and 1
     let colorIndex: number = 2;
-    fsatResults.forEach(result => {
+    this.fsatReportRollupService.selectedFsatResults.forEach(result => {
       this.pieChartData.push({
         equipmentName: result.name,
         energyUsed: result.baselineResults.annualEnergy,
@@ -144,8 +141,7 @@ export class FsatRollupComponent implements OnInit {
 
   setTableData() {
     this.rollupSummaryTableData = new Array();
-    let fsatResults: Array<FsatResultsData> = this.fsatReportRollupService.fsatResults.getValue();
-    fsatResults.forEach(dataItem => {
+    this.fsatReportRollupService.selectedFsatResults.forEach(dataItem => {
       this.rollupSummaryTableData.push({
         equipmentName: dataItem.name,
         modificationName: dataItem.modName,
