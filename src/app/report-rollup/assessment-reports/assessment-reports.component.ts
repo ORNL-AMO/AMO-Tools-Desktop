@@ -12,6 +12,7 @@ import { PsatReportRollupService } from '../psat-report-rollup.service';
 import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
+import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
 
 @Component({
   selector: 'app-assessment-reports',
@@ -43,7 +44,7 @@ export class AssessmentReportsComponent implements OnInit {
 
   constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService,
     private directoryDashboardService: DirectoryDashboardService, private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
-    private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService) { }
+    private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService) { }
 
   ngOnInit(): void {
     let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
@@ -71,7 +72,7 @@ export class AssessmentReportsComponent implements OnInit {
       }
     });
 
-    this.treasureHuntAssesmentsSub = this.reportRollupService.treasureHuntAssessments.subscribe(items => {
+    this.treasureHuntAssesmentsSub = this.treasureHuntReportRollupService.treasureHuntAssessments.subscribe(items => {
       if (items) {
         this._treasureHuntAssessments = items;
       }

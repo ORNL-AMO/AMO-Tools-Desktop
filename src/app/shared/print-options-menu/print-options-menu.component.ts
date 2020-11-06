@@ -9,6 +9,7 @@ import { PsatReportRollupService } from '../../report-rollup/psat-report-rollup.
 import { PhastReportRollupService } from '../../report-rollup/phast-report-rollup.service';
 import { FsatReportRollupService } from '../../report-rollup/fsat-report-rollup.service';
 import { SsmtReportRollupService } from '../../report-rollup/ssmt-report-rollup.service';
+import { TreasureHuntReportRollupService } from '../../report-rollup/treasure-hunt-report-rollup.service';
 @Component({
   selector: 'app-print-options-menu',
   templateUrl: './print-options-menu.component.html',
@@ -27,7 +28,7 @@ export class PrintOptionsMenuComponent implements OnInit {
   showSsmtReportOptions: boolean = false;
   showTHReportOptions: boolean = false;
   showWasteWaterOptions: boolean = false;
-  constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private reportRollupService: ReportRollupService,
+  constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
     private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService,
     private ssmtReportRollupService: SsmtReportRollupService) { }
 
@@ -66,7 +67,7 @@ export class PrintOptionsMenuComponent implements OnInit {
       this.showFsatReportOptions = (this.fsatReportRollupService.fsatAssessments.getValue().length != 0);
       this.showPhastReportOptions = (this.phastReportRollupService.phastAssessments.getValue().length != 0);
       this.showSsmtReportOptions = (this.ssmtReportRollupService.ssmtAssessments.getValue().length != 0);
-      this.showTHReportOptions = (this.reportRollupService.numTreasureHunt != 0);
+      this.showTHReportOptions = (this.treasureHuntReportRollupService.treasureHuntAssessments.getValue().length != 0);
       // this.showWasteWaterOptions = 
     }
   }

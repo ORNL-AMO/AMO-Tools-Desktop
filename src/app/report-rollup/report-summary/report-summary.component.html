@@ -18,7 +18,7 @@
                     (click)="showAssessmentModal('ssmt')">
                     <app-ssmt-summary [settings]="settings"></app-ssmt-summary>
                 </li>
-                <li *ngIf="reportRollupService.numTreasureHunt != 0" [hidden]="showSummary == 'closed'"
+                <li *ngIf="showTreasureHuntSummary" [hidden]="showSummary == 'closed'"
                     class="treasure-hunt-summary" (click)="showAssessmentModal('treasureHunt')">
                     <app-treasure-hunt-summary></app-treasure-hunt-summary>
                 </li>

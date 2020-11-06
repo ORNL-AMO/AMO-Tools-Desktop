@@ -17,7 +17,6 @@ import { PrintOptionsMenuService } from '../shared/print-options-menu/print-opti
 export class ReportRollupComponent implements OnInit {
 
   _reportAssessments: Array<ReportItem>;
-  _treasureHuntAssessments: Array<ReportItem>;
   bannerHeight: number;
   assessmentsGathered: boolean = false;
   createdDate: Date;
@@ -27,7 +26,6 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('assessmentReportsDiv', { static: false }) assessmentReportsDiv: ElementRef;
   sidebarHeight: number = 0;
   printView: boolean = false;
-  treasureHuntAssesmentsSub: Subscription;
   showPrintSub: Subscription;
 
   gatheringAssessments: boolean = true;
@@ -36,7 +34,6 @@ export class ReportRollupComponent implements OnInit {
     private printOptionsMenuService: PrintOptionsMenuService) { }
 
   ngOnInit() {
-    this._treasureHuntAssessments = new Array<ReportItem>();
     this.getSettings();
 
     setTimeout(() => {
@@ -57,23 +54,12 @@ export class ReportRollupComponent implements OnInit {
     this.showPrintSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
       this.printView = val;
     });
-
-    this.treasureHuntAssesmentsSub = this.reportRollupService.treasureHuntAssessments.subscribe(items => {
-      if (items) {
-        this._treasureHuntAssessments = items;
-        this.reportRollupService.numTreasureHunt = this._treasureHuntAssessments.length;
-        this.reportRollupService.initTreasureHuntResultsArray(this._treasureHuntAssessments);
-      } else {
-        this.reportRollupService.numTreasureHunt = 0;
-      }
-    });
   }
 
 
   ngOnDestroy() {
     this.reportRollupService.initSummary();
     if (this.showPrintSub) this.showPrintSub.unsubscribe();
-    if (this.treasureHuntAssesmentsSub) this.treasureHuntAssesmentsSub.unsubscribe();
   }
 
   getSettings() {

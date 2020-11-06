@@ -6,6 +6,7 @@ import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { PsatReportRollupService } from '../psat-report-rollup.service';
 import { ReportRollupService } from '../report-rollup.service';
 import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
+import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
 
 @Component({
   selector: 'app-report-summary',
@@ -23,13 +24,15 @@ export class ReportSummaryComponent implements OnInit {
   showPhastSummary: boolean;
   showFsatSummary: boolean;
   showSsmtSummary: boolean;
+  showTreasureHuntSummary: boolean;
   psatAssessmentsSub: Subscription;
   phastAssessmentsSub: Subscription;
   fsatAssessmentsSub: Subscription;
   ssmtAssessmentsSub: Subscription;
+  treasureHuntAssessmentsSub: Subscription;
   constructor(public reportRollupService: ReportRollupService, private psatReportRollupService: PsatReportRollupService,
     private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService,
-    private ssmtReportRollupService: SsmtReportRollupService) { }
+    private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService) { }
 
   ngOnInit() {
     this.psatAssessmentsSub = this.psatReportRollupService.psatAssessments.subscribe(val => {
@@ -46,7 +49,11 @@ export class ReportSummaryComponent implements OnInit {
 
     this.ssmtAssessmentsSub = this.ssmtReportRollupService.ssmtAssessments.subscribe(val => {
       this.showSsmtSummary = val.length != 0;
-    })
+    });
+
+    this.treasureHuntAssessmentsSub = this.treasureHuntReportRollupService.treasureHuntAssessments.subscribe(val => {
+      this.showTreasureHuntSummary = val.length != 0;
+    });
   }
 
   ngOnDestroy() {
@@ -54,6 +61,7 @@ export class ReportSummaryComponent implements OnInit {
     this.phastAssessmentsSub.unsubscribe();
     this.fsatAssessmentsSub.unsubscribe();
     this.ssmtAssessmentsSub.unsubscribe();
+    this.treasureHuntAssessmentsSub.unsubscribe();
   }
 
   showAssessmentModal(assessmentModalType: string) {

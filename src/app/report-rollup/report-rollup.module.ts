@@ -50,6 +50,7 @@ import { PsatReportRollupService } from './psat-report-rollup.service';
 import { PhastReportRollupService } from './phast-report-rollup.service';
 import { FsatReportRollupService } from './fsat-report-rollup.service';
 import { SsmtReportRollupService } from './ssmt-report-rollup.service';
+import { TreasureHuntReportRollupService } from './treasure-hunt-report-rollup.service';
 
 @NgModule({
   imports: [
@@ -107,7 +108,8 @@ import { SsmtReportRollupService } from './ssmt-report-rollup.service';
     PsatReportRollupService,
     PhastReportRollupService,
     FsatReportRollupService,
-    SsmtReportRollupService
+    SsmtReportRollupService,
+    TreasureHuntReportRollupService
   ],
   exports: [ReportRollupComponent]
 })
