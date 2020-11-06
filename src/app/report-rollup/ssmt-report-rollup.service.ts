@@ -10,23 +10,23 @@ export class SsmtReportRollupService {
   
   ssmtAssessments: BehaviorSubject<Array<ReportItem>>;
   selectedSsmt: BehaviorSubject<Array<SsmtCompare>>;
-  ssmtResults: BehaviorSubject<Array<SsmtResultsData>>;
-  allSsmtResults: BehaviorSubject<Array<AllSsmtResultsData>>;
+  selectedSsmtResults: Array<SsmtResultsData>;
+  allSsmtResults:Array<AllSsmtResultsData>;
 
   constructor(private ssmtService: SsmtService) { }
 
   initSummary(){
     this.ssmtAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.selectedSsmt = new BehaviorSubject<Array<SsmtCompare>>(new Array<SsmtCompare>());
-    this.ssmtResults = new BehaviorSubject<Array<SsmtResultsData>>(new Array<SsmtResultsData>());
-    this.allSsmtResults = new BehaviorSubject<Array<AllSsmtResultsData>>(new Array<AllSsmtResultsData>());
+    this.selectedSsmtResults = new Array<SsmtResultsData>();
+    this.allSsmtResults = new Array<AllSsmtResultsData>();
 
   }
 
   //used for ssmt summary
-  initSsmtCompare(resultsArr: Array<AllSsmtResultsData>) {
+  initSsmtCompare() {
     let tmpResults: Array<SsmtCompare> = new Array<SsmtCompare>();
-    resultsArr.forEach(result => {
+    this.allSsmtResults.forEach(result => {
       let minCost = _.minBy(result.modificationResults, (result) => { return result.operationsOutput.totalOperatingCost; });
       let modIndex;
       if (minCost != undefined) {
@@ -56,8 +56,8 @@ export class SsmtReportRollupService {
     this.selectedSsmt.next(tmpSelected);
   }
 
-  initSsmtResultsArr(ssmtArr: Array<ReportItem>) {
-    let tmpResultsArr = new Array<AllSsmtResultsData>();
+  setAllSsmtResults(ssmtArr: Array<ReportItem>) {
+    this.allSsmtResults = new Array<AllSsmtResultsData>();
     ssmtArr.forEach(val => {
       if (val.assessment.ssmt.setupDone) {
         //get results
@@ -71,30 +71,28 @@ export class SsmtReportRollupService {
               let tmpResults: SSMTOutput = mod.ssmt.outputData;
               modResultsArr.push(tmpResults);
             });
-            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
+            this.allSsmtResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
           } else {
             let modResultsArr = new Array<SSMTOutput>();
             modResultsArr.push(baselineResults);
-            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
+            this.allSsmtResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
           }
         } else {
           let modResultsArr = new Array<SSMTOutput>();
           modResultsArr.push(baselineResults);
-          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
+          this.allSsmtResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
         }
       }
     });
-    this.allSsmtResults.next(tmpResultsArr);
   }
 
-  getSsmtResultsFromSelected(selectedSsmt: Array<SsmtCompare>) {
-    let tmpResultsArr = new Array<SsmtResultsData>();
+  setSsmtResultsFromSelected(selectedSsmt: Array<SsmtCompare>) {
+    this.selectedSsmtResults = new Array<SsmtResultsData>();
     selectedSsmt.forEach(val => {
       let baselineResults: SSMTOutput = val.baseline.outputData;
       let modificationResults: SSMTOutput = val.modification.outputData;
-      tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
+      this.selectedSsmtResults.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     });
-    this.ssmtResults.next(tmpResultsArr);
   }
 
 }

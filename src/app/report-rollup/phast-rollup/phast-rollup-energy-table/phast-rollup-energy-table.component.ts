@@ -32,7 +32,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   ngOnInit() {
     this.settings = this.reportRollupService.checkSettings(this.settings);
     this.setUnits();
-    let phastResults: Array<PhastResultsData> = this.phastReportRollupService.phastResults.getValue();
+    let phastResults: Array<PhastResultsData> = JSON.parse(JSON.stringify(this.phastReportRollupService.selectedPhastResults));
     let fuelResults: Array<PhastResultsData> = phastResults.filter(resultItem => { return resultItem.settings.energySourceType == 'Fuel' });
     this.setFuelSummary(fuelResults);
     let electricityResults: Array<PhastResultsData> = phastResults.filter(resultItem => { return resultItem.settings.energySourceType == 'Electricity' });
@@ -96,8 +96,8 @@ export class PhastRollupEnergyTableComponent implements OnInit {
     };
     let steamHeatingValue = 0;
     if (assessment.phast.meteredEnergy && assessment.phast.meteredEnergy.meteredEnergySteam) {
-        steamHeatingValue = assessment.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
-        steamHeatingValue = this.convertUnitsService.value(steamHeatingValue).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
+      steamHeatingValue = assessment.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
+      steamHeatingValue = this.convertUnitsService.value(steamHeatingValue).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
     }
 
     if (assessment.phast.designedEnergy && assessment.phast.designedEnergy.steam) {

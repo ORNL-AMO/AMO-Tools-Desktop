@@ -29,26 +29,16 @@ export class SsmtSummaryComponent implements OnInit {
     this.assessmentSub = this.ssmtReportRollupService.ssmtAssessments.subscribe(val => {
       this.numSsmt = val.length;
       if (val.length != 0) {
-        this.ssmtReportRollupService.initSsmtResultsArr(val);
+        this.ssmtReportRollupService.setAllSsmtResults(val);
+        this.ssmtReportRollupService.initSsmtCompare();
       }
-    })
-
-    this.allSub = this.ssmtReportRollupService.allSsmtResults.subscribe(val => {
-      if (val.length != 0) {
-        this.ssmtReportRollupService.initSsmtCompare(val);
-      }
-    })
+    });
     this.selectedSub = this.ssmtReportRollupService.selectedSsmt.subscribe(val => {
       if (val.length != 0) {
-        this.ssmtReportRollupService.getSsmtResultsFromSelected(val);
+        this.ssmtReportRollupService.setSsmtResultsFromSelected(val);
+        this.calcSsmtSums();
       }
-    })
-
-    this.resultsSub = this.ssmtReportRollupService.ssmtResults.subscribe(val => {
-      if (val.length != 0) {
-        this.calcSsmtSums(val);
-      }
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -58,12 +48,12 @@ export class SsmtSummaryComponent implements OnInit {
     this.resultsSub.unsubscribe();
   }
 
-  calcSsmtSums(resultsData: Array<SsmtResultsData>) {
+  calcSsmtSums() {
     let sumSavings = 0;
     let sumEnergy = 0;
     let sumCost = 0;
     let sumEnergySavings = 0;
-    resultsData.forEach(result => {
+    this.ssmtReportRollupService.selectedSsmtResults.forEach(result => {
       let diffCost = result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost;
       sumSavings += diffCost;
       sumCost += result.modificationResults.operationsOutput.totalOperatingCost;

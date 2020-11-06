@@ -21,9 +21,8 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
 
   ngOnInit() {
     this.tableData = new Array();
-    let phastResults: Array<PhastResultsData> = this.phastReportRollupService.phastResults.getValue();
     //use copy for conversions
-    let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(phastResults));
+    let phastResultsCpy: Array<PhastResultsData> = JSON.parse(JSON.stringify(this.phastReportRollupService.selectedPhastResults));
     phastResultsCpy.forEach(resultItem => {
       let tableRow: TableDataItem = this.getTableRow(resultItem);
       this.tableData.push(tableRow);

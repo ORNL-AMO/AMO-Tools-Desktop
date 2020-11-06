@@ -89,18 +89,17 @@ export class SsmtRollupComponent implements OnInit {
   }
 
   getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
-    let ssmtResults: Array<SsmtResultsData> = this.ssmtReportRollupService.ssmtResults.getValue();
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
     if (dataOption == 'cost') {
-      ssmtResults.forEach(result => {
+      this.ssmtReportRollupService.selectedSsmtResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost);
         projectedCosts.push(result.modificationResults.operationsOutput.totalOperatingCost);
       })
     } else if (dataOption == 'energy') {
-      ssmtResults.forEach(result => {
+      this.ssmtReportRollupService.selectedSsmtResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.operationsOutput.boilerFuelUsage - result.modificationResults.operationsOutput.boilerFuelUsage);
         projectedCosts.push(result.modificationResults.operationsOutput.boilerFuelUsage);
@@ -114,9 +113,8 @@ export class SsmtRollupComponent implements OnInit {
   }
 
   setTableData() {
-    let ssmtResults: Array<SsmtResultsData> = this.ssmtReportRollupService.ssmtResults.getValue();
     this.rollupSummaryTableData = new Array();
-    ssmtResults.forEach(resultItem => {
+    this.ssmtReportRollupService.selectedSsmtResults.forEach(resultItem => {
       let paybackPeriod: number = this.getPayback(resultItem.modificationResults.operationsOutput.totalOperatingCost, resultItem.baselineResults.operationsOutput.totalOperatingCost, resultItem.modification.operatingCosts.implementationCosts);
       this.rollupSummaryTableData.push({
         equipmentName: resultItem.name,

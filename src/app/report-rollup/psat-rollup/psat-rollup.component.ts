@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
-import { PsatResultsData } from '../report-rollup-models';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
 import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
@@ -99,18 +98,18 @@ export class PsatRollupComponent implements OnInit {
   }
 
   getChartData(dataOption: string): { projectedCosts: Array<number>, labels: Array<string>, costSavings: Array<number> } {
-    let psatResults: Array<PsatResultsData> = this.psatReportRollupService.psatResults.getValue();
+
     let projectedCosts: Array<number> = new Array();
     let labels: Array<string> = new Array();
     let costSavings: Array<number> = new Array();
     if (dataOption == 'cost') {
-      psatResults.forEach(result => {
+      this.psatReportRollupService.selectedPsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annual_cost - result.modificationResults.annual_cost);
         projectedCosts.push(result.modificationResults.annual_cost);
       })
     } else if (dataOption == 'energy') {
-      psatResults.forEach(result => {
+      this.psatReportRollupService.selectedPsatResults.forEach(result => {
         labels.push(result.name);
         costSavings.push(result.baselineResults.annual_energy - result.modificationResults.annual_energy);
         projectedCosts.push(result.modificationResults.annual_energy);
@@ -124,13 +123,12 @@ export class PsatRollupComponent implements OnInit {
   }
 
   setPieChartData() {
-    let psatResults: Array<PsatResultsData> = this.psatReportRollupService.psatResults.getValue();
     this.pieChartData = new Array();
-    let totalEnergyUse: number = _.sumBy(psatResults, (result) => { return result.baselineResults.annual_energy; });
-    let totalCost: number = _.sumBy(psatResults, (result) => { return result.baselineResults.annual_cost; });
+    let totalEnergyUse: number = _.sumBy(this.psatReportRollupService.selectedPsatResults, (result) => { return result.baselineResults.annual_energy; });
+    let totalCost: number = _.sumBy(this.psatReportRollupService.selectedPsatResults, (result) => { return result.baselineResults.annual_cost; });
     //starting with 2, summary table uses 0 and 1
     let colorIndex: number = 2;
-    psatResults.forEach(result => {
+    this.psatReportRollupService.selectedPsatResults.forEach(result => {
       this.pieChartData.push({
         equipmentName: result.name,
         energyUsed: result.baselineResults.annual_energy,
@@ -145,8 +143,7 @@ export class PsatRollupComponent implements OnInit {
 
   setTableData() {
     this.rollupSummaryTableData = new Array();
-    let psatResultData: Array<PsatResultsData> = this.psatReportRollupService.psatResults.getValue();
-    psatResultData.forEach(dataItem => {
+    this.psatReportRollupService.selectedPsatResults.forEach(dataItem => {
       this.rollupSummaryTableData.push({
         equipmentName: dataItem.name,
         modificationName: dataItem.modName,
