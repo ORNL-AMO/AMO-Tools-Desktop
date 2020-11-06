@@ -23,6 +23,7 @@ export interface FlueGasByMass {
     o2?: number;
     moisture?: number;
     nitrogen?: number;
+    heatInput?: number;
 }
 
 export interface FlueGasByVolume {
@@ -44,4 +45,17 @@ export interface FlueGasByVolume {
     CO2?: number;
     SO2?: number;
     O2?: number;
+    heatInput?: number;
 }
+
+
+export interface FlueGasOutput {
+    baseline: FlueGasResult
+    modification?: FlueGasResult
+}
+
+export interface FlueGasResult {
+    availableHeat?: number;
+    flueGasLosses?: number;
+  }
+  
