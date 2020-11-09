@@ -53,6 +53,7 @@ import { SsmtReportRollupService } from './ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from './treasure-hunt-report-rollup.service';
 import { WasteWaterReportRollupService } from './waste-water-report-rollup.service';
 import { WasteWaterSummaryComponent } from './report-summary/waste-water-summary/waste-water-summary.component';
+import { WasteWaterReportModule } from '../waste-water/waste-water-report/waste-water-report.module';
 
 @NgModule({
   imports: [
@@ -68,7 +69,8 @@ import { WasteWaterSummaryComponent } from './report-summary/waste-water-summary
     PrintOptionsMenuModule,
     PieChartModule,
     SharedPipesModule,
-    RouterModule
+    RouterModule,
+    WasteWaterReportModule
   ],
   declarations: [
     ReportRollupComponent, 

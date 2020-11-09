@@ -3,8 +3,6 @@ import { Subscription } from 'rxjs';
 import { ReportItem } from '../report-rollup-models';
 import { ReportRollupService } from '../report-rollup.service';
 import { Calculator } from '../../shared/models/calculators';
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { DirectoryDashboardService } from '../../dashboard/directory-dashboard/directory-dashboard.service';
 import { Settings } from '../../shared/models/settings';
 import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
@@ -13,6 +11,7 @@ import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.service';
+import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
 
 @Component({
   selector: 'app-assessment-reports',
@@ -26,11 +25,13 @@ export class AssessmentReportsComponent implements OnInit {
   _fsatAssessments: Array<ReportItem>;
   _ssmtAssessments: Array<ReportItem>;
   _treasureHuntAssessments: Array<ReportItem>;
+  _wasteWaterAssessments: Array<ReportItem>;
   phastAssessmentsSub: Subscription;
   fsatAssessmentsSub: Subscription;
   psatAssessmentSub: Subscription;
   ssmtAssessmentsSub: Subscription;
   treasureHuntAssesmentsSub: Subscription;
+  wasteWaterAssessmentsSub: Subscription;
   printView: boolean;
   printViewSub: Subscription;
   rollupPrintOptions: PrintOptions;
@@ -42,13 +43,12 @@ export class AssessmentReportsComponent implements OnInit {
   selectedPhastCalcs: Array<Calculator>;
   settings: Settings;
 
-  constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService,
-    private directoryDashboardService: DirectoryDashboardService, private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
-    private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService) { }
+  constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
+    private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
+    private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
 
   ngOnInit(): void {
-    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-    this.settings = this.settingsDbService.getByDirectoryId(directoryId);
+    this.settings = this.reportRollupService.settings.getValue();
     this.psatAssessmentSub = this.psatReportRollupService.psatAssessments.subscribe(items => {
       if (items) {
         this._psatAssessments = items;
@@ -89,6 +89,12 @@ export class AssessmentReportsComponent implements OnInit {
     this.selectedCalcsSub = this.reportRollupService.selectedCalcs.subscribe(selectedCalcs => {
       this.setSelectedCalcsArrays(selectedCalcs);
     });
+
+    this.wasteWaterAssessmentsSub = this.wasteWaterReportRollupService.wasteWaterAssessments.subscribe(val => {
+      if (val) {
+        this._wasteWaterAssessments = val;
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -97,8 +103,10 @@ export class AssessmentReportsComponent implements OnInit {
     this.psatAssessmentSub.unsubscribe();
     this.ssmtAssessmentsSub.unsubscribe();
     this.treasureHuntAssesmentsSub.unsubscribe();
+    this.rollupPrintOptionsSub.unsubscribe();
     this.printViewSub.unsubscribe();
     this.selectedCalcsSub.unsubscribe();
+    this.wasteWaterAssessmentsSub.unsubscribe();
   }
 
   setSelectedCalcsArrays(selectedCalcs: Array<Calculator>) {
