@@ -8,6 +8,7 @@ import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.mod
 import { SrtGraphsComponent } from './srt-graphs/srt-graphs.component';
 import { WasteWaterAnalysisModule } from '../waste-water-analysis/waste-water-analysis.module';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-op
     FacilityInfoSummaryModule,
     PercentGraphModule,
     WasteWaterAnalysisModule,
-    PrintOptionsMenuModule
+    PrintOptionsMenuModule,
+    FormsModule
   ],
   exports: [
     WasteWaterReportComponent

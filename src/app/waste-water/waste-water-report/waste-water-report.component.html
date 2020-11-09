@@ -86,7 +86,7 @@
         <div class="results scroll-item print-height"
             *ngIf="currentTab == 'results' || (showPrintView && printOptions.printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-result-data [settings]="settings" [inRollup]="inRollup" [wasteWater]="assessment.wasteWater">
+            <app-result-data [settings]="settings" [inRollup]="inRollup"  [assessment]="assessment">
             </app-result-data>
         </div>
         <div class="results print-height"

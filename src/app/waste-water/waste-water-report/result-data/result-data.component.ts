@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { WasteWaterReportRollupService } from '../../../report-rollup/waste-water-report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
@@ -10,16 +11,33 @@ import { WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
 })
 export class ResultDataComponent implements OnInit {
   @Input()
-  wasteWater: WasteWater;
+  assessment: Assessment;
   @Input()
   settings: Settings;
   @Input()
   inRollup: boolean;
 
-  constructor() { }
+  selectedModificationIndex: number;
+  wasteWater: WasteWater;
+  constructor(private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
 
   ngOnInit(): void {
-    console.log(this.wasteWater);
+    this.wasteWater = this.assessment.wasteWater;
+    if (this.inRollup) {
+      this.wasteWaterReportRollupService.selectedWasteWater.forEach(val => {
+        if (val) {
+          val.forEach(assessment => {
+            if (assessment.assessmentId == this.assessment.id) {
+              this.selectedModificationIndex = assessment.selectedIndex;
+            }
+          })
+        }
+      })
+    }
   }
 
+
+  useModification() {
+    this.wasteWaterReportRollupService.updateSelectedWasteWater({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+  }
 }
