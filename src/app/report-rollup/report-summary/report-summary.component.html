@@ -22,6 +22,11 @@
                     (click)="showAssessmentModal('treasureHunt')">
                     <app-treasure-hunt-summary></app-treasure-hunt-summary>
                 </li>
+
+                <li *ngIf="showWasteWater" [hidden]="showSummary == 'closed'" class="waste-water-summary"
+                    (click)="showAssessmentModal('wasteWater')">
+                    <app-waste-water-summary></app-waste-water-summary>
+                </li>
             </ul>
         </div>
     </div>

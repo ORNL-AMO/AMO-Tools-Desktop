@@ -51,6 +51,8 @@ import { PhastReportRollupService } from './phast-report-rollup.service';
 import { FsatReportRollupService } from './fsat-report-rollup.service';
 import { SsmtReportRollupService } from './ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from './treasure-hunt-report-rollup.service';
+import { WasteWaterReportRollupService } from './waste-water-report-rollup.service';
+import { WasteWaterSummaryComponent } from './report-summary/waste-water-summary/waste-water-summary.component';
 
 @NgModule({
   imports: [
@@ -101,6 +103,7 @@ import { TreasureHuntReportRollupService } from './treasure-hunt-report-rollup.s
     RollupSummaryTableComponent,
     RollupSummaryPieChartComponent,
     RollupSummaryEnergyTableComponent,
+    WasteWaterSummaryComponent,
 
   ],
   providers: [
@@ -109,7 +112,8 @@ import { TreasureHuntReportRollupService } from './treasure-hunt-report-rollup.s
     PhastReportRollupService,
     FsatReportRollupService,
     SsmtReportRollupService,
-    TreasureHuntReportRollupService
+    TreasureHuntReportRollupService,
+    WasteWaterReportRollupService
   ],
   exports: [ReportRollupComponent]
 })

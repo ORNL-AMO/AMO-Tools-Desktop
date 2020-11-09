@@ -18,9 +18,7 @@ export class SsmtSummaryComponent implements OnInit {
   totalCost: number = 0;
   totalEnergy: number = 0;
   assessmentSub: Subscription;
-  allSub: Subscription;
   selectedSub: Subscription;
-  resultsSub: Subscription;
   numSsmt: number;
   constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService) { }
 
@@ -43,9 +41,7 @@ export class SsmtSummaryComponent implements OnInit {
 
   ngOnDestroy() {
     this.assessmentSub.unsubscribe();
-    this.allSub.unsubscribe();
     this.selectedSub.unsubscribe();
-    this.resultsSub.unsubscribe();
   }
 
   calcSsmtSums() {

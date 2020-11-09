@@ -16,6 +16,7 @@ import { PhastReportRollupService } from './phast-report-rollup.service';
 import { FsatReportRollupService } from './fsat-report-rollup.service';
 import { SsmtReportRollupService } from './ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from './treasure-hunt-report-rollup.service';
+import { WasteWaterReportRollupService } from './waste-water-report-rollup.service';
 
 @Injectable()
 export class ReportRollupService {
@@ -37,7 +38,8 @@ export class ReportRollupService {
     private phastReportRollupService: PhastReportRollupService,
     private fsatReportRollupService: FsatReportRollupService,
     private ssmtReportRollupService: SsmtReportRollupService,
-    private treasureHuntReportRollupService: TreasureHuntReportRollupService
+    private treasureHuntReportRollupService: TreasureHuntReportRollupService,
+    private wasteWaterReportRollupService: WasteWaterReportRollupService
 
   ) {
     this.initSummary();
@@ -49,6 +51,7 @@ export class ReportRollupService {
     this.fsatReportRollupService.initSummary();
     this.ssmtReportRollupService.initSummary();
     this.treasureHuntReportRollupService.initSummary();
+    this.wasteWaterReportRollupService.initSummary();
     this.reportAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.calcsArray = new Array<Calculator>();
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
@@ -93,6 +96,8 @@ export class ReportRollupService {
     this.ssmtReportRollupService.ssmtAssessments.next(ssmtArray);
     let treasureHuntArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'TreasureHunt' });
     this.treasureHuntReportRollupService.treasureHuntAssessments.next(treasureHuntArray);
+    let wasteWaterArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'WasteWater' });
+    this.wasteWaterReportRollupService.wasteWaterAssessments.next(wasteWaterArray);
     this.reportAssessments.next(this.assessmentsArray);
   }
 
