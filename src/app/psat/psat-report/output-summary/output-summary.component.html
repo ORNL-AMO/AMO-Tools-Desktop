@@ -215,7 +215,7 @@
       </tr>
       <tr>
         <td></td>
-        <td></td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
         <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.inputs.pumpType != 11" class="text-muted">*Optimized</span>
@@ -223,8 +223,9 @@
       </tr>
       <tr>
         <th>Selected Energy Projects</th>
-        <th>&mdash;</th>
-        <th *ngFor="let modification of psat.modifications; let index = index;">
+        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
+        <th *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span class="d-block"
             *ngIf="modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity">{{ modification.exploreOppsShowVfd.display }}</span>
           <span class="d-block"
@@ -244,8 +245,9 @@
       </tr>
       <tr>
         <th>Modifications</th>
-        <th>&mdash;</th>
-        <th *ngFor="let modification of psat.modifications; let index = index;">
+        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
+        <th *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <div *ngFor="let modificationMade of getModificationsMadeList(modification.psat)">
             {{modificationMade}}<br>
           </div>
@@ -259,8 +261,8 @@
         </td>
         <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <input *ngIf="modification.psat.valid.isValid" name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index"
-            [(ngModel)]="selectedModificationIndex">
+          <input *ngIf="modification.psat.valid.isValid" name="{{'summarySelect_'+assessment.id}}" type="radio"
+            (change)="useModification()" [value]="index" [(ngModel)]="selectedModificationIndex">
         </td>
       </tr>
     </tbody>

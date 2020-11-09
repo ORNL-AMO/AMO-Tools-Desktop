@@ -6,7 +6,8 @@
         <thead>
             <tr>
                 <th [ngStyle]="{'width.%': 100 /(wasteWater.modifications.length+2)}"></th>
-                <th [ngStyle]="{'width.%': 100 /(wasteWater.modifications.length+2)}">Baseline</th>
+                <th [ngStyle]="{'width.%': 100 /(wasteWater.modifications.length+2)}"
+                    [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
                 <th [ngStyle]="{'width.%': 100 /(wasteWater.modifications.length+2)}"
                     *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
@@ -16,7 +17,7 @@
         <tbody>
             <tr>
                 <td>Percent Savings (%)</td>
-                <td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     &mdash; &mdash;
                 </td>
                 <td class="percent-graph" *ngFor="let modification of wasteWater.modifications; let index = index;"
@@ -45,7 +46,8 @@
             <tr>
                 <td>Total Average Daily Flow Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.TotalAverageDailyFlowRate | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.TotalAverageDailyFlowRate | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     {{modification.outputs.TotalAverageDailyFlowRate | number:'1.0-1'}}</td>
@@ -53,14 +55,16 @@
             <tr>
                 <td>Aeration Volume in Service (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mil gal</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup></span>)</td>
-                <td>{{wasteWater.baselineData.outputs.VolumeInService | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.VolumeInService | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">
                     {{modification.outputs.VolumeInService | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>Influent BOD<sub>5</sub> Concentration (mg/L)</td>
-                <td>{{wasteWater.baselineData.outputs.InfluentBOD5Concentration | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.InfluentBOD5Concentration | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.InfluentBOD5Concentration
             | number:'1.0-1'}}</td>
@@ -69,7 +73,8 @@
                 <td>Influent BOD<sub>5</sub> Mass Loading (<span
                         *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.InfluentBOD5MassLoading | number:'1.0-0'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.InfluentBOD5MassLoading | number:'1.0-0'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.InfluentBOD5MassLoading
             | number:'2.0-0'}}</td>
@@ -77,7 +82,8 @@
             <tr>
                 <td>SEC WW Oxid N Load (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.SecWWOxidNLoad | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.SecWWOxidNLoad | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.SecWWOxidNLoad
             | number:'1.0-1'}}</td>
@@ -85,35 +91,40 @@
             <tr>
                 <td>SEC WW TSS Load (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.SecWWTSSLoad | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.SecWWTSSLoad | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.SecWWTSSLoad
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>F/M Ratio</td>
-                <td>{{wasteWater.baselineData.outputs.FM_ratio | number:'1.0-3'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.FM_ratio | number:'1.0-3'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.FM_ratio
             | number:'1.0-3'}}</td>
             </tr>
             <tr>
                 <td>Solids Retention Time (day)</td>
-                <td>{{wasteWater.baselineData.outputs.SolidsRetentionTime | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.SolidsRetentionTime | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.SolidsRetentionTime
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>MLSS Concentration (mg/L)</td>
-                <td>{{wasteWater.baselineData.outputs.MLSS | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.MLSS | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.MLSS
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>MLVSS Concentration (mg/L)</td>
-                <td>{{wasteWater.baselineData.outputs.MLVSS | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.MLVSS | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.MLVSS
             | number:'1.0-1'}}</td>
@@ -121,7 +132,8 @@
             <tr>
                 <td>TSS Sludge Production (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.TSSSludgeProduction | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.TSSSludgeProduction | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.TSSSludgeProduction
             | number:'1.0-1'}}</td>
@@ -130,7 +142,8 @@
                 <td>TSS in Activate Sludge Effluent (<span
                         *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.TSSInActivatedSludgeEffluent | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.TSSInActivatedSludgeEffluent | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.TSSInActivatedSludgeEffluent
             | number:'1.0-1'}}</td>
@@ -138,7 +151,8 @@
             <tr>
                 <td>Total Oxygen Requirements (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.TotalOxygenRequirements | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.TotalOxygenRequirements | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.TotalOxygenRequirements
             | number:'1.0-1'}}</td>
@@ -147,7 +161,8 @@
                 <td>Total Oxygen Req'd - Denitrification (<span
                         *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.TotalOxygenReqWDenit | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.TotalOxygenReqWDenit | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.TotalOxygenReqWDenit
             | number:'1.0-1'}}</td>
@@ -155,7 +170,8 @@
             <tr>
                 <td>Total Oxygen Supplied (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.TotalOxygenSupplied | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.TotalOxygenSupplied | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.TotalOxygenSupplied
             | number:'1.0-1'}}</td>
@@ -163,7 +179,8 @@
             <tr>
                 <td>Mixing Intensity in Reactor (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp/Mgal</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/m<sup>3</sup></span>)</td>
-                <td>{{wasteWater.baselineData.outputs.MixingIntensityInReactor | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.MixingIntensityInReactor | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.MixingIntensityInReactor
             | number:'1.0-1'}}</td>
@@ -171,14 +188,16 @@
             <tr>
                 <td>RAS Flow Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.RASFlowRate | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.RASFlowRate | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.RASFlowRate
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>RAS Recycle Percentage (%)</td>
-                <td>{{wasteWater.baselineData.outputs.RASRecyclePercentage | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.RASRecyclePercentage | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.RASRecyclePercentage
             | number:'1.0-1'}}</td>
@@ -186,7 +205,8 @@
             <tr>
                 <td>WAS Flow Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.WASFlowRate | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.WASFlowRate | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.WASFlowRate
             | number:'1.0-1'}}</td>
@@ -194,7 +214,8 @@
             <tr>
                 <td>RAS TSS Concentration (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.RASTSSConcentration | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.RASTSSConcentration | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.RASTSSConcentration
             | number:'1.0-1'}}</td>
@@ -202,14 +223,16 @@
             <tr>
                 <td>Total Sludge Production (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.TotalSludgeProduction | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.TotalSludgeProduction | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.TotalSludgeProduction
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>Reactor Detention Time (hr)</td>
-                <td>{{wasteWater.baselineData.outputs.ReactorDetentionTime | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.ReactorDetentionTime | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.ReactorDetentionTime
             | number:'1.0-1'}}</td>
@@ -217,42 +240,48 @@
             <tr>
                 <td>VOLR (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb BOD/kft<sup>3</sup>-day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg BOD/m<sup>3</sup>-day</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.VOLR | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.VOLR | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.VOLR
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>Effluent CBOD<sub>5</sub> (mg/L)</td>
-                <td>{{wasteWater.baselineData.outputs.EffluentCBOD5 | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.EffluentCBOD5 | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.EffluentCBOD5
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>Effluent TSS (mg/L)</td>
-                <td>{{wasteWater.baselineData.outputs.EffluentTSS | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.EffluentTSS | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.EffluentTSS
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>Effluent Ammonia-N (mg/L)</td>
-                <td>{{wasteWater.baselineData.outputs.EffluentAmmonia_N | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.EffluentAmmonia_N | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.EffluentAmmonia_N
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>Effluent NO<sub>3</sub>-N (mg/L)</td>
-                <td>{{wasteWater.baselineData.outputs.EffluentNO3_N | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.EffluentNO3_N | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.EffluentNO3_N
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
                 <td>Effluent NO<sub>3</sub>-N - Denitrification (mg/L)</td>
-                <td>{{wasteWater.baselineData.outputs.EffluentNO3_N_W_Denit | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.EffluentNO3_N_W_Denit | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.EffluentNO3_N_W_Denit
             | number:'1.0-1'}}</td>
@@ -264,7 +293,8 @@
                 <td>Field Oxygen Transfer Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
                         O<sub>2</sub>/hp-hr</span><span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
                         O<sub>2</sub>/kWh</span>)</td>
-                <td>{{wasteWater.baselineData.outputs.FieldOTR | number:'1.0-1'}}</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.FieldOTR | number:'1.0-1'}}</td>
                 <td *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.FieldOTR
             | number:'1.0-1'}}</td>
@@ -272,28 +302,30 @@
 
             <tr>
                 <th>Aerator Energy Use (MWh/yr)</th>
-                <th>{{wasteWater.baselineData.outputs.AeEnergy | number:'1.0-0'}}</th>
+                <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.AeEnergy | number:'1.0-0'}}</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.AeEnergy
             | number:'1.0-0'}}</th>
             </tr>
             <tr>
                 <th>Energy Savings (MWh/yr)</th>
-                <th>&mdash;</th>
+                <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'positive-savings': modification.outputs.percentCostSavings > 10, 'selected-modification': index == selectedModificationIndex}">{{modification.outputs.energySavings
             | number:'1.0-0'}}</th>
             </tr>
             <tr>
                 <th>Aerator Cost ($/yr)</th>
-                <th>{{wasteWater.baselineData.outputs.AeCost | currency:'USD':'symbol':'1.0-0'}}</th>
+                <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{wasteWater.baselineData.outputs.AeCost | currency:'USD':'symbol':'1.0-0'}}</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'positive-savings': modification.outputs.percentCostSavings > 10,'selected-modification': index == selectedModificationIndex}">{{modification.outputs.AeCost
             | currency:'USD':'symbol':'1.0-0'}}</th>
             </tr>
             <tr>
                 <th>Cost Savings ($/yr)</th>
-                <th>&mdash;</th>
+                <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'positive-savings': modification.outputs.percentCostSavings > 10, 'selected-modification': index == selectedModificationIndex}">
                     {{modification.outputs.costSavings | currency:'USD':'symbol':'1.0-0'}}
