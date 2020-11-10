@@ -54,8 +54,8 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
     let configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       displaylogo: false,
-      displayModeBar: true,
-      responsive: true
+      displayModeBar: !this.printView,
+      responsive: true,
     };
     Plotly.newPlot(this.analysisBarChart.nativeElement, traceData, layout, configOptions);
   }

@@ -72,13 +72,13 @@ export class SrtGraphComponent implements OnInit {
     };
 
     if (this.printView) {
-      layout.width = 450;
+      layout.width = 500;
     }
 
     var configOptions = {
       modeBarButtonsToRemove: [],
       displaylogo: false,
-      displayModeBar: true,
+      displayModeBar: !this.printView,
       responsive: true
     };
 
