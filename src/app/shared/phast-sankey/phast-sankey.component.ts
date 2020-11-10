@@ -314,7 +314,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       if (this.exothermicHeat) {
         this.nodes.push(
           {
-            name: "Exothermic Heat " + this.decimalPipe.transform(this.exothermicHeat, '1.0-2') + `  ${this.units}/hr`,
+            name: "Exothermic Heat from process" + this.decimalPipe.transform(this.exothermicHeat, '1.0-2') + `  ${this.units}/hr`,
             value: this.exothermicHeatValue,
             x: .02,
             y: .9,
@@ -334,7 +334,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
       this.nodes.push(
         {
-          name: this.getNameLabel('Fuel Energy', this.fuelEnergy, fuelValue),
+          name: this.getNameLabel('Chemical Heat Delivered', this.fuelEnergy, fuelValue),
           value: fuelValue,
           x: .02,
           y: .2,
@@ -345,7 +345,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
           id: 'fuelConnector'
         },
         {
-          name: this.getNameLabel("Electrical Energy ", this.electricalEnergy, electricalValue),
+          name: this.getNameLabel("Electrical Heat Delivered", this.electricalEnergy, electricalValue),
           value: electricalValue,
           x: .02,
           y: .5,
@@ -356,7 +356,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
           id: 'electricalConnector'
         },
         {
-          name: ``,
+          name: `Energy Input Total`,
           value: 100,
           x: .2,
           y: .5,
