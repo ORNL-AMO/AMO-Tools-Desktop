@@ -26,6 +26,8 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   appBackground: boolean;
   @Input()
   assessment: Assessment;
+  @Input()
+  labelStyle: string;
 
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
 
@@ -63,6 +65,8 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   secondConnectorLoss: number;
   exothermicHeatValue: number;
 
+  results: FuelResults;
+
   constructor(private sankeyService: SankeyService, 
     private phastValidService: PhastValidService,
     private _dom: ElementRef,
@@ -72,8 +76,8 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.phast.valid = this.phastValidService.checkValid(this.phast);
     if (this.phast.valid.isValid) {
-      let results = this.sankeyService.getFuelTotals(this.phast, this.settings);
-      this.initSankeySetup(results);
+      this.results = this.sankeyService.getFuelTotals(this.phast, this.settings);
+      this.initSankeySetup();
     }
   }
 
@@ -90,17 +94,21 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       this.phast.valid = this.phastValidService.checkValid(this.phast);
       if (!changes.phast.firstChange) {
         if (this.phast.valid.isValid) {
-          let results = this.sankeyService.getFuelTotals(this.phast, this.settings);
-          if (results.totalInput > 0) {
-            this.initSankeySetup(results);
+          this.results = this.sankeyService.getFuelTotals(this.phast, this.settings);
+          if (this.results.totalInput > 0) {
+            this.initSankeySetup();
             this.renderSankey();
           }
         }
       }
     }
+    if (changes.labelStyle && !changes.labelStyle.firstChange) {
+      this.initSankeySetup();
+      this.renderSankey(true);
+    }
   }
 
-  initSankeySetup(results) {
+  initSankeySetup() {
     this.units = this.settings.steamEnergyMeasurement;
     this.orangeLinkPaths = [];
     this.connectingNodes = [];
@@ -111,14 +119,13 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
     this.totalLosses = 0;
     this.initialLossConnectorTargets = [];
 
-    this.buildNodes(results);
+    this.buildNodes();
     this.buildLinks();
   }
 
-  renderSankey() {
-    if (this.ngChart) {
-      Plotly.purge(this.ngChart.nativeElement); 
-    }
+  renderSankey(isUpdate = false) {
+    Plotly.purge(this.ngChart.nativeElement); 
+
 
     let sankeyLink = {
       value: this.nodes.map(node => node.value),
@@ -190,34 +197,35 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       layout.paper_bgcolor = 'ececec';
       layout.plot_bgcolor = 'ececec';
     }
-
     let config = {
       modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
       responsive: true,
     };
+  
+      Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
+        .then(chart => {
+          chart.on('plotly_restyle', () => {
+            this.setGradient();
+          });
+          chart.on('plotly_afterplot', () => {
+            this.setGradient();
+          });
+          chart.on('plotly_hover', (hoverData) => {
+            this.setGradient(hoverData);
+          });
+          chart.on('plotly_unhover', () => {
+            this.setGradient();
+          });
+          chart.on('plotly_relayout', () => {
+            this.setGradient();
+          });
+        });
 
-    Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
-    .then(chart => {
-      chart.on('plotly_restyle', () => {
-        this.setGradient();
-      });
-      chart.on('plotly_afterplot', () => {
-        this.setGradient();
-      });
-      chart.on('plotly_hover', (hoverData) => {
-        this.setGradient(hoverData);
-      });
-      chart.on('plotly_unhover', () => {
-        this.setGradient();
-      });
-      chart.on('plotly_relayout', () => {
-        this.setGradient();
-      });
-    });
+      this.addGradientElement();
+      this.buildSvgArrows();
 
-    this.addGradientElement();
-    this.buildSvgArrows();
   }
+
 
   buildLinks() {  
     this.links = [];  
@@ -238,21 +246,21 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   }
 
   
-  buildNodes(results: FuelResults) {
-    this.energyInput = results.totalInput;
-    let flueGasLoss = results.totalFlueGas;
-    let waterCoolingLoss = results.totalCoolingLoss;
-    let wallLoss = results.totalWallLoss;
-    let openingLoss = results.totalOpeningLoss;
-    let leakageLoss = results.totalLeakageLoss;
-    let atmosphereLoss = results.totalAtmosphereLoss;
-    let fixtureLoss = results.totalFixtureLoss;
-    let externalLoss = results.totalExtSurfaceLoss;
-    let systemLoss = results.totalSystemLosses;
-    let otherLoss = results.totalOtherLoss;
-    let slagLoss = results.totalSlag;
-    let exhaustLoss = results.totalExhaustGas;
-    let chargeMaterialLoss = results.totalChargeMaterialLoss;
+  buildNodes() {
+    this.energyInput = this.results.totalInput;
+    let flueGasLoss = this.results.totalFlueGas;
+    let waterCoolingLoss = this.results.totalCoolingLoss;
+    let wallLoss = this.results.totalWallLoss;
+    let openingLoss = this.results.totalOpeningLoss;
+    let leakageLoss = this.results.totalLeakageLoss;
+    let atmosphereLoss = this.results.totalAtmosphereLoss;
+    let fixtureLoss = this.results.totalFixtureLoss;
+    let externalLoss = this.results.totalExtSurfaceLoss;
+    let systemLoss = this.results.totalSystemLosses;
+    let otherLoss = this.results.totalOtherLoss;
+    let slagLoss = this.results.totalSlag;
+    let exhaustLoss = this.results.totalExhaustGas;
+    let chargeMaterialLoss = this.results.totalChargeMaterialLoss;
 
     let losses = {
       'Flue Gas': flueGasLoss,
@@ -275,7 +283,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
     } else {
       this.units = 'kW';
     }
-
+      
     this.addInitialNodes();
     let currentPosition = 0;
     for (let lossName in losses) {
@@ -326,7 +334,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
       this.nodes.push(
         {
-          name: "Fuel Energy " + this.decimalPipe.transform(this.fuelEnergy, '1.0-2') + `  ${this.units}/hr`,
+          name: this.getNameLabel('Fuel Energy', this.fuelEnergy, fuelValue),
           value: fuelValue,
           x: .02,
           y: .2,
@@ -337,7 +345,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
           id: 'fuelConnector'
         },
         {
-          name: "Electrical Energy " + this.decimalPipe.transform(this.electricalEnergy, '1.0-2') + `  ${this.units}/hr`,
+          name: this.getNameLabel("Electrical Energy ", this.electricalEnergy, electricalValue),
           value: electricalValue,
           x: .02,
           y: .5,
@@ -394,7 +402,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
         
         this.nodes.push(
           {
-            name: "Exothermic Heat " + this.decimalPipe.transform(this.exothermicHeat, '1.0-2') + `  ${this.units}/hr`,
+            name: this.getNameLabel('Exothermic Heat', this.exothermicHeat, this.exothermicHeatValue),
             value: this.exothermicHeatValue,
             x: .02,
             y: .95,
@@ -413,7 +421,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
       this.nodes.push(
         {
-          name: "Electrical Energy " + this.decimalPipe.transform(this.energyInput, '1.0-2') + `  ${this.units}/hr`,
+          name: this.getNameLabel("Electrical Energy", this.energyInput, electricalEnergyValue),
           value: electricalEnergyValue,
           x: .02,
           y: .5,
@@ -564,7 +572,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   // }
 
   addLossNode(loss: number, lossValue: number, lossName: string, lossNodeYIndex: number) {
-    let lossNodeYPositions = [.1, .9, .2, .8, .1, .9, .2, .8, .1, .9, .2, .8, .1, .9, .2, .8];
+    let lossNodeYPositions = [.1, .9, .2, .8, .15, .9, .2, .8, .1, .9, .2, .8, .1, .9, .2, .8];
 
     if (this.currentSourceIndex < this.additionalLossConnectorIndex) {
       this.totalLosses += loss;
@@ -600,7 +608,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       this.lossNodeXPosition += .05
       this.nodes.push(
         {
-          name: `${lossName} ${this.decimalPipe.transform(loss, '1.0-2')} ${this.units}/hr`,
+          name: this.getNameLabel(lossName, loss, lossValue),
           value: lossValue,
           x: this.lossNodeXPosition,
           y: lossNodeYPositions[lossNodeYIndex],
@@ -631,9 +639,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   }
 
   addEndNode(chargeMaterialLoss) {
-    let adjustedInput = this.exothermicHeat? this.energyInput + this.exothermicHeat : this.energyInput;
-    
-    let chargeMaterialLossValue = (chargeMaterialLoss / adjustedInput) * 100;
+    let chargeMaterialLossValue = (chargeMaterialLoss / this.energyInput) * 100;
     if (chargeMaterialLossValue > 0) {
      if (chargeMaterialLossValue > this.minPlotlyDisplayValue) {
        if (this.hasLossConnectors) {
@@ -644,7 +650,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
         }
        this.nodes.push(
          {
-           name: "Charge Material " + this.decimalPipe.transform(chargeMaterialLoss, '1.0-2') + `  ${this.units}/hr`,
+           name: this.getNameLabel("Charge Material", chargeMaterialLoss, chargeMaterialLossValue),
            value: chargeMaterialLossValue,
            x: .9,
            y: .6,
@@ -694,6 +700,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
     if (tmpExothermicHeat !== 0 && tmpExothermicHeat !== null) {
       this.exothermicHeat = Math.abs(tmpExothermicHeat);
       this.exothermicHeatValue = (this.exothermicHeat / (this.energyInput + this.exothermicHeat)) * 100;
+      this.energyInput = this.energyInput + this.exothermicHeat;
     }
   }
 
@@ -711,6 +718,18 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       this.fuelEnergy = totalFuelEnergy;
     }
 
+  }
+
+  getNameLabel(lossName: string, loss: number, lossValue: number) {
+    let nameLabel: string;
+    if (this.labelStyle == 'both') {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-2')} ${this.units}/hr (${this.decimalPipe.transform(lossValue, '1.1-1')}%)`
+    } else if (this.labelStyle == 'power') {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-2')} ${this.units}/hr`
+    } else {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(lossValue, '1.1-1')}%`
+    }
+    return nameLabel;
   }
 
   addGradientElement(): void {

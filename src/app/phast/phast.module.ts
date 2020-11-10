@@ -78,7 +78,7 @@ import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
     TabsTooltipModule,
     ToastModule,
     UnitConverterModule,
-    PhastSankeyModule
+    PhastSankeyModule,
   ],
   providers: [
     PhastService,
