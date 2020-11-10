@@ -55,6 +55,7 @@ import { WasteWaterReportRollupService } from './waste-water-report-rollup.servi
 import { WasteWaterSummaryComponent } from './report-summary/waste-water-summary/waste-water-summary.component';
 import { WasteWaterReportModule } from '../waste-water/waste-water-report/waste-water-report.module';
 import { WasteWaterRollupComponent } from './waste-water-rollup/waste-water-rollup.component';
+import { WasteWaterRollupPrintComponent } from './waste-water-rollup/waste-water-rollup-print/waste-water-rollup-print.component';
 
 @NgModule({
   imports: [
@@ -108,6 +109,7 @@ import { WasteWaterRollupComponent } from './waste-water-rollup/waste-water-roll
     RollupSummaryEnergyTableComponent,
     WasteWaterSummaryComponent,
     WasteWaterRollupComponent,
+    WasteWaterRollupPrintComponent,
 
   ],
   providers: [

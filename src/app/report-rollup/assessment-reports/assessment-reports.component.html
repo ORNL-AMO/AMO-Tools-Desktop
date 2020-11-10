@@ -110,7 +110,7 @@
     <div *ngIf="_wasteWaterAssessments.length > 0 && rollupPrintOptions.printWasteWaterRollup" class="row"
         [ngClass]="{'page-break-before': _psatAssessments.length != 0 || _phastAssessments.length != 0 || _fsatAssessments.length != 0 || _ssmtAssessments.length != 0 || _treasureHuntAssessments.length != 0}">
         <div class="col-12">
-            <!--TODO:-->
+            <app-waste-water-rollup [printView]="true"></app-waste-water-rollup>
         </div>
     </div>
 

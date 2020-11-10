@@ -13,7 +13,7 @@ import * as _ from 'lodash';
 })
 export class WasteWaterRollupComponent implements OnInit {
   @Input()
-  inPrintView: boolean;
+  printView: boolean;
 
   pieChartDataOption: string = 'energy';
   barChartDataOption: string;

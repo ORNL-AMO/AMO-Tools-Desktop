@@ -1,5 +1,5 @@
 <!--not print view-->
-<div *ngIf="!inPrintView">
+<div *ngIf="!printView">
     <!--energy use pie and table-->
     <div class="row">
         <div class="col-12 pt-2">
@@ -45,3 +45,9 @@
         </div>
     </div>
 </div>
+
+<!--print-->
+<app-waste-water-rollup-print *ngIf="printView" [energyBarChartData]="energyBarChartData"
+    [costBarChartData]="costBarChartData" [pieChartData]="pieChartData"
+    [rollupSummaryTableData]="rollupSummaryTableData">
+</app-waste-water-rollup-print>
