@@ -4,7 +4,6 @@
     <div class="modal-dialog">
         <div class="modal-content" *ngIf="assessmentModalType != undefined">
             <div class="modal-header">
-                <!-- <h5>Pump Assessment Rollup</h5> -->
                 {{assessmentModalLabel}}
                 <button class="close" aria-label="Close" (click)="hideAssessmentRollupModal()">
                     <span aria-hidden="true">&times;</span>
@@ -23,6 +22,7 @@
                 </app-report-rollup-units>
                 <app-treasure-hunt-rollup *ngIf="assessmentModalType == 'treasureHunt'">
                 </app-treasure-hunt-rollup>
+                <app-waste-water-rollup *ngIf="assessmentModalType == 'waste-water'"></app-waste-water-rollup>
             </div>
         </div>
     </div>

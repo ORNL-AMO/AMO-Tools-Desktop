@@ -54,6 +54,7 @@ import { TreasureHuntReportRollupService } from './treasure-hunt-report-rollup.s
 import { WasteWaterReportRollupService } from './waste-water-report-rollup.service';
 import { WasteWaterSummaryComponent } from './report-summary/waste-water-summary/waste-water-summary.component';
 import { WasteWaterReportModule } from '../waste-water/waste-water-report/waste-water-report.module';
+import { WasteWaterRollupComponent } from './waste-water-rollup/waste-water-rollup.component';
 
 @NgModule({
   imports: [
@@ -106,6 +107,7 @@ import { WasteWaterReportModule } from '../waste-water/waste-water-report/waste-
     RollupSummaryPieChartComponent,
     RollupSummaryEnergyTableComponent,
     WasteWaterSummaryComponent,
+    WasteWaterRollupComponent,
 
   ],
   providers: [
