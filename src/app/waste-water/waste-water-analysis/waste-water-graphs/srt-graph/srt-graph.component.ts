@@ -17,6 +17,8 @@ export class SrtGraphComponent implements OnInit {
   hideActionsMenu: boolean;
   @Input()
   printView: boolean;
+  @Input()
+  settings: Settings;
 
   @ViewChild('srtGraphItem', { static: false }) srtGraphItem: ElementRef;
 
@@ -28,6 +30,9 @@ export class SrtGraphComponent implements OnInit {
     this.xAxisHoverSub = this.wasteWaterAnalysisService.xAxisHover.subscribe(val => {
       this.setHover(val);
     });
+    if(!this.settings){
+      this.settings = this.wasteWaterService.settings.getValue();
+    }
   }
 
   ngOnDestroy() {
@@ -39,9 +44,8 @@ export class SrtGraphComponent implements OnInit {
   }
 
   plotChart(){
-    let settings: Settings = this.wasteWaterService.settings.getValue();
     let unitSuffix: string = this.analysisGraphItem.dataVariable.imperialUnit;
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure == 'Metric') {
       unitSuffix = this.analysisGraphItem.dataVariable.metricUnit;
     }
 

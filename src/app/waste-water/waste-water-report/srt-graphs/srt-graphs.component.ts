@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Settings } from '../../../shared/models/settings';
 import { AnalysisGraphItem, WasteWaterAnalysisService } from '../../waste-water-analysis/waste-water-analysis.service';
 
 @Component({
@@ -9,6 +10,8 @@ import { AnalysisGraphItem, WasteWaterAnalysisService } from '../../waste-water-
 export class SrtGraphsComponent implements OnInit {
   @Input()
   printView: boolean;
+  @Input()
+  settings: Settings;
 
   analysisGraphItems: Array<AnalysisGraphItem>;
   constructor(private wasteWaterAnalysisService: WasteWaterAnalysisService) { }

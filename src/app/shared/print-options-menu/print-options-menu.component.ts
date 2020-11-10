@@ -10,6 +10,7 @@ import { PhastReportRollupService } from '../../report-rollup/phast-report-rollu
 import { FsatReportRollupService } from '../../report-rollup/fsat-report-rollup.service';
 import { SsmtReportRollupService } from '../../report-rollup/ssmt-report-rollup.service';
 import { TreasureHuntReportRollupService } from '../../report-rollup/treasure-hunt-report-rollup.service';
+import { WasteWaterReportRollupService } from '../../report-rollup/waste-water-report-rollup.service';
 @Component({
   selector: 'app-print-options-menu',
   templateUrl: './print-options-menu.component.html',
@@ -30,7 +31,7 @@ export class PrintOptionsMenuComponent implements OnInit {
   showWasteWaterOptions: boolean = false;
   constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
     private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService, private fsatReportRollupService: FsatReportRollupService,
-    private ssmtReportRollupService: SsmtReportRollupService) { }
+    private ssmtReportRollupService: SsmtReportRollupService, private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
 
   ngOnInit() {
     this.setContext();
@@ -68,7 +69,7 @@ export class PrintOptionsMenuComponent implements OnInit {
       this.showPhastReportOptions = (this.phastReportRollupService.phastAssessments.getValue().length != 0);
       this.showSsmtReportOptions = (this.ssmtReportRollupService.ssmtAssessments.getValue().length != 0);
       this.showTHReportOptions = (this.treasureHuntReportRollupService.treasureHuntAssessments.getValue().length != 0);
-      // this.showWasteWaterOptions = 
+      this.showWasteWaterOptions = (this.wasteWaterReportRollupService.wasteWaterAssessments.getValue().length != 0);
     }
   }
 

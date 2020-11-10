@@ -125,6 +125,8 @@ export class SidebarComponent implements OnInit {
         this.focusedAssessment = this._ssmtAssessments[0].assessment;
       } else if (this._treasureHuntAssessments.length != 0) {
         this.focusedAssessment = this._treasureHuntAssessments[0].assessment;
+      } else if(this._wasteWaterAssessments.length != 0){
+        this.focusedAssessment = this._wasteWaterAssessments[0].assessment;
       }
     }
   }
