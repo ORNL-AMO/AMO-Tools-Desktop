@@ -45,63 +45,86 @@ export class PhastValidService {
     private otherLossessService: OtherLossesService,
   ) { }
 
-  
-  
-  checkValid(phast: PHAST): PhastValid {
-    let isChargeMaterialValid: boolean = this.checkChargeMaterialValid(phast);
-    let isFlueGasValid: boolean = this.checkFlueGasValid(phast);
-    let isFixtureValid: boolean = this.checkFixtureValid(phast);
-    let isWallValid: boolean = this.checkWallValid(phast);
-    let isCoolingValid: boolean = this.checkCoolingValid(phast);
-    let isAtmosphereValid: boolean = this.checkAtmosphereValid(phast);
-    let isOpeningValid: boolean = this.checkOpeningValid(phast);
-    let isLeakageValid: boolean = this.checkLeakageValid(phast);
-    let isExtendedValid: boolean = this.checkExtendedValid(phast);
-    let isOtherValid: boolean = this.checkOtherValid(phast);
-    let isOperationsValid: boolean = this.checkOperationsValid(phast);
-    let isSystemEfficiencyValid: boolean = this.checkSysEfficiencyValid(phast);
-    let isEnergyInputValid: boolean = this.checkEnergyInputValid(phast);
-    let isSlagValid: boolean = this.checkSlagValid(phast);
-    let isExhaustGasValid: boolean = this.checkExhaustGasValid(phast);
-    let isInputExhaustValid: boolean = this.checkInputExhaustValid(phast);
-    let isAuxPowerValid: boolean = this.checkAuxPowerValidValid(phast);
 
-    return {
-      isValid: isChargeMaterialValid 
-                && isFlueGasValid 
-                && isFixtureValid 
-                && isWallValid 
-                && isCoolingValid 
-                && isAtmosphereValid 
-                && isOpeningValid
-                && isLeakageValid 
-                && isOtherValid
-                && isExtendedValid
-                && isOperationsValid
-                && isEnergyInputValid
-                && isSystemEfficiencyValid
-                && isSlagValid
-                && isExhaustGasValid
-                && isInputExhaustValid
-                && isAuxPowerValid,
-      operationsValid: isOperationsValid,
-      chargeMaterialValid: isChargeMaterialValid,
-      flueGasValid: isFlueGasValid,
-      fixtureValid: isFixtureValid,
-      wallValid: isWallValid,
-      coolingValid: isCoolingValid,
-      atmosphereValid: isAtmosphereValid,
-      openingValid: isOpeningValid,
-      leakageValid: isLeakageValid,
-      extendedSurfaceValid: isExtendedValid,
-      otherValid: isOtherValid,
-      systemEfficiencyValid: isSystemEfficiencyValid,
-      energyInputValid: isEnergyInputValid,
-      slagValid: isSlagValid,
-      exhaustGasValid: isExhaustGasValid,
-      inputExhaustValid: isInputExhaustValid,
-      auxPowerValid: isAuxPowerValid
-    };
+
+  checkValid(phast: PHAST): PhastValid {
+    if (phast.losses) {
+      let isChargeMaterialValid: boolean = this.checkChargeMaterialValid(phast);
+      let isFlueGasValid: boolean = this.checkFlueGasValid(phast);
+      let isFixtureValid: boolean = this.checkFixtureValid(phast);
+      let isWallValid: boolean = this.checkWallValid(phast);
+      let isCoolingValid: boolean = this.checkCoolingValid(phast);
+      let isAtmosphereValid: boolean = this.checkAtmosphereValid(phast);
+      let isOpeningValid: boolean = this.checkOpeningValid(phast);
+      let isLeakageValid: boolean = this.checkLeakageValid(phast);
+      let isExtendedValid: boolean = this.checkExtendedValid(phast);
+      let isOtherValid: boolean = this.checkOtherValid(phast);
+      let isOperationsValid: boolean = this.checkOperationsValid(phast);
+      let isSystemEfficiencyValid: boolean = this.checkSysEfficiencyValid(phast);
+      let isEnergyInputValid: boolean = this.checkEnergyInputValid(phast);
+      let isSlagValid: boolean = this.checkSlagValid(phast);
+      let isExhaustGasValid: boolean = this.checkExhaustGasValid(phast);
+      let isInputExhaustValid: boolean = this.checkInputExhaustValid(phast);
+      let isAuxPowerValid: boolean = this.checkAuxPowerValidValid(phast);
+
+      return {
+        isValid: isChargeMaterialValid
+          && isFlueGasValid
+          && isFixtureValid
+          && isWallValid
+          && isCoolingValid
+          && isAtmosphereValid
+          && isOpeningValid
+          && isLeakageValid
+          && isOtherValid
+          && isExtendedValid
+          && isOperationsValid
+          && isEnergyInputValid
+          && isSystemEfficiencyValid
+          && isSlagValid
+          && isExhaustGasValid
+          && isInputExhaustValid
+          && isAuxPowerValid,
+        operationsValid: isOperationsValid,
+        chargeMaterialValid: isChargeMaterialValid,
+        flueGasValid: isFlueGasValid,
+        fixtureValid: isFixtureValid,
+        wallValid: isWallValid,
+        coolingValid: isCoolingValid,
+        atmosphereValid: isAtmosphereValid,
+        openingValid: isOpeningValid,
+        leakageValid: isLeakageValid,
+        extendedSurfaceValid: isExtendedValid,
+        otherValid: isOtherValid,
+        systemEfficiencyValid: isSystemEfficiencyValid,
+        energyInputValid: isEnergyInputValid,
+        slagValid: isSlagValid,
+        exhaustGasValid: isExhaustGasValid,
+        inputExhaustValid: isInputExhaustValid,
+        auxPowerValid: isAuxPowerValid
+      };
+    } else {
+      return {
+        isValid: false,
+        operationsValid: false,
+        chargeMaterialValid: false,
+        flueGasValid: false,
+        fixtureValid: false,
+        wallValid: false,
+        coolingValid: false,
+        atmosphereValid: false,
+        openingValid: false,
+        leakageValid: false,
+        extendedSurfaceValid: false,
+        otherValid: false,
+        systemEfficiencyValid: false,
+        energyInputValid: false,
+        slagValid: false,
+        exhaustGasValid: false,
+        inputExhaustValid: false,
+        auxPowerValid: false
+      }
+    }
   }
 
   checkExhaustGasValid(phast: PHAST): boolean {
@@ -141,7 +164,7 @@ export class PhastValidService {
       });
     }
     return valid
-    
+
   }
 
   checkOperationsValid(phast: PHAST): boolean {
@@ -151,7 +174,7 @@ export class PhastValidService {
 
   checkChargeMaterialValid(phast: PHAST): boolean {
     let valid = true;
-    if (phast.losses.chargeMaterials) {
+    if (phast.losses && phast.losses.chargeMaterials) {
       let chargeMaterialForm: FormGroup;
       phast.losses.chargeMaterials.forEach(loss => {
         if (loss.chargeMaterialType === 'Gas') {
@@ -198,7 +221,7 @@ export class PhastValidService {
           valid = false;
         }
       });
-    } 
+    }
     return valid;
   }
 
@@ -251,11 +274,11 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.openingLosses) {
       phast.losses.openingLosses.forEach(loss => {
-          let openingForm: FormGroup = this.openingLossesService.getFormFromLoss(loss);
-          if (openingForm.status === 'INVALID') {
-            valid = false;
-          }
-        });
+        let openingForm: FormGroup = this.openingLossesService.getFormFromLoss(loss);
+        if (openingForm.status === 'INVALID') {
+          valid = false;
+        }
+      });
     }
     return valid;
   }

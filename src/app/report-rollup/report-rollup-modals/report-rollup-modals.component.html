@@ -4,25 +4,25 @@
     <div class="modal-dialog">
         <div class="modal-content" *ngIf="assessmentModalType != undefined">
             <div class="modal-header">
-                <!-- <h5>Pump Assessment Rollup</h5> -->
                 {{assessmentModalLabel}}
                 <button class="close" aria-label="Close" (click)="hideAssessmentRollupModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body scroll-item" *ngIf="displayModalContent">
-                <app-psat-rollup *ngIf="assessmentModalType == 'psat'" [settings]="settings"
-                    [calculators]="selectedCalculators"></app-psat-rollup>
-                <app-phast-rollup *ngIf="assessmentModalType == 'phast'" [settings]="settings"
-                    [calculators]="selectedCalculators"></app-phast-rollup>
-                <app-fsat-rollup *ngIf="assessmentModalType == 'fsat'" [settings]="settings"
-                    [calculators]="selectedCalculators"></app-fsat-rollup>
-                <app-ssmt-rollup *ngIf="assessmentModalType == 'ssmt'" [settings]="settings"></app-ssmt-rollup>
-                <app-report-rollup-units *ngIf="assessmentModalType == 'unitsModal'" [settings]="settings"
+                <app-psat-rollup *ngIf="assessmentModalType == 'psat'" [calculators]="selectedCalculators">
+                </app-psat-rollup>
+                <app-phast-rollup *ngIf="assessmentModalType == 'phast'" [calculators]="selectedCalculators">
+                </app-phast-rollup>
+                <app-fsat-rollup *ngIf="assessmentModalType == 'fsat'" [calculators]="selectedCalculators">
+                </app-fsat-rollup>
+                <app-ssmt-rollup *ngIf="assessmentModalType == 'ssmt'"></app-ssmt-rollup>
+                <app-report-rollup-units *ngIf="assessmentModalType == 'unitsModal'"
                     (closeUnitModal)="hideAssessmentRollupModal()">
                 </app-report-rollup-units>
-                <app-treasure-hunt-rollup *ngIf="assessmentModalType == 'treasureHunt'" [settings]="settings">
+                <app-treasure-hunt-rollup *ngIf="assessmentModalType == 'treasureHunt'">
                 </app-treasure-hunt-rollup>
+                <app-waste-water-rollup *ngIf="assessmentModalType == 'waste-water'"></app-waste-water-rollup>
             </div>
         </div>
     </div>

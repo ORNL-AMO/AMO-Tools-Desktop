@@ -87,8 +87,8 @@ export class WasteWaterReportComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
-    this.showPrintMenuSub.unsubscribe();
+  ngOnDestroy() {
+    if (this.showPrintMenuSub) this.showPrintMenuSub.unsubscribe();
     this.showPrintViewSub.unsubscribe();
   }
 

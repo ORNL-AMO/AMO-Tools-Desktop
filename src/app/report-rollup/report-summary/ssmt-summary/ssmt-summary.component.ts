@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ReportRollupService } from '../../report-rollup.service';
 import { SsmtResultsData } from '../../report-rollup-models';
 import { Settings } from '../../../shared/models/settings';
+import { SsmtReportRollupService } from '../../ssmt-report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 
 @Component({
   selector: 'app-ssmt-summary',
@@ -10,57 +11,45 @@ import { Settings } from '../../../shared/models/settings';
   styleUrls: ['./ssmt-summary.component.css', '../report-summary.component.css']
 })
 export class SsmtSummaryComponent implements OnInit {
-  @Input()
-  settings: Settings;
 
+  settings: Settings;
   ssmtSavingPotential: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
   assessmentSub: Subscription;
-  allSub: Subscription;
   selectedSub: Subscription;
-  resultsSub: Subscription;
-  constructor(public reportRollupService: ReportRollupService) { }
+  numSsmt: number;
+  constructor(public ssmtReportRollupService: SsmtReportRollupService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    this.assessmentSub = this.reportRollupService.ssmtAssessments.subscribe(val => {
+    this.settings = this.reportRollupService.settings.getValue();
+    this.assessmentSub = this.ssmtReportRollupService.ssmtAssessments.subscribe(val => {
+      this.numSsmt = val.length;
       if (val.length != 0) {
-        this.reportRollupService.initSsmtResultsArr(val);
+        this.ssmtReportRollupService.setAllSsmtResults(val);
+        this.ssmtReportRollupService.initSsmtCompare();
       }
-    })
-
-    this.allSub = this.reportRollupService.allSsmtResults.subscribe(val => {
+    });
+    this.selectedSub = this.ssmtReportRollupService.selectedSsmt.subscribe(val => {
       if (val.length != 0) {
-        this.reportRollupService.initSsmtCompare(val);
+        this.ssmtReportRollupService.setSsmtResultsFromSelected(val);
+        this.calcSsmtSums();
       }
-    })
-    this.selectedSub = this.reportRollupService.selectedSsmt.subscribe(val => {
-      if (val.length != 0) {
-        this.reportRollupService.getSsmtResultsFromSelected(val);
-      }
-    })
-
-    this.resultsSub = this.reportRollupService.ssmtResults.subscribe(val => {
-      if (val.length != 0) {
-        this.calcSsmtSums(val);
-      }
-    })
+    });
   }
 
   ngOnDestroy() {
     this.assessmentSub.unsubscribe();
-    this.allSub.unsubscribe();
     this.selectedSub.unsubscribe();
-    this.resultsSub.unsubscribe();
   }
 
-  calcSsmtSums(resultsData: Array<SsmtResultsData>) {
+  calcSsmtSums() {
     let sumSavings = 0;
     let sumEnergy = 0;
     let sumCost = 0;
     let sumEnergySavings = 0;
-    resultsData.forEach(result => {
+    this.ssmtReportRollupService.selectedSsmtResults.forEach(result => {
       let diffCost = result.baselineResults.operationsOutput.totalOperatingCost - result.modificationResults.operationsOutput.totalOperatingCost;
       sumSavings += diffCost;
       sumCost += result.modificationResults.operationsOutput.totalOperatingCost;
