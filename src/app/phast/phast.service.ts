@@ -876,23 +876,15 @@ export class PhastService {
     return sumAdditionalHeat;
   }
 
-  sumGrossHeat(losses: Losses) {
-
+  getMinElectricityInputRequirement(losses: Losses, settings: Settings): number {
+    if (losses.exhaustGasEAF.length == 0) {
+      let exothermicHeat = 0 - Math.abs(this.sumChargeMaterialExothermic(losses.chargeMaterials, settings));
+      let totalInput = this.sumHeatInput(losses, settings);
+      let tmpResults = this.energyInputEAF(losses.energyInputEAF[0], settings);
+      return totalInput - tmpResults.totalChemicalEnergyInput - exothermicHeat
+    } else {
+      return undefined;
+    }
   }
-
-  // sumAuxiliaryEquipment(phast: PHAST, results: Array<any>) {
-  //   let sum = 0;
-  //   results.forEach(result => {
-  //     if (result.motorPower == 'Calculated') {
-  //       sum += result.totalPower;
-  //     } else if (result.motorPower == 'Rated') {
-  //       if (result.totalPower != 0) {
-  //         let convert = this.convertUnitsService.value(result.totalPower).from('hp').to('kW');
-  //         sum += convert;
-  //       }
-  //     }
-  //   })
-  //   return sum;
-  // }
 }
 

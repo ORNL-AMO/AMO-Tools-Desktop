@@ -105,7 +105,7 @@ export class PhastResultsService {
 
     //EAF
     if (resultCats.showEnInput1 && this.checkLoss(phast.losses.energyInputEAF)) {
-      let tmpForm = this.energyInputService.getFormFromLoss(phast.losses.energyInputEAF[0]);
+      let tmpForm = this.energyInputService.getFormFromLoss(phast.losses.energyInputEAF[0], undefined);
       if (tmpForm.status === 'VALID') {
         let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
         results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
