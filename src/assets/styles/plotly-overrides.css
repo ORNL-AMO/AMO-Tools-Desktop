@@ -1,7 +1,7 @@
-/* sankey overrides */
+/* SSMT sankey overrides */
 /* =========================== */
 
-/*  Starting link color */
+
 app-psat-sankey > 
 div.js-plotly-plot >
 div.plot-container.plotly >
@@ -41,7 +41,6 @@ path.sankey-link {
     fill-opacity: .9 !important;
 }
 
-/*  Motor loss link color */
 app-psat-sankey > 
 div.js-plotly-plot >
 div.plot-container.plotly >
@@ -54,7 +53,6 @@ path.sankey-link:nth-child(3) {
     fill-opacity: .9 !important;
 }
 
-/* Drive loss link color */
 app-psat-sankey > 
 div.js-plotly-plot >
 div.plot-container.plotly >
@@ -67,7 +65,7 @@ path.sankey-link:nth-child(4) {
     fill-opacity: .9 !important;
 }
 
-/*  Ending Links color */
+
 app-psat-sankey > 
 div.js-plotly-plot >
 div.plot-container.plotly >
@@ -94,7 +92,6 @@ path.sankey-link {
 }
 
 
-/*  Motor loss link color */
 app-fsat-sankey > 
 div.js-plotly-plot >
 div.plot-container.plotly >
@@ -107,7 +104,6 @@ path.sankey-link:nth-child(3) {
     fill-opacity: .9 !important;
 }
 
-/* Fan loss link color */
 app-fsat-sankey > 
 div.js-plotly-plot >
 div.plot-container.plotly >
@@ -120,7 +116,6 @@ path.sankey-link:nth-child(4) {
     fill-opacity: .9 !important;
 }
 
-/*  Ending Links color */
 app-fsat-sankey > 
 div.js-plotly-plot >
 div.plot-container.plotly >
@@ -147,7 +142,7 @@ text.node-label {
   }
 
 
-app-phast-sankey > 
+app-phast-sankey >
 div >
 div.js-plotly-plot >
 div.plot-container.plotly >
@@ -159,7 +154,20 @@ g.sankey-node >
 g.node-entered >
 text.node-label {
     text-shadow: none !important;
-  }
+}
+
+app-ssmt-sankey > 
+div.js-plotly-plot >
+div.plot-container.plotly >
+div.svg-container > 
+svg.main-svg >
+g.sankey >
+g.sankey-node-set >
+g.sankey-node >
+g.node-entered >
+text.node-label {
+    text-shadow: none !important;
+}
 
 app-phast-sankey > 
 div.js-plotly-plot >

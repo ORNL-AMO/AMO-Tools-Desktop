@@ -110,6 +110,7 @@ export class PhastResultsService {
         let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
         results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
         //use grossHeatInput here because it will be updated if exhaustGasEAF exists
+        results.grossHeatInput = results.grossHeatInput + results.totalExhaustGasEAF;
         results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.totalChemicalEnergyInput;
         results.energyInputTotal = results.grossHeatInput;
       }

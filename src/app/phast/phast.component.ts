@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-phast',
@@ -74,7 +75,8 @@ export class PhastComponent implements OnInit {
     private phastCompareService: PhastCompareService,
     private cd: ChangeDetectorRef,
     private settingsDbService: SettingsDbService,
-    private assessmentDbService: AssessmentDbService) {
+    private assessmentDbService: AssessmentDbService,
+    private settingsService: SettingsService) {
   }
 
   ngOnInit() {
@@ -272,7 +274,7 @@ export class PhastComponent implements OnInit {
     if (!this.settings) {
       let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
       this.addSettings(tmpSettings);
-    }else{
+    } else {
       this.lossesService.setTabs(this.settings);
     }
   }
@@ -449,14 +451,13 @@ export class PhastComponent implements OnInit {
   }
 
   addSettings(settings: Settings) {
-    delete settings.id;
-    delete settings.directoryId;
-    settings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(settings).then(id => {
-      settings.id = id;
-      this.settings = settings;      
-      this.lossesService.setTabs(this.settings);
-      this.settingsDbService.setAll();
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        this.lossesService.setTabs(this.settings);
+      });
     });
   }
 }

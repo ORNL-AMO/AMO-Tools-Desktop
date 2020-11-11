@@ -12,6 +12,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../dashboard/assessment.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -67,6 +68,10 @@ export class SsmtComponent implements OnInit {
   modListOpen: boolean = false;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+
+  ssmtOptions: Array<any>;
+  selectedSSMT: SSMT;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
@@ -75,7 +80,8 @@ export class SsmtComponent implements OnInit {
     private assessmentDbService: AssessmentDbService,
     private compareService: CompareService,
     private assessmentService: AssessmentService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private settingsService: SettingsService
   ) { }
 
   ngOnInit() {
@@ -97,6 +103,7 @@ export class SsmtComponent implements OnInit {
         this.compareService.setCompareVals(this._ssmt);
       }
       this.getSettings();
+      this.initSankeyList();
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
         this.ssmtService.mainTab.next(tmpTab);
@@ -197,12 +204,22 @@ export class SsmtComponent implements OnInit {
     });
   }
 
+  initSankeyList() {
+    this.ssmtOptions = new Array<any>();
+    this.ssmtOptions.push({ name: 'Baseline', ssmt: this.assessment.ssmt });
+    this.selectedSSMT = this.ssmtOptions[0];
+    if (this._ssmt.modifications) {
+      this._ssmt.modifications.forEach(mod => {
+        this.ssmtOptions.push({ name: mod.ssmt.name, ssmt: mod.ssmt });
+      });
+    }
+  }
 
   getSettings() {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (!this.settings) {
-      this.settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-      this.addSettings(this.settings);
+      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(settings);
     }
   }
 
@@ -404,12 +421,12 @@ export class SsmtComponent implements OnInit {
   }
 
   addSettings(settings: Settings) {
-    delete settings.id;
-    delete settings.directoryId;
-    settings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(settings).then(id => {
-      this.settings.id = id;
-      this.settingsDbService.setAll();
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+      });
     });
   }
 }

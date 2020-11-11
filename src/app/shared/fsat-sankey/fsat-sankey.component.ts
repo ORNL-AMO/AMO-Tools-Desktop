@@ -22,6 +22,8 @@ export class FsatSankeyComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   appBackground: boolean;
+  @Input()
+  printView: boolean;
 
   @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
   energyInput: number;
@@ -199,10 +201,20 @@ export class FsatSankeyComponent implements OnInit {
       layout.plot_bgcolor = 'ececec';
     }
 
-    const config = {
-      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
-      responsive: true
-    };
+    let config;
+    if (this.printView) {
+      config = {
+        modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
+        displaylogo: false,
+        displayModeBar: false,
+        responsive: false
+      };
+    } else {
+      config = {
+        modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
+        responsive: true
+      };
+    }
 
     Plotly.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config);
     this.addGradientElement();
