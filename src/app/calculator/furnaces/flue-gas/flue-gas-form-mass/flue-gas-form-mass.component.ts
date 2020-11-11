@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '
 import { FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
+import { FlueGasWarnings } from '../../../../phast/losses/flue-gas-losses/flue-gas-losses.service';
 import { PhastService } from '../../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FlueGas, FlueGasByMass } from '../../../../shared/models/phast/losses/flueGas';
@@ -44,8 +45,10 @@ export class FlueGasFormMassComponent implements OnInit {
   calculationExcessAir: number = 0.0;
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
-  stackTemperatureWarning: boolean = false;
+  flueTemperatureWarning: boolean = false;
   tempMin: number;
+  warnings: FlueGasWarnings;
+;
 
   constructor(private flueGasService: FlueGasService, 
               private phastService: PhastService, 
@@ -97,7 +100,6 @@ export class FlueGasFormMassComponent implements OnInit {
     this.tempMin = 212;
     this.tempMin = this.convertUnitsService.value(this.tempMin).from('F').to(this.settings.steamTemperatureMeasurement);
     this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
-    this.checkStackLossTemp();
     this.calculate();
   }
 
@@ -120,6 +122,11 @@ export class FlueGasFormMassComponent implements OnInit {
     this.initFormSetup();
   }
 
+  checkWarnings() {
+    let tmpLoss: FlueGasByMass = this.flueGasService.buildByMassLossFromForm(this.byMassForm);
+    this.warnings = this.flueGasService.setByMassWarnings(tmpLoss);
+  }
+
   setCalcMethod() {
     if (this.byMassForm.controls.oxygenCalculationMethod.value === 'Excess Air') {
       this.calcMethodExcessAir = true;
@@ -128,7 +135,6 @@ export class FlueGasFormMassComponent implements OnInit {
     }
   }
   
-  // TODO move to service
   calcExcessAir() {
     let input = {
       carbon: this.byMassForm.controls.carbon.value,
@@ -173,6 +179,8 @@ export class FlueGasFormMassComponent implements OnInit {
   }
 
   calculate() {
+    this.checkFlueGasTemp();
+    this.checkWarnings();
     if (this.isBaseline) {
       let currentBaselineData: FlueGas = this.flueGasService.baselineData.getValue();
       let currentBaselineByMass: FlueGasByMass = this.flueGasService.buildByMassLossFromForm(this.byMassForm)
@@ -203,11 +211,11 @@ export class FlueGasFormMassComponent implements OnInit {
     });
   }
 
-  checkStackLossTemp() {
+  checkFlueGasTemp() {
     if (this.byMassForm.controls.flueGasTemperature.value && this.byMassForm.controls.flueGasTemperature.value < this.tempMin) {
-      this.stackTemperatureWarning = true;
+      this.flueTemperatureWarning = true;
     } else {
-      this.stackTemperatureWarning = false;
+      this.flueTemperatureWarning = false;
     }
   }
 

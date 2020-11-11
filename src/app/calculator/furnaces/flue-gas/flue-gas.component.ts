@@ -1,5 +1,4 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FlueGas, FlueGasOutput } from '../../../shared/models/phast/losses/flueGas';
@@ -50,7 +49,7 @@ export class FlueGasComponent implements OnInit {
               private flueGasService: FlueGasService) { }
 
   ngOnInit() {
-    // TODO haven't built results - default to help
+    // TODO results not yet built - default to help
     // if (this.settingsDbService.globalSettings.defaultPanelTab) {
     //   this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     // }
@@ -62,7 +61,6 @@ export class FlueGasComponent implements OnInit {
     if(!existingInputs) {
       this.flueGasService.initDefaultEmptyInputs(this.settings);
       this.flueGasService.initDefaultEmptyOutput();
-      // this.createModification();
     }
     this.initSubscriptions();
     if(this.modificationData) {

@@ -21,7 +21,7 @@
       <span class="alert-danger pull-right small"
         *ngIf="byMassForm.controls.flueGasTemperature.invalid && !byMassForm.controls.flueGasTemperature.pristine">
         <span *ngIf="byMassForm.controls.flueGasTemperature.errors.required">Value Required</span>
-        <span *ngIf="byMassForm.controls.flueGasTemperature.errors.min">Value can't be less than Ambient Temperature
+        <span *ngIf="byMassForm.controls.flueGasTemperature.errors.min">Value can't be less than Combustion Temperature
           ({{byMassForm.controls.flueGasTemperature.errors.min.min}}
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>,).</span>
       </span>
@@ -40,6 +40,7 @@
         (focus)="focusField('oxygenCalculationMethod')" >
         <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
       </select>
+      <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
     </div>
 
     <div class="form-group" *ngIf="!calcMethodExcessAir">
@@ -50,13 +51,15 @@
           (focus)="focusField('o2InFlueGas')" >
         <span class="input-group-addon units">%</span>
       </div>
-      <!-- <span class="alert-warning pull-right small" *ngIf="calculationWarning !== null">{{calculationWarning}}</span> -->
+      <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
       <div class="form-group">
         <label class="small">Excess Air</label>
         <div class="text-center small">
           {{calculationExcessAir | number:'2.2-2'}} %
         </div>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="warnings.excessAirWarning !== null">{{warnings.excessAirWarning}}</span>
+
       <span class="alert-danger pull-right small"
         *ngIf="byMassForm.controls.o2InFlueGas.invalid && !byMassForm.controls.o2InFlueGas.pristine">
         <span *ngIf="byMassForm.controls.o2InFlueGas.errors.required">Value Required</span>
@@ -81,7 +84,8 @@
           (input)="calcExcessAir()" (focus)="focusField('excessAirPercentage')" >
         <span class="input-group-addon units">%</span>
       </div>
-      <!-- <span class="alert-warning pull-right small" *ngIf="calculationWarning !== null">{{calculationWarning}}</span> -->
+      <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
+
       <span class="alert-danger pull-right small"
         *ngIf="byMassForm.controls.excessAirPercentage.invalid && !byMassForm.controls.excessAirPercentage.pristine">
         <span *ngIf="byMassForm.controls.excessAirPercentage.errors.required">Value Required</span>
@@ -101,7 +105,8 @@
         <span class="input-group-addon units"><span
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
       </div>
-      <!-- <span class="alert-warning pull-right small" *ngIf="combustionAirTempWarning !== null">{{combustionAirTempWarning}}</span> -->
+      <span class="alert-warning pull-right small" *ngIf="warnings.combustionAirTempWarning !== null">{{warnings.combustionAirTempWarning}}</span>
+
       <span class="alert-danger pull-right small"
         *ngIf="byMassForm.controls.combustionAirTemperature.invalid && !byMassForm.controls.combustionAirTemperature.pristine">
         <span *ngIf="byMassForm.controls.combustionAirTemperature.errors.required">Value Required</span>
@@ -130,7 +135,8 @@
           (input)="calculate()" (focus)="focusField('moistureInAirComposition')" >
         <span class="input-group-addon units">%</span>
       </div>
-      <!-- <span class="alert-warning pull-right small" *ngIf="moistureInAirCompositionError !== null">{{moistureInAirCompositionError}}</span> -->
+      <span class="alert-warning pull-right small" *ngIf="warnings.moistureInAirCompositionWarning !== null">{{warnings.moistureInAirCompositionWarning}}</span>
+
       <span class="alert-danger pull-right small"
         *ngIf="byMassForm.controls.moistureInAirComposition.invalid && !byMassForm.controls.moistureInAirComposition.pristine">
         <span *ngIf="byMassForm.controls.moistureInAirComposition.errors.required">Value Required</span>
@@ -164,7 +170,8 @@
           (focus)="focusField('unburnedCarbonInAsh')" >
         <span class="input-group-addon units">%</span>
       </div>
-      <!-- <span class="alert-warning pull-right small" *ngIf="unburnedCarbonInAshError !== null">{{unburnedCarbonInAshError}}</span> -->
+      <span class="alert-warning pull-right small" *ngIf="warnings.unburnedCarbonInAshWarning !== null">{{warnings.unburnedCarbonInAshWarning}}</span>
+
       <span class="alert-danger pull-right small"
         *ngIf="byMassForm.controls.unburnedCarbonInAsh.invalid && !byMassForm.controls.unburnedCarbonInAsh.pristine">
         <span *ngIf="byMassForm.controls.unburnedCarbonInAsh.errors.required">Value Required</span>
@@ -187,17 +194,11 @@
     </div>
     <span class="alert-danger pull-right small"
       *ngIf="byMassForm.controls.heatInput.invalid && !byMassForm.controls.heatInput.pristine">
-      <!-- <span *ngIf="byMassForm.controls.heatInput.errors.required">Value Required</span>
-      <span *ngIf="byMassForm.controls.heatInput.errors.min">Value can't be less than Ambient Temperature
+      <span *ngIf="byMassForm.controls.heatInput.errors.required">Value Required</span>
+      <span *ngIf="byMassForm.controls.heatInput.errors.min">Value can't be less than
         ({{byMassForm.controls.heatInput.errors.min.min}}
-        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>,).</span> -->
+        <span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr</span>
     </span>
-    <!-- <span class="alert-warning small" *ngIf="flueTemperatureWarning == true">
-      Flue Temperature less than {{tempMin}} <span
-        [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>, gases may be condensing in the
-      flue and
-      calculated efficiency may not be valid.
-    </span> -->
   </div>
 </form>
 

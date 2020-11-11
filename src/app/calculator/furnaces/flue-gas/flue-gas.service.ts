@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { PhastService } from '../../../phast/phast.service';
+import { FlueGasLossesService } from '../../../phast/losses/flue-gas-losses/flue-gas-losses.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
@@ -9,12 +9,12 @@ declare var phastAddon: any;
 
 @Injectable()
 export class FlueGasService {
-  flueGasInput: FlueGas = {
-    flueGasType: undefined,
-    flueGasByVolume: undefined,
-    flueGasByMass: undefined,
-    name: undefined
-  };
+  // flueGasInput: FlueGas = {
+  //   flueGasType: undefined,
+  //   flueGasByVolume: undefined,
+  //   flueGasByMass: undefined,
+  //   name: undefined
+  // };
   baselineData: BehaviorSubject<FlueGas>;
   modificationData: BehaviorSubject<FlueGas>;
   output: BehaviorSubject<FlueGasOutput>;
@@ -24,7 +24,9 @@ export class FlueGasService {
   generateExample: BehaviorSubject<boolean>;
 
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) {
+  constructor(private formBuilder: FormBuilder, 
+              private convertUnitsService: ConvertUnitsService, 
+              private flueGasLossesService: FlueGasLossesService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
     this.baselineData = new BehaviorSubject<FlueGas>(undefined);
@@ -205,22 +207,8 @@ export class FlueGasService {
   calculate(settings: Settings, inModal = false) {
     let baselineFlueGas = this.baselineData.getValue();
     let modificationFlueGas = this.modificationData.getValue();
-    // let output: FlueGasOutput = {
-    //   baseline: {
-    //     availableHeat: 0,
-    //     flueGasLosses: 0
-    //   },
-    //   modification: {
-    //     availableHeat: 0,
-    //     flueGasLosses: 0
-    //   }
-    // };
-    // this.initDefaultEmptyOutput();
+
     let output = this.output.getValue();
-
-    // let availableHeat: number;
-    // let flueGasLosses: number;
-
     let baselineResults = this.getFlueGasResult(baselineFlueGas, settings);
     if (baselineResults) {
       output.baseline = baselineResults;
@@ -233,9 +221,6 @@ export class FlueGasService {
     }
 
     this.output.next(output);
-    if (inModal == true) {
-      // TODO send call to emit results up when calculating as flue gas modal
-    }
   }
 
   getFlueGasResult(flueGasData: FlueGas, settings: Settings) {
@@ -243,7 +228,6 @@ export class FlueGasService {
       availableHeat: 0,
       flueGasLosses: 0
     }
-
     if (flueGasData.flueGasType == 'By Volume' && flueGasData.flueGasByVolume) {
       let availableHeat = this.flueGasByVolume(flueGasData.flueGasByVolume, settings);
       result.availableHeat = availableHeat * 100;
@@ -306,7 +290,7 @@ export class FlueGasService {
 
   generateExampleData(settings: Settings) {
     let exampleCombAirTemp: number = 80;
-    let exampleFlueGasTemp: number = 320;
+    let exampleFlueGasTemp: number = 900;
     let exampleFuelTemp: number = 80;
     if(settings.unitsOfMeasure != 'Imperial'){
       exampleCombAirTemp = this.convertUnitsService.value(exampleCombAirTemp).from('F').to('C');
@@ -360,20 +344,30 @@ export class FlueGasService {
         O2: 0.1,
         SO2: 0,
         combustionAirTemperature: exampleCombAirTemp,
-        excessAirPercentage: 17,
-        flueGasTemperature: exampleFlueGasTemp,
+        excessAirPercentage: 10,
+        flueGasTemperature: 250,
         fuelTemperature: exampleFuelTemp,
         gasTypeId: 1,
         o2InFlueGas: 3.124,
         oxygenCalculationMethod: "Excess Air",
-        heatInput: 27,
+        heatInput: 15,
       },
       flueGasType: 'By Volume',
       name: 'Modification Flue Gas'
     }
     this.baselineData.next(exampleBaseline);
     this.modificationData.next(exampleMod);
-    // this.flueGasService.generateExample.next(true);
 
   }
+
+  setByMassWarnings(tmpLoss: FlueGasByMass) {
+    let warnings = this.flueGasLossesService.checkFlueGasByMassWarnings(tmpLoss);
+    return warnings;
+  }
+
+  setByVolumeWarnings(tmpLoss: FlueGasByMass) {
+    let warnings = this.flueGasLossesService.checkFlueGasByVolumeWarnings(tmpLoss);
+    return warnings;
+  }
+
 }

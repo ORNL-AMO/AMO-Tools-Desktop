@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChi
 import { FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
+import { FlueGasWarnings } from '../../../../phast/losses/flue-gas-losses/flue-gas-losses.service';
 import { PhastService } from '../../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FlueGas, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
@@ -43,8 +44,9 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   calculationExcessAir: number = 0.0;
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
-  stackTemperatureWarning: boolean = false;
+  flueTemperatureWarning: boolean = false;
   tempMin: number;
+  warnings: FlueGasWarnings;
 
   constructor(private flueGasService: FlueGasService, 
               private phastService: PhastService, 
@@ -97,7 +99,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.tempMin = 212;
     this.tempMin = this.convertUnitsService.value(this.tempMin).from('F').to(this.settings.steamTemperatureMeasurement);
     this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
-    this.checkStackLossTemp();
     this.calculate();
   }
 
@@ -119,6 +120,11 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.initFormSetup();
   }
 
+  checkWarnings() {
+    let tmpLoss: FlueGasByVolume = this.flueGasService.buildByVolumeLossFromForm(this.byVolumeForm);
+    this.warnings = this.flueGasService.setByVolumeWarnings(tmpLoss);
+  }
+
   setCalcMethod() {
     if (this.byVolumeForm.controls.oxygenCalculationMethod.value === 'Excess Air') {
       this.calcMethodExcessAir = true;
@@ -127,7 +133,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     }
   }
   
-  // TODO move to service
   calcExcessAir() {
     let input = {
       CH4: this.byVolumeForm.controls.CH4.value,
@@ -174,16 +179,10 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     }
     this.calculate();
   }
-
-  // checkWarnings() {
-  //   let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(this.flueGasLossForm).flueGasByVolume;
-  //   this.warnings = this.flueGasLossesService.checkFlueGasByVolumeWarnings(tmpLoss);
-  //   let hasWarning: boolean = this.flueGasLossesService.checkWarningsExist(this.warnings);
-  //   this.inputError.emit(hasWarning);
-  // }
   
   calculate() {
-    // this.checkWarnings();
+    this.checkFlueGasTemp();
+    this.checkWarnings();
     if (this.isBaseline) {
       let currentBaselineData: FlueGas = this.flueGasService.baselineData.getValue();
       let currentBaselineByVolume: FlueGasByVolume = this.flueGasService.buildByVolumeLossFromForm(this.byVolumeForm)
@@ -216,11 +215,11 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.setCalcMethod();
   }
 
-  checkStackLossTemp() {
+  checkFlueGasTemp() {
     if (this.byVolumeForm.controls.flueGasTemperature.value && this.byVolumeForm.controls.flueGasTemperature.value < this.tempMin) {
-      this.stackTemperatureWarning = true;
+      this.flueTemperatureWarning = true;
     } else {
-      this.stackTemperatureWarning = false;
+      this.flueTemperatureWarning = false;
     }
   }
 
@@ -230,6 +229,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     if (this.byVolumeForm.controls.combustionAirTemperature.value) {
       this.byVolumeForm.controls.combustionAirTemperature.markAsDirty();
     }
+    this.calculate();
   }
 
   setFuelTempValidation() {
@@ -238,6 +238,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     if (this.byVolumeForm.controls.flueGasTemperature.value) {
       this.byVolumeForm.controls.flueGasTemperature.markAsDirty();
     }
+    this.calculate();
   }
 
   setProperties() {
