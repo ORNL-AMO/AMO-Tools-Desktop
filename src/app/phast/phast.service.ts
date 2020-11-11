@@ -877,7 +877,7 @@ export class PhastService {
   }
 
   getMinElectricityInputRequirement(losses: Losses, settings: Settings): number {
-    if (losses.exhaustGasEAF.length == 0) {
+    if (losses.exhaustGasEAF && losses.exhaustGasEAF.length == 0) {
       let exothermicHeat = 0 - Math.abs(this.sumChargeMaterialExothermic(losses.chargeMaterials, settings));
       let totalInput = this.sumHeatInput(losses, settings);
       let tmpResults = this.energyInputEAF(losses.energyInputEAF[0], settings);
