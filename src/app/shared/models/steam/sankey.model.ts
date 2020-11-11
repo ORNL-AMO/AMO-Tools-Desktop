@@ -5,7 +5,7 @@ export interface SSMTSankeyNode {
     y: number,
     nodeColor: string,
     source: number,
-    target: number[],
+    target: number[],   
     isConnector: boolean,
     isConnectingPath?: boolean,
     isCircularFlow?: boolean,

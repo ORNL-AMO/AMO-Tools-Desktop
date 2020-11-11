@@ -46,7 +46,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   units: string = 'MMBtu';
 
   // node/link not rendered or too small to see
-  minPlotlyDisplayValue = .1;
+  minPlotlyDisplayValue = .2;
 
   constructor(private calculateLossesService: CalculateLossesService, private ssmtService: SsmtService,
     private _dom: ElementRef,
@@ -248,19 +248,29 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     this.nodes = [];
     let energyInput = this.losses.fuelEnergy + this.losses.makeupWaterEnergy;
     let stackLosses = this.losses.stack + this.losses.blowdown;
-    let otherLosses = this.losses.highPressureHeader + this.losses.mediumPressureHeader + this.losses.lowPressureHeader + this.losses.condensateLosses + this.losses.deaeratorVentLoss;
     let turbineLosses = this.losses.condensingTurbineEfficiencyLoss + this.losses.highToMediumTurbineEfficiencyLoss + this.losses.highToLowTurbineEfficiencyLoss + this.losses.mediumToLowTurbineEfficiencyLoss + this.losses.condensingLosses
     let turbineGeneration = this.losses.condensingTurbineUsefulEnergy + this.losses.highToLowTurbineUsefulEnergy + this.losses.highToMediumTurbineUsefulEnergy + this.losses.mediumToLowTurbineUsefulEnergy;
     let processUsage = this.losses.highPressureProcessUsage + this.losses.mediumPressureProcessUsage + this.losses.lowPressureProcessUsage;
     let unreturnedCondensate = this.losses.lowPressureProcessLoss + this.losses.highPressureProcessLoss + this.losses.mediumPressureProcessLoss;
     
+
+    let otherLosses = this.losses.highPressureHeader + this.losses.mediumPressureHeader + this.losses.lowPressureHeader + this.losses.condensateLosses + this.losses.deaeratorVentLoss + this.losses.condensateFlashTankLoss;
+    if (!isNaN(this.losses.lowPressureVentLoss)) {
+      otherLosses + this.losses.lowPressureVentLoss;
+    }
     // Returned condensate and steam
     let returnedCondensate = 0;
-    if (this.results.outputData.deaeratorOutput.feedwaterEnergyFlow) {
-      returnedCondensate = this.results.outputData.deaeratorOutput.feedwaterEnergyFlow;
-    }
+    let returnedCondensateValue = 0;
     let originalEnergyInput = energyInput;
     let energyInputValue = (energyInput / originalEnergyInput) * 100;
+    
+    if (this.results.outputData.deaeratorOutput.feedwaterEnergyFlow) {
+      returnedCondensate = this.results.outputData.deaeratorOutput.feedwaterEnergyFlow;
+      returnedCondensateValue = (returnedCondensate / energyInput) * 100;
+    }
+    // Return condensate loops back into energyInput
+    let adjustedEnergyInput = energyInput + returnedCondensate;
+    energyInputValue += returnedCondensateValue;
     
     let stackLossValue = (stackLosses / energyInput) * 100;
     let otherLossValue = (otherLosses / energyInput) * 100;
@@ -268,11 +278,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let turbineGenerationValue = (turbineGeneration / energyInput) * 100;
     let unreturnedCondensateValue = (unreturnedCondensate / energyInput) * 100;
     let processUsageValue = (processUsage / energyInput) * 100;
-    let returnedCondensateValue = (returnedCondensate / energyInput) * 100;
     
-    // Return condensate loops back into energyInput
-    let adjustedEnergyInput = energyInput + returnedCondensate;
-    energyInputValue += returnedCondensateValue;
 
     let lossConnectorTargets = [3]; 
     let usefulConnectorTargets = [];
@@ -616,6 +622,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let nodes = this._dom.nativeElement.querySelectorAll('.sankey-node');
     let fillOpacity = 1;
     let fill: string;
+    let returnedCondensateNode = this.nodes.length - 2;
 
     for (let i = 0; i < links.length; i++) {
       if (this.redLinkPaths.includes(i + 1)) {
@@ -633,7 +640,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       }
       links[i].setAttribute('style', `fill: ${fill}; opacity: 1; fill-opacity: ${fillOpacity};`);
       
-      if (i == this.nodes.length - 1) {
+      if (i == returnedCondensateNode) {
         this.setNodeLabelSpacing(nodes[i]);
       }
     }
