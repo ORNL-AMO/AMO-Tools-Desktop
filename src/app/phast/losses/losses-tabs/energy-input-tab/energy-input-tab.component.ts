@@ -1,11 +1,16 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
-import { PHAST } from '../../../../shared/models/phast/phast';
+import { Losses, PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { EnergyInputService } from '../../energy-input/energy-input.service';
 import { EnergyInputCompareService } from '../../energy-input/energy-input-compare.service';
 import { EnergyInputEAF } from '../../../../shared/models/phast/losses/energyInputEAF';
 import { Subscription } from 'rxjs';
+import { ExhaustGasCompareService } from '../../exhaust-gas/exhaust-gas-compare.service';
+import { PhastService } from '../../../phast.service';
+import { ExhaustGasEAF } from '../../../../shared/models/phast/losses/exhaustGasEAF';
+import { Settings } from '../../../../shared/models/settings';
+import { PhastCompareService } from '../../../phast-compare.service';
 
 @Component({
   selector: 'app-energy-input-tab',
@@ -17,6 +22,8 @@ export class EnergyInputTabComponent implements OnInit {
   phast: PHAST;
   @Input()
   inSetup: boolean;
+  @Input()
+  settings: Settings;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -28,7 +35,8 @@ export class EnergyInputTabComponent implements OnInit {
   enInput1Done: boolean;
   compareSubscription: Subscription;
   lossSubscription: Subscription;
-  constructor(private lossesService: LossesService, private energyInputService: EnergyInputService, private energyInputCompareService: EnergyInputCompareService, private cd: ChangeDetectorRef) { }
+  constructor(private lossesService: LossesService, private energyInputService: EnergyInputService, private energyInputCompareService: EnergyInputCompareService, private cd: ChangeDetectorRef,
+    private phastCompareService: PhastCompareService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.setNumLosses();
@@ -68,14 +76,19 @@ export class EnergyInputTabComponent implements OnInit {
     let testVal = false;
     if (this.energyInputCompareService.baselineEnergyInput) {
       this.energyInputCompareService.baselineEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss) === false) {
+        if (this.checkLossValid(loss, this.phast.losses) === false) {
           testVal = true;
         }
       });
     }
     if (this.energyInputCompareService.modifiedEnergyInput && !this.inSetup) {
+      let selectedModification = this.phastCompareService.selectedModification.getValue();
+      let losses: Losses;
+      if (selectedModification) {
+        losses = selectedModification.losses;
+      }
       this.energyInputCompareService.modifiedEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss) === false) {
+        if (this.checkLossValid(loss, losses) === false) {
           testVal = true;
         }
       });
@@ -84,8 +97,12 @@ export class EnergyInputTabComponent implements OnInit {
   }
 
 
-  checkLossValid(loss: EnergyInputEAF) {
-    let tmpForm: FormGroup = this.energyInputService.getFormFromLoss(loss);
+  checkLossValid(loss: EnergyInputEAF, losses: Losses) {
+    let minElectricityInput: number;
+    if (losses) {
+      minElectricityInput = this.phastService.getMinElectricityInputRequirement(losses, this.settings);
+    }
+    let tmpForm: FormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {
