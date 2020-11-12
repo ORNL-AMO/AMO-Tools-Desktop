@@ -64,7 +64,7 @@
   <!--Sankey-->
   <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
     <nav class="navbar phast">
-      <div class="d-flex justify-content-start align-items-center w-100 flex-wrap">
+      <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
         <div class="tab-content pl-2 pr-2">
             <div class="form-group" *ngIf="phastOptions.length > 1">
               <select name="phastSelect" class="form-control mx-auto w-100" id="phastSelect" [(ngModel)]="sankeyPhast">

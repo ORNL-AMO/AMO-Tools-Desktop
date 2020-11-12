@@ -31,8 +31,6 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
 
-  isBaseline: boolean;
-  firstChange: boolean = true;
   links: Array<{ source: number, target: number }> = [];
   nodes: Array<PHASTSankeyNode> = [];
   
@@ -46,7 +44,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   units: string = 'MMBtu';
 
   // node/link not rendered or too small to see
-  minPlotlyDisplayValue = .1;
+  minPlotlyDisplayValue = .2;
   
   currentSourceIndex = 0;
   initialLossConnectorTargets: Array<number> = [];
@@ -103,8 +101,10 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       }
     }
     if (changes.labelStyle && !changes.labelStyle.firstChange) {
-      this.initSankeySetup();
-      this.renderSankey(true);
+      if (this.phast.valid.isValid) {
+        this.initSankeySetup();
+        this.renderSankey();
+      }
     }
   }
 
@@ -125,7 +125,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
     this.buildLinks();
   }
 
-  renderSankey(isUpdate = false) {
+  renderSankey() {
     Plotly.purge(this.ngChart.nativeElement); 
 
 
@@ -249,8 +249,8 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
   
   buildNodes() {
-    console.log(this.results);
     this.energyInput = this.results.totalInput;
+    
     let flueGasLoss = this.results.totalFlueGas;
     let waterCoolingLoss = this.results.totalCoolingLoss;
     let wallLoss = this.results.totalWallLoss;
@@ -303,19 +303,14 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
     let tmpExothermicHeat = this.sankeyService.getExothermicHeat();
     if (tmpExothermicHeat !== 0 && tmpExothermicHeat !== null) {
       this.exothermicHeat = Math.abs(tmpExothermicHeat);
-      // this.exothermicHeatValue = (this.exothermicHeat / (this.energyInput + this.exothermicHeat)) * 100;
       this.energyInput = this.energyInput + this.exothermicHeat;
       this.exothermicHeatValue = (this.exothermicHeat / this.energyInput) * 100;
-      console.log('exothermicHeat', this.exothermicHeat);
-      console.log('exothermicHeatValue', this.exothermicHeatValue);
-
     }
   }
 
   addInitialNodes() {
     this.setExothermicHeat();
-    // Set fuel and chemical energy
-    this.setFuelEnergy();
+    this.setFuelAndChemical();
     this.electricalEnergy = this.sankeyService.getElectricalEnergy();
 
     let fuelValue = (this.fuelEnergy / this.energyInput) * 100;
@@ -327,14 +322,11 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       // This represents the first connector added after the initialLossconnector
       this.subLossesConnectorIndex = 5;
       let totalInputValue = 100;
-
       let startingSource = 0;
       let spacerTarget = 3;
-      let totalInputTarget = 2;
 
       if (this.exothermicHeat) {
         startingSource++;
-        totalInputTarget++;
         spacerTarget++;
 
         this.nodes.push(
@@ -344,7 +336,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
             x: .02,
             y: .9,
             source: 0,
-            target: [totalInputTarget],
+            target: [startingSource + 2],
             isConnector: true,
             nodeColor: this.gradientStartColor,
             id: 'exothermicHeat'
@@ -353,8 +345,6 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
         this.currentSourceIndex++;
         this.secondConnectorLoss++;
         this.subLossesConnectorIndex++;
-
-        // electricalValue -= this.exothermicHeatValue;
       }
 
       this.nodes.push(
@@ -364,7 +354,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
           x: .02,
           y: .2,
           source: startingSource,
-          target: [totalInputTarget],
+          target: [startingSource + 2],
           isConnector: true,
           nodeColor: this.gradientStartColor,
           id: 'fuelConnector'
@@ -373,9 +363,9 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
           name: this.getNameLabel("Electrical Heat Delivered", this.electricalEnergy, electricalValue),
           value: electricalValue,
           x: .02,
-          y: .6,
+          y: .65,
           source: startingSource + 1,
-          target: [totalInputTarget],
+          target: [startingSource + 2],
           isConnector: true,
           nodeColor: this.gradientStartColor,
           id: 'electricalConnector'
@@ -408,23 +398,14 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       this.secondConnectorLoss = 5;
       // This represents the first connector added after the initialLossconnector
       this.subLossesConnectorIndex = 4;
-      let electricalEnergySource = 0;
-      let electricalEnergyTarget = 1;
 
-      let spacerSource = 1;
-      let spacerTarget = 2;
-
-      let initialConnectorSource = 2;
       let totalInputValue = 100;
+      let startingSource = 0;
 
       if (this.exothermicHeat) {
-        electricalEnergySource++;
-        electricalEnergyTarget++;
-        spacerSource++;
-        spacerTarget++;
-        initialConnectorSource++;
-        totalInputValue -= this.exothermicHeatValue;
-        
+        totalInputValue -= this.exothermicHeatValue;        
+        startingSource++;
+
         this.nodes.push(
           {
             name: this.getNameLabel('Exothermic Heat', this.exothermicHeat, this.exothermicHeatValue),
@@ -432,7 +413,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
             x: .02,
             y: .95,
             source: 0,
-            target: [spacerSource],
+            target: [startingSource + 1],
             isConnector: true,
             nodeColor: this.gradientStartColor,
             id: 'exothermicHeat'
@@ -441,7 +422,6 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
         this.currentSourceIndex++;
         this.secondConnectorLoss++;
         this.subLossesConnectorIndex++;
-
       }
 
       this.nodes.push(
@@ -450,8 +430,8 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
           value: totalInputValue,
           x: .02,
           y: .5,
-          source: electricalEnergySource,
-          target: [electricalEnergyTarget],
+          source: startingSource,
+          target: [startingSource + 1],
           isConnector: true,
           nodeColor: this.gradientStartColor,
           id: 'originConnector'
@@ -461,8 +441,8 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
           value: 100,
           x: .2,
           y: .5,
-          source: spacerSource,
-          target: [spacerTarget],
+          source: startingSource + 1,
+          target: [startingSource + 2],
           isConnector: true,
           nodeColor: this.gradientStartColor,
           id: 'spacer'
@@ -472,7 +452,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
           value: 0,
           x: .35,
           y: .5,
-          source: initialConnectorSource,
+          source: startingSource + 2,
           target: this.initialLossConnectorTargets,
           isConnector: true,
           nodeColor: this.gradientStartColor,
@@ -587,7 +567,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   }
 
 
-  setFuelEnergy() {
+  setFuelAndChemical() {
     let totalFuelEnergy = 0;
     if ((this.sankeyService.getFuelEnergy() !== null && this.sankeyService.getFuelEnergy() !== undefined) 
         || (this.sankeyService.getChemicalEnergy() !== null && this.sankeyService.getChemicalEnergy() !== undefined)) {
