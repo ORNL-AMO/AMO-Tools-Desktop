@@ -44,17 +44,20 @@ export class WasteWaterReportComponent implements OnInit {
     private wasteWaterAnalysisService: WasteWaterAnalysisService, private printOptionsMenuService: PrintOptionsMenuService) { }
 
   ngOnInit(): void {
+    console.log(this.assessment.wasteWater);
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     this.createdDate = new Date();
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
     }
-    this.assessment.wasteWater.baselineData.outputs = this.wasteWaterService.calculateResults(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, this.settings);
-    this.assessment.wasteWater.modifications.forEach(mod => {
-      mod.outputs = this.wasteWaterService.calculateResults(mod.activatedSludgeData, mod.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, this.settings, this.assessment.wasteWater.baselineData.outputs);
-    });
-    this.wasteWaterAnalysisService.setResults(this.assessment.wasteWater, this.settings);
+    if (this.assessment.wasteWater.setupDone) {
+      this.assessment.wasteWater.baselineData.outputs = this.wasteWaterService.calculateResults(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, this.settings);
+      this.assessment.wasteWater.modifications.forEach(mod => {
+        mod.outputs = this.wasteWaterService.calculateResults(mod.activatedSludgeData, mod.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, this.settings, this.assessment.wasteWater.baselineData.outputs);
+      });
+      this.wasteWaterAnalysisService.setResults(this.assessment.wasteWater, this.settings);
+    }
     if (!this.inRollup) {
       this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
         this.showPrintMenu = val;
@@ -107,9 +110,11 @@ export class WasteWaterReportComponent implements OnInit {
   }
 
   getContainerHeight() {
-    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
-    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    if (this.reportBtns) {
+      let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+      let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    }
   }
 
   print() {
