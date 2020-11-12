@@ -5,7 +5,6 @@ import { FlueGasLossesService } from './losses/flue-gas-losses/flue-gas-losses.s
 import { ExtendedSurfaceLossesService } from './losses/extended-surface-losses/extended-surface-losses.service';
 import { OperationsService } from './losses/operations/operations.service';
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
-import { HeatSystemEfficiencyCompareService } from './losses/heat-system-efficiency/heat-system-efficiency-compare.service';
 import { ExhaustGasService } from './losses/exhaust-gas/exhaust-gas.service';
 import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
@@ -20,6 +19,8 @@ import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
 import { AtmosphereLossesService } from './losses/atmosphere-losses/atmosphere-losses.service';
 import { SlagService } from './losses/slag/slag.service';
+import { PhastService } from './phast.service';
+import { Settings } from '../shared/models/settings';
 
 
 @Injectable()
@@ -39,15 +40,15 @@ export class PhastValidService {
     private energyInputService: EnergyInputService,
     private exhaustGasService: ExhaustGasService,
     private energyInputExhaustGasService: EnergyInputExhaustGasService,
-    private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService,
     private fixtureLossesService: FixtureLossesService,
     private gasLeakageLossesService: GasLeakageLossesService,
     private otherLossessService: OtherLossesService,
+    private phastService: PhastService
   ) { }
 
-  
-  
-  checkValid(phast: PHAST): PhastValid {
+
+
+  checkValid(phast: PHAST, settings: Settings): PhastValid {
     let isChargeMaterialValid: boolean = this.checkChargeMaterialValid(phast);
     let isFlueGasValid: boolean = this.checkFlueGasValid(phast);
     let isFixtureValid: boolean = this.checkFixtureValid(phast);
@@ -60,30 +61,30 @@ export class PhastValidService {
     let isOtherValid: boolean = this.checkOtherValid(phast);
     let isOperationsValid: boolean = this.checkOperationsValid(phast);
     let isSystemEfficiencyValid: boolean = this.checkSysEfficiencyValid(phast);
-    let isEnergyInputValid: boolean = this.checkEnergyInputValid(phast);
+    let isEnergyInputValid: boolean = this.checkEnergyInputValid(phast, settings);
     let isSlagValid: boolean = this.checkSlagValid(phast);
     let isExhaustGasValid: boolean = this.checkExhaustGasValid(phast);
     let isInputExhaustValid: boolean = this.checkInputExhaustValid(phast);
     let isAuxPowerValid: boolean = this.checkAuxPowerValidValid(phast);
 
     return {
-      isValid: isChargeMaterialValid 
-                && isFlueGasValid 
-                && isFixtureValid 
-                && isWallValid 
-                && isCoolingValid 
-                && isAtmosphereValid 
-                && isOpeningValid
-                && isLeakageValid 
-                && isOtherValid
-                && isExtendedValid
-                && isOperationsValid
-                && isEnergyInputValid
-                && isSystemEfficiencyValid
-                && isSlagValid
-                && isExhaustGasValid
-                && isInputExhaustValid
-                && isAuxPowerValid,
+      isValid: isChargeMaterialValid
+        && isFlueGasValid
+        && isFixtureValid
+        && isWallValid
+        && isCoolingValid
+        && isAtmosphereValid
+        && isOpeningValid
+        && isLeakageValid
+        && isOtherValid
+        && isExtendedValid
+        && isOperationsValid
+        && isEnergyInputValid
+        && isSystemEfficiencyValid
+        && isSlagValid
+        && isExhaustGasValid
+        && isInputExhaustValid
+        && isAuxPowerValid,
       operationsValid: isOperationsValid,
       chargeMaterialValid: isChargeMaterialValid,
       flueGasValid: isFlueGasValid,
@@ -141,7 +142,7 @@ export class PhastValidService {
       });
     }
     return valid
-    
+
   }
 
   checkOperationsValid(phast: PHAST): boolean {
@@ -198,7 +199,7 @@ export class PhastValidService {
           valid = false;
         }
       });
-    } 
+    }
     return valid;
   }
 
@@ -251,11 +252,11 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.openingLosses) {
       phast.losses.openingLosses.forEach(loss => {
-          let openingForm: FormGroup = this.openingLossesService.getFormFromLoss(loss);
-          if (openingForm.status === 'INVALID') {
-            valid = false;
-          }
-        });
+        let openingForm: FormGroup = this.openingLossesService.getFormFromLoss(loss);
+        if (openingForm.status === 'INVALID') {
+          valid = false;
+        }
+      });
     }
     return valid;
   }
@@ -317,11 +318,15 @@ export class PhastValidService {
     return valid;
   }
 
-  checkEnergyInputValid(phast: PHAST): boolean {
+  checkEnergyInputValid(phast: PHAST, settings: Settings): boolean {
     let valid = true;
     if (phast.losses.energyInputEAF) {
+      let minElectricityInput: number;
+      if (phast.losses) {
+        minElectricityInput = this.phastService.getMinElectricityInputRequirement(phast.losses, settings);
+      }
       phast.losses.energyInputEAF.forEach(loss => {
-        let energyInputForm: FormGroup = this.energyInputService.getFormFromLoss(loss)
+        let energyInputForm: FormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput)
         if (energyInputForm.status === 'INVALID') {
           valid = false;
         }
