@@ -88,6 +88,7 @@ export class PhastComponent implements OnInit {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
       //use copy of phast object of as modal provided to forms
       this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
+      console.log(this._phast);
       if (this._phast.modifications) {
         if (this._phast.modifications.length !== 0) {
           if (!this._phast.modifications[0].exploreOpportunities) {
