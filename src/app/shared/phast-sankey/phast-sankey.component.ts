@@ -72,7 +72,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
     private decimalPipe: DecimalPipe) { }
 
   ngOnInit() {
-    this.phast.valid = this.phastValidService.checkValid(this.phast);
+    this.phast.valid = this.phastValidService.checkValid(this.phast, this.settings);
     if (this.phast.valid.isValid) {
       this.results = this.sankeyService.getFuelTotals(this.phast, this.settings);
       this.initSankeySetup();
@@ -89,7 +89,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.phast) {
-      this.phast.valid = this.phastValidService.checkValid(this.phast);
+      this.phast.valid = this.phastValidService.checkValid(this.phast, this.settings);
       if (!changes.phast.firstChange) {
         if (this.phast.valid.isValid) {
           this.results = this.sankeyService.getFuelTotals(this.phast, this.settings);
