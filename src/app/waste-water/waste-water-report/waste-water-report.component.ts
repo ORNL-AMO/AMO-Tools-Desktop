@@ -44,7 +44,6 @@ export class WasteWaterReportComponent implements OnInit {
     private wasteWaterAnalysisService: WasteWaterAnalysisService, private printOptionsMenuService: PrintOptionsMenuService) { }
 
   ngOnInit(): void {
-    console.log(this.assessment.wasteWater);
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     this.createdDate = new Date();
     if (this.assessment) {
