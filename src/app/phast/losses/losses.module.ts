@@ -49,6 +49,7 @@ import { OperationsModule } from './operations/operations.module';
 import { OperationsHelpComponent } from './losses-help/operations-help/operations-help.component';
 import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-page.component';
 import { LossesResultPanelComponent } from './losses-result-panel/losses-result-panel.component';
+import { PhastSankeyModule } from '../../shared/phast-sankey/phast-sankey.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -71,7 +72,8 @@ import { LossesResultPanelComponent } from './losses-result-panel/losses-result-
     EnergyInputExhaustGasLossesModule,
     OperationsModule,
     HeatSystemEfficiencyModule,
-    PhastReportModule
+    PhastReportModule,
+    PhastSankeyModule
   ],
   declarations: [
     LossesComponent,

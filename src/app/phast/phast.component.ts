@@ -29,6 +29,9 @@ export class PhastComponent implements OnInit {
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
+  sankeyLabelStyle: string = 'both';
+  phastOptions: Array<{ name: string, phast: PHAST }>;
+  showSankeyLabelOptions: boolean;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -100,6 +103,7 @@ export class PhastComponent implements OnInit {
       }
       //get settings
       this.getSettings();
+      this.initSankeyList();
     });
     //check to see if we need to start on a specified tab
     let tmpTab = this.assessmentService.getTab();
@@ -218,6 +222,18 @@ export class PhastComponent implements OnInit {
     }
     else {
       this.tab2Status = 'missing-data';
+    }
+  }
+
+  initSankeyList() {
+    this.phastOptions = new Array<{ name: string, phast: PHAST }>();
+    this.phastOptions.push({ name: 'Baseline', phast: this._phast });
+    this.sankeyPhast = this.phastOptions[0].phast;
+    this.showSankeyLabelOptions = ((this.sankeyPhast.name == 'Baseline' || this.sankeyPhast.name == null) && this.sankeyPhast.setupDone) || (this.sankeyPhast.valid && this.sankeyPhast.valid.isValid);
+    if (this._phast.modifications) {
+      this._phast.modifications.forEach(mod => {
+        this.phastOptions.push({ name: mod.phast.name, phast: mod.phast });
+      });
     }
   }
 
@@ -343,6 +359,10 @@ export class PhastComponent implements OnInit {
 
   exportData() {
     //TODO: Logic for exporting data (csv?)
+  }
+
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle = style;
   }
 
   selectModificationModal() {
