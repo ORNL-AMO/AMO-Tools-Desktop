@@ -30,7 +30,7 @@ export class PhastComponent implements OnInit {
   @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
   sankeyLabelStyle: string = 'both';
-  phastOptions: any[];
+  phastOptions: Array<{ name: string, phast: PHAST }>;
   showSankeyLabelOptions: boolean;
 
   @HostListener('window:resize', ['$event'])
@@ -226,7 +226,7 @@ export class PhastComponent implements OnInit {
   }
 
   initSankeyList() {
-    this.phastOptions = new Array<any>();
+    this.phastOptions = new Array<{ name: string, phast: PHAST }>();
     this.phastOptions.push({ name: 'Baseline', phast: this._phast });
     this.sankeyPhast = this.phastOptions[0].phast;
     this.showSankeyLabelOptions = (this.sankeyPhast.name == 'Baseline' && this.sankeyPhast.setupDone) || (this.sankeyPhast.valid && this.sankeyPhast.valid.isValid);

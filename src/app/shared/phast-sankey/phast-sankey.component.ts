@@ -331,7 +331,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
         this.nodes.push(
           {
-            name: this.getNameLabel("Exothermic Heat from Process", this.exothermicHeat, this.exothermicHeatValue),
+            name: this.getNameLabel("Exothermic Heat", this.exothermicHeat, this.exothermicHeatValue),
             value: this.exothermicHeatValue,
             x: .02,
             y: .9,
@@ -349,7 +349,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
       this.nodes.push(
         {
-          name: this.getNameLabel('Chemical Heat Delivered', this.fuelEnergy, fuelValue),
+          name: this.getNameLabel('Chemical Heat', this.fuelEnergy, fuelValue),
           value: fuelValue,
           x: .02,
           y: .2,
@@ -360,7 +360,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
           id: 'fuelConnector'
         },
         {
-          name: this.getNameLabel("Electrical Heat Delivered", this.electricalEnergy, electricalValue),
+          name: this.getNameLabel("Electrical Heat", this.electricalEnergy, electricalValue),
           value: electricalValue,
           x: .02,
           y: .65,
@@ -371,7 +371,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
           id: 'electricalConnector'
         },
         {
-          name: `Energy Input Total`,
+          name: `Total Energy`,
           value: totalInputValue,
           x: .2,
           y: .5,
@@ -586,9 +586,9 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
   getNameLabel(lossName: string, loss: number, lossValue: number) {
     let nameLabel: string;
     if (this.labelStyle == 'both') {
-      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-2')} ${this.units}/hr (${this.decimalPipe.transform(lossValue, '1.1-1')}%)`
+      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-0')} ${this.units}/hr (${this.decimalPipe.transform(lossValue, '1.1-1')}%)`
     } else if (this.labelStyle == 'power') {
-      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-2')} ${this.units}/hr`
+      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-0')} ${this.units}/hr`
     } else {
       nameLabel = `${lossName} ${this.decimalPipe.transform(lossValue, '1.1-1')}%`
     }

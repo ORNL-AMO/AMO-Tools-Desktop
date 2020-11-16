@@ -39,7 +39,6 @@ export class SankeyService {
     if (phast.losses.energyInputEAF && !resultCats.showFlueGas && !resultCats.showEnInput2) {
       if (phast.losses.energyInputEAF.length > 0) {
         this.setChemicalEnergy(phastResults);
-        // this.electricalEnergy = phastResults.grossHeatInput - phastResults.energyInputHeatDelivered;
         this.electricalEnergy = phastResults.energyInputHeatDelivered;
       }
     }
