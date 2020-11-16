@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { FlueGasLossesService } from '../../../phast/losses/flue-gas-losses/flue-gas-losses.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
@@ -9,12 +7,6 @@ declare var phastAddon: any;
 
 @Injectable()
 export class FlueGasService {
-  // flueGasInput: FlueGas = {
-  //   flueGasType: undefined,
-  //   flueGasByVolume: undefined,
-  //   flueGasByMass: undefined,
-  //   name: undefined
-  // };
   baselineData: BehaviorSubject<FlueGas>;
   modificationData: BehaviorSubject<FlueGas>;
   output: BehaviorSubject<FlueGasOutput>;
@@ -24,165 +16,16 @@ export class FlueGasService {
   generateExample: BehaviorSubject<boolean>;
 
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private formBuilder: FormBuilder, 
-              private convertUnitsService: ConvertUnitsService, 
-              private flueGasLossesService: FlueGasLossesService) {
+  constructor(private convertUnitsService: ConvertUnitsService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
     this.baselineData = new BehaviorSubject<FlueGas>(undefined);
     this.modificationData = new BehaviorSubject<FlueGas>(undefined);
-    this.output = new BehaviorSubject<any>(undefined);
+    this.output = new BehaviorSubject<FlueGasOutput>(undefined);
 
     this.currentField = new BehaviorSubject<string>('default');
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
-  }
-
-  initEmptyVolumeForm(): FormGroup {
-    return this.formBuilder.group({
-      'heatInput': ['', Validators.required],
-      'gasTypeId': [1, Validators.required],
-      'flueGasTemperature': ['', Validators.required],
-      'oxygenCalculationMethod': ['Excess Air', Validators.required],
-      'excessAirPercentage': ['', [Validators.required, Validators.min(0)]],
-      'o2InFlueGas': ['', [Validators.required, Validators.min(0), Validators.max(21)]],
-      'combustionAirTemperature': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      'fuelTemperature': [''],
-      'CH4': ['', Validators.required],
-      'C2H6': ['', Validators.required],
-      'N2': ['', Validators.required],
-      'H2': ['', Validators.required],
-      'C3H8': ['', Validators.required],
-      'C4H10_CnH2n': ['', Validators.required],
-      'H2O': ['', Validators.required],
-      'CO': ['', Validators.required],
-      'CO2': ['', Validators.required],
-      'SO2': ['', Validators.required],
-      'O2': ['', Validators.required],
-      'name': ['Loss #' + 1]
-    });
-  }
-
-  initEmptyMassForm(): FormGroup {
-    return this.formBuilder.group({
-      'heatInput': ['', Validators.required],
-      'gasTypeId': [1, Validators.required],
-      'flueGasTemperature': ['', Validators.required],
-      'oxygenCalculationMethod': ['Excess Air', Validators.required],
-      'excessAirPercentage': ['', [Validators.required, Validators.min(0)]],
-      'o2InFlueGas': ['', [Validators.required, Validators.min(0), Validators.max(21)]],
-      'combustionAirTemperature': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      'fuelTemperature': [''],
-      'moistureInAirComposition': [.0077, [Validators.required, Validators.min(0), Validators.max(100)]],
-      'ashDischargeTemperature': ['', Validators.required],
-      'unburnedCarbonInAsh': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-      'carbon': ['', Validators.required],
-      'hydrogen': ['', Validators.required],
-      'sulphur': ['', Validators.required],
-      'inertAsh': ['', Validators.required],
-      'o2': ['', Validators.required],
-      'moisture': ['', Validators.required],
-      'nitrogen': ['', Validators.required],
-      'name': ['Loss #' + 1]
-    });
-  }
-
-  initByVolumeFormFromLoss(loss: FlueGas): FormGroup {
-    return this.formBuilder.group({
-      'heatInput': [loss.flueGasByVolume.heatInput, Validators.required],
-      'gasTypeId': [loss.flueGasByVolume.gasTypeId, Validators.required],
-      'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
-      'oxygenCalculationMethod': [loss.flueGasByVolume.oxygenCalculationMethod, Validators.required],
-      'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, [Validators.required, Validators.min(0)]],
-      'o2InFlueGas': [loss.flueGasByVolume.o2InFlueGas, [Validators.required, Validators.min(0), Validators.max(21)]],
-      'combustionAirTemperature': [loss.flueGasByVolume.combustionAirTemperature, [Validators.required, Validators.min(0), Validators.max(100)]],
-      'fuelTemperature': [loss.flueGasByVolume.fuelTemperature],
-      'CH4': [loss.flueGasByVolume.CH4, Validators.required],
-      'C2H6': [loss.flueGasByVolume.C2H6, Validators.required],
-      'N2': [loss.flueGasByVolume.N2, Validators.required],
-      'H2': [loss.flueGasByVolume.H2, Validators.required],
-      'C3H8': [loss.flueGasByVolume.C3H8, Validators.required],
-      'C4H10_CnH2n': [loss.flueGasByVolume.C4H10_CnH2n, Validators.required],
-      'H2O': [loss.flueGasByVolume.H2O, Validators.required],
-      'CO': [loss.flueGasByVolume.CO, Validators.required],
-      'CO2': [loss.flueGasByVolume.CO2, Validators.required],
-      'SO2': [loss.flueGasByVolume.SO2, Validators.required],
-      'O2': [loss.flueGasByVolume.O2, Validators.required],
-      'name': [loss.name]
-    });
-  }
-
-  initByMassFormFromLoss(loss: FlueGas): FormGroup {
-    return this.formBuilder.group({
-      'heatInput': [loss.flueGasByMass.heatInput, Validators.required],
-      'gasTypeId': [loss.flueGasByMass.gasTypeId, Validators.required],
-      'flueGasTemperature': [loss.flueGasByMass.flueGasTemperature, Validators.required],
-      'oxygenCalculationMethod': [loss.flueGasByMass.oxygenCalculationMethod, Validators.required],
-      'excessAirPercentage': [loss.flueGasByMass.excessAirPercentage, [Validators.required, Validators.min(0)]],
-      'o2InFlueGas': [loss.flueGasByMass.o2InFlueGas, [Validators.required, Validators.min(0), Validators.max(21)]],
-      'combustionAirTemperature': [loss.flueGasByMass.combustionAirTemperature, [Validators.required, Validators.min(0), Validators.max(100)]],
-      'fuelTemperature': [loss.flueGasByMass.fuelTemperature],
-      'moistureInAirComposition': [loss.flueGasByMass.moistureInAirComposition, [Validators.required, Validators.min(0), Validators.max(100)]],
-      'ashDischargeTemperature': [loss.flueGasByMass.ashDischargeTemperature, Validators.required],
-      'unburnedCarbonInAsh': [loss.flueGasByMass.unburnedCarbonInAsh, [Validators.required, Validators.min(0), Validators.max(100)]],
-      'carbon': [loss.flueGasByMass.carbon, Validators.required],
-      'hydrogen': [loss.flueGasByMass.hydrogen, Validators.required],
-      'sulphur': [loss.flueGasByMass.sulphur, Validators.required],
-      'inertAsh': [loss.flueGasByMass.inertAsh, Validators.required],
-      'o2': [loss.flueGasByMass.o2, Validators.required],
-      'moisture': [loss.flueGasByMass.moisture, Validators.required],
-      'nitrogen': [loss.flueGasByMass.nitrogen, Validators.required],
-      'name': [loss.name]
-    });
-  }
-
-  buildByMassLossFromForm(form: FormGroup): FlueGasByMass {
-    let flueGasByMass: FlueGasByMass = {
-      heatInput: form.controls.heatInput.value,
-      gasTypeId: form.controls.gasTypeId.value,
-      flueGasTemperature: form.controls.flueGasTemperature.value,
-      oxygenCalculationMethod: form.controls.oxygenCalculationMethod.value,
-      excessAirPercentage: form.controls.excessAirPercentage.value,
-      o2InFlueGas: form.controls.o2InFlueGas.value,
-      combustionAirTemperature: form.controls.combustionAirTemperature.value,
-      fuelTemperature: form.controls.fuelTemperature.value,
-      ashDischargeTemperature: form.controls.ashDischargeTemperature.value,
-      moistureInAirComposition: form.controls.moistureInAirComposition.value,
-      unburnedCarbonInAsh: form.controls.unburnedCarbonInAsh.value,
-      carbon: form.controls.carbon.value,
-      hydrogen: form.controls.hydrogen.value,
-      sulphur: form.controls.sulphur.value,
-      inertAsh: form.controls.inertAsh.value,
-      o2: form.controls.o2.value,
-      moisture: form.controls.moisture.value,
-      nitrogen: form.controls.nitrogen.value
-    };
-    return flueGasByMass;
-  }
-
-  buildByVolumeLossFromForm(form: FormGroup): FlueGasByVolume {
-    let flueGasByVolume: FlueGasByVolume = {
-      heatInput: form.controls.heatInput.value,
-      gasTypeId: form.controls.gasTypeId.value,
-      flueGasTemperature: form.controls.flueGasTemperature.value,
-      oxygenCalculationMethod: form.controls.oxygenCalculationMethod.value,
-      excessAirPercentage: form.controls.excessAirPercentage.value,
-      o2InFlueGas: form.controls.o2InFlueGas.value,
-      combustionAirTemperature: form.controls.combustionAirTemperature.value,
-      fuelTemperature: form.controls.fuelTemperature.value,
-      CH4: form.controls.CH4.value,
-      C2H6: form.controls.C2H6.value,
-      N2: form.controls.N2.value,
-      H2: form.controls.H2.value,
-      C3H8: form.controls.C3H8.value,
-      C4H10_CnH2n: form.controls.C4H10_CnH2n.value,
-      H2O: form.controls.H2O.value,
-      CO: form.controls.CO.value,
-      CO2: form.controls.CO2.value,
-      SO2: form.controls.SO2.value,
-      O2: form.controls.O2.value
-    };
-    return flueGasByVolume;
   }
 
   flueGasByVolume(input: FlueGasByVolume, settings: Settings) {
@@ -208,22 +51,21 @@ export class FlueGasService {
     let baselineFlueGas = this.baselineData.getValue();
     let modificationFlueGas = this.modificationData.getValue();
 
-    let output = this.output.getValue();
-    let baselineResults = this.getFlueGasResult(baselineFlueGas, settings);
+    let output: FlueGasOutput = this.output.getValue();
+    let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, settings);
     if (baselineResults) {
       output.baseline = baselineResults;
     }
     if (modificationFlueGas) {
-      let modificationResults = this.getFlueGasResult(modificationFlueGas, settings);
+      let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, settings);
       if (modificationResults) {
         output.modification = modificationResults;
       }
     }
-
     this.output.next(output);
   }
 
-  getFlueGasResult(flueGasData: FlueGas, settings: Settings) {
+  getFlueGasResult(flueGasData: FlueGas, settings: Settings): FlueGasResult {
     let result: FlueGasResult = {
       availableHeat: 0,
       flueGasLosses: 0
@@ -358,16 +200,6 @@ export class FlueGasService {
     this.baselineData.next(exampleBaseline);
     this.modificationData.next(exampleMod);
 
-  }
-
-  setByMassWarnings(tmpLoss: FlueGasByMass) {
-    let warnings = this.flueGasLossesService.checkFlueGasByMassWarnings(tmpLoss);
-    return warnings;
-  }
-
-  setByVolumeWarnings(tmpLoss: FlueGasByMass) {
-    let warnings = this.flueGasLossesService.checkFlueGasByVolumeWarnings(tmpLoss);
-    return warnings;
   }
 
 }

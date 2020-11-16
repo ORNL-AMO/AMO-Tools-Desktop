@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasService } from '../flue-gas.service';
 
@@ -9,11 +10,10 @@ import { FlueGasService } from '../flue-gas.service';
 })
 export class FlueGasHelpComponent implements OnInit {
   @Input()
-  currentField: string;
-  @Input()
   settings: Settings;
   displaySuggestions: boolean = false;
-  currentFieldSub: any;
+  currentFieldSub: Subscription;
+  currentField: string;
 
   constructor(private flueGasService: FlueGasService) { }
   

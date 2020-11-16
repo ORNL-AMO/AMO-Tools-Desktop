@@ -1,13 +1,14 @@
 import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { settings } from 'cluster';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
-import { FlueGasWarnings } from '../../../../phast/losses/flue-gas-losses/flue-gas-losses.service';
 import { PhastService } from '../../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { FlueGas, FlueGasByMass } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByMass, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { FlueGasFormService } from '../flue-gas-form.service';
 import { FlueGasService } from '../flue-gas.service';
 
 @Component({
@@ -31,7 +32,6 @@ export class FlueGasFormMassComponent implements OnInit {
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
-  coolingTowerOutputSub: Subscription;
   modificationDataSub: Subscription;
 
   byMassForm: FormGroup;
@@ -48,12 +48,11 @@ export class FlueGasFormMassComponent implements OnInit {
   flueTemperatureWarning: boolean = false;
   tempMin: number;
   warnings: FlueGasWarnings;
-;
 
-  constructor(private flueGasService: FlueGasService, 
+  constructor(private flueGasService: FlueGasService,
+              private flueGasFormService: FlueGasFormService,
               private phastService: PhastService, 
-              private suiteDbService: SuiteDbService,
-              private convertUnitsService: ConvertUnitsService) { }
+              private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
     this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
@@ -95,36 +94,30 @@ export class FlueGasFormMassComponent implements OnInit {
     }
     this.setCalcMethod();
     this.calcExcessAir();
-    this.setCombustionValidation();
-    this.setFuelTempValidation();
-    this.tempMin = 212;
-    this.tempMin = this.convertUnitsService.value(this.tempMin).from('F').to(this.settings.steamTemperatureMeasurement);
-    this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
     this.calculate();
   }
 
   setForm() {
     let updatedFlueGasData: FlueGas;
     if (this.isBaseline) {
-      let currentBaseline: FlueGas = this.flueGasService.baselineData.getValue();
-      updatedFlueGasData = currentBaseline;
+      updatedFlueGasData= this.flueGasService.baselineData.getValue();
     } else {
-      let currentModification: FlueGas = this.flueGasService.modificationData.getValue();
-      updatedFlueGasData = currentModification;
+      updatedFlueGasData = this.flueGasService.modificationData.getValue();
     }
 
     if (updatedFlueGasData.flueGasByMass) {
-      this.byMassForm = this.flueGasService.initByMassFormFromLoss(updatedFlueGasData);
+      this.byMassForm = this.flueGasFormService.initByMassFormFromLoss(updatedFlueGasData, false);
     } else {
-      this.byMassForm = this.flueGasService.initEmptyMassForm();
+      this.byMassForm = this.flueGasFormService.initEmptyMassForm();
     }
 
     this.initFormSetup();
   }
 
   checkWarnings() {
-    let tmpLoss: FlueGasByMass = this.flueGasService.buildByMassLossFromForm(this.byMassForm);
-    this.warnings = this.flueGasService.setByMassWarnings(tmpLoss);
+    let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm).flueGasByMass;
+    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
+    debugger;
   }
 
   setCalcMethod() {
@@ -176,21 +169,22 @@ export class FlueGasFormMassComponent implements OnInit {
         });
       }
     }
+    this.calculate();
   }
 
   calculate() {
-    this.checkFlueGasTemp();
+    let valid = this.flueGasFormService.setValidators(this.byMassForm).valid;
+    debugger;
     this.checkWarnings();
-    if (this.isBaseline) {
-      let currentBaselineData: FlueGas = this.flueGasService.baselineData.getValue();
-      let currentBaselineByMass: FlueGasByMass = this.flueGasService.buildByMassLossFromForm(this.byMassForm)
-      currentBaselineData.flueGasByMass = currentBaselineByMass;
-      this.flueGasService.baselineData.next(currentBaselineData);
-    } else { 
-      let currentModificationData: FlueGas = this.flueGasService.modificationData.getValue();
-      let currentModificationByMass: FlueGasByMass = this.flueGasService.buildByMassLossFromForm(this.byMassForm)
-      currentModificationData.flueGasByMass = currentModificationByMass;
-      this.flueGasService.modificationData.next(currentModificationData);
+    if (valid) {
+      let currentDataByMass: FlueGas;
+      if (this.isBaseline) {
+        currentDataByMass = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
+        this.flueGasService.baselineData.next(currentDataByMass);
+      } else { 
+        currentDataByMass = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
+        this.flueGasService.modificationData.next(currentDataByMass);
+      }
     }
   }
 
@@ -211,36 +205,12 @@ export class FlueGasFormMassComponent implements OnInit {
     });
   }
 
-  checkFlueGasTemp() {
-    if (this.byMassForm.controls.flueGasTemperature.value && this.byMassForm.controls.flueGasTemperature.value < this.tempMin) {
-      this.flueTemperatureWarning = true;
-    } else {
-      this.flueTemperatureWarning = false;
-    }
-  }
-
   changeMethod() {
     this.byMassForm.patchValue({
       o2InFlueGas: 0,
       excessAirPercentage: 0
     });
     this.setCalcMethod();
-  }
-
-  setCombustionValidation() {
-    this.byMassForm.controls.combustionAirTemperature.setValidators([Validators.required, Validators.max(this.byMassForm.controls.flueGasTemperature.value)]);
-    this.byMassForm.controls.combustionAirTemperature.reset(this.byMassForm.controls.combustionAirTemperature.value);
-    if (this.byMassForm.controls.combustionAirTemperature.value) {
-      this.byMassForm.controls.combustionAirTemperature.markAsDirty();
-    }
-  }
-
-  setFuelTempValidation() {
-    this.byMassForm.controls.flueGasTemperature.setValidators([Validators.required, Validators.min(this.byMassForm.controls.combustionAirTemperature.value)]);
-    this.byMassForm.controls.flueGasTemperature.reset(this.byMassForm.controls.flueGasTemperature.value);
-    if (this.byMassForm.controls.flueGasTemperature.value) {
-      this.byMassForm.controls.flueGasTemperature.markAsDirty();
-    }
   }
 
   roundVal(val: number, digits: number) {

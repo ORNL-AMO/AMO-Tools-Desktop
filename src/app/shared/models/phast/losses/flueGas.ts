@@ -59,3 +59,13 @@ export interface FlueGasResult {
     flueGasLosses?: number;
   }
   
+
+  export interface FlueGasWarnings {
+    moistureInAirCompositionWarning?: string;
+    unburnedCarbonInAshWarning?: string;
+    combustionAirTempWarning?: string;
+    excessAirWarning?: string;
+    o2Warning?: string;
+    flueGasTemp?: string;
+  }
+  

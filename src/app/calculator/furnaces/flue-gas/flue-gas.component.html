@@ -44,9 +44,9 @@
 				</select>
 			  </div>
 			<app-flue-gas-form-mass *ngIf="method == 'By Mass'" [inModal]="inModal" [settings]="settings"
-			 (focusField)="focusField($event)" [inModal]="inModal" [isBaseline]="true" (emitCalculate)="calculate($event)"></app-flue-gas-form-mass>
+			 [inModal]="inModal" [isBaseline]="true"></app-flue-gas-form-mass>
 			<app-flue-gas-form-volume *ngIf="method == 'By Volume'" [inModal]="inModal" [settings]="settings"
-			 (focusField)="focusField($event)" [inModal]="inModal" [isBaseline]="true" (emitCalculate)="calculate($event)"></app-flue-gas-form-volume>
+			 [inModal]="inModal" [isBaseline]="true"></app-flue-gas-form-volume>
 			 
 			 <!-- Results -->
 			 <div *ngIf="output" class="d-flex flex-column mt-3 mb-2" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
@@ -105,9 +105,9 @@
 					</select>
 				</div>
 			<app-flue-gas-form-mass *ngIf="method == 'By Mass'" [inModal]="inModal" [settings]="settings"
-			 (focusField)="focusField($event)" [inModal]="inModal" [isBaseline]="false"></app-flue-gas-form-mass>
+			  [inModal]="inModal" [isBaseline]="false"></app-flue-gas-form-mass>
 			 <app-flue-gas-form-volume *ngIf="method == 'By Volume'" [inModal]="inModal" [settings]="settings"
-			 (focusField)="focusField($event)" [inModal]="inModal" [isBaseline]="false" ></app-flue-gas-form-volume>
+			  [inModal]="inModal" [isBaseline]="false" ></app-flue-gas-form-volume>
 			 <!-- Mod results -->
 				<div class="d-flex flex-column mt-3 mb-2">
 					<div class="form-group m-0">
@@ -169,7 +169,7 @@
 			<div class="p-2">
 			<!-- <app-flue-gas-results class="w-100" *ngIf="tabSelect == 'results'" [settings]="settings" 
 			[modificationExists]="modificationExists"></app-flue-gas-results> -->
-			<app-flue-gas-help *ngIf="tabSelect == 'help'" [settings]="settings" [currentField]="currentField"></app-flue-gas-help>
+			<app-flue-gas-help *ngIf="tabSelect == 'help'" [settings]="settings" ></app-flue-gas-help>
 			</div>
 		  </div>
 		</div>

@@ -2,10 +2,10 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { FormGroup } from '@angular/forms';
-import { FlueGasLossesService, FlueGasWarnings } from '../../flue-gas-losses/flue-gas-losses.service';
 import { FlueGasCompareService } from '../../flue-gas-losses/flue-gas-compare.service';
-import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Subscription } from 'rxjs';
+import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 @Component({
   selector: 'app-flue-gas-tab',
@@ -28,7 +28,10 @@ export class FlueGasTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string> = [];
   lossSubscription: Subscription;
-  constructor(private lossesService: LossesService, private flueGasLossesService: FlueGasLossesService, private flueGasCompareService: FlueGasCompareService, private cd: ChangeDetectorRef) { }
+  constructor(private lossesService: LossesService, 
+              private flueGasFormService: FlueGasFormService,
+              private flueGasCompareService: FlueGasCompareService, 
+              private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
@@ -71,12 +74,12 @@ export class FlueGasTabComponent implements OnInit {
 
   checkWarningExists(loss: FlueGas): boolean {
     if (loss.flueGasType === 'By Mass') {
-      let warnings: FlueGasWarnings = this.flueGasLossesService.checkFlueGasByMassWarnings(loss.flueGasByMass);
-      let tmpHasWarning: boolean = this.flueGasLossesService.checkWarningsExist(warnings);
+      let warnings: FlueGasWarnings = this.flueGasFormService.checkFlueGasByMassWarnings(loss.flueGasByMass);
+      let tmpHasWarning: boolean = this.flueGasFormService.checkWarningsExist(warnings);
       return tmpHasWarning;
     } else if (loss.flueGasType === 'By Volume') {
-      let warnings: FlueGasWarnings = this.flueGasLossesService.checkFlueGasByVolumeWarnings(loss.flueGasByVolume);
-      let tmpHasWarning: boolean = this.flueGasLossesService.checkWarningsExist(warnings);
+      let warnings: FlueGasWarnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(loss.flueGasByVolume);
+      let tmpHasWarning: boolean = this.flueGasFormService.checkWarningsExist(warnings);
       return tmpHasWarning;
     }
   }
@@ -112,14 +115,14 @@ export class FlueGasTabComponent implements OnInit {
 
   checkMaterialValid(loss: FlueGas) {
     if (loss.flueGasType === 'By Volume') {
-      let tmpForm: FormGroup = this.flueGasLossesService.initByVolumeFormFromLoss(loss);
+      let tmpForm: FormGroup = this.flueGasFormService.initByVolumeFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
     } else if (loss.flueGasType === 'By Mass') {
-      let tmpForm: FormGroup = this.flueGasLossesService.initByMassFormFromLoss(loss);
+      let tmpForm: FormGroup = this.flueGasFormService.initByMassFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

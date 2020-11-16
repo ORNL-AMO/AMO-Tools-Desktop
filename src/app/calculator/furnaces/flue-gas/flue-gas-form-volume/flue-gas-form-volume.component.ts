@@ -2,12 +2,11 @@ import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChi
 import { FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
-import { FlueGasWarnings } from '../../../../phast/losses/flue-gas-losses/flue-gas-losses.service';
 import { PhastService } from '../../../../phast/phast.service';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { FlueGas, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { FlueGasFormService } from '../flue-gas-form.service';
 import { FlueGasService } from '../flue-gas.service';
 
 @Component({
@@ -31,7 +30,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
-  coolingTowerOutputSub: Subscription;
   modificationDataSub: Subscription;
 
   byVolumeForm: FormGroup;
@@ -49,9 +47,9 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   warnings: FlueGasWarnings;
 
   constructor(private flueGasService: FlueGasService, 
+              private flueGasFormService: FlueGasFormService,
               private phastService: PhastService, 
-              private suiteDbService: SuiteDbService,
-              private convertUnitsService: ConvertUnitsService) {
+              private suiteDbService: SuiteDbService) {
   }
 
   ngOnInit() {
@@ -94,35 +92,23 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     }
     this.setCalcMethod();
     this.calcExcessAir();
-    this.setCombustionValidation();
-    this.setFuelTempValidation();
-    this.tempMin = 212;
-    this.tempMin = this.convertUnitsService.value(this.tempMin).from('F').to(this.settings.steamTemperatureMeasurement);
-    this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
     this.calculate();
   }
 
   setForm() {
     let updatedFlueGasData: FlueGas;
     if (this.isBaseline) {
-      let currentBaseline: FlueGas = this.flueGasService.baselineData.getValue();
-      updatedFlueGasData = currentBaseline;
+      updatedFlueGasData = this.flueGasService.baselineData.getValue();
     } else {
-      let currentModification: FlueGas = this.flueGasService.modificationData.getValue();
-      updatedFlueGasData = currentModification;
+      updatedFlueGasData = this.flueGasService.modificationData.getValue();
     }
 
     if (updatedFlueGasData.flueGasByVolume) {
-      this.byVolumeForm = this.flueGasService.initByVolumeFormFromLoss(updatedFlueGasData);
+      this.byVolumeForm = this.flueGasFormService.initByVolumeFormFromLoss(updatedFlueGasData, false);
     } else {
-      this.byVolumeForm = this.flueGasService.initEmptyVolumeForm();
+      this.byVolumeForm = this.flueGasFormService.initEmptyVolumeForm();
     }
     this.initFormSetup();
-  }
-
-  checkWarnings() {
-    let tmpLoss: FlueGasByVolume = this.flueGasService.buildByVolumeLossFromForm(this.byVolumeForm);
-    this.warnings = this.flueGasService.setByVolumeWarnings(tmpLoss);
   }
 
   setCalcMethod() {
@@ -180,19 +166,23 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.calculate();
   }
   
+  checkWarnings() {
+    let tmpLoss: FlueGasByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm).flueGasByVolume;
+    this.warnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(tmpLoss);
+  }
+
   calculate() {
-    this.checkFlueGasTemp();
+    let valid = this.flueGasFormService.setValidators(this.byVolumeForm).valid;
     this.checkWarnings();
-    if (this.isBaseline) {
-      let currentBaselineData: FlueGas = this.flueGasService.baselineData.getValue();
-      let currentBaselineByVolume: FlueGasByVolume = this.flueGasService.buildByVolumeLossFromForm(this.byVolumeForm)
-      currentBaselineData.flueGasByVolume = currentBaselineByVolume;
-      this.flueGasService.baselineData.next(currentBaselineData);
-    } else {
-      let currentModificationData: FlueGas = this.flueGasService.modificationData.getValue();
-      let currentModificationByVolume: FlueGasByVolume = this.flueGasService.buildByVolumeLossFromForm(this.byVolumeForm)
-      currentModificationData.flueGasByVolume = currentModificationByVolume;
-      this.flueGasService.modificationData.next(currentModificationData);
+    if (valid) {
+      let currentDataByVolume: FlueGas;
+      if (this.isBaseline) {
+        currentDataByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
+        this.flueGasService.baselineData.next(currentDataByVolume);
+      } else {
+        currentDataByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
+        this.flueGasService.modificationData.next(currentDataByVolume);
+      }
     }
   }
 
@@ -213,32 +203,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
       excessAirPercentage: 0
     });
     this.setCalcMethod();
-  }
-
-  checkFlueGasTemp() {
-    if (this.byVolumeForm.controls.flueGasTemperature.value && this.byVolumeForm.controls.flueGasTemperature.value < this.tempMin) {
-      this.flueTemperatureWarning = true;
-    } else {
-      this.flueTemperatureWarning = false;
-    }
-  }
-
-  setCombustionValidation() {
-    this.byVolumeForm.controls.combustionAirTemperature.setValidators([Validators.required, Validators.max(this.byVolumeForm.controls.flueGasTemperature.value)]);
-    this.byVolumeForm.controls.combustionAirTemperature.reset(this.byVolumeForm.controls.combustionAirTemperature.value);
-    if (this.byVolumeForm.controls.combustionAirTemperature.value) {
-      this.byVolumeForm.controls.combustionAirTemperature.markAsDirty();
-    }
-    this.calculate();
-  }
-
-  setFuelTempValidation() {
-    this.byVolumeForm.controls.flueGasTemperature.setValidators([Validators.required, Validators.min(this.byVolumeForm.controls.combustionAirTemperature.value)]);
-    this.byVolumeForm.controls.flueGasTemperature.reset(this.byVolumeForm.controls.flueGasTemperature.value);
-    if (this.byVolumeForm.controls.flueGasTemperature.value) {
-      this.byVolumeForm.controls.flueGasTemperature.markAsDirty();
-    }
-    this.calculate();
   }
 
   setProperties() {

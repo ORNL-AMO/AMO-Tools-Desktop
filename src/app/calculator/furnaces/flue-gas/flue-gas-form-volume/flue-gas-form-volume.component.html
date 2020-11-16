@@ -16,7 +16,7 @@
       <div class="input-group">
         <input name="flueGasTemperature" type="number" step="10" class="form-control"
           formControlName="flueGasTemperature" id="flueGasTemperature" onfocus="this.select();"
-          (input)="setCombustionValidation()" (focus)="focusField('flueGasTemperature')" >
+          (input)="calculate()" (focus)="focusField('flueGasTemperature')" >
         <span class="input-group-addon units"><span
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
       </div>
@@ -27,11 +27,7 @@
           ({{byVolumeForm.controls.flueGasTemperature.errors.min.min}}<span
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>).</span>
       </span>
-      <div class="alert-warning small" *ngIf="flueTemperatureWarning == true">
-        Flue Temperature less than {{tempMin}} <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>, gases may be condensing in the
-        flue and
-        calculated efficiency may not be valid.
-      </div>
+      <span class="alert-warning pull-right small" *ngIf="warnings.flueGasTemp !== null">{{warnings.flueGasTemp}}</span>
     </div>
 
     <div class="form-group">
@@ -41,35 +37,30 @@
         (focus)="focusField('oxygenCalculationMethod')" >
         <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
       </select>
-      <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
     </div>
 
-    <div class="form-group" *ngIf="!calcMethodExcessAir">
-      <label class="small" for="o2InFlueGas">Oxygen In Flue Gas</label>
-      <div class="input-group">
+    <div *ngIf="!calcMethodExcessAir">
+      <div class="form-group"> 
+        <label class="small" for="o2InFlueGas">Oxygen In Flue Gas</label>
+        <div class="input-group">
         <input name="o2InFlueGas" type="number" step="0.5" min="0" max="20.5" class="form-control"
-          formControlName="o2InFlueGas" id="o2InFlueGas" onfocus="this.select();" (input)="calcExcessAir()"
-          (focus)="focusField('o2InFlueGas')" >
+        formControlName="o2InFlueGas" id="o2InFlueGas" onfocus="this.select();" (input)="calcExcessAir()"
+        (focus)="focusField('o2InFlueGas')" >
         <span class="input-group-addon units">%</span>
-      </div>
-      <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
-
+        <span class="alert-warning pull-right small"
+        *ngIf="byVolumeForm.controls.o2InFlueGas.invalid && !byVolumeForm.controls.o2InFlueGas.pristine">
+        <span *ngIf="byVolumeForm.controls.o2InFlueGas.errors.required">Value Required</span>
+      </span>
+    </div>
+    <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
+  </div>
+      
       <div class="form-group">
         <label class="small">Excess Air</label>
         <div class="text-center small">
           {{calculationExcessAir | number:'2.2-2'}} %
         </div>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="warnings.excessAirWarning !== null">{{warnings.excessAirWarning}}</span>
-
-      <span class="alert-danger pull-right small"
-        *ngIf="byVolumeForm.controls.o2InFlueGas.invalid && !byVolumeForm.controls.o2InFlueGas.pristine">
-        <span *ngIf="byVolumeForm.controls.o2InFlueGas.errors.required">Value Required</span>
-        <span *ngIf="byVolumeForm.controls.o2InFlueGas.errors.max">Value can't be greater than
-          {{byVolumeForm.controls.o2InFlueGas.errors.max.max}} %.</span>
-        <span *ngIf="byVolumeForm.controls.o2InFlueGas.errors.min">Value can't be less than
-          {{byVolumeForm.controls.o2InFlueGas.errors.min.min}} %.</span>
-      </span>
     </div>
 
     <div class="form-group" *ngIf="calcMethodExcessAir">
@@ -89,10 +80,8 @@
       <span class="alert-danger pull-right small"
         *ngIf="byVolumeForm.controls.excessAirPercentage.invalid && !byVolumeForm.controls.excessAirPercentage.pristine">
         <span *ngIf="byVolumeForm.controls.excessAirPercentage.errors.required">Value Required</span>
-        <span *ngIf="byVolumeForm.controls.excessAirPercentage.errors.max">Value can't be greater than
-          {{byVolumeForm.controls.excessAirPercentage.errors.max.max}} %.</span>
-        <span *ngIf="byVolumeForm.controls.excessAirPercentage.errors.min">Value can't be less than
-          {{byVolumeForm.controls.excessAirPercentage.errors.min.min}} %.</span>
+        <span *ngIf="byVolumeForm.controls.excessAirPercentage.errors.greaterThan == 0">Value must be greater than than
+          0.</span>
       </span>
     </div>
 
@@ -101,18 +90,18 @@
       <div class="input-group">
         <input name="combustionAirTemperature" type="number" step="10" class="form-control"
           formControlName="combustionAirTemperature" id="combustionAirTemperature" onfocus="this.select();"
-          (input)="setFuelTempValidation()" (focus)="focusField('combustionAirTemperature')" >
+          (input)="calculate()" (focus)="focusField('combustionAirTemperature')" >
         <span class="input-group-addon units"><span
             [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span></span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="warnings.combustionAirTempWarning !== null">{{warnings.combustionAirTempWarning}}</span>
 
       <span class="alert-danger pull-right small"
         *ngIf="byVolumeForm.controls.combustionAirTemperature.invalid && !byVolumeForm.controls.combustionAirTemperature.pristine">
         <span *ngIf="byVolumeForm.controls.combustionAirTemperature.errors.required">Value Required</span>
         <span *ngIf="byVolumeForm.controls.combustionAirTemperature.errors.max">Value can't be greater than Flue Gas
-          Temperature ({{byVolumeForm.controls.combustionAirTemperature.errors.max.max}} <span
-            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>).</span>
+          Temperature ({{byVolumeForm.controls.combustionAirTemperature.errors.max.max}} 
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>).
+        </span>
       </span>
     </div>
 

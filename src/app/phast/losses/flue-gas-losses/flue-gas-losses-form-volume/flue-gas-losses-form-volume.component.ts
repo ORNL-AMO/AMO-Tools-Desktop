@@ -6,8 +6,9 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
-import { FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
-import { FlueGasWarnings, FlueGasLossesService } from '../flue-gas-losses.service';
+import { FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasLossesService } from '../flue-gas-losses.service';
+import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 @Component({
   selector: 'app-flue-gas-losses-form-volume',
@@ -50,7 +51,10 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   calculationFlueGasO2 = 0.0;
   showModal: boolean = false;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private flueGasLossesService: FlueGasLossesService, private lossesService: LossesService, private phastService: PhastService) { }
+  constructor(private suiteDbService: SuiteDbService, 
+              private flueGasCompareService: FlueGasCompareService, 
+              private flueGasFormService: FlueGasFormService, 
+              private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -154,9 +158,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(this.flueGasLossForm).flueGasByVolume;
-    this.warnings = this.flueGasLossesService.checkFlueGasByVolumeWarnings(tmpLoss);
-    let hasWarning: boolean = this.flueGasLossesService.checkWarningsExist(this.warnings);
+    let tmpLoss: FlueGasByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.flueGasLossForm).flueGasByVolume;
+    this.warnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(tmpLoss);
+    let hasWarning: boolean = this.flueGasFormService.checkWarningsExist(this.warnings);
     this.inputError.emit(hasWarning);
   }
 

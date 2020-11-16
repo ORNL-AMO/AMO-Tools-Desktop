@@ -20,6 +20,7 @@ import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
 import { AtmosphereLossesService } from './losses/atmosphere-losses/atmosphere-losses.service';
 import { SlagService } from './losses/slag/slag.service';
+import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 
 @Injectable()
@@ -34,6 +35,7 @@ export class PhastValidService {
     private coolingLossesService: CoolingLossesService,
     private wallLossesService: WallLossesService,
     private flueGasLossesService: FlueGasLossesService,
+    private flueGasFormService: FlueGasFormService,
     private extendedSurfaceLossesService: ExtendedSurfaceLossesService,
     private operationsService: OperationsService,
     private energyInputService: EnergyInputService,
@@ -176,9 +178,9 @@ export class PhastValidService {
       let flueGasForm: FormGroup;
       phast.losses.flueGasLosses.forEach(loss => {
         if (loss.flueGasByVolume) {
-          flueGasForm = this.flueGasLossesService.initByVolumeFormFromLoss(loss);
+          flueGasForm = this.flueGasFormService.initByVolumeFormFromLoss(loss, true);
         } else if (loss.flueGasByMass) {
-          flueGasForm = this.flueGasLossesService.initByVolumeFormFromLoss(loss);
+          flueGasForm = this.flueGasFormService.initByMassFormFromLoss(loss, true);
         }
 
         if (flueGasForm.status === 'INVALID') {

@@ -6,8 +6,9 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
-import { FlueGasLossesService, FlueGasWarnings } from '../flue-gas-losses.service';
-import { FlueGasByMass } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasLossesService } from '../flue-gas-losses.service';
+import { FlueGasByMass, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 @Component({
   selector: 'app-flue-gas-losses-form-mass',
@@ -50,7 +51,9 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   calculationExcessAir = 0.0;
   calculationFlueGasO2 = 0.0;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService,
+  constructor(private suiteDbService: SuiteDbService, 
+    private flueGasFormService: FlueGasFormService, 
+    private flueGasCompareService: FlueGasCompareService,
     private lossesService: LossesService, private phastService: PhastService, private flueGasLossesService: FlueGasLossesService) { }
 
   ngOnInit() {
@@ -175,9 +178,9 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpLoss: FlueGasByMass = this.flueGasLossesService.buildByMassLossFromForm(this.flueGasLossForm).flueGasByMass;
-    this.warnings = this.flueGasLossesService.checkFlueGasByMassWarnings(tmpLoss);
-    let hasWarning: boolean = this.flueGasLossesService.checkWarningsExist(this.warnings);
+    let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.flueGasLossForm).flueGasByMass;
+    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
+    let hasWarning: boolean = this.flueGasFormService.checkWarningsExist(this.warnings);
     this.inputError.emit(hasWarning);
   }
 
