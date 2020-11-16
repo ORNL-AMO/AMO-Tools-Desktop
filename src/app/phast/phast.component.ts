@@ -229,7 +229,7 @@ export class PhastComponent implements OnInit {
     this.phastOptions = new Array<{ name: string, phast: PHAST }>();
     this.phastOptions.push({ name: 'Baseline', phast: this._phast });
     this.sankeyPhast = this.phastOptions[0].phast;
-    this.showSankeyLabelOptions = (this.sankeyPhast.name == 'Baseline' && this.sankeyPhast.setupDone) || (this.sankeyPhast.valid && this.sankeyPhast.valid.isValid);
+    this.showSankeyLabelOptions = ((this.sankeyPhast.name == 'Baseline' || this.sankeyPhast.name == null) && this.sankeyPhast.setupDone) || (this.sankeyPhast.valid && this.sankeyPhast.valid.isValid);
     if (this._phast.modifications) {
       this._phast.modifications.forEach(mod => {
         this.phastOptions.push({ name: mod.phast.name, phast: mod.phast });
