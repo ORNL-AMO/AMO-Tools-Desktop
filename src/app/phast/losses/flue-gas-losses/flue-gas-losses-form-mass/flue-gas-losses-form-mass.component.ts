@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap';
@@ -6,7 +6,6 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
-import { FlueGasLossesService } from '../flue-gas-losses.service';
 import { FlueGasByMass, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 
@@ -54,7 +53,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, 
     private flueGasFormService: FlueGasFormService, 
     private flueGasCompareService: FlueGasCompareService,
-    private lossesService: LossesService, private phastService: PhastService, private flueGasLossesService: FlueGasLossesService) { }
+    private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -172,6 +171,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   save() {
+    this.flueGasLossForm = this.flueGasFormService.setValidators(this.flueGasLossForm);
     this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);

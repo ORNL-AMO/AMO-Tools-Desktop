@@ -1,10 +1,8 @@
 import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { settings } from 'cluster';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FlueGas, FlueGasByMass, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
@@ -32,7 +30,6 @@ export class FlueGasFormMassComponent implements OnInit {
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
-  modificationDataSub: Subscription;
 
   byMassForm: FormGroup;
   options: any;
@@ -45,8 +42,6 @@ export class FlueGasFormMassComponent implements OnInit {
   calculationExcessAir: number = 0.0;
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
-  flueTemperatureWarning: boolean = false;
-  tempMin: number;
   warnings: FlueGasWarnings;
 
   constructor(private flueGasService: FlueGasService,
@@ -94,7 +89,6 @@ export class FlueGasFormMassComponent implements OnInit {
     }
     this.setCalcMethod();
     this.calcExcessAir();
-    this.calculate();
   }
 
   setForm() {
@@ -117,7 +111,6 @@ export class FlueGasFormMassComponent implements OnInit {
   checkWarnings() {
     let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm).flueGasByMass;
     this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
-    debugger;
   }
 
   setCalcMethod() {
@@ -173,16 +166,13 @@ export class FlueGasFormMassComponent implements OnInit {
   }
 
   calculate() {
-    let valid = this.flueGasFormService.setValidators(this.byMassForm).valid;
-    debugger;
+    this.byMassForm = this.flueGasFormService.setValidators(this.byMassForm);
     this.checkWarnings();
-    if (valid) {
-      let currentDataByMass: FlueGas;
+    if (this.byMassForm.valid) {
+      let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
       if (this.isBaseline) {
-        currentDataByMass = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
         this.flueGasService.baselineData.next(currentDataByMass);
       } else { 
-        currentDataByMass = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
         this.flueGasService.modificationData.next(currentDataByMass);
       }
     }

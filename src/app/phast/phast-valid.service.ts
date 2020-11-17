@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { FormGroup } from '@angular/forms';
-import { FlueGasLossesService } from './losses/flue-gas-losses/flue-gas-losses.service';
 import { ExtendedSurfaceLossesService } from './losses/extended-surface-losses/extended-surface-losses.service';
 import { OperationsService } from './losses/operations/operations.service';
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
@@ -34,7 +33,6 @@ export class PhastValidService {
     private chargeMaterialService: ChargeMaterialService,
     private coolingLossesService: CoolingLossesService,
     private wallLossesService: WallLossesService,
-    private flueGasLossesService: FlueGasLossesService,
     private flueGasFormService: FlueGasFormService,
     private extendedSurfaceLossesService: ExtendedSurfaceLossesService,
     private operationsService: OperationsService,

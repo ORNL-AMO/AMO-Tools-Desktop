@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FlueGas, FlueGasOutput } from '../../../shared/models/phast/losses/flueGas';
@@ -14,8 +14,6 @@ export class FlueGasComponent implements OnInit {
 
   @Input()
   settings: Settings;
-  @Output('emitEfficiency')
-  emitEfficiency = new EventEmitter<number>();
   @Input()
   inTreasureHunt: boolean;
   
@@ -49,7 +47,7 @@ export class FlueGasComponent implements OnInit {
               private flueGasService: FlueGasService) { }
 
   ngOnInit() {
-    // TODO results not yet built - default to help
+    // results not yet built - default to help
     // if (this.settingsDbService.globalSettings.defaultPanelTab) {
     //   this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     // }
@@ -59,9 +57,10 @@ export class FlueGasComponent implements OnInit {
 
     let existingInputs = this.flueGasService.baselineData.getValue();
     if(!existingInputs) {
-      this.flueGasService.initDefaultEmptyInputs(this.settings);
       this.flueGasService.initDefaultEmptyOutput();
+      this.flueGasService.initDefaultEmptyInputs();
     }
+    this.output = this.flueGasService.output.getValue();
     this.initSubscriptions();
     if(this.modificationData) {
       this.modificationExists = true;
@@ -87,12 +86,20 @@ export class FlueGasComponent implements OnInit {
       this.flueGasService.calculate(this.settings);
     })
     this.outputSubscription = this.flueGasService.output.subscribe(val => {
-      this.output = val;
+      if (val) {
+        this.output = val;
+      }
     });
   }
-  
-  setTab(str: string) {
-    this.tabSelect = str;
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  changeFuelType() {
+    this.flueGasService.initDefaultEmptyOutput();
   }
 
   createModification() {
@@ -103,7 +110,7 @@ export class FlueGasComponent implements OnInit {
 
    btnResetData() {
     this.flueGasService.resetData.next(true);
-    this.flueGasService.initDefaultEmptyInputs(this.settings);
+    this.flueGasService.initDefaultEmptyInputs();
     this.flueGasService.modificationData.next(undefined);
     this.method = 'By Mass';
     this.modificationExists = false;
@@ -132,12 +139,6 @@ export class FlueGasComponent implements OnInit {
     this.flueGasService.currentField.next(str);
   }
   
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.resizeTabs();
-    }, 100);
-  }
-
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;

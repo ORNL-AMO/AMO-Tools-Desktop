@@ -56,6 +56,7 @@ export interface FlueGasOutput {
 
 export interface FlueGasResult {
     availableHeat?: number;
+    availableHeatError?: string;
     flueGasLosses?: number;
   }
   

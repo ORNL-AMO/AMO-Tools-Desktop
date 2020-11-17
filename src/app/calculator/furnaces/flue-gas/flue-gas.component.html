@@ -4,7 +4,7 @@
 		[ngClass]="{'justify-content-between': inTreasureHunt}">
 		<div class="d-flex pl-2 align-items-center">
 		  <div class="text-center">
-			<img src="assets/images/calculator-icons/furnace-icons/o2.png" class="ico-size">
+			<img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="ico-size">
 		  </div>
 		  <div class="pl-2">
 			<h3>Flue Gas</h3>
@@ -37,8 +37,8 @@
 			  <!-- app form -->
 			  <div class="form-group">
 				<label class="small" for="method">Type of fuel</label>
-				<select class="form-control" id="method" [(ngModel)]="method" (focus)="focusField('measurementType')"
-				  (blur)="focusField('default')" (change)="changeFuelType()">
+				<select class="form-control" id="method" [(ngModel)]="method" 
+				(focus)="focusField('measurementType')" (change)="changeFuelType()">
 				  <option [ngValue]="'By Volume'">Gas</option>
 				  <option [ngValue]="'By Mass'">Solid/Liquid</option>
 				</select>
@@ -49,7 +49,7 @@
 			 [inModal]="inModal" [isBaseline]="true"></app-flue-gas-form-volume>
 			 
 			 <!-- Results -->
-			 <div *ngIf="output" class="d-flex flex-column mt-3 mb-2" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
+			 <div *ngIf="output" class="d-flex flex-column mt-3 mb-2">
 				<div class="form-group m-0">
 				  <label class="bold">Available Heat</label>
 				  <div *ngIf="output.baseline.availableHeat" class="text-center bold small">
@@ -58,7 +58,7 @@
 				  <div *ngIf="!output.baseline.availableHeat" class="text-center bold small">
 					&mdash; &mdash;
 				  </div>
-				  <span class="alert-warning pull-right small" *ngIf="availableHeatError !== null">{{availableHeatError}}</span>
+				  <span class="alert-warning pull-right small" *ngIf="output.baseline.availableHeatError">{{output.availableHeatError}}</span>
 				</div>
 				<div class="form-group m-0">
 				  <label class="bold">Flue Gas Losses</label>
@@ -98,8 +98,8 @@
 			  <!-- app form -->
 				<div class="form-group">
 					<label class="small" for="method">Type of fuel</label>
-					<select disabled class="form-control" id="method" [(ngModel)]="method" (focus)="focusField('measurementType')"
-					  (blur)="focusField('default')" (change)="changeFuelType()">
+					<select disabled class="form-control" id="method" [(ngModel)]="method" 
+					(focus)="focusField('measurementType')" (change)="changeFuelType()">
 					  <option [ngValue]="'By Volume'">Gas</option>
 					  <option [ngValue]="'By Mass'">Solid/Liquid</option>
 					</select>
@@ -118,7 +118,7 @@
 					  <div *ngIf="!output.modification.availableHeat" class="text-center bold small">
 						&mdash; &mdash;
 					  </div>
-					  <span class="alert-warning pull-right small" *ngIf="availableHeatError !== null">{{availableHeatError}}</span>
+					  <span class="alert-warning pull-right small" *ngIf="output.modification.availableHeatError">{{output.modification.availableHeatError}}</span>
 					</div>
 					<div class="form-group m-0">
 					  <label class="bold">Flue Gas Losses</label>

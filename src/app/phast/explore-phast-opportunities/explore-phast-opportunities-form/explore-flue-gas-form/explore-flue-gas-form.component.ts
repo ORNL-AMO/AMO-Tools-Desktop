@@ -5,7 +5,6 @@ import { FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/
 import { LossTab } from '../../../tabs';
 import { PhastService } from '../../../phast.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { FlueGasLossesService } from '../../../losses/flue-gas-losses/flue-gas-losses.service';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 @Component({
@@ -43,7 +42,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   modificationWarnings: { excessAirWarning: string, o2Warning: string };
   constructor(private phastService: PhastService, private suiteDbService: SuiteDbService, 
               private flueGasFormService: FlueGasFormService,
-              private flueGasLossesService: FlueGasLossesService) { }
+              ) { }
 
   ngOnInit() {
     this.initData();

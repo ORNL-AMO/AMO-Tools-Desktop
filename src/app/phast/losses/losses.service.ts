@@ -4,7 +4,6 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../phast-results.service';
-import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
 import { LossTab, defaultTabs } from '../tabs';
 import * as _ from 'lodash';
 import { FlueGasFormService } from '../../calculator/furnaces/flue-gas/flue-gas-form.service';
@@ -33,7 +32,7 @@ export class LossesService {
   constructor(private phastService: PhastService, 
               private phastResultsService: PhastResultsService, 
               private flueGasFormService: FlueGasFormService,
-              private flueGasLossesService: FlueGasLossesService) {
+              ) {
     this.lossIndex = new BehaviorSubject<number>(0);
     // this.baseline = new BehaviorSubject<PHAST>(null);
     //this.modification = new BehaviorSubject<Modification>(null);

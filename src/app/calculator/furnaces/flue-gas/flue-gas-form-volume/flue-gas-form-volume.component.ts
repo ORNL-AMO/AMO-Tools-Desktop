@@ -30,7 +30,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
-  modificationDataSub: Subscription;
 
   byVolumeForm: FormGroup;
 
@@ -42,8 +41,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   calculationExcessAir: number = 0.0;
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
-  flueTemperatureWarning: boolean = false;
-  tempMin: number;
   warnings: FlueGasWarnings;
 
   constructor(private flueGasService: FlueGasService, 
@@ -92,7 +89,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     }
     this.setCalcMethod();
     this.calcExcessAir();
-    this.calculate();
   }
 
   setForm() {
@@ -172,15 +168,13 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   }
 
   calculate() {
-    let valid = this.flueGasFormService.setValidators(this.byVolumeForm).valid;
+    this.byVolumeForm = this.flueGasFormService.setValidators(this.byVolumeForm);
     this.checkWarnings();
-    if (valid) {
-      let currentDataByVolume: FlueGas;
+    if (this.byVolumeForm.valid) {
+      let currentDataByVolume: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
       if (this.isBaseline) {
-        currentDataByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
         this.flueGasService.baselineData.next(currentDataByVolume);
       } else {
-        currentDataByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
         this.flueGasService.modificationData.next(currentDataByVolume);
       }
     }

@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash';
-import { FlueGasLossesService } from './flue-gas-losses.service';
 import { PhastService } from '../../phast.service';
 import { FlueGas } from '../../../shared/models/phast/losses/flueGas';
 import { Losses } from '../../../shared/models/phast/phast';
@@ -46,8 +45,8 @@ export class FlueGasLossesComponent implements OnInit {
   lossesLocked: boolean = false;
   idString: string;
   constructor(private phastService: PhastService, 
-              private flueGasService: FlueGasService, 
               private flueGasFormService: FlueGasFormService, 
+              private cd: ChangeDetectorRef,
               private flueGasCompareService: FlueGasCompareService) { }
 
   ngOnInit() {
@@ -187,6 +186,7 @@ export class FlueGasLossesComponent implements OnInit {
         loss.systemLosses = null;
       }
     }
+    this.cd.detectChanges();
   }
 
   setName(loss: FlueGasObj) {

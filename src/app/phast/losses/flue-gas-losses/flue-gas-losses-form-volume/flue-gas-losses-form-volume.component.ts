@@ -7,7 +7,6 @@ import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
 import { FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
-import { FlueGasLossesService } from '../flue-gas-losses.service';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 @Component({
@@ -187,6 +186,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   save() {
+    this.flueGasLossForm = this.flueGasFormService.setValidators(this.flueGasLossForm);
     this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);

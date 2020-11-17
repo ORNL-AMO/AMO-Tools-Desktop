@@ -110,6 +110,10 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="byMassForm.controls.fuelTemperature.invalid && !byMassForm.controls.fuelTemperature.pristine">
+        <span *ngIf="byMassForm.controls.fuelTemperature.errors.required">Value Required</span>
+      </span>
       </div>
 
     <div class="form-group">

@@ -142,9 +142,8 @@ export class FlueGasFormService {
   }
 
   setValidators(formGroup: FormGroup): FormGroup {
-    formGroup = this.setCombustionAirTempValidators(formGroup);
     formGroup = this.setFlueGasTempValidators(formGroup);
-    formGroup = this.setFuelTempValidators(formGroup);
+    formGroup = this.setCombustionAirTempValidators(formGroup);
     return formGroup;
   }
 
@@ -152,6 +151,8 @@ export class FlueGasFormService {
     let flueGasTemp = formGroup.controls.flueGasTemperature.value;
     if (flueGasTemp) {
       formGroup.controls.combustionAirTemperature.setValidators([Validators.required, Validators.max(flueGasTemp)]);
+      formGroup.controls.combustionAirTemperature.markAsDirty();
+      formGroup.controls.combustionAirTemperature.updateValueAndValidity();
     }
     return formGroup;
   }
@@ -160,22 +161,16 @@ export class FlueGasFormService {
     let combustionAirTemperature = formGroup.controls.combustionAirTemperature.value;
     if (combustionAirTemperature) {
       formGroup.controls.flueGasTemperature.setValidators([Validators.required, Validators.min(combustionAirTemperature)]);
+      formGroup.controls.flueGasTemperature.markAsDirty();
+      formGroup.controls.flueGasTemperature.updateValueAndValidity();
     }
     return formGroup;
-  }
-
-  setFuelTempValidators(form: FormGroup): FormGroup {
-    form.controls.flueGasTemperature.setValidators([Validators.required, Validators.min(form.controls.combustionAirTemperature.value)]);
-    // form.controls.flueGasTemperature.reset(form.controls.flueGasTemperature.value);
-    if (form.controls.flueGasTemperature.value) {
-      form.controls.flueGasTemperature.markAsDirty();
-    }
-    return form;
   }
 
   buildByMassLossFromForm(form: FormGroup): FlueGas {
     let flueGas: FlueGas = {
       name: form.controls.name.value,
+      flueGasType: "By Mass",
       flueGasByMass: {
         gasTypeId: form.controls.gasTypeId.value,
         flueGasTemperature: form.controls.flueGasTemperature.value,
@@ -206,6 +201,7 @@ export class FlueGasFormService {
   buildByVolumeLossFromForm(form: FormGroup): FlueGas {
     let flueGas: FlueGas = {
       name: form.controls.name.value,
+      flueGasType: "By Volume",
       flueGasByVolume: {
         gasTypeId: form.controls.gasTypeId.value,
         flueGasTemperature: form.controls.flueGasTemperature.value,
@@ -256,8 +252,6 @@ export class FlueGasFormService {
 
   checkFlueGasTemp(flueGas: FlueGasByMass | FlueGasByVolume) {
     if (flueGas.flueGasTemperature && flueGas.flueGasTemperature < this.flueGasTempMin) {
-      // return `Flue Gas Temperature less than ${this.flueGasTempMin} ${settings.steamTemperatureMeasurement}, gases may be condensing in the
-      //           flue and calculated efficiency may not be valid.`
       return `Flue Gas Temperature less than ${this.flueGasTempMin}, gases may be condensing in the
                 flue and calculated efficiency may not be valid.`
     } else {
@@ -274,7 +268,7 @@ export class FlueGasFormService {
   }
 
 
-  // TODO Below still used in Assessment
+  // Below checks still used in Assessment
   checkUnburnedCarbon(flueGas: FlueGasByMass): string {
     if (flueGas.unburnedCarbonInAsh < 0) {
       return 'Unburned Carbon in Ash must be equal or greater than 0%';
