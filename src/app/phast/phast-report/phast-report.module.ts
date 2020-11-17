@@ -19,6 +19,7 @@ import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { InvalidPhastModule } from '../invalid-phast/invalid-phast.module';
+import { PhastSankeyModule } from '../../shared/phast-sankey/phast-sankey.module';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { InvalidPhastModule } from '../invalid-phast/invalid-phast.module';
     PieChartModule,
     SimpleTooltipModule,
     SharedPipesModule,
-    InvalidPhastModule
+    InvalidPhastModule,
+    PhastSankeyModule
   ],
   declarations: [
     PhastReportComponent, 

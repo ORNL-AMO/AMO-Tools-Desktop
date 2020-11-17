@@ -16,6 +16,7 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-fsat',
@@ -86,7 +87,8 @@ export class FsatComponent implements OnInit {
     private fanMotorService: FanMotorService,
     private fanFieldDataService: FanFieldDataService,
     private fanSetupService: FanSetupService,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+    private settingsService: SettingsService) {
   }
 
   ngOnInit() {
@@ -239,8 +241,8 @@ export class FsatComponent implements OnInit {
   getSettings() {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (!this.settings) {
-      this.settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-      this.addSettings(this.settings);
+      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(settings);
     }
   }
 
@@ -409,12 +411,12 @@ export class FsatComponent implements OnInit {
   }
 
   addSettings(settings: Settings) {
-    delete settings.id;
-    delete settings.directoryId;
-    settings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(settings).then(id => {
-      this.settings.id = id;
-      this.settingsDbService.setAll();
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+      });
     });
   }
 }

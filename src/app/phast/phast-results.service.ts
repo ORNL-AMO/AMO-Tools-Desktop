@@ -110,11 +110,12 @@ export class PhastResultsService {
 
     //EAF
     if (resultCats.showEnInput1 && this.checkLoss(phast.losses.energyInputEAF)) {
-      let tmpForm = this.energyInputService.getFormFromLoss(phast.losses.energyInputEAF[0]);
+      let tmpForm = this.energyInputService.getFormFromLoss(phast.losses.energyInputEAF[0], undefined);
       if (tmpForm.status === 'VALID') {
         let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
         results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
         //use grossHeatInput here because it will be updated if exhaustGasEAF exists
+        results.grossHeatInput = results.grossHeatInput + results.totalExhaustGasEAF;
         results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.totalChemicalEnergyInput;
         results.energyInputTotal = results.grossHeatInput;
       }
