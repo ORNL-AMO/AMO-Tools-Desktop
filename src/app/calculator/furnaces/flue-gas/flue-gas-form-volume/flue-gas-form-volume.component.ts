@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';

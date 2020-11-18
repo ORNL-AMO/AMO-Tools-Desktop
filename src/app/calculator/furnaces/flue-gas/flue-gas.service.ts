@@ -29,25 +29,6 @@ export class FlueGasService {
     this.generateExample = new BehaviorSubject<boolean>(undefined);
   }
 
-  // flueGasByVolume(input: FlueGasByVolume, settings: Settings) {
-  //   let inputs: FlueGasByVolume = JSON.parse(JSON.stringify(input));
-  //   inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
-  //   inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
-  //   inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from(settings.temperatureMeasurement).to('F');
-  //   let results = phastAddon.flueGasLossesByVolume(inputs);
-  //   return results;
-  // }
-
-  // flueGasByMass(input: FlueGasByMass, settings: Settings) {
-  //   let inputs: FlueGasByMass = JSON.parse(JSON.stringify(input));
-  //   inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from(settings.temperatureMeasurement).to('F');
-  //   inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from(settings.temperatureMeasurement).to('F');
-  //   inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from(settings.temperatureMeasurement).to('F');
-  //   inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from(settings.temperatureMeasurement).to('F');
-  //   let results = phastAddon.flueGasLossesByMass(inputs);
-  //   return results;
-  // }
-
   calculate(settings: Settings) {
     let baselineFlueGas = this.baselineData.getValue();
     let modificationFlueGas = this.modificationData.getValue();
@@ -73,14 +54,12 @@ export class FlueGasService {
       flueGasLosses: 0
     }
     if (flueGasData.flueGasType == 'By Volume' && flueGasData.flueGasByVolume) {
-      // let availableHeat = this.flueGasByVolume(flueGasData.flueGasByVolume, settings);
       let availableHeat = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
       result.availableHeat = availableHeat * 100;
       let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByVolume.heatInput;
       result.flueGasLosses = flueGasLosses;
     } else if (flueGasData.flueGasType === 'By Mass' && flueGasData.flueGasByMass) {
       let availableHeat = this.phastService.flueGasByMass(flueGasData.flueGasByMass, settings);
-      // let availableHeat = this.flueGasByMass(flueGasData.flueGasByMass, settings);
       result.availableHeat = availableHeat * 100;
       let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByMass.heatInput;
       result.flueGasLosses = flueGasLosses;
