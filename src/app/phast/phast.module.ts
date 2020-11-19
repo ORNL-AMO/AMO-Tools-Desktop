@@ -38,6 +38,7 @@ import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 import { PhastValidService } from './phast-valid.service';
+import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { PhastValidService } from './phast-valid.service';
     UtilitiesModule,
     TabsTooltipModule,
     ToastModule,
-    UnitConverterModule
+    UnitConverterModule,
+    PhastSankeyModule,
   ],
   providers: [
     PhastService,

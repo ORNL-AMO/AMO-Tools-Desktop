@@ -214,7 +214,7 @@
     </div>
   </div>
   <div class="flex-fill w-50" [ngStyle]="{'height.px': containerHeight}">
-    <app-losses-result-panel *ngIf="!inSetup" [inSetup]="inSetup" [lossesTab]="selectedTab"
+    <app-losses-result-panel *ngIf="!inSetup" [inSetup]="inSetup" [inModifyConditions]="true" [lossesTab]="selectedTab"
       [currentField]="currentField" [settings]="settings" [phast]="phast" [toggleCalculate]="toggleCalculate"
       [modification]="phast.modifications[modificationIndex]" [containerHeight]="containerHeight"
       (emitSave)="saveModifications()"></app-losses-result-panel>
