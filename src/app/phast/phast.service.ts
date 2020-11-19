@@ -29,7 +29,6 @@ import { AtmosphereLossesService } from './losses/atmosphere-losses/atmosphere-l
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
 import { ChargeMaterialService } from './losses/charge-material/charge-material.service';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
-import { WallLossesService } from './losses/wall-losses/wall-losses.service';
 import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
 import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
@@ -37,6 +36,7 @@ import { SlagService } from './losses/slag/slag.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { StepTab, stepTabs, specTabs } from './tabs';
 import * as _ from 'lodash';
+import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
 @Injectable()
 export class PhastService {
 
@@ -54,7 +54,7 @@ export class PhastService {
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
     private chargeMaterialService: ChargeMaterialService,
     private coolingLossesService: CoolingLossesService,
-    private wallLossesService: WallLossesService,
+    private wallFormService: WallFormService,
     private fixtureLossesService: FixtureLossesService,
     private gasLeakageLossesService: GasLeakageLossesService,
     private otherLossessService: OtherLossesService,
@@ -734,7 +734,7 @@ export class PhastService {
         conditionFactor: 1,
         correctionFactor: 1
       };
-      let tmpForm = this.wallLossesService.getWallLossForm(tmpWallLoss);
+      let tmpForm = this.wallFormService.getWallLossForm(tmpWallLoss);
       if (tmpForm.status === 'VALID') {
         let lossVal = this.wallLosses(tmpWallLoss, settings);
         if (isNaN(lossVal) === false) {
@@ -822,7 +822,7 @@ export class PhastService {
   sumWallLosses(losses: WallLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.wallLossesService.getWallLossForm(loss);
+      let tmpForm = this.wallFormService.getWallLossForm(loss);
       if (tmpForm.status === 'VALID') {
         sum += this.wallLosses(loss, settings);
       }

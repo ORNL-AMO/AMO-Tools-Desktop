@@ -3,9 +3,13 @@ import { CommonModule } from '@angular/common';
 import { WallFormComponent } from './wall-form/wall-form.component';
 import { WallHelpComponent } from './wall-help/wall-help.component';
 import { WallResultsComponent } from './wall-results/wall-results.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { WallService } from './wall.service';
+import { WallFormService } from './wall-form.service';
+import { WallComponent } from './wall.component';
+import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
+import { ModalModule } from 'ngx-bootstrap';
 
 
 
@@ -13,14 +17,23 @@ import { WallService } from './wall.service';
   declarations: [
     WallFormComponent, 
     WallHelpComponent, 
-    WallResultsComponent],
+    WallResultsComponent,
+    WallComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
+    ModalModule,
+    ReactiveFormsModule,
     SharedPipesModule,
+    SuiteDbModule
+  ],
+  exports: [
+    WallComponent
   ],
   providers: [
-    WallService
+    WallService,
+    WallFormService
   ]
 })
 export class WallModule { }

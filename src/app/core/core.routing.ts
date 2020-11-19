@@ -83,6 +83,7 @@ import { CoolingTowerComponent } from '../calculator/process-cooling/cooling-tow
 import { FanPsychrometricComponent } from '../calculator/utilities/fan-psychrometric/fan-psychrometric.component';
 import { MotorInventoryComponent } from '../motor-inventory/motor-inventory.component';
 import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing';
+import { WallComponent } from '../calculator/furnaces/wall/wall.component';
 
 export const coreRoutes: Routes = [
   {
@@ -318,6 +319,10 @@ export const coreRoutes: Routes = [
           {
             path: 'o2-enrichment',
             component: O2EnrichmentComponent
+          },
+          {
+            path: 'wall-loss',
+            component: WallComponent
           },
           {
             path: 'achievable-efficiency',

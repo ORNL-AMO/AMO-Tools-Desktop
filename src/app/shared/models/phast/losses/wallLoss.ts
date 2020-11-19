@@ -9,5 +9,16 @@ export interface WallLoss {
   conditionFactor?: number;
   correctionFactor?: number;
   heatLoss?: number;
+  availableHeat?: number;
   id?: any;
+}
+
+export interface WallLossOutput {
+  baseline: WallLossResults,
+  modification?: WallLossResults
+}
+
+export interface WallLossResults {
+  wallLoss?: number;
+  grossLoss?: number;
 }

@@ -4,10 +4,10 @@
 		[ngClass]="{'justify-content-between': inTreasureHunt}">
 		<div class="d-flex pl-2 align-items-center">
 		  <div class="text-center">
-			<img src="assets/images/calculator-icons/furnace-icons/o2.png" class="ico-size">
+			<img src="assets/images/calculator-icons/furnace-icons/wall-loss.png" class="ico-size">
 		  </div>
 		  <div class="pl-2">
-			<h3>Flue Gas</h3>
+			<h3>Wall Loss</h3>
 		  </div>
 		</div>
 		<div class="d-flex pr-2" *ngIf="inTreasureHunt">
@@ -34,40 +34,28 @@
 			  <h3>Baseline</h3>
 			</div>
 			<div class="d-flex flex-column mx-2 mb-4">
-			  <!-- app form -->
-			  <div class="form-group">
-				<label class="small" for="method">Type of fuel</label>
-				<select class="form-control" id="method" [(ngModel)]="method" (focus)="focusField('measurementType')"
-				  (blur)="focusField('default')" (change)="changeFuelType()">
-				  <option [ngValue]="'By Volume'">Gas</option>
-				  <option [ngValue]="'By Mass'">Solid/Liquid</option>
-				</select>
-			  </div>
-			<app-flue-gas-form-mass *ngIf="method == 'By Mass'" [inModal]="inModal" [settings]="settings"
-			 (focusField)="focusField($event)" [inModal]="inModal" [isBaseline]="true" (emitCalculate)="calculate($event)"></app-flue-gas-form-mass>
-			<app-flue-gas-form-volume *ngIf="method == 'By Volume'" [inModal]="inModal" [settings]="settings"
-			 (focusField)="focusField($event)" [inModal]="inModal" [isBaseline]="true" (emitCalculate)="calculate($event)"></app-flue-gas-form-volume>
-			 
+				<app-wall-form [inModal]="inModal" [settings]="settings" [selected]="baselineSelected" [isBaseline]="true"></app-wall-form>
 			 <!-- Results -->
-			 <div *ngIf="output" class="d-flex flex-column mt-3 mb-2" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
+			 <div *ngIf="output.baseline" class="d-flex flex-column mt-3 mb-2">
+					<div class="form-group m-0">
+					  <label class="bold">Wall Loss</label>
+					  <div *ngIf="output.baseline.wallLoss" class="text-center bold small">
+						{{output.baseline.wallLoss | sigFigs:'6'}} 
+						<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+					  </div>
+					  <div *ngIf="!output.baseline.wallLoss" class="text-center bold small">
+						&mdash; &mdash;
+					  </div>
+					</div>
+			  </div>
+			  <div *ngIf="output.baseline" class="d-flex flex-column mt-1 mb-2">
 				<div class="form-group m-0">
-				  <label class="bold">Available Heat</label>
-				  <div *ngIf="output.baseline.availableHeat" class="text-center bold small">
-					{{output.baseline.availableHeat | number:'2.1-1'}} %
+				  <label class="bold">Gross Loss</label>
+				  <div *ngIf="output.baseline.grossLoss" class="text-center bold small">
+					{{output.baseline.grossLoss | sigFigs:'6'}} 
+					<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
 				  </div>
-				  <div *ngIf="!output.baseline.availableHeat" class="text-center bold small">
-					&mdash; &mdash;
-				  </div>
-				  <span class="alert-warning pull-right small" *ngIf="availableHeatError !== null">{{availableHeatError}}</span>
-				</div>
-				<div class="form-group m-0">
-				  <label class="bold">Flue Gas Losses</label>
-				  <div *ngIf="output.baseline.flueGasLosses" class="text-center bold small">
-					{{output.baseline.flueGasLosses | sigFigs:'3'}} 
-					<span class="input-group-addon"><span
-						[innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr</span>
-				  </div>
-				  <div *ngIf="!output.baseline.flueGasLosses" class="text-center bold small">
+				  <div *ngIf="!output.baseline.grossLoss" class="text-center bold small">
 					&mdash; &mdash;
 				  </div>
 				</div>
@@ -85,49 +73,36 @@
 			  </div>
 			</div>
 		  </div>
-  
-  
+
 		  <!-- Modification -->
 		  <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="setModificationSelected()"
 			[ngClass]="{'disabled': baselineSelected == true, 'modal-open': isModalOpen == true}">
 			<div class="header mx-2 mb-4">
 			  <h3>Modification</h3>
 			</div>
-			<!-- forms -->
 			<div class="d-flex flex-column ml-2 mr-2 mb-4">
-			  <!-- app form -->
-				<div class="form-group">
-					<label class="small" for="method">Type of fuel</label>
-					<select disabled class="form-control" id="method" [(ngModel)]="method" (focus)="focusField('measurementType')"
-					  (blur)="focusField('default')" (change)="changeFuelType()">
-					  <option [ngValue]="'By Volume'">Gas</option>
-					  <option [ngValue]="'By Mass'">Solid/Liquid</option>
-					</select>
-				</div>
-			<app-flue-gas-form-mass *ngIf="method == 'By Mass'" [inModal]="inModal" [settings]="settings"
-			 (focusField)="focusField($event)" [inModal]="inModal" [isBaseline]="false"></app-flue-gas-form-mass>
-			 <app-flue-gas-form-volume *ngIf="method == 'By Volume'" [inModal]="inModal" [settings]="settings"
-			 (focusField)="focusField($event)" [inModal]="inModal" [isBaseline]="false" ></app-flue-gas-form-volume>
+			<app-wall-form [inModal]="inModal" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-wall-form>
 			 <!-- Mod results -->
-				<div class="d-flex flex-column mt-3 mb-2">
+				<div *ngIf="output.modification" class="d-flex flex-column mt-3 mb-2">
 					<div class="form-group m-0">
-					  <label class="bold">Available Heat</label>
-					  <div *ngIf="output.modification.availableHeat" class="text-center bold small">
-						{{output.modification.availableHeat | number:'2.1-1'}} %
+					  <label class="bold">Wall Loss</label>
+					  <div *ngIf="output.modification.wallLoss" class="text-center bold small">
+						{{output.modification.wallLoss | sigFigs:'6'}} 
+						<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
 					  </div>
-					  <div *ngIf="!output.modification.availableHeat" class="text-center bold small">
+					  <div *ngIf="!output.modification.wallLoss" class="text-center bold small">
 						&mdash; &mdash;
 					  </div>
-					  <span class="alert-warning pull-right small" *ngIf="availableHeatError !== null">{{availableHeatError}}</span>
 					</div>
+				  </div>
+				  <div *ngIf="output.modification" class="d-flex flex-column mt-1 mb-2">
 					<div class="form-group m-0">
-					  <label class="bold">Flue Gas Losses</label>
-					  <div *ngIf="output.modification.flueGasLosses" class="text-center bold small">
-						{{output.modification.flueGasLosses | sigFigs:'3'}}
-						<span class="input-group-addon"><span
-							[innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr</span>
+					  <label class="bold">Gross Loss</label>
+					  <div *ngIf="output.modification.grossLoss" class="text-center bold small">
+						{{output.modification.grossLoss | sigFigs:'6'}} 
+						<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
 					  </div>
-					  <div *ngIf="!output.modification.flueGasLosses" class="text-center bold small">
+					  <div *ngIf="!output.modification.grossLoss" class="text-center bold small">
 						&mdash; &mdash;
 					  </div>
 					</div>
@@ -153,12 +128,6 @@
 		<div class="col-4 p-0 help-panel">
 		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
 			<div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
-			  <!-- <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
-				  (click)="setTab('results')">
-				  <div>Results</div>
-				</a>
-			  </div> -->
 			  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
 				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
 				  <div>Help</div>
@@ -167,9 +136,7 @@
 			</div>
   
 			<div class="p-2">
-			<!-- <app-flue-gas-results class="w-100" *ngIf="tabSelect == 'results'" [settings]="settings" 
-			[modificationExists]="modificationExists"></app-flue-gas-results> -->
-			<app-flue-gas-help *ngIf="tabSelect == 'help'" [settings]="settings" [currentField]="currentField"></app-flue-gas-help>
+			<app-wall-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-wall-help>
 			</div>
 		  </div>
 		</div>

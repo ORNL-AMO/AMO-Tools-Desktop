@@ -1,7 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
+import { Subscription } from 'rxjs';
 import { WallLossWarnings } from '../../../../phast/losses/wall-losses/wall-losses.service';
 import { WallLossesSurface } from '../../../../shared/models/materials';
+import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
+import { Settings } from '../../../../shared/models/settings';
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { WallFormService } from '../wall-form.service';
+import { WallService } from '../wall.service';
 
 @Component({
   selector: 'app-wall-form',
@@ -10,46 +17,101 @@ import { WallLossesSurface } from '../../../../shared/models/materials';
 })
 export class WallFormComponent implements OnInit {
   
-  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
+  @Input()
+  settings: Settings;
+  @Input()
+  isBaseline: boolean;
+  @Input()
+  inModal: boolean;
+  @Input()
+  selected: boolean;
+  @ViewChild('surfaceModal', { static: false }) public surfaceModal: ModalDirective;
+  @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
 
+  
   surfaceOptions: Array<WallLossesSurface>;
-  showModal: boolean = false;
+  showSurfaceModal: boolean = false;
   warnings: WallLossWarnings;
   idString: string;
 
-  constructor() { }
+  wallLossesForm: FormGroup;
+  resetDataSub: Subscription;
+  generateExampleSub: Subscription;
+  showFlueModal: boolean;
+
+  constructor(private wallFormService: WallFormService,
+              private suiteDbService: SuiteDbService,
+              private wallService: WallService) { }
   ngOnInit(): void {
+    this.initSubscriptions();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected == false) {
+        this.wallLossesForm.disable();
+      } else {
+        this.wallLossesForm.enable();
+      }
+    }
+  }
+
+  initSubscriptions() {
+    this.resetDataSub = this.wallService.resetData.subscribe(value => {
+      this.setForm();
+      })
+    this.generateExampleSub = this.wallService.generateExample.subscribe(value => {
+      this.setForm();
+    })
+  }
+
+
+  initFormSetup() {
+    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+    this.calculate();
+    if (this.selected == false) {
+      this.wallLossesForm.disable();
+    }
+  }
+
+  setForm() {
+    let updatedWallLossData: WallLoss;
+    if (this.isBaseline) {
+      updatedWallLossData = this.wallService.baselineData.getValue();
+    } else {
+      updatedWallLossData = this.wallService.modificationData.getValue();
+    }
+    if (updatedWallLossData) {
+      this.wallLossesForm = this.wallFormService.getWallLossForm(updatedWallLossData);
+    } else {
+      this.wallLossesForm = this.wallFormService.initForm();
+    }
+
+    this.initFormSetup();
   }
 
   disableForm() {
     this.wallLossesForm.controls.surfaceShape.disable();
   }
-  //enable select input fields
   enableForm() {
     this.wallLossesForm.controls.surfaceShape.enable();
   }
 
-  //emits to wall-losses.component the focused field changed
   focusField(str: string) {
-    this.changeField.emit(str);
-  }
-  //emits to default help on blur of input elements
-  focusOut() {
-    this.changeField.emit('default');
-  }
-  //check inputs for errors
-  checkWarnings() {
-    let tmpLoss: WallLoss = this.wallLossesService.getWallLossFromForm(this.wallLossesForm);
-    this.warnings = this.wallLossesService.checkWarnings(tmpLoss);
-    let hasWarning: boolean = this.wallLossesService.checkWarningsExist(this.warnings);
-    this.inputError.emit(hasWarning);
+    this.wallService.currentField.next(str);
   }
 
-  //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
-  save() {
-    this.checkWarnings();
-    this.calculate.emit(true);
-    this.saveEmit.emit(true);
+  calculate() {
+    this.wallLossesForm = this.wallFormService.setValidators(this.wallLossesForm);
+    if (this.wallLossesForm.valid) {
+      let currentWallLoss: WallLoss = this.wallFormService.getWallLossFromForm(this.wallLossesForm);
+      if (this.isBaseline) {
+        this.wallService.baselineData.next(currentWallLoss);
+      } else {
+        this.wallService.modificationData.next(currentWallLoss);
+      }
+    }
   }
 
   setProperties() {
@@ -57,21 +119,21 @@ export class WallFormComponent implements OnInit {
     this.wallLossesForm.patchValue({
       conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
     });
-    this.calculate.emit(true);
-    this.save();
+    this.calculate();
   }
+
   roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
+    let rounded = Number(val.toFixed(digits));
+    return rounded;
   }
 
-  showMaterialModal() {
-    this.showModal = true;
-    this.lossesService.modalOpen.next(this.showModal);
-    this.materialModal.show();
+  showSurfaceShapeModal() {
+    this.showSurfaceModal = true;
+    this.wallService.modalOpen.next(this.showSurfaceModal);
+    this.surfaceModal.show();
   }
 
-  hideMaterialModal(event?: any) {
+  hideSurfaceShapeModal(event?: any) {
     if (event) {
       this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
       let newMaterial = this.surfaceOptions.filter(material => { return material.surface === event.surface; });
@@ -82,79 +144,30 @@ export class WallFormComponent implements OnInit {
         this.setProperties();
       }
     }
-    this.materialModal.hide();
-    this.showModal = false;
-    this.lossesService.modalOpen.next(this.showModal);
-  }
-  canCompare() {
-    if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses && !this.inSetup) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  compareSurfaceArea(): boolean {
-    if (this.canCompare()) {
-      return this.wallLossCompareService.compareSurfaceArea(this.lossIndex);
-    } else {
-      return false;
-    }
+    this.surfaceModal.hide();
+    this.showSurfaceModal = false;
+    this.wallService.modalOpen.next(this.showSurfaceModal);
   }
 
-  compareAmbientTemperature(): boolean {
-    if (this.canCompare()) {
-      return this.wallLossCompareService.compareAmbientTemperature(this.lossIndex);
-    } else {
-      return false;
-    }
+  showFlueGasModal() {
+    this.showSurfaceModal = true;
+    this.wallService.modalOpen.next(this.showSurfaceModal);
+    this.surfaceModal.show();
   }
 
-  compareSurfaceTemperature(): boolean {
-    if (this.canCompare()) {
-      return this.wallLossCompareService.compareSurfaceTemperature(this.lossIndex);
-    } else {
-      return false;
+  hideFlueGasModal(event?: any) {
+    if (event) {
+      // TODO where is this value?
+      let calculatedAvailableHeat;
+      if (calculatedAvailableHeat) {
+        this.wallLossesForm.patchValue({
+          availableHeat: calculatedAvailableHeat
+        });
+      }
     }
-  }
-
-  compareWindVelocity(): boolean {
-    if (this.canCompare()) {
-      return this.wallLossCompareService.compareWindVelocity(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-
-  compareSurfaceEmissivity(): boolean {
-    if (this.canCompare()) {
-      return this.wallLossCompareService.compareSurfaceEmissivity(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-
-  compareSurfaceShape(): boolean {
-    if (this.canCompare()) {
-      return this.wallLossCompareService.compareSurfaceShape(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-
-  compareConditionFactor(): boolean {
-    if (this.canCompare()) {
-      return this.wallLossCompareService.compareConditionFactor(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-
-  compareCorrectionFactor(): boolean {
-    if (this.canCompare()) {
-      return this.wallLossCompareService.compareCorrectionFactor(this.lossIndex);
-    } else {
-      return false;
-    }
+    this.flueGasModal.hide();
+    this.showFlueModal = false;
+    this.wallService.modalOpen.next(this.showFlueModal);
   }
 
 }

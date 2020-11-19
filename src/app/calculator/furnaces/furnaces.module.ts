@@ -6,7 +6,6 @@ import { O2EnrichmentModule } from './o2-enrichment/o2-enrichment.module';
 import { EfficiencyImprovementModule } from './efficiency-improvement/efficiency-improvement.module';
 import { FurnacesListComponent } from './furnaces-list/furnaces-list.component';
 import { RouterModule } from '@angular/router';
-import { WallComponent } from './wall/wall.component';
 import { WallModule } from './wall/wall.module';
 
 @NgModule({
@@ -21,7 +20,6 @@ import { WallModule } from './wall/wall.module';
   ],
   declarations: [
     FurnacesListComponent,
-    WallComponent
   ],
   exports: [
     FurnacesListComponent
