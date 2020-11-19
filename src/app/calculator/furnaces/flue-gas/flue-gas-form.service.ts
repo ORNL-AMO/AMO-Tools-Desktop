@@ -1,23 +1,27 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/phast/losses/flueGas';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../shared/models/phast/losses/flueGas';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
-@Injectable()
-export class FlueGasLossesService {
+@Injectable({
+  providedIn: 'root'
+})
+export class FlueGasFormService {
 
-  constructor(private formBuilder: FormBuilder) {
-  }
+  flueGasTempMin: number = 212;
+  constructor(private formBuilder: FormBuilder) { }
 
+  initEmptyVolumeForm(loss?: number): FormGroup {
+    let lossNumber = loss? loss : 0;
 
-  initFormVolume(lossNum: number): FormGroup {
-    return this.formBuilder.group({
+    let formGroup = this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
       'flueGasTemperature': ['', Validators.required],
-      'oxygenCalculationMethod': ['', Validators.required],
-      'excessAirPercentage': ['', Validators.required],
+      'oxygenCalculationMethod': ['Excess Air', Validators.required],
+      'excessAirPercentage': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'o2InFlueGas': ['', Validators.required],
-      'combustionAirTemperature': ['', Validators.required],
-      'fuelTemperature': ['', Validators.required],
+      'combustionAirTemperature': ['', [Validators.required]],
+      'fuelTemperature': [''],
       'CH4': ['', Validators.required],
       'C2H6': ['', Validators.required],
       'N2': ['', Validators.required],
@@ -29,22 +33,36 @@ export class FlueGasLossesService {
       'CO2': ['', Validators.required],
       'SO2': ['', Validators.required],
       'O2': ['', Validators.required],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNumber]
     });
+
+    if (!loss) {
+      formGroup.addControl('heatInput', new FormControl(['', Validators.required]));
+    }
+
+    formGroup = this.setValidators(formGroup);
+    return formGroup;
   }
 
-  initFormMass(lossNum: number): FormGroup {
-    return this.formBuilder.group({
+  initEmptyMassForm(loss?: number): FormGroup {
+    let defaultMoistureInAirComp: any = .0077;
+    let lossNumber: number = 0;
+    if (loss) {
+      defaultMoistureInAirComp = '';
+      lossNumber = loss;
+    } 
+
+     let formGroup = this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
       'flueGasTemperature': ['', Validators.required],
-      'oxygenCalculationMethod': ['', Validators.required],
-      'excessAirPercentage': ['', Validators.required],
+      'oxygenCalculationMethod': ['Excess Air', Validators.required],
+      'excessAirPercentage': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'o2InFlueGas': ['', Validators.required],
-      'combustionAirTemperature': ['', Validators.required],
-      'fuelTemperature': ['', Validators.required],
-      'moistureInAirComposition': ['', Validators.required],
+      'combustionAirTemperature': ['', [Validators.required]],
+      'fuelTemperature': [''],
+      'moistureInAirComposition': [defaultMoistureInAirComp, [Validators.required, Validators.min(0), Validators.max(100)]],
       'ashDischargeTemperature': ['', Validators.required],
-      'unburnedCarbonInAsh': ['', Validators.required],
+      'unburnedCarbonInAsh': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       'carbon': ['', Validators.required],
       'hydrogen': ['', Validators.required],
       'sulphur': ['', Validators.required],
@@ -52,19 +70,26 @@ export class FlueGasLossesService {
       'o2': ['', Validators.required],
       'moisture': ['', Validators.required],
       'nitrogen': ['', Validators.required],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNumber]
     });
+
+    if (!loss) {
+      formGroup.addControl('heatInput', new FormControl(['', Validators.required]));
+    }
+
+    formGroup = this.setValidators(formGroup);
+    return formGroup;
   }
 
-  initByVolumeFormFromLoss(loss: FlueGas): FormGroup {
-    return this.formBuilder.group({
+  initByVolumeFormFromLoss(loss: FlueGas, inAssessment = true): FormGroup {
+    let formGroup = this.formBuilder.group({
       'gasTypeId': [loss.flueGasByVolume.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
       'oxygenCalculationMethod': [loss.flueGasByVolume.oxygenCalculationMethod, Validators.required],
-      'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, Validators.required],
+      'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'o2InFlueGas': [loss.flueGasByVolume.o2InFlueGas, Validators.required],
-      'combustionAirTemperature': [loss.flueGasByVolume.combustionAirTemperature, Validators.required],
-      'fuelTemperature': [loss.flueGasByVolume.fuelTemperature, Validators.required],
+      'combustionAirTemperature': [loss.flueGasByVolume.combustionAirTemperature, [Validators.required, Validators.min(0)]],
+      'fuelTemperature': [loss.flueGasByVolume.fuelTemperature],
       'CH4': [loss.flueGasByVolume.CH4, Validators.required],
       'C2H6': [loss.flueGasByVolume.C2H6, Validators.required],
       'N2': [loss.flueGasByVolume.N2, Validators.required],
@@ -78,20 +103,27 @@ export class FlueGasLossesService {
       'O2': [loss.flueGasByVolume.O2, Validators.required],
       'name': [loss.name]
     });
+
+    if (!inAssessment) {
+      formGroup.addControl('heatInput', new FormControl(loss.flueGasByVolume.heatInput, Validators.required));
+    }
+
+    formGroup = this.setValidators(formGroup);
+    return formGroup;
   }
 
-  initByMassFormFromLoss(loss: FlueGas): FormGroup {
-    return this.formBuilder.group({
+  initByMassFormFromLoss(loss: FlueGas, inAssessment = true): FormGroup {
+      let formGroup = this.formBuilder.group({
       'gasTypeId': [loss.flueGasByMass.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByMass.flueGasTemperature, Validators.required],
       'oxygenCalculationMethod': [loss.flueGasByMass.oxygenCalculationMethod, Validators.required],
-      'excessAirPercentage': [loss.flueGasByMass.excessAirPercentage, Validators.required],
+      'excessAirPercentage': [loss.flueGasByMass.excessAirPercentage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'o2InFlueGas': [loss.flueGasByMass.o2InFlueGas, Validators.required],
       'combustionAirTemperature': [loss.flueGasByMass.combustionAirTemperature, Validators.required],
       'fuelTemperature': [loss.flueGasByMass.fuelTemperature, Validators.required],
-      'moistureInAirComposition': [loss.flueGasByMass.moistureInAirComposition, Validators.required],
+      'moistureInAirComposition': [loss.flueGasByMass.moistureInAirComposition, [Validators.required, Validators.min(0), Validators.max(100)]],
       'ashDischargeTemperature': [loss.flueGasByMass.ashDischargeTemperature, Validators.required],
-      'unburnedCarbonInAsh': [loss.flueGasByMass.unburnedCarbonInAsh, Validators.required],
+      'unburnedCarbonInAsh': [loss.flueGasByMass.unburnedCarbonInAsh, [Validators.required, Validators.min(0), Validators.max(100)]],
       'carbon': [loss.flueGasByMass.carbon, Validators.required],
       'hydrogen': [loss.flueGasByMass.hydrogen, Validators.required],
       'sulphur': [loss.flueGasByMass.sulphur, Validators.required],
@@ -101,11 +133,44 @@ export class FlueGasLossesService {
       'nitrogen': [loss.flueGasByMass.nitrogen, Validators.required],
       'name': [loss.name]
     });
+
+    if (!inAssessment) {
+      formGroup.addControl('heatInput', new FormControl(loss.flueGasByMass.heatInput, Validators.required));
+    }
+
+    return formGroup;
+  }
+
+  setValidators(formGroup: FormGroup): FormGroup {
+    formGroup = this.setFlueGasTempValidators(formGroup);
+    formGroup = this.setCombustionAirTempValidators(formGroup);
+    return formGroup;
+  }
+
+  setCombustionAirTempValidators(formGroup: FormGroup) {
+    let flueGasTemp = formGroup.controls.flueGasTemperature.value;
+    if (flueGasTemp) {
+      formGroup.controls.combustionAirTemperature.setValidators([Validators.required, Validators.max(flueGasTemp)]);
+      formGroup.controls.combustionAirTemperature.markAsDirty();
+      formGroup.controls.combustionAirTemperature.updateValueAndValidity();
+    }
+    return formGroup;
+  }
+
+  setFlueGasTempValidators(formGroup: FormGroup) {
+    let combustionAirTemperature = formGroup.controls.combustionAirTemperature.value;
+    if (combustionAirTemperature) {
+      formGroup.controls.flueGasTemperature.setValidators([Validators.required, Validators.min(combustionAirTemperature)]);
+      formGroup.controls.flueGasTemperature.markAsDirty();
+      formGroup.controls.flueGasTemperature.updateValueAndValidity();
+    }
+    return formGroup;
   }
 
   buildByMassLossFromForm(form: FormGroup): FlueGas {
-    let tmpFlueGas: FlueGas = {
+    let flueGas: FlueGas = {
       name: form.controls.name.value,
+      flueGasType: "By Mass",
       flueGasByMass: {
         gasTypeId: form.controls.gasTypeId.value,
         flueGasTemperature: form.controls.flueGasTemperature.value,
@@ -125,13 +190,18 @@ export class FlueGasLossesService {
         moisture: form.controls.moisture.value,
         nitrogen: form.controls.nitrogen.value
       }
-    };
-    return tmpFlueGas;
+    }
+
+    if (form.controls.heatInput) {
+      flueGas.flueGasByMass.heatInput = form.controls.heatInput.value;
+    }
+    return flueGas;
   }
 
   buildByVolumeLossFromForm(form: FormGroup): FlueGas {
-    let tmpFlueGas: FlueGas = {
+    let flueGas: FlueGas = {
       name: form.controls.name.value,
+      flueGasType: "By Volume",
       flueGasByVolume: {
         gasTypeId: form.controls.gasTypeId.value,
         flueGasTemperature: form.controls.flueGasTemperature.value,
@@ -152,15 +222,20 @@ export class FlueGasLossesService {
         SO2: form.controls.SO2.value,
         O2: form.controls.O2.value
       }
-    };
-    return tmpFlueGas;
+    }
+
+    if (form.controls.heatInput) {
+      flueGas.flueGasByVolume.heatInput = form.controls.heatInput.value;
+    }
+    return flueGas;
   }
 
   checkFlueGasByVolumeWarnings(flueGas: FlueGasByVolume): FlueGasWarnings {
     return {
       combustionAirTempWarning: this.checkCombustionAirTemp(flueGas),
       excessAirWarning: this.checkExcessAirWarning(flueGas),
-      o2Warning: this.checkO2Warning(flueGas)
+      o2Warning: this.checkO2Warning(flueGas),
+      flueGasTemp: this.checkFlueGasTemp(flueGas)
     };
   }
 
@@ -170,18 +245,30 @@ export class FlueGasLossesService {
       unburnedCarbonInAshWarning: this.checkUnburnedCarbon(flueGas),
       combustionAirTempWarning: this.checkCombustionAirTemp(flueGas),
       excessAirWarning: this.checkExcessAirWarning(flueGas),
-      o2Warning: this.checkO2Warning(flueGas)
+      o2Warning: this.checkO2Warning(flueGas),
+      flueGasTemp: this.checkFlueGasTemp(flueGas)
     };
   }
-  checkMoistureInAir(flueGas: FlueGasByMass): string {
-    if (flueGas.moistureInAirComposition < 0) {
-      return 'Moisture in Combustion Air must be equal or greater than 0%';
-    } else if (flueGas.moistureInAirComposition > 100) {
-      return 'Moisture in Combustion Air must be less than or equal to 100%';
+
+  checkFlueGasTemp(flueGas: FlueGasByMass | FlueGasByVolume) {
+    if (flueGas.flueGasTemperature && flueGas.flueGasTemperature < this.flueGasTempMin) {
+      return `Flue Gas Temperature less than ${this.flueGasTempMin}, gases may be condensing in the
+                flue and calculated efficiency may not be valid.`
     } else {
       return null;
     }
   }
+
+  checkO2Warning(flueGas: FlueGasByMass | FlueGasByVolume): string {
+    if (flueGas.o2InFlueGas < 0 || flueGas.o2InFlueGas >= 21) {
+      return 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
+    } else {
+      return null;
+    }
+  }
+
+
+  // Below checks still used in Assessment
   checkUnburnedCarbon(flueGas: FlueGasByMass): string {
     if (flueGas.unburnedCarbonInAsh < 0) {
       return 'Unburned Carbon in Ash must be equal or greater than 0%';
@@ -191,16 +278,10 @@ export class FlueGasLossesService {
       return null;
     }
   }
+  
   checkCombustionAirTemp(flueGas: FlueGasByMass | FlueGasByVolume): string {
     if (flueGas.combustionAirTemperature > flueGas.flueGasTemperature) {
       return "Combustion air temperature must be less than flue gas temperature";
-    } else {
-      return null;
-    }
-  }
-  checkO2Warning(flueGas: FlueGasByMass | FlueGasByVolume): string {
-    if (flueGas.o2InFlueGas < 0 || flueGas.o2InFlueGas > 20.99999) {
-      return 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
     } else {
       return null;
     }
@@ -209,6 +290,16 @@ export class FlueGasLossesService {
   checkExcessAirWarning(flueGas: FlueGasByMass | FlueGasByVolume): string {
     if (flueGas.excessAirPercentage < 0) {
       return 'Excess Air must be greater than 0 percent';
+    } else {
+      return null;
+    }
+  }
+
+   checkMoistureInAir(flueGas: FlueGasByMass): string {
+    if (flueGas.moistureInAirComposition < 0) {
+      return 'Moisture in Combustion Air must be equal or greater than 0%';
+    } else if (flueGas.moistureInAirComposition > 100) {
+      return 'Moisture in Combustion Air must be less than or equal to 100%';
     } else {
       return null;
     }
@@ -223,12 +314,4 @@ export class FlueGasLossesService {
     }
     return hasWarning;
   }
-}
-
-export interface FlueGasWarnings {
-  moistureInAirCompositionWarning?: string;
-  unburnedCarbonInAshWarning?: string;
-  combustionAirTempWarning: string;
-  excessAirWarning: string;
-  o2Warning: string;
 }

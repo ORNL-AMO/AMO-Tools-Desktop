@@ -4,15 +4,20 @@ import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { AuxEquipmentService } from './aux-equipment/aux-equipment.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { FlueGasLossesService } from './losses/flue-gas-losses/flue-gas-losses.service';
 import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
+import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 
 @Injectable()
 export class PhastResultsService {
 
-  constructor(private phastService: PhastService, private auxEquipmentService: AuxEquipmentService, private convertUnitsService: ConvertUnitsService, private flueGasLossesService: FlueGasLossesService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private energyInputService: EnergyInputService) { }
+  constructor(private phastService: PhastService, 
+              private flueGasFormService: FlueGasFormService,          
+              private auxEquipmentService: AuxEquipmentService, 
+              private convertUnitsService: ConvertUnitsService, 
+              private energyInputExhaustGasService: EnergyInputExhaustGasService, 
+              private energyInputService: EnergyInputService) { }
   checkLoss(loss: any) {
     if (!loss) {
       return false;
@@ -147,7 +152,7 @@ export class PhastResultsService {
       let tmpFlueGas = phast.losses.flueGasLosses[0];
       if (tmpFlueGas) {
         if (tmpFlueGas.flueGasType === 'By Mass') {
-          let tmpForm = this.flueGasLossesService.initByMassFormFromLoss(tmpFlueGas);
+          let tmpForm = this.flueGasFormService.initByMassFormFromLoss(tmpFlueGas, true);
           if (tmpForm.status === 'VALID') {
             const availableHeat = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
             results.flueGasAvailableHeat = availableHeat * 100;
@@ -156,7 +161,7 @@ export class PhastResultsService {
             results.totalFlueGas = results.flueGasSystemLosses;
           }
         } else if (tmpFlueGas.flueGasType === 'By Volume') {
-          let tmpForm = this.flueGasLossesService.initByVolumeFormFromLoss(tmpFlueGas);
+          let tmpForm = this.flueGasFormService.initByVolumeFormFromLoss(tmpFlueGas, true);
           if (tmpForm.status === 'VALID') {
             const availableHeat = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
             results.flueGasAvailableHeat = availableHeat * 100;

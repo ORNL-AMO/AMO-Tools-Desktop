@@ -5,7 +5,7 @@ import { FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/
 import { LossTab } from '../../../tabs';
 import { PhastService } from '../../../phast.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { FlueGasLossesService } from '../../../losses/flue-gas-losses/flue-gas-losses.service';
+import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 @Component({
   selector: 'app-explore-flue-gas-form',
@@ -40,7 +40,9 @@ export class ExploreFlueGasFormComponent implements OnInit {
 
   baselineWarnings: { excessAirWarning: string, o2Warning: string };
   modificationWarnings: { excessAirWarning: string, o2Warning: string };
-  constructor(private phastService: PhastService, private suiteDbService: SuiteDbService, private flueGasLossesService: FlueGasLossesService) { }
+  constructor(private phastService: PhastService, private suiteDbService: SuiteDbService, 
+              private flueGasFormService: FlueGasFormService,
+              ) { }
 
   ngOnInit() {
     this.initData();
@@ -181,8 +183,8 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   checkWarnings(loss: FlueGasByMass | FlueGasByVolume): { excessAirWarning: string, o2Warning: string } {
-    let tmpO2Warning: string = this.flueGasLossesService.checkO2Warning(loss);
-    let tmpExcessAirWarning: string = this.flueGasLossesService.checkExcessAirWarning(loss);
+    let tmpO2Warning: string = this.flueGasFormService.checkO2Warning(loss);
+    let tmpExcessAirWarning: string = this.flueGasFormService.checkExcessAirWarning(loss);
     return { excessAirWarning: tmpExcessAirWarning, o2Warning: tmpO2Warning };
   }
 
