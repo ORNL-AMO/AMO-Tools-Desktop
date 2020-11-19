@@ -10,6 +10,7 @@ import { FlueGasComponent } from './flue-gas.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { FlueGasModalComponent } from './flue-gas-modal/flue-gas-modal.component';
 
 
 
@@ -20,6 +21,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     FlueGasResultsComponent,
     FlueGasFormVolumeComponent,
     FlueGasFormMassComponent,
+    FlueGasModalComponent,
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     SharedPipesModule
   ],
   exports: [
-    FlueGasComponent
+    FlueGasComponent,
+    FlueGasModalComponent
   ],
   providers: [
     FlueGasService

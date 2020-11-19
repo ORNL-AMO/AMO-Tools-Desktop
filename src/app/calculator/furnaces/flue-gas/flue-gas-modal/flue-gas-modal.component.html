@@ -1,0 +1,60 @@
+<p>flue-gas-modal works!</p>
+<div class="card">
+    <div class="card-body custom-card-body card-container col">
+      <div class="row">
+        <div class="col-sm-6 col-md-6 card-column">
+          <div class="row phast align-items-top">
+            <div class="col-12">
+              <div class="header card-header">
+                <h3 *ngIf="!editExistingMaterial">Calculate Available Heat From Flue Gas</h3>
+              </div>
+            </div>
+          </div>
+            <!-- Form -->
+            <div class="form-group">
+                <label class="small" for="method">Type of fuel</label>
+                <select class="form-control" id="method" [(ngModel)]="method" 
+                (focus)="focusField('measurementType')" (change)="changeFuelType()">
+                  <option [ngValue]="'By Volume'">Gas</option>
+                  <option [ngValue]="'By Mass'">Solid/Liquid</option>
+                </select>
+              </div>
+            <app-flue-gas-form-mass *ngIf="method == 'By Mass'" [settings]="settings" [selected]="baselineSelected"
+             [isBaseline]="true"></app-flue-gas-form-mass>
+            <app-flue-gas-form-volume *ngIf="method == 'By Volume'" [selected]="baselineSelected" [settings]="settings"
+             [isBaseline]="true"></app-flue-gas-form-volume>
+
+             <!-- Calculations -->
+             <div class="d-flex flex-column mt-3 mb-2">
+                <div class="form-group m-0">
+                  <label class="bold">Available Heat</label>
+                  <div *ngIf="output.baseline.availableHeat" class="text-center bold small">
+                    {{output.baseline.availableHeat | number:'2.1-1'}} %
+                  </div>
+                  <div *ngIf="!output.baseline.availableHeat" class="text-center bold small">
+                    &mdash; &mdash;
+                  </div>
+                  <span class="alert-warning pull-right small" *ngIf="output.baseline.availableHeatError">{{output.baseline.availableHeatError}}</span>
+                </div>
+              </div>
+        </div>
+  
+        <div class="col-sm-6 col-md-6 card-help-column">
+          <div class="tab-content">
+            <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+				  <div>Help</div>
+				</a>
+			  </div>
+            <app-flue-gas-help [settings]="settings"></app-flue-gas-help>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-btn-container">
+        <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="setAvailableheat()"
+          [disabled]="!output.baseline.availableHeat">Submit</button>
+      </div>
+    </div>
+  </div>
