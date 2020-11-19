@@ -21,7 +21,7 @@ import { FlueGasModalComponent } from './flue-gas-modal/flue-gas-modal.component
     FlueGasResultsComponent,
     FlueGasFormVolumeComponent,
     FlueGasFormMassComponent,
-    FlueGasModalComponent,
+    FlueGasModalComponent
   ],
   imports: [
     CommonModule,

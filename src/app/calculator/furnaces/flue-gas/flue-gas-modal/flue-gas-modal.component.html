@@ -11,7 +11,7 @@
             </div>
           </div>
             <!-- Form -->
-            <div class="form-group">
+            <div class="form-group pt-3 px-2">
                 <label class="small" for="method">Type of fuel</label>
                 <select class="form-control" id="method" [(ngModel)]="method" 
                 (focus)="focusField('measurementType')" (change)="changeFuelType()">
@@ -20,12 +20,12 @@
                 </select>
               </div>
             <app-flue-gas-form-mass *ngIf="method == 'By Mass'" [settings]="settings" [selected]="baselineSelected"
-             [isBaseline]="true"></app-flue-gas-form-mass>
+             [isBaseline]="true" [inModal]="true"></app-flue-gas-form-mass>
             <app-flue-gas-form-volume *ngIf="method == 'By Volume'" [selected]="baselineSelected" [settings]="settings"
-             [isBaseline]="true"></app-flue-gas-form-volume>
+             [isBaseline]="true" [inModal]="true"></app-flue-gas-form-volume>
 
              <!-- Calculations -->
-             <div class="d-flex flex-column mt-3 mb-2">
+             <div class="d-flex flex-column mt-3 mb-2 p-2">
                 <div class="form-group m-0">
                   <label class="bold">Available Heat</label>
                   <div *ngIf="output.baseline.availableHeat" class="text-center bold small">
@@ -41,11 +41,13 @@
   
         <div class="col-sm-6 col-md-6 card-help-column">
           <div class="tab-content">
-            <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-				  <div>Help</div>
-				</a>
-			  </div>
+            <div class="row phast align-items-top">
+                <div class="col-12">
+                  <div class="header card-header">
+                    <h3>Help</h3>
+                  </div>
+                </div>
+              </div>
             <app-flue-gas-help [settings]="settings"></app-flue-gas-help>
           </div>
         </div>
@@ -53,7 +55,7 @@
       </div>
       <div class="modal-btn-container">
         <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-        <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="setAvailableheat()"
+        <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="setAvailableHeat()"
           [disabled]="!output.baseline.availableHeat">Submit</button>
       </div>
     </div>
