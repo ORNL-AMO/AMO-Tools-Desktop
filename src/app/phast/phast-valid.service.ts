@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { FormGroup } from '@angular/forms';
-import { FlueGasLossesService } from './losses/flue-gas-losses/flue-gas-losses.service';
 import { ExtendedSurfaceLossesService } from './losses/extended-surface-losses/extended-surface-losses.service';
 import { OperationsService } from './losses/operations/operations.service';
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
@@ -18,6 +17,7 @@ import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
 import { AtmosphereLossesService } from './losses/atmosphere-losses/atmosphere-losses.service';
 import { SlagService } from './losses/slag/slag.service';
+import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
@@ -34,7 +34,7 @@ export class PhastValidService {
     private chargeMaterialService: ChargeMaterialService,
     private coolingLossesService: CoolingLossesService,
     private wallFormService: WallFormService,
-    private flueGasLossesService: FlueGasLossesService,
+    private flueGasFormService: FlueGasFormService,
     private extendedSurfaceLossesService: ExtendedSurfaceLossesService,
     private operationsService: OperationsService,
     private energyInputService: EnergyInputService,
@@ -177,9 +177,9 @@ export class PhastValidService {
       let flueGasForm: FormGroup;
       phast.losses.flueGasLosses.forEach(loss => {
         if (loss.flueGasByVolume) {
-          flueGasForm = this.flueGasLossesService.initByVolumeFormFromLoss(loss);
+          flueGasForm = this.flueGasFormService.initByVolumeFormFromLoss(loss, true);
         } else if (loss.flueGasByMass) {
-          flueGasForm = this.flueGasLossesService.initByVolumeFormFromLoss(loss);
+          flueGasForm = this.flueGasFormService.initByMassFormFromLoss(loss, true);
         }
 
         if (flueGasForm.status === 'INVALID') {

@@ -84,6 +84,7 @@ import { FanPsychrometricComponent } from '../calculator/utilities/fan-psychrome
 import { MotorInventoryComponent } from '../motor-inventory/motor-inventory.component';
 import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing';
 import { WallComponent } from '../calculator/furnaces/wall/wall.component';
+import { FlueGasComponent } from '../calculator/furnaces/flue-gas/flue-gas.component';
 
 export const coreRoutes: Routes = [
   {
@@ -323,6 +324,10 @@ export const coreRoutes: Routes = [
           {
             path: 'wall-loss',
             component: WallComponent
+          },
+          {
+            path: 'flue-gas',
+            component: FlueGasComponent
           },
           {
             path: 'achievable-efficiency',

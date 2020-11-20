@@ -224,6 +224,7 @@ export class PhastComponent implements OnInit {
     else {
       this.tab2Status = 'missing-data';
     }
+    this.cd.detectChanges();
   }
 
   initSankeyList() {

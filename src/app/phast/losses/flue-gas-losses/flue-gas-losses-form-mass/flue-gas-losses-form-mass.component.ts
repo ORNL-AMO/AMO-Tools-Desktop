@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap';
@@ -6,8 +6,8 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
-import { FlueGasLossesService, FlueGasWarnings } from '../flue-gas-losses.service';
-import { FlueGasByMass } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 @Component({
   selector: 'app-flue-gas-losses-form-mass',
@@ -50,8 +50,10 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   calculationExcessAir = 0.0;
   calculationFlueGasO2 = 0.0;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService,
-    private lossesService: LossesService, private phastService: PhastService, private flueGasLossesService: FlueGasLossesService) { }
+  constructor(private suiteDbService: SuiteDbService, 
+    private flueGasFormService: FlueGasFormService, 
+    private flueGasCompareService: FlueGasCompareService,
+    private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -169,15 +171,16 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   save() {
+    this.flueGasLossForm = this.flueGasFormService.setValidators(this.flueGasLossForm);
     this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
 
   checkWarnings() {
-    let tmpLoss: FlueGasByMass = this.flueGasLossesService.buildByMassLossFromForm(this.flueGasLossForm).flueGasByMass;
-    this.warnings = this.flueGasLossesService.checkFlueGasByMassWarnings(tmpLoss);
-    let hasWarning: boolean = this.flueGasLossesService.checkWarningsExist(this.warnings);
+    let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.flueGasLossForm).flueGasByMass;
+    this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
+    let hasWarning: boolean = this.flueGasFormService.checkWarningsExist(this.warnings);
     this.inputError.emit(hasWarning);
   }
 
