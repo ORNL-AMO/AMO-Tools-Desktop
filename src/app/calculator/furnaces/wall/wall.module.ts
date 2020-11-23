@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WallFormComponent } from './wall-form/wall-form.component';
 import { WallHelpComponent } from './wall-help/wall-help.component';
-import { WallResultsComponent } from './wall-results/wall-results.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { WallService } from './wall.service';
@@ -18,7 +17,6 @@ import { FlueGasModule } from '../flue-gas/flue-gas.module';
   declarations: [
     WallFormComponent, 
     WallHelpComponent, 
-    WallResultsComponent,
     WallComponent
   ],
   imports: [

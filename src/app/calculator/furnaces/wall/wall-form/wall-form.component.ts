@@ -43,7 +43,6 @@ export class WallFormComponent implements OnInit {
               private cd: ChangeDetectorRef) { }
   ngOnInit(): void {
     this.initSubscriptions();
-    this.setFormState();
   }
 
   ngOnChanges(changes: SimpleChanges) {

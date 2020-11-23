@@ -28,8 +28,6 @@ export class WallLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  @Output('inputError')
-  inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
   @Input()
@@ -52,7 +50,6 @@ export class WallLossesFormComponent implements OnInit {
     }
     this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
     //init warnings
-    // this.checkWarnings();
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -90,7 +87,6 @@ export class WallLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
   save() {
     this.wallLossesForm = this.wallFormService.setValidators(this.wallLossesForm);
     this.calculate.emit(true);

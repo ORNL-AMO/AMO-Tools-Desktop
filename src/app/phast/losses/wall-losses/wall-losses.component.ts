@@ -38,7 +38,6 @@ export class WallLossesComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  showError: boolean = false;
   total: number = 0;
   constructor(private phastService: PhastService, private wallFormService: WallFormService) { }
 
@@ -111,10 +110,6 @@ export class WallLossesComponent implements OnInit {
     });
 
     this.saveLosses();
-  }
-
-  setError(bool: boolean) {
-    this.showError = bool;
   }
 
   collapseLoss(loss: WallLossObj) {
