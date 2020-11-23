@@ -76,6 +76,7 @@ export class AirLeakService {
       airLeakInputExample = this.convertAirleakService.convertExample(airLeakInputExample);
     }
     this.airLeakInput.next(airLeakInputExample);
+    console.log(airLeakInputExample);
     this.generateExample.next(true);
     this.generateExample.next(false);
   }
