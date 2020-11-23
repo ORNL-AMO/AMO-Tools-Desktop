@@ -10,6 +10,7 @@ import { WallFormService } from './wall-form.service';
 import { WallComponent } from './wall.component';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { ModalModule } from 'ngx-bootstrap';
+import { FlueGasModule } from '../flue-gas/flue-gas.module';
 
 
 
@@ -26,7 +27,8 @@ import { ModalModule } from 'ngx-bootstrap';
     ModalModule,
     ReactiveFormsModule,
     SharedPipesModule,
-    SuiteDbModule
+    FlueGasModule,
+    SuiteDbModule,
   ],
   exports: [
     WallComponent

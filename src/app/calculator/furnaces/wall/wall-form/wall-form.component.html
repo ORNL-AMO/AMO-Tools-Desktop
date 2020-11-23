@@ -110,7 +110,7 @@
 
       <div class="form-group">
         <label class="small" for="{{'availableHeat'+idString}}">Available Heat
-          <a id="materialHelp" class="form-text small click-link" (click)="showFlueGasModal()" [ngClass]="{'disabled-link': !isBaseline}">Calculate</a>
+          <a id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
         </label>
         <div class="input-group">
           <input  name="{{'availableHeat'+lossIndex}}" type="number" step="any" min="0"
@@ -150,7 +150,7 @@
 
     
   <!--CREATE flueGas MODAL-->
-  <!-- <div bsModal #flueGasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="flueGasModalLabel"
+  <div bsModal #flueGasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="flueGasModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -160,4 +160,4 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>

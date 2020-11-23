@@ -72,6 +72,7 @@ export class WallService {
       name: ''
     };
     this.baselineData.next(emptyBaselineData);
+    this.modificationData.next(undefined);
   }
 
   initDefaultEmptyOutput() {

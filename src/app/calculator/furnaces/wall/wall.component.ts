@@ -36,7 +36,6 @@ export class WallComponent implements OnInit {
   outputSubscription: Subscription;
   output: WallLossOutput;
 
-  currentField: string;
   tabSelect: string = 'help';
   baselineSelected = true;
   modificationExists = false;
@@ -76,7 +75,6 @@ export class WallComponent implements OnInit {
       this.isModalOpen = modalOpen;
     })
     this.baselineDataSub = this.wallService.baselineData.subscribe(value => {
-      this.setBaselineSelected();
       this.wallService.calculate(this.settings);
     })
     this.modificationDataSub = this.wallService.modificationData.subscribe(value => {
@@ -98,28 +96,22 @@ export class WallComponent implements OnInit {
    }
 
    btnResetData() {
-    this.wallService.initDefaultEmptyInputs();
-    this.wallService.modificationData.next(undefined);
-    this.wallService.resetData.next(true);
     this.modificationExists = false;
+    this.wallService.initDefaultEmptyInputs();
+    this.wallService.resetData.next(true);
   }
 
   btnGenerateExample() {
     this.wallService.generateExampleData(this.settings);
     this.modificationExists = true;
-    this.baselineSelected = true;
   }
 
   setBaselineSelected() {
-    if (this.baselineSelected == false) {
-      this.baselineSelected = true;
-    }
+    this.baselineSelected = true;
   }
 
   setModificationSelected() {
-    if (this.baselineSelected == true) {
-      this.baselineSelected = false;
-    }
+    this.baselineSelected = false;
   }
 
   focusField(str: string) {

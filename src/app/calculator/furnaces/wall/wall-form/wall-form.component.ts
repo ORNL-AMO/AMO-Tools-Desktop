@@ -1,8 +1,7 @@
-import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
-import { WallLossWarnings } from '../../../../phast/losses/wall-losses/wall-losses.service';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../../shared/models/settings';
@@ -32,50 +31,45 @@ export class WallFormComponent implements OnInit {
   
   surfaceOptions: Array<WallLossesSurface>;
   showSurfaceModal: boolean = false;
-  warnings: WallLossWarnings;
-  idString: string;
 
   wallLossesForm: FormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
-  showFlueModal: boolean;
+  showFlueGasModal: boolean;
 
   constructor(private wallFormService: WallFormService,
               private suiteDbService: SuiteDbService,
-              private wallService: WallService) { }
+              private wallService: WallService,
+              private cd: ChangeDetectorRef) { }
   ngOnInit(): void {
     this.initSubscriptions();
+    this.setFormState();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
-      if (this.selected == false) {
-        this.wallLossesForm.disable();
-      } else {
-        this.wallLossesForm.enable();
-      }
+      this.setFormState();
     }
   }
 
   initSubscriptions() {
     this.resetDataSub = this.wallService.resetData.subscribe(value => {
-      this.setForm();
+      this.initForm();
       })
     this.generateExampleSub = this.wallService.generateExample.subscribe(value => {
-      this.setForm();
+      this.initForm();
     })
   }
 
-
-  initFormSetup() {
-    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
-    this.calculate();
+  setFormState() {
     if (this.selected == false) {
       this.wallLossesForm.disable();
+    } else {
+      this.wallLossesForm.enable();
     }
   }
 
-  setForm() {
+  initForm() {
     let updatedWallLossData: WallLoss;
     if (this.isBaseline) {
       updatedWallLossData = this.wallService.baselineData.getValue();
@@ -88,7 +82,9 @@ export class WallFormComponent implements OnInit {
       this.wallLossesForm = this.wallFormService.initForm();
     }
 
-    this.initFormSetup();
+    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+    this.calculate();
+    this.setFormState();
   }
 
   disableForm() {
@@ -149,25 +145,22 @@ export class WallFormComponent implements OnInit {
     this.wallService.modalOpen.next(this.showSurfaceModal);
   }
 
-  showFlueGasModal() {
-    this.showSurfaceModal = true;
-    this.wallService.modalOpen.next(this.showSurfaceModal);
-    this.surfaceModal.show();
+  initFlueGasModal() {
+    this.showFlueGasModal = true;
+    this.wallService.modalOpen.next(this.showFlueGasModal);
+    this.flueGasModal.show();
   }
 
-  hideFlueGasModal(event?: any) {
-    if (event) {
-      // TODO where is this value?
-      let calculatedAvailableHeat;
-      if (calculatedAvailableHeat) {
-        this.wallLossesForm.patchValue({
-          availableHeat: calculatedAvailableHeat
-        });
-      }
+  hideFlueGasModal(calculatedAvailableHeat?: any) {
+    if (calculatedAvailableHeat) {
+      calculatedAvailableHeat = this.roundVal(calculatedAvailableHeat, 1);
+      this.wallLossesForm.patchValue({
+        availableHeat: calculatedAvailableHeat
+      });
     }
     this.flueGasModal.hide();
-    this.showFlueModal = false;
-    this.wallService.modalOpen.next(this.showFlueModal);
+    this.showFlueGasModal = false;
+    this.wallService.modalOpen.next(this.showFlueGasModal);
   }
 
 }
