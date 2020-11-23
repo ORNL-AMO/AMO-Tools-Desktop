@@ -102,11 +102,11 @@ export class CompressedAirReductionFormComponent implements OnInit {
       this.idString = 'modification_' + this.index;
     }
     //previous 0.8.1 versions had nozzle type 12 with different color knife
-    if(this.data.pressureMethodData.nozzleType == 12){
+    if (this.data.pressureMethodData.nozzleType == 12) {
       this.data.pressureMethodData.nozzleType = 11;
     }
 
-    if(this.data.compressorElectricityData.compressorControl == 8){
+    if (this.data.compressorElectricityData.compressorControl == 8) {
       this.compressorCustomControl = true;
     }
     this.form = this.compressedAirReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
@@ -143,23 +143,12 @@ export class CompressedAirReductionFormComponent implements OnInit {
       if (this.form.controls.compressorSpecificPowerControl.value == 4) {
         this.compressorCustomSpecificPower = true;
       }
-      let specificPower: number = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower;
-
-      if (this.settings.unitsOfMeasure != 'Imperial') {
-        specificPower = this.convertCompressedAirReductionService.convertSpecificPower(specificPower);
-        specificPower = this.convertCompressedAirReductionService.roundVal(specificPower);
-      }
+      let specificPower: number = this.getSpecificPower();
       this.form.patchValue({ compressorSpecificPower: specificPower });
     }
     else if (this.form.controls.compressorSpecificPowerControl.value != 4) {
       this.compressorCustomSpecificPower = false;
-      let specificPower: number = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower;
-
-      if (this.settings.unitsOfMeasure != 'Imperial') {
-        specificPower = this.convertCompressedAirReductionService.convertSpecificPower(specificPower);
-        specificPower = this.convertCompressedAirReductionService.roundVal(specificPower);
-      }
-
+      let specificPower: number = this.getSpecificPower();
       this.form.patchValue({ compressorSpecificPower: specificPower });
     }
     else {
@@ -169,6 +158,18 @@ export class CompressedAirReductionFormComponent implements OnInit {
     }
     this.compressedAirReductionService.setValidators(this.form);
     this.calculate();
+  }
+
+  getSpecificPower(): number {
+    let specificPower: number = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower;
+
+    if (this.settings.unitsOfMeasure != 'Imperial') {
+      specificPower = this.convertCompressedAirReductionService.convertSpecificPower(specificPower);
+      specificPower = this.convertCompressedAirReductionService.roundVal(specificPower);
+    } else {
+      specificPower = specificPower * 100;
+    }
+    return specificPower;
   }
 
   changeCompressorControl() {

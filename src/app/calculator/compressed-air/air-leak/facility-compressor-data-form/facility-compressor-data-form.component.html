@@ -123,7 +123,7 @@
       <div class="col-6 text-center">
         <span
           class="small bold">{{facilityCompressorDataForm.controls.compressorElectricityData.controls.compressorSpecificPower.value | number:'1.0-2'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 SCFM)</span>
           <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
         </span>
       </div>
@@ -135,7 +135,7 @@
         <input class="form-control" name="compressorSpecificPower" id="compressorCustomSpecificPower"
           (input)="changeCompressorType()" formControlName="compressorSpecificPower" type="number"
           (focus)="changeField('compressorSpecificPower')" onfocus="this.select();">
-        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 SCFM)</span>
         <span class="units input-group-addon"
           *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
       </div>
