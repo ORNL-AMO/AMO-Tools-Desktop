@@ -40,7 +40,6 @@ export class FlueGasModalComponent implements OnInit {
       this.flueGasService.initDefaultEmptyOutput();
       this.flueGasService.initDefaultEmptyInputs();
     }
-    this.output = this.flueGasService.output.getValue();
     this.initSubscriptions();
   }
 

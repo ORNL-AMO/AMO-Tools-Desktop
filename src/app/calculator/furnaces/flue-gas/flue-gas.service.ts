@@ -34,10 +34,10 @@ export class FlueGasService {
 
   calculate(settings: Settings) {
     this.initDefaultEmptyOutput();
-    let output = this.output.getValue();
+    let output: FlueGasOutput = this.output.getValue();
     
-    let baselineFlueGas = this.baselineData.getValue();
-    let modificationFlueGas = this.modificationData.getValue();
+    let baselineFlueGas: FlueGas = this.baselineData.getValue();
+    let modificationFlueGas: FlueGas = this.modificationData.getValue();
     
     let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, settings);
     output.baseline = baselineResults;
@@ -55,17 +55,17 @@ export class FlueGasService {
       flueGasLosses: 0
     }
     if (flueGasData.flueGasType == 'By Volume' && flueGasData.flueGasByVolume) {
-      let validData = this.flueGasFormService.initByVolumeFormFromLoss(flueGasData).valid;
+      let validData: boolean = this.flueGasFormService.initByVolumeFormFromLoss(flueGasData).valid;
       if (validData) {
-        let availableHeat = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
+        let availableHeat: number = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByVolume.heatInput;
         result.flueGasLosses = flueGasLosses;
       }
     } else if (flueGasData.flueGasType === 'By Mass' && flueGasData.flueGasByMass) {
-      let validData = this.flueGasFormService.initByMassFormFromLoss(flueGasData).valid;
+      let validData: boolean = this.flueGasFormService.initByMassFormFromLoss(flueGasData).valid;
       if (validData) {
-        let availableHeat = this.phastService.flueGasByMass(flueGasData.flueGasByMass, settings);
+        let availableHeat: number = this.phastService.flueGasByMass(flueGasData.flueGasByMass, settings);
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByMass.heatInput;
         result.flueGasLosses = flueGasLosses;
