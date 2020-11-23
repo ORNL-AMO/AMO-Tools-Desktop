@@ -37,7 +37,7 @@ export class CompressedAirReductionService {
       compressorControl: 8,
       compressorControlAdjustment: 25,
       compressorSpecificPowerControl: 0,
-      compressorSpecificPower: 0.16
+      compressorSpecificPower: 16
     };
     let hoursPerYear: number = 8760;
     if (operatingHours) {
@@ -103,7 +103,7 @@ export class CompressedAirReductionService {
         compressorControl: 8,
         compressorControlAdjustment: 0,
         compressorSpecificPowerControl: 0,
-        compressorSpecificPower: 0
+        compressorSpecificPower: 16
       },
       units: 1
     };
