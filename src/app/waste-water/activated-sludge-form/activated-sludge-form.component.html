@@ -220,12 +220,13 @@
                 <input type="number" name="FractionBiomass" class="form-control number-input-field"
                     id="{{'FractionBiomass_'+idString}}" (focus)="focusField('FractionBiomass')" (input)="save()"
                     formControlName="FractionBiomass" [readonly]="!selected">
+                    <span class="input-group-addon units">mg VSS/mg</span>
             </div>
             <span *ngIf="form.controls.FractionBiomass.invalid && !form.controls.FractionBiomass.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.FractionBiomass.errors.required">Value
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.FractionBiomass.errors.min">Value can't
-                    be less than {{form.controls.FractionBiomass.errors.min.min}}</span>
+                    be less than {{form.controls.FractionBiomass.errors.min.min}} mg VSS/mg</span>
             </span>
         </div>
         <!-- BiomassYeild -->
@@ -236,12 +237,13 @@
                 <input type="number" name="BiomassYeild" class="form-control number-input-field"
                     id="{{'BiomassYeild_'+idString}}" (focus)="focusField('BiomassYeild')" (input)="save()"
                     formControlName="BiomassYeild" [readonly]="!selected">
+                    <span class="input-group-addon units">mg VSS/mg</span>
             </div>
             <span *ngIf="form.controls.BiomassYeild.invalid && !form.controls.BiomassYeild.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.BiomassYeild.errors.required">Value
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.BiomassYeild.errors.min">Value can't
-                    be less than {{form.controls.BiomassYeild.errors.min.min}}</span>
+                    be less than {{form.controls.BiomassYeild.errors.min.min}} mg VSS/mg</span>
             </span>
         </div>
         <!-- HalfSaturation -->
@@ -252,13 +254,13 @@
                 <input type="number" name="HalfSaturation" class="form-control HalfSaturation-input-field"
                     id="{{'HalfSaturation_'+idString}}" (focus)="focusField('HalfSaturation')" (input)="save()"
                     formControlName="HalfSaturation" [readonly]="!selected">
-                <span class="input-group-addon units">mg/L</span>
+                    <span class="input-group-addon units">mg VSS/mg</span>
             </div>
             <span *ngIf="form.controls.HalfSaturation.invalid && !form.controls.HalfSaturation.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.HalfSaturation.errors.required">Value
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.HalfSaturation.errors.min">Value can't
-                    be less than {{form.controls.HalfSaturation.errors.min.min}} mg/L</span>
+                    be less than {{form.controls.HalfSaturation.errors.min.min}} mg VSS/mg</span>
             </span>
         </div>
         <!-- MicrobialDecay -->
