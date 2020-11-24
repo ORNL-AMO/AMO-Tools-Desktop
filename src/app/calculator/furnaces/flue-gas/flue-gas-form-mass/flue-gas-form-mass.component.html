@@ -168,7 +168,7 @@
     </div>
   </div>
   
-  <div class="form-group">
+  <div *ngIf="!inModal" class="form-group">
     <label class="small" for="heatInput">Heat Delivered</label>
     <div class="input-group">
       <input name="heatInput" type="number" step="10" class="form-control"

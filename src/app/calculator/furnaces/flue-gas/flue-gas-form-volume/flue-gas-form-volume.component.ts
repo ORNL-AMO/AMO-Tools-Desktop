@@ -170,13 +170,11 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   calculate() {
     this.byVolumeForm = this.flueGasFormService.setValidators(this.byVolumeForm);
     this.checkWarnings();
-    if (this.byVolumeForm.valid) {
-      let currentDataByVolume: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
-      if (this.isBaseline) {
-        this.flueGasService.baselineData.next(currentDataByVolume);
-      } else {
-        this.flueGasService.modificationData.next(currentDataByVolume);
-      }
+    let currentDataByVolume: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
+    if (this.isBaseline) {
+      this.flueGasService.baselineData.next(currentDataByVolume);
+    } else {
+      this.flueGasService.modificationData.next(currentDataByVolume);
     }
   }
 

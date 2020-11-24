@@ -4,6 +4,7 @@ import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlueGas, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
+import { FlueGasFormService } from './flue-gas-form.service';
 declare var phastAddon: any;
 
 @Injectable()
@@ -17,7 +18,9 @@ export class FlueGasService {
   generateExample: BehaviorSubject<boolean>;
 
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private convertUnitsService: ConvertUnitsService, private phastService: PhastService) {
+  constructor(private convertUnitsService: ConvertUnitsService, 
+              private phastService: PhastService,
+              private flueGasFormService: FlueGasFormService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
     this.baselineData = new BehaviorSubject<FlueGas>(undefined);
@@ -30,19 +33,17 @@ export class FlueGasService {
   }
 
   calculate(settings: Settings) {
-    let baselineFlueGas = this.baselineData.getValue();
-    let modificationFlueGas = this.modificationData.getValue();
-
+    this.initDefaultEmptyOutput();
     let output: FlueGasOutput = this.output.getValue();
+    
+    let baselineFlueGas: FlueGas = this.baselineData.getValue();
+    let modificationFlueGas: FlueGas = this.modificationData.getValue();
+    
     let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, settings);
-    if (baselineResults) {
-      output.baseline = baselineResults;
-    }
+    output.baseline = baselineResults;
     if (modificationFlueGas) {
       let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, settings);
-      if (modificationResults) {
-        output.modification = modificationResults;
-      }
+      output.modification = modificationResults;
     }
     this.output.next(output);
   }
@@ -54,15 +55,21 @@ export class FlueGasService {
       flueGasLosses: 0
     }
     if (flueGasData.flueGasType == 'By Volume' && flueGasData.flueGasByVolume) {
-      let availableHeat = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
-      result.availableHeat = availableHeat * 100;
-      let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByVolume.heatInput;
-      result.flueGasLosses = flueGasLosses;
+      let validData: boolean = this.flueGasFormService.initByVolumeFormFromLoss(flueGasData).valid;
+      if (validData) {
+        let availableHeat: number = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
+        result.availableHeat = availableHeat * 100;
+        let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByVolume.heatInput;
+        result.flueGasLosses = flueGasLosses;
+      }
     } else if (flueGasData.flueGasType === 'By Mass' && flueGasData.flueGasByMass) {
-      let availableHeat = this.phastService.flueGasByMass(flueGasData.flueGasByMass, settings);
-      result.availableHeat = availableHeat * 100;
-      let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByMass.heatInput;
-      result.flueGasLosses = flueGasLosses;
+      let validData: boolean = this.flueGasFormService.initByMassFormFromLoss(flueGasData).valid;
+      if (validData) {
+        let availableHeat: number = this.phastService.flueGasByMass(flueGasData.flueGasByMass, settings);
+        result.availableHeat = availableHeat * 100;
+        let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByMass.heatInput;
+        result.flueGasLosses = flueGasLosses;
+      }
     } 
 
     result = this.checkAvailableHeatResult(result);

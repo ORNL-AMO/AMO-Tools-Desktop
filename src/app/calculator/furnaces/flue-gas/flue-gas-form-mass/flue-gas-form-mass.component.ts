@@ -168,13 +168,11 @@ export class FlueGasFormMassComponent implements OnInit {
   calculate() {
     this.byMassForm = this.flueGasFormService.setValidators(this.byMassForm);
     this.checkWarnings();
-    if (this.byMassForm.valid) {
-      let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
-      if (this.isBaseline) {
-        this.flueGasService.baselineData.next(currentDataByMass);
-      } else { 
-        this.flueGasService.modificationData.next(currentDataByMass);
-      }
+    let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
+    if (this.isBaseline) {
+      this.flueGasService.baselineData.next(currentDataByMass);
+    } else { 
+      this.flueGasService.modificationData.next(currentDataByMass);
     }
   }
 

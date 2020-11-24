@@ -60,7 +60,6 @@ export class FlueGasComponent implements OnInit {
       this.flueGasService.initDefaultEmptyOutput();
       this.flueGasService.initDefaultEmptyInputs();
     }
-    this.output = this.flueGasService.output.getValue();
     this.initSubscriptions();
     if(this.modificationData) {
       this.modificationExists = true;
