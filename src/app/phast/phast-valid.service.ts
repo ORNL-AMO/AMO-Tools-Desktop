@@ -10,7 +10,6 @@ import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/aux
 import { ChargeMaterialService } from './losses/charge-material/charge-material.service';
 
 import { PHAST, PhastValid } from '../shared/models/phast/phast';
-import { WallLossesService } from './losses/wall-losses/wall-losses.service';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
 import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
 import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
@@ -21,6 +20,7 @@ import { SlagService } from './losses/slag/slag.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
+import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
 
 
 @Injectable()
@@ -33,7 +33,7 @@ export class PhastValidService {
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
     private chargeMaterialService: ChargeMaterialService,
     private coolingLossesService: CoolingLossesService,
-    private wallLossesService: WallLossesService,
+    private wallFormService: WallFormService,
     private flueGasFormService: FlueGasFormService,
     private extendedSurfaceLossesService: ExtendedSurfaceLossesService,
     private operationsService: OperationsService,
@@ -207,7 +207,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.wallLosses) {
       phast.losses.wallLosses.forEach(loss => {
-        let wallForm: FormGroup = this.wallLossesService.getWallLossForm(loss);
+        let wallForm: FormGroup = this.wallFormService.getWallLossForm(loss);
         if (wallForm.status === 'INVALID') {
           valid = false;
         }

@@ -1,41 +1,53 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
-export class WallLossesService {
+export class WallFormService {
+
   constructor(private formBuilder: FormBuilder) { }
 
-  //init empty wall loss form
-  initForm(lossNum: number): FormGroup {
-    return this.formBuilder.group({
-      'surfaceArea': ['', Validators.required],
+  initForm(lossNum?: number): FormGroup {
+    let formGroup = this.formBuilder.group({
+      'surfaceArea': ['', [Validators.required, Validators.min(0)]],
       'avgSurfaceTemp': ['', Validators.required],
       'ambientTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'windVelocity': [0, Validators.required],
-      'surfaceShape': ['Vertical Plates', Validators.required],
+      'windVelocity': [0, [Validators.required, Validators.min(0)]],
+      'surfaceShape': [3, Validators.required],
       'conditionFactor': [1.394, Validators.required],
-      'surfaceEmissivity': [0.9, Validators.required],
+      'surfaceEmissivity': [0.9, [Validators.required, Validators.min(0), Validators.max(1)]],
       'name': ['Loss #' + lossNum]
     });
+
+    if (!lossNum) {
+      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0)]));
+    }
+    return formGroup;
   }
 
-  //get form from WallLoss
-  getWallLossForm(wallLoss: WallLoss): FormGroup {
-    return this.formBuilder.group({
-      'surfaceArea': [wallLoss.surfaceArea, Validators.required],
+  getWallLossForm(wallLoss: WallLoss, inAssessment = false): FormGroup {
+    let formGroup = this.formBuilder.group({
+      'surfaceArea': [wallLoss.surfaceArea, [Validators.required, Validators.min(0)]],
       'avgSurfaceTemp': [wallLoss.surfaceTemperature, Validators.required],
       'ambientTemp': [wallLoss.ambientTemperature, Validators.required],
       'correctionFactor': [wallLoss.correctionFactor, Validators.required],
-      'windVelocity': [wallLoss.windVelocity, Validators.required],
+      'windVelocity': [wallLoss.windVelocity, [Validators.required, Validators.min(0)]],
       'conditionFactor': [wallLoss.conditionFactor, Validators.required],
-      'surfaceEmissivity': [wallLoss.surfaceEmissivity, Validators.required],
+      'surfaceEmissivity': [wallLoss.surfaceEmissivity, [Validators.required, Validators.min(0), Validators.max(1)]],
       'surfaceShape': [wallLoss.surfaceShape],
       'name': [wallLoss.name]
     });
+
+    if (!inAssessment) {
+      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0)]));
+    }
+
+    formGroup = this.setValidators(formGroup);
+    return formGroup;
   }
-  //get WallLoss from form
+
   getWallLossFromForm(wallLossForm: FormGroup): WallLoss {
     let tmpWallLoss: WallLoss = {
       surfaceArea: wallLossForm.controls.surfaceArea.value,
@@ -46,9 +58,26 @@ export class WallLossesService {
       surfaceShape: wallLossForm.controls.surfaceShape.value,
       conditionFactor: wallLossForm.controls.conditionFactor.value,
       correctionFactor: wallLossForm.controls.correctionFactor.value,
+      availableHeat: wallLossForm.controls.availableHeat? wallLossForm.controls.availableHeat.value : '',
       name: wallLossForm.controls.name.value
     };
+
     return tmpWallLoss;
+  }
+
+  setValidators(formGroup: FormGroup): FormGroup {
+    formGroup = this.setSurfaceTemperatureValidators(formGroup);
+    return formGroup;
+  }
+
+  setSurfaceTemperatureValidators(formGroup: FormGroup) {
+    let avgSurfaceTemp = formGroup.controls.avgSurfaceTemp.value;
+    if (avgSurfaceTemp) {
+      formGroup.controls.avgSurfaceTemp.setValidators([Validators.required, Validators.min(formGroup.controls.ambientTemp.value)]);
+      formGroup.controls.avgSurfaceTemp.markAsDirty();
+      formGroup.controls.avgSurfaceTemp.updateValueAndValidity();
+    }
+    return formGroup;
   }
 
   checkWarnings(loss: WallLoss): WallLossWarnings {
