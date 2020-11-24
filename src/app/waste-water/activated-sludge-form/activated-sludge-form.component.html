@@ -254,13 +254,13 @@
                 <input type="number" name="HalfSaturation" class="form-control HalfSaturation-input-field"
                     id="{{'HalfSaturation_'+idString}}" (focus)="focusField('HalfSaturation')" (input)="save()"
                     formControlName="HalfSaturation" [readonly]="!selected">
-                    <span class="input-group-addon units">mg VSS/mg</span>
+                    <span class="input-group-addon units">mg/L BOD</span>
             </div>
             <span *ngIf="form.controls.HalfSaturation.invalid && !form.controls.HalfSaturation.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.HalfSaturation.errors.required">Value
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.HalfSaturation.errors.min">Value can't
-                    be less than {{form.controls.HalfSaturation.errors.min.min}} mg VSS/mg</span>
+                    be less than {{form.controls.HalfSaturation.errors.min.min}} mg/L BOD</span>
             </span>
         </div>
         <!-- MicrobialDecay -->

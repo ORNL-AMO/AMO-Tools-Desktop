@@ -45,67 +45,69 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     selected: true
 }, {
     name: 'BiomassProd',
-    label: 'BiomassProd',
+    label: 'Biomass Production VSS',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
     selected: false
 }, {
     name: 'SludgeProd',
-    label: 'SludgeProd',
+    label: 'Sludge Production VSS',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
     selected: true
 }, {
     name: 'SolidProd',
-    label: 'SolidProd',
+    label: 'T. Solids Production TSS',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
     selected: true
 }, {
-    name: 'Effluent',
+    name: 'Effluent TSS',
     label: 'Effluent',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
     selected: false
 }, {
     name: 'IntentWaste',
-    label: 'IntentWaste',
+    label: 'Intent Waste TSS',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
     selected: false
 }, {
     name: 'OxygenRqd',
-    label: 'OxygenRqd',
+    label: 'Oxygen Required',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
     selected: true
-}, {
-    name: 'FlowMgd',
-    label: 'FlowMgd',
-    metricUnit: 'mgd',
-    imperialUnit: 'm&#x00B3;/day',
-    selected: false
-}, {
+}, 
+// {
+//     name: 'FlowMgd',
+//     label: 'FlowMgd',
+//     metricUnit: 'mgd',
+//     imperialUnit: 'm&#x00B3;/day',
+//     selected: false
+// }, 
+{
     name: 'NRemoved',
-    label: 'NRemoved',
-    metricUnit: '',
-    imperialUnit: '',
+    label: 'Nitrogen Removed',
+    metricUnit: 'lb/day',
+    imperialUnit: 'kg/day',
     selected: false
 }, {
     name: 'NRemovedMgl',
-    label: 'NRemovedMgl',
+    label: 'Nitrogen Removed Mgl',
     metricUnit: 'mgl',
     imperialUnit: 'm&#x00B3;',
     selected: false
 }, {
     name: 'NitO2Dem',
-    label: 'NitO2Dem',
-    metricUnit: '',
-    imperialUnit: '',
+    label: 'Oxygen demand due to nitrification',
+    metricUnit: 'lb/day',
+    imperialUnit: 'kg/day',
     selected: false
 }, {
     name: 'O2Reqd',
-    label: 'O&#x2082; Required',
+    label: 'Total O&#x2082; Requirements',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
     selected: false
@@ -123,7 +125,7 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     selected: false
 }, {
     name: 'TotalO2Rqd',
-    label: 'Total O&#x2082; Requirements',
+    label: 'O&#x2082; Requirements with denitrification savings',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
     selected: false
@@ -135,15 +137,15 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     selected: false
 }, {
     name: 'EstimatedEff',
-    label: 'EstimatedEff',
-    metricUnit: '',
-    imperialUnit: '',
+    label: 'Effluent CBOD5',
+    metricUnit: 'mg/L',
+    imperialUnit: 'mg/L',
     selected: false
 }, {
     name: 'EstimRas',
-    label: 'EstimRas',
-    metricUnit: '',
-    imperialUnit: '',
+    label: 'Ras Flow Rate',
+    metricUnit: 'mgd',
+    imperialUnit: 'm&#x00B3;/day',
     selected: false
 }, {
     name: 'FmRatio',
@@ -151,10 +153,12 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     metricUnit: '',
     imperialUnit: '',
     selected: false
-}, {
-    name: 'Diff_MLSS',
-    label: 'Diff_MLSS',
-    metricUnit: '',
-    imperialUnit: '',
-    selected: false
-}]
+}, 
+// {
+//     name: 'Diff_MLSS',
+//     label: 'Diff_MLSS',
+//     metricUnit: '',
+//     imperialUnit: '',
+//     selected: false
+// }
+]
