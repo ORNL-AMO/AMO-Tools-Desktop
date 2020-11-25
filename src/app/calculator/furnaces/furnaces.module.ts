@@ -7,6 +7,7 @@ import { EfficiencyImprovementModule } from './efficiency-improvement/efficiency
 import { FurnacesListComponent } from './furnaces-list/furnaces-list.component';
 import { RouterModule } from '@angular/router';
 import { FlueGasModule } from './flue-gas/flue-gas.module';
+import { ChargeMaterialModule } from './charge-material/charge-material.module';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { FlueGasModule } from './flue-gas/flue-gas.module';
     EnergyEquivalencyModule,
     EfficiencyImprovementModule,
     FlueGasModule,
+    ChargeMaterialModule,
     RouterModule
   ],
   declarations: [

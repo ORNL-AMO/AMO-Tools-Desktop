@@ -1,0 +1,173 @@
+<form [formGroup]="chargeMaterialForm">
+    <div class="form-section">
+      <div class="form-group">
+        <label class="small" for="{{'materialName_'+idString}}">Name of Material
+          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()">Add New Gas Material</a>
+        </label>
+        <select name="{{'materialName_'+lossIndex}}" class="form-control" id="{{'materialName_'+idString}}" formControlName="materialId" (change)="setProperties()"
+          (focus)="focusField('materialName')" >
+          <option *ngFor="let material of materialTypes" [ngValue]="material.id">{{material.substance}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="small" for="{{'materialSpecificHeat_'+idString}}">Specific Heat of Gas</label>
+        <div class="input-group">
+          <input  name="{{'materialSpecificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialSpecificHeat"
+            id="{{'materialSpecificHeat_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('materialSpecificHeat')"
+            >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
+        </div>
+        <span class="alert-warning pull-right small" *ngIf="warnings.specificHeatGasWarning !== null">{{warnings.specificHeatGasWarning}}</span>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-group">
+        <label class="small" for="{{'feedRate_'+idString}}">Feed Rate for Gas Mixture</label>
+        <div class="input-group">
+          <input  name="{{'feedRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="feedRate" id="{{'feedRate_'+idString}}"
+            onfocus="this.select();" (input)="calculate()" (focus)="focusField('feedRate')" >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
+        </div>
+        <span class="alert-warning pull-right small" *ngIf="warnings.feedGasRateWarning !== null">{{warnings.feedGasRateWarning}}</span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'initialTemperature_'+idString}}">Initial Temperature</label>
+        <div class="input-group">
+          <input  name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
+            id="{{'initialTemperature_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('initialTemperature')"
+            >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-warning pull-right small" *ngIf="warnings.initialTempWarning !== null">{{warnings.initialTempWarning}}</span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'dischargeTemperature_'+idString}}">Discharge Temperature</label>
+        <div class="input-group" >
+          <input  name="{{'dischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="dischargeTemperature"
+            id="{{'dischargeTemperature_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('dischargeTemperature')"
+            >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-warning pull-right small" *ngIf="warnings.initialTempWarning !== null">{{warnings.initialTempWarning}}</span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'vaporInGas_'+idString}}">Vapor in Gas Mixture</label>
+        <div class="input-group" >
+          <input  name="{{'vaporInGas_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="vaporInGas" id="{{'vaporInGas_'+idString}}"
+            onfocus="this.select();" (input)="calculate()" (focus)="focusField('vaporInGas')" >
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-warning pull-right small" *ngIf="warnings.gasMixVaporWarning !== null">{{warnings.gasMixVaporWarning}}</span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'specificHeatOfVapor_'+idString}}">Specific Heat of Vapor</label>
+        <div class="input-group" >
+          <input  name="{{'specificHeatOfVapor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="specificHeatOfVapor"
+            id="{{'specificHeatOfVapor_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('specificHeatOfVapor')"
+            >
+  
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
+        </div>
+        <span class="alert-warning pull-right small" *ngIf="warnings.specificHeatGasVaporWarning !== null">{{warnings.specificHeatGasVaporWarning}}</span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'gasReacted_'+idString}}">Feed Gas Reacted</label>
+        <div class="input-group" >
+          <input  name="{{'gasReacted_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="gasReacted" id="{{'gasReacted_'+idString}}"
+            onfocus="this.select();" (input)="calculate()" (focus)="focusField('gasReacted')" >
+          <span class="units">%</span>
+        </div>
+        <span class="alert-warning pull-right small" *ngIf="warnings.feedGasReactedWarning !== null">{{warnings.feedGasReactedWarning}}</span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'heatOfReaction_'+idString}}">Heat of Reaction</label>
+        <div class="input-group">
+          <input  name="{{'heatOfReaction_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heatOfReaction"
+            id="{{'heatOfReaction_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('heatOfReaction')" >
+  
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
+        </div>
+        <span class="alert-warning pull-right small" *ngIf="warnings.heatOfReactionWarning !== null">{{warnings.heatOfReactionWarning}}</span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'endothermicOrExothermic_'+idString}}">Endothermic/Exothermic</label>
+        <select name="{{'endothermicOrExothermic_'+lossIndex}}" class="form-control" formControlName="endothermicOrExothermic" id="{{'endothermicOrExothermic_'+idString}}"
+          (change)="calculate()" (focus)="focusField('endothermicOrExothermic')">
+          <option>Endothermic</option>
+          <option>Exothermic</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'additionalHeatRequired_'+idString}}">Additional Heat Required</label>
+        <div class="input-group">
+          <input  name="{{'additionalHeatRequired_'+lossIndex}}" type="number" class="form-control" formControlName="additionalHeatRequired"
+            id="{{'additionalHeatRequired_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('additionalHeatRequired')"
+            >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/hr</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'availableHeat'+idString}}">Available Heat
+          <a id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
+        </label>
+        <div class="input-group">
+          <input  name="{{'availableHeat'+lossIndex}}" type="number" step="any" min="0"
+          class="form-control" formControlName="availableHeat" id="{{'availableHeat'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('availableHeat')">
+          <span class="input-group-addon units">%</span>
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+        *ngIf="wallLossesForm.controls.availableHeat.invalid && !wallLossesForm.controls.availableHeat.pristine">
+        <span *ngIf="wallLossesForm.controls.availableHeat.errors.required">Value Required</span>
+        <span *ngIf="wallLossesForm.controls.availableHeat.errors.greaterThan == 0">Value must be greater than than
+          0.</span>
+      </span> -->
+      </div>
+      
+    </div>
+  </form>
+  
+  
+  
+  <!--CREATE charge material MODAL-->
+  <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div>
+          <app-gas-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+            [settings]="settings"></app-gas-load-charge-material>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+      <!--CREATE flueGas MODAL-->
+<div bsModal #flueGasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="flueGasModalLabel"
+aria-hidden="true" [config]="{backdrop: 'static'}">
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div>
+      <app-flue-gas-modal *ngIf="showFlueGasModal" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
+        [settings]="settings"></app-flue-gas-modal>
+    </div>
+  </div>
+</div>
+</div>
