@@ -39,7 +39,7 @@ export class FlueGasComponent implements OnInit {
 
   method: string = 'By Mass';
   currentField: string;
-  tabSelect: string = 'help';
+  tabSelect: string = 'results';
   baselineSelected = true;
   modificationExists = false;
 
@@ -47,10 +47,9 @@ export class FlueGasComponent implements OnInit {
               private flueGasService: FlueGasService) { }
 
   ngOnInit() {
-    // results not yet built - default to help
-    // if (this.settingsDbService.globalSettings.defaultPanelTab) {
-    //   this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
-    // }
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -136,6 +135,11 @@ export class FlueGasComponent implements OnInit {
 
   focusField(str: string) {
     this.flueGasService.currentField.next(str);
+  }
+
+  
+  setTab(str: string) {
+    this.tabSelect = str;
   }
   
   resizeTabs() {

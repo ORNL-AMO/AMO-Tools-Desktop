@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { OperatingHours } from '../../../shared/models/operations';
 import { FlueGas, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
 import { FlueGasFormService } from './flue-gas-form.service';
@@ -16,6 +17,7 @@ export class FlueGasService {
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
+  operatingHours: OperatingHours;
 
   modalOpen: BehaviorSubject<boolean>;
   constructor(private convertUnitsService: ConvertUnitsService, 
@@ -44,6 +46,10 @@ export class FlueGasService {
     if (modificationFlueGas) {
       let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, settings);
       output.modification = modificationResults;
+
+      output.fuelSavings = baselineResults.fuelUse - modificationResults.fuelUse;
+      output.costSavings = baselineResults.fuelCost - modificationResults.fuelCost;
+      debugger;
     }
     this.output.next(output);
   }
@@ -52,8 +58,11 @@ export class FlueGasService {
     let result: FlueGasResult = {
       availableHeat: 0,
       availableHeatError: undefined,
-      flueGasLosses: 0
+      flueGasLosses: 0,
+      fuelCost: 0,
+      fuelUse: 0
     }
+    
     if (flueGasData.flueGasType == 'By Volume' && flueGasData.flueGasByVolume) {
       let validData: boolean = this.flueGasFormService.initByVolumeFormFromLoss(flueGasData).valid;
       if (validData) {
@@ -61,6 +70,8 @@ export class FlueGasService {
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByVolume.heatInput;
         result.flueGasLosses = flueGasLosses;
+        result.fuelCost = flueGasData.flueGasByVolume.fuelCost * flueGasData.flueGasByVolume.hoursPerYear;
+        result.fuelUse = flueGasLosses * flueGasData.flueGasByVolume.hoursPerYear;
       }
     } else if (flueGasData.flueGasType === 'By Mass' && flueGasData.flueGasByMass) {
       let validData: boolean = this.flueGasFormService.initByMassFormFromLoss(flueGasData).valid;
@@ -69,6 +80,8 @@ export class FlueGasService {
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByMass.heatInput;
         result.flueGasLosses = flueGasLosses;
+        result.fuelCost = flueGasData.flueGasByMass.fuelCost * flueGasData.flueGasByMass.hoursPerYear;
+        result.fuelUse = flueGasLosses * flueGasData.flueGasByMass.hoursPerYear;
       }
     } 
 
@@ -106,7 +119,9 @@ export class FlueGasService {
         availableHeat: 0,
         availableHeatError: undefined,
         flueGasLosses: 0
-      }
+      },
+      fuelSavings: 0,
+      costSavings: 0
     };
     this.output.next(output);
   }
@@ -167,6 +182,8 @@ export class FlueGasService {
         fuelTemperature: exampleFuelTemp,
         gasTypeId: 1,
         o2InFlueGas: 2.857,
+        fuelCost: 11,
+        hoursPerYear: 8760,
         oxygenCalculationMethod: "Excess Air",
         heatInput: 15,
       },
@@ -194,6 +211,8 @@ export class FlueGasService {
         fuelTemperature: exampleFuelTemp,
         gasTypeId: 1,
         o2InFlueGas: 3.124,
+        fuelCost: 11,
+        hoursPerYear: 8760,
         oxygenCalculationMethod: "Excess Air",
         heatInput: 15,
       },

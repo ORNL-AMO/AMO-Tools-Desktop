@@ -61,6 +61,7 @@
         Fuel
         <br>
         <small class="text-muted">
+          
           Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
           are intended
           to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
@@ -71,6 +72,25 @@
         </small>
       </h6>
     </div>
+
+    <div class="my-2" *ngIf="currentField == 'gasTypeIdModal'">
+      <h6>
+        Fuel
+        <br>
+        <small class="my-2">If needing to add a new fuel, please do so in the "Custom Materials" page or within a new assessment</small>
+        <br>
+        <small class="text-muted">
+          Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
+          are intended
+          to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+          fuel
+          compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+          edit
+          the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+        </small>
+      </h6>
+    </div>
+
   
   
     <div class="my-2" *ngIf="currentField == 'flueGasTemperature'">
