@@ -172,7 +172,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       this.xUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.fanFlowRate);
       this.powerUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.fanPowerMeasurement);
       if (this.settings.unitsOfMeasure == 'Imperial') {
-        this.imperialFanPrecision = '.1f';
+        this.imperialFanPrecision = '.2f';
       }
     }
   }
