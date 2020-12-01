@@ -115,13 +115,13 @@ export class PhastValidService {
         }
       });
     }
-    return valid
+    return valid;
   }
 
   checkInputExhaustValid(phast: PHAST): boolean {
     let valid = true;
-    if (phast.losses.exhaustGasEAF) {
-      phast.losses.exhaustGasEAF.forEach(loss => {
+    if (phast.losses.energyInputExhaustGasLoss) {
+      phast.losses.energyInputExhaustGasLoss.forEach(loss => {
         let exhaustGasForm: FormGroup = this.energyInputExhaustGasService.getFormFromLoss(loss);
         if (exhaustGasForm.status === 'INVALID') {
           valid = false;

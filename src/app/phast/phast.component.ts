@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsService } from '../settings/settings.service';
+import { PhastValidService } from './phast-valid.service';
 
 @Component({
   selector: 'app-phast',
@@ -70,6 +71,7 @@ export class PhastComponent implements OnInit {
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
+    private phastValidService: PhastValidService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
     private lossesService: LossesService,
@@ -91,7 +93,6 @@ export class PhastComponent implements OnInit {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
       //use copy of phast object of as modal provided to forms
       this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
-      console.log(this._phast);
       if (this._phast.modifications) {
         if (this._phast.modifications.length !== 0) {
           if (!this._phast.modifications[0].exploreOpportunities) {
@@ -102,7 +103,6 @@ export class PhastComponent implements OnInit {
           }
         }
       }
-      //get settings
       this.getSettings();
       this.initSankeyList();
     });
@@ -214,6 +214,7 @@ export class PhastComponent implements OnInit {
   checkSetupDone() {
     //use copy so we don't modify existing
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
+    this._phast.valid = this.phastValidService.checkValid(JSON.parse(JSON.stringify(this._phast)), this.settings);
     this.lossesService.updateTabs.next(true);
     //set current phast as selected sankey in sankey tab
     this.sankeyPhast = this._phast;
