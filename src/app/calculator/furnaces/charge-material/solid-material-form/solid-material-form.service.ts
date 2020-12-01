@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class SolidMaterialFormService {
       'materialLatentHeatOfFusion': ['', [Validators.required, Validators.min(0)]],
       'materialHeatOfLiquid': ['', [Validators.required, Validators.min(0)]],
       'materialMeltingPoint': ['', Validators.required],
-      'feedRate': ['', Validators.required],
+      'feedRate': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'waterContentAsCharged': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       'waterContentAsDischarged': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       'initialTemperature': ['', Validators.required],
@@ -25,14 +25,14 @@ export class SolidMaterialFormService {
       'waterVaporDischargeTemperature': [0, Validators.required],
       'percentChargeMelted': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       'percentChargeReacted': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      'heatOfReaction': [0, Validators.required],
+      'heatOfReaction': [0, [Validators.required, Validators.min(0)]],
       'endothermicOrExothermic': ['Endothermic', Validators.required],
       'additionalHeatRequired': [0, Validators.required],
       'name': ['Material #' + lossNumber]
     });
 
     if (!assesmentLossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0)]));
+      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]));
     }
 
     return formGroup;
@@ -50,7 +50,7 @@ export class SolidMaterialFormService {
       'materialLatentHeatOfFusion': [chargeMaterial.solidChargeMaterial.latentHeat, [Validators.required, Validators.min(0)]],
       'materialHeatOfLiquid': [chargeMaterial.solidChargeMaterial.specificHeatLiquid, [Validators.required, Validators.min(0)]],
       'materialMeltingPoint': [chargeMaterial.solidChargeMaterial.meltingPoint, Validators.required],
-      'feedRate': [chargeMaterial.solidChargeMaterial.chargeFeedRate, Validators.required],
+      'feedRate': [chargeMaterial.solidChargeMaterial.chargeFeedRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'waterContentAsCharged': [chargeMaterial.solidChargeMaterial.waterContentCharged, [Validators.required, Validators.min(0), Validators.max(100)]],
       'waterContentAsDischarged': [chargeMaterial.solidChargeMaterial.waterContentDischarged, [Validators.required, Validators.min(0), Validators.max(100)]],
       'initialTemperature': [chargeMaterial.solidChargeMaterial.initialTemperature, Validators.required],
@@ -58,18 +58,30 @@ export class SolidMaterialFormService {
       'waterVaporDischargeTemperature': [chargeMaterial.solidChargeMaterial.waterVaporDischargeTemperature, Validators.required],
       'percentChargeMelted': [chargeMaterial.solidChargeMaterial.chargeMelted, [Validators.required, Validators.min(0), Validators.max(100)]],
       'percentChargeReacted': [chargeMaterial.solidChargeMaterial.chargeReacted, [Validators.required, Validators.min(0), Validators.max(100)]],
-      'heatOfReaction': [chargeMaterial.solidChargeMaterial.reactionHeat, Validators.required],
+      'heatOfReaction': [chargeMaterial.solidChargeMaterial.reactionHeat, [Validators.required, Validators.min(0)]],
       'endothermicOrExothermic': [reactionType, Validators.required],
       'additionalHeatRequired': [chargeMaterial.solidChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
     });
 
     if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0)]));
+      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
     }
 
+    formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
   }
+
+  setInitialTempValidator(formGroup: FormGroup) {
+    let dischargeTemperature = formGroup.controls.chargeMaterialDischargeTemperature.value;
+    if (dischargeTemperature) {
+      formGroup.controls.initialTemperature.setValidators([Validators.required, Validators.max(dischargeTemperature)]);
+      formGroup.controls.initialTemperature.markAsDirty();
+      formGroup.controls.initialTemperature.updateValueAndValidity();
+    }
+    debugger;
+    return formGroup;
+}
 
 
   buildSolidChargeMaterial(solidForm: FormGroup): ChargeMaterial {
@@ -103,4 +115,37 @@ export class SolidMaterialFormService {
     return tmpSolidMaterial;
   }
 
+  checkSolidWarnings(material: SolidChargeMaterial): SolidMaterialWarnings {
+    return {
+      dischargeTempWarning: this.checkDischargeTemperature(material),
+      initialOverMeltWarning: this.checkInitialOverMelting(material)
+    };
+  }
+
+  checkDischargeTemperature(material: SolidChargeMaterial): string {
+    if ((material.dischargeTemperature > material.meltingPoint) && material.chargeMelted === 0) {
+      return 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
+    } else if ((material.dischargeTemperature < material.meltingPoint) && material.chargeMelted > 0) {
+      return 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
+    } else {
+      return null;
+    }
+  }
+
+  checkInitialOverMelting(material: SolidChargeMaterial): string {
+    if (material.initialTemperature > material.meltingPoint && material.chargeMelted <= 0) {
+      return "The initial temperature is higher than the melting point, please enter proper percentage for charge melted.";
+    }
+    else if ((material.initialTemperature < material.meltingPoint) && material.chargeMelted > 0){
+      return 'The initial temperature is lower than the melting point, the percentage for charge melted should be 0%.';
+    } else {
+      return null;
+    }
+  }
+
+}
+
+export interface SolidMaterialWarnings {
+  dischargeTempWarning: string;
+  initialOverMeltWarning: string;
 }

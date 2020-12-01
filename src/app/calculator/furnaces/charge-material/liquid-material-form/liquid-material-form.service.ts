@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
 @Injectable()
@@ -13,23 +13,23 @@ export class LiquidMaterialFormService {
 
     let formGroup = this.formBuilder.group({
       'materialId': [1, Validators.required],
-      'materialSpecificHeatLiquid': ['', Validators.required],
+      'materialSpecificHeatLiquid': ['', [Validators.required, Validators.min(0)]],
       'materialVaporizingTemperature': ['', Validators.required],
-      'materialLatentHeat': ['', Validators.required],
-      'materialSpecificHeatVapor': ['', Validators.required],
-      'feedRate': ['', Validators.required],
+      'materialLatentHeat': ['', [Validators.required, Validators.min(0)]],
+      'materialSpecificHeatVapor': ['', [Validators.required, Validators.min(0)]],
+      'feedRate': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'initialTemperature': ['', Validators.required],
       'dischargeTemperature': ['', Validators.required],
-      'liquidVaporized': [0, Validators.required],
-      'liquidReacted': [0, Validators.required],
-      'heatOfReaction': [0, Validators.required],
+      'liquidVaporized': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'liquidReacted': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'heatOfReaction': [0, [Validators.required, Validators.min(0)]],
       'endothermicOrExothermic': ['Endothermic', Validators.required],
       'additionalHeatRequired': [0, Validators.required],
       'name': ['Material #' + lossNumber]
     });
 
     if (!assesmentLossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0)]));
+      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]));
     }
 
     return formGroup;
@@ -42,16 +42,16 @@ export class LiquidMaterialFormService {
     }
     let formGroup = this.formBuilder.group({
       'materialId': [chargeMaterial.liquidChargeMaterial.materialId, Validators.required],
-      'materialSpecificHeatLiquid': [chargeMaterial.liquidChargeMaterial.specificHeatLiquid, Validators.required],
+      'materialSpecificHeatLiquid': [chargeMaterial.liquidChargeMaterial.specificHeatLiquid, [Validators.required, Validators.min(0)]],
       'materialVaporizingTemperature': [chargeMaterial.liquidChargeMaterial.vaporizingTemperature, Validators.required],
-      'materialLatentHeat': [chargeMaterial.liquidChargeMaterial.latentHeat, Validators.required],
-      'materialSpecificHeatVapor': [chargeMaterial.liquidChargeMaterial.specificHeatVapor, Validators.required],
-      'feedRate': [chargeMaterial.liquidChargeMaterial.chargeFeedRate, Validators.required],
+      'materialLatentHeat': [chargeMaterial.liquidChargeMaterial.latentHeat, [Validators.required, Validators.min(0)]],
+      'materialSpecificHeatVapor': [chargeMaterial.liquidChargeMaterial.specificHeatVapor, [Validators.required, Validators.min(0)]],
+      'feedRate': [chargeMaterial.liquidChargeMaterial.chargeFeedRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'initialTemperature': [chargeMaterial.liquidChargeMaterial.initialTemperature, Validators.required],
       'dischargeTemperature': [chargeMaterial.liquidChargeMaterial.dischargeTemperature, Validators.required],
-      'liquidVaporized': [chargeMaterial.liquidChargeMaterial.percentVaporized, Validators.required],
-      'liquidReacted': [chargeMaterial.liquidChargeMaterial.percentReacted, Validators.required],
-      'heatOfReaction': [chargeMaterial.liquidChargeMaterial.reactionHeat, Validators.required],
+      'liquidVaporized': [chargeMaterial.liquidChargeMaterial.percentVaporized, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'liquidReacted': [chargeMaterial.liquidChargeMaterial.percentReacted, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'heatOfReaction': [chargeMaterial.liquidChargeMaterial.reactionHeat, [Validators.required, Validators.min(0)]],
       'endothermicOrExothermic': [reactionType, Validators.required],
       'additionalHeatRequired': [chargeMaterial.liquidChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
@@ -59,11 +59,21 @@ export class LiquidMaterialFormService {
 
     
     if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0)]));
+      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
     }
 
-    // formGroup = this.setValidators(formGroup);
+    formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
+  }
+
+  setInitialTempValidator(formGroup: FormGroup) {
+      let dischargeTemperature = formGroup.controls.dischargeTemperature.value;
+      if (dischargeTemperature) {
+        formGroup.controls.initialTemperature.setValidators([Validators.required, Validators.max(dischargeTemperature)]);
+        formGroup.controls.initialTemperature.markAsDirty();
+        formGroup.controls.initialTemperature.updateValueAndValidity();
+      }
+      return formGroup;
   }
 
   buildLiquidChargeMaterial(liquidForm: FormGroup): ChargeMaterial {
@@ -93,4 +103,46 @@ export class LiquidMaterialFormService {
     };
     return tmpLiquidMaterial;
   }
+
+  checkLiquidWarnings(material: LiquidChargeMaterial): LiquidMaterialWarnings {
+    return {
+      dischargeTempWarning: this.checkDischargeTemp(material),
+      inletOverVaporizingWarning: this.checkInletOverVaporizing(material),
+      outletOverVaporizingWarning: this.checkOutletOverVaporizing(material),
+    };
+  }
+
+  checkDischargeTemp(material: LiquidChargeMaterial): string {
+    if ((material.dischargeTemperature > material.vaporizingTemperature) && material.percentVaporized === 0) {
+      return 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
+    } else if ((material.dischargeTemperature < material.vaporizingTemperature) && material.percentVaporized > 0) {
+      return 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
+    } else {
+      return null;
+    }
+  }
+
+  checkInletOverVaporizing(material: LiquidChargeMaterial): string {
+    if (material.initialTemperature > material.vaporizingTemperature && material.percentVaporized <= 0) {
+      return "The initial temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.";
+    } else {
+      return null;
+    }
+  }
+  checkOutletOverVaporizing(material: LiquidChargeMaterial): string {
+    if (material.dischargeTemperature > material.vaporizingTemperature && material.percentVaporized <= 0) {
+      return "The discharge temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.";
+    }
+    else {
+      return null;
+    }
+  }
+
+}
+
+
+export interface LiquidMaterialWarnings {
+  dischargeTempWarning: string;
+  inletOverVaporizingWarning: string;
+  outletOverVaporizingWarning: string;
 }

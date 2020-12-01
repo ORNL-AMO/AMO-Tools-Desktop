@@ -2,13 +2,11 @@ import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
-import { GasMaterialWarnings } from '../../../../phast/losses/charge-material/charge-material.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
-import { ChargeMaterial, GasChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { ChargeMaterialFormService } from '../charge-material-form.service';
 import { ChargeMaterialService } from '../charge-material.service';
 import { GasMaterialFormService } from './gas-material-form.service';
 
@@ -36,7 +34,6 @@ export class GasMaterialFormComponent implements OnInit {
 
   chargeMaterialForm: FormGroup;
   options: any;
-  warnings: GasMaterialWarnings;
   selectedMaterialId: any;
   selectedMaterial: any;
   idString: string;
@@ -48,7 +45,6 @@ export class GasMaterialFormComponent implements OnInit {
               private chargeMaterialService: ChargeMaterialService, 
               private convertUnitsService: ConvertUnitsService,
               private gasMaterialFormService: GasMaterialFormService,
-              private chargeMaterialFormService: ChargeMaterialFormService,
               ) {}
 
   ngOnInit() {
@@ -98,7 +94,6 @@ export class GasMaterialFormComponent implements OnInit {
       this.chargeMaterialForm = this.gasMaterialFormService.initGasForm();
     }
 
-    this.checkWarnings();
     this.calculate();
     this.setFormState();
   }
@@ -120,15 +115,8 @@ export class GasMaterialFormComponent implements OnInit {
     return test;
   }
 
-  checkWarnings() {
-    let tmpMaterial: GasChargeMaterial = this.gasMaterialFormService.buildGasChargeMaterial(this.chargeMaterialForm).gasChargeMaterial;
-    this.warnings = this.chargeMaterialFormService.checkGasWarnings(tmpMaterial);
-  }
-
   calculate() {
-    // this.chargeMaterialForm = this.gasMaterialFormService.setValidators(this.chargeMaterialForm);
-    this.checkWarnings();
-    debugger;
+    this.chargeMaterialForm = this.gasMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     if (this.chargeMaterialForm.valid) {
       let chargeMaterial: ChargeMaterial = this.gasMaterialFormService.buildGasChargeMaterial(this.chargeMaterialForm);
       if (this.isBaseline) {

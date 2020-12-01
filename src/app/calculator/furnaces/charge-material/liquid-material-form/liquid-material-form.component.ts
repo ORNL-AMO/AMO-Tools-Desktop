@@ -7,9 +7,8 @@ import { LiquidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { ChargeMaterial, LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { ChargeMaterialFormService, LiquidMaterialWarnings } from '../charge-material-form.service';
 import { ChargeMaterialService } from '../charge-material.service';
-import { LiquidMaterialFormService } from './liquid-material-form.service';
+import { LiquidMaterialFormService, LiquidMaterialWarnings } from './liquid-material-form.service';
 
 @Component({
   selector: 'app-liquid-material-form',
@@ -46,7 +45,6 @@ export class LiquidMaterialFormComponent implements OnInit {
               private chargeMaterialService: ChargeMaterialService, 
               private convertUnitsService: ConvertUnitsService,
               private liquidMaterialFormService: LiquidMaterialFormService,
-              private chargeMaterialFormService: ChargeMaterialFormService,
               ) {}
 
   ngOnInit() {
@@ -138,11 +136,11 @@ export class LiquidMaterialFormComponent implements OnInit {
 
   checkWarnings() {
     let tmpMaterial: LiquidChargeMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(this.chargeMaterialForm).liquidChargeMaterial;
-    this.warnings = this.chargeMaterialFormService.checkLiquidWarnings(tmpMaterial);
+    this.warnings = this.liquidMaterialFormService.checkLiquidWarnings(tmpMaterial);
   }
 
   calculate() {
-    // this.chargeMaterialForm = this.liquidMaterialFormService.setValidators(this.chargeMaterialForm);
+    this.chargeMaterialForm = this.liquidMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     this.checkWarnings();
     if (this.chargeMaterialForm.valid) {
       let chargeMaterial: ChargeMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(this.chargeMaterialForm);

@@ -7,8 +7,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
-import { SolidMaterialWarnings, ChargeMaterialService } from '../charge-material.service';
 import { SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { SolidMaterialFormService, SolidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 
 @Component({
   selector: 'app-solid-charge-material-form',
@@ -47,7 +47,11 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   showModal: boolean = false;
   warnings: SolidMaterialWarnings;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private chargeMaterialService: ChargeMaterialService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) {
+  constructor(private suiteDbService: SuiteDbService, 
+              private chargeMaterialCompareService: ChargeMaterialCompareService, 
+              private solidMaterialFormService: SolidMaterialFormService,
+              private lossesService: LossesService, 
+              private convertUnitsService: ConvertUnitsService) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -129,13 +133,14 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpMaterial: SolidChargeMaterial = this.chargeMaterialService.buildSolidChargeMaterial(this.chargeMaterialForm).solidChargeMaterial;
-    this.warnings = this.chargeMaterialService.checkSolidWarnings(tmpMaterial);
-    let hasWarning: boolean = this.chargeMaterialService.checkWarningsExist(this.warnings);
+    let tmpMaterial: SolidChargeMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(this.chargeMaterialForm).solidChargeMaterial;
+    this.warnings = this.solidMaterialFormService.checkSolidWarnings(tmpMaterial);
+    let hasWarning: boolean = this.warnings.dischargeTempWarning !== null || this.warnings.initialOverMeltWarning !== null;
     this.inputError.emit(hasWarning);
   }
 
   save() {
+    this.chargeMaterialForm = this.solidMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);

@@ -7,9 +7,8 @@ import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { ChargeMaterial, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { ChargeMaterialFormService, SolidMaterialWarnings } from '../charge-material-form.service';
 import { ChargeMaterialService } from '../charge-material.service';
-import { SolidMaterialFormService } from './solid-material-form.service';
+import { SolidMaterialFormService, SolidMaterialWarnings } from './solid-material-form.service';
 
 @Component({
   selector: 'app-solid-material-form',
@@ -46,7 +45,6 @@ export class SolidMaterialFormComponent implements OnInit {
               private chargeMaterialService: ChargeMaterialService, 
               private convertUnitsService: ConvertUnitsService,
               private solidMaterialFormService: SolidMaterialFormService,
-              private chargeMaterialFormService: ChargeMaterialFormService,
               ) {}
 
   ngOnInit() {
@@ -137,10 +135,11 @@ export class SolidMaterialFormComponent implements OnInit {
 
   checkWarnings() {
     let tmpMaterial: SolidChargeMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(this.chargeMaterialForm).solidChargeMaterial;
-    this.warnings = this.chargeMaterialFormService.checkSolidWarnings(tmpMaterial);
+    this.warnings = this.solidMaterialFormService.checkSolidWarnings(tmpMaterial);
   }
 
   calculate() {
+    this.chargeMaterialForm = this.solidMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     this.checkWarnings();
     if (this.chargeMaterialForm.valid) {
       let chargeMaterial: ChargeMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(this.chargeMaterialForm);

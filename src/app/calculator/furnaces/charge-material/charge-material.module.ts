@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
-import { ChargeMaterialFormService } from './charge-material-form.service';
 import { ChargeMaterialService } from './charge-material.service';
 import { GasMaterialFormComponent } from './gas-material-form/gas-material-form.component';
 import { LiquidMaterialFormComponent } from './liquid-material-form/liquid-material-form.component';
@@ -40,7 +39,6 @@ import { GasMaterialFormService } from './gas-material-form/gas-material-form.se
   ],
   providers: [
     ChargeMaterialService,
-    ChargeMaterialFormService,
     SolidMaterialFormService,
     LiquidMaterialFormService,
     GasMaterialFormService,

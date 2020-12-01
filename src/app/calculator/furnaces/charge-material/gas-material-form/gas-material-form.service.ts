@@ -13,21 +13,21 @@ export class GasMaterialFormService {
 
     let formGroup = this.formBuilder.group({
       'materialId': [1, Validators.required],
-      'materialSpecificHeat': ['', Validators.required],
-      'feedRate': ['', Validators.required],
-      'vaporInGas': [0, Validators.required],
+      'materialSpecificHeat': ['',  [Validators.required, Validators.min(0)]],
+      'feedRate': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      'vaporInGas': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       'initialTemperature': ['', Validators.required],
       'dischargeTemperature': ['', Validators.required],
-      'specificHeatOfVapor': [0, Validators.required],
-      'gasReacted': [0, Validators.required],
-      'heatOfReaction': [0, Validators.required],
+      'specificHeatOfVapor': [0, [Validators.required, Validators.min(0)]],
+      'gasReacted': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'heatOfReaction': [0, [Validators.required, Validators.min(0)]],
       'endothermicOrExothermic': ['Endothermic', Validators.required],
       'additionalHeatRequired': [0, Validators.required],
       'name': ['Material #' + lossNumber]
     });
 
     if (!assesmentLossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0)]));
+      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]));
     }
 
     return formGroup;
@@ -40,26 +40,36 @@ export class GasMaterialFormService {
     }
     let formGroup = this.formBuilder.group({
       'materialId': [chargeMaterial.gasChargeMaterial.materialId, Validators.required],
-      'materialSpecificHeat': [chargeMaterial.gasChargeMaterial.specificHeatGas, Validators.required],
-      'feedRate': [chargeMaterial.gasChargeMaterial.feedRate, Validators.required],
-      'vaporInGas': [chargeMaterial.gasChargeMaterial.percentVapor, Validators.required],
+      'materialSpecificHeat': [chargeMaterial.gasChargeMaterial.specificHeatGas, [Validators.required, Validators.min(0)]],
+      'feedRate': [chargeMaterial.gasChargeMaterial.feedRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      'vaporInGas': [chargeMaterial.gasChargeMaterial.percentVapor, [Validators.required, Validators.min(0), Validators.max(100)]],
       'initialTemperature': [chargeMaterial.gasChargeMaterial.initialTemperature, Validators.required],
       'dischargeTemperature': [chargeMaterial.gasChargeMaterial.dischargeTemperature, Validators.required],
-      'specificHeatOfVapor': [chargeMaterial.gasChargeMaterial.specificHeatVapor, Validators.required],
-      'gasReacted': [chargeMaterial.gasChargeMaterial.percentReacted, Validators.required],
-      'heatOfReaction': [chargeMaterial.gasChargeMaterial.reactionHeat, Validators.required],
+      'specificHeatOfVapor': [chargeMaterial.gasChargeMaterial.specificHeatVapor, [Validators.required, Validators.min(0)]],
+      'gasReacted': [chargeMaterial.gasChargeMaterial.percentReacted, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'heatOfReaction': [chargeMaterial.gasChargeMaterial.reactionHeat, [Validators.required, Validators.min(0)]],
       'endothermicOrExothermic': [reactionType, Validators.required],
       'additionalHeatRequired': [chargeMaterial.gasChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
     });
 
     if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0)]));
+      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
     }
 
-    // formGroup = this.setValidators(formGroup);
+    formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
   }
+
+  setInitialTempValidator(formGroup: FormGroup) {
+    let dischargeTemperature = formGroup.controls.dischargeTemperature.value;
+    if (dischargeTemperature) {
+      formGroup.controls.initialTemperature.setValidators([Validators.required, Validators.max(dischargeTemperature)]);
+      formGroup.controls.initialTemperature.markAsDirty();
+      formGroup.controls.initialTemperature.updateValueAndValidity();
+    }
+    return formGroup;
+}
 
   buildGasChargeMaterial(gasForm: FormGroup): ChargeMaterial {
     let reactionType = 0;

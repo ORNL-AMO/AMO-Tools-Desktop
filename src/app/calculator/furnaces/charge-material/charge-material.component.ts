@@ -92,7 +92,6 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   changeMaterialType() {
-    console.log(this.materialType);
     this.chargeMaterialService.initDefaultEmptyOutput();
   }
 

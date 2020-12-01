@@ -7,8 +7,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
-import { GasMaterialWarnings, ChargeMaterialService } from '../charge-material.service';
 import { GasChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { GasMaterialFormService } from '../../../../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 @Component({
   selector: 'app-gas-charge-material-form',
   templateUrl: './gas-charge-material-form.component.html',
@@ -41,9 +41,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   materialTypes: any;
   selectedMaterial: any;
   showModal: boolean = false;
-  warnings: GasMaterialWarnings;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private gasMaterialFormService: GasMaterialFormService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isBaseline) {
@@ -131,10 +130,10 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpMaterial: GasChargeMaterial = this.chargeMaterialService.buildGasChargeMaterial(this.chargeMaterialForm).gasChargeMaterial;
-    this.warnings = this.chargeMaterialService.checkGasWarnings(tmpMaterial);
-    let hasWarning: boolean = this.chargeMaterialService.checkWarningsExist(this.warnings);
-    this.inputError.emit(hasWarning);
+    // let tmpMaterial: GasChargeMaterial = this.gasMaterialFormService.buildGasChargeMaterial(this.chargeMaterialForm).gasChargeMaterial;
+    // this.warnings = this.gasMaterialFormService.checkGasWarnings(tmpMaterial);
+    // let hasWarning: boolean = this.gasMaterialFormService.checkWarningsExist(this.warnings);
+    // this.inputError.emit(hasWarning);
   }
 
   save() {

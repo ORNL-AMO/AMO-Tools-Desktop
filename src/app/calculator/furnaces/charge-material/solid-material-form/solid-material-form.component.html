@@ -23,9 +23,11 @@
         *ngIf="chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.invalid && !chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.pristine">
         <span *ngIf="chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.errors.required">Value Required</span>
         <span *ngIf="chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.errors.min">Value can't be less than
-          {{chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.errors.min.min}} %.</span>
+          {{chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.errors.min.min}} 
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(lb-&#8457;)</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(kg-&#8451;)</span>
+          .</span>
       </span>
-        <!-- <span class="alert-warning pull-right small" *ngIf="warnings.specificHeatWarning !==null">{{warnings.specificHeatWarning}}</span> -->
       </div>
   
       <div class="form-group">
@@ -42,11 +44,10 @@
         <span *ngIf="chargeMaterialForm.controls.materialLatentHeatOfFusion.errors.required">Value Required</span>
         <span *ngIf="chargeMaterialForm.controls.materialLatentHeatOfFusion.errors.min">Value can't be less than
           {{chargeMaterialForm.controls.materialLatentHeatOfFusion.errors.min.min}} 
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/lb</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
           .</span>
       </span>
-        <!-- <span class="alert-warning pull-right small" *ngIf="warnings.latentHeatWarning !==null">{{warnings.latentHeatWarning}}</span> -->
       </div>
   
       <div class="form-group">
@@ -63,11 +64,10 @@
         <span *ngIf="chargeMaterialForm.controls.materialHeatOfLiquid.errors.required">Value Required</span>
         <span *ngIf="chargeMaterialForm.controls.materialHeatOfLiquid.errors.min">Value can't be less than
           {{chargeMaterialForm.controls.materialHeatOfLiquid.errors.min.min}} 
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(lb-&#8457;)</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(kg-&#8451;)</span>
           .</span>
       </span>
-        <!-- <span class="alert-warning pull-right small" *ngIf="warnings.heatOfLiquidWarning !==null">{{warnings.heatOfLiquidWarning}}</span> -->
       </div>
   
       <div class="form-group">
@@ -79,6 +79,10 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="chargeMaterialForm.controls.materialMeltingPoint.invalid && !chargeMaterialForm.controls.materialMeltingPoint.pristine">
+        <span *ngIf="chargeMaterialForm.controls.materialMeltingPoint.errors.required">Value Required</span>
+      </span>
       </div>
     </div>
   
@@ -91,7 +95,15 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
         </div>
-        <span class="alert-warning pull-right small" *ngIf="warnings.feedRateWarning !== null">{{warnings.feedRateWarning}}</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="chargeMaterialForm.controls.feedRate.invalid && !chargeMaterialForm.controls.feedRate.pristine">
+        <span *ngIf="chargeMaterialForm.controls.feedRate.errors.required">Value Required</span>
+        <span *ngIf="chargeMaterialForm.controls.feedRate.errors.greaterThan == 0">Value must be greater than than
+          0
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>.
+        </span>
+      </span>
       </div>
   
       <div class="form-group">
@@ -103,7 +115,15 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
-        <span class="alert-warning pull-right small" *ngIf="warnings.initialTempWarning !== null">{{warnings.initialTempWarning}}</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="chargeMaterialForm.controls.initialTemperature.invalid && !chargeMaterialForm.controls.initialTemperature.pristine">
+        <span *ngIf="chargeMaterialForm.controls.initialTemperature.errors.required">Value Required</span>
+        <span *ngIf="chargeMaterialForm.controls.initialTemperature.errors.max">Value can't be greater than Outlet Temperature
+          ({{chargeMaterialForm.controls.initialTemperature.errors.max.max}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+          ).</span>
+      </span>
         <span class="alert-warning pull-right small" *ngIf="warnings.initialOverMeltWarning !== null">{{warnings.initialOverMeltWarning}}</span>
       </div>
   
@@ -117,9 +137,13 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
-        <span class="alert-warning pull-right small" *ngIf="warnings.initialTempWarning !== null">{{warnings.initialTempWarning}}</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="chargeMaterialForm.controls.chargeMaterialDischargeTemperature.invalid && !chargeMaterialForm.controls.chargeMaterialDischargeTemperature.pristine">
+        <span *ngIf="chargeMaterialForm.controls.chargeMaterialDischargeTemperature.errors.required">Value Required</span>
+      </span>
         <span class="alert-warning pull-right small" *ngIf="warnings.dischargeTempWarning !== null">{{warnings.dischargeTempWarning}}</span>
       </div>
+
       <div class="form-group">
         <label class="small" for="{{'waterContentAsCharged_'+idString}}">Water Content as Charged</label>
         <div class="input-group">
@@ -136,7 +160,6 @@
         <span *ngIf="chargeMaterialForm.controls.waterContentAsCharged.errors.min">Value can't be less than
           {{chargeMaterialForm.controls.waterContentAsCharged.errors.min.min}} %.</span>
       </span>
-        <!-- <span class="alert-warning pull-right small" *ngIf="warnings.waterChargedWarning !== null">{{warnings.waterChargedWarning}}</span> -->
       </div>
   
       <div class="form-group">
@@ -155,7 +178,6 @@
         <span *ngIf="chargeMaterialForm.controls.waterContentAsDischarged.errors.min">Value can't be less than
           {{chargeMaterialForm.controls.waterContentAsDischarged.errors.min.min}} %.</span>
       </span>
-        <!-- <span class="alert-warning pull-right small" *ngIf="warnings.waterDischargedWarning !== null">{{warnings.waterDischargedWarning}}</span> -->
       </div>
   
       <div class="form-group">
@@ -167,6 +189,10 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="chargeMaterialForm.controls.waterVaporDischargeTemperature.invalid && !chargeMaterialForm.controls.waterVaporDischargeTemperature.pristine">
+        <span *ngIf="chargeMaterialForm.controls.waterVaporDischargeTemperature.errors.required">Value Required</span>
+      </span>
       </div>
   
       <div class="form-group">
@@ -185,8 +211,7 @@
         <span *ngIf="chargeMaterialForm.controls.percentChargeMelted.errors.min">Value can't be less than
           {{chargeMaterialForm.controls.percentChargeMelted.errors.min.min}} %.</span>
       </span>
-        <!-- <span class="alert-warning pull-right small" *ngIf="warnings.chargeMeltedWarning !== null">{{warnings.chargeMeltedWarning}}</span> -->
-        <!-- <span class="alert-warning pull-right small" *ngIf="warnings.dischargeTempWarning !== null">{{warnings.dischargeTempWarning}}</span> -->
+      <span class="alert-warning pull-right small" *ngIf="warnings.dischargeTempWarning !== null">{{warnings.dischargeTempWarning}}</span>
       </div>
   
       <div class="form-group">
@@ -205,7 +230,6 @@
         <span *ngIf="chargeMaterialForm.controls.percentChargeReacted.errors.min">Value can't be less than
           {{chargeMaterialForm.controls.percentChargeReacted.errors.min.min}} %.</span>
       </span>
-        <!-- <span class="alert-warning pull-right small" *ngIf="warnings.chargeSolidReactedWarning !== null">{{warnings.chargeSolidReactedWarning}}</span> -->
       </div>
   
       <div class="form-group">
@@ -216,7 +240,15 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
         </div>
-        <span class="alert-warning pull-right small" *ngIf="warnings.heatOfReactionWarning !== null">{{warnings.heatOfReactionWarning}}</span>
+        <span class="alert-danger pull-right small"
+        *ngIf="chargeMaterialForm.controls.heatOfReaction.invalid && !chargeMaterialForm.controls.heatOfReaction.pristine">
+        <span *ngIf="chargeMaterialForm.controls.heatOfReaction.errors.required">Value Required</span>
+        <span *ngIf="chargeMaterialForm.controls.heatOfReaction.errors.min">Value can't be less than
+          {{chargeMaterialForm.controls.heatOfReaction.errors.min.min}} 
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/lb</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
+          .</span>
+      </span>
       </div>
   
       <div class="form-group">
@@ -237,6 +269,10 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/hr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/hr</span>
         </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="chargeMaterialForm.controls.additionalHeatRequired.invalid && !chargeMaterialForm.controls.additionalHeatRequired.pristine">
+        <span *ngIf="chargeMaterialForm.controls.additionalHeatRequired.errors.required">Value Required</span>
+      </span>
       </div>
 
       <div class="form-group">
@@ -254,6 +290,7 @@
         <span *ngIf="chargeMaterialForm.controls.availableHeat.errors.required">Value Required</span>
         <span *ngIf="chargeMaterialForm.controls.availableHeat.errors.greaterThan == 0">Value must be greater than than
           0.</span>
+          <span *ngIf="chargeMaterialForm.controls.availableHeat.errors.max">Value can't be greater than 100%.</span>
       </span>
       </div>
 
