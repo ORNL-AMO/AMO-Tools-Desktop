@@ -5,8 +5,8 @@
         <td class="bold w-50">Fuel Use</td>
         <td *ngIf="output.baseline.fuelUse" class="text-center w-50">
           {{output.baseline.fuelUse | number:'1.0-0'}}
-          <span class="input-group-addon"><span
-						[innerHTML]="settings.energyResultUnit | settingsLabel"></span></span>/yr
+          <span class="input-group-addon">
+            <span [innerHTML]="output.baseline.energyUnit | settingsLabel"></span></span>/yr
         </td>
         <td *ngIf="!output.baseline.fuelUse" class="text-center w-50">
           &mdash; &mdash;
@@ -15,7 +15,7 @@
       <tr>
         <td class="bold w-50">Fuel Cost</td>
         <td *ngIf="output.baseline.fuelCost" class="text-center w-50">
-          {{output.baseline.fuelCost | currency:'USD':'symbol':'1.0-2'}}
+          {{output.baseline.fuelCost | currency:'USD':'symbol':'1.2-2'}}
         </td>
         <td *ngIf="!output.baseline.fuelCost" class="text-center w-50">
           &mdash; &mdash;
@@ -25,8 +25,8 @@
         <td class="bold w-50">Gross Loss</td>
         <td *ngIf="output.baseline.flueGasLosses" class="text-center w-50">
           {{output.baseline.flueGasLosses | sigFigs:'3'}}
-          <span class="input-group-addon"><span
-						[innerHTML]="settings.energyResultUnit | settingsLabel"></span></span>/hr
+          <span class="input-group-addon">
+            <span [innerHTML]="output.baseline.energyUnit | settingsLabel"></span></span>/hr
         </td>
         <td *ngIf="!output.baseline.flueGasLosses" class="text-center w-50">
           &mdash; &mdash;
@@ -46,8 +46,8 @@
         <td class="bold w-50">Fuel Use</td>
         <td *ngIf="output.modification.fuelUse" class="text-center w-50">
           {{output.modification.fuelUse | number:'1.0-0'}} 
-          <span class="input-group-addon"><span
-						[innerHTML]="settings.energyResultUnit | settingsLabel"></span></span>/yr
+          <span class="input-group-addon">
+            <span [innerHTML]="output.modification.energyUnit | settingsLabel"></span></span>/yr
         </td>
         <td *ngIf="!output.modification.fuelUse" class="text-center w-50">
           &mdash; &mdash;
@@ -56,7 +56,7 @@
       <tr>
         <td class="bold w-50">Fuel Cost</td>
         <td *ngIf="output.modification.fuelCost" class="text-center w-50">
-          {{output.modification.fuelCost | currency:'USD':'symbol':'1.0-2'}}
+          {{output.modification.fuelCost | currency:'USD':'symbol':'1.2-2'}}
         </td>
         <td *ngIf="!output.modification.fuelCost" class="text-center w-50">
           &mdash; &mdash;
@@ -66,8 +66,8 @@
         <td class="bold w-50">Gross Loss</td>
         <td *ngIf="output.modification.flueGasLosses" class="text-center w-50">
           {{output.modification.flueGasLosses | sigFigs:'3'}}
-          <span class="input-group-addon"><span
-						[innerHTML]="settings.energyResultUnit | settingsLabel"></span></span>/hr
+          <span class="input-group-addon">
+            <span [innerHTML]="output.modification.energyUnit | settingsLabel"></span></span>/hr
         </td>
         <td *ngIf="!output.modification.flueGasLosses" class="text-center w-50">
           &mdash; &mdash;
@@ -84,8 +84,8 @@
     <tr>
       <td class="bold w-50">Fuel Savings</td>
       <td *ngIf="output.fuelSavings" class="text-center w-50">{{output.fuelSavings | number:'1.0-0'}}
-        <span class="input-group-addon"><span
-          [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/yr
+        <span class="input-group-addon">
+          <span [innerHTML]="output.baseline.energyUnit | settingsLabel"></span>/yr
         </span>
       </td>
       <td *ngIf="!output.fuelSavings" class="text-center w-50">
@@ -94,7 +94,7 @@
     </tr>
     <tr>
       <td class="bold w-50">Annual Cost Savings</td>
-      <td *ngIf="output.costSavings" class="text-center w-50">{{output.costSavings | currency:'USD':'symbol':'1.0-2'}}</td>
+      <td *ngIf="output.costSavings" class="text-center w-50">{{output.costSavings | currency:'USD':'symbol':'1.2-2'}}</td>
       <td *ngIf="!output.costSavings" class="text-center w-50">
         &mdash; &mdash;
       </td>

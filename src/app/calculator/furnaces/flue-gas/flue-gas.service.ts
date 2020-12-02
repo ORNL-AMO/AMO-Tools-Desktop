@@ -6,7 +6,6 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { FlueGas, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
 import { FlueGasFormService } from './flue-gas-form.service';
-declare var phastAddon: any;
 
 @Injectable()
 export class FlueGasService {
@@ -49,7 +48,6 @@ export class FlueGasService {
 
       output.fuelSavings = baselineResults.fuelUse - modificationResults.fuelUse;
       output.costSavings = baselineResults.fuelCost - modificationResults.fuelCost;
-      debugger;
     }
     this.output.next(output);
   }
@@ -60,33 +58,48 @@ export class FlueGasService {
       availableHeatError: undefined,
       flueGasLosses: 0,
       fuelCost: 0,
-      fuelUse: 0
+      fuelUse: 0,
+      energyUnit: settings.energyResultUnit
     }
-    
+
     if (flueGasData.flueGasType == 'By Volume' && flueGasData.flueGasByVolume) {
-      let validData: boolean = this.flueGasFormService.initByVolumeFormFromLoss(flueGasData).valid;
+      let validData: boolean = this.flueGasFormService.initByVolumeFormFromLoss(flueGasData, false).valid;
       if (validData) {
+        result.energyUnit = this.getAnnualEnergyUnit(flueGasData.flueGasByVolume.energySourceType, settings);
         let availableHeat: number = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByVolume.heatInput;
         result.flueGasLosses = flueGasLosses;
-        result.fuelCost = flueGasData.flueGasByVolume.fuelCost * flueGasData.flueGasByVolume.hoursPerYear;
+        result.fuelCost = result.flueGasLosses * flueGasData.flueGasByVolume.hoursPerYear * flueGasData.flueGasByVolume.fuelCost;
         result.fuelUse = flueGasLosses * flueGasData.flueGasByVolume.hoursPerYear;
       }
     } else if (flueGasData.flueGasType === 'By Mass' && flueGasData.flueGasByMass) {
-      let validData: boolean = this.flueGasFormService.initByMassFormFromLoss(flueGasData).valid;
+      let validData: boolean = this.flueGasFormService.initByMassFormFromLoss(flueGasData, false).valid;
       if (validData) {
+        result.energyUnit = this.getAnnualEnergyUnit(flueGasData.flueGasByVolume.energySourceType, settings);
         let availableHeat: number = this.phastService.flueGasByMass(flueGasData.flueGasByMass, settings);
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByMass.heatInput;
         result.flueGasLosses = flueGasLosses;
-        result.fuelCost = flueGasData.flueGasByMass.fuelCost * flueGasData.flueGasByMass.hoursPerYear;
+        result.fuelCost = result.flueGasLosses * flueGasData.flueGasByMass.hoursPerYear * flueGasData.flueGasByMass.fuelCost;
         result.fuelUse = flueGasLosses * flueGasData.flueGasByMass.hoursPerYear;
       }
     } 
 
     result = this.checkAvailableHeatResult(result);
     return result;
+  }
+
+  getAnnualEnergyUnit(energySourceType: string, settings: Settings) {
+    let energyUnit: string = settings.energyResultUnit;
+    if (energySourceType === 'Electricity') {
+      energyUnit = 'kWh';
+    } else if (settings.unitsOfMeasure === 'Metric') {
+      energyUnit = 'GJ';
+    } else {
+      energyUnit = 'MMBtu';
+    }
+    return energyUnit;
   }
 
   checkAvailableHeatResult(result: FlueGasResult) {
@@ -121,7 +134,7 @@ export class FlueGasService {
         flueGasLosses: 0
       },
       fuelSavings: 0,
-      costSavings: 0
+      costSavings: 0,
     };
     this.output.next(output);
   }
@@ -186,6 +199,7 @@ export class FlueGasService {
         hoursPerYear: 8760,
         oxygenCalculationMethod: "Excess Air",
         heatInput: 15,
+        energySourceType: 'Fuel'
       },
       flueGasType: 'By Volume',
       name: 'Baseline Flue Gas'
@@ -213,6 +227,7 @@ export class FlueGasService {
         o2InFlueGas: 3.124,
         fuelCost: 11,
         hoursPerYear: 8760,
+        energySourceType: 'Fuel',
         oxygenCalculationMethod: "Excess Air",
         heatInput: 15,
       },

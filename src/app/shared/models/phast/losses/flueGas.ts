@@ -7,6 +7,7 @@ export interface FlueGas {
 
 export interface FlueGasByMass {
     hoursPerYear?: number;
+    energySourceType?: string;
     gasTypeId?: number;
     fuelCost?: number;
     flueGasTemperature?: number;
@@ -30,6 +31,7 @@ export interface FlueGasByMass {
 
 export interface FlueGasByVolume {
     hoursPerYear?: number;
+    energySourceType?: string;
     gasTypeId?: number;
     fuelCost?: number;
     flueGasTemperature?: number;
@@ -67,6 +69,7 @@ export interface FlueGasResult {
     fuelUse?: number;
     fuelCost?: number;
     grossLoss?: number;
+    energyUnit?: string;
   }
   
 

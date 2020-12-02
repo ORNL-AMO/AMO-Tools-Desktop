@@ -183,6 +183,13 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     }
   }
 
+  setEnergySource(str: string) {
+    this.byVolumeForm.patchValue({
+      energySourceType: str
+    });
+    this.calculate();
+  }
+
   focusField(str: string) {
     if (str === 'gasTypeId' && this.inModal) {
       str = 'gasTypeIdModal'

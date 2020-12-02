@@ -117,6 +117,13 @@ export class FlueGasFormMassComponent implements OnInit {
     this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
   }
 
+  setEnergySource(str: string) {
+    this.byMassForm.patchValue({
+      energySourceType: str
+    });
+    this.calculate();
+  }
+
   setCalcMethod() {
     if (this.byMassForm.controls.oxygenCalculationMethod.value === 'Excess Air') {
       this.calcMethodExcessAir = true;

@@ -1,5 +1,12 @@
 <form [formGroup]="byVolumeForm">
   <div class="form-section">
+    <div *ngIf="!inModal && byVolumeForm.controls.energySourceType" class="d-flex flex-column w-100 justify-content-center pt-1 pb-1">
+      <div class="btn-group btn-group-sm align-self-center">
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Fuel')" [ngClass]="{'active': byVolumeForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Steam')" [ngClass]="{'active':  byVolumeForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+      </div>
+    </div>
+
     <div *ngIf="!inModal" class="form-group">
       <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
       <div class="input-group">
@@ -21,7 +28,7 @@
       </span>
     </div>
 
-    <div class="form-group">
+    <div *ngIf="!inModal" class="form-group">
       <label class="small" for="fuelCost">Fuel Cost</label>
       <div class="input-group">
         <input name="fuelCost" type="number" class="form-control"
@@ -36,6 +43,7 @@
         <span *ngIf="byVolumeForm.controls.fuelCost.errors.required">Value Required</span>
       </span>
     </div>
+
     <div class="form-group">
       <label class="small" for="gasTypeId">Fuel
         <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" *ngIf="!inModal">Add New
