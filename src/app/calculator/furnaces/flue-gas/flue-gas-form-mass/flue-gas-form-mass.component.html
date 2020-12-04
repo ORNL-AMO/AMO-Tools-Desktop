@@ -1,12 +1,5 @@
 <form [formGroup]="byMassForm">
   <div class="form-section">
-    <div *ngIf="!inModal && byMassForm.controls.energySourceType" class="d-flex flex-column w-100 justify-content-center pt-1 pb-1">
-      <div class="btn-group btn-group-sm align-self-center">
-        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Fuel')" [ngClass]="{'active': byMassForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
-        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Steam')" [ngClass]="{'active':  byMassForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
-      </div>
-    </div>
-
     <div *ngIf="!inModal" class="form-group">
       <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
       <div class="input-group">

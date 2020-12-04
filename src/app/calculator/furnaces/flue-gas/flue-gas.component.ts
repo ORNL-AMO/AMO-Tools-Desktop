@@ -28,7 +28,6 @@ export class FlueGasComponent implements OnInit {
   containerHeight: number;
   isModalOpen: boolean;
   modalSubscription: Subscription;
-
   results: {baseline: number, modification: number};
   baselineData: FlueGas;
   modificationData: FlueGas;
@@ -104,21 +103,23 @@ export class FlueGasComponent implements OnInit {
     this.flueGasService.initModification();
     this.modificationExists = true;
     this.setModificationSelected();
+    this.flueGasService.calculate(this.settings);
    }
 
    btnResetData() {
-    this.flueGasService.resetData.next(true);
+    this.baselineSelected = true;
+    this.modificationExists = false;
     this.flueGasService.initDefaultEmptyInputs();
+    this.flueGasService.resetData.next(true);
     this.flueGasService.modificationData.next(undefined);
     this.method = 'By Mass';
-    this.modificationExists = false;
   }
 
   btnGenerateExample() {
-      this.method = 'By Volume';
-      this.flueGasService.generateExampleData(this.settings);
-      this.modificationExists = true;
-      this.baselineSelected = true;
+    this.method = 'By Volume';
+    this.modificationExists = true;
+    this.flueGasService.generateExampleData(this.settings);
+    this.baselineSelected = true;
   }
 
   setBaselineSelected() {

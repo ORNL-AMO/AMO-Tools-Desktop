@@ -30,8 +30,6 @@ export class FlueGasFormMassComponent implements OnInit {
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   resetDataSub: Subscription;
-  generateExampleSub: Subscription;
-
   byMassForm: FormGroup;
   options: any;
 
@@ -47,7 +45,6 @@ export class FlueGasFormMassComponent implements OnInit {
   showOperatingHoursModal: boolean;
 
   formWidth: number;
-
   constructor(private flueGasService: FlueGasService,
               private flueGasFormService: FlueGasFormService,
               private phastService: PhastService, 
@@ -60,7 +57,6 @@ export class FlueGasFormMassComponent implements OnInit {
 
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
-    this.generateExampleSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -77,9 +73,6 @@ export class FlueGasFormMassComponent implements OnInit {
     this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
       this.setForm();
       })
-    this.generateExampleSub = this.flueGasService.generateExample.subscribe(value => {
-      this.setForm();
-    })
   }
 
   initFormSetup() {

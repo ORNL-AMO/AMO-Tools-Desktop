@@ -51,10 +51,10 @@ export class FlueGasModalComponent implements OnInit {
 
   initSubscriptions() {
     this.baselineDataSub = this.flueGasService.baselineData.subscribe(value => {
-      this.flueGasService.calculate(this.settings);
+      this.flueGasService.calculate(this.settings, true);
     })
     this.modificationDataSub = this.flueGasService.modificationData.subscribe(value => {
-      this.flueGasService.calculate(this.settings);
+      this.flueGasService.calculate(this.settings, true);
     })
     this.outputSubscription = this.flueGasService.output.subscribe(val => {
       if (val) {

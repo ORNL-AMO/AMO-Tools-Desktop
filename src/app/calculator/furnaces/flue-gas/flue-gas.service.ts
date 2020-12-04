@@ -33,26 +33,27 @@ export class FlueGasService {
     this.generateExample = new BehaviorSubject<boolean>(undefined);
   }
 
-  calculate(settings: Settings) {
+  calculate(settings: Settings, inModal = false) {
     this.initDefaultEmptyOutput();
     let output: FlueGasOutput = this.output.getValue();
     
     let baselineFlueGas: FlueGas = this.baselineData.getValue();
     let modificationFlueGas: FlueGas = this.modificationData.getValue();
     
-    let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, settings);
+    let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, settings, inModal);
     output.baseline = baselineResults;
     if (modificationFlueGas) {
-      let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, settings);
+      let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, settings, inModal);
       output.modification = modificationResults;
-
+      
       output.fuelSavings = baselineResults.fuelUse - modificationResults.fuelUse;
       output.costSavings = baselineResults.fuelCost - modificationResults.fuelCost;
     }
+    debugger;
     this.output.next(output);
   }
 
-  getFlueGasResult(flueGasData: FlueGas, settings: Settings): FlueGasResult {
+  getFlueGasResult(flueGasData: FlueGas, settings: Settings, inModal: boolean): FlueGasResult {
     let result: FlueGasResult = {
       availableHeat: 0,
       availableHeatError: undefined,
@@ -63,9 +64,12 @@ export class FlueGasService {
     }
 
     if (flueGasData.flueGasType == 'By Volume' && flueGasData.flueGasByVolume) {
-      let validData: boolean = this.flueGasFormService.initByVolumeFormFromLoss(flueGasData, false).valid;
+      let formGroup = this.flueGasFormService.initByVolumeFormFromLoss(flueGasData, false);
+      let validData: boolean = formGroup.valid;
+      if (inModal) {
+        validData = this.flueGasFormService.setValidators(formGroup, inModal).valid;
+      } 
       if (validData) {
-        result.energyUnit = this.getAnnualEnergyUnit(flueGasData.flueGasByVolume.energySourceType, settings);
         let availableHeat: number = this.phastService.flueGasByVolume(flueGasData.flueGasByVolume, settings);
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByVolume.heatInput;
@@ -74,9 +78,12 @@ export class FlueGasService {
         result.fuelUse = flueGasLosses * flueGasData.flueGasByVolume.hoursPerYear;
       }
     } else if (flueGasData.flueGasType === 'By Mass' && flueGasData.flueGasByMass) {
-      let validData: boolean = this.flueGasFormService.initByMassFormFromLoss(flueGasData, false).valid;
+      let formGroup = this.flueGasFormService.initByMassFormFromLoss(flueGasData, false);
+      let validData: boolean = formGroup.valid;
+      if (inModal) {
+        validData = this.flueGasFormService.setValidators(formGroup, inModal).valid;
+      } 
       if (validData) {
-        result.energyUnit = this.getAnnualEnergyUnit(flueGasData.flueGasByVolume.energySourceType, settings);
         let availableHeat: number = this.phastService.flueGasByMass(flueGasData.flueGasByMass, settings);
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByMass.heatInput;
@@ -85,21 +92,8 @@ export class FlueGasService {
         result.fuelUse = flueGasLosses * flueGasData.flueGasByMass.hoursPerYear;
       }
     } 
-
     result = this.checkAvailableHeatResult(result);
     return result;
-  }
-
-  getAnnualEnergyUnit(energySourceType: string, settings: Settings) {
-    let energyUnit: string = settings.energyResultUnit;
-    if (energySourceType === 'Electricity') {
-      energyUnit = 'kWh';
-    } else if (settings.unitsOfMeasure === 'Metric') {
-      energyUnit = 'GJ';
-    } else {
-      energyUnit = 'MMBtu';
-    }
-    return energyUnit;
   }
 
   checkAvailableHeatResult(result: FlueGasResult) {
@@ -118,6 +112,7 @@ export class FlueGasService {
       flueGasByMass: undefined,
       name: undefined
     };
+
     this.baselineData.next(emptyBaselineData);
   }
 
@@ -158,6 +153,7 @@ export class FlueGasService {
         name: undefined
       };
     }
+
     this.modificationData.next(modification);
   }
 
@@ -195,11 +191,10 @@ export class FlueGasService {
         fuelTemperature: exampleFuelTemp,
         gasTypeId: 1,
         o2InFlueGas: 2.857,
-        fuelCost: 11,
-        hoursPerYear: 8760,
         oxygenCalculationMethod: "Excess Air",
         heatInput: 15,
-        energySourceType: 'Fuel'
+        hoursPerYear: 8760,
+        fuelCost: 3.50
       },
       flueGasType: 'By Volume',
       name: 'Baseline Flue Gas'
@@ -225,18 +220,18 @@ export class FlueGasService {
         fuelTemperature: exampleFuelTemp,
         gasTypeId: 1,
         o2InFlueGas: 3.124,
-        fuelCost: 11,
-        hoursPerYear: 8760,
-        energySourceType: 'Fuel',
         oxygenCalculationMethod: "Excess Air",
         heatInput: 15,
+        hoursPerYear: 8760,
+        fuelCost: 4.99
       },
       flueGasType: 'By Volume',
       name: 'Modification Flue Gas'
     }
-    this.baselineData.next(exampleBaseline);
+  
     this.modificationData.next(exampleMod);
-
+    this.baselineData.next(exampleBaseline);
+    this.generateExample.next(true);
   }
 
 }
