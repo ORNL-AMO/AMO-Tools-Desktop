@@ -10,6 +10,9 @@ import { WallComponent } from './wall.component';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { FlueGasModule } from '../flue-gas/flue-gas.module';
+import { WallResultsComponent } from './wall-results/wall-results.component';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 
 
 
@@ -17,7 +20,7 @@ import { FlueGasModule } from '../flue-gas/flue-gas.module';
   declarations: [
     WallFormComponent, 
     WallHelpComponent, 
-    WallComponent
+    WallComponent, WallResultsComponent
   ],
   imports: [
     CommonModule,
@@ -27,6 +30,8 @@ import { FlueGasModule } from '../flue-gas/flue-gas.module';
     SharedPipesModule,
     FlueGasModule,
     SuiteDbModule,
+    ExportableResultsTableModule,
+    OperatingHoursModalModule
   ],
   exports: [
     WallComponent
