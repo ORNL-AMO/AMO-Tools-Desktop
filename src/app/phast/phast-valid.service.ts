@@ -21,6 +21,7 @@ import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-for
 import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
+import { PhastResultsService } from './phast-results.service';
 
 
 @Injectable()
@@ -43,7 +44,7 @@ export class PhastValidService {
     private fixtureLossesService: FixtureLossesService,
     private gasLeakageLossesService: GasLeakageLossesService,
     private otherLossessService: OtherLossesService,
-    private phastService: PhastService
+    private phastResultsService: PhastResultsService
   ) { }
 
 
@@ -323,7 +324,7 @@ export class PhastValidService {
     if (phast.losses.energyInputEAF) {
       let minElectricityInput: number;
       if (phast.losses) {
-        minElectricityInput = this.phastService.getMinElectricityInputRequirement(phast.losses, settings);
+        minElectricityInput = this.phastResultsService.getMinElectricityInputRequirement(phast, settings);
       }
       phast.losses.energyInputEAF.forEach(loss => {
         let energyInputForm: FormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput)

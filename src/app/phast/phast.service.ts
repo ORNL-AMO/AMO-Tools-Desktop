@@ -876,15 +876,30 @@ export class PhastService {
     return sumAdditionalHeat;
   }
 
-  getMinElectricityInputRequirement(losses: Losses, settings: Settings): number {
-    if (losses.exhaustGasEAF && losses.exhaustGasEAF.length == 0) {
-      let exothermicHeat = 0 - Math.abs(this.sumChargeMaterialExothermic(losses.chargeMaterials, settings));
-      let totalInput = this.sumHeatInput(losses, settings);
-      let tmpResults = this.energyInputEAF(losses.energyInputEAF[0], settings);
-      return totalInput - tmpResults.totalChemicalEnergyInput + exothermicHeat
-    } else {
-      return undefined;
-    }
-  }
+  // getMinElectricityInputRequirement(losses: Losses, settings: Settings): number {
+  //   debugger
+  //   if (losses.exhaustGasEAF && losses.exhaustGasEAF.length == 0) {
+  //     let exothermicHeat = 0 - Math.abs(this.sumChargeMaterialExothermic(losses.chargeMaterials, settings));
+  //     let totalInput = this.sumHeatInput(losses, settings);
+  //     let tmpResults = this.energyInputEAF(losses.energyInputEAF[0], settings);
+  //     let minRequirement: number = totalInput - tmpResults.totalChemicalEnergyInput + exothermicHeat
+  //     console.log('ex gas');
+  //     return minRequirement;
+  //   } else if (losses.energyInputExhaustGasLoss && losses.energyInputExhaustGasLoss.length != 0) {
+  //     console.log('en inp ex gas')
+  //     let exhaustGasLosses = this.energyInputExhaustGasLosses(losses.energyInputExhaustGasLoss[0], settings);
+  //     return exhaustGasLosses.exhaustGasLosses
+  //   } else if(losses.energyInputEAF && losses.energyInputEAF.length != 0){
+  //     results.energyInputTotal = losses.energyInputEAF[0].electricityInput + results.energyInputTotalChemEnergy;
+  //     results.energyInputHeatDelivered = phast.losses.energyInputEAF[0].electricityInput;
+  //     let minRequirement: number = results.energyInputTotal - results.totalInput - results.exothermicHeat;
+
+  //   }
+    
+  //   else {
+  //     console.log('undefined')
+  //     return undefined;
+  //   }
+  // }
 }
 
