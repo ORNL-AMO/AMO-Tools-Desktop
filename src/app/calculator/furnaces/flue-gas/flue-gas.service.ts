@@ -49,7 +49,6 @@ export class FlueGasService {
       output.fuelSavings = baselineResults.fuelUse - modificationResults.fuelUse;
       output.costSavings = baselineResults.fuelCost - modificationResults.fuelCost;
     }
-    debugger;
     this.output.next(output);
   }
 

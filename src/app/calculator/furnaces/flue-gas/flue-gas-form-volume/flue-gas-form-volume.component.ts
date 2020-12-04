@@ -93,7 +93,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
       }
     }
     if (!this.byVolumeForm.controls.fuelCost.value) {
-      debugger;
       this.byVolumeForm.patchValue({
         fuelCost: this.settings.fuelCost,
       });
