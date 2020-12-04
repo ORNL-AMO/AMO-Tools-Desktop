@@ -92,6 +92,12 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
         this.setProperties();
       }
     }
+    if (!this.byVolumeForm.controls.fuelCost.value) {
+      debugger;
+      this.byVolumeForm.patchValue({
+        fuelCost: this.settings.fuelCost,
+      });
+    }
     this.setCalcMethod();
     this.calcExcessAir();
   }

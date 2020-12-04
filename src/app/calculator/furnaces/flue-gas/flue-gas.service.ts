@@ -194,7 +194,7 @@ export class FlueGasService {
         oxygenCalculationMethod: "Excess Air",
         heatInput: 15,
         hoursPerYear: 8760,
-        fuelCost: 3.50
+        fuelCost: undefined
       },
       flueGasType: 'By Volume',
       name: 'Baseline Flue Gas'
@@ -223,7 +223,7 @@ export class FlueGasService {
         oxygenCalculationMethod: "Excess Air",
         heatInput: 15,
         hoursPerYear: 8760,
-        fuelCost: 4.99
+        fuelCost: undefined
       },
       flueGasType: 'By Volume',
       name: 'Modification Flue Gas'

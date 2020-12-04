@@ -13,7 +13,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 import { FlueGasModalComponent } from './flue-gas-modal/flue-gas-modal.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
-import { FlueGasFormEnergyComponent } from './flue-gas-form-energy/flue-gas-form-energy.component';
 
 
 
@@ -25,7 +24,6 @@ import { FlueGasFormEnergyComponent } from './flue-gas-form-energy/flue-gas-form
     FlueGasFormVolumeComponent,
     FlueGasFormMassComponent,
     FlueGasModalComponent,
-    FlueGasFormEnergyComponent
   ],
   imports: [
     CommonModule,
