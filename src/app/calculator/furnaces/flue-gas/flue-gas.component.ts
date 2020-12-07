@@ -28,7 +28,6 @@ export class FlueGasComponent implements OnInit {
   containerHeight: number;
   isModalOpen: boolean;
   modalSubscription: Subscription;
-
   results: {baseline: number, modification: number};
   baselineData: FlueGas;
   modificationData: FlueGas;
@@ -39,7 +38,7 @@ export class FlueGasComponent implements OnInit {
 
   method: string = 'By Mass';
   currentField: string;
-  tabSelect: string = 'help';
+  tabSelect: string = 'results';
   baselineSelected = true;
   modificationExists = false;
 
@@ -47,10 +46,9 @@ export class FlueGasComponent implements OnInit {
               private flueGasService: FlueGasService) { }
 
   ngOnInit() {
-    // results not yet built - default to help
-    // if (this.settingsDbService.globalSettings.defaultPanelTab) {
-    //   this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
-    // }
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -105,21 +103,23 @@ export class FlueGasComponent implements OnInit {
     this.flueGasService.initModification();
     this.modificationExists = true;
     this.setModificationSelected();
+    this.flueGasService.calculate(this.settings);
    }
 
    btnResetData() {
-    this.flueGasService.resetData.next(true);
+    this.baselineSelected = true;
+    this.modificationExists = false;
     this.flueGasService.initDefaultEmptyInputs();
+    this.flueGasService.resetData.next(true);
     this.flueGasService.modificationData.next(undefined);
     this.method = 'By Mass';
-    this.modificationExists = false;
   }
 
   btnGenerateExample() {
-      this.method = 'By Volume';
-      this.flueGasService.generateExampleData(this.settings);
-      this.modificationExists = true;
-      this.baselineSelected = true;
+    this.method = 'By Volume';
+    this.modificationExists = true;
+    this.flueGasService.generateExampleData(this.settings);
+    this.baselineSelected = true;
   }
 
   setBaselineSelected() {
@@ -136,6 +136,11 @@ export class FlueGasComponent implements OnInit {
 
   focusField(str: string) {
     this.flueGasService.currentField.next(str);
+  }
+
+  
+  setTab(str: string) {
+    this.tabSelect = str;
   }
   
   resizeTabs() {
