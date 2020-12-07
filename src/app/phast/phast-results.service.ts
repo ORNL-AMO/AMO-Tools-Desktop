@@ -12,12 +12,12 @@ import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-for
 @Injectable()
 export class PhastResultsService {
 
-  constructor(private phastService: PhastService, 
-              private flueGasFormService: FlueGasFormService,          
-              private auxEquipmentService: AuxEquipmentService, 
-              private convertUnitsService: ConvertUnitsService, 
-              private energyInputExhaustGasService: EnergyInputExhaustGasService, 
-              private energyInputService: EnergyInputService) { }
+  constructor(private phastService: PhastService,
+    private flueGasFormService: FlueGasFormService,
+    private auxEquipmentService: AuxEquipmentService,
+    private convertUnitsService: ConvertUnitsService,
+    private energyInputExhaustGasService: EnergyInputExhaustGasService,
+    private energyInputService: EnergyInputService) { }
   checkLoss(loss: any) {
     if (!loss) {
       return false;
@@ -248,6 +248,15 @@ export class PhastResultsService {
 
     if (resultCategories.showExGas) {
       return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100;
+    }
+  }
+
+  getMinElectricityInputRequirement(phast: PHAST, settings: Settings): number {
+    if (phast.losses) {
+      let results: PhastResults = this.getResults(phast, settings);
+      return results.totalExhaustGasEAF * (-1);
+    } else {
+      return undefined;
     }
   }
 }

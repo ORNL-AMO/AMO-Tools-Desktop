@@ -100,10 +100,7 @@ export class EnergyInputComponent implements OnInit {
   }
 
   getMinElectricityRequirement(): number {
-    let minElectricityRequirement: number;
-    if (this.losses.exhaustGasEAF) {
-      minElectricityRequirement = this.phastService.getMinElectricityInputRequirement(this.losses, this.settings);
-    }
+    let minElectricityRequirement: number = this.phastResultsService.getMinElectricityInputRequirement(this.phast, this.settings);
     return minElectricityRequirement;
   }
 
