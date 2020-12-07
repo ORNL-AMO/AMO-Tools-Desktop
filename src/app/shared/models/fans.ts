@@ -129,7 +129,7 @@ export interface PlaneData {
   totalPressureLossBtwnPlanes2and5: number;
   inletSEF: number;
   outletSEF: number;
-  //variationInBarometricPressure: boolean;
+  variationInBarometricPressure: boolean;
   // globalBarometricPressure: number;
   estimate2and5TempFrom1: boolean;
   FanInletFlange: Plane;
