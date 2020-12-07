@@ -36,7 +36,7 @@ export class WallComponent implements OnInit {
   outputSubscription: Subscription;
   output: WallLossOutput;
 
-  tabSelect: string = 'help';
+  tabSelect: string = 'results';
   baselineSelected = true;
   modificationExists = false;
 
@@ -44,10 +44,9 @@ export class WallComponent implements OnInit {
               private wallService: WallService) { }
 
   ngOnInit() {
-    // TODO results not yet built - default to help
-    // if (this.settingsDbService.globalSettings.defaultPanelTab) {
-    //   this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
-    // }
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

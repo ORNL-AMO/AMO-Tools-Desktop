@@ -41,7 +41,7 @@
 					  <label class="bold">Wall Loss</label>
 					  <div *ngIf="output.baseline.wallLoss" class="text-center bold small">
 						{{output.baseline.wallLoss | sigFigs:'6'}} 
-						<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+						<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
 					  </div>
 					  <div *ngIf="!output.baseline.wallLoss" class="text-center bold small">
 						&mdash; &mdash;
@@ -53,7 +53,7 @@
 				  <label class="bold">Gross Loss</label>
 				  <div *ngIf="output.baseline.grossLoss" class="text-center bold small">
 					{{output.baseline.grossLoss | sigFigs:'6'}} 
-					<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+					<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
 				  </div>
 				  <div *ngIf="!output.baseline.grossLoss" class="text-center bold small">
 					&mdash; &mdash;
@@ -88,7 +88,7 @@
 					  <label class="bold">Wall Loss</label>
 					  <div *ngIf="output.modification.wallLoss" class="text-center bold small">
 						{{output.modification.wallLoss | sigFigs:'6'}} 
-						<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+						<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
 					  </div>
 					  <div *ngIf="!output.modification.wallLoss" class="text-center bold small">
 						&mdash; &mdash;
@@ -100,7 +100,7 @@
 					  <label class="bold">Gross Loss</label>
 					  <div *ngIf="output.modification.grossLoss" class="text-center bold small">
 						{{output.modification.grossLoss | sigFigs:'6'}} 
-						<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+						<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
 					  </div>
 					  <div *ngIf="!output.modification.grossLoss" class="text-center bold small">
 						&mdash; &mdash;
@@ -128,14 +128,22 @@
 		<div class="col-4 p-0 help-panel">
 		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
 			<div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
-			  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-				  <div>Help</div>
-				</a>
+				<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+				  <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+					(click)="setTab('results')">
+					<div>Results</div>
+				  </a>
+				</div>
+				<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+				  <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+					<div>Help</div>
+				  </a>
+				</div>
 			  </div>
-			</div>
   
 			<div class="p-2">
+			<app-wall-results class="w-100" *ngIf="tabSelect == 'results'" [settings]="settings" 
+				[modificationExists]="modificationExists"></app-wall-results>
 			<app-wall-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-wall-help>
 			</div>
 		  </div>

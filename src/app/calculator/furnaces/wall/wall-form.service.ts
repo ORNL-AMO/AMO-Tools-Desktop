@@ -22,12 +22,16 @@ export class WallFormService {
     });
 
     if (!lossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0)]));
+      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new FormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new FormControl('Fuel', [Validators.required]));
+      formGroup.addControl('fuelCost', new FormControl(''));
     }
+
     return formGroup;
   }
 
-  getWallLossForm(wallLoss: WallLoss, inAssessment = false): FormGroup {
+  getWallLossForm(wallLoss: WallLoss, inAssessment = true): FormGroup {
     let formGroup = this.formBuilder.group({
       'surfaceArea': [wallLoss.surfaceArea, [Validators.required, Validators.min(0)]],
       'avgSurfaceTemp': [wallLoss.surfaceTemperature, Validators.required],
@@ -37,11 +41,14 @@ export class WallFormService {
       'conditionFactor': [wallLoss.conditionFactor, Validators.required],
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, [Validators.required, Validators.min(0), Validators.max(1)]],
       'surfaceShape': [wallLoss.surfaceShape],
-      'name': [wallLoss.name]
+      'name': [wallLoss.name],
     });
 
     if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0)]));
+      formGroup.addControl('availableHeat', new FormControl(wallLoss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new FormControl(wallLoss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new FormControl(wallLoss.energySourceType, [Validators.required]));
+      formGroup.addControl('fuelCost', new FormControl(wallLoss.fuelCost));
     }
 
     formGroup = this.setValidators(formGroup);
@@ -58,9 +65,16 @@ export class WallFormService {
       surfaceShape: wallLossForm.controls.surfaceShape.value,
       conditionFactor: wallLossForm.controls.conditionFactor.value,
       correctionFactor: wallLossForm.controls.correctionFactor.value,
-      availableHeat: wallLossForm.controls.availableHeat? wallLossForm.controls.availableHeat.value : '',
+      availableHeat: wallLossForm.controls.availableHeat? wallLossForm.controls.availableHeat.value : 0,
       name: wallLossForm.controls.name.value
     };
+    // In standalone
+    if (wallLossForm.controls.availableHeat) {
+      tmpWallLoss.energySourceType = wallLossForm.controls.energySourceType.value,
+      tmpWallLoss.hoursPerYear = wallLossForm.controls.hoursPerYear.value,
+      tmpWallLoss.fuelCost = wallLossForm.controls.fuelCost.value
+      tmpWallLoss.availableHeat = wallLossForm.controls.availableHeat.value
+    }
 
     return tmpWallLoss;
   }
@@ -74,8 +88,8 @@ export class WallFormService {
     let avgSurfaceTemp = formGroup.controls.avgSurfaceTemp.value;
     if (avgSurfaceTemp) {
       formGroup.controls.avgSurfaceTemp.setValidators([Validators.required, Validators.min(formGroup.controls.ambientTemp.value)]);
-      formGroup.controls.avgSurfaceTemp.markAsDirty();
       formGroup.controls.avgSurfaceTemp.updateValueAndValidity();
+      formGroup.controls.avgSurfaceTemp.markAsDirty();
     }
     return formGroup;
   }
