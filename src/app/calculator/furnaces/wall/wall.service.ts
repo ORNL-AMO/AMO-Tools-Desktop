@@ -45,7 +45,7 @@ export class WallService {
     let output: WallLossOutput = this.output.getValue();
     output.energyUnit = this.getAnnualEnergyUnit(baselineWallLoss.energySourceType, settings);
 
-    let validBaseline = this.wallFormService.getWallLossForm(baselineWallLoss).valid;
+    let validBaseline = this.wallFormService.getWallLossForm(baselineWallLoss, false).valid;
     if (validBaseline) {
       baselineResults = this.getWallLossResult(baselineWallLoss, settings);
       if (baselineResults) {
@@ -54,7 +54,7 @@ export class WallService {
     }
 
     if (modificationWallLoss) {
-      let validModification = this.wallFormService.getWallLossForm(modificationWallLoss).valid;
+      let validModification = this.wallFormService.getWallLossForm(modificationWallLoss, false).valid;
       if (validModification) {
         modificationResults = this.getWallLossResult(modificationWallLoss, settings);
         if (modificationResults) {
@@ -104,6 +104,8 @@ export class WallService {
     };
     this.baselineData.next(emptyBaselineData);
     this.modificationData.next(undefined);
+    this.energySourceType.next('Fuel');
+
   }
 
   initDefaultEmptyOutput() {
@@ -177,7 +179,7 @@ export class WallService {
     };
     
     this.modificationData.next(modExample);
-
+    this.energySourceType.next('Fuel');
     this.generateExample.next(true);
   }
 

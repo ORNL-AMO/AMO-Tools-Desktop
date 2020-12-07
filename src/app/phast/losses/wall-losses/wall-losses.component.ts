@@ -82,7 +82,7 @@ export class WallLossesComponent implements OnInit {
       this.losses.wallLosses.forEach(loss => {
         //create a temp loss object
         let tmpLoss = {
-          form: this.wallFormService.getWallLossForm(loss),
+          form: this.wallFormService.getWallLossForm(loss, true),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };

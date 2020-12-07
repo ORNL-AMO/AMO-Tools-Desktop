@@ -97,7 +97,6 @@ export class WallComponent implements OnInit {
    btnResetData() {
     this.modificationExists = false;
     this.wallService.initDefaultEmptyInputs();
-    this.wallService.energySourceType.next('Fuel');
     this.wallService.resetData.next(true);
   }
 

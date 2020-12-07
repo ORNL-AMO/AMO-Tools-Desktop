@@ -117,7 +117,7 @@ export class WallFormComponent implements OnInit {
       updatedWallLossData = this.wallService.modificationData.getValue();
     }
     if (updatedWallLossData) {
-      this.wallLossesForm = this.wallFormService.getWallLossForm(updatedWallLossData);
+      this.wallLossesForm = this.wallFormService.getWallLossForm(updatedWallLossData, false);
     } else {
       this.wallLossesForm = this.wallFormService.initForm();
     }

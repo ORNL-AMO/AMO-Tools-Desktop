@@ -31,7 +31,7 @@ export class WallFormService {
     return formGroup;
   }
 
-  getWallLossForm(wallLoss: WallLoss, inAssessment = false): FormGroup {
+  getWallLossForm(wallLoss: WallLoss, inAssessment = true): FormGroup {
     let formGroup = this.formBuilder.group({
       'surfaceArea': [wallLoss.surfaceArea, [Validators.required, Validators.min(0)]],
       'avgSurfaceTemp': [wallLoss.surfaceTemperature, Validators.required],
