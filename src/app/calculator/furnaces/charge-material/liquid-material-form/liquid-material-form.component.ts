@@ -142,13 +142,11 @@ export class LiquidMaterialFormComponent implements OnInit {
   calculate() {
     this.chargeMaterialForm = this.liquidMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     this.checkWarnings();
-    if (this.chargeMaterialForm.valid) {
-      let chargeMaterial: ChargeMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(this.chargeMaterialForm);
-      if (this.isBaseline) {
-        this.chargeMaterialService.baselineData.next(chargeMaterial);
-      } else { 
-        this.chargeMaterialService.modificationData.next(chargeMaterial);
-      }
+    let chargeMaterial: ChargeMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(this.chargeMaterialForm);
+    if (this.isBaseline) {
+      this.chargeMaterialService.baselineData.next(chargeMaterial);
+    } else { 
+      this.chargeMaterialService.modificationData.next(chargeMaterial);
     }
   }
 

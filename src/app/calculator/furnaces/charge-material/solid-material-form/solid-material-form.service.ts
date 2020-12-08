@@ -38,7 +38,7 @@ export class SolidMaterialFormService {
     return formGroup;
   }
 
-  getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean): FormGroup {
+  getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): FormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.solidChargeMaterial.thermicReactionType !== 0) {
       reactionType = 'Exothermic';
@@ -79,7 +79,6 @@ export class SolidMaterialFormService {
       formGroup.controls.initialTemperature.markAsDirty();
       formGroup.controls.initialTemperature.updateValueAndValidity();
     }
-    debugger;
     return formGroup;
 }
 
@@ -112,6 +111,7 @@ export class SolidMaterialFormService {
         availableHeat: solidForm.controls.availableHeat? solidForm.controls.availableHeat.value : '',
       }
     };
+
     return tmpSolidMaterial;
   }
 

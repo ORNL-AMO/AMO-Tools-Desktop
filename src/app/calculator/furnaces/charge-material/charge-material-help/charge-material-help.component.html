@@ -35,6 +35,40 @@
       </div>
     <hr class="my-1 hr-spacer">
   
+    <div class="my-2" *ngIf="currentField == 'operationHours'">
+      <h6>
+        Hours per Year
+        <small class="text-muted">
+          <br>
+          Number of hours per year the lighting is on. This is not necessarily how many hours the facility is operating.
+          Be sure to include normally scheduled overtime.
+          <hr>
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'fuelCost'">
+      <h6>
+        Fuel Cost
+        <br>
+        <small class="text-muted">
+            Cost of fuel per energy unit
+            <hr>
+        </small>
+    </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'energySourceType'">
+      <h6>
+        Energy Source
+        <small class="text-muted">
+          <br>
+          Select the appropriate energy source to determine energy costs and, if steam or fuel, help estimate system efficiency.
+            Choose steam if you purchase steam directly, choose fuel if you make your own steam for process heating.
+          <hr>
+        </small>
+      </h6>
+    </div>
   
     <!--Solid, Liquid and Gas Charge Material-->
     <div class="my-2" *ngIf="currentField == 'chargeMaterialType'">

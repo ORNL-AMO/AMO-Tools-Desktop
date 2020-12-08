@@ -117,13 +117,11 @@ export class GasMaterialFormComponent implements OnInit {
 
   calculate() {
     this.chargeMaterialForm = this.gasMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
-    if (this.chargeMaterialForm.valid) {
-      let chargeMaterial: ChargeMaterial = this.gasMaterialFormService.buildGasChargeMaterial(this.chargeMaterialForm);
-      if (this.isBaseline) {
-        this.chargeMaterialService.baselineData.next(chargeMaterial);
-      } else { 
-        this.chargeMaterialService.modificationData.next(chargeMaterial);
-      }
+    let chargeMaterial: ChargeMaterial = this.gasMaterialFormService.buildGasChargeMaterial(this.chargeMaterialForm);
+    if (this.isBaseline) {
+      this.chargeMaterialService.baselineData.next(chargeMaterial);
+    } else { 
+      this.chargeMaterialService.modificationData.next(chargeMaterial);
     }
   }
 

@@ -14,6 +14,11 @@ import { SolidMaterialFormService } from './solid-material-form/solid-material-f
 import { FlueGasModule } from '../flue-gas/flue-gas.module';
 import { LiquidMaterialFormService } from './liquid-material-form/liquid-material-form.service';
 import { GasMaterialFormService } from './gas-material-form/gas-material-form.service';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { EnergyFormComponent } from './energy-form/energy-form.component';
+import { EnergyFormService } from './energy-form/energy-form.service';
+import { ChargeMaterialResultsComponent } from './charge-material-results/charge-material-results.component';
 
 
 
@@ -23,7 +28,9 @@ import { GasMaterialFormService } from './gas-material-form/gas-material-form.se
     ChargeMaterialComponent,
     GasMaterialFormComponent,
     LiquidMaterialFormComponent,
-    SolidMaterialFormComponent
+    SolidMaterialFormComponent,
+    EnergyFormComponent,
+    ChargeMaterialResultsComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +39,9 @@ import { GasMaterialFormService } from './gas-material-form/gas-material-form.se
     ModalModule,
     SuiteDbModule,
     SharedPipesModule,
-    FlueGasModule
+    FlueGasModule,
+    ExportableResultsTableModule,
+    OperatingHoursModalModule
   ],
   exports: [
     ChargeMaterialComponent
@@ -42,6 +51,7 @@ import { GasMaterialFormService } from './gas-material-form/gas-material-form.se
     SolidMaterialFormService,
     LiquidMaterialFormService,
     GasMaterialFormService,
+    EnergyFormService
   ]
 })
 export class ChargeMaterialModule { }

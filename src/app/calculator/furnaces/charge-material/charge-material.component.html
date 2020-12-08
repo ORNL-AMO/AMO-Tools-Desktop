@@ -34,6 +34,7 @@
 			</div>
 			<div class="d-flex flex-column mx-2 mb-4">
 			  <!-- app form -->
+			  <app-energy-form [selected]="baselineSelected" [isBaseline]="true" [settings]="settings"></app-energy-form>
 				<div class="form-group">
 				  <label class="small" for="materialType">Select Type</label>
 				  <select [disabled]="!baselineSelected" class="form-control" id="materialType" (change)="changeMaterialType()" [(ngModel)]="materialType"
@@ -50,13 +51,12 @@
 				<app-gas-material-form *ngIf="materialType == 'Gas'" [selected]="baselineSelected"
 					[isBaseline]="true" [settings]="settings"></app-gas-material-form>
 			 <!-- Results -->
-			 <!-- TODO units -->
 			 <div *ngIf="output" class="d-flex flex-column mt-3 mb-2">
 				<div class="form-group m-0">
 				  <label class="bold">Heat Required</label>
 				  <div *ngIf="output.baseline.netHeatLoss" class="text-center bold small">
 					{{output.baseline.netHeatLoss | sigFigs:'6'}}
-					<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+					<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
 				  </div>
 				  <div *ngIf="!output.baseline.netHeatLoss" class="text-center bold small">
 					&mdash; &mdash;
@@ -66,7 +66,7 @@
 					<label class="bold">Reaction Heat</label>
 					<div *ngIf="output.baseline.endoExoHeat" class="text-center bold small">
 						{{output.baseline.endoExoHeat | sigFigs:'6'}}
-						<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+						<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
 					</div>
 					<div *ngIf="!output.baseline.endoExoHeat" class="text-center bold small">
 					  &mdash; &mdash;
@@ -76,7 +76,7 @@
 					<label class="bold">Total Heat Required</label>
 					<div *ngIf="output.baseline.heatRequired" class="text-center bold small">
 						{{output.baseline.heatRequired | sigFigs:'6'}}
-						<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+						<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
 					</div>
 					<div *ngIf="!output.baseline.heatRequired" class="text-center bold small">
 					  &mdash; &mdash;
@@ -86,7 +86,7 @@
 					<label class="bold">Gross Loss</label>
 					<div *ngIf="output.baseline.grossLoss" class="text-center bold small">
 					  {{output.baseline.grossLoss | sigFigs:'6'}} 
-					  <span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+					  <span [innerHTML]="energyUnit | settingsLabel"></span>/hr
 					</div>
 					<div *ngIf="!output.baseline.grossLoss" class="text-center bold small">
 					  &mdash; &mdash;
@@ -118,6 +118,7 @@
 			<!-- forms -->
 			<div class="d-flex flex-column ml-2 mr-2 mb-4">
 			  <!-- app form -->
+			  <app-energy-form [selected]="!baselineSelected" [isBaseline]="false" [settings]="settings"></app-energy-form>
 			  <div class="form-group">
 				<label class="small" for="materialType">Select Type</label>
 				<select [disabled]="baselineSelected" class="form-control" id="materialType" [(ngModel)]="materialType"
@@ -139,7 +140,7 @@
 					  <label class="bold">Heat Required</label>
 					  <div *ngIf="output.modification.netHeatLoss" class="text-center bold small">
 						{{output.modification.netHeatLoss | sigFigs:'6'}}
-						<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+						<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
 					  </div>
 					  <div *ngIf="!output.modification.netHeatLoss" class="text-center bold small">
 						&mdash; &mdash;
@@ -149,7 +150,7 @@
 						<label class="bold">Reaction Heat</label>
 						<div *ngIf="output.modification.endoExoHeat" class="text-center bold small">
 							{{output.modification.endoExoHeat | sigFigs:'6'}}
-							<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+							<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
 						</div>
 						<div *ngIf="!output.modification.endoExoHeat" class="text-center bold small">
 						  &mdash; &mdash;
@@ -159,7 +160,7 @@
 						<label class="bold">Total Heat Required</label>
 						<div *ngIf="output.modification.heatRequired" class="text-center bold small">
 							{{output.modification.heatRequired | sigFigs:'6'}}
-							<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+							<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
 						</div>
 						<div *ngIf="!output.modification.heatRequired" class="text-center bold small">
 						  &mdash; &mdash;
@@ -169,7 +170,7 @@
 						<label class="bold">Gross Loss</label>
 						<div *ngIf="output.modification.grossLoss" class="text-center bold small">
 						  {{output.modification.grossLoss | sigFigs:'6'}} 
-						  <span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr
+						  <span [innerHTML]="energyUnit | settingsLabel"></span>/hr
 						</div>
 						<div *ngIf="!output.modification.grossLoss" class="text-center bold small">
 						  &mdash; &mdash;
@@ -192,23 +193,30 @@
 			</div>
 		  </div>
 		</div>
-  
-		<!-- help panel -->
+
 		<div class="col-4 p-0 help-panel">
-		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
-			<div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
-			  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
-				  <div>Help</div>
-				</a>
-			  </div>
-			</div>
-  
-			<div class="p-2">
-			<app-charge-material-help *ngIf="tabSelect == 'help'" [settings]="settings" ></app-charge-material-help>
+			<div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
+			  <div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
+				  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+					<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+					  (click)="setTab('results')">
+					  <div>Results</div>
+					</a>
+				  </div>
+				  <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+					<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+					  <div>Help</div>
+					</a>
+				  </div>
+				</div>
+	
+			  <div class="p-2">
+				<app-charge-material-results class="w-100" *ngIf="tabSelect == 'results'" [settings]="settings" 
+				[modificationExists]="modificationExists"></app-charge-material-results>
+				<app-charge-material-help *ngIf="tabSelect == 'help'" [settings]="settings" ></app-charge-material-help>
+				</div>
 			</div>
 		  </div>
-		</div>
   
 	  </div>
 	</div>

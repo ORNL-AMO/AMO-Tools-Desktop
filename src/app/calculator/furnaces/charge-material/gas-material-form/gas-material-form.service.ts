@@ -33,7 +33,7 @@ export class GasMaterialFormService {
     return formGroup;
   }
 
-  getGasChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean): FormGroup {
+  getGasChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): FormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.gasChargeMaterial.thermicReactionType !== 0) {
       reactionType = 'Exothermic';

@@ -141,13 +141,11 @@ export class SolidMaterialFormComponent implements OnInit {
   calculate() {
     this.chargeMaterialForm = this.solidMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     this.checkWarnings();
-    if (this.chargeMaterialForm.valid) {
-      let chargeMaterial: ChargeMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(this.chargeMaterialForm);
-      if (this.isBaseline) {
-        this.chargeMaterialService.baselineData.next(chargeMaterial);
-      } else { 
-        this.chargeMaterialService.modificationData.next(chargeMaterial);
-      }
+    let chargeMaterial: ChargeMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(this.chargeMaterialForm);
+    if (this.isBaseline) {
+      this.chargeMaterialService.baselineData.next(chargeMaterial);
+    } else { 
+      this.chargeMaterialService.modificationData.next(chargeMaterial);
     }
   }
 
