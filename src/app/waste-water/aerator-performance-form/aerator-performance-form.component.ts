@@ -43,12 +43,14 @@ export class AeratorPerformanceFormComponent implements OnInit {
   wasteWaterDifferentSub: Subscription;
   settings: Settings;
   aeratorPerformanceWarnings: AeratorPerformanceWarnings;
+  idString: string = 'baseline';
   constructor(private wasteWaterService: WasteWaterService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private compareService: CompareService) { }
 
   ngOnInit(): void {
     this.settings = this.wasteWaterService.settings.getValue();
     if (this.isModification) {
+      this.idString = 'modification';
       this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
         if (val) {
           let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
@@ -101,7 +103,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
       this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(aeratorPerformanceData);
       wasteWater.baselineData.aeratorPerformanceData = aeratorPerformanceData;
     }
-    this.wasteWaterService.wasteWater.next(wasteWater);
+    this.wasteWaterService.updateWasteWater(wasteWater);
   }
 
   enableForm() {

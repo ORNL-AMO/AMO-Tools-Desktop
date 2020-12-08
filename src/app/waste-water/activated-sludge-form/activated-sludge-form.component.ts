@@ -27,12 +27,14 @@ export class ActivatedSludgeFormComponent implements OnInit {
   wasteWaterDifferentSub: Subscription;
   activatedSludgeDifferent: ActivatedSludgeDifferent;
   settings: Settings;
+  idString: string = 'baseline';
   constructor(private wasteWaterService: WasteWaterService, private activatedSludgeFormService: ActivatedSludgeFormService,
     private compareService: CompareService) { }
 
   ngOnInit(): void {
     this.settings = this.wasteWaterService.settings.getValue();
     if (this.isModification) {
+      this.idString = 'modification';
       this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(val => {
         if (val) {
           let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
@@ -65,7 +67,7 @@ export class ActivatedSludgeFormComponent implements OnInit {
       let activatedSludgeData: ActivatedSludgeData = this.activatedSludgeFormService.getObjFromForm(this.form);
       wasteWater.baselineData.activatedSludgeData = activatedSludgeData;
     }
-    this.wasteWaterService.wasteWater.next(wasteWater);
+    this.wasteWaterService.updateWasteWater(wasteWater);
   }
 
   focusField(str: string) {

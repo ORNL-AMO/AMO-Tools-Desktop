@@ -26,7 +26,7 @@ export class WasteWaterSummaryCardComponent implements OnInit {
   constructor(private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
-    this.setupDone = this.wasteWaterService.checkWasteWaterValid(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics);
+    this.setupDone = this.wasteWaterService.checkWasteWaterValid(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics).isValid;
     if (this.setupDone) {
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
       this.baselineResults = this.wasteWaterService.calculateResults(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics, settings);
