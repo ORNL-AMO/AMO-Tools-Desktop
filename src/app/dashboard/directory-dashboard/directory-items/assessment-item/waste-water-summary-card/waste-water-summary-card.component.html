@@ -77,8 +77,6 @@
     <a (click)="goToAssessment('system-setup')">Finish Setup</a>
 </div>
 
-
-
 <div bsModal #reportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog">
@@ -89,7 +87,7 @@
                 </button>
             </div>
             <div class="modal-body scroll-item" *ngIf="showReport">
-                <app-waste-water-report [assessment]="assessment"></app-waste-water-report>
+                <app-waste-water-report [assessment]="assessment" [quickReport]="true"></app-waste-water-report>
             </div>
         </div>
     </div>

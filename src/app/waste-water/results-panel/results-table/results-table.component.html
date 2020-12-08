@@ -21,16 +21,13 @@
             <span class="table-text"> &mdash; &mdash;</span>
         </div>
         <div class="col-4" *ngIf="showModification">
-            <app-percent-graph *ngIf="modificationResults.TotalAverageDailyFlowRate != undefined"
+            <app-percent-graph *ngIf="modificationValid.isValid != undefined"
                 [value]="modificationResults.percentCostSavings"></app-percent-graph>
-            <div class="alert-danger small" *ngIf="!modificationResults.TotalAverageDailyFlowRate == undefined">
+            <div class="alert-danger small" *ngIf="!modificationValid.isValid">
                 Invalid modification<br>
-                <!-- <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fluidValid">Errors found in Fluid<br></span>
-          <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fieldDataValid">Errors found in Field
-            Data<br></span>
-          <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fanValid">Errors found in Fan
-            Setup<br></span>
-          <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.motorValid">Errors found in Motor<br></span> -->
+                <span *ngIf="!modificationValid.activatedSludgeValid">Errors found in Activated Sludge<br></span>
+                <span *ngIf="!modificationValid.aeratorPerformanceValid">Errors found in Aerator Performance<br></span>
+                <span *ngIf="!modificationValid.systemBasicsValid">Errors found in System Basics<br></span>
             </div>
         </div>
     </div>
@@ -130,8 +127,9 @@
     <div class="d-flex stripe my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-            <span class="table-text">RAS TSS Concentration (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
-            *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</span>
+            <span class="table-text">RAS TSS Concentration (<span
+                    *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
+                    *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</span>
         </div>
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
@@ -145,8 +143,9 @@
     <div class="d-flex my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-            <span class="table-text">Total Sludge Production (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
-            *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</span>
+            <span class="table-text">Total Sludge Production (<span
+                    *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
+                    *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</span>
         </div>
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
@@ -175,8 +174,8 @@
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Field Oxygen Transfer Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
-                O<sub>2</sub>/hp-hr</span><span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
-                O<sub>2</sub>/kWh</span>)</span>
+                    O<sub>2</sub>/hp-hr</span><span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+                    O<sub>2</sub>/kWh</span>)</span>
         </div>
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">

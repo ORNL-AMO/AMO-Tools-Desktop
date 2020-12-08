@@ -24,7 +24,8 @@ export class WasteWaterReportComponent implements OnInit {
   containerHeight: number;
   @Input()
   inRollup: boolean;
-
+  @Input()
+  quickReport: boolean;
 
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
