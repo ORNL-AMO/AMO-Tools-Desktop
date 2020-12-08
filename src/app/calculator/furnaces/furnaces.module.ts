@@ -8,6 +8,7 @@ import { FurnacesListComponent } from './furnaces-list/furnaces-list.component';
 import { RouterModule } from '@angular/router';
 import { WallModule } from './wall/wall.module';
 import { FlueGasModule } from './flue-gas/flue-gas.module';
+import { AtmosphereModule } from './atmosphere/atmosphere.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { FlueGasModule } from './flue-gas/flue-gas.module';
     EfficiencyImprovementModule,
     WallModule,
     FlueGasModule,
-    RouterModule
+    RouterModule,
+    AtmosphereModule
   ],
   declarations: [
     FurnacesListComponent,
