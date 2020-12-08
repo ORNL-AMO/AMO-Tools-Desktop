@@ -33,10 +33,8 @@ export class GasMaterialFormComponent implements OnInit {
   generateExampleSub: Subscription;
 
   chargeMaterialForm: FormGroup;
-  options: any;
   selectedMaterialId: any;
   selectedMaterial: any;
-  idString: string;
   materialTypes: any;
   showModal: boolean;
   showFlueGasModal: boolean;

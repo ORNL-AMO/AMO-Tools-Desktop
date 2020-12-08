@@ -32,11 +32,9 @@ export class SolidMaterialFormComponent implements OnInit {
   generateExampleSub: Subscription;
 
   chargeMaterialForm: FormGroup;
-  options: any;
   warnings: SolidMaterialWarnings;
   selectedMaterialId: any;
   selectedMaterial: any;
-  idString: string;
   materialTypes: any;
   showModal: boolean;
   showFlueGasModal: boolean;

@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { ChargeMaterial, ChargeMaterialOutput, ChargeMaterialResult, EnergyData, LoadChargeMaterial, SolidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, ChargeMaterialOutput, ChargeMaterialResult, EnergyData, GasChargeMaterial, LiquidChargeMaterial, LoadChargeMaterial, SolidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../shared/models/settings';
 import { EnergyFormService } from './energy-form/energy-form.service';
 import { GasMaterialFormService } from './gas-material-form/gas-material-form.service';
@@ -291,6 +291,15 @@ export class ChargeMaterialService {
     this.modificationData.next(modificationChargeMaterial);
 
     this.generateExample.next(true);
+  }
+
+  checkInitialTemp(material: GasChargeMaterial | LiquidChargeMaterial | SolidChargeMaterial): string {
+    if (material.initialTemperature > material.dischargeTemperature) {
+      return "Initial Temperature  (" + material.initialTemperature + ") cannot be greater than Outlet Temperature (" + material.dischargeTemperature + ")";
+    }
+    else {
+      return null;
+    }
   }
 
   convertSolidChargeMaterial(solidMaterial: SolidChargeMaterial, currentUnits: string, convertedUnits: string): SolidChargeMaterial {

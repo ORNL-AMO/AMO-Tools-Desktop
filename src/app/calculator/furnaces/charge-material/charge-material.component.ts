@@ -88,12 +88,10 @@ export class ChargeMaterialComponent implements OnInit {
       this.isModalOpen = modalOpen;
     })
     this.baselineDataSub = this.chargeMaterialService.baselineData.subscribe(value => {
-      // this.chargeMaterialService.calculate(this.settings);
-      this.calculate();
+      this.chargeMaterialService.calculate(this.settings);
     })
     this.modificationDataSub = this.chargeMaterialService.modificationData.subscribe(value => {
-      // this.chargeMaterialService.calculate(this.settings);
-      this.calculate();
+      this.chargeMaterialService.calculate(this.settings);
     })
     this.outputSubscription = this.chargeMaterialService.output.subscribe(val => {
       if (val) {
@@ -102,23 +100,15 @@ export class ChargeMaterialComponent implements OnInit {
     });
     this.baselineEnergySub = this.chargeMaterialService.baselineEnergyData.subscribe(energyData => {
       this.energyUnit = this.chargeMaterialService.getAnnualEnergyUnit(energyData.energySourceType, this.settings);
-      // this.chargeMaterialService.calculate(this.settings);
-      this.calculate();
+      this.chargeMaterialService.calculate(this.settings);
     });
     this.modificationEnergySub = this.chargeMaterialService.modificationEnergyData.subscribe(energyData => {
-      // this.chargeMaterialService.calculate(this.settings);
-      this.calculate();
+      this.chargeMaterialService.calculate(this.settings);
   });
   }
 
   setTab(str: string) {
     this.tabSelect = str;
-  }
-
-  calculate() {
-    // setTimeout(() => {
-      this.chargeMaterialService.calculate(this.settings);
-    // }, 200);
   }
 
   changeMaterialType() {
