@@ -31,6 +31,7 @@ export class GasMaterialFormComponent implements OnInit {
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
+  energySourceSub: Subscription;
 
   chargeMaterialForm: FormGroup;
   selectedMaterialId: any;
@@ -38,6 +39,7 @@ export class GasMaterialFormComponent implements OnInit {
   materialTypes: any;
   showModal: boolean;
   showFlueGasModal: boolean;
+  energySourceType: string;
 
   constructor(private suiteDbService: SuiteDbService, 
               private chargeMaterialService: ChargeMaterialService, 
@@ -66,6 +68,7 @@ export class GasMaterialFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    this.energySourceSub.unsubscribe();
     this.chargeMaterialService.modalOpen.next(false);
   }
 
@@ -75,7 +78,10 @@ export class GasMaterialFormComponent implements OnInit {
       })
     this.generateExampleSub = this.chargeMaterialService.generateExample.subscribe(value => {
       this.initForm();
-    })
+    });
+    this.energySourceSub = this.chargeMaterialService.energySourceType.subscribe(energySourceType => {
+      this.energySourceType = energySourceType;
+    });
   }
 
   initForm() {
