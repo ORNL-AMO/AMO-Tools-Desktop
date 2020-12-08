@@ -41,7 +41,7 @@ export class SystemBasicsComponent implements OnInit {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let systemBasics: SystemBasics = this.systemBasicsService.getObjFromForm(this.systemBasicsForm);
     wasteWater.systemBasics = systemBasics;
-    this.wasteWaterService.wasteWater.next(wasteWater);
+    this.wasteWaterService.updateWasteWater(wasteWater);
   }
 
   saveSettings() {
@@ -67,7 +67,7 @@ export class SystemBasicsComponent implements OnInit {
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     wasteWater = this.convertWasteWaterService.convertWasteWater(wasteWater, this.oldSettings, newSettings);
-    this.wasteWaterService.wasteWater.next(wasteWater);
+    this.wasteWaterService.updateWasteWater(wasteWater);
     this.oldSettings = newSettings;
     this.dataUpdated = true;
     this.showUpdateData = false;

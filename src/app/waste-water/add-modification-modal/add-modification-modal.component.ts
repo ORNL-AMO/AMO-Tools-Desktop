@@ -40,7 +40,7 @@ export class AddModificationModalComponent implements OnInit {
     modification.name = this.newModificationName;
     modification.id = Math.random().toString(36).substr(2, 9);
     wasteWater.modifications.push(modification);
-    this.wasteWaterService.wasteWater.next(wasteWater);
+    this.wasteWaterService.updateWasteWater(wasteWater);
     this.wasteWaterService.selectedModificationId.next(modification.id);
     this.closeAddNewModal();
   }

@@ -101,7 +101,7 @@ export class AeratorPerformanceFormComponent implements OnInit {
       this.aeratorPerformanceWarnings = this.aeratorPerformanceFormService.checkWarnings(aeratorPerformanceData);
       wasteWater.baselineData.aeratorPerformanceData = aeratorPerformanceData;
     }
-    this.wasteWaterService.wasteWater.next(wasteWater);
+    this.wasteWaterService.updateWasteWater(wasteWater);
   }
 
   enableForm() {

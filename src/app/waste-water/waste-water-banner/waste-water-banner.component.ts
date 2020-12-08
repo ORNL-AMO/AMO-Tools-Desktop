@@ -27,7 +27,9 @@ export class WasteWaterBannerComponent implements OnInit {
 
   ngOnInit(): void {
     this.wasteWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
-      this.isBaselineValid = this.wasteWaterService.checkWasteWaterValid(val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.systemBasics);
+      if (val.baselineData.valid) {
+        this.isBaselineValid = val.baselineData.valid.isValid;
+      }
     });
 
     this.mainTabSub = this.wasteWaterService.mainTab.subscribe(val => {
@@ -57,11 +59,11 @@ export class WasteWaterBannerComponent implements OnInit {
     }
   }
 
-  changeAssessmentTab(str: string){
+  changeAssessmentTab(str: string) {
     this.wasteWaterService.assessmentTab.next(str);
   }
 
-  selectModification(){
+  selectModification() {
     this.wasteWaterService.showModificationListModal.next(true);
   }
 }

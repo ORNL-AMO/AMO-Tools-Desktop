@@ -65,7 +65,7 @@ export class ActivatedSludgeFormComponent implements OnInit {
       let activatedSludgeData: ActivatedSludgeData = this.activatedSludgeFormService.getObjFromForm(this.form);
       wasteWater.baselineData.activatedSludgeData = activatedSludgeData;
     }
-    this.wasteWaterService.wasteWater.next(wasteWater);
+    this.wasteWaterService.updateWasteWater(wasteWater);
   }
 
   focusField(str: string) {

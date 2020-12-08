@@ -58,7 +58,7 @@ export class WasteWaterComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.getById(parseInt(params['id']));
-      this.wasteWaterService.wasteWater.next(this.assessment.wasteWater);
+      this.wasteWaterService.updateWasteWater(this.assessment.wasteWater);
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
@@ -144,7 +144,6 @@ export class WasteWaterComponent implements OnInit {
 
   saveWasteWater(wasteWater: WasteWater) {
     this.assessment.wasteWater = wasteWater;
-    this.assessment.wasteWater.setupDone = this.wasteWaterService.checkWasteWaterValid(this.assessment.wasteWater.baselineData.activatedSludgeData, this.assessment.wasteWater.baselineData.aeratorPerformanceData, this.assessment.wasteWater.systemBasics);
     this.indexedDbService.putAssessment(this.assessment).then(() => {
       this.assessmentDbService.setAll();
     });

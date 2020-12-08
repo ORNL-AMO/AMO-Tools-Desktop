@@ -17,7 +17,8 @@ export interface WasteWaterData {
     aeratorPerformanceData: AeratorPerformanceData,
     name: string,
     id: string,
-    outputs?: WasteWaterResults
+    outputs?: WasteWaterResults,
+    valid?: WasteWaterValid
 }
 
 export interface ActivatedSludgeData {
@@ -155,4 +156,11 @@ export interface WasteWaterTreatmentInputData {
     Speed: number,
     EnergyCostUnit: number
 
+}
+
+export interface WasteWaterValid {
+    isValid: boolean,
+    activatedSludgeValid: boolean,
+    aeratorPerformanceValid: boolean,
+    systemBasicsValid: boolean,
 }

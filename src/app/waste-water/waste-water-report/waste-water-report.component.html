@@ -53,7 +53,8 @@
         </div>
     </div>
 
-    <div class="report-data" *ngIf="assessment.wasteWater.setupDone && assessment.wasteWater.valid.isValid">
+    <div class="report-data"
+        *ngIf="assessment.wasteWater.setupDone && assessment.wasteWater.baselineData.valid.isValid">
 
         <ul #reportBtns class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
@@ -95,7 +96,7 @@
     </div>
     <!-- End .report-data -->
 
-    <div *ngIf="!assessment.wasteWater.setupDone || !assessment.wasteWater.valid.isValid">
+    <div *ngIf="!assessment.wasteWater.setupDone || !assessment.wasteWater.baselineData.valid.isValid">
         <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
             see the resulting data.</p>
     </div>
