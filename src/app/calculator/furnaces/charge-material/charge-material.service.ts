@@ -2,25 +2,43 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { ChargeMaterial, ChargeMaterialOutput, ChargeMaterialResult } from '../../../shared/models/phast/losses/chargeMaterial';
+import { OperatingHours } from '../../../shared/models/operations';
+import { ChargeMaterial, ChargeMaterialOutput, ChargeMaterialResult, EnergyData, LoadChargeMaterial, SolidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../shared/models/settings';
+import { EnergyFormService } from './energy-form/energy-form.service';
+import { GasMaterialFormService } from './gas-material-form/gas-material-form.service';
+import { LiquidMaterialFormService } from './liquid-material-form/liquid-material-form.service';
+import { SolidMaterialFormService } from './solid-material-form/solid-material-form.service';
 
 @Injectable()
 export class ChargeMaterialService {
   baselineData: BehaviorSubject<ChargeMaterial>;
   modificationData: BehaviorSubject<ChargeMaterial>;
+  baselineEnergyData: BehaviorSubject<EnergyData>;
+  modificationEnergyData: BehaviorSubject<EnergyData>;
   output: BehaviorSubject<ChargeMaterialOutput>;
   
   currentField: BehaviorSubject<string>;
   resetData: BehaviorSubject<boolean>;
   generateExample: BehaviorSubject<boolean>;
+  operatingHours: OperatingHours;
+  energySourceType: BehaviorSubject<string>;
 
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private convertUnitsService: ConvertUnitsService, private phastService: PhastService) {
+  constructor(private phastService: PhastService,
+    private gasMaterialFormService: GasMaterialFormService,
+    private liquidMaterialFormService: LiquidMaterialFormService,
+    private energyFormService: EnergyFormService,
+    private solidMaterialFormService: SolidMaterialFormService,
+    private convertUnitsService: ConvertUnitsService
+              ) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
     this.baselineData = new BehaviorSubject<ChargeMaterial>(undefined);
     this.modificationData = new BehaviorSubject<ChargeMaterial>(undefined);
+    this.baselineEnergyData = new BehaviorSubject<EnergyData>(undefined);
+    this.modificationEnergyData = new BehaviorSubject<EnergyData>(undefined);
+    this.energySourceType = new BehaviorSubject<string>(undefined);
     this.output = new BehaviorSubject<ChargeMaterialOutput>(undefined);
 
     this.currentField = new BehaviorSubject<string>('default');
@@ -28,50 +46,86 @@ export class ChargeMaterialService {
     this.generateExample = new BehaviorSubject<boolean>(undefined);
   }
 
-  calculate(settings: Settings) {
-    let baselineChargeMaterial = this.baselineData.getValue();
-    let modificationChargeMaterial = this.modificationData.getValue();
-
-    let output: ChargeMaterialOutput = this.output.getValue();
-    let baselineResults: ChargeMaterialResult = this.getChargeMaterialResult(baselineChargeMaterial, settings);
-    if (baselineResults) {
-      output.baseline = baselineResults;
+  getValidChargeMaterial(chargeMaterial: ChargeMaterial, energyData: EnergyData) {
+    let valid: boolean = false;
+    if (chargeMaterial.chargeMaterialType == "Liquid") {
+      valid = this.liquidMaterialFormService.getLiquidChargeMaterialForm(chargeMaterial, false).valid;
     }
+    if (chargeMaterial.chargeMaterialType == "Gas") {
+      valid = this.gasMaterialFormService.getGasChargeMaterialForm(chargeMaterial, false).valid;
+    }
+    if (chargeMaterial.chargeMaterialType == "Solid") {
+      valid = this.solidMaterialFormService.getSolidChargeMaterialForm(chargeMaterial, false).valid;
+    }
+    valid = valid && this.energyFormService.getEnergyForm(energyData).valid;
+    return valid;
+  }
+  calculate(settings: Settings) {
+    let baselineChargeMaterial: ChargeMaterial = this.baselineData.getValue();
+    let modificationChargeMaterial: ChargeMaterial = this.modificationData.getValue();
+    let baselineResults: ChargeMaterialResult;
+    let modificationResults: ChargeMaterialResult;
+    let baselineEnergyData: EnergyData = this.baselineEnergyData.getValue();
+    let modificationEnergyData: EnergyData = this.modificationEnergyData.getValue();
+
+    this.initDefaultEmptyOutput();
+    let output: ChargeMaterialOutput = this.output.getValue();
+    output.energyUnit = this.getAnnualEnergyUnit(baselineEnergyData.energySourceType, settings);
+
+    let validData = this.getValidChargeMaterial(baselineChargeMaterial, baselineEnergyData);
+    if (validData) {
+      baselineResults = this.getChargeMaterialResult(baselineChargeMaterial, baselineEnergyData, settings);
+        output.baseline = baselineResults;
+    }
+
     if (modificationChargeMaterial) {
-      let modificationResults: ChargeMaterialResult = this.getChargeMaterialResult(modificationChargeMaterial, settings);
-      if (modificationResults) {
-        output.modification = modificationResults;
+      let validModificationData = this.getValidChargeMaterial(modificationChargeMaterial, modificationEnergyData);
+      if (validModificationData) {
+        modificationResults = this.getChargeMaterialResult(modificationChargeMaterial, modificationEnergyData, settings);
+        if (modificationResults) {
+          output.modification = modificationResults;
+        }
       }
+    }
+
+    if (baselineResults && modificationResults) {
+      output.fuelSavings = baselineResults.fuelUse - modificationResults.fuelUse;
+      output.costSavings = baselineResults.fuelCost - modificationResults.fuelCost;
     }
     this.output.next(output);
   }
 
-  getChargeMaterialResult(chargeMaterialData: ChargeMaterial, settings: Settings): ChargeMaterialResult {
+
+  getChargeMaterialResult(chargeMaterialData: ChargeMaterial, energyData: EnergyData, settings: Settings): ChargeMaterialResult {
     let result: ChargeMaterialResult = {
       heatRequired: 0,
       netHeatLoss: 0,
       endoExoHeat: 0,
-      grossLoss: 0
+      grossLoss: 0,
+      fuelUse: 0,
+      fuelCost: 0
     }
+    let loadChargeMaterial: LoadChargeMaterial;
+    let availableHeat: number;
+    let calculatorEnergyUnit = this.getAnnualEnergyUnit(energyData.energySourceType, settings);
     if (chargeMaterialData.chargeMaterialType == 'Gas' && chargeMaterialData.gasChargeMaterial) {
-      let calculated = this.phastService.gasLoadChargeMaterial(chargeMaterialData.gasChargeMaterial, settings);
-      result.heatRequired = calculated.grossHeatLoss;
-      result.netHeatLoss = calculated.netHeatLoss;
-      result.endoExoHeat = calculated.endoExoHeat;
-      result.grossLoss =  (calculated.grossHeatLoss / chargeMaterialData.gasChargeMaterial.availableHeat) * 100;
+      loadChargeMaterial = this.phastService.gasLoadChargeMaterial(chargeMaterialData.gasChargeMaterial, settings, calculatorEnergyUnit);
+      availableHeat = chargeMaterialData.gasChargeMaterial.availableHeat;
     } else if (chargeMaterialData.chargeMaterialType == 'Liquid' && chargeMaterialData.liquidChargeMaterial) {
-      let calculated = this.phastService.liquidLoadChargeMaterial(chargeMaterialData.liquidChargeMaterial, settings);
-      result.heatRequired = calculated.grossHeatLoss;
-      result.netHeatLoss = calculated.netHeatLoss;
-      result.endoExoHeat = calculated.endoExoHeat;
-      result.grossLoss =  (calculated.grossHeatLoss / chargeMaterialData.liquidChargeMaterial.availableHeat) * 100;
+      loadChargeMaterial = this.phastService.liquidLoadChargeMaterial(chargeMaterialData.liquidChargeMaterial, settings, calculatorEnergyUnit);
+      availableHeat = chargeMaterialData.liquidChargeMaterial.availableHeat;
     }  else if (chargeMaterialData.chargeMaterialType == 'Solid' && chargeMaterialData.solidChargeMaterial) {
-      let calculated = this.phastService.solidLoadChargeMaterial(chargeMaterialData.solidChargeMaterial, settings);
-      result.heatRequired = calculated.grossHeatLoss;
-      result.netHeatLoss = calculated.netHeatLoss;
-      result.endoExoHeat = calculated.endoExoHeat;
-      result.grossLoss =  (calculated.grossHeatLoss / chargeMaterialData.solidChargeMaterial.availableHeat) * 100;
+      loadChargeMaterial = this.phastService.solidLoadChargeMaterial(chargeMaterialData.solidChargeMaterial, settings, calculatorEnergyUnit);
+      availableHeat = chargeMaterialData.solidChargeMaterial.availableHeat;
     }
+
+    result.heatRequired = loadChargeMaterial.grossHeatLoss;
+    result.netHeatLoss = loadChargeMaterial.netHeatLoss;
+    result.endoExoHeat = loadChargeMaterial.endoExoHeat;
+    result.grossLoss =  (loadChargeMaterial.grossHeatLoss / availableHeat) * 100;
+    result.fuelUse = result.grossLoss * energyData.hoursPerYear;
+    result.fuelCost = result.grossLoss * energyData.hoursPerYear * energyData.fuelCost;
+
     return result;
   }
 
@@ -83,8 +137,30 @@ export class ChargeMaterialService {
       solidChargeMaterial: undefined,
       name: undefined
     };
+
+    let energyData: EnergyData = {
+      energySourceType: "Fuel",
+      fuelCost: 0,
+      hoursPerYear: 8760
+    }
     this.baselineData.next(emptyBaselineData);
     this.modificationData.next(undefined);
+
+    this.baselineEnergyData.next(energyData);
+    this.modificationEnergyData.next(undefined);
+    this.energySourceType.next('Fuel');
+  }
+
+  getAnnualEnergyUnit(energySourceType: string, settings: Settings) {
+    let energyUnit: string = settings.energyResultUnit;
+    if (energySourceType === 'Electricity') {
+      energyUnit = 'kWh';
+    } else if (settings.unitsOfMeasure === 'Metric') {
+      energyUnit = 'GJ';
+    } else {
+      energyUnit = 'MMBtu';
+    }
+    return energyUnit;
   }
 
   initDefaultEmptyOutput() {
@@ -135,11 +211,20 @@ export class ChargeMaterialService {
         name: undefined
       };
     }
+
+    let currentBaselineEnergy: EnergyData = this.baselineEnergyData.getValue();
+    let baselineEnergyCopy: EnergyData = JSON.parse(JSON.stringify(currentBaselineEnergy));
+    let modificationEnergy: EnergyData = {
+      energySourceType: baselineEnergyCopy.energySourceType,
+      fuelCost: baselineEnergyCopy.fuelCost,
+      hoursPerYear: baselineEnergyCopy.hoursPerYear
+    }
+
+    this.modificationEnergyData.next(modificationEnergy);
     this.modificationData.next(modification);
   }
 
   generateExampleData(settings: Settings) {
-    // TODO conversions
     let baselineChargeMaterial: ChargeMaterial = {
       name: undefined,
       chargeMaterialType: 'Solid',
@@ -159,7 +244,8 @@ export class ChargeMaterialService {
         chargeMelted: 0,
         chargeReacted: 1,
         reactionHeat: 50,
-        additionalHeat: 0
+        additionalHeat: 0,
+        availableHeat: 100
       }
     };
 
@@ -182,12 +268,69 @@ export class ChargeMaterialService {
         chargeMelted: 0,
         chargeReacted: 1,
         reactionHeat: 50,
-        additionalHeat: 0
+        additionalHeat: 0,
+        availableHeat: 100
       }
     }
+
+    if (settings.unitsOfMeasure != 'Imperial') {
+      this.convertSolidChargeMaterial(baselineChargeMaterial.solidChargeMaterial, 'Imperial', 'Metric');
+    }
+
+    let energyExample: EnergyData = {
+      energySourceType: 'Fuel',
+      hoursPerYear: 8760,
+      fuelCost: 3.99
+    };
+
+    this.energySourceType.next('Fuel');
+    this.baselineEnergyData.next(energyExample);
+    this.modificationEnergyData.next(energyExample);
+    
     this.baselineData.next(baselineChargeMaterial);
     this.modificationData.next(modificationChargeMaterial);
+
     this.generateExample.next(true);
+  }
+
+  convertSolidChargeMaterial(solidMaterial: SolidChargeMaterial, currentUnits: string, convertedUnits: string): SolidChargeMaterial {
+    if (currentUnits === 'Metric' && convertedUnits === 'Imperial') {
+      solidMaterial.meltingPoint = this.convertVal(solidMaterial.meltingPoint, 'C', 'F');
+      solidMaterial.initialTemperature = this.convertVal(solidMaterial.initialTemperature, 'C', 'F');
+      solidMaterial.dischargeTemperature = this.convertVal(solidMaterial.dischargeTemperature, 'C', 'F');
+      solidMaterial.waterVaporDischargeTemperature = this.convertVal(solidMaterial.waterVaporDischargeTemperature, 'C', 'F');
+      solidMaterial.chargeFeedRate = this.convertVal(solidMaterial.chargeFeedRate, 'kg', 'lb');
+      solidMaterial.reactionHeat = this.convertVal(solidMaterial.reactionHeat, 'kJkg', 'btuLb');
+      solidMaterial.additionalHeat = this.convertVal(solidMaterial.additionalHeat, 'kJ', 'Btu');
+      solidMaterial.specificHeatLiquid = this.convertVal(solidMaterial.specificHeatLiquid, 'kJkgC', 'btulbF');
+      solidMaterial.specificHeatSolid = this.convertVal(solidMaterial.specificHeatSolid, 'kJkgC', 'btulbF');
+      solidMaterial.latentHeat = this.convertVal(solidMaterial.latentHeat, 'kJkg', 'btuLb');
+    } else if (currentUnits === 'Imperial' && convertedUnits === 'Metric') {
+      solidMaterial.meltingPoint = this.convertVal(solidMaterial.meltingPoint, 'F', 'C');
+      solidMaterial.initialTemperature = this.convertVal(solidMaterial.initialTemperature, 'F', 'C');
+      solidMaterial.dischargeTemperature = this.convertVal(solidMaterial.dischargeTemperature, 'F', 'C');
+      solidMaterial.waterVaporDischargeTemperature = this.convertVal(solidMaterial.waterVaporDischargeTemperature, 'F', 'C');
+      solidMaterial.chargeFeedRate = this.convertVal(solidMaterial.chargeFeedRate, 'lb', 'kg');
+      solidMaterial.reactionHeat = this.convertVal(solidMaterial.reactionHeat, 'btuLb', 'kJkg');
+      solidMaterial.additionalHeat = this.convertVal(solidMaterial.additionalHeat, 'Btu', 'kJ');
+      solidMaterial.specificHeatLiquid = this.convertVal(solidMaterial.specificHeatLiquid, 'btulbF', 'kJkgC');
+      solidMaterial.specificHeatSolid = this.convertVal(solidMaterial.specificHeatSolid, 'btulbF', 'kJkgC');
+      solidMaterial.latentHeat = this.convertVal(solidMaterial.latentHeat, 'btuLb', 'kJkg');
+    }
+    return solidMaterial;
+  }
+
+  convertVal(val: number, from: string, to: string) {
+    if (val !== undefined) {
+      val = this.convertUnitsService.value(val).from(from).to(to);
+      val = this.roundVal(val, 4);
+    }
+    return val;
+  }
+
+  roundVal(val: number, digits: number) {
+    return Number(val.toFixed(digits));
+
   }
 
 }

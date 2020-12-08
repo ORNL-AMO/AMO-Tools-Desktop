@@ -19,6 +19,10 @@ export class ChargeMaterialComponent implements OnInit {
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  energyUnit: string;
+  baselineEnergySub: Subscription;
+  modificationEnergySub: Subscription;
+  updatedCalculation: boolean;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -39,13 +43,16 @@ export class ChargeMaterialComponent implements OnInit {
   output: ChargeMaterialOutput;
 
   materialType: string = "Solid";
-  tabSelect: string = 'help';
+  tabSelect: string = 'results';
   baselineSelected = true;
   modificationExists = false;
 
   constructor(private settingsDbService: SettingsDbService, private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnInit(): void {
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -72,6 +79,8 @@ export class ChargeMaterialComponent implements OnInit {
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
     this.outputSubscription.unsubscribe();
+    this.baselineEnergySub.unsubscribe();
+    this.modificationEnergySub.unsubscribe();
   }
 
   initSubscriptions() {
@@ -79,16 +88,37 @@ export class ChargeMaterialComponent implements OnInit {
       this.isModalOpen = modalOpen;
     })
     this.baselineDataSub = this.chargeMaterialService.baselineData.subscribe(value => {
-      this.chargeMaterialService.calculate(this.settings);
+      // this.chargeMaterialService.calculate(this.settings);
+      this.calculate();
     })
     this.modificationDataSub = this.chargeMaterialService.modificationData.subscribe(value => {
-      this.chargeMaterialService.calculate(this.settings);
+      // this.chargeMaterialService.calculate(this.settings);
+      this.calculate();
     })
     this.outputSubscription = this.chargeMaterialService.output.subscribe(val => {
       if (val) {
         this.output = val;
       }
     });
+    this.baselineEnergySub = this.chargeMaterialService.baselineEnergyData.subscribe(energyData => {
+      this.energyUnit = this.chargeMaterialService.getAnnualEnergyUnit(energyData.energySourceType, this.settings);
+      // this.chargeMaterialService.calculate(this.settings);
+      this.calculate();
+    });
+    this.modificationEnergySub = this.chargeMaterialService.modificationEnergyData.subscribe(energyData => {
+      // this.chargeMaterialService.calculate(this.settings);
+      this.calculate();
+  });
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  calculate() {
+    // setTimeout(() => {
+      this.chargeMaterialService.calculate(this.settings);
+    // }, 200);
   }
 
   changeMaterialType() {
