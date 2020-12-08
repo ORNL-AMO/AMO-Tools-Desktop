@@ -28,7 +28,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   currentFieldSub: Subscription;
 
   tabSelect: string = 'results';
-  headerHeight: number;
+  containerHeight: number;
   editMode: boolean = false;
   modificationExists: boolean;
 
@@ -36,7 +36,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   airLeakInputSub: Subscription;
 
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
-  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('panelHeader', { static: false }) panelHeader: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
@@ -82,8 +82,8 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    if (this.panelHeader) {
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.panelHeader.nativeElement.offsetHeight;
     }
   }
 

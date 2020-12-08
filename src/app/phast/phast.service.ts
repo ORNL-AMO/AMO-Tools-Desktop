@@ -28,7 +28,6 @@ import { OpeningLossesService } from './losses/opening-losses/opening-losses.ser
 import { AtmosphereLossesService } from './losses/atmosphere-losses/atmosphere-losses.service';
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
-import { WallLossesService } from './losses/wall-losses/wall-losses.service';
 import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
 import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
@@ -36,10 +35,11 @@ import { SlagService } from './losses/slag/slag.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { StepTab, stepTabs, specTabs } from './tabs';
 import * as _ from 'lodash';
+
+import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
 import { LiquidMaterialFormService } from '../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
-
 @Injectable()
 export class PhastService {
 
@@ -56,7 +56,7 @@ export class PhastService {
     private atmosphereLossesService: AtmosphereLossesService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
     private coolingLossesService: CoolingLossesService,
-    private wallLossesService: WallLossesService,
+    private wallFormService: WallFormService,
     private fixtureLossesService: FixtureLossesService,
     private gasLeakageLossesService: GasLeakageLossesService,
     private otherLossessService: OtherLossesService,
@@ -740,7 +740,7 @@ export class PhastService {
         conditionFactor: 1,
         correctionFactor: 1
       };
-      let tmpForm = this.wallLossesService.getWallLossForm(tmpWallLoss);
+      let tmpForm = this.wallFormService.getWallLossForm(tmpWallLoss);
       if (tmpForm.status === 'VALID') {
         let lossVal = this.wallLosses(tmpWallLoss, settings);
         if (isNaN(lossVal) === false) {
@@ -828,7 +828,7 @@ export class PhastService {
   sumWallLosses(losses: WallLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.wallLossesService.getWallLossForm(loss);
+      let tmpForm = this.wallFormService.getWallLossForm(loss);
       if (tmpForm.status === 'VALID') {
         sum += this.wallLosses(loss, settings);
       }
@@ -880,17 +880,6 @@ export class PhastService {
     }
 
     return sumAdditionalHeat;
-  }
-
-  getMinElectricityInputRequirement(losses: Losses, settings: Settings): number {
-    if (losses.exhaustGasEAF && losses.exhaustGasEAF.length == 0) {
-      let exothermicHeat = 0 - Math.abs(this.sumChargeMaterialExothermic(losses.chargeMaterials, settings));
-      let totalInput = this.sumHeatInput(losses, settings);
-      let tmpResults = this.energyInputEAF(losses.energyInputEAF[0], settings);
-      return totalInput - tmpResults.totalChemicalEnergyInput + exothermicHeat
-    } else {
-      return undefined;
-    }
   }
 }
 

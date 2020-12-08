@@ -6,11 +6,9 @@ import { EnergyInputService } from '../../energy-input/energy-input.service';
 import { EnergyInputCompareService } from '../../energy-input/energy-input-compare.service';
 import { EnergyInputEAF } from '../../../../shared/models/phast/losses/energyInputEAF';
 import { Subscription } from 'rxjs';
-import { ExhaustGasCompareService } from '../../exhaust-gas/exhaust-gas-compare.service';
-import { PhastService } from '../../../phast.service';
-import { ExhaustGasEAF } from '../../../../shared/models/phast/losses/exhaustGasEAF';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastCompareService } from '../../../phast-compare.service';
+import { PhastResultsService } from '../../../phast-results.service';
 
 @Component({
   selector: 'app-energy-input-tab',
@@ -36,7 +34,7 @@ export class EnergyInputTabComponent implements OnInit {
   compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private energyInputService: EnergyInputService, private energyInputCompareService: EnergyInputCompareService, private cd: ChangeDetectorRef,
-    private phastCompareService: PhastCompareService, private phastService: PhastService) { }
+    private phastCompareService: PhastCompareService, private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
     this.setNumLosses();
@@ -76,7 +74,7 @@ export class EnergyInputTabComponent implements OnInit {
     let testVal = false;
     if (this.energyInputCompareService.baselineEnergyInput) {
       this.energyInputCompareService.baselineEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss, this.phast.losses) === false) {
+        if (this.checkLossValid(loss, this.phast) === false) {
           testVal = true;
         }
       });
@@ -88,7 +86,7 @@ export class EnergyInputTabComponent implements OnInit {
         losses = selectedModification.losses;
       }
       this.energyInputCompareService.modifiedEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss, losses) === false) {
+        if (this.checkLossValid(loss, this.phast) === false) {
           testVal = true;
         }
       });
@@ -97,10 +95,10 @@ export class EnergyInputTabComponent implements OnInit {
   }
 
 
-  checkLossValid(loss: EnergyInputEAF, losses: Losses) {
+  checkLossValid(loss: EnergyInputEAF, phast: PHAST) {
     let minElectricityInput: number;
-    if (losses) {
-      minElectricityInput = this.phastService.getMinElectricityInputRequirement(losses, this.settings);
+    if (phast) {
+      minElectricityInput = this.phastResultsService.getMinElectricityInputRequirement(phast, this.settings);
     }
     let tmpForm: FormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput);
     if (tmpForm.status === 'VALID') {

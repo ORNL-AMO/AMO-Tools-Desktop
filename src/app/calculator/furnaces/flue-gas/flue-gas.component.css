@@ -8,6 +8,10 @@
     cursor: pointer;
 }
 
+.flue-gas-icon {
+    width: 53px;
+}
+
 .no-data {
     background: none;
 }
@@ -58,10 +62,6 @@
 
 .add-fixture{
     margin-top: 10px;
-}
-
-.ngas-icon{
-    height: 55px;
 }
 
 .opp-sheet-icon{

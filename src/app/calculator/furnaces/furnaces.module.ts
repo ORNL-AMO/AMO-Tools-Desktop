@@ -6,6 +6,7 @@ import { O2EnrichmentModule } from './o2-enrichment/o2-enrichment.module';
 import { EfficiencyImprovementModule } from './efficiency-improvement/efficiency-improvement.module';
 import { FurnacesListComponent } from './furnaces-list/furnaces-list.component';
 import { RouterModule } from '@angular/router';
+import { WallModule } from './wall/wall.module';
 import { FlueGasModule } from './flue-gas/flue-gas.module';
 import { ChargeMaterialModule } from './charge-material/charge-material.module';
 
@@ -16,6 +17,7 @@ import { ChargeMaterialModule } from './charge-material/charge-material.module';
     O2EnrichmentModule,
     EnergyEquivalencyModule,
     EfficiencyImprovementModule,
+    WallModule,
     FlueGasModule,
     ChargeMaterialModule,
     RouterModule

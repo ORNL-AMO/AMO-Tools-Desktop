@@ -3,7 +3,13 @@
       Flue Gas Help
       <br>
       <small class="text-muted">
-        Enter measured data to calculate your system's annual savings potential.
+        This calculator can be used to calculate fuel savings due to changes in wall insulation for a heating system such as boiler or furnace. 
+        Heat is lost by radiation and convection from an outside surface of a boiler or a furnace.  
+        Heat loss depends primarily on the wall surface temperature but it is also affected by wall surface emissivity, orientation of the surface, 
+        wind velocity over the surface etc. Outside wall temperature depends on the type and thickness of insulation used for the walls.  
+        Improvements in the insulation and changes in other conditions such as protection from the wind could result 
+        in reduction of wall outside temperature and correspondingly reduction in heat loss from the heating system.  
+        Actual energy savings or reduction in fuel heat input due to reduction in wall loss depends on combustion efficiency or available heat of the heating system.  
       </small>
     </h5>
     <label class="p-1" (click)="toggleSuggestions()">
@@ -55,6 +61,7 @@
         Fuel
         <br>
         <small class="text-muted">
+          
           Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
           are intended
           to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
@@ -65,6 +72,25 @@
         </small>
       </h6>
     </div>
+
+    <div class="my-2" *ngIf="currentField == 'gasTypeIdModal'">
+      <h6>
+        Fuel
+        <br>
+        <small class="my-2">If needing to add a new fuel, please do so in the "Custom Materials" page or within a new assessment</small>
+        <br>
+        <small class="text-muted">
+          Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
+          are intended
+          to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+          fuel
+          compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+          edit
+          the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+        </small>
+      </h6>
+    </div>
+
   
   
     <div class="my-2" *ngIf="currentField == 'flueGasTemperature'">

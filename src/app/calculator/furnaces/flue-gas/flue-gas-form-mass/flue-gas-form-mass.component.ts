@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
+import { OperatingHours } from '../../../../shared/models/operations';
 import { FlueGas, FlueGasByMass, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
@@ -29,8 +30,6 @@ export class FlueGasFormMassComponent implements OnInit {
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   resetDataSub: Subscription;
-  generateExampleSub: Subscription;
-
   byMassForm: FormGroup;
   options: any;
 
@@ -43,7 +42,9 @@ export class FlueGasFormMassComponent implements OnInit {
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
   warnings: FlueGasWarnings;
+  showOperatingHoursModal: boolean;
 
+  formWidth: number;
   constructor(private flueGasService: FlueGasService,
               private flueGasFormService: FlueGasFormService,
               private phastService: PhastService, 
@@ -56,7 +57,6 @@ export class FlueGasFormMassComponent implements OnInit {
 
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
-    this.generateExampleSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -73,9 +73,6 @@ export class FlueGasFormMassComponent implements OnInit {
     this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
       this.setForm();
       })
-    this.generateExampleSub = this.flueGasService.generateExample.subscribe(value => {
-      this.setForm();
-    })
   }
 
   initFormSetup() {
@@ -111,6 +108,13 @@ export class FlueGasFormMassComponent implements OnInit {
   checkWarnings() {
     let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm).flueGasByMass;
     this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
+  }
+
+  setEnergySource(str: string) {
+    this.byMassForm.patchValue({
+      energySourceType: str
+    });
+    this.calculate();
   }
 
   setCalcMethod() {
@@ -168,17 +172,18 @@ export class FlueGasFormMassComponent implements OnInit {
   calculate() {
     this.byMassForm = this.flueGasFormService.setValidators(this.byMassForm);
     this.checkWarnings();
-    if (this.byMassForm.valid) {
-      let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
-      if (this.isBaseline) {
-        this.flueGasService.baselineData.next(currentDataByMass);
-      } else { 
-        this.flueGasService.modificationData.next(currentDataByMass);
-      }
+    let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
+    if (this.isBaseline) {
+      this.flueGasService.baselineData.next(currentDataByMass);
+    } else { 
+      this.flueGasService.modificationData.next(currentDataByMass);
     }
   }
 
   focusField(str: string) {
+    if (str === 'gasTypeId' && this.inModal) {
+      str = 'gasTypeIdModal'
+    }
     this.flueGasService.currentField.next(str);
   }
 
@@ -227,6 +232,28 @@ export class FlueGasFormMassComponent implements OnInit {
     this.materialModal.hide();
     this.flueGasService.modalOpen.next(false);
     this.calculate();
+  }
+
+  
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.flueGasService.operatingHours = oppHours;
+    this.byMassForm.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
+    this.calculate();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 
 }

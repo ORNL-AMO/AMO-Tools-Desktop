@@ -9,7 +9,6 @@ import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
 
 import { PHAST, PhastValid } from '../shared/models/phast/phast';
-import { WallLossesService } from './losses/wall-losses/wall-losses.service';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
 import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
 import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
@@ -20,6 +19,8 @@ import { SlagService } from './losses/slag/slag.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
+import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
+import { PhastResultsService } from './phast-results.service';
 import { LiquidMaterialFormService } from '../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
@@ -34,7 +35,7 @@ export class PhastValidService {
     private slagService: SlagService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
     private coolingLossesService: CoolingLossesService,
-    private wallLossesService: WallLossesService,
+    private wallFormService: WallFormService,
     private flueGasFormService: FlueGasFormService,
     private extendedSurfaceLossesService: ExtendedSurfaceLossesService,
     private operationsService: OperationsService,
@@ -47,7 +48,8 @@ export class PhastValidService {
     private phastService: PhastService,
     private liquidMaterialFormService: LiquidMaterialFormService,
     private gasMaterialFormService: GasMaterialFormService,
-    private solidMaterialFormService: SolidMaterialFormService
+    private solidMaterialFormService: SolidMaterialFormService,
+    private phastResultsService: PhastResultsService
   ) { }
 
 
@@ -119,13 +121,13 @@ export class PhastValidService {
         }
       });
     }
-    return valid
+    return valid;
   }
 
   checkInputExhaustValid(phast: PHAST): boolean {
     let valid = true;
-    if (phast.losses.exhaustGasEAF) {
-      phast.losses.exhaustGasEAF.forEach(loss => {
+    if (phast.losses.energyInputExhaustGasLoss) {
+      phast.losses.energyInputExhaustGasLoss.forEach(loss => {
         let exhaustGasForm: FormGroup = this.energyInputExhaustGasService.getFormFromLoss(loss);
         if (exhaustGasForm.status === 'INVALID') {
           valid = false;
@@ -211,7 +213,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.wallLosses) {
       phast.losses.wallLosses.forEach(loss => {
-        let wallForm: FormGroup = this.wallLossesService.getWallLossForm(loss);
+        let wallForm: FormGroup = this.wallFormService.getWallLossForm(loss);
         if (wallForm.status === 'INVALID') {
           valid = false;
         }
@@ -327,7 +329,7 @@ export class PhastValidService {
     if (phast.losses.energyInputEAF) {
       let minElectricityInput: number;
       if (phast.losses) {
-        minElectricityInput = this.phastService.getMinElectricityInputRequirement(phast.losses, settings);
+        minElectricityInput = this.phastResultsService.getMinElectricityInputRequirement(phast, settings);
       }
       phast.losses.energyInputEAF.forEach(loss => {
         let energyInputForm: FormGroup = this.energyInputService.getFormFromLoss(loss, minElectricityInput)

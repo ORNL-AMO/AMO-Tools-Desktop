@@ -426,7 +426,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
 
       this.nodes.push(
         {
-          name: this.getNameLabel("Electrical Energy", this.energyInput - this.exothermicHeat, totalInputValue),
+          name: this.getNameLabel("Heat Input", this.energyInput - this.exothermicHeat, totalInputValue),
           value: totalInputValue,
           x: .02,
           y: .5,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Plane } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
@@ -28,9 +28,13 @@ export class FanDataFormComponent implements OnInit {
   planeData: Plane;
   resetFormSubscription: Subscription;
   getResultsSubscription: Subscription;
-  constructor(private planeDataFormService: PlaneDataFormService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService, private fanAnalysisService: FanAnalysisService) { }
+  variationInBarometricPressure: boolean;
+  constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
+    if (this.fanAnalysisService.inputData.PlaneData) {
+      this.variationInBarometricPressure = this.fanAnalysisService.inputData.PlaneData.variationInBarometricPressure;
+    }
     this.setPlaneData();
     this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
     this.calcArea();
@@ -135,7 +139,7 @@ export class FanDataFormComponent implements OnInit {
   }
 
   setInternalDimensionAndClose(internalDimension: number) {
-    let controlName = this.currentDimension == 'Width'? 'width': 'length';
+    let controlName = this.currentDimension == 'Width' ? 'width' : 'length';
     this.dataForm.controls[controlName].patchValue(internalDimension);
     this.closeInternalDimensionModal();
   }
