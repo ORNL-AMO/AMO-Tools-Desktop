@@ -1,71 +1,54 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { ChargeMaterialCompareService } from '../charge-material-compare.service';
-import { ModalDirective } from 'ngx-bootstrap';
-import { LossesService } from '../../losses.service';
-import { Settings } from '../../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ModalDirective } from 'ngx-bootstrap';
+import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { LiquidLoadChargeMaterial } from '../../../../shared/models/materials';
-import { LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
-import { LiquidMaterialFormService, LiquidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
+import { ChargeMaterial, LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { Settings } from '../../../../shared/models/settings';
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { ChargeMaterialService } from '../charge-material.service';
+import { LiquidMaterialFormService, LiquidMaterialWarnings } from './liquid-material-form.service';
 
 @Component({
-  selector: 'app-liquid-charge-material-form',
-  templateUrl: './liquid-charge-material-form.component.html',
-  styleUrls: ['./liquid-charge-material-form.component.css']
+  selector: 'app-liquid-material-form',
+  templateUrl: './liquid-material-form.component.html',
+  styleUrls: ['./liquid-material-form.component.css']
 })
-export class LiquidChargeMaterialFormComponent implements OnInit {
-  @Input()
-  chargeMaterialForm: FormGroup;
-  @Output('calculate')
-  calculate = new EventEmitter<boolean>();
-  @Input()
-  baselineSelected: boolean;
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
-  @Output('saveEmit')
-  saveEmit = new EventEmitter<boolean>();
-  @Input()
-  lossIndex: number;
+export class LiquidMaterialFormComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Output('inputError')
-  inputError = new EventEmitter<boolean>();
-  @Input()
-  inSetup: boolean;
   @Input()
   isBaseline: boolean;
-
+  @Input()
+  selected: boolean;
+  @Input()
+  inModal: boolean;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
-  materialTypes: any;
-  selectedMaterial: any;
+  resetDataSub: Subscription;
+  generateExampleSub: Subscription;
 
+  chargeMaterialForm: FormGroup;
   warnings: LiquidMaterialWarnings;
-  showModal: boolean = false;
-  idString: string;
-  constructor(private suiteDbService: SuiteDbService, private liquidMaterialFormService: LiquidMaterialFormService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  selectedMaterialId: any;
+  selectedMaterial: any;
+  materialTypes: any;
+  showModal: boolean;
+  showFlueGasModal: boolean;
+  energySourceSub: Subscription;
+  energySourceType: string;
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.baselineSelected) {
-      if (!changes.baselineSelected.firstChange) {
-        if (!this.baselineSelected) {
-          this.disableForm();
-        } else {
-          this.enableForm();
-        }
-      }
-    }
-  }
+  constructor(private suiteDbService: SuiteDbService, 
+              private chargeMaterialService: ChargeMaterialService, 
+              private convertUnitsService: ConvertUnitsService,
+              private liquidMaterialFormService: LiquidMaterialFormService,
+              ) {}
 
   ngOnInit() {
-    if (!this.isBaseline) {
-      this.idString = 'phast_modification_solid_' + this.lossIndex;
-    }
-    else {
-      this.idString = 'phast_baseline_solid_' + this.lossIndex;
-    }
+    this.initSubscriptions();
     this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
@@ -74,33 +57,53 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         }
       }
     }
-    this.checkWarnings();
-    if (!this.baselineSelected) {
-      this.disableForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+        this.setFormState();
     }
   }
 
   ngOnDestroy() {
-    this.lossesService.modalOpen.next(false);
+    this.resetDataSub.unsubscribe();
+    this.generateExampleSub.unsubscribe();
+    this.energySourceSub.unsubscribe();
+    this.chargeMaterialService.modalOpen.next(false);
   }
 
-  disableForm() {
-    this.chargeMaterialForm.controls.materialId.disable();
-    this.chargeMaterialForm.controls.endothermicOrExothermic.disable();
+  initSubscriptions() {
+    this.resetDataSub = this.chargeMaterialService.resetData.subscribe(value => {
+      this.initForm();
+      });
+    this.generateExampleSub = this.chargeMaterialService.generateExample.subscribe(value => {
+      this.initForm();
+    });
+    this.energySourceSub = this.chargeMaterialService.energySourceType.subscribe(energySourceType => {
+      this.energySourceType = energySourceType;
+    });
   }
 
-  enableForm() {
-    this.chargeMaterialForm.controls.materialId.enable();
-    this.chargeMaterialForm.controls.endothermicOrExothermic.enable();
+  initForm() {
+    let updatedChargeMaterialData: ChargeMaterial;
+    if (this.isBaseline) {
+      updatedChargeMaterialData = this.chargeMaterialService.baselineData.getValue();
+    } else {
+      updatedChargeMaterialData = this.chargeMaterialService.modificationData.getValue();
+    }
+
+    if (updatedChargeMaterialData && updatedChargeMaterialData.liquidChargeMaterial) {
+      this.chargeMaterialForm = this.liquidMaterialFormService.getLiquidChargeMaterialForm(updatedChargeMaterialData, false);
+    } else {
+      this.chargeMaterialForm = this.liquidMaterialFormService.initLiquidForm();
+    }
+
+    this.checkWarnings();
+    this.calculate();
+    this.setFormState();
   }
 
-  focusField(str: string) {
-    this.changeField.emit(str);
-  }
-  focusOut() {
-    this.changeField.emit('default');
-  }
-
+  
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (this.settings.unitsOfMeasure === 'Metric') {
@@ -115,7 +118,19 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       materialSpecificHeatVapor: this.roundVal(selectedMaterial.specificHeatVapor, 4),
       materialVaporizingTemperature: this.roundVal(selectedMaterial.vaporizationTemperature, 4)
     });
-    this.save();
+    this.calculate();
+  }
+
+  setFormState() {
+    if (this.selected == false) {
+      this.chargeMaterialForm.disable();
+    } else {
+      this.chargeMaterialForm.enable();
+    }
+  }
+
+  focusField(str: string) {
+    this.chargeMaterialService.currentField.next(str);
   }
 
   roundVal(val: number, digits: number) {
@@ -126,18 +141,20 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   checkWarnings() {
     let tmpMaterial: LiquidChargeMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(this.chargeMaterialForm).liquidChargeMaterial;
     this.warnings = this.liquidMaterialFormService.checkLiquidWarnings(tmpMaterial);
-    let hasWarning: boolean = this.warnings.dischargeTempWarning !== undefined || this.warnings.inletOverVaporizingWarning !== undefined || this.warnings.outletOverVaporizingWarning !== undefined;
-    this.inputError.emit(hasWarning);
   }
 
-  save() {
+  calculate() {
     this.chargeMaterialForm = this.liquidMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     this.checkWarnings();
-    this.saveEmit.emit(true);
-    this.calculate.emit(true);
+    let chargeMaterial: ChargeMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(this.chargeMaterialForm);
+    if (this.isBaseline) {
+      this.chargeMaterialService.baselineData.next(chargeMaterial);
+    } else { 
+      this.chargeMaterialService.modificationData.next(chargeMaterial);
+    }
   }
-  
-  checkSpecificHeatDiffLiquid() {
+
+    checkSpecificHeatDiffLiquid() {
     let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
@@ -196,85 +213,15 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       }
     }
   }
-  checkFeedRateDiff() {
-    if (this.canCompare()) {
-      return this.chargeMaterialCompareService.compareLiquidChargeFeedRate(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-  canCompare() {
-    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials && !this.inSetup) {
-      if (this.chargeMaterialCompareService.compareMaterialType(this.lossIndex) === false) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-  checkInitialTempDiff() {
-    if (this.canCompare()) {
-      return this.chargeMaterialCompareService.compareLiquidInitialTemperature(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-  checkDischargeTempDiff() {
-    if (this.canCompare()) {
-      return this.chargeMaterialCompareService.compareLiquidDischargeTemperature(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-  checkChargeReactedDiff() {
-    if (this.canCompare()) {
-      return this.chargeMaterialCompareService.compareLiquidPercentReacted(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-  checkReactionHeatDiff() {
-    if (this.canCompare()) {
-      return this.chargeMaterialCompareService.compareLiquidReactionHeat(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-  checkExothermicDiff() {
-    if (this.canCompare()) {
-      return this.chargeMaterialCompareService.compareLiquidThermicReaction(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-  checkAdditionalHeatDiff() {
-    if (this.canCompare()) {
-      return this.chargeMaterialCompareService.compareLiquidAdditionalHeat(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-  checkLiquidVaporizedDiff() {
-    if (this.canCompare()) {
-      return this.chargeMaterialCompareService.compareLiquidPercentVaporized(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
-  checkMaterialDiff() {
-    if (this.canCompare()) {
-      return this.chargeMaterialCompareService.compareLiquidMaterialId(this.lossIndex);
-    } else {
-      return false;
-    }
-  }
+
+
+
   showMaterialModal() {
     this.showModal = true;
-    this.lossesService.modalOpen.next(true);
+    this.chargeMaterialService.modalOpen.next(true);
     this.materialModal.show();
   }
+
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
@@ -286,8 +233,29 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         this.setProperties();
       }
     }
-    this.materialModal.hide();
     this.showModal = false;
-    this.lossesService.modalOpen.next(false);
+    this.materialModal.hide();
+    this.chargeMaterialService.modalOpen.next(false);
+  }
+
+  initFlueGasModal() {
+    this.showFlueGasModal = true;
+    this.chargeMaterialService.modalOpen.next(this.showFlueGasModal);
+    this.flueGasModal.show();
+  }
+
+  hideFlueGasModal(calculatedAvailableHeat?: any) {
+    if (calculatedAvailableHeat) {
+      calculatedAvailableHeat = this.roundVal(calculatedAvailableHeat, 1);
+      this.chargeMaterialForm.patchValue({
+        availableHeat: calculatedAvailableHeat
+      });
+    }
+    this.flueGasModal.hide();
+    this.showFlueGasModal = false;
+    this.chargeMaterialService.modalOpen.next(this.showFlueGasModal);
   }
 }
+
+
+
