@@ -26,6 +26,8 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   assessment: Assessment;
   @Input()
   appBackground: boolean;
+  @Input()
+  labelStyle: string;
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
 
   losses: SSMTLosses;
@@ -62,9 +64,15 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.ssmt.firstChange) {
+    if (changes.ssmt && !changes.ssmt.firstChange) {
       if (this.ssmt.setupDone) {
         this.getLosses();
+        this.initSankeySetup();
+        this.renderSankey();
+      }
+    }
+    if (changes.labelStyle && !changes.labelStyle.firstChange) {
+      if (this.ssmt.setupDone) {
         this.initSankeySetup();
         this.renderSankey();
       }
@@ -289,7 +297,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let currentSourceIndex = 4;
     this.nodes.push(
       {
-        name: "Energy " + this.decimalPipe.transform(originalEnergyInput, '1.0-0') + `  ${this.units}/hr`,
+        name: this.getNameLabel("Energy", originalEnergyInput, 100),
         value: 100,
         x: .05,
         y: .6,
@@ -339,7 +347,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       if (stackLossValue > this.minPlotlyDisplayValue) {
         this.nodes.push(
           {
-            name: "Stack Loss " + this.decimalPipe.transform(stackLosses, '1.0-0') + `  ${this.units}/hr`,
+            name: this.getNameLabel("Stack Loss", stackLosses, stackLossValue),
             value: stackLossValue,
             x: .5,
             y: .1,
@@ -368,7 +376,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       if (otherLossValue > this.minPlotlyDisplayValue) {
         this.nodes.push(
           {
-            name: "Other Losses " + this.decimalPipe.transform(otherLosses, '1.0-0') + `  ${this.units}/hr`,
+            name: this.getNameLabel("Other Losses", otherLosses, otherLossValue),
             value: otherLossValue,
             x: .55,
             y: .3,
@@ -397,7 +405,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       if (turbineLossValue > this.minPlotlyDisplayValue) {
         this.nodes.push(
           {
-              name: "Turbine Losses " + this.decimalPipe.transform(turbineLosses, '1.0-0') + `  ${this.units}/hr`,
+              name: this.getNameLabel("Turbine Losses", turbineLosses, turbineLossValue),
               value: turbineLossValue,
               x: .6,
               y: .2,
@@ -428,7 +436,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       if (turbineGenerationValue > this.minPlotlyDisplayValue) {
         this.nodes.push(
           {
-            name: "Turbine Generation " + this.decimalPipe.transform(turbineGeneration, '1.0-0') + `  ${this.units}/hr`,
+            name: this.getNameLabel("Turbine Generation", turbineGeneration, turbineGenerationValue),
             value: turbineGenerationValue,
             x: .8,
             y: .4,
@@ -457,7 +465,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       if (processUsageValue > this.minPlotlyDisplayValue) {
         this.nodes.push(
           {
-            name: "Process Usage " + this.decimalPipe.transform(processUsage, '1.0-0') + `  ${this.units}/hr`,
+            name: this.getNameLabel("Process Usage", processUsage, processUsageValue),
             value: processUsageValue,
             x: .85,
             y: .6,
@@ -486,7 +494,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       if (unreturnedCondensateValue > this.minPlotlyDisplayValue) {
         this.nodes.push(
           {
-            name: "Unreturned Condensate " + this.decimalPipe.transform(unreturnedCondensate, '1.0-0') + `  ${this.units}/hr`,
+            name: this.getNameLabel("Unreturned Condensate", unreturnedCondensate, unreturnedCondensateValue),
             value: unreturnedCondensateValue,
             x: .8,
             y: .75,
@@ -524,7 +532,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       if (remainingEnergyValue > this.minPlotlyDisplayValue) {
         this.nodes.push(
           {
-            name: "Remaining Energy " + this.decimalPipe.transform(remainingEnergy, '1.0-0') + `  ${this.units}/hr`,
+            name: this.getNameLabel("Remaining Energy", remainingEnergy, remainingEnergyValue),
             value: remainingEnergyValue,
             x: .8,
             y: .8,
@@ -552,7 +560,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       if (returnedCondensateValue > this.minPlotlyDisplayValue) {
         this.nodes.push(
           {
-            name: "Returned Condensate " + this.decimalPipe.transform(returnedCondensate, '1.0-0') + `  ${this.units}/hr`,
+            name: this.getNameLabel("Returned Condensate", returnedCondensate, returnedCondensateValue),
             value: returnedCondensateValue,
             x: .8,
             y: .95,
@@ -593,6 +601,18 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }
     return this.nodes;
+  }
+
+  getNameLabel(lossName: string, loss: number, lossValue: number) {
+    let nameLabel: string;
+    if (this.labelStyle == 'both') {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-0')} ${this.units}/hr (${this.decimalPipe.transform(lossValue, '1.1-1')}%)`
+    } else if (this.labelStyle == 'energy') {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-0')} ${this.units}/hr`
+    } else {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(lossValue, '1.1-1')}%`
+    }
+    return nameLabel;
   }
 
   addGradientElement(): void {

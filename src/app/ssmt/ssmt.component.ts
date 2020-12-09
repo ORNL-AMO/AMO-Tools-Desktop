@@ -70,7 +70,10 @@ export class SsmtComponent implements OnInit {
   showToast: boolean = false;
 
   ssmtOptions: Array<any>;
-  selectedSSMT: SSMT;
+  selectedSSMT: {ssmt: SSMT, name};
+
+  sankeyLabelStyle: string = 'both';
+  showSankeyLabelOptions: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -208,11 +211,16 @@ export class SsmtComponent implements OnInit {
     this.ssmtOptions = new Array<any>();
     this.ssmtOptions.push({ name: 'Baseline', ssmt: this.assessment.ssmt });
     this.selectedSSMT = this.ssmtOptions[0];
+    this.showSankeyLabelOptions = ((this.selectedSSMT.ssmt.name == 'Baseline' || this.selectedSSMT.ssmt.name == null) && this.selectedSSMT.ssmt != undefined) || (this.selectedSSMT.ssmt.valid && this.selectedSSMT.ssmt.valid.isValid);
     if (this._ssmt.modifications) {
       this._ssmt.modifications.forEach(mod => {
         this.ssmtOptions.push({ name: mod.ssmt.name, ssmt: mod.ssmt });
       });
     }
+  }
+
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle = style;
   }
 
   getSettings() {
