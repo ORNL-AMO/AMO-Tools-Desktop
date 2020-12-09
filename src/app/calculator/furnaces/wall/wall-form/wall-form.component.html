@@ -3,9 +3,9 @@
 
        <div class="d-flex flex-column w-100 justify-content-center pb-3">
          <div class="btn-group btn-group-sm align-self-center">
-           <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Fuel')" [ngClass]="{'active': wallLossesForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
-           <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Electricity')" [ngClass]="{'active': wallLossesForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
-           <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Steam')" [ngClass]="{'active':  wallLossesForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+           <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Fuel')" [ngClass]="{'active': wallLossesForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+           <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Electricity')" [ngClass]="{'active': wallLossesForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+           <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Steam')" [ngClass]="{'active':  wallLossesForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
          </div>
        </div>
   
