@@ -386,7 +386,7 @@ export class PhastService {
     return phastAddon.flueGasByMassCalculateO2(input);
   }
 
-  atmosphere(input: AtmosphereLoss, settings: Settings) {
+  atmosphere(input: AtmosphereLoss, settings: Settings, calculatorEnergyUnit = '') {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -398,7 +398,9 @@ export class PhastService {
     } else {
       results = phastAddon.atmosphere(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    results = this.convertResult(results, conversionUnit);
     return results;
   }
 
