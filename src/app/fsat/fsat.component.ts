@@ -71,8 +71,11 @@ export class FsatComponent implements OnInit {
 
   fsatOptions: Array<any>;
   fsatOptionsLength: number;
-  fsat1: FSAT;
-  fsat2: FSAT;
+
+  sankeyLabelStyle: string = 'both';
+  showSankeyLabelOptions: boolean;
+  fsat1: {fsat: FSAT, name: string};
+  fsat2: {fsat: FSAT, name: string};
   //exploreOppsToast: boolean = false;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
@@ -205,6 +208,7 @@ export class FsatComponent implements OnInit {
     this.fsatOptions = new Array<any>();
     this.fsatOptions.push({ name: 'Baseline', fsat: this._fsat });
     this.fsat1 = this.fsatOptions[0];
+    this.showSankeyLabelOptions = ((this.fsat1.name == 'Baseline' || this.fsat1.name == null) && this.fsat1.fsat.setupDone) || (this.fsat1.fsat.valid && this.fsat1.fsat.valid.isValid);
     if (this._fsat.modifications) {
       this._fsat.modifications.forEach(mod => {
         this.fsatOptions.push({ name: mod.fsat.name, fsat: mod.fsat });
@@ -212,6 +216,10 @@ export class FsatComponent implements OnInit {
       this.fsat2 = this.fsatOptions[1];
     }
     this.fsatOptionsLength = this.fsatOptions.length;
+  }
+
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle = style;
   }
 
 
