@@ -46,8 +46,11 @@ export class PsatComponent implements OnInit {
   //TODO: move this and sankey choosing logic oput of this component
   psatOptions: Array<any>;
   psatOptionsLength: number;
-  psat1: PSAT;
-  psat2: PSAT;
+  psat1: {name: string, psat: PSAT};
+  psat2: {name: string, psat: PSAT};
+
+  sankeyLabelStyle: string = 'both';
+  showSankeyLabelOptions: boolean;
 
   _psat: PSAT;
   settings: Settings;
@@ -222,6 +225,7 @@ export class PsatComponent implements OnInit {
     this.psatOptions = new Array<any>();
     this.psatOptions.push({ name: 'Baseline', psat: this._psat });
     this.psat1 = this.psatOptions[0];
+    this.showSankeyLabelOptions = ((this.psat1.name == 'Baseline' || this.psat1.name == null) && this.psat1.psat.setupDone) || (this.psat1.psat.valid && this.psat1.psat.valid.isValid);
     if (this._psat.modifications) {
       this._psat.modifications.forEach(mod => {
         this.psatOptions.push({ name: mod.psat.name, psat: mod.psat });
@@ -229,6 +233,10 @@ export class PsatComponent implements OnInit {
       this.psat2 = this.psatOptions[1];
       this.psatOptionsLength = this.psatOptions.length;
     }
+  }
+
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle = style;
   }
 
   getSettings() {
