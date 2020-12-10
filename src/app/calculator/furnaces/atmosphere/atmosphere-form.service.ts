@@ -46,7 +46,6 @@ export class AtmosphereFormService {
       formGroup.addControl('fuelCost', new FormControl(loss.fuelCost));
     }
     
-    // formGroup = this.setInletTemperatureValidators(formGroup);
     return formGroup;
   }
 
@@ -72,21 +71,8 @@ export class AtmosphereFormService {
     return tmpLoss;
   }
 
-  // setInletTemperatureValidators(formGroup: FormGroup) {
-  //   let inletTemp = formGroup.controls.inletTemp.value;
-  //   if (inletTemp) {
-  //     formGroup.controls.inletTemp.setValidators([Validators.required, Validators.max(formGroup.controls.outletTemp.value)]);
-  //     formGroup.controls.inletTemp.updateValueAndValidity();
-  //     formGroup.controls.inletTemp.markAsDirty();
-  //   }
-  //   return formGroup;
-  // }
-
-
   checkWarnings(loss: AtmosphereLoss): AtmosphereLossWarnings {
     return {
-      // specificHeatWarning: this.checkSpecificHeat(loss),
-      // flowRateWarning: this.checkFlowRate(loss),
       temperatureWarning: this.checkTempError(loss)
     };
   }
@@ -98,21 +84,6 @@ export class AtmosphereFormService {
       return null;
     }
   }
-  checkSpecificHeat(loss: AtmosphereLoss) {
-    if (loss.specificHeat < 0) {
-      return 'Specific Heat must be greater than 0';
-    } else {
-      return null;
-    }
-  }
-  checkFlowRate(loss: AtmosphereLoss): string {
-    if (loss.flowRate < 0) {
-      return 'Flow Rate must be greater than 0';
-    } else {
-      return null;
-    }
-  }
-
 }
 
 export interface AtmosphereLossWarnings {

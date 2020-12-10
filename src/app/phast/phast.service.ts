@@ -37,6 +37,7 @@ import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/ma
 import { StepTab, stepTabs, specTabs } from './tabs';
 import * as _ from 'lodash';
 import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
+import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
 @Injectable()
 export class PhastService {
 
@@ -50,7 +51,7 @@ export class PhastService {
   constructor(
     private openingLossesService: OpeningLossesService,
     private convertUnitsService: ConvertUnitsService,
-    private atmosphereLossesService: AtmosphereLossesService,
+    private atmosphereFormService: AtmosphereFormService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
     private chargeMaterialService: ChargeMaterialService,
     private coolingLossesService: CoolingLossesService,
@@ -634,7 +635,7 @@ export class PhastService {
   sumAtmosphereLosses(losses: AtmosphereLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.atmosphereLossesService.getAtmosphereForm(loss);
+      let tmpForm = this.atmosphereFormService.getAtmosphereForm(loss);
       if (tmpForm.status === 'VALID') {
         sum += this.atmosphere(loss, settings);
       }

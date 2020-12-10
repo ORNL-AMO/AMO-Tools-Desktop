@@ -78,7 +78,6 @@
         <span *ngIf="atmosphereLossForm.controls.specificHeat.errors.greaterThan == 0">Value must be greater than than
           0.</span>
       </span>
-        <!-- <span class="alert-warning pull-right small" *ngIf="warnings.specificHeatWarning !== null">{{warnings.specificHeatWarning}}</span> -->
       </div>
   
   
@@ -90,15 +89,10 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
-        <!-- <span class="alert-danger pull-right small"
-        *ngIf="atmosphereLossForm.controls.inletTemp.invalid && !atmosphereLossForm.controls.inletTemp.pristine">
-        <span *ngIf="atmosphereLossForm.controls.inletTemp.errors.required">Value Required</span>
-          <span *ngIf="atmosphereLossForm.controls.inletTemp.errors.max">Value can't be greater than
-            {{atmosphereLossForm.controls.inletTemp.errors.max.max}} 
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
-          </span>
-      </span> -->
+        <span class="alert-danger pull-right small"
+          *ngIf="atmosphereLossForm.controls.inletTemp.invalid && !atmosphereLossForm.controls.inletTemp.pristine">
+          <span *ngIf="atmosphereLossForm.controls.inletTemp.errors.required">Value Required</span>
+        </span>
         <span class="alert-warning pull-right small" *ngIf="warnings.temperatureWarning !== null">{{warnings.temperatureWarning}}</span>
       </div>
   
@@ -110,6 +104,10 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="atmosphereLossForm.controls.outletTemp.invalid && !atmosphereLossForm.controls.outletTemp.pristine">
+        <span *ngIf="atmosphereLossForm.controls.outletTemp.errors.required">Value Required</span>
+      </span>
         <span class="alert-warning pull-right small" *ngIf="warnings.temperatureWarning !== null">{{warnings.temperatureWarning}}</span>
       </div>
   
@@ -130,7 +128,6 @@
         <span *ngIf="atmosphereLossForm.controls.flowRate.errors.greaterThan == 0">Value must be greater than
           0.</span>
       </span>
-        <!-- <span class="alert-warning pull-right small" *ngIf="warnings.flowRateWarning !== null">{{warnings.flowRateWarning}}</span> -->
       </div>
   
       <div class="form-group">
@@ -138,6 +135,10 @@
         <input name="{{'correctionFactor_'+lossIndex}}" type="number" min="0" step="any" class="form-control"
           formControlName="correctionFactor" id="{{'correctionFactor'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('correctionFactor')"
            >
+           <span class="alert-danger pull-right small"
+           *ngIf="atmosphereLossForm.controls.correctionFactor.invalid && !atmosphereLossForm.controls.correctionFactor.pristine">
+           <span *ngIf="atmosphereLossForm.controls.correctionFactor.errors.required">Value Required</span>
+         </span>
       </div>
 
       <div class="form-group">

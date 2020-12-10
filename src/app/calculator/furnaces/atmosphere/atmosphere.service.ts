@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../shared/models/operations';
 import { AtmosphereLoss, AtmosphereLossOutput, AtmosphereLossResults } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../shared/models/settings';
@@ -22,7 +21,7 @@ export class AtmosphereService {
   operatingHours: OperatingHours;
 
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private convertUnitsService: ConvertUnitsService, private atmosphereFormService: AtmosphereFormService, private phastService: PhastService) {
+  constructor(private atmosphereFormService: AtmosphereFormService, private phastService: PhastService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
     this.baselineData = new BehaviorSubject<AtmosphereLoss>(undefined);

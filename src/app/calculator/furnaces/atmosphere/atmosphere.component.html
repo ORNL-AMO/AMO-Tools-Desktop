@@ -126,7 +126,7 @@
   
 		<!-- help panel -->
 		<div class="col-4 p-0 help-panel">
-		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
+		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}" [ngStyle]="{'height.px': containerHeight}">
 			<div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
 				<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
 				  <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
@@ -141,11 +141,9 @@
 				</div>
 			  </div>
   
-			<div class="p-2">
-			<app-atmosphere-results class="w-100" *ngIf="tabSelect == 'results'" [settings]="settings" 
+			<app-atmosphere-results class="w-100 p-2" *ngIf="tabSelect == 'results'" [settings]="settings" 
 				[modificationExists]="modificationExists"></app-atmosphere-results>
-			<app-atmosphere-help *ngIf="tabSelect == 'help'" [settings]="settings"></app-atmosphere-help>
-			</div>
+			<app-atmosphere-help class="p-2" *ngIf="tabSelect == 'help'" [settings]="settings"></app-atmosphere-help>
 		  </div>
 		</div>
   
