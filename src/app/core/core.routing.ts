@@ -86,6 +86,7 @@ import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing
 import { WallComponent } from '../calculator/furnaces/wall/wall.component';
 import { FlueGasComponent } from '../calculator/furnaces/flue-gas/flue-gas.component';
 import { AtmosphereComponent } from '../calculator/furnaces/atmosphere/atmosphere.component';
+import { ChargeMaterialComponent } from '../calculator/furnaces/charge-material/charge-material.component';
 
 export const coreRoutes: Routes = [
   {
@@ -333,6 +334,10 @@ export const coreRoutes: Routes = [
           {
             path: 'flue-gas',
             component: FlueGasComponent
+          },
+          {
+            path: 'charge-material',
+            component: ChargeMaterialComponent
           },
           {
             path: 'achievable-efficiency',

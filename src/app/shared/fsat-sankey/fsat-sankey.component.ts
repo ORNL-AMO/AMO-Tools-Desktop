@@ -24,6 +24,8 @@ export class FsatSankeyComponent implements OnInit {
   appBackground: boolean;
   @Input()
   printView: boolean;
+  @Input()
+  labelStyle: string;
 
   @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
   energyInput: number;
@@ -63,6 +65,11 @@ export class FsatSankeyComponent implements OnInit {
         if (this.fsat.valid.isValid) {
           this.sankey();
         }
+      }
+    }
+    if (changes.labelStyle && !changes.labelStyle.firstChange) {
+      if (this.fsat.valid.isValid) {
+        this.sankey();
       }
     }
   }
@@ -236,10 +243,15 @@ export class FsatSankeyComponent implements OnInit {
       this.connectingNodes = [0,1,2];
       usefulOutput = motorConnectorValue - this.fanLosses;
     }
+
+    let motorLossesValue = (this.motorLosses / this.energyInput) * 100;
+    let driveLossesValue = (this.driveLosses / this.energyInput) * 100;
+    let fanLossesValue = (this.fanLosses / this.energyInput) * 100;
+    let usefulOutputValue = (usefulOutput / this.energyInput) * 100;
     
     nodes.push(
       {
-        name: 'Energy Input ' + this.decimalPipe.transform(this.energyInput, '1.0-0') + ' kW',
+        name: this.getNameLabel("Energy Input", this.energyInput, 100),
         value: 100,
         loss: this.energyInput,
         x: .1,
@@ -275,8 +287,8 @@ export class FsatSankeyComponent implements OnInit {
         id: 'motorConnector'
       },
       {
-        name: 'Motor Losses ' + this.decimalPipe.transform(this.motorLosses, '1.0-0') + ' kW',
-        value: (this.motorLosses / this.energyInput) * 100,
+        name: this.getNameLabel("Motor Losses", this.motorLosses, motorLossesValue),
+        value: motorLossesValue,
         loss: this.motorLosses,
         x: .5,
         y: .10, 
@@ -290,8 +302,8 @@ export class FsatSankeyComponent implements OnInit {
     if (this.driveLosses > 0) {
       nodes.push(
         {
-          name: 'Drive Losses ' + this.decimalPipe.transform(this.driveLosses, '1.0-0') + ' kW',
-          value: (this.driveLosses / this.energyInput) * 100,
+          name: this.getNameLabel("Drive Losses", this.driveLosses, driveLossesValue),
+          value: driveLossesValue,
           loss: this.driveLosses,
           x: .6,
           y: .25,
@@ -317,8 +329,8 @@ export class FsatSankeyComponent implements OnInit {
     }
     nodes.push(
       {
-        name: 'Fan Losses ' + this.decimalPipe.transform(this.fanLosses, '1.0-0') + ' kW',
-        value: (this.fanLosses / this.energyInput) * 100,
+        name: this.getNameLabel("Fan Losses", this.fanLosses, fanLossesValue),
+        value: fanLossesValue,
         loss: this.fanLosses,
         x: .8,
         y: .15, 
@@ -329,8 +341,8 @@ export class FsatSankeyComponent implements OnInit {
         id: 'fanLosses'
       },
       {
-        name: 'Useful Output ' + this.decimalPipe.transform(usefulOutput, '1.0-0') + ' kW',
-        value: (usefulOutput / this.energyInput) * 100,
+        name: this.getNameLabel("Useful Output", usefulOutput, usefulOutputValue),
+        value: usefulOutputValue,
         loss: usefulOutput,
         x: .85,
         y: .65, 
@@ -342,6 +354,18 @@ export class FsatSankeyComponent implements OnInit {
       }
     );
     return nodes;
+  }
+
+  getNameLabel(lossName: string, loss: number, lossValue: number) {
+    let nameLabel: string;
+    if (this.labelStyle == 'both') {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-0')} kW/hr (${this.decimalPipe.transform(lossValue, '1.1-1')}%)`
+    } else if (this.labelStyle == 'power') {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-0')} kW/hr`
+    } else {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(lossValue, '1.1-1')}%`
+    }
+    return nameLabel;
   }
 
   buildSvgArrows() {

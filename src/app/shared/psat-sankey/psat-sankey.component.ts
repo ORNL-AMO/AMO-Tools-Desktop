@@ -37,6 +37,8 @@ export class PsatSankeyComponent implements OnInit {
   validPsat: PsatValid;
   @Input()
   printView: boolean;
+  @Input()
+  labelStyle: string;
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
 
   selectedResults: PsatOutputs;
@@ -80,6 +82,7 @@ export class PsatSankeyComponent implements OnInit {
     this.checkPsatChanges(changes);
     this.checkExploreOppsBaselineChanges(changes);
     this.checkExploreOppsModChanges(changes);
+    this.checkLabelStyleChanges(changes);
   }
 
   checkPsatChanges(changes: SimpleChanges) {
@@ -89,6 +92,14 @@ export class PsatSankeyComponent implements OnInit {
         if (this.validPsat.isValid) {
           this.sankey(this.selectedResults);
         }
+      }
+    }
+  }
+
+  checkLabelStyleChanges(changes: SimpleChanges) {
+    if (changes.labelStyle && !changes.labelStyle.firstChange) {
+      if (this.validPsat.isValid) {
+        this.sankey(this.selectedResults);
       }
     }
   }
@@ -289,9 +300,14 @@ export class PsatSankeyComponent implements OnInit {
       usefulOutput = motorConnectorValue - this.pump;
     }
 
+    let motorLossValue = (this.motor / results.motor_power) * 100;
+    let driveLossValue = (this.drive / results.motor_power) * 100;
+    let pumpLossValue = (this.pump / results.motor_power) * 100;
+    let usefulOutputValue = (usefulOutput / results.motor_power) * 100;
+
     nodes.push(
       {
-        name: "Energy Input " + this.decimalPipe.transform(results.motor_power, '1.0-0') + " kW",
+        name: this.getNameLabel("Energy Input", results.motor_power, 100),
         value: 100,
         x: .1,
         y: .6,
@@ -327,8 +343,8 @@ export class PsatSankeyComponent implements OnInit {
         id: 'motorConnector'
       },
       {
-        name: "Motor Losses " + this.decimalPipe.transform(this.motor, '1.0-0') + " kW",
-        value: (this.motor / results.motor_power) * 100,
+        name: this.getNameLabel("Motor Losses", results.motor_power, motorLossValue),
+        value: motorLossValue,
         x: .5,
         y: .10,
         source: 3,
@@ -342,8 +358,8 @@ export class PsatSankeyComponent implements OnInit {
     if (this.drive > 0) {
       nodes.push(
         {
-          name: "Drive Losses " + this.decimalPipe.transform(this.drive, '1.0-0') + " kW",
-          value: (this.drive / results.motor_power) * 100,
+          name: this.getNameLabel("Drive Losses", this.drive, driveLossValue),
+          value: driveLossValue,
           x: .6,
           y: .25,
           source: 4,
@@ -369,8 +385,8 @@ export class PsatSankeyComponent implements OnInit {
     }
     nodes.push(
       {
-        name: "Pump Losses " + this.decimalPipe.transform(this.pump, '1.0-0') + " kW",
-        value: (this.pump / results.motor_power) * 100,
+        name: this.getNameLabel("Pump Losses", this.pump, pumpLossValue),
+        value: pumpLossValue,
         x: .8,
         y: .15,
         source: this.drive > 0 ? 6 : 4,
@@ -381,7 +397,7 @@ export class PsatSankeyComponent implements OnInit {
         id: 'pumpLosses'
       },
       {
-        name: "Useful Output " + this.decimalPipe.transform(usefulOutput, '1.0-0') + " kW",
+        name: this.getNameLabel("Useful Output", usefulOutput, usefulOutputValue),
         value: (usefulOutput / results.motor_power) * 100,
         x: .85,
         y: .65,
@@ -395,6 +411,20 @@ export class PsatSankeyComponent implements OnInit {
     );
     return nodes;
   }
+
+  
+  getNameLabel(lossName: string, loss: number, lossValue: number) {
+    let nameLabel: string;
+    if (this.labelStyle == 'both') {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-0')} kW/hr (${this.decimalPipe.transform(lossValue, '1.1-1')}%)`
+    } else if (this.labelStyle == 'power') {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(loss, '1.0-0')} kW/hr`
+    } else {
+      nameLabel = `${lossName} ${this.decimalPipe.transform(lossValue, '1.1-1')}%`
+    }
+    return nameLabel;
+  }
+
 
   buildSvgArrows() {
     const rects = this._dom.nativeElement.querySelectorAll('.node-rect');
