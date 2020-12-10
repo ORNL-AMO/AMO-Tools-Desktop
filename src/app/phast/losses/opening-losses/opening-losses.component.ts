@@ -115,6 +115,7 @@ export class OpeningLossesComponent implements OnInit {
   }
 
   calculate(loss: OpeningLossObj) {
+    console.log(this._openingLosses);
     if (loss.form.status === 'VALID') {
       if (loss.form.controls.openingType.value === 'Rectangular (or Square)' && loss.form.controls.heightOfOpening.value !== '') {
         let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
