@@ -1,1 +1,220 @@
-<p>opening-form works!</p>
+<form [formGroup]="openingLossesForm">
+    <div class="form-section">
+
+      <div class="d-flex flex-column w-100 justify-content-center pb-3">
+        <div class="btn-group btn-group-sm align-self-center">
+          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Fuel')" [ngClass]="{'active': openingLossesForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Electricity')" [ngClass]="{'active': openingLossesForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+          <button type="button" [disabled]="!isBaseline && openingLossesForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Steam')" [ngClass]="{'active':  openingLossesForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+        </div>
+      </div>
+ 
+      <div class="form-group">
+        <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
+        <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
+            formControlName="hoursPerYear" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
+           onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="openingLossesForm.controls.hoursPerYear.invalid && !openingLossesForm.controls.hoursPerYear.pristine">
+          <span *ngIf="openingLossesForm.controls.hoursPerYear.errors.required">Value required.</span>
+          <span *ngIf="openingLossesForm.controls.hoursPerYear.errors.max">Value can't be greater than
+            {{openingLossesForm.controls.hoursPerYear.errors.max.max}}.</span>
+          <span *ngIf="openingLossesForm.controls.hoursPerYear.errors.min">Value can't be less than
+            {{openingLossesForm.controls.hoursPerYear.errors.min.min}}.</span>
+        </span>
+      </div>
+ 
+      <div class="form-group">
+        <label class="small" for="fuelCost">
+          <span *ngIf="openingLossesForm.controls.energySourceType.value == 'Electricity'">
+           Energy Cost
+          </span>
+         <span *ngIf="openingLossesForm.controls.energySourceType.value != 'Electricity'">
+           Fuel Cost
+         </span> 
+         </label>
+        <div class="input-group">
+          <input name="fuelCost" type="number" class="form-control"
+          formControlName="fuelCost" id="fuelCost" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('fuelCost')" >
+          <span class="input-group-addon units">$/<span [innerHTML]="energyUnit | settingsLabel"></span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="openingLossesForm.controls.fuelCost.invalid && !openingLossesForm.controls.fuelCost.pristine">
+          <span *ngIf="openingLossesForm.controls.fuelCost.errors.required">Value Required</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label class="small" for="{{'type'+idString}}">Select Type</label>
+        <select name="{{'openingType_'+lossIndex}}" class="form-control" formControlName="openingType" id="{{'type'+idString}}"
+          (change)="calculate()" (focus)="focusField('openingType')" >
+          <option>Round</option>
+          <option>Rectangular (or Square)</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'numberOfOpenings'+idString}}" aria-describedby="numberOfOpeningsHelp">Number of
+          Openings
+          <small id="numberOfOpeningsHelp" class="form-text text-muted text-help">Same Size and Shape</small>
+        </label>
+  
+        <input  name="{{'numberOfOpenings_'+lossIndex}}" type="number" step="any" min="0"
+          class="form-control" formControlName="numberOfOpenings" id="{{'numberOfOpenings'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('numberOfOpenings')" >
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'wallThickness'+idString}}">Furnace Wall Thickness</label>
+        <div class="input-group">
+          <input  name="{{'wallThickness_'+lossIndex}}" type="number" step="any" min="0"
+            class="form-control" formControlName="wallThickness" id="{{'wallThickness'+idString}}" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('wallThickness')" >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label *ngIf="openingLossesForm.controls.openingType.value != 'Round'" class="small" for="{{'lengthOfOpening'+idString}}">Length
+          of Openings</label>
+        <label *ngIf="openingLossesForm.controls.openingType.value == 'Round'" class="small" for="{{'lengthOfOpening'+idString}}">Diameter
+          of Openings</label>
+        <div class="input-group">
+          <input  name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" min="0"
+            class="form-control" formControlName="lengthOfOpening" id="{{'lengthOfOpening'+idString}}" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('lengthOfOpening')" >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
+        </div>
+      </div>
+  
+      <div class="form-group" *ngIf="openingLossesForm.controls.openingType.value != 'Round'">
+        <label class="small" for="{{'heightOfOpening'+idString}}">Height of Openings</label>
+        <div class="input-group">
+          <input  name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" min="0"
+            class="form-control" formControlName="heightOfOpening" id="{{'heightOfOpening'+idString}}" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('heightOfOpening')" >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label class="small">Total Opening Area</label>
+        <div class="text-center small">
+          {{totalArea | number:'2.2-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft
+            <sup>2</sup>
+          </span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m
+            <sup>2</sup>
+          </span>
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'viewFactor'+idString}}" aria-describedby="viewFactorHelp">View Factor
+          <!-- <a id="{{'viewFactor_'+lossIndex}}" class="form-text small click-link" (click)="calculateViewFactor()">Calculate View Factor</a> -->
+        </label>
+  
+        <input  name="{{'viewFactor_'+lossIndex}}" type="number" step="0.1" min="0" max="1"
+          class="form-control" formControlName="viewFactor" id="{{'viewFactor'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('viewFactor')" >
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'insideTemp'+idString}}">Avg. Zone or Radiation Source Temp.</label>
+        <div class="input-group">
+          <input  name="{{'insideTemp_'+lossIndex}}" type="number" step="10" class="form-control"
+            formControlName="insideTemp" id="{{'insideTemp'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('insideTemp')"
+            >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'ambientTemp'+idString}}">Ambient Temp.</label>
+        <div class="input-group">
+          <input  name="{{'ambientTemp_'+lossIndex}}" type="number" step="10" class="form-control"
+            formControlName="ambientTemp" id="{{'ambientTemp'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('ambientTemp')"
+            >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'emissivity'+idString}}" aria-describedby="emissivityHelp">Emissivity of the Source
+          <small id="emissivityHelp" class="form-text text-muted text-help">Typical - 0.9</small>
+        </label>
+        <input  name="{{'emissivity_'+lossIndex}}" type="number" step="0.1" min="0" max="1"
+          class="form-control" formControlName="emissivity" id="{{'emissivity'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('emissivity')"  >
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'percentTimeOpen'+idString}}">% of Time Open</label>
+        <div class="input-group" >
+          <input  name="{{'percentTimeOpen_'+lossIndex}}" type="number" step="1" min="0"
+            max="100" class="form-control" formControlName="percentTimeOpen" id="{{'percentTimeOpen'+idString}}" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('percentTimeOpen')" >
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+
+      
+      <div class="form-group">
+        <label class="small" for="{{'availableHeat'+idString}}">
+          <span *ngIf="openingLossesForm.controls.energySourceType.value != 'Steam'">
+            Available Heat
+          </span>
+          <span *ngIf="openingLossesForm.controls.energySourceType.value == 'Steam'">
+            Boiler Efficiency
+          </span>
+          <a *ngIf="openingLossesForm.controls.energySourceType.value != 'Electricity'" id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
+          <a *ngIf="openingLossesForm.controls.energySourceType.value == 'Electricity'" id="materialHelp" disabled class="disabled form-text small">Calculate</a>
+        </label>
+        <div class="input-group">
+          <input  name="{{'availableHeat'+lossIndex}}" type="number" step="any" min="0"
+          class="form-control" formControlName="availableHeat" id="{{'availableHeat'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('availableHeat')">
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="openingLossesForm.controls.availableHeat.invalid && !openingLossesForm.controls.availableHeat.pristine">
+        <span *ngIf="openingLossesForm.controls.availableHeat.errors.required">Value Required</span>
+        <span *ngIf="openingLossesForm.controls.availableHeat.errors.greaterThan == 0">Value must be greater than than
+          0.</span>
+          <span *ngIf="openingLossesForm.controls.availableHeat.errors.max">Value can't be greater than
+            {{openingLossesForm.controls.availableHeat.errors.max.max}}%</span>
+      </span>
+      </div>
+
+    </div>
+  </form>
+
+  <div bsModal #flueGasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="flueGasModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-flue-gas-modal *ngIf="showFlueGasModal" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
+          [settings]="settings"></app-flue-gas-modal>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+(emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
+[operatingHours]="openingService.operatingHours">
+</app-operating-hours-modal>

@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { WallModule } from './wall/wall.module';
 import { FlueGasModule } from './flue-gas/flue-gas.module';
 import { ChargeMaterialModule } from './charge-material/charge-material.module';
+import { OpeningModule } from './opening/opening.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { ChargeMaterialModule } from './charge-material/charge-material.module';
     WallModule,
     FlueGasModule,
     ChargeMaterialModule,
-    RouterModule
+    RouterModule, 
+    OpeningModule
   ],
   declarations: [
     FurnacesListComponent,

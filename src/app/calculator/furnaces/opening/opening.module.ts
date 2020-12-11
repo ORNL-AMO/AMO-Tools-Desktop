@@ -4,7 +4,6 @@ import { OpeningComponent } from './opening.component';
 import { OpeningHelpComponent } from './opening-help/opening-help.component';
 import { OpeningResultsComponent } from './opening-results/opening-results.component';
 import { OpeningFormComponent } from './opening-form/opening-form.component';
-import { OpeningService } from './opening.service';
 import { OpeningFormService } from './opening-form.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
@@ -13,7 +12,7 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { FlueGasModule } from '../flue-gas/flue-gas.module';
-
+import { OpeningService } from './opening.service';
 
 
 @NgModule({
