@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../shared/models/operations';
+import { EnergyData } from '../../../shared/models/phast/losses/chargeMaterial';
 import { FlueGas, FlueGasOutput, FlueGasResult } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
 import { FlueGasFormService } from './flue-gas-form.service';
@@ -11,6 +12,8 @@ import { FlueGasFormService } from './flue-gas-form.service';
 export class FlueGasService {
   baselineData: BehaviorSubject<FlueGas>;
   modificationData: BehaviorSubject<FlueGas>;
+  baselineEnergyData: BehaviorSubject<EnergyData>;
+  modificationEnergyData: BehaviorSubject<EnergyData>;
   output: BehaviorSubject<FlueGasOutput>;
   
   currentField: BehaviorSubject<string>;
@@ -26,6 +29,9 @@ export class FlueGasService {
 
     this.baselineData = new BehaviorSubject<FlueGas>(undefined);
     this.modificationData = new BehaviorSubject<FlueGas>(undefined);
+    this.baselineEnergyData = new BehaviorSubject<EnergyData>(undefined);
+    this.modificationEnergyData = new BehaviorSubject<EnergyData>(undefined);
+
     this.output = new BehaviorSubject<FlueGasOutput>(undefined);
 
     this.currentField = new BehaviorSubject<string>('default');
@@ -39,11 +45,13 @@ export class FlueGasService {
     
     let baselineFlueGas: FlueGas = this.baselineData.getValue();
     let modificationFlueGas: FlueGas = this.modificationData.getValue();
+    let baselineEnergyData: EnergyData = this.baselineEnergyData.getValue();
+    let modificationEnergyData: EnergyData = this.modificationEnergyData.getValue();
     
-    let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, settings, inModal);
+    let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, baselineEnergyData, settings, inModal);
     output.baseline = baselineResults;
     if (modificationFlueGas) {
-      let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, settings, inModal);
+      let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, modificationEnergyData, settings, inModal);
       output.modification = modificationResults;
       
       output.fuelSavings = baselineResults.fuelUse - modificationResults.fuelUse;
@@ -52,7 +60,7 @@ export class FlueGasService {
     this.output.next(output);
   }
 
-  getFlueGasResult(flueGasData: FlueGas, settings: Settings, inModal: boolean): FlueGasResult {
+  getFlueGasResult(flueGasData: FlueGas, energyData: EnergyData, settings: Settings, inModal: boolean): FlueGasResult {
     let result: FlueGasResult = {
       availableHeat: 0,
       availableHeatError: undefined,
@@ -73,8 +81,8 @@ export class FlueGasService {
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByVolume.heatInput;
         result.flueGasLosses = flueGasLosses;
-        result.fuelCost = result.flueGasLosses * flueGasData.flueGasByVolume.hoursPerYear * flueGasData.flueGasByVolume.fuelCost;
-        result.fuelUse = flueGasLosses * flueGasData.flueGasByVolume.hoursPerYear;
+        result.fuelCost = result.flueGasLosses * energyData.hoursPerYear * energyData.fuelCost;
+        result.fuelUse = flueGasLosses * energyData.hoursPerYear;
       }
     } else if (flueGasData.flueGasType === 'By Mass' && flueGasData.flueGasByMass) {
       let formGroup = this.flueGasFormService.initByMassFormFromLoss(flueGasData, false);
@@ -87,8 +95,8 @@ export class FlueGasService {
         result.availableHeat = availableHeat * 100;
         let flueGasLosses = (1 - availableHeat) * flueGasData.flueGasByMass.heatInput;
         result.flueGasLosses = flueGasLosses;
-        result.fuelCost = result.flueGasLosses * flueGasData.flueGasByMass.hoursPerYear * flueGasData.flueGasByMass.fuelCost;
-        result.fuelUse = flueGasLosses * flueGasData.flueGasByMass.hoursPerYear;
+        result.fuelCost = result.flueGasLosses * energyData.hoursPerYear * energyData.fuelCost;
+        result.fuelUse = flueGasLosses * energyData.hoursPerYear;
       }
     } 
     result = this.checkAvailableHeatResult(result);
@@ -112,7 +120,16 @@ export class FlueGasService {
       name: undefined
     };
 
+    let energyData: EnergyData = {
+      fuelCost: 0,
+      hoursPerYear: 8760
+    }
+    
     this.baselineData.next(emptyBaselineData);
+    this.modificationData.next(undefined);
+    
+    this.baselineEnergyData.next(energyData);
+    this.modificationEnergyData.next(undefined);
   }
 
   initDefaultEmptyOutput() {
@@ -153,6 +170,15 @@ export class FlueGasService {
       };
     }
 
+    let currentBaselineEnergy: EnergyData = this.baselineEnergyData.getValue();
+    let baselineEnergyCopy: EnergyData = JSON.parse(JSON.stringify(currentBaselineEnergy));
+    let modificationEnergy: EnergyData = {
+      fuelCost: baselineEnergyCopy.fuelCost,
+      hoursPerYear: baselineEnergyCopy.hoursPerYear
+    }
+
+    this.modificationEnergyData.next(modificationEnergy);
+
     this.modificationData.next(modification);
   }
 
@@ -192,8 +218,6 @@ export class FlueGasService {
         o2InFlueGas: 2.857,
         oxygenCalculationMethod: "Excess Air",
         heatInput: 15,
-        hoursPerYear: 8760,
-        fuelCost: undefined
       },
       flueGasType: 'By Volume',
       name: 'Baseline Flue Gas'
@@ -221,15 +245,21 @@ export class FlueGasService {
         o2InFlueGas: 3.124,
         oxygenCalculationMethod: "Excess Air",
         heatInput: 15,
-        hoursPerYear: 8760,
-        fuelCost: undefined
       },
       flueGasType: 'By Volume',
       name: 'Modification Flue Gas'
     }
+
+    let energyExample: EnergyData = {
+      hoursPerYear: 8760,
+      fuelCost: 3.99
+    };
+
+    this.baselineEnergyData.next(energyExample);
+    this.modificationEnergyData.next(energyExample);
   
-    this.modificationData.next(exampleMod);
     this.baselineData.next(exampleBaseline);
+    this.modificationData.next(exampleMod);
     this.generateExample.next(true);
   }
 

@@ -3,7 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
-import { OperatingHours } from '../../../../shared/models/operations';
 import { FlueGas, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
@@ -66,42 +65,31 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
-      if (this.selected == false) {
-        this.byVolumeForm.disable();
-      } else {
-        this.byVolumeForm.enable();
-      }
+      this.setFormState();
     }
   }
 
   initSubscriptions() {
     this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
-      this.setForm();
+      this.initForm();
       })
     this.generateExampleSub = this.flueGasService.generateExample.subscribe(value => {
-      this.setForm();
+      this.initForm();
     })
   }
 
   initFormSetup() {
-    if (this.selected == false) {
-      this.byVolumeForm.disable();
-    }
+    this.setFormState();
     if (this.byVolumeForm.controls.gasTypeId.value && this.byVolumeForm.controls.gasTypeId.value !== '') {
       if (this.byVolumeForm.controls.CH4.value === '' || !this.byVolumeForm.controls.CH4.value) {
         this.setProperties();
       }
     }
-    if (!this.byVolumeForm.controls.fuelCost.value) {
-      this.byVolumeForm.patchValue({
-        fuelCost: this.settings.fuelCost,
-      });
-    }
     this.setCalcMethod();
     this.calcExcessAir();
   }
 
-  setForm() {
+  initForm() {
     let updatedFlueGasData: FlueGas;
     if (this.isBaseline) {
       updatedFlueGasData = this.flueGasService.baselineData.getValue();
@@ -109,12 +97,20 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
       updatedFlueGasData = this.flueGasService.modificationData.getValue();
     }
 
-    if (updatedFlueGasData.flueGasByVolume) {
+    if (updatedFlueGasData && updatedFlueGasData.flueGasByVolume) {
       this.byVolumeForm = this.flueGasFormService.initByVolumeFormFromLoss(updatedFlueGasData, false);
     } else {
       this.byVolumeForm = this.flueGasFormService.initEmptyVolumeForm();
     }
     this.initFormSetup();
+  }
+
+  setFormState() {
+    if (this.selected == false) {
+      this.byVolumeForm.disable();
+    } else {
+      this.byVolumeForm.enable();
+    }
   }
 
   setCalcMethod() {
@@ -188,13 +184,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     }
   }
 
-  setEnergySource(str: string) {
-    this.byVolumeForm.patchValue({
-      energySourceType: str
-    });
-    this.calculate();
-  }
-
   focusField(str: string) {
     if (str === 'gasTypeId' && this.inModal) {
       str = 'gasTypeIdModal'
@@ -260,24 +249,4 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.calculate();
   }
 
-  closeOperatingHoursModal() {
-    this.showOperatingHoursModal = false;
-  }
-
-  openOperatingHoursModal() {
-    this.showOperatingHoursModal = true;
-  }
-
-  updateOperatingHours(oppHours: OperatingHours) {
-    this.flueGasService.operatingHours = oppHours;
-    this.byVolumeForm.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
-    this.calculate();
-    this.closeOperatingHoursModal();
-  }
-
-  setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
-      this.formWidth = this.formElement.nativeElement.clientWidth;
-    }
-  }
 }
