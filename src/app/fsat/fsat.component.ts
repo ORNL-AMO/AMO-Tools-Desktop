@@ -16,6 +16,7 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-fsat',
@@ -70,8 +71,11 @@ export class FsatComponent implements OnInit {
 
   fsatOptions: Array<any>;
   fsatOptionsLength: number;
-  fsat1: FSAT;
-  fsat2: FSAT;
+
+  sankeyLabelStyle: string = 'both';
+  showSankeyLabelOptions: boolean;
+  fsat1: {fsat: FSAT, name: string};
+  fsat2: {fsat: FSAT, name: string};
   //exploreOppsToast: boolean = false;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
@@ -86,7 +90,8 @@ export class FsatComponent implements OnInit {
     private fanMotorService: FanMotorService,
     private fanFieldDataService: FanFieldDataService,
     private fanSetupService: FanSetupService,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+    private settingsService: SettingsService) {
   }
 
   ngOnInit() {
@@ -203,6 +208,7 @@ export class FsatComponent implements OnInit {
     this.fsatOptions = new Array<any>();
     this.fsatOptions.push({ name: 'Baseline', fsat: this._fsat });
     this.fsat1 = this.fsatOptions[0];
+    this.showSankeyLabelOptions = ((this.fsat1.name == 'Baseline' || this.fsat1.name == null) && this.fsat1.fsat.setupDone) || (this.fsat1.fsat.valid && this.fsat1.fsat.valid.isValid);
     if (this._fsat.modifications) {
       this._fsat.modifications.forEach(mod => {
         this.fsatOptions.push({ name: mod.fsat.name, fsat: mod.fsat });
@@ -210,6 +216,10 @@ export class FsatComponent implements OnInit {
       this.fsat2 = this.fsatOptions[1];
     }
     this.fsatOptionsLength = this.fsatOptions.length;
+  }
+
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle = style;
   }
 
 
@@ -239,8 +249,8 @@ export class FsatComponent implements OnInit {
   getSettings() {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (!this.settings) {
-      this.settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-      this.addSettings(this.settings);
+      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(settings);
     }
   }
 
@@ -409,12 +419,12 @@ export class FsatComponent implements OnInit {
   }
 
   addSettings(settings: Settings) {
-    delete settings.id;
-    delete settings.directoryId;
-    settings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(settings).then(id => {
-      this.settings.id = id;
-      this.settingsDbService.setAll();
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+      });
     });
   }
 }

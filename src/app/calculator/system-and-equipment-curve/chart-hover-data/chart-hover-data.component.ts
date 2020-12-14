@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HoverGroupData } from '../system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
 import { Settings } from '../../../shared/models/settings';
-import { ChartConfig } from '../../../shared/models/plotting';
 
 @Component({
   selector: 'app-chart-hover-data',
@@ -16,6 +15,8 @@ export class ChartHoverDataComponent implements OnInit {
   settings: Settings;
   @Input()
   equipmentType: string;
+  @Input()
+  imperialFanPrecision: string;
   constructor() { }
 
   ngOnInit(): void {

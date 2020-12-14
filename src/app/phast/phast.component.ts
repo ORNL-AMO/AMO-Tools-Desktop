@@ -14,6 +14,8 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { SettingsService } from '../settings/settings.service';
+import { PhastValidService } from './phast-valid.service';
 
 @Component({
   selector: 'app-phast',
@@ -28,6 +30,9 @@ export class PhastComponent implements OnInit {
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
+  sankeyLabelStyle: string = 'both';
+  phastOptions: Array<{ name: string, phast: PHAST }>;
+  showSankeyLabelOptions: boolean;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -66,13 +71,15 @@ export class PhastComponent implements OnInit {
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
+    private phastValidService: PhastValidService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,
     private cd: ChangeDetectorRef,
     private settingsDbService: SettingsDbService,
-    private assessmentDbService: AssessmentDbService) {
+    private assessmentDbService: AssessmentDbService,
+    private settingsService: SettingsService) {
   }
 
   ngOnInit() {
@@ -96,8 +103,8 @@ export class PhastComponent implements OnInit {
           }
         }
       }
-      //get settings
       this.getSettings();
+      this.initSankeyList();
     });
     //check to see if we need to start on a specified tab
     let tmpTab = this.assessmentService.getTab();
@@ -207,6 +214,7 @@ export class PhastComponent implements OnInit {
   checkSetupDone() {
     //use copy so we don't modify existing
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
+    this._phast.valid = this.phastValidService.checkValid(JSON.parse(JSON.stringify(this._phast)), this.settings);
     this.lossesService.updateTabs.next(true);
     //set current phast as selected sankey in sankey tab
     this.sankeyPhast = this._phast;
@@ -216,6 +224,19 @@ export class PhastComponent implements OnInit {
     }
     else {
       this.tab2Status = 'missing-data';
+    }
+    this.cd.detectChanges();
+  }
+
+  initSankeyList() {
+    this.phastOptions = new Array<{ name: string, phast: PHAST }>();
+    this.phastOptions.push({ name: 'Baseline', phast: this._phast });
+    this.sankeyPhast = this.phastOptions[0].phast;
+    this.showSankeyLabelOptions = ((this.sankeyPhast.name == 'Baseline' || this.sankeyPhast.name == null) && this.sankeyPhast.setupDone) || (this.sankeyPhast.valid && this.sankeyPhast.valid.isValid);
+    if (this._phast.modifications) {
+      this._phast.modifications.forEach(mod => {
+        this.phastOptions.push({ name: mod.phast.name, phast: mod.phast });
+      });
     }
   }
 
@@ -258,7 +279,7 @@ export class PhastComponent implements OnInit {
     if (!this.settings) {
       let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
       this.addSettings(tmpSettings);
-    }else{
+    } else {
       this.lossesService.setTabs(this.settings);
     }
   }
@@ -341,6 +362,10 @@ export class PhastComponent implements OnInit {
 
   exportData() {
     //TODO: Logic for exporting data (csv?)
+  }
+
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle = style;
   }
 
   selectModificationModal() {
@@ -431,14 +456,13 @@ export class PhastComponent implements OnInit {
   }
 
   addSettings(settings: Settings) {
-    delete settings.id;
-    delete settings.directoryId;
-    settings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(settings).then(id => {
-      settings.id = id;
-      this.settings = settings;      
-      this.lossesService.setTabs(this.settings);
-      this.settingsDbService.setAll();
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+        this.lossesService.setTabs(this.settings);
+      });
     });
   }
 }

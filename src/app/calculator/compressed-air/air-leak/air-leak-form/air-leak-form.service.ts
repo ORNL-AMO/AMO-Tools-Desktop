@@ -155,7 +155,7 @@ export class AirLeakFormService {
         compressorControl: 8,
         compressorControlAdjustment: 25,
         compressorSpecificPowerControl: 0,
-        compressorSpecificPower: .16
+        compressorSpecificPower: 16
       },
     };
     if (settings && settings.unitsOfMeasure == 'Metric') {
@@ -173,7 +173,7 @@ export class AirLeakFormService {
         compressorControl: 8,
         compressorControlAdjustment: 25,
         compressorSpecificPowerControl: 0,
-        compressorSpecificPower: .16
+        compressorSpecificPower: 16
       },
     };
     return exampleData;

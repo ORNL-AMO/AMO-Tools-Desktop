@@ -1,9 +1,6 @@
 <div class="d-flex w-100 h-100 flex-column justify-content-end">
   <label class="group-label pt-2">{{ label }} Cost Savings</label>
-  <app-treasure-hunt-gauge
-    [value]="summaryData.totalPercentSavings"
-    [chartHeight]="75"
-  >
+  <app-treasure-hunt-gauge [value]="summaryData.totalPercentSavings" [chartHeight]="75">
   </app-treasure-hunt-gauge>
   <table class="mx-auto">
     <tbody>
@@ -33,4 +30,8 @@
       </tr>
     </tbody>
   </table>
+  <div *ngIf="summaryData.modificationCost < 0" class="alert-danger p-2 small">
+    Utility savings projects exceed current utility spending. Adjust current spending in the "Facility Basics" or adjust
+    the selected savings projects.
+  </div>
 </div>

@@ -1,3 +1,4 @@
+import { NgModel } from "@angular/forms";
 
 export interface ChargeMaterial {
   chargeMaterialType?: string;
@@ -24,6 +25,7 @@ export interface GasChargeMaterial {
   heatRequired?: number;
   endoExoHeat?: number;
   netHeatLoss?: number;
+  availableHeat?: number
 }
 //Liquid and Solid uses "chargeFeedRate"
 export interface LiquidChargeMaterial {
@@ -44,6 +46,7 @@ export interface LiquidChargeMaterial {
   heatRequired?: number;
   endoExoHeat?: number;
   netHeatLoss?: number;
+  availableHeat?: number
 }
 export interface SolidChargeMaterial {
   materialId?: number;
@@ -66,4 +69,36 @@ export interface SolidChargeMaterial {
   heatRequired?: number;
   endoExoHeat?: number;
   netHeatLoss?: number;
+  availableHeat?: number
+}
+
+export interface ChargeMaterialOutput {
+  baseline?: ChargeMaterialResult,
+  modification?: ChargeMaterialResult,
+  energyUnit?: string,
+  fuelSavings?: number,
+  costSavings?: number
+}
+
+export interface ChargeMaterialResult {
+  heatRequired?: number,
+  netHeatLoss?: number,
+  endoExoHeat?: number,
+  grossLoss?: number,
+  fuelUse?: number,
+  fuelCost?: number
+}
+
+export interface LoadChargeMaterial
+  {
+    netHeatLoss: number,
+    endoExoHeat: number,
+    grossHeatLoss: number,
+    bindingResult: number
+  };
+
+export interface EnergyData {
+  energySourceType?: string;
+  fuelCost?: number;
+  hoursPerYear?: number;
 }

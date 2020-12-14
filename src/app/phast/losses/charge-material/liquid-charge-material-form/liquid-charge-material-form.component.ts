@@ -8,7 +8,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { FormGroup } from '@angular/forms';
 import { LiquidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
-import { ChargeMaterialService, LiquidMaterialWarnings } from '../charge-material.service';
+import { LiquidMaterialFormService, LiquidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 
 @Component({
   selector: 'app-liquid-charge-material-form',
@@ -45,7 +45,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   warnings: LiquidMaterialWarnings;
   showModal: boolean = false;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private liquidMaterialFormService: LiquidMaterialFormService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -124,13 +124,14 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpMaterial: LiquidChargeMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(this.chargeMaterialForm).liquidChargeMaterial;
-    this.warnings = this.chargeMaterialService.checkLiquidWarnings(tmpMaterial);
-    let hasWarning: boolean = this.chargeMaterialService.checkWarningsExist(this.warnings);
+    let tmpMaterial: LiquidChargeMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(this.chargeMaterialForm).liquidChargeMaterial;
+    this.warnings = this.liquidMaterialFormService.checkLiquidWarnings(tmpMaterial);
+    let hasWarning: boolean = this.warnings.dischargeTempWarning !== undefined || this.warnings.inletOverVaporizingWarning !== undefined || this.warnings.outletOverVaporizingWarning !== undefined;
     this.inputError.emit(hasWarning);
   }
 
   save() {
+    this.chargeMaterialForm = this.liquidMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);

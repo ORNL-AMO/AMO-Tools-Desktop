@@ -31,6 +31,17 @@
         {{planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.min.min}}.</span>
     </span>
   </div>
+  <div class="form-group">
+    <label for="variationInBarometricPressure">Variation in Planar Barometric Pressure</label>
+    <div class="input-group">
+      <select formControlName="variationInBarometricPressure" name="variationInBarometricPressure"
+        id="variationInBarometricPressure" (change)="save()" (focus)="focusField('variationInBarometricPressure')"
+        class="form-control">
+        <option [ngValue]="true">Yes</option>
+        <option [ngValue]="false">No</option>
+      </select>
+    </div>
+  </div>
   <label class="group-label group-label-2">System Effect Data</label>
   <div class="form-group">
     <label for="inletSEF">Inlet System Effect Factor</label>

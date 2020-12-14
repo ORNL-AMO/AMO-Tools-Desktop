@@ -32,7 +32,8 @@
         (click)="changeTab('report')">Report</a>
     </div>
     <div class="nav-item">
-      <a class="nav-link disabled">Sankey</a>
+      <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.ssmt.setupDone}"
+      (click)="changeTab('sankey')">Sankey</a>
     </div>
     <div class="nav-item">
       <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators'}"

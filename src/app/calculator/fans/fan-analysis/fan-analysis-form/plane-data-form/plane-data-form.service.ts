@@ -24,7 +24,8 @@ export class PlaneDataFormService {
       totalPressureLossBtwnPlanes1and4: [obj.totalPressureLossBtwnPlanes1and4, [Validators.required, Validators.min(0)]],
       totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, [Validators.required, Validators.min(0)]],
       inletSEF: [obj.inletSEF, Validators.required],
-      outletSEF: [obj.outletSEF, Validators.required]
+      outletSEF: [obj.outletSEF, Validators.required],
+      variationInBarometricPressure: [obj.variationInBarometricPressure]
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {

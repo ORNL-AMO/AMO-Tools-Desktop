@@ -27,9 +27,7 @@ import { Settings } from '../shared/models/settings';
 import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
 import { AtmosphereLossesService } from './losses/atmosphere-losses/atmosphere-losses.service';
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
-import { ChargeMaterialService } from './losses/charge-material/charge-material.service';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
-import { WallLossesService } from './losses/wall-losses/wall-losses.service';
 import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
 import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
@@ -37,6 +35,11 @@ import { SlagService } from './losses/slag/slag.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { StepTab, stepTabs, specTabs } from './tabs';
 import * as _ from 'lodash';
+
+import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
+import { LiquidMaterialFormService } from '../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
+import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
+import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 @Injectable()
 export class PhastService {
 
@@ -52,12 +55,14 @@ export class PhastService {
     private convertUnitsService: ConvertUnitsService,
     private atmosphereLossesService: AtmosphereLossesService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
-    private chargeMaterialService: ChargeMaterialService,
     private coolingLossesService: CoolingLossesService,
-    private wallLossesService: WallLossesService,
+    private wallFormService: WallFormService,
     private fixtureLossesService: FixtureLossesService,
     private gasLeakageLossesService: GasLeakageLossesService,
     private otherLossessService: OtherLossesService,
+    private liquidMaterialFormService: LiquidMaterialFormService,
+    private gasMaterialFormService: GasMaterialFormService,
+    private solidMaterialFormService: SolidMaterialFormService,
     private slagService: SlagService
   ) {
     this.initTabs();
@@ -138,7 +143,7 @@ export class PhastService {
     return results;
   }
 
-  gasLoadChargeMaterial(input: GasChargeMaterial, settings: Settings) {
+  gasLoadChargeMaterial(input: GasChargeMaterial, settings: Settings, calculatorEnergyUnit = '') {
     let inputs = this.createInputCopy(input);
     let netHeatLoss = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -154,11 +159,12 @@ export class PhastService {
       netHeatLoss = phastAddon.gasLoadChargeMaterial(inputs);
     }
 
-    netHeatLoss = this.convertResult(netHeatLoss, settings.energyResultUnit);
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    netHeatLoss = this.convertResult(netHeatLoss, conversionUnit);
     const bindingResult = netHeatLoss;
     const isEndothermic = (input.thermicReactionType === 0);
     let endoExoHeat = (isEndothermic) ? input.percentReacted / 100 : -input.percentReacted / 100;
-    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.feedRate * inputs.reactionHeat).from('Btu').to(settings.energyResultUnit);
+    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.feedRate * inputs.reactionHeat).from('Btu').to(conversionUnit);
     const grossHeatLoss = (isEndothermic) ? netHeatLoss : netHeatLoss + endoExoHeat;
     netHeatLoss = (isEndothermic) ? netHeatLoss - endoExoHeat : netHeatLoss;
 
@@ -188,7 +194,7 @@ export class PhastService {
     return results;
   }
 
-  liquidLoadChargeMaterial(input: LiquidChargeMaterial, settings: Settings) {
+  liquidLoadChargeMaterial(input: LiquidChargeMaterial, settings: Settings, calculatorEnergyUnit = '') {
     let inputs = this.createInputCopy(input);
     let netHeatLoss = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -206,11 +212,12 @@ export class PhastService {
       netHeatLoss = phastAddon.liquidLoadChargeMaterial(inputs);
     }
 
-    netHeatLoss = this.convertResult(netHeatLoss, settings.energyResultUnit);
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    netHeatLoss = this.convertResult(netHeatLoss, conversionUnit);
     const bindingResult = netHeatLoss;
     const isEndothermic = (input.thermicReactionType === 0);
     let endoExoHeat = (isEndothermic) ? input.percentReacted / 100 : -input.percentReacted / 100;
-    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat).from('Btu').to(settings.energyResultUnit);
+    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat).from('Btu').to(conversionUnit);
     const grossHeatLoss = (isEndothermic) ? netHeatLoss : netHeatLoss + endoExoHeat;
     netHeatLoss = (isEndothermic) ? netHeatLoss - endoExoHeat : netHeatLoss;
 
@@ -271,7 +278,7 @@ export class PhastService {
     return this.convertResult(results, settings.energyResultUnit);
   }
 
-  solidLoadChargeMaterial(input: SolidChargeMaterial, settings: Settings) {
+  solidLoadChargeMaterial(input: SolidChargeMaterial, settings: Settings, calculatorEnergyUnit = '') {
     let inputs = this.createInputCopy(input);
     let netHeatLoss = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -289,16 +296,15 @@ export class PhastService {
     } else {
       netHeatLoss = phastAddon.solidLoadChargeMaterial(inputs);
     }
-
-    netHeatLoss = this.convertResult(netHeatLoss, settings.energyResultUnit);
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    netHeatLoss = this.convertResult(netHeatLoss, conversionUnit);
     const bindingResult = netHeatLoss;
     const isEndothermic = (input.thermicReactionType === 0);
     let endoExoHeat = (isEndothermic) ? input.chargeReacted / 100 : -input.chargeReacted / 100;
-    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat * (1 - inputs.waterContentCharged / 100)).from('Btu').to(settings.energyResultUnit);
+    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat * (1 - inputs.waterContentCharged / 100)).from('Btu').to(conversionUnit);
 
     const grossHeatLoss = (isEndothermic) ? netHeatLoss : netHeatLoss + endoExoHeat;
     netHeatLoss = (isEndothermic) ? netHeatLoss - endoExoHeat : netHeatLoss;
-
     return {
       netHeatLoss: netHeatLoss,
       endoExoHeat: endoExoHeat,
@@ -623,9 +629,9 @@ export class PhastService {
     //   let tmpResults = this.energyInputExhaustGasLosses(losses.energyInputExhaustGasLoss[0], settings)
     //   grossHeatRequired += tmpResults.exhaustGasLosses;
     // }
-    if (losses.exhaustGasEAF) {
-      grossHeatRequired += this.sumExhaustGasEAF(losses.exhaustGasEAF, settings);
-    }
+    // if (losses.exhaustGasEAF) {
+    //   grossHeatRequired += this.sumExhaustGasEAF(losses.exhaustGasEAF, settings);
+    // }
     return grossHeatRequired;
   }
 
@@ -655,17 +661,17 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.chargeMaterialType === 'Gas') {
-        let tmpForm = this.chargeMaterialService.getGasChargeMaterialForm(loss);
+        let tmpForm = this.gasMaterialFormService.getGasChargeMaterialForm(loss);
         if (tmpForm.status === 'VALID') {
           sum += this.gasLoadChargeMaterial(loss.gasChargeMaterial, settings).bindingResult;
         }
       } else if (loss.chargeMaterialType === 'Solid') {
-        let tmpForm = this.chargeMaterialService.getSolidChargeMaterialForm(loss);
+        let tmpForm = this.solidMaterialFormService.getSolidChargeMaterialForm(loss);
         if (tmpForm.status === 'VALID') {
           sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings).bindingResult;
         }
       } else if (loss.chargeMaterialType === 'Liquid') {
-        let tmpForm = this.chargeMaterialService.getLiquidChargeMaterialForm(loss);
+        let tmpForm = this.liquidMaterialFormService.getLiquidChargeMaterialForm(loss);
         if (tmpForm.status === 'VALID') {
           sum += this.liquidLoadChargeMaterial(loss.liquidChargeMaterial, settings).bindingResult;
         }
@@ -734,7 +740,7 @@ export class PhastService {
         conditionFactor: 1,
         correctionFactor: 1
       };
-      let tmpForm = this.wallLossesService.getWallLossForm(tmpWallLoss);
+      let tmpForm = this.wallFormService.getWallLossForm(tmpWallLoss);
       if (tmpForm.status === 'VALID') {
         let lossVal = this.wallLosses(tmpWallLoss, settings);
         if (isNaN(lossVal) === false) {
@@ -822,7 +828,7 @@ export class PhastService {
   sumWallLosses(losses: WallLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.wallLossesService.getWallLossForm(loss);
+      let tmpForm = this.wallFormService.getWallLossForm(loss);
       if (tmpForm.status === 'VALID') {
         sum += this.wallLosses(loss, settings);
       }
@@ -875,24 +881,5 @@ export class PhastService {
 
     return sumAdditionalHeat;
   }
-
-  sumGrossHeat(losses: Losses) {
-
-  }
-
-  // sumAuxiliaryEquipment(phast: PHAST, results: Array<any>) {
-  //   let sum = 0;
-  //   results.forEach(result => {
-  //     if (result.motorPower == 'Calculated') {
-  //       sum += result.totalPower;
-  //     } else if (result.motorPower == 'Rated') {
-  //       if (result.totalPower != 0) {
-  //         let convert = this.convertUnitsService.value(result.totalPower).from('hp').to('kW');
-  //         sum += convert;
-  //       }
-  //     }
-  //   })
-  //   return sum;
-  // }
 }
 

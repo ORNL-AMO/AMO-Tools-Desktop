@@ -102,13 +102,13 @@ export class ResultsDataComponent implements OnInit {
         this.phastMods = this.phast.modifications;
         if (this.phast.modifications.length !== 0) {
           this.phast.modifications.forEach(mod => {
-            mod.phast.valid = this.phastValidService.checkValid(mod.phast);
+            mod.phast.valid = this.phastValidService.checkValid(mod.phast, this.settings);
             let tmpResults = this.phastResultsService.getResults(mod.phast, this.settings);
             this.modificationResults.push(tmpResults);
           });
         }
       } else if (this.modification && !this.inSetup && !this.inReport) {
-        this.modification.phast.valid = this.phastValidService.checkValid(this.modification.phast);
+        this.modification.phast.valid = this.phastValidService.checkValid(this.modification.phast, this.settings);
         let tmpResults = this.phastResultsService.getResults(this.modification.phast, this.settings);
         this.modificationResults.push(tmpResults);
       }
