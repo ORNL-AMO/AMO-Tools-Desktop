@@ -159,20 +159,12 @@ export class FacilityCompressorDataFormComponent implements OnInit {
       if (compressorElectricityForm.controls.compressorSpecificPowerControl.value == 4) {
         this.compressorCustomSpecificPower = true;
       }
-      let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
-      if (this.settings.unitsOfMeasure != 'Imperial') {
-        specificPower = this.convertAirLeakService.convertSpecificPower(specificPower);
-        specificPower = this.convertAirLeakService.roundVal(specificPower);
-      }
+      let specificPower: number = this.getSpecificPower(compressorElectricityForm);
       compressorElectricityForm.patchValue({ compressorSpecificPower: specificPower });
     }
     else if (compressorElectricityForm.controls.compressorSpecificPowerControl.value != 4) {
       this.compressorCustomSpecificPower = false;
-      let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
-      if (this.settings.unitsOfMeasure != 'Imperial') {
-        specificPower = this.convertAirLeakService.convertSpecificPower(specificPower);
-        specificPower = this.convertAirLeakService.roundVal(specificPower);
-      }
+      let specificPower: number = this.getSpecificPower(compressorElectricityForm);
       compressorElectricityForm.patchValue({ compressorSpecificPower: specificPower });
     }
     else {
@@ -182,6 +174,19 @@ export class FacilityCompressorDataFormComponent implements OnInit {
     }
     this.airLeakFormService.setCompressorDataValidators(this.facilityCompressorDataForm);
     this.save();
+  }
+
+
+  getSpecificPower(compressorElectricityForm: FormGroup): number {
+    let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
+    if (this.settings.unitsOfMeasure != 'Imperial') {
+      specificPower = this.convertAirLeakService.convertSpecificPower(specificPower);
+      specificPower = this.convertAirLeakService.roundVal(specificPower);
+    } else {
+      //per issue-4091
+      specificPower = specificPower * 100;
+    }
+    return specificPower
   }
 
   toggleSelected(index: number, selected: boolean) {

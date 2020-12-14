@@ -1,0 +1,19 @@
+.form-group{
+    margin-bottom: 2px;
+}
+
+
+.modal-content{
+    border: none;
+    border-radius: 0px;
+}
+
+
+.modal-header{
+    background: #fff;
+}
+
+
+.modal-dialog{
+    top: 20%;
+}

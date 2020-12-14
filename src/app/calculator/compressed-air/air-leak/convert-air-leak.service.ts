@@ -32,6 +32,11 @@ export class ConvertAirLeakService {
         let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
         inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / conversionHelper;
       }
+    } else {
+      for (let i = 0; i < inputArray.length; i++) {
+        //per issue-4091
+        inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / 100;
+      }
     }
     return inputArray;
   }
@@ -102,7 +107,8 @@ export class ConvertAirLeakService {
   convertDefaultFacilityCompressorData(inputData: FacilityCompressorData): FacilityCompressorData {
 
     let conversionHelper = this.convertUnitsService.value(1).from('ft3').to('m3');
-    inputData.compressorElectricityData.compressorSpecificPower = this.convertSpecificPower(inputData.compressorElectricityData.compressorSpecificPower);
+    // /100 per issue-4091
+    inputData.compressorElectricityData.compressorSpecificPower = this.convertSpecificPower((inputData.compressorElectricityData.compressorSpecificPower / 100));
     inputData.compressorElectricityData.compressorSpecificPower = this.roundVal(inputData.compressorElectricityData.compressorSpecificPower);
     if (inputData.utilityType == 0) {
       inputData.utilityCost = inputData.utilityCost / conversionHelper;

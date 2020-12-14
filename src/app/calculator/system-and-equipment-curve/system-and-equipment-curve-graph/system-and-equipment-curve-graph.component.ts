@@ -91,6 +91,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   displayPowerChart: boolean = false;
   fluidPowerData: Array<number>;
   hoverChartId: string;
+  imperialFanPrecision: string;
 
   constructor(
     private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
@@ -170,6 +171,9 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       this.yUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.fanPressureMeasurement);
       this.xUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.fanFlowRate);
       this.powerUnits = this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.fanPowerMeasurement);
+      if (this.settings.unitsOfMeasure == 'Imperial') {
+        this.imperialFanPrecision = '.2f';
+      }
     }
   }
 
@@ -330,7 +334,9 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.curveEquipmentChart.data[this.traces.system].x = xTmp;
     this.curveEquipmentChart.data[this.traces.system].y = yTmp;
     this.fluidPowerData = fluidTmp;
-    let template = `${'System Curve'} ${this.yName}: %{y:.0f} ${this.yUnits}`;
+
+    let precision = this.imperialFanPrecision? this.imperialFanPrecision : '.0f';
+    let template = `${'System Curve'} ${this.yName}: %{y:${precision}} ${this.yUnits}`;
     this.curveEquipmentChart.data[this.traces.system].hovertemplate = template;
   }
 
@@ -344,7 +350,9 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.curveEquipmentChart.data[traceIndex].x = xTmp;
     this.curveEquipmentChart.data[traceIndex].y = yTmp;
     this.curveEquipmentChart.data[traceIndex].line.color = this.pointColors[traceIndex - 1];
-    let template = `${traceTitle} ${this.yName}: %{y:.0f} ${this.yUnits}<br>`;
+    
+    let precision = this.imperialFanPrecision? this.imperialFanPrecision : '.0f';
+    let template = `${traceTitle} ${this.yName}: %{y:${precision}} ${this.yUnits}<br>`;
     this.curveEquipmentChart.data[traceIndex].hovertemplate = template;
   }
 
@@ -508,8 +516,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     let intersectionTrace = this.curveEquipmentChart.data[traceDataIndex];
     intersectionTrace.x = [point.x];
     intersectionTrace.y = [point.y];
-    intersectionTrace.hovertemplate = `${name} Intersection<br>Flow: %{x:.0f} ${this.xUnits}<br>${this.yName}: %{y:.0f} ${this.yUnits}`;
-    
+    let precision = this.imperialFanPrecision? this.imperialFanPrecision : '.0f';
+    intersectionTrace.hovertemplate = `${name} Intersection<br>Flow: %{x:.0f} ${this.xUnits}<br>${this.yName}: %{y:${precision}} ${this.yUnits}`;
     this.curveEquipmentChart.data[traceDataIndex] = intersectionTrace;
 
     point.pointColor = this.defaultPointBackgroundColor;

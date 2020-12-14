@@ -29,10 +29,10 @@
     <!--wall losses form with data injected-->
     <app-wall-losses-form (changeField)="changeField($event)" [(wallLossesForm)]="loss.form"
       (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
-      [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"
+      [lossIndex]="lossIndex" [settings]="settings" [inSetup]="inSetup"
       [isBaseline]="isBaseline"></app-wall-losses-form>
   </div>
-  <div class="loss-results" [ngClass]="{'input-error': showError == true}">
+  <div class="loss-results">
     <div class="form-group">
       <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
       <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">

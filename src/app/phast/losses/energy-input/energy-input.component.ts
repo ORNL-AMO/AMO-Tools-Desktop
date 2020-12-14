@@ -6,6 +6,7 @@ import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputE
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { PhastResultsService } from '../../phast-results.service';
+import { PhastService } from '../../phast.service';
 
 @Component({
   selector: 'app-energy-input',
@@ -40,7 +41,7 @@ export class EnergyInputComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private energyInputService: EnergyInputService, private phastResultsService: PhastResultsService) { }
+  constructor(private energyInputService: EnergyInputService, private phastResultsService: PhastResultsService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -75,9 +76,10 @@ export class EnergyInputComponent implements OnInit {
   initForms() {
     if (this.losses.energyInputEAF) {
       let lossIndex = 1;
+      let minElectricityRequirement: number = this.getMinElectricityRequirement();
       this.losses.energyInputEAF.forEach(loss => {
         let tmpLoss = {
-          form: this.energyInputService.getFormFromLoss(loss),
+          form: this.energyInputService.getFormFromLoss(loss, minElectricityRequirement),
           results: {
             energyInputHeatDelivered: 0,
             energyInputTotalChemEnergy: 0,
@@ -95,6 +97,11 @@ export class EnergyInputComponent implements OnInit {
         this._energyInputs.push(tmpLoss);
       });
     }
+  }
+
+  getMinElectricityRequirement(): number {
+    let minElectricityRequirement: number = this.phastResultsService.getMinElectricityInputRequirement(this.phast, this.settings);
+    return minElectricityRequirement;
   }
 
   addLoss() {
@@ -149,6 +156,12 @@ export class EnergyInputComponent implements OnInit {
       tmpEnergyInputs.push(tmpEnergyInput);
     });
     this.losses.energyInputEAF = tmpEnergyInputs;
+    let minEnergyRequirement: number = this.getMinElectricityRequirement();
+    let updatedValidators = this.energyInputService.getElectricityInputValidators(minEnergyRequirement);
+    this._energyInputs.forEach(loss => {
+      loss.form.controls.electricityInput.setValidators(updatedValidators);
+      loss.form.controls.electricityInput.updateValueAndValidity();
+    });
     this.savedLoss.emit(true);
   }
 

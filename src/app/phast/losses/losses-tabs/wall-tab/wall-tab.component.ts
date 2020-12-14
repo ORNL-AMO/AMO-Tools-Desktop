@@ -2,10 +2,10 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
-import { WallLossesService, WallLossWarnings } from '../../wall-losses/wall-losses.service';
 import { WallLossCompareService } from '../../wall-losses/wall-loss-compare.service';
 import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { Subscription } from 'rxjs';
+import { WallFormService, WallLossWarnings } from '../../../../calculator/furnaces/wall/wall-form.service';
 
 @Component({
   selector: 'app-wall-tab',
@@ -26,7 +26,7 @@ export class WallTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string> = [];
   lossSubscription: Subscription;
-  constructor(private lossesService: LossesService, private wallLossesService: WallLossesService, private wallLossCompareService: WallLossCompareService, private cd: ChangeDetectorRef) { }
+  constructor(private lossesService: LossesService, private wallFormService: WallFormService, private wallLossCompareService: WallLossCompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
@@ -73,8 +73,8 @@ export class WallTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: WallLossWarnings = this.wallLossesService.checkWarnings(loss);
-        let tmpHasWarning: boolean = this.wallLossesService.checkWarningsExist(warnings);
+        let warnings: WallLossWarnings = this.wallFormService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.wallFormService.checkWarningsExist(warnings);
         if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
@@ -85,8 +85,8 @@ export class WallTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: WallLossWarnings = this.wallLossesService.checkWarnings(loss);
-        let tmpHasWarning: boolean = this.wallLossesService.checkWarningsExist(warnings);
+        let warnings: WallLossWarnings = this.wallFormService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.wallFormService.checkWarningsExist(warnings);
         if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
@@ -97,7 +97,7 @@ export class WallTabComponent implements OnInit {
 
 
   checkLossValid(loss: WallLoss) {
-    let tmpForm: FormGroup = this.wallLossesService.getWallLossForm(loss);
+    let tmpForm: FormGroup = this.wallFormService.getWallLossForm(loss);
     if (tmpForm.status === 'VALID') {
       return true;
     } else {

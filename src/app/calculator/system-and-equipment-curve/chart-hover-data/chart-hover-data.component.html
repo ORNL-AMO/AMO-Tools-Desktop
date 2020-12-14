@@ -31,7 +31,14 @@
           <span *ngIf="!currentHoverData.baseline.x">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="currentHoverData.baseline.y">{{currentHoverData.baseline.y | number: '1.0-0'}}</span>
+          <span *ngIf="currentHoverData.baseline.y">
+            <span *ngIf="imperialFanPrecision">
+              {{currentHoverData.baseline.y | number: '1.2-2'}}
+            </span>
+            <span *ngIf="!imperialFanPrecision">
+              {{currentHoverData.baseline.y | number: '1.0-0'}}
+            </span>
+          </span>
           <span *ngIf="!currentHoverData.baseline.y">&mdash; &mdash;</span>
         </td>
         <td>
@@ -48,7 +55,14 @@
           <span *ngIf="!currentHoverData.modification.x">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="currentHoverData.modification.y">{{currentHoverData.modification.y | number: '1.0-0'}}</span>
+          <span *ngIf="currentHoverData.modification.y">
+            <span *ngIf="imperialFanPrecision">
+              {{currentHoverData.modification.y | number: '1.2-2'}}
+            </span>
+            <span *ngIf="!imperialFanPrecision">
+              {{currentHoverData.modification.y | number: '1.0-0'}}
+            </span>
+          </span>
           <span *ngIf="!currentHoverData.modification.y">&mdash; &mdash;</span>
         </td>
         <td>
@@ -65,7 +79,14 @@
           <span *ngIf="!currentHoverData.system.x">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="currentHoverData.system.y">{{currentHoverData.system.y | number: '1.0-0'}}</span>
+          <span *ngIf="currentHoverData.system.y">
+            <span *ngIf="imperialFanPrecision">
+              {{currentHoverData.system.y | number: '1.2-2'}}
+            </span>
+            <span *ngIf="!imperialFanPrecision">
+              {{currentHoverData.system.y | number: '1.0-0'}}
+            </span>
+          </span>
           <span *ngIf="!currentHoverData.system.y">&mdash; &mdash;</span>
         </td>
         <td>
