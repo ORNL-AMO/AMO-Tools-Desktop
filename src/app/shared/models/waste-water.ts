@@ -1,3 +1,5 @@
+import { SavingsOpportunity } from "./explore-opps";
+
 export interface WasteWater {
     baselineData: WasteWaterData,
     modifications?: Array<WasteWaterData>,
@@ -18,7 +20,8 @@ export interface WasteWaterData {
     name: string,
     id: string,
     outputs?: WasteWaterResults,
-    valid?: WasteWaterValid
+    valid?: WasteWaterValid,
+    exploreAeratorPerformance?: SavingsOpportunity
 }
 
 export interface ActivatedSludgeData {
