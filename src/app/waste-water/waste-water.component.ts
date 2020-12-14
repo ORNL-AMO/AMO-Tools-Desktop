@@ -93,6 +93,7 @@ export class WasteWaterComponent implements OnInit {
 
     this.assessmentTabSub = this.wasteWaterService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
+      this.getContainerHeight();
     });
 
     this.showAddModificationSub = this.wasteWaterService.showAddModificationModal.subscribe(val => {
