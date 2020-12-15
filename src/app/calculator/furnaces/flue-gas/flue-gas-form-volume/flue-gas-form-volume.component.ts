@@ -42,10 +42,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
   warnings: FlueGasWarnings;
-  showOperatingHoursModal: boolean;
-
-  formWidth: number;
-
 
   constructor(private flueGasService: FlueGasService, 
               private flueGasFormService: FlueGasFormService,

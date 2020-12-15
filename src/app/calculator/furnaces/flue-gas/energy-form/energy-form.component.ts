@@ -13,8 +13,6 @@ import { EnergyFormService } from './energy-form.service';
   styleUrls: ['./energy-form.component.css']
 })
 export class EnergyFormComponent implements OnInit {
-  showOperatingHoursModal: boolean;
-  energyForm: FormGroup;
   @Input()
   settings: Settings;
   @Input()
@@ -22,6 +20,8 @@ export class EnergyFormComponent implements OnInit {
   @Input()
   selected: boolean;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  showOperatingHoursModal: boolean;
+  energyForm: FormGroup;
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
@@ -29,7 +29,6 @@ export class EnergyFormComponent implements OnInit {
 
   formWidth: number;
   energyUnit: string;
-  energySourceTypeSub: any;
   constructor(private flueGasService: FlueGasService,
              private cd: ChangeDetectorRef,
              private energyFormService: EnergyFormService) { }
@@ -121,7 +120,7 @@ export class EnergyFormComponent implements OnInit {
   }
 
   setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
+    if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }

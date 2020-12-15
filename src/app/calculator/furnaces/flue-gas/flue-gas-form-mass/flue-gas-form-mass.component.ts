@@ -42,9 +42,7 @@ export class FlueGasFormMassComponent implements OnInit {
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
   warnings: FlueGasWarnings;
-  showOperatingHoursModal: boolean;
 
-  formWidth: number;
   constructor(private flueGasService: FlueGasService,
               private flueGasFormService: FlueGasFormService,
               private phastService: PhastService, 

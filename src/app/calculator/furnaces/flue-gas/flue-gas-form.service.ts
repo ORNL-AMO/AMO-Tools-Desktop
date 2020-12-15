@@ -3,9 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../shared/models/phast/losses/flueGas';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FlueGasFormService {
 
   flueGasTempMin: number = 212;

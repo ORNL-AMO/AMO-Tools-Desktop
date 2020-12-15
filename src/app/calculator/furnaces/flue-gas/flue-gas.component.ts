@@ -70,6 +70,8 @@ export class FlueGasComponent implements OnInit {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
+    this.baselineEnergySub.unsubscribe();
+    this.modificationEnergySub.unsubscribe();
     this.outputSubscription.unsubscribe();
   }
 
