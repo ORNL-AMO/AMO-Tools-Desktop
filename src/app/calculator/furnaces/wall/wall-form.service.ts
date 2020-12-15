@@ -9,6 +9,7 @@ export class WallFormService {
   constructor(private formBuilder: FormBuilder) { }
 
   initForm(lossNum?: number): FormGroup {
+    let lossNumber = lossNum? lossNum : 1;
     let formGroup = this.formBuilder.group({
       'surfaceArea': ['', [Validators.required, Validators.min(0)]],
       'avgSurfaceTemp': ['', Validators.required],
@@ -18,7 +19,7 @@ export class WallFormService {
       'surfaceShape': [3, Validators.required],
       'conditionFactor': [1.394, Validators.required],
       'surfaceEmissivity': [0.9, [Validators.required, Validators.min(0), Validators.max(1)]],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNumber]
     });
 
     if (!lossNum) {
