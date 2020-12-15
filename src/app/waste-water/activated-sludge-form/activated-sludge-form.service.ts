@@ -7,7 +7,7 @@ export class ActivatedSludgeFormService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getFormFromObj(obj: ActivatedSludgeData): FormGroup{
+  getFormFromObj(obj: ActivatedSludgeData): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       Temperature: [obj.Temperature, [Validators.required, Validators.min(0)]],
       So: [obj.So, [Validators.required, Validators.min(0)]],
@@ -15,14 +15,14 @@ export class ActivatedSludgeFormService {
       FlowRate: [obj.FlowRate, [Validators.required, Validators.min(0)]],
       InertVSS: [obj.InertVSS, [Validators.required, Validators.min(0)]],
       OxidizableN: [obj.OxidizableN, [Validators.required, Validators.min(0)]],
-      Biomass: [obj.Biomass, [Validators.required, Validators.min(0)]],
+      Biomass: [obj.Biomass, [Validators.required, Validators.min(0), Validators.max(1)]],
       InfluentTSS: [obj.InfluentTSS, [Validators.required, Validators.min(0)]],
       InertInOrgTSS: [obj.InertInOrgTSS, [Validators.required, Validators.min(0)]],
       EffluentTSS: [obj.EffluentTSS, [Validators.required, Validators.min(0)]],
       RASTSS: [obj.RASTSS, [Validators.required, Validators.min(0)]],
       MLSSpar: [obj.MLSSpar, [Validators.required, Validators.min(0)]],
-      FractionBiomass: [obj.FractionBiomass, [Validators.required, Validators.min(0)]],
-      BiomassYeild: [obj.BiomassYeild, [Validators.required, Validators.min(0)]],
+      FractionBiomass: [obj.FractionBiomass, [Validators.required, Validators.min(0), Validators.max(1)]],
+      BiomassYeild: [obj.BiomassYeild, [Validators.required, Validators.min(0), Validators.max(1)]],
       HalfSaturation: [obj.HalfSaturation, [Validators.required, Validators.min(0)]],
       MicrobialDecay: [obj.MicrobialDecay, [Validators.required, Validators.min(0)]],
       MaxUtilizationRate: [obj.MaxUtilizationRate, [Validators.required, Validators.min(0)]]
@@ -30,7 +30,7 @@ export class ActivatedSludgeFormService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): ActivatedSludgeData{
+  getObjFromForm(form: FormGroup): ActivatedSludgeData {
     return {
       Temperature: form.controls.Temperature.value,
       So: form.controls.So.value,

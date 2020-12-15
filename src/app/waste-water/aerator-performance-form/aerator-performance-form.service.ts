@@ -15,7 +15,7 @@ export class AeratorPerformanceFormService {
       SOTR: [obj.SOTR, [Validators.required, Validators.min(0)]],
       Aeration: [obj.Aeration, [Validators.required, Validators.min(0)]],
       Elevation: [obj.Elevation, [Validators.required, Validators.min(0)]],
-      OperatingTime: [obj.OperatingTime, [Validators.required, Validators.min(0)]],
+      OperatingTime: [obj.OperatingTime, [Validators.required, Validators.min(0), Validators.max(24)]],
       TypeAerators: [obj.TypeAerators, [Validators.required, Validators.min(0)]],
       Speed: [obj.Speed, [Validators.required, Validators.min(0), Validators.max(100)]],
       EnergyCostUnit: [obj.EnergyCostUnit, [Validators.required, Validators.min(0)]]

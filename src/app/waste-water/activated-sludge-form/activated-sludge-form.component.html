@@ -124,6 +124,8 @@
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.Biomass.errors.min">Value can't be
                     less than {{form.controls.Biomass.errors.min.min}}</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.Biomass.errors.max">Value can't be
+                    greater than {{form.controls.Biomass.errors.max.max}}</span>
             </span>
         </div>
         <!-- InfluentTSS -->
@@ -227,6 +229,8 @@
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.FractionBiomass.errors.min">Value can't
                     be less than {{form.controls.FractionBiomass.errors.min.min}} mg VSS/mg</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.FractionBiomass.errors.max">Value can't
+                    be greater than {{form.controls.FractionBiomass.errors.max.max}} mg VSS/mg</span>
             </span>
         </div>
         <!-- BiomassYeild -->
@@ -244,6 +248,8 @@
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.BiomassYeild.errors.min">Value can't
                     be less than {{form.controls.BiomassYeild.errors.min.min}} mg VSS/mg</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.BiomassYeild.errors.max">Value can't be
+                    greater than {{form.controls.BiomassYeild.errors.max.max}} mg VSS/mg</span>
             </span>
         </div>
         <!-- HalfSaturation -->
