@@ -32,6 +32,8 @@ import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.component';
 import { AnalysisMenuComponent } from './waste-water-banner/analysis-menu/analysis-menu.component';
 import { WasteWaterAnalysisModule } from './waste-water-analysis/waste-water-analysis.module';
+import { ExploreOpportunitiesFormComponent } from './explore-opportunities/explore-opportunities-form/explore-opportunities-form.component';
+import { ExploreAeratorFormComponent } from './explore-opportunities/explore-opportunities-form/explore-aerator-form/explore-aerator-form.component';
 
 
 @NgModule({
@@ -54,6 +56,8 @@ import { WasteWaterAnalysisModule } from './waste-water-analysis/waste-water-ana
     SystemBasicsHelpComponent,
     SetupTabsComponent,
     AnalysisMenuComponent,
+    ExploreOpportunitiesFormComponent,
+    ExploreAeratorFormComponent,
   ],
   imports: [
     CommonModule,
