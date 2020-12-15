@@ -137,9 +137,9 @@ export class PhastReportComponent implements OnInit {
   }
 
   setPhastValidity() {
-    this.phast.valid = this.phastValidService.checkValid(this.phast);
+    this.phast.valid = this.phastValidService.checkValid(this.phast, this.settings);
     this.phast.modifications.forEach(modification => {
-      modification.phast.valid = this.phastValidService.checkValid(modification.phast);
+      modification.phast.valid = this.phastValidService.checkValid(modification.phast, this.settings);
     });
   }
 

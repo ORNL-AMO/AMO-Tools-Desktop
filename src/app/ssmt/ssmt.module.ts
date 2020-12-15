@@ -25,7 +25,7 @@ import { HeaderFormComponent } from './header/header-form/header-form.component'
 import { TurbineService } from './turbine/turbine.service';
 import { CondensingTurbineFormComponent } from './turbine/condensing-turbine-form/condensing-turbine-form.component';
 import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pressure-turbine-form.component';
-import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
+import { SsmtSankeyModule } from '../shared/ssmt-sankey/ssmt-sankey.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 import { SsmtReportModule } from './ssmt-report/ssmt-report.module';
 import { CalculateLossesService } from './calculate-losses.service';
@@ -74,7 +74,8 @@ import { RouterModule } from '@angular/router';
     TabsTooltipModule,
     ToastModule,
     SharedPipesModule,
-    RouterModule
+    RouterModule,
+    SsmtSankeyModule,
   ],
   declarations: [
     SsmtComponent,
@@ -92,7 +93,6 @@ import { RouterModule } from '@angular/router';
     HeaderFormComponent,
     CondensingTurbineFormComponent,
     PressureTurbineFormComponent,
-    SsmtSankeyComponent
   ],
   providers: [
     SsmtService,

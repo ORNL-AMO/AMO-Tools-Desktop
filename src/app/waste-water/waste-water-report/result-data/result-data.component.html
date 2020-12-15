@@ -25,13 +25,12 @@
                     <div class="hide-print" *ngIf="modification.outputs.percentCostSavings">
                         <app-percent-graph [value]="modification.outputs.percentCostSavings">
                         </app-percent-graph>
-                        <!-- <div class="alert-danger small" *ngIf="!modification.valid.isValid">
-                Invalid modification<br>
-                <span *ngIf="!modification.valid.fluidValid">Errors found in Fluid<br></span>
-                <span *ngIf="!modification.valid.fieldDataValid">Errors found in Field Data<br></span>
-                <span *ngIf="!modification.valid.fanValid">Errors found in Fan Setup<br></span>
-                <span *ngIf="!modification.valid.motorValid">Errors found in Motor<br></span>
-              </div> -->
+                        <div class="alert-danger small" *ngIf="!modification.valid.isValid">
+                            Invalid modification<br>
+                            <span *ngIf="!modification.valid.activatedSludgeValid">Errors found in Activated Sludge<br></span>
+                            <span *ngIf="!modification.valid.aeratorPerformanceValid">Errors found in Aerator Performance<br></span>
+                            <span *ngIf="!modification.valid.systemBasicsValid">Errors found in System Basics<br></span>
+                        </div>
                     </div>
                     <div class="show-print text-center" *ngIf="modification.outputs.percentCostSavings">
                         {{modification.outputs.percentCostSavings | number:'1.0'}} %

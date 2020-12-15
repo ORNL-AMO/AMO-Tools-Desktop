@@ -16,10 +16,12 @@
         <th class="section-header">System Basics</th>
         <th></th>
         <th *ngFor="let modification of wasteWater.modifications">
-          <!-- <div class="alert-danger m-0"
-                *ngIf="!modification.psat.valid.isValid && !modification.psat.valid.pumpFluidValid">
-                Errors found in Pump Fluid setup
-            </div> -->
+          <div class="alert-danger small" *ngIf="!modification.valid.isValid">
+            Invalid modification<br>
+            <span *ngIf="!modification.valid.activatedSludgeValid">Errors found in Activated Sludge<br></span>
+            <span *ngIf="!modification.valid.aeratorPerformanceValid">Errors found in Aerator Performance<br></span>
+            <span *ngIf="!modification.valid.systemBasicsValid">Errors found in System Basics<br></span>
+          </div>
         </th>
       </tr>
       <tr>

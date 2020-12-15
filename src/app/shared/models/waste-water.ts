@@ -1,3 +1,5 @@
+import { SavingsOpportunity } from "./explore-opps";
+
 export interface WasteWater {
     baselineData: WasteWaterData,
     modifications?: Array<WasteWaterData>,
@@ -17,7 +19,9 @@ export interface WasteWaterData {
     aeratorPerformanceData: AeratorPerformanceData,
     name: string,
     id: string,
-    outputs?: WasteWaterResults
+    outputs?: WasteWaterResults,
+    valid?: WasteWaterValid,
+    exploreAeratorPerformance?: SavingsOpportunity
 }
 
 export interface ActivatedSludgeData {
@@ -155,4 +159,11 @@ export interface WasteWaterTreatmentInputData {
     Speed: number,
     EnergyCostUnit: number
 
+}
+
+export interface WasteWaterValid {
+    isValid: boolean,
+    activatedSludgeValid: boolean,
+    aeratorPerformanceValid: boolean,
+    systemBasicsValid: boolean,
 }

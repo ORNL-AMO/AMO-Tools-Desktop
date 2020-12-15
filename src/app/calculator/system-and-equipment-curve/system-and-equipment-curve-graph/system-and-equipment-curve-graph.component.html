@@ -28,7 +28,7 @@
             [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
           </div>
         </div>
-        <app-chart-hover-data [equipmentType]="equipmentType" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
+        <app-chart-hover-data [equipmentType]="equipmentType" [settings]="settings" [imperialFanPrecision]="imperialFanPrecision" [currentHoverData]="currentHoverData"></app-chart-hover-data>
       </div>
     </div>
   </div>
@@ -88,7 +88,7 @@
       </div>
     </div>
   </div>
-  <app-chart-hover-data [equipmentType]="equipmentType" [settings]="settings" [currentHoverData]="currentHoverData"></app-chart-hover-data>
+  <app-chart-hover-data [equipmentType]="equipmentType" [settings]="settings" [imperialFanPrecision]="imperialFanPrecision" [currentHoverData]="currentHoverData"></app-chart-hover-data>
 </div>
 
   <div class="d-flex flex-column my-2 p-2 scroll-item data-summary">
@@ -127,7 +127,8 @@
         </div>
         </td>
         <td class="text-center">{{point.x | number: '1.0-0'}}</td>
-        <td class="text-center">{{point.y | number: '1.0-0'}}</td>
+        <td *ngIf="imperialFanPrecision" class="text-center">{{point.y | number: '1.2-2'}}</td>
+        <td *ngIf="!imperialFanPrecision" class="text-center">{{point.y | number: '1.0-0'}}</td>
         <td class="text-center">
           <span *ngIf="point.efficiency">{{point.efficiency | number: '1.0-1'}}</span>
           <span *ngIf="!point.efficiency">&mdash; &mdash;</span>
@@ -177,7 +178,8 @@
       </tr>
       <tr *ngFor="let point of selectedDataPoints; let index = index">
         <td class="text-center">{{point.x}}</td>
-        <td class="text-center">{{point.y}}</td>
+        <td *ngIf="imperialFanPrecision" class="text-center">{{point.y | number: '1.2-2'}}</td>
+        <td *ngIf="!imperialFanPrecision" class="text-center">{{point.y | number: '1.0-0'}}</td>
         <td class="text-center">{{point.efficiency | number: '1.1-1'}}</td>
         <td class="text-center">{{point.power | number: '1.1-1'}}</td>
       </tr>

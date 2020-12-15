@@ -3,6 +3,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class EnergyInputService {
@@ -44,7 +45,8 @@ export class EnergyInputService {
     return tmpEnergyInput;
   }
 
-  getFormFromLoss(loss: EnergyInputEAF): FormGroup {
+  getFormFromLoss(loss: EnergyInputEAF, minElectricityInput: number): FormGroup {
+    let electricityInputValidators = this.getElectricityInputValidators(minElectricityInput);
     return this.formBuilder.group({
       naturalGasHeatInput: [loss.naturalGasHeatInput, Validators.required],
       flowRateInput: [loss.flowRateInput],
@@ -53,9 +55,17 @@ export class EnergyInputService {
       electrodeUse: [loss.electrodeUse, Validators.required],
       electrodeHeatingValue: [loss.electrodeHeatingValue, Validators.required],
       otherFuels: [loss.otherFuels, Validators.required],
-      electricityInput: [loss.electricityInput, Validators.required],
+      electricityInput: [loss.electricityInput, electricityInputValidators],
       name: [loss.name]
     })
+  }
+
+  getElectricityInputValidators(minElectricityInput: number){
+    let electricityInputValidators = [];
+    if(minElectricityInput != undefined){
+      electricityInputValidators = [Validators.required, GreaterThanValidator.greaterThan(minElectricityInput)];
+    }
+    return electricityInputValidators;
   }
 
   calculateHeatInputFromFlowRate(flowRate: number, settings: Settings) {

@@ -72,7 +72,7 @@
       <label class="bold">Gross Heat</label>
       <div *ngIf="loss.grossHeat" class="text-center bold">
         {{loss.grossHeat | sigFigs:'6'}}
-        <span>{{resultsUnit}}</span>
+        <span>{{ resultsUnit }}</span>
       </div>
       <div *ngIf="!loss.grossHeat" class="text-center bold">
         &mdash; &mdash;
@@ -82,7 +82,7 @@
       <label class="bold">Flue Gas Losses</label>
       <div *ngIf="loss.systemLosses" class="text-center bold">
         {{loss.systemLosses | sigFigs:'6'}}
-        <span>{{resultsUnit}}</span>
+        <span>{{ resultsUnit }}</span>
       </div>
       <div *ngIf="!loss.systemLosses" class="text-center bold">
         &mdash; &mdash;

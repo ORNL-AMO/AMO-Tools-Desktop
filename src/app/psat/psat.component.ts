@@ -18,6 +18,7 @@ import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import { FormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-psat',
@@ -45,8 +46,11 @@ export class PsatComponent implements OnInit {
   //TODO: move this and sankey choosing logic oput of this component
   psatOptions: Array<any>;
   psatOptionsLength: number;
-  psat1: PSAT;
-  psat2: PSAT;
+  psat1: {name: string, psat: PSAT};
+  psat2: {name: string, psat: PSAT};
+
+  sankeyLabelStyle: string = 'both';
+  showSankeyLabelOptions: boolean;
 
   _psat: PSAT;
   settings: Settings;
@@ -80,7 +84,8 @@ export class PsatComponent implements OnInit {
     private pumpFluidService: PumpFluidService,
     private motorService: MotorService,
     private fieldDataService: FieldDataService,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+    private settingsService: SettingsService) {
   }
 
   ngOnInit() {
@@ -220,6 +225,7 @@ export class PsatComponent implements OnInit {
     this.psatOptions = new Array<any>();
     this.psatOptions.push({ name: 'Baseline', psat: this._psat });
     this.psat1 = this.psatOptions[0];
+    this.showSankeyLabelOptions = ((this.psat1.name == 'Baseline' || this.psat1.name == null) && this.psat1.psat.setupDone) || (this.psat1.psat.valid && this.psat1.psat.valid.isValid);
     if (this._psat.modifications) {
       this._psat.modifications.forEach(mod => {
         this.psatOptions.push({ name: mod.psat.name, psat: mod.psat });
@@ -229,11 +235,15 @@ export class PsatComponent implements OnInit {
     }
   }
 
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle = style;
+  }
+
   getSettings() {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (!this.settings) {
-      this.settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-      this.addSettings(this.settings);
+      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(settings);
     }
   }
 
@@ -379,12 +389,12 @@ export class PsatComponent implements OnInit {
   }
 
   addSettings(settings: Settings) {
-    delete settings.id;
-    delete settings.directoryId;
-    settings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(settings).then(id => {
-      this.settings.id = id;
-      this.settingsDbService.setAll();
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+      });
     });
   }
 }

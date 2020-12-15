@@ -12,6 +12,7 @@ import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { CalculatorsService } from './calculators/calculators.service';
 import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 import { SortCardsData } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -53,7 +54,8 @@ export class TreasureHuntComponent implements OnInit {
     private treasureHuntService: TreasureHuntService,
     private cd: ChangeDetectorRef,
     private calculatorsService: CalculatorsService,
-    private treasureChestMenuService: TreasureChestMenuService
+    private treasureChestMenuService: TreasureChestMenuService,
+    private settingsService: SettingsService
   ) { }
 
   ngOnInit() {
@@ -141,8 +143,8 @@ export class TreasureHuntComponent implements OnInit {
   getSettings() {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (!this.settings) {
-      this.settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-      this.addSettings(this.settings);
+      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(settings);
     }
   }
 
@@ -256,12 +258,12 @@ export class TreasureHuntComponent implements OnInit {
   }
 
   addSettings(settings: Settings) {
-    delete settings.id;
-    delete settings.directoryId;
-    settings.assessmentId = this.assessment.id;
-    this.indexedDbService.addSettings(settings).then(id => {
-      this.settings.id = id;
-      this.settingsDbService.setAll();
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+      });
     });
   }
 }

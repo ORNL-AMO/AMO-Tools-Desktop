@@ -60,7 +60,7 @@ export class ModificationListModalComponent implements OnInit {
         this.wasteWaterService.selectedModificationId.next(undefined);
       }
     }
-    this.wasteWaterService.wasteWater.next(this.wasteWater);
+    this.wasteWaterService.updateWasteWater(this.wasteWater);
     this.deleteModificationId = undefined;
   }
 
@@ -78,14 +78,14 @@ export class ModificationListModalComponent implements OnInit {
 
   selectModification(modId: string) {
     this.wasteWaterService.selectedModificationId.next(modId);
-    this.wasteWaterService.wasteWater.next(this.wasteWater);
+    this.wasteWaterService.updateWasteWater(this.wasteWater);
     this.closeModal();
   }
 
   saveUpdates() {
     let renameModIndex: number = this.wasteWater.modifications.findIndex(modification => { return modification.id == this.renameModificationId });
     this.wasteWater.modifications[renameModIndex].name = this.renameModificationName;
-    this.wasteWaterService.wasteWater.next(this.wasteWater);
+    this.wasteWaterService.updateWasteWater(this.wasteWater);
     this.renameModificationId = undefined;
   }
 
@@ -97,7 +97,7 @@ export class ModificationListModalComponent implements OnInit {
     }
     modificationCopy.id = Math.random().toString(36).substr(2, 9);
     this.wasteWater.modifications.push(modificationCopy);
-    this.wasteWaterService.wasteWater.next(this.wasteWater);
+    this.wasteWaterService.updateWasteWater(this.wasteWater);
     this.wasteWaterService.selectedModificationId.next(modificationCopy.id);
   }
 
@@ -117,7 +117,7 @@ export class ModificationListModalComponent implements OnInit {
     modification.name = this.newModificationName;
     modification.id = Math.random().toString(36).substr(2, 9);
     this.wasteWater.modifications.push(modification);
-    this.wasteWaterService.wasteWater.next(this.wasteWater);
+    this.wasteWaterService.updateWasteWater(this.wasteWater);
     this.wasteWaterService.selectedModificationId.next(modification.id);
     this.closeModal();
   }

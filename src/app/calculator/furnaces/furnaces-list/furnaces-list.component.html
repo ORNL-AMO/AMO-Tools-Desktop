@@ -4,6 +4,51 @@
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="calc-img"
+                        [routerLink]="['/calculators/flue-gas']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/flue-gas']">Flue Gas</a>
+                <p>
+                    Determine the amount of heat lost in the furnace flue gas
+
+                </p>
+            </div>
+        </div>
+
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/wall-loss.png" class="calc-img"
+                        [routerLink]="['/calculators/wall-loss']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/wall-loss']">Wall Loss</a>
+                <p>
+                    This calculator can be used to calculate fuel savings due to changes in wall insulation for a heating system.
+                </p>
+            </div>
+        </div>
+
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/charge-materials.png" class="calc-img"
+                        [routerLink]="['/calculators/charge-material']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/charge-material']">Charge Material</a>
+                <p>
+                    Estimates savings from preheating or changing how the load is heated.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/furnace-icons/o2.png" class="calc-img"
                         [routerLink]="['/calculators/o2-enrichment']">
                 </div>

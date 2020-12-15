@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SSMTLosses, SSMTOutput, TurbineOutput, SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, BoilerOutput } from '../shared/models/steam/steam-outputs';
+import { SSMTLosses, SSMTOutput, TurbineOutput, SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, BoilerOutput, HeatExchangerOutput } from '../shared/models/steam/steam-outputs';
 import { SSMTInputs, SSMT, SsmtValid } from '../shared/models/steam/ssmt';
 import { SteamService } from '../calculator/steam/steam.service';
 import { Settings } from '../shared/models/settings';
@@ -19,7 +19,6 @@ export class CalculateLossesService {
     let ssmtValid: SsmtValid = this.ssmtService.checkValid(ssmtCpy, settings);
     if (ssmtValid.isValid) {
       ssmtLosses.stack = this.calculateStack(resultsCpy);
-      ssmtLosses.blowdown = this.calculateBlowdown(resultsCpy.boilerOutput, settings);
       ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(resultsCpy.deaeratorOutput, settings);
       ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(resultsCpy.highPressureProcessSteamUsage, resultsCpy.highPressureCondensate, settings);
       ssmtLosses.highPressureProcessUsage = resultsCpy.highPressureProcessSteamUsage.processUsage;
@@ -62,6 +61,15 @@ export class CalculateLossesService {
           ssmtLosses.mediumPressureProcessLoss = this.calculateProcessLoss(resultsCpy.mediumPressureProcessSteamUsage, resultsCpy.mediumPressureCondensate, settings);
         }
       }
+
+      if (inputCpy.boilerInput.preheatMakeupWater) {
+        ssmtLosses.blowdown = this.calculateBlowdownHeatExchanger(resultsCpy.heatExchanger, settings);
+      } else if (inputCpy.boilerInput.blowdownFlashed) {
+        ssmtLosses.blowdown = this.calculateBlowdownFlashTank(resultsCpy.blowdownFlashTank, settings);
+      } else {
+        ssmtLosses.blowdown = this.calculateBlowdown(resultsCpy.boilerOutput, settings);
+      }
+
       ssmtLosses.condensateLosses = this.calculateCondensateLoss(resultsCpy, settings);
       ssmtLosses.condensingLosses = this.calculateCondensingLosses(resultsCpy.condensingTurbine, inputCpy, settings);
 
@@ -84,6 +92,18 @@ export class CalculateLossesService {
 
   calculateBlowdown(boilerOutput: BoilerOutput, settings: Settings): number {
     let energy: number = this.calculateEnergy(boilerOutput.blowdownMassFlow, boilerOutput.blowdownSpecificEnthalpy, settings);
+    energy = this.convertUnitsService.value(energy).from('MJ').to(settings.steamEnergyMeasurement);
+    return energy;
+  }
+
+  calculateBlowdownFlashTank(flashTank: FlashTankOutput, settings: Settings): number {
+    let energy: number = this.calculateEnergy(flashTank.outletLiquidMassFlow, flashTank.outletLiquidSpecificEnthalpy, settings);
+    energy = this.convertUnitsService.value(energy).from('MJ').to(settings.steamEnergyMeasurement);
+    return energy;
+  }
+
+  calculateBlowdownHeatExchanger(heatExchanger: HeatExchangerOutput, settings: Settings): number {
+    let energy: number = this.calculateEnergy(heatExchanger.hotOutletMassFlow, heatExchanger.hotOutletSpecificEnthalpy, settings);
     energy = this.convertUnitsService.value(energy).from('MJ').to(settings.steamEnergyMeasurement);
     return energy;
   }

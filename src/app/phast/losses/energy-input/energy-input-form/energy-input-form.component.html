@@ -101,6 +101,14 @@
         <!-- <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span> -->
         <span class="input-group-addon units">kW</span>
       </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="energyInputForm.controls.electricityInput.invalid && !energyInputForm.controls.electricityInput.pristine">
+        <span *ngIf="energyInputForm.controls.electricityInput.errors.greaterThan">Electricity Input must be greater
+          than
+          {{energyInputForm.controls.electricityInput.errors.greaterThan | number:'1.2-2'}} kW OR the Exhaust Gas Loss
+          page must be filled out.
+        </span>
+      </span>
     </div>
   </div>
 </form>
