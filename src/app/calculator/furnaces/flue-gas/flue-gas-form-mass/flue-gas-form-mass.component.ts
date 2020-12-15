@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
@@ -42,12 +42,11 @@ export class FlueGasFormMassComponent implements OnInit {
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
   warnings: FlueGasWarnings;
-  showOperatingHoursModal: boolean;
 
-  formWidth: number;
   constructor(private flueGasService: FlueGasService,
               private flueGasFormService: FlueGasFormService,
               private phastService: PhastService, 
+              private cd: ChangeDetectorRef,
               private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
@@ -61,24 +60,19 @@ export class FlueGasFormMassComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
-      if (this.selected == false) {
-        this.byMassForm.disable();
-      } else {
-        this.byMassForm.enable();
-      }
+      this.setFormState();
     }
   }
 
   initSubscriptions() {
     this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
-      this.setForm();
+      this.initForm();
+      this.cd.detectChanges();
       })
   }
 
   initFormSetup() {
-    if (this.selected == false) {
-      this.byMassForm.disable();
-    }
+    this.setFormState();
     if (this.byMassForm.controls.gasTypeId.value && this.byMassForm.controls.gasTypeId.value !== '') {
       if (this.byMassForm.controls.carbon.value === '') {
         this.setProperties();
@@ -88,7 +82,15 @@ export class FlueGasFormMassComponent implements OnInit {
     this.calcExcessAir();
   }
 
-  setForm() {
+  setFormState() {
+    if (this.selected == false) {
+      this.byMassForm.disable();
+    } else {
+      this.byMassForm.enable();
+    }
+  }
+
+  initForm() {
     let updatedFlueGasData: FlueGas;
     if (this.isBaseline) {
       updatedFlueGasData= this.flueGasService.baselineData.getValue();
@@ -96,7 +98,7 @@ export class FlueGasFormMassComponent implements OnInit {
       updatedFlueGasData = this.flueGasService.modificationData.getValue();
     }
 
-    if (updatedFlueGasData.flueGasByMass) {
+    if (updatedFlueGasData && updatedFlueGasData.flueGasByMass) {
       this.byMassForm = this.flueGasFormService.initByMassFormFromLoss(updatedFlueGasData, false);
     } else {
       this.byMassForm = this.flueGasFormService.initEmptyMassForm();
@@ -108,13 +110,6 @@ export class FlueGasFormMassComponent implements OnInit {
   checkWarnings() {
     let tmpLoss: FlueGasByMass = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm).flueGasByMass;
     this.warnings = this.flueGasFormService.checkFlueGasByMassWarnings(tmpLoss);
-  }
-
-  setEnergySource(str: string) {
-    this.byMassForm.patchValue({
-      energySourceType: str
-    });
-    this.calculate();
   }
 
   setCalcMethod() {
@@ -234,26 +229,5 @@ export class FlueGasFormMassComponent implements OnInit {
     this.calculate();
   }
 
-  
-  closeOperatingHoursModal() {
-    this.showOperatingHoursModal = false;
-  }
-
-  openOperatingHoursModal() {
-    this.showOperatingHoursModal = true;
-  }
-
-  updateOperatingHours(oppHours: OperatingHours) {
-    this.flueGasService.operatingHours = oppHours;
-    this.byMassForm.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
-    this.calculate();
-    this.closeOperatingHoursModal();
-  }
-
-  setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
-      this.formWidth = this.formElement.nativeElement.clientWidth;
-    }
-  }
 
 }
