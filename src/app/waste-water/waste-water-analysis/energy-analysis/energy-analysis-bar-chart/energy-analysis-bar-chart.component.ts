@@ -111,13 +111,16 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
   }
 
   getFormatedValue(num: number, prefix?: string, suffix?: string): string {
-    let formattedWithDecimal = (num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-    if (prefix) {
-      return prefix + formattedWithDecimal.substring(0, formattedWithDecimal.length - 3);
-    } else if (suffix) {
-      return formattedWithDecimal.substring(0, formattedWithDecimal.length - 3) + ' ' + suffix;
-    } else {
-      return formattedWithDecimal.substring(0, formattedWithDecimal.length - 3);
+    if (num) {
+      let formattedWithDecimal = (num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      if (prefix) {
+        return prefix + formattedWithDecimal.substring(0, formattedWithDecimal.length - 3);
+      } else if (suffix) {
+        return formattedWithDecimal.substring(0, formattedWithDecimal.length - 3) + ' ' + suffix;
+      } else {
+        return formattedWithDecimal.substring(0, formattedWithDecimal.length - 3);
+      }
     }
+    return;
   }
 }

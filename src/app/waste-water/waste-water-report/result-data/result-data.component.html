@@ -25,23 +25,23 @@
                     <div class="hide-print" *ngIf="modification.outputs.percentCostSavings">
                         <app-percent-graph [value]="modification.outputs.percentCostSavings">
                         </app-percent-graph>
-                        <div class="alert-danger small" *ngIf="!modification.valid.isValid">
-                            Invalid modification<br>
-                            <span *ngIf="!modification.valid.activatedSludgeValid">Errors found in Activated Sludge<br></span>
-                            <span *ngIf="!modification.valid.aeratorPerformanceValid">Errors found in Aerator Performance<br></span>
-                            <span *ngIf="!modification.valid.systemBasicsValid">Errors found in System Basics<br></span>
-                        </div>
                     </div>
                     <div class="show-print text-center" *ngIf="modification.outputs.percentCostSavings">
                         {{modification.outputs.percentCostSavings | number:'1.0'}} %
                     </div>
                     <div *ngIf="!modification.outputs.percentCostSavings" class="mx-auto">&mdash; &mdash;
                     </div>
+                    <div class="alert-danger small" *ngIf="!modification.valid.isValid">
+                        Invalid modification<br>
+                        <span *ngIf="!modification.valid.activatedSludgeValid">Errors found in Activated
+                            Sludge<br></span>
+                        <span *ngIf="!modification.valid.aeratorPerformanceValid">Errors found in Aerator
+                            Performance<br></span>
+                        <span *ngIf="!modification.valid.systemBasicsValid">Errors found in System Basics<br></span>
+                    </div>
                 </td>
             </tr>
-            <!-- <tr>
-                <td colspan="100%" class="bold large">Approximate Operating Conditions</td>
-            </tr> -->
+            <label class="group-label mt-2">Influent</label>
             <tr>
                 <td>Total Average Daily Flow Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</td>
@@ -96,6 +96,8 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.SecWWTSSLoad
             | number:'1.0-1'}}</td>
             </tr>
+
+            <label class="group-label mt-2">Activated Sludge Process</label>
             <tr>
                 <td>F/M Ratio</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
@@ -245,6 +247,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.VOLR
             | number:'1.0-1'}}</td>
             </tr>
+            <label class="group-label mt-2">Effluent</label>
             <tr>
                 <td>Effluent CBOD<sub>5</sub> (mg/L)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
@@ -285,9 +288,7 @@
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.EffluentNO3_N_W_Denit
             | number:'1.0-1'}}</td>
             </tr>
-            <!-- <tr>
-                <td colspan="100%" class="bold large">Actual Aerator Performance</td>
-            </tr> -->
+            <label class="group-label mt-2">Aerator</label>
             <tr>
                 <td>Field Oxygen Transfer Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
                         O<sub>2</sub>/hp-hr</span><span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg

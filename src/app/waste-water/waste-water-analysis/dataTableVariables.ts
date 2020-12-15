@@ -62,8 +62,8 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     imperialUnit: 'kg/day',
     selected: true
 }, {
-    name: 'Effluent TSS',
-    label: 'Effluent',
+    name: 'Effluent',
+    label: 'Effluent TSS',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
     selected: false

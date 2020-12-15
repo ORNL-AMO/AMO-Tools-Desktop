@@ -28,7 +28,7 @@
         <!-- So -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.So, 'invalid': form.controls.So.invalid}">
-            <label for="{{'So_'+idString}}">S<sub>o</sub></label>
+            <label for="{{'So_'+idString}}">Influent CBOD<sub>5</sub> (S<sub>o</sub>)</label>
             <div class="input-group">
                 <input type="number" name="So" class="form-control number-input-field" id="{{'So_'+idString}}"
                     (focus)="focusField('So')" (input)="save()" formControlName="So" [readonly]="!selected">
@@ -114,7 +114,7 @@
         <!-- Biomass -->
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.Biomass, 'invalid': form.controls.Biomass.invalid}">
-            <label for="{{'Biomass_'+idString}}">Biomass Yield</label>
+            <label for="{{'Biomass_'+idString}}">VSS/TSS Ratio of Biomass</label>
             <div class="input-group">
                 <input type="number" name="Biomass" class="form-control number-input-field" id="{{'Biomass_'+idString}}"
                     (focus)="focusField('Biomass')" (input)="save()" formControlName="Biomass" [readonly]="!selected">
@@ -220,7 +220,7 @@
                 <input type="number" name="FractionBiomass" class="form-control number-input-field"
                     id="{{'FractionBiomass_'+idString}}" (focus)="focusField('FractionBiomass')" (input)="save()"
                     formControlName="FractionBiomass" [readonly]="!selected">
-                    <span class="input-group-addon units">mg VSS/mg</span>
+                <span class="input-group-addon units">mg VSS/mg</span>
             </div>
             <span *ngIf="form.controls.FractionBiomass.invalid && !form.controls.FractionBiomass.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.FractionBiomass.errors.required">Value
@@ -237,7 +237,7 @@
                 <input type="number" name="BiomassYeild" class="form-control number-input-field"
                     id="{{'BiomassYeild_'+idString}}" (focus)="focusField('BiomassYeild')" (input)="save()"
                     formControlName="BiomassYeild" [readonly]="!selected">
-                    <span class="input-group-addon units">mg VSS/mg</span>
+                <span class="input-group-addon units">mg VSS/mg</span>
             </div>
             <span *ngIf="form.controls.BiomassYeild.invalid && !form.controls.BiomassYeild.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.BiomassYeild.errors.required">Value
@@ -254,7 +254,7 @@
                 <input type="number" name="HalfSaturation" class="form-control HalfSaturation-input-field"
                     id="{{'HalfSaturation_'+idString}}" (focus)="focusField('HalfSaturation')" (input)="save()"
                     formControlName="HalfSaturation" [readonly]="!selected">
-                    <span class="input-group-addon units">mg/L BOD</span>
+                <span class="input-group-addon units">mg/L BOD</span>
             </div>
             <span *ngIf="form.controls.HalfSaturation.invalid && !form.controls.HalfSaturation.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.HalfSaturation.errors.required">Value
