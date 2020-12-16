@@ -76,7 +76,6 @@ export class WallService {
         output.fuelSavings = output.baseline.totalFuelUse - output.modification.totalFuelUse;
         output.costSavings = output.baseline.totalFuelCost - output.modification.totalFuelCost;
       }
-    
     }
 
     this.output.next(output);
@@ -164,8 +163,8 @@ export class WallService {
     } else {
       dataArray = this.modificationData.getValue();
     }
-    // dataArray doesn't exist during reset cycle (multiple subjects emitting)
-    if (dataArray) {
+    // dataArray won't exist during reset cycle w/ multiple subjects emitting
+    if (dataArray && dataArray[index]) {
       dataArray[index].name = data.name;
       dataArray[index].hoursPerYear = data.hoursPerYear;
       dataArray[index].fuelCost = data.fuelCost;
@@ -201,7 +200,7 @@ export class WallService {
     }
   }
   
-  addLoss(settings: Settings, hoursPerYear: number, modificationExists: boolean) {
+  addLoss(hoursPerYear: number, modificationExists: boolean) {
     let currentBaselineData: Array<WallLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
     let baselineObj: WallLoss = this.initDefaultLoss(index, hoursPerYear);
@@ -258,6 +257,7 @@ export class WallService {
       fuelCost: 3.5,
       energySourceType: 'Fuel'
     };
+
     let baselineExample = [baselineData];
     this.baselineData.next(baselineExample);
 

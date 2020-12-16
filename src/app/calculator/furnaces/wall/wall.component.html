@@ -1,6 +1,5 @@
 <div class="d-flex h-100 modify-conditions phast standalone-calculator" #contentContainer>
-	<!-- <div class="d-flex flex-column w-100 mh-100 scroll-item" [ngClass]="{'disabled': baselineSelected == true, 'modal-open': isModalOpen == true}"> -->
-		<div class="d-flex flex-column w-100 mh-100 scroll-item" [ngClass]="{'disabled': baselineSelected == true}">
+		<div class="d-flex flex-column w-100 mh-100 scroll-item">
 	  <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
 		[ngClass]="{'justify-content-between': inTreasureHunt}">
 		<div class="d-flex pl-2 align-items-center">
@@ -30,7 +29,8 @@
 	  <div class="d-flex">
 		<div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
 		  <div class="baseline w-50 panel-column" (click)="setBaselineSelected()"
-			[ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+			[ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}"
+			>
 			<div class="header mx-2 mb-4">
 			  <h3>Baseline</h3>
               <a class="click-link pull-right small add-loss" (click)="addLoss()">+Add Loss</a>
@@ -55,7 +55,7 @@
 
 		  <!-- Modification -->
 		  <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="setModificationSelected()"
-			[ngClass]="{'disabled': baselineSelected == true}">
+			[ngClass]="{'disabled': baselineSelected == true, 'modal-open': isModalOpen == true}">
 			<div class="header mx-2 mb-4">
 			  <h3>Modification</h3>
 			</div>

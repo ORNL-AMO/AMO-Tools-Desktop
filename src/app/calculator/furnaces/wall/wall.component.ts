@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { WallLoss, WallLossOutput } from '../../../shared/models/phast/losses/wallLoss';
+import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../shared/models/settings';
 import { WallService } from './wall.service';
 
@@ -22,7 +22,6 @@ export class WallComponent implements OnInit {
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
-  isEditingName: boolean;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -30,8 +29,10 @@ export class WallComponent implements OnInit {
     }, 100);
   }
   containerHeight: number;
+  columnHeight: number;
   isModalOpen: boolean;
   modalSubscription: Subscription;
+  isEditingName: boolean;
 
   baselineData: Array<WallLoss>;
   modificationData: Array<WallLoss>;
@@ -90,7 +91,7 @@ export class WallComponent implements OnInit {
 
   addLoss() {
     let hoursPerYear = this.operatingHours? this.operatingHours.hoursPerYear : undefined;
-    this.wallService.addLoss(this.settings, hoursPerYear, this.modificationExists);
+    this.wallService.addLoss(hoursPerYear, this.modificationExists);
   }
 
   createModification() {

@@ -11,16 +11,12 @@
     max-width: 90%; 
 }
 
- .form-section {
-    margin-bottom: 10px;
-    padding-bottom: 4px;
-    border-bottom: #bbb dashed 1px;
-  }
+.form-section {
+   margin-bottom: 10px;
+   padding-bottom: 4px;
+   border-bottom: #bbb dashed 1px;
+ }
 
-  /* .form-section {
-    padding-bottom: .25rem;
-    border-bottom: 1px dashed;
-} */
 .add-loss {
     margin-bottom: 5px;
 }

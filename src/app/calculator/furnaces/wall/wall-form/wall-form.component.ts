@@ -52,12 +52,19 @@ export class WallFormComponent implements OnInit {
   isEditingName: boolean;
 
   trackingEnergySource: boolean;
+  idString: string;
 
   constructor(private wallFormService: WallFormService,
               private suiteDbService: SuiteDbService,
               private cd: ChangeDetectorRef,
               private wallService: WallService) { }
   ngOnInit(): void {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.index;
+    }
+    else {
+      this.idString = '_baseline_' + this.index;
+    }
     this.trackingEnergySource = this.index > 0 || !this.isBaseline;
     this.initSubscriptions();
     this.energyUnit = this.wallService.getAnnualEnergyUnit(this.wallLossesForm.controls.energySourceType.value, this.settings);
