@@ -110,13 +110,13 @@ export class ChargeMaterialService {
     let calculatorEnergyUnit = this.getAnnualEnergyUnit(energyData.energySourceType, settings);
     if (chargeMaterialData.chargeMaterialType == 'Gas' && chargeMaterialData.gasChargeMaterial) {
       loadChargeMaterial = this.phastService.gasLoadChargeMaterial(chargeMaterialData.gasChargeMaterial, settings, calculatorEnergyUnit);
-      availableHeat = chargeMaterialData.gasChargeMaterial.availableHeat;
+      availableHeat = energyData.availableHeat;
     } else if (chargeMaterialData.chargeMaterialType == 'Liquid' && chargeMaterialData.liquidChargeMaterial) {
       loadChargeMaterial = this.phastService.liquidLoadChargeMaterial(chargeMaterialData.liquidChargeMaterial, settings, calculatorEnergyUnit);
-      availableHeat = chargeMaterialData.liquidChargeMaterial.availableHeat;
+      availableHeat = energyData.availableHeat;
     }  else if (chargeMaterialData.chargeMaterialType == 'Solid' && chargeMaterialData.solidChargeMaterial) {
       loadChargeMaterial = this.phastService.solidLoadChargeMaterial(chargeMaterialData.solidChargeMaterial, settings, calculatorEnergyUnit);
-      availableHeat = chargeMaterialData.solidChargeMaterial.availableHeat;
+      availableHeat = energyData.availableHeat;
     }
 
     result.heatRequired = loadChargeMaterial.grossHeatLoss;
@@ -141,7 +141,8 @@ export class ChargeMaterialService {
     let energyData: EnergyData = {
       energySourceType: "Fuel",
       fuelCost: 0,
-      hoursPerYear: 8760
+      hoursPerYear: 8760,
+      availableHeat: 100
     }
     this.baselineData.next(emptyBaselineData);
     this.modificationData.next(undefined);
@@ -217,7 +218,8 @@ export class ChargeMaterialService {
     let modificationEnergy: EnergyData = {
       energySourceType: baselineEnergyCopy.energySourceType,
       fuelCost: baselineEnergyCopy.fuelCost,
-      hoursPerYear: baselineEnergyCopy.hoursPerYear
+      hoursPerYear: baselineEnergyCopy.hoursPerYear,
+      availableHeat: baselineEnergyCopy.availableHeat
     }
 
     this.modificationEnergyData.next(modificationEnergy);
@@ -245,7 +247,6 @@ export class ChargeMaterialService {
         chargeReacted: 1,
         reactionHeat: 50,
         additionalHeat: 0,
-        availableHeat: 100
       }
     };
 
@@ -269,19 +270,19 @@ export class ChargeMaterialService {
         chargeReacted: 1,
         reactionHeat: 50,
         additionalHeat: 0,
-        availableHeat: 100
       }
-    }
-
-    if (settings.unitsOfMeasure != 'Imperial') {
-      this.convertSolidChargeMaterial(baselineChargeMaterial.solidChargeMaterial, 'Imperial', 'Metric');
     }
 
     let energyExample: EnergyData = {
       energySourceType: 'Fuel',
       hoursPerYear: 8760,
-      fuelCost: 3.99
+      fuelCost: 3.99,
+      availableHeat: 100
     };
+
+    if (settings.unitsOfMeasure != 'Imperial') {
+      this.convertSolidChargeMaterial(baselineChargeMaterial.solidChargeMaterial, 'Imperial', 'Metric');
+    }
 
     this.energySourceType.next('Fuel');
     this.baselineEnergyData.next(energyExample);

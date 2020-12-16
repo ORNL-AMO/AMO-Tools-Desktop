@@ -31,10 +31,6 @@ export class SolidMaterialFormService {
       'name': ['Material #' + lossNumber]
     });
 
-    if (!assesmentLossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-    }
-
     return formGroup;
   }
 
@@ -63,10 +59,6 @@ export class SolidMaterialFormService {
       'additionalHeatRequired': [chargeMaterial.solidChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
     });
-
-    if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-    }
 
     formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
@@ -108,7 +100,6 @@ export class SolidMaterialFormService {
         chargeReacted: solidForm.controls.percentChargeReacted.value,
         reactionHeat: solidForm.controls.heatOfReaction.value,
         additionalHeat: solidForm.controls.additionalHeatRequired.value,
-        availableHeat: solidForm.controls.availableHeat? solidForm.controls.availableHeat.value : '',
       }
     };
 

@@ -26,7 +26,6 @@ export class GasMaterialFormComponent implements OnInit {
   @Input()
   inModal: boolean;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   resetDataSub: Subscription;
@@ -38,7 +37,6 @@ export class GasMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   materialTypes: any;
   showModal: boolean;
-  showFlueGasModal: boolean;
   energySourceType: string;
 
   constructor(private suiteDbService: SuiteDbService, 
@@ -178,21 +176,4 @@ export class GasMaterialFormComponent implements OnInit {
     this.chargeMaterialService.modalOpen.next(false);
   }
 
-  initFlueGasModal() {
-    this.showFlueGasModal = true;
-    this.chargeMaterialService.modalOpen.next(this.showFlueGasModal);
-    this.flueGasModal.show();
-  }
-
-  hideFlueGasModal(calculatedAvailableHeat?: any) {
-    if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.roundVal(calculatedAvailableHeat, 1);
-      this.chargeMaterialForm.patchValue({
-        availableHeat: calculatedAvailableHeat
-      });
-    }
-    this.flueGasModal.hide();
-    this.showFlueGasModal = false;
-    this.chargeMaterialService.modalOpen.next(this.showFlueGasModal);
-  }
 }

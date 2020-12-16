@@ -25,7 +25,6 @@ export interface GasChargeMaterial {
   heatRequired?: number;
   endoExoHeat?: number;
   netHeatLoss?: number;
-  availableHeat?: number
 }
 //Liquid and Solid uses "chargeFeedRate"
 export interface LiquidChargeMaterial {
@@ -46,7 +45,6 @@ export interface LiquidChargeMaterial {
   heatRequired?: number;
   endoExoHeat?: number;
   netHeatLoss?: number;
-  availableHeat?: number
 }
 export interface SolidChargeMaterial {
   materialId?: number;
@@ -69,7 +67,6 @@ export interface SolidChargeMaterial {
   heatRequired?: number;
   endoExoHeat?: number;
   netHeatLoss?: number;
-  availableHeat?: number
 }
 
 export interface ChargeMaterialOutput {
@@ -101,4 +98,5 @@ export interface EnergyData {
   energySourceType?: string;
   fuelCost?: number;
   hoursPerYear?: number;
+  availableHeat?: number;
 }

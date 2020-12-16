@@ -32,18 +32,20 @@
 			<div class="header mx-2 mb-4">
 			  <h3>Baseline</h3>
 			</div>
-			<div class="d-flex flex-column mx-2 mb-4">
+			<div class="d-flex flex-column mx-4 mb-4">
 			  <!-- app form -->
-			  <app-energy-form [selected]="baselineSelected" [isBaseline]="true" [settings]="settings"></app-energy-form>
-				<div class="form-group">
-				  <label class="small" for="materialType">Select Type</label>
-				  <select [disabled]="!baselineSelected" class="form-control" id="materialType" (change)="changeMaterialType()" [(ngModel)]="materialType"
-					 (focus)="focusField('chargeMaterialType')">
-					<option [ngValue]="'Solid'">Solid</option>
-					<option [ngValue]="'Liquid'">Liquid</option>
-					<option [ngValue]="'Gas'">Gas</option>
-				  </select>
+			  <div class="mb-4 p-2 form-card">
+					<app-energy-form [selected]="baselineSelected" [isBaseline]="true" [settings]="settings"></app-energy-form>
+					<div class="form-group">
+						<label class="small" for="materialType">Select Type</label>
+						<select [disabled]="!baselineSelected" class="form-control" id="materialType" (change)="changeMaterialType()" [(ngModel)]="materialType"
+						(focus)="focusField('chargeMaterialType')">
+						<option [ngValue]="'Solid'">Solid</option>
+						<option [ngValue]="'Liquid'">Liquid</option>
+						<option [ngValue]="'Gas'">Gas</option>
+					</select>
 				</div>
+
 				<app-solid-material-form *ngIf="materialType == 'Solid'" [selected]="baselineSelected"
 					[isBaseline]="true" [settings]="settings"></app-solid-material-form>
 				<app-liquid-material-form *ngIf="materialType == 'Liquid'" [selected]="baselineSelected"
@@ -94,6 +96,7 @@
 				</div>
 
 			  </div>
+			  </div>
 
 			  <div class="w-100 justify content-center btn-group btn-group-sm">
 				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
@@ -116,8 +119,10 @@
 			  <h3>Modification</h3>
 			</div>
 			<!-- forms -->
-			<div class="d-flex flex-column ml-2 mr-2 mb-4">
+			<div class="d-flex flex-column mx-4 mb-4">
 			  <!-- app form -->
+			  <div class="mb-4 p-2 form-card">
+
 			  <app-energy-form [selected]="!baselineSelected" [isBaseline]="false" [settings]="settings"></app-energy-form>
 			  <div class="form-group">
 				<label class="small" for="materialType">Select Type</label>
@@ -176,6 +181,7 @@
 						  &mdash; &mdash;
 						</div>
 					</div>
+				  </div>
 				  </div>
 			</div>
 		  </div>
