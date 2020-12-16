@@ -608,6 +608,7 @@ export class PsatService {
       form.controls.motorVoltage.value,
       settings
     );
+    estEfficiency = estEfficiency;
     form.patchValue({
       fullLoadAmps: estEfficiency
     });
