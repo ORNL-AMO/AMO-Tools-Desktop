@@ -122,6 +122,7 @@ export class FanShaftPowerFormComponent implements OnInit {
       let efficiency: number = 100;
       let motorVoltage: number = this.fanShaftPower.npv;
       let fla: number = this.psatService.estFanFLA(horsePower, motorRPM, frequency, efficiencyClass, efficiency, motorVoltage, this.settings);
+      fla = Math.round(fla);
       this.shaftPowerForm.patchValue({
         fullLoadAmps: fla
       });
