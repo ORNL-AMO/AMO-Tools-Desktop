@@ -156,7 +156,6 @@ export class RatedMotorFormComponent implements OnInit {
         this.modificationForm.controls.motorRatedVoltage.value,
         this.settings
       );
-      estEfficiency = estEfficiency;
       this.modificationForm.controls.fullLoadAmps.patchValue(estEfficiency);
     }
     this.calculate();
