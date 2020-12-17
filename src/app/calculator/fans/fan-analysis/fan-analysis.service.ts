@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { Fan203Inputs, Plane } from '../../../shared/models/fans';
+import { FsatService } from '../../../fsat/fsat.service';
+import { Fan203Inputs, Plane, VelocityResults } from '../../../shared/models/fans';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class FanAnalysisService {
@@ -13,10 +16,11 @@ export class FanAnalysisService {
   resetForms: BehaviorSubject<boolean>;
   updateTraverseData: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
+  velocityResults: BehaviorSubject<VelocityResults>;
 
   inAssessmentModal: boolean;
   pressureCalcResultType: string = 'static';
-  constructor() {
+  constructor(private fsatService: FsatService) {
     this.mainTab = new BehaviorSubject<string>('fan-setup');
     this.stepTab = new BehaviorSubject<string>('fan-info');
     this.getResults = new BehaviorSubject<boolean>(true);
@@ -24,6 +28,14 @@ export class FanAnalysisService {
     this.resetForms = new BehaviorSubject<boolean>(false);
     this.updateTraverseData = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
+    this.velocityResults = new BehaviorSubject<VelocityResults>(undefined);
+  }
+
+  calculateVelocityResults(planeData: Plane, settings: Settings) {
+    let velocityResults = this.fsatService.getVelocityPressureData(planeData, settings);
+    let traverseVelocity = 1096 * Math.sqrt(velocityResults.pv3 / this.inputData.BaseGasDensity.gasDensity);
+    velocityResults.traverseVelocity = traverseVelocity;
+    this.velocityResults.next(velocityResults);
   }
 
   getDefaultData(): Fan203Inputs {
