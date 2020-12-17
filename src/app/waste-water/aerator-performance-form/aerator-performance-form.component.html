@@ -131,6 +131,8 @@
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingTime.errors.min">Value can't
                     be less than {{form.controls.OperatingTime.errors.min.min}} hr/day</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingTime.errors.max">Value can't
+                    be greater than {{form.controls.OperatingTime.errors.max.max}} hr/day</span>
             </span>
         </div>
         <!-- TypeAerators -->

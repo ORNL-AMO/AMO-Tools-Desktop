@@ -25,7 +25,8 @@ export class ResultsTableComponent implements OnInit {
     this.wastWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
       this.baselineResults = this.wasteWaterService.calculateResults(val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.systemBasics, this.settings);
       let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
-      if (modificationData) {
+      let mainTab: string = this.wasteWaterService.mainTab.getValue();
+      if (modificationData && mainTab == 'assessment') {
         this.modificationValid = modificationData.valid;
         this.modificationName = modificationData.name;
         this.modificationResults = this.wasteWaterService.calculateResults(modificationData.activatedSludgeData, modificationData.aeratorPerformanceData, val.systemBasics, this.settings, this.baselineResults);

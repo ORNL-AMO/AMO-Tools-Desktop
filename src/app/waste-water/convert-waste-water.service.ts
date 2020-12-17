@@ -100,9 +100,13 @@ export class ConvertWasteWaterService {
     row.OxygenRqd = this.convertUnitsService.value(row.OxygenRqd).from('lb').to('kg');
     row.FlowMgd = this.convertUnitsService.value(row.FlowMgd).from('lb').to('kg');
     row.TotalO2Rqd = this.convertUnitsService.value(row.TotalO2Rqd).from('lb').to('kg');
+    row.NRemoved = this.convertUnitsService.value(row.NRemoved).from('lb').to('kg');
+    row.NitO2Dem = this.convertUnitsService.value(row.NitO2Dem).from('lb').to('kg');
+    row.O2Reqd = this.convertUnitsService.value(row.O2Reqd).from('lb').to('kg');
     //metric = m3, imperial = Mgal
     row.NRemovedMgl = this.convertUnitsService.value(row.NRemovedMgl).from('Mgal').to('m3');
     row.WAS = this.convertUnitsService.value(row.WAS).from('Mgal').to('m3');
+    row.EstimRas = this.convertUnitsService.value(row.EstimRas).from('Mgal').to('m3');
     return row;
   }
 
