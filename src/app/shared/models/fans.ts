@@ -238,6 +238,12 @@ export interface PlaneResults {
   OutletMstPlane: PlaneResult;
 }
 
+export interface VelocityResults { 
+  pv3: number,
+  percent75Rule: number,
+  traverseVelocity?: number 
+}
+
 export interface PlaneResult {
   gasDensity: number;
   gasTotalPressure: number;

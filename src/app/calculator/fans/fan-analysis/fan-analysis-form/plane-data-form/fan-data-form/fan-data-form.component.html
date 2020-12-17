@@ -135,20 +135,6 @@
       </span>
     </div>
   </div>
-  <!--3 velocity data-->
-  <div class="form-group bold" *ngIf="planeNum == '3a' || planeNum == '3b' || planeNum == '3c'">
-    <label for="pv3">Traverse Velocity Pressure</label>
-    <div class="text-center">
-      {{velocityData.pv3 | sigFigs: '6'}}
-      <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
-    </div>
-  </div>
-  <div class="form-group bold" *ngIf="planeNum == '3a' || planeNum == '3b' || planeNum == '3c'">
-    <label for="percent75Rule">Points Satisfying 75% Rule</label>
-    <div class="text-center" [ngClass]="{'text-danger': velocityData.percent75Rule < 75}">
-      {{velocityData.percent75Rule | number: '1.1-1'}} %
-    </div>
-  </div>
 </form>
 
 <app-internal-dimension-modal *ngIf="showInternalDimensionModal" [dimension]="currentDimension" [settings]="settings"
