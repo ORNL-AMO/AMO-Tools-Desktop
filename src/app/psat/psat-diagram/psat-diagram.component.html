@@ -33,7 +33,7 @@
           </tr>
           <tr>
             <td class="data-cell data-cell-label">Current <span class="muted">(A)</span>:</td>
-            <td *ngFor="let result of resultsArr" class="data-cell">{{result.output.motor_current| number:'1.0-1'}}</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.output.motor_current | number:'1.0-0'}}</td>
           </tr>
           <tr>
             <td class="data-cell data-cell-label">Rated Power <span class="muted">({{settings.powerMeasurement}})</span>:</td>
@@ -41,7 +41,7 @@
           </tr>
           <tr>
             <td class="data-cell data-cell-label">Rated Full Load Amps:</td>
-            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.motor_rated_fla| number:'1.0-1'}}</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.motor_rated_fla| number:'1.0-0'}}</td>
           </tr>
           <tr>
             <td class="data-cell data-cell-label">Rated Voltage:</td>
