@@ -1,12 +1,12 @@
 <div class="mb-4 p-2 form-card">
 <form [formGroup]="wallLossesForm">
-    <label *ngIf="!isEditingName" class="group-label w-100 bold">
+    <label *ngIf="!isEditingName" class="group-label mb-2 w-100 bold" [ngClass]="{'py-1': !isBaseline}">
       <span (click)="editLossName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
       <span>{{wallLossesForm.controls.name.value}}</span>
       <a *ngIf="isBaseline" class="click-link pull-right add-loss text-danger small pl-2"
         (click)="removeLoss(index)">+Remove Loss</a>
     </label>
-    <label *ngIf="isEditingName" class="group-label w-100">
+    <label *ngIf="isEditingName" class="group-label mb-2 pb-1 w-100">
       <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
       <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
       <span class="alert-danger small ml-2" *ngIf="wallLossesForm.controls.name.invalid && !wallLossesForm.controls.name.pristine">
@@ -14,12 +14,12 @@
       </span>
     </label>
 
-    <div class="form-section">
-       <div class="d-flex flex-column w-100 justify-content-center py-2">
+    <div *ngIf="index == 0" class="form-section">
+       <div class="d-flex flex-column w-100 justify-content-center pb-2">
          <div class="btn-group btn-group-sm align-self-center">
-           <button type="button" [disabled]="!isFirstLoss || (!isBaseline && wallLossesForm.controls.energySourceType.value != 'Fuel')" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Fuel')" [ngClass]="{'active': wallLossesForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
-           <button type="button" [disabled]="!isFirstLoss || (!isBaseline && wallLossesForm.controls.energySourceType.value != 'Electricity')" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Electricity')" [ngClass]="{'active': wallLossesForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
-           <button type="button" [disabled]="!isFirstLoss || (!isBaseline && wallLossesForm.controls.energySourceType.value != 'Steam')" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Steam')" [ngClass]="{'active':  wallLossesForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+           <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Fuel')" [ngClass]="{'active': wallLossesForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+           <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Electricity')" [ngClass]="{'active': wallLossesForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+           <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Steam')" [ngClass]="{'active':  wallLossesForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
          </div>
        </div>
   
