@@ -30,11 +30,20 @@ export class EnergyFormComponent implements OnInit {
   formWidth: number;
   energyUnit: string;
   energySourceTypeSub: any;
+  idString: string;
+  index: number = 0;
+  
   constructor(private chargeMaterialService: ChargeMaterialService,
              private cd: ChangeDetectorRef,
              private energyFormService: EnergyFormService) { }
 
   ngOnInit(): void {
+    if (this.isBaseline) {
+      this.idString = 'baseline_' + this.index;
+    }
+    else {
+      this.idString = 'modification_' + this.index;
+    }
     this.initSubscriptions();
     this.energyUnit = this.chargeMaterialService.getAnnualEnergyUnit(this.energyForm.controls.energySourceType.value, this.settings);
     if (this.isBaseline) {

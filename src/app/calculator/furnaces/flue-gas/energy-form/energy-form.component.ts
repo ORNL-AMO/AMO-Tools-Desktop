@@ -29,11 +29,19 @@ export class EnergyFormComponent implements OnInit {
 
   formWidth: number;
   energyUnit: string;
+  index: number = 0;
+  idString: string;
   constructor(private flueGasService: FlueGasService,
              private cd: ChangeDetectorRef,
              private energyFormService: EnergyFormService) { }
 
   ngOnInit(): void {
+    if (this.isBaseline) {
+      this.idString = 'baseline_' + this.index;
+    }
+    else {
+      this.idString = 'modification_' + this.index;
+    }
     this.initSubscriptions();
   }
 
