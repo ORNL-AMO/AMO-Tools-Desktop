@@ -24,8 +24,6 @@ export class WallFormComponent implements OnInit {
   @Input()
   index: number;
   @Input()
-  inModal: boolean;
-  @Input()
   selected: boolean;
   @Input()
   operatingHours: OperatingHours;
@@ -48,7 +46,6 @@ export class WallFormComponent implements OnInit {
   energySourceTypeSub: any;
   outputSubscription: Subscription;
   lossResult: WallLossResult;
-  isFirstLoss = true;
   isEditingName: boolean;
 
   trackingEnergySource: boolean;
@@ -120,7 +117,6 @@ export class WallFormComponent implements OnInit {
     }
 
     if (this.index > 0) {
-      this.isFirstLoss = false;
       this.wallLossesForm.controls.hoursPerYear.disable();
       this.wallLossesForm.controls.fuelCost.disable();
       this.wallLossesForm.controls.availableHeat.disable();

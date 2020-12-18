@@ -128,7 +128,7 @@
 
     <div class="form-group">
       <label class="small" for="{{'dischargeTemperature_'+idString}}">Discharge Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': checkDischargeTempDiff(), 'error': warnings.dischargeTempWarning !== null || warnings.initialTempWarning !== null || warnings.outletOverVaporizingWarning !== null, 'invalid': chargeMaterialForm.controls.dischargeTemperature.invalid}">
+      <div class="input-group" [ngClass]="{'indicate-different': checkDischargeTempDiff(), 'error': warnings.dischargeTempWarning !== null || warnings.outletOverVaporizingWarning !== null, 'invalid': chargeMaterialForm.controls.dischargeTemperature.invalid}">
         <input [readonly]="!baselineSelected" name="{{'dischargeTemperature_'+lossIndex}}" type="number" min="0" step="any" class="form-control"
           formControlName="dischargeTemperature" id="{{'dischargeTemperature_'+idString}}" onfocus="this.select();" (input)="save()"
           (focus)="focusField('dischargeTemperature')" >

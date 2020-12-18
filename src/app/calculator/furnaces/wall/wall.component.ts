@@ -31,11 +31,11 @@ export class WallComponent implements OnInit {
   containerHeight: number;
   columnHeight: number;
   isModalOpen: boolean;
-  modalSubscription: Subscription;
   isEditingName: boolean;
-
+  
   baselineData: Array<WallLoss>;
   modificationData: Array<WallLoss>;
+  modalSubscription: Subscription;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
 

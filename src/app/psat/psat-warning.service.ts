@@ -135,14 +135,12 @@ export class PsatWarningService {
     let rpmError: string = this.checkMotorRpm(psat);
     let voltageError: string = this.checkMotorVoltage(psat);
     let flaError: string = this.checkFLA(psat, settings);
-    let recalculateFla: string = this.updateFla ? "Inputs to this calculated value have changed. Consider re-estimating" : null;
     let ratedPowerError: string;
     ratedPowerError = this.checkMotorRatedPower(psat, settings, isModification);
     return {
       rpmError: rpmError,
       voltageError: voltageError,
       flaError: flaError,
-      recalculateFla: recalculateFla,
       ratedPowerError: ratedPowerError
     }
   }
@@ -272,20 +270,23 @@ export class PsatWarningService {
         psat.inputs.motor_rated_voltage,
         settings
       );
-      this.psatService.flaRange.flaMax = estEfficiency * 1.05;
-      this.psatService.flaRange.flaMin = estEfficiency * .95;
-      if (psat.inputs.motor_rated_fla < this.psatService.flaRange.flaMin) {
-        return 'Value should be greater than ' + Math.round(this.psatService.flaRange.flaMin);
-      } else if (psat.inputs.motor_rated_fla > this.psatService.flaRange.flaMax) {
-        return 'Value should be less than ' + Math.round(this.psatService.flaRange.flaMax);
-      } else {
-        if (psat.inputs.motor_rated_fla != estEfficiency) {
-          this.updateFla = true;
-        } else {
-          this.updateFla = false;
-        }
-        return null;
+      // Keep - may use min/max again
+      // this.psatService.flaRange.flaMax = estEfficiency * 1.05;
+      // this.psatService.flaRange.flaMin = estEfficiency * .95;
+      // if (psat.inputs.motor_rated_fla < this.psatService.flaRange.flaMin) {
+      //   return 'Value should be greater than ' + Math.round(this.psatService.flaRange.flaMin);
+      // } else if (psat.inputs.motor_rated_fla > this.psatService.flaRange.flaMax) {
+      //   return 'Value should be less than ' + Math.round(this.psatService.flaRange.flaMax);
+      // } else {
+      //   return null;
+      // }
+
+      let limit = .05;
+      let percentDifference = Math.abs(psat.inputs.motor_rated_fla - estEfficiency) / estEfficiency;
+      if (percentDifference > limit) {
+        return `Value is greater than ${limit * 100}% different from estimated FLA (${Math.round(estEfficiency)} A). Consider using the 'Estimate Full-Load Amps' button.`;
       }
+      return null;
     } else {
       return null;
     }
@@ -380,7 +381,6 @@ export interface MotorWarnings {
   voltageError: string;
   flaError: string;
   ratedPowerError: string;
-  recalculateFla: string;
 }
 
 export interface PumpFluidWarnings {
