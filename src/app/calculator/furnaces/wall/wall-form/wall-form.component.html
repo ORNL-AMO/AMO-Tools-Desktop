@@ -1,7 +1,21 @@
+<div class="mb-4 p-2 form-card">
 <form [formGroup]="wallLossesForm">
-    <div class="form-section">
+    <label *ngIf="!isEditingName" class="group-label mb-2 w-100 bold" [ngClass]="{'py-1': !isBaseline}">
+      <span (click)="editLossName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+      <span>{{wallLossesForm.controls.name.value}}</span>
+      <a *ngIf="isBaseline" class="click-link pull-right add-loss text-danger small pl-2"
+        (click)="removeLoss(index)">+Remove Loss</a>
+    </label>
+    <label *ngIf="isEditingName" class="group-label mb-2 pb-1 w-100">
+      <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+      <span class="alert-danger small ml-2" *ngIf="wallLossesForm.controls.name.invalid && !wallLossesForm.controls.name.pristine">
+        <span *ngIf="wallLossesForm.controls.name.errors.required">Please enter a loss name.</span>
+      </span>
+    </label>
 
-       <div class="d-flex flex-column w-100 justify-content-center pb-3">
+    <div *ngIf="index == 0" class="form-section">
+       <div class="d-flex flex-column w-100 justify-content-center pb-2">
          <div class="btn-group btn-group-sm align-self-center">
            <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Fuel')" [ngClass]="{'active': wallLossesForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
            <button type="button" [disabled]="!isBaseline && wallLossesForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (focus)="focusField('energySourceType')" (click)="setEnergySource('Electricity')" [ngClass]="{'active': wallLossesForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
@@ -15,7 +29,7 @@
            <span class="input-group-addon op-hour-addon units">
              <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
            </span>
-           <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
+           <input  class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
              formControlName="hoursPerYear" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
             onfocus="this.select();">
            <span class="units input-group-addon">hrs/yr</span>
@@ -31,7 +45,7 @@
        </div>
   
        <div class="form-group">
-         <label class="small" for="fuelCost">
+         <label class="small" for="{{'fuelCost'+idString}}">
            <span *ngIf="wallLossesForm.controls.energySourceType.value == 'Electricity'">
             Energy Cost
            </span>
@@ -40,8 +54,8 @@
           </span> 
           </label>
          <div class="input-group">
-           <input name="fuelCost" type="number" class="form-control"
-           formControlName="fuelCost" id="fuelCost" onfocus="this.select();"
+           <input  name="fuelCost" type="number" class="form-control"
+           formControlName="fuelCost" id="{{'fuelCost'+idString}}" onfocus="this.select();"
            (input)="calculate()" (focus)="focusField('fuelCost')" >
            <span class="input-group-addon units">$/<span [innerHTML]="energyUnit | settingsLabel"></span>
            </span>
@@ -51,7 +65,39 @@
            <span *ngIf="wallLossesForm.controls.fuelCost.errors.required">Value Required</span>
          </span>
        </div>
-  
+
+       <div class="form-group">
+        <label class="small" for="{{'availableHeat'+idString}}">
+          <span *ngIf="wallLossesForm.controls.energySourceType.value == 'Fuel'">
+            Available Heat
+          </span>
+          <span *ngIf="wallLossesForm.controls.energySourceType.value == 'Steam'">
+            Boiler Efficiency
+          </span>
+          <span *ngIf="wallLossesForm.controls.energySourceType.value == 'Electricity'">
+            System Efficiency
+          </span>
+          <a *ngIf="wallLossesForm.controls.energySourceType.value != 'Electricity' && index == 0" id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
+          <a *ngIf="wallLossesForm.controls.energySourceType.value == 'Electricity' || index > 0" id="materialHelp" disabled class="disabled form-text small">Calculate</a>
+        </label>
+        <div class="input-group">
+          <input  name="{{'availableHeat'+idString}}" type="number" step="any" min="0"
+          class="form-control" formControlName="availableHeat" id="{{'availableHeat'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('availableHeat')">
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="wallLossesForm.controls.availableHeat.invalid && !wallLossesForm.controls.availableHeat.pristine">
+        <span *ngIf="wallLossesForm.controls.availableHeat.errors.required">Value Required</span>
+        <span *ngIf="wallLossesForm.controls.availableHeat.errors.greaterThan == 0">Value must be greater than than
+          0.</span>
+          <span *ngIf="wallLossesForm.controls.availableHeat.errors.max">Value can't be greater than
+            {{wallLossesForm.controls.availableHeat.errors.max.max}}%</span>
+      </span>
+      </div>
+
+    </div>
+    <div class="form-section">
 
       <div class="form-group">
         <label class="small" for="{{'avgSurfaceTemp'+idString}}">Average Surface Temperature</label>
@@ -122,7 +168,7 @@
   
       <div class="form-group">
         <label class="small" for="{{'conditionFactor'+idString}}">Surface Shape / Orientation Factor</label>
-        <div class="text-center small">
+        <div class="text-center small bold">
           {{wallLossesForm.controls.conditionFactor.value}}
         </div>
       </div>
@@ -164,33 +210,6 @@
         </span>
       </span>
       </div>
-
-      <div class="form-group">
-        <label class="small" for="{{'availableHeat'+idString}}">
-          <span *ngIf="wallLossesForm.controls.energySourceType.value != 'Steam'">
-            Available Heat
-          </span>
-          <span *ngIf="wallLossesForm.controls.energySourceType.value == 'Steam'">
-            Boiler Efficiency
-          </span>
-          <a *ngIf="wallLossesForm.controls.energySourceType.value != 'Electricity'" id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
-          <a *ngIf="wallLossesForm.controls.energySourceType.value == 'Electricity'" id="materialHelp" disabled class="disabled form-text small">Calculate</a>
-        </label>
-        <div class="input-group">
-          <input  name="{{'availableHeat'+idString}}" type="number" step="any" min="0"
-          class="form-control" formControlName="availableHeat" id="{{'availableHeat'+idString}}" onfocus="this.select();"
-          (input)="calculate()" (focus)="focusField('availableHeat')">
-          <span class="input-group-addon units">%</span>
-        </div>
-        <span class="alert-danger pull-right small"
-        *ngIf="wallLossesForm.controls.availableHeat.invalid && !wallLossesForm.controls.availableHeat.pristine">
-        <span *ngIf="wallLossesForm.controls.availableHeat.errors.required">Value Required</span>
-        <span *ngIf="wallLossesForm.controls.availableHeat.errors.greaterThan == 0">Value must be greater than than
-          0.</span>
-          <span *ngIf="wallLossesForm.controls.availableHeat.errors.max">Value can't be greater than
-            {{wallLossesForm.controls.availableHeat.errors.max.max}}%</span>
-      </span>
-      </div>
   
       <div class="form-group">
         <label class="small" for="{{'correctionFactor'+idString}}">Correction Factor</label>
@@ -204,6 +223,35 @@
     </span>
     </div>
   </form>
+
+  <!-- Results -->
+  <div *ngIf="lossResult" class="d-flex flex-column mt-1 mb-2">
+    <div class="form-group m-0">
+      <label class="bold">Wall Loss</label>
+      <div *ngIf="lossResult.wallLoss" class="text-center bold small">
+      {{lossResult.wallLoss | sigFigs:'6'}} 
+      <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+      </div>
+      <div *ngIf="!lossResult.wallLoss" class="text-center bold small">
+      &mdash; &mdash;
+      </div>
+    </div>
+  </div>
+  <div *ngIf="lossResult" class="d-flex flex-column mt-1 mb-2">
+    <div class="form-group m-0">
+      <label class="bold">Gross Loss</label>
+      <div *ngIf="lossResult.grossLoss" class="text-center bold small">
+      {{lossResult.grossLoss | sigFigs:'6'}} 
+      <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+      </div>
+      <div *ngIf="!lossResult.grossLoss" class="text-center bold small">
+      &mdash; &mdash;
+      </div>
+    </div>
+  </div>
+
+</div>
+
   
   <!--CREATE SURFACE MODAL-->
   <div bsModal #surfaceModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="surfaceModalLabel"
@@ -234,5 +282,5 @@
 
   <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
-  [operatingHours]="wallService.operatingHours">
+  [operatingHours]="operatingHours">
 </app-operating-hours-modal>
