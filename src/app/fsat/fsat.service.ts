@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, PsychrometricResults } from '../shared/models/fans';
+import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor, FsatValid, PsychrometricResults, VelocityResults } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
@@ -76,9 +76,9 @@ export class FsatService {
     return psychrometricResults;
   }
 
-  getVelocityPressureData(inputs: Plane, settings: Settings): { pv3: number, percent75Rule: number } {
+  getVelocityPressureData(inputs: Plane, settings: Settings): VelocityResults {
     inputs = this.convertFanAnalysisService.convertPlaneForCalculations(inputs, settings);
-    let results: { pv3: number, percent75Rule: number } = fanAddon.getVelocityPressureData(inputs);
+    let results: VelocityResults = fanAddon.getVelocityPressureData(inputs);
     if (settings.fanPressureMeasurement !== 'inH2o') {
       results.pv3 = this.convertUnitsService.value(results.pv3).from('inH2o').to(settings.fanPressureMeasurement);
     }

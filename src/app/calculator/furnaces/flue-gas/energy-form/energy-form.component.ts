@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { EnergyData } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
-import { ChargeMaterialService } from '../charge-material.service';
+import { FlueGasService } from '../flue-gas.service';
 import { EnergyFormService } from './energy-form.service';
 
 @Component({
@@ -13,8 +13,6 @@ import { EnergyFormService } from './energy-form.service';
   styleUrls: ['./energy-form.component.css']
 })
 export class EnergyFormComponent implements OnInit {
-  showOperatingHoursModal: boolean;
-  energyForm: FormGroup;
   @Input()
   settings: Settings;
   @Input()
@@ -22,6 +20,8 @@ export class EnergyFormComponent implements OnInit {
   @Input()
   selected: boolean;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  showOperatingHoursModal: boolean;
+  energyForm: FormGroup;
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
@@ -29,11 +29,9 @@ export class EnergyFormComponent implements OnInit {
 
   formWidth: number;
   energyUnit: string;
-  energySourceTypeSub: any;
-  idString: string;
   index: number = 0;
-  
-  constructor(private chargeMaterialService: ChargeMaterialService,
+  idString: string;
+  constructor(private flueGasService: FlueGasService,
              private cd: ChangeDetectorRef,
              private energyFormService: EnergyFormService) { }
 
@@ -45,13 +43,6 @@ export class EnergyFormComponent implements OnInit {
       this.idString = 'modification_' + this.index;
     }
     this.initSubscriptions();
-    this.energyUnit = this.chargeMaterialService.getAnnualEnergyUnit(this.energyForm.controls.energySourceType.value, this.settings);
-    if (this.isBaseline) {
-      this.chargeMaterialService.energySourceType.next(this.energyForm.controls.energySourceType.value);
-    } else {
-      let energySource = this.chargeMaterialService.energySourceType.getValue();
-      this.setEnergySource(energySource);
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -63,36 +54,15 @@ export class EnergyFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
-    if (!this.isBaseline) {
-      this.energySourceTypeSub.unsubscribe();
-    }
   }
 
   initSubscriptions() {
-    this.resetDataSub = this.chargeMaterialService.resetData.subscribe(value => {
+    this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
       this.initForm();
       });
-    this.generateExampleSub = this.chargeMaterialService.generateExample.subscribe(value => {
+    this.generateExampleSub = this.flueGasService.generateExample.subscribe(value => {
       this.initForm();
     });
-    if (!this.isBaseline) {
-      this.energySourceTypeSub = this.chargeMaterialService.energySourceType.subscribe(energySourceType => {
-        this.setEnergySource(energySourceType);
-      });
-    }
-  }
-
-  setEnergySource(energySourceType: string) {
-    this.energyForm.patchValue({
-      energySourceType: energySourceType
-    });
-    this.energyUnit = this.chargeMaterialService.getAnnualEnergyUnit(energySourceType, this.settings);
-
-    if (this.isBaseline) {
-      this.chargeMaterialService.energySourceType.next(energySourceType);
-    }
-    this.cd.detectChanges();
-    this.calculate();
   }
 
   setFormState() {
@@ -101,20 +71,27 @@ export class EnergyFormComponent implements OnInit {
     } else {
       this.energyForm.enable();
     }
+    this.cd.detectChanges();
   }
 
 
   initForm() {
     let energyData: EnergyData;
     if (this.isBaseline) {
-      energyData = this.chargeMaterialService.baselineEnergyData.getValue();
+      energyData = this.flueGasService.baselineEnergyData.getValue();
     } else {
-      energyData = this.chargeMaterialService.modificationEnergyData.getValue();
+      energyData = this.flueGasService.modificationEnergyData.getValue();
     }
     if (energyData) {
       this.energyForm = this.energyFormService.getEnergyForm(energyData);
     } else {
       this.energyForm = this.energyFormService.initEnergyForm();
+    }
+
+    if (!this.energyForm.controls.fuelCost.value) {
+      this.energyForm.patchValue({
+        fuelCost: this.settings.fuelCost,
+      });
     }
 
     this.calculate();
@@ -123,15 +100,15 @@ export class EnergyFormComponent implements OnInit {
 
 
   focusField(str: string) {
-    this.chargeMaterialService.currentField.next(str);
+    this.flueGasService.currentField.next(str);
   }
 
   calculate() {
     let currentEnergyData: EnergyData = this.energyFormService.buildEnergyData(this.energyForm);
     if (this.isBaseline) {
-      this.chargeMaterialService.baselineEnergyData.next(currentEnergyData);
+      this.flueGasService.baselineEnergyData.next(currentEnergyData);
     } else {
-      this.chargeMaterialService.modificationEnergyData.next(currentEnergyData);
+      this.flueGasService.modificationEnergyData.next(currentEnergyData);
     }
   }
 
@@ -144,14 +121,14 @@ export class EnergyFormComponent implements OnInit {
   }
 
   updateOperatingHours(oppHours: OperatingHours) {
-    this.chargeMaterialService.operatingHours = oppHours;
+    this.flueGasService.operatingHours = oppHours;
     this.energyForm.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
     this.calculate();
     this.closeOperatingHoursModal();
   }
 
   setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
+    if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }
