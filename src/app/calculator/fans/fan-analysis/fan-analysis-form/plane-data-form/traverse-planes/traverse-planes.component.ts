@@ -84,12 +84,4 @@ export class TraversePlanesComponent implements OnInit {
     this.planeDescription = `Additional Traverse Plane ${this.planeNumber}`;
   }
 
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
-  }
 }

@@ -134,7 +134,7 @@
   <div class="text-center small bold">
     <span *ngIf="velocityResults && velocityResults.pv3">
         {{velocityResults.pv3 | sigFigs: '6'}}
-        <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </span>
     <span *ngIf="!velocityResults || !velocityResults.pv3">
             &mdash; &mdash;

@@ -127,15 +127,6 @@ export class FanDataFormComponent implements OnInit {
     this.fanAnalysisService.currentField.next(str);
   }
 
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
-  }
-
   openInternalDimensionModal(dimension: string) {
     this.showInternalDimensionModal = true;
     this.currentDimension = dimension;
