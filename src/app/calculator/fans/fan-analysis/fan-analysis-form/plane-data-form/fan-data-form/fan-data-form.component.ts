@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Plane, VelocityResults } from '../../../../../../shared/models/fans';
+import { Plane } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
 import { PlaneDataFormService } from '../plane-data-form.service';
 import { ConvertUnitsService } from '../../../../../../shared/convert-units/convert-units.service';
@@ -27,7 +27,9 @@ export class FanDataFormComponent implements OnInit {
   planeData: Plane;
   resetFormSubscription: Subscription;
   getResultsSubscription: Subscription;
+  staticPressureValueSubscription: Subscription;
   variationInBarometricPressure: boolean;
+
   constructor(private planeDataFormService: PlaneDataFormService, private fsatService: FsatService, private convertUnitsService: ConvertUnitsService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
@@ -37,6 +39,16 @@ export class FanDataFormComponent implements OnInit {
     this.setPlaneData();
     this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
     this.calcArea();
+    this.initSubscriptions();
+  }
+
+  ngOnDestroy() {
+    this.resetFormSubscription.unsubscribe();
+    this.getResultsSubscription.unsubscribe();
+    this.staticPressureValueSubscription.unsubscribe();
+  }
+
+  initSubscriptions() {
     this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
       if (val == true) {
         this.setPlaneData();
@@ -48,11 +60,13 @@ export class FanDataFormComponent implements OnInit {
       this.setPlaneData();
       this.calcVelocityResults();
     });
-  }
 
-  ngOnDestroy() {
-    this.resetFormSubscription.unsubscribe();
-    this.getResultsSubscription.unsubscribe();
+    this.staticPressureValueSubscription = this.planeDataFormService.staticPressureValue.subscribe(staticPressureControlValue => {
+      if (staticPressureControlValue != undefined) {
+        this.dataForm.patchValue({staticPressure: staticPressureControlValue});
+        this.save();
+      }
+    });
   }
 
   resetData() {

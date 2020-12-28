@@ -37,7 +37,8 @@ export class PressureReadingsFormComponent implements OnInit {
         this.setPlaneData();
         this.updateData();
       }
-    })
+    });
+    this.save();
   }
 
   ngOnDestroy() {
@@ -50,24 +51,18 @@ export class PressureReadingsFormComponent implements OnInit {
   }
 
   initializeData() {
-    if (this.planeData.traverseData.length !== this.planeData.numInsertionPoints || this.planeData.traverseData[0].length !== this.planeData.numTraverseHoles) {
-      let cols = new Array();
-      for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
-        cols.push(0);
-        this.numLabels.push(i + 1);
-      }
-
-      let rows = new Array();
-      for (let i = 0; i < this.planeData.numInsertionPoints; i++) {
-        rows.push(JSON.parse(JSON.stringify(cols)));
-      }
-      this.traverseHoles = rows;
+    if (this.pressureType != 'Static') {
+      this.setTraverseHoles(this.planeData.traverseData);
     } else {
-      this.traverseHoles = this.planeData.traverseData;
+      this.setTraverseHoles(this.planeData.staticPressureData);
+    }
+  }
+
+  setTraverseHoles(currentTraverseData: Array<Array<number>>) {
+      this.traverseHoles = currentTraverseData;
       for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
         this.numLabels.push(i + 1);
       }
-    }
   }
 
   updateData() {
@@ -93,8 +88,31 @@ export class PressureReadingsFormComponent implements OnInit {
     this.save();
   }
 
+  setStaticPressure() {
+    let row;
+    let total = 0;
+    let count = 0;
+    let avg = 0;
+
+    for (let i = 0; i < this.traverseHoles.length; i++) {
+      row = this.traverseHoles[i];
+      count += row.length;
+      for (let j = 0; j < row.length; j++) {
+          total += row[j];
+        }
+      }
+
+    avg = count === 0 ? NaN : (total / count);
+    this.planeData.staticPressure = avg;
+  }
+
   save() {
-    this.planeData.traverseData = this.traverseHoles;
+    if (this.pressureType == 'Static') {
+      this.setStaticPressure();
+      this.planeData.staticPressureData = this.traverseHoles;
+    } else {
+      this.planeData.traverseData = this.traverseHoles;
+    }
     this.fanAnalysisService.setPlane(this.planeNum, this.planeData);
     this.fanAnalysisService.getResults.next(true);
   }

@@ -11,9 +11,11 @@ export class PlaneDataFormService {
 
   planeStep: BehaviorSubject<string>;
   planeShape: BehaviorSubject<string>;
+  staticPressureValue: BehaviorSubject<number>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
     this.planeStep = new BehaviorSubject<string>('plane-info');
     this.planeShape = new BehaviorSubject<string>(undefined);
+    this.staticPressureValue = new BehaviorSubject<number>(undefined);
   }
 
   getPlaneInfoFormFromObj(obj: PlaneData): FormGroup {
