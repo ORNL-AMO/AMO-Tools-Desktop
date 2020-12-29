@@ -14,16 +14,15 @@ import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.ser
 import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
-import { AtmosphereLossesService } from './losses/atmosphere-losses/atmosphere-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
-import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
 import { PhastResultsService } from './phast-results.service';
 import { LiquidMaterialFormService } from '../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
+import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
 
 
 @Injectable()
@@ -31,7 +30,7 @@ export class PhastValidService {
 
   constructor(
     private openingLossesService: OpeningLossesService,
-    private atmosphereLossesService: AtmosphereLossesService,
+    private atmosphereFormService: AtmosphereFormService,
     private slagService: SlagService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
     private coolingLossesService: CoolingLossesService,
@@ -45,7 +44,6 @@ export class PhastValidService {
     private fixtureLossesService: FixtureLossesService,
     private gasLeakageLossesService: GasLeakageLossesService,
     private otherLossessService: OtherLossesService,
-    private phastService: PhastService,
     private liquidMaterialFormService: LiquidMaterialFormService,
     private gasMaterialFormService: GasMaterialFormService,
     private solidMaterialFormService: SolidMaterialFormService,
@@ -245,7 +243,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.atmosphereLosses) {
       phast.losses.atmosphereLosses.forEach(loss => {
-        let atmosphereForm: FormGroup = this.atmosphereLossesService.getAtmosphereForm(loss)
+        let atmosphereForm: FormGroup = this.atmosphereFormService.getAtmosphereForm(loss)
         if (atmosphereForm.status === 'INVALID') {
           valid = false;
         }

@@ -7,8 +7,8 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
-import { AtmosphereLossWarnings, AtmosphereLossesService } from '../atmosphere-losses.service';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
+import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 
 @Component({
   selector: 'app-atmosphere-losses-form',
@@ -44,7 +44,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   materialTypes: Array<AtmosphereSpecificHeat>;
   showModal: boolean = false;
   idString: string;
-  constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereLossesService: AtmosphereLossesService) { }
+  constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereFormService: AtmosphereFormService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -118,9 +118,9 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpLoss: AtmosphereLoss = this.atmosphereLossesService.getLossFromForm(this.atmosphereLossForm);
-    this.warnings = this.atmosphereLossesService.checkWarnings(tmpLoss);
-    let hasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(this.warnings);
+    let tmpLoss: AtmosphereLoss = this.atmosphereFormService.getLossFromForm(this.atmosphereLossForm);
+    this.warnings = this.atmosphereFormService.checkWarnings(tmpLoss);
+    let hasWarning: boolean = this.warnings.temperatureWarning != undefined
     this.inputError.emit(hasWarning);
   }
 
