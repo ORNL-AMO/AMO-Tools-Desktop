@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../shared/models/operations';
 import { AtmosphereLoss, AtmosphereLossOutput, AtmosphereLossResults } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../shared/models/settings';
@@ -21,7 +22,7 @@ export class AtmosphereService {
   operatingHours: OperatingHours;
 
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private atmosphereFormService: AtmosphereFormService, private phastService: PhastService) {
+  constructor(private atmosphereFormService: AtmosphereFormService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
     this.baselineData = new BehaviorSubject<Array<AtmosphereLoss>>(undefined);
@@ -225,12 +226,35 @@ export class AtmosphereService {
   }
 
   generateExampleData(settings: Settings) {
+    let specificHeat: number = .0185;
+    let inletTemperature: number = 30;
+    let outletTemperature: number = 1000;
+    let modOutletTemperature: number = 900;
+    let flowRate: number = 120000;
+
+    if(settings.unitsOfMeasure != 'Imperial'){
+      specificHeat = this.convertUnitsService.value(specificHeat).from('btuScfF').to('kJm3C');
+      specificHeat = Number(specificHeat.toFixed(5));
+
+      inletTemperature = this.convertUnitsService.value(inletTemperature).from('F').to('C');
+      inletTemperature = Number(inletTemperature.toFixed(2));
+
+      outletTemperature = this.convertUnitsService.value(outletTemperature).from('F').to('C');
+      outletTemperature = Number(outletTemperature.toFixed(2));
+
+      modOutletTemperature = this.convertUnitsService.value(modOutletTemperature).from('F').to('C');
+      modOutletTemperature = Number(modOutletTemperature.toFixed(2));
+
+      flowRate = this.convertUnitsService.value(flowRate).from('ft3/h').to('m3/h');
+      flowRate = Number(flowRate.toFixed(2));
+    }
+
     let baselineExample: AtmosphereLoss = {
       atmosphereGas: 1,
-      specificHeat: .0185,
-      inletTemperature: 30,
-      outletTemperature: 1000,
-      flowRate: 120000,
+      specificHeat: specificHeat,
+      inletTemperature: inletTemperature,
+      outletTemperature: outletTemperature,
+      flowRate: flowRate,
       correctionFactor: 1,
       heatLoss: 0,
       energySourceType: 'Fuel',
@@ -243,10 +267,10 @@ export class AtmosphereService {
 
     let modExample: AtmosphereLoss = {
       atmosphereGas: 1,
-      specificHeat: .0185,
-      inletTemperature: 30,
-      outletTemperature: 900,
-      flowRate: 120000,
+      specificHeat: specificHeat,
+      inletTemperature: inletTemperature,
+      outletTemperature: modOutletTemperature,
+      flowRate: flowRate,
       correctionFactor: 1,
       heatLoss: 0,
       energySourceType: 'Fuel',

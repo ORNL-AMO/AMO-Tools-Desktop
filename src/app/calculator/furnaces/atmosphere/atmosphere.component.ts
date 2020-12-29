@@ -40,8 +40,8 @@ export class AtmosphereComponent implements OnInit {
   output: AtmosphereLossOutput;
 
   tabSelect: string = 'results';
-  baselineSelected = true;
-  modificationExists = false;
+  baselineSelected: boolean = true;
+  modificationExists: boolean = false;
 
   constructor(private settingsDbService: SettingsDbService, 
               private atmosphereService: AtmosphereService) { }
