@@ -29,4 +29,5 @@ export interface WallLossResult {
   fuelCost?: number;
   wallLoss?: number;
   grossLoss?: number;
+  energyUnit?: string;
 }

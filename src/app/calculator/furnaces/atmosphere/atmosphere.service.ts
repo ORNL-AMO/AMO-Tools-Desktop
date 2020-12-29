@@ -9,8 +9,8 @@ import { AtmosphereFormService } from './atmosphere-form.service';
 @Injectable()
 export class AtmosphereService {
 
-  baselineData: BehaviorSubject<AtmosphereLoss>;
-  modificationData: BehaviorSubject<AtmosphereLoss>;
+  baselineData: BehaviorSubject<Array<AtmosphereLoss>>;
+  modificationData: BehaviorSubject<Array<AtmosphereLoss>>;
   output: BehaviorSubject<AtmosphereLossOutput>;
   
   currentField: BehaviorSubject<string>;
@@ -24,8 +24,8 @@ export class AtmosphereService {
   constructor(private atmosphereFormService: AtmosphereFormService, private phastService: PhastService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
-    this.baselineData = new BehaviorSubject<AtmosphereLoss>(undefined);
-    this.modificationData = new BehaviorSubject<AtmosphereLoss>(undefined);
+    this.baselineData = new BehaviorSubject<Array<AtmosphereLoss>>(undefined);
+    this.modificationData = new BehaviorSubject<Array<AtmosphereLoss>>(undefined);
     this.output = new BehaviorSubject<AtmosphereLossOutput>(undefined);
 
     this.currentField = new BehaviorSubject<string>('default');
@@ -35,49 +35,77 @@ export class AtmosphereService {
   }
 
   calculate(settings: Settings) {
-    let baselineAtmosphereLoss = this.baselineData.getValue();
-    let modificationAtmosphereLoss = this.modificationData.getValue();
+    let baselineAtmosphereLosses: Array<AtmosphereLoss> = this.baselineData.getValue();
+    let modificationAtmosphereLosses: Array<AtmosphereLoss> = this.modificationData.getValue();
     let baselineResults: AtmosphereLossResults;
     let modificationResults: AtmosphereLossResults;
 
     this.initDefaultEmptyOutput();
     let output: AtmosphereLossOutput = this.output.getValue();
-    output.energyUnit = this.getAnnualEnergyUnit(baselineAtmosphereLoss.energySourceType, settings);
+    
+    let validBaseline = this.checkValidInputData(baselineAtmosphereLosses);
+    let validModification: boolean;
+    if (modificationAtmosphereLosses) {
+      validModification = this.checkValidInputData(modificationAtmosphereLosses);
+    }
 
-    let validBaseline = this.atmosphereFormService.getAtmosphereForm(baselineAtmosphereLoss, false).valid;
     if (validBaseline) {
-      baselineResults = this.getAtmosphereLossResult(baselineAtmosphereLoss, settings);
-      if (baselineResults) {
-        output.baseline = baselineResults;
-      }
-    }
-
-    if (modificationAtmosphereLoss) {
-      let validModification = this.atmosphereFormService.getAtmosphereForm(modificationAtmosphereLoss, false).valid;
-      if (validModification) {
-        modificationResults = this.getAtmosphereLossResult(modificationAtmosphereLoss, settings);
-        if (modificationResults) {
-          output.modification = modificationResults;
+      output.energyUnit = this.getAnnualEnergyUnit(baselineAtmosphereLosses[0].energySourceType, settings);
+      baselineAtmosphereLosses.forEach((loss, index) => {
+        baselineResults = this.getAtmosphereLossResult(loss, settings);
+        if (baselineResults) {
+          output.baseline.losses.push(baselineResults);
+          output.baseline.totalFuelUse += baselineResults.fuelUse;
+          output.baseline.totalFuelCost += baselineResults.fuelCost;
+          output.baseline.grossLoss += baselineResults.grossLoss;
         }
+
+        if (validModification && modificationAtmosphereLosses[index]) {
+
+          modificationResults = this.getAtmosphereLossResult(modificationAtmosphereLosses[index], settings);
+          if (modificationResults) {
+            output.modification.losses.push(modificationResults);
+            output.modification.totalFuelUse += modificationResults.fuelUse;
+            output.modification.totalFuelCost += modificationResults.fuelCost;
+            output.modification.grossLoss += modificationResults.grossLoss;
+          }
+        }
+      });
+
+      if (baselineResults && modificationResults) {
+        output.fuelSavings = output.baseline.totalFuelUse - output.modification.totalFuelUse;
+        output.costSavings = output.baseline.totalFuelCost - output.modification.totalFuelCost;
       }
     }
 
-    if (baselineResults && modificationResults) {
-      output.fuelSavings = baselineResults.fuelUse - modificationResults.fuelUse;
-      output.costSavings = baselineResults.fuelCost - modificationResults.fuelCost;
-    }
     this.output.next(output);
   }
 
+  checkValidInputData(losses: Array<AtmosphereLoss>):boolean {
+    if (losses.length > 0) {
+      losses.forEach(data => {
+        let form = this.atmosphereFormService.getAtmosphereForm(data);
+        if (!form.valid) {
+          return false;
+        }
+      })
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   getAtmosphereLossResult(atmosphereLossData: AtmosphereLoss, settings: Settings): AtmosphereLossResults {
+    let energyUnit = this.getAnnualEnergyUnit(atmosphereLossData.energySourceType, settings);
+    
     let result: AtmosphereLossResults = {
       atmosphereLoss: 0,
       grossLoss: 0,
       fuelUse: 0,
-      fuelCost: 0
+      fuelCost: 0,
+      energyUnit: energyUnit
     }
-    let energyUnit = this.getAnnualEnergyUnit(atmosphereLossData.energySourceType, settings);
-
+    
     if (atmosphereLossData) {
       result.atmosphereLoss = this.phastService.atmosphere(atmosphereLossData, settings, energyUnit);
       result.grossLoss =  (result.atmosphereLoss / atmosphereLossData.availableHeat) * 100;
@@ -88,7 +116,16 @@ export class AtmosphereService {
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData: AtmosphereLoss = {
+    let emptyBaselineData: AtmosphereLoss = this.initDefaultLoss(0);
+    let baselineData: Array<AtmosphereLoss> = [emptyBaselineData];
+    this.baselineData.next(baselineData);
+    this.modificationData.next(undefined);
+    this.energySourceType.next('Fuel');
+
+  }
+
+  initDefaultLoss(index: number, hoursPerYear: number = 8760) {
+    let defaultBaselineData: AtmosphereLoss = {
       atmosphereGas: 1,
       specificHeat: 0,
       inletTemperature: 0,
@@ -96,22 +133,21 @@ export class AtmosphereService {
       flowRate: 0,
       correctionFactor: 0,
       heatLoss: 0,
-      name: '',
+      name: 'Loss #' + (index + 1),
       energySourceType: 'Fuel',
       fuelCost: 0,
-      hoursPerYear: 8760,    
-      availableHeat: 0,  
+      hoursPerYear: hoursPerYear,    
+      availableHeat: 100,  
     };
-    this.baselineData.next(emptyBaselineData);
-    this.modificationData.next(undefined);
-    this.energySourceType.next('Fuel');
 
+    return defaultBaselineData;
   }
+
 
   initDefaultEmptyOutput() {
      let output: AtmosphereLossOutput = {
-      baseline: {atmosphereLoss: 0, grossLoss: 0, fuelCost: 0, fuelUse: 0},
-      modification: {atmosphereLoss: 0, grossLoss: 0, fuelCost: 0, fuelUse: 0},
+      baseline: {totalFuelUse: 0, grossLoss: 0, totalFuelCost: 0, losses: []},
+      modification: {totalFuelUse: 0, grossLoss: 0, totalFuelCost: 0, losses: []},
       fuelSavings: 0,
       costSavings: 0
     };
@@ -119,10 +155,73 @@ export class AtmosphereService {
   }
 
   initModification() {
-    let currentBaselineData: AtmosphereLoss = this.baselineData.getValue();
+    let currentBaselineData: Array<AtmosphereLoss> = this.baselineData.getValue();
     let currentBaselineCopy = JSON.parse(JSON.stringify(currentBaselineData));
-    let modification: AtmosphereLoss = currentBaselineCopy;
-    this.modificationData.next(modification);
+    this.modificationData.next(currentBaselineCopy);
+  }
+
+  updateDataArray(data: AtmosphereLoss, index: number, isBaseline: boolean) {
+    let dataArray: Array<AtmosphereLoss>;
+    if (isBaseline) {
+      dataArray = this.baselineData.getValue();
+    } else {
+      dataArray = this.modificationData.getValue();
+    }
+    // dataArray won't exist during reset cycle w/ multiple subjects emitting
+    if (dataArray && dataArray[index]) {
+      dataArray[index].name = data.name;
+      dataArray[index].hoursPerYear = data.hoursPerYear;
+      dataArray[index].fuelCost = data.fuelCost;
+      dataArray[index].availableHeat = data.availableHeat;
+      dataArray[index].energySourceType = data.energySourceType;
+      dataArray[index].atmosphereGas = data.atmosphereGas;
+      dataArray[index].specificHeat = data.specificHeat;
+      dataArray[index].inletTemperature = data.inletTemperature;
+      dataArray[index].outletTemperature = data.outletTemperature
+      dataArray[index].flowRate = data.flowRate;
+      dataArray[index].correctionFactor = data.correctionFactor;
+      dataArray[index].heatLoss = data.heatLoss;
+    }
+
+     if (isBaseline) {
+      this.baselineData.next(dataArray);
+    } else {
+      this.modificationData.next(dataArray);
+    }
+  }
+
+    
+  removeLoss(i: number) {
+    let currentBaselineData: Array<AtmosphereLoss> = this.baselineData.getValue();
+    currentBaselineData.splice(i, 1);
+    this.baselineData.next(currentBaselineData);
+    let currentModificationData: Array<AtmosphereLoss> = this.modificationData.getValue();
+    if (currentModificationData) {
+      currentModificationData.splice(i, 1);
+      this.modificationData.next(currentModificationData);
+    }
+  }
+  
+  addLoss(hoursPerYear: number, modificationExists: boolean) {
+    let currentBaselineData: Array<AtmosphereLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
+    let index = currentBaselineData.length;
+    let baselineObj: AtmosphereLoss = this.initDefaultLoss(index, hoursPerYear);
+    baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
+    baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+    currentBaselineData.push(baselineObj)
+    this.baselineData.next(currentBaselineData);
+    
+    if (modificationExists) {
+      let currentModificationData: Array<AtmosphereLoss> = this.modificationData.getValue();
+      let modificationObj: AtmosphereLoss = this.initDefaultLoss(index, hoursPerYear);
+      
+      // Set loss operational constants
+      modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
+      modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+
+      currentModificationData.push(modificationObj);
+      this.modificationData.next(currentModificationData);
+    }
   }
 
   generateExampleData(settings: Settings) {
@@ -134,13 +233,13 @@ export class AtmosphereService {
       flowRate: 120000,
       correctionFactor: 1,
       heatLoss: 0,
-      name: '',
       energySourceType: 'Fuel',
       fuelCost: 3.99,
       hoursPerYear: 8760,    
-      availableHeat: 100,    
+      availableHeat: 100,
+      name: 'Loss #1'
     };
-    this.baselineData.next(baselineExample);
+    this.baselineData.next([baselineExample]);
 
     let modExample: AtmosphereLoss = {
       atmosphereGas: 1,
@@ -150,14 +249,14 @@ export class AtmosphereService {
       flowRate: 120000,
       correctionFactor: 1,
       heatLoss: 0,
-      name: '',
       energySourceType: 'Fuel',
       fuelCost: 3.99,
       hoursPerYear: 8760,    
-      availableHeat: 100,  
+      availableHeat: 100,
+      name: 'Loss #1 (Lower Outlet Temp)'
     };
     
-    this.modificationData.next(modExample);
+    this.modificationData.next([modExample]);
     this.energySourceType.next('Fuel');
     this.generateExample.next(true);
   }

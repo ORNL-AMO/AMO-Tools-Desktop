@@ -96,11 +96,14 @@ export class WallService {
   }
 
   getWallLossResult(wallLossData: WallLoss, settings: Settings): WallLossResult {
+    let energyUnit = this.getAnnualEnergyUnit(wallLossData.energySourceType, settings);
+
     let result: WallLossResult = {
       wallLoss: 0,
       grossLoss: 0,
       fuelUse: 0,
-      fuelCost: 0
+      fuelCost: 0,
+      energyUnit: energyUnit
     }
     if (wallLossData) {
       result.wallLoss = this.phastService.wallLosses(wallLossData, settings);

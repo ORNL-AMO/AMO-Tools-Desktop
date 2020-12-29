@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { OperatingHours } from '../../../shared/models/operations';
 import { AtmosphereLoss, AtmosphereLossOutput } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../shared/models/settings';
 import { AtmosphereService } from './atmosphere.service';
@@ -15,6 +16,8 @@ export class AtmosphereComponent implements OnInit {
   settings: Settings;
   @Input()
   inTreasureHunt: boolean;
+  @Input()
+  operatingHours: OperatingHours;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -26,10 +29,11 @@ export class AtmosphereComponent implements OnInit {
   }
   containerHeight: number;
   isModalOpen: boolean;
+  isEditingName: boolean;
   modalSubscription: Subscription;
 
-  baselineData: AtmosphereLoss;
-  modificationData: AtmosphereLoss;
+  baselineData: Array<AtmosphereLoss>;
+  modificationData: Array<AtmosphereLoss>;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
   outputSubscription: Subscription;
@@ -73,9 +77,11 @@ export class AtmosphereComponent implements OnInit {
       this.isModalOpen = modalOpen;
     })
     this.baselineDataSub = this.atmosphereService.baselineData.subscribe(value => {
+      this.baselineData = value;
       this.atmosphereService.calculate(this.settings);
     })
     this.modificationDataSub = this.atmosphereService.modificationData.subscribe(value => {
+      this.modificationData = value
       this.atmosphereService.calculate(this.settings);
     })
     this.outputSubscription = this.atmosphereService.output.subscribe(val => {
@@ -85,6 +91,11 @@ export class AtmosphereComponent implements OnInit {
   
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  addLoss() {
+    let hoursPerYear = this.operatingHours? this.operatingHours.hoursPerYear : undefined;
+    this.atmosphereService.addLoss(hoursPerYear, this.modificationExists);
   }
 
   createModification() {

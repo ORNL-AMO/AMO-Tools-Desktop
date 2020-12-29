@@ -16,3 +16,27 @@
     border-right: none;
   }
 
+.form-section {
+    margin-bottom: 10px;
+    padding-bottom: 4px;
+    border-bottom: #bbb dashed 1px;
+}
+
+
+.add-loss {
+    margin-bottom: 5px;
+}
+
+.form-row-pad-fix {
+    margin-left: -15px !important;
+}
+
+.form-card {
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px 0 grey;
+}
+
+.btn-edit-name:hover {
+    cursor: pointer;
+}

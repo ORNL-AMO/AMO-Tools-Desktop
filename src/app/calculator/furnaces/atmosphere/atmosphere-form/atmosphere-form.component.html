@@ -1,5 +1,20 @@
+<div class="mb-4 p-2 form-card">
 <form [formGroup]="atmosphereLossForm">
-    <div class="form-section">
+    <label *ngIf="!isEditingName" class="group-label mb-2 w-100 bold" [ngClass]="{'py-1': !isBaseline}">
+      <span (click)="editLossName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+      <span>{{atmosphereLossForm.controls.name.value}}</span>
+      <a *ngIf="isBaseline" class="click-link pull-right add-loss text-danger small pl-2"
+        (click)="removeLoss(index)">+Remove Loss</a>
+    </label>
+    <label *ngIf="isEditingName" class="group-label mb-2 pb-1 w-100">
+      <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+      <span class="alert-danger small ml-2" *ngIf="atmosphereLossForm.controls.name.invalid && !atmosphereLossForm.controls.name.pristine">
+        <span *ngIf="atmosphereLossForm.controls.name.errors.required">Please enter a loss name.</span>
+      </span>
+    </label>
+
+    <div *ngIf="index == 0" class="form-section">
 
       <div class="d-flex flex-column w-100 justify-content-center pb-3">
         <div class="btn-group btn-group-sm align-self-center">
@@ -52,6 +67,38 @@
         </span>
       </div>
 
+      <div class="form-group">
+        <label class="small" for="{{'availableHeat'+idString}}">
+          <span *ngIf="atmosphereLossForm.controls.energySourceType.value == 'Fuel'">
+            Available Heat
+          </span>
+          <span *ngIf="atmosphereLossForm.controls.energySourceType.value == 'Steam'">
+            Boiler Efficiency
+          </span>
+          <span *ngIf="atmosphereLossForm.controls.energySourceType.value == 'Electricity'">
+            System Efficiency
+          </span>
+          <a *ngIf="atmosphereLossForm.controls.energySourceType.value != 'Electricity'" id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
+          <a *ngIf="atmosphereLossForm.controls.energySourceType.value == 'Electricity'" id="materialHelp" disabled class="disabled form-text small">Calculate</a>
+        </label>
+        <div class="input-group">
+          <input  name="{{'availableHeat'+lossIndex}}" type="number" step="any" min="0"
+          class="form-control" formControlName="availableHeat" id="{{'availableHeat'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('availableHeat')">
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="atmosphereLossForm.controls.availableHeat.invalid && !atmosphereLossForm.controls.availableHeat.pristine">
+        <span *ngIf="atmosphereLossForm.controls.availableHeat.errors.required">Value Required</span>
+        <span *ngIf="atmosphereLossForm.controls.availableHeat.errors.greaterThan == 0">Value must be greater than than
+          0.</span>
+          <span *ngIf="atmosphereLossForm.controls.availableHeat.errors.max">Value can't be greater than
+            {{atmosphereLossForm.controls.availableHeat.errors.max.max}}%</span>
+      </span>
+      </div>
+    </div>
+
+    <div class="form-section">
       <div class="form-group">
         <label class="small" for="{{'atmosphereGas'+idString}}">Atmosphere Gas
           <a id="materialHelp" class="form-text small click-link" (click)="initSpecificHeatModal()" >Add New Gas</a>
@@ -141,35 +188,36 @@
          </span>
       </div>
 
-      <div class="form-group">
-        <label class="small" for="{{'availableHeat'+idString}}">
-          <span *ngIf="atmosphereLossForm.controls.energySourceType.value != 'Steam'">
-            Available Heat
-          </span>
-          <span *ngIf="atmosphereLossForm.controls.energySourceType.value == 'Steam'">
-            Boiler Efficiency
-          </span>
-          <a *ngIf="atmosphereLossForm.controls.energySourceType.value != 'Electricity'" id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
-          <a *ngIf="atmosphereLossForm.controls.energySourceType.value == 'Electricity'" id="materialHelp" disabled class="disabled form-text small">Calculate</a>
-        </label>
-        <div class="input-group">
-          <input  name="{{'availableHeat'+lossIndex}}" type="number" step="any" min="0"
-          class="form-control" formControlName="availableHeat" id="{{'availableHeat'+idString}}" onfocus="this.select();"
-          (input)="calculate()" (focus)="focusField('availableHeat')">
-          <span class="input-group-addon units">%</span>
-        </div>
-        <span class="alert-danger pull-right small"
-        *ngIf="atmosphereLossForm.controls.availableHeat.invalid && !atmosphereLossForm.controls.availableHeat.pristine">
-        <span *ngIf="atmosphereLossForm.controls.availableHeat.errors.required">Value Required</span>
-        <span *ngIf="atmosphereLossForm.controls.availableHeat.errors.greaterThan == 0">Value must be greater than than
-          0.</span>
-          <span *ngIf="atmosphereLossForm.controls.availableHeat.errors.max">Value can't be greater than
-            {{atmosphereLossForm.controls.availableHeat.errors.max.max}}%</span>
-      </span>
-      </div>
-
     </div>
   </form>
+
+  		 <!-- Results -->
+		<div *ngIf="lossResult" class="d-flex flex-column mt-3 mb-2">
+			<div class="form-group m-0">
+			  <label class="bold">Atmosphere Loss</label>
+			  <div *ngIf="lossResult.atmosphereLoss" class="text-center bold small">
+				{{lossResult.atmosphereLoss | sigFigs:'6'}} 
+        <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+			  </div>
+			  <div *ngIf="!lossResult.atmosphereLoss" class="text-center bold small">
+				&mdash; &mdash;
+			  </div>
+			</div>
+		 </div>
+		 <div *ngIf="lossResult" class="d-flex flex-column mt-1 mb-2">
+		<div class="form-group m-0">
+		  <label class="bold">Gross Loss</label>
+		  <div *ngIf="lossResult.grossLoss" class="text-center bold small">
+			{{lossResult.grossLoss | sigFigs:'6'}} 
+      <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+		  </div>
+		  <div *ngIf="!lossResult.grossLoss" class="text-center bold small">
+			&mdash; &mdash;
+		  </div>
+		</div>
+  </div>
+  
+</div>
   
   
   <div bsModal #specificHeatModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"

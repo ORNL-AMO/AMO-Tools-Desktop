@@ -15,8 +15,8 @@ export interface AtmosphereLoss {
 
 
 export interface AtmosphereLossOutput {
-    baseline?: AtmosphereLossResults,
-    modification?: AtmosphereLossResults
+    baseline?: {totalFuelUse: number, grossLoss: number, totalFuelCost: number, losses: Array<AtmosphereLossResults>},
+    modification?: {totalFuelUse: number, grossLoss: number, totalFuelCost: number, losses: Array<AtmosphereLossResults>}
     energyUnit?: string;
     fuelSavings?: number;
     costSavings?: number;
@@ -27,5 +27,6 @@ export interface AtmosphereLossOutput {
     fuelCost?: number;
     atmosphereLoss?: number;
     grossLoss?: number;
+    energyUnit?: string; 
   }
   
