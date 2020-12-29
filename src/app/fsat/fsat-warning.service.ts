@@ -221,18 +221,23 @@ export class FsatWarningService {
         fsat.fanMotor.motorRatedVoltage,
         settings
       );
-      let flaMax = estEfficiency * 1.05;
-      let flaMin = estEfficiency * .95;
-      if (fsat.fanMotor.fullLoadAmps < flaMin) {
-        return 'Value should be greater than ' + Math.round(flaMin) + ' A';
-      } else if (fsat.fanMotor.fullLoadAmps > flaMax) {
-        return 'Value should be less than ' + Math.round(flaMax) + ' A';
-      } else {
-        if (fsat.fanMotor.fullLoadAmps != estEfficiency) {
-          return "Inputs to this calculated value have changed. Consider re-estimating";
-        }
-        return null;
+
+      // Keep - may use min/max in the future
+      // let flaMax = estEfficiency * 1.05;
+      // let flaMin = estEfficiency * .95;
+      // if (fsat.fanMotor.fullLoadAmps < flaMin) {
+      //   return 'Value should be greater than ' + Math.round(flaMin) + ' A';
+      // } else if (fsat.fanMotor.fullLoadAmps > flaMax) {
+      //   return 'Value should be less than ' + Math.round(flaMax) + ' A';
+      // } else {
+      // return null;
+
+      let limit = .05;
+      let percentDifference = Math.abs(fsat.fanMotor.fullLoadAmps - estEfficiency) / estEfficiency;
+      if (percentDifference > limit) {
+        return `Value is greater than ${limit * 100}% different from estimated FLA (${Math.round(estEfficiency)} A). Consider using the 'Estimate Full-Load Amps' button.`;
       }
+      return null;
     } else {
       return null;
     }

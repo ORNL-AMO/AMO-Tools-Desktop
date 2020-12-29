@@ -38,6 +38,8 @@ export class SolidMaterialFormComponent implements OnInit {
   showModal: boolean;
   energySourceType: string;
   energySourceSub: Subscription;
+  idString: string;
+  index: number = 0;
 
   constructor(private suiteDbService: SuiteDbService, 
               private chargeMaterialService: ChargeMaterialService, 
@@ -46,6 +48,12 @@ export class SolidMaterialFormComponent implements OnInit {
               ) {}
 
   ngOnInit() {
+    if (this.isBaseline) {
+      this.idString = 'baseline_' + this.index;
+    }
+    else {
+      this.idString = 'modification_' + this.index;
+    }
     this.initSubscriptions();
     this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
     if (this.chargeMaterialForm) {

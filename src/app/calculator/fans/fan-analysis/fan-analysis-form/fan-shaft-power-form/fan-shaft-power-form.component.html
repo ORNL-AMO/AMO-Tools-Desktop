@@ -2,7 +2,7 @@
   <div class="d-flex flex-column">
     <div class="header mr-2 ml-2">
       <h3>
-        Fan Shaft Power
+        Power
       </h3>
     </div>
   </div>
@@ -149,7 +149,7 @@
           </div>
           <div class="text-center w-50">
             <span *ngIf="fanShaftPower.amps">
-              {{fanShaftPower.amps | sigFigs: '6'}}
+              {{fanShaftPower.amps | number: '1.0-0'}}
             </span>
             <span class="bold" *ngIf="!fanShaftPower.amps">
               &mdash; &mdash;

@@ -4,7 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
+import { WallLoss, WallLossResult } from '../../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { WallFormService } from '../wall-form.service';
@@ -22,9 +22,11 @@ export class WallFormComponent implements OnInit {
   @Input()
   isBaseline: boolean;
   @Input()
-  inModal: boolean;
+  index: number;
   @Input()
   selected: boolean;
+  @Input()
+  operatingHours: OperatingHours;
   @ViewChild('surfaceModal', { static: false }) public surfaceModal: ModalDirective;
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
@@ -42,19 +44,32 @@ export class WallFormComponent implements OnInit {
   formWidth: number;
   energyUnit: string;
   energySourceTypeSub: any;
+  outputSubscription: Subscription;
+  lossResult: WallLossResult;
+  isEditingName: boolean;
+
+  trackingEnergySource: boolean;
+  idString: string;
 
   constructor(private wallFormService: WallFormService,
               private suiteDbService: SuiteDbService,
               private cd: ChangeDetectorRef,
               private wallService: WallService) { }
   ngOnInit(): void {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.index;
+    }
+    else {
+      this.idString = '_baseline_' + this.index;
+    }
+    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
     this.initSubscriptions();
     this.energyUnit = this.wallService.getAnnualEnergyUnit(this.wallLossesForm.controls.energySourceType.value, this.settings);
-    if (this.isBaseline) {
-      this.wallService.energySourceType.next(this.wallLossesForm.controls.energySourceType.value);
-    } else {
+    if (this.trackingEnergySource) {
       let energySource = this.wallService.energySourceType.getValue();
       this.setEnergySource(energySource);
+    } else {
+      this.wallService.energySourceType.next(this.wallLossesForm.controls.energySourceType.value);
     }
   }
 
@@ -63,12 +78,12 @@ export class WallFormComponent implements OnInit {
       this.setFormState();
     }
   }
-
   
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
-    if (!this.isBaseline) {
+    this.outputSubscription.unsubscribe();
+    if (this.trackingEnergySource) {
       this.energySourceTypeSub.unsubscribe();
     }
   }
@@ -80,7 +95,14 @@ export class WallFormComponent implements OnInit {
     this.generateExampleSub = this.wallService.generateExample.subscribe(value => {
       this.initForm();
     });
-    if (!this.isBaseline) {
+    this.outputSubscription = this.wallService.output.subscribe(output => {
+      if (this.isBaseline) {
+        this.lossResult = output.baseline.losses[this.index];
+      } else {
+        this.lossResult = output.modification.losses[this.index];
+      }
+    });
+    if (this.trackingEnergySource) {
       this.energySourceTypeSub = this.wallService.energySourceType.subscribe(energySourceType => {
         this.setEnergySource(energySourceType);
       });
@@ -93,6 +115,12 @@ export class WallFormComponent implements OnInit {
     } else {
       this.wallLossesForm.enable();
     }
+
+    if (this.index > 0) {
+      this.wallLossesForm.controls.hoursPerYear.disable();
+      this.wallLossesForm.controls.fuelCost.disable();
+      this.wallLossesForm.controls.availableHeat.disable();
+    }
   }
 
   setEnergySource(energySourceType: string) {
@@ -101,20 +129,31 @@ export class WallFormComponent implements OnInit {
     });
     this.energyUnit = this.wallService.getAnnualEnergyUnit(energySourceType, this.settings);
 
-    if (this.isBaseline) {
+    if (!this.trackingEnergySource) {
       this.wallService.energySourceType.next(energySourceType);
     }
     this.cd.detectChanges();
     this.calculate();
   }
 
+  editLossName() {
+    this.isEditingName = true;
+  }
+
+  doneEditingName() {
+    this.isEditingName = false;
+  }
 
   initForm() {
     let updatedWallLossData: WallLoss;
     if (this.isBaseline) {
-      updatedWallLossData = this.wallService.baselineData.getValue();
+      let baselineData: Array<WallLoss> = this.wallService.baselineData.getValue();
+      updatedWallLossData = baselineData[this.index];
     } else {
-      updatedWallLossData = this.wallService.modificationData.getValue();
+      let modificationData: Array<WallLoss> = this.wallService.modificationData.getValue();
+      if (modificationData) {
+        updatedWallLossData = modificationData[this.index];
+      }
     }
     if (updatedWallLossData) {
       this.wallLossesForm = this.wallFormService.getWallLossForm(updatedWallLossData, false);
@@ -141,11 +180,11 @@ export class WallFormComponent implements OnInit {
   calculate() {
     this.wallLossesForm = this.wallFormService.setValidators(this.wallLossesForm);
     let currentWallLoss: WallLoss = this.wallFormService.getWallLossFromForm(this.wallLossesForm);
-    if (this.isBaseline) {
-      this.wallService.baselineData.next(currentWallLoss);
-    } else {
-      this.wallService.modificationData.next(currentWallLoss);
-    }
+    this.wallService.updateDataArray(currentWallLoss, this.index, this.isBaseline);
+  }
+
+  removeLoss() {
+    this.wallService.removeLoss(this.index);
   }
 
   setProperties() {
@@ -217,7 +256,7 @@ export class WallFormComponent implements OnInit {
   }
 
   setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
+    if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }

@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 export class PressureReadingsFormComponent implements OnInit {
   @Input()
   planeNum: string;
+  @Input()
+  pressureType: string = 'Velocity';
 
   traverseHoles: Array<Array<number>>;
   numLabels: Array<number>;

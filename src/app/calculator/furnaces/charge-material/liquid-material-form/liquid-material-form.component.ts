@@ -24,6 +24,7 @@ export class LiquidMaterialFormComponent implements OnInit {
   selected: boolean;
   @Input()
   inModal: boolean;
+
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
@@ -38,6 +39,8 @@ export class LiquidMaterialFormComponent implements OnInit {
   showModal: boolean;
   energySourceSub: Subscription;
   energySourceType: string;
+  idString: string;
+  index: number = 0;
 
   constructor(private suiteDbService: SuiteDbService, 
               private chargeMaterialService: ChargeMaterialService, 
@@ -46,6 +49,13 @@ export class LiquidMaterialFormComponent implements OnInit {
               ) {}
 
   ngOnInit() {
+    if (this.isBaseline) {
+      this.idString = 'baseline_' + this.index;
+    }
+    else {
+      this.idString = 'modification_' + this.index;
+    }
+
     this.initSubscriptions();
     this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
     if (this.chargeMaterialForm) {

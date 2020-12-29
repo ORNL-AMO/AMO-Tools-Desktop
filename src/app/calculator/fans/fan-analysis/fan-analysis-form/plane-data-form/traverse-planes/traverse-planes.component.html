@@ -1,0 +1,83 @@
+<!-- 3a -->
+<div *ngIf="planeStep == '3a'">
+    <app-fan-data-form [planeNum]="planeStep" [planeDescription]="planeDescription"
+    [settings]="settings"></app-fan-data-form>
+    <app-plane-three-form [planeNum]="planeStep"></app-plane-three-form>
+    
+    <app-pressure-readings-form [planeNum]="planeStep">
+    </app-pressure-readings-form>
+    
+    <!--  Static pressure input/ calculation result -->
+    <!-- <app-pressure-readings-form *ngIf="planeStep == '3a'" [planeNum]="'3a'" [pressureType]="'Static'">
+    </app-pressure-readings-form> -->
+</div>
+
+<!-- 3b -->
+<div *ngIf="planeStep == '3b'">
+    <app-fan-data-form [planeNum]="planeStep" [planeDescription]="planeDescription"
+    [settings]="settings"></app-fan-data-form>
+    <app-plane-three-form [planeNum]="planeStep"></app-plane-three-form>
+    
+    <app-pressure-readings-form [planeNum]="planeStep">
+    </app-pressure-readings-form>
+    
+    <!--  Static pressure input/ calculation result -->
+    <!-- <app-pressure-readings-form *ngIf="planeStep == '3a'" [planeNum]="'3a'" [pressureType]="'Static'">
+    </app-pressure-readings-form> -->
+</div>
+
+<!-- 3c -->
+<div *ngIf="planeStep == '3c'">
+    <app-fan-data-form [planeNum]="planeStep" [planeDescription]="planeDescription"
+    [settings]="settings"></app-fan-data-form>
+    <app-plane-three-form [planeNum]="planeStep"></app-plane-three-form>
+    
+    <app-pressure-readings-form [planeNum]="planeStep">
+    </app-pressure-readings-form>
+    
+    <!--  Static pressure input/ calculation result -->
+    <!-- <app-pressure-readings-form *ngIf="planeStep == '3a'" [planeNum]="'3a'" [pressureType]="'Static'">
+    </app-pressure-readings-form> --> 
+</div>
+
+<!-- Velocity Results -->
+<div class="form-group bold mt-3">
+  <label for="pv3">Traverse Velocity Pressure</label>
+  <div class="text-center small bold">
+    <span *ngIf="velocityResults && velocityResults.pv3">
+        {{velocityResults.pv3 | sigFigs: '6'}}
+        <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </span>
+    <span *ngIf="!velocityResults || !velocityResults.pv3">
+            &mdash; &mdash;
+    </span>
+  </div>
+</div>
+<div class="form-group bold">
+  <label for="percent75Rule">Points Satisfying 75% Rule</label>
+  <div class="text-center small bold">
+    <span *ngIf="velocityResults && velocityResults.percent75Rule" [ngClass]="{'text-danger': velocityResults.percent75Rule < 75}">
+        {{velocityResults.percent75Rule | number: '1.1-1'}} %
+    </span>
+    <span *ngIf="!velocityResults || !velocityResults.percent75Rule">
+        &mdash; &mdash;
+    </span>
+  </div>
+</div>
+<div class="form-group bold">
+    <label for="traverseVelocity">Traverse Velocity</label>
+    <div class="text-center small bold">
+      <span *ngIf="velocityResults && velocityResults.traverseVelocity">
+          {{velocityResults.traverseVelocity | number: '1.1-1'}} 
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">
+            ft/min
+          </span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+            m/min
+        </span>
+      </span>
+      <span *ngIf="!velocityResults || !velocityResults.traverseVelocity">
+          &mdash; &mdash;
+      </span>
+    </div>
+  </div>
