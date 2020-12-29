@@ -89,21 +89,22 @@ export class PressureReadingsFormComponent implements OnInit {
   }
 
   setStaticPressure() {
-    let row;
-    let total = 0;
-    let count = 0;
-    let avg = 0;
+    // Static pressure result is avg of all traverse holes/insertion points
+    let row: Array<number>;
+    let totalHolesValue: number = 0;
+    let holeCount: number = 0;
+    let holesAverage: number = 0;
 
     for (let i = 0; i < this.traverseHoles.length; i++) {
       row = this.traverseHoles[i];
-      count += row.length;
+      holeCount += row.length;
       for (let j = 0; j < row.length; j++) {
-          total += row[j];
+        totalHolesValue += row[j];
         }
       }
 
-    avg = count === 0 ? NaN : (total / count);
-    this.planeData.staticPressure = avg;
+    holesAverage = holeCount === 0 ? NaN : (totalHolesValue / holeCount);
+    this.planeData.staticPressure = holesAverage;
   }
 
   save() {

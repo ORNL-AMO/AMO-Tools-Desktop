@@ -7,7 +7,7 @@
     <app-pressure-readings-form [planeNum]="planeStep">
     </app-pressure-readings-form>
 
-    <div [formGroup]="fanDataForm" class="form-group mt-4">
+    <form [formGroup]="fanDataForm" class="form-group mt-4">
       <label for="{{'staticPressure_'+idString}}">Static Pressure
         <a class="form-text small click-link" 
         *ngIf="userDefinedStaticPressure" (click)="showHideInputField()">Calculate Static Pressure</a>
@@ -34,9 +34,9 @@
           {{fanDataForm.controls.staticPressure.value | number:'1.0-2'}}
           <span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
         </span>
-        <span class="mr-2" *ngIf="!fanDataForm.controls.staticPressure.value">&mdash; &mdash;</span>
+        <span class="mr-2 calculated-error" *ngIf="!fanDataForm.controls.staticPressure.value">&mdash; &mdash;</span>
       </div>
-    </div>
+    </form>
 
     <app-pressure-readings-form *ngIf="!userDefinedStaticPressure" [planeNum]="planeStep" [pressureType]="'Static'">
     </app-pressure-readings-form>
@@ -51,7 +51,7 @@
     <app-pressure-readings-form [planeNum]="planeStep">
     </app-pressure-readings-form>
     
-    <div [formGroup]="fanDataForm" class="form-group mt-4">
+    <form [formGroup]="fanDataForm" class="form-group mt-4">
       <label for="{{'staticPressure_'+idString}}">Static Pressure
         <a class="form-text small click-link" 
         *ngIf="userDefinedStaticPressure" (click)="showHideInputField()">Calculate Static Pressure</a>
@@ -77,9 +77,9 @@
         <span class="mr-2" *ngIf="fanDataForm.controls.staticPressure.value">
           {{fanDataForm.controls.staticPressure.value | number:'1.0-2'}}
         </span>
-        <span class="mr-2" *ngIf="!fanDataForm.controls.staticPressure.value">&mdash; &mdash;</span>
+        <span class="mr-2 calculated-error" *ngIf="!fanDataForm.controls.staticPressure.value">&mdash; &mdash;</span>
       </div>
-    </div>
+    </form>
 
     <app-pressure-readings-form *ngIf="!userDefinedStaticPressure" [planeNum]="planeStep" [pressureType]="'Static'">
     </app-pressure-readings-form>
@@ -94,7 +94,7 @@
     <app-pressure-readings-form [planeNum]="planeStep">
     </app-pressure-readings-form>
     
-    <div [formGroup]="fanDataForm" class="form-group mt-4">
+    <form [formGroup]="fanDataForm" class="form-group mt-4">
       <label for="{{'staticPressure_'+idString}}">Static Pressure
         <a class="form-text small click-link" 
         *ngIf="userDefinedStaticPressure" (click)="showHideInputField()">Calculate Static Pressure</a>
@@ -120,9 +120,9 @@
         <span class="mr-2" *ngIf="fanDataForm.controls.staticPressure.value">
           {{fanDataForm.controls.staticPressure.value | number:'1.0-2'}}
         </span>
-        <span class="mr-2" *ngIf="!fanDataForm.controls.staticPressure.value">&mdash; &mdash;</span>
+        <span class="mr-2 calculated-error" *ngIf="!fanDataForm.controls.staticPressure.value">&mdash; &mdash;</span>
       </div>
-    </div>
+    </form>
 
     <app-pressure-readings-form *ngIf="!userDefinedStaticPressure" [planeNum]="planeStep" [pressureType]="'Static'">
     </app-pressure-readings-form>

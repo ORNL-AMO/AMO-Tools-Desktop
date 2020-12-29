@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ConvertUnitsService } from '../../../../../../shared/convert-units/convert-units.service';
 import { Plane, VelocityResults } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
 import { FanAnalysisService } from '../../../fan-analysis.service';
@@ -29,7 +28,6 @@ export class TraversePlanesComponent implements OnInit {
   getResultsSub: Subscription;
 
   constructor(private fanAnalysisService: FanAnalysisService,
-             private convertUnitsService: ConvertUnitsService,
              private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit(): void {
