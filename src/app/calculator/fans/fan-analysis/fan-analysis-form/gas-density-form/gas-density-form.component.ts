@@ -148,15 +148,6 @@ export class GasDensityFormComponent implements OnInit {
       && this.gasDensityForm.controls.specificGravity.valid && this.gasDensityForm.controls.dewPoint.valid);
   }
 
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
-  }
-
   setValidators() {
     let ranges: GasDensityRanges = this.gasDensityFormService.getGasDensityRanges(this.settings, this.gasDensityForm.controls.dryBulbTemp.value);
     this.gasDensityFormService.setRelativeHumidityValidators(this.gasDensityForm);

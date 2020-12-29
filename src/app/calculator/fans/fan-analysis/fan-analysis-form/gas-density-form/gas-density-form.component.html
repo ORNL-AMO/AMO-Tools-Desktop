@@ -47,7 +47,7 @@
       <div class="input-group">
         <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure"
           id="staticPressure" (input)="getResults()" (focus)="focusField('staticPressure')" onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right"
         *ngIf="gasDensityForm.controls.staticPressure.invalid && !gasDensityForm.controls.staticPressure.pristine">
@@ -64,7 +64,7 @@
         <input name="barometricPressure" type="number" step="any" class="form-control"
           formControlName="barometricPressure" id="barometricPressure" (input)="getResults()"
           (focus)="focusField('barometricPressure')" onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right"
         *ngIf="gasDensityForm.controls.barometricPressure.invalid && !gasDensityForm.controls.barometricPressure.pristine">
@@ -162,7 +162,7 @@
       <div class="input-group" *ngIf="gasDensityForm.controls.inputType.value == 'custom'">
         <input name="gasDensity" type="number" step="any" class="form-control" formControlName="gasDensity"
           id="gasDensity" (input)="getResults()" (focus)="focusField('gasDensity')" onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.densityMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.densityMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right" *ngIf="gasDensityForm.controls.gasDensity.invalid">
         <span *ngIf="gasDensityForm.controls.gasDensity.errors.required">Gas Density Value Required</span>

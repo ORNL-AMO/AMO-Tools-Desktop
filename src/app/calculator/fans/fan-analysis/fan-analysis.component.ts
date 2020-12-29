@@ -131,6 +131,7 @@ export class FanAnalysisComponent implements OnInit {
     this.fanAnalysisService.resetForms.next(true);
     this.fanAnalysisService.resetForms.next(false);
     this.fanAnalysisService.velocityResults.next(undefined);
+    this.fanAnalysisService.fanShaftPowerResults.next(undefined);
     this.fanAnalysisService.mainTab.next('fan-setup');
     this.fanAnalysisService.stepTab.next('fan-info');
     this.fanAnalysisService.getResults.next(true);
