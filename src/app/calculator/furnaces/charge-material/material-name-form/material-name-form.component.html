@@ -1,0 +1,15 @@
+<form [formGroup]="materialNameForm">
+    <label *ngIf="!isEditingName" class="group-label mb-2 w-100 bold" [ngClass]="{'py-1': !isBaseline}">
+      <span (click)="editLossName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+      <span>{{materialNameForm.controls.name.value}}</span>
+      <a *ngIf="isBaseline" class="click-link pull-right add-loss text-danger small pl-2"
+        (click)="removeLoss(index)">+Remove Loss</a>
+    </label>
+    <label *ngIf="isEditingName" class="group-label mb-2 pb-1 w-100">
+      <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+      <span class="alert-danger small ml-2" *ngIf="materialNameForm.controls.name.invalid && !materialNameForm.controls.name.pristine">
+        <span *ngIf="materialNameForm.controls.name.errors.required">Please enter a loss name.</span>
+      </span>
+    </label>
+</form>

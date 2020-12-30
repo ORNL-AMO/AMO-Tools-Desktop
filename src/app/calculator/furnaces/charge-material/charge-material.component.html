@@ -31,72 +31,32 @@
 		  <div class="baseline w-50 panel-column" (click)="setBaselineSelected()" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
 			<div class="header mx-2 mb-4">
 			  <h3>Baseline</h3>
+              <a class="click-link pull-right small add-loss" (click)="addLoss()">+Add Loss</a>
 			</div>
 			<div class="d-flex flex-column mx-4 mb-4">
-			  <!-- app form -->
-			  <div class="mb-4 p-2 form-card">
-					<app-energy-form [selected]="baselineSelected" [isBaseline]="true" [settings]="settings"></app-energy-form>
-					<div class="form-group">
-						<label class="small" for="materialType">Select Type</label>
-						<select [disabled]="!baselineSelected" class="form-control" id="materialType" (change)="changeMaterialType()" [(ngModel)]="materialType"
-						(focus)="focusField('chargeMaterialType')">
-						<option [ngValue]="'Solid'">Solid</option>
-						<option [ngValue]="'Liquid'">Liquid</option>
-						<option [ngValue]="'Gas'">Gas</option>
-					</select>
-				</div>
-
-				<app-solid-material-form *ngIf="materialType == 'Solid'" [selected]="baselineSelected"
-					[isBaseline]="true" [settings]="settings"></app-solid-material-form>
-				<app-liquid-material-form *ngIf="materialType == 'Liquid'" [selected]="baselineSelected"
-					[isBaseline]="true" [settings]="settings"></app-liquid-material-form>
-				<app-gas-material-form *ngIf="materialType == 'Gas'" [selected]="baselineSelected"
-					[isBaseline]="true" [settings]="settings"></app-gas-material-form>
-			 <!-- Results -->
-			 <div *ngIf="output" class="d-flex flex-column mt-3 mb-2">
-				<div class="form-group m-0">
-				  <label class="bold">Heat Required</label>
-				  <div *ngIf="output.baseline.netHeatLoss" class="text-center bold small">
-					{{output.baseline.netHeatLoss | sigFigs:'6'}}
-					<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
-				  </div>
-				  <div *ngIf="!output.baseline.netHeatLoss" class="text-center bold small">
-					&mdash; &mdash;
-				  </div>
-				</div>
-				<div class="form-group m-0">
-					<label class="bold">Reaction Heat</label>
-					<div *ngIf="output.baseline.endoExoHeat" class="text-center bold small">
-						{{output.baseline.endoExoHeat | sigFigs:'6'}}
-						<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
+				<div *ngFor="let data of baselineData; let i = index;">
+					<div class="mb-4 p-2 form-card">
+						<app-material-name-form [index]="i" [selected]="baselineSelected"
+						[isBaseline]="true" [settings]="settings"></app-material-name-form>
+						<app-energy-form *ngIf="i == 0" class="form-section" [selected]="baselineSelected"
+						[isBaseline]="true" [settings]="settings" [operatingHours]="operatingHours"></app-energy-form>
+						<div class="form-group">
+							<label class="small" for="materialType">Select Type</label>
+							<select [disabled]="!baselineSelected" class="form-control" id="materialType" (change)="changeMaterialType()" [(ngModel)]="materialType"
+							(focus)="focusField('chargeMaterialType')">
+								<option [ngValue]="'Solid'">Solid</option>
+								<option [ngValue]="'Liquid'">Liquid</option>
+								<option [ngValue]="'Gas'">Gas</option>
+							</select>
+						</div>
+						<app-solid-material-form *ngIf="materialType == 'Solid'" [index]="i" [selected]="baselineSelected"
+							[isBaseline]="true" [settings]="settings"></app-solid-material-form>
+						<app-liquid-material-form *ngIf="materialType == 'Liquid'" [index]="i" [selected]="baselineSelected"
+							[isBaseline]="true" [settings]="settings"></app-liquid-material-form>
+						<app-gas-material-form *ngIf="materialType == 'Gas'" [index]="i" [selected]="baselineSelected"
+							[isBaseline]="true" [settings]="settings"></app-gas-material-form>
+						</div>
 					</div>
-					<div *ngIf="!output.baseline.endoExoHeat" class="text-center bold small">
-					  &mdash; &mdash;
-					</div>
-				  </div>
-				  <div class="form-group m-0">
-					<label class="bold">Total Heat Required</label>
-					<div *ngIf="output.baseline.heatRequired" class="text-center bold small">
-						{{output.baseline.heatRequired | sigFigs:'6'}}
-						<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
-					</div>
-					<div *ngIf="!output.baseline.heatRequired" class="text-center bold small">
-					  &mdash; &mdash;
-					</div>
-				  </div>
-				  <div class="form-group m-0">
-					<label class="bold">Gross Loss</label>
-					<div *ngIf="output.baseline.grossLoss" class="text-center bold small">
-					  {{output.baseline.grossLoss | sigFigs:'6'}} 
-					  <span [innerHTML]="energyUnit | settingsLabel"></span>/hr
-					</div>
-					<div *ngIf="!output.baseline.grossLoss" class="text-center bold small">
-					  &mdash; &mdash;
-					</div>
-				</div>
-
-			  </div>
-			  </div>
 
 			  <div class="w-100 justify content-center btn-group btn-group-sm">
 				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
@@ -120,70 +80,31 @@
 			</div>
 			<!-- forms -->
 			<div class="d-flex flex-column mx-4 mb-4">
-			  <!-- app form -->
-			  <div class="mb-4 p-2 form-card">
-
-			  <app-energy-form [selected]="!baselineSelected" [isBaseline]="false" [settings]="settings"></app-energy-form>
-			  <div class="form-group">
-				<label class="small" for="materialType">Select Type</label>
-				<select disabled class="form-control" id="materialType" [(ngModel)]="materialType"
-				   (focus)="focusField('chargeMaterialType')">
-				  <option>Solid</option>
-				  <option>Liquid</option>
-				  <option>Gas</option>
-				</select>
-			  </div>
-			  <app-solid-material-form *ngIf="materialType == 'Solid'" [selected]="!baselineSelected"
-			  [isBaseline]="false" [settings]="settings"></app-solid-material-form>
-			  <app-liquid-material-form *ngIf="materialType == 'Liquid'" [selected]="!baselineSelected"
-			  [isBaseline]="false" [settings]="settings"></app-liquid-material-form>
-			  <app-gas-material-form *ngIf="materialType == 'Gas'" [selected]="!baselineSelected"
-				  [isBaseline]="false" [settings]="settings"></app-gas-material-form>
-			 <!-- Mod results -->
-				<div *ngIf="output" class="d-flex flex-column mt-3 mb-2">
-					<div class="form-group m-0">
-					  <label class="bold">Heat Required</label>
-					  <div *ngIf="output.modification.netHeatLoss" class="text-center bold small">
-						{{output.modification.netHeatLoss | sigFigs:'6'}}
-						<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
-					  </div>
-					  <div *ngIf="!output.modification.netHeatLoss" class="text-center bold small">
-						&mdash; &mdash;
-					  </div>
+				<div *ngFor="let data of modificationData; let i = index;">
+					<div class="mb-4 p-2 form-card">
+						<app-material-name-form [index]="i" [selected]="!baselineSelected"
+				  			[isBaseline]="false" [settings]="settings"></app-material-name-form>
+						<app-energy-form *ngIf="i == 0" class="form-section" [operatingHours]="operatingHours"
+						 [selected]="!baselineSelected" [isBaseline]="false" [settings]="settings"></app-energy-form>
+						<div class="form-group">
+							<label class="small" for="materialType">Select Type</label>
+							<select disabled class="form-control" id="materialType" [(ngModel)]="materialType"
+							(focus)="focusField('chargeMaterialType')">
+							<option>Solid</option>
+							<option>Liquid</option>
+							<option>Gas</option>
+							</select>
+						</div>
+						<app-solid-material-form *ngIf="materialType == 'Solid'" [index]="i" [selected]="!baselineSelected"
+						[isBaseline]="false" [settings]="settings"></app-solid-material-form>
+						<app-liquid-material-form *ngIf="materialType == 'Liquid'" [index]="i" [selected]="!baselineSelected"
+						[isBaseline]="false" [settings]="settings"></app-liquid-material-form>
+						<app-gas-material-form *ngIf="materialType == 'Gas'" [index]="i" [selected]="!baselineSelected"
+							[isBaseline]="false" [settings]="settings"></app-gas-material-form>
 					</div>
-					<div class="form-group m-0">
-						<label class="bold">Reaction Heat</label>
-						<div *ngIf="output.modification.endoExoHeat" class="text-center bold small">
-							{{output.modification.endoExoHeat | sigFigs:'6'}}
-							<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
-						</div>
-						<div *ngIf="!output.modification.endoExoHeat" class="text-center bold small">
-						  &mdash; &mdash;
-						</div>
-					  </div>
-					  <div class="form-group m-0">
-						<label class="bold">Total Heat Required</label>
-						<div *ngIf="output.modification.heatRequired" class="text-center bold small">
-							{{output.modification.heatRequired | sigFigs:'6'}}
-							<span [innerHTML]="energyUnit | settingsLabel"></span>/hr
-						</div>
-						<div *ngIf="!output.modification.heatRequired" class="text-center bold small">
-						  &mdash; &mdash;
-						</div>
-					  </div>
-					  <div class="form-group m-0">
-						<label class="bold">Gross Loss</label>
-						<div *ngIf="output.modification.grossLoss" class="text-center bold small">
-						  {{output.modification.grossLoss | sigFigs:'6'}} 
-						  <span [innerHTML]="energyUnit | settingsLabel"></span>/hr
-						</div>
-						<div *ngIf="!output.modification.grossLoss" class="text-center bold small">
-						  &mdash; &mdash;
-						</div>
-					</div>
-				  </div>
-				  </div>
+				</div>
 			</div>
+
 		  </div>
 		  <!-- no content message -->
 		  <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"

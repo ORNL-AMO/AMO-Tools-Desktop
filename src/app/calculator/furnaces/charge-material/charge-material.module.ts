@@ -19,6 +19,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 import { EnergyFormComponent } from './energy-form/energy-form.component';
 import { EnergyFormService } from './energy-form/energy-form.service';
 import { ChargeMaterialResultsComponent } from './charge-material-results/charge-material-results.component';
+import { MaterialLossResultComponent } from './material-loss-result/material-loss-result.component';
+import { MaterialNameFormComponent } from './material-name-form/material-name-form.component';
 
 
 
@@ -30,7 +32,9 @@ import { ChargeMaterialResultsComponent } from './charge-material-results/charge
     LiquidMaterialFormComponent,
     SolidMaterialFormComponent,
     EnergyFormComponent,
-    ChargeMaterialResultsComponent
+    ChargeMaterialResultsComponent,
+    MaterialLossResultComponent,
+    MaterialNameFormComponent
   ],
   imports: [
     CommonModule,

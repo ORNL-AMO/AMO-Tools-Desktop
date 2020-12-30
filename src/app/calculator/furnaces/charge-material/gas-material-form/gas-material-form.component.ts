@@ -4,7 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
-import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, ChargeMaterialResult } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ChargeMaterialService } from '../charge-material.service';
@@ -24,22 +24,21 @@ export class GasMaterialFormComponent implements OnInit {
   @Input()
   selected: boolean;
   @Input()
-  inModal: boolean;
+  index: number;
+
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
-  energySourceSub: Subscription;
 
   chargeMaterialForm: FormGroup;
-  selectedMaterialId: any;
-  selectedMaterial: any;
   materialTypes: any;
   showModal: boolean;
-  energySourceType: string;
+
   idString: string;
-  index: number = 0;
+  outputSubscription: Subscription;
+  lossResult: ChargeMaterialResult;
 
   constructor(private suiteDbService: SuiteDbService, 
               private chargeMaterialService: ChargeMaterialService, 
@@ -74,7 +73,7 @@ export class GasMaterialFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
-    this.energySourceSub.unsubscribe();
+    this.outputSubscription.unsubscribe();
     this.chargeMaterialService.modalOpen.next(false);
   }
 
@@ -85,17 +84,25 @@ export class GasMaterialFormComponent implements OnInit {
     this.generateExampleSub = this.chargeMaterialService.generateExample.subscribe(value => {
       this.initForm();
     });
-    this.energySourceSub = this.chargeMaterialService.energySourceType.subscribe(energySourceType => {
-      this.energySourceType = energySourceType;
+    this.outputSubscription = this.chargeMaterialService.output.subscribe(output => {
+      if (this.isBaseline) {
+        this.lossResult = output.baseline.losses[this.index];
+      } else {
+        this.lossResult = output.modification.losses[this.index];
+      }
     });
   }
 
   initForm() {
     let updatedChargeMaterialData: ChargeMaterial;
     if (this.isBaseline) {
-      updatedChargeMaterialData = this.chargeMaterialService.baselineData.getValue();
+      let baselineData: Array<ChargeMaterial> = this.chargeMaterialService.baselineData.getValue();
+      updatedChargeMaterialData = baselineData[this.index];
     } else {
-      updatedChargeMaterialData = this.chargeMaterialService.modificationData.getValue();
+      let modificationData: Array<ChargeMaterial> = this.chargeMaterialService.modificationData.getValue();
+      if (modificationData) {
+        updatedChargeMaterialData = modificationData[this.index];
+      }
     }
 
     if (updatedChargeMaterialData && updatedChargeMaterialData.gasChargeMaterial) {
@@ -128,13 +135,8 @@ export class GasMaterialFormComponent implements OnInit {
   calculate() {
     this.chargeMaterialForm = this.gasMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     let chargeMaterial: ChargeMaterial = this.gasMaterialFormService.buildGasChargeMaterial(this.chargeMaterialForm);
-    if (this.isBaseline) {
-      this.chargeMaterialService.baselineData.next(chargeMaterial);
-    } else { 
-      this.chargeMaterialService.modificationData.next(chargeMaterial);
-    }
+    this.chargeMaterialService.updateDataArray(chargeMaterial, this.index, this.isBaseline);
   }
-
 
   checkMaterialValues() {
     let material: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);

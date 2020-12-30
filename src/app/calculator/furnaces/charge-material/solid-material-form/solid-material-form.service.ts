@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChargeMaterial, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
@@ -9,7 +9,7 @@ export class SolidMaterialFormService {
   constructor(private formBuilder: FormBuilder) { }
 
   initSolidForm(assesmentLossNum?: number): FormGroup {
-    let lossNumber = assesmentLossNum? assesmentLossNum : 0;
+    let lossNumber = assesmentLossNum? assesmentLossNum : 1;
     
     let formGroup = this.formBuilder.group({
       'materialId': [1, Validators.required],

@@ -1,6 +1,8 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { OperatingHours } from '../../../shared/models/operations';
 import { ChargeMaterial, ChargeMaterialOutput } from '../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../shared/models/settings';
 import { ChargeMaterialService } from './charge-material.service';
@@ -16,13 +18,13 @@ export class ChargeMaterialComponent implements OnInit {
   settings: Settings;
   @Input()
   inTreasureHunt: boolean;
+  @Input()
+  operatingHours: OperatingHours;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
-  energyUnit: string;
-  baselineEnergySub: Subscription;
-  modificationEnergySub: Subscription;
-  updatedCalculation: boolean;
+  isEditingName: boolean;
+  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -32,10 +34,13 @@ export class ChargeMaterialComponent implements OnInit {
   
   containerHeight: number;
   isModalOpen: boolean;
+  lossNameForm: FormGroup;
   
-  results: {baseline: number, modification: number};
-  baselineData: ChargeMaterial;
-  modificationData: ChargeMaterial;
+  baselineData: Array<ChargeMaterial>;
+  modificationData: Array<ChargeMaterial>;
+  
+  baselineEnergySub: Subscription;
+  modificationEnergySub: Subscription;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
   outputSubscription: Subscription;
@@ -78,7 +83,6 @@ export class ChargeMaterialComponent implements OnInit {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
-    this.outputSubscription.unsubscribe();
     this.baselineEnergySub.unsubscribe();
     this.modificationEnergySub.unsubscribe();
   }
@@ -88,24 +92,32 @@ export class ChargeMaterialComponent implements OnInit {
       this.isModalOpen = modalOpen;
     })
     this.baselineDataSub = this.chargeMaterialService.baselineData.subscribe(value => {
+      this.baselineData = value;
+      // this.getLossName();
       this.chargeMaterialService.calculate(this.settings);
     })
     this.modificationDataSub = this.chargeMaterialService.modificationData.subscribe(value => {
+      this.modificationData = value;
+      // this.getLossName();
       this.chargeMaterialService.calculate(this.settings);
     })
-    this.outputSubscription = this.chargeMaterialService.output.subscribe(val => {
-      if (val) {
-        this.output = val;
-      }
-    });
     this.baselineEnergySub = this.chargeMaterialService.baselineEnergyData.subscribe(energyData => {
-      this.energyUnit = this.chargeMaterialService.getAnnualEnergyUnit(energyData.energySourceType, this.settings);
       this.chargeMaterialService.calculate(this.settings);
     });
     this.modificationEnergySub = this.chargeMaterialService.modificationEnergyData.subscribe(energyData => {
       this.chargeMaterialService.calculate(this.settings);
   });
   }
+
+  addLoss() {
+    this.chargeMaterialService.addLoss(this.modificationExists);
+  }
+
+  createModification() {
+    this.chargeMaterialService.initModification();
+    this.modificationExists = true;
+    this.setModificationSelected();
+   }
 
   setTab(str: string) {
     this.tabSelect = str;
@@ -115,11 +127,25 @@ export class ChargeMaterialComponent implements OnInit {
     this.chargeMaterialService.initDefaultEmptyOutput();
   }
 
-  createModification() {
-    this.chargeMaterialService.initModification();
-    this.modificationExists = true;
-    this.setModificationSelected();
-   }
+  // getLossName() {
+  //   let currentMaterialForm: FormGroup = this.chargeMaterialService.editLossName(0, true);
+  //   if (currentMaterialForm) {
+  //     this.lossNameForm = currentMaterialForm;
+  //   }
+  // }
+  
+  editLossName(index: number) {
+    // let currentMaterialForm: FormGroup = this.chargeMaterialService.editLossName(index, true);
+    // if (currentMaterialForm) {
+    //   this.lossNameForm = currentMaterialForm;
+    // }
+    this.isEditingName = true;
+  }
+
+  doneEditingName(index: number) {
+    this.isEditingName = false;
+    // this.chargeMaterialService.saveLossName(this.lossNameForm, index, true);
+  }
 
    btnResetData() {
     this.modificationExists = false;

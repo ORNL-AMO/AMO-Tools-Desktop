@@ -70,8 +70,8 @@ export interface SolidChargeMaterial {
 }
 
 export interface ChargeMaterialOutput {
-  baseline?: ChargeMaterialResult,
-  modification?: ChargeMaterialResult,
+  baseline?: {totalFuelUse: number, grossLoss: number, totalFuelCost: number, losses: Array<ChargeMaterialResult>},
+  modification?: {totalFuelUse: number, grossLoss: number, totalFuelCost: number, losses: Array<ChargeMaterialResult>},
   energyUnit?: string,
   fuelSavings?: number,
   costSavings?: number
@@ -84,6 +84,7 @@ export interface ChargeMaterialResult {
   grossLoss?: number,
   fuelUse?: number,
   fuelCost?: number
+  energyUnit?: string,
 }
 
 export interface LoadChargeMaterial

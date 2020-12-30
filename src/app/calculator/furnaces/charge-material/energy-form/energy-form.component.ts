@@ -22,6 +22,9 @@ export class EnergyFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   selected: boolean;
+  @Input()
+  operatingHours: OperatingHours;
+  
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
 

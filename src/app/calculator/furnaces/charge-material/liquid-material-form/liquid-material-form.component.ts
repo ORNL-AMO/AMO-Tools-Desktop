@@ -4,7 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { LiquidLoadChargeMaterial } from '../../../../shared/models/materials';
-import { ChargeMaterial, LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, ChargeMaterialResult, LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ChargeMaterialService } from '../charge-material.service';
@@ -23,7 +23,7 @@ export class LiquidMaterialFormComponent implements OnInit {
   @Input()
   selected: boolean;
   @Input()
-  inModal: boolean;
+  index: number;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
@@ -33,14 +33,12 @@ export class LiquidMaterialFormComponent implements OnInit {
 
   chargeMaterialForm: FormGroup;
   warnings: LiquidMaterialWarnings;
-  selectedMaterialId: any;
-  selectedMaterial: any;
   materialTypes: any;
   showModal: boolean;
-  energySourceSub: Subscription;
-  energySourceType: string;
+  
+  lossResult: ChargeMaterialResult;
   idString: string;
-  index: number = 0;
+  outputSubscription: Subscription;
 
   constructor(private suiteDbService: SuiteDbService, 
               private chargeMaterialService: ChargeMaterialService, 
@@ -76,7 +74,7 @@ export class LiquidMaterialFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
-    this.energySourceSub.unsubscribe();
+    this.outputSubscription.unsubscribe();
     this.chargeMaterialService.modalOpen.next(false);
   }
 
@@ -87,17 +85,25 @@ export class LiquidMaterialFormComponent implements OnInit {
     this.generateExampleSub = this.chargeMaterialService.generateExample.subscribe(value => {
       this.initForm();
     });
-    this.energySourceSub = this.chargeMaterialService.energySourceType.subscribe(energySourceType => {
-      this.energySourceType = energySourceType;
+    this.outputSubscription = this.chargeMaterialService.output.subscribe(output => {
+      if (this.isBaseline) {
+        this.lossResult = output.baseline.losses[this.index];
+      } else {
+        this.lossResult = output.modification.losses[this.index];
+      }
     });
   }
 
   initForm() {
     let updatedChargeMaterialData: ChargeMaterial;
     if (this.isBaseline) {
-      updatedChargeMaterialData = this.chargeMaterialService.baselineData.getValue();
+      let baselineData: Array<ChargeMaterial> = this.chargeMaterialService.baselineData.getValue();
+      updatedChargeMaterialData = baselineData[this.index];
     } else {
-      updatedChargeMaterialData = this.chargeMaterialService.modificationData.getValue();
+      let modificationData: Array<ChargeMaterial> = this.chargeMaterialService.modificationData.getValue();
+      if (modificationData) {
+        updatedChargeMaterialData = modificationData[this.index];
+      }
     }
 
     if (updatedChargeMaterialData && updatedChargeMaterialData.liquidChargeMaterial) {
@@ -111,7 +117,6 @@ export class LiquidMaterialFormComponent implements OnInit {
     this.setFormState();
   }
 
-  
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (this.settings.unitsOfMeasure === 'Metric') {
@@ -155,11 +160,7 @@ export class LiquidMaterialFormComponent implements OnInit {
     this.chargeMaterialForm = this.liquidMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     this.checkWarnings();
     let chargeMaterial: ChargeMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(this.chargeMaterialForm);
-    if (this.isBaseline) {
-      this.chargeMaterialService.baselineData.next(chargeMaterial);
-    } else { 
-      this.chargeMaterialService.modificationData.next(chargeMaterial);
-    }
+    this.chargeMaterialService.updateDataArray(chargeMaterial, this.index, this.isBaseline);
   }
 
     checkSpecificHeatDiffLiquid() {
@@ -221,8 +222,6 @@ export class LiquidMaterialFormComponent implements OnInit {
       }
     }
   }
-
-
 
   showMaterialModal() {
     this.showModal = true;
