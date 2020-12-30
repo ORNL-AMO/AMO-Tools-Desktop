@@ -43,6 +43,7 @@ export class PlaneDataFormService {
     obj.totalPressureLossBtwnPlanes2and5 = form.controls.totalPressureLossBtwnPlanes2and5.value;
     obj.inletSEF = form.controls.inletSEF.value;
     obj.outletSEF = form.controls.outletSEF.value;
+    obj.variationInBarometricPressure = form.controls.variationInBarometricPressure.value;
     return obj;
 
   }
