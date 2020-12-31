@@ -25,6 +25,8 @@ export class ChargeMaterialService {
   operatingHours: OperatingHours;
   energySourceType: BehaviorSubject<string>;
 
+  collapseMapping: BehaviorSubject<{[index: number]: boolean }>;
+
   modalOpen: BehaviorSubject<boolean>;
   constructor(private phastService: PhastService,
     private gasMaterialFormService: GasMaterialFormService,
@@ -41,7 +43,8 @@ export class ChargeMaterialService {
     this.modificationEnergyData = new BehaviorSubject<EnergyData>(undefined);
     this.energySourceType = new BehaviorSubject<string>(undefined);
     this.output = new BehaviorSubject<ChargeMaterialOutput>(undefined);
-
+    
+    this.collapseMapping = new BehaviorSubject<{[index: number]: boolean }>({});
     this.currentField = new BehaviorSubject<string>('default');
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.generateExample = new BehaviorSubject<boolean>(undefined);
@@ -49,34 +52,19 @@ export class ChargeMaterialService {
 
   getValidChargeMaterial(chargeMaterial: ChargeMaterial, energyData: EnergyData) {
     let valid: boolean = false;
-    if (chargeMaterial.chargeMaterialType == "Liquid") {
+    if (chargeMaterial.chargeMaterialType == "Liquid" && chargeMaterial.liquidChargeMaterial) {
       valid = this.liquidMaterialFormService.getLiquidChargeMaterialForm(chargeMaterial, false).valid;
     }
-    if (chargeMaterial.chargeMaterialType == "Gas") {
+    if (chargeMaterial.chargeMaterialType == "Gas" && chargeMaterial.gasChargeMaterial) {
       valid = this.gasMaterialFormService.getGasChargeMaterialForm(chargeMaterial, false).valid;
     }
-    if (chargeMaterial.chargeMaterialType == "Solid") {
+    if (chargeMaterial.chargeMaterialType == "Solid" && chargeMaterial.solidChargeMaterial) {
       valid = this.solidMaterialFormService.getSolidChargeMaterialForm(chargeMaterial, false).valid;
     }
     valid = valid && this.energyFormService.getEnergyForm(energyData).valid;
     return valid;
   }
 
-  checkValidInputData(losses: Array<ChargeMaterial>, energyData: EnergyData):boolean {
-    let valid: boolean = true;
-    if (losses.length > 0) {
-      losses.forEach(data => {
-        valid = this.getValidChargeMaterial(data, energyData);
-        if (!valid) {
-          return false;
-        }
-      });
-      return true;
-    } else {
-      return false;
-    }
-  }
-  
   calculate(settings: Settings) {
     let baselineChargeMaterial: Array<ChargeMaterial> = this.baselineData.getValue();
     let modificationChargeMaterial: Array<ChargeMaterial> = this.modificationData.getValue();
@@ -89,24 +77,17 @@ export class ChargeMaterialService {
     let output: ChargeMaterialOutput = this.output.getValue();
     output.energyUnit = this.getAnnualEnergyUnit(baselineEnergyData.energySourceType, settings);
 
-    let validBaseline = this.checkValidInputData(baselineChargeMaterial, baselineEnergyData);
-    let validModification: boolean;
-    if (modificationChargeMaterial) {
-      validModification = this.checkValidInputData(modificationChargeMaterial, modificationEnergyData);
-    }
-    
-    if (validBaseline) {
-      baselineChargeMaterial.forEach((loss, index) => {
-        baselineResults = this.getChargeMaterialResult(loss, baselineEnergyData, settings);
-        if (baselineResults) {
-          output.baseline.losses.push(baselineResults);
-          output.baseline.totalFuelUse += baselineResults.fuelUse;
-          output.baseline.totalFuelCost += baselineResults.fuelCost;
-          output.baseline.grossLoss += baselineResults.grossLoss;
-        }
+    baselineChargeMaterial.forEach((loss, index) => {
+      let validBaseline = this.getValidChargeMaterial(loss, baselineEnergyData);
+      baselineResults = this.getChargeMaterialResult(loss, baselineEnergyData, validBaseline, settings);
+      output.baseline.losses.push(baselineResults);
+      output.baseline.totalFuelUse += baselineResults.fuelUse;
+      output.baseline.totalFuelCost += baselineResults.fuelCost;
+      output.baseline.grossLoss += baselineResults.grossLoss;
 
-        if (validModification && modificationChargeMaterial[index]) {
-          modificationResults = this.getChargeMaterialResult(modificationChargeMaterial[index], modificationEnergyData, settings);
+        if (modificationChargeMaterial && modificationChargeMaterial[index]) {
+          let validModification = this.getValidChargeMaterial(modificationChargeMaterial[index], modificationEnergyData);
+          modificationResults = this.getChargeMaterialResult(modificationChargeMaterial[index], modificationEnergyData, validModification, settings);
           if (modificationResults) {
             output.modification.losses.push(modificationResults);
             output.modification.totalFuelUse += modificationResults.fuelUse;
@@ -114,8 +95,7 @@ export class ChargeMaterialService {
             output.modification.grossLoss += modificationResults.grossLoss;
           }
         }
-      });
-    }
+    });
 
     if (baselineResults && modificationResults) {
       output.fuelSavings = output.baseline.totalFuelUse - output.modification.totalFuelUse;
@@ -126,7 +106,7 @@ export class ChargeMaterialService {
   }
 
 
-  getChargeMaterialResult(chargeMaterialData: ChargeMaterial, energyData: EnergyData, settings: Settings): ChargeMaterialResult {
+  getChargeMaterialResult(chargeMaterialData: ChargeMaterial, energyData: EnergyData, isValid: boolean, settings: Settings): ChargeMaterialResult {
     let result: ChargeMaterialResult = {
       heatRequired: 0,
       netHeatLoss: 0,
@@ -135,34 +115,37 @@ export class ChargeMaterialService {
       fuelUse: 0,
       fuelCost: 0
     }
-    let loadChargeMaterial: LoadChargeMaterial;
-    let availableHeat: number;
     let calculatorEnergyUnit = this.getAnnualEnergyUnit(energyData.energySourceType, settings);
-    if (chargeMaterialData.chargeMaterialType == 'Gas' && chargeMaterialData.gasChargeMaterial) {
-      loadChargeMaterial = this.phastService.gasLoadChargeMaterial(chargeMaterialData.gasChargeMaterial, settings, calculatorEnergyUnit);
-      availableHeat = energyData.availableHeat;
-    } else if (chargeMaterialData.chargeMaterialType == 'Liquid' && chargeMaterialData.liquidChargeMaterial) {
-      loadChargeMaterial = this.phastService.liquidLoadChargeMaterial(chargeMaterialData.liquidChargeMaterial, settings, calculatorEnergyUnit);
-      availableHeat = energyData.availableHeat;
-    }  else if (chargeMaterialData.chargeMaterialType == 'Solid' && chargeMaterialData.solidChargeMaterial) {
-      loadChargeMaterial = this.phastService.solidLoadChargeMaterial(chargeMaterialData.solidChargeMaterial, settings, calculatorEnergyUnit);
-      availableHeat = energyData.availableHeat;
-    }
 
-    if (loadChargeMaterial) { 
-      result.heatRequired = loadChargeMaterial.grossHeatLoss;
-      result.netHeatLoss = loadChargeMaterial.netHeatLoss;
-      result.endoExoHeat = loadChargeMaterial.endoExoHeat;
-      result.grossLoss =  (loadChargeMaterial.grossHeatLoss / availableHeat) * 100;
-      result.fuelUse = result.grossLoss * energyData.hoursPerYear;
-      result.fuelCost = result.grossLoss * energyData.hoursPerYear * energyData.fuelCost;
-      result.energyUnit = calculatorEnergyUnit;
+    if (isValid) {
+      let loadChargeMaterial: LoadChargeMaterial;
+      let availableHeat: number;
+      if (chargeMaterialData.chargeMaterialType == 'Gas' && chargeMaterialData.gasChargeMaterial) {
+        loadChargeMaterial = this.phastService.gasLoadChargeMaterial(chargeMaterialData.gasChargeMaterial, settings, calculatorEnergyUnit);
+        availableHeat = energyData.availableHeat;
+      } else if (chargeMaterialData.chargeMaterialType == 'Liquid' && chargeMaterialData.liquidChargeMaterial) {
+        loadChargeMaterial = this.phastService.liquidLoadChargeMaterial(chargeMaterialData.liquidChargeMaterial, settings, calculatorEnergyUnit);
+        availableHeat = energyData.availableHeat;
+      } else if (chargeMaterialData.chargeMaterialType == 'Solid' && chargeMaterialData.solidChargeMaterial) {
+        loadChargeMaterial = this.phastService.solidLoadChargeMaterial(chargeMaterialData.solidChargeMaterial, settings, calculatorEnergyUnit);
+        availableHeat = energyData.availableHeat;
+      }
+
+      if (loadChargeMaterial) {
+        result.heatRequired = loadChargeMaterial.grossHeatLoss;
+        result.netHeatLoss = loadChargeMaterial.netHeatLoss;
+        result.endoExoHeat = loadChargeMaterial.endoExoHeat;
+        result.grossLoss = (loadChargeMaterial.grossHeatLoss / availableHeat) * 100;
+        result.fuelUse = result.grossLoss * energyData.hoursPerYear;
+        result.fuelCost = result.grossLoss * energyData.hoursPerYear * energyData.fuelCost;
+        result.energyUnit = calculatorEnergyUnit;
+      }
     }
 
     return result;
   }
 
-  addLoss(modificationExists: boolean) {
+  addLoss(hoursPerYear: number, modificationExists: boolean) {
     let currentBaselineData: Array<ChargeMaterial> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
     let baselineObj: ChargeMaterial = this.initDefaultLoss(index, currentBaselineData[index - 1].chargeMaterialType);
@@ -175,6 +158,16 @@ export class ChargeMaterialService {
 
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
+    }
+
+    if (hoursPerYear) {
+      let currentBaselineEnergy = this.baselineEnergyData.getValue();
+      currentBaselineEnergy.hoursPerYear = hoursPerYear;
+      this.baselineEnergyData.next(currentBaselineEnergy);
+
+      let currentModificationEnergy = this.modificationEnergyData.getValue();
+      currentModificationEnergy.hoursPerYear = hoursPerYear;
+      this.modificationEnergyData.next(currentModificationEnergy);
     }
   }
 
@@ -236,13 +229,7 @@ export class ChargeMaterialService {
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData: ChargeMaterial = {
-      chargeMaterialType: '',
-      liquidChargeMaterial: undefined,
-      gasChargeMaterial: undefined,
-      solidChargeMaterial: undefined,
-      name: undefined
-    };
+    let emptyBaselineData = this.initDefaultLoss(0, 'Solid');
 
     let energyData: EnergyData = {
       energySourceType: "Fuel",
@@ -260,7 +247,7 @@ export class ChargeMaterialService {
 
   initDefaultLoss(index: number, materialType: string) {
     let defaultLoss: ChargeMaterial = {
-      chargeMaterialType: '',
+      chargeMaterialType: materialType,
       liquidChargeMaterial: undefined,
       gasChargeMaterial: undefined,
       solidChargeMaterial: undefined,
@@ -304,7 +291,7 @@ export class ChargeMaterialService {
         additionalHeat: 0,
       }
       defaultLoss.liquidChargeMaterial = material;
-    } else {
+    } else if (materialType == 'Gas') {
       material = {
         materialId: 1,
         thermicReactionType: 0,
@@ -421,6 +408,7 @@ export class ChargeMaterialService {
     
     this.baselineData.next([baselineChargeMaterial]);
     this.modificationData.next([modificationChargeMaterial]);
+    this.collapseMapping.next({});
 
     this.generateExample.next(true);
   }

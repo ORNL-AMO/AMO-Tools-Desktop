@@ -109,7 +109,6 @@ export class SolidMaterialFormService {
   checkSolidWarnings(material: SolidChargeMaterial): SolidMaterialWarnings {
     return {
       dischargeTempWarning: this.checkDischargeTemperature(material),
-      initialOverMeltWarning: this.checkInitialOverMelting(material)
     };
   }
 
@@ -123,20 +122,8 @@ export class SolidMaterialFormService {
     }
   }
 
-  checkInitialOverMelting(material: SolidChargeMaterial): string {
-    if (material.initialTemperature > material.meltingPoint && material.chargeMelted <= 0) {
-      return "The initial temperature is higher than the melting point, please enter proper percentage for charge melted.";
-    }
-    else if ((material.initialTemperature < material.meltingPoint) && material.chargeMelted > 0){
-      return 'The initial temperature is lower than the melting point, the percentage for charge melted should be 0%.';
-    } else {
-      return null;
-    }
-  }
-
 }
 
 export interface SolidMaterialWarnings {
   dischargeTempWarning: string;
-  initialOverMeltWarning: string;
 }

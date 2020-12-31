@@ -87,18 +87,25 @@ export class ChargeMaterialComponent implements OnInit {
     this.modificationEnergySub.unsubscribe();
   }
 
+  checkIsCollapsedMaterial(index: number) {
+    let isCollapsed: boolean;
+    let collapseState = this.chargeMaterialService.collapseMapping.getValue();
+    if (collapseState && collapseState[index] != undefined) {
+      isCollapsed = collapseState[index];
+    }
+    return isCollapsed;
+  }
+
   initSubscriptions() {
     this.modalSubscription = this.chargeMaterialService.modalOpen.subscribe(modalOpen => {
       this.isModalOpen = modalOpen;
     })
     this.baselineDataSub = this.chargeMaterialService.baselineData.subscribe(value => {
       this.baselineData = value;
-      // this.getLossName();
       this.chargeMaterialService.calculate(this.settings);
     })
     this.modificationDataSub = this.chargeMaterialService.modificationData.subscribe(value => {
       this.modificationData = value;
-      // this.getLossName();
       this.chargeMaterialService.calculate(this.settings);
     })
     this.baselineEnergySub = this.chargeMaterialService.baselineEnergyData.subscribe(energyData => {
@@ -110,7 +117,8 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   addLoss() {
-    this.chargeMaterialService.addLoss(this.modificationExists);
+    let hoursPerYear = this.operatingHours? this.operatingHours.hoursPerYear : undefined;
+    this.chargeMaterialService.addLoss(hoursPerYear, this.modificationExists);
   }
 
   createModification() {
@@ -123,34 +131,19 @@ export class ChargeMaterialComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  changeMaterialType() {
+  changeMaterialType(index: number, materialType: string) {
+    if (this.modificationData.length > 0) {
+      this.modificationData[index].chargeMaterialType = materialType;
+      this.chargeMaterialService.modificationData.next(this.modificationData);
+    }
     this.chargeMaterialService.initDefaultEmptyOutput();
-  }
-
-  // getLossName() {
-  //   let currentMaterialForm: FormGroup = this.chargeMaterialService.editLossName(0, true);
-  //   if (currentMaterialForm) {
-  //     this.lossNameForm = currentMaterialForm;
-  //   }
-  // }
-  
-  editLossName(index: number) {
-    // let currentMaterialForm: FormGroup = this.chargeMaterialService.editLossName(index, true);
-    // if (currentMaterialForm) {
-    //   this.lossNameForm = currentMaterialForm;
-    // }
-    this.isEditingName = true;
-  }
-
-  doneEditingName(index: number) {
-    this.isEditingName = false;
-    // this.chargeMaterialService.saveLossName(this.lossNameForm, index, true);
   }
 
    btnResetData() {
     this.modificationExists = false;
     this.materialType = 'Solid';
     this.chargeMaterialService.initDefaultEmptyInputs();
+    this.chargeMaterialService.collapseMapping.next({});
     this.chargeMaterialService.resetData.next(true);
   }
 

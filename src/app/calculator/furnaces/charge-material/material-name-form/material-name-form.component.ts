@@ -24,12 +24,17 @@ export class MaterialNameFormComponent implements OnInit {
   materialType: string;
   
   generateExampleSub: Subscription;
+  toggleModificationCollapseSub: Subscription;
   resetDataSub: Subscription;
+
+  isMaterialCollapsed: boolean = false;
 
   constructor(private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnInit(): void {
     this.initSubscriptions();
+    let collapseMapping = this.chargeMaterialService.collapseMapping.getValue();
+    this.isMaterialCollapsed = collapseMapping[this.index];
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -70,7 +75,14 @@ export class MaterialNameFormComponent implements OnInit {
     }
   }
 
-  editLossName() {
+  collapseMaterial() {
+    this.isMaterialCollapsed = !this.isMaterialCollapsed;
+    let collapseMapping = this.chargeMaterialService.collapseMapping.getValue();
+    collapseMapping[this.index] = this.isMaterialCollapsed;
+    this.chargeMaterialService.collapseMapping.next(collapseMapping);
+  }
+
+  editName() {
     this.isEditingName = true;
   }
 

@@ -1,10 +1,10 @@
-import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
-import { ChargeMaterial, ChargeMaterialResult, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, ChargeMaterialOutput, ChargeMaterialResult, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ChargeMaterialService } from '../charge-material.service';
@@ -36,9 +36,14 @@ export class SolidMaterialFormComponent implements OnInit {
   materialTypes: any;
   showModal: boolean;
   lossResult: ChargeMaterialResult;
+  chargeMaterialType: string;
   
   idString: string;
   outputSubscription: Subscription;
+
+  showMaterialProperties: boolean = true;
+  collapseMaterial: boolean = false;
+  collapseMaterialSub: Subscription;
 
   constructor(private suiteDbService: SuiteDbService, 
               private chargeMaterialService: ChargeMaterialService, 
@@ -47,13 +52,15 @@ export class SolidMaterialFormComponent implements OnInit {
               ) {}
 
   ngOnInit() {
+    this.initSubscriptions();
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;
     }
     else {
       this.idString = 'modification_' + this.index;
+      let baselineData: Array<ChargeMaterial> = this.chargeMaterialService.baselineData.getValue();
+      this.chargeMaterialType = baselineData[this.index].chargeMaterialType;
     }
-    this.initSubscriptions();
     this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
@@ -66,14 +73,23 @@ export class SolidMaterialFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
-        this.setFormState();
+      this.setFormState();
     }
+    if (changes.index && !changes.index.firstChange) {
+      let output: ChargeMaterialOutput = this.chargeMaterialService.output.getValue();
+      this.setLossResult(output);
+    }
+  }
+
+  toggleMaterialProperties() {
+    this.showMaterialProperties = !this.showMaterialProperties;
   }
 
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
     this.outputSubscription.unsubscribe();
+    this.collapseMaterialSub.unsubscribe();
     this.chargeMaterialService.modalOpen.next(false);
   }
 
@@ -85,12 +101,21 @@ export class SolidMaterialFormComponent implements OnInit {
       this.initForm();
     });
     this.outputSubscription = this.chargeMaterialService.output.subscribe(output => {
-      if (this.isBaseline) {
-        this.lossResult = output.baseline.losses[this.index];
-      } else {
-        this.lossResult = output.modification.losses[this.index];
+      this.setLossResult(output);
+    });
+    this.collapseMaterialSub = this.chargeMaterialService.collapseMapping.subscribe((collapseMapping: {[index: number]: boolean }) => {
+      if (collapseMapping && collapseMapping[this.index] != undefined) {
+        this.collapseMaterial = collapseMapping[this.index];
       }
     });
+  }
+
+  setLossResult(output: ChargeMaterialOutput) {
+    if (this.isBaseline) {
+      this.lossResult = output.baseline.losses[this.index];
+    } else {
+      this.lossResult = output.modification.losses[this.index];
+    }
   }
 
   initForm() {

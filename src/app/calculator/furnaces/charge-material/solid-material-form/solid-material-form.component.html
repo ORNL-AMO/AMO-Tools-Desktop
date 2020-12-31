@@ -1,4 +1,15 @@
-<form [formGroup]="chargeMaterialForm">
+<!-- Disabled - only displays material type if in mod column -->
+<div *ngIf="!isBaseline && !collapseMaterial" class="form-group">
+  <label class="small" for="materialType">Select Type</label>
+  <select disabled class="form-control" id="materialType" [(ngModel)]="chargeMaterialType"
+  (focus)="focusField('chargeMaterialType')">
+  <option>Solid</option>
+  <option>Liquid</option>
+  <option>Gas</option>
+  </select>
+</div>
+
+<form *ngIf="!collapseMaterial" [formGroup]="chargeMaterialForm">
     <div class="form-section">
       <div class="form-group">
         <label class="small" for="{{'materialName_'+idString}}">Name of Material
@@ -124,7 +135,6 @@
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
           ).</span>
       </span>
-        <span class="alert-warning pull-right small" *ngIf="warnings.initialOverMeltWarning !== null">{{warnings.initialOverMeltWarning}}</span>
       </div>
   
   

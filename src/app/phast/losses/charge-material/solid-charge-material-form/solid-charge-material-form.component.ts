@@ -135,7 +135,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   checkWarnings() {
     let tmpMaterial: SolidChargeMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(this.chargeMaterialForm).solidChargeMaterial;
     this.warnings = this.solidMaterialFormService.checkSolidWarnings(tmpMaterial);
-    let hasWarning: boolean = this.warnings.dischargeTempWarning !== null || this.warnings.initialOverMeltWarning !== null;
+    let hasWarning: boolean = this.warnings.dischargeTempWarning !== null;
     this.inputError.emit(hasWarning);
   }
 

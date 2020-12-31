@@ -115,7 +115,7 @@ export class ChargeMaterialTabComponent implements OnInit {
       return tmpHasWarning;
     } else if (material.chargeMaterialType === 'Solid') {
       let warnings: SolidMaterialWarnings = this.solidMaterialFormService.checkSolidWarnings(material.solidChargeMaterial);
-      let tmpHasWarning: boolean = warnings.dischargeTempWarning != undefined || warnings.initialOverMeltWarning != undefined;
+      let tmpHasWarning: boolean = warnings.dischargeTempWarning != undefined;
       return tmpHasWarning;
     }
   }

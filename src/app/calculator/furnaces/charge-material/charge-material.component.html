@@ -31,32 +31,37 @@
 		  <div class="baseline w-50 panel-column" (click)="setBaselineSelected()" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
 			<div class="header mx-2 mb-4">
 			  <h3>Baseline</h3>
-              <a class="click-link pull-right small add-loss" (click)="addLoss()">+Add Loss</a>
+              <a class="disabled pull-right small add-loss disabled" *ngIf="baselineData.length == 0">+Add Loss</a>
+              <a class="click-link pull-right small add-loss" *ngIf="baselineData.length > 0" (click)="addLoss()">+Add Loss</a>
 			</div>
 			<div class="d-flex flex-column mx-4 mb-4">
-				<div *ngFor="let data of baselineData; let i = index;">
+				<div *ngFor="let materialData of baselineData; let i = index;">
 					<div class="mb-4 p-2 form-card">
 						<app-material-name-form [index]="i" [selected]="baselineSelected"
 						[isBaseline]="true" [settings]="settings"></app-material-name-form>
-						<app-energy-form *ngIf="i == 0" class="form-section" [selected]="baselineSelected"
-						[isBaseline]="true" [settings]="settings" [operatingHours]="operatingHours"></app-energy-form>
-						<div class="form-group">
-							<label class="small" for="materialType">Select Type</label>
-							<select [disabled]="!baselineSelected" class="form-control" id="materialType" (change)="changeMaterialType()" [(ngModel)]="materialType"
-							(focus)="focusField('chargeMaterialType')">
+						<div *ngIf="!checkIsCollapsedMaterial(i)">
+							<app-energy-form *ngIf="i == 0" class="form-section" [selected]="baselineSelected"
+							[isBaseline]="true" [settings]="settings" [operatingHours]="operatingHours"></app-energy-form>
+							<div class="form-group">
+								<label class="small" for="materialType">Select Type</label>
+								<select [disabled]="!baselineSelected" class="form-control" id="materialType" 
+								[(ngModel)]="materialData.chargeMaterialType"
+								(change)="changeMaterialType(i, materialData.chargeMaterialType)" 
+								(focus)="focusField('chargeMaterialType')">
 								<option [ngValue]="'Solid'">Solid</option>
 								<option [ngValue]="'Liquid'">Liquid</option>
 								<option [ngValue]="'Gas'">Gas</option>
-							</select>
+								</select>
+							</div>
 						</div>
-						<app-solid-material-form *ngIf="materialType == 'Solid'" [index]="i" [selected]="baselineSelected"
+						<app-solid-material-form *ngIf="materialData.chargeMaterialType == 'Solid'" [index]="i" [selected]="baselineSelected"
 							[isBaseline]="true" [settings]="settings"></app-solid-material-form>
-						<app-liquid-material-form *ngIf="materialType == 'Liquid'" [index]="i" [selected]="baselineSelected"
+						<app-liquid-material-form *ngIf="materialData.chargeMaterialType == 'Liquid'" [index]="i" [selected]="baselineSelected"
 							[isBaseline]="true" [settings]="settings"></app-liquid-material-form>
-						<app-gas-material-form *ngIf="materialType == 'Gas'" [index]="i" [selected]="baselineSelected"
+						<app-gas-material-form *ngIf="materialData.chargeMaterialType == 'Gas'" [index]="i" [selected]="baselineSelected"
 							[isBaseline]="true" [settings]="settings"></app-gas-material-form>
 						</div>
-					</div>
+				</div>
 
 			  <div class="w-100 justify content-center btn-group btn-group-sm">
 				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
@@ -80,26 +85,20 @@
 			</div>
 			<!-- forms -->
 			<div class="d-flex flex-column mx-4 mb-4">
-				<div *ngFor="let data of modificationData; let i = index;">
+				<div *ngFor="let materialData of modificationData; let i = index;">
 					<div class="mb-4 p-2 form-card">
 						<app-material-name-form [index]="i" [selected]="!baselineSelected"
-				  			[isBaseline]="false" [settings]="settings"></app-material-name-form>
-						<app-energy-form *ngIf="i == 0" class="form-section" [operatingHours]="operatingHours"
-						 [selected]="!baselineSelected" [isBaseline]="false" [settings]="settings"></app-energy-form>
-						<div class="form-group">
-							<label class="small" for="materialType">Select Type</label>
-							<select disabled class="form-control" id="materialType" [(ngModel)]="materialType"
-							(focus)="focusField('chargeMaterialType')">
-							<option>Solid</option>
-							<option>Liquid</option>
-							<option>Gas</option>
-							</select>
+							  [isBaseline]="false" [settings]="settings"></app-material-name-form>
+						<div *ngIf="!checkIsCollapsedMaterial(i)">
+							<app-energy-form *ngIf="i == 0" class="form-section" [operatingHours]="operatingHours"
+							[selected]="!baselineSelected" [isBaseline]="false" [settings]="settings"></app-energy-form>
 						</div>
-						<app-solid-material-form *ngIf="materialType == 'Solid'" [index]="i" [selected]="!baselineSelected"
+
+						<app-solid-material-form *ngIf="materialData.chargeMaterialType == 'Solid'" [index]="i" [selected]="!baselineSelected"
 						[isBaseline]="false" [settings]="settings"></app-solid-material-form>
-						<app-liquid-material-form *ngIf="materialType == 'Liquid'" [index]="i" [selected]="!baselineSelected"
+						<app-liquid-material-form *ngIf="materialData.chargeMaterialType == 'Liquid'" [index]="i" [selected]="!baselineSelected"
 						[isBaseline]="false" [settings]="settings"></app-liquid-material-form>
-						<app-gas-material-form *ngIf="materialType == 'Gas'" [index]="i" [selected]="!baselineSelected"
+						<app-gas-material-form *ngIf="materialData.chargeMaterialType == 'Gas'" [index]="i" [selected]="!baselineSelected"
 							[isBaseline]="false" [settings]="settings"></app-gas-material-form>
 					</div>
 				</div>
