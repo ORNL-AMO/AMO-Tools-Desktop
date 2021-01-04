@@ -19,6 +19,8 @@ export class FlueGasComponent implements OnInit {
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  baselineEnergySub: Subscription;
+  modificationEnergySub: Subscription;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -68,25 +70,33 @@ export class FlueGasComponent implements OnInit {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
+    this.baselineEnergySub.unsubscribe();
+    this.modificationEnergySub.unsubscribe();
     this.outputSubscription.unsubscribe();
   }
 
   initSubscriptions() {
     this.modalSubscription = this.flueGasService.modalOpen.subscribe(modalOpen => {
       this.isModalOpen = modalOpen;
-    })
+    });
     this.baselineDataSub = this.flueGasService.baselineData.subscribe(value => {
       this.setBaselineSelected();
       this.flueGasService.calculate(this.settings);
-    })
+    });
     this.modificationDataSub = this.flueGasService.modificationData.subscribe(value => {
       this.flueGasService.calculate(this.settings);
-    })
+    });
     this.outputSubscription = this.flueGasService.output.subscribe(val => {
       if (val) {
         this.output = val;
       }
     });
+    this.baselineEnergySub = this.flueGasService.baselineEnergyData.subscribe(energyData => {
+      this.flueGasService.calculate(this.settings);
+    });
+    this.modificationEnergySub = this.flueGasService.modificationEnergyData.subscribe(energyData => {
+      this.flueGasService.calculate(this.settings);
+  });
   }
 
   ngAfterViewInit() {
@@ -106,11 +116,11 @@ export class FlueGasComponent implements OnInit {
     this.flueGasService.calculate(this.settings);
    }
 
-   btnResetData() {
-    this.baselineSelected = true;
+  btnResetData() {
     this.modificationExists = false;
     this.flueGasService.initDefaultEmptyInputs();
     this.flueGasService.resetData.next(true);
+    this.baselineSelected = true;
     this.flueGasService.modificationData.next(undefined);
     this.method = 'By Mass';
   }

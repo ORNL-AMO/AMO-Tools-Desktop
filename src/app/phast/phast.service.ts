@@ -19,7 +19,6 @@ import { FlueGasByMass, FlueGasByVolume } from '../shared/models/phast/losses/fl
 import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';
-declare var phastAddon: any;
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
@@ -40,6 +39,10 @@ import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
 import { LiquidMaterialFormService } from '../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
+import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
+
+declare var phastAddon: any;
+
 @Injectable()
 export class PhastService {
 
@@ -53,7 +56,7 @@ export class PhastService {
   constructor(
     private openingLossesService: OpeningLossesService,
     private convertUnitsService: ConvertUnitsService,
-    private atmosphereLossesService: AtmosphereLossesService,
+    private atmosphereFormService: AtmosphereFormService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
     private coolingLossesService: CoolingLossesService,
     private wallFormService: WallFormService,
@@ -392,7 +395,7 @@ export class PhastService {
     return phastAddon.flueGasByMassCalculateO2(input);
   }
 
-  atmosphere(input: AtmosphereLoss, settings: Settings) {
+  atmosphere(input: AtmosphereLoss, settings: Settings, calculatorEnergyUnit = '') {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -404,7 +407,9 @@ export class PhastService {
     } else {
       results = phastAddon.atmosphere(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    results = this.convertResult(results, conversionUnit);
     return results;
   }
 
@@ -638,7 +643,7 @@ export class PhastService {
   sumAtmosphereLosses(losses: AtmosphereLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.atmosphereLossesService.getAtmosphereForm(loss);
+      let tmpForm = this.atmosphereFormService.getAtmosphereForm(loss);
       if (tmpForm.status === 'VALID') {
         sum += this.atmosphere(loss, settings);
       }

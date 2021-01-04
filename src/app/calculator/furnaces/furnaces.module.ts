@@ -8,6 +8,7 @@ import { FurnacesListComponent } from './furnaces-list/furnaces-list.component';
 import { RouterModule } from '@angular/router';
 import { WallModule } from './wall/wall.module';
 import { FlueGasModule } from './flue-gas/flue-gas.module';
+import { AtmosphereModule } from './atmosphere/atmosphere.module';
 import { ChargeMaterialModule } from './charge-material/charge-material.module';
 import { OpeningModule } from './opening/opening.module';
 
@@ -20,6 +21,8 @@ import { OpeningModule } from './opening/opening.module';
     EfficiencyImprovementModule,
     WallModule,
     FlueGasModule,
+    RouterModule,
+    AtmosphereModule,
     ChargeMaterialModule,
     RouterModule, 
     OpeningModule

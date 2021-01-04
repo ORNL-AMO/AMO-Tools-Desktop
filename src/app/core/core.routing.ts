@@ -85,6 +85,7 @@ import { MotorInventoryComponent } from '../motor-inventory/motor-inventory.comp
 import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing';
 import { WallComponent } from '../calculator/furnaces/wall/wall.component';
 import { FlueGasComponent } from '../calculator/furnaces/flue-gas/flue-gas.component';
+import { AtmosphereComponent } from '../calculator/furnaces/atmosphere/atmosphere.component';
 import { ChargeMaterialComponent } from '../calculator/furnaces/charge-material/charge-material.component';
 import { OpeningComponent } from '../calculator/furnaces/opening/opening.component';
 
@@ -322,6 +323,10 @@ export const coreRoutes: Routes = [
           {
             path: 'o2-enrichment',
             component: O2EnrichmentComponent
+          },
+          {
+            path: 'atmosphere',
+            component: AtmosphereComponent
           },
           {
             path: 'wall-loss',

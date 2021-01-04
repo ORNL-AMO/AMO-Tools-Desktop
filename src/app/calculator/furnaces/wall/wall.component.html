@@ -1,5 +1,5 @@
 <div class="d-flex h-100 modify-conditions phast standalone-calculator" #contentContainer>
-	<div class="d-flex flex-column w-100 mh-100 scroll-item">
+		<div class="d-flex flex-column w-100 mh-100 scroll-item">
 	  <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
 		[ngClass]="{'justify-content-between': inTreasureHunt}">
 		<div class="d-flex pl-2 align-items-center">
@@ -29,37 +29,16 @@
 	  <div class="d-flex">
 		<div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
 		  <div class="baseline w-50 panel-column" (click)="setBaselineSelected()"
-			[ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+			[ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}"
+			>
 			<div class="header mx-2 mb-4">
 			  <h3>Baseline</h3>
+              <a class="click-link pull-right small add-loss" (click)="addLoss()">+Add Loss</a>
 			</div>
-			<div class="d-flex flex-column mx-2 mb-4">
-				<app-wall-form [inModal]="inModal" [settings]="settings" [selected]="baselineSelected" [isBaseline]="true"></app-wall-form>
-			 <!-- Results -->
-			 <div *ngIf="output.baseline" class="d-flex flex-column mt-3 mb-2">
-					<div class="form-group m-0">
-					  <label class="bold">Wall Loss</label>
-					  <div *ngIf="output.baseline.wallLoss" class="text-center bold small">
-						{{output.baseline.wallLoss | sigFigs:'6'}} 
-						<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
-					  </div>
-					  <div *ngIf="!output.baseline.wallLoss" class="text-center bold small">
-						&mdash; &mdash;
-					  </div>
-					</div>
-			  </div>
-			  <div *ngIf="output.baseline" class="d-flex flex-column mt-1 mb-2">
-				<div class="form-group m-0">
-				  <label class="bold">Gross Loss</label>
-				  <div *ngIf="output.baseline.grossLoss" class="text-center bold small">
-					{{output.baseline.grossLoss | sigFigs:'6'}} 
-					<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
-				  </div>
-				  <div *ngIf="!output.baseline.grossLoss" class="text-center bold small">
-					&mdash; &mdash;
-				  </div>
+			<div class="d-flex flex-column mx-4 mb-4">
+				<div *ngFor="let data of baselineData; let i = index;">
+					<app-wall-form [index]="i" [operatingHours]="operatingHours" [settings]="settings" [selected]="baselineSelected" [isBaseline]="true"></app-wall-form>
 				</div>
-			  </div>
 
 			  <div class="w-100 justify content-center btn-group btn-group-sm">
 				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
@@ -80,32 +59,9 @@
 			<div class="header mx-2 mb-4">
 			  <h3>Modification</h3>
 			</div>
-			<div class="d-flex flex-column ml-2 mr-2 mb-4">
-			<app-wall-form [inModal]="inModal" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-wall-form>
-			 <!-- Mod results -->
-				<div *ngIf="output.modification" class="d-flex flex-column mt-3 mb-2">
-					<div class="form-group m-0">
-					  <label class="bold">Wall Loss</label>
-					  <div *ngIf="output.modification.wallLoss" class="text-center bold small">
-						{{output.modification.wallLoss | sigFigs:'6'}} 
-						<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
-					  </div>
-					  <div *ngIf="!output.modification.wallLoss" class="text-center bold small">
-						&mdash; &mdash;
-					  </div>
-					</div>
-				  </div>
-				  <div *ngIf="output.modification" class="d-flex flex-column mt-1 mb-2">
-					<div class="form-group m-0">
-					  <label class="bold">Gross Loss</label>
-					  <div *ngIf="output.modification.grossLoss" class="text-center bold small">
-						{{output.modification.grossLoss | sigFigs:'6'}} 
-						<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
-					  </div>
-					  <div *ngIf="!output.modification.grossLoss" class="text-center bold small">
-						&mdash; &mdash;
-					  </div>
-					</div>
+			<div class="d-flex flex-column mx-4 mb-4">
+				<div *ngFor="let data of modificationData; let i = index;">
+					<app-wall-form [operatingHours]="operatingHours" [index]="i" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-wall-form>
 				  </div>
 			</div>
 		  </div>

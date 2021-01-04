@@ -3,9 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../shared/models/phast/losses/flueGas';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FlueGasFormService {
 
   flueGasTempMin: number = 212;
@@ -38,8 +36,6 @@ export class FlueGasFormService {
 
     if (!loss) {
       formGroup.addControl('heatInput', new FormControl('', [Validators.required, Validators.min(0)]));
-      formGroup.addControl('fuelCost', new FormControl(''));
-      formGroup.addControl('hoursPerYear', new FormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
     }
 
     formGroup = this.setValidators(formGroup);
@@ -77,8 +73,6 @@ export class FlueGasFormService {
 
     if (!loss) {
       formGroup.addControl('heatInput', new FormControl('', [Validators.required, Validators.min(0)]));
-      formGroup.addControl('fuelCost', new FormControl(''));
-      formGroup.addControl('hoursPerYear', new FormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
     }
 
     formGroup = this.setValidators(formGroup);
@@ -110,8 +104,6 @@ export class FlueGasFormService {
 
     if (!inAssessment) {
       formGroup.addControl('heatInput', new FormControl(loss.flueGasByVolume.heatInput, [Validators.required, Validators.min(0)]));
-      formGroup.addControl('fuelCost', new FormControl(loss.flueGasByVolume.fuelCost));
-      formGroup.addControl('hoursPerYear', new FormControl(loss.flueGasByVolume.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
     }
 
     formGroup = this.setValidators(formGroup);
@@ -142,8 +134,6 @@ export class FlueGasFormService {
 
     if (!inAssessment) {
       formGroup.addControl('heatInput', new FormControl(loss.flueGasByMass.heatInput, [Validators.required, Validators.min(0)]));
-      formGroup.addControl('fuelCost', new FormControl(loss.flueGasByMass.fuelCost));
-      formGroup.addControl('hoursPerYear', new FormControl(loss.flueGasByMass.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
     }
 
     formGroup = this.setValidators(formGroup);
@@ -209,8 +199,6 @@ export class FlueGasFormService {
     // in Standalone
     if (form.controls.heatInput) {
       flueGas.flueGasByMass.heatInput = form.controls.heatInput.value;
-      flueGas.flueGasByMass.fuelCost = form.controls.fuelCost.value;
-      flueGas.flueGasByMass.hoursPerYear = form.controls.hoursPerYear.value;
     }
     return flueGas;
   }
@@ -244,8 +232,6 @@ export class FlueGasFormService {
     // in Standalone
     if (form.controls.heatInput) {
       flueGas.flueGasByVolume.heatInput = form.controls.heatInput.value;
-      flueGas.flueGasByVolume.fuelCost = form.controls.fuelCost.value;
-      flueGas.flueGasByVolume.hoursPerYear = form.controls.hoursPerYear.value;
     }
     return flueGas;
   }

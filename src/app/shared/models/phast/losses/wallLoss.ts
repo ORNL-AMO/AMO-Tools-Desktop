@@ -17,16 +17,17 @@ export interface WallLoss {
 }
 
 export interface WallLossOutput {
-  baseline: WallLossResults,
-  modification?: WallLossResults
+  baseline: {totalFuelUse: number, grossLoss: number, totalFuelCost: number, losses: Array<WallLossResult>},
+  modification?: {totalFuelUse: number, grossLoss: number, totalFuelCost: number, losses: Array<WallLossResult>},
   energyUnit?: string;
   fuelSavings: number;
   costSavings: number;
 }
 
-export interface WallLossResults {
+export interface WallLossResult {
   fuelUse?: number;
   fuelCost?: number;
   wallLoss?: number;
   grossLoss?: number;
+  energyUnit?: string;
 }
