@@ -55,7 +55,6 @@ export class OpeningFormService {
     }
 
     formGroup = this.setValidators(formGroup);
-    debugger;
     return formGroup
   }
 
@@ -92,13 +91,11 @@ export class OpeningFormService {
   }
 
   setAmbientTempValidators(formGroup: FormGroup) {
-    let ambientTemperature = formGroup.controls.ambientTemp.value;
-    debugger;
-    if (ambientTemperature) {
-      formGroup.controls.ambientTemperature.setValidators([Validators.required, Validators.max(formGroup.controls.insideTemp.value)]);
-      formGroup.controls.ambientTemperature.updateValueAndValidity();
-      formGroup.controls.ambientTemperature.markAsDirty();
-      debugger;
+    let ambientTemp = formGroup.controls.ambientTemp.value;
+    if (ambientTemp) {
+      formGroup.controls.ambientTemp.setValidators([Validators.required, Validators.max(formGroup.controls.insideTemp.value)]);
+      formGroup.controls.ambientTemp.updateValueAndValidity();
+      formGroup.controls.ambientTemp.markAsDirty();
     }
     return formGroup;
   }

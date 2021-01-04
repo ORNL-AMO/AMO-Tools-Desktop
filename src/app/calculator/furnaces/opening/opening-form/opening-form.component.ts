@@ -21,9 +21,9 @@ export class OpeningFormComponent implements OnInit {
   @Input()
   isBaseline: boolean;
   @Input()
-  inModal: boolean;
-  @Input()
   selected: boolean;
+  @Input()
+  index: number;
 
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
@@ -38,19 +38,28 @@ export class OpeningFormComponent implements OnInit {
   energyUnit: string;
   energySourceTypeSub: any;
   totalArea: number;
+  trackingEnergySource: boolean;
+  idString: string;
 
   constructor(private openingFormService: OpeningFormService,
               private convertUnitsService: ConvertUnitsService,
               private cd: ChangeDetectorRef,
               private openingService: OpeningService) { }
   ngOnInit(): void {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.index;
+    }
+    else {
+      this.idString = '_baseline_' + this.index;
+    }
+    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
     this.initSubscriptions();
     this.energyUnit = this.openingService.getAnnualEnergyUnit(this.openingLossesForm.controls.energySourceType.value, this.settings);
-    if (this.isBaseline) {
-      this.openingService.energySourceType.next(this.openingLossesForm.controls.energySourceType.value);
-    } else {
+    if (this.trackingEnergySource) {
       let energySource = this.openingService.energySourceType.getValue();
       this.setEnergySource(energySource);
+    } else {
+      this.openingService.energySourceType.next(this.openingLossesForm.controls.energySourceType.value);
     }
   }
 
@@ -63,7 +72,7 @@ export class OpeningFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
-    if (!this.isBaseline) {
+    if (this.trackingEnergySource) {
       this.energySourceTypeSub.unsubscribe();
     }
   }
@@ -75,7 +84,7 @@ export class OpeningFormComponent implements OnInit {
     this.generateExampleSub = this.openingService.generateExample.subscribe(value => {
       this.initForm();
     });
-    if (!this.isBaseline) {
+    if (this.trackingEnergySource) {
       this.energySourceTypeSub = this.openingService.energySourceType.subscribe(energySourceType => {
         this.setEnergySource(energySourceType);
       });
@@ -96,7 +105,7 @@ export class OpeningFormComponent implements OnInit {
     });
     this.energyUnit = this.openingService.getAnnualEnergyUnit(energySourceType, this.settings);
 
-    if (this.isBaseline) {
+    if (!this.trackingEnergySource) {
       this.openingService.energySourceType.next(energySourceType);
     }
     this.cd.detectChanges();
@@ -111,7 +120,6 @@ export class OpeningFormComponent implements OnInit {
     } else {
       updatedOpeningLossData = this.openingService.modificationData.getValue();
     }
-    debugger;
     if (updatedOpeningLossData) {
       this.openingLossesForm = this.openingFormService.getFormFromLoss(updatedOpeningLossData, false);
     } else {
@@ -129,7 +137,7 @@ export class OpeningFormComponent implements OnInit {
 
   calculate() {
     this.getArea();
-    this.calculateViewFactor();
+    // this.calculateViewFactor();
 
     this.openingLossesForm = this.openingFormService.setValidators(this.openingLossesForm);
     let currentOpeningLoss: OpeningLoss = this.openingFormService.getLossFromForm(this.openingLossesForm);
@@ -140,6 +148,7 @@ export class OpeningFormComponent implements OnInit {
     }
   }
 
+  // TODO is this used?
   calculateViewFactor() {
     this.totalArea = 0;
     if (this.openingLossesForm.controls.numberOfOpenings.valid 
@@ -150,7 +159,7 @@ export class OpeningFormComponent implements OnInit {
         this.openingLossesForm.patchValue({
           viewFactor: this.roundVal(viewFactor, 3)
         });
-        this.calculate();
+        // this.calculate();
     }
   }
 

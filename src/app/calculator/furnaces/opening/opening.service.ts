@@ -163,6 +163,7 @@ export class OpeningService {
       energySourceType: 'Fuel',
       availableHeat: 100,
     };
+
     this.baselineData.next(baselineExample);
 
     let modExample: OpeningLoss = {
