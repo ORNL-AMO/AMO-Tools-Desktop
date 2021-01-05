@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { OpeningLossesCompareService } from '../opening-losses-compare.service';
-import { OpeningLossesService, OpeningLossWarnings } from '../opening-losses.service';
 import { PhastService } from '../../../phast.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
+import { OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
+import { OpeningFormService } from '../../../../calculator/furnaces/opening/opening-form.service';
 
 @Component({
   selector: 'app-opening-losses-form',
@@ -35,11 +35,11 @@ export class OpeningLossesFormComponent implements OnInit {
   isBaseline: boolean;
 
   totalArea: number = 0.0;
-  warnings: OpeningLossWarnings;
   idString: string;
   constructor(private convertUnitsService: ConvertUnitsService,
     private openingLossesCompareService: OpeningLossesCompareService,
-    private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
+    private openingFormService: OpeningFormService,
+    private openingLossesService: OpeningService, private phastService: PhastService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -48,7 +48,6 @@ export class OpeningLossesFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.checkWarnings();
     this.getArea(true);
     if (!this.baselineSelected) {
       this.disableForm();
@@ -76,26 +75,6 @@ export class OpeningLossesFormComponent implements OnInit {
     this.openingLossesForm.controls.openingType.enable();
   }
 
-  checkWarnings() {
-    let tmpLoss: OpeningLoss = this.openingLossesService.getLossFromForm(this.openingLossesForm);
-    this.warnings = this.openingLossesService.checkWarnings(tmpLoss);
-    let hasWarning: boolean = this.openingLossesService.checkWarningsExist(this.warnings);
-    this.inputError.emit(hasWarning);
-  }
-
-  calculateViewFactor() {
-    this.save();
-    if (this.warnings.numOpeningsWarning !== null || this.warnings.lengthWarning !== null || this.warnings.heightWarning !== null) {
-      this.totalArea = 0;
-      return;
-    }
-    let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
-    let viewFactor = this.phastService.viewFactorCalculation(vfInputs, this.settings);
-    this.openingLossesForm.patchValue({
-      viewFactor: this.roundVal(viewFactor, 3)
-    });
-  }
-
   roundVal(val: number, digits: number): number {
     return Number(val.toFixed(digits));
   }
@@ -112,7 +91,7 @@ export class OpeningLossesFormComponent implements OnInit {
       largeUnit = 'm';
     }
 
-    if (this.warnings.numOpeningsWarning !== null || this.warnings.lengthWarning !== null || this.warnings.heightWarning !== null) {
+    if (this.openingLossesForm.controls.numberOfOpenings.invalid || this.openingLossesForm.controls.lengthOfOpening.invalid || this.openingLossesForm.controls.heightOfOpening.invalid) {
       this.totalArea = 0;
       return;
     }
@@ -149,7 +128,7 @@ export class OpeningLossesFormComponent implements OnInit {
   }
 
   save() {
-    this.checkWarnings();
+    this.openingFormService.setAmbientTempValidators(this.openingLossesForm);
     this.calculate.emit(true);
     this.saveEmit.emit(true);
   }

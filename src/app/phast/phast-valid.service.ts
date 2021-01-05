@@ -13,7 +13,6 @@ import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.ser
 import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
 import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
-import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { Settings } from '../shared/models/settings';
@@ -23,13 +22,14 @@ import { LiquidMaterialFormService } from '../calculator/furnaces/charge-materia
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
+import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 
 
 @Injectable()
 export class PhastValidService {
 
   constructor(
-    private openingLossesService: OpeningLossesService,
+    private openingFormService: OpeningFormService,
     private atmosphereFormService: AtmosphereFormService,
     private slagService: SlagService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
@@ -256,7 +256,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.openingLosses) {
       phast.losses.openingLosses.forEach(loss => {
-        let openingForm: FormGroup = this.openingLossesService.getFormFromLoss(loss);
+        let openingForm: FormGroup = this.openingFormService.getFormFromLoss(loss);
         if (openingForm.status === 'INVALID') {
           valid = false;
         }

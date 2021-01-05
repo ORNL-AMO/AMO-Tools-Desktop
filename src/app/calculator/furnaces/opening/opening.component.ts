@@ -12,8 +12,6 @@ import { OpeningService } from './opening.service';
   styleUrls: ['./opening.component.css']
 })
 export class OpeningComponent implements OnInit {
-
-
   @Input()
   settings: Settings;
   @Input()
@@ -41,8 +39,8 @@ export class OpeningComponent implements OnInit {
   output: OpeningLossOutput;
 
   tabSelect: string = 'results';
-  baselineSelected = true;
-  modificationExists = false;
+  baselineSelected: boolean = true;
+  modificationExists: boolean = false;
 
   constructor(private settingsDbService: SettingsDbService, 
               private openingService: OpeningService) { }
@@ -102,7 +100,6 @@ export class OpeningComponent implements OnInit {
    }
 
    btnResetData() {
-     // TODO reorder?
     this.modificationExists = false;
     this.openingService.initDefaultEmptyInputs();
     this.openingService.resetData.next(true);

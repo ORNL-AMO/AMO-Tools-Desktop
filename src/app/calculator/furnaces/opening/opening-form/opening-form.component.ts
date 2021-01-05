@@ -30,16 +30,17 @@ export class OpeningFormComponent implements OnInit {
   openingLossesForm: FormGroup;
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
+  outputSubscription: Subscription;
+  energySourceTypeSub: Subscription;
+  
   showFlueGasModal: boolean;
-
   showOperatingHoursModal: boolean;
+
   formWidth: number;
   energyUnit: string;
-  energySourceTypeSub: any;
   totalArea: number;
   trackingEnergySource: boolean;
   idString: string;
-  outputSubscription: any;
   lossResult: OpeningLossResults;
   isEditingName: boolean;
 
@@ -173,27 +174,11 @@ export class OpeningFormComponent implements OnInit {
 
   calculate() {
     this.getArea();
-    // this.calculateViewFactor();
 
     this.openingLossesForm = this.openingFormService.setValidators(this.openingLossesForm);
     let currentOpeningLoss: OpeningLoss = this.openingFormService.getLossFromForm(this.openingLossesForm);
     this.openingService.updateDataArray(currentOpeningLoss, this.index, this.isBaseline);
   }
-
-  // TODO is this used?
-  // calculateViewFactor() {
-  //   this.totalArea = 0;
-  //   if (this.openingLossesForm.controls.numberOfOpenings.valid 
-  //     && this.openingLossesForm.controls.lengthOfOpening.valid  
-  //     && this.openingLossesForm.controls.heightOfOpening.valid) { 
-  //       let vfInputs: ViewFactorInput = this.openingFormService.getViewFactorInput(this.openingLossesForm);
-  //       let viewFactor = this.openingService.getViewFactor(vfInputs, this.settings);
-  //       this.openingLossesForm.patchValue({
-  //         viewFactor: this.roundVal(viewFactor, 3)
-  //       });
-  //       // this.calculate();
-  //   }
-  // }
 
   removeLoss() {
     this.openingService.removeLoss(this.index);
