@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { OperatingHours } from '../../../shared/models/operations';
 import { OpeningLoss, OpeningLossOutput } from '../../../shared/models/phast/losses/openingLoss';
 import { Settings } from '../../../shared/models/settings';
 import { OpeningService } from './opening.service';
@@ -17,6 +18,8 @@ export class OpeningComponent implements OnInit {
   settings: Settings;
   @Input()
   inTreasureHunt: boolean;
+  @Input()
+  operatingHours: OperatingHours;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -30,8 +33,8 @@ export class OpeningComponent implements OnInit {
   isModalOpen: boolean;
   modalSubscription: Subscription;
 
-  baselineData: OpeningLoss;
-  modificationData: OpeningLoss;
+  baselineData: Array<OpeningLoss>;
+  modificationData: Array<OpeningLoss>;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
   outputSubscription: Subscription;
@@ -67,7 +70,6 @@ export class OpeningComponent implements OnInit {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
-    this.outputSubscription.unsubscribe();
   }
 
   initSubscriptions() {
@@ -75,18 +77,22 @@ export class OpeningComponent implements OnInit {
       this.isModalOpen = modalOpen;
     })
     this.baselineDataSub = this.openingService.baselineData.subscribe(value => {
+      this.baselineData = value;
       this.openingService.calculate(this.settings);
     })
     this.modificationDataSub = this.openingService.modificationData.subscribe(value => {
+      this.modificationData = value;
       this.openingService.calculate(this.settings);
     })
-    this.outputSubscription = this.openingService.output.subscribe(val => {
-      this.output = val;
-    });
   }
   
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  addLoss() {
+    let hoursPerYear = this.operatingHours? this.operatingHours.hoursPerYear : undefined;
+    this.openingService.addLoss(hoursPerYear, this.modificationExists);
   }
 
   createModification() {
@@ -96,6 +102,7 @@ export class OpeningComponent implements OnInit {
    }
 
    btnResetData() {
+     // TODO reorder?
     this.modificationExists = false;
     this.openingService.initDefaultEmptyInputs();
     this.openingService.resetData.next(true);

@@ -32,35 +32,12 @@
 			[ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
 			<div class="header mx-2 mb-4">
 			  <h3>Baseline</h3>
+              <a class="click-link pull-right small add-loss" (click)="addLoss()">+Add Loss</a>
 			</div>
-			<div class="d-flex flex-column mx-2 mb-4">
-				<app-opening-form [settings]="settings" [selected]="baselineSelected" [isBaseline]="true"></app-opening-form>
-			 <!-- Results -->
-			 <div *ngIf="output.baseline" class="d-flex flex-column mt-3 mb-2">
-					<div class="form-group m-0">
-					  <label class="bold">Opening Loss</label>
-					  <div *ngIf="output.baseline.openingLoss" class="text-center bold small">
-						{{output.baseline.openingLoss | sigFigs:'6'}} 
-						<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
-					  </div>
-					  <div *ngIf="!output.baseline.openingLoss" class="text-center bold small">
-						&mdash; &mdash;
-					  </div>
-					</div>
-			  </div>
-			  <div *ngIf="output.baseline" class="d-flex flex-column mt-1 mb-2">
-				<div class="form-group m-0">
-				  <label class="bold">Gross Loss</label>
-				  <div *ngIf="output.baseline.grossLoss" class="text-center bold small">
-					{{output.baseline.grossLoss | sigFigs:'6'}} 
-					<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
-				  </div>
-				  <div *ngIf="!output.baseline.grossLoss" class="text-center bold small">
-					&mdash; &mdash;
-				  </div>
+			<div class="d-flex flex-column mx-4 mb-4">
+				<div *ngFor="let data of baselineData; let i = index;">
+					<app-opening-form [index]="i" [settings]="settings" [selected]="baselineSelected" [isBaseline]="true"></app-opening-form>
 				</div>
-			  </div>
-
 			  <div class="w-100 justify content-center btn-group btn-group-sm">
 				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
 				  (click)="btnResetData()">
@@ -80,33 +57,10 @@
 			<div class="header mx-2 mb-4">
 			  <h3>Modification</h3>
 			</div>
-			<div class="d-flex flex-column ml-2 mr-2 mb-4">
-			<app-opening-form [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-opening-form>
-			 <!-- Mod results -->
-				<div *ngIf="output.modification" class="d-flex flex-column mt-3 mb-2">
-					<div class="form-group m-0">
-					  <label class="bold">Opening Loss</label>
-					  <div *ngIf="output.modification.openingLoss" class="text-center bold small">
-						{{output.modification.openingLoss | sigFigs:'6'}} 
-						<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
-					  </div>
-					  <div *ngIf="!output.modification.openingLoss" class="text-center bold small">
-						&mdash; &mdash;
-					  </div>
-					</div>
-				  </div>
-				  <div *ngIf="output.modification" class="d-flex flex-column mt-1 mb-2">
-					<div class="form-group m-0">
-					  <label class="bold">Gross Loss</label>
-					  <div *ngIf="output.modification.grossLoss" class="text-center bold small">
-						{{output.modification.grossLoss | sigFigs:'6'}} 
-						<span [innerHTML]="output.energyUnit | settingsLabel"></span>/hr
-					  </div>
-					  <div *ngIf="!output.modification.grossLoss" class="text-center bold small">
-						&mdash; &mdash;
-					  </div>
-					</div>
-				  </div>
+			<div class="d-flex flex-column mx-4 mb-4">
+				<div *ngFor="let data of modificationData; let i = index;">
+					<app-opening-form [index]="i" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-opening-form>
+				</div>
 			</div>
 		  </div>
 		  <!-- no content message -->
@@ -126,7 +80,7 @@
   
 		<!-- help panel -->
 		<div class="col-4 p-0 help-panel">
-		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
+		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}" [ngStyle]="{'height.px': containerHeight}">
 			<div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
 				<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
 				  <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"

@@ -51,11 +51,11 @@ export interface ViewFactorInput {
 }
 
 export interface OpeningLossOutput {
-    baseline: OpeningLossResults,
-    modification?: OpeningLossResults
-    energyUnit?: string;
+    baseline: {totalFuelUse: number, grossLoss: number, totalFuelCost: number, losses: Array<OpeningLossResults>},
+    modification?: {totalFuelUse: number, grossLoss: number, totalFuelCost: number, losses: Array<OpeningLossResults>},
     fuelSavings: number;
     costSavings: number;
+    energyUnit?: string;
   }
   
   export interface OpeningLossResults {
@@ -63,4 +63,5 @@ export interface OpeningLossOutput {
     fuelCost?: number;
     openingLoss?: number;
     grossLoss?: number;
+    energyUnit?: string;
   }

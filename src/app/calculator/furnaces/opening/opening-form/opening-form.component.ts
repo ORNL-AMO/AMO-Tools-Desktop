@@ -4,9 +4,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { OpeningLoss, ViewFactorInput } from '../../../../shared/models/phast/losses/openingLoss';
+import { OpeningLoss, OpeningLossOutput, OpeningLossResults, ViewFactorInput } from '../../../../shared/models/phast/losses/openingLoss';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { OpeningFormService } from '../opening-form.service';
 import { OpeningService } from '../opening.service';
 
@@ -40,6 +39,9 @@ export class OpeningFormComponent implements OnInit {
   totalArea: number;
   trackingEnergySource: boolean;
   idString: string;
+  outputSubscription: any;
+  lossResult: OpeningLossResults;
+  isEditingName: boolean;
 
   constructor(private openingFormService: OpeningFormService,
               private convertUnitsService: ConvertUnitsService,
@@ -67,11 +69,16 @@ export class OpeningFormComponent implements OnInit {
     if (changes.selected && !changes.selected.firstChange) {
       this.setFormState();
     }
+    if (changes.index && !changes.index.firstChange) {
+      let output: OpeningLossOutput = this.openingService.output.getValue();
+      this.setLossResult(output);
+    }
   }
 
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    this.outputSubscription.unsubscribe();
     if (this.trackingEnergySource) {
       this.energySourceTypeSub.unsubscribe();
     }
@@ -84,6 +91,9 @@ export class OpeningFormComponent implements OnInit {
     this.generateExampleSub = this.openingService.generateExample.subscribe(value => {
       this.initForm();
     });
+    this.outputSubscription = this.openingService.output.subscribe(output => {
+      this.setLossResult(output);
+    });
     if (this.trackingEnergySource) {
       this.energySourceTypeSub = this.openingService.energySourceType.subscribe(energySourceType => {
         this.setEnergySource(energySourceType);
@@ -91,11 +101,33 @@ export class OpeningFormComponent implements OnInit {
     }
   }
 
+  setLossResult(output: OpeningLossOutput) {
+    if (this.isBaseline) {
+      this.lossResult = output.baseline.losses[this.index];
+    } else {
+      this.lossResult = output.modification.losses[this.index];
+    }
+  }
+
+  editLossName() {
+    this.isEditingName = true;
+  }
+
+  doneEditingName() {
+    this.isEditingName = false;
+  }
+
   setFormState() {
     if (this.selected == false) {
       this.openingLossesForm.disable();
     } else {
       this.openingLossesForm.enable();
+    }
+
+    if (this.index > 0) {
+      this.openingLossesForm.controls.hoursPerYear.disable();
+      this.openingLossesForm.controls.fuelCost.disable();
+      this.openingLossesForm.controls.availableHeat.disable();
     }
   }
 
@@ -116,9 +148,13 @@ export class OpeningFormComponent implements OnInit {
   initForm() {
     let updatedOpeningLossData: OpeningLoss;
     if (this.isBaseline) {
-      updatedOpeningLossData = this.openingService.baselineData.getValue();
+      let baselineData: Array<OpeningLoss> = this.openingService.baselineData.getValue();
+      updatedOpeningLossData = baselineData[this.index];
     } else {
-      updatedOpeningLossData = this.openingService.modificationData.getValue();
+      let modificationData: Array<OpeningLoss> = this.openingService.modificationData.getValue();
+      if (modificationData) {
+        updatedOpeningLossData = modificationData[this.index];
+      }
     }
     if (updatedOpeningLossData) {
       this.openingLossesForm = this.openingFormService.getFormFromLoss(updatedOpeningLossData, false);
@@ -141,26 +177,26 @@ export class OpeningFormComponent implements OnInit {
 
     this.openingLossesForm = this.openingFormService.setValidators(this.openingLossesForm);
     let currentOpeningLoss: OpeningLoss = this.openingFormService.getLossFromForm(this.openingLossesForm);
-    if (this.isBaseline) {
-      this.openingService.baselineData.next(currentOpeningLoss);
-    } else {
-      this.openingService.modificationData.next(currentOpeningLoss);
-    }
+    this.openingService.updateDataArray(currentOpeningLoss, this.index, this.isBaseline);
   }
 
   // TODO is this used?
-  calculateViewFactor() {
-    this.totalArea = 0;
-    if (this.openingLossesForm.controls.numberOfOpenings.valid 
-      && this.openingLossesForm.controls.lengthOfOpening.valid  
-      && this.openingLossesForm.controls.heightOfOpening.valid) { 
-        let vfInputs: ViewFactorInput = this.openingFormService.getViewFactorInput(this.openingLossesForm);
-        let viewFactor = this.openingService.getViewFactor(vfInputs, this.settings);
-        this.openingLossesForm.patchValue({
-          viewFactor: this.roundVal(viewFactor, 3)
-        });
-        // this.calculate();
-    }
+  // calculateViewFactor() {
+  //   this.totalArea = 0;
+  //   if (this.openingLossesForm.controls.numberOfOpenings.valid 
+  //     && this.openingLossesForm.controls.lengthOfOpening.valid  
+  //     && this.openingLossesForm.controls.heightOfOpening.valid) { 
+  //       let vfInputs: ViewFactorInput = this.openingFormService.getViewFactorInput(this.openingLossesForm);
+  //       let viewFactor = this.openingService.getViewFactor(vfInputs, this.settings);
+  //       this.openingLossesForm.patchValue({
+  //         viewFactor: this.roundVal(viewFactor, 3)
+  //       });
+  //       // this.calculate();
+  //   }
+  // }
+
+  removeLoss() {
+    this.openingService.removeLoss(this.index);
   }
 
   getArea() {
@@ -170,8 +206,8 @@ export class OpeningFormComponent implements OnInit {
       smallUnit = 'mm';
       largeUnit = 'm';
     }
-    this.totalArea = 0.0;
     if (this.openingLossesForm.controls.numberOfOpenings.valid && this.openingLossesForm.controls.lengthOfOpening.valid  && this.openingLossesForm.controls.heightOfOpening.valid) {
+      this.totalArea = 0.0;
       if (this.openingLossesForm.controls.openingType.value === 'Round') {
           this.openingLossesForm.controls.heightOfOpening.setValue(0);
           //let radiusFeet = (radiusInches * .08333333) / 2;
