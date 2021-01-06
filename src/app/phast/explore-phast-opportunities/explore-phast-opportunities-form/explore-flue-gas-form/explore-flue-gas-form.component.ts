@@ -59,6 +59,8 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   initData() {
+    this.baselineWarnings = {excessAirWarning: null, o2Warning: null};
+    this.modificationWarnings = {excessAirWarning: null, o2Warning: null};
     if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
       this.baselineFlueGas = this.phast.losses.flueGasLosses[0].flueGasByMass;
     } else {
