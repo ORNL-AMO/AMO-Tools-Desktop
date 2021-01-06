@@ -46,11 +46,15 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   lossExists(phast: PHAST) {
-    if (phast.losses) {
-      return true;
-    } else {
-      return false;
+    let phastLosses: boolean = phast.losses && Object.keys(phast.losses).length !== 0;
+    let lossesExist = false;
+
+    if (phastLosses) {
+      // if a loss is added and removed, phast.losses object still has array
+      lossesExist = Object.values(phast.losses).some((lossArray: []) => lossArray.length > 0);
     }
+
+    return lossesExist;
   }
   //save changes to settings
   saveChanges(bool?: boolean) {
