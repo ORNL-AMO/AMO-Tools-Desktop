@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
-import { OpeningLossesService, OpeningLossWarnings } from '../../../losses/opening-losses/opening-losses.service';
 import { PhastService } from '../../../phast.service';
 import { LossTab } from '../../../tabs';
+import { OpeningLossWarnings, OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
+import { OpeningFormService } from '../../../../calculator/furnaces/opening/opening-form.service';
 
 @Component({
   selector: 'app-explore-opening-form',
@@ -34,7 +35,10 @@ export class ExploreOpeningFormComponent implements OnInit {
   showEmissivity: Array<boolean>;
   showViewFactor: Array<boolean>;
   showSize: Array<boolean>;
-  constructor(private convertUnitsService: ConvertUnitsService, private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, 
+    private openingLossesService: OpeningService,
+    private openingFormService: OpeningFormService,
+    private phastService: PhastService) { }
 
   ngOnInit() {
     this.initData();
@@ -255,7 +259,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   calculateViewFactor(loss: OpeningLoss) {
-    let openingLossform: FormGroup = this.openingLossesService.getFormFromLoss(loss);
+    let openingLossform: FormGroup = this.openingFormService.getFormFromLoss(loss);
     let vfInputs = this.openingLossesService.getViewFactorInput(openingLossform);
     let viewFactor = this.phastService.viewFactorCalculation(vfInputs, this.settings);
     loss.viewFactor = Number(viewFactor.toFixed(3));

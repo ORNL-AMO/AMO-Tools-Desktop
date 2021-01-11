@@ -35,13 +35,27 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/furnace-icons/wall-loss.png" class="calc-img"
-                        [routerLink]="['/calculators/wall-loss']">
+                    [routerLink]="['/calculators/wall-loss']">
                 </div>
             </div>
             <div class="d-flex flex-fill flex-column justify-content-center">
                 <a [routerLink]="['/calculators/wall-loss']">Wall Loss</a>
                 <p>
                     This calculator can be used to calculate fuel savings due to changes in wall insulation for a heating system.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/opening.png" class="calc-img"
+                        [routerLink]="['/calculators/opening']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/opening']">Opening</a>
+                <p>
+                    Estimates losses due to openings in the heating system.
                 </p>
             </div>
         </div>
