@@ -141,7 +141,7 @@
         <div class="input-group">
           <div class="text-center w-50">
             <span *ngIf="fanShaftPower.voltage">
-              {{fanShaftPower.voltage | sigFigs: '6'}}
+              {{fanShaftPower.voltage | number: '1.0-0'}}
             </span>
             <span class="bold" *ngIf="!fanShaftPower.voltage">
               &mdash; &mdash;
