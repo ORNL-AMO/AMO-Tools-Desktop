@@ -109,7 +109,7 @@
 
     <div class="form-group">
       <label class="small" for="{{'initialTemperature_'+idString}}">Initial Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareSolidInitialTemperature(), 'error': warnings.initialOverMeltWarning !== null, 'invalid': chargeMaterialForm.controls.initialTemperature.invalid}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidInitialTemperature(), 'invalid': chargeMaterialForm.controls.initialTemperature.invalid}">
         <input [readonly]="!baselineSelected" name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
           id="{{'initialTemperature_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('initialTemperature')"
           >
@@ -125,7 +125,6 @@
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
           ).</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.initialOverMeltWarning !== null">{{warnings.initialOverMeltWarning}}</span>
     </div>
 
 

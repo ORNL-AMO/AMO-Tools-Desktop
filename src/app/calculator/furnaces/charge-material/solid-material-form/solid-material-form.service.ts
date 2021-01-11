@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChargeMaterial, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
@@ -9,7 +9,7 @@ export class SolidMaterialFormService {
   constructor(private formBuilder: FormBuilder) { }
 
   initSolidForm(assesmentLossNum?: number): FormGroup {
-    let lossNumber = assesmentLossNum? assesmentLossNum : 0;
+    let lossNumber = assesmentLossNum? assesmentLossNum : 1;
     
     let formGroup = this.formBuilder.group({
       'materialId': [1, Validators.required],
@@ -30,10 +30,6 @@ export class SolidMaterialFormService {
       'additionalHeatRequired': [0, Validators.required],
       'name': ['Material #' + lossNumber]
     });
-
-    if (!assesmentLossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-    }
 
     return formGroup;
   }
@@ -63,10 +59,6 @@ export class SolidMaterialFormService {
       'additionalHeatRequired': [chargeMaterial.solidChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
     });
-
-    if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-    }
 
     formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
@@ -108,7 +100,6 @@ export class SolidMaterialFormService {
         chargeReacted: solidForm.controls.percentChargeReacted.value,
         reactionHeat: solidForm.controls.heatOfReaction.value,
         additionalHeat: solidForm.controls.additionalHeatRequired.value,
-        availableHeat: solidForm.controls.availableHeat? solidForm.controls.availableHeat.value : '',
       }
     };
 
@@ -118,7 +109,6 @@ export class SolidMaterialFormService {
   checkSolidWarnings(material: SolidChargeMaterial): SolidMaterialWarnings {
     return {
       dischargeTempWarning: this.checkDischargeTemperature(material),
-      initialOverMeltWarning: this.checkInitialOverMelting(material)
     };
   }
 
@@ -132,20 +122,8 @@ export class SolidMaterialFormService {
     }
   }
 
-  checkInitialOverMelting(material: SolidChargeMaterial): string {
-    if (material.initialTemperature > material.meltingPoint && material.chargeMelted <= 0) {
-      return "The initial temperature is higher than the melting point, please enter proper percentage for charge melted.";
-    }
-    else if ((material.initialTemperature < material.meltingPoint) && material.chargeMelted > 0){
-      return 'The initial temperature is lower than the melting point, the percentage for charge melted should be 0%.';
-    } else {
-      return null;
-    }
-  }
-
 }
 
 export interface SolidMaterialWarnings {
   dischargeTempWarning: string;
-  initialOverMeltWarning: string;
 }

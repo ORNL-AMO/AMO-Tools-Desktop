@@ -1,10 +1,10 @@
-import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
-import { ChargeMaterial, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, ChargeMaterialOutput, ChargeMaterialResult, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ChargeMaterialService } from '../charge-material.service';
@@ -23,9 +23,8 @@ export class SolidMaterialFormComponent implements OnInit {
   @Input()
   selected: boolean;
   @Input()
-  inModal: boolean;
-  @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
+  index: number;
+
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   resetDataSub: Subscription;
@@ -33,15 +32,17 @@ export class SolidMaterialFormComponent implements OnInit {
 
   chargeMaterialForm: FormGroup;
   warnings: SolidMaterialWarnings;
-  selectedMaterialId: any;
-  selectedMaterial: any;
   materialTypes: any;
   showModal: boolean;
-  showFlueGasModal: boolean;
-  energySourceType: string;
-  energySourceSub: Subscription;
+  lossResult: ChargeMaterialResult;
+  chargeMaterialType: string;
+  
   idString: string;
-  index: number = 0;
+  outputSubscription: Subscription;
+
+  showMaterialProperties: boolean = true;
+  collapseMaterial: boolean = false;
+  collapseMaterialSub: Subscription;
 
   constructor(private suiteDbService: SuiteDbService, 
               private chargeMaterialService: ChargeMaterialService, 
@@ -50,13 +51,15 @@ export class SolidMaterialFormComponent implements OnInit {
               ) {}
 
   ngOnInit() {
+    this.initSubscriptions();
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;
     }
     else {
       this.idString = 'modification_' + this.index;
+      let baselineData: Array<ChargeMaterial> = this.chargeMaterialService.baselineData.getValue();
+      this.chargeMaterialType = baselineData[this.index].chargeMaterialType;
     }
-    this.initSubscriptions();
     this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
@@ -69,14 +72,23 @@ export class SolidMaterialFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
-        this.setFormState();
+      this.setFormState();
     }
+    if (changes.index && !changes.index.firstChange) {
+      let output: ChargeMaterialOutput = this.chargeMaterialService.output.getValue();
+      this.setLossResult(output);
+    }
+  }
+
+  toggleMaterialProperties() {
+    this.showMaterialProperties = !this.showMaterialProperties;
   }
 
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
-    this.energySourceSub.unsubscribe();
+    this.outputSubscription.unsubscribe();
+    this.collapseMaterialSub.unsubscribe();
     this.chargeMaterialService.modalOpen.next(false);
   }
 
@@ -87,17 +99,34 @@ export class SolidMaterialFormComponent implements OnInit {
     this.generateExampleSub = this.chargeMaterialService.generateExample.subscribe(value => {
       this.initForm();
     });
-    this.energySourceSub = this.chargeMaterialService.energySourceType.subscribe(energySourceType => {
-      this.energySourceType = energySourceType;
+    this.outputSubscription = this.chargeMaterialService.output.subscribe(output => {
+      this.setLossResult(output);
     });
+    this.collapseMaterialSub = this.chargeMaterialService.collapseMapping.subscribe((collapseMapping: {[index: number]: boolean }) => {
+      if (collapseMapping && collapseMapping[this.index] != undefined) {
+        this.collapseMaterial = collapseMapping[this.index];
+      }
+    });
+  }
+
+  setLossResult(output: ChargeMaterialOutput) {
+    if (this.isBaseline) {
+      this.lossResult = output.baseline.losses[this.index];
+    } else {
+      this.lossResult = output.modification.losses[this.index];
+    }
   }
 
   initForm() {
     let updatedChargeMaterialData: ChargeMaterial;
     if (this.isBaseline) {
-      updatedChargeMaterialData = this.chargeMaterialService.baselineData.getValue();
+      let baselineData: Array<ChargeMaterial> = this.chargeMaterialService.baselineData.getValue();
+      updatedChargeMaterialData = baselineData[this.index];
     } else {
-      updatedChargeMaterialData = this.chargeMaterialService.modificationData.getValue();
+      let modificationData: Array<ChargeMaterial> = this.chargeMaterialService.modificationData.getValue();
+      if (modificationData) {
+        updatedChargeMaterialData = modificationData[this.index];
+      }
     }
 
     if (updatedChargeMaterialData && updatedChargeMaterialData.solidChargeMaterial) {
@@ -154,11 +183,8 @@ export class SolidMaterialFormComponent implements OnInit {
     this.chargeMaterialForm = this.solidMaterialFormService.setInitialTempValidator(this.chargeMaterialForm);
     this.checkWarnings();
     let chargeMaterial: ChargeMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(this.chargeMaterialForm);
-    if (this.isBaseline) {
-      this.chargeMaterialService.baselineData.next(chargeMaterial);
-    } else { 
-      this.chargeMaterialService.modificationData.next(chargeMaterial);
-    }
+    this.chargeMaterialService.updateDataArray(chargeMaterial, this.index, this.isBaseline);
+
   }
 
   checkSpecificHeatOfSolid() {
@@ -238,23 +264,5 @@ export class SolidMaterialFormComponent implements OnInit {
     this.showModal = false;
     this.materialModal.hide();
     this.chargeMaterialService.modalOpen.next(false);
-  }
-
-  initFlueGasModal() {
-    this.showFlueGasModal = true;
-    this.chargeMaterialService.modalOpen.next(this.showFlueGasModal);
-    this.flueGasModal.show();
-  }
-
-  hideFlueGasModal(calculatedAvailableHeat?: any) {
-    if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.roundVal(calculatedAvailableHeat, 1);
-      this.chargeMaterialForm.patchValue({
-        availableHeat: calculatedAvailableHeat
-      });
-    }
-    this.flueGasModal.hide();
-    this.showFlueGasModal = false;
-    this.chargeMaterialService.modalOpen.next(this.showFlueGasModal);
   }
 }
