@@ -130,7 +130,7 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   changeMaterialType(index: number, materialType: string) {
-    if (this.modificationData.length > 0) {
+    if (this.modificationData && this.modificationData.length > 0) {
       this.modificationData[index].chargeMaterialType = materialType;
       this.chargeMaterialService.modificationData.next(this.modificationData);
     }
