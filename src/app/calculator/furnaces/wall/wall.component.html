@@ -33,7 +33,8 @@
 			>
 			<div class="header mx-2 mb-4">
 			  <h3>Baseline</h3>
-              <a class="click-link pull-right small add-loss" (click)="addLoss()">+Add Loss</a>
+			  <a class="disabled pull-right small add-loss disabled" *ngIf="baselineData.length == 0">+Add Loss</a>
+              <a class="click-link pull-right small add-loss" *ngIf="baselineData.length > 0" (click)="addLoss()">+Add Loss</a>
 			</div>
 			<div class="d-flex flex-column mx-4 mb-4">
 				<div *ngFor="let data of baselineData; let i = index;">

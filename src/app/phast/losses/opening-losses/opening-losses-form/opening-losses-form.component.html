@@ -3,7 +3,7 @@
     <div class="form-group">
       <label class="small" for="{{'type'+idString}}">Select Type</label>
       <select name="{{'openingType_'+lossIndex}}" class="form-control" formControlName="openingType" id="{{'type'+idString}}"
-        (change)="getArea(); calculateViewFactor()" (focus)="focusField('openingType')"  [ngClass]="{'indicate-different': compareOpeningType(), 'invalid': openingLossesForm.controls.openingType.invalid}">
+        (change)="getArea(); " (focus)="focusField('openingType')"  [ngClass]="{'indicate-different': compareOpeningType(), 'invalid': openingLossesForm.controls.openingType.invalid}">
         <option>Round</option>
         <option>Rectangular (or Square)</option>
       </select>
@@ -17,7 +17,7 @@
 
       <input [readonly]="!baselineSelected" name="{{'numberOfOpenings_'+lossIndex}}" type="number" step="any" min="0"
         class="form-control" formControlName="numberOfOpenings" id="{{'numberOfOpenings'+idString}}" onfocus="this.select();"
-        (input)="getArea(); calculateViewFactor()" (focus)="focusField('numberOfOpenings')" 
+        (input)="getArea(); " (focus)="focusField('numberOfOpenings')" 
         [ngClass]="{'indicate-different': compareNumberOfOpenings(), 'invalid': openingLossesForm.controls.numberOfOpenings.invalid}">
         <span class="alert-danger pull-right small"
         *ngIf="openingLossesForm.controls.numberOfOpenings.invalid && !openingLossesForm.controls.numberOfOpenings.pristine">
@@ -32,7 +32,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareThickness(), 'invalid': openingLossesForm.controls.wallThickness.invalid}">
         <input [readonly]="!baselineSelected" name="{{'wallThickness_'+lossIndex}}" type="number" step="any" min="0"
           class="form-control" formControlName="wallThickness" id="{{'wallThickness'+idString}}" onfocus="this.select();"
-          (input)="getArea(); calculateViewFactor()" (focus)="focusField('wallThickness')" >
+          (input)="getArea(); " (focus)="focusField('wallThickness')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
       </div>
@@ -52,7 +52,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareLengthOfOpening(), 'invalid': openingLossesForm.controls.lengthOfOpening.invalid}">
         <input [readonly]="!baselineSelected" name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" min="0"
           class="form-control" formControlName="lengthOfOpening" id="{{'lengthOfOpening'+idString}}" onfocus="this.select();"
-          (input)="getArea(); calculateViewFactor()" (focus)="focusField('lengthOfOpening')" >
+          (input)="getArea(); " (focus)="focusField('lengthOfOpening')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
       </div>
@@ -68,7 +68,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareHeightOfOpening(), 'invalid': openingLossesForm.controls.heightOfOpening.invalid}">
         <input [readonly]="!baselineSelected" name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" min="0"
           class="form-control" formControlName="heightOfOpening" id="{{'heightOfOpening'+idString}}" onfocus="this.select();"
-          (input)="getArea(); calculateViewFactor()" (focus)="focusField('heightOfOpening')" >
+          (input)="getArea(); " (focus)="focusField('heightOfOpening')" >
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
       </div>

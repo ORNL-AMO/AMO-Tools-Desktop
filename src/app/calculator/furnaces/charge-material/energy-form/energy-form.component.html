@@ -66,7 +66,7 @@
           <a *ngIf="energyForm.controls.energySourceType.value == 'Electricity'" id="materialHelp" disabled class="disabled form-text small">Calculate</a>
         </label>
         <div class="input-group">
-          <input  name="{{'availableHeat'+lossIndex}}" type="number" step="any" min="0"
+          <input  name="{{'availableHeat'+idString}}" type="number" step="any" min="0"
           class="form-control" formControlName="availableHeat" id="{{'availableHeat'+idString}}" onfocus="this.select();"
           (input)="calculate()" (focus)="focusField('availableHeat')">
           <span class="input-group-addon units">%</span>

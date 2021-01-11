@@ -96,7 +96,6 @@ export class WallService {
   }
 
   getWallLossResult(wallLossData: WallLoss, settings: Settings): WallLossResult {
-    
     let result: WallLossResult = {
       wallLoss: 0,
       grossLoss: 0,

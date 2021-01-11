@@ -216,16 +216,3 @@
     </div>
   </div>
   
-
-      <!--CREATE flueGas MODAL-->
-<div bsModal #flueGasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="flueGasModalLabel"
-aria-hidden="true" [config]="{backdrop: 'static'}">
-<div class="modal-dialog modal-lg">
-  <div class="modal-content">
-    <div>
-      <app-flue-gas-modal *ngIf="showFlueGasModal" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
-        [settings]="settings"></app-flue-gas-modal>
-    </div>
-  </div>
-</div>
-</div>
