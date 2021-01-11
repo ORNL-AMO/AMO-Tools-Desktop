@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { WallLoss, WallLossResult } from '../../../../shared/models/phast/losses/wallLoss';
+import { WallLoss, WallLossOutput, WallLossResult } from '../../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { WallFormService } from '../wall-form.service';
@@ -31,6 +31,10 @@ export class WallFormComponent implements OnInit {
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
   
   surfaceOptions: Array<WallLossesSurface>;
   showSurfaceModal: boolean = false;
@@ -77,8 +81,16 @@ export class WallFormComponent implements OnInit {
     if (changes.selected && !changes.selected.firstChange) {
       this.setFormState();
     }
+    if (changes.index && !changes.index.firstChange) {
+      let output: WallLossOutput = this.wallService.output.getValue();
+      this.setLossResult(output);
+    }
   }
-  
+
+  ngAfterViewInit() {
+    this.setOpHoursModalWidth();
+  }
+
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
@@ -96,16 +108,20 @@ export class WallFormComponent implements OnInit {
       this.initForm();
     });
     this.outputSubscription = this.wallService.output.subscribe(output => {
-      if (this.isBaseline) {
-        this.lossResult = output.baseline.losses[this.index];
-      } else {
-        this.lossResult = output.modification.losses[this.index];
-      }
+      this.setLossResult(output);
     });
     if (this.trackingEnergySource) {
       this.energySourceTypeSub = this.wallService.energySourceType.subscribe(energySourceType => {
         this.setEnergySource(energySourceType);
       });
+    }
+  }
+
+  setLossResult(output: WallLossOutput) {
+    if (this.isBaseline) {
+      this.lossResult = output.baseline.losses[this.index];
+    } else {
+      this.lossResult = output.modification.losses[this.index];
     }
   }
 
