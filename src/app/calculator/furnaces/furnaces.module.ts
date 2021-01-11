@@ -10,6 +10,7 @@ import { WallModule } from './wall/wall.module';
 import { FlueGasModule } from './flue-gas/flue-gas.module';
 import { AtmosphereModule } from './atmosphere/atmosphere.module';
 import { ChargeMaterialModule } from './charge-material/charge-material.module';
+import { OpeningModule } from './opening/opening.module';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { ChargeMaterialModule } from './charge-material/charge-material.module';
     RouterModule,
     AtmosphereModule,
     ChargeMaterialModule,
-    RouterModule
+    RouterModule, 
+    OpeningModule
   ],
   declarations: [
     FurnacesListComponent,

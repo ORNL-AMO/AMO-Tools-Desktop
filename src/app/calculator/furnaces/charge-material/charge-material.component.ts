@@ -1,7 +1,9 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { ChargeMaterial, ChargeMaterialOutput } from '../../../shared/models/phast/losses/chargeMaterial';
+import { OperatingHours } from '../../../shared/models/operations';
+import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../shared/models/settings';
 import { ChargeMaterialService } from './charge-material.service';
 
@@ -16,13 +18,13 @@ export class ChargeMaterialComponent implements OnInit {
   settings: Settings;
   @Input()
   inTreasureHunt: boolean;
+  @Input()
+  operatingHours: OperatingHours;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
-  energyUnit: string;
-  baselineEnergySub: Subscription;
-  modificationEnergySub: Subscription;
-  updatedCalculation: boolean;
+  isEditingName: boolean;
+  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -32,15 +34,16 @@ export class ChargeMaterialComponent implements OnInit {
   
   containerHeight: number;
   isModalOpen: boolean;
+  lossNameForm: FormGroup;
   
-  results: {baseline: number, modification: number};
-  baselineData: ChargeMaterial;
-  modificationData: ChargeMaterial;
+  baselineData: Array<ChargeMaterial>;
+  modificationData: Array<ChargeMaterial>;
+  
+  baselineEnergySub: Subscription;
+  modificationEnergySub: Subscription;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
-  outputSubscription: Subscription;
   modalSubscription: Subscription;
-  output: ChargeMaterialOutput;
 
   materialType: string = "Solid";
   tabSelect: string = 'results';
@@ -78,9 +81,17 @@ export class ChargeMaterialComponent implements OnInit {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
-    this.outputSubscription.unsubscribe();
     this.baselineEnergySub.unsubscribe();
     this.modificationEnergySub.unsubscribe();
+  }
+
+  checkIsCollapsedMaterial(index: number) {
+    let isCollapsed: boolean;
+    let collapseState = this.chargeMaterialService.collapseMapping.getValue();
+    if (collapseState && collapseState[index] != undefined) {
+      isCollapsed = collapseState[index];
+    }
+    return isCollapsed;
   }
 
   initSubscriptions() {
@@ -88,18 +99,14 @@ export class ChargeMaterialComponent implements OnInit {
       this.isModalOpen = modalOpen;
     })
     this.baselineDataSub = this.chargeMaterialService.baselineData.subscribe(value => {
+      this.baselineData = value;
       this.chargeMaterialService.calculate(this.settings);
     })
     this.modificationDataSub = this.chargeMaterialService.modificationData.subscribe(value => {
+      this.modificationData = value;
       this.chargeMaterialService.calculate(this.settings);
     })
-    this.outputSubscription = this.chargeMaterialService.output.subscribe(val => {
-      if (val) {
-        this.output = val;
-      }
-    });
     this.baselineEnergySub = this.chargeMaterialService.baselineEnergyData.subscribe(energyData => {
-      this.energyUnit = this.chargeMaterialService.getAnnualEnergyUnit(energyData.energySourceType, this.settings);
       this.chargeMaterialService.calculate(this.settings);
     });
     this.modificationEnergySub = this.chargeMaterialService.modificationEnergyData.subscribe(energyData => {
@@ -107,12 +114,9 @@ export class ChargeMaterialComponent implements OnInit {
   });
   }
 
-  setTab(str: string) {
-    this.tabSelect = str;
-  }
-
-  changeMaterialType() {
-    this.chargeMaterialService.initDefaultEmptyOutput();
+  addLoss() {
+    let hoursPerYear = this.operatingHours? this.operatingHours.hoursPerYear : undefined;
+    this.chargeMaterialService.addLoss(hoursPerYear, this.modificationExists);
   }
 
   createModification() {
@@ -121,10 +125,23 @@ export class ChargeMaterialComponent implements OnInit {
     this.setModificationSelected();
    }
 
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  changeMaterialType(index: number, materialType: string) {
+    if (this.modificationData.length > 0) {
+      this.modificationData[index].chargeMaterialType = materialType;
+      this.chargeMaterialService.modificationData.next(this.modificationData);
+    }
+    this.chargeMaterialService.initDefaultEmptyOutput();
+  }
+
    btnResetData() {
     this.modificationExists = false;
     this.materialType = 'Solid';
     this.chargeMaterialService.initDefaultEmptyInputs();
+    this.chargeMaterialService.collapseMapping.next({});
     this.chargeMaterialService.resetData.next(true);
   }
 

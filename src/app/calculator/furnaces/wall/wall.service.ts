@@ -102,6 +102,7 @@ export class WallService {
       fuelUse: 0,
       fuelCost: 0,
     }
+    
     if (wallLossData) {
       result.energyUnit = this.getAnnualEnergyUnit(wallLossData.energySourceType, settings);
       result.wallLoss = this.phastService.wallLosses(wallLossData, settings);

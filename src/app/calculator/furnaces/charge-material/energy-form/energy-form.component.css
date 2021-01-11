@@ -15,3 +15,10 @@
     border-left: solid 1px;
     border-right: none;
   }
+
+    
+.form-section {
+   margin-bottom: 10px;
+   padding-bottom: 4px;
+   border-bottom: #bbb dashed 1px;
+ }

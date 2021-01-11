@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { EnergyData } from '../../../../shared/models/phast/losses/chargeMaterial';
@@ -21,7 +22,15 @@ export class EnergyFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   selected: boolean;
+  @Input()
+  operatingHours: OperatingHours;
+  
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
@@ -58,6 +67,10 @@ export class EnergyFormComponent implements OnInit {
     if (changes.selected && !changes.selected.firstChange) {
       this.setFormState();
     }
+  }
+  
+  ngAfterViewInit() {
+    this.setOpHoursModalWidth();
   }
 
   ngOnDestroy() {
@@ -151,8 +164,31 @@ export class EnergyFormComponent implements OnInit {
   }
 
   setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
+    if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
+  }
+
+  initFlueGasModal() {
+    this.showFlueGasModal = true;
+    this.chargeMaterialService.modalOpen.next(this.showFlueGasModal);
+    this.flueGasModal.show();
+  }
+
+  hideFlueGasModal(calculatedAvailableHeat?: any) {
+    if (calculatedAvailableHeat) {
+      calculatedAvailableHeat = this.roundVal(calculatedAvailableHeat, 1);
+      this.energyForm.patchValue({
+        availableHeat: calculatedAvailableHeat
+      });
+    }
+    this.flueGasModal.hide();
+    this.showFlueGasModal = false;
+    this.chargeMaterialService.modalOpen.next(this.showFlueGasModal);
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 }

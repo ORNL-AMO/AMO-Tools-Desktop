@@ -26,10 +26,6 @@ export class GasMaterialFormService {
       'name': ['Material #' + lossNumber]
     });
 
-    if (!assesmentLossNum) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-    }
-
     return formGroup;
   }
 
@@ -52,10 +48,6 @@ export class GasMaterialFormService {
       'additionalHeatRequired': [chargeMaterial.gasChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
     });
-
-    if (!inAssessment) {
-      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
-    }
 
     formGroup = this.setInitialTempValidator(formGroup);
     return formGroup;
@@ -91,7 +83,6 @@ export class GasMaterialFormService {
         percentReacted: gasForm.controls.gasReacted.value,
         reactionHeat: gasForm.controls.heatOfReaction.value,
         additionalHeat: gasForm.controls.additionalHeatRequired.value,
-        availableHeat: gasForm.controls.availableHeat? gasForm.controls.availableHeat.value : '',
       }
     };
     return tmpGasMaterial;

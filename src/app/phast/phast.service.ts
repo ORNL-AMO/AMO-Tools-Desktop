@@ -23,8 +23,6 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 
-import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
-import { AtmosphereLossesService } from './losses/atmosphere-losses/atmosphere-losses.service';
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
 import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
@@ -40,6 +38,8 @@ import { LiquidMaterialFormService } from '../calculator/furnaces/charge-materia
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
+import { OpeningService } from '../calculator/furnaces/opening/opening.service';
+import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 
 declare var phastAddon: any;
 
@@ -54,7 +54,7 @@ export class PhastService {
   modalOpen: BehaviorSubject<boolean>;
   assessmentTab: BehaviorSubject<string>;
   constructor(
-    private openingLossesService: OpeningLossesService,
+    private openingFormService: OpeningFormService,
     private convertUnitsService: ConvertUnitsService,
     private atmosphereFormService: AtmosphereFormService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
@@ -793,13 +793,13 @@ export class PhastService {
   sumOpeningLosses(losses: OpeningLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.openingLossesService.getFormFromLoss(loss);
+      let tmpForm = this.openingFormService.getFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         if (loss.openingType === 'Round') {
-          let tmpLoss = this.openingLossesService.getCircularLossFromForm(tmpForm);
+          let tmpLoss = this.openingFormService.getCircularLossFromForm(tmpForm);
           sum += this.openingLossesCircular(tmpLoss, settings) * loss.numberOfOpenings;
         } else if (loss.openingType === 'Rectangular (or Square)') {
-          let tmpLoss = this.openingLossesService.getQuadLossFromForm(tmpForm);
+          let tmpLoss = this.openingFormService.getQuadLossFromForm(tmpForm);
           sum += this.openingLossesQuad(tmpLoss, settings) * loss.numberOfOpenings;
         }
       }
