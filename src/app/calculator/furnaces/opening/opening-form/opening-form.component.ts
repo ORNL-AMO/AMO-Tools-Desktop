@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
@@ -26,6 +26,10 @@ export class OpeningFormComponent implements OnInit {
 
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
 
   openingLossesForm: FormGroup;
   resetDataSub: Subscription;
@@ -75,6 +79,11 @@ export class OpeningFormComponent implements OnInit {
       this.setLossResult(output);
     }
   }
+
+  ngAfterViewInit() {
+    this.setOpHoursModalWidth();
+  }
+
 
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
@@ -252,7 +261,7 @@ export class OpeningFormComponent implements OnInit {
   }
 
   setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
+    if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }

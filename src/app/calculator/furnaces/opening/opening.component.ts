@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { OpeningLoss, OpeningLossOutput } from '../../../shared/models/phast/losses/openingLoss';
+import { OpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { Settings } from '../../../shared/models/settings';
 import { OpeningService } from './opening.service';
 
@@ -35,8 +35,6 @@ export class OpeningComponent implements OnInit {
   modificationData: Array<OpeningLoss>;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
-  outputSubscription: Subscription;
-  output: OpeningLossOutput;
 
   tabSelect: string = 'results';
   baselineSelected: boolean = true;
