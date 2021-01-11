@@ -3,9 +3,9 @@
   <label class="small" for="materialType">Select Type</label>
   <select disabled class="form-control" id="materialType" [(ngModel)]="chargeMaterialType"
   (focus)="focusField('chargeMaterialType')">
-  <option>Solid</option>
-  <option>Liquid</option>
-  <option>Gas</option>
+  <option [ngValue]="'Solid'">Solid</option>
+  <option [ngValue]="'Liquid'">Liquid</option>
+  <option [ngValue]="'Gas'">Gas</option>
   </select>
 </div>
 

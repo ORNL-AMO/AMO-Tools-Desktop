@@ -26,7 +26,6 @@ export class GasMaterialFormComponent implements OnInit {
   @Input()
   index: number;
 
-  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   resetDataSub: Subscription;

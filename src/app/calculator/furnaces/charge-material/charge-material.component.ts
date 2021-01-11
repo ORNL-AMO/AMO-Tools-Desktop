@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { ChargeMaterial, ChargeMaterialOutput } from '../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../shared/models/settings';
 import { ChargeMaterialService } from './charge-material.service';
 
@@ -43,9 +43,7 @@ export class ChargeMaterialComponent implements OnInit {
   modificationEnergySub: Subscription;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
-  outputSubscription: Subscription;
   modalSubscription: Subscription;
-  output: ChargeMaterialOutput;
 
   materialType: string = "Solid";
   tabSelect: string = 'results';
