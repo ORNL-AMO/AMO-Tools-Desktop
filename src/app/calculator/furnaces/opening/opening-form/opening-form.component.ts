@@ -164,8 +164,8 @@ export class OpeningFormComponent implements OnInit {
       this.totalArea = 0.0;
       return;
     }
-    let vfInputs = this.openingService.getViewFactorInput(this.openingLossesForm);
-    let viewFactor = this.openingService.viewFactorCalculation(vfInputs, this.settings);
+    let vfInputs: ViewFactorInput = this.openingService.getViewFactorInput(this.openingLossesForm);
+    let viewFactor: number = this.openingService.viewFactorCalculation(vfInputs, this.settings);
     this.openingLossesForm.patchValue({
       viewFactor: this.roundVal(viewFactor, 3)
     });

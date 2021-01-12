@@ -208,7 +208,7 @@ export class OpeningService {
     };
   }
 
-    viewFactorCalculation(input: any, settings: Settings): number {
+    viewFactorCalculation(input: ViewFactorInput, settings: Settings): number {
       return this.phastService.viewFactorCalculation(input, settings);
     }
 

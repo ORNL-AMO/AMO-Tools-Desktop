@@ -6,6 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
 import { OpeningFormService } from '../../../../calculator/furnaces/opening/opening-form.service';
+import { ViewFactorInput } from '../../../../shared/models/phast/losses/openingLoss';
 
 @Component({
   selector: 'app-opening-losses-form',
@@ -150,8 +151,8 @@ export class OpeningLossesFormComponent implements OnInit {
       this.totalArea = 0.0;
       return;
     }
-    let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
-    let viewFactor = this.phastService.viewFactorCalculation(vfInputs, this.settings);
+    let vfInputs: ViewFactorInput = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
+    let viewFactor: number = this.phastService.viewFactorCalculation(vfInputs, this.settings);
     this.openingLossesForm.patchValue({
       viewFactor: this.roundVal(viewFactor, 3)
     });
