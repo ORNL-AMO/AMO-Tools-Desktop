@@ -118,7 +118,7 @@ export class CoolingLossesService {
   //Both
   checkSpecificHeat(loss: GasCoolingLoss | LiquidCoolingLoss): string {
     if (loss.specificHeat < 0) {
-      return 'Specific Heat must be equal or greater than 0';
+      return 'Average Specific Heat must be equal or greater than 0';
     } else {
       return null;
     }

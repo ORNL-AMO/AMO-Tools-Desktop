@@ -22,7 +22,7 @@
       </div>
   
       <div class="form-group">
-        <label class="small" for="{{'materialSpecificHeatOfSolidMaterial_'+idString}}">Average specific heat of the solid material</label>
+        <label class="small" for="{{'materialSpecificHeatOfSolidMaterial_'+idString}}">Average Specific Heat of Solid </label>
         <div class="input-group">
           <input  name="{{'materialSpecificHeatOfSolidMaterial_'+idString}}" type="number" step="any" min="0" class="form-control"
             formControlName="materialSpecificHeatOfSolidMaterial" id="{{'materialSpecificHeatOfSolidMaterial_'+idString}}" onfocus="this.select();"
@@ -62,7 +62,7 @@
       </div>
   
       <div class="form-group">
-        <label class="small" for="{{'materialHeatOfLiquid_'+idString}}">Specific heat of liquid from molten material</label>
+        <label class="small" for="{{'materialHeatOfLiquid_'+idString}}">Average Specific Heat of Molten Material</label>
         <div class="input-group">
           <input  name="{{'materialHeatOfLiquid_'+idString}}" type="number" step="any" min="0" class="form-control" formControlName="materialHeatOfLiquid"
             id="{{'materialHeatOfLiquid_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('materialHeatOfLiquid')"
@@ -99,7 +99,7 @@
   
     <div class="form-section">
       <div class="form-group">
-        <label class="small" for="{{'feedRate_'+idString}}">Charge (wet)-Feed Rate</label>
+        <label class="small" for="{{'feedRate_'+idString}}">Charge Feed Rate (Wet)</label>
         <div class="input-group">
           <input  name="{{'feedRate_'+idString}}" type="number" step="any" min="0" class="form-control" formControlName="feedRate"
             id="{{'feedRate_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('feedRate')" >
@@ -118,7 +118,7 @@
       </div>
   
       <div class="form-group">
-        <label class="small" for="{{'initialTemperature_'+idString}}">Initial Temperature</label>
+        <label class="small" for="{{'initialTemperature_'+idString}}">Charge Inlet Temperature</label>
         <div class="input-group">
           <input  name="{{'initialTemperature_'+idString}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
             id="{{'initialTemperature_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('initialTemperature')"
@@ -129,7 +129,7 @@
         <span class="alert-danger pull-right small"
         *ngIf="chargeMaterialForm.controls.initialTemperature.invalid && !chargeMaterialForm.controls.initialTemperature.pristine">
         <span *ngIf="chargeMaterialForm.controls.initialTemperature.errors.required">Value Required</span>
-        <span *ngIf="chargeMaterialForm.controls.initialTemperature.errors.max">Value can't be greater than Outlet Temperature
+        <span *ngIf="chargeMaterialForm.controls.initialTemperature.errors.max">Value can't be greater than Charge Outlet Temperature
           ({{chargeMaterialForm.controls.initialTemperature.errors.max.max}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
@@ -139,7 +139,7 @@
   
   
       <div class="form-group">
-        <label class="small" for="{{'chargeMaterialDischargeTemperature_'+idString}}">Charge Material Discharge Temperature</label>
+        <label class="small" for="{{'chargeMaterialDischargeTemperature_'+idString}}">Charge Outlet Temperature</label>
         <div class="input-group">
           <input  name="{{'chargeMaterialDischargeTemperature_'+idString}}" type="number" step="any" class="form-control" formControlName="chargeMaterialDischargeTemperature"
             id="{{'chargeMaterialDischargeTemperature_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('chargeMaterialDischargeTemperature')"
@@ -155,7 +155,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="{{'waterContentAsCharged_'+idString}}">Water Content as Charged</label>
+        <label class="small" for="{{'waterContentAsCharged_'+idString}}">Water Content (Charged)</label>
         <div class="input-group">
           <input  name="{{'waterContentAsCharged_'+idString}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="waterContentAsCharged"
             id="{{'waterContentAsCharged_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('waterContentAsCharged')"
@@ -173,7 +173,7 @@
       </div>
   
       <div class="form-group">
-        <label class="small" for="{{'waterContentAsDischarged_'+idString}}">Water Content as Discharged</label>
+        <label class="small" for="{{'waterContentAsDischarged_'+idString}}">Water Content (Discharged)</label>
         <div class="input-group" >
           <input  name="{{'waterContentAsDischarged_'+idString}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="waterContentAsDischarged"
             id="{{'waterContentAsDischarged_'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('waterContentAsDischarged')"
@@ -262,7 +262,7 @@
       </div>
   
       <div class="form-group">
-        <label class="small" for="{{'endothermicOrExothermic_'+idString}}">Endothermic/Exothermic</label>
+        <label class="small" for="{{'endothermicOrExothermic_'+idString}}">Type of Reaction (Exothermic/Endothermic)</label>
         <select name="{{'endothermicOrExothermic_'+idString}}" class="form-control" formControlName="endothermicOrExothermic" id="{{'endothermicOrExothermic_'+idString}}"
           (change)="calculate()" (focus)="focusField('endothermicOrExothermic')">
           <option>Endothermic</option>

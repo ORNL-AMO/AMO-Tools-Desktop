@@ -114,9 +114,9 @@ export class SolidMaterialFormService {
 
   checkDischargeTemperature(material: SolidChargeMaterial): string {
     if ((material.dischargeTemperature > material.meltingPoint) && material.chargeMelted === 0) {
-      return 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
+      return 'The Charge Outlet Temperature is higher than the melting point, please enter proper percentage for charge melted.';
     } else if ((material.dischargeTemperature < material.meltingPoint) && material.chargeMelted > 0) {
-      return 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
+      return 'The Charge Outlet Temperature is lower than the melting point, the percentage for charge melted should be 0%.';
     } else {
       return null;
     }

@@ -208,7 +208,7 @@
       </div>
   
       <div class="form-group">
-        <label class="small" for="{{'insideTemp'+idString}}">Avg. Zone or Radiation Source Temp.</label>
+        <label class="small" for="{{'insideTemp'+idString}}">Average Inside Temperature</label>
         <div class="input-group">
           <input  name="{{'insideTemp_'+idString}}" type="number" step="10" class="form-control"
             formControlName="insideTemp" id="{{'insideTemp'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('insideTemp')"
@@ -223,7 +223,7 @@
       </div>
   
       <div class="form-group">
-        <label class="small" for="{{'ambientTemp'+idString}}">Ambient Temp.</label>
+        <label class="small" for="{{'ambientTemp'+idString}}">Ambient Temperature</label>
         <div class="input-group">
           <input  name="{{'ambientTemp_'+idString}}" type="number" step="10" class="form-control"
             formControlName="ambientTemp" id="{{'ambientTemp'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('ambientTemp')"
@@ -235,7 +235,7 @@
         *ngIf="openingLossesForm.controls.ambientTemp.invalid && !openingLossesForm.controls.ambientTemp.pristine">
         <span *ngIf="openingLossesForm.controls.ambientTemp.errors.required">Value required.</span>
         <span *ngIf="openingLossesForm.controls.ambientTemp.errors.max">Value can't be greater than
-          Zone/Radiation Source temperature ({{openingLossesForm.controls.ambientTemp.errors.max.max}}
+          Average Inside temperature ({{openingLossesForm.controls.ambientTemp.errors.max.max}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
           ).</span>
@@ -260,7 +260,7 @@
       </div>
   
       <div class="form-group">
-        <label class="small" for="{{'percentTimeOpen'+idString}}">% of Time Open</label>
+        <label class="small" for="{{'percentTimeOpen'+idString}}">Time Open</label>
         <div class="input-group" >
           <input  name="{{'percentTimeOpen_'+idString}}" type="number" step="1" min="0"
             max="100" class="form-control" formControlName="percentTimeOpen" id="{{'percentTimeOpen'+idString}}" onfocus="this.select();"

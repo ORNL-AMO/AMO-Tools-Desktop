@@ -370,7 +370,7 @@ export class OpeningService {
 
   checkTemperature(loss: OpeningLoss): string {
     if (loss.ambientTemperature > loss.insideTemperature) {
-      return 'Ambient Temperature cannot be greater than Average Zone Temperature';
+      return 'Ambient Temperature cannot be greater than Average Inside Temperature';
     } else {
       return null;
     }
