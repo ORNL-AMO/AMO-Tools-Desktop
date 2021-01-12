@@ -105,9 +105,9 @@ export class LiquidMaterialFormService {
 
   checkDischargeTemp(material: LiquidChargeMaterial): string {
     if ((material.dischargeTemperature > material.vaporizingTemperature) && material.percentVaporized === 0) {
-      return 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
+      return 'The Charge Outlet Temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
     } else if ((material.dischargeTemperature < material.vaporizingTemperature) && material.percentVaporized > 0) {
-      return 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
+      return 'The Charge Outlet Temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
     } else {
       return null;
     }
@@ -115,14 +115,14 @@ export class LiquidMaterialFormService {
 
   checkInletOverVaporizing(material: LiquidChargeMaterial): string {
     if (material.initialTemperature > material.vaporizingTemperature && material.percentVaporized <= 0) {
-      return "The initial temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.";
+      return "The Charge Inlet Temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.";
     } else {
       return null;
     }
   }
   checkOutletOverVaporizing(material: LiquidChargeMaterial): string {
     if (material.dischargeTemperature > material.vaporizingTemperature && material.percentVaporized <= 0) {
-      return "The discharge temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.";
+      return "The Charge Outlet Temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.";
     }
     else {
       return null;

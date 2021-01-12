@@ -415,7 +415,7 @@ export class ChargeMaterialService {
 
   checkInitialTemp(material: GasChargeMaterial | LiquidChargeMaterial | SolidChargeMaterial): string {
     if (material.initialTemperature > material.dischargeTemperature) {
-      return "Initial Temperature  (" + material.initialTemperature + ") cannot be greater than Outlet Temperature (" + material.dischargeTemperature + ")";
+      return "Charge Inlet Temperature  (" + material.initialTemperature + ") cannot be greater than Charge Outlet Temperature (" + material.dischargeTemperature + ")";
     }
     else {
       return null;
