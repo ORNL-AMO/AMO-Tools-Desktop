@@ -32,11 +32,11 @@ export class SolidMaterialFormComponent implements OnInit {
 
   chargeMaterialForm: FormGroup;
   warnings: SolidMaterialWarnings;
-  materialTypes: any;
+  materialTypes: Array<SolidLoadChargeMaterial>;
   showModal: boolean;
   lossResult: ChargeMaterialResult;
   chargeMaterialType: string;
-  
+
   idString: string;
   outputSubscription: Subscription;
 
@@ -44,11 +44,11 @@ export class SolidMaterialFormComponent implements OnInit {
   collapseMaterial: boolean = false;
   collapseMaterialSub: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService, 
-              private chargeMaterialService: ChargeMaterialService, 
-              private convertUnitsService: ConvertUnitsService,
-              private solidMaterialFormService: SolidMaterialFormService,
-              ) {}
+  constructor(private suiteDbService: SuiteDbService,
+    private chargeMaterialService: ChargeMaterialService,
+    private convertUnitsService: ConvertUnitsService,
+    private solidMaterialFormService: SolidMaterialFormService,
+  ) { }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -95,14 +95,14 @@ export class SolidMaterialFormComponent implements OnInit {
   initSubscriptions() {
     this.resetDataSub = this.chargeMaterialService.resetData.subscribe(value => {
       this.initForm();
-      });
+    });
     this.generateExampleSub = this.chargeMaterialService.generateExample.subscribe(value => {
       this.initForm();
     });
     this.outputSubscription = this.chargeMaterialService.output.subscribe(output => {
       this.setLossResult(output);
     });
-    this.collapseMaterialSub = this.chargeMaterialService.collapseMapping.subscribe((collapseMapping: {[index: number]: boolean }) => {
+    this.collapseMaterialSub = this.chargeMaterialService.collapseMapping.subscribe((collapseMapping: { [index: number]: boolean }) => {
       if (collapseMapping && collapseMapping[this.index] != undefined) {
         this.collapseMaterial = collapseMapping[this.index];
       }
@@ -153,19 +153,21 @@ export class SolidMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
-      selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
-      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
-      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+    let selectedMaterial: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (selectedMaterial) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
+        selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
+        selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
+        selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+      }
+      this.chargeMaterialForm.patchValue({
+        materialLatentHeatOfFusion: this.roundVal(selectedMaterial.latentHeat, 4),
+        materialMeltingPoint: this.roundVal(selectedMaterial.meltingPoint, 4),
+        materialHeatOfLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
+        materialSpecificHeatOfSolidMaterial: this.roundVal(selectedMaterial.specificHeatSolid, 4)
+      });
     }
-    this.chargeMaterialForm.patchValue({
-      materialLatentHeatOfFusion: this.roundVal(selectedMaterial.latentHeat, 4),
-      materialMeltingPoint: this.roundVal(selectedMaterial.meltingPoint, 4),
-      materialHeatOfLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
-      materialSpecificHeatOfSolidMaterial: this.roundVal(selectedMaterial.specificHeatSolid, 4)
-    });
     this.calculate();
   }
 
@@ -253,10 +255,10 @@ export class SolidMaterialFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
-      let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: SolidLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.chargeMaterialForm.patchValue({
-          materialId: newMaterial[0].id
+          materialId: newMaterial.id
         });
         this.setProperties();
       }

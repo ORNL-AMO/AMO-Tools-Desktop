@@ -74,13 +74,15 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
-    }
+    if (selectedMaterial) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
+      }
 
-    this.atmosphereLossForm.patchValue({
-      specificHeat: this.roundVal(selectedMaterial.specificHeat, 4)
-    });
+      this.atmosphereLossForm.patchValue({
+        specificHeat: this.roundVal(selectedMaterial.specificHeat, 4)
+      });
+    }
     this.save();
   }
 
@@ -198,10 +200,10 @@ export class AtmosphereLossesFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
-      let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: AtmosphereSpecificHeat = this.materialTypes.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.atmosphereLossForm.patchValue({
-          atmosphereGas: newMaterial[0].id
+          atmosphereGas: newMaterial.id
         });
         this.setProperties();
       }

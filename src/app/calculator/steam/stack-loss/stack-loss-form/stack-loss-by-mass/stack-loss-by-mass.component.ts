@@ -6,6 +6,7 @@ import { PhastService } from '../../../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { StackLossService } from '../../stack-loss.service';
+import { SolidLiquidFlueGasMaterial } from '../../../../../shared/models/materials';
 
 @Component({
   selector: 'app-stack-loss-by-mass',
@@ -27,7 +28,7 @@ export class StackLossByMassComponent implements OnInit {
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
 
-  options: any;
+  options: Array<SolidLiquidFlueGasMaterial>;
 
   calculationMethods: Array<string> = [
     'Excess Air',
@@ -41,9 +42,9 @@ export class StackLossByMassComponent implements OnInit {
   tempMin: number;
 
   constructor(private suiteDbService: SuiteDbService,
-              private phastService: PhastService, 
-              private convertUnitsService: ConvertUnitsService,
-              private stackLossService: StackLossService) { }
+    private phastService: PhastService,
+    private convertUnitsService: ConvertUnitsService,
+    private stackLossService: StackLossService) { }
 
 
   ngOnInit() {
@@ -156,16 +157,18 @@ export class StackLossByMassComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.stackLossForm.controls.gasTypeId.value);
-    this.stackLossForm.patchValue({
-      carbon: this.roundVal(tmpFlueGas.carbon, 4),
-      hydrogen: this.roundVal(tmpFlueGas.hydrogen, 4),
-      sulphur: this.roundVal(tmpFlueGas.sulphur, 4),
-      inertAsh: this.roundVal(tmpFlueGas.inertAsh, 4),
-      o2: this.roundVal(tmpFlueGas.o2, 4),
-      moisture: this.roundVal(tmpFlueGas.moisture, 4),
-      nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
-    });
+    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.stackLossForm.controls.gasTypeId.value);
+    if (tmpFlueGas) {
+      this.stackLossForm.patchValue({
+        carbon: this.roundVal(tmpFlueGas.carbon, 4),
+        hydrogen: this.roundVal(tmpFlueGas.hydrogen, 4),
+        sulphur: this.roundVal(tmpFlueGas.sulphur, 4),
+        inertAsh: this.roundVal(tmpFlueGas.inertAsh, 4),
+        o2: this.roundVal(tmpFlueGas.o2, 4),
+        moisture: this.roundVal(tmpFlueGas.moisture, 4),
+        nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
+      });
+    }
   }
   calculate() {
     this.checkStackLossTemp();

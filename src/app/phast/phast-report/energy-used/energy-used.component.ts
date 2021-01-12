@@ -9,6 +9,7 @@ import { PhastResultsService } from '../../phast-results.service';
 import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 @Component({
   selector: 'app-energy-used',
   templateUrl: './energy-used.component.html',
@@ -132,15 +133,19 @@ export class EnergyUsedComponent implements OnInit {
         this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings, true);
       }
     }
-    
+
     if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
-      let gas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
-      this.fuelHeatingValue = gas.heatingValue;
-      this.fuelName = gas.substance;
+      let gas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+      if (gas) {
+        this.fuelHeatingValue = gas.heatingValue;
+        this.fuelName = gas.substance;
+      }
     } else if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-      let gas = this.suiteDbService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
-      this.fuelHeatingValue = gas.heatingValue;
-      this.fuelName = gas.substance;
+      let gas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+      if (gas) {
+        this.fuelHeatingValue = gas.heatingValue;
+        this.fuelName = gas.substance;
+      }
     }
     this.fuelHeatingValue = this.convertResult(this.fuelHeatingValue, this.settings);
   }
