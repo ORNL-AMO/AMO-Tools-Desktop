@@ -47,6 +47,7 @@ export class OpeningFormComponent implements OnInit {
   idString: string;
   lossResult: OpeningLossResults;
   isEditingName: boolean;
+  canCalculateViewFactor: boolean;
 
   constructor(private openingFormService: OpeningFormService,
               private convertUnitsService: ConvertUnitsService,
@@ -68,6 +69,7 @@ export class OpeningFormComponent implements OnInit {
     } else {
       this.openingService.energySourceType.next(this.openingLossesForm.controls.energySourceType.value);
     }
+    this.checkCanCalculateViewFactor();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -141,6 +143,34 @@ export class OpeningFormComponent implements OnInit {
     }
   }
 
+  checkCanCalculateViewFactor() {
+    if (this.openingLossesForm.controls.openingType.value == 'Round' 
+      && (this.openingLossesForm.controls.numberOfOpenings.invalid
+      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+      this.canCalculateViewFactor = false;
+    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (or Square)' 
+      &&  (this.openingLossesForm.controls.numberOfOpenings.invalid 
+      || this.openingLossesForm.controls.heightOfOpening.invalid
+      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+      this.canCalculateViewFactor = false;
+    } else {
+      this.canCalculateViewFactor = true;
+    }
+  }
+
+  calculateViewFactor() {
+    this.calculate();
+    if (!this.canCalculateViewFactor) {
+      this.totalArea = 0.0;
+      return;
+    }
+    let vfInputs = this.openingService.getViewFactorInput(this.openingLossesForm);
+    let viewFactor = this.openingService.viewFactorCalculation(vfInputs, this.settings);
+    this.openingLossesForm.patchValue({
+      viewFactor: this.roundVal(viewFactor, 3)
+    });
+  }
+
   setEnergySource(energySourceType: string) {
     this.openingLossesForm.patchValue({
       energySourceType: energySourceType
@@ -183,7 +213,7 @@ export class OpeningFormComponent implements OnInit {
 
   calculate() {
     this.getArea();
-
+    this.checkCanCalculateViewFactor();
     this.openingLossesForm = this.openingFormService.setValidators(this.openingLossesForm);
     let currentOpeningLoss: OpeningLoss = this.openingFormService.getLossFromForm(this.openingLossesForm);
     this.openingService.updateDataArray(currentOpeningLoss, this.index, this.isBaseline);

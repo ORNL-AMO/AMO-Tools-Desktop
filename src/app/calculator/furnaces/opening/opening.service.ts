@@ -208,6 +208,10 @@ export class OpeningService {
     };
   }
 
+    viewFactorCalculation(input: any, settings: Settings): number {
+      return this.phastService.viewFactorCalculation(input, settings);
+    }
+
   initDefaultEmptyOutput() {
      let output: OpeningLossOutput = {
       baseline: {totalFuelCost: 0, totalFuelUse: 0, grossLoss: 0, losses: []},

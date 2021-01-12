@@ -36,6 +36,7 @@ export class OpeningLossesFormComponent implements OnInit {
 
   totalArea: number = 0.0;
   idString: string;
+  canCalculateViewFactor: boolean;
   constructor(private convertUnitsService: ConvertUnitsService,
     private openingLossesCompareService: OpeningLossesCompareService,
     private openingFormService: OpeningFormService,
@@ -52,6 +53,7 @@ export class OpeningLossesFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.checkCanCalculateViewFactor();
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -127,7 +129,36 @@ export class OpeningLossesFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
+  checkCanCalculateViewFactor() {
+    if (this.openingLossesForm.controls.openingType.value == 'Round' 
+      && (this.openingLossesForm.controls.numberOfOpenings.invalid
+      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+      this.canCalculateViewFactor = false;
+    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (or Square)' 
+      &&  (this.openingLossesForm.controls.numberOfOpenings.invalid 
+      || this.openingLossesForm.controls.heightOfOpening.invalid
+      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+      this.canCalculateViewFactor = false;
+    } else {
+      this.canCalculateViewFactor = true;
+    }
+  }
+
+  calculateViewFactor() {
+    this.save();
+    if (!this.canCalculateViewFactor) {
+      this.totalArea = 0.0;
+      return;
+    }
+    let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
+    let viewFactor = this.phastService.viewFactorCalculation(vfInputs, this.settings);
+    this.openingLossesForm.patchValue({
+      viewFactor: this.roundVal(viewFactor, 3)
+    });
+  }
+
   save() {
+    this.checkCanCalculateViewFactor();
     this.openingFormService.setAmbientTempValidators(this.openingLossesForm);
     this.calculate.emit(true);
     this.saveEmit.emit(true);
