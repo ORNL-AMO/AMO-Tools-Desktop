@@ -32,7 +32,7 @@ export class GasMaterialFormComponent implements OnInit {
   generateExampleSub: Subscription;
 
   chargeMaterialForm: FormGroup;
-  materialTypes: any;
+  materialTypes: Array<GasLoadChargeMaterial>;
   showModal: boolean;
 
   idString: string;
@@ -42,11 +42,11 @@ export class GasMaterialFormComponent implements OnInit {
   collapseMaterial: boolean = false;
   chargeMaterialType: string;
 
-  constructor(private suiteDbService: SuiteDbService, 
-              private chargeMaterialService: ChargeMaterialService, 
-              private convertUnitsService: ConvertUnitsService,
-              private gasMaterialFormService: GasMaterialFormService,
-              ) {}
+  constructor(private suiteDbService: SuiteDbService,
+    private chargeMaterialService: ChargeMaterialService,
+    private convertUnitsService: ConvertUnitsService,
+    private gasMaterialFormService: GasMaterialFormService,
+  ) { }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -70,7 +70,7 @@ export class GasMaterialFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
-        this.setFormState();
+      this.setFormState();
     }
     if (changes.index && !changes.index.firstChange) {
       let output: ChargeMaterialOutput = this.chargeMaterialService.output.getValue();
@@ -89,14 +89,14 @@ export class GasMaterialFormComponent implements OnInit {
   initSubscriptions() {
     this.resetDataSub = this.chargeMaterialService.resetData.subscribe(value => {
       this.initForm();
-      })
+    })
     this.generateExampleSub = this.chargeMaterialService.generateExample.subscribe(value => {
       this.initForm();
     });
     this.outputSubscription = this.chargeMaterialService.output.subscribe(output => {
       this.setLossResult(output);
     });
-    this.collapseMaterialSub = this.chargeMaterialService.collapseMapping.subscribe((collapseMapping: {[index: number]: boolean }) => {
+    this.collapseMaterialSub = this.chargeMaterialService.collapseMapping.subscribe((collapseMapping: { [index: number]: boolean }) => {
       if (collapseMapping && collapseMapping[this.index] != undefined) {
         this.collapseMaterial = collapseMapping[this.index];
       }
@@ -172,13 +172,15 @@ export class GasMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+    let selectedMaterial: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (selectedMaterial) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+      }
+      this.chargeMaterialForm.patchValue({
+        materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
+      });
     }
-    this.chargeMaterialForm.patchValue({
-      materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
-    });
     this.calculate();
   }
 
@@ -190,7 +192,7 @@ export class GasMaterialFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
       let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.chargeMaterialForm.patchValue({

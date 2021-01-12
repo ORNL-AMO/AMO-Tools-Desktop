@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
+import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { FlueGas, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
@@ -33,7 +34,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   byVolumeForm: FormGroup;
 
-  options: any;
+  options: Array<FlueGasMaterial>;
   calculationMethods: Array<string> = [
     'Excess Air',
     'Oxygen in Flue Gas'
@@ -43,10 +44,10 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   calcMethodExcessAir: boolean;
   warnings: FlueGasWarnings;
 
-  constructor(private flueGasService: FlueGasService, 
-              private flueGasFormService: FlueGasFormService,
-              private phastService: PhastService, 
-              private suiteDbService: SuiteDbService) {
+  constructor(private flueGasService: FlueGasService,
+    private flueGasFormService: FlueGasFormService,
+    private phastService: PhastService,
+    private suiteDbService: SuiteDbService) {
   }
 
   ngOnInit() {
@@ -68,7 +69,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
       this.initForm();
-      })
+    })
     this.generateExampleSub = this.flueGasService.generateExample.subscribe(value => {
       this.initForm();
     })
@@ -116,7 +117,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
       this.calcMethodExcessAir = false;
     }
   }
-  
+
   calcExcessAir() {
     let input = {
       CH4: this.byVolumeForm.controls.CH4.value,
@@ -163,7 +164,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     }
     this.calculate();
   }
-  
+
   checkWarnings() {
     let tmpLoss: FlueGasByVolume = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm).flueGasByVolume;
     this.warnings = this.flueGasFormService.checkFlueGasByVolumeWarnings(tmpLoss);
@@ -203,20 +204,22 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   }
 
   setProperties() {
-    let tmpFlueGas = this.suiteDbService.selectGasFlueGasMaterialById(this.byVolumeForm.controls.gasTypeId.value);
-    this.byVolumeForm.patchValue({
-      CH4: this.roundVal(tmpFlueGas.CH4, 4),
-      C2H6: this.roundVal(tmpFlueGas.C2H6, 4),
-      N2: this.roundVal(tmpFlueGas.N2, 4),
-      H2: this.roundVal(tmpFlueGas.H2, 4),
-      C3H8: this.roundVal(tmpFlueGas.C3H8, 4),
-      C4H10_CnH2n: this.roundVal(tmpFlueGas.C4H10_CnH2n, 4),
-      H2O: this.roundVal(tmpFlueGas.H2O, 4),
-      CO: this.roundVal(tmpFlueGas.CO, 4),
-      CO2: this.roundVal(tmpFlueGas.CO2, 4),
-      SO2: this.roundVal(tmpFlueGas.SO2, 4),
-      O2: this.roundVal(tmpFlueGas.O2, 4)
-    });
+    let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.byVolumeForm.controls.gasTypeId.value);
+    if (tmpFlueGas) {
+      this.byVolumeForm.patchValue({
+        CH4: this.roundVal(tmpFlueGas.CH4, 4),
+        C2H6: this.roundVal(tmpFlueGas.C2H6, 4),
+        N2: this.roundVal(tmpFlueGas.N2, 4),
+        H2: this.roundVal(tmpFlueGas.H2, 4),
+        C3H8: this.roundVal(tmpFlueGas.C3H8, 4),
+        C4H10_CnH2n: this.roundVal(tmpFlueGas.C4H10_CnH2n, 4),
+        H2O: this.roundVal(tmpFlueGas.H2O, 4),
+        CO: this.roundVal(tmpFlueGas.CO, 4),
+        CO2: this.roundVal(tmpFlueGas.CO2, 4),
+        SO2: this.roundVal(tmpFlueGas.SO2, 4),
+        O2: this.roundVal(tmpFlueGas.O2, 4)
+      });
+    }
     this.calculate();
   }
   roundVal(val: number, digits: number) {
@@ -231,7 +234,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.options = this.suiteDbService.selectGasFlueGasMaterials();
       let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.byVolumeForm.patchValue({

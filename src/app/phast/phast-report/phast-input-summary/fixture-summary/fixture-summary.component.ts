@@ -21,7 +21,7 @@ export class FixtureSummaryComponent implements OnInit {
   numLosses: number = 0;
   collapse: boolean = true;
   lossData: Array<any>;
-  materialOptions: Array<any>;
+  materialOptions: Array<SolidLoadChargeMaterial>;
 
   materialNameDiff: Array<boolean>;
   specificHeatDiff: Array<boolean>;
@@ -107,7 +107,6 @@ export class FixtureSummaryComponent implements OnInit {
   }
 
   checkSpecificHeat(loss: FixtureLoss) {
-    console.log(loss);
     let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(loss.materialName);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
