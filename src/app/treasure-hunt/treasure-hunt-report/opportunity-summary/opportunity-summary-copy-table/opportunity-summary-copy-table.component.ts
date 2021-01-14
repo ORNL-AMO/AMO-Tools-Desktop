@@ -59,8 +59,8 @@ export class OpportunitySummaryCopyTableComponent implements OnInit {
         total = total + oCost.cost;
       });
     }
-    if (oppCost && oppCost.additionalAnnualSavings) {
-      total = total - oppCost.additionalAnnualSavings.cost
+    if (oppCost && oppCost.additionalSavings) {
+      total = total - oppCost.additionalSavings.cost
     }
     return total;
   }

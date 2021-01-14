@@ -8,7 +8,6 @@ import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { SortCardsService } from '../opportunity-cards/sort-cards.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { TreasureHunt } from '../../../shared/models/treasure-hunt';
-import { getInterpolationArgsLength } from '@angular/compiler/src/render3/view/util';
 
 @Component({
   selector: 'app-summary-card',
