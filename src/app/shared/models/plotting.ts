@@ -14,6 +14,7 @@ export interface SimpleChart {
         grid?: any,
         barmode?: string,
         height?: number,
+        width?: number,
         legend?: {
             orientation: string,
             font?: {

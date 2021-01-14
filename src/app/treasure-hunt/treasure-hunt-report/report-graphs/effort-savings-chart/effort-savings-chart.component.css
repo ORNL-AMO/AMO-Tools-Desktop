@@ -54,3 +54,8 @@
     height: 0;
     width: 0;
   }
+
+
+  .max-width-50{
+    max-width: 50px;
+  }
