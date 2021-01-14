@@ -52,15 +52,16 @@ export class OpportunitySummaryComponent implements OnInit {
   }
 
   getOtherCost(oppCost: OpportunityCost): number {
+    let total: number = 0;
     if (oppCost && oppCost.otherCosts && oppCost.otherCosts.length != 0) {
-      let total: number = 0;
       oppCost.otherCosts.forEach(oCost => {
         total = total + oCost.cost;
-      })
-      return total;
-    } else {
-      return 0;
+      });
     }
+    if (oppCost && oppCost.additionalAnnualSavings) {
+      total = total - oppCost.additionalAnnualSavings.cost
+    }
+    return total;
   }
 
   getEngineeringCost(oppCost: OpportunityCost): number {
