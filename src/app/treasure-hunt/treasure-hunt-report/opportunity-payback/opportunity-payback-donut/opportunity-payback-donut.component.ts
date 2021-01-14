@@ -81,6 +81,8 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       hoverformat: '.2r',
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
       hoverinfo: 'label+percent',
+      direction: "clockwise",
+      rotation: 45
     }];
     var layout = {
       width: 900,
@@ -94,7 +96,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
     var modebarBtns = {
       modeBarButtonsToRemove: ['hoverClosestPie'],
       displaylogo: false,
-      displayModeBar: true
+      displayModeBar: false
     };
     Plotly.react(this.paybackDonutChart.nativeElement, data, layout, modebarBtns);
   }
