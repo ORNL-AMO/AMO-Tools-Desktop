@@ -5,6 +5,20 @@
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="calc-img"
+                        [routerLink]="['/calculators/air-heating']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/air-heating']">Air Heating using Flue Gas</a>
+                <p>
+                    This calculator can be used to estimate maximum air flow that can be heated by using exhaust gas heat of flue gases from a furnace, oven, or boiler
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="calc-img"
                         [routerLink]="['/calculators/flue-gas']">
                 </div>
             </div>

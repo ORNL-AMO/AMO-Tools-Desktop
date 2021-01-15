@@ -1,0 +1,81 @@
+<div class="d-flex h-100 phast modify-conditions standalone-calculator" #contentContainer>
+	<div class="d-flex flex-column modification w-50 mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
+		<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
+		<div class="d-flex pl-2 align-items-center">
+			<div class="text-center">
+			<img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="ico-size2 icon">
+			</div>
+			<div class="pl-2">
+			<h3>Air Heating using Flue Gas</h3>
+			</div>
+			</div>
+		</div>
+    
+		<div class="d-flex flex-column m-4">
+			<app-air-heating-form [settings]="settings" [inModal]="isModalOpen"></app-air-heating-form>	
+			 <div *ngIf="output" class="d-flex flex-column my-2">
+				<div class="form-group m-0">
+				  <label class="bold">Heat Transfered to Cold Air</label>
+				  <div *ngIf="output.hxColdAir" class="text-center bold small">
+					{{output.hxColdAir | number:'1.0-0'}}
+					<span class="input-group-addon">
+						<span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+						<span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+					</span>
+				  </div>
+				  <div *ngIf="!output.hxColdAir" class="text-center bold small">
+					&mdash; &mdash;
+				  </div>
+				</div>
+				<div class="form-group m-0">
+				  <label class="bold">Exhaust Gas Temperature Leaving Heat Exchanger</label>
+				  <div *ngIf="output.hxOutletExhaust" class="text-center bold small">
+					{{output.hxOutletExhaust | number:'1.0-0'}} 
+					<span class="input-group-addon">
+						<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+       					<span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+					</span>
+				  </div>
+				  <div *ngIf="!output.hxOutletExhaust" class="text-center bold small">
+					&mdash; &mdash;
+				  </div>
+				</div>
+				<div class="form-group m-0">
+					<label class="bold">Annual Energy Savings</label>
+					<div *ngIf="output.energySavings" class="text-center bold small">
+					  {{output.energySavings | currency:'USD':'symbol':'1.0-0'}}
+					</div>
+					<div *ngIf="!output.energySavings" class="text-center bold small">
+					  &mdash; &mdash;
+					</div>
+				  </div>
+			  </div>
+
+			  <div class="w-100 mt-3 justify content-center btn-group btn-group-sm">
+				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
+				  (click)="btnResetData()">
+				  Reset Data
+				</button>
+				<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+				  (click)="btnGenerateExample()">
+				  Generate Example
+				</button>
+			  </div>
+      		</div>
+		</div>
+
+		<div class="d-flex flex-column w-50 mh-100 scroll-item">
+			<div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" 
+					[ngStyle]="{'height.px': headerHeight}" [ngClass]="{'modal-open': isModalOpen == true}">
+			  <div class="flex-fill panel-tab-item h-100 active">
+				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+				  <div>Help</div>
+				</a>
+			  </div>
+			</div>
+			<div class="d-flex">
+				<app-air-heating-help *ngIf="tabSelect == 'help'" [settings]="settings" ></app-air-heating-help>
+			</div>
+		  </div>
+
+  </div>

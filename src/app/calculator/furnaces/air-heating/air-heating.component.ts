@@ -1,0 +1,98 @@
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { AirHeatingOutput } from '../../../shared/models/phast/airHeating';
+import { Settings } from '../../../shared/models/settings';
+import { AirHeatingService } from './air-heating.service';
+
+@Component({
+  selector: 'app-air-heating',
+  templateUrl: './air-heating.component.html',
+  styleUrls: ['./air-heating.component.css']
+})
+export class AirHeatingComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  
+  airFlowConversionInputSub: Subscription;
+  modalSubscription: Subscription;
+  outputSubscription: Subscription;
+  
+  headerHeight: number;
+  isModalOpen: boolean;
+  tabSelect: string = 'help';
+  output: AirHeatingOutput;
+  
+  constructor(private airHeatingService: AirHeatingService,
+              private settingsDbService: SettingsDbService) { }
+
+  ngOnInit(): void {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    let existingInputs = this.airHeatingService.airHeatingInput.getValue();
+    if(!existingInputs) {
+      this.airHeatingService.initDefaultEmptyInputs();
+      this.airHeatingService.initDefaultEmptyOutputs();
+    }
+    this.initSubscriptions();
+  }
+
+  ngOnDestroy() {
+    this.airFlowConversionInputSub.unsubscribe();
+    this.outputSubscription.unsubscribe();
+    this.modalSubscription.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  initSubscriptions() {
+    this.airFlowConversionInputSub = this.airHeatingService.airHeatingInput.subscribe(value => {
+      this.calculate();
+    });
+
+    this.outputSubscription = this.airHeatingService.airHeatingOutput.subscribe(value => {
+      this.output = value;
+    });
+
+    this.modalSubscription = this.airHeatingService.modalOpen.subscribe(modalOpen => {
+      this.isModalOpen = modalOpen;
+    });
+  }
+
+  calculate() {
+    this.airHeatingService.calculate(this.settings);
+  }
+
+  btnResetData() {
+    this.airHeatingService.initDefaultEmptyInputs();
+    this.airHeatingService.resetData.next(true);
+  }
+
+  btnGenerateExample() {
+    this.airHeatingService.generateExampleData(this.settings);
+    this.airHeatingService.generateExample.next(true);
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
+
+}
