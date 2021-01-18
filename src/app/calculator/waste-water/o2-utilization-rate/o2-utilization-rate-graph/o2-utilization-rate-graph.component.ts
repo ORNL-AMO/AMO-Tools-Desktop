@@ -35,15 +35,42 @@ export class O2UtilizationRateGraphComponent implements OnInit {
   drawGraph() {
     if (this.o2UtilizationChart) {
       Plotly.purge(this.o2UtilizationChart.nativeElement);
-      var trace1 = {
+      let trace = {
         x: this.inputDataPoints.map(dataPoint => { return dataPoint.time }),
         y: this.inputDataPoints.map(dataPoint => { return dataPoint.dissolvedOxygen }),
-        type: 'scatter'
+        type: 'scatter',
       };
 
-      var data = [trace1];
-
-      Plotly.newPlot(this.o2UtilizationChart.nativeElement, data);
+      let layout = {
+        xaxis: {
+          // autorange: false,
+          // type: 'linear',
+          // showgrid: showGrid,
+          title: {
+            text: "Time (seconds)"
+          },
+          rangemode: 'tozero'
+        },
+        yaxis: {
+          // autorange: false,
+          // showgrid: showGrid,
+          title: {
+            text: "Dissolved Oxygen (mg/L)"
+          },
+          rangemode: 'tozero'
+        },
+        margin: {
+          t: 50,
+          r: 50
+        }
+      };
+      let config = {
+        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true
+      }
+      Plotly.newPlot(this.o2UtilizationChart.nativeElement, [trace], layout, config);
     }
   }
 
