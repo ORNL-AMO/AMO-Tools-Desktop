@@ -57,7 +57,7 @@ export class O2UtilizationRateGraphComponent implements OnInit {
             text: "Time (seconds)"
           },
           rangemode: 'tozero',
-          tickvals: [0, 10, 20, 30, 40, 50, 60]
+          tickvals: this.inputDataPoints.map(dataPoint => { return dataPoint.time })
         },
         yaxis: {
           // autorange: false,

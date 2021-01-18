@@ -8,8 +8,7 @@ import { O2UtilizationRateGraphComponent } from './o2-utilization-rate-graph/o2-
 import { FormsModule } from '@angular/forms';
 import { O2UtilizationRateResultsComponent } from './o2-utilization-rate-results/o2-utilization-rate-results.component';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
-
-
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +21,8 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
   imports: [
     CommonModule,
     FormsModule,
-    SimpleTooltipModule
+    SimpleTooltipModule,
+    ExportableResultsTableModule
   ],
   providers: [
     O2UtilizationRateService

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { O2UtilizationRateService } from '../o2-utilization-rate.service';
 import * as regression from 'regression';
@@ -10,10 +10,12 @@ import * as regression from 'regression';
 })
 export class O2UtilizationRateResultsComponent implements OnInit {
 
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   inputDataPointsSub: Subscription;
   r2: number;
   oxygenUtilizationRate: number;
   regressionEquation: string;
+  copyTableString: string;
   constructor(private o2UtilizationRateService: O2UtilizationRateService) { }
 
   ngOnInit(): void {
@@ -28,5 +30,10 @@ export class O2UtilizationRateResultsComponent implements OnInit {
 
   ngOnDestroy() {
     this.inputDataPointsSub.unsubscribe();
+  }
+
+
+  updateTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }
