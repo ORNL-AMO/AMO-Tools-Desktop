@@ -36,7 +36,9 @@ export class O2UtilizationRateGraphComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.drawGraph();
+    setTimeout(() => {
+      this.drawGraph();      
+    }, 100)
   }
 
   drawGraph() {

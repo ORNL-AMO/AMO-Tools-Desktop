@@ -136,6 +136,9 @@
     border-bottom: #F39C12 solid 2px;
  }
   
+ .waste-water .header{
+    border-bottom: #003087 solid 2px;
+}
 
 .general .btn-secondary:not([disabled]):not(.disabled).active{
     background: #145A32;
@@ -171,6 +174,12 @@
 
 .treasure-hunt .btn-secondary:not([disabled]):not(.disabled).active{
     background-origin: #2E4053;
+    transition: all .5s ease-in-out;
+    color: white;
+}
+
+.waste-water .btn-secondary:not([disabled]):not(.disabled).active{
+    background-origin: #003087;
     transition: all .5s ease-in-out;
     color: white;
 }
@@ -303,6 +312,10 @@
 
 .motor-inventory .group-label{
     border-bottom: #84b641 solid 2px;
+}
+
+.waste-water .group-label{
+    border-bottom: #003087 solid 2px;
 }
 
 .loss-label{
@@ -472,5 +485,10 @@
 
     .motor-inventory .scroll-item::-webkit-scrollbar-thumb{
         background-color: #84b641;
+        outline: 1px solid slategrey;
+    }
+
+    .waste-water .scroll-item::-webkit-scrollbar-thumb{
+        background-color: #003087;
         outline: 1px solid slategrey;
     }
