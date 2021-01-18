@@ -9,6 +9,9 @@ import { Settings } from '../../../../shared/models/settings';
 import { OpeningFormService } from '../opening-form.service';
 import { OpeningService } from '../opening.service';
 
+import * as _ from 'lodash';
+
+
 @Component({
   selector: 'app-opening-form',
   templateUrl: './opening-form.component.html',
@@ -135,6 +138,7 @@ export class OpeningFormComponent implements OnInit {
     } else {
       this.openingLossesForm.enable();
     }
+    // this.checkCanCalculateViewFactor();
 
     if (this.index > 0) {
       this.openingLossesForm.controls.hoursPerYear.disable();
@@ -144,14 +148,19 @@ export class OpeningFormComponent implements OnInit {
   }
 
   checkCanCalculateViewFactor() {
-    if (this.openingLossesForm.controls.openingType.value == 'Round' 
-      && (this.openingLossesForm.controls.numberOfOpenings.invalid
-      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+    // set copied form enabled to read invalid controls
+    let formCopy: FormGroup = _.clone(this.openingLossesForm);
+    formCopy.enable();
+    if (formCopy.controls.openingType.value == 'Round' 
+      && (formCopy.controls.numberOfOpenings.invalid
+      || formCopy.controls.lengthOfOpening.invalid
+      )) {
       this.canCalculateViewFactor = false;
-    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (or Square)' 
-      &&  (this.openingLossesForm.controls.numberOfOpenings.invalid 
-      || this.openingLossesForm.controls.heightOfOpening.invalid
-      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+    } else if (formCopy.controls.openingType.value == 'Rectangular (or Square)' 
+      &&  (formCopy.controls.numberOfOpenings.invalid 
+      || formCopy.controls.heightOfOpening.invalid
+      || formCopy.controls.lengthOfOpening.invalid
+      )) {
       this.canCalculateViewFactor = false;
     } else {
       this.canCalculateViewFactor = true;
