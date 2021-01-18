@@ -20,7 +20,6 @@ export class O2UtilizationRateResultsComponent implements OnInit {
     this.inputDataPointsSub = this.o2UtilizationRateService.inputDataPoints.subscribe(inputDataPoints => {
       let regressionData: Array<[number, number]> = inputDataPoints.map(dataPoint => { return [dataPoint.time, dataPoint.dissolvedOxygen] });
       let regressionResult = regression.linear(regressionData, { precision: 5 });
-      console.log(regressionResult);
       this.r2 = regressionResult.r2;
       this.oxygenUtilizationRate = regressionResult.equation[0] * (-3600);
       this.regressionEquation = regressionResult.string;
