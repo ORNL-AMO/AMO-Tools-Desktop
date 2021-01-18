@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { O2UtilizationDataPoints, O2UtilizationRateService } from './o2-utilization-rate.service';
 
 @Component({
   selector: 'app-o2-utilization-rate',
@@ -20,7 +21,7 @@ export class O2UtilizationRateComponent implements OnInit {
 
   tabSelect: string = 'help';
 
-  constructor(private settingsDbService: SettingsDbService) { }
+  constructor(private settingsDbService: SettingsDbService, private o2UtilizationRateService: O2UtilizationRateService) { }
 
   ngOnInit(): void {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -36,11 +37,13 @@ export class O2UtilizationRateComponent implements OnInit {
   }
 
   btnGenerateExample() {
-
+    let exampleData: Array<O2UtilizationDataPoints> = this.o2UtilizationRateService.getExampleData();
+    this.o2UtilizationRateService.inputDataPoints.next(exampleData);
   }
 
   btnResetData() {
-
+    let initialData: Array<O2UtilizationDataPoints> = this.o2UtilizationRateService.getInitialDataPoints();
+    this.o2UtilizationRateService.inputDataPoints.next(initialData);
   }
 
   setTab(str: string) {
