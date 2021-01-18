@@ -7,6 +7,7 @@ import { O2UtilizationRateHelpComponent } from './o2-utilization-rate-help/o2-ut
 import { O2UtilizationRateGraphComponent } from './o2-utilization-rate-graph/o2-utilization-rate-graph.component';
 import { FormsModule } from '@angular/forms';
 import { O2UtilizationRateResultsComponent } from './o2-utilization-rate-results/o2-utilization-rate-results.component';
+import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
 
 
@@ -20,7 +21,8 @@ import { O2UtilizationRateResultsComponent } from './o2-utilization-rate-results
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    SimpleTooltipModule
   ],
   providers: [
     O2UtilizationRateService

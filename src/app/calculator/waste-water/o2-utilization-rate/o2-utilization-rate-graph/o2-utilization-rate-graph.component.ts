@@ -14,7 +14,14 @@ export class O2UtilizationRateGraphComponent implements OnInit {
   @ViewChild("o2UtilizationChart", { static: false }) o2UtilizationChart: ElementRef;
   inputDataPoints: Array<O2UtilizationDataPoints>;
   inputDataPointsSub: Subscription;
-
+  hoverBtnGridLines: boolean = false;
+  displayGridLinesTooltip: boolean = false;
+  hoverBtnExpand: boolean = false;
+  displayExpandTooltip: boolean = false;
+  hoverBtnCollapse: boolean = false;
+  displayCollapseTooltip: boolean = false;
+  expanded: boolean = false;
+  showGridLines: boolean = true;
   constructor(private o2UtilizationRateService: O2UtilizationRateService) { }
 
   ngOnInit(): void {
@@ -45,15 +52,16 @@ export class O2UtilizationRateGraphComponent implements OnInit {
         xaxis: {
           // autorange: false,
           // type: 'linear',
-          // showgrid: showGrid,
+          showgrid: this.showGridLines,
           title: {
             text: "Time (seconds)"
           },
-          rangemode: 'tozero'
+          rangemode: 'tozero',
+          tickvals: [0, 10, 20, 30, 40, 50, 60]
         },
         yaxis: {
           // autorange: false,
-          // showgrid: showGrid,
+          showgrid: this.showGridLines,
           title: {
             text: "Dissolved Oxygen (mg/L)"
           },
@@ -72,6 +80,88 @@ export class O2UtilizationRateGraphComponent implements OnInit {
       }
       Plotly.newPlot(this.o2UtilizationChart.nativeElement, [trace], layout, config);
     }
+  }
+
+  
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.drawGraph();
+    }, 100);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.drawGraph();
+    }, 100);
+  }
+  
+
+  hideTooltip(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      this.hoverBtnExpand = false;
+      this.displayExpandTooltip = false;
+    }
+    else if (btnType === 'btnCollapseChart') {
+      this.hoverBtnCollapse = false;
+      this.displayCollapseTooltip = false;
+    }
+    else if (btnType === 'btnGridLines') {
+      this.hoverBtnGridLines = false;
+      this.displayGridLinesTooltip = false;
+    }
+  }
+
+  initTooltip(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType === 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
+    }
+    else if (btnType === 'btnGridLines') {
+      this.hoverBtnGridLines = true;
+    }
+    setTimeout(() => {
+      this.checkHover(btnType);
+    }, 200);
+  }
+
+  checkHover(btnType: string) {
+    if (btnType === 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
+      }
+      else {
+        this.displayExpandTooltip = false;
+      }
+    }
+    else if (btnType === 'btnGridLines') {
+      if (this.hoverBtnGridLines) {
+        this.displayGridLinesTooltip = true;
+      }
+      else {
+        this.displayGridLinesTooltip = false;
+      }
+    }
+    else if (btnType === 'btnCollapseChart') {
+      if (this.hoverBtnCollapse) {
+        this.displayCollapseTooltip = true;
+      }
+      else {
+        this.displayCollapseTooltip = false;
+      }
+    }
+  }
+
+  toggleGrid() {
+    this.showGridLines = !this.showGridLines;
+    this.drawGraph();
   }
 
 }
