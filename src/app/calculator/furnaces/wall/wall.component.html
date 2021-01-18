@@ -83,7 +83,7 @@
   
 		<!-- help panel -->
 		<div class="col-4 p-0 help-panel">
-		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
+		  <div class="d-flex flex-column mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}" [ngStyle]="{'height.px': containerHeight}">
 			<div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
 				<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
 				  <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
@@ -105,7 +105,7 @@
 			</div>
 		  </div>
 		</div>
-  
+
 	  </div>
 	</div>
   </div>
