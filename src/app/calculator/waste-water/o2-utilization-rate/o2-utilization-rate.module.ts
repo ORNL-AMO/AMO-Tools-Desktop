@@ -6,6 +6,7 @@ import { O2UtilizationRateFormComponent } from './o2-utilization-rate-form/o2-ut
 import { O2UtilizationRateHelpComponent } from './o2-utilization-rate-help/o2-utilization-rate-help.component';
 import { O2UtilizationRateGraphComponent } from './o2-utilization-rate-graph/o2-utilization-rate-graph.component';
 import { FormsModule } from '@angular/forms';
+import { O2UtilizationRateResultsComponent } from './o2-utilization-rate-results/o2-utilization-rate-results.component';
 
 
 
@@ -14,7 +15,8 @@ import { FormsModule } from '@angular/forms';
     O2UtilizationRateComponent,
     O2UtilizationRateFormComponent,
     O2UtilizationRateHelpComponent,
-    O2UtilizationRateGraphComponent
+    O2UtilizationRateGraphComponent,
+    O2UtilizationRateResultsComponent
   ],
   imports: [
     CommonModule,

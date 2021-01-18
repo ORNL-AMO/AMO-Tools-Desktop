@@ -29,7 +29,6 @@ export class O2UtilizationRateComponent implements OnInit {
     }
   }
 
-
   resizeTabs() {
     if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

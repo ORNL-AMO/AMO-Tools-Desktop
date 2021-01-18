@@ -38,7 +38,8 @@
         <div class="d-flex w-100" id="motorPerformanceGraph">
             <app-o2-utilization-rate-help *ngIf="tabSelect == 'help'"></app-o2-utilization-rate-help>
             <div class="d-flex flex-column w-100 align-items-center pt-4 p-3" *ngIf="tabSelect == 'results'">
-                <app-o2-utilization-rate-graph></app-o2-utilization-rate-graph>
+                <app-o2-utilization-rate-graph class="w-100"></app-o2-utilization-rate-graph>
+                <app-o2-utilization-rate-results class="w-100"></app-o2-utilization-rate-results>
             </div>
         </div>
     </div>
