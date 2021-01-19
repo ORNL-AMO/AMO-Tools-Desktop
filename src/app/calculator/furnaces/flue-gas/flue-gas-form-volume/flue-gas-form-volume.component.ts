@@ -136,7 +136,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     };
 
     if (!this.calcMethodExcessAir) {
-      if (this.byVolumeForm.controls.o2InFlueGas.status === 'VALID') {
+      if (this.byVolumeForm.controls.o2InFlueGas.status !== 'INVALID') {
         this.calculationExcessAir = this.phastService.flueGasCalculateExcessAir(input);
         this.byVolumeForm.patchValue({
           excessAirPercentage: this.calculationExcessAir,
@@ -150,7 +150,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     }
 
     if (this.calcMethodExcessAir) {
-      if (this.byVolumeForm.controls.excessAirPercentage.status === 'VALID') {
+      if (this.byVolumeForm.controls.excessAirPercentage.status !== 'INVALID') {
         this.calculationFlueGasO2 = this.phastService.flueGasCalculateO2(input);
         this.byVolumeForm.patchValue({
           o2InFlueGas: this.calculationFlueGasO2,

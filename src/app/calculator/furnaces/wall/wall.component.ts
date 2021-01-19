@@ -107,8 +107,8 @@ export class WallComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.wallService.generateExampleData(this.settings);
     this.modificationExists = true;
+    this.wallService.generateExampleData(this.settings);
   }
 
   setBaselineSelected() {

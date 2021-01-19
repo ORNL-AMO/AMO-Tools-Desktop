@@ -9,6 +9,9 @@ import { Settings } from '../../../../shared/models/settings';
 import { OpeningFormService } from '../opening-form.service';
 import { OpeningService } from '../opening.service';
 
+import * as _ from 'lodash';
+
+
 @Component({
   selector: 'app-opening-form',
   templateUrl: './opening-form.component.html',
@@ -77,6 +80,8 @@ export class OpeningFormComponent implements OnInit {
       this.setFormState();
     }
     if (changes.index && !changes.index.firstChange) {
+      this.checkEnergySourceSub();
+      this.setFormState();
       let output: OpeningLossOutput = this.openingService.output.getValue();
       this.setLossResult(output);
     }
@@ -113,6 +118,15 @@ export class OpeningFormComponent implements OnInit {
     }
   }
 
+  checkEnergySourceSub() {
+    let isCurrentlySubscribed = this.trackingEnergySource;
+    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
+
+    if (!this.trackingEnergySource && isCurrentlySubscribed) {
+      this.energySourceTypeSub.unsubscribe();
+    }
+  }
+
   setLossResult(output: OpeningLossOutput) {
     if (this.isBaseline) {
       this.lossResult = output.baseline.losses[this.index];
@@ -135,27 +149,37 @@ export class OpeningFormComponent implements OnInit {
     } else {
       this.openingLossesForm.enable();
     }
-
-    if (this.index > 0) {
-      this.openingLossesForm.controls.hoursPerYear.disable();
-      this.openingLossesForm.controls.fuelCost.disable();
-      this.openingLossesForm.controls.availableHeat.disable();
-    }
   }
 
   checkCanCalculateViewFactor() {
-    if (this.openingLossesForm.controls.openingType.value == 'Round' 
-      && (this.openingLossesForm.controls.numberOfOpenings.invalid
-      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+    let form: FormGroup = this.openingLossesForm;
+    if (!this.selected) {
+      form = this.getReadOnlyForm();
+    }
+
+    if (form.controls.openingType.value == 'Round' 
+      && (form.controls.numberOfOpenings.invalid
+      || form.controls.lengthOfOpening.invalid
+      )) {
       this.canCalculateViewFactor = false;
-    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (or Square)' 
-      &&  (this.openingLossesForm.controls.numberOfOpenings.invalid 
-      || this.openingLossesForm.controls.heightOfOpening.invalid
-      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+    } else if (form.controls.openingType.value == 'Rectangular (or Square)' 
+      &&  (form.controls.numberOfOpenings.invalid 
+      || form.controls.heightOfOpening.invalid
+      || form.controls.lengthOfOpening.invalid
+      )) {
       this.canCalculateViewFactor = false;
     } else {
       this.canCalculateViewFactor = true;
     }
+  }
+
+  getReadOnlyForm(): FormGroup {
+    let formCopy: FormGroup = _.cloneDeep(this.openingLossesForm);
+    // enable to read invalid controls
+    formCopy.enable();
+    // cloneDeep triggers valueChanges/enabled on form
+    this.openingLossesForm.disable();
+    return formCopy;
   }
 
   calculateViewFactor() {
@@ -233,7 +257,9 @@ export class OpeningFormComponent implements OnInit {
     if (this.openingLossesForm.controls.numberOfOpenings.valid && this.openingLossesForm.controls.lengthOfOpening.valid  && this.openingLossesForm.controls.heightOfOpening.valid) {
       this.totalArea = 0.0;
       if (this.openingLossesForm.controls.openingType.value === 'Round') {
-          this.openingLossesForm.controls.heightOfOpening.setValue(0);
+          this.openingLossesForm.patchValue({
+            heightOfOpening: 0
+          });
           //let radiusFeet = (radiusInches * .08333333) / 2;
           let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value;
           let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit) / 2;

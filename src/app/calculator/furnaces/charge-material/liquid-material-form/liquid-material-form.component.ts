@@ -123,15 +123,17 @@ export class LiquidMaterialFormComponent implements OnInit {
       }
     }
 
-    if (updatedChargeMaterialData && updatedChargeMaterialData.liquidChargeMaterial) {
-      this.chargeMaterialForm = this.liquidMaterialFormService.getLiquidChargeMaterialForm(updatedChargeMaterialData, false);
-    } else {
-      this.chargeMaterialForm = this.liquidMaterialFormService.initLiquidForm();
-    }
+    if (updatedChargeMaterialData && updatedChargeMaterialData.chargeMaterialType == 'Liquid') {
+      if (updatedChargeMaterialData && updatedChargeMaterialData.liquidChargeMaterial) {
+        this.chargeMaterialForm = this.liquidMaterialFormService.getLiquidChargeMaterialForm(updatedChargeMaterialData, false);
+      } else {
+        this.chargeMaterialForm = this.liquidMaterialFormService.initLiquidForm();
+      }
 
-    this.checkWarnings();
-    this.calculate();
-    this.setFormState();
+      this.checkWarnings();
+      this.calculate();
+      this.setFormState();
+    }
   }
 
   setProperties() {

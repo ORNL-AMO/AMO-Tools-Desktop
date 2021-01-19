@@ -189,7 +189,7 @@
       </div>
   
       <div class="form-group">
-        <label class="small" for="{{'viewFactor'+idString}}" aria-describedby="viewFactorHelp">
+        <label class="small" for="{{'viewFactor'+idString}}" aria-describedby="viewFactorHelp" [ngStyle]="{'padding-bottom': !canCalculateViewFactor? '17px': '0'}">
           View Factor
           <a class="form-text click-link small" 
           *ngIf="canCalculateViewFactor"

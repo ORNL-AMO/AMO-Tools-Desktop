@@ -129,15 +129,16 @@ export class SolidMaterialFormComponent implements OnInit {
       }
     }
 
-    if (updatedChargeMaterialData && updatedChargeMaterialData.solidChargeMaterial) {
-      this.chargeMaterialForm = this.solidMaterialFormService.getSolidChargeMaterialForm(updatedChargeMaterialData, false);
-    } else {
-      this.chargeMaterialForm = this.solidMaterialFormService.initSolidForm();
+    if (updatedChargeMaterialData && updatedChargeMaterialData.chargeMaterialType == 'Solid') {
+      if (updatedChargeMaterialData && updatedChargeMaterialData.solidChargeMaterial) {
+        this.chargeMaterialForm = this.solidMaterialFormService.getSolidChargeMaterialForm(updatedChargeMaterialData, false);
+      } else {
+        this.chargeMaterialForm = this.solidMaterialFormService.initSolidForm();
+      }
+      this.checkWarnings();
+      this.calculate();
+      this.setFormState();
     }
-
-    this.checkWarnings();
-    this.calculate();
-    this.setFormState();
   }
 
   setFormState() {
