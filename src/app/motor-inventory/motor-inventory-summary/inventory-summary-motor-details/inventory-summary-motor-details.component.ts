@@ -3,6 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { MotorInventoryData } from '../../motor-inventory';
 import { Subscription } from 'rxjs';
+import { WindowRefService } from '../../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-inventory-summary-motor-details',
@@ -15,7 +16,8 @@ export class InventorySummaryMotorDetailsComponent implements OnInit {
   settingsSub: Subscription;
   motorInventoryData: MotorInventoryData;
   filterInventorySummarySub: Subscription;
-  constructor(private motorInventoryService: MotorInventoryService) { }
+  showPrint: boolean = false;
+  constructor(private motorInventoryService: MotorInventoryService, private windowRefService: WindowRefService) { }
 
   ngOnInit(): void {
     this.filterInventorySummarySub = this.motorInventoryService.filterInventorySummary.subscribe(val => {
@@ -28,9 +30,18 @@ export class InventorySummaryMotorDetailsComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.filterInventorySummarySub.unsubscribe();
     this.settingsSub.unsubscribe();
   }
 
+
+  print() {
+    this.showPrint = true;
+    setTimeout(() => {
+      let win = this.windowRefService.nativeWindow;
+      win.print();
+      // this.showPrint = false;
+    }, 300)
+  }
 }
