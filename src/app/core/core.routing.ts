@@ -88,6 +88,8 @@ import { FlueGasComponent } from '../calculator/furnaces/flue-gas/flue-gas.compo
 import { AtmosphereComponent } from '../calculator/furnaces/atmosphere/atmosphere.component';
 import { ChargeMaterialComponent } from '../calculator/furnaces/charge-material/charge-material.component';
 import { OpeningComponent } from '../calculator/furnaces/opening/opening.component';
+import { O2UtilizationRateComponent } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.component';
+import { WasteWaterListComponent } from '../calculator/waste-water/waste-water-list/waste-water-list.component';
 
 export const coreRoutes: Routes = [
   {
@@ -411,6 +413,14 @@ export const coreRoutes: Routes = [
           {
             path: 'cooling-tower',
             component: CoolingTowerComponent
+          },
+          {
+            path: 'waste-water-list',
+            component: WasteWaterListComponent
+          },
+          {
+            path: 'o2-utilization-rate',
+            component: O2UtilizationRateComponent
           }
         ]
       }

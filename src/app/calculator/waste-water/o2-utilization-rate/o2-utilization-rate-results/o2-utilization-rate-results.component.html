@@ -1,0 +1,29 @@
+<div class="p-2">
+    <table #copyTable class="table table-hover table-striped">
+        <tbody>
+            <tr>
+                <td class="text-center bold" colspan="2">{{regressionEquation}}</td>
+            </tr>
+            <tr>
+                <td class="bold">
+                    O<sub>2</sub> Utilization Rate
+                </td>
+                <td>
+                    {{oxygenUtilizationRate | number:'.1-4'}} mg DO/L.hr
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">
+                    R<sup>2</sup>
+                </td>
+                <td>
+                    {{r2 | number:'.1-4'}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<app-exportable-results-table [tableString]="copyTableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>
