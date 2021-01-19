@@ -107,8 +107,10 @@ export class OpeningService {
     let currentBaselineData: Array<OpeningLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
     let baselineObj: OpeningLoss = this.initDefaultLoss(index, hoursPerYear);
-    baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-    baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+    if (index > 0) {
+      baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
+      baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+    }
     currentBaselineData.push(baselineObj)
     this.baselineData.next(currentBaselineData);
     
@@ -116,9 +118,10 @@ export class OpeningService {
       let currentModificationData: Array<OpeningLoss> = this.modificationData.getValue();
       let modificationObj: OpeningLoss = this.initDefaultLoss(index, hoursPerYear);
       
-      // Set case operational constants
-      modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-      modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+      if (index > 0) {
+        modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
+        modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+      }
 
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
@@ -295,7 +298,6 @@ export class OpeningService {
     };
     
     this.modificationData.next([modExample]);
-    this.energySourceType.next('Fuel');
     this.generateExample.next(true);
   }
 

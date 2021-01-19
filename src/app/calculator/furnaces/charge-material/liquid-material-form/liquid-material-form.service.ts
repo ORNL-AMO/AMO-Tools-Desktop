@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChargeMaterial, LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 

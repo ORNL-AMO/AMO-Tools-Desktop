@@ -206,8 +206,10 @@ export class WallService {
     let currentBaselineData: Array<WallLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
     let baselineObj: WallLoss = this.initDefaultLoss(index, hoursPerYear);
-    baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-    baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+    if (index > 0) {
+      baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
+      baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+    }
     currentBaselineData.push(baselineObj)
     this.baselineData.next(currentBaselineData);
     
@@ -215,10 +217,10 @@ export class WallService {
       let currentModificationData: Array<WallLoss> = this.modificationData.getValue();
       let modificationObj: WallLoss = this.initDefaultLoss(index, hoursPerYear);
       
-      // Set case operational constants
-      modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-      modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-
+      if (index > 0) {
+        modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
+        modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+      }
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
     }
@@ -280,6 +282,7 @@ export class WallService {
     };
     
     this.modificationData.next([modificationData]);
+    this.generateExample.next(true);
   }
 
   getAnnualEnergyUnit(energySourceType: string, settings: Settings) {

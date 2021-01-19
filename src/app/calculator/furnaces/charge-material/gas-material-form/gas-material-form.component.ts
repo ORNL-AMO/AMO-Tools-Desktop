@@ -123,14 +123,15 @@ export class GasMaterialFormComponent implements OnInit {
       }
     }
 
-    if (updatedChargeMaterialData && updatedChargeMaterialData.gasChargeMaterial) {
-      this.chargeMaterialForm = this.gasMaterialFormService.getGasChargeMaterialForm(updatedChargeMaterialData, false);
-    } else {
-      this.chargeMaterialForm = this.gasMaterialFormService.initGasForm();
+    if (updatedChargeMaterialData && updatedChargeMaterialData.chargeMaterialType == 'Gas') {
+      if (updatedChargeMaterialData && updatedChargeMaterialData.gasChargeMaterial) {
+        this.chargeMaterialForm = this.gasMaterialFormService.getGasChargeMaterialForm(updatedChargeMaterialData, false);
+      } else {
+        this.chargeMaterialForm = this.gasMaterialFormService.initGasForm();
+      }
+      this.calculate();
+      this.setFormState();
     }
-
-    this.calculate();
-    this.setFormState();
   }
 
   setFormState() {

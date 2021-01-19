@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { AtmosphereLoss, AtmosphereLossResults } from '../../../../shared/models/phast/losses/atmosphereLoss';
+import { AtmosphereLoss, AtmosphereLossOutput, AtmosphereLossResults } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { AtmosphereFormService, AtmosphereLossWarnings } from '../atmosphere-form.service';
@@ -83,6 +83,11 @@ export class AtmosphereFormComponent implements OnInit {
     if (changes.selected && !changes.selected.firstChange) {
       this.setFormState();
     }
+    if (changes.index && !changes.index.firstChange) {
+      this.checkEnergySourceSub();
+      let output: AtmosphereLossOutput = this.atmosphereService.output.getValue();
+      this.setLossResult(output);
+    }
   }
 
   ngOnDestroy() {
@@ -90,6 +95,15 @@ export class AtmosphereFormComponent implements OnInit {
     this.generateExampleSub.unsubscribe();
     this.outputSubscription.unsubscribe();
     if (this.trackingEnergySource) {
+      this.energySourceTypeSub.unsubscribe();
+    }
+  }
+
+  checkEnergySourceSub() {
+    let isCurrentlySubscribed = this.trackingEnergySource;
+    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
+
+    if (!this.trackingEnergySource && isCurrentlySubscribed) {
       this.energySourceTypeSub.unsubscribe();
     }
   }
@@ -114,6 +128,14 @@ export class AtmosphereFormComponent implements OnInit {
       });
     }
 
+  }
+
+  setLossResult(output: AtmosphereLossOutput) {
+    if (this.isBaseline) {
+      this.lossResult = output.baseline.losses[this.index];
+    } else {
+      this.lossResult = output.modification.losses[this.index];
+    }
   }
 
   setFormState() {

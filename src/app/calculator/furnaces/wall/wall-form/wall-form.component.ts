@@ -82,6 +82,8 @@ export class WallFormComponent implements OnInit {
       this.setFormState();
     }
     if (changes.index && !changes.index.firstChange) {
+      this.checkEnergySourceSub();
+      this.setFormState();
       let output: WallLossOutput = this.wallService.output.getValue();
       this.setLossResult(output);
     }
@@ -122,6 +124,15 @@ export class WallFormComponent implements OnInit {
       this.lossResult = output.baseline.losses[this.index];
     } else {
       this.lossResult = output.modification.losses[this.index];
+    }
+  }
+
+  checkEnergySourceSub() {
+    let isCurrentlySubscribed = this.trackingEnergySource;
+    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
+
+    if (!this.trackingEnergySource && isCurrentlySubscribed) {
+      this.energySourceTypeSub.unsubscribe();
     }
   }
 

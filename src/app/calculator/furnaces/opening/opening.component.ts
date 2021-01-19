@@ -104,8 +104,8 @@ export class OpeningComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.openingService.generateExampleData(this.settings);
     this.modificationExists = true;
+    this.openingService.generateExampleData(this.settings);
   }
 
   setBaselineSelected() {
