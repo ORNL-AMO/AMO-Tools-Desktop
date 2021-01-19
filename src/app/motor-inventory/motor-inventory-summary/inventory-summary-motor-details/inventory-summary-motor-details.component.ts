@@ -16,7 +16,6 @@ export class InventorySummaryMotorDetailsComponent implements OnInit {
   settingsSub: Subscription;
   motorInventoryData: MotorInventoryData;
   filterInventorySummarySub: Subscription;
-  showPrint: boolean = false;
   constructor(private motorInventoryService: MotorInventoryService, private windowRefService: WindowRefService) { }
 
   ngOnInit(): void {
@@ -37,11 +36,7 @@ export class InventorySummaryMotorDetailsComponent implements OnInit {
 
 
   print() {
-    this.showPrint = true;
-    setTimeout(() => {
       let win = this.windowRefService.nativeWindow;
       win.print();
-      // this.showPrint = false;
-    }, 300)
   }
 }
