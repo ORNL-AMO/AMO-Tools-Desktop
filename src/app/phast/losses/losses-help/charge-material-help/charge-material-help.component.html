@@ -14,22 +14,24 @@
     </span>
   </label>
   <div class="my-2" *ngIf="displaySuggestions">
-      <h6>
-        <small class="text-muted">
-          <ul>
-            <li>Explore possibilities of lowering the final product temperature</li>
-            <li> Preheating the charge or load material entering the furnace</li>
-            <li> Pre-drying to reduce moisture content of the load entering the furnace</li>
-            <li> Maintain charge feed rate as close to the rated capacity as possible</li>
-            <li> Consider possibility of reducing endothermic reactions by controlling process conditions</li>
-          </ul>
+    <h6>
+      <small class="text-muted">
+        <ul>
+          <li>Explore possibilities of lowering the final product temperature</li>
+          <li> Preheating the charge or load material entering the furnace</li>
+          <li> Pre-drying to reduce moisture content of the load entering the furnace</li>
+          <li> Maintain charge feed rate as close to the rated capacity as possible</li>
+          <li> Consider possibility of reducing endothermic reactions by controlling process conditions</li>
+        </ul>
 
-            <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
-            There may additional measures when considering specific situations and the user is encouraged to review and apply
-            the appropriate measures
-        </small>
-      </h6>
-    </div>
+        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all
+        operating conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and
+        apply
+        the appropriate measures
+      </small>
+    </h6>
+  </div>
   <hr class="my-1 hr-spacer">
 
 
@@ -57,7 +59,8 @@
       Material Name
       <br>
       <small class="text-muted">
-        Select material from the drop down list. The material properties cells below this will be filled in if the material is selected
+        Select material from the drop down list. The material properties cells below this will be filled in if the
+        material is selected
         from the list.
       </small>
     </h6>
@@ -67,11 +70,15 @@
   <!--Solid Charge Material-->
   <div class="my-2" *ngIf="currentField == 'materialSpecificHeatOfSolidMaterial'">
     <h6>
-      Average Specific Heat of Solid 
+      Average Specific Heat of Solid
       <br>
       <small class="text-muted">
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default given from database;
-        may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. MEASUR provides an default value for several materials.
         <hr>
       </small>
     </h6>
@@ -98,8 +105,10 @@
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -118,8 +127,10 @@
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -133,8 +144,12 @@
       Average Specific Heat of Molten Material
       <br>
       <small class="text-muted">
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default given from database;
-        may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. MEASUR provides an default value for several materials.
         <hr>
       </small>
     </h6>
@@ -161,8 +176,10 @@
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -181,8 +198,10 @@
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -196,8 +215,10 @@
       Water Content (Charged)
       <br>
       <small class="text-muted">
-        Water content of the charge material as percentage of total charge weight - wet basis. This value can be obtained from moisture
-        tests or specifications for the material charged.
+        Water content of the charge material as percentage of total charge weight - wet basis. This value can be
+        obtained from moisture tests or specifications for the material charged. It can also be the moisture (water or
+        snow) entering the furnace on the charge material. For example – steel scrap going in EAFs sometime includes
+        snow or moisture. This could also be set to zero and another charge material (water) added.
         <hr>
       </small>
     </h6>
@@ -222,9 +243,10 @@
     <h6>
       Water Content (Discharged)
       <br>
-      <small class="text-muted">
-        Water content of the discharged material as percentage of total discharged weight - wet basis. This value can be obtained
-        from moisture tests or specifications for the material discharged.
+      <small class="text-muted">Water content of the charge material as percentage of total charge weight - wet basis.
+        This value can be obtained from moisture tests or specifications for the material charged. It can also be the
+        moisture (water or snow) entering the furnace on the charge material. For example – steel scrap going in EAFs
+        sometime includes snow or moisture. This could also be set to zero and another charge material (water) added.
         <hr>
       </small>
     </h6>
@@ -250,7 +272,8 @@
       Charge Melted
       <br>
       <small class="text-muted">
-        Charge material melted (as % of solid dry material charged). Use value or data from process/production engineering or measurement
+        Charge material melted (as % of solid dry material charged). Use value or data from process/production
+        engineering or measurement
         of the final product.
         <hr>
       </small>
@@ -277,7 +300,8 @@
       Charge Reacted
       <br>
       <small class="text-muted">
-        Charge material (as % of dry material) reacted. Use value or data from process/production engineering or measurement of the
+        Charge material (as % of dry material) reacted. Use value or data from process/production engineering or
+        measurement of the
         final product.
         <hr>
       </small>
@@ -304,7 +328,8 @@
       Water Vapor Discharge Temperature
       <br>
       <small class="text-muted">
-        Temperature of water vapor (usually mixed with exhaust air or flue gases) as it is discharged form the furnace/oven.
+        Temperature of water vapor (usually mixed with exhaust air or flue gases) as it is discharged form the
+        furnace/oven.
       </small>
     </h6>
   </div>
@@ -315,7 +340,8 @@
       Charge Outlet Temperature
       <br>
       <small class="text-muted">
-        Discharge temperature for the material as it is discharged from the furnace or oven. Use production data or actual measurement.
+        Discharge temperature for the material as it is discharged from the furnace or oven. Use production data or
+        actual measurement.
       </small>
     </h6>
   </div>
@@ -338,8 +364,12 @@
       Specific Heat of the Liquid
       <br>
       <small class="text-muted">
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default given from database;
-        may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. MEASUR provides an default value for several materials.
         <hr>
       </small>
     </h6>
@@ -366,8 +396,10 @@
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -386,8 +418,10 @@
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -428,8 +462,10 @@
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -443,14 +479,20 @@
       Specific Heat of Vapor
       <br>
       <small class="text-muted">
-        Give specific heat value for the vapor resulting from vaporizing of the liquid at the temperature range of the vaporizing
-        temperature and final temperature (discharge temperature) of the liquid/vapor.
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. MEASUR provides an default value for several materials.
         <hr>
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -464,7 +506,8 @@
       Charge Vaporized
       <br>
       <small class="text-muted">
-        Charge liquid vaporized (% liquid charged) during the heating process. Get the value (data) from process/production engineering
+        Charge liquid vaporized (% liquid charged) during the heating process. Get the value (data) from
+        process/production engineering
         or measurement of the final product.
         <hr>
       </small>
@@ -489,7 +532,7 @@
   <div class="my-2" *ngIf="currentField == 'liquidReacted'">
     <h6>
       Charge Reacted (% of Charge)
-    <hr>
+      <hr>
     </h6>
     <div class="w-100 justify-content-center">
       <table class="table table-hover table-striped">
@@ -514,8 +557,12 @@
       Specific Heat of Gas
       <br>
       <small class="text-muted">
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default given from database;
-        may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. MEASUR provides an default value for several materials.
         <hr>
       </small>
     </h6>
@@ -542,8 +589,10 @@
       </small>
       <div class="alert alert-info">
         <small class="text-muted">
-          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will not be saved in the database.
-          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          This value comes from the Process Heating Materials Database. Its value can be changed here, however, it will
+          not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the
+          database.
           If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
           it as a new material by clicking "Add New ... "
         </small>
@@ -557,7 +606,8 @@
       Vapor in Gas Mixture
       <br>
       <small class="text-muted">
-        Vapor mixed with the feed gas expressed as % of the total mixture charge weight. Use test data or charge material specifications.
+        Vapor mixed with the feed gas expressed as % of the total mixture charge weight. Use test data or charge
+        material specifications.
         <hr>
       </small>
     </h6>
@@ -583,8 +633,12 @@
       Specific Heat of Vapor
       <br>
       <small class="text-muted">
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature. Use available data from handbooks
-        based on average of inlet and outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree. For most materials, specific heat
+        changes with temperature. At low temperatures, this change is negligible and it can be assumed that specific
+        heat is constant across the temperature differential. At higher temperatures, the material's specific heat
+        increase is more substantial. This makes heat loss or heat demand calculations difficult. As MEASUR does not
+        take this change into account, it is recommended that an average value of specific heat for a certain
+        temperature range is used. MEASUR provides an default value for several materials.
         <hr>
       </small>
     </h6>
@@ -651,7 +705,8 @@
       Charge Outlet Temperature
       <br>
       <small class="text-muted">
-        Discharge temperature for the material as it is discharged from the furnace or oven. Use production data or actual measurement.
+        Discharge temperature for the material as it is discharged from the furnace or oven. Use production data or
+        actual measurement.
       </small>
     </h6>
   </div>
@@ -662,7 +717,8 @@
       Heat of Reaction
       <br>
       <small class="text-muted">
-        Mass based change in enthalpy due to a reaction. Do not use negative values for exothermic reactions, instead change the
+        Mass based change in enthalpy due to a reaction. Do not use negative values for exothermic reactions, instead
+        change the
         below dropdown menu.
         <hr>
       </small>
@@ -692,7 +748,8 @@
       Type of Reaction (Exothermic/Endothermic)
       <br>
       <small class="text-muted">
-        Type of reaction. Select from the drop down menu and select endothermic or exothermic. Use positive number (+ve) in either
+        Type of reaction. Select from the drop down menu and select endothermic or exothermic. Use positive number (+ve)
+        in either
         one of these cases.
       </small>
     </h6>
@@ -704,7 +761,8 @@
       Charge Feed Rate
       <br>
       <small class="text-muted">
-        Weight of material charged per hour. Use total weight including moisture in the charge material. Note that for batch furnaces
+        Weight of material charged per hour. Use total weight including moisture in the charge material. Note that for
+        batch furnaces
         the total weight should be corrected for cycle time to obtain weight per hour value.
         <hr>
       </small>
