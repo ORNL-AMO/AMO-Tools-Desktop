@@ -192,8 +192,9 @@
         <br>
         This is used to capture the effect of the shape of the outlet on air loss.
         Typical values:
-        <hr class="my-1">Sharp Edged – 0.6
-        <hr class="my-1">Gradual Transition – 1
+        <hr class="my-1">100% coefficient of flow (un-adjusted for orifice geometry): 1
+        <hr class="my-1">Well-rounded orifices: 0.97
+        <hr class="my-1">Sharp orifices: 0.61
       </small>
     </h6>
   </div>
@@ -209,7 +210,7 @@
     </h6>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'dischargeCoefficient'">
+  <div class="my-2" *ngIf="currentField == 'supplyPressure'">
     <h6>
       Supply Pressure
       <small class="text-muted">
