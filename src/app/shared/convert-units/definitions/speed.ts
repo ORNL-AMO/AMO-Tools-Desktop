@@ -7,6 +7,22 @@ export const speed = {
                  display:  '(m/s)'
             }
             , to_anchor: 3.6
+        },
+        'm/d': {
+            name: {
+                singular: 'Metre per day'
+                , plural: 'Metres per day' ,
+                 display:  '(m/d)'
+            }
+            , to_anchor: 24
+        },
+        'm/h': {
+            name: {
+                singular: 'Metre per hour'
+                , plural: 'Metres per hour' ,
+                 display:  '(m/h)'
+            }
+            , to_anchor: 1000
         }
         , 'km/h': {
             name: {

@@ -90,6 +90,8 @@ import { ChargeMaterialComponent } from '../calculator/furnaces/charge-material/
 import { OpeningComponent } from '../calculator/furnaces/opening/opening.component';
 import { O2UtilizationRateComponent } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.component';
 import { WasteWaterListComponent } from '../calculator/waste-water/waste-water-list/waste-water-list.component';
+import { StatePointAnalysisModule } from '../calculator/waste-water/state-point-analysis/state-point-analysis.module';
+import { StatePointAnalysisComponent } from '../calculator/waste-water/state-point-analysis/state-point-analysis.component';
 
 export const coreRoutes: Routes = [
   {
@@ -421,6 +423,10 @@ export const coreRoutes: Routes = [
           {
             path: 'o2-utilization-rate',
             component: O2UtilizationRateComponent
+          },
+          {
+            path: 'state-point-analysis',
+            component: StatePointAnalysisComponent
           }
         ]
       }

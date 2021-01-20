@@ -112,6 +112,14 @@ export const volumeFlowRate = {
             }
             , to_anchor: 5 / 18
         }
+        , 'm3/d': {
+            name: {
+                singular: 'Cubic meter per day'
+                , plural: 'Cubic meters per day',
+                 display:  '(m&#x00B3;/d)'
+            }
+            , to_anchor: 1 / 86.4
+        }
         , 'km3/s': {
             name: {
                 singular: 'Cubic kilometer per second'

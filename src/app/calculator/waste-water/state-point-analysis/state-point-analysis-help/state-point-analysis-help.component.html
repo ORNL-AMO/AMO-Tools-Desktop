@@ -1,0 +1,124 @@
+<div class="my-2">
+    <h6>
+        State Point Analysis
+        <br>
+        <small class="text-muted">
+            A state point analysis is a powerful activated sludge design, operations, and troubleshooting
+            tool.  The traditional approach to a state point analysis is to develop the requisite 
+            settling flux curve using the settling parameters Vo and K.  Alternatively, the 
+            requisite settling flux curve can be developed using correlations between these settling parameters and Sludge Volume Index, SVI.  
+            The SVI is performed a number of different ways:  
+            <ol class="parameter-list">
+                <li>in a 1 L graduated cylinder with stirring (SVIGS)</li>                
+                <li>in a 1 L graduated cylinder without stirring (SVIGN)</li>                
+                <li>in a 2 L settlometer with stirring (SVISS)</li>                
+                <li>and (4) in a 2 L settlometer without stirring (SVISN)</li>                
+            </ol>
+            The appropriate correlations are used to generate the flux curves in this calculator.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+
+<div class="my-2" *ngIf="currentField == 'sviParameter'">
+    <h6>
+        SVI parameter 
+        <br>
+        <small class="text-muted">
+            The traditional approach to a state point analysis is to develop the requisite settling flux curve using the settling parameters Vo and K (choose “VoK”).  
+            Alternatively, the requisite settling flux curve can be developed using correlations between these settling parameters and Sludge Volume Index, SVI.  
+            The SVI is performed a number of different ways:  
+            <ol class="parameter-list">
+                <li>in a 1 L graduated cylinder with stirring (SVIGS)</li>                
+                <li>in a 1 L graduated cylinder without stirring (SVIGN)</li>                
+                <li>in a 2 L settlometer with stirring (SVISS)</li>                
+                <li>and (4) in a 2 L settlometer without stirring (SVISN)</li>                
+            </ol>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="currentField == 'sviValue'">
+    <h6>
+        Sludge Volume Index
+        <br>
+        <small class="text-muted">
+            A metric to describe the ability of the sludge to settle and 
+            compact. Measured in either a graduated cylinder or settlometer 
+            and calculated as the ratio of settled sludge volume (mL/L) to Mixed Liquor Suspended Solids (g/L)
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="currentField == 'kValue'">
+    <h6>
+        K
+        <br>
+        <small class="text-muted">
+            Empirical Settling Parameter
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="currentField == 'sludgeSettlingVelocity'">
+    <h6>
+        V<sub>o</sub>
+        <br>
+        <small class="text-muted">
+           Maximum Sludge Settling Velocity
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="currentField == 'numberOfClarifiers'">
+    <h6>
+        Number of Clarifiers 
+        <br>
+        <small class="text-muted">
+            Total number of clarifiers in the system
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="currentField == 'areaOfClarifier'">
+    <h6>
+        Clarifier Area
+        <br>
+        <small class="text-muted">
+            area of a single clarifier
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="currentField == 'MLSS'">
+    <h6>
+        MLSS 
+        <br>
+        <small class="text-muted">
+            Mixed Liquor Suspended Solids concentration
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="currentField == 'influentFlow'">
+    <h6>
+        Influent Flow
+        <br>
+        <small class="text-muted">
+            Flow rate of the incoming influent
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="currentField == 'rasFlow'">
+    <h6>
+        RAS Flow
+        <br>
+        <small class="text-muted">
+            Flow rate of the return activated sludge
+        </small>
+    </h6>
+</div>
+
+
