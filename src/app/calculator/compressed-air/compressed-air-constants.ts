@@ -308,7 +308,7 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
       decibels: 25,
       decibelRatingA: 20,
       pressureA: 150,
-      firstFlowA: 1.04,
+      firstFlowA: 1.4,
       secondFlowA: 1.2,
       decibelRatingB: 30,
       pressureB: 125,
