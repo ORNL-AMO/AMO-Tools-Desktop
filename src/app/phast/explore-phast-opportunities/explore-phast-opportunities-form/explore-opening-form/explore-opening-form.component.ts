@@ -6,8 +6,8 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { FormGroup } from '@angular/forms';
 import { PhastService } from '../../../phast.service';
 import { LossTab } from '../../../tabs';
-import { OpeningLossWarnings, OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
-import { OpeningFormService } from '../../../../calculator/furnaces/opening/opening-form.service';
+import { OpeningFormService, OpeningLossWarnings } from '../../../../calculator/furnaces/opening/opening-form.service';
+import { OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
 
 @Component({
   selector: 'app-explore-opening-form',
@@ -86,9 +86,9 @@ export class ExploreOpeningFormComponent implements OnInit {
         this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTimeOpen = { hasOpportunity: check, display: 'Minimize the Time Furnace Doors are Open' }; 
       }
 
-      let tmpWarnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(loss);
+      let tmpWarnings: OpeningLossWarnings = this.openingFormService.checkWarnings(loss);
       this.baselineWarnings.push(tmpWarnings);
-      tmpWarnings = this.openingLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
+      tmpWarnings = this.openingFormService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
       this.modificationWarnings.push(tmpWarnings);
       index++;
     });
@@ -205,13 +205,13 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   checkBaselineWarnings(index: number) {
-    let tmpWarnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(this.phast.losses.openingLosses[index]);
+    let tmpWarnings: OpeningLossWarnings = this.openingFormService.checkWarnings(this.phast.losses.openingLosses[index]);
     this.baselineWarnings[index] = tmpWarnings;
     this.calculate();
   }
 
   checkModificationWarnings(index: number) {
-    let tmpWarnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
+    let tmpWarnings: OpeningLossWarnings = this.openingFormService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
     this.modificationWarnings[index] = tmpWarnings;
     this.calculate();
   }

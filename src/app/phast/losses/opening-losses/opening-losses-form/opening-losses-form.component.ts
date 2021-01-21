@@ -160,7 +160,7 @@ export class OpeningLossesFormComponent implements OnInit {
 
   save() {
     this.checkCanCalculateViewFactor();
-    this.openingFormService.setAmbientTempValidators(this.openingLossesForm);
+    this.openingFormService.setValidators(this.openingLossesForm);
     this.calculate.emit(true);
     this.saveEmit.emit(true);
   }
