@@ -7,7 +7,7 @@ import * as Plotly from 'plotly.js';
 import { StatePointAnalysisService } from '../state-point-analysis.service';
 import { Subscription } from 'rxjs';
 import { StatePointAnalysisGraphService } from '../state-point-analysis-graph.service';
-import { StatePointAnalysisInput, StatePointAnalysisOutput, StatePointAnalysisResults } from '../../../../shared/models/waste-water';
+import { StatePointAnalysisOutput, StatePointAnalysisResults } from '../../../../shared/models/waste-water';
 
 @Component({
   selector: 'app-state-point-analysis-graph',
@@ -137,7 +137,6 @@ export class StatePointAnalysisGraphComponent implements OnInit {
 
       underflowTrace.name = `Underflow Rate (${resultType})`;
       underflowTrace.legendGroup = `group${index}`;
-      // underflowTrace.hovertemplate = `%{y:.2r}${this.yUnits}`;
       underflowTrace.hovertemplate =  `Concentration %{x:.2r} (g/L) <br>Flux %{y:.2r} (${this.yUnits})`;
       underflowTrace.line.color = this.graphColors[traceIndex % this.graphColors.length]
       this.spaGraph.data[traceIndex] = underflowTrace;

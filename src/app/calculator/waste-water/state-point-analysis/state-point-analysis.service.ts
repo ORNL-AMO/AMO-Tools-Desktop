@@ -60,7 +60,7 @@ export class StatePointAnalysisService {
     this.initDefaultEmptyOutput();
     let output: StatePointAnalysisOutput = this.output.getValue();
     
-    let validBaseline = this.statePointAnalysisFormService.getFormFromInput(baselineInputs);
+    let validBaseline = this.statePointAnalysisFormService.getFormFromInput(baselineInputs).valid;
     if (validBaseline) {
       let baselineInputCopy = JSON.parse(JSON.stringify(baselineInputs));
       baselineInputCopy = this.convertStatePointAnalysisInput(baselineInputCopy, settings);
@@ -70,7 +70,7 @@ export class StatePointAnalysisService {
       output.baseline = baselineResults;
       output.sviParameterName = this.sviParameters[baselineInputs.sviParameter].display;
       if (modificationInputs) {
-        let validModification = this.statePointAnalysisFormService.getFormFromInput(modificationInputs);
+        let validModification = this.statePointAnalysisFormService.getFormFromInput(modificationInputs).valid;
         if (validModification) {
           let modificationInputCopy = JSON.parse(JSON.stringify(modificationInputs));
           modificationInputCopy = this.convertStatePointAnalysisInput(modificationInputCopy, settings);
@@ -137,53 +137,51 @@ export class StatePointAnalysisService {
     this.modificationData.next(currentBaselineCopy);
   }
 
-  generateExampleData(settings: Settings) {
-    // SVIGN method examples
-    // let exampleBaseline: StatePointAnalysisInput = {
-    //   sviValue: 150,
-    //   sviParameter: 1,
-    //   numberOfClarifiers: 1,
-    //   areaOfClarifier: 10010.427,
-    //   MLSS: 2.5,
-    //   influentFlow: 12,
-    //   rasFlow: 5,
-    //   sludgeSettlingVelocity: 1,
-    // }
-
-    // let exampleMod: StatePointAnalysisInput = {
-    //   sviValue: 150,
-    //   sviParameter: 1,
-    //   numberOfClarifiers: 1,
-    //   areaOfClarifier: 10010.427,
-    //   MLSS: 2.5,
-    //   influentFlow: 6.34,
-    //   rasFlow: 5,
-    //   sludgeSettlingVelocity: 1,
-    // }
-    
-    // voK examples
+  generateExampleData(settings: Settings) {    
+    // VoK method examples
     let exampleBaseline: StatePointAnalysisInput = {
       sviValue: 600,
       sviParameter: 4,
       numberOfClarifiers: 2,
-      areaOfClarifier: 907.92,
+      areaOfClarifier: 910,
       MLSS: 2.5,
-      influentFlow: .999997,
+      influentFlow: 1,
       rasFlow: .7,
-      sludgeSettlingVelocity: 374.916667,
+      sludgeSettlingVelocity: 375,
     }
     let exampleMod: StatePointAnalysisInput = {
       sviValue: 600,
       sviParameter: 4,
       numberOfClarifiers: 2,
-      areaOfClarifier: 907.92,
+      areaOfClarifier: 910,
       MLSS: 2.5,
-      influentFlow: 6.340129,
+      influentFlow: .9,
       rasFlow: .7,
-      // second mod rasFlow
-      // rasFlow: 4.44,
       sludgeSettlingVelocity: 375,
     }
+
+     // SVIGN method examples
+    //  let exampleBaseline: StatePointAnalysisInput = {
+    //    sviValue: 150,
+    //    sviParameter: 1,
+    //    numberOfClarifiers: 1,
+    //    areaOfClarifier: 10010.427,
+    //    MLSS: 2.5,
+    //    influentFlow: 12,
+    //    rasFlow: 5,
+    //    sludgeSettlingVelocity: 1,
+    //  }
+
+    //  let exampleMod: StatePointAnalysisInput = {
+    //    sviValue: 150,
+    //    sviParameter: 1,
+    //    numberOfClarifiers: 1,
+    //    areaOfClarifier: 10010.427,
+    //    MLSS: 2.5,
+    //    influentFlow: 6.34,
+    //    rasFlow: 5,
+    //    sludgeSettlingVelocity: 1,
+    //  }
 
     if (settings.unitsOfMeasure == 'Metric') {
       exampleBaseline = this.convertStatePointAnalysisExample(exampleBaseline);

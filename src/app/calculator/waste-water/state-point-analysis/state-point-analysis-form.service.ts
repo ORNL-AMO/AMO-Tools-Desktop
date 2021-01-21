@@ -21,16 +21,32 @@ export class StatePointAnalysisFormService {
     return formGroup;
   }
 
-  getFormFromInput(input: StatePointAnalysisInput): FormGroup {
+  getFormFromInput(input: StatePointAnalysisInput, updatedBaselineInput?: StatePointAnalysisInput): FormGroup {
+    let sviValue: number = input.sviValue;
+    let sviParameter: number = input.sviParameter;
+    let numberOfClarifiers: number = input.numberOfClarifiers;
+    let areaOfClarifier: number = input.areaOfClarifier;
+    let mlss: number = input.MLSS;
+    let sludgeSettlingVelocity: number = input.sludgeSettlingVelocity;
+
+    if (updatedBaselineInput) {
+      sviValue = updatedBaselineInput.sviValue;
+      sviParameter = updatedBaselineInput.sviParameter;
+      numberOfClarifiers = updatedBaselineInput.numberOfClarifiers;
+      areaOfClarifier = updatedBaselineInput.areaOfClarifier;
+      mlss = updatedBaselineInput.MLSS;
+      sludgeSettlingVelocity = updatedBaselineInput.sludgeSettlingVelocity;
+    }
+
     let formGroup: FormGroup = this.formBuilder.group({
-      sviValue: [input.sviValue, [Validators.required, Validators.min(0)]],
-      sviParameter: [input.sviParameter, [Validators.required, Validators.min(0)]],
-      numberOfClarifiers: [input.numberOfClarifiers, [Validators.required, Validators.min(0)]],
-      areaOfClarifier: [input.areaOfClarifier, [Validators.required, Validators.min(0)]],
-      MLSS: [input.MLSS, [Validators.required, Validators.min(0)]],
+      sviValue: [sviValue, [Validators.required, Validators.min(0)]],
+      sviParameter: [sviParameter, [Validators.required, Validators.min(0)]],
+      numberOfClarifiers: [numberOfClarifiers, [Validators.required, Validators.min(0)]],
+      areaOfClarifier: [areaOfClarifier, [Validators.required, Validators.min(0)]],
+      MLSS: [mlss, [Validators.required, Validators.min(0)]],
       influentFlow: [input.influentFlow, [Validators.required, Validators.min(0)]],
       rasFlow: [input.rasFlow, [Validators.required, Validators.min(0)]],
-      sludgeSettlingVelocity: [input.sludgeSettlingVelocity, [Validators.required, Validators.min(0)]],
+      sludgeSettlingVelocity: [sludgeSettlingVelocity, [Validators.required, Validators.min(0)]],
     });
     return formGroup;
   }

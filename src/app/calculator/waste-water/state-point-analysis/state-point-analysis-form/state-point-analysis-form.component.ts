@@ -21,10 +21,11 @@ export class StatePointAnalysisFormComponent implements OnInit {
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
-  form: FormGroup;
-  selectedSviParameter: string;
+  baselineDataSub: Subscription;
 
+  form: FormGroup;
   sviParameters: Array<{ value: number, display: string }>;
+  
   constructor(private statePointAnalysisService: StatePointAnalysisService,
               private statePointAnalysisFormService: StatePointAnalysisFormService,
               private cd: ChangeDetectorRef
@@ -38,6 +39,9 @@ export class StatePointAnalysisFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    if (!this.isBaseline) {
+      this.baselineDataSub.unsubscribe();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -52,7 +56,13 @@ export class StatePointAnalysisFormComponent implements OnInit {
       });
     this.generateExampleSub = this.statePointAnalysisService.generateExample.subscribe(value => {
       this.setForm();
-    })
+    });
+    if (!this.isBaseline) {
+      this.baselineDataSub = this.statePointAnalysisService.baselineData.subscribe(updatedBaseline => {
+        this.setForm(updatedBaseline);
+      });
+    }
+
   }
 
   initFormSetup() {
@@ -72,7 +82,7 @@ export class StatePointAnalysisFormComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  setForm() {
+  setForm(updatedBaselineInput?: StatePointAnalysisInput) {
     let statePointAnalysisInput: StatePointAnalysisInput;
     if (this.isBaseline) {
       statePointAnalysisInput = this.statePointAnalysisService.baselineData.getValue();
@@ -81,7 +91,7 @@ export class StatePointAnalysisFormComponent implements OnInit {
     }
 
     if (statePointAnalysisInput) {
-      this.form = this.statePointAnalysisFormService.getFormFromInput(statePointAnalysisInput);
+      this.form = this.statePointAnalysisFormService.getFormFromInput(statePointAnalysisInput, updatedBaselineInput);
     } else {
       this.form = this.statePointAnalysisFormService.getEmptyForm();
     }

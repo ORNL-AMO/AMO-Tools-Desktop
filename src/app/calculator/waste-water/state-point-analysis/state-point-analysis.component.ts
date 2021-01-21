@@ -13,8 +13,6 @@ import { StatePointAnalysisService } from './state-point-analysis.service';
 export class StatePointAnalysisComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  inTreasureHunt: boolean;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -119,11 +117,6 @@ export class StatePointAnalysisComponent implements OnInit {
       this.baselineSelected = false;
     }
   }
-
-  focusField(str: string) {
-    this.statePointAnalysisService.currentField.next(str);
-  }
-
   
   setTab(str: string) {
     this.tabSelect = str;
