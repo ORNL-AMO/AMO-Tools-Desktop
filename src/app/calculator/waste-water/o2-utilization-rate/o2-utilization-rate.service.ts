@@ -7,7 +7,7 @@ export class O2UtilizationRateService {
   inputDataPoints: BehaviorSubject<Array<O2UtilizationDataPoints>>;
 
   constructor() {
-    let initDataPoints: Array<O2UtilizationDataPoints> = this.getExampleData();
+    let initDataPoints: Array<O2UtilizationDataPoints> = this.getInitialDataPoints();
     this.inputDataPoints = new BehaviorSubject<Array<O2UtilizationDataPoints>>(initDataPoints);
   }
 
