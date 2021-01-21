@@ -174,8 +174,7 @@ export class PhastComponent implements OnInit {
 
   setExploreOppsDefaults(modification: Modification) {  
     // old assessments with scenario added - prevent break on missing properties
-    if (modification.exploreOpportunities) {
-      let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
+    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
       if (modification.exploreOppsShowAirTemp == undefined) {
         modification.exploreOppsShowAirTemp = exploreOppsDefault;
       }
@@ -221,7 +220,6 @@ export class PhastComponent implements OnInit {
       if (modification.exploreOppsShowFixtures == undefined) {
         modification.exploreOppsShowFixtures = exploreOppsDefault;
       }
-    }
   }
 
   ngAfterViewInit() {
@@ -445,6 +443,7 @@ export class PhastComponent implements OnInit {
 
   saveNewMod(mod: Modification) {
     this._phast.modifications.push(mod);
+    this.initSankeyList();
     this.phastCompareService.setCompareVals(this._phast, this._phast.modifications.length - 1, false);
     this.closeAddNewModal();
     this.saveDb();
