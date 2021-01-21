@@ -237,6 +237,7 @@ export class OpportunityCardsComponent implements OnInit {
   }
 
   toggleSelected(cardData: OpportunityCardData) {
+    this.modifyDataIndex = cardData.index;
     if (cardData.opportunityType == 'lighting-replacement') {
       cardData.lightingReplacement.selected = cardData.selected;
       this.treasureHuntService.editLightingReplacementTreasureHuntItem(cardData.lightingReplacement, cardData.opportunityIndex);
