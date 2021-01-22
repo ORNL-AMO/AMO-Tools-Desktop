@@ -170,7 +170,7 @@ export class OpeningFormService {
       thicknessWarning: this.checkWallThickness(loss),
       lengthWarning: this.checkLength(loss),
       heightWarning: this.checkHeight(loss),
-      viewFactorWarning: this.checkViewFactor(loss)
+      viewFactorWarning: this.checkViewFactor(loss),
     };
   }
 
@@ -216,6 +216,20 @@ export class OpeningFormService {
     }
   }
 
+  checkCalculateVFWarning(form: FormGroup, calculatedViewFactor: number): string {
+    if (form.valid) {
+      let limit = .05;
+      let percentDifference = Math.abs(form.controls.viewFactor.value - calculatedViewFactor) / calculatedViewFactor;
+      if (percentDifference > limit) {
+        return `Value is greater than ${limit * 100}% different from calculated View Factor (${Math.round(calculatedViewFactor)} A). Consider using the 'Calculate View Factor' button.`;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
   checkTemperature(loss: OpeningLoss): string {
     if (loss.ambientTemperature > loss.insideTemperature) {
       return 'Ambient Temperature cannot be greater than Average Zone Temperature';
@@ -223,6 +237,7 @@ export class OpeningFormService {
       return null;
     }
   }
+
   checkEmissivity(loss: OpeningLoss): string {
     if (loss.emissivity > 1) {
       return 'Surface emissivity must be less than 1';

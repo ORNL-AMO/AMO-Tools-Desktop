@@ -38,6 +38,7 @@ export class OpeningLossesFormComponent implements OnInit {
   totalArea: number = 0.0;
   idString: string;
   canCalculateViewFactor: boolean;
+  calculateVFWarning: string;
   constructor(private convertUnitsService: ConvertUnitsService,
     private openingLossesCompareService: OpeningLossesCompareService,
     private openingFormService: OpeningFormService,
@@ -55,6 +56,7 @@ export class OpeningLossesFormComponent implements OnInit {
       this.disableForm();
     }
     this.checkCanCalculateViewFactor();
+    this.checkWarnings();
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -146,21 +148,30 @@ export class OpeningLossesFormComponent implements OnInit {
   }
 
   calculateViewFactor() {
-    this.save();
     if (!this.canCalculateViewFactor) {
       this.totalArea = 0.0;
       return;
     }
     let vfInputs: ViewFactorInput = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
-    let viewFactor: number = this.phastService.viewFactorCalculation(vfInputs, this.settings);
+    let calculatedViewFactor: number = this.openingLossesService.getViewFactor(vfInputs, this.settings);
     this.openingLossesForm.patchValue({
-      viewFactor: this.roundVal(viewFactor, 3)
+      viewFactor: this.roundVal(calculatedViewFactor, 3)
     });
+    this.save();
+  }
+
+  checkWarnings() {
+    let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
+    let calculatedViewFactor = this.openingLossesService.getViewFactor(vfInputs, this.settings);
+    this.calculateVFWarning = this.openingFormService.checkCalculateVFWarning(this.openingLossesForm, calculatedViewFactor);
   }
 
   save() {
-    this.checkCanCalculateViewFactor();
     this.openingFormService.setValidators(this.openingLossesForm);
+    this.checkCanCalculateViewFactor();
+    if (this.canCalculateViewFactor) {
+      this.checkWarnings();
+    }
     this.calculate.emit(true);
     this.saveEmit.emit(true);
   }

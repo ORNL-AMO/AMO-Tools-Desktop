@@ -5,8 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { OpeningLossesCompareService } from '../../opening-losses/opening-losses-compare.service';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
 import { Subscription } from 'rxjs';
-import { OpeningLossWarnings, OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
-import { OpeningFormService } from '../../../../calculator/furnaces/opening/opening-form.service';
+import { OpeningFormService, OpeningLossWarnings } from '../../../../calculator/furnaces/opening/opening-form.service';
 
 @Component({
   selector: 'app-opening-tab',
@@ -29,7 +28,6 @@ export class OpeningTabComponent implements OnInit {
   badgeClass: Array<string> = [];
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, 
-              private openingLossesService: OpeningService,
               private openingFormService: OpeningFormService, 
               private openingLossesCompareService: OpeningLossesCompareService, private cd: ChangeDetectorRef) { }
 
@@ -78,8 +76,8 @@ export class OpeningTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(loss);
-        let tmpHasWarning: boolean = this.openingLossesService.checkWarningsExist(warnings);
+        let warnings: OpeningLossWarnings = this.openingFormService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.openingFormService.checkWarningsExist(warnings);
         if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
@@ -90,8 +88,8 @@ export class OpeningTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(loss);
-        let tmpHasWarning: boolean = this.openingLossesService.checkWarningsExist(warnings);
+        let warnings: OpeningLossWarnings = this.openingFormService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.openingFormService.checkWarningsExist(warnings);
         if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
