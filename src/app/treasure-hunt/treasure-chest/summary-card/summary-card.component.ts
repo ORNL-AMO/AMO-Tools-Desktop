@@ -67,8 +67,9 @@ export class SummaryCardComponent implements OnInit {
       this.wasteWaterData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.wasteWaterUsed, treasureHunt.currentEnergyUsage.wasteWaterCosts, 'Waste Water');
       this.otherFuelData = this.setUtilityTotal(treasureHunt.currentEnergyUsage.otherFuelUsed, treasureHunt.currentEnergyUsage.otherFuelCosts, 'Other Fuel');
       let baselineCost: number = this.electricityData.baselineCost + this.naturalGasData.baselineCost + this.waterData.baselineCost + this.compressedAirData.baselineCost + this.steamData.baselineCost + this.wasteWaterData.baselineCost + this.otherFuelData.baselineCost;
-      this.totals = this.getTotals(baselineCost, opportunityCards);
       this.additionalAnnualSavings = this.calculateAdditionalSavings(baselineCost, opportunityCards);
+      this.totals = this.getTotals(baselineCost, opportunityCards, this.additionalAnnualSavings.totalCostSavings);
+      
     }
   }
 
@@ -115,8 +116,8 @@ export class SummaryCardComponent implements OnInit {
     return { totalPercentSavings: totalPercentSavings, totalCostSavings: totalCostSavings, baselineCost: baselineCost, modificationCost: modificationCost }
   }
 
-  getTotals(baselineCost: number, opportunityCards: Array<OpportunityCardData>): UtilityTotal {
-    let totalCostSavings: number = 0;
+  getTotals(baselineCost: number, opportunityCards: Array<OpportunityCardData>, additionalCostSavings: number): UtilityTotal {
+    let totalCostSavings: number = 0 + additionalCostSavings;
     opportunityCards.forEach(card => {
       if (card.selected == true) {
         if (card.percentSavings) {
