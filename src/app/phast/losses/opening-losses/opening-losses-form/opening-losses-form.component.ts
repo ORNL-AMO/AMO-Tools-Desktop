@@ -80,10 +80,6 @@ export class OpeningLossesFormComponent implements OnInit {
     this.openingLossesForm.controls.openingType.enable();
   }
 
-  roundVal(val: number, digits: number): number {
-    return Number(val.toFixed(digits));
-  }
-
   getArea(dontSave?: boolean) {
     if (!dontSave) {
       this.save();
@@ -155,7 +151,7 @@ export class OpeningLossesFormComponent implements OnInit {
     let vfInputs: ViewFactorInput = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
     let calculatedViewFactor: number = this.openingLossesService.getViewFactor(vfInputs, this.settings);
     this.openingLossesForm.patchValue({
-      viewFactor: this.roundVal(calculatedViewFactor, 3)
+      viewFactor: this.openingFormService.roundVal(calculatedViewFactor, 3)
     });
     this.save();
   }
@@ -163,7 +159,7 @@ export class OpeningLossesFormComponent implements OnInit {
   checkWarnings() {
     let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
     let calculatedViewFactor = this.openingLossesService.getViewFactor(vfInputs, this.settings);
-    this.calculateVFWarning = this.openingFormService.checkCalculateVFWarning(this.openingLossesForm, calculatedViewFactor);
+    this.calculateVFWarning = this.openingFormService.checkCalculateVFWarning(this.openingLossesForm.controls.viewFactor.value, calculatedViewFactor);
   }
 
   save() {

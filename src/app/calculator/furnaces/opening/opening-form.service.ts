@@ -161,7 +161,7 @@ export class OpeningFormService {
     return circularOpeningLoss;
   }
 
-  checkWarnings(loss: OpeningLoss): OpeningLossWarnings {
+  checkWarnings(loss: OpeningLoss, calculatedViewFactor?: number): OpeningLossWarnings {
     return {
       temperatureWarning: this.checkTemperature(loss),
       emissivityWarning: this.checkEmissivity(loss),
@@ -171,6 +171,7 @@ export class OpeningFormService {
       lengthWarning: this.checkLength(loss),
       heightWarning: this.checkHeight(loss),
       viewFactorWarning: this.checkViewFactor(loss),
+      calculateVFWarning: this.checkCalculateVFWarning(loss.viewFactor, calculatedViewFactor)
     };
   }
 
@@ -216,18 +217,22 @@ export class OpeningFormService {
     }
   }
 
-  checkCalculateVFWarning(form: FormGroup, calculatedViewFactor: number): string {
-    if (form.valid) {
+  checkCalculateVFWarning(currentViewFactor: number, calculatedViewFactor: number): string {
+    if (currentViewFactor) {
       let limit = .05;
-      let percentDifference = Math.abs(form.controls.viewFactor.value - calculatedViewFactor) / calculatedViewFactor;
+      let percentDifference = Math.abs(currentViewFactor - calculatedViewFactor) / calculatedViewFactor;
       if (percentDifference > limit) {
-        return `Value is greater than ${limit * 100}% different from calculated View Factor (${Math.round(calculatedViewFactor)} A). Consider using the 'Calculate View Factor' button.`;
+        return `Value is greater than ${limit * 100}% different from the calculated View Factor (${this.roundVal(calculatedViewFactor, 3)}). Consider using the 'Calculate View Factor' button.`;
       } else {
         return null;
       }
     } else {
       return null;
     }
+  }
+
+  roundVal(val: number, digits: number): number {
+    return Number(val.toFixed(digits));
   }
 
   checkTemperature(loss: OpeningLoss): string {
@@ -279,4 +284,5 @@ export interface OpeningLossWarnings {
   lengthWarning: string;
   heightWarning: string;
   viewFactorWarning: string;
+  calculateVFWarning: string;
 }
