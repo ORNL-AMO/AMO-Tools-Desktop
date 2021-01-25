@@ -192,10 +192,12 @@
           <label class="baseline-value-label" for="viewFactor" aria-describedby="viewFactorHelp">View Factor</label>
           <div class="text-muted text-center baseline-value-input mb-1">{{ loss.viewFactor }}</div>
           <span>
-            <a id="{{'viewFactor1_'+lossIndex}}" class="click-link small" (click)="calculateViewFactor(loss)">Calculate
+            <a id="{{'viewFactor1_'+lossIndex}}" class="click-link small" (click)="setViewFactor(loss, index)">Calculate
               View Factor</a>
           </span>
           <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].viewFactorWarning !== null">{{baselineWarnings[index].viewFactorWarning}}</span>
+          <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].calculateVFWarning !== null">{{baselineWarnings[index].calculateVFWarning}}</span>
+
         </div>
       </form>
       <form class="explore-opps-form">
@@ -206,10 +208,12 @@
             <input name="{{'viewFactor2_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control mb-1" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].viewFactor"
             id="viewFactor2" onfocus="this.select();" (input)="checkModificationWarnings(index)" (focus)="focusField('viewFactor')">
             <span>
-              <a id="{{'viewFactor2_'+lossIndex}}" class="click-link small" (click)="calculateViewFactor(phast.modifications[exploreModIndex].phast.losses.openingLosses[index])">Calculate
+              <a id="{{'viewFactor2_'+lossIndex}}" class="click-link small" (click)="setViewFactor(phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)">Calculate
                 View Factor</a>
               </span>
               <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].viewFactorWarning  !== null">{{modificationWarnings[index].viewFactorWarning}}</span>
+              <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].calculateVFWarning !== null">{{modificationWarnings[index].calculateVFWarning}}</span>
+
             </div>
         </div>
       </form>

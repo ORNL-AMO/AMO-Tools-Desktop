@@ -161,7 +161,7 @@ export class OpeningFormService {
     return circularOpeningLoss;
   }
 
-  checkWarnings(loss: OpeningLoss): OpeningLossWarnings {
+  checkWarnings(loss: OpeningLoss, calculatedViewFactor?: number): OpeningLossWarnings {
     return {
       temperatureWarning: this.checkTemperature(loss),
       emissivityWarning: this.checkEmissivity(loss),
@@ -170,7 +170,8 @@ export class OpeningFormService {
       thicknessWarning: this.checkWallThickness(loss),
       lengthWarning: this.checkLength(loss),
       heightWarning: this.checkHeight(loss),
-      viewFactorWarning: this.checkViewFactor(loss)
+      viewFactorWarning: this.checkViewFactor(loss),
+      calculateVFWarning: this.checkCalculateVFWarning(loss.viewFactor, calculatedViewFactor)
     };
   }
 
@@ -216,6 +217,24 @@ export class OpeningFormService {
     }
   }
 
+  checkCalculateVFWarning(currentViewFactor: number, calculatedViewFactor: number): string {
+    if (currentViewFactor) {
+      let limit = .05;
+      let percentDifference = Math.abs(currentViewFactor - calculatedViewFactor) / calculatedViewFactor;
+      if (percentDifference > limit) {
+        return `Value is greater than ${limit * 100}% different from the calculated View Factor (${this.roundVal(calculatedViewFactor, 3)}). Consider using the 'Calculate View Factor' button.`;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  roundVal(val: number, digits: number): number {
+    return Number(val.toFixed(digits));
+  }
+
   checkTemperature(loss: OpeningLoss): string {
     if (loss.ambientTemperature > loss.insideTemperature) {
       return 'Ambient Temperature cannot be greater than Average Zone Temperature';
@@ -223,6 +242,7 @@ export class OpeningFormService {
       return null;
     }
   }
+
   checkEmissivity(loss: OpeningLoss): string {
     if (loss.emissivity > 1) {
       return 'Surface emissivity must be less than 1';
@@ -264,4 +284,5 @@ export interface OpeningLossWarnings {
   lengthWarning: string;
   heightWarning: string;
   viewFactorWarning: string;
+  calculateVFWarning: string;
 }
