@@ -28,8 +28,10 @@
 	  <!-- baseline -->
 	  <div class="d-flex">
 		<div class="p-0 col-8 d-flex scroll-item bg-white" [ngStyle]="{'height.px': containerHeight}">
-		  <div class="w-50 baseline panel-column" (click)="setBaselineSelected()"
-			[ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+		  <div #baselineColumn class="w-50 baseline panel-column" (click)="setBaselineSelected()"
+			[ngClass]="{'disabled': baselineSelected == false,
+						 'modal-open': isModalOpen == true,
+						'fit-height': fitColumnHeight}">
 			<div class="header mx-2 mb-4">
 				<h3>Baseline</h3>
 				<a class="click-link pull-right small add-loss" (click)="addLoss()">+Add Loss</a>
@@ -54,7 +56,10 @@
 
 		  <!-- Modification -->
 		  <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="setModificationSelected()"
-			[ngClass]="{'disabled': baselineSelected == true, 'modal-open': isModalOpen == true}">
+			[ngClass]="{'disabled': baselineSelected == true, 
+						'modal-open': isModalOpen == true,
+						'fit-height': fitColumnHeight}"
+			[ngStyle]="{'padding-bottom': fitColumnHeight? '50px' : ''}">
 			<div class="header mx-2 mb-4">
 			  <h3>Modification</h3>
 			</div>

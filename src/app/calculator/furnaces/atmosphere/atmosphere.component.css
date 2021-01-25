@@ -84,3 +84,7 @@
    .atmosphere-icon {
         width: 53px;
    }
+
+   .fit-height {
+       height: fit-content !important;
+   }

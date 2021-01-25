@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
@@ -21,13 +21,16 @@ export class AtmosphereComponent implements OnInit {
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  @ViewChild('baselineColumn', { static: false }) baselineColumn: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
+      this.checkColumnHeight();
       this.resizeTabs();
     }, 100);
   }
   containerHeight: number;
+  fitColumnHeight: boolean;
   isModalOpen: boolean;
   isEditingName: boolean;
   modalSubscription: Subscription;
@@ -43,7 +46,8 @@ export class AtmosphereComponent implements OnInit {
   baselineSelected: boolean = true;
   modificationExists: boolean = false;
 
-  constructor(private settingsDbService: SettingsDbService, 
+  constructor(private settingsDbService: SettingsDbService,
+              private cd: ChangeDetectorRef,
               private atmosphereService: AtmosphereService) { }
 
   ngOnInit() {
@@ -78,6 +82,7 @@ export class AtmosphereComponent implements OnInit {
     })
     this.baselineDataSub = this.atmosphereService.baselineData.subscribe(value => {
       this.baselineData = value;
+      this.checkColumnHeight();
       this.atmosphereService.calculate(this.settings);
     })
     this.modificationDataSub = this.atmosphereService.modificationData.subscribe(value => {
@@ -131,6 +136,18 @@ export class AtmosphereComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  checkColumnHeight() {
+    if (this.baselineColumn) {
+      let columnHeight = this.baselineColumn.nativeElement.offsetHeight;
+      if (columnHeight >= this.containerHeight && this.baselineData.length > 1) {
+        this.fitColumnHeight = true;
+      } else {
+        this.fitColumnHeight = false;
+      }
+      this.cd.detectChanges();
+    }
   }
 
   resizeTabs() {
