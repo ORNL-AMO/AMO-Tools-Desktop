@@ -2,9 +2,9 @@
 	<div class="d-flex flex-column modification w-50 mh-100 scroll-item" [ngClass]="{'modal-open': isModalOpen == true}">
 		<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
 		<div class="d-flex pl-2 align-items-center">
-			<div class="text-center">
-			<img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="ico-size2 icon">
-			</div>
+			<div class="col-md-auto">
+				<img src="assets/images/calculator-icons/furnace-icons/air-heating-icon.png" class="ico-size2 px-2 py-1">
+			  </div>
 			<div class="pl-2">
 			<h3>Air Heating using Flue Gas</h3>
 			</div>
@@ -43,7 +43,7 @@
 				<div class="form-group m-0">
 					<label class="bold">Annual Energy Savings</label>
 					<div *ngIf="output.energySavings" class="text-center bold small">
-					  {{output.energySavings | currency:'USD':'symbol':'1.0-0'}}
+					  {{output.energySavings | number:'1.0-0'}}
 					</div>
 					<div *ngIf="!output.energySavings" class="text-center bold small">
 					  &mdash; &mdash;

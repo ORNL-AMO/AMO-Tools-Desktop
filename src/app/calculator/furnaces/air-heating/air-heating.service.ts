@@ -78,6 +78,7 @@ export class AirHeatingService {
       this.initDefaultEmptyOutputs();
     } else {
         inputCopy = this.convertInputUnits(inputCopy, settings);
+        inputCopy = this.convertPercentInputs(inputCopy);
         let airHeatingOutput: AirHeatingOutput = processHeatAddon.airHeatingUsingExhaust(inputCopy);
         airHeatingOutput = this.convertResultUnits(airHeatingOutput, settings);
         this.airHeatingOutput.next(airHeatingOutput);
@@ -116,6 +117,14 @@ export class AirHeatingService {
       exampleInput = this.convertExampleUnits(exampleInput);
     }
     this.airHeatingInput.next(exampleInput);
+  }
+
+  convertPercentInputs(inputs: AirHeatingInput) {
+    inputs.excessAir = inputs.excessAir > 0? inputs.excessAir / 100 : inputs.excessAir;
+    inputs.flueGasO2 = inputs.flueGasO2 > 0? inputs.flueGasO2 / 100 : inputs.flueGasO2;
+    inputs.heaterEfficiency = inputs.heaterEfficiency > 0? inputs.heaterEfficiency / 100 : inputs.heaterEfficiency;
+    inputs.hxEfficiency = inputs.heaterEfficiency > 0? inputs.hxEfficiency / 100 : inputs.heaterEfficiency;
+    return inputs;
   }
 
   
