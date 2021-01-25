@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
+import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { FlueGas, FlueGasByMass, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
@@ -31,7 +32,7 @@ export class FlueGasFormMassComponent implements OnInit {
 
   resetDataSub: Subscription;
   byMassForm: FormGroup;
-  options: any;
+  options: Array<SolidLiquidFlueGasMaterial>;
 
   calculationMethods: Array<string> = [
     'Excess Air',
@@ -44,10 +45,10 @@ export class FlueGasFormMassComponent implements OnInit {
   warnings: FlueGasWarnings;
 
   constructor(private flueGasService: FlueGasService,
-              private flueGasFormService: FlueGasFormService,
-              private phastService: PhastService, 
-              private cd: ChangeDetectorRef,
-              private suiteDbService: SuiteDbService) { }
+    private flueGasFormService: FlueGasFormService,
+    private phastService: PhastService,
+    private cd: ChangeDetectorRef,
+    private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
     this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
@@ -68,7 +69,7 @@ export class FlueGasFormMassComponent implements OnInit {
     this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
       this.initForm();
       this.cd.detectChanges();
-      })
+    })
   }
 
   initFormSetup() {
@@ -93,7 +94,7 @@ export class FlueGasFormMassComponent implements OnInit {
   initForm() {
     let updatedFlueGasData: FlueGas;
     if (this.isBaseline) {
-      updatedFlueGasData= this.flueGasService.baselineData.getValue();
+      updatedFlueGasData = this.flueGasService.baselineData.getValue();
     } else {
       updatedFlueGasData = this.flueGasService.modificationData.getValue();
     }
@@ -119,7 +120,7 @@ export class FlueGasFormMassComponent implements OnInit {
       this.calcMethodExcessAir = false;
     }
   }
-  
+
   calcExcessAir() {
     let input = {
       carbon: this.byMassForm.controls.carbon.value,
@@ -170,7 +171,7 @@ export class FlueGasFormMassComponent implements OnInit {
     let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
     if (this.isBaseline) {
       this.flueGasService.baselineData.next(currentDataByMass);
-    } else { 
+    } else {
       this.flueGasService.modificationData.next(currentDataByMass);
     }
   }
@@ -183,16 +184,19 @@ export class FlueGasFormMassComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
-    this.byMassForm.patchValue({
-      carbon: this.roundVal(tmpFlueGas.carbon, 4),
-      hydrogen: this.roundVal(tmpFlueGas.hydrogen, 4),
-      sulphur: this.roundVal(tmpFlueGas.sulphur, 4),
-      inertAsh: this.roundVal(tmpFlueGas.inertAsh, 4),
-      o2: this.roundVal(tmpFlueGas.o2, 4),
-      moisture: this.roundVal(tmpFlueGas.moisture, 4),
-      nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
-    });
+    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
+    if (tmpFlueGas) {
+      this.byMassForm.patchValue({
+        carbon: this.roundVal(tmpFlueGas.carbon, 4),
+        hydrogen: this.roundVal(tmpFlueGas.hydrogen, 4),
+        sulphur: this.roundVal(tmpFlueGas.sulphur, 4),
+        inertAsh: this.roundVal(tmpFlueGas.inertAsh, 4),
+        o2: this.roundVal(tmpFlueGas.o2, 4),
+        moisture: this.roundVal(tmpFlueGas.moisture, 4),
+        nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
+      });
+    }
+    this.calculate();
   }
 
   changeMethod() {

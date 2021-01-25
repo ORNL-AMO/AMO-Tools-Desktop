@@ -44,7 +44,11 @@ export class EffortSavingsChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.initRenderChart();
+    if(!this.showPrint){
+      this.initRenderChart();
+    }else{
+      this.initRenderPrintChart();
+    }
   }
 
   initRenderChart() {
@@ -87,6 +91,68 @@ export class EffortSavingsChartComponent implements OnInit {
         displaylogo: false,
         displayModeBar: true,
         responsive: true
+      },
+    };
+
+    this.buildTrace();
+    let chartLayout = JSON.parse(JSON.stringify(this.effortChart.layout));
+    Plotly.newPlot(this.effortChartId, this.effortChart.data, chartLayout, this.effortChart.config)
+      .then(chart => {
+        chart.on('plotly_beforehover', () => {
+          if (this.showingHoverLabels) {
+            return false;
+          }
+        });
+        chart.on('plotly_legendclick', (legendClick) => {
+         this.updateVisibleLabels(legendClick);
+        });
+        chart.on('plotly_relayout', () => {
+          this.showingHoverLabels = false;
+        });
+      });
+  }
+
+  initRenderPrintChart() {
+    Plotly.purge(this.effortChartId);
+
+    this.effortChart = {
+      name: 'Payback vs. Effort to Implement',
+      data: [],
+      layout: {
+        height: 600,
+        width: 1000,
+        hovermode: 'closest',
+        xaxis: {
+          autorange: true,
+          type: 'linear',
+          showgrid: true,
+          showticksuffix: 'all',
+          title: {
+            text: "Payback Period (years)"
+          },
+        },
+        yaxis: {
+          autorange: true,
+          type: 'auto',
+          rangemode: 'tozero',
+          showgrid: true,
+          title: {
+            text: "Effort to Implement"
+          },
+          showticksuffix: 'all'
+        },
+        margin: {
+          t: 50,
+          b: 50,
+          l: 75,
+          r: 100
+        }
+      },
+      config: {
+        modeBarButtonsToRemove: ['lasso2d', 'pan2d', 'select2d', 'hoverClosestCartesian', 'toggleSpikelines', 'hoverCompareCartesian'],
+        displaylogo: false,
+        displayModeBar: false,
+        responsive: false
       },
     };
 

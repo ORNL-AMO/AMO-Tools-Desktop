@@ -45,12 +45,12 @@ export class ChargeMaterialComponent implements OnInit {
   modificationDataSub: Subscription;
   modalSubscription: Subscription;
 
-  materialType: string = "Solid";
   tabSelect: string = 'results';
   baselineSelected = true;
   modificationExists = false;
 
-  constructor(private settingsDbService: SettingsDbService, private chargeMaterialService: ChargeMaterialService) { }
+  constructor(private settingsDbService: SettingsDbService, 
+              private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnInit(): void {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -139,14 +139,12 @@ export class ChargeMaterialComponent implements OnInit {
 
    btnResetData() {
     this.modificationExists = false;
-    this.materialType = 'Solid';
     this.chargeMaterialService.initDefaultEmptyInputs();
     this.chargeMaterialService.collapseMapping.next({});
     this.chargeMaterialService.resetData.next(true);
   }
 
   btnGenerateExample() {
-    this.materialType = 'Solid';
     this.modificationExists = true;
     this.chargeMaterialService.generateExampleData(this.settings);
   }

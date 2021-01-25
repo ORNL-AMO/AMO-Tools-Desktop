@@ -6,6 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
 import { OpeningFormService } from '../../../../calculator/furnaces/opening/opening-form.service';
+import { ViewFactorInput } from '../../../../shared/models/phast/losses/openingLoss';
 
 @Component({
   selector: 'app-opening-losses-form',
@@ -36,6 +37,7 @@ export class OpeningLossesFormComponent implements OnInit {
 
   totalArea: number = 0.0;
   idString: string;
+  canCalculateViewFactor: boolean;
   constructor(private convertUnitsService: ConvertUnitsService,
     private openingLossesCompareService: OpeningLossesCompareService,
     private openingFormService: OpeningFormService,
@@ -52,6 +54,7 @@ export class OpeningLossesFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.checkCanCalculateViewFactor();
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -127,8 +130,37 @@ export class OpeningLossesFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
+  checkCanCalculateViewFactor() {
+    if (this.openingLossesForm.controls.openingType.value == 'Round' 
+      && (this.openingLossesForm.controls.numberOfOpenings.invalid
+      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+      this.canCalculateViewFactor = false;
+    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (or Square)' 
+      &&  (this.openingLossesForm.controls.numberOfOpenings.invalid 
+      || this.openingLossesForm.controls.heightOfOpening.invalid
+      || this.openingLossesForm.controls.lengthOfOpening.invalid)) {
+      this.canCalculateViewFactor = false;
+    } else {
+      this.canCalculateViewFactor = true;
+    }
+  }
+
+  calculateViewFactor() {
+    this.save();
+    if (!this.canCalculateViewFactor) {
+      this.totalArea = 0.0;
+      return;
+    }
+    let vfInputs: ViewFactorInput = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
+    let viewFactor: number = this.phastService.viewFactorCalculation(vfInputs, this.settings);
+    this.openingLossesForm.patchValue({
+      viewFactor: this.roundVal(viewFactor, 3)
+    });
+  }
+
   save() {
-    this.openingFormService.setAmbientTempValidators(this.openingLossesForm);
+    this.checkCanCalculateViewFactor();
+    this.openingFormService.setValidators(this.openingLossesForm);
     this.calculate.emit(true);
     this.saveEmit.emit(true);
   }

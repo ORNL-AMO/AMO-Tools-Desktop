@@ -148,13 +148,14 @@ export class ChargeMaterialService {
   addLoss(hoursPerYear: number, modificationExists: boolean) {
     let currentBaselineData: Array<ChargeMaterial> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
-    let baselineObj: ChargeMaterial = this.initDefaultLoss(index, currentBaselineData[index - 1].chargeMaterialType);
+    let chargeMaterialType = index == 0? 'Solid' : currentBaselineData[index - 1].chargeMaterialType;
+    let baselineObj: ChargeMaterial = this.initDefaultLoss(index, chargeMaterialType);
     currentBaselineData.push(baselineObj)
     this.baselineData.next(currentBaselineData);
     
     if (modificationExists) {
       let currentModificationData: Array<ChargeMaterial> = this.modificationData.getValue();
-      let modificationObj: ChargeMaterial = this.initDefaultLoss(index, currentBaselineData[index - 1].chargeMaterialType);
+      let modificationObj: ChargeMaterial = this.initDefaultLoss(index, chargeMaterialType);
 
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
@@ -400,6 +401,7 @@ export class ChargeMaterialService {
 
     if (settings.unitsOfMeasure != 'Imperial') {
       this.convertSolidChargeMaterial(baselineChargeMaterial.solidChargeMaterial, 'Imperial', 'Metric');
+      this.convertSolidChargeMaterial(modificationChargeMaterial.solidChargeMaterial, 'Imperial', 'Metric');
     }
 
     this.energySourceType.next('Fuel');

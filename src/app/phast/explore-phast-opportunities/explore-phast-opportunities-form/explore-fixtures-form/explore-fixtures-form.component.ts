@@ -26,7 +26,7 @@ export class ExploreFixturesFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('changeTab')
   changeTab = new EventEmitter<LossTab>();
-  
+
   showFeedRate: Array<boolean>;
   showMaterial: Array<boolean>;
   materials: Array<SolidLoadChargeMaterial>;
@@ -50,20 +50,20 @@ export class ExploreFixturesFormComponent implements OnInit {
       }
     }
   }
-  
+
   initData() {
     this.showFeedRate = new Array();
     this.modificationWarnings = new Array<{ specificHeatWarning: string, feedRateWarning: string }>();
     this.baselineWarnings = new Array<{ specificHeatWarning: string, feedRateWarning: string }>();
     this.showMaterial = new Array<boolean>();
-    this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: false, display: 'Improve Materials Handling' }; 
-    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp = { hasOpportunity: false, display: 'Avoid Fixture Cooling' }; 
-    
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: false, display: 'Improve Materials Handling' };
+    this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp = { hasOpportunity: false, display: 'Avoid Fixture Cooling' };
+
     let index: number = 0;
     this.phast.losses.fixtureLosses.forEach(loss => {
       let check: boolean = this.initFeedRate(loss.feedRate, this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].feedRate);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures.hasOpportunity && check) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: check, display: 'Improve Materials Handling' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: check, display: 'Improve Materials Handling' };
       }
       this.showFeedRate.push(check);
       let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
@@ -72,7 +72,7 @@ export class ExploreFixturesFormComponent implements OnInit {
       this.modificationWarnings.push(tmpWarnings);
       check = (loss.materialName !== this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].materialName);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures.hasOpportunity && check) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: check, display: 'Improve Materials Handling' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: check, display: 'Improve Materials Handling' };
       }
       this.showMaterial.push(check);
       index++;
@@ -93,7 +93,7 @@ export class ExploreFixturesFormComponent implements OnInit {
     this.phast.losses.fixtureLosses.forEach(loss => {
       let check = (loss.initialTemperature !== this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].initialTemperature);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp.hasOpportunity && check) {
-        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp = { hasOpportunity: check, display: 'Avoid Fixture Cooling' }; 
+        this.phast.modifications[this.exploreModIndex].exploreOppsShowAllTemp = { hasOpportunity: check, display: 'Avoid Fixture Cooling' };
       }
       this.showInitialTemp.push(check);
       index++;
@@ -179,10 +179,12 @@ export class ExploreFixturesFormComponent implements OnInit {
 
   setSpecificHeat(loss: FixtureLoss) {
     let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(loss.materialName);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      material.specificHeatSolid = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
+    if (material) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        material.specificHeatSolid = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
+      }
+      loss.specificHeat = Number(material.specificHeatSolid.toFixed(3));
     }
-    loss.specificHeat = Number(material.specificHeatSolid.toFixed(3));
     this.calculate();
   }
 

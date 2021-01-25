@@ -60,7 +60,8 @@
     <span [routerLink]="['/calculators/atmosphere']" routerLinkActive="selected" class="sidebar-item">Atmosphere</span>
     <span [routerLink]="['/calculators/wall-loss']" routerLinkActive="selected" class="sidebar-item">Wall Loss</span>
     <span [routerLink]="['/calculators/opening']" routerLinkActive="selected" class="sidebar-item">Opening Loss</span>
-    <span [routerLink]="['/calculators/charge-material']" routerLinkActive="selected" class="sidebar-item">Charge Material</span>
+    <span [routerLink]="['/calculators/charge-material']" routerLinkActive="selected" class="sidebar-item">Charge
+      Material</span>
     <span [routerLink]="['/calculators/o2-enrichment']" routerLinkActive="selected" class="sidebar-item">O<sub>2</sub>
       Enrichment</span>
     <span [routerLink]="['/calculators/efficiency-improvement']" routerLinkActive="selected"
@@ -137,6 +138,15 @@
   <div class="directory-item">
     <span [routerLink]="['/calculators/lighting-replacement']" routerLinkActive="selected" class="sidebar-item">Lighting
       Replacement</span>
+  </div>
+</div>
+<!--lighting-->
+<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
+  <span class="sidebar-item" [routerLink]="['/calculators/waste-water-list']" routerLinkActive="selected">Waste
+    Water</span>
+  <div class="directory-item">
+    <span [routerLink]="['/calculators/o2-utilization-rate']" routerLinkActive="selected"
+      class="sidebar-item">O<sub>2</sub> Utilization Rate</span>
   </div>
 </div>
 <!--general-->

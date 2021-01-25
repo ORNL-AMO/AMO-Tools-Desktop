@@ -207,8 +207,10 @@ export class AtmosphereService {
     let currentBaselineData: Array<AtmosphereLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
     let baselineObj: AtmosphereLoss = this.initDefaultLoss(index, hoursPerYear);
-    baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-    baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+    if (index > 0) {
+      baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
+      baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+    }
     currentBaselineData.push(baselineObj)
     this.baselineData.next(currentBaselineData);
     
@@ -216,9 +218,10 @@ export class AtmosphereService {
       let currentModificationData: Array<AtmosphereLoss> = this.modificationData.getValue();
       let modificationObj: AtmosphereLoss = this.initDefaultLoss(index, hoursPerYear);
       
-      // Set loss operational constants
-      modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-      modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+      if (index > 0) {
+        modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
+        modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
+      }
 
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
@@ -281,7 +284,6 @@ export class AtmosphereService {
     };
     
     this.modificationData.next([modExample]);
-    this.energySourceType.next('Fuel');
     this.generateExample.next(true);
   }
 

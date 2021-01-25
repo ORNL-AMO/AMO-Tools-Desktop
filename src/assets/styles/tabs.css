@@ -110,7 +110,10 @@ Tabs
     border-bottom: #84b641 solid 3px;
   }
 
-
+  .waste-water .tabs.primary .active a {
+    border: none;
+    border-bottom: #003087 solid 3px;
+  }
   
 
 
@@ -175,7 +178,10 @@ Tabs
   .tabs.subtabs.motor-inventory {
     border-bottom: #84b641 solid 3px;
   }
-
+  
+  .tabs.subtabs.waste-water {
+    border-bottom: #003087 solid 3px;
+  }
     .tabs.subtabs.progress-tabs a {
       color: #000;
       padding-top: 8px;

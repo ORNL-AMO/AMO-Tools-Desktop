@@ -16,7 +16,7 @@ import { WallService } from '../wall.service';
   styleUrls: ['./wall-form.component.css']
 })
 export class WallFormComponent implements OnInit {
-  
+
   @Input()
   settings: Settings;
   @Input()
@@ -35,7 +35,7 @@ export class WallFormComponent implements OnInit {
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-  
+
   surfaceOptions: Array<WallLossesSurface>;
   showSurfaceModal: boolean = false;
 
@@ -47,7 +47,7 @@ export class WallFormComponent implements OnInit {
   showOperatingHoursModal: boolean;
   formWidth: number;
   energyUnit: string;
-  energySourceTypeSub: any;
+  energySourceTypeSub: Subscription;
   outputSubscription: Subscription;
   lossResult: WallLossResult;
   isEditingName: boolean;
@@ -56,9 +56,9 @@ export class WallFormComponent implements OnInit {
   idString: string;
 
   constructor(private wallFormService: WallFormService,
-              private suiteDbService: SuiteDbService,
-              private cd: ChangeDetectorRef,
-              private wallService: WallService) { }
+    private suiteDbService: SuiteDbService,
+    private cd: ChangeDetectorRef,
+    private wallService: WallService) { }
   ngOnInit(): void {
     if (!this.isBaseline) {
       this.idString = '_modification_' + this.index;
@@ -82,6 +82,8 @@ export class WallFormComponent implements OnInit {
       this.setFormState();
     }
     if (changes.index && !changes.index.firstChange) {
+      this.checkEnergySourceSub();
+      this.setFormState();
       let output: WallLossOutput = this.wallService.output.getValue();
       this.setLossResult(output);
     }
@@ -103,7 +105,7 @@ export class WallFormComponent implements OnInit {
   initSubscriptions() {
     this.resetDataSub = this.wallService.resetData.subscribe(value => {
       this.initForm();
-      });
+    });
     this.generateExampleSub = this.wallService.generateExample.subscribe(value => {
       this.initForm();
     });
@@ -122,6 +124,15 @@ export class WallFormComponent implements OnInit {
       this.lossResult = output.baseline.losses[this.index];
     } else {
       this.lossResult = output.modification.losses[this.index];
+    }
+  }
+
+  checkEnergySourceSub() {
+    let isCurrentlySubscribed = this.trackingEnergySource;
+    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
+
+    if (!this.trackingEnergySource && isCurrentlySubscribed) {
+      this.energySourceTypeSub.unsubscribe();
     }
   }
 
@@ -204,10 +215,12 @@ export class WallFormComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
-    this.wallLossesForm.patchValue({
-      conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
-    });
+    let tmpFactor: WallLossesSurface = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
+    if (tmpFactor) {
+      this.wallLossesForm.patchValue({
+        conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
+      });
+    }
     this.calculate();
   }
 
@@ -225,10 +238,10 @@ export class WallFormComponent implements OnInit {
   hideSurfaceShapeModal(event?: any) {
     if (event) {
       this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
-      let newMaterial = this.surfaceOptions.filter(material => { return material.surface === event.surface; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: WallLossesSurface = this.surfaceOptions.find(material => { return material.surface === event.surface; });
+      if (newMaterial) {
         this.wallLossesForm.patchValue({
-          surfaceShape: newMaterial[0].id
+          surfaceShape: newMaterial.id
         });
         this.setProperties();
       }

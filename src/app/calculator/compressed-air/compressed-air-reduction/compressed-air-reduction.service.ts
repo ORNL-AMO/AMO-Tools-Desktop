@@ -44,7 +44,7 @@ export class CompressedAirReductionService {
       hoursPerYear = operatingHours.hoursPerYear;
     }
     let utilityCost: number = settings && settings.electricityCost ? settings.electricityCost : 0.066;
-    if(utilityType == 0){
+    if (utilityType == 0) {
       utilityCost = settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12;
     }
 
@@ -241,7 +241,7 @@ export class CompressedAirReductionService {
     if (modification) {
       let modificationInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(modification));
       modificationResults = this.calculate(modificationInpCpy, settings);
-    } else{
+    } else {
       modificationResults = baselineResults;
     }
     let compressedAirReductionResults: CompressedAirReductionResults = {
@@ -253,7 +253,7 @@ export class CompressedAirReductionService {
       annualConsumptionReduction: 0
     }
     if (modificationResults) {
-      if (baselineInpCpy[0].utilityType == 0) {
+      if (baselineInpCpy.length != 0 && baselineInpCpy[0].utilityType == 0) {
         //use consumption reduction to energy use..
         compressedAirReductionResults.baselineResults.energyUse = compressedAirReductionResults.baselineResults.consumption;
         compressedAirReductionResults.modificationResults.energyUse = compressedAirReductionResults.modificationResults.consumption;

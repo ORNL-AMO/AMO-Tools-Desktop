@@ -145,10 +145,12 @@ export class AirLeakService {
     baselineResults = this.convertAirleakService.convertResult(baselineResults, settings);
     modificationResults = this.convertAirleakService.convertResult(modificationResults, settings);
 
+    let compressorControlAdjustment: number = airLeakSurveyInput.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment || 1;
+
     let savings: AirLeakSurveyResult = {
       totalFlowRate: baselineResults.totalFlowRate - modificationResults.totalFlowRate,
-      annualTotalElectricity: baselineResults.annualTotalElectricity - modificationResults.annualTotalElectricity,
-      annualTotalElectricityCost: baselineResults.annualTotalElectricityCost - modificationResults.annualTotalElectricityCost,
+      annualTotalElectricity: (baselineResults.annualTotalElectricity - modificationResults.annualTotalElectricity) * compressorControlAdjustment,
+      annualTotalElectricityCost: (baselineResults.annualTotalElectricityCost - modificationResults.annualTotalElectricityCost) * compressorControlAdjustment,
       annualTotalFlowRate: baselineResults.annualTotalFlowRate - modificationResults.annualTotalFlowRate,
     }
     let outputs: AirLeakSurveyOutput = {

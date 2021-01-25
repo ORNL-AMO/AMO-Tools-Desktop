@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { AtmosphereLoss, AtmosphereLossResults } from '../../../../shared/models/phast/losses/atmosphereLoss';
+import { AtmosphereLoss, AtmosphereLossOutput, AtmosphereLossResults } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { AtmosphereFormService, AtmosphereLossWarnings } from '../atmosphere-form.service';
@@ -44,7 +44,7 @@ export class AtmosphereFormComponent implements OnInit {
   showOperatingHoursModal: boolean;
   formWidth: number;
   energyUnit: string;
-  energySourceTypeSub: any;
+  energySourceTypeSub: Subscription;
 
   lossResult: AtmosphereLossResults;
   isEditingName: boolean;
@@ -54,10 +54,10 @@ export class AtmosphereFormComponent implements OnInit {
   outputSubscription: Subscription;
 
   constructor(private atmosphereFormService: AtmosphereFormService,
-              private suiteDbService: SuiteDbService, 
-              private convertUnitsService: ConvertUnitsService,
-              private cd: ChangeDetectorRef,
-              private atmosphereService: AtmosphereService) { }
+    private suiteDbService: SuiteDbService,
+    private convertUnitsService: ConvertUnitsService,
+    private cd: ChangeDetectorRef,
+    private atmosphereService: AtmosphereService) { }
 
   ngOnInit(): void {
     if (!this.isBaseline) {
@@ -83,6 +83,11 @@ export class AtmosphereFormComponent implements OnInit {
     if (changes.selected && !changes.selected.firstChange) {
       this.setFormState();
     }
+    if (changes.index && !changes.index.firstChange) {
+      this.checkEnergySourceSub();
+      let output: AtmosphereLossOutput = this.atmosphereService.output.getValue();
+      this.setLossResult(output);
+    }
   }
 
   ngOnDestroy() {
@@ -94,10 +99,19 @@ export class AtmosphereFormComponent implements OnInit {
     }
   }
 
+  checkEnergySourceSub() {
+    let isCurrentlySubscribed = this.trackingEnergySource;
+    this.trackingEnergySource = this.index > 0 || !this.isBaseline;
+
+    if (!this.trackingEnergySource && isCurrentlySubscribed) {
+      this.energySourceTypeSub.unsubscribe();
+    }
+  }
+
   initSubscriptions() {
     this.resetDataSub = this.atmosphereService.resetData.subscribe(value => {
       this.initForm();
-      });
+    });
     this.generateExampleSub = this.atmosphereService.generateExample.subscribe(value => {
       this.initForm();
     });
@@ -116,6 +130,14 @@ export class AtmosphereFormComponent implements OnInit {
 
   }
 
+  setLossResult(output: AtmosphereLossOutput) {
+    if (this.isBaseline) {
+      this.lossResult = output.baseline.losses[this.index];
+    } else {
+      this.lossResult = output.modification.losses[this.index];
+    }
+  }
+
   setFormState() {
     if (this.selected == false) {
       this.atmosphereLossForm.disable();
@@ -126,13 +148,14 @@ export class AtmosphereFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
+    if (selectedMaterial) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
+      }
+      this.atmosphereLossForm.patchValue({
+        specificHeat: this.roundVal(selectedMaterial.specificHeat, 4),
+      });
     }
-
-    this.atmosphereLossForm.patchValue({
-      specificHeat: this.roundVal(selectedMaterial.specificHeat, 4),
-    });
     this.calculate();
   }
 
@@ -208,7 +231,7 @@ export class AtmosphereFormComponent implements OnInit {
     this.atmosphereService.currentField.next(str);
   }
 
-   
+
   checkWarnings() {
     let tmpLoss: AtmosphereLoss = this.atmosphereFormService.getLossFromForm(this.atmosphereLossForm);
     this.warnings = this.atmosphereFormService.checkWarnings(tmpLoss);
@@ -230,10 +253,10 @@ export class AtmosphereFormComponent implements OnInit {
   hideSpecificHeatModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
-      let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: AtmosphereSpecificHeat = this.materialTypes.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.atmosphereLossForm.patchValue({
-          atmosphereGas: newMaterial[0].id
+          atmosphereGas: newMaterial.id
         });
         this.setProperties();
       }

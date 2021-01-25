@@ -32,9 +32,9 @@ export class LiquidMaterialFormComponent implements OnInit {
 
   chargeMaterialForm: FormGroup;
   warnings: LiquidMaterialWarnings;
-  materialTypes: any;
+  materialTypes: Array<LiquidLoadChargeMaterial>;
   showModal: boolean;
-  
+
   lossResult: ChargeMaterialResult;
   idString: string;
   outputSubscription: Subscription;
@@ -42,11 +42,11 @@ export class LiquidMaterialFormComponent implements OnInit {
   collapseMaterial: boolean = false;
   chargeMaterialType: string;
 
-  constructor(private suiteDbService: SuiteDbService, 
-              private chargeMaterialService: ChargeMaterialService, 
-              private convertUnitsService: ConvertUnitsService,
-              private liquidMaterialFormService: LiquidMaterialFormService,
-              ) {}
+  constructor(private suiteDbService: SuiteDbService,
+    private chargeMaterialService: ChargeMaterialService,
+    private convertUnitsService: ConvertUnitsService,
+    private liquidMaterialFormService: LiquidMaterialFormService,
+  ) { }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -70,7 +70,7 @@ export class LiquidMaterialFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
-        this.setFormState();
+      this.setFormState();
     }
     if (changes.index && !changes.index.firstChange) {
       let output: ChargeMaterialOutput = this.chargeMaterialService.output.getValue();
@@ -89,14 +89,14 @@ export class LiquidMaterialFormComponent implements OnInit {
   initSubscriptions() {
     this.resetDataSub = this.chargeMaterialService.resetData.subscribe(value => {
       this.initForm();
-      });
+    });
     this.generateExampleSub = this.chargeMaterialService.generateExample.subscribe(value => {
       this.initForm();
     });
     this.outputSubscription = this.chargeMaterialService.output.subscribe(output => {
       this.setLossResult(output);
     });
-    this.collapseMaterialSub = this.chargeMaterialService.collapseMapping.subscribe((collapseMapping: {[index: number]: boolean }) => {
+    this.collapseMaterialSub = this.chargeMaterialService.collapseMapping.subscribe((collapseMapping: { [index: number]: boolean }) => {
       if (collapseMapping && collapseMapping[this.index] != undefined) {
         this.collapseMaterial = collapseMapping[this.index];
       }
@@ -123,31 +123,35 @@ export class LiquidMaterialFormComponent implements OnInit {
       }
     }
 
-    if (updatedChargeMaterialData && updatedChargeMaterialData.liquidChargeMaterial) {
-      this.chargeMaterialForm = this.liquidMaterialFormService.getLiquidChargeMaterialForm(updatedChargeMaterialData, false);
-    } else {
-      this.chargeMaterialForm = this.liquidMaterialFormService.initLiquidForm();
-    }
+    if (updatedChargeMaterialData && updatedChargeMaterialData.chargeMaterialType == 'Liquid') {
+      if (updatedChargeMaterialData && updatedChargeMaterialData.liquidChargeMaterial) {
+        this.chargeMaterialForm = this.liquidMaterialFormService.getLiquidChargeMaterialForm(updatedChargeMaterialData, false);
+      } else {
+        this.chargeMaterialForm = this.liquidMaterialFormService.initLiquidForm();
+      }
 
-    this.checkWarnings();
-    this.calculate();
-    this.setFormState();
+      this.checkWarnings();
+      this.calculate();
+      this.setFormState();
+    }
   }
 
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      selectedMaterial.vaporizationTemperature = this.convertUnitsService.value(this.roundVal(selectedMaterial.vaporizationTemperature, 4)).from('F').to('C');
-      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
-      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
-      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+    let selectedMaterial: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (selectedMaterial) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        selectedMaterial.vaporizationTemperature = this.convertUnitsService.value(this.roundVal(selectedMaterial.vaporizationTemperature, 4)).from('F').to('C');
+        selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
+        selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
+        selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+      }
+      this.chargeMaterialForm.patchValue({
+        materialLatentHeat: this.roundVal(selectedMaterial.latentHeat, 4),
+        materialSpecificHeatLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
+        materialSpecificHeatVapor: this.roundVal(selectedMaterial.specificHeatVapor, 4),
+        materialVaporizingTemperature: this.roundVal(selectedMaterial.vaporizationTemperature, 4)
+      });
     }
-    this.chargeMaterialForm.patchValue({
-      materialLatentHeat: this.roundVal(selectedMaterial.latentHeat, 4),
-      materialSpecificHeatLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
-      materialSpecificHeatVapor: this.roundVal(selectedMaterial.specificHeatVapor, 4),
-      materialVaporizingTemperature: this.roundVal(selectedMaterial.vaporizationTemperature, 4)
-    });
     this.calculate();
   }
 
@@ -180,7 +184,7 @@ export class LiquidMaterialFormComponent implements OnInit {
     this.chargeMaterialService.updateDataArray(chargeMaterial, this.index, this.isBaseline);
   }
 
-    checkSpecificHeatDiffLiquid() {
+  checkSpecificHeatDiffLiquid() {
     let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
@@ -249,10 +253,10 @@ export class LiquidMaterialFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
-      let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: LiquidLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.chargeMaterialForm.patchValue({
-          materialId: newMaterial[0].id
+          materialId: newMaterial.id
         });
         this.setProperties();
       }

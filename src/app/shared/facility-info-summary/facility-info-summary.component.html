@@ -18,23 +18,33 @@
     </tr>
     <tr>
       <td>Street</td>
-      <td>{{facilityInfo.address.street}}</td>
+      <td>
+        <span *ngIf="facilityInfo.address">{{facilityInfo.address.street}}</span>
+      </td>
     </tr>
     <tr>
       <td>City</td>
-      <td>{{facilityInfo.address.city}}</td>
+      <td>
+        <span *ngIf="facilityInfo.address">{{facilityInfo.address.city}}</span>
+      </td>
     </tr>
     <tr>
       <td>State</td>
-      <td>{{facilityInfo.address.state}}</td>
+      <td>
+        <span *ngIf="facilityInfo.address">{{facilityInfo.address.state}}</span>
+      </td>
     </tr>
     <tr>
       <td>Country</td>
-      <td>{{facilityInfo.address.country}}</td>
+      <td>
+        <span *ngIf="facilityInfo.address">{{facilityInfo.address.country}}</span>
+      </td>
     </tr>
     <tr>
       <td>Zip</td>
-      <td>{{facilityInfo.address.zip}}</td>
+      <td>
+        <span *ngIf="facilityInfo.address">{{facilityInfo.address.zip}}</span>
+      </td>
     </tr>
     <tr>
       <td class="bold" colspan="2">
@@ -43,15 +53,21 @@
     </tr>
     <tr>
       <td>Name</td>
-      <td>{{facilityInfo.facilityContact.contactName}}</td>
+      <td>
+        <span *ngIf="facilityInfo.facilityContact">{{facilityInfo.facilityContact.contactName}}</span>
+      </td>
     </tr>
     <tr>
       <td>Phone</td>
-      <td>{{facilityInfo.facilityContact.phoneNumber | phone}}</td>
+      <td>
+        <span *ngIf="facilityInfo.facilityContact">{{facilityInfo.facilityContact.phoneNumber | phone}}</span>
+      </td>
     </tr>
     <tr>
       <td>Email</td>
-      <td>{{facilityInfo.facilityContact.email}}</td>
+      <td>
+        <span *ngIf="facilityInfo.facilityContact">{{facilityInfo.facilityContact.email}}</span>
+      </td>
     </tr>
     <tr>
       <td class="bold" colspan="2">
@@ -60,15 +76,21 @@
     </tr>
     <tr>
       <td>Name</td>
-      <td>{{facilityInfo.assessmentContact.contactName}}</td>
+      <td>
+        <span *ngIf="facilityInfo.assessmentContact">{{facilityInfo.assessmentContact.contactName}}</span>
+      </td>
     </tr>
     <tr>
       <td>Phone</td>
-      <td>{{facilityInfo.assessmentContact.phoneNumber | phone}}</td>
+      <td>
+        <span *ngIf="facilityInfo.assessmentContact">{{facilityInfo.assessmentContact.phoneNumber | phone}}</span>
+      </td>
     </tr>
     <tr>
       <td>Email</td>
-      <td>{{facilityInfo.assessmentContact.email}}</td>
+      <td>
+        <span *ngIf="facilityInfo.assessmentContact">{{facilityInfo.assessmentContact.email}}</span>
+      </td>
     </tr>
   </table>
 </div>

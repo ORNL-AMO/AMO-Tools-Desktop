@@ -94,11 +94,13 @@ export class WallLossesFormComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
-    this.wallLossesForm.patchValue({
-      conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
-    });
-    this.calculate.emit(true);
+    let tmpFactor: WallLossesSurface = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
+    if (tmpFactor) {
+      this.wallLossesForm.patchValue({
+        conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
+      });
+      this.calculate.emit(true);
+    }
     this.save();
   }
   roundVal(val: number, digits: number) {
@@ -115,10 +117,10 @@ export class WallLossesFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
-      let newMaterial = this.surfaceOptions.filter(material => { return material.surface === event.surface; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: WallLossesSurface = this.surfaceOptions.find(material => { return material.surface === event.surface; });
+      if (newMaterial) {
         this.wallLossesForm.patchValue({
-          surfaceShape: newMaterial[0].id
+          surfaceShape: newMaterial.id
         });
         this.setProperties();
       }
