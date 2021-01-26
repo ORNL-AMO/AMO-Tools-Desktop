@@ -129,12 +129,12 @@ export class FixtureService {
 
   initDefaultLoss(index: number, hoursPerYear: number = 8760) {
     let defaultBaselineData: FixtureLoss = {
-      atmosphereGas: 1,
       specificHeat: 0,
-      inletTemperature: 0,
-      outletTemperature: 0,
-      flowRate: 0,
+      feedRate: 0,
+      initialTemperature: 0,
+      finalTemperature: 0,
       correctionFactor: 0,
+      materialName: 0,
       heatLoss: 0,
       name: 'Loss #' + (index + 1),
       energySourceType: 'Fuel',
@@ -232,8 +232,8 @@ export class FixtureService {
 
   generateExampleData(settings: Settings) {
     let specificHeat: number = .0185;
-    let inletTemperature: number = 30;
-    let outletTemperature: number = 1000;
+    let initialTemperature: number = 30;
+    let finalTemperature: number = 1000;
     let modOutletTemperature: number = 900;
     let flowRate: number = 120000;
 
@@ -241,11 +241,11 @@ export class FixtureService {
       specificHeat = this.convertUnitsService.value(specificHeat).from('btuScfF').to('kJm3C');
       specificHeat = Number(specificHeat.toFixed(5));
 
-      inletTemperature = this.convertUnitsService.value(inletTemperature).from('F').to('C');
-      inletTemperature = Number(inletTemperature.toFixed(2));
+      initialTemperature = this.convertUnitsService.value(initialTemperature).from('F').to('C');
+      initialTemperature = Number(initialTemperature.toFixed(2));
 
-      outletTemperature = this.convertUnitsService.value(outletTemperature).from('F').to('C');
-      outletTemperature = Number(outletTemperature.toFixed(2));
+      finalTemperature = this.convertUnitsService.value(finalTemperature).from('F').to('C');
+      finalTemperature = Number(finalTemperature.toFixed(2));
 
       modOutletTemperature = this.convertUnitsService.value(modOutletTemperature).from('F').to('C');
       modOutletTemperature = Number(modOutletTemperature.toFixed(2));
@@ -255,10 +255,15 @@ export class FixtureService {
     }
 
     let baselineExample: FixtureLoss = {
-      atmosphereGas: 1,
+      feedRate: 0,
+      finalTemperature: 0,
+      correctionFactor: 0,
+      materialName: 0,
+      heatLoss: 0,
+
       specificHeat: specificHeat,
-      inletTemperature: inletTemperature,
-      outletTemperature: outletTemperature,
+      initialTemperature: initialTemperature,
+      finalTemperature: finalTemperature,
       flowRate: flowRate,
       correctionFactor: 1,
       heatLoss: 0,
