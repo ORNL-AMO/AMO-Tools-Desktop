@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Settings } from '../../../../shared/models/settings';
+import { FixtureService } from '../fixture.service';
 
 @Component({
   selector: 'app-fixture-help',
@@ -14,10 +17,10 @@ export class FixtureHelpComponent implements OnInit {
   displaySuggestions: boolean;
 
 
-  constructor(private atmosphereService: AtmosphereService) { }
+  constructor(private fixtureService: FixtureService) { }
 
   ngOnInit(): void {
-    this.currentFieldSub = this.atmosphereService.currentField.subscribe(val => {
+    this.currentFieldSub = this.fixtureService.currentField.subscribe(val => {
       this.currentField = val;
     });
   }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { initial } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -64,7 +65,6 @@ export class FixtureService {
         }
 
         if (validModification && modificationFixtureLosses[index]) {
-
           modificationResults = this.getFixtureLossResult(modificationFixtureLosses[index], settings);
           if (modificationResults) {
             output.modification.losses.push(modificationResults);
@@ -110,7 +110,7 @@ export class FixtureService {
     }
     
     if (fixtureLossData) {
-      result.fixtureLoss = this.phastService.atmosphere(fixtureLossData, settings, energyUnit);
+      result.fixtureLoss = this.phastService.fixtureLosses(fixtureLossData, settings, energyUnit);
       result.grossLoss =  (result.fixtureLoss / fixtureLossData.availableHeat) * 100;
       result.fuelUse = result.grossLoss * fixtureLossData.hoursPerYear;
       result.fuelCost = result.grossLoss * fixtureLossData.hoursPerYear * fixtureLossData.fuelCost;
@@ -134,7 +134,7 @@ export class FixtureService {
       initialTemperature: 0,
       finalTemperature: 0,
       correctionFactor: 0,
-      materialName: 0,
+      materialName: 1,
       heatLoss: 0,
       name: 'Loss #' + (index + 1),
       energySourceType: 'Fuel',
@@ -172,18 +172,7 @@ export class FixtureService {
     }
     // dataArray won't exist during reset cycle w/ multiple subjects emitting
     if (dataArray && dataArray[index]) {
-      dataArray[index].name = data.name;
-      dataArray[index].hoursPerYear = data.hoursPerYear;
-      dataArray[index].fuelCost = data.fuelCost;
-      dataArray[index].availableHeat = data.availableHeat;
-      dataArray[index].energySourceType = data.energySourceType;
-      dataArray[index].atmosphereGas = data.atmosphereGas;
-      dataArray[index].specificHeat = data.specificHeat;
-      dataArray[index].inletTemperature = data.inletTemperature;
-      dataArray[index].outletTemperature = data.outletTemperature
-      dataArray[index].flowRate = data.flowRate;
-      dataArray[index].correctionFactor = data.correctionFactor;
-      dataArray[index].heatLoss = data.heatLoss;
+      Object.assign(dataArray[index], data);
     }
 
      if (isBaseline) {
@@ -231,11 +220,11 @@ export class FixtureService {
   }
 
   generateExampleData(settings: Settings) {
-    let specificHeat: number = .0185;
-    let initialTemperature: number = 30;
-    let finalTemperature: number = 1000;
-    let modOutletTemperature: number = 900;
-    let flowRate: number = 120000;
+    let specificHeat: number = .16;
+    let initialTemperature: number = 45;
+    let finalTemperature: number = 345;
+    let modFinalTemperature: number = 250;
+    let feedRate: number = 45345;
 
     if(settings.unitsOfMeasure != 'Imperial'){
       specificHeat = this.convertUnitsService.value(specificHeat).from('btuScfF').to('kJm3C');
@@ -247,25 +236,20 @@ export class FixtureService {
       finalTemperature = this.convertUnitsService.value(finalTemperature).from('F').to('C');
       finalTemperature = Number(finalTemperature.toFixed(2));
 
-      modOutletTemperature = this.convertUnitsService.value(modOutletTemperature).from('F').to('C');
-      modOutletTemperature = Number(modOutletTemperature.toFixed(2));
+      modFinalTemperature = this.convertUnitsService.value(modFinalTemperature).from('F').to('C');
+      modFinalTemperature = Number(modFinalTemperature.toFixed(2));
 
-      flowRate = this.convertUnitsService.value(flowRate).from('ft3/h').to('m3/h');
-      flowRate = Number(flowRate.toFixed(2));
+      feedRate = this.convertUnitsService.value(feedRate).from('kg').to('lb');
+      feedRate = Number(feedRate.toFixed(2));
     }
 
     let baselineExample: FixtureLoss = {
-      feedRate: 0,
-      finalTemperature: 0,
-      correctionFactor: 0,
-      materialName: 0,
-      heatLoss: 0,
-
+      materialName: 13,
       specificHeat: specificHeat,
       initialTemperature: initialTemperature,
       finalTemperature: finalTemperature,
-      flowRate: flowRate,
       correctionFactor: 1,
+      feedRate: feedRate,
       heatLoss: 0,
       energySourceType: 'Fuel',
       fuelCost: 3.99,
@@ -276,18 +260,18 @@ export class FixtureService {
     this.baselineData.next([baselineExample]);
 
     let modExample: FixtureLoss = {
-      atmosphereGas: 1,
+      materialName: 13,
       specificHeat: specificHeat,
-      inletTemperature: inletTemperature,
-      outletTemperature: modOutletTemperature,
-      flowRate: flowRate,
+      initialTemperature: initialTemperature,
+      finalTemperature: modFinalTemperature,
       correctionFactor: 1,
+      feedRate: feedRate,
       heatLoss: 0,
       energySourceType: 'Fuel',
       fuelCost: 3.99,
       hoursPerYear: 8760,    
       availableHeat: 100,
-      name: 'Loss #1 (Lower Outlet Temp)'
+      name: 'Loss #1 (Lower Final Temp)'
     };
     
     this.modificationData.next([modExample]);

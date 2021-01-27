@@ -25,7 +25,6 @@ import { Settings } from '../shared/models/settings';
 
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
-import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
 import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
@@ -38,8 +37,8 @@ import { LiquidMaterialFormService } from '../calculator/furnaces/charge-materia
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
-import { OpeningService } from '../calculator/furnaces/opening/opening.service';
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
+import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
 
 declare var phastAddon: any;
 
@@ -60,7 +59,7 @@ export class PhastService {
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
     private coolingLossesService: CoolingLossesService,
     private wallFormService: WallFormService,
-    private fixtureLossesService: FixtureLossesService,
+    private fixtureFormService: FixtureFormService,
     private gasLeakageLossesService: GasLeakageLossesService,
     private otherLossessService: OtherLossesService,
     private liquidMaterialFormService: LiquidMaterialFormService,
@@ -112,7 +111,7 @@ export class PhastService {
     return val;
   }
 
-  fixtureLosses(input: FixtureLoss, settings: Settings): number {
+  fixtureLosses(input: FixtureLoss, settings: Settings, calculatorEnergyUnit = ''): number {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -124,7 +123,8 @@ export class PhastService {
     } else {
       results = phastAddon.fixtureLosses(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    results = this.convertResult(results, conversionUnit);
     return results;
   }
 
@@ -759,7 +759,7 @@ export class PhastService {
   sumFixtureLosses(losses: FixtureLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.fixtureLossesService.getFormFromLoss(loss);
+      let tmpForm = this.fixtureFormService.getFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         sum += this.fixtureLosses(loss, settings);
       }

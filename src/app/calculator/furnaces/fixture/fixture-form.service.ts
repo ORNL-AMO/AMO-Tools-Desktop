@@ -12,11 +12,11 @@ export class FixtureFormService {
   initForm(lossNum?: number): FormGroup {
     let formGroup = this.formBuilder.group({
       'materialName': ['', Validators.required],
-      'feedRate': ['', Validators.required],
+      'feedRate': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'initialTemp': ['', Validators.required],
       'finalTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'specificHeat': ['', Validators.required],
+      'specificHeat': ['', [Validators.required, Validators.min(0)]],
       'name': ['Loss #' + lossNum]
     });
 
@@ -33,11 +33,11 @@ export class FixtureFormService {
   getFormFromLoss(loss: FixtureLoss, inAssessment = true): FormGroup {
     let formGroup = this.formBuilder.group({
       'materialName': [loss.materialName, Validators.required],
-      'feedRate': [loss.feedRate, Validators.required],
+      'feedRate': [loss.feedRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'initialTemp': [loss.initialTemperature, Validators.required],
       'finalTemp': [loss.finalTemperature, Validators.required],
       'correctionFactor': [loss.correctionFactor, Validators.required],
-      'specificHeat': [loss.specificHeat, Validators.required],
+      'specificHeat': [loss.specificHeat, [Validators.required, Validators.min(0)]],
       'name': [loss.name]
     });
 

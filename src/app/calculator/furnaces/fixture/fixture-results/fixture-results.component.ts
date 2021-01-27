@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { FixtureLossOutput } from '../../../../shared/models/phast/losses/fixtureLoss';
+import { Settings } from '../../../../shared/models/settings';
+import { FixtureService } from '../fixture.service';
 
 @Component({
   selector: 'app-fixture-results',
@@ -20,12 +24,12 @@ export class FixtureResultsComponent implements OnInit {
   table2String: any;
 
   outputSubscription: Subscription;
-  output: AtmosphereLossOutput;
+  output: FixtureLossOutput;
 
-  constructor(private atmosphereService: AtmosphereService) { }
+  constructor(private fixtureService: FixtureService) { }
 
   ngOnInit(): void {
-    this.outputSubscription = this.atmosphereService.output.subscribe(val => {
+    this.outputSubscription = this.fixtureService.output.subscribe(val => {
       this.output = val;
     })
   }

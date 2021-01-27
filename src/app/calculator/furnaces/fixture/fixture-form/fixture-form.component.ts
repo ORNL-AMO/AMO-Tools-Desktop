@@ -31,10 +31,7 @@ export class FixtureFormComponent implements OnInit {
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
-
-  specificHeatWarning: string = null;
-  feedRateWarning: string = null;
-
+  
   materialTypes: Array<SolidLoadChargeMaterial>;
   showMaterialModal: boolean = false;
 
@@ -79,6 +76,7 @@ export class FixtureFormComponent implements OnInit {
       let energySource = this.fixtureService.energySourceType.getValue();
       this.setEnergySource(energySource);
     }
+    this.setSpecificHeat();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -248,21 +246,7 @@ export class FixtureFormComponent implements OnInit {
     this.fixtureService.currentField.next(str);
   }
 
-
-  // checkWarnings() {
-  //   let tmpLoss: FixtureLoss = this.fixtureFormService.getLossFromForm(this.fixtureForm);
-  //   this.warnings = this.fixtureFormService.checkWarnings(tmpLoss);
-  // }
-
-  checkWarnings() {
-    let fixtureLoss: FixtureLoss = this.fixtureFormService.getLossFromForm(this.fixtureForm);
-    let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureFormService.checkWarnings(fixtureLoss);
-    this.specificHeatWarning = tmpWarnings.specificHeatWarning;
-    this.feedRateWarning = tmpWarnings.feedRateWarning;
-  }
-
   calculate() {
-    this.checkWarnings();
     let currentFixtureLoss: FixtureLoss = this.fixtureFormService.getLossFromForm(this.fixtureForm);
     this.fixtureService.updateDataArray(currentFixtureLoss, this.index, this.isBaseline);
 
@@ -280,7 +264,7 @@ export class FixtureFormComponent implements OnInit {
       let newMaterial: SolidLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.fixtureForm.patchValue({
-          atmosphereGas: newMaterial.id
+          materialName: newMaterial.id
         });
         this.setProperties();
       }
@@ -295,7 +279,6 @@ export class FixtureFormComponent implements OnInit {
     let rounded = Number(val.toFixed(digits));
     return rounded;
   }
-
 
   initFlueGasModal() {
     this.showFlueGasModal = true;

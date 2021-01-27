@@ -15,7 +15,7 @@
       <tr>
         <td class="bold w-50">Fuel Cost</td>
         <td *ngIf="output.baseline.totalFuelCost" class="text-center w-50">
-          {{output.baseline.totalFuelCost | currency:'USD':'symbol':'1.2-2'}}
+          {{output.baseline.totalFuelCost | currency: 'USD': 'symbol' : '1.2-2'}}
         </td>
         <td *ngIf="!output.baseline.totalFuelCost" class="text-center w-50">
           &mdash; &mdash;
@@ -57,7 +57,7 @@
       <tr>
         <td class="bold w-50">Fuel Cost</td>
         <td *ngIf="output.modification.totalFuelCost" class="text-center w-50">
-          {{output.modification.totalFuelCost | currency:'USD':'symbol':'1.2-2'}}
+          {{output.modification.totalFuelCost | currency: 'USD' : 'symbol' : '1.2-2'}}
         </td>
         <td *ngIf="!output.modification.totalFuelCost" class="text-center w-50">
           &mdash; &mdash;
