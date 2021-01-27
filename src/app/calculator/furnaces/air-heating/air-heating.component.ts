@@ -47,7 +47,6 @@ export class AirHeatingComponent implements OnInit {
 
   ngOnDestroy() {
     this.airFlowConversionInputSub.unsubscribe();
-    this.outputSubscription.unsubscribe();
     this.modalSubscription.unsubscribe();
   }
 
@@ -61,11 +60,6 @@ export class AirHeatingComponent implements OnInit {
     this.airFlowConversionInputSub = this.airHeatingService.airHeatingInput.subscribe(value => {
       this.calculate();
     });
-
-    this.outputSubscription = this.airHeatingService.airHeatingOutput.subscribe(value => {
-      this.output = value;
-    });
-
     this.modalSubscription = this.airHeatingService.modalOpen.subscribe(modalOpen => {
       this.isModalOpen = modalOpen;
     });

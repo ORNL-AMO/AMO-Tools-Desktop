@@ -63,7 +63,9 @@ export class AirHeatingService {
     let emptyOutput: AirHeatingOutput = {
       hxColdAir: 0,
       hxOutletExhaust: 0,
-      energySavings: 0
+      energySavings: 0,
+      heatCapacityFlue: 0,
+      heatCapacityAir: 0,
     };
     this.airHeatingOutput.next(emptyOutput);
   }
@@ -171,6 +173,12 @@ export class AirHeatingService {
 
       output.energySavings = this.convertUnitsService.value(output.energySavings).from('MMBtu').to('GJ');
       output.energySavings = this.roundVal(output.energySavings, 2);
+
+      output.heatCapacityFlue = this.convertUnitsService.value(output.heatCapacityFlue).from('Btu/F').to('J/C');
+      output.heatCapacityFlue = this.roundVal(output.heatCapacityFlue, 4);
+      
+      output.heatCapacityAir = this.convertUnitsService.value(output.heatCapacityAir).from('Btu/F').to('J/C');
+      output.heatCapacityAir = this.roundVal(output.heatCapacityAir, 4);
     }
     return output;
   }

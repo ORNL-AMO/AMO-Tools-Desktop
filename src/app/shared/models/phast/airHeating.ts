@@ -38,5 +38,7 @@ export interface AirHeatingInput {
 export interface AirHeatingOutput {
     hxColdAir: number,
     hxOutletExhaust: number,
-    energySavings: number
+    energySavings: number,
+    heatCapacityFlue: number,
+    heatCapacityAir: number
 }

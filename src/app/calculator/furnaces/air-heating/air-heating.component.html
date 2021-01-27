@@ -13,43 +13,7 @@
     
 		<div class="d-flex flex-column m-4">
 			<app-air-heating-form [settings]="settings" [inModal]="isModalOpen"></app-air-heating-form>	
-			 <div *ngIf="output" class="d-flex flex-column my-2">
-				<div class="form-group m-0">
-				  <label class="bold">Heat Transfered to Cold Air</label>
-				  <div *ngIf="output.hxColdAir" class="text-center bold small">
-					{{output.hxColdAir | number:'1.0-0'}}
-					<span class="input-group-addon">
-						<span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
-						<span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
-					</span>
-				  </div>
-				  <div *ngIf="!output.hxColdAir" class="text-center bold small">
-					&mdash; &mdash;
-				  </div>
-				</div>
-				<div class="form-group m-0">
-				  <label class="bold">Exhaust Gas Temperature Leaving Heat Exchanger</label>
-				  <div *ngIf="output.hxOutletExhaust" class="text-center bold small">
-					{{output.hxOutletExhaust | number:'1.0-0'}} 
-					<span class="input-group-addon">
-						<span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
-       					<span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
-					</span>
-				  </div>
-				  <div *ngIf="!output.hxOutletExhaust" class="text-center bold small">
-					&mdash; &mdash;
-				  </div>
-				</div>
-				<div class="form-group m-0">
-					<label class="bold">Annual Energy Savings</label>
-					<div *ngIf="output.energySavings" class="text-center bold small">
-					  {{output.energySavings | number:'1.0-0'}}
-					</div>
-					<div *ngIf="!output.energySavings" class="text-center bold small">
-					  &mdash; &mdash;
-					</div>
-				  </div>
-			  </div>
+			<app-air-heating-results [settings]="settings"></app-air-heating-results>	
 
 			  <div class="w-100 mt-3 justify content-center btn-group btn-group-sm">
 				<button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
