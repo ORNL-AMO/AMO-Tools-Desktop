@@ -115,7 +115,8 @@ export class TreasureHuntRollupComponent implements OnInit {
       other: other,
       opportunitySummaries: opportunitySummaries,
       totalImplementationCost: totalImplementationCost,
-      hasMixed: hasMixed
+      hasMixed: hasMixed,
+      totalAdditionalSavings: 0
     }
   }
 
