@@ -45,6 +45,7 @@ import { thermalConductivity } from './definitions/thermalConductivity';
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
+import { hourlyHeatCapacity } from './definitions/hourlyHeatCapacity';
 @Injectable()
 export class ConvertUnitsService {
   _measures = {
@@ -72,6 +73,7 @@ export class ConvertUnitsService {
     force: force,
     //kineViscosity: kineViscosity,
     specificHeat: specificHeat,
+    hourlyHeatCapacity: hourlyHeatCapacity,
     volumetricHeat: volumetricHeat,
     specificEnergy: specificEnergy,
     density: density,
