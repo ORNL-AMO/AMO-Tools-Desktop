@@ -3,9 +3,10 @@ import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { AirHeatingInput } from '../../../../shared/models/phast/airHeating';
-import { FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { AirHeatingFormService } from '../air-heating-form.service';
@@ -30,7 +31,7 @@ export class AirHeatingFormComponent implements OnInit {
     this.setOpHoursModalWidth();
   }
   form: FormGroup;
-  fuelOptions: any;
+  fuelOptions: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
@@ -46,7 +47,6 @@ export class AirHeatingFormComponent implements OnInit {
   formWidth: number;
 
   showOperatingHoursModal: boolean;
-  warnings: FlueGasWarnings;
   o2Warning: string;
 
   constructor(private suiteDbService: SuiteDbService,
@@ -115,7 +115,7 @@ export class AirHeatingFormComponent implements OnInit {
   }
 
   calcExcessAir() {
-    let input = this.airHeatingFormService.getMaterialInputProperties(this.form);
+    let input: MaterialInputProperties = this.airHeatingFormService.getMaterialInputProperties(this.form);
 
     if (!this.calcMethodExcessAir) {
       if (this.form.controls.flueGasO2.status === 'VALID') {
@@ -213,7 +213,7 @@ export class AirHeatingFormComponent implements OnInit {
 
   calculate() {
     this.o2Warning = this.airHeatingFormService.checkO2Warning(this.form);
-    let updatedInput: AirHeatingInput 
+    let updatedInput: AirHeatingInput;
     if (this.form.controls.gasFuelType.value == true) {
       updatedInput = this.airHeatingFormService.getAirHeatingInputGasMaterial(this.form);
     } else {
@@ -255,11 +255,11 @@ export class AirHeatingFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.setFuelOptions();
-      let newMaterial = this.fuelOptions.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: FlueGasMaterial | SolidLiquidFlueGasMaterial = this.fuelOptions.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.form.patchValue({
-          materialTypeId: newMaterial[0].id,
-          substance: newMaterial[0].substance
+          materialTypeId: newMaterial.id,
+          substance: newMaterial.substance
         });
         this.setMaterialProperties();
       }

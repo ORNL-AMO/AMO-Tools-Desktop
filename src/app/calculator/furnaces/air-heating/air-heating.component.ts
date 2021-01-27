@@ -23,12 +23,10 @@ export class AirHeatingComponent implements OnInit {
   
   airFlowConversionInputSub: Subscription;
   modalSubscription: Subscription;
-  outputSubscription: Subscription;
   
   headerHeight: number;
   isModalOpen: boolean;
   tabSelect: string = 'help';
-  output: AirHeatingOutput;
   
   constructor(private airHeatingService: AirHeatingService,
               private settingsDbService: SettingsDbService) { }

@@ -121,7 +121,7 @@ export class AirHeatingService {
     this.airHeatingInput.next(exampleInput);
   }
 
-  convertPercentInputs(inputs: AirHeatingInput) {
+  convertPercentInputs(inputs: AirHeatingInput): AirHeatingInput {
     inputs.excessAir = inputs.excessAir > 0? inputs.excessAir / 100 : inputs.excessAir;
     inputs.flueGasO2 = inputs.flueGasO2 > 0? inputs.flueGasO2 / 100 : inputs.flueGasO2;
     inputs.heaterEfficiency = inputs.heaterEfficiency > 0? inputs.heaterEfficiency / 100 : inputs.heaterEfficiency;
@@ -183,9 +183,9 @@ export class AirHeatingService {
     return output;
   }
 
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
+  roundVal(val: number, digits: number): number {
+    let rounded = Number(val.toFixed(digits));
+    return rounded;
   }
 
 }

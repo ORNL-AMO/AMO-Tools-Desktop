@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AirHeatingInput } from '../../../shared/models/phast/airHeating';
+import { MaterialInputProperties } from '../../../shared/models/phast/losses/flueGas';
 
 @Injectable()
 export class AirHeatingFormService {
@@ -112,8 +113,8 @@ export class AirHeatingFormService {
     return obj;
   }
   
-  getMaterialInputProperties(form: FormGroup) {
-    let input;
+  getMaterialInputProperties(form: FormGroup): MaterialInputProperties {
+    let input: MaterialInputProperties;
     if (form.controls.gasFuelType.value == true) {
       input = {
         CH4: form.controls.CH4.value,
@@ -148,7 +149,7 @@ export class AirHeatingFormService {
     return input;
   }
 
-  checkO2Warning(form: FormGroup) {
+  checkO2Warning(form: FormGroup): string {
     if (form.controls.flueGasO2.value < 0 || form.controls.flueGasO2.value >= 21) {
       return 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
     } else {

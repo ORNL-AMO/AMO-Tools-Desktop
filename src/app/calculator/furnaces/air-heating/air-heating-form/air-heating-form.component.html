@@ -5,12 +5,12 @@
       </label>
 
       <div class="form-group">
-        <label class="small" for="{{'operatingHours_'+idString}}">Annual Operating Hours</label>
+        <label class="small" for="operatingHours">Annual Operating Hours</label>
         <div class="input-group">
           <span class="input-group-addon op-hour-addon units">
             <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
           </span>
-          <input class="form-control" name="operatingHours" id="{{'operatingHours_'+idString}}"
+          <input class="form-control" name="operatingHours" id="operatingHours"
             formControlName="operatingHours" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
            onfocus="this.select();">
           <span class="units input-group-addon">hrs/yr</span>
