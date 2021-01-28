@@ -15,7 +15,7 @@ import { AtmosphereLoss } from '../shared/models/phast/losses/atmosphereLoss';
 import { Slag } from '../shared/models/phast/losses/slag';
 import { AuxiliaryPowerLoss } from '../shared/models/phast/losses/auxiliaryPowerLoss';
 import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
-import { FlueGasByMass, FlueGasByVolume } from '../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
 import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';
@@ -37,8 +37,8 @@ import { LiquidMaterialFormService } from '../calculator/furnaces/charge-materia
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
-import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
+import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 
 declare var phastAddon: any;
 
@@ -379,19 +379,19 @@ export class PhastService {
     return results;
   }
 
-  flueGasCalculateExcessAir(input: any) {
+  flueGasCalculateExcessAir(input: MaterialInputProperties) {
     return phastAddon.flueGasCalculateExcessAir(input);
   }
 
-  flueGasCalculateO2(input: any) {
+  flueGasCalculateO2(input: MaterialInputProperties) {
     return phastAddon.flueGasCalculateO2(input);
   }
 
-  flueGasByMassCalculateExcessAir(input: any) {
+  flueGasByMassCalculateExcessAir(input: MaterialInputProperties) {
     return phastAddon.flueGasByMassCalculateExcessAir(input);
   }
 
-  flueGasByMassCalculateO2(input: any) {
+  flueGasByMassCalculateO2(input: MaterialInputProperties) {
     return phastAddon.flueGasByMassCalculateO2(input);
   }
 

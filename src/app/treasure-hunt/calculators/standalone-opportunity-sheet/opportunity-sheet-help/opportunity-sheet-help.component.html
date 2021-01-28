@@ -122,7 +122,7 @@
   </div>
   <div class="my-2" *ngIf="currentField == 'opportunitySheetBusinessUnits'">
     <h6>
-     Owner / Lead
+      Owner / Lead
       <small class="text-muted">
         <br>
         Provide the name for the business unit that will own the opportunity or
@@ -161,6 +161,30 @@
       </small>
     </h6>
   </div>
+  <div class="my-2" *ngIf="currentField == 'implementationEffort'">
+    <h6>
+      Effort to Implement
+      <small class="text-muted">
+        <br>
+        The amount of effort the savings opportunity will take to implement on a scales of 1-10
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'additionalAnnualSavings'">
+    <h6>
+      Other Annual Savings
+      <small class="text-muted">
+        <br>
+        Approximate additional annual cost savings associated with implementing the opportunity, such as reduced
+        maintenance and labor cost.
+        <br>
+        Provide a name for the savings and a savings amount.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
 
 
 </div>
