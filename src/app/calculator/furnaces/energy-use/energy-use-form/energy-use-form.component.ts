@@ -87,11 +87,6 @@ export class EnergyUseFormComponent implements OnInit {
     this.form = this.energyUseService.getFormFromObj(this.flowCalculations);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.flowCalculations) {
-      this.form = this.energyUseService.getFormFromObj(this.flowCalculations);
-    }
-  }
 
   calculate() {
     //TODO: update validation with extra error check rules
