@@ -35,6 +35,15 @@ export class OpportunitySummaryComponent implements OnInit {
     this.emitUpdateOpportunities.emit(this.opportunitySummaries);
   }
 
+  getAdditionalSavings(oppCost: OpportunityCost): number {
+    if (oppCost && oppCost.additionalAnnualSavings) {
+      return oppCost.additionalAnnualSavings.cost;
+    } else {
+      return 0;
+    }
+  }
+
+
   getMaterialCost(oppCost: OpportunityCost): number {
     if (oppCost) {
       return oppCost.material;

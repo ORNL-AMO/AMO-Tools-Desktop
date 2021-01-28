@@ -11,8 +11,8 @@ import { FlueGasModule } from './flue-gas/flue-gas.module';
 import { AtmosphereModule } from './atmosphere/atmosphere.module';
 import { ChargeMaterialModule } from './charge-material/charge-material.module';
 import { OpeningModule } from './opening/opening.module';
-import { LeakageComponent } from './leakage/leakage.component';
 import { LeakageModule } from './leakage/leakage.module';
+import { AirHeatingModule } from './air-heating/air-heating.module';
 
 @NgModule({
   imports: [
@@ -28,7 +28,8 @@ import { LeakageModule } from './leakage/leakage.module';
     ChargeMaterialModule,
     RouterModule, 
     OpeningModule,
-    LeakageModule
+    LeakageModule,
+    AirHeatingModule
   ],
   declarations: [
     FurnacesListComponent,

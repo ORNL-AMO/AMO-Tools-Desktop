@@ -15,7 +15,7 @@ import { AtmosphereLoss } from '../shared/models/phast/losses/atmosphereLoss';
 import { Slag } from '../shared/models/phast/losses/slag';
 import { AuxiliaryPowerLoss } from '../shared/models/phast/losses/auxiliaryPowerLoss';
 import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
-import { FlueGasByMass, FlueGasByVolume } from '../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
 import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';
@@ -26,7 +26,6 @@ import { Settings } from '../shared/models/settings';
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
 import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
-import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
@@ -37,8 +36,8 @@ import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
 import { LiquidMaterialFormService } from '../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
-import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
+import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
 import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
 
 declare var phastAddon: any;
@@ -381,19 +380,19 @@ export class PhastService {
     return results;
   }
 
-  flueGasCalculateExcessAir(input: any) {
+  flueGasCalculateExcessAir(input: MaterialInputProperties) {
     return phastAddon.flueGasCalculateExcessAir(input);
   }
 
-  flueGasCalculateO2(input: any) {
+  flueGasCalculateO2(input: MaterialInputProperties) {
     return phastAddon.flueGasCalculateO2(input);
   }
 
-  flueGasByMassCalculateExcessAir(input: any) {
+  flueGasByMassCalculateExcessAir(input: MaterialInputProperties) {
     return phastAddon.flueGasByMassCalculateExcessAir(input);
   }
 
-  flueGasByMassCalculateO2(input: any) {
+  flueGasByMassCalculateO2(input: MaterialInputProperties) {
     return phastAddon.flueGasByMassCalculateO2(input);
   }
 
