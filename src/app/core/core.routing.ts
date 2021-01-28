@@ -90,6 +90,7 @@ import { ChargeMaterialComponent } from '../calculator/furnaces/charge-material/
 import { OpeningComponent } from '../calculator/furnaces/opening/opening.component';
 import { O2UtilizationRateComponent } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.component';
 import { WasteWaterListComponent } from '../calculator/waste-water/waste-water-list/waste-water-list.component';
+import { LeakageComponent } from '../calculator/furnaces/leakage/leakage.component';
 
 export const coreRoutes: Routes = [
   {
@@ -345,6 +346,10 @@ export const coreRoutes: Routes = [
           {
             path: 'charge-material',
             component: ChargeMaterialComponent
+          },
+          {
+            path: 'leakage',
+            component: LeakageComponent
           },
           {
             path: 'achievable-efficiency',

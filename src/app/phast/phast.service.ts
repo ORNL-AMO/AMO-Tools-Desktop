@@ -38,8 +38,8 @@ import { LiquidMaterialFormService } from '../calculator/furnaces/charge-materia
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
-import { OpeningService } from '../calculator/furnaces/opening/opening.service';
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
+import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
 
 declare var phastAddon: any;
 
@@ -61,7 +61,7 @@ export class PhastService {
     private coolingLossesService: CoolingLossesService,
     private wallFormService: WallFormService,
     private fixtureLossesService: FixtureLossesService,
-    private gasLeakageLossesService: GasLeakageLossesService,
+    private leakageFormService: LeakageFormService,
     private otherLossessService: OtherLossesService,
     private liquidMaterialFormService: LiquidMaterialFormService,
     private gasMaterialFormService: GasMaterialFormService,
@@ -333,7 +333,7 @@ export class PhastService {
   }
 
 
-  leakageLosses(input: LeakageLoss, settings: Settings) {
+  leakageLosses(input: LeakageLoss, settings: Settings, calculatorEnergyUnit = '') {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -345,7 +345,9 @@ export class PhastService {
     } else {
       results = phastAddon.leakageLosses(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    results = this.convertResult(results, conversionUnit);
     return results;
   }
 
@@ -782,7 +784,7 @@ export class PhastService {
   sumLeakageLosses(losses: LeakageLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.gasLeakageLossesService.initFormFromLoss(loss);
+      let tmpForm = this.leakageFormService.initFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         sum += this.leakageLosses(loss, settings);
       }

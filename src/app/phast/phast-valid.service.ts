@@ -23,6 +23,7 @@ import { GasMaterialFormService } from '../calculator/furnaces/charge-material/g
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
+import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
 
 
 @Injectable()
@@ -42,12 +43,12 @@ export class PhastValidService {
     private exhaustGasService: ExhaustGasService,
     private energyInputExhaustGasService: EnergyInputExhaustGasService,
     private fixtureLossesService: FixtureLossesService,
-    private gasLeakageLossesService: GasLeakageLossesService,
     private otherLossessService: OtherLossesService,
     private liquidMaterialFormService: LiquidMaterialFormService,
     private gasMaterialFormService: GasMaterialFormService,
     private solidMaterialFormService: SolidMaterialFormService,
-    private phastResultsService: PhastResultsService
+    private phastResultsService: PhastResultsService,
+    private leakageFormService: LeakageFormService
   ) { }
 
 
@@ -269,7 +270,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.leakageLosses) {
       phast.losses.leakageLosses.forEach(loss => {
-        let leakageForm: FormGroup = this.gasLeakageLossesService.initFormFromLoss(loss)
+        let leakageForm: FormGroup = this.leakageFormService.initFormFromLoss(loss)
         if (leakageForm.status === 'INVALID') {
           valid = false;
         }
