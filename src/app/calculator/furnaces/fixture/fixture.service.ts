@@ -113,7 +113,7 @@ export class FixtureService {
       result.fixtureLoss = this.phastService.fixtureLosses(fixtureLossData, settings, energyUnit);
       result.grossLoss =  (result.fixtureLoss / fixtureLossData.availableHeat) * 100;
       result.fuelUse = result.grossLoss * fixtureLossData.hoursPerYear;
-      result.fuelCost = result.grossLoss * fixtureLossData.hoursPerYear * fixtureLossData.fuelCost;
+      result.fuelCost = result.fuelUse * fixtureLossData.fuelCost;
     }
     return result;
   }
@@ -194,10 +194,12 @@ export class FixtureService {
     }
   }
   
-  addLoss(hoursPerYear: number, modificationExists: boolean) {
+  addLoss(treasureHours, modificationExists: boolean) {
     let currentBaselineData: Array<FixtureLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
+    let hoursPerYear = treasureHours? treasureHours : currentBaselineData[index - 1].hoursPerYear;
     let baselineObj: FixtureLoss = this.initDefaultLoss(index, hoursPerYear);
+    
     if (index > 0) {
       baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
       baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;

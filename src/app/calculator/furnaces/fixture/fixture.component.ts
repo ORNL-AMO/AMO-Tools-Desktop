@@ -94,7 +94,7 @@ export class FixtureComponent implements OnInit {
   }
 
   addLoss() {
-    let hoursPerYear = this.operatingHours? this.operatingHours.hoursPerYear : undefined;
+    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
     this.fixtureService.addLoss(hoursPerYear, this.modificationExists);
   }
 
