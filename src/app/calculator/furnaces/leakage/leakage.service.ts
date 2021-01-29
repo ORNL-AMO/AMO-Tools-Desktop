@@ -111,7 +111,7 @@ export class LeakageService {
       result.leakageLoss = this.phastService.leakageLosses(leakageLossData, settings, energyUnit);
       result.grossLoss =  (result.leakageLoss / leakageLossData.availableHeat) * 100;
       result.fuelUse = result.grossLoss * leakageLossData.hoursPerYear;
-      result.fuelCost = result.grossLoss * leakageLossData.hoursPerYear * leakageLossData.fuelCost;
+      result.fuelCost = result.fuelUse * leakageLossData.fuelCost;
     }
     return result;
   }
@@ -122,7 +122,6 @@ export class LeakageService {
     this.baselineData.next(baselineData);
     this.modificationData.next(undefined);
     this.energySourceType.next('Fuel');
-
   }
 
   initDefaultLoss(index: number, hoursPerYear: number = 8760) {
@@ -192,9 +191,10 @@ export class LeakageService {
     }
   }
   
-  addLoss(hoursPerYear: number, modificationExists: boolean) {
+  addLoss(treasureHours: number, modificationExists: boolean) {
     let currentBaselineData: Array<LeakageLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
+    let hoursPerYear = treasureHours? treasureHours : currentBaselineData[index - 1].hoursPerYear;
     let baselineObj: LeakageLoss = this.initDefaultLoss(index, hoursPerYear);
     if (index > 0) {
       baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
