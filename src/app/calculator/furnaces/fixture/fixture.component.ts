@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { FixtureLoss, FixtureLossOutput } from '../../../shared/models/phast/losses/fixtureLoss';
+import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { Settings } from '../../../shared/models/settings';
 import { FixtureService } from './fixture.service';
 
@@ -36,8 +36,6 @@ export class FixtureComponent implements OnInit {
   modificationData: Array<FixtureLoss>;
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
-  outputSubscription: Subscription;
-  output: FixtureLossOutput;
 
   tabSelect: string = 'results';
   baselineSelected: boolean = true;
@@ -69,7 +67,6 @@ export class FixtureComponent implements OnInit {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
-    this.outputSubscription.unsubscribe();
   }
 
   initSubscriptions() {
@@ -84,9 +81,6 @@ export class FixtureComponent implements OnInit {
       this.modificationData = value
       this.fixtureService.calculate(this.settings);
     })
-    this.outputSubscription = this.fixtureService.output.subscribe(val => {
-      this.output = val;
-    });
   }
   
   setTab(str: string) {
