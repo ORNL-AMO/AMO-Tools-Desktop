@@ -152,10 +152,10 @@ export class AirLeakFormService {
       utilityType: 0,
       utilityCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
       compressorElectricityData: {
-        compressorControl: 0,
-        compressorControlAdjustment: .25,
+        compressorControl: 8,
+        compressorControlAdjustment: 25,
         compressorSpecificPowerControl: 0,
-        compressorSpecificPower: .16
+        compressorSpecificPower: 16
       },
     };
     if (settings && settings.unitsOfMeasure == 'Metric') {
@@ -170,10 +170,10 @@ export class AirLeakFormService {
       utilityType: 1,
       utilityCost: 0.12,
       compressorElectricityData: {
-        compressorControl: 0,
-        compressorControlAdjustment: .25,
+        compressorControl: 8,
+        compressorControlAdjustment: 25,
         compressorSpecificPowerControl: 0,
-        compressorSpecificPower: .16
+        compressorSpecificPower: 16
       },
     };
     return exampleData;

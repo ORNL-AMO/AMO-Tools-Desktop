@@ -143,6 +143,7 @@ export interface GraphObj {
     bins: Array<{ min: number, max: number }>,
     binnedField: LogToolField,
     useStandardDeviation: boolean,
+    usePercentForBins: boolean,
     binningMethod: string,
     binSize: number,
     graphId: string,
@@ -199,4 +200,39 @@ export interface AnnotationData {
     annotationId: string,
     yref: string,
     seriesName: string
+}
+
+
+export interface LogToolDbData {
+    id?: number,
+    name: string,
+    modifiedDate: Date,
+    setupData: {
+        logToolDays: Array<LogToolDay>,
+        individualDataFromCsv: Array<IndividualDataFromCsv>,
+        fields: Array<LogToolField>,
+        dataCleaned: boolean,
+        dataSubmitted: boolean,
+        noDayTypeAnalysis: boolean
+    }
+    visualizeData: {
+        graphObjects: Array<GraphObj>,
+        selectedGraphObj: GraphObj,
+        visualizeData: Array<{ dataField: LogToolField, data: Array<number | string> }>;
+        annotateDataPoint: AnnotationData;
+    },
+    dayTypeData: {
+        selectedDataField: LogToolField,
+        dayTypes: Array<DayType>,
+        dayTypeSummaries: Array<DayTypeSummary>,
+        displayDayTypeCalander: boolean,
+        dayTypesCalculated: boolean,
+        calendarStartDate: { year: number, month: number, day: number },
+        numberOfMonths: number,
+        dataView: string,
+        dataDisplayType: string,
+        selectedGraphType: string,
+        dayTypeScatterPlotData: Array<DayTypeGraphItem>,
+        individualDayScatterPlotData: Array<DayTypeGraphItem>
+    }
 }

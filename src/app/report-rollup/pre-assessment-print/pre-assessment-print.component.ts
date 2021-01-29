@@ -23,10 +23,10 @@ export class PreAssessmentPrintComponent implements OnInit {
   constructor(private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit(): void {
-    this.energyUnit = this.settings.energyResultUnit + '/hr';
-    let costResults: Array<PreAssessmentResult> = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'energyCost');
+    this.energyUnit = this.settings.energyResultUnit;
+    let costResults: Array<PreAssessmentResult> = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'energyCost', false);
     this.valuePieData = costResults.map(resultItem => { return { value: resultItem.energyCost, label: resultItem.name } })
-    let energyResults: Array<PreAssessmentResult> = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'value');
+    let energyResults: Array<PreAssessmentResult> = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'value', false);
     this.energyUsePieData = energyResults.map(resultItem => { return { value: resultItem.value, label: resultItem.name } })
   
     this.energyTextTemplate = '%{label}: %{value:.3r} ' + this.energyUnit;

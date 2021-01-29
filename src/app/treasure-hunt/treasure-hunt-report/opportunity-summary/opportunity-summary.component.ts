@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { OpportunitySummary, OpportunityCost } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
@@ -24,6 +24,7 @@ export class OpportunitySummaryComponent implements OnInit {
 
   sortBy: string = 'utilityType';
   sortByDirection: string = 'asc';
+
   constructor() { }
 
   ngOnInit() {
@@ -33,6 +34,15 @@ export class OpportunitySummaryComponent implements OnInit {
   updateOpportunities() {
     this.emitUpdateOpportunities.emit(this.opportunitySummaries);
   }
+
+  getAdditionalSavings(oppCost: OpportunityCost): number {
+    if (oppCost && oppCost.additionalAnnualSavings) {
+      return oppCost.additionalAnnualSavings.cost;
+    } else {
+      return 0;
+    }
+  }
+
 
   getMaterialCost(oppCost: OpportunityCost): number {
     if (oppCost) {
@@ -51,15 +61,16 @@ export class OpportunitySummaryComponent implements OnInit {
   }
 
   getOtherCost(oppCost: OpportunityCost): number {
+    let total: number = 0;
     if (oppCost && oppCost.otherCosts && oppCost.otherCosts.length != 0) {
-      let total: number = 0;
       oppCost.otherCosts.forEach(oCost => {
         total = total + oCost.cost;
-      })
-      return total;
-    } else {
-      return 0;
+      });
     }
+    if (oppCost && oppCost.additionalSavings) {
+      total = total - oppCost.additionalSavings.cost
+    }
+    return total;
   }
 
   getEngineeringCost(oppCost: OpportunityCost): number {
@@ -82,4 +93,5 @@ export class OpportunitySummaryComponent implements OnInit {
       this.sortByDirection = 'desc';
     }
   }
+
 }

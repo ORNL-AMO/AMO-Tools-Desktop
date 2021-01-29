@@ -22,6 +22,10 @@ import { UtilityBarChartComponent } from './executive-summary/utility-bar-chart/
 import { ExecutiveSummaryTableComponent } from './executive-summary/executive-summary-table/executive-summary-table.component';
 import { TeamSummaryTableComponent } from './executive-summary/team-summary-table/team-summary-table.component';
 import { TeamSummaryPieChartComponent } from './executive-summary/team-summary-pie-chart/team-summary-pie-chart.component';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
+import { OpportunitySummaryCopyTableComponent } from './opportunity-summary/opportunity-summary-copy-table/opportunity-summary-copy-table.component';
+import { EffortSavingsChartComponent } from './report-graphs/effort-savings-chart/effort-savings-chart.component';
+import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   imports: [
@@ -30,7 +34,9 @@ import { TeamSummaryPieChartComponent } from './executive-summary/team-summary-p
     FacilityInfoSummaryModule,
     PrintOptionsMenuModule,
     PieChartModule,
-    TreasureChestMenuModule
+    TreasureChestMenuModule,
+    ExportableResultsTableModule,
+    SimpleTooltipModule,
   ],
   declarations: [
     TreasureHuntReportComponent,
@@ -47,7 +53,9 @@ import { TeamSummaryPieChartComponent } from './executive-summary/team-summary-p
     UtilityBarChartComponent,
     ExecutiveSummaryTableComponent,
     TeamSummaryTableComponent,
-    TeamSummaryPieChartComponent
+    TeamSummaryPieChartComponent,
+    OpportunitySummaryCopyTableComponent,
+    EffortSavingsChartComponent
   ],
   exports: [TreasureHuntReportComponent, CostPieChartComponent, UtilityBarChartComponent, ExecutiveSummaryTableComponent, TeamSummaryPieChartComponent, OpportunityPaybackBarChartComponent],
   providers: [OpportunityPaybackService, OpportunitySummaryService]

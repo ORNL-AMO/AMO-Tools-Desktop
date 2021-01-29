@@ -1,12 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Plane } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
 import { PlaneDataFormService } from '../plane-data-form.service';
 import { ConvertUnitsService } from '../../../../../../shared/convert-units/convert-units.service';
-import { FsatService } from '../../../../../../fsat/fsat.service';
 import { FanAnalysisService } from '../../../fan-analysis.service';
 import { Subscription } from 'rxjs';
+import { FsatService } from '../../../../../../fsat/fsat.service';
 
 @Component({
   selector: 'app-fan-data-form',
@@ -24,16 +24,31 @@ export class FanDataFormComponent implements OnInit {
   showInternalDimensionModal = false;
   currentDimension: string;
   dataForm: FormGroup;
-  velocityData: { pv3: number, percent75Rule: number };
   planeData: Plane;
   resetFormSubscription: Subscription;
   getResultsSubscription: Subscription;
-  constructor(private planeDataFormService: PlaneDataFormService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService, private fanAnalysisService: FanAnalysisService) { }
+  staticPressureValueSubscription: Subscription;
+  variationInBarometricPressure: boolean;
+
+  constructor(private planeDataFormService: PlaneDataFormService, private fsatService: FsatService, private convertUnitsService: ConvertUnitsService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
+    if (this.fanAnalysisService.inputData.PlaneData) {
+      this.variationInBarometricPressure = this.fanAnalysisService.inputData.PlaneData.variationInBarometricPressure;
+    }
     this.setPlaneData();
     this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
     this.calcArea();
+    this.initSubscriptions();
+  }
+
+  ngOnDestroy() {
+    this.resetFormSubscription.unsubscribe();
+    this.getResultsSubscription.unsubscribe();
+    this.staticPressureValueSubscription.unsubscribe();
+  }
+
+  initSubscriptions() {
     this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
       if (val == true) {
         this.setPlaneData();
@@ -43,13 +58,15 @@ export class FanDataFormComponent implements OnInit {
 
     this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
       this.setPlaneData();
-      this.calcVelocityData();
+      this.calcVelocityResults();
     });
-  }
 
-  ngOnDestroy() {
-    this.resetFormSubscription.unsubscribe();
-    this.getResultsSubscription.unsubscribe();
+    this.staticPressureValueSubscription = this.planeDataFormService.staticPressureValue.subscribe(staticPressureControlValue => {
+      if (staticPressureControlValue != undefined) {
+        this.dataForm.patchValue({staticPressure: staticPressureControlValue});
+        this.save();
+      }
+    });
   }
 
   resetData() {
@@ -85,13 +102,9 @@ export class FanDataFormComponent implements OnInit {
     this.save();
   }
 
-  calcVelocityData() {
-    if (this.planeNum == '3a' || this.planeNum == '3b' || this.planeNum == '3c') {
-      if (this.dataForm.status === 'VALID') {
-        this.velocityData = this.fsatService.getVelocityPressureData(this.planeData, this.settings);
-      } else {
-        this.velocityData = { pv3: 0, percent75Rule: 0 };
-      }
+  calcVelocityResults() {
+    if (this.dataForm.valid && (this.planeNum == '3a' || this.planeNum == '3b' || this.planeNum == '3c')) {
+        this.fanAnalysisService.calculateVelocityResults(this.planeData, this.settings);
     }
   }
 
@@ -105,22 +118,13 @@ export class FanDataFormComponent implements OnInit {
 
   save() {
     this.planeData = this.planeDataFormService.getPlaneObjFromForm(this.dataForm, this.planeData);
-    this.calcVelocityData();
+    this.calcVelocityResults();
     this.fanAnalysisService.setPlane(this.planeNum, this.planeData);
     this.fanAnalysisService.getResults.next(true);
   }
 
   focusField(str: string) {
     this.fanAnalysisService.currentField.next(str);
-  }
-
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
   }
 
   openInternalDimensionModal(dimension: string) {
@@ -135,7 +139,7 @@ export class FanDataFormComponent implements OnInit {
   }
 
   setInternalDimensionAndClose(internalDimension: number) {
-    let controlName = this.currentDimension == 'Width'? 'width': 'length';
+    let controlName = this.currentDimension == 'Width' ? 'width' : 'length';
     this.dataForm.controls[controlName].patchValue(internalDimension);
     this.closeInternalDimensionModal();
   }

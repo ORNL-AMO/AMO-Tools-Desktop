@@ -11,6 +11,7 @@ import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { InventoryDbService } from '../indexedDb/inventory-db.service';
 declare var google: any;
 @Component({
   selector: 'app-core',
@@ -52,7 +53,8 @@ export class CoreComponent implements OnInit {
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
-    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router) {
+    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private router: Router,
+    private inventoryDbService: InventoryDbService) {
   }
 
   ngOnInit() {
@@ -122,7 +124,7 @@ export class CoreComponent implements OnInit {
     setTimeout(() => {
       if (this.settingsDbService.globalSettings.disableSurveyMonkey != true) {
         this.showSurvey = 'show';
-      }else{
+      } else {
         this.destroySurvey = true;
       }
     }, 3500);
@@ -152,11 +154,13 @@ export class CoreComponent implements OnInit {
       this.assessmentDbService.setAll().then(() => {
         this.settingsDbService.setAll().then(() => {
           this.calculatorDbService.setAll().then(() => {
-            if (this.suiteDbService.hasStarted == true) {
-              this.suiteDbService.initCustomDbMaterials();
-            }
-            this.idbStarted = true;
-            this.changeDetectorRef.detectChanges();
+            this.inventoryDbService.setAll().then(() => {
+              if (this.suiteDbService.hasStarted == true) {
+                this.suiteDbService.initCustomDbMaterials();
+              }
+              this.idbStarted = true;
+              this.changeDetectorRef.detectChanges();
+            })
           });
         });
       });

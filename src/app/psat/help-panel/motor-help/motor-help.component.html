@@ -183,29 +183,17 @@
         Full Load Amps represent either the known or estimated amps. This value will be used as a normalizing value in the Field
         Data section if Current is the selected Load estimation method.
         <br> If the Full-Load Amps is not known, an estimate can be made by clicking the
-        <strong>"Estimate Full-Load Amps"
-        </strong> button. Note that the correct Rated Voltage, Rated Motor Power, and Motor RPM should be entered before
-        the button is pressed.
+        <u>"Estimate Full-Load Amps"
+        </u> button. 
+        <br><br>
+        <span class="bold">Note:</span> The correct Rated Voltage, Rated Motor Power, and Motor RPM should be entered before the button
+        is pressed. If any of these values change (either in the baseline or when creating a scenario), this button should be used again.
         <hr>
       </small>
     </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0 A</td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
     <h6>
       <small class="text-muted">
-        <hr> An expected range is determined by the provided motor rated power, speed, voltage and class.
+        An expected range is determined by the provided motor rated power, speed, voltage and class.
         <br>
         <u>Expected Minimum Value:</u>
         {{getFlaMin() | number:'2.2-2'}} A

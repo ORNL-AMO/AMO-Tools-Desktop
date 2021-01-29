@@ -37,6 +37,7 @@ export class FanInfoFormComponent implements OnInit {
     }
   }
 
+
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
   }
@@ -64,14 +65,5 @@ export class FanInfoFormComponent implements OnInit {
   save() {
     this.fanAnalysisService.inputData.FanRatedInfo = this.fanInfoFormService.getBasicsObjectFromForm(this.ratedInfoForm);
     this.fanAnalysisService.getResults.next(true);
-  }
-
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
   }
 }

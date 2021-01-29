@@ -1,14 +1,21 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FanShaftPower } from '../../../../../shared/models/fans';
+import { Settings } from '../../../../../shared/models/settings';
 import { GreaterThanValidator } from '../../../../../shared/validators/greater-than';
+import { ConvertFanAnalysisService } from '../../convert-fan-analysis.service';
 
 @Injectable()
 export class FanShaftPowerFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private convertFanAnalysisService: ConvertFanAnalysisService) { }
 
-  getShaftPowerFormFromObj(obj: FanShaftPower): FormGroup {
+  getShaftPowerFormFromObj(obj: FanShaftPower, inStandalone?: boolean, settings?: Settings): FormGroup {
+    let motorShaftPower = obj.motorShaftPower;
+    if (inStandalone && obj.motorShaftPower) {
+      motorShaftPower = this.convertFanAnalysisService.convertNum(obj.motorShaftPower, settings.fanPowerMeasurement, 'kW'); 
+    }
+
     let form = this.formBuilder.group({
       isMethodOne: [obj.isMethodOne, Validators.required],
       isVFD: [obj.isVFD, Validators.required],
@@ -18,7 +25,7 @@ export class FanShaftPowerFormService {
       powerFactorAtLoad: [obj.powerFactorAtLoad, [Validators.required, Validators.min(0), Validators.max(1), GreaterThanValidator.greaterThan(0)]],
       npv: [obj.npv, [Validators.required, Validators.min(0), Validators.max(20000)]],
       fullLoadAmps: [obj.fla, Validators.required],
-      motorShaftPower: [obj.motorShaftPower, Validators.required],
+      motorShaftPower: [motorShaftPower, Validators.required],
       phase1Voltage: [obj.phase1.voltage, Validators.min(0)],
       phase1Amps: [obj.phase1.amps, Validators.min(0)],
       phase2Voltage: [obj.phase2.voltage, Validators.min(0)],
@@ -32,10 +39,14 @@ export class FanShaftPowerFormService {
       efficiencyClass: [obj.efficiencyClass],
       frequency: [obj.frequency]
     });
+
     return form;
   }
 
-  getShaftPowerObjFromForm(form: FormGroup, obj: FanShaftPower): FanShaftPower {
+  getShaftPowerObjFromForm(form: FormGroup, obj: FanShaftPower, inStandalone?: boolean, settings?: Settings): FanShaftPower {
+    if (inStandalone && form.controls.motorShaftPower.value) {
+      obj.motorShaftPower = this.convertFanAnalysisService.convertNum(form.controls.motorShaftPower.value, 'kW', settings.fanPowerMeasurement); 
+    }
     obj.isMethodOne = form.controls.isMethodOne.value;
     obj.isVFD = form.controls.isVFD.value;
     obj.mainsDataAvailable = form.controls.mainsDataAvailable.value;
@@ -43,7 +54,7 @@ export class FanShaftPowerFormService {
     obj.synchronousSpeed = form.controls.synchronousSpeed.value;
     obj.npv = form.controls.npv.value;
     obj.fla = form.controls.fullLoadAmps.value;
-    obj.motorShaftPower = form.controls.motorShaftPower.value;
+    
     obj.phase1 = {
       voltage: form.controls.phase1Voltage.value,
       amps: form.controls.phase1Amps.value

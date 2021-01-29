@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
+import { WallLossesSurface } from '../../../../shared/models/materials';
 
 @Component({
   selector: 'app-wall-summary',
@@ -18,7 +19,7 @@ export class WallSummaryComponent implements OnInit {
   //array holds table data
   lossData: Array<any>;
   //substance data held as id, need to use array to get substance name
-  surfaceOrientationOptions: Array<any>;
+  surfaceOrientationOptions: Array<WallLossesSurface>;
   //num of wall losses
   numLosses: number = 0;
   //used to collapse table

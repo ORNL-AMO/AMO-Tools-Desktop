@@ -6,6 +6,7 @@ import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputE
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { PhastResultsService } from '../../phast-results.service';
+import { PhastService } from '../../phast.service';
 
 @Component({
   selector: 'app-energy-input',
@@ -40,9 +41,7 @@ export class EnergyInputComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  energyInputTotal: number = 0;
-  electricalHeatDelivered: number = 0;
-  constructor(private energyInputService: EnergyInputService, private phastResultsService: PhastResultsService) { }
+  constructor(private energyInputService: EnergyInputService, private phastResultsService: PhastResultsService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -77,9 +76,10 @@ export class EnergyInputComponent implements OnInit {
   initForms() {
     if (this.losses.energyInputEAF) {
       let lossIndex = 1;
+      let minElectricityRequirement: number = this.getMinElectricityRequirement();
       this.losses.energyInputEAF.forEach(loss => {
         let tmpLoss = {
-          form: this.energyInputService.getFormFromLoss(loss),
+          form: this.energyInputService.getFormFromLoss(loss, minElectricityRequirement),
           results: {
             energyInputHeatDelivered: 0,
             energyInputTotalChemEnergy: 0,
@@ -97,6 +97,11 @@ export class EnergyInputComponent implements OnInit {
         this._energyInputs.push(tmpLoss);
       });
     }
+  }
+
+  getMinElectricityRequirement(): number {
+    let minElectricityRequirement: number = this.phastResultsService.getMinElectricityInputRequirement(this.phast, this.settings);
+    return minElectricityRequirement;
   }
 
   addLoss() {
@@ -122,24 +127,18 @@ export class EnergyInputComponent implements OnInit {
   }
   calculate(loss: EnInputObj) {
     if (loss.form.status === 'VALID') {
-      // let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
       let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       loss.results = {
         energyInputHeatDelivered: tmpResults.energyInputHeatDelivered,
         energyInputTotalChemEnergy: tmpResults.energyInputTotalChemEnergy,
-        grossHeatInput: tmpResults.grossHeatInput
+        grossHeatInput: tmpResults.energyInputTotal
       };
-      // let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
-      // this.energyInputTotal = tmpResults.grossHeatInput;
-      // this.electricalHeatDelivered = this.energyInputTotal - loss.results.heatDelivered;
     } else {
       loss.results = {
         energyInputHeatDelivered: null,
         energyInputTotalChemEnergy: null,
         grossHeatInput: null
       };
-      this.energyInputTotal = 0;
-      this.electricalHeatDelivered = 0;
     }
   }
 
@@ -157,6 +156,12 @@ export class EnergyInputComponent implements OnInit {
       tmpEnergyInputs.push(tmpEnergyInput);
     });
     this.losses.energyInputEAF = tmpEnergyInputs;
+    let minEnergyRequirement: number = this.getMinElectricityRequirement();
+    let updatedValidators = this.energyInputService.getElectricityInputValidators(minEnergyRequirement);
+    this._energyInputs.forEach(loss => {
+      loss.form.controls.electricityInput.setValidators(updatedValidators);
+      loss.form.controls.electricityInput.updateValueAndValidity();
+    });
     this.savedLoss.emit(true);
   }
 

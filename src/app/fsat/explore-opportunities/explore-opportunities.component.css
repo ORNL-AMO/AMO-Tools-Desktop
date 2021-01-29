@@ -5,3 +5,7 @@ p {
     margin-bottom: 0px;
     padding-top: .25rem;
 }
+
+.btn.btn-secondary{
+    padding: 6px;
+}

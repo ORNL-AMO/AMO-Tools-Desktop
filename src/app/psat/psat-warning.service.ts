@@ -13,6 +13,7 @@ import { fluidProperties } from './psatConstants';
 @Injectable()
 export class PsatWarningService {
 
+  updateFla: boolean = false;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
   //FIELD DATA
   //warnings for field data form
@@ -31,27 +32,21 @@ export class PsatWarningService {
   }
   //Field data warning: flowError
   checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings) {
-    let tmpFlowRate: number;
-    //convert
     //get min max
     let flowRateRange = this.getFlowRateMinMax(pumpStyle);
-
+    //convert
     if (settings.flowMeasurement != 'gpm') {
-      tmpFlowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
-      flowRateRange.min = this.convertUnitsService.value(flowRateRange.min).from(settings.flowMeasurement).to('gpm');
+      flowRateRange.min = this.convertUnitsService.value(flowRateRange.min).from('gpm').to(settings.flowMeasurement);
       flowRateRange.min = this.convertUnitsService.roundVal(flowRateRange.min, 2);
-      flowRateRange.max = this.convertUnitsService.value(flowRateRange.max).from(settings.flowMeasurement).to('gpm');
+      flowRateRange.max = this.convertUnitsService.value(flowRateRange.max).from('gpm').to(settings.flowMeasurement);
       flowRateRange.max = this.convertUnitsService.roundVal(flowRateRange.max, 2);
-
-    } else {
-      tmpFlowRate = flowRate;
     }
     //check in range
-    if (tmpFlowRate >= flowRateRange.min && tmpFlowRate <= flowRateRange.max) {
+    if (flowRate >= flowRateRange.min && flowRate <= flowRateRange.max) {
       return null;
-    } else if (tmpFlowRate < flowRateRange.min) {
+    } else if (flowRate < flowRateRange.min) {
       return 'Flow rate is too small for selected pump style, should be greater than ' + flowRateRange.min;
-    } else if (tmpFlowRate > flowRateRange.max) {
+    } else if (flowRate > flowRateRange.max) {
       return 'Flow rate is too large for selected pump style, should be less than ' + flowRateRange.max;
     } else {
       return null;
@@ -275,15 +270,23 @@ export class PsatWarningService {
         psat.inputs.motor_rated_voltage,
         settings
       );
-      this.psatService.flaRange.flaMax = estEfficiency * 1.05;
-      this.psatService.flaRange.flaMin = estEfficiency * .95;
-      if (psat.inputs.motor_rated_fla < this.psatService.flaRange.flaMin) {
-        return 'Value should be greater than ' + Math.round(this.psatService.flaRange.flaMin);
-      } else if (psat.inputs.motor_rated_fla > this.psatService.flaRange.flaMax) {
-        return 'Value should be less than ' + Math.round(this.psatService.flaRange.flaMax);
-      } else {
-        return null;
+      // Keep - may use min/max again
+      // this.psatService.flaRange.flaMax = estEfficiency * 1.05;
+      // this.psatService.flaRange.flaMin = estEfficiency * .95;
+      // if (psat.inputs.motor_rated_fla < this.psatService.flaRange.flaMin) {
+      //   return 'Value should be greater than ' + Math.round(this.psatService.flaRange.flaMin);
+      // } else if (psat.inputs.motor_rated_fla > this.psatService.flaRange.flaMax) {
+      //   return 'Value should be less than ' + Math.round(this.psatService.flaRange.flaMax);
+      // } else {
+      //   return null;
+      // }
+
+      let limit = .05;
+      let percentDifference = Math.abs(psat.inputs.motor_rated_fla - estEfficiency) / estEfficiency;
+      if (percentDifference > limit) {
+        return `Value is greater than ${limit * 100}% different from estimated FLA (${Math.round(estEfficiency)} A). Consider using the 'Estimate Full-Load Amps' button.`;
       }
+      return null;
     } else {
       return null;
     }

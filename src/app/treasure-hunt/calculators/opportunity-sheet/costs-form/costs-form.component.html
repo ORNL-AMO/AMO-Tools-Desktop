@@ -17,8 +17,8 @@
   <div class="form-group">
     <label for="material">Material</label>
     <div class="input-group">
-      <input type="number" class="form-control" [(ngModel)]="opportunityCost.material" name="material"
-        id="material" (focus)="focusField('material')">
+      <input type="number" class="form-control" [(ngModel)]="opportunityCost.material" name="material" id="material"
+        (focus)="focusField('material')">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
@@ -27,12 +27,24 @@
   <div class="form-group">
     <label for="labor">Labor</label>
     <div class="input-group">
-      <input type="number" class="form-control" [(ngModel)]="opportunityCost.labor" name="labor"
-        id="labor" (focus)="focusField('labor')">
+      <input type="number" class="form-control" [(ngModel)]="opportunityCost.labor" name="labor" id="labor"
+        (focus)="focusField('labor')">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
 </div>
+<div class="col-12">
+  <div class="form-group">
+    <label for="material">Effort to Implement</label>
+    <div class="input-group">
+      <select class="form-control" [(ngModel)]="opportunityCost.implementationEffort" name="implementationEffort"
+        id="implementationEffort" (focus)="focusField('implementationEffort')">
+        <option *ngFor="let level of effortLevels" [ngValue]="level">{{level}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
 <div class="col-12" *ngFor="let otherCost of opportunityCost.otherCosts; let index = index;">
   <div class="form-group d-flex">
     <div class="w-50 input-group pr-2">
@@ -80,30 +92,30 @@
 
 <!--Annual Savings-->
 <div class="col-12 text-center pt-2" *ngIf="!opportunityCost.additionalAnnualSavings">
-  <a class="click-link small" (click)="addAdditionalAnnualSavings()">+Add Additional Annual Savings</a>
+  <a class="click-link small" (click)="addAdditionalAnnualSavings()"
+    (focus)="focusField('additionalAnnualSavings')">+Add Other Annual Savings</a>
 </div>
 <div class="col-12" *ngIf="opportunityCost.additionalAnnualSavings">
-  <label class="group-label">Additional Annual Savings</label>
+  <label class="group-label">Other Annual Savings</label>
 </div>
 <div class="col-12" *ngIf="opportunityCost.additionalAnnualSavings">
   <div class="form-group d-flex">
     <div class="w-50 input-group pr-2">
       <input type="text" class="form-control" [(ngModel)]="opportunityCost.additionalAnnualSavings.description"
         name="additionalAnnualSavingsDescription" id="additionalAnnualSavingsDescription"
-        (focus)="focusField('additionalAnnualSavingsDescription')">
+        (focus)="focusField('additionalAnnualSavings')">
       <span class="input-group-addon units remove-item" (click)="removeAdditionalAnnualSavings()">
         <span class="fa fa-times"></span>
       </span>
     </div>
     <div class="w-50 input-group">
       <input class="form-control" type="number" [(ngModel)]="opportunityCost.additionalAnnualSavings.cost"
-        name="additionalAnnualSavingsCost" id="additionalAnnualSavingsCost" (focus)="focusField('additionalAnnualSavingsCost')">
+        name="additionalAnnualSavingsCost" id="additionalAnnualSavingsCost"
+        (focus)="focusField('additionalAnnualSavings')">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
 </div>
-
-
 
 <div class="col-12">
   <label class="group-label" for="costDescription">Opportunity Notes</label>

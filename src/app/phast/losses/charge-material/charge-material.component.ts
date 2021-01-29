@@ -3,9 +3,11 @@ import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
-import { ChargeMaterialService } from './charge-material.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { LiquidMaterialFormService } from '../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
+import { GasMaterialFormService } from '../../../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
+import { SolidMaterialFormService } from '../../../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 
 @Component({
   selector: 'app-charge-material',
@@ -47,7 +49,11 @@ export class ChargeMaterialComponent implements OnInit {
     endoExoHeat: number
   };
   idString: string;
-  constructor(private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
+  constructor(private phastService: PhastService, 
+              private liquidMaterialFormService: LiquidMaterialFormService,
+              private gasMaterialFormService: GasMaterialFormService,
+              private solidMaterialFormService: SolidMaterialFormService
+    ) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -96,9 +102,9 @@ export class ChargeMaterialComponent implements OnInit {
       if (loss.chargeMaterialType === 'Gas') {
         tmpLoss = {
           chargeMaterialType: 'Gas',
-          solidForm: this.chargeMaterialService.initSolidForm(lossIndex),
-          liquidForm: this.chargeMaterialService.initLiquidForm(lossIndex),
-          gasForm: this.chargeMaterialService.getGasChargeMaterialForm(loss),
+          solidForm: this.solidMaterialFormService.initSolidForm(lossIndex),
+          liquidForm: this.liquidMaterialFormService.initLiquidForm(lossIndex),
+          gasForm: this.gasMaterialFormService.getGasChargeMaterialForm(loss),
           heatRequired: loss.gasChargeMaterial.heatRequired || 0.0,
           netHeatLoss: loss.gasChargeMaterial.netHeatLoss || 0.0,
           endoExoHeat: loss.gasChargeMaterial.endoExoHeat || 0.0,
@@ -108,9 +114,9 @@ export class ChargeMaterialComponent implements OnInit {
       else if (loss.chargeMaterialType === 'Solid') {
         tmpLoss = {
           chargeMaterialType: 'Solid',
-          solidForm: this.chargeMaterialService.getSolidChargeMaterialForm(loss),
-          liquidForm: this.chargeMaterialService.initLiquidForm(lossIndex),
-          gasForm: this.chargeMaterialService.initGasForm(lossIndex),
+          solidForm: this.solidMaterialFormService.getSolidChargeMaterialForm(loss),
+          liquidForm: this.liquidMaterialFormService.initLiquidForm(lossIndex),
+          gasForm: this.gasMaterialFormService.initGasForm(lossIndex),
           heatRequired: loss.solidChargeMaterial.heatRequired || 0.0,
           netHeatLoss: loss.solidChargeMaterial.netHeatLoss || 0.0,
           endoExoHeat: loss.solidChargeMaterial.endoExoHeat || 0.0,
@@ -120,9 +126,9 @@ export class ChargeMaterialComponent implements OnInit {
       else if (loss.chargeMaterialType === 'Liquid') {
         tmpLoss = {
           chargeMaterialType: 'Liquid',
-          solidForm: this.chargeMaterialService.initSolidForm(lossIndex),
-          liquidForm: this.chargeMaterialService.getLiquidChargeMaterialForm(loss),
-          gasForm: this.chargeMaterialService.initGasForm(lossIndex),
+          solidForm: this.solidMaterialFormService.initSolidForm(lossIndex),
+          liquidForm: this.liquidMaterialFormService.getLiquidChargeMaterialForm(loss),
+          gasForm: this.gasMaterialFormService.initGasForm(lossIndex),
           heatRequired: loss.liquidChargeMaterial.heatRequired || 0.0,
           netHeatLoss: loss.liquidChargeMaterial.netHeatLoss || 0.0,
           endoExoHeat: loss.liquidChargeMaterial.endoExoHeat || 0.0,
@@ -138,9 +144,9 @@ export class ChargeMaterialComponent implements OnInit {
   addMaterial() {
     this._chargeMaterial.push({
       chargeMaterialType: 'Solid',
-      solidForm: this.chargeMaterialService.initSolidForm(this._chargeMaterial.length + 1),
-      liquidForm: this.chargeMaterialService.initLiquidForm(this._chargeMaterial.length + 1),
-      gasForm: this.chargeMaterialService.initGasForm(this._chargeMaterial.length + 1),
+      solidForm: this.solidMaterialFormService.initSolidForm(this._chargeMaterial.length + 1),
+      liquidForm: this.liquidMaterialFormService.initLiquidForm(this._chargeMaterial.length + 1),
+      gasForm: this.gasMaterialFormService.initGasForm(this._chargeMaterial.length + 1),
       heatRequired: 0.0,
       netHeatLoss: 0.0,
       endoExoHeat: 0.0,
@@ -162,7 +168,7 @@ export class ChargeMaterialComponent implements OnInit {
   calculate(loss: ChargeMaterialObj) {
     if (loss.chargeMaterialType === 'Solid') {
       if (loss.solidForm.status === 'VALID') {
-        let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildSolidChargeMaterial(loss.solidForm);
+        let tmpMaterial: ChargeMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(loss.solidForm);
         const results = this.phastService.solidLoadChargeMaterial(tmpMaterial.solidChargeMaterial, this.settings);
         loss.heatRequired = results.grossHeatLoss;
         loss.netHeatLoss = results.netHeatLoss;
@@ -172,7 +178,7 @@ export class ChargeMaterialComponent implements OnInit {
       }
     } else if (loss.chargeMaterialType === 'Liquid') {
       if (loss.liquidForm.status === 'VALID') {
-        let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(loss.liquidForm);
+        let tmpMaterial: ChargeMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(loss.liquidForm);
         const results = this.phastService.liquidLoadChargeMaterial(tmpMaterial.liquidChargeMaterial, this.settings);
         loss.heatRequired = results.grossHeatLoss;
         loss.netHeatLoss = results.netHeatLoss;
@@ -182,7 +188,7 @@ export class ChargeMaterialComponent implements OnInit {
       }
     } else if (loss.chargeMaterialType === 'Gas') {
       if (loss.gasForm.status === 'VALID') {
-        let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildGasChargeMaterial(loss.gasForm);
+        let tmpMaterial: ChargeMaterial = this.gasMaterialFormService.buildGasChargeMaterial(loss.gasForm);
         const results = this.phastService.gasLoadChargeMaterial(tmpMaterial.gasChargeMaterial, this.settings);
         loss.heatRequired = results.grossHeatLoss;
         loss.netHeatLoss = results.netHeatLoss;
@@ -206,7 +212,7 @@ export class ChargeMaterialComponent implements OnInit {
           });
         }
         lossIndex++;
-        tmpMaterial = this.chargeMaterialService.buildGasChargeMaterial(material.gasForm);
+        tmpMaterial = this.gasMaterialFormService.buildGasChargeMaterial(material.gasForm);
         tmpMaterial.gasChargeMaterial.heatRequired = material.heatRequired;
         tmpMaterial.chargeMaterialType = 'Gas';
       } else if (material.chargeMaterialType === 'Solid') {
@@ -216,7 +222,7 @@ export class ChargeMaterialComponent implements OnInit {
           });
         }
         lossIndex++;
-        tmpMaterial = this.chargeMaterialService.buildSolidChargeMaterial(material.solidForm);
+        tmpMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(material.solidForm);
         tmpMaterial.solidChargeMaterial.heatRequired = material.heatRequired;
         tmpMaterial.chargeMaterialType = 'Solid';
       } else if (material.chargeMaterialType === 'Liquid') {
@@ -226,7 +232,7 @@ export class ChargeMaterialComponent implements OnInit {
           });
         }
         lossIndex++;
-        tmpMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(material.liquidForm);
+        tmpMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(material.liquidForm);
         tmpMaterial.liquidChargeMaterial.heatRequired = material.heatRequired;
         tmpMaterial.chargeMaterialType = 'Liquid';
       }

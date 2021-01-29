@@ -109,10 +109,10 @@
                 Full Load Amps
               </td>
               <td [ngClass]="{'indicate-report-field-different':fullLoadAmpsDiff[0] == true}">
-                {{fanMotor.baseline.fullLoadAmps}}
+                {{fanMotor.baseline.fullLoadAmps | number:'1.0-0'}}
               </td>
               <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.fullLoadAmps, mod.fullLoadAmps, 'fullLoadAmpsDiff', 0)}">
-                {{mod.fullLoadAmps}}
+                {{mod.fullLoadAmps | number:'1.0-0'}}
               </td>
             </tr>
           </tbody>

@@ -76,9 +76,9 @@
           </span>
         </td>
       </tr>
+
       <label class="group-label mt-2 mb-2">Useful Energy</label>
-      <tr
-        *ngIf="showCondensingTurbine || showHighToLowTurbine || showHighToMediumTurbine || showMediumToLowTurbine">
+      <tr *ngIf="showCondensingTurbine || showHighToLowTurbine || showHighToMediumTurbine || showMediumToLowTurbine">
         <td class="bold">Turbine Generation</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
@@ -166,7 +166,26 @@
           </span>
         </td>
       </tr>
-
+      <tr>
+        <td class="pl-4">Returned Steam and Condensate</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <span *ngIf="baselineLosses.returnedSteamAndCondensate">
+            {{baselineLosses.returnedSteamAndCondensate | number:'1.0-2'}}
+          </span>
+          <span *ngIf="!baselineLosses.returnedSteamAndCondensate">
+            &mdash;
+          </span>
+        </td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modification.valid.isValid && modification.outputData.returnedSteamAndCondensate">
+            {{modification.outputData.returnedSteamAndCondensate | number:'1.0-2'}}
+          </span>
+          <span *ngIf="!modification.valid.isValid || !modification.outputData.returnedSteamAndCondensate">
+            &mdash;
+          </span>
+        </td>
+      </tr>
 
       <tr>
         <td class="bold">Process Usage</td>

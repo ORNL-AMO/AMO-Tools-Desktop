@@ -16,6 +16,8 @@ export class ByDataFormComponent implements OnInit {
   @Input()
   equipmentType: string;
   @Input()
+  selectedFormView: string;
+  @Input()
   settings: Settings;
 
   byDataForm: FormGroup;
@@ -24,9 +26,10 @@ export class ByDataFormComponent implements OnInit {
   flowUnit: string;
   formLabel: string;
   orderOptions: Array<number> = [
-    2, 3, 4, 5, 6
+    1, 2, 3, 4, 5, 6
   ];
   resetFormsSub: Subscription;
+  powerDataCollapsed: string = 'closed';
   constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private formBuilder: FormBuilder,
     private curveDataService: CurveDataService, private cd: ChangeDetectorRef) { }
 
@@ -57,7 +60,7 @@ export class ByDataFormComponent implements OnInit {
   initForm() {
     let defaultData: ByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
     if (defaultData == undefined) {
-      defaultData = this.equipmentCurveService.getByDataDefault(this.settings);
+      defaultData = this.equipmentCurveService.getResetByDataInputs();
     }
     this.systemAndEquipmentCurveService.byDataInputs.next(defaultData);
     this.byDataForm = this.equipmentCurveService.getByDataFormFromObj(defaultData);
@@ -85,7 +88,8 @@ export class ByDataFormComponent implements OnInit {
   addRow() {
     let tmpDataRowForm = this.formBuilder.group({
       flow: [0, [Validators.required, Validators.max(1000000)]],
-      yValue: [0, [Validators.required, Validators.min(0)]]
+      yValue: [0, [Validators.required, Validators.min(0)]],
+      power: [0, [Validators.required, Validators.min(0)]],
     });
     let tmpFormArray: FormArray = this.byDataForm.controls.dataRows.value;
     tmpFormArray.push(tmpDataRowForm);

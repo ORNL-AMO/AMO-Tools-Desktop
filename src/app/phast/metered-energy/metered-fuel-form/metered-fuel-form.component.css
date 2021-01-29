@@ -2,3 +2,7 @@
     width: auto !important;
     margin-right: none !important;
 }
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }

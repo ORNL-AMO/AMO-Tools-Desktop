@@ -70,27 +70,35 @@ export class PsatService {
 
   //results
   resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
-    //call results existing
-    let tmpResults: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
-
-
-    if (settings.powerMeasurement != 'hp') {
-      tmpResults = this.convertOutputs(tmpResults, settings);
+    let valid: PsatValid = this.isPsatValid(psatInputs, true)
+    if (valid.isValid) {
+      let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
+      //call results existing
+      let tmpResults: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
+      if (settings.powerMeasurement != 'hp') {
+        tmpResults = this.convertOutputs(tmpResults, settings);
+      }
+      tmpResults = this.roundResults(tmpResults);
+      return tmpResults;
+    } else {
+      return this.emptyResults();
     }
-    tmpResults = this.roundResults(tmpResults);
-    return tmpResults;
   }
 
   resultsModified(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    let tmpInputs: any = this.convertInputs(psatInputs, settings);
-    tmpInputs.margin = 1;
-    let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
-    if (settings.powerMeasurement != 'hp') {
-      tmpResults = this.convertOutputs(tmpResults, settings);
+    let valid: PsatValid = this.isPsatValid(psatInputs, false)
+    if (valid.isValid) {
+      let tmpInputs: any = this.convertInputs(psatInputs, settings);
+      tmpInputs.margin = 1;
+      let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
+      if (settings.powerMeasurement != 'hp') {
+        tmpResults = this.convertOutputs(tmpResults, settings);
+      }
+      tmpResults = this.roundResults(tmpResults);
+      return tmpResults;
+    } else {
+      return this.emptyResults();
     }
-    tmpResults = this.roundResults(tmpResults);
-    return tmpResults;
   }
 
   emptyResults(): PsatOutputs {
@@ -288,15 +296,19 @@ export class PsatService {
       // horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
-    let inputs: any = {
-      motor_rated_power: horsePower,
-      motor_rated_speed: motorRPM,
-      line_frequency: frequency,
-      efficiency_class: efficiencyClass,
-      efficiency: efficiency,
-      motor_rated_voltage: motorVoltage
+    if (motorRPM > 0) {
+      let inputs: any = {
+        motor_rated_power: horsePower,
+        motor_rated_speed: motorRPM,
+        line_frequency: frequency,
+        efficiency_class: efficiencyClass,
+        efficiency: efficiency,
+        motor_rated_voltage: motorVoltage
+      }
+      return this.roundVal(psatAddon.estFLA(inputs), 2);
+    } else {
+      return 0;
     }
-    return this.roundVal(psatAddon.estFLA(inputs), 2);
 
   }
 
@@ -418,6 +430,94 @@ export class PsatService {
     };
     return this.roundVal(psatAddon.nema(tmpInputs), 2);
   }
+
+  //motor efficiency (nema without hard coded load factor)
+  motorEfficiency(
+    lineFreq: number,
+    motorRPM: number,
+    efficiencyClass: number,
+    efficiency: number,
+    motorPower: number,
+    loadFactor: number,
+    settings: Settings
+  ): number {
+    if (motorPower != undefined && lineFreq != undefined && motorRPM != undefined && efficiencyClass != undefined && loadFactor != undefined) {
+      if (settings.unitsOfMeasure != 'Imperial') {
+        motorPower = this.convertUnitsService.value(motorPower).from(settings.powerMeasurement).to('hp');
+      }
+      //efficiency unused, calced from efficiencyClass
+      let tmpInputs = {
+        line_frequency: lineFreq,
+        motor_rated_speed: motorRPM,
+        efficiency_class: efficiencyClass,
+        efficiency: efficiency,
+        motor_rated_power: motorPower,
+        load_factor: loadFactor
+      };
+      return this.roundVal(psatAddon.nema(tmpInputs), 2);
+    } else {
+      return 0;
+    }
+  }
+
+  motorPowerFactor(
+    motorRatedPower: number,
+    loadFactor: number,
+    motorCurrent: number,
+    motorEfficiency: number,
+    ratedVoltage: number,
+    settings: Settings
+  ): number {
+    if (settings.unitsOfMeasure != 'Imperial') {
+      motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
+    }
+    if (motorRatedPower && motorCurrent && ratedVoltage) {
+      //efficiency and load factor need to be decimal
+      let inp = {
+        motorRatedPower: motorRatedPower,
+        loadFactor: loadFactor / 100,
+        motorCurrent: motorCurrent,
+        motorEfficiency: motorEfficiency / 100,
+        ratedVoltage: ratedVoltage
+      };
+      return this.roundVal(psatAddon.motorPowerFactor(inp), 2);
+    } else {
+      return 0;
+    }
+  }
+
+  motorCurrent(
+    motorRatedPower: number,
+    motorRpm: number,
+    lineFrequency: number,
+    efficiencyClass: number,
+    loadFactor: number,
+    ratedVoltage: number,
+    fullLoadAmps: number,
+    specifiedEfficiency: number,
+    settings: Settings
+  ): number {
+    if (settings.unitsOfMeasure != 'Imperial') {
+      motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
+    }
+    if (motorRatedPower && motorRpm && ratedVoltage && fullLoadAmps) {
+      let inp = {
+        motorRatedPower: motorRatedPower,
+        loadFactor: loadFactor,
+        motorRPM: motorRpm,
+        line_frequency: lineFrequency,
+        efficiency_class: efficiencyClass,
+        fullLoadAmps: fullLoadAmps,
+        ratedVoltage: ratedVoltage,
+        specifiedEfficiency: specifiedEfficiency
+      };
+      return this.roundVal(psatAddon.motorCurrent(inp), 2);
+    } else {
+      return 0;
+    }
+  }
+
+
   //ENUM Helpers
   getPumpStyleFromEnum(num: number): string {
     let pumpStyle: { display: string, value: number } = _.find(pumpTypesConstant, (pumpStyle) => { return pumpStyle.value == num });

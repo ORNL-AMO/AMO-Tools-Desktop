@@ -5,6 +5,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Subscription } from 'rxjs';
+import { AirLeakSurveyTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-air-leak',
@@ -12,6 +13,12 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./air-leak.component.css']
 })
 export class AirLeakComponent implements OnInit, AfterViewInit {
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<AirLeakSurveyTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
   @Input()
@@ -21,7 +28,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   currentFieldSub: Subscription;
 
   tabSelect: string = 'results';
-  headerHeight: number;
+  containerHeight: number;
   editMode: boolean = false;
   modificationExists: boolean;
 
@@ -29,7 +36,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   airLeakInputSub: Subscription;
 
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
-  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('panelHeader', { static: false }) panelHeader: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
@@ -75,8 +82,8 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    if (this.panelHeader) {
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.panelHeader.nativeElement.offsetHeight;
     }
   }
 
@@ -85,13 +92,21 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   }
 
   btnResetData() {
-   this.airLeakService.resetData.next(true);
    this.airLeakService.initDefaultEmptyInputs(this.settings);
    this.airLeakService.currentLeakIndex.next(0);
+   this.airLeakService.resetData.next(true);
   }
 
   btnGenerateExample() {
-    this.airLeakService.generateExampleData();
+    this.airLeakService.generateExampleData(this.settings);
+  }
+
+  save() {
+    this.emitSave.emit({ airLeakSurveyInput: this.airLeakService.airLeakInput.getValue() });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
   }
 
 }

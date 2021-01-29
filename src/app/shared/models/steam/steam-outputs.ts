@@ -362,7 +362,8 @@ export interface SSMTLosses {
   totalProcessLosses: number;
   totalVentLosses: number;
   totalTurbineLosses: number;
-  totalOtherLosses: number
+  totalOtherLosses: number;
+  returnedSteamAndCondensate: number;
 }
 
 export interface HeatExchangerOutput {

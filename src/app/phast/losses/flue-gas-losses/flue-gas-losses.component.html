@@ -43,7 +43,7 @@
       <label class="small" for="{{'type_'+lossIndex+idString}}">Type of fuel</label>
       <select class="form-control" id="{{'type_'+lossIndex+idString}}" [(ngModel)]="loss.measurementType"
         [disabled]="(!baselineSelected || lossesLocked) && !inSetup" (focus)="changeField('measurementType')"
-        (blur)="focusOut()" (change)="saveLosses()" [ngClass]="{'indicate-different': compareLossType(lossIndex)}">
+         (change)="saveLosses()" [ngClass]="{'indicate-different': compareLossType(lossIndex)}">
         <option [ngValue]="'By Volume'">Gas</option>
         <option [ngValue]="'By Mass'">Solid/Liquid</option>
       </select>
@@ -72,7 +72,7 @@
       <label class="bold">Gross Heat</label>
       <div *ngIf="loss.grossHeat" class="text-center bold">
         {{loss.grossHeat | sigFigs:'6'}}
-        <span>{{resultsUnit}}</span>
+        <span>{{ resultsUnit }}</span>
       </div>
       <div *ngIf="!loss.grossHeat" class="text-center bold">
         &mdash; &mdash;
@@ -82,7 +82,7 @@
       <label class="bold">Flue Gas Losses</label>
       <div *ngIf="loss.systemLosses" class="text-center bold">
         {{loss.systemLosses | sigFigs:'6'}}
-        <span>{{resultsUnit}}</span>
+        <span>{{ resultsUnit }}</span>
       </div>
       <div *ngIf="!loss.systemLosses" class="text-center bold">
         &mdash; &mdash;

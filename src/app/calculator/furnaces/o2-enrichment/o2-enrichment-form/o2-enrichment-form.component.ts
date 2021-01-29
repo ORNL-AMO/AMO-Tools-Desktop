@@ -1,9 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, HostListener, ElementRef, ViewChild } from '@angular/core';
-import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
+import { Component, OnInit, Input, HostListener, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { EnrichmentInput, EnrichmentOutput, EnrichmentInputData } from '../../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../../shared/models/settings';
-import { O2EnrichmentService, O2EnrichmentMinMax } from '../o2-enrichment.service';
-import { FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { O2EnrichmentService } from '../o2-enrichment.service';
+import { FormGroup, AbstractControl } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { Subscription } from 'rxjs';
+import { O2EnrichmentFormService } from '../o2-enrichment-form.service';
+
 @Component({
   selector: 'app-o2-enrichment-form',
   templateUrl: './o2-enrichment-form.component.html',
@@ -11,109 +14,116 @@ import { OperatingHours } from '../../../../shared/models/operations';
 })
 export class O2EnrichmentFormComponent implements OnInit {
   @Input()
-  o2Enrichment: O2Enrichment;
-  @Output('calculate')
-  calculate = new EventEmitter<boolean>();
-  @Input()
-  o2EnrichmentOutput: O2EnrichmentOutput;
-  @Output('changeFieldEmit')
-  changeFieldEmit = new EventEmitter<string>();
-  @Input()
   settings: Settings;
-  @Input()
-  o2Form: FormGroup;
-
+  
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
   }
-
+  
   formWidth: number;
-
-
-  annualCostSavings: number;
+  isEditingName: boolean = false;
   showOperatingHoursModal: boolean;
   operatingHoursControl: AbstractControl;
-  constructor(private o2EnrichmentService: O2EnrichmentService) { }
+  o2Form: FormGroup;
+
+  currentEnrichmentIndexSub: Subscription;
+  currentEnrichmentIndex: number;
+  currentEnrichmentOutput: EnrichmentOutput;
+
+  constructor(private o2EnrichmentService: O2EnrichmentService, 
+              private cd: ChangeDetectorRef,
+              private o2FormService: O2EnrichmentFormService) { }
 
   ngOnInit() {
-    this.o2Form.controls.o2CombAir.disable();
-    this.setRanges();
+    this.initSubscriptions();
+    this.o2FormService.setRanges(this.o2Form, this.settings);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.o2EnrichmentOutput) {
-      this.annualCostSavings = this.o2EnrichmentOutput.annualFuelCost - this.o2EnrichmentOutput.annualFuelCostEnriched;
-    }
+  ngOnDestroy() {
+    this.currentEnrichmentIndexSub.unsubscribe();
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.setOpHoursModalWidth();
   }
 
-  calc() {
-    this.setRanges();
-    this.calculate.emit(true);
+  initSubscriptions() {
+    this.currentEnrichmentIndexSub = this.o2EnrichmentService.currentEnrichmentIndex.subscribe(index => {
+      this.currentEnrichmentIndex = index;
+      let inputs: Array<EnrichmentInput> = this.o2EnrichmentService.enrichmentInputs.getValue();
+      let outputs: Array<EnrichmentOutput> = this.o2EnrichmentService.enrichmentOutputs.getValue();
+      this.currentEnrichmentOutput = outputs[index];
+      if (inputs) {
+        this.initForm(inputs, index);
+      }
+    });
   }
+
+  initForm(inputs, index: number) {
+    let currentInput = inputs[index];
+    this.o2Form = this.o2FormService.initFormFromObj(this.settings, currentInput.inputData);
+    this.cd.detectChanges();
+    if (this.o2Form.controls.isBaseline.value) {
+      this.o2Form.controls.o2CombAir.disable();
+    } else {
+      this.o2Form.controls.o2CombAir.enable();
+    }
+  }
+
+  addModification() {
+    this.o2EnrichmentService.addModification(this.o2Form);
+  }
+
+  removeModification() {
+    this.o2EnrichmentService.removeModification(this.currentEnrichmentIndex);
+  }
+
+
+  calculate() {
+    this.o2FormService.setRanges(this.o2Form, this.settings);
+    let inputData: EnrichmentInputData = this.o2FormService.getObjFromForm(this.o2Form);
+    let enrichmentInputs = this.o2EnrichmentService.enrichmentInputs.getValue();
+    let currentInput = {
+      inputData: inputData
+    };
+    enrichmentInputs[this.currentEnrichmentIndex] = currentInput;
+    this.o2EnrichmentService.enrichmentInputs.next(enrichmentInputs);
+  }
+
 
   changeField(str: string) {
-    this.changeFieldEmit.emit(str);
-  }
-  focusOut() {
-    this.changeFieldEmit.emit('default');
+    this.o2EnrichmentService.currentField.next(str);
   }
 
-  setRanges() {
-    let tmpO2Enrichment: O2Enrichment = this.o2EnrichmentService.getObjFromForm(this.o2Form);
-    let tmpRanges: O2EnrichmentMinMax = this.o2EnrichmentService.getMinMaxRanges(this.settings, tmpO2Enrichment);
-    let combAirTempDirty: boolean = this.o2Form.controls.combAirTempEnriched.dirty;
-    let o2CombAirDirty: boolean = this.o2Form.controls.o2CombAir.dirty;
-    let combAirTempEnrichedDirty: boolean = this.o2Form.controls.combAirTemp.dirty;
-
-    this.o2Form.controls.combAirTempEnriched.setValidators([Validators.required, Validators.min(tmpRanges.combAirTempEnrichedMin), Validators.max(tmpRanges.combAirTempEnrichedMax)]);
-    this.o2Form.controls.combAirTempEnriched.reset(this.o2Form.controls.combAirTempEnriched.value);
-
-    this.o2Form.controls.o2CombAir.setValidators([Validators.required, Validators.max(tmpRanges.o2CombAirMax)]);
-    this.o2Form.controls.o2CombAir.reset(this.o2Form.controls.o2CombAir.value);
-
-    this.o2Form.controls.combAirTemp.setValidators([Validators.required, Validators.min(tmpRanges.combAirTempMin), Validators.max(tmpRanges.combAirTempMax)]);
-    this.o2Form.controls.combAirTemp.reset(this.o2Form.controls.combAirTemp.value);
-
-    if (combAirTempDirty) {
-      this.o2Form.controls.combAirTempEnriched.markAsDirty();
-    }
-    if (o2CombAirDirty) {
-      this.o2Form.controls.o2CombAir.markAsDirty();
-    }
-    if (combAirTempEnrichedDirty) {
-      this.o2Form.controls.combAirTemp.markAsDirty();
-    }
-  }
-
-  plot() {
-
-  }
-
-  closeOperatingHoursModal(){
+  closeOperatingHoursModal() {
     this.showOperatingHoursModal = false;
   }
 
-  openOperatingHoursModal(opHoursControl: AbstractControl){
+  openOperatingHoursModal(opHoursControl: AbstractControl) {
     this.operatingHoursControl = opHoursControl;
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: OperatingHours){
+  updateOperatingHours(oppHours: OperatingHours) {
     this.o2EnrichmentService.operatingHours = oppHours;
     this.operatingHoursControl.patchValue(oppHours.hoursPerYear);
-    this.calc();
+    this.calculate();
     this.closeOperatingHoursModal();
   }
 
-  setOpHoursModalWidth(){
-    if (this.formElement.nativeElement.clientWidth) {
+  setOpHoursModalWidth() {
+    if (this.formElement) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
+  }
+
+  editCaseName() {
+    this.isEditingName = true;
+  }
+
+  doneEditingName() {
+    this.isEditingName = false;
   }
 }

@@ -106,9 +106,9 @@ export class ReplaceExistingComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
-      this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
+    if (this.leftPanelHeader) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.offsetHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
     }
   }
 

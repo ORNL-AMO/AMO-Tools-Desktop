@@ -5,7 +5,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { CurveDataService } from '../../curve-data.service';
-import { PumpSystemCurveData } from '../../../../shared/models/system-and-equipment-curve';
+import { PumpSystemCurveData, ModificationEquipment } from '../../../../shared/models/system-and-equipment-curve';
 
 @Component({
   selector: 'app-pump-system-curve-form',
@@ -15,6 +15,18 @@ import { PumpSystemCurveData } from '../../../../shared/models/system-and-equipm
 export class PumpSystemCurveFormComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  equipmentType: string;
+
+  modificationOptions: Array<{ display: string, value: number }> = [
+    { display: 'Flow Rate', value: 0 },
+    { display: 'Head', value: 1 },
+  ];
+
+  flowUnit: string;
+  yValueUnit: string;
+  modificationEquipmentSub: Subscription;
+  modificationEquipment: ModificationEquipment
 
   pointOneFluidPower: number = 0;
   pointTwoFluidPower: number = 0;
@@ -22,16 +34,18 @@ export class PumpSystemCurveFormComponent implements OnInit {
   resetFormsSub: Subscription;
   assessmentDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }>;
   showDataPointOptions: boolean = false;
+  pumpModificationCollapsed: string = 'closed';
+
+  displaySpeed: boolean = true;
+  equipmentInputsSub: Subscription;
+  pumpModificationCollapsedSub: Subscription;
+
   constructor(private pumpSystemCurveFormService: PumpSystemCurveFormService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
     private curveDataService: CurveDataService) { }
 
   ngOnInit() {
-    this.initForm();
-    this.resetFormsSub = this.curveDataService.resetForms.subscribe(val => {
-      if (val == true) {
-        this.initForm();
-      }
-    });
+    this.initSystemCurveForm();
+    this.initSubscriptions();
 
     if (this.systemAndEquipmentCurveService.systemCurveDataPoints) {
       this.assessmentDataPoints = this.systemAndEquipmentCurveService.systemCurveDataPoints;
@@ -45,12 +59,38 @@ export class PumpSystemCurveFormComponent implements OnInit {
 
   ngOnDestroy() {
     this.resetFormsSub.unsubscribe();
+    this.modificationEquipmentSub.unsubscribe();
+    this.equipmentInputsSub.unsubscribe();
+    this.pumpModificationCollapsedSub.unsubscribe();
   }
 
-  initForm() {
+  initSubscriptions() {
+    this.resetFormsSub = this.curveDataService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.initSystemCurveForm();
+      }
+    });
+    this.equipmentInputsSub = this.systemAndEquipmentCurveService.equipmentInputs.subscribe(inputs => {
+      if (inputs) {
+        this.displaySpeed = Boolean(inputs.measurementOption);
+      }
+    });
+    this.modificationEquipmentSub = this.systemAndEquipmentCurveService.modificationEquipment.subscribe(equipment => {
+      if (equipment) {
+        this.modificationEquipment = equipment;
+      }
+    });
+    this.pumpModificationCollapsedSub = this.systemAndEquipmentCurveService.pumpModificationCollapsed.subscribe(val => {
+      if (val) {
+        this.pumpModificationCollapsed = val;
+      }
+    });
+  }
+  
+  initSystemCurveForm() {
     let dataObj: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.value;
     if (dataObj == undefined) {
-      dataObj = this.pumpSystemCurveFormService.getPumpSystemCurveDefaults(this.settings);
+      dataObj = this.pumpSystemCurveFormService.getResetPumpSystemCurveInputs();
     }
     this.systemAndEquipmentCurveService.pumpSystemCurveData.next(dataObj);
     this.pumpSystemCurveForm = this.pumpSystemCurveFormService.getFormFromObj(dataObj);
@@ -88,5 +128,16 @@ export class PumpSystemCurveFormComponent implements OnInit {
       });
       this.saveChanges();
     }
+  }
+
+  togglePumpModification() {
+      if (this.pumpModificationCollapsed == 'closed') {
+        this.pumpModificationCollapsed = 'open';
+        this.systemAndEquipmentCurveService.pumpModificationCollapsed.next(this.pumpModificationCollapsed);
+      } else {
+        this.pumpModificationCollapsed = 'closed';
+        this.systemAndEquipmentCurveService.pumpModificationCollapsed.next(this.pumpModificationCollapsed);
+      }
+      this.systemAndEquipmentCurveService.updateGraph.next(true);
   }
 }

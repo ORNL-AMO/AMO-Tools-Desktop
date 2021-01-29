@@ -40,11 +40,11 @@
                 </a>
             </div>
         </div>
-        <div class="mr-2 ml-2">
-            <app-system-and-equipment-curve-help *ngIf="tabSelect == 'help'"></app-system-and-equipment-curve-help>
-            <app-system-and-equipment-curve-graph *ngIf="tabSelect == 'results'" [equipmentType]="equipmentType"
+        <div class="d-flex flex-column w-100 align-items-center pt-3 p-2">
+            <app-system-and-equipment-curve-help class="w-100" *ngIf="tabSelect == 'help'"></app-system-and-equipment-curve-help>
+            <app-system-and-equipment-curve-graph class="w-100" *ngIf="tabSelect == 'results'" [equipmentType]="equipmentType"
                 [settings]="settings"></app-system-and-equipment-curve-graph>
-            <app-regression-equations *ngIf="tabSelect == 'results'" [equipmentType]="equipmentType"
+            <app-regression-equations class="w-100" *ngIf="tabSelect == 'results'" [equipmentType]="equipmentType"
                 [isEquipmentCurvePrimary]="isEquipmentCurvePrimary"></app-regression-equations>
         </div>
     </div>

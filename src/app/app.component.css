@@ -87,9 +87,6 @@ Buttons
   border-color: #717171;
 }
 
-.btn.disabled, .btn:disabled {
-    opacity: 1;
-}
 .btn-primary.disabled, .btn-primary:disabled,
 .btn-secondary.disabled, .btn-secondary:disabled {
     color: #c5c5c5;
@@ -1029,6 +1026,15 @@ Calculators
   background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
 }
 
+.ico-size4.waste-water {
+  height: 55px;
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #003087);
+}
+
 .ico-size5 {
   height: 55px;
   background: linear-gradient(rgba(147, 112, 219, 0.34), rgba(216, 191, 216, 0.65));
@@ -1239,6 +1245,10 @@ Banner
   .banner.log-tool{
     background: #117A65;
     color: white;
+  }
+
+  .banner.motor-inventory{
+    background: #84b641;
   }
 
 
@@ -1715,7 +1725,7 @@ No Data Messaging
   padding: 5px;
 }
 
-.fa-bar-chart {
+.fa-bar-chart, .fa-comment-o {
   opacity: 0.6;
   padding: 5px;
   border-radius: 2px;
@@ -1753,7 +1763,7 @@ No Data Messaging
   transition: ease-in-out 0.2s all;
 }
 
-.fa-bar-chart:hover {
+.fa-bar-chart:hover, .fa-comment-o:hover {
   cursor: pointer;
   opacity: 1;
   border-color: #212529;

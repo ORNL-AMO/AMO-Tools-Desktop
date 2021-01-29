@@ -11,9 +11,11 @@ export class PlaneDataFormService {
 
   planeStep: BehaviorSubject<string>;
   planeShape: BehaviorSubject<string>;
+  staticPressureValue: BehaviorSubject<number>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
     this.planeStep = new BehaviorSubject<string>('plane-info');
     this.planeShape = new BehaviorSubject<string>(undefined);
+    this.staticPressureValue = new BehaviorSubject<number>(undefined);
   }
 
   getPlaneInfoFormFromObj(obj: PlaneData): FormGroup {
@@ -24,8 +26,14 @@ export class PlaneDataFormService {
       totalPressureLossBtwnPlanes1and4: [obj.totalPressureLossBtwnPlanes1and4, [Validators.required, Validators.min(0)]],
       totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, [Validators.required, Validators.min(0)]],
       inletSEF: [obj.inletSEF, Validators.required],
-      outletSEF: [obj.outletSEF, Validators.required]
+      outletSEF: [obj.outletSEF, Validators.required],
+      variationInBarometricPressure: [obj.variationInBarometricPressure]
     });
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 
@@ -35,6 +43,7 @@ export class PlaneDataFormService {
     obj.totalPressureLossBtwnPlanes2and5 = form.controls.totalPressureLossBtwnPlanes2and5.value;
     obj.inletSEF = form.controls.inletSEF.value;
     obj.outletSEF = form.controls.outletSEF.value;
+    obj.variationInBarometricPressure = form.controls.variationInBarometricPressure.value;
     return obj;
 
   }
@@ -46,6 +55,11 @@ export class PlaneDataFormService {
       numTraverseHoles: [obj.numTraverseHoles, [Validators.required, Validators.min(1), Validators.max(10)]],
       numInsertionPoints: [obj.numInsertionPoints, [Validators.min(1), Validators.max(10)]]
     });
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 
@@ -70,6 +84,11 @@ export class PlaneDataFormService {
       numInletBoxes: [obj.numInletBoxes]
     });
     this.setPlaneValidators(form, planeNum, obj.planeType, ranges);
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 

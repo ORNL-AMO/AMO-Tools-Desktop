@@ -1,10 +1,8 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TreasureHuntResults } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
 import { OpportunityCardData } from '../../treasure-chest/opportunity-cards/opportunity-cards.service';
-import { TreasureChestMenuService } from '../../treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 import { TreasureHuntReportService } from '../treasure-hunt-report.service';
 
 @Component({
@@ -23,7 +21,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   opportunityCardsData: Array<OpportunityCardData>;
 
   teamData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
-  constructor(private treasureChestMenuService: TreasureChestMenuService, private treasureHuntReportService: TreasureHuntReportService) { }
+  constructor(private treasureHuntReportService: TreasureHuntReportService) { }
 
   ngOnInit() {
   }

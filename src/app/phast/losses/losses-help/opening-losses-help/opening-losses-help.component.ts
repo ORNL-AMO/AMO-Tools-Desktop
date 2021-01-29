@@ -13,6 +13,8 @@ export class OpeningLossesHelpComponent implements OnInit {
   settings: Settings;
   @Input()
   currentField: string;
+  displaySuggestions: boolean = false;
+
 
   @ViewChild('viewFactorModal', { static: false }) public viewFactorModal: ModalDirective;
 
@@ -29,5 +31,9 @@ export class OpeningLossesHelpComponent implements OnInit {
   hideViewFactorModal() {
     this.lossesService.modalOpen.next(false);
     this.viewFactorModal.hide();
+  }
+
+  toggleSuggestions() {
+    this.displaySuggestions = !this.displaySuggestions;
   }
 }

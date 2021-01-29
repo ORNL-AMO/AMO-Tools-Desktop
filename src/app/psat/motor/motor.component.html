@@ -118,7 +118,7 @@
         <span *ngIf="psatForm.controls.fullLoadAmps.errors.required">Value Required</span>
       </span>
       <span class="alert-warning small pull-right"
-        *ngIf="motorWarnings.flaError !== null && !psatForm.controls.fullLoadAmps.invalid && !psatForm.controls.fullLoadAmps.pristine">{{motorWarnings.flaError}}</span>
-    </div>
+        *ngIf="motorWarnings.flaError !== null && !psatForm.controls.fullLoadAmps.invalid">{{motorWarnings.flaError}}</span>
+      </div>
   </div>
 </form>

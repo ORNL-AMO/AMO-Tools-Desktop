@@ -1,0 +1,92 @@
+<div class="p-2">
+    <table class="table table-sm table-striped table-hover" *ngIf="selectedMotorDepartment">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Op. Hours
+                </th>
+                <th>
+                    Eff. Class
+                </th>
+                <th>
+                    Est. Efficiency
+                </th>
+                <th>
+                    Rated Power
+                </th>
+                <th>
+                    Energy Usage
+                </th>
+                <th>
+                    Energy Cost
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let tableDataItem of tableDataItems"
+                [ngClass]="{'selected-item':tableDataItem.motorItem.id == selectedMotorItem.id}">
+                <td>
+                    <span *ngIf="tableDataItem.motorItem.id == selectedMotorItem.id" class="fa fa-chevron-right"></span>
+                    <a class="click-link" (click)="selectMotor(tableDataItem.motorItem)">{{tableDataItem.name}}</a>
+                </td>
+                <td>
+                    <span *ngIf="tableDataItem.operatingHours">
+                        {{tableDataItem.operatingHours}} hrs/yr
+                    </span>
+                    <span *ngIf="!tableDataItem.operatingHours">
+                        &mdash; hrs/yr
+                    </span>
+                </td>
+                <td>
+                    {{tableDataItem.efficiencyClass | motorEfficiencyClass}}
+                </td>
+                <td>
+                    <span *ngIf="tableDataItem.estimatedEfficiency">
+                        {{tableDataItem.estimatedEfficiency}} %
+                    </span>
+                    <span *ngIf="!tableDataItem.estimatedEfficiency">
+                        &mdash; %
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="tableDataItem.ratedPower">
+                        {{tableDataItem.ratedPower}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                    </span>
+                    <span *ngIf="!tableDataItem.ratedPower">
+                        &mdash;
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="tableDataItem.energyUsage">
+                        {{tableDataItem.energyUsage | number:'1.0-0'}} kWh/yr
+                    </span>
+                    <span *ngIf="!tableDataItem.energyUsage">
+                        &mdash; kWh/yr
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="tableDataItem.energyCost">
+                        {{tableDataItem.energyCost | currency:'USD':'symbol':'2.0-0'}}
+                    </span>
+                    <span *ngIf="!tableDataItem.energyCost">
+                        $ &mdash;
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="p-2 w-100 text-center">
+    <a class="click-link" (click)="addNewMotor()">+Add New Motor</a>
+</div>
+
+<div class="p-2 w-100 text-center">
+    <img src="assets/images/energy-use-equation.PNG" class="w-100">
+</div>

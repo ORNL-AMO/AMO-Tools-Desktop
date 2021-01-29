@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
-import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
-import { PipeInsulationReductionService } from '../../calculator/utilities/pipe-insulation-reduction/pipe-insulation-reduction.service';
+import { PipeInsulationReductionService } from '../../calculator/steam/pipe-insulation-reduction/pipe-insulation-reduction.service';
 import { CompressedAirReductionService } from '../../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.service';
 import { CompressedAirPressureReductionService } from '../../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
 import { SteamReductionService } from '../../calculator/steam/steam-reduction/steam-reduction.service';
+import { TankInsulationReductionService } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.service';
+import { AirLeakService } from '../../calculator/compressed-air/air-leak/air-leak.service';
 
 @Injectable()
 export class CalculatorsService {
@@ -24,7 +26,7 @@ export class CalculatorsService {
     private motorDriveService: MotorDriveService, private naturalGasReductionService: NaturalGasReductionService, private electricityReductionService: ElectricityReductionService,
     private compressedAirReductionService: CompressedAirReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
     private waterReductionService: WaterReductionService, private opportunitySheetService: OpportunitySheetService, private steamReductionService: SteamReductionService,
-    private pipeInsulationReductionService: PipeInsulationReductionService) {
+    private pipeInsulationReductionService: PipeInsulationReductionService, private tankInsulationReductionService: TankInsulationReductionService, private airLeakService: AirLeakService) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
   cancelCalc() {
@@ -269,6 +271,49 @@ export class CalculatorsService {
     this.calcOpportunitySheet = undefined;
     this.pipeInsulationReductionService.baselineData = undefined;
     this.pipeInsulationReductionService.modificationData = undefined;
+    this.cancelCalc();
+  }
+
+  //tank insulation reduction
+  addNewTankInsulationReduction() {
+    this.calcOpportunitySheet = undefined;
+    this.tankInsulationReductionService.baselineData = undefined;
+    this.tankInsulationReductionService.modificationData = undefined;
+    this.isNewOpportunity = true;
+    this.selectedCalc.next('tank-insulation-reduction');
+  }
+  editTankInsulationReductionsItem(tankInsulationReduction: TankInsulationReductionTreasureHunt, index: number) {
+    this.calcOpportunitySheet = tankInsulationReduction.opportunitySheet;
+    this.isNewOpportunity = false;
+    this.itemIndex = index;
+    this.tankInsulationReductionService.baselineData = tankInsulationReduction.baseline;
+    this.tankInsulationReductionService.modificationData = tankInsulationReduction.modification;
+    this.selectedCalc.next('tank-insulation-reduction');
+  }
+  cancelTankInsulationReduction() {
+    this.calcOpportunitySheet = undefined;
+    this.tankInsulationReductionService.baselineData = undefined;
+    this.tankInsulationReductionService.modificationData = undefined;
+    this.cancelCalc();
+  }
+
+  //tank insulation reduction
+  addNewAirLeakSurvey() {
+    this.calcOpportunitySheet = undefined;
+    this.airLeakService.airLeakInput.next(undefined);
+    this.isNewOpportunity = true;
+    this.selectedCalc.next('air-leak-survey');
+  }
+  editAirLeakSurveyItem(airLeakSurvey: AirLeakSurveyTreasureHunt, index: number) {
+    this.calcOpportunitySheet = airLeakSurvey.opportunitySheet;
+    this.isNewOpportunity = false;
+    this.itemIndex = index;
+    this.airLeakService.airLeakInput.next(airLeakSurvey.airLeakSurveyInput);
+    this.selectedCalc.next('air-leak-survey');
+  }
+  cancelAirLeakSurvey() {
+    this.calcOpportunitySheet = undefined;
+    this.airLeakService.airLeakInput.next(undefined);
     this.cancelCalc();
   }
 }

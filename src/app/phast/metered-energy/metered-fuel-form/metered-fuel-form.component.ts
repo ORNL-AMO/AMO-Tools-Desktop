@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { MeteredEnergyFuel } from '../../../shared/models/phast/meteredEnergy';
 import { SuiteDbService } from '../../../suiteDb/suite-db.service';
-import { FlueGasMaterial } from '../../../shared/models/materials';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertPhastService } from '../../convert-phast.service';
 import { PhastService } from "../../phast.service";
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
   selector: 'app-metered-fuel-form',
@@ -27,7 +28,16 @@ export class MeteredFuelFormComponent implements OnInit {
   @Input()
   inElectricity: boolean;
 
-  fuelTypes: FlueGasMaterial[];
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  showOperatingHoursModal: boolean = false;
+  formWidth: number;
+
+  fuelTypes: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
   setMeteredEnergy: boolean;
 
   constructor(private suiteDbService: SuiteDbService, private convertPhastService: ConvertPhastService, private phastService: PhastService) { }
@@ -36,7 +46,9 @@ export class MeteredFuelFormComponent implements OnInit {
     this.getFuelTypes(true);
     this.calculate();
   }
-
+  ngAfterViewInit() {
+    this.setOpHoursModalWidth();
+  }
   getFuelTypes(bool?: boolean) {
     if (this.inputs.fuelDescription === 'gas') {
       this.fuelTypes = this.suiteDbService.selectGasFlueGasMaterials();
@@ -62,18 +74,22 @@ export class MeteredFuelFormComponent implements OnInit {
 
   setProperties() {
     if (this.inputs.fuelDescription === 'gas') {
-      let fuel = this.suiteDbService.selectGasFlueGasMaterialById(this.inputs.fuelType);
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        fuel.heatingValueVolume = this.convertPhastService.convertVal(fuel.heatingValueVolume, 'btuSCF', 'kJNm3');
+      let fuel: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(this.inputs.fuelType);
+      if (fuel) {
+        if (this.settings.unitsOfMeasure === 'Metric') {
+          fuel.heatingValueVolume = this.convertPhastService.convertVal(fuel.heatingValueVolume, 'btuSCF', 'kJNm3');
+        }
+        this.inputs.heatingValue = fuel.heatingValueVolume;
       }
-      this.inputs.heatingValue = fuel.heatingValueVolume;
     } else {
-      const fuel = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.inputs.fuelType);
-      let heatingVal = this.phastService.flueGasByMassCalculateHeatingValue(fuel);
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        heatingVal = this.convertPhastService.convertVal(heatingVal, 'btuLb', 'kJkg');
+      let fuel: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.inputs.fuelType);
+      if (fuel) {
+        let heatingVal = this.phastService.flueGasByMassCalculateHeatingValue(fuel);
+        if (this.settings.unitsOfMeasure === 'Metric') {
+          heatingVal = this.convertPhastService.convertVal(heatingVal, 'btuLb', 'kJkg');
+        }
+        this.inputs.heatingValue = heatingVal;
       }
-      this.inputs.heatingValue = heatingVal;
     }
     this.calculate();
   }
@@ -89,4 +105,27 @@ export class MeteredFuelFormComponent implements OnInit {
     this.emitSave.emit(true);
     this.emitCalculate.emit(true);
   }
+  openOperatingHoursModal() {
+    this.phastService.modalOpen.next(true);
+    this.showOperatingHoursModal = true;
+  }
+
+  closeOperatingHoursModal() {
+    this.phastService.modalOpen.next(false);
+    this.showOperatingHoursModal = false;
+  }
+
+  updateOperatingHours(newOppHours: OperatingHours) {
+    this.inputs.operatingHoursCalc = newOppHours;
+    this.inputs.operatingHours = newOppHours.hoursPerYear;
+    this.calculate();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
+  }
+
 }

@@ -25,7 +25,7 @@ export class EnergyInputService {
       electrodeHeatingValue: [electrodeHeatingDefault, Validators.required],
       otherFuels: ['', Validators.required],
       electricityInput: ['', Validators.required],
-      name: ['Loss #'+lossNum]
+      name: ['Loss #' + lossNum]
     })
   }
 
@@ -44,7 +44,8 @@ export class EnergyInputService {
     return tmpEnergyInput;
   }
 
-  getFormFromLoss(loss: EnergyInputEAF): FormGroup {
+  getFormFromLoss(loss: EnergyInputEAF, minElectricityInput: number): FormGroup {
+    let electricityInputValidators = this.getElectricityInputValidators(minElectricityInput);
     return this.formBuilder.group({
       naturalGasHeatInput: [loss.naturalGasHeatInput, Validators.required],
       flowRateInput: [loss.flowRateInput],
@@ -53,8 +54,28 @@ export class EnergyInputService {
       electrodeUse: [loss.electrodeUse, Validators.required],
       electrodeHeatingValue: [loss.electrodeHeatingValue, Validators.required],
       otherFuels: [loss.otherFuels, Validators.required],
-      electricityInput: [loss.electricityInput, Validators.required],
+      electricityInput: [loss.electricityInput, electricityInputValidators],
       name: [loss.name]
     })
+  }
+
+  getElectricityInputValidators(minElectricityInput: number) {
+    let electricityInputValidators = [];
+    if (minElectricityInput != undefined) {
+      minElectricityInput = this.convertUnitsService.roundVal(minElectricityInput, 2)
+      electricityInputValidators = [Validators.required, Validators.min(minElectricityInput)];
+    }
+    return electricityInputValidators;
+  }
+
+  calculateHeatInputFromFlowRate(flowRate: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      return this.convertUnitsService.roundVal(flowRate * (1020 / (Math.pow(10, 6))), 3);
+    } else {
+      let convertedFlowRate: number = this.convertUnitsService.value(flowRate).from('m3').to('ft3');
+      let heatInput: number = convertedFlowRate * (1020 / (Math.pow(10, 6)));
+      let convertedHeatInput: number = this.convertUnitsService.value(heatInput).from('MMBtu').to('GJ');
+      return this.convertUnitsService.roundVal(convertedHeatInput, 3);
+    }
   }
 }

@@ -32,6 +32,8 @@ import { TutorialsModule } from '../tutorials/tutorials.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { UpdateToastComponent } from '../update-toast/update-toast.component';
 import { LogToolModule } from '../log-tool/log-tool.module';
+import { MotorInventoryModule } from '../motor-inventory/motor-inventory.module';
+import { InventoryDbService } from '../indexedDb/inventory-db.service';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,8 @@ import { LogToolModule } from '../log-tool/log-tool.module';
     ToastModule,
     TutorialsModule,
     DashboardModule,
-    LogToolModule
+    LogToolModule,
+    MotorInventoryModule
   ],
   providers: [
     AssessmentService,
@@ -70,7 +73,8 @@ import { LogToolModule } from '../log-tool/log-tool.module';
     DirectoryDbService,
     SettingsDbService,
     CalculatorDbService,
-    DeleteDataService
+    DeleteDataService,
+    InventoryDbService
   ]
 })
 

@@ -3,6 +3,7 @@ import { VisualizeService } from '../visualize.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js';
 import { AnnotationData } from '../../log-tool-models';
+import { LogToolDbService } from '../../log-tool-db.service';
 
 @Component({
   selector: 'app-visualize-graph',
@@ -15,7 +16,8 @@ export class VisualizeGraphComponent implements OnInit {
 
   selectedGraphDataSubscription: Subscription;
   plotClickSubscription: any;
-  constructor(private visualizeService: VisualizeService) {
+  gettingRanges: any;
+  constructor(private visualizeService: VisualizeService, private logToolDbService: LogToolDbService) {
   }
 
   ngOnInit() {
@@ -23,6 +25,7 @@ export class VisualizeGraphComponent implements OnInit {
     this.visualizeService.plotFunctionType = 'react';
 
     this.selectedGraphDataSubscription = this.visualizeService.selectedGraphObj.subscribe(graphObj => {
+      this.logToolDbService.saveData();
       let mode = {
         modeBarButtonsToRemove: ['lasso2d'],
         responsive: true,
@@ -35,13 +38,22 @@ export class VisualizeGraphComponent implements OnInit {
         Plotly.purge('plotlyDiv');
         // render chart
         //use copy of layout otherwise range value gets set and messes stuff up
-        Plotly.newPlot('plotlyDiv', graphObj.data, JSON.parse(JSON.stringify(graphObj.layout)), mode).then(chart => {
+        //layoutCopy ranges used in data table
+        let layoutCopy = JSON.parse(JSON.stringify(graphObj.layout));
+        Plotly.newPlot('plotlyDiv', graphObj.data, layoutCopy, mode).then(chart => {
+          let newRanges: PlotlyAxisRanges = this.getRestyleRanges(layoutCopy);
+          this.visualizeService.restyleRanges.next(newRanges);
           // subscribe to click event for annotations
           chart.on('plotly_click', (data) => {
             // send data point for annotations
             let newAnnotation: AnnotationData = this.visualizeService.getAnnotationPoint(data.points[0].x, data.points[0].y, data.points[0].fullData.yaxis, data.points[0].fullData.name);
             this.visualizeService.annotateDataPoint.next(newAnnotation);
           });
+
+          chart.on('plotly_relayout', (data) => {
+            let newRanges: PlotlyAxisRanges = this.getRestyleRanges(layoutCopy);
+            this.visualizeService.restyleRanges.next(newRanges);
+          })
         });
       } else {
         //update chart
@@ -54,4 +66,44 @@ export class VisualizeGraphComponent implements OnInit {
   ngOnDestroy() {
     this.selectedGraphDataSubscription.unsubscribe();
   }
+
+
+  getRestyleRanges(layout: any): PlotlyAxisRanges {
+    let xMin: number;
+    let xMax: number;
+    let yMin: number;
+    let yMax: number;
+    let y2Min: number;
+    let y2Max: number;
+    if (layout.xaxis.range) {
+      xMin = layout.xaxis.range[0];
+      xMax = layout.xaxis.range[1];
+    }
+    if (layout.yaxis.range) {
+      yMin = layout.yaxis.range[0];
+      yMax = layout.yaxis.range[1];
+    }
+    if (layout.yaxis2.range) {
+      y2Min = layout.yaxis2.range[0];
+      y2Max = layout.yaxis2.range[1];
+    }
+    return {
+      xMin: xMin,
+      xMax: xMax,
+      yMin: yMin,
+      yMax: yMax,
+      y2Min: y2Min,
+      y2Max: y2Max
+    }
+  }
+}
+
+
+export interface PlotlyAxisRanges {
+  xMin: number,
+  xMax: number,
+  yMin: number,
+  yMax: number,
+  y2Min: number,
+  y2Max: number
 }

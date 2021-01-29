@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Fan203Inputs, Plane } from '../../../shared/models/fans';
+import { FsatService } from '../../../fsat/fsat.service';
+import { Fan203Inputs, FanShaftPowerResults, Plane, VelocityResults } from '../../../shared/models/fans';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class FanAnalysisService {
@@ -13,10 +15,12 @@ export class FanAnalysisService {
   resetForms: BehaviorSubject<boolean>;
   updateTraverseData: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
+  velocityResults: BehaviorSubject<VelocityResults>;
+  fanShaftPowerResults: BehaviorSubject<FanShaftPowerResults>;
 
   inAssessmentModal: boolean;
   pressureCalcResultType: string = 'static';
-  constructor() {
+  constructor(private fsatService: FsatService) {
     this.mainTab = new BehaviorSubject<string>('fan-setup');
     this.stepTab = new BehaviorSubject<string>('fan-info');
     this.getResults = new BehaviorSubject<boolean>(true);
@@ -24,6 +28,15 @@ export class FanAnalysisService {
     this.resetForms = new BehaviorSubject<boolean>(false);
     this.updateTraverseData = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
+    this.velocityResults = new BehaviorSubject<VelocityResults>(undefined);
+    this.fanShaftPowerResults = new BehaviorSubject<FanShaftPowerResults>(undefined);
+  }
+
+  calculateVelocityResults(planeData: Plane, settings: Settings) {
+    let velocityResults = this.fsatService.getVelocityPressureData(planeData, settings);
+    let traverseVelocity = 1096 * Math.sqrt(velocityResults.pv3 / this.inputData.BaseGasDensity.gasDensity);
+    velocityResults.traverseVelocity = traverseVelocity;
+    this.velocityResults.next(velocityResults);
   }
 
   getDefaultData(): Fan203Inputs {
@@ -44,6 +57,7 @@ export class FanAnalysisService {
         plane5upstreamOfPlane2: true,
         totalPressureLossBtwnPlanes1and4: undefined,
         totalPressureLossBtwnPlanes2and5: undefined,
+        variationInBarometricPressure: false,
         inletSEF: undefined,
         outletSEF: undefined,
         //  variationInBarometricPressure: true,
@@ -84,6 +98,11 @@ export class FanAnalysisService {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          ],
+          staticPressureData: [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           ]
         },
         AddlTraversePlanes: [
@@ -104,6 +123,11 @@ export class FanAnalysisService {
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ],
+            staticPressureData: [
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
           },
           {
@@ -120,6 +144,11 @@ export class FanAnalysisService {
             numTraverseHoles: 10,
             numInsertionPoints: 3,
             traverseData: [
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ],
+            staticPressureData: [
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -215,6 +244,7 @@ export class FanAnalysisService {
         plane5upstreamOfPlane2: true,
         totalPressureLossBtwnPlanes1and4: 0,
         totalPressureLossBtwnPlanes2and5: 0.627,
+        variationInBarometricPressure: false,
         inletSEF: 0,
         outletSEF: 0,
         estimate2and5TempFrom1: false,
@@ -249,6 +279,11 @@ export class FanAnalysisService {
             [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
             [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
           ],
+          staticPressureData: [
+            [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
+            [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
+            [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
+          ],
           length: 143.63,
           numInletBoxes: 0,
           numInsertionPoints: 3,
@@ -268,6 +303,11 @@ export class FanAnalysisService {
               [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
               [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
               [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
+            ],
+            staticPressureData: [
+              [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
+              [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
+              [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
             ],
             length: 143.63,
             numInletBoxes: 0,

@@ -54,7 +54,7 @@ export class FixtureLossesService {
 
   checkSpecificHeat(loss: FixtureLoss): string {
     if (loss.specificHeat < 0) {
-      return 'Specific Heat must be equal or greater than 0';
+      return 'Average Specific Heat of Material must be equal or greater than 0';
     } else {
       return null;
     }
@@ -62,7 +62,7 @@ export class FixtureLossesService {
 
   checkFeedRate(loss: FixtureLoss): string {
     if (loss.feedRate < 0) {
-      return 'Fixture Weight feed rate must be greater than 0';
+      return 'Fixture Feed Rate must be greater than 0';
     } else {
       return null;
     }

@@ -107,7 +107,7 @@ export class StandaloneService {
       // metric: m3 imperial:scfm (ft3)
       inputCpy.airDemand = this.convertUnitsService.value(inputCpy.airDemand).from('m3').to('ft3');
       //metric:kPa imperial: psi
-      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPa').to('psi');
+      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPa').to('psig');
       //metric:kpaa imperial:psia
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
       //metric: m3 imperial: gal
@@ -325,8 +325,8 @@ export class StandaloneService {
       //metric: m3 imperial: gal
       inputCpy.tankSize = this.convertUnitsService.value(inputCpy.tankSize).from('m3').to('gal');
       //metric:kPa imperial: psi
-      inputCpy.airPressureIn = this.convertUnitsService.value(inputCpy.airPressureIn).from('kPa').to('psi');
-      inputCpy.airPressureOut = this.convertUnitsService.value(inputCpy.airPressureOut).from('kPa').to('psi');
+      inputCpy.airPressureIn = this.convertUnitsService.value(inputCpy.airPressureIn).from('kPa').to('psig');
+      inputCpy.airPressureOut = this.convertUnitsService.value(inputCpy.airPressureOut).from('kPa').to('psig');
       //metric: m3 imperial: ft3
       let calcTankCapacity: number = standaloneAddon.usableAirCapacity(inputCpy);
       calcTankCapacity = this.convertUnitsService.value(calcTankCapacity).from('ft3').to('m3');

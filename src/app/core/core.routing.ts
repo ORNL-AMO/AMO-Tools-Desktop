@@ -42,7 +42,7 @@ import { Co2SavingsComponent } from '../calculator/utilities/co2-savings/co2-sav
 import { CombinedHeatPowerComponent } from '../calculator/utilities/combined-heat-power/combined-heat-power.component';
 import { ElectricityReductionComponent } from '../calculator/utilities/electricity-reduction/electricity-reduction.component';
 import { NaturalGasReductionComponent } from '../calculator/utilities/natural-gas-reduction/natural-gas-reduction.component';
-import { PipeInsulationReductionComponent } from '../calculator/utilities/pipe-insulation-reduction/pipe-insulation-reduction.component';
+import { PipeInsulationReductionComponent } from '../calculator/steam/pipe-insulation-reduction/pipe-insulation-reduction.component';
 import { PowerFactorCorrectionComponent } from '../calculator/utilities/power-factor-correction/power-factor-correction.component';
 import { PreAssessmentComponent } from '../calculator/utilities/pre-assessment/pre-assessment.component';
 import { UnitConverterComponent } from '../calculator/utilities/unit-converter/unit-converter.component';
@@ -71,7 +71,7 @@ import { SaturatedPropertiesComponent } from '../calculator/steam/saturated-prop
 import { StackLossComponent } from '../calculator/steam/stack-loss/stack-loss.component';
 import { SteamPropertiesComponent } from '../calculator/steam/steam-properties/steam-properties.component';
 import { TurbineComponent } from '../calculator/steam/turbine/turbine.component';
-import { TankInsulationReductionComponent } from '../calculator/utilities/tank-insulation-reduction/tank-insulation-reduction.component';
+import { TankInsulationReductionComponent } from '../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.component';
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
 import { AirLeakComponent } from '../calculator/compressed-air/air-leak/air-leak.component';
 import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
@@ -80,6 +80,17 @@ import { SteamReductionComponent } from '../calculator/steam/steam-reduction/ste
 import { AirFlowConversionComponent } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.component';
 import { ProcessCoolingListComponent } from '../calculator/process-cooling/process-cooling-list/process-cooling-list.component';
 import { CoolingTowerComponent } from '../calculator/process-cooling/cooling-tower/cooling-tower.component';
+import { FanPsychrometricComponent } from '../calculator/utilities/fan-psychrometric/fan-psychrometric.component';
+import { MotorInventoryComponent } from '../motor-inventory/motor-inventory.component';
+import { motorInventoryRoutes } from '../motor-inventory/motor-inventory.routing';
+import { WallComponent } from '../calculator/furnaces/wall/wall.component';
+import { FlueGasComponent } from '../calculator/furnaces/flue-gas/flue-gas.component';
+import { AtmosphereComponent } from '../calculator/furnaces/atmosphere/atmosphere.component';
+import { ChargeMaterialComponent } from '../calculator/furnaces/charge-material/charge-material.component';
+import { OpeningComponent } from '../calculator/furnaces/opening/opening.component';
+import { AirHeatingComponent } from '../calculator/furnaces/air-heating/air-heating.component';
+import { O2UtilizationRateComponent } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.component';
+import { WasteWaterListComponent } from '../calculator/waste-water/waste-water-list/waste-water-list.component';
 
 export const coreRoutes: Routes = [
   {
@@ -209,6 +220,10 @@ export const coreRoutes: Routes = [
             component: AirLeakComponent
           },
           {
+            path: 'fan-psychrometric',
+            component: FanPsychrometricComponent
+          },
+          {
             path: 'fan-analysis',
             component: FanAnalysisComponent
           },
@@ -313,6 +328,30 @@ export const coreRoutes: Routes = [
             component: O2EnrichmentComponent
           },
           {
+            path: 'atmosphere',
+            component: AtmosphereComponent
+          },
+          {
+            path: 'wall-loss',
+            component: WallComponent
+          },
+          {
+            path: 'opening',
+            component: OpeningComponent
+          },
+          {
+            path: 'flue-gas',
+            component: FlueGasComponent
+          },
+          {
+            path: 'air-heating',
+            component: AirHeatingComponent
+          },
+          {
+            path: 'charge-material',
+            component: ChargeMaterialComponent
+          },
+          {
             path: 'achievable-efficiency',
             component: AchievableEfficiencyComponent
           },
@@ -379,6 +418,14 @@ export const coreRoutes: Routes = [
           {
             path: 'cooling-tower',
             component: CoolingTowerComponent
+          },
+          {
+            path: 'waste-water-list',
+            component: WasteWaterListComponent
+          },
+          {
+            path: 'o2-utilization-rate',
+            component: O2UtilizationRateComponent
           }
         ]
       }
@@ -413,11 +460,6 @@ export const coreRoutes: Routes = [
     path: 'report-rollup',
     component: ReportRollupComponent,
     children: [
-      // {
-      //   path: '',
-      //   pathMatch: 'full',
-      //   redirectTo: 'assessment-reports'
-      // },
       {
         path: '',
         component: AssessmentReportsComponent
@@ -428,6 +470,10 @@ export const coreRoutes: Routes = [
     path: 'log-tool',
     component: LogToolComponent,
     children: logToolRoutes
-
-  }
+  },
+  {
+    component: MotorInventoryComponent,
+    path: 'motor-inventory/:id',
+    children: motorInventoryRoutes
+  },
 ];

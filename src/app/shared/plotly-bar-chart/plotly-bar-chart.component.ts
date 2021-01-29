@@ -37,7 +37,7 @@ export class PlotlyBarChartComponent implements OnInit {
   ngOnChanges() {
     if (this.barChart) {
       if (!this.isPrint) {
-        this.drawPrintChart();
+        this.createChart();
       } else {
         this.drawPrintChart();
       }

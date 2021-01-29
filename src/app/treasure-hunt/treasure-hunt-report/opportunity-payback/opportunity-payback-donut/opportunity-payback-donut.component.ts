@@ -53,7 +53,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
     }];
     var layout = {
       showlegend: false,
-      margin: { t: 30, b: 30, l: 40, r: 40 },
+      // margin: { t: 30, b: 30, l: 40, r: 40 },
     };
 
     var modebarBtns = {
@@ -81,6 +81,8 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       hoverformat: '.2r',
       texttemplate: '<b>%{label}</b> <br> %{value:$,.0f}',
       hoverinfo: 'label+percent',
+      direction: "clockwise",
+      rotation: 45
     }];
     var layout = {
       width: 900,
@@ -94,7 +96,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
     var modebarBtns = {
       modeBarButtonsToRemove: ['hoverClosestPie'],
       displaylogo: false,
-      displayModeBar: true
+      displayModeBar: false
     };
     Plotly.react(this.paybackDonutChart.nativeElement, data, layout, modebarBtns);
   }
@@ -116,64 +118,4 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       ]
     };
   }
-
-  // initChart() {
-  //   if (this.showPrint) {
-  //     this.chart = c3.generate({
-  //       bindto: this.donutChartElement.nativeElement,
-  //       data: {
-  //         type: 'donut',
-  //         columns: [
-  //           ['Less than 1 Year ', this.opportunitiesPaybackDetails.lessThanOneYear.totalSavings],
-  //           ['1 to 2 Years ', this.opportunitiesPaybackDetails.oneToTwoYears.totalSavings],
-  //           ['2 to 3 Years ', this.opportunitiesPaybackDetails.twoToThreeYears.totalSavings],
-  //           ['More than 3 Years ', this.opportunitiesPaybackDetails.moreThanThreeYears.totalSavings],
-  //         ]
-  //       },
-  //       size: {
-  //         width: 850,
-  //         height: 350
-  //       }
-  //       // legend: {
-  //       //   show: false
-  //       // },
-  //       // color: {
-  //       //   pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
-  //       //   threshold: {
-  //       //     values: [25, 50]
-  //       //   }
-  //       // },
-  //       // tooltip: {
-  //       //   show: false
-  //       // },
-  //     });
-  //   } else {
-  //     this.chart = c3.generate({
-  //       bindto: this.donutChartElement.nativeElement,
-  //       data: {
-  //         type: 'donut',
-  //         columns: [
-  //           ['Less than 1 Year ', this.opportunitiesPaybackDetails.lessThanOneYear.totalSavings],
-  //           ['1 to 2 Years ', this.opportunitiesPaybackDetails.oneToTwoYears.totalSavings],
-  //           ['2 to 3 Years ', this.opportunitiesPaybackDetails.twoToThreeYears.totalSavings],
-  //           ['More than 3 Years ', this.opportunitiesPaybackDetails.moreThanThreeYears.totalSavings],
-  //         ]
-  //       },
-  //       // legend: {
-  //       //   show: false
-  //       // },
-  //       // color: {
-  //       //   pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
-  //       //   threshold: {
-  //       //     values: [25, 50]
-  //       //   }
-  //       // },
-  //       // tooltip: {
-  //       //   show: false
-  //       // },
-  //     });
-  //   }
-
-  // }
-
 }

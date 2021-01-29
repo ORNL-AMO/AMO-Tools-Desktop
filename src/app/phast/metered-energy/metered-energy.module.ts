@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 
 import { MeteredEnergyComponent } from './metered-energy.component';
 import { MeteredEnergyService } from './metered-energy.service';
@@ -9,10 +9,12 @@ import { MeteredEnergyHelpComponent } from './metered-energy-help/metered-energy
 import { MeteredSteamFormComponent } from './metered-steam-form/metered-steam-form.component';
 import { MeteredElectricityFormComponent } from './metered-electricity-form/metered-electricity-form.component';
 import { MeteredEnergyResultsComponent } from './metered-energy-results/metered-energy-results.component';
+import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     MeteredEnergyComponent,

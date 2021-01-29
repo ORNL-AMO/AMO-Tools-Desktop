@@ -1,6 +1,18 @@
 .group-label{
     font-size: 22px;
 }
-.print-avoid-break {
-    page-break-inside: avoid;
+@media print {
+    .print-break-before {
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+    .date-modified {
+        font-size: 18px;
+    }
+    .print-height {
+        height: 100% !important;
+    }
+    .print-avoid-break {
+        page-break-inside: avoid;
+    }
 }

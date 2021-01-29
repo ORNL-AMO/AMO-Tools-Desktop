@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as regression from 'regression';
 import * as _ from 'lodash';
-import { FanSystemCurveData, PumpSystemCurveData, ByDataInputs, EquipmentInputs, ByEquationInputs } from '../../shared/models/system-and-equipment-curve';
+import { FanSystemCurveData, PumpSystemCurveData, ByDataInputs, EquipmentInputs, ByEquationInputs, ModificationEquipment } from '../../shared/models/system-and-equipment-curve';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
@@ -18,6 +18,7 @@ export class RegressionEquationsService {
   modificationEquipmentCurveByEquationRegressionEquation: BehaviorSubject<string>;
 
   systemCurveRegressionEquation: BehaviorSubject<string>;
+  dataPairCoordinateIncrement: number = 2;
   constructor(private convertUnitsService: ConvertUnitsService) {
     this.baselineEquipmentCurveByDataRegressionEquation = new BehaviorSubject<string>(undefined);
     this.baselineEquipmentCurveByDataRSquared = new BehaviorSubject<number>(undefined);
@@ -31,7 +32,7 @@ export class RegressionEquationsService {
     this.systemCurveRegressionEquation = new BehaviorSubject<string>(undefined);
   }
 
-  getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, yValue: string, maxFlowRate: number): {
+  getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, modificationEquipment: ModificationEquipment, yValue: string, maxFlowRate: number): {
     baselineRegressionEquation: string,
     baselineRSquared: number,
     modificationRegressionEquation: string,
@@ -43,7 +44,6 @@ export class RegressionEquationsService {
     byData.dataRows.forEach(row => {
       baselineData.push([row.flow, row.yValue]);
     })
-
     let baselineResults = regression.polynomial(baselineData, { order: byData.dataOrder, precision: 50 });
     this.setSigFigs(baselineResults);
     let baselineRegressionEquation: string = baselineResults.string;
@@ -51,29 +51,34 @@ export class RegressionEquationsService {
     baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, yValue);
     let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
 
-    let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
+    let ratio: number;
     let modifiedDataPairs: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     let modificationData: Array<Array<number>> = new Array();
-    baselineData = new Array();
-    for (let i = 0; i <= maxFlowRate; i += 10) {
+    if (modificationEquipment) {
+      ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
+    }
+    let curveExponentVal = 2;
+    for (let i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
         let xBaseline: number = i;
         let yBaseline: number = yVal[1];
-        let xModified: number = i * ratio;
-        let yModified: number = yVal[1] * Math.pow(ratio, 2);
-        if (xModified <= maxFlowRate) {
-          modifiedDataPairs.push({
-            x: xModified,
-            y: yModified
-          });
-          modificationData.push([xModified, yModified]);
-        }
         baselineDataPairs.push({
           x: xBaseline,
           y: yBaseline
         });
         baselineData.push([xBaseline, yBaseline]);
+        if (modificationEquipment) {
+          let xModified: number = i * ratio;
+          let yModified: number = yVal[1] * Math.pow(ratio, curveExponentVal);
+          if (xModified <= maxFlowRate) {
+            modifiedDataPairs.push({
+              x: xModified,
+              y: yModified
+            });
+            modificationData.push([xModified, yModified]);
+          }
+        }
       }
     }
     let modificationResults = regression.polynomial(modificationData, { order: byData.dataOrder, precision: 50 });
@@ -87,7 +92,59 @@ export class RegressionEquationsService {
       baselineDataPairs: baselineDataPairs,
       modifiedDataPairs: modifiedDataPairs
     }
+  }
 
+  getEquipmentPowerRegressionByData(byData: ByDataInputs, modificationEquipment: ModificationEquipment, equipmentInputs: EquipmentInputs,  maxFlowRate: number):
+  {
+    baseline: Array<{ x: number, y: number }>,
+    modification: Array<{ x: number, y: number }>
+  }
+  {
+    let regressionInputs: Array<Array<number>> = new Array();
+    byData.dataRows.forEach(row => {
+      regressionInputs.push([row.flow, row.power]);
+    });
+
+    let baselineResults = regression.polynomial(regressionInputs, { order: byData.powerDataOrder, precision: 50 });
+    this.setSigFigs(baselineResults);
+
+    let ratio: number;
+    let modificationDataPairs: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
+    let modificationData: Array<Array<number>> = new Array();
+    if (modificationEquipment) {
+      ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
+    }
+
+    let powerExponentVal = 3;
+    let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
+    for (let i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
+      let yVal = baselineResults.predict(i);
+      if (yVal[1] > 0) {
+        let xBaseline: number = i;
+        let yBaseline: number = yVal[1];
+        baselineDataPairs.push({
+          x: xBaseline,
+          y: yBaseline
+        });
+        if (modificationEquipment) {
+          let xModified: number = i * ratio;
+          let yModified: number = yVal[1] * Math.pow(ratio, powerExponentVal);
+          if (xModified <= maxFlowRate) {
+            modificationDataPairs.push({
+              x: xModified,
+              y: yModified
+            });
+            modificationData.push([xModified, yModified]);
+          }
+        }
+      }
+    }
+    let modificationResults = regression.polynomial(modificationData, { order: byData.dataOrder, precision: 50 });
+    this.setSigFigs(modificationResults);
+    return  {
+      baseline: baselineDataPairs,
+      modification: modificationDataPairs
+    }
   }
 
   setSigFigs(data: { equation: Array<number>, string: string }) {
@@ -115,7 +172,7 @@ export class RegressionEquationsService {
     return regressionEquation;
   }
 
-  getEquipmentCurveRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, secondValueLabel: string, maxFlowRate: number): {
+  getEquipmentCurveRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, modificationEquipment: ModificationEquipment, secondValueLabel: string, maxFlowRate: number): {
     baselineRegressionEquation: string,
     modificationRegressionEquation: string,
     baselineDataPairs: Array<{ x: number, y: number }>,
@@ -141,9 +198,11 @@ export class RegressionEquationsService {
     }
     //baseline
     let baselineDataPairs: Array<{ x: number, y: number }> = this.calculateByEquationData(byEquationInputs, 1, maxFlowRate).dataPairs;
-
     //modification
-    let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
+    let ratio: number;
+    if (modificationEquipment) {
+      ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
+    }
     let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio, maxFlowRate);
     let modificationResults = regression.polynomial(modifiedData.calculationData, { order: byEquationInputs.equationOrder, precision: 50 });
     this.setSigFigs(modificationResults);
@@ -152,15 +211,41 @@ export class RegressionEquationsService {
       baselineRegressionEquation: baselineRegressionEquation,
       modificationRegressionEquation: modificationRegressionEquation,
       baselineDataPairs: baselineDataPairs,
-      modifiedDataPairs: modifiedData.dataPairs
+      modifiedDataPairs: modifiedData.dataPairs,
     };
   }
 
-  calculateByEquationData(byEquationInputs: ByEquationInputs, ratio: number, maxFlowRate: number): { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } {
+  getEquipmentPowerRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, modificationEquipment: ModificationEquipment, maxFlowRate: number):
+  {
+    baseline: Array<{ x: number, y: number }>,
+    modification: Array<{ x: number, y: number }>
+  }{
+    let baselineDataPairs: Array<{ x: number, y: number }> = this.calculateByEquationData(byEquationInputs, 1, maxFlowRate, true).dataPairs;
+    let ratio: number;
+    if (modificationEquipment) {
+      ratio = modificationEquipment.speed / equipmentInputs.baselineMeasurement;
+    }    
+    let modifiedPowerData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio, maxFlowRate, true);
+    let modificationDataPairs: Array<{ x: number, y: number }> = modifiedPowerData.dataPairs;
+    let modificationResults = regression.polynomial(modifiedPowerData.calculationData, { order: byEquationInputs.equationOrder, precision: 50 });
+    this.setSigFigs(modificationResults);
+    
+    return  {
+      baseline: baselineDataPairs,
+      modification: modificationDataPairs
+    }
+  }
+
+  calculateByEquationData(byEquationInputs: ByEquationInputs, ratio: number, maxFlowRate: number, calculatePower = false): { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } {
     let calculationData: Array<Array<number>> = new Array();
     let dataPairs: Array<{ x: number, y: number }> = new Array();
-    for (let i = 0; i <= maxFlowRate; i += 10) {
-      let yVal = this.calculateY(byEquationInputs, i);
+    for (let i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
+      let yVal;
+      if (calculatePower) {
+        yVal = this.calculateYPower(byEquationInputs, i);
+      } else {
+        yVal = this.calculateY(byEquationInputs, i);
+      }
       if (yVal > 0) {
         let x: number = i * ratio;
         let y: number = yVal * Math.pow(ratio, 2);
@@ -177,6 +262,11 @@ export class RegressionEquationsService {
   calculateY(data: ByEquationInputs, flow: number): number {
     let result = data.constant + (data.flow * flow) + (data.flowTwo * Math.pow(flow, 2)) + (data.flowThree * Math.pow(flow, 3)) + (data.flowFour * Math.pow(flow, 4)) + (data.flowFive * Math.pow(flow, 5)) + (data.flowSix * Math.pow(flow, 6));
     return result;
+  }
+
+  calculateYPower(data: ByEquationInputs, flow: number): number {
+    let power = data.powerConstant + (data.powerFlow * flow) + (data.powerFlowTwo * Math.pow(flow, 2)) + (data.powerFlowThree * Math.pow(flow, 3)) + (data.powerFlowFour * Math.pow(flow, 4)) + (data.powerFlowFive * Math.pow(flow, 5)) + (data.powerFlowSix * Math.pow(flow, 6));
+    return power;
   }
 
   getPumpSystemCurveRegressionEquation(data: PumpSystemCurveData): string {
@@ -242,7 +332,7 @@ export class RegressionEquationsService {
       fanSystemCurveData.pointTwoPressure,
       fanSystemCurveData.systemLossExponent
     );
-    for (var i = 0; i <= maxFlowRate; i += 10) {
+    for (var i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
       let pressureAndFluidPower: { pressure: number, fluidPower: number } = this.calculateFanPressureAndFluidPower(staticPressure, lossCoefficient, i, fanSystemCurveData.systemLossExponent, fanSystemCurveData.compressibilityFactor, settings);
       if (pressureAndFluidPower.pressure >= 0) {
         data.push({ x: i, y: pressureAndFluidPower.pressure, fluidPower: pressureAndFluidPower.fluidPower })
@@ -270,8 +360,7 @@ export class RegressionEquationsService {
       pumpSystemCurveData.pointTwoHead,
       pumpSystemCurveData.systemLossExponent
     );
-
-    for (var i = 0; i <= maxFlowRate; i += 10) {
+    for (var i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
       let headAndFluidPower: { head: number, fluidPower: number } = this.calculatePumpHeadAndFluidPower(staticHead, lossCoefficient, i, pumpSystemCurveData.systemLossExponent, pumpSystemCurveData.specificGravity, settings);
       if (headAndFluidPower.head >= 0) {
         data.push({ x: i, y: headAndFluidPower.head, fluidPower: headAndFluidPower.fluidPower });

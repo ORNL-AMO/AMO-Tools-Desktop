@@ -1,0 +1,18 @@
+td{
+    font-size: small;
+  }
+  
+  th {
+    border-top: none;
+    padding: .25rem;
+  }
+  
+  td{
+    font-size: small;
+    padding: .25rem;
+  }
+  
+  table {
+    margin-bottom: .5rem;
+    background: white;
+  }

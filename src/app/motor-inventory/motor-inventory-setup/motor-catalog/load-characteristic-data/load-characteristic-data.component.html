@@ -1,0 +1,144 @@
+<label class="group-label" (click)="toggleForm()">
+    <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+    Load Characteristic
+</label>
+<form *ngIf="displayForm" class="p-1" [formGroup]="motorForm">
+    <!-- efficiency75 -->
+    <div class="form-group" *ngIf="displayOptions.efficiency75">
+        <label for="efficiency75">Efficiency at 75% Load
+            <span class="form-text">
+                <a class="small click-link" (click)="calculateEfficiency75()"
+                    [ngClass]="{'disabled': disableEstimateLoadEfficiency}">Estimate Efficiency</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('efficiency75')"></span>
+            </span>
+        </label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('efficiency75')" (input)="save()"
+                formControlName="efficiency75" id="efficiency75">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.efficiency75.invalid">
+            <span *ngIf="motorForm.controls.efficiency75.errors.max">Value can't be greater than
+                {{motorForm.controls.efficiency75.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.efficiency75.errors.min">Value can't be less than
+                {{motorForm.controls.efficiency75.errors.min.min}} %.</span>
+        </span>
+    </div>
+    <!-- efficiency50 -->
+    <div class="form-group" *ngIf="displayOptions.efficiency50">
+        <label for="efficiency50">Efficiency at 50% Load
+            <span class="form-text">
+                <a class="small click-link" (click)="calculateEfficiency50()"
+                    [ngClass]="{'disabled': disableEstimateLoadEfficiency}">Estimate Efficiency</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('efficiency50')"></span>
+            </span>
+        </label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('efficiency50')" (input)="save()"
+                formControlName="efficiency50" id="efficiency50">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.efficiency50.invalid">
+            <span *ngIf="motorForm.controls.efficiency50.errors.max">Value can't be greater than
+                {{motorForm.controls.efficiency50.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.efficiency50.errors.min">Value can't be less than
+                {{motorForm.controls.efficiency50.errors.min.min}} %.</span>
+        </span>
+    </div>
+    <!-- efficiency25 -->
+    <div class="form-group" *ngIf="displayOptions.efficiency25">
+        <label for="efficiency25">Efficiency at 25% Load
+            <span class="form-text">
+                <a class="small click-link" (click)="calculateEfficiency25()"
+                    [ngClass]="{'disabled': disableEstimateLoadEfficiency}">Estimate Efficiency</a>
+                <span class="fa fa-question-circle" (click)="focusHelp('efficiency25')"></span>
+            </span>
+        </label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('efficiency25')" (input)="save()"
+                formControlName="efficiency25" id="efficiency25">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.efficiency25.invalid">
+            <span *ngIf="motorForm.controls.efficiency25.errors.max">Value can't be greater than
+                {{motorForm.controls.efficiency25.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.efficiency25.errors.min">Value can't be less than
+                {{motorForm.controls.efficiency25.errors.min.min}} %.</span>
+        </span>
+    </div>
+
+    <!-- powerFactor100 -->
+    <div class="form-group" *ngIf="displayOptions.powerFactor100">
+        <label for="powerFactor100">Power Factor at Full Load</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor100')" (input)="save()"
+                formControlName="powerFactor100" id="powerFactor100">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor100.invalid">
+            <span *ngIf="motorForm.controls.powerFactor100.errors.max">Value can't be greater than
+                {{motorForm.controls.powerFactor100.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.powerFactor100.errors.min">Value can't be less than
+                {{motorForm.controls.powerFactor100.errors.min.min}} %.</span>
+        </span>
+    </div>
+    <!-- powerFactor75 -->
+    <div class="form-group" *ngIf="displayOptions.powerFactor75">
+        <label for="powerFactor75">Power Factor at 75% Load</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor75')" (input)="save()"
+                formControlName="powerFactor75" id="powerFactor75">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor75.invalid">
+            <span *ngIf="motorForm.controls.powerFactor75.errors.max">Value can't be greater than
+                {{motorForm.controls.powerFactor75.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.powerFactor75.errors.min">Value can't be less than
+                {{motorForm.controls.powerFactor75.errors.min.min}} %.</span>
+        </span>
+    </div>
+    <!-- powerFactor50 -->
+    <div class="form-group" *ngIf="displayOptions.powerFactor50">
+        <label for="powerFactor50">Power Factor at 50% Load</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor50')" (input)="save()"
+                formControlName="powerFactor50" id="powerFactor50">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor50.invalid">
+            <span *ngIf="motorForm.controls.powerFactor50.errors.max">Value can't be greater than
+                {{motorForm.controls.powerFactor50.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.powerFactor50.errors.min">Value can't be less than
+                {{motorForm.controls.powerFactor50.errors.min.min}} %.</span>
+        </span>
+    </div>
+    <!-- powerFactor25 -->
+    <div class="form-group" *ngIf="displayOptions.powerFactor25">
+        <label for="powerFactor25">Power Factor at 25% Load</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('powerFactor25')" (input)="save()"
+                formControlName="powerFactor25" id="powerFactor25">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.powerFactor25.invalid">
+            <span *ngIf="motorForm.controls.powerFactor25.errors.max">Value can't be greater than
+                {{motorForm.controls.powerFactor25.errors.max.max}} %.</span>
+            <span *ngIf="motorForm.controls.powerFactor25.errors.min">Value can't be less than
+                {{motorForm.controls.powerFactor25.errors.min.min}} %.</span>
+        </span>
+    </div>
+    <!-- ampsIdle -->
+    <div class="form-group" *ngIf="displayOptions.ampsIdle">
+        <label for="ampsIdle">Idle Amps</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('ampsIdle')" (input)="save()"
+                formControlName="ampsIdle" id="ampsIdle">
+            <span class="input-group-addon units">A</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="motorForm.controls.ampsIdle.invalid">
+            <span *ngIf="motorForm.controls.ampsIdle.errors.min">Value can't be less than
+                {{motorForm.controls.ampsIdle.errors.min.min}} A.</span>
+        </span>
+    </div>
+</form>

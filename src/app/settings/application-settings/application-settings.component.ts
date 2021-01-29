@@ -23,6 +23,8 @@ export class ApplicationSettingsComponent implements OnInit {
   inPhast: boolean;
   @Input()
   inTreasureHunt: boolean;
+  @Input()
+  inInventory: boolean;
 
   languages: Array<string> = [
     'English'

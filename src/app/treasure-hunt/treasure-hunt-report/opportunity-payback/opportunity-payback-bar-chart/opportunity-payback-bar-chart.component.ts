@@ -59,7 +59,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       showlegend: false,
       legend: { "orientation": "h" },
       font: {
-        size: 16,
+        size: 14,
       },
       yaxis: {
         hoverformat: '$.2s',
@@ -68,7 +68,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
           // text: this.yAxisLabel,
           font: {
             family: 'Arial',
-            size: 16
+            size: 14
           }
         },
         fixedrange: true
@@ -109,7 +109,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       tracesIndex++;
     })
     let layout = {
-      width: 800,
+      width: 1000,
       showlegend: false,
       legend: { "orientation": "h" },
       font: {
@@ -136,7 +136,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
     var configOptions = {
       modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       displaylogo: false,
-      displayModeBar: true
+      displayModeBar: false
     };
     Plotly.react(this.paybackBarChart.nativeElement, traces, layout, configOptions);
   }

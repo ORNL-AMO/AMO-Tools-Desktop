@@ -4,15 +4,20 @@ import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { AuxEquipmentService } from './aux-equipment/aux-equipment.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { FlueGasLossesService } from './losses/flue-gas-losses/flue-gas-losses.service';
 import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { EnergyInputService } from './losses/energy-input/energy-input.service';
+import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 
 @Injectable()
 export class PhastResultsService {
 
-  constructor(private phastService: PhastService, private auxEquipmentService: AuxEquipmentService, private convertUnitsService: ConvertUnitsService, private flueGasLossesService: FlueGasLossesService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private energyInputService: EnergyInputService) { }
+  constructor(private phastService: PhastService,
+    private flueGasFormService: FlueGasFormService,
+    private auxEquipmentService: AuxEquipmentService,
+    private convertUnitsService: ConvertUnitsService,
+    private energyInputExhaustGasService: EnergyInputExhaustGasService,
+    private energyInputService: EnergyInputService) { }
   checkLoss(loss: any) {
     if (!loss) {
       return false;
@@ -47,6 +52,7 @@ export class PhastResultsService {
       exothermicHeat: 0,
       energyInputTotalChemEnergy: 0,
       energyInputHeatDelivered: 0,
+      energyInputTotal: 0,
       flueGasSystemLosses: 0,
       flueGasGrossHeat: 0,
       flueGasAvailableHeat: 0,
@@ -99,17 +105,26 @@ export class PhastResultsService {
     }
     if (resultCats.showExGas && this.checkLoss(phast.losses.exhaustGasEAF)) {
       results.totalExhaustGasEAF = this.phastService.sumExhaustGasEAF(phast.losses.exhaustGasEAF, settings);
-      
       results.grossHeatInput = results.totalInput - Math.abs(results.exothermicHeat);
     }
 
-
+    //EAF
     if (resultCats.showEnInput1 && this.checkLoss(phast.losses.energyInputEAF)) {
-      let tmpForm = this.energyInputService.getFormFromLoss(phast.losses.energyInputEAF[0]);
+      let tmpForm = this.energyInputService.getFormFromLoss(phast.losses.energyInputEAF[0], undefined);
       if (tmpForm.status === 'VALID') {
         let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
         results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
+        //use grossHeatInput here because it will be updated if exhaustGasEAF exists
+        results.grossHeatInput = results.grossHeatInput + results.totalExhaustGasEAF;
         results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.totalChemicalEnergyInput;
+        results.energyInputTotal = results.grossHeatInput;
+      }
+      //if no exhaust gas EAF
+      if (!this.checkLoss(phast.losses.exhaustGasEAF)) {
+        results.energyInputTotal = phast.losses.energyInputEAF[0].electricityInput + results.energyInputTotalChemEnergy;
+        results.energyInputHeatDelivered = phast.losses.energyInputEAF[0].electricityInput;
+        results.totalExhaustGasEAF = results.energyInputTotal - results.totalInput - results.exothermicHeat;
+        results.grossHeatInput = results.energyInputHeatDelivered + results.energyInputTotalChemEnergy;
       }
     }
 
@@ -137,7 +152,7 @@ export class PhastResultsService {
       let tmpFlueGas = phast.losses.flueGasLosses[0];
       if (tmpFlueGas) {
         if (tmpFlueGas.flueGasType === 'By Mass') {
-          let tmpForm = this.flueGasLossesService.initByMassFormFromLoss(tmpFlueGas);
+          let tmpForm = this.flueGasFormService.initByMassFormFromLoss(tmpFlueGas, true);
           if (tmpForm.status === 'VALID') {
             const availableHeat = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
             results.flueGasAvailableHeat = availableHeat * 100;
@@ -146,7 +161,7 @@ export class PhastResultsService {
             results.totalFlueGas = results.flueGasSystemLosses;
           }
         } else if (tmpFlueGas.flueGasType === 'By Volume') {
-          let tmpForm = this.flueGasLossesService.initByVolumeFormFromLoss(tmpFlueGas);
+          let tmpForm = this.flueGasFormService.initByVolumeFormFromLoss(tmpFlueGas, true);
           if (tmpForm.status === 'VALID') {
             const availableHeat = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
             results.flueGasAvailableHeat = availableHeat * 100;
@@ -233,6 +248,15 @@ export class PhastResultsService {
 
     if (resultCategories.showExGas) {
       return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100;
+    }
+  }
+
+  getMinElectricityInputRequirement(phast: PHAST, settings: Settings): number {
+    if (phast.losses) {
+      let results: PhastResults = this.getResults(phast, settings);
+      return results.totalInput + results.exothermicHeat - results.energyInputTotalChemEnergy;
+    } else {
+      return undefined;
     }
   }
 }

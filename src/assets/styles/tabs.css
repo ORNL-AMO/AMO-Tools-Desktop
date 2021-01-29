@@ -105,6 +105,15 @@ Tabs
     border-bottom: #117A65 solid 3px;
   }
 
+  .motor-inventory .tabs.primary .active a {
+    border: none;
+    border-bottom: #84b641 solid 3px;
+  }
+
+  .waste-water .tabs.primary .active a {
+    border: none;
+    border-bottom: #003087 solid 3px;
+  }
   
 
 
@@ -166,6 +175,13 @@ Tabs
     border-bottom: #117A65 solid 3px;
   }
 
+  .tabs.subtabs.motor-inventory {
+    border-bottom: #84b641 solid 3px;
+  }
+  
+  .tabs.subtabs.waste-water {
+    border-bottom: #003087 solid 3px;
+  }
     .tabs.subtabs.progress-tabs a {
       color: #000;
       padding-top: 8px;
@@ -238,6 +254,10 @@ Tabs
 
       .tabs.subtabs.log-tool .active .step-number {
         background: #117A65;
+      }
+
+      .tabs.subtabs.motor-inventory .active .step-number {
+        background: #84b641;
       }
 
       .tabs.subtabs.fsat .active .step-number{

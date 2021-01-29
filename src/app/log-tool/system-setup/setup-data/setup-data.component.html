@@ -17,6 +17,28 @@
                 <span class="alert-danger small w-100 text-center" *ngIf="validFile == false">Invalid File Type - Must
                     have a .csv file extension</span>
             </div>
+            <div class="p-2" *ngIf="previewDataFromCsv">
+                <table class="table table-condensed table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <td class="bold" colspan="100%">
+                                Select Header Row
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let itemIndex of itemIndexes">
+                            <td>
+                                <input type="radio" name="selectedIndex" id="{{'item'+itemIndex}}"
+                                    [(ngModel)]="selectedHeaderRow" value={{itemIndex}}>
+                            </td>
+                            <td *ngFor="let dataItem of previewDataFromCsv.data[itemIndex]">
+                                {{dataItem}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="d-flex w-100 justify-content-end" *ngIf="dataExists == false">
                 <button class="btn btn-primary pull-right" role="button" (click)="parseImportData()"
                     [disabled]="importData == undefined">Parse CSV Data</button>
@@ -42,6 +64,10 @@
                     "Start Over" above. This cannot be undone.
                 </div>
                 <hr>
+            </div>
+            <div class="pt-2" *ngIf="previousDataAvailable">
+                <a class="click-link small" (click)="usePreviousData()">Load Data from Last Use
+                    ({{previousDataAvailable | date:'long'}})</a>
             </div>
         </div>
 

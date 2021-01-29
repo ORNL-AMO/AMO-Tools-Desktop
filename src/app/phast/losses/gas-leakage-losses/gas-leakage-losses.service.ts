@@ -65,7 +65,7 @@ export class GasLeakageLossesService {
 
   checkSpecificGravity(loss: LeakageLoss): string {
     if (loss.specificGravity < 0) {
-      return 'Specific Density of Flue Gases must be equal or greater than 0';
+      return 'Specific Gravity of Flue Gas must be equal or greater than 0';
     } else {
       return null;
     }
@@ -81,7 +81,7 @@ export class GasLeakageLossesService {
 
   checkTemperature(loss: LeakageLoss): string {
     if (loss.ambientTemperature > loss.leakageGasTemperature) {
-      return "Ambient Temperature shouldn't be greater than Temperature of Gases Leaking";
+      return "Ambient Temperature shouldn't be greater than Temperature of Leaking Gases";
     } else {
       return null;
     }

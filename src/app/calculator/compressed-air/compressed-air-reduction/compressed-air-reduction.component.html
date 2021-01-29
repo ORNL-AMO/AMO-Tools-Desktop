@@ -1,5 +1,5 @@
 <div class="d-flex h-100 modify-conditions general standalone-calculator" #contentContainer>
-  <div class="d-flex flex-column w-100 h-100 scroll-item">
+  <div class="d-flex flex-column w-100 h-100">
     <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
       [ngClass]="{'justify-content-between': inTreasureHunt}">
       <div class="d-flex pl-2 align-items-center">
@@ -33,7 +33,8 @@
           [ngClass]="{'disabled': baselineSelected == false}">
           <div class="header mx-2 mb-4">
             <h3>Baseline</h3>
-            <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a>
+            <!--remove add equipment issue 4528 (will be added back)-->
+            <!-- <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a> -->
           </div>
           <div class="d-flex flex-column mx-4 mb-4">
             <!-- app form -->
@@ -63,7 +64,8 @@
           <!-- modification header -->
           <div class="header mx-2 mb-4">
             <h3>Modification</h3>
-            <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a>
+            <!--remove add equipment issue 4528 (will be added back)-->
+            <!-- <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a> -->
           </div>
           <!-- forms -->
           <div class="d-flex flex-column mx-4 mb-4">
@@ -72,7 +74,9 @@
               <app-compressed-air-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="false"
                 (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
                 (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected"
-                [utilityType]="baselineData[0].utilityType">
+                [utilityType]="baselineData[0].utilityType"
+                [compressorControl]="baselineData[0].compressorElectricityData.compressorControl"
+                [compressorControlAdjustment]="baselineData[0].compressorElectricityData.compressorControlAdjustment">
               </app-compressed-air-reduction-form>
             </div>
           </div>
@@ -96,7 +100,7 @@
 
       <!-- help panel -->
       <div class="col-4 p-0 help-panel">
-        <div class="d-flex flex-column mh-100 scroll-item">
+        <div class="d-flex flex-column mh-100 scroll-item" [ngStyle]="{'height.px': containerHeight}">
           <div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
             <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
               <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"

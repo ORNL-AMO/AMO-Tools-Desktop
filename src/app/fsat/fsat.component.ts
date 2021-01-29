@@ -4,12 +4,9 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { FsatService } from './fsat.service';
 import { Settings } from '../shared/models/settings';
-import { SettingsService } from '../settings/settings.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
 import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } from '../shared/models/fans';
 import * as _ from 'lodash';
@@ -19,6 +16,7 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-fsat',
@@ -55,7 +53,6 @@ export class FsatComponent implements OnInit {
   stepTab: string;
   stepTabIndex: number;
   settings: Settings;
-  isAssessmentSettings: boolean;
   assessmentTab: string;
   mainTabSub: Subscription;
   stepTabSub: Subscription;
@@ -74,17 +71,18 @@ export class FsatComponent implements OnInit {
 
   fsatOptions: Array<any>;
   fsatOptionsLength: number;
-  fsat1: FSAT;
-  fsat2: FSAT;
+
+  sankeyLabelStyle: string = 'both';
+  showSankeyLabelOptions: boolean;
+  fsat1: {fsat: FSAT, name: string};
+  fsat2: {fsat: FSAT, name: string};
   //exploreOppsToast: boolean = false;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
-    private settingsService: SettingsService,
     private settingsDbService: SettingsDbService,
-    private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private compareService: CompareService,
     private assessmentService: AssessmentService,
@@ -92,37 +90,34 @@ export class FsatComponent implements OnInit {
     private fanMotorService: FanMotorService,
     private fanFieldDataService: FanFieldDataService,
     private fanSetupService: FanSetupService,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+    private settingsService: SettingsService) {
   }
 
   ngOnInit() {
-    let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
-      tmpAssessmentId = params['id'];
-      this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
-        this.assessment = dbAssessment;
-        this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
-        if (this._fsat.modifications) {
-          if (this._fsat.modifications.length !== 0) {
-            this.modificationExists = true;
-            this.modificationIndex = 0;
-            this.compareService.setCompareVals(this._fsat, 0);
-          } else {
-            this.modificationExists = false;
-            this.compareService.setCompareVals(this._fsat);
-          }
+      this.assessment = this.assessmentDbService.getById(parseInt(params['id']))
+      this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
+      if (this._fsat.modifications) {
+        if (this._fsat.modifications.length !== 0) {
+          this.modificationExists = true;
+          this.modificationIndex = 0;
+          this.compareService.setCompareVals(this._fsat, 0);
         } else {
-          this._fsat.modifications = new Array<Modification>();
           this.modificationExists = false;
           this.compareService.setCompareVals(this._fsat);
         }
-        this.getSettings();
-        this.initSankeyList();
-        let tmpTab: string = this.assessmentService.tab;
-        if (tmpTab) {
-          this.fsatService.mainTab.next(tmpTab);
-        }
-      });
+      } else {
+        this._fsat.modifications = new Array<Modification>();
+        this.modificationExists = false;
+        this.compareService.setCompareVals(this._fsat);
+      }
+      this.getSettings();
+      this.initSankeyList();
+      let tmpTab: string = this.assessmentService.tab;
+      if (tmpTab) {
+        this.fsatService.mainTab.next(tmpTab);
+      }
     });
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -213,6 +208,7 @@ export class FsatComponent implements OnInit {
     this.fsatOptions = new Array<any>();
     this.fsatOptions.push({ name: 'Baseline', fsat: this._fsat });
     this.fsat1 = this.fsatOptions[0];
+    this.showSankeyLabelOptions = ((this.fsat1.name == 'Baseline' || this.fsat1.name == null) && this.fsat1.fsat.setupDone) || (this.fsat1.fsat.valid && this.fsat1.fsat.valid.isValid);
     if (this._fsat.modifications) {
       this._fsat.modifications.forEach(mod => {
         this.fsatOptions.push({ name: mod.fsat.name, fsat: mod.fsat });
@@ -220,6 +216,10 @@ export class FsatComponent implements OnInit {
       this.fsat2 = this.fsatOptions[1];
     }
     this.fsatOptionsLength = this.fsatOptions.length;
+  }
+
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle = style;
   }
 
 
@@ -239,57 +239,25 @@ export class FsatComponent implements OnInit {
 
   saveSettings(newSettings: Settings) {
     this.settings = newSettings;
-    //TODO:implement saving settings
-    if (this.isAssessmentSettings) {
-      this.indexedDbService.putSettings(this.settings).then(() => {
-        this.settingsDbService.setAll().then(() => {
-        });
+    this.indexedDbService.putSettings(this.settings).then(() => {
+      this.settingsDbService.setAll().then(() => {
       });
-    }
+    });
   }
 
 
   getSettings() {
-    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-    if (tmpSettings) {
-      this.settings = tmpSettings;
-      this.isAssessmentSettings = true;
-    } else {
-      //if no settings found for assessment, check directory settings
-      this.getParentDirectorySettings(this.assessment.directoryId);
-    }
-  }
-
-  getParentDirectorySettings(parentId: number) {
-    let dirSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
-    if (dirSettings) {
-      let settingsForm = this.settingsService.getFormFromSettings(dirSettings);
-      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-      tmpSettings.createdDate = new Date();
-      tmpSettings.modifiedDate = new Date();
-      tmpSettings.assessmentId = this.assessment.id;
-      //create settings for assessment
-      this.indexedDbService.addSettings(tmpSettings).then(
-        results => {
-          this.settingsDbService.setAll().then(() => {
-            // this.addToast('Settings Saved');
-            this.getSettings();
-          });
-        });
-    }
-    else {
-      //if no settings for directory check parent directory
-      let tmpDir: Directory = this.directoryDbService.getById(parentId);
-      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    if (!this.settings) {
+      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+      this.addSettings(settings);
     }
   }
 
   showAddNewModal() {
-    //this.isModalOpen = true;
     this.addNewModal.show();
   }
   closeAddNewModal() {
-    //this.isModalOpen = false;
     this.fsatService.openNewModal.next(false);
     this.addNewModal.hide();
   }
@@ -318,7 +286,6 @@ export class FsatComponent implements OnInit {
   saveFieldData(newFieldData: FieldData) {
     this._fsat.fieldData = newFieldData;
     this.saveFsat(this._fsat);
-    // this.save();
   }
 
   saveFsat(newFsat: FSAT) {
@@ -347,7 +314,7 @@ export class FsatComponent implements OnInit {
   }
 
   checkSetupDone(fsat: FSAT): boolean {
-    return this.fsatService.checkValid(fsat, true).isValid;
+    return this.fsatService.checkValid(fsat, true, this.settings).isValid;
   }
 
   selectModificationModal() {
@@ -365,7 +332,7 @@ export class FsatComponent implements OnInit {
     if (this.stepTab === 'system-basics') {
       return true;
     } else if (this.stepTab === 'fsat-fluid') {
-      let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity);
+      let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity, this.settings);
       if (isValid) {
         return true;
       } else {
@@ -449,5 +416,15 @@ export class FsatComponent implements OnInit {
       this.settingsDbService.setAll();
     });
     this.hideToast();
+  }
+
+  addSettings(settings: Settings) {
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
+    newSettings.assessmentId = this.assessment.id;
+    this.indexedDbService.addSettings(newSettings).then(id => {
+      this.settingsDbService.setAll().then(() => {
+        this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+      });
+    });
   }
 }

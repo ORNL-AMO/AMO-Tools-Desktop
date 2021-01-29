@@ -67,7 +67,7 @@ export class PreAssessmentItemComponent implements OnInit {
 
   calculateData() {
     this.numUnits = this.calculator.preAssessments.length;
-    let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu');
+    let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu', false);
     this.energyUsed = _.sumBy(tmpResults, 'value');
     this.energyCost = _.sumBy(tmpResults, 'energyCost');
   }

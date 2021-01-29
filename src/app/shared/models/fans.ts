@@ -16,6 +16,7 @@ export interface FSAT {
   operatingHours?: OperatingHours;
   outputs?: FsatOutput;
   valid?: FsatValid;
+  tempFsatCopy?: FSAT;
 }
 
 export interface FsatValid {
@@ -117,6 +118,7 @@ export interface Plane {
   staticPressure?: number;
   pitotTubeCoefficient?: number;
   traverseData?: Array<Array<number>>;
+  staticPressureData?: Array<Array<number>>;
   pitotTubeType?: string;
   numTraverseHoles?: number;
   numInsertionPoints?: number;
@@ -128,7 +130,7 @@ export interface PlaneData {
   totalPressureLossBtwnPlanes2and5: number;
   inletSEF: number;
   outletSEF: number;
-  //variationInBarometricPressure: boolean;
+  variationInBarometricPressure: boolean;
   // globalBarometricPressure: number;
   estimate2and5TempFrom1: boolean;
   FanInletFlange: Plane;
@@ -142,6 +144,7 @@ export interface PlaneData {
 export interface BaseGasDensity {
   dryBulbTemp?: number;
   staticPressure?: number;
+  altitude?: number;
   barometricPressure?: number;
   gasDensity?: number;
   gasType?: string;
@@ -154,7 +157,8 @@ export interface BaseGasDensity {
   specificHeatGas?: number; //used with wetBulb
 }
 
-export interface CalculatedGasDensity {
+
+export interface PsychrometricResults {
   gasDensity: number;
   absolutePressure: number;
   saturatedHumidity: number;
@@ -166,6 +170,8 @@ export interface CalculatedGasDensity {
   relativeHumidity: number;
   saturationPressure: number;
   wetBulbTemp: number;
+  barometricPressure?: number,
+  dryBulbTemp?: number;
 }
 
 export interface FanShaftPower {
@@ -231,6 +237,17 @@ export interface PlaneResults {
   FlowTraverse: PlaneResult;
   InletMstPlane: PlaneResult;
   OutletMstPlane: PlaneResult;
+}
+
+export interface VelocityResults { 
+  pv3: number,
+  percent75Rule: number,
+  traverseVelocity?: number 
+}
+
+export interface FanShaftPowerResults {
+  power: number;
+  powerCorrected: number;
 }
 
 export interface PlaneResult {

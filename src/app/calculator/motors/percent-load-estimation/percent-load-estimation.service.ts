@@ -45,7 +45,7 @@ export class PercentLoadEstimationService {
       phase3Amps: 37,
       ratedVoltage: 460,
       ratedCurrent: 72.1,
-      powerFactor: 0.77
+      powerFactor: 77
     };
     this.fieldMeasurementInputs = fieldMeasurementInputs;
     return fieldMeasurementInputs;
@@ -117,13 +117,6 @@ export class PercentLoadEstimationService {
       powerFactor: 0
     };
     return this.fieldMeasurementInputs;
-  }
-
-  initFieldMeasurementForm(): FormGroup {
-    let tmpForm = this.formBuilder.group({
-
-    });
-    return tmpForm;
   }
 
   getFieldMeasurementFormFromObj(inputObj: FieldMeasurementInputs): FormGroup {
@@ -211,6 +204,11 @@ export class PercentLoadEstimationService {
     let deviation: number = this.voltageDeviation(data);
     let avgVoltage: number = this.averageVoltage(data);
     return (deviation / avgVoltage) * 100;
+  }
+
+  calculateSlipMethod(data: SlipMethod): number {
+    return ((data.synchronousSpeed - data.measuredSpeed)
+      / (data.synchronousSpeed - data.nameplateFullLoadSpeed)) * 100;
   }
 }
 

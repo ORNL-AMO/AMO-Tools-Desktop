@@ -26,7 +26,7 @@ export class DesignedEnergyResultsComponent implements OnInit {
     if (this.settings.energyResultUnit === 'kWh') {
       this.resultUnits.energyPerTimeUnit = 'kW';
     } else {
-      this.resultUnits.energyPerTimeUnit = this.settings.energyResultUnit + '/hr';
+      this.resultUnits.energyPerTimeUnit = this.settings.energyResultUnit;
     }
     this.resultUnits.electricityUsedUnit = 'kW';
     this.setEnergyIntensity();

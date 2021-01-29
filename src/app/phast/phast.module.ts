@@ -38,6 +38,8 @@ import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 import { PhastValidService } from './phast-valid.service';
+import { FlueGasModule } from '../calculator/furnaces/flue-gas/flue-gas.module';
+import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
 
 @NgModule({
   declarations: [
@@ -68,6 +70,7 @@ import { PhastValidService } from './phast-valid.service';
     PhastReportModule,
     PreAssessmentModule,
     O2EnrichmentModule,
+    FlueGasModule,
     EfficiencyImprovementModule,
     EnergyEquivalencyModule,
     EnergyUseModule,
@@ -76,7 +79,8 @@ import { PhastValidService } from './phast-valid.service';
     UtilitiesModule,
     TabsTooltipModule,
     ToastModule,
-    UnitConverterModule
+    UnitConverterModule,
+    PhastSankeyModule,
   ],
   providers: [
     PhastService,

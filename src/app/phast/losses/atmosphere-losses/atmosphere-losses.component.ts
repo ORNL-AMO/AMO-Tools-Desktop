@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { AtmosphereLossesService } from './atmosphere-losses.service';
 import { Losses, PHAST } from '../../../shared/models/phast/phast';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { AtmosphereFormService } from '../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 
 @Component({
   selector: 'app-atmosphere-losses',
@@ -40,7 +40,7 @@ export class AtmosphereLossesComponent implements OnInit {
   resultsUnit: string;
   lossesLocked: boolean = false;
   selectedMod: PHAST;
-  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService) { }
+  constructor(private atmosphereFormService: AtmosphereFormService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -77,7 +77,7 @@ export class AtmosphereLossesComponent implements OnInit {
       let lossIndex = 1;
       this.losses.atmosphereLosses.forEach(loss => {
         let tmpLoss = {
-          form: this.atmosphereLossesService.getAtmosphereForm(loss),
+          form: this.atmosphereFormService.getAtmosphereForm(loss),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
@@ -95,7 +95,7 @@ export class AtmosphereLossesComponent implements OnInit {
 
   addLoss() {
     this._atmosphereLosses.push({
-      form: this.atmosphereLossesService.initForm(this._atmosphereLosses.length + 1),
+      form: this.atmosphereFormService.initForm(this._atmosphereLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -112,7 +112,7 @@ export class AtmosphereLossesComponent implements OnInit {
 
   calculate(loss: any) {
     if (loss.form.status === 'VALID') {
-      let tmpAtmosphereLoss = this.atmosphereLossesService.getLossFromForm(loss.form);
+      let tmpAtmosphereLoss = this.atmosphereFormService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.atmosphere(tmpAtmosphereLoss, this.settings);
     } else {
       loss.heatLoss = null;
@@ -129,7 +129,7 @@ export class AtmosphereLossesComponent implements OnInit {
         });
       }
       lossIndex++;
-      let tmpAtmosphereLoss = this.atmosphereLossesService.getLossFromForm(loss.form);
+      let tmpAtmosphereLoss = this.atmosphereFormService.getLossFromForm(loss.form);
       tmpAtmosphereLoss.heatLoss = loss.heatLoss;
       tmpAtmosphereLosses.push(tmpAtmosphereLoss);
     });

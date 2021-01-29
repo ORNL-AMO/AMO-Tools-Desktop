@@ -1,0 +1,14 @@
+.motor-inventory-container{
+    height: 100vh;
+}
+
+.motor-inventory .btn-primary{
+    background: #84b641;
+    color: white;
+}
+
+@media print{
+    .scroll-item{
+        overflow-y: visible;
+    }
+}

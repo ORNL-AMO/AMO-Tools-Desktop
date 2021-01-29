@@ -1,0 +1,69 @@
+<div *ngIf="output" class="d-flex flex-column my-2">
+    <div class="form-group mt-1">
+      <label class="bold">Heat Transfered to Cold Air</label>
+      <div *ngIf="output.hxColdAir" class="text-center bold small">
+        {{output.hxColdAir | number:'1.0-0'}}
+        <span class="input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+        </span>
+      </div>
+      <div *ngIf="!output.hxColdAir" class="text-center bold small">
+        &mdash; &mdash;
+      </div>
+    </div>
+    <div class="form-group mt-1">
+      <label class="bold">Exhaust Gas Temperature Leaving Heat Exchanger</label>
+      <div *ngIf="output.hxOutletExhaust" class="text-center bold small">
+        {{output.hxOutletExhaust | number:'1.0-0'}} 
+        <span class="input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+               <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+        </span>
+      </div>
+      <div *ngIf="!output.hxOutletExhaust" class="text-center bold small">
+        &mdash; &mdash;
+      </div>
+    </div>
+
+    <div class="form-group mt-1">
+        <label class="bold">Heat Capacity of Flue</label>
+        <div *ngIf="output.heatCapacityFlue" class="text-center bold small">
+          {{output.heatCapacityFlue | number:'1.0-0'}} 
+          <span class="input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(hr-&#8457;)</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">J/(hr-&#8451;)</span>
+          </span>
+        </div>
+        <div *ngIf="!output.heatCapacityFlue" class="text-center bold small">
+          &mdash; &mdash;
+        </div>
+      </div>
+
+      <div class="form-group mt-1">
+        <label class="bold">Heat Capacity of Air</label>
+        <div *ngIf="output.heatCapacityAir" class="text-center bold small">
+          {{output.heatCapacityAir | number:'1.0-0'}} 
+          <span class="input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(hr-&#8457;)</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">J/(hr-&#8451;)</span>
+          </span>
+        </div>
+        <div *ngIf="!output.heatCapacityAir" class="text-center bold small">
+          &mdash; &mdash;
+        </div>
+      </div>
+    <div class="form-group mt-1">
+        <label class="bold">Annual Energy Savings</label>
+        <div *ngIf="output.energySavings" class="text-center bold small">
+          {{output.energySavings | number:'1.0-0'}}
+          <span class="input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+        </span>
+        </div>
+        <div *ngIf="!output.energySavings" class="text-center bold small">
+          &mdash; &mdash;
+        </div>
+      </div>
+  </div>

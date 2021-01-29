@@ -1,7 +1,7 @@
 <form [formGroup]="turbineForm">
   <label class="group-label w-100">
     <div class="form-group">
-      <input type="checkbox" (change)="save()" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()"
+      <input type="checkbox" (change)="save()" id="useTurbine" formControlName="useTurbine" 
         [ngClass]="{'indicate-different': isUseTurbineDifferent()}">
       <span class="pl-1">Condensing Turbine</span>
     </div>
@@ -12,7 +12,7 @@
       <div class="input-group">
         <input name="isentropicEfficiency" type="number" step="any" class="form-control" id="isentropicEfficiency"
           (input)="save()" [readonly]="!selected" formControlName="isentropicEfficiency" (focus)="focusField('isentropicEfficiency')"
-          (blur)="focusOut()" [ngClass]="{'indicate-different': isIsentropicEfficiencyDifferent()}">
+           [ngClass]="{'indicate-different': isIsentropicEfficiencyDifferent()}">
         <span class="units input-group-addon">%</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.isentropicEfficiency.invalid && !turbineForm.controls.isentropicEfficiency.pristine">
@@ -29,7 +29,7 @@
       <div class="input-group">
         <input name="generationEfficiency" type="number" step="any" class="form-control" id="generationEfficiency"
           (input)="save()" [readonly]="!selected" formControlName="generationEfficiency" (focus)="focusField('generationEfficiency')"
-          (blur)="focusOut()" [ngClass]="{'indicate-different': isGenerationEfficiencyDifferent()}">
+           [ngClass]="{'indicate-different': isGenerationEfficiencyDifferent()}">
         <span class="units input-group-addon">%</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.generationEfficiency.invalid && !turbineForm.controls.generationEfficiency.pristine">
@@ -46,7 +46,7 @@
       <div class="input-group">
         <input name="condenserPressure" type="number" step="any" class="form-control" id="{{idString+'condenserPressure'}}"
           (input)="save()" [readonly]="!selected" formControlName="condenserPressure" (focus)="focusField('condenserPressure')"
-          (blur)="focusOut()" [ngClass]="{'indicate-different': isCondenserPressureDifferent()}">
+           [ngClass]="{'indicate-different': isCondenserPressureDifferent()}">
         <span class="units input-group-addon" [innerHTML]="settings.steamVacuumPressure | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.condenserPressure.invalid && !turbineForm.controls.condenserPressure.pristine">
@@ -62,7 +62,7 @@
     <div class="form-group">
       <label for="{{idString+'operationType'}}">Operation Type</label>
       <select name="operationType" class="form-control" id="{{idString+'operationType'}}" (change)="changeOperationValidators()"
-        (focus)="focusField('operationType')" (blur)="focusOut()" formControlName="operationType" [ngClass]="{'indicate-different': isOperationTypeDifferent()}">
+        (focus)="focusField('operationType')"  formControlName="operationType" [ngClass]="{'indicate-different': isOperationTypeDifferent()}">
         <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
@@ -75,7 +75,7 @@
       <div class="input-group">
         <input name="operationValue" type="number" step="any" class="form-control" id="{{idString+'operationValue'}}"
           (input)="save()" [readonly]="!selected" formControlName="operationValue" (focus)="focusField('operationValue')"
-          (blur)="focusOut()" [ngClass]="{'indicate-different': isOperationValueDifferent()}">
+           [ngClass]="{'indicate-different': isOperationValueDifferent()}">
         <span class="units input-group-addon">
           <span *ngIf="turbineForm.controls.operationType.value == 0" [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
           <span *ngIf="turbineForm.controls.operationType.value == 1" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>

@@ -46,7 +46,7 @@
             <tbody>
               <tr>
                 <td class="bold w-50">Flow</td>
-                <td class="text-center w-50"> {{flowCalculationResults.flow | number:'2.0-0'}}
+                <td *ngIf="flowCalculationResults.flow" class="text-center w-50"> {{flowCalculationResults.flow | number:'2.0-0'}}
                   <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
                     SCFH
                   </span>
@@ -54,10 +54,13 @@
                     Nm<sup>3</sup>/hr
                   </span>
                 </td>
+                <td *ngIf="!flowCalculationResults.flow" class="text-center w-50">
+                  &mdash; &mdash;
+                </td>
               </tr>
               <tr>
                 <td class="bold w-50">Total Flow</td>
-                <td class="text-center w-50">
+                <td *ngIf="flowCalculationResults.totalFlow" class="text-center w-50">
                   {{flowCalculationResults.totalFlow | number:'2.0-0'}}
                   <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
                     SCF
@@ -66,10 +69,13 @@
                     Nm<sup>3</sup>
                   </span>
                 </td>
+                <td *ngIf="!flowCalculationResults.totalFlow" class="text-center w-50">
+                  &mdash; &mdash;
+                </td>
               </tr>
               <tr>
                 <td class="bold w-50">Energy Use</td>
-                <td class="text-center w-50">
+                <td *ngIf="flowCalculationResults.heatInput" class="text-center w-50">
                   {{flowCalculationResults.heatInput | number:'2.0-0'}}
                   <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
                     MMBtu
@@ -77,6 +83,9 @@
                   <span *ngIf="settings.unitsOfMeasure == 'Metric'">
                     GJ
                   </span>
+                </td>
+                <td *ngIf="!flowCalculationResults.heatInput" class="text-center w-50">
+                  &mdash; &mdash;
                 </td>
               </tr>
             </tbody>

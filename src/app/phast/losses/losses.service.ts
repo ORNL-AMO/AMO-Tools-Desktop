@@ -4,9 +4,10 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../phast-results.service';
-import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
 import { LossTab, defaultTabs } from '../tabs';
 import * as _ from 'lodash';
+import { FlueGasFormService } from '../../calculator/furnaces/flue-gas/flue-gas-form.service';
+
 @Injectable()
 export class LossesService {
   lossIndex: BehaviorSubject<number>;
@@ -28,7 +29,10 @@ export class LossesService {
 
   lossesTabs: Array<LossTab>;
   updateTabs: BehaviorSubject<boolean>;
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private flueGasLossesService: FlueGasLossesService) {
+  constructor(private phastService: PhastService, 
+              private phastResultsService: PhastResultsService, 
+              private flueGasFormService: FlueGasFormService,
+              ) {
     this.lossIndex = new BehaviorSubject<number>(0);
     // this.baseline = new BehaviorSubject<PHAST>(null);
     //this.modification = new BehaviorSubject<Modification>(null);
@@ -218,7 +222,7 @@ export class LossesService {
       if (phast.losses.flueGasLosses.length !== 0) {
         let flueGas = phast.losses.flueGasLosses[0];
         if (flueGas.flueGasType === 'By Mass') {
-          let tmpForm = this.flueGasLossesService.initByMassFormFromLoss(flueGas);
+          let tmpForm = this.flueGasFormService.initByMassFormFromLoss(flueGas);
           if (tmpForm.status === 'VALID') {
             let test = this.phastService.flueGasByMass(flueGas.flueGasByMass, settings);
             if (test !== 0) {
@@ -228,7 +232,7 @@ export class LossesService {
             }
           }
         } else if (flueGas.flueGasType === 'By Volume') {
-          let tmpForm = this.flueGasLossesService.initByVolumeFormFromLoss(flueGas);
+          let tmpForm = this.flueGasFormService.initByVolumeFormFromLoss(flueGas);
           if (tmpForm.status === 'VALID') {
             let test = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, settings);
             if (test !== 0) {

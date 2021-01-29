@@ -7,12 +7,10 @@ import { LogToolDay, LogToolField, IndividualDataFromCsv } from './log-tool-mode
 export class LogToolDataService {
 
   logToolDays: Array<LogToolDay>;
-  validNumberOfDayDataPoints: number;
   constructor(private logToolService: LogToolService) { }
 
   resetData() {
     this.logToolDays = new Array();
-    this.validNumberOfDayDataPoints = undefined;
   }
 
   getDataFieldOptions(): Array<LogToolField> {
@@ -174,6 +172,21 @@ export class LogToolDataService {
       data: individualDayData
     });
     return dayData;
+  }
+
+  getDataInRange(dataField: LogToolField, xField: LogToolField, xMin: any, xMax: any, dataMin: number, dataMax: number): Array<any> {
+    let csvData: IndividualDataFromCsv = this.logToolService.individualDataFromCsv.find(csvData => { return csvData.csvName == dataField.csvName });
+    let data: Array<any> = _.filter(csvData.csvImportData.data, (dataItem => {
+      if (xField.isDateField == true) {
+        let dateField: LogToolField = csvData.fields.find(field => {return field.isDateField})
+        return (new Date(dataItem[dateField.fieldName]).valueOf() > new Date(xMin).valueOf() && new Date(dataItem[dateField.fieldName]).valueOf() < new Date(xMax).valueOf() && dataItem[dataField.fieldName] > dataMin && dataItem[dataField.fieldName] < dataMax);
+      } else {
+        return (dataItem[xField.fieldName] > xMin && dataItem[xField.fieldName] < xMax && dataItem[dataField.fieldName] > dataMin && dataItem[dataField.fieldName] < dataMax);
+      }
+    }));
+    let mappedValues: Array<any> = _.mapValues(data, (dataItem) => { return dataItem[dataField.fieldName] });
+    let valueArr = _.values(mappedValues);
+    return valueArr;
   }
 }
 

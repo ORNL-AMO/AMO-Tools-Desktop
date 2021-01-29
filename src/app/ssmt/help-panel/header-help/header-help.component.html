@@ -4,13 +4,14 @@
     <br>
   </h5>
   <hr class="my-1 hr-spacer">
-  <div class="my-2" *ngIf="currentField == 'default'">
+  <div>
     <h6>
       <small class="text-muted">
         Enter measured data to calculate your system's annual savings potential.
       </small>
     </h6>
   </div>
+  <hr class="my-1 hr-spacer">
   <div class="my-2" *ngIf="currentField == 'numberOfHeaders'">
     <h6>
       Number Of Headers
@@ -121,7 +122,9 @@
       Heat Loss
       <br>
       <small class="text-muted">
-        Estimate of Heat lost in header piping before use in turbines and process.
+        Heat Loss describes the heat transfer from steam distribution systems using the 
+        approximate percent of heat (enthalpy) lost between the inlet and outlet of a header. 
+        Estimates of heat loss can be developed to better reflect distribution system losses and pipe insulation opportunities.
         <hr>
       </small>
     </h6>

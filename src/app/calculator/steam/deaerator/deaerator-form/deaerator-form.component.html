@@ -3,7 +3,7 @@
     <label class="small" for="deaeratorPressure">Deaerator Pressure</label>
     <div class="input-group">
       <input class="form-control" name="deaeratorPressure" id="deaeratorPressure" formControlName="deaeratorPressure"
-        type="number" (input)="calculate()" (focus)="focusField('deaeratorPressure')" (blur)="focusOut()"
+        type="number" (input)="calculate()" (focus)="focusField('deaeratorPressure')" 
         onfocus="this.select();">
       <span class="input-group-addon units"><span
           [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
@@ -24,7 +24,7 @@
     <label class="small" for="ventRate">Vent Rate</label>
     <div class="input-group">
       <input class="form-control" name="ventRate" id="ventRate" formControlName="ventRate" type="number"
-        (input)="calculate()" (focus)="focusField('ventRate')" (blur)="focusOut()" onfocus="this.select();">
+        (input)="calculate()" (focus)="focusField('ventRate')"  onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
     <span class="alert-danger pull-right small"
@@ -41,7 +41,7 @@
     <label class="small" for="feedwaterMassFlow">Feedwater Mass Flow</label>
     <div class="input-group">
       <input class="form-control" name="feedwaterMassFlow" id="feedwaterMassFlow" formControlName="feedwaterMassFlow"
-        type="number" (input)="calculate()" (focus)="focusField('feedwaterMassFlow')" (blur)="focusOut()"
+        type="number" (input)="calculate()" (focus)="focusField('feedwaterMassFlow')" 
         onfocus="this.select();">
       <span class="input-group-addon units"><span
           [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
@@ -63,7 +63,7 @@
     <label class="small" for="waterPressure">Pressure</label>
     <div class="input-group">
       <input class="form-control" name="waterPressure" id="waterPressure" formControlName="waterPressure" type="number"
-        (input)="calculate()" (focus)="focusField('waterPressure')" (blur)="focusOut()" onfocus="this.select();">
+        (input)="calculate()" (focus)="focusField('waterPressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span
           [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
@@ -82,7 +82,7 @@
     <label class="small" for="waterThermodynamicQuantity">Known Variable</label>
     <select name="waterThermodynamicQuantity" class="form-control" formControlName="waterThermodynamicQuantity"
       id="waterThermodynamicQuantity" (change)="setWaterQuantityRanges()"
-      (focus)="focusField('waterThermodynamicQuantity')" (blur)="focusOut()">
+      (focus)="focusField('waterThermodynamicQuantity')" >
       <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
     </select>
   </div>
@@ -91,7 +91,7 @@
     <label class="small" for="waterQuantityValue">{{getWaterOptionDisplay()}} Value</label>
     <div class="input-group">
       <input class="form-control" name="waterQuantityValue" id="waterQuantityValue" formControlName="waterQuantityValue"
-        type="number" (input)="calculate()" (focus)="focusField('waterQuantityValue')" (blur)="focusOut()"
+        type="number" (input)="calculate()" (focus)="focusField('waterQuantityValue')" 
         onfocus="this.select();">
       <span *ngIf="deaeratorForm.controls.waterThermodynamicQuantity.value != 3" class="input-group-addon units"
         [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.waterThermodynamicQuantity.value) | settingsLabel"></span>
@@ -117,7 +117,7 @@
     <label class="small" for="steamPressure">Pressure</label>
     <div class="input-group">
       <input class="form-control" name="steamPressure" id="steamPressure" formControlName="steamPressure" type="number"
-        (input)="calculate()" (focus)="focusField('steamPressure')" (blur)="focusOut()" onfocus="this.select();">
+        (input)="calculate()" (focus)="focusField('steamPressure')"  onfocus="this.select();">
       <span class="input-group-addon units"><span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
     <span class="alert-danger pull-right small"
@@ -134,7 +134,7 @@
     <label class="small" for="steamThermodynamicQuantity">Known Variable</label>
     <select name="steamThermodynamicQuantity" class="form-control" formControlName="steamThermodynamicQuantity"
       id="steamThermodynamicQuantity" (change)="setSteamQuantityRanges()"
-      (focus)="focusField('steamThermodynamicQuantity')" (blur)="focusOut()">
+      (focus)="focusField('steamThermodynamicQuantity')" >
       <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
     </select>
   </div>
@@ -143,7 +143,7 @@
     <label class="small" for="steamQuantityValue">{{getSteamOptionDisplay()}} Value</label>
     <div class="input-group">
       <input class="form-control" name="steamQuantityValue" id="steamQuantityValue" formControlName="steamQuantityValue"
-        type="number" (input)="calculate()" (focus)="focusField('steamQuantityValue')" (blur)="focusOut()"
+        type="number" (input)="calculate()" (focus)="focusField('steamQuantityValue')" 
         onfocus="this.select();">
       <span *ngIf="deaeratorForm.controls.steamThermodynamicQuantity.value != 3" class="input-group-addon units"
         [innerHTML]="getOptionDisplayUnit(deaeratorForm.controls.steamThermodynamicQuantity.value) | settingsLabel"></span>
