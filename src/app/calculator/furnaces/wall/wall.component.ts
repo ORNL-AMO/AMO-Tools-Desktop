@@ -90,7 +90,7 @@ export class WallComponent implements OnInit {
   }
 
   addLoss() {
-    let hoursPerYear = this.operatingHours? this.operatingHours.hoursPerYear : undefined;
+    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
     this.wallService.addLoss(hoursPerYear, this.modificationExists);
   }
 
