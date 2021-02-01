@@ -98,14 +98,16 @@ export class OpeningService {
       } 
       result.grossLoss =  (result.openingLoss / openingLossData.availableHeat) * 100;
       result.fuelUse = result.grossLoss * openingLossData.hoursPerYear;
-      result.fuelCost = result.grossLoss * openingLossData.hoursPerYear * openingLossData.fuelCost;
+      result.fuelCost = result.fuelUse * openingLossData.fuelCost;
     }
     return result;
   }
 
-  addLoss(hoursPerYear: number, modificationExists: boolean) {
+  addLoss(treasureHours: number, modificationExists: boolean) {
     let currentBaselineData: Array<OpeningLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
+    
+    let hoursPerYear = treasureHours? treasureHours : currentBaselineData[index - 1].hoursPerYear;
     let baselineObj: OpeningLoss = this.initDefaultLoss(index, hoursPerYear);
     if (index > 0) {
       baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;

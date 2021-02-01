@@ -147,6 +147,10 @@ export class CompressedAirReductionService {
       units: [inputObj.units]
     });
     form = this.setValidators(form);
+    if(!isBaseline){
+      form.controls.compressorControl.disable();
+      form.controls.compressorControlAdjustment.disable();
+    }
     return form;
   }
 
@@ -259,8 +263,8 @@ export class CompressedAirReductionService {
         compressedAirReductionResults.modificationResults.energyUse = compressedAirReductionResults.modificationResults.consumption;
       }
 
-      compressedAirReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
-      compressedAirReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
+      compressedAirReductionResults.annualEnergySavings = (baselineResults.energyUse - modificationResults.energyUse) * (baselineInpCpy[0].compressorElectricityData.compressorControlAdjustment / 100);
+      compressedAirReductionResults.annualCostSavings = (baselineResults.energyCost - modificationResults.energyCost) * (baselineInpCpy[0].compressorElectricityData.compressorControlAdjustment / 100);
       compressedAirReductionResults.annualFlowRateReduction = baselineResults.flowRate - modificationResults.flowRate;
       compressedAirReductionResults.annualConsumptionReduction = baselineResults.consumption - modificationResults.consumption;
     }
