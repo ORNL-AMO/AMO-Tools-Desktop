@@ -2,11 +2,9 @@ import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges,
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { LeakageLoss, LeakageLossOutput, LeakageLossResults } from '../../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../../shared/models/settings';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { LeakageFormService, LeakageWarnings } from '../leakage-form.service';
 import { LeakageService } from '../leakage.service';
 
@@ -49,8 +47,6 @@ export class LeakageFormComponent implements OnInit {
   outputSubscription: Subscription;
 
   constructor(private leakageFormService: LeakageFormService,
-    private suiteDbService: SuiteDbService,
-    private convertUnitsService: ConvertUnitsService,
     private cd: ChangeDetectorRef,
     private leakageService: LeakageService) { }
 
