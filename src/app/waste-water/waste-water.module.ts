@@ -34,6 +34,7 @@ import { AnalysisMenuComponent } from './waste-water-banner/analysis-menu/analys
 import { WasteWaterAnalysisModule } from './waste-water-analysis/waste-water-analysis.module';
 import { ExploreOpportunitiesFormComponent } from './explore-opportunities/explore-opportunities-form/explore-opportunities-form.component';
 import { ExploreAeratorFormComponent } from './explore-opportunities/explore-opportunities-form/explore-aerator-form/explore-aerator-form.component';
+import { WasteWaterDiagramComponent } from './waste-water-diagram/waste-water-diagram.component';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import { ExploreAeratorFormComponent } from './explore-opportunities/explore-opp
     AnalysisMenuComponent,
     ExploreOpportunitiesFormComponent,
     ExploreAeratorFormComponent,
+    WasteWaterDiagramComponent,
   ],
   imports: [
     CommonModule,

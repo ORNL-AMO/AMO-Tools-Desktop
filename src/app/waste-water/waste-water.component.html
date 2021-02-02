@@ -33,6 +33,10 @@
     <app-waste-water-analysis [containerHeight]="containerHeight"></app-waste-water-analysis>
   </div>
 
+  <div class="tab-content" *ngIf="mainTab == 'diagram'">
+    <app-waste-water-diagram></app-waste-water-diagram>
+  </div>
+
   <!--Report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
