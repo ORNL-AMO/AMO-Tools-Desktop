@@ -13,7 +13,7 @@
         <label class="group-label">Modeling Conditions</label>
         <!-- MaxDays -->
         <div class="form-group" [ngClass]="{'invalid': systemBasicsForm.controls.MaxDays.invalid}">
-            <label for="MaxDays">Max. Modeled Solids Retention Time (SRT)</label>
+            <label for="MaxDays">Max. Solids Retention Time (SRT)</label>
             <div class="input-group">
                 <input type="number" name="MaxDays" class="form-control number-input-field" id="MaxDays"
                     (focus)="focusField('MaxDays')" (input)="saveSystemBasics()" formControlName="MaxDays">
@@ -29,7 +29,7 @@
             </span>
         </div>
         <!--TimeIncrement-->
-        <div class="form-group" [ngClass]="{'invalid': systemBasicsForm.controls.TimeIncrement.invalid}">
+        <!-- <div class="form-group" [ngClass]="{'invalid': systemBasicsForm.controls.TimeIncrement.invalid}">
             <label for="TimeIncrement">Time Step for SRT Modeling</label>
             <div class="input-group">
                 <input type="number" name="TimeIncrement" class="form-control number-input-field" id="TimeIncrement"
@@ -45,7 +45,7 @@
                     *ngIf="systemBasicsForm.controls.TimeIncrement.errors.min">Value can't
                     be less than {{systemBasicsForm.controls.TimeIncrement.errors.min.min}} days</span>
             </span>
-        </div>
+        </div> -->
         <!--operatingMonths-->
         <div class="form-group" [ngClass]="{'invalid': systemBasicsForm.controls.operatingMonths.invalid}">
             <label for="operatingMonths">Operating Months</label>

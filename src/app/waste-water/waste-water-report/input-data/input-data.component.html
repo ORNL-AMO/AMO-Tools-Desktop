@@ -26,7 +26,7 @@
       </tr>
       <tr>
         <td>
-          Max. Modeled Solids Retention Time "SRT" (days)
+          Max. Solids Retention Time "SRT" (days)
         </td>
         <td>
           {{wasteWater.systemBasics.MaxDays}}
@@ -35,7 +35,7 @@
           &mdash;
         </td>
       </tr>
-      <tr>
+      <!-- <tr>
         <td>
           Time Step for SRT Modeling (days)
         </td>
@@ -45,7 +45,7 @@
         <td *ngFor="let mod of wasteWater.modifications">
           &mdash;
         </td>
-      </tr>
+      </tr> -->
       <tr>
         <td>
           Operating Months
@@ -191,7 +191,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('RASTSS') == true}">
-          RAST TSS (mg/L)
+          RAS TSS (mg/L)
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('RASTSS') == true}">
           {{wasteWater.baselineData.activatedSludgeData.RASTSS}}
@@ -290,7 +290,7 @@
       <tr>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingDO') == true}">
-          Operating Disolved Oxygen (mg/L)
+          Operating Dissolved Oxygen (mg/L)
         </td>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingDO') == true}">

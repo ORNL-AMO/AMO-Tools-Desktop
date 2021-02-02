@@ -78,7 +78,7 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     label: 'Oxygen Required',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
-    selected: true
+    selected: false
 }, 
 // {
 //     name: 'FlowMgd',
@@ -110,7 +110,7 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     label: 'Total O&#x2082; Requirements',
     metricUnit: 'lb/day',
     imperialUnit: 'kg/day',
-    selected: false
+    selected: true
 }, {
     name: 'EffNH3N',
     label: 'Effluent NH&#x00B3;-N Concentration',
