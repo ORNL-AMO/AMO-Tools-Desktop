@@ -96,7 +96,7 @@ export class ConvertWasteWaterService {
     row.SludgeProd = this.convertUnitsService.value(row.SludgeProd).from('lb').to('kg');
     row.SolidProd = this.convertUnitsService.value(row.SolidProd).from('lb').to('kg');
     row.Effluent = this.convertUnitsService.value(row.Effluent).from('lb').to('kg');
-    row.IntentWaste = this.convertUnitsService.value(row.IntentWaste).from('lb').to('kg');
+    row.InertWaste = this.convertUnitsService.value(row.InertWaste).from('lb').to('kg');
     row.OxygenRqd = this.convertUnitsService.value(row.OxygenRqd).from('lb').to('kg');
     row.FlowMgd = this.convertUnitsService.value(row.FlowMgd).from('lb').to('kg');
     row.TotalO2Rqd = this.convertUnitsService.value(row.TotalO2Rqd).from('lb').to('kg');

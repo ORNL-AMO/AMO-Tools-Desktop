@@ -199,7 +199,7 @@ export class WasteWaterService {
       SludgeProd: row[7],
       SolidProd: row[8],
       Effluent: row[9],
-      IntentWaste: row[10],
+      InertWaste: row[10],
       OxygenRqd: row[11],
       FlowMgd: row[12],
       NRemoved: row[13],

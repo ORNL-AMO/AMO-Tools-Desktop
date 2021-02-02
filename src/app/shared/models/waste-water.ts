@@ -109,7 +109,7 @@ export interface CalculationsTableRow {
     SludgeProd: number,
     SolidProd: number,
     Effluent: number,
-    IntentWaste: number,
+    InertWaste: number,
     OxygenRqd: number,
     FlowMgd: number,
     NRemoved: number,

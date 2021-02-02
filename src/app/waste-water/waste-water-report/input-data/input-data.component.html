@@ -107,7 +107,10 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('FlowRate') == true}">
-          Flow Rate (MGD)
+          Flow Rate 
+          (
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MGD</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('FlowRate') == true}">
           {{wasteWater.baselineData.activatedSludgeData.FlowRate}}
