@@ -21,7 +21,8 @@ export interface WasteWaterData {
     id: string,
     outputs?: WasteWaterResults,
     valid?: WasteWaterValid,
-    exploreAeratorPerformance?: SavingsOpportunity
+    exploreAeratorPerformance?: SavingsOpportunity,
+    exploreReduceOxygen?: SavingsOpportunity
 }
 
 export interface ActivatedSludgeData {
