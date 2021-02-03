@@ -23,7 +23,7 @@ export class SrtGraphsComponent implements OnInit {
       'MLSS',
       'SludgeProd',
       'SolidProd',
-      'OxygenRqd',
+      'O2Reqd',
       'EstimatedEff'
     ]
 
