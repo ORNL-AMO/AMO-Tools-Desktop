@@ -1,3 +1,51 @@
+<!-- Reduce Supplied Oxygen -->
+<div class="checkbox">
+    <label class="group-label" for="exploreReduceOxygen">
+        <input type="checkbox" id="exploreReduceOxygen" (focus)="focusField('exploreReduceOxygen')"
+            (change)="setExploreReduceOxygen()"
+            [(ngModel)]="modificationData.exploreReduceOxygen.hasOpportunity" />
+        {{ modificationData.exploreReduceOxygen.display }}
+    </label>
+</div>
+<!-- Operating Dissolved Oxygen (DO)-->
+<li *ngIf="modificationData.exploreReduceOxygen.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid':baselineForm.controls.OperatingDO.invalid}">
+            <label for="baselineOperatingDO" class="baseline-value-label">Baseline Operating Dissolved Oxygen (DO)</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.OperatingDO.value }}
+                <span>mg/L</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="baselineForm.controls.OperatingDO.invalid && !baselineForm.controls.OperatingDO.pristine">
+                <span *ngIf="baselineForm.controls.OperatingDO.errors.required">Value Required</span>
+                <span *ngIf="baselineForm.controls.OperatingDO.errors.min">Value can't be less than
+                    {{baselineForm.controls.OperatingDO.errors.min.min}} &#8451;</span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid':modificationForm.controls.OperatingDO.invalid }">
+            <label for="modificationOperatingDO" class="mod-value-label">Modification Operating Dissolved Oxygen (DO)</label>
+            <div class="input-group mod-max-width">
+                <input name="modificationOperatingDO" type="number" step="0.1" min="0" max="24"
+                    id="modificationOperatingDO" class="form-control mod-value-input"
+                    (focus)="focusField('OperatingDO')" formControlName="OperatingDO" (input)="save()" />
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="modificationForm.controls.OperatingDO.invalid && !modificationForm.controls.OperatingDO.pristine">
+                <span *ngIf="modificationForm.controls.OperatingDO.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.OperatingDO.errors.min">Value can't be less than
+                    {{modificationForm.controls.OperatingDO.errors.min.min}} &#8451;</span>
+            </span>
+        </div>
+    </form>
+</li>
+<!-- END Reduce Supplied Oxygen -->
+
+<!-- Modify Aerator Performance -->
 <div class="checkbox">
     <label class="group-label" for="modifyAeratorPerformance">
         <input type="checkbox" id="modifyAeratorPerformance" (focus)="focusField('modifyAeratorPerformance')"
@@ -121,3 +169,4 @@
         </div>
     </form>
 </li>
+<!-- END Modify Aerator Performance -->

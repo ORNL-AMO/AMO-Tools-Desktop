@@ -36,6 +36,7 @@ export class ExploreAeratorFormComponent implements OnInit {
         this.modificationForm = this.aeratorPerformanceFormService.getFormFromObj(this.modificationData.aeratorPerformanceData);
         this.modificationWarnings = this.aeratorPerformanceFormService.checkWarnings(this.modificationData.aeratorPerformanceData);
         this.initExploreAearatorPerformance();
+        this.initExploreReduceOxygen();
       }
     });
   }
@@ -51,11 +52,23 @@ export class ExploreAeratorFormComponent implements OnInit {
     this.modificationData.exploreAeratorPerformance = { display: 'Modify Aerator Performance', hasOpportunity: hasOpportunity }
   }
 
+  initExploreReduceOxygen() {
+    let hasOpportunity: boolean = (this.modificationData.aeratorPerformanceData.OperatingDO != this.baselineData.aeratorPerformanceData.OperatingDO);
+    this.modificationData.exploreReduceOxygen = { display: 'Reduce Supplied Oxygen', hasOpportunity: hasOpportunity }
+  }
+
   setExploreAeratorPerformance() {
     if (this.modificationData.exploreAeratorPerformance.hasOpportunity == false) {
       this.modificationForm.controls.OperatingTime.patchValue(this.modificationForm.controls.OperatingTime.value);
       this.modificationForm.controls.Aeration.patchValue(this.modificationForm.controls.Aeration.value);
       this.modificationForm.controls.Speed.patchValue(this.modificationForm.controls.Speed.value);
+      this.save();
+    }
+  }
+
+  setExploreReduceOxygen() {
+    if (this.modificationData.exploreReduceOxygen.hasOpportunity == false) {
+      this.modificationForm.controls.OperatingDO.patchValue(this.modificationForm.controls.OperatingDO.value);
       this.save();
     }
   }
