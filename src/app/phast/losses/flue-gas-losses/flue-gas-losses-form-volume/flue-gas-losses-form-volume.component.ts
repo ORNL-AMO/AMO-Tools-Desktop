@@ -6,7 +6,7 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
-import { FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasByVolume, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 
@@ -118,7 +118,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   calcExcessAir() {
-    let input = {
+    let input: MaterialInputProperties = {
       CH4: this.flueGasLossForm.controls.CH4.value,
       C2H6: this.flueGasLossForm.controls.C2H6.value,
       N2: this.flueGasLossForm.controls.N2.value,

@@ -7,6 +7,7 @@ import { ConvertUnitsService } from '../../../../../shared/convert-units/convert
 import { ModalDirective } from 'ngx-bootstrap';
 import { StackLossService } from '../../stack-loss.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../../shared/models/materials';
+import { MaterialInputProperties } from '../../../../../shared/models/phast/losses/flueGas';
 
 @Component({
   selector: 'app-stack-loss-by-mass',
@@ -113,7 +114,7 @@ export class StackLossByMassComponent implements OnInit {
   }
 
   calcExcessAir() {
-    let input = {
+    let input: MaterialInputProperties = {
       carbon: this.stackLossForm.controls.carbon.value,
       hydrogen: this.stackLossForm.controls.hydrogen.value,
       sulphur: this.stackLossForm.controls.sulphur.value,
