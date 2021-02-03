@@ -6,7 +6,7 @@ import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { FixtureLossesService } from '../../../losses/fixture-losses/fixture-losses.service';
+import { FixtureFormService } from '../../../../calculator/furnaces/fixture/fixture-form.service';
 
 @Component({
   selector: 'app-explore-fixtures-form',
@@ -34,7 +34,7 @@ export class ExploreFixturesFormComponent implements OnInit {
   baselineWarnings: Array<{ specificHeatWarning: string, feedRateWarning: string }>;
   modificationWarnings: Array<{ specificHeatWarning: string, feedRateWarning: string }>;
   showInitialTemp: Array<boolean>;
-  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private fixtureLossesService: FixtureLossesService) { }
+  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private fixtureFormService: FixtureFormService) { }
 
   ngOnInit() {
     this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
@@ -66,9 +66,9 @@ export class ExploreFixturesFormComponent implements OnInit {
         this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures = { hasOpportunity: check, display: 'Improve Materials Handling' };
       }
       this.showFeedRate.push(check);
-      let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
+      let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureFormService.checkWarnings(loss);
       this.baselineWarnings.push(tmpWarnings);
-      tmpWarnings = this.fixtureLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index]);
+      tmpWarnings = this.fixtureFormService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index]);
       this.modificationWarnings.push(tmpWarnings);
       check = (loss.materialName !== this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].materialName);
       if (!this.phast.modifications[this.exploreModIndex].exploreOppsShowFixtures.hasOpportunity && check) {
@@ -153,13 +153,13 @@ export class ExploreFixturesFormComponent implements OnInit {
   }
 
   checkModificationWarnings(index: number) {
-    let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index]);
+    let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureFormService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index]);
     this.modificationWarnings[index] = tmpWarnings;
     this.calculate();
   }
 
   checkBaselineWarnings(index: number) {
-    let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(this.phast.losses.fixtureLosses[index]);
+    let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureFormService.checkWarnings(this.phast.losses.fixtureLosses[index]);
     this.baselineWarnings[index] = tmpWarnings;
     this.calculate();
   }

@@ -10,7 +10,6 @@ import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/aux
 
 import { PHAST, PhastValid } from '../shared/models/phast/phast';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
-import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
@@ -23,6 +22,7 @@ import { SolidMaterialFormService } from '../calculator/furnaces/charge-material
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
+import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
 
 
 @Injectable()
@@ -41,7 +41,7 @@ export class PhastValidService {
     private energyInputService: EnergyInputService,
     private exhaustGasService: ExhaustGasService,
     private energyInputExhaustGasService: EnergyInputExhaustGasService,
-    private fixtureLossesService: FixtureLossesService,
+    private fixtureFormService: FixtureFormService,
     private otherLossessService: OtherLossesService,
     private liquidMaterialFormService: LiquidMaterialFormService,
     private gasMaterialFormService: GasMaterialFormService,
@@ -198,7 +198,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.fixtureLosses) {
       phast.losses.fixtureLosses.forEach(loss => {
-        let fixtureForm: FormGroup = this.fixtureLossesService.getFormFromLoss(loss);
+        let fixtureForm: FormGroup = this.fixtureFormService.getFormFromLoss(loss);
         if (fixtureForm.status === 'INVALID') {
           valid = false;
         }

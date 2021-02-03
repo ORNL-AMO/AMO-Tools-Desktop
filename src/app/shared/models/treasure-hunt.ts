@@ -244,6 +244,14 @@ export interface OpportunitySummary {
     owner: string
 }
 
+
+export interface SavingsItem { 
+    savings: number, 
+    currentCost: number,
+    newCost: number, 
+    label: string 
+}
+
 export interface UtilityUsageData {
     baselineEnergyUsage: number,
     baselineEnergyCost: number,
