@@ -91,6 +91,7 @@ import { OpeningComponent } from '../calculator/furnaces/opening/opening.compone
 import { AirHeatingComponent } from '../calculator/furnaces/air-heating/air-heating.component';
 import { O2UtilizationRateComponent } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.component';
 import { WasteWaterListComponent } from '../calculator/waste-water/waste-water-list/waste-water-list.component';
+import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.component';
 
 export const coreRoutes: Routes = [
   {
@@ -350,6 +351,10 @@ export const coreRoutes: Routes = [
           {
             path: 'charge-material',
             component: ChargeMaterialComponent
+          },
+          {
+            path: 'fixture',
+            component: FixtureComponent
           },
           {
             path: 'achievable-efficiency',
