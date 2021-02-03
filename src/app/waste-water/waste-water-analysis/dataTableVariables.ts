@@ -9,7 +9,7 @@ export interface DataTableVariable {
 
 export const DataTableVariables: Array<DataTableVariable> = [{
     name: 'Se',
-    label: 'Efffluent CBOD5 Concentration (S&#x2080;)',
+    label: 'Effluent CBOD5 Concentration (S&#8337;)',
     metricUnit: 'mg/L',
     imperialUnit: 'mg/L',
     selected: true
@@ -46,38 +46,38 @@ export const DataTableVariables: Array<DataTableVariable> = [{
 }, {
     name: 'BiomassProd',
     label: 'Biomass Production VSS',
-    metricUnit: 'lb/day',
-    imperialUnit: 'kg/day',
+    metricUnit: 'kg/day',
+    imperialUnit: 'lb/day',
     selected: false
 }, {
     name: 'SludgeProd',
     label: 'Sludge Production VSS',
-    metricUnit: 'lb/day',
-    imperialUnit: 'kg/day',
+    metricUnit: 'kg/day',
+    imperialUnit: 'lb/day',
     selected: true
 }, {
     name: 'SolidProd',
-    label: 'T. Solids Production TSS',
-    metricUnit: 'lb/day',
-    imperialUnit: 'kg/day',
+    label: 'Total Solids Production TSS',
+    metricUnit: 'kg/day',
+    imperialUnit: 'lb/day',
     selected: true
 }, {
     name: 'Effluent',
     label: 'Effluent TSS',
-    metricUnit: 'lb/day',
-    imperialUnit: 'kg/day',
+    metricUnit: 'kg/day',
+    imperialUnit: 'lb/day',
     selected: false
 }, {
-    name: 'IntentWaste',
-    label: 'Intent Waste TSS',
-    metricUnit: 'lb/day',
-    imperialUnit: 'kg/day',
+    name: 'InertWaste',
+    label: 'Inert Waste TSS',
+    metricUnit: 'kg/day',
+    imperialUnit: 'lb/day',
     selected: false
 }, {
     name: 'OxygenRqd',
-    label: 'Oxygen Required',
-    metricUnit: 'lb/day',
-    imperialUnit: 'kg/day',
+    label: 'Oxygen Required for CBOD Removal',
+    metricUnit: 'kg/day',
+    imperialUnit: 'lb/day',
     selected: false
 }, 
 // {
@@ -90,26 +90,26 @@ export const DataTableVariables: Array<DataTableVariable> = [{
 {
     name: 'NRemoved',
     label: 'Nitrogen Removed',
-    metricUnit: 'lb/day',
-    imperialUnit: 'kg/day',
+    metricUnit: 'kg/day',
+    imperialUnit: 'lb/day',
     selected: false
 }, {
     name: 'NRemovedMgl',
-    label: 'Nitrogen Removed Mgl',
+    label: 'N2 Removed',
     metricUnit: 'mgl',
-    imperialUnit: 'm&#x00B3;',
+    imperialUnit: 'mgl',
     selected: false
 }, {
     name: 'NitO2Dem',
     label: 'Oxygen demand due to nitrification',
-    metricUnit: 'lb/day',
-    imperialUnit: 'kg/day',
+    metricUnit: 'kg/day',
+    imperialUnit: 'lb/day',
     selected: false
 }, {
     name: 'O2Reqd',
     label: 'Total O&#x2082; Requirements',
-    metricUnit: 'lb/day',
-    imperialUnit: 'kg/day',
+    metricUnit: 'kg/day',
+    imperialUnit: 'lb/day',
     selected: true
 }, {
     name: 'EffNH3N',
@@ -126,32 +126,32 @@ export const DataTableVariables: Array<DataTableVariable> = [{
 }, {
     name: 'TotalO2Rqd',
     label: 'O&#x2082; Requirements with denitrification savings',
-    metricUnit: 'lb/day',
-    imperialUnit: 'kg/day',
+    metricUnit: 'kg/day',
+    imperialUnit: 'lb/day',
     selected: false
 }, {
     name: 'WAS',
     label: 'WAS Flow',
-    metricUnit: 'mgd',
-    imperialUnit: 'm&#x00B3;/day',
+    metricUnit: 'm&#x00B3;/day',
+    imperialUnit: 'mgd',
     selected: false
 }, {
     name: 'EstimatedEff',
-    label: 'Effluent CBOD5',
+    label: 'Total Effluent CBOD5',
     metricUnit: 'mg/L',
     imperialUnit: 'mg/L',
-    selected: false
+    selected: true
 }, {
     name: 'EstimRas',
     label: 'Ras Flow Rate',
-    metricUnit: 'mgd',
-    imperialUnit: 'm&#x00B3;/day',
+    metricUnit: 'm&#x00B3;/day',
+    imperialUnit: 'mgd',
     selected: false
 }, {
     name: 'FmRatio',
     label: 'F/M Ratio',
-    metricUnit: '',
-    imperialUnit: '',
+    metricUnit: '1/day',
+    imperialUnit: '1/day',
     selected: false
 }, 
 // {

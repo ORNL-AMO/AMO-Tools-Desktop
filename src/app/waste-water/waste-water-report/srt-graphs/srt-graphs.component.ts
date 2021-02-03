@@ -23,7 +23,8 @@ export class SrtGraphsComponent implements OnInit {
       'MLSS',
       'SludgeProd',
       'SolidProd',
-      'O2Reqd'
+      'O2Reqd',
+      'EstimatedEff'
     ]
 
     this.analysisGraphItems = this.wasteWaterAnalysisService.getAnalysisGraphItems(this.wasteWaterAnalysisService.baselineResults, this.wasteWaterAnalysisService.modificationsResultsArr);
