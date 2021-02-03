@@ -117,14 +117,29 @@ export class LeakageService {
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData: LeakageLoss = this.initDefaultLoss(0);
+    let emptyBaselineData: LeakageLoss = this.initDefaultLoss(0, undefined);
     let baselineData: Array<LeakageLoss> = [emptyBaselineData];
     this.baselineData.next(baselineData);
     this.modificationData.next(undefined);
     this.energySourceType.next('Fuel');
   }
 
-  initDefaultLoss(index: number, hoursPerYear: number = 8760) {
+  initDefaultLoss(index: number, treasureHours: number, leakageLoss?: LeakageLoss) {
+    let fuelCost: number = 0;
+    let availableHeat: number = 100;
+    let hoursPerYear = 8760;
+
+    if (leakageLoss) {
+      fuelCost = leakageLoss.fuelCost;
+      availableHeat = leakageLoss.availableHeat;
+
+      if (treasureHours) {
+        hoursPerYear = treasureHours;
+      } else {
+        hoursPerYear = leakageLoss.hoursPerYear;
+      }
+    }
+
     let defaultBaselineData: LeakageLoss = {
       draftPressure: 0,
       openingArea: 0,
@@ -135,9 +150,9 @@ export class LeakageService {
       correctionFactor: 1.0,
       name: 'Loss #' + (index + 1),
       energySourceType: 'Fuel',
-      fuelCost: 0,
+      fuelCost: fuelCost,
       hoursPerYear: hoursPerYear,    
-      availableHeat: 100,  
+      availableHeat: availableHeat,  
     };
 
     return defaultBaselineData;
@@ -194,24 +209,13 @@ export class LeakageService {
   addLoss(treasureHours: number, modificationExists: boolean) {
     let currentBaselineData: Array<LeakageLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
-    let hoursPerYear = treasureHours? treasureHours : currentBaselineData[index - 1].hoursPerYear;
-    let baselineObj: LeakageLoss = this.initDefaultLoss(index, hoursPerYear);
-    if (index > 0) {
-      baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-      baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-    }
+    let baselineObj: LeakageLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
     currentBaselineData.push(baselineObj)
     this.baselineData.next(currentBaselineData);
     
     if (modificationExists) {
       let currentModificationData: Array<LeakageLoss> = this.modificationData.getValue();
-      let modificationObj: LeakageLoss = this.initDefaultLoss(index, hoursPerYear);
-      
-      if (index > 0) {
-        modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-        modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-      }
-
+      let modificationObj: LeakageLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
     }
