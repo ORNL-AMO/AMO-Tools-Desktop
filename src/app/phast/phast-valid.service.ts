@@ -10,7 +10,6 @@ import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/aux
 
 import { PHAST, PhastValid } from '../shared/models/phast/phast';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
-import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
@@ -22,6 +21,7 @@ import { GasMaterialFormService } from '../calculator/furnaces/charge-material/g
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
+import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
 import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
 
 
@@ -42,12 +42,12 @@ export class PhastValidService {
     private exhaustGasService: ExhaustGasService,
     private energyInputExhaustGasService: EnergyInputExhaustGasService,
     private fixtureFormService: FixtureFormService,
-    private gasLeakageLossesService: GasLeakageLossesService,
     private otherLossessService: OtherLossesService,
     private liquidMaterialFormService: LiquidMaterialFormService,
     private gasMaterialFormService: GasMaterialFormService,
     private solidMaterialFormService: SolidMaterialFormService,
-    private phastResultsService: PhastResultsService
+    private phastResultsService: PhastResultsService,
+    private leakageFormService: LeakageFormService
   ) { }
 
 
@@ -269,7 +269,7 @@ export class PhastValidService {
     let valid = true;
     if (phast.losses.leakageLosses) {
       phast.losses.leakageLosses.forEach(loss => {
-        let leakageForm: FormGroup = this.gasLeakageLossesService.initFormFromLoss(loss)
+        let leakageForm: FormGroup = this.leakageFormService.initFormFromLoss(loss)
         if (leakageForm.status === 'INVALID') {
           valid = false;
         }

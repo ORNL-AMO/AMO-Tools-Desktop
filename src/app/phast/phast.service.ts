@@ -25,7 +25,6 @@ import { Settings } from '../shared/models/settings';
 
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
 import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
-import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
@@ -37,6 +36,7 @@ import { LiquidMaterialFormService } from '../calculator/furnaces/charge-materia
 import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
+import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
 import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 
@@ -59,8 +59,8 @@ export class PhastService {
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
     private coolingLossesService: CoolingLossesService,
     private wallFormService: WallFormService,
+    private leakageFormService: LeakageFormService,
     private fixtureFormService: FixtureFormService,
-    private gasLeakageLossesService: GasLeakageLossesService,
     private otherLossessService: OtherLossesService,
     private liquidMaterialFormService: LiquidMaterialFormService,
     private gasMaterialFormService: GasMaterialFormService,
@@ -333,7 +333,7 @@ export class PhastService {
   }
 
 
-  leakageLosses(input: LeakageLoss, settings: Settings) {
+  leakageLosses(input: LeakageLoss, settings: Settings, calculatorEnergyUnit = '') {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -345,7 +345,9 @@ export class PhastService {
     } else {
       results = phastAddon.leakageLosses(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+
+    let conversionUnit: string = calculatorEnergyUnit? calculatorEnergyUnit : settings.energyResultUnit;
+    results = this.convertResult(results, conversionUnit);
     return results;
   }
 
@@ -782,7 +784,7 @@ export class PhastService {
   sumLeakageLosses(losses: LeakageLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      let tmpForm = this.gasLeakageLossesService.initFormFromLoss(loss);
+      let tmpForm = this.leakageFormService.initFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         sum += this.leakageLosses(loss, settings);
       }
