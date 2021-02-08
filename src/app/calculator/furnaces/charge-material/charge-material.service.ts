@@ -148,15 +148,13 @@ export class ChargeMaterialService {
   addLoss(hoursPerYear: number, modificationExists: boolean) {
     let currentBaselineData: Array<ChargeMaterial> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
-    let chargeMaterialType = index == 0? 'Solid' : currentBaselineData[index - 1].chargeMaterialType;
-    let baselineObj: ChargeMaterial = this.initDefaultLoss(index, chargeMaterialType);
+    let baselineObj: ChargeMaterial = this.initDefaultLoss(index, currentBaselineData[0]);
     currentBaselineData.push(baselineObj)
     this.baselineData.next(currentBaselineData);
     
     if (modificationExists) {
       let currentModificationData: Array<ChargeMaterial> = this.modificationData.getValue();
-      let modificationObj: ChargeMaterial = this.initDefaultLoss(index, chargeMaterialType);
-
+      let modificationObj: ChargeMaterial = this.initDefaultLoss(index, currentBaselineData[0]);
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
     }
@@ -230,7 +228,7 @@ export class ChargeMaterialService {
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData = this.initDefaultLoss(0, 'Solid');
+    let emptyBaselineData = this.initDefaultLoss(0, undefined);
 
     let energyData: EnergyData = {
       energySourceType: "Fuel",
@@ -246,7 +244,9 @@ export class ChargeMaterialService {
     this.energySourceType.next('Fuel');
   }
 
-  initDefaultLoss(index: number, materialType: string) {
+  initDefaultLoss(index: number, chargeMaterial?: ChargeMaterial) {
+    let materialType = chargeMaterial? chargeMaterial.chargeMaterialType : 'Solid';
+
     let defaultLoss: ChargeMaterial = {
       chargeMaterialType: materialType,
       liquidChargeMaterial: undefined,
