@@ -24,7 +24,6 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { Settings } from '../shared/models/settings';
 
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
-import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
 import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
 import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
@@ -39,6 +38,7 @@ import { GasMaterialFormService } from '../calculator/furnaces/charge-material/g
 import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
+import { CoolingFormService } from '../calculator/furnaces/cooling/cooling-form.service';
 
 declare var phastAddon: any;
 
@@ -57,7 +57,7 @@ export class PhastService {
     private convertUnitsService: ConvertUnitsService,
     private atmosphereFormService: AtmosphereFormService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
-    private coolingLossesService: CoolingLossesService,
+    private coolingFormService: CoolingFormService,
     private wallFormService: WallFormService,
     private fixtureLossesService: FixtureLossesService,
     private gasLeakageLossesService: GasLeakageLossesService,
@@ -691,12 +691,12 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.coolingLossType === 'Gas') {
-        let tmpForm = this.coolingLossesService.initGasFormFromLoss(loss);
+        let tmpForm = this.coolingFormService.initGasFormFromLoss(loss);
         if (tmpForm.status === 'VALID') {
           sum += this.gasCoolingLosses(loss.gasCoolingLoss, settings);
         }
       } else if (loss.coolingLossType === 'Liquid') {
-        let tmpForm = this.coolingLossesService.initLiquidFormFromLoss(loss);
+        let tmpForm = this.coolingFormService.initLiquidFormFromLoss(loss);
         if (tmpForm.status === 'VALID') {
           sum += this.liquidCoolingLosses(loss.liquidCoolingLoss, settings);
         }
