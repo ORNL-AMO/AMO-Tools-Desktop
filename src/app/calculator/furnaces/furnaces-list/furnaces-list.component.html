@@ -48,6 +48,20 @@
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/cooling.png" class="calc-img"
+                        [routerLink]="['/calculators/cooling']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/cooling']">Cooling</a>
+                <p>
+                    Estimate losses from a cooling a heating system.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/furnace-icons/wall-loss.png" class="calc-img"
                     [routerLink]="['/calculators/wall-loss']">
                 </div>

@@ -91,6 +91,7 @@ import { OpeningComponent } from '../calculator/furnaces/opening/opening.compone
 import { AirHeatingComponent } from '../calculator/furnaces/air-heating/air-heating.component';
 import { O2UtilizationRateComponent } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.component';
 import { WasteWaterListComponent } from '../calculator/waste-water/waste-water-list/waste-water-list.component';
+import { CoolingComponent } from '../calculator/furnaces/cooling/cooling.component';
 
 export const coreRoutes: Routes = [
   {
@@ -330,6 +331,10 @@ export const coreRoutes: Routes = [
           {
             path: 'atmosphere',
             component: AtmosphereComponent
+          },
+          {
+            path: 'cooling',
+            component: CoolingComponent
           },
           {
             path: 'wall-loss',
