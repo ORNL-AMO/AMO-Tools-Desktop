@@ -6,8 +6,8 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { EnergyData } from '../../../shared/models/phast/losses/chargeMaterial';
 import { CoolingLoss, CoolingLossOutput, CoolingLossResults } from '../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../shared/models/settings';
+import { EnergyFormService } from '../charge-material/energy-form/energy-form.service';
 import { CoolingFormService } from './cooling-form.service';
-import { EnergyFormService } from './energy-form/energy-form.service';
 
 @Injectable()
 export class CoolingService {

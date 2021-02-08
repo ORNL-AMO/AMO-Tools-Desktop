@@ -16,8 +16,6 @@ import { LiquidCoolingFormComponent } from './liquid-cooling-form/liquid-cooling
 import { LossNameFormComponent } from './loss-name-form/loss-name-form.component';
 import { EnergyFormComponent } from './energy-form/energy-form.component';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
-import { EnergyFormService } from './energy-form/energy-form.service';
-
 
 
 @NgModule({
@@ -45,7 +43,6 @@ import { EnergyFormService } from './energy-form/energy-form.service';
     CoolingComponent
   ],
   providers: [
-    EnergyFormService,
     CoolingService,
     CoolingFormService
   ]
