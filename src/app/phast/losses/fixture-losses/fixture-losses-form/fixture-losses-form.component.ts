@@ -7,8 +7,6 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
-import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
-import { FixtureLossesService } from '../fixture-losses.service';
 
 @Component({
   selector: 'app-fixture-losses-form',
@@ -39,12 +37,10 @@ export class FixtureLossesFormComponent implements OnInit {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
-  specificHeatWarning: string = null;
-  feedRateWarning: string = null;
   materials: Array<SolidLoadChargeMaterial>;
   showModal: boolean = false;
   idString: string;
-  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private fixtureLossesService: FixtureLossesService) { }
+  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -69,7 +65,6 @@ export class FixtureLossesFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.checkWarnings();
   }
 
   disableForm() {
@@ -120,19 +115,11 @@ export class FixtureLossesFormComponent implements OnInit {
     }
   }
 
-  checkWarnings() {
-    let fixtureLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(this.lossesForm);
-    let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(fixtureLoss);
-    this.specificHeatWarning = tmpWarnings.specificHeatWarning;
-    this.feedRateWarning = tmpWarnings.feedRateWarning;
-    let hasWarning: boolean = ((this.feedRateWarning !== null) || (this.specificHeatWarning !== null));
-    this.inputError.emit(hasWarning);
-  }
   save() {
-    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
+  
   setProperties() {
     let selectedMaterial: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
     if (selectedMaterial) {
