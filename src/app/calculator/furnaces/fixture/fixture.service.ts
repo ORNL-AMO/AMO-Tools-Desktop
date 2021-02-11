@@ -119,7 +119,7 @@ export class FixtureService {
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData: FixtureLoss = this.initDefaultLoss(0);
+    let emptyBaselineData: FixtureLoss = this.initDefaultLoss(0, undefined);
     let baselineData: Array<FixtureLoss> = [emptyBaselineData];
     this.baselineData.next(baselineData);
     this.modificationData.next(undefined);
@@ -127,7 +127,22 @@ export class FixtureService {
 
   }
 
-  initDefaultLoss(index: number, hoursPerYear: number = 8760) {
+  initDefaultLoss(index: number, treasureHours: number, fixtureLoss?: FixtureLoss) {
+    let fuelCost: number = 0;
+    let availableHeat: number = 100;
+    let hoursPerYear = 8760;
+
+    if (fixtureLoss) {
+      fuelCost = fixtureLoss.fuelCost;
+      availableHeat = fixtureLoss.availableHeat;
+
+      if (treasureHours) {
+        hoursPerYear = treasureHours;
+      } else {
+        hoursPerYear = fixtureLoss.hoursPerYear;
+      }
+    }
+
     let defaultBaselineData: FixtureLoss = {
       specificHeat: 0,
       feedRate: 0,
@@ -138,9 +153,9 @@ export class FixtureService {
       heatLoss: 0,
       name: 'Loss #' + (index + 1),
       energySourceType: 'Fuel',
-      fuelCost: 0,
+      fuelCost: fuelCost,
       hoursPerYear: hoursPerYear,    
-      availableHeat: 100,  
+      availableHeat: availableHeat,  
     };
 
     return defaultBaselineData;
@@ -197,25 +212,13 @@ export class FixtureService {
   addLoss(treasureHours, modificationExists: boolean) {
     let currentBaselineData: Array<FixtureLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
-    let hoursPerYear = treasureHours? treasureHours : currentBaselineData[index - 1].hoursPerYear;
-    let baselineObj: FixtureLoss = this.initDefaultLoss(index, hoursPerYear);
-    
-    if (index > 0) {
-      baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-      baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-    }
+    let baselineObj: FixtureLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
     currentBaselineData.push(baselineObj)
     this.baselineData.next(currentBaselineData);
     
     if (modificationExists) {
       let currentModificationData: Array<FixtureLoss> = this.modificationData.getValue();
-      let modificationObj: FixtureLoss = this.initDefaultLoss(index, hoursPerYear);
-      
-      if (index > 0) {
-        modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-        modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-      }
-
+      let modificationObj: FixtureLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
     }
