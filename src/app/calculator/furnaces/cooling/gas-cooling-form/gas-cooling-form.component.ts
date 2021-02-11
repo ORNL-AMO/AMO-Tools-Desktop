@@ -74,11 +74,7 @@ export class GasCoolingFormComponent implements OnInit {
       this.initForm();
     });
     this.outputSubscription = this.coolingService.output.subscribe(output => {
-      if (this.isBaseline) {
-        this.lossResult = output.baseline.losses[this.index];
-      } else {
-        this.lossResult = output.modification.losses[this.index];
-      }
+      this.setLossResult(output);
     });
   }
 

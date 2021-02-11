@@ -1,16 +1,3 @@
-<div *ngIf="!isBaseline" class="form-group">
-  <label class="small" for="coolingMedium">Cooling Medium</label>
-    <select disabled class="form-control" id="coolingMedium" 
-    [(ngModel)]="coolingMedium"
-    (focus)="focusField('coolingMedium')"
-    >
-    <option [ngValue]="'Gas'">Air</option>
-    <option [ngValue]="'Liquid'">Water</option>
-      <!-- cosmetic labels/options - input handled the same as Gas/Liquid  -->
-    <option [ngValue]="'Gas'">Other Gas</option>
-    <option [ngValue]="'Liquid'">Other Liquid</option>
-  </select>
-</div>
     
     <form [formGroup]="coolingForm">
       <div class="form-section">

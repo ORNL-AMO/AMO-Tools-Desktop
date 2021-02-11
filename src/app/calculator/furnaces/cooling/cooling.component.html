@@ -44,9 +44,8 @@
 						<div class="form-group">
 							<label class="small" for="{{'coolingMedium_'+i}}">Cooling Medium</label>
 							<select 
-							[disabled]="!baselineSelected" class="form-control" id="coolingMedium" 
+							[disabled]="!baselineSelected" class="form-control" id="{{'coolingMedium_'+i}}" 
 							[(ngModel)]="coolingLoss.coolingMedium"
-							(change)="changeCoolingMedium(i, coolingLoss.coolingMedium)" 
 							(focus)="focusField('coolingMedium')"
 							>
 							<option [ngValue]="'Gas'">Air</option>
@@ -86,6 +85,20 @@
 							[isBaseline]="false" [settings]="settings"></app-loss-name-form>
 						<app-cooling-energy-form *ngIf="i == 0" class="form-section" [selected]="!baselineSelected"
 							[isBaseline]="false" [settings]="settings" [operatingHours]="operatingHours"></app-cooling-energy-form>
+							<div class="form-group">
+								<label class="small" for="{{'coolingMedium_'+i}}">Cooling Medium</label>
+								<select 
+								[disabled]="baselineSelected" class="form-control" id="{{'coolingMedium_'+i}}" 
+								[(ngModel)]="coolingLoss.coolingMedium"
+								(focus)="focusField('coolingMedium')"
+								>
+								<option [ngValue]="'Gas'">Air</option>
+								<option [ngValue]="'Liquid'">Water</option>
+									<!-- cosmetic labels/options - input handled the same as Gas/Liquid  -->
+								<option [ngValue]="'Gas'">Other Gas</option>
+								<option [ngValue]="'Liquid'">Other Liquid</option>
+								</select>
+							</div>
 						<app-gas-cooling-form *ngIf="coolingLoss.coolingMedium == 'Gas'" [index]="i" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-gas-cooling-form>
 						<app-liquid-cooling-form *ngIf="coolingLoss.coolingMedium == 'Liquid'" [index]="i" [settings]="settings" [selected]="!baselineSelected" [isBaseline]="false"></app-liquid-cooling-form>
 					</div>

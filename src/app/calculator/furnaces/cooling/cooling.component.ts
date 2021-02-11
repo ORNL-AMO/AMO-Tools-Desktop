@@ -102,15 +102,6 @@ export class CoolingComponent implements OnInit {
     this.coolingService.addLoss(this.settings, treasureHours, this.modificationExists);
   }
 
-  changeCoolingMedium(index: number, medium: string) {
-    if (this.modificationData && this.modificationData.length > 0) {
-      this.modificationData[index].coolingMedium = medium;
-      this.coolingService.modificationData.next(this.modificationData);
-    }
-    this.coolingService.initDefaultEmptyOutput();
-  }
-
-
   createModification() {
     this.coolingService.initModification();
     this.modificationExists = true;
