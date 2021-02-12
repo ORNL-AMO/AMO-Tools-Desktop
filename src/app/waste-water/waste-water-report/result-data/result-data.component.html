@@ -43,7 +43,7 @@
             </tr>
             <label class="group-label mt-2">Influent</label>
             <tr>
-                <td>Total Average Daily Flow Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
+                <td>Total Average Daily Flow Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">MGD</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{wasteWater.baselineData.outputs.TotalAverageDailyFlowRate | number:'1.0-1'}}</td>
@@ -52,7 +52,7 @@
                     {{modification.outputs.TotalAverageDailyFlowRate | number:'1.0-1'}}</td>
             </tr>
             <tr>
-                <td>Aeration Volume in Service (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mil gal</span><span
+                <td>Aeration Volume in Service (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">MGD</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup></span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{wasteWater.baselineData.outputs.VolumeInService | number:'1.0-1'}}</td>
@@ -140,7 +140,7 @@
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
-                <td>TSS in Activate Sludge Effluent (<span
+                <td>TSS in Activated Sludge Effluent (<span
                         *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
@@ -150,7 +150,7 @@
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
-                <td>Total Oxygen Requirements (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
+                <td>Total O<sub>2</sub> Requirements (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{wasteWater.baselineData.outputs.TotalOxygenRequirements | number:'1.0-1'}}</td>
@@ -159,7 +159,7 @@
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
-                <td>Total Oxygen Req'd - Denitrification (<span
+                <td>Total O<sub>2</sub> Req'd - Denitrification (<span
                         *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
@@ -169,7 +169,7 @@
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
-                <td>Total Oxygen Supplied (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
+                <td>Total O<sub>2</sub> Supplied (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/day</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/day</span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{wasteWater.baselineData.outputs.TotalOxygenSupplied | number:'1.0-1'}}</td>
@@ -187,7 +187,7 @@
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
-                <td>RAS Flow Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
+                <td>RAS Flow Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">MGD</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{wasteWater.baselineData.outputs.RASFlowRate | number:'1.0-2'}}</td>
@@ -204,7 +204,7 @@
             | number:'1.0-1'}}</td>
             </tr>
             <tr>
-                <td>WAS Flow Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
+                <td>WAS Flow Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">MGD</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{wasteWater.baselineData.outputs.WASFlowRate | number:'1.0-2'}}</td>
@@ -213,7 +213,7 @@
             | number:'1.0-2'}}</td>
             </tr>
             <tr>
-                <td>RAS TSS Concentration (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">mgd</span><span
+                <td>RAS TSS Concentration (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">MGD</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/day</span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{wasteWater.baselineData.outputs.RASTSSConcentration | number:'1.0-1'}}</td>
@@ -290,7 +290,7 @@
             </tr>
             <label class="group-label mt-2">Aerator</label>
             <tr>
-                <td>Field Oxygen Transfer Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
+                <td>Field O<sub>2</sub> Transfer Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
                         O<sub>2</sub>/hp-hr</span><span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
                         O<sub>2</sub>/kWh</span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">

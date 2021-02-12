@@ -15,7 +15,7 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     selected: true
 }, {
     name: 'HeterBio',
-    label: 'Heterotrophic biomass concentration',
+    label: 'Heterotrophic Biomass Concentration',
     metricUnit: 'mg/L',
     imperialUnit: 'mg/L',
     selected: false
@@ -75,7 +75,7 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     selected: false
 }, {
     name: 'OxygenRqd',
-    label: 'Oxygen Required for CBOD Removal',
+    label: 'O&#x2082; Required for CBOD Removal',
     metricUnit: 'kg/day',
     imperialUnit: 'lb/day',
     selected: false
@@ -95,13 +95,13 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     selected: false
 }, {
     name: 'NRemovedMgl',
-    label: 'N2 Removed',
-    metricUnit: 'mgl',
-    imperialUnit: 'mgl',
+    label: 'Nitrogren Removed in Cell Mass',
+    metricUnit: 'mg/L',
+    imperialUnit: 'mg/L',
     selected: false
 }, {
     name: 'NitO2Dem',
-    label: 'Oxygen demand due to nitrification',
+    label: 'O&#x2082; demand due to nitrification',
     metricUnit: 'kg/day',
     imperialUnit: 'lb/day',
     selected: false
@@ -113,13 +113,13 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     selected: true
 }, {
     name: 'EffNH3N',
-    label: 'Effluent NH&#x00B3;-N Concentration',
+    label: 'Effluent NH&#8323;-N Concentration',
     metricUnit: 'mg/L',
     imperialUnit: 'mg/L',
     selected: false
 }, {
     name: 'EffNo3N',
-    label: 'Effluent NO&#x00B3;-N Concentration',
+    label: 'Effluent NO&#8323;-N Concentration',
     metricUnit: 'mg/L',
     imperialUnit: 'mg/L',
     selected: false
@@ -133,7 +133,7 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     name: 'WAS',
     label: 'WAS Flow',
     metricUnit: 'm&#x00B3;/day',
-    imperialUnit: 'mgd',
+    imperialUnit: 'MGD',
     selected: false
 }, {
     name: 'EstimatedEff',
@@ -143,9 +143,9 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     selected: true
 }, {
     name: 'EstimRas',
-    label: 'Ras Flow Rate',
+    label: 'RAS Flow Rate',
     metricUnit: 'm&#x00B3;/day',
-    imperialUnit: 'mgd',
+    imperialUnit: 'MGD',
     selected: false
 }, {
     name: 'FmRatio',
