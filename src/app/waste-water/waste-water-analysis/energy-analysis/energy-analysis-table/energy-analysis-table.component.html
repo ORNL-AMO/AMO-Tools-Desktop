@@ -31,10 +31,10 @@
                     {{baselineResults.SolidsRetentionTime}}
                 </td>
                 <td>
-                    <span *ngIf="baselineResults.AeEnergy">
-                        {{baselineResults.AeEnergy | number:'1.0-0'}} MWh/yr
+                    <span *ngIf="baselineResults.AeEnergyAnnual">
+                        {{baselineResults.AeEnergyAnnual | number:'1.0-0'}} MWh/yr
                     </span>
-                    <span *ngIf="!baselineResults.AeEnergy">
+                    <span *ngIf="!baselineResults.AeEnergyAnnual">
                         &mdash; kWh/yr
                     </span>
                 </td>
@@ -62,10 +62,10 @@
                     {{modificationResults.results.SolidsRetentionTime}}
                 </td>
                 <td>
-                    <span *ngIf="modificationResults.results.AeEnergy">
-                        {{modificationResults.results.AeEnergy | number:'1.0-0'}} MWh/yr
+                    <span *ngIf="modificationResults.results.AeEnergyAnnual">
+                        {{modificationResults.results.AeEnergyAnnual | number:'1.0-0'}} MWh/yr
                     </span>
-                    <span *ngIf="!modificationResults.results.AeEnergy">
+                    <span *ngIf="!modificationResults.results.AeEnergyAnnual">
                         &mdash; MWh/yr
                     </span>
                 </td>

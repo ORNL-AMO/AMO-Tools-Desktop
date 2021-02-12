@@ -182,8 +182,8 @@ export class DirectorySummaryComponent implements OnInit {
       if (assessment.wasteWater.setupDone) {
         let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
         let results: WasteWaterResults = this.wasteWaterService.calculateResults(assessment.wasteWater.baselineData.activatedSludgeData, assessment.wasteWater.baselineData.aeratorPerformanceData, assessment.wasteWater.systemBasics, settings);
-        if (results.AeEnergy != undefined) {
-          totalEnergyUsed = results.AeEnergy + totalEnergyUsed;
+        if (results.AeEnergyAnnual != undefined) {
+          totalEnergyUsed = results.AeEnergyAnnual + totalEnergyUsed;
           totalCost = results.AeCost + totalCost;
         }
       }

@@ -303,9 +303,9 @@
             <tr>
                 <th>Aerator Energy Use (MWh/yr)</th>
                 <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    {{wasteWater.baselineData.outputs.AeEnergy | number:'1.0-0'}}</th>
+                    {{wasteWater.baselineData.outputs.AeEnergyAnnual | number:'1.0-0'}}</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
-                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.AeEnergy
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.AeEnergyAnnual
             | number:'1.0-0'}}</th>
             </tr>
             <tr>
