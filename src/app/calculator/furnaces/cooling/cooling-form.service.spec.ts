@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { EnergyFormService } from './energy-form.service';
+import { CoolingFormService } from './cooling-form.service';
 
-describe('EnergyFormService', () => {
-  let service: EnergyFormService;
+describe('CoolingFormService', () => {
+  let service: CoolingFormService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(EnergyFormService);
+    service = TestBed.inject(CoolingFormService);
   });
 
   it('should be created', () => {

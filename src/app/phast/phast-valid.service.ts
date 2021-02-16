@@ -9,7 +9,6 @@ import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-
 import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
 
 import { PHAST, PhastValid } from '../shared/models/phast/phast';
-import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
@@ -23,6 +22,7 @@ import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosph
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
 import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
+import { CoolingFormService } from '../calculator/furnaces/cooling/cooling-form.service';
 
 
 @Injectable()
@@ -33,7 +33,7 @@ export class PhastValidService {
     private atmosphereFormService: AtmosphereFormService,
     private slagService: SlagService,
     private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
-    private coolingLossesService: CoolingLossesService,
+    private coolingFormService: CoolingFormService,
     private wallFormService: WallFormService,
     private flueGasFormService: FlueGasFormService,
     private extendedSurfaceLossesService: ExtendedSurfaceLossesService,
@@ -226,9 +226,9 @@ export class PhastValidService {
       let coolingForm: FormGroup;
       phast.losses.coolingLosses.forEach(loss => {
         if (loss.gasCoolingLoss) {
-          coolingForm = this.coolingLossesService.initGasFormFromLoss(loss);
+          coolingForm = this.coolingFormService.initGasFormFromLoss(loss);
         } else if (loss.liquidCoolingLoss) {
-          coolingForm = this.coolingLossesService.initLiquidFormFromLoss(loss);
+          coolingForm = this.coolingFormService.initLiquidFormFromLoss(loss);
         }
 
         if (coolingForm.status === 'INVALID') {
