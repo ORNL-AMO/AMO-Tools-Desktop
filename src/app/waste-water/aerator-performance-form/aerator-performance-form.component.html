@@ -54,7 +54,27 @@
                     less than {{form.controls.Beta.errors.min.min}}</span>
             </span>
         </div>
-        <!-- SOTR -->
+
+            <!-- Aerator -->
+            <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Aerator, 'invalid': form.controls.Aerator.invalid}">
+            <label for="{{'Aerator_'+idString}}">Aerator</label>
+            <select class="form-control" formControlName="Aerator" (change)="setDefaultSOTR()"
+                (focus)="focusField('aerator')">
+              <optgroup label="Diffused Air Systems">
+                <option *ngFor="let aerator of aerationRanges.diffusers" [ngValue]="aerator.label">{{aerator.label}}</option>
+              </optgroup>
+              <optgroup label="Mechanical Aerators">
+                <option *ngFor="let aerator of aerationRanges.mechanical" [ngValue]="aerator.label">{{aerator.label}}</option>
+              </optgroup>
+              <optgroup label="Hybrid Aerators">
+                <option *ngFor="let aerator of aerationRanges.hybrid" [ngValue]="aerator.label">{{aerator.label}}</option>
+              </optgroup>
+              <option [ngValue]="'Other'">Other</option>
+            </select>
+            </div>
+
+            <!-- SOTR -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.SOTR, 'invalid': form.controls.SOTR.invalid}">
             <label for="{{'SOTR_'+idString}}">Standard Oxygen Transfer Rate (SOTR)</label>
@@ -141,7 +161,7 @@
             <label for="{{'TypeAerators_'+idString}}">Type of Aerator</label>
             <select class="form-control" formControlName="TypeAerators" (change)="save()"
                 (focus)="focusField('TypeAerators')">
-                <option *ngFor="let areatorType of areatorTypes" [ngValue]="areatorType.value">{{areatorType.display}}
+                <option *ngFor="let aeratorType of aeratorTypes" [ngValue]="aeratorType.value">{{aeratorType.display}}
                 </option>
             </select>
         </div>
@@ -182,5 +202,18 @@
                     be less than {{form.controls.EnergyCostUnit.errors.min.min | currency}}</span>
             </span>
         </div>
+        <!-- AnoxicZoneCondition -->
+            <div class="form-group"
+            [ngClass]="{'indicate-different': aeratorPerformanceDifferent.AnoxicZoneCondition, 'invalid': form.controls.AnoxicZoneCondition.invalid}">
+            <label for="{{'AnoxicZoneCondition_'+idString}}">
+                Do you have an anoxic zone with returned mixed liquor from the aerobic zone?
+            </label>
+            <select class="form-control" formControlName="AnoxicZoneCondition" (change)="save()"
+                (focus)="focusField('AnoxicZoneCondition')">
+                <option [ngValue]="false">No</option>
+                <option [ngValue]="true">Yes</option>
+            </select>
+        </div>
+
     </div>
 </form>

@@ -45,8 +45,10 @@ export class CompareService {
       Elevation: baselineData.Elevation != modificationData.Elevation,
       OperatingTime: baselineData.OperatingTime != modificationData.OperatingTime,
       TypeAerators: baselineData.TypeAerators != modificationData.TypeAerators,
+      Aerator: baselineData.Aerator != modificationData.Aerator,
       Speed: baselineData.Speed != modificationData.Speed,
       EnergyCostUnit: baselineData.EnergyCostUnit != modificationData.EnergyCostUnit,
+      AnoxicZoneCondition: baselineData.AnoxicZoneCondition != modificationData.AnoxicZoneCondition,
     }
   }
 
@@ -132,8 +134,10 @@ export interface AeratorPerformanceDifferent {
   Aeration: boolean,
   Elevation: boolean,
   OperatingTime: boolean,
+  Aerator: boolean,
   TypeAerators: boolean,
   Speed: boolean,
   EnergyCostUnit: boolean,
+  AnoxicZoneCondition: boolean
 }
 

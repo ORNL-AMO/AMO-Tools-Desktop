@@ -70,13 +70,88 @@
                 equipment at standard conditions to determine the SOTR. The design engineer must adjust the SOTR for
                 field conditions.
                 <br>
+                
+                <hr class="my-1 hr-spacer">
+                Aeration Device Range of Standard O2 Transfer Rates ( <span
+                    *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                )
+            </small>
+            <div class="w-100 justify-content-center mt-1">
+                <table class="table table-hover table-striped">
+                    <tbody>
+                        <tr>
+                            <th class="w-50"></th>
+                            <th colspan="2" class="w-50 text-center">
+                                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="w-50"></th>
+                             <th class="text-center">
+                                Minimum
+                            </th>
+                            <th class="text-center">
+                                Maximum
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Diffused Air Systems</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.diffusers">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.min}}</td>
+                            <td class="w-25 text-center">{{range.max}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Mechanical Aerators</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.mechanical">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.min}}</td>
+                            <td class="w-25 text-center">{{range.max}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Hybrid Aerators</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.hybrid">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.min}}</td>
+                            <td class="w-25 text-center">{{range.max}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="small alert-warning">
+                Please note that standard oxygen transfer capacity for diffused aeration systems is typically expressed
+                as a percent transfer efficiency and was converted to <span
+                    *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span> by assuming a
+                compressor efficiency of
+                75%, tank depth of 15 ft (4.572 m), and diffusers at 1.5 ft (0.4572 m) above tank bottom.
+            </div>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="focusedField == 'aerator'">
+        <h6>
+            Aerator
+            <br>
+            <small class="text-muted">
+                Standard oxygen transfer rate (SOTR) is the oxygen transfer rate in tap water at 20 °C, zero DO
+                concentration, and sea level (one atmosphere of pressure). Aeration equipment manufacturers test their
+                equipment at standard conditions to determine the SOTR. The design engineer must adjust the SOTR for
+                field conditions.
+                <br>
                 <hr class="my-1 hr-spacer">
                 Standard oxygen transfer rate in tap water at 20°C, zero DO, & sea level <span
                     *ngIf="settings.unitsOfMeasure == 'Imperial'">lb O<sub>2</sub>/(hp-hr)</span>
                 <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
-                <hr>
             </small>
-            <div class="w-100 justify-content-center">
+            <div class="w-100 justify-content-center mt-1">
                 <table class="table table-hover table-striped">
                     <tbody>
                         <tr>
@@ -86,13 +161,34 @@
                                 <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg O<sub>2</sub>/(kWh)</span>
                             </th>
                         </tr>
-                        <tr *ngFor="let standardSOTRValue of standardSOTRValues">
-                            <td class="w-50 text-center">{{standardSOTRValue.label}}</td>
-                            <td class="w-50 text-center">{{standardSOTRValue.value}}</td>
+                        <tr>
+                            <th class="text-center">Diffused Air Systems</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.diffusers">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.default}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Mechanical Aerators</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.mechanical">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.default}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Hybrid Aerators</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr *ngFor="let range of aerationRanges.hybrid">
+                            <td class="w-50 text-center">{{range.label}}</td>
+                            <td class="w-25 text-center">{{range.default}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
             <div class="small alert-warning">
                 Please note that standard oxygen transfer capacity for diffused aeration systems is typically expressed
                 as a percent transfer efficiency and was converted to <span

@@ -18,11 +18,15 @@ export class ResultsTableComponent implements OnInit {
   showModification: boolean;
   modificationName: string;
   settings: Settings;
+  baselineConditions: DisplayConditions;
+  modificationConditions: DisplayConditions;
   constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
+    this.initDisplayConditions();
     this.settings = this.wasteWaterService.settings.getValue();
     this.wastWaterSub = this.wasteWaterService.wasteWater.subscribe(val => {
+      this.checkDisplayConditions(val.baselineData, this.baselineConditions);
       this.baselineResults = this.wasteWaterService.calculateResults(val.baselineData.activatedSludgeData, val.baselineData.aeratorPerformanceData, val.systemBasics, this.settings);
       let modificationData: WasteWaterData = this.wasteWaterService.getModificationFromId();
       let mainTab: string = this.wasteWaterService.mainTab.getValue();
@@ -30,6 +34,7 @@ export class ResultsTableComponent implements OnInit {
         this.modificationValid = modificationData.valid;
         this.modificationName = modificationData.name;
         this.modificationResults = this.wasteWaterService.calculateResults(modificationData.activatedSludgeData, modificationData.aeratorPerformanceData, val.systemBasics, this.settings, this.baselineResults);
+        this.checkDisplayConditions(modificationData, this.modificationConditions);
         this.showModification = true;
       } else {
         this.modificationName = undefined;
@@ -43,4 +48,17 @@ export class ResultsTableComponent implements OnInit {
     this.wastWaterSub.unsubscribe();
   }
 
+  initDisplayConditions() {
+    this.baselineConditions = {hasAnoxicZone: undefined};
+    this.modificationConditions = {hasAnoxicZone: undefined};
+  }
+
+  checkDisplayConditions(wasteWaterData: WasteWaterData, conditions: DisplayConditions) {
+    conditions.hasAnoxicZone = wasteWaterData.aeratorPerformanceData.AnoxicZoneCondition == true
+  }
+
+}
+
+export interface DisplayConditions {
+  hasAnoxicZone: boolean
 }
