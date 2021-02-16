@@ -8,6 +8,7 @@ export interface DataTableVariable {
 }
 
 export const DataTableVariables: Array<DataTableVariable> = [{
+    // S - 'soluble' e - 'effluent' 
     name: 'Se',
     label: 'Effluent CBOD5 Concentration (S&#8337;)',
     metricUnit: 'mg/L',
@@ -136,6 +137,7 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     imperialUnit: 'mgd',
     selected: false
 }, {
+    // Total Effluent - soluable and insoluble
     name: 'EstimatedEff',
     label: 'Total Effluent CBOD5',
     metricUnit: 'mg/L',

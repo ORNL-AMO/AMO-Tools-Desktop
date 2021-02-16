@@ -56,6 +56,8 @@ import { WasteWaterSummaryComponent } from './report-summary/waste-water-summary
 import { WasteWaterReportModule } from '../waste-water/waste-water-report/waste-water-report.module';
 import { WasteWaterRollupComponent } from './waste-water-rollup/waste-water-rollup.component';
 import { WasteWaterRollupPrintComponent } from './waste-water-rollup/waste-water-rollup-print/waste-water-rollup-print.component';
+import { NutrientRemovalTableComponent } from './waste-water-rollup/nutrient-removal-table/nutrient-removal-table.component';
+import { EffluentEnergyUseTableComponent } from './waste-water-rollup/effluent-energy-use-table/effluent-energy-use-table.component';
 
 @NgModule({
   imports: [
@@ -110,6 +112,8 @@ import { WasteWaterRollupPrintComponent } from './waste-water-rollup/waste-water
     WasteWaterSummaryComponent,
     WasteWaterRollupComponent,
     WasteWaterRollupPrintComponent,
+    NutrientRemovalTableComponent,
+    EffluentEnergyUseTableComponent,
 
   ],
   providers: [

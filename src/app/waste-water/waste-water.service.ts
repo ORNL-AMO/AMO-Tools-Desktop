@@ -92,9 +92,9 @@ export class WasteWaterService {
       }
       let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
       //return per month, convert to years
-      wasteWaterResults.AeEnergy = wasteWaterResults.AeEnergy * systemBasics.operatingMonths;
+      wasteWaterResults.AeEnergyAnnual = wasteWaterResults.AeEnergy * systemBasics.operatingMonths;
       wasteWaterResults.AeCost = wasteWaterResults.AeCost * systemBasics.operatingMonths;
-      wasteWaterResults.AeEnergy = this.convertUnitsService.value(wasteWaterResults.AeEnergy).from('kWh').to('MWh');
+      wasteWaterResults.AeEnergyAnnual = this.convertUnitsService.value(wasteWaterResults.AeEnergyAnnual).from('kWh').to('MWh');
       if (settings.unitsOfMeasure != 'Imperial') {
         wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
       }
@@ -134,6 +134,7 @@ export class WasteWaterService {
       EffluentNO3_N: undefined,
       EffluentNO3_N_W_Denit: undefined,
       AeEnergy: undefined,
+      AeEnergyAnnual: undefined,
       AeCost: undefined,
       FieldOTR: undefined,
       costSavings: 0,
@@ -146,7 +147,7 @@ export class WasteWaterService {
 
   setSavingsResults(modificationResults: WasteWaterResults, baselineResults: WasteWaterResults): WasteWaterResults {
     modificationResults.costSavings = baselineResults.AeCost - modificationResults.AeCost;
-    modificationResults.energySavings = baselineResults.AeEnergy - modificationResults.AeEnergy;
+    modificationResults.energySavings = baselineResults.AeEnergyAnnual - modificationResults.AeEnergyAnnual;
     modificationResults.percentCostSavings = (modificationResults.costSavings / baselineResults.AeCost) * 100;
     return modificationResults;
   }

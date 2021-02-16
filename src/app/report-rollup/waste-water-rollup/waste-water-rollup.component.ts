@@ -5,6 +5,7 @@ import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
 import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
 import * as _ from 'lodash';
+import { EffluentEnergyResults, NutrientRemovalResults } from '../report-rollup-models';
 
 @Component({
   selector: 'app-waste-water-rollup',
@@ -24,6 +25,8 @@ export class WasteWaterRollupComponent implements OnInit {
   yAxisLabel: string;
   pieChartData: Array<PieChartDataItem>;
   rollupSummaryTableData: Array<RollupSummaryTableData>;
+  rollupEffluentEnergyTable: Array<EffluentEnergyResults>;
+  rollupNutrientTable: Array<NutrientRemovalResults>;
   // settings: Settings;
   constructor(private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
 
@@ -103,8 +106,8 @@ export class WasteWaterRollupComponent implements OnInit {
     } else if (dataOption == 'energy') {
       this.wasteWaterReportRollupService.selectedWasteWaterResults.forEach(result => {
         labels.push(result.name);
-        costSavings.push(result.baselineResults.AeEnergy - result.modificationResults.AeEnergy);
-        projectedCosts.push(result.modificationResults.AeEnergy);
+        costSavings.push(result.baselineResults.AeEnergyAnnual - result.modificationResults.AeEnergyAnnual);
+        projectedCosts.push(result.modificationResults.AeEnergyAnnual);
       })
     }
     return {
@@ -116,17 +119,17 @@ export class WasteWaterRollupComponent implements OnInit {
 
   setPieChartData() {
     this.pieChartData = new Array();
-    let totalEnergyUse: number = _.sumBy(this.wasteWaterReportRollupService.selectedWasteWaterResults, (result) => { return result.baselineResults.AeEnergy; });
+    let totalEnergyUse: number = _.sumBy(this.wasteWaterReportRollupService.selectedWasteWaterResults, (result) => { return result.baselineResults.AeEnergyAnnual; });
     let totalCost: number = _.sumBy(this.wasteWaterReportRollupService.selectedWasteWaterResults, (result) => { return result.baselineResults.AeCost; });
     //starting with 2, summary table uses 0 and 1
     let colorIndex: number = 2;
     this.wasteWaterReportRollupService.selectedWasteWaterResults.forEach(result => {
       this.pieChartData.push({
         equipmentName: result.name,
-        energyUsed: result.baselineResults.AeEnergy,
+        energyUsed: result.baselineResults.AeEnergyAnnual,
         annualCost: result.baselineResults.AeCost,
         percentCost: result.baselineResults.AeCost / totalCost * 100,
-        percentEnergy: result.baselineResults.AeEnergy / totalEnergyUse * 100,
+        percentEnergy: result.baselineResults.AeEnergyAnnual / totalEnergyUse * 100,
         color: graphColors[colorIndex]
       });
       colorIndex++;
@@ -139,16 +142,20 @@ export class WasteWaterRollupComponent implements OnInit {
       this.rollupSummaryTableData.push({
         equipmentName: dataItem.name,
         modificationName: dataItem.modName,
-        baselineEnergyUse: dataItem.baselineResults.AeEnergy,
+        baselineEnergyUse: dataItem.baselineResults.AeEnergyAnnual,
         modificationCost: dataItem.modificationResults.AeCost,
-        modificationEnergyUse: dataItem.baselineResults.AeEnergy,
+        modificationEnergyUse: dataItem.baselineResults.AeEnergyAnnual,
         baselineCost: dataItem.baselineResults.AeCost,
         costSavings: dataItem.baselineResults.AeCost - dataItem.modificationResults.AeCost,
         implementationCosts: 0,
         payBackPeriod: this.getPayback(dataItem.modificationResults.AeCost, dataItem.baselineResults.AeCost, 0)
       })
-    })
+    });
+
+    this.rollupNutrientTable = this.wasteWaterReportRollupService.nutrientRemovalResults;
+    this.rollupEffluentEnergyTable = this.wasteWaterReportRollupService.effluentEnergyResults;
   }
+
   getPayback(modCost: number, baselineCost: number, implementationCost: number) {
     if (implementationCost) {
       let val = (implementationCost / (baselineCost - modCost)) * 12;

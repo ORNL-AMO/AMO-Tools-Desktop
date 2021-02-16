@@ -48,9 +48,9 @@ export class WasteWaterSummaryComponent implements OnInit {
       let diffCost = result.baselineResults.AeCost - result.modificationResults.AeCost;
       sumSavings += diffCost;
       sumCost += result.modificationResults.AeCost;
-      let diffEnergy = result.baselineResults.AeEnergy - result.modificationResults.AeEnergy;
+      let diffEnergy = result.baselineResults.AeEnergyAnnual - result.modificationResults.AeEnergyAnnual;
       sumEnergySavings += diffEnergy;
-      sumEnergy += result.modificationResults.AeEnergy;
+      sumEnergy += result.modificationResults.AeEnergyAnnual;
     })
     this.savingPotential = sumSavings;
     this.energySavingsPotential = sumEnergySavings;

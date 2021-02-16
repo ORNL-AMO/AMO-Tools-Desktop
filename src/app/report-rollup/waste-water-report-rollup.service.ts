@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { WasteWaterService } from '../waste-water/waste-water.service';
-import { AllWasteWaterResultsData, ReportItem, WasteWaterCompare, WasteWaterResultsData } from './report-rollup-models';
+import { AllWasteWaterResultsData, EffluentEnergyData, EffluentEnergyResults, NutrientRemovalResults, ReportItem, WasteWaterCompare, WasteWaterResultsData } from './report-rollup-models';
 import * as _ from 'lodash';
-import { WasteWaterResults } from '../shared/models/waste-water';
+import { WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
 @Injectable()
 export class WasteWaterReportRollupService {
 
@@ -11,6 +11,9 @@ export class WasteWaterReportRollupService {
   selectedWasteWater: BehaviorSubject<Array<WasteWaterCompare>>;
   selectedWasteWaterResults: Array<WasteWaterResultsData>;
   allWasteWaterResults: Array<AllWasteWaterResultsData>;
+  nutrientRemovalResults: Array<NutrientRemovalResults>;
+  effluentEnergyResults: Array<EffluentEnergyResults>;
+
   constructor(
     private wasteWaterService: WasteWaterService) { }
 
@@ -86,10 +89,76 @@ export class WasteWaterReportRollupService {
 
   setWasteWaterResultsFromSelected(selectedWasteWater: Array<WasteWaterCompare>) {
     this.selectedWasteWaterResults = new Array<WasteWaterResultsData>();
-    selectedWasteWater.forEach(val => {
-      let baselineResults: WasteWaterResults = val.baseline.outputs;
-      let modificationResults: WasteWaterResults = val.modification.outputs;
-      this.selectedWasteWaterResults.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
+    this.nutrientRemovalResults = new Array<NutrientRemovalResults>();
+    this.effluentEnergyResults = new Array<EffluentEnergyResults>();
+
+    selectedWasteWater.forEach((wwc: WasteWaterCompare) => {
+      let baselineResults: WasteWaterResults = wwc.baseline.outputs;
+      let modificationResults: WasteWaterResults = wwc.modification.outputs;
+      this.selectedWasteWaterResults.push({ 
+        baselineResults: baselineResults, 
+        modificationResults: modificationResults, 
+        assessmentId: wwc.assessmentId, 
+        name: wwc.name, 
+        modName: wwc.modification.name, 
+        baseline: wwc.baseline, 
+        modification: wwc.modification, 
+        settings: wwc.settings 
+      });
+
+      this.nutrientRemovalResults.push(this.getNutrientRemovalResults(wwc)); 
+
+      let effluentEnergyResults: EffluentEnergyResults = {
+        baseline: this.getEffluentEnergyResults(wwc.name, wwc.assessment.wasteWater.systemBasics.operatingMonths, wwc.baseline),
+        modification: this.getEffluentEnergyResults(wwc.name, wwc.assessment.wasteWater.systemBasics.operatingMonths, wwc.modification),
+        // energyUnit: 
+      };
+      this.effluentEnergyResults.push(effluentEnergyResults); 
     });
   }
+
+  getNutrientRemovalResults(wwc: WasteWaterCompare): NutrientRemovalResults {
+    let results: NutrientRemovalResults = {
+      assessmentName: wwc.name,
+      baselineName: wwc.baseline.name,
+      modificationName: wwc.modification.name,
+      baselineTSSRemoval: 0,
+      baselineNRemoval: 0,
+      baselineBODRemoval: 0,
+      modificationTSSRemoval: 0,
+      modificationNRemoval: 0,
+      modificationBODRemoval: 0
+    };
+
+    results.baselineTSSRemoval = (1 - (wwc.baseline.activatedSludgeData.EffluentTSS / wwc.baseline.activatedSludgeData.InfluentTSS)) * 100; 
+    results.modificationTSSRemoval = (1 - (wwc.modification.activatedSludgeData.EffluentTSS / wwc.modification.activatedSludgeData.InfluentTSS)) * 100; 
+    results.baselineBODRemoval = (1 - (wwc.baseline.outputs.EffluentCBOD5 / wwc.baseline.activatedSludgeData.So)) * 100; 
+    results.modificationBODRemoval = (1 - (wwc.modification.outputs.EffluentCBOD5 / wwc.modification.activatedSludgeData.So)) * 100;
+    
+    return results;
+  } 
+
+  getEffluentEnergyResults(assessmentName: string, operatingMonths: number, wwd: WasteWaterData): EffluentEnergyData {
+    let data: EffluentEnergyData = {
+      assessmentName: assessmentName,
+      equipmentName: wwd.name,
+      kWhMonth: 0,
+      millionGallons: 0,
+      personEquivalents: 0,
+      BODRemoved: 0,
+      TSSRemoved: 0,
+      TNRemoved: 0
+    }
+    
+    data.kWhMonth = wwd.outputs.AeEnergy;
+    data.millionGallons = data.kWhMonth * (1/30) * wwd.activatedSludgeData.FlowRate;
+    // .2 lb BOD / person / day
+    data.personEquivalents = data.kWhMonth * operatingMonths / (wwd.outputs.InfluentBOD5MassLoading / (.2 * 30));
+    // 8.345 density of water
+    data.BODRemoved = data.kWhMonth * (1/30) / ((wwd.activatedSludgeData.So - wwd.outputs.EffluentCBOD5) * wwd.activatedSludgeData.FlowRate * 8.345);
+    data.TSSRemoved = data.kWhMonth * (1/30) / ((wwd.activatedSludgeData.InfluentTSS - wwd.outputs.EffluentTSS) * wwd.activatedSludgeData.FlowRate * 8.345);
+
+    return data;
+  }
+
 }

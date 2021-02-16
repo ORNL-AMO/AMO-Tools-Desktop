@@ -3,7 +3,23 @@
     <!--energy use pie and table-->
     <div class="row">
         <div class="col-12 pt-2">
-            <label class="group-label">Waste Water Systems Energy Use</label>
+            <label class="group-label">Nutrient Removal Rates</label>
+        </div>
+        <div class="col-12">
+            <app-nutrient-removal-table [tableData]="rollupNutrientTable"></app-nutrient-removal-table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 pt-2">
+            <label class="group-label">Effluent Energy Use Performance (kWh)</label>
+        </div>
+        <div class="col-12">
+            <app-effluent-energy-use-table [tableData]="rollupEffluentEnergyTable"></app-effluent-energy-use-table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 pt-2">
+            <label class="group-label mt-2">Waste Water Systems Energy Use</label>
         </div>
         <div class="col-5">
             <div class="btn-group btn-group-sm pt-2 pb-2 w-100">
