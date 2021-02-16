@@ -293,7 +293,7 @@
       <tr>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingDO') == true}">
-          Operating Dissolved Oxygen (mg/L)
+          Operating Dissolved O<sub>2</sub> (mg/L)
         </td>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingDO') == true}">
@@ -306,7 +306,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Alpha') == true}">
-          Oxygen Transfer Coefficient Ratio
+          O<sub>2</sub> Transfer Coefficient Ratio
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Alpha') == true}">
           {{wasteWater.baselineData.aeratorPerformanceData.Alpha}}
@@ -330,7 +330,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('SOTR') == true}">
-          Standard Oxygen Transfer Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
+          Standard O<sub>2</sub> Transfer Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
             O<sub>2</sub>/(hp-hr)</span>
           <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
             O<sub>2</sub>/(kWh)</span>)
