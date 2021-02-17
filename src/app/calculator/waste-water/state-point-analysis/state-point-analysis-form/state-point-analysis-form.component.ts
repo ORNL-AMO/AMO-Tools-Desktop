@@ -18,6 +18,8 @@ export class StatePointAnalysisFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   selected: boolean;
+  @Input()
+  index: boolean;
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
@@ -25,6 +27,7 @@ export class StatePointAnalysisFormComponent implements OnInit {
 
   form: FormGroup;
   sviParameters: Array<{ value: number, display: string }>;
+  idString: string;
   
   constructor(private statePointAnalysisService: StatePointAnalysisService,
               private statePointAnalysisFormService: StatePointAnalysisFormService,
@@ -32,6 +35,12 @@ export class StatePointAnalysisFormComponent implements OnInit {
               ) { }
 
   ngOnInit() {
+    if (this.isBaseline) {
+      this.idString = 'baseline_' + this.index;
+    }
+    else {
+      this.idString = 'modification_' + this.index;
+    }
     this.sviParameters = this.statePointAnalysisService.sviParameters;
     this.initSubscriptions();
   }

@@ -13,6 +13,8 @@ import { StatePointAnalysisService } from './state-point-analysis.service';
 export class StatePointAnalysisComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
   
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -36,6 +38,7 @@ export class StatePointAnalysisComponent implements OnInit {
   tabSelect: string = 'graph';
   baselineSelected: boolean = true;
   modificationExists: boolean = false;
+
 
   constructor(private settingsDbService: SettingsDbService, 
               private statePointAnalysisService: StatePointAnalysisService) { }
