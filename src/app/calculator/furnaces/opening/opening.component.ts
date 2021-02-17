@@ -87,7 +87,7 @@ export class OpeningComponent implements OnInit {
   }
 
   addLoss() {
-    let hoursPerYear = this.operatingHours? this.operatingHours.hoursPerYear : undefined;
+    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
     this.openingService.addLoss(hoursPerYear, this.modificationExists);
   }
 

@@ -30,6 +30,10 @@ export class CompressedAirReductionFormComponent implements OnInit {
   selected: boolean;
   @Input()
   utilityType: number;
+  @Input()
+  compressorControl: number;
+  @Input()
+  compressorControlAdjustment: number;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -120,6 +124,16 @@ export class CompressedAirReductionFormComponent implements OnInit {
     if (changes.utilityType && !changes.utilityType.firstChange) {
       this.form.patchValue({ utilityType: this.utilityType });
     }
+
+    if (changes.compressorControlAdjustment && !changes.compressorControlAdjustment.firstChange) {
+      this.form.controls.compressorControlAdjustment.patchValue(this.compressorControlAdjustment);
+    }
+
+    if (changes.compressorControl && !changes.compressorControl.firstChange) {
+      this.form.controls.compressorControl.patchValue(this.compressorControl);
+      this.compressorCustomControl = (this.compressorControl == 8);
+    }
+
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected == false) {
         this.form.disable();
@@ -127,6 +141,8 @@ export class CompressedAirReductionFormComponent implements OnInit {
         this.form.enable();
         if (this.index != 0 || !this.isBaseline) {
           this.form.controls.utilityType.disable();
+          this.form.controls.compressorControl.disable();
+          this.form.controls.compressorControlAdjustment.disable();
         }
       }
     }

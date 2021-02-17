@@ -1,0 +1,245 @@
+<div class="mb-4 p-2 form-card">
+  <form [formGroup]="fixtureForm">
+    <label *ngIf="!isEditingName" class="group-label mb-2 w-100 bold" [ngClass]="{'py-1': !isBaseline}">
+      <span (click)="editLossName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+      <span>{{fixtureForm.controls.name.value}}</span>
+      <a *ngIf="isBaseline" class="click-link pull-right add-loss text-danger small pl-2"
+        (click)="removeLoss(index)">+Remove Loss</a>
+    </label>
+    <label *ngIf="isEditingName" class="group-label mb-2 pb-1 w-100">
+      <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+      <span class="alert-danger small ml-2" *ngIf="fixtureForm.controls.name.invalid && !fixtureForm.controls.name.pristine">
+        <span *ngIf="fixtureForm.controls.name.errors.required">Please enter a loss name.</span>
+      </span>
+    </label>
+
+    <div *ngIf="index == 0" class="form-section">
+
+      <div class="d-flex flex-column w-100 justify-content-center pb-3">
+        <div class="btn-group btn-group-sm align-self-center">
+          <button type="button" [disabled]="!isBaseline && fixtureForm.controls.energySourceType.value != 'Fuel'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Fuel')" [ngClass]="{'active': fixtureForm.controls.energySourceType.value == 'Fuel'}">Fuel</button>
+          <button type="button" [disabled]="!isBaseline && fixtureForm.controls.energySourceType.value != 'Electricity'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Electricity')" [ngClass]="{'active': fixtureForm.controls.energySourceType.value == 'Electricity'}">Electrotechnology</button>
+          <button type="button" [disabled]="!isBaseline && fixtureForm.controls.energySourceType.value != 'Steam'" class="btn btn-secondary btn-sm toggle-btn" (click)="setEnergySource('Steam')" [ngClass]="{'active':  fixtureForm.controls.energySourceType.value == 'Steam'}">Steam-based</button>
+        </div>
+      </div>
+ 
+      <div class="form-group">
+        <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
+        <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
+            formControlName="hoursPerYear" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
+           onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="fixtureForm.controls.hoursPerYear.invalid && !fixtureForm.controls.hoursPerYear.pristine">
+          <span *ngIf="fixtureForm.controls.hoursPerYear.errors.required">Value required.</span>
+          <span *ngIf="fixtureForm.controls.hoursPerYear.errors.max">Value can't be greater than
+            {{fixtureForm.controls.hoursPerYear.errors.max.max}}.</span>
+          <span *ngIf="fixtureForm.controls.hoursPerYear.errors.min">Value can't be less than
+            {{fixtureForm.controls.hoursPerYear.errors.min.min}}.</span>
+        </span>
+      </div>
+ 
+      <div class="form-group">
+        <label class="small" for="{{'fuelCost'+idString}}">
+          <span *ngIf="fixtureForm.controls.energySourceType.value == 'Electricity'">
+           Energy Cost
+          </span>
+         <span *ngIf="fixtureForm.controls.energySourceType.value != 'Electricity'">
+           Fuel Cost
+         </span> 
+         </label>
+        <div class="input-group">
+          <input name="fuelCost" type="number" class="form-control"
+          formControlName="fuelCost" id="{{'fuelCost'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('fuelCost')" >
+          <span class="input-group-addon units">$/<span [innerHTML]="energyUnit | settingsLabel"></span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="fixtureForm.controls.fuelCost.invalid && !fixtureForm.controls.fuelCost.pristine">
+          <span *ngIf="fixtureForm.controls.fuelCost.errors.required">Value Required</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'availableHeat'+idString}}">
+          <span *ngIf="fixtureForm.controls.energySourceType.value == 'Fuel'">
+            Available Heat
+          </span>
+          <span *ngIf="fixtureForm.controls.energySourceType.value == 'Steam'">
+            Boiler Efficiency
+          </span>
+          <span *ngIf="fixtureForm.controls.energySourceType.value == 'Electricity'">
+            System Efficiency
+          </span>
+          <a *ngIf="fixtureForm.controls.energySourceType.value != 'Electricity'" id="materialHelp" class="form-text small click-link" (click)="initFlueGasModal()">Calculate</a>
+          <a *ngIf="fixtureForm.controls.energySourceType.value == 'Electricity'" id="materialHelp" disabled class="disabled form-text small">Calculate</a>
+        </label>
+        <div class="input-group">
+          <input  name="{{'availableHeat'+idString}}" type="number" step="any" min="0"
+          class="form-control" formControlName="availableHeat" id="{{'availableHeat'+idString}}" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusField('availableHeat')">
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="fixtureForm.controls.availableHeat.invalid && !fixtureForm.controls.availableHeat.pristine">
+        <span *ngIf="fixtureForm.controls.availableHeat.errors.required">Value Required</span>
+        <span *ngIf="fixtureForm.controls.availableHeat.errors.greaterThan == 0">Value must be greater than than
+          0.</span>
+          <span *ngIf="fixtureForm.controls.availableHeat.errors.max">Value can't be greater than
+            {{fixtureForm.controls.availableHeat.errors.max.max}}%</span>
+      </span>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-group">
+        <label class="small" for="{{'materialName'+idString}}">Material Name
+          <a id="materialHelp" class="form-text small click-link" (click)="initMaterialModal()">
+            Add New Material</a>
+        </label>
+        <select name="{{'materialName_'+idString}}" class="form-control" formControlName="materialName" id="{{'materialName'+idString}}"
+          (change)="setSpecificHeat()" (focus)="focusField('materialName')" >
+          <option *ngFor="let material of materialTypes" [ngValue]="material.id">{{material.substance}}</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'specificHeat'+idString}}">Average Specific Heat of Material</label>
+        <div class="input-group" >
+          <input  name="{{'specificHeat_'+idString}}" type="number" step="any" min="0"
+            class="form-control" formControlName="specificHeat" id="{{'specificHeat'+idString}}" onfocus="this.select();"
+            (input)="calculate()" (focus)="focusField('specificHeat')" >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="fixtureForm.controls.specificHeat.invalid && !fixtureForm.controls.specificHeat.pristine">
+        <span *ngIf="fixtureForm.controls.specificHeat.errors.required">Value Required</span>
+        <span *ngIf="fixtureForm.controls.specificHeat.errors.min">Value can't be less than
+          {{fixtureForm.controls.specificHeat.errors.min.min}}.</span>
+      </span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'feedRate'+idString}}">Fixture Feed Rate</label>
+        <div class="input-group">
+          <input  name="{{'feedRate_'+idString}}" type="number" step="any" min="0" class="form-control"
+            formControlName="feedRate" id="{{'feedRate'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('feedRate')"
+            >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="fixtureForm.controls.feedRate.invalid && !fixtureForm.controls.feedRate.pristine">
+        <span *ngIf="fixtureForm.controls.feedRate.errors.required">Value Required</span>
+        <span *ngIf="fixtureForm.controls.feedRate.errors.greaterThan == 0">Value must be greater than than
+          0.</span>
+      </span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'initialTemp'+idString}}">Inlet Temperature</label>
+        <div class="input-group" >
+          <input  name="{{'initialTemp_'+idString}}" type="number" step="any" class="form-control"
+            formControlName="initialTemp" id="{{'initialTemp'+idString}}" onfocus="this.select();" (input)="calculate()"
+            (focus)="focusField('initialTemp')" >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="fixtureForm.controls.initialTemp.invalid && !fixtureForm.controls.initialTemp.pristine">
+        <span *ngIf="fixtureForm.controls.initialTemp.errors.required">Value Required</span>
+      </span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'finalTemp'+idString}}">Outlet Temperature</label>
+        <div class="input-group">
+          <input  name="{{'finalTemp_'+idString}}" type="number" step="any" class="form-control"
+            formControlName="finalTemp" id="{{'finalTemp'+idString}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('finalTemp')"
+            >
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small"
+        *ngIf="fixtureForm.controls.finalTemp.invalid && !fixtureForm.controls.finalTemp.pristine">
+        <span *ngIf="fixtureForm.controls.finalTemp.errors.required">Value Required</span>
+      </span>
+      </div>
+  
+      <div class="form-group">
+        <label class="small" for="{{'correctionFactor'+idString}}">Correction Factor</label>
+        <input  name="{{'correctionFactor_'+idString}}" type="number" step="any" class="form-control"
+          formControlName="correctionFactor" id="{{'correctionFactor'+idString}}" onfocus="this.select();" (input)="calculate()"
+          (focus)="focusField('correctionFactor')" >
+          <span class="alert-danger pull-right small"
+          *ngIf="fixtureForm.controls.correctionFactor.invalid && !fixtureForm.controls.correctionFactor.pristine">
+          <span *ngIf="fixtureForm.controls.correctionFactor.errors.required">Value Required</span>
+        </span>
+      </div>
+    </div>
+  </form>
+  
+         <!-- Results -->
+    <div *ngIf="lossResult" class="d-flex flex-column mt-3 mb-2">
+        <div class="form-group m-0">
+          <label class="bold">Fixture Loss</label>
+          <div *ngIf="lossResult.fixtureLoss" class="text-center bold small">
+            {{lossResult.fixtureLoss | sigFigs:'6'}} 
+        <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+          </div>
+          <div *ngIf="!lossResult.fixtureLoss" class="text-center bold small">
+            &mdash; &mdash;
+          </div>
+        </div>
+     </div>
+  <div *ngIf="lossResult" class="d-flex flex-column mt-1 mb-2">
+    <div class="form-group m-0">
+      <label class="bold">Gross Loss</label>
+      <div *ngIf="lossResult.grossLoss" class="text-center bold small">
+        {{lossResult.grossLoss | sigFigs:'6'}} 
+      <span [innerHTML]="lossResult.energyUnit | settingsLabel"></span>/hr
+      </div>
+      <div *ngIf="!lossResult.grossLoss" class="text-center bold small">
+        &mdash; &mdash;
+      </div>
+    </div>
+    </div>
+      
+    </div>
+      
+      
+    <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div>
+          <app-solid-load-charge-material *ngIf="showMaterialModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+            [settings]="settings"></app-solid-load-charge-material>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <div bsModal #flueGasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="flueGasModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-flue-gas-modal *ngIf="showFlueGasModal" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
+          [settings]="settings"></app-flue-gas-modal>
+      </div>
+    </div>
+  </div>
+  </div>
+    
+    <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
+    [operatingHours]="fixtureService.operatingHours">
+  </app-operating-hours-modal>

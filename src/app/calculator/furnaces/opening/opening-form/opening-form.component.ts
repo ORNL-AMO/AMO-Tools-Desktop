@@ -51,6 +51,7 @@ export class OpeningFormComponent implements OnInit {
   lossResult: OpeningLossResults;
   isEditingName: boolean;
   canCalculateViewFactor: boolean;
+  calculateVFWarning: string;
 
   constructor(private openingFormService: OpeningFormService,
               private convertUnitsService: ConvertUnitsService,
@@ -73,6 +74,7 @@ export class OpeningFormComponent implements OnInit {
       this.openingService.energySourceType.next(this.openingLossesForm.controls.energySourceType.value);
     }
     this.checkCanCalculateViewFactor();
+    this.checkWarnings();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -183,16 +185,22 @@ export class OpeningFormComponent implements OnInit {
   }
 
   calculateViewFactor() {
-    this.calculate();
     if (!this.canCalculateViewFactor) {
       this.totalArea = 0.0;
       return;
     }
     let vfInputs: ViewFactorInput = this.openingService.getViewFactorInput(this.openingLossesForm);
-    let viewFactor: number = this.openingService.viewFactorCalculation(vfInputs, this.settings);
+    let viewFactor: number = this.openingService.getViewFactor(vfInputs, this.settings);
     this.openingLossesForm.patchValue({
-      viewFactor: this.roundVal(viewFactor, 3)
+      viewFactor: this.openingFormService.roundVal(viewFactor, 3)
     });
+    this.calculate();
+  }
+
+  checkWarnings() {
+    let vfInputs = this.openingService.getViewFactorInput(this.openingLossesForm);
+    let calculatedViewFactor = this.openingService.getViewFactor(vfInputs, this.settings);
+    this.calculateVFWarning = this.openingFormService.checkCalculateVFWarning(this.openingLossesForm.controls.viewFactor.value, calculatedViewFactor);
   }
 
   setEnergySource(energySourceType: string) {
@@ -230,7 +238,6 @@ export class OpeningFormComponent implements OnInit {
     this.setFormState();
   }
 
-
   focusField(str: string) {
     this.openingService.currentField.next(str);
   }
@@ -238,6 +245,9 @@ export class OpeningFormComponent implements OnInit {
   calculate() {
     this.getArea();
     this.checkCanCalculateViewFactor();
+    if (this.canCalculateViewFactor) {
+      this.checkWarnings();
+    }
     this.openingLossesForm = this.openingFormService.setValidators(this.openingLossesForm);
     let currentOpeningLoss: OpeningLoss = this.openingFormService.getLossFromForm(this.openingLossesForm);
     this.openingService.updateDataArray(currentOpeningLoss, this.index, this.isBaseline);
@@ -278,11 +288,6 @@ export class OpeningFormComponent implements OnInit {
     }
   }
 
-  roundVal(val: number, digits: number) {
-    let rounded = Number(val.toFixed(digits));
-    return rounded;
-  }
-
   initFlueGasModal() {
     this.showFlueGasModal = true;
     this.openingService.modalOpen.next(this.showFlueGasModal);
@@ -291,7 +296,7 @@ export class OpeningFormComponent implements OnInit {
 
   hideFlueGasModal(calculatedAvailableHeat?: any) {
     if (calculatedAvailableHeat) {
-      calculatedAvailableHeat = this.roundVal(calculatedAvailableHeat, 1);
+      calculatedAvailableHeat = this.openingFormService.roundVal(calculatedAvailableHeat, 1);
       this.openingLossesForm.patchValue({
         availableHeat: calculatedAvailableHeat
       });

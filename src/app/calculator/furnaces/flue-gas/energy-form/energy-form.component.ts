@@ -4,8 +4,8 @@ import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { EnergyData } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
+import { EnergyFormService } from '../../charge-material/energy-form/energy-form.service';
 import { FlueGasService } from '../flue-gas.service';
-import { EnergyFormService } from './energy-form.service';
 
 @Component({
   selector: 'app-energy-form',

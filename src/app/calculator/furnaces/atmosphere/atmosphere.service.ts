@@ -111,13 +111,13 @@ export class AtmosphereService {
       result.atmosphereLoss = this.phastService.atmosphere(atmosphereLossData, settings, energyUnit);
       result.grossLoss =  (result.atmosphereLoss / atmosphereLossData.availableHeat) * 100;
       result.fuelUse = result.grossLoss * atmosphereLossData.hoursPerYear;
-      result.fuelCost = result.grossLoss * atmosphereLossData.hoursPerYear * atmosphereLossData.fuelCost;
+      result.fuelCost = result.fuelUse * atmosphereLossData.fuelCost;
     }
     return result;
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData: AtmosphereLoss = this.initDefaultLoss(0);
+    let emptyBaselineData: AtmosphereLoss = this.initDefaultLoss(0, undefined);
     let baselineData: Array<AtmosphereLoss> = [emptyBaselineData];
     this.baselineData.next(baselineData);
     this.modificationData.next(undefined);
@@ -125,7 +125,22 @@ export class AtmosphereService {
 
   }
 
-  initDefaultLoss(index: number, hoursPerYear: number = 8760) {
+  initDefaultLoss(index: number, treasureHours: number, atmoshpereLoss?: AtmosphereLoss) {
+    let fuelCost: number = 0;
+    let availableHeat: number = 100;
+    let hoursPerYear = 8760;
+
+    if (atmoshpereLoss) {
+      fuelCost = atmoshpereLoss.fuelCost;
+      availableHeat = atmoshpereLoss.availableHeat;
+
+      if (treasureHours) {
+        hoursPerYear = treasureHours;
+      } else {
+        hoursPerYear = atmoshpereLoss.hoursPerYear;
+      }
+    }
+
     let defaultBaselineData: AtmosphereLoss = {
       atmosphereGas: 1,
       specificHeat: 0,
@@ -136,9 +151,9 @@ export class AtmosphereService {
       heatLoss: 0,
       name: 'Loss #' + (index + 1),
       energySourceType: 'Fuel',
-      fuelCost: 0,
+      fuelCost: fuelCost,
       hoursPerYear: hoursPerYear,    
-      availableHeat: 100,  
+      availableHeat: availableHeat,  
     };
 
     return defaultBaselineData;
@@ -203,26 +218,16 @@ export class AtmosphereService {
     }
   }
   
-  addLoss(hoursPerYear: number, modificationExists: boolean) {
+  addLoss(treasureHours: number, modificationExists: boolean) {
     let currentBaselineData: Array<AtmosphereLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
-    let baselineObj: AtmosphereLoss = this.initDefaultLoss(index, hoursPerYear);
-    if (index > 0) {
-      baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-      baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-    }
+    let baselineObj: AtmosphereLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
     currentBaselineData.push(baselineObj)
     this.baselineData.next(currentBaselineData);
     
     if (modificationExists) {
       let currentModificationData: Array<AtmosphereLoss> = this.modificationData.getValue();
-      let modificationObj: AtmosphereLoss = this.initDefaultLoss(index, hoursPerYear);
-      
-      if (index > 0) {
-        modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-        modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-      }
-
+      let modificationObj: AtmosphereLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
     }

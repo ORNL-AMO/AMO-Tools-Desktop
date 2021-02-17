@@ -2,10 +2,10 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
-import { GasLeakageLossesService, LeakageWarnings } from '../../gas-leakage-losses/gas-leakage-losses.service';
 import { GasLeakageCompareService } from '../../gas-leakage-losses/gas-leakage-compare.service';
 import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss';
 import { Subscription } from 'rxjs';
+import { LeakageFormService, LeakageWarnings } from '../../../../calculator/furnaces/leakage/leakage-form.service';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class GasLeakageTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string> = [];
   lossSubscription: Subscription;
-  constructor(private lossesService: LossesService, private gasLeakageLossesService: GasLeakageLossesService, private gasLeakageCompareService: GasLeakageCompareService, private cd: ChangeDetectorRef) { }
+  constructor(private lossesService: LossesService, private leakageFormService: LeakageFormService, private gasLeakageCompareService: GasLeakageCompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
@@ -75,8 +75,8 @@ export class GasLeakageTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(loss);
-        let tmpHasWarning: boolean = this.gasLeakageLossesService.checkWarningsExist(warnings);
+        let warnings: LeakageWarnings = this.leakageFormService.checkLeakageWarnings(loss);
+        let tmpHasWarning: boolean = this.leakageFormService.checkWarningsExist(warnings);
         if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
@@ -87,8 +87,8 @@ export class GasLeakageTabComponent implements OnInit {
         if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
-        let warnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(loss);
-        let tmpHasWarning: boolean = this.gasLeakageLossesService.checkWarningsExist(warnings);
+        let warnings: LeakageWarnings = this.leakageFormService.checkLeakageWarnings(loss);
+        let tmpHasWarning: boolean = this.leakageFormService.checkWarningsExist(warnings);
         if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
@@ -99,7 +99,7 @@ export class GasLeakageTabComponent implements OnInit {
 
 
   checkLossValid(loss: LeakageLoss) {
-      let tmpForm: FormGroup = this.gasLeakageLossesService.initFormFromLoss(loss);
+      let tmpForm: FormGroup = this.leakageFormService.initFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
         return true;
       } else {

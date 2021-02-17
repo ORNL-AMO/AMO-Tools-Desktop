@@ -108,20 +108,35 @@ export class WallService {
       result.wallLoss = this.phastService.wallLosses(wallLossData, settings);
       result.grossLoss =  (result.wallLoss / wallLossData.availableHeat) * 100;
       result.fuelUse = result.grossLoss * wallLossData.hoursPerYear;
-      result.fuelCost = result.grossLoss * wallLossData.hoursPerYear * wallLossData.fuelCost;
+      result.fuelCost = result.fuelUse * wallLossData.fuelCost;
     }
     return result;
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData: WallLoss = this.initDefaultLoss(0);
+    let emptyBaselineData: WallLoss = this.initDefaultLoss(0, undefined);
     let baselineData: Array<WallLoss> = [emptyBaselineData];
     this.modificationData.next(undefined);
     this.energySourceType.next('Fuel');
     this.baselineData.next(baselineData);
   }
 
-  initDefaultLoss(index: number, hoursPerYear: number = 8760) {
+  initDefaultLoss(index: number, treasureHours: number, wallLoss?: WallLoss) {
+    let fuelCost: number = 0;
+    let availableHeat: number = 100;
+    let hoursPerYear = 8760;
+
+    if (wallLoss) {
+      fuelCost = wallLoss.fuelCost;
+      availableHeat = wallLoss.availableHeat;
+
+      if (treasureHours) {
+        hoursPerYear = treasureHours;
+      } else {
+        hoursPerYear = wallLoss.hoursPerYear;
+      }
+    }
+
     let defaultBaselineLoss: WallLoss = {
       surfaceArea: 0,
       surfaceTemperature: 0,
@@ -131,10 +146,10 @@ export class WallService {
       surfaceShape: 3,
       conditionFactor: 1.394,
       surfaceEmissivity: 0.9,
-      availableHeat: 100,
+      availableHeat: availableHeat,
       name: 'Loss #' + (index + 1),
       hoursPerYear: hoursPerYear,
-      fuelCost: undefined,
+      fuelCost: fuelCost,
       energySourceType: 'Fuel'
     };
 
@@ -202,25 +217,16 @@ export class WallService {
     }
   }
   
-  addLoss(hoursPerYear: number, modificationExists: boolean) {
+  addLoss(treasureHours: number, modificationExists: boolean) {
     let currentBaselineData: Array<WallLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
     let index = currentBaselineData.length;
-    let baselineObj: WallLoss = this.initDefaultLoss(index, hoursPerYear);
-    if (index > 0) {
-      baselineObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-      baselineObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-    }
+    let baselineObj: WallLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
     currentBaselineData.push(baselineObj)
     this.baselineData.next(currentBaselineData);
     
     if (modificationExists) {
       let currentModificationData: Array<WallLoss> = this.modificationData.getValue();
-      let modificationObj: WallLoss = this.initDefaultLoss(index, hoursPerYear);
-      
-      if (index > 0) {
-        modificationObj.fuelCost = currentBaselineData[index - 1].fuelCost;
-        modificationObj.availableHeat = currentBaselineData[index - 1].availableHeat;
-      }
+      let modificationObj: WallLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
       currentModificationData.push(modificationObj);
       this.modificationData.next(currentModificationData);
     }

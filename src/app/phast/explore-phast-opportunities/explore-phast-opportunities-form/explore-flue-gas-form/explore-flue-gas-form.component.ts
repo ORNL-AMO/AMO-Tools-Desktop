@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
-import { FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { LossTab } from '../../../tabs';
 import { PhastService } from '../../../phast.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
@@ -39,8 +39,8 @@ export class ExploreFlueGasFormComponent implements OnInit {
   showExcessAir: boolean = false;
   showO2: boolean = false;
 
-  baselineWarnings: { excessAirWarning: string, o2Warning: string };
-  modificationWarnings: { excessAirWarning: string, o2Warning: string };
+  baselineWarnings: FlueGasWarnings;
+  modificationWarnings: FlueGasWarnings;
   constructor(private phastService: PhastService, private suiteDbService: SuiteDbService,
     private flueGasFormService: FlueGasFormService,
   ) { }
@@ -161,7 +161,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
     if (loss.o2InFlueGas < 0 || loss.o2InFlueGas > 20.99999) {
       loss.excessAirPercentage = 0.0;
     } else {
-      let input = this.buildInput(loss);
+      let input: MaterialInputProperties = this.buildInput(loss);
       loss.excessAirPercentage = this.phastService.flueGasCalculateExcessAir(input);
     }
     if (num === 1) {
@@ -175,7 +175,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
     if (loss.excessAirPercentage < 0) {
       loss.o2InFlueGas = 0.0;
     } else {
-      let input = this.buildInput(loss);
+      let input: MaterialInputProperties = this.buildInput(loss);
       loss.o2InFlueGas = this.phastService.flueGasCalculateO2(input);
     }
     if (num === 1) {
@@ -185,10 +185,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
     }
   }
 
-  checkWarnings(loss: FlueGasByMass | FlueGasByVolume): { excessAirWarning: string, o2Warning: string } {
+  checkWarnings(loss: FlueGasByMass | FlueGasByVolume): FlueGasWarnings {
     let tmpO2Warning: string = this.flueGasFormService.checkO2Warning(loss);
     let tmpExcessAirWarning: string = this.flueGasFormService.checkExcessAirWarning(loss);
-    return { excessAirWarning: tmpExcessAirWarning, o2Warning: tmpO2Warning };
+    let combustionAirTempWarning: string = this.flueGasFormService.checkCombustionAirTemp(loss);
+    return { excessAirWarning: tmpExcessAirWarning, o2Warning: tmpO2Warning, combustionAirTempWarning: combustionAirTempWarning };
   }
 
   checkBaselineWarnings(loss: FlueGasByMass | FlueGasByVolume) {
@@ -201,10 +202,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
     this.calculate();
   }
 
-  buildInput(loss: FlueGasByMass | FlueGasByVolume) {
+  buildInput(loss: FlueGasByMass | FlueGasByVolume): MaterialInputProperties {
     let tmpFlueGas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(loss.gasTypeId);
+    let input: MaterialInputProperties;
     if (tmpFlueGas) {
-      let input = {
+      input = {
         CH4: tmpFlueGas.CH4,
         C2H6: tmpFlueGas.C2H6,
         N2: tmpFlueGas.N2,
@@ -221,7 +223,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
       };
       return input;
     } else {
-      let input = {
+      input = {
         CH4: 0,
         C2H6: 0,
         N2: 0,

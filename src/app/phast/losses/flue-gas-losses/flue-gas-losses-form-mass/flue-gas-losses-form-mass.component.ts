@@ -6,7 +6,7 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { FormGroup } from '@angular/forms';
-import { FlueGasByMass, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 
@@ -117,7 +117,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   calcExcessAir() {
-    let input = {
+    let input: MaterialInputProperties = {
       carbon: this.flueGasLossForm.controls.carbon.value,
       hydrogen: this.flueGasLossForm.controls.hydrogen.value,
       sulphur: this.flueGasLossForm.controls.sulphur.value,

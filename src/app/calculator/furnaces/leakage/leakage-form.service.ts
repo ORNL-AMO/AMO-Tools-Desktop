@@ -1,35 +1,55 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
+
 @Injectable()
-export class GasLeakageLossesService {
+export class LeakageFormService {
 
   constructor(private formBuilder: FormBuilder) {
   }
-  initForm(lossNum: number): FormGroup {
-    return this.formBuilder.group({
+  initForm(lossNum?: number): FormGroup {
+    let formGroup = this.formBuilder.group({
       draftPressure: ['', Validators.required],
-      openingArea: ['', Validators.required],
+      openingArea: ['', [Validators.required, Validators.min(0)]],
       leakageGasTemperature: ['', Validators.required],
       ambientTemperature: ['', Validators.required],
       coefficient: [.8052, Validators.required],
-      specificGravity: [1.0, Validators.required],
+      specificGravity: [1.0, [Validators.required, Validators.min(0)]],
       correctionFactor: [1.0, Validators.required],
       name: ['Loss #' + lossNum]
     });
+
+    if (!lossNum) {
+      formGroup.addControl('availableHeat', new FormControl(100, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new FormControl(8760, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new FormControl('Fuel', [Validators.required]));
+      formGroup.addControl('fuelCost', new FormControl(''));
+    }
+
+    return formGroup;
   }
 
-  initFormFromLoss(loss: LeakageLoss): FormGroup {
-    return this.formBuilder.group({
+  initFormFromLoss(loss: LeakageLoss, inAssessment: boolean = true): FormGroup {
+    let formGroup = this.formBuilder.group({
       draftPressure: [loss.draftPressure, Validators.required],
-      openingArea: [loss.openingArea, Validators.required],
+      openingArea: [loss.openingArea, [Validators.required, Validators.min(0)]],
       leakageGasTemperature: [loss.leakageGasTemperature, Validators.required],
       ambientTemperature: [loss.ambientTemperature, Validators.required],
       coefficient: [loss.coefficient, Validators.required],
-      specificGravity: [loss.specificGravity, Validators.required],
+      specificGravity: [loss.specificGravity, [Validators.required, Validators.min(0)]],
       correctionFactor: [loss.correctionFactor, Validators.required],
       name: [loss.name]
     });
+
+    if (!inAssessment) {
+      formGroup.addControl('availableHeat', new FormControl(loss.availableHeat, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]));
+      formGroup.addControl('hoursPerYear', new FormControl(loss.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]));
+      formGroup.addControl('energySourceType', new FormControl(loss.energySourceType, [Validators.required]));
+      formGroup.addControl('fuelCost', new FormControl(loss.fuelCost));
+    }
+    
+    return formGroup;
   }
 
   initLossFromForm(form: FormGroup): LeakageLoss {
@@ -43,6 +63,15 @@ export class GasLeakageLossesService {
       correctionFactor: form.controls.correctionFactor.value,
       name: form.controls.name.value
     };
+    
+    // In standalone
+    if (form.controls.availableHeat) {
+      tmpLoss.energySourceType = form.controls.energySourceType.value,
+      tmpLoss.hoursPerYear = form.controls.hoursPerYear.value,
+      tmpLoss.fuelCost = form.controls.fuelCost.value
+      tmpLoss.availableHeat = form.controls.availableHeat.value
+    }
+
     return tmpLoss;
   }
 
@@ -50,11 +79,11 @@ export class GasLeakageLossesService {
     return {
       openingAreaWarning: this.checkOpeningArea(loss),
       specificGravityWarning: this.checkSpecificGravity(loss),
-      draftPressureWarning: this.checkDraftPressure(loss),
       temperatureWarning: this.checkTemperature(loss)
     };
   }
-
+  
+  // used in explore opps
   checkOpeningArea(loss: LeakageLoss): string {
     if (loss.openingArea < 0) {
       return 'Opening Area must be equal or greater than 0';
@@ -65,15 +94,7 @@ export class GasLeakageLossesService {
 
   checkSpecificGravity(loss: LeakageLoss): string {
     if (loss.specificGravity < 0) {
-      return 'Density of Flue Gas must be equal or greater than 0';
-    } else {
-      return null;
-    }
-  }
-
-  checkDraftPressure(loss: LeakageLoss): string {
-    if (loss.draftPressure < 0) {
-      return 'Draft Pressure must be equal or greater than 0';
+      return 'Specific Gravity of Flue Gas must be equal or greater than 0';
     } else {
       return null;
     }
@@ -102,6 +123,5 @@ export class GasLeakageLossesService {
 export interface LeakageWarnings {
   openingAreaWarning: string;
   specificGravityWarning: string;
-  draftPressureWarning: string;
   temperatureWarning: string;
 }

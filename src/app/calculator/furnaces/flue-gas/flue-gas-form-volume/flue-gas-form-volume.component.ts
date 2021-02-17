@@ -4,7 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
-import { FlueGas, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByVolume, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasFormService } from '../flue-gas-form.service';
@@ -119,7 +119,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   }
 
   calcExcessAir() {
-    let input = {
+    let input: MaterialInputProperties = {
       CH4: this.byVolumeForm.controls.CH4.value,
       C2H6: this.byVolumeForm.controls.C2H6.value,
       N2: this.byVolumeForm.controls.N2.value,

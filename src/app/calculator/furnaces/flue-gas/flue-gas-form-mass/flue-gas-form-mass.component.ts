@@ -4,8 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
-import { OperatingHours } from '../../../../shared/models/operations';
-import { FlueGas, FlueGasByMass, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGasFormService } from '../flue-gas-form.service';
@@ -122,7 +121,7 @@ export class FlueGasFormMassComponent implements OnInit {
   }
 
   calcExcessAir() {
-    let input = {
+    let input: MaterialInputProperties = {
       carbon: this.byMassForm.controls.carbon.value,
       hydrogen: this.byMassForm.controls.hydrogen.value,
       sulphur: this.byMassForm.controls.sulphur.value,

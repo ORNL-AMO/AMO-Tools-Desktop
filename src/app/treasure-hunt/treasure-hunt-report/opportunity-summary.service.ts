@@ -64,15 +64,16 @@ export class OpportunitySummaryService {
 
   getNewOpportunitySummary(opportunityName: string, utilityType: string, costSavings: number, totalEnergySavings: number, opportunityCost: OpportunityCost, baselineCost: number, modificationCost: number, team: string, equipment: string, owner: string, mixedIndividualResults?: Array<OpportunitySummary>): OpportunitySummary {
     let totalCost: number = this.opportunitySheetService.getOppSheetImplementationCost(opportunityCost)
+    let payback: number = totalCost / costSavings;
     if (opportunityCost && opportunityCost.additionalAnnualSavings) {
-      costSavings = costSavings + opportunityCost.additionalAnnualSavings.cost;
+      payback = totalCost / (costSavings + opportunityCost.additionalAnnualSavings.cost);
     }
     return {
       opportunityName: opportunityName,
       utilityType: utilityType,
       costSavings: costSavings,
       totalCost: totalCost,
-      payback: totalCost / costSavings,
+      payback: payback,
       opportunityCost: opportunityCost,
       totalEnergySavings: totalEnergySavings,
       mixedIndividualResults: mixedIndividualResults,

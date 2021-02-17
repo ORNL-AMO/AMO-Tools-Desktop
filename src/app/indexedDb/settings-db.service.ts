@@ -7,6 +7,7 @@ import { SettingsService } from '../settings/settings.service';
 import { DirectoryDbService } from './directory-db.service';
 import { Directory } from '../shared/models/directory';
 import { InventoryItem } from '../shared/models/inventory/inventory';
+
 @Injectable()
 export class SettingsDbService {
   allSettings: Array<Settings>;

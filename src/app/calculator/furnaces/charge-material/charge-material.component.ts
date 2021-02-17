@@ -115,7 +115,7 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   addLoss() {
-    let hoursPerYear = this.operatingHours? this.operatingHours.hoursPerYear : undefined;
+    let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
     this.chargeMaterialService.addLoss(hoursPerYear, this.modificationExists);
   }
 

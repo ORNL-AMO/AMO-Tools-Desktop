@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { TreasureHuntReportComponent } from './treasure-hunt-report.component';
 import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
 import { OpportunitySummaryComponent } from './opportunity-summary/opportunity-summary.component';
@@ -58,6 +58,6 @@ import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.
     EffortSavingsChartComponent
   ],
   exports: [TreasureHuntReportComponent, CostPieChartComponent, UtilityBarChartComponent, ExecutiveSummaryTableComponent, TeamSummaryPieChartComponent, OpportunityPaybackBarChartComponent],
-  providers: [OpportunityPaybackService, OpportunitySummaryService]
+  providers: [OpportunityPaybackService, OpportunitySummaryService, CurrencyPipe]
 })
 export class TreasureHuntReportModule { }

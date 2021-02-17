@@ -88,10 +88,13 @@ import { FlueGasComponent } from '../calculator/furnaces/flue-gas/flue-gas.compo
 import { AtmosphereComponent } from '../calculator/furnaces/atmosphere/atmosphere.component';
 import { ChargeMaterialComponent } from '../calculator/furnaces/charge-material/charge-material.component';
 import { OpeningComponent } from '../calculator/furnaces/opening/opening.component';
+import { AirHeatingComponent } from '../calculator/furnaces/air-heating/air-heating.component';
 import { O2UtilizationRateComponent } from '../calculator/waste-water/o2-utilization-rate/o2-utilization-rate.component';
 import { WasteWaterListComponent } from '../calculator/waste-water/waste-water-list/waste-water-list.component';
-import { StatePointAnalysisModule } from '../calculator/waste-water/state-point-analysis/state-point-analysis.module';
 import { StatePointAnalysisComponent } from '../calculator/waste-water/state-point-analysis/state-point-analysis.component';
+import { CoolingComponent } from '../calculator/furnaces/cooling/cooling.component';
+import { LeakageComponent } from '../calculator/furnaces/leakage/leakage.component';
+import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.component';
 
 export const coreRoutes: Routes = [
   {
@@ -333,6 +336,10 @@ export const coreRoutes: Routes = [
             component: AtmosphereComponent
           },
           {
+            path: 'cooling',
+            component: CoolingComponent
+          },
+          {
             path: 'wall-loss',
             component: WallComponent
           },
@@ -345,8 +352,20 @@ export const coreRoutes: Routes = [
             component: FlueGasComponent
           },
           {
+            path: 'air-heating',
+            component: AirHeatingComponent
+          },
+          {
             path: 'charge-material',
             component: ChargeMaterialComponent
+          },
+          {
+            path: 'leakage',
+            component: LeakageComponent
+          },
+          {
+            path: 'fixture',
+            component: FixtureComponent
           },
           {
             path: 'achievable-efficiency',
