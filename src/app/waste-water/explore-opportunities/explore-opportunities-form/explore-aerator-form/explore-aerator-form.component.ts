@@ -54,7 +54,7 @@ export class ExploreAeratorFormComponent implements OnInit {
 
   initExploreReduceOxygen() {
     let hasOpportunity: boolean = (this.modificationData.aeratorPerformanceData.OperatingDO != this.baselineData.aeratorPerformanceData.OperatingDO);
-    this.modificationData.exploreReduceOxygen = { display: 'Reduce Supplied Oxygen', hasOpportunity: hasOpportunity }
+    this.modificationData.exploreReduceOxygen = { display: ' Reduce Supplied O<sub>2</sub>', hasOpportunity: hasOpportunity }
   }
 
   setExploreAeratorPerformance() {

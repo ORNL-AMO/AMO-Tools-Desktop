@@ -91,6 +91,7 @@ export interface WasteWaterResults {
     EffluentNO3_N: number,
     EffluentNO3_N_W_Denit: number,
     AeEnergy: number,
+    AeEnergyAnnual: number,
     AeCost: number,
     FieldOTR: number,
     costSavings: number,

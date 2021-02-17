@@ -86,12 +86,12 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
   }
 
   getEnergyUsageData() {
-    let yVals: Array<number> = [this.wasteWaterAnalysisService.baselineResults.AeEnergy];
+    let yVals: Array<number> = [this.wasteWaterAnalysisService.baselineResults.AeEnergyAnnual];
     let xVals: Array<string> = ['Baseline'];
     let markerColors: Array<string> = ['#1E7640'];
     this.wasteWaterAnalysisService.modificationsResultsArr.forEach(modification => {
       xVals.push(modification.name);
-      yVals.push(modification.results.AeEnergy);
+      yVals.push(modification.results.AeEnergyAnnual);
       markerColors.push(modification.color);
     });
     return [{
