@@ -34,6 +34,7 @@ export class PhastComponent implements OnInit {
   sankeyLabelStyle: string = 'both';
   phastOptions: Array<{ name: string, phast: PHAST }>;
   showSankeyLabelOptions: boolean;
+  updateUnitsModalSub: Subscription;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -170,6 +171,10 @@ export class PhastComponent implements OnInit {
         this.showAddNewModal();
       }
     });
+
+    this.updateUnitsModalSub = this.settingsService.updateUnitsModalOpen.subscribe(modalOpen => {
+      this.isModalOpen = modalOpen;
+    })
   }
 
   setExploreOppsDefaults(modification: Modification) {  
@@ -243,6 +248,7 @@ export class PhastComponent implements OnInit {
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.addNewSubscription.unsubscribe();
+    this.updateUnitsModalSub.unsubscribe();
     //reset services
     this.lossesService.lossesTab.next(1);
     this.phastService.initTabs();
