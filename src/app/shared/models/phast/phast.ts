@@ -34,6 +34,8 @@ export interface PHAST {
   implementationCost?: number;
   disableSetupDialog?: boolean;
   equipmentNotes?: string;
+  dataUpdated?: boolean;
+  lossDataUnits?: string;
   valid?: PhastValid;
 }
 
