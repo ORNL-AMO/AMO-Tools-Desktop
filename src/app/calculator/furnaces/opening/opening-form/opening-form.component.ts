@@ -301,6 +301,7 @@ export class OpeningFormComponent implements OnInit {
         availableHeat: calculatedAvailableHeat
       });
     }
+    this.calculate();
     this.flueGasModal.hide();
     this.showFlueGasModal = false;
     this.openingService.modalOpen.next(this.showFlueGasModal);

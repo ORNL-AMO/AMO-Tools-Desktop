@@ -264,6 +264,7 @@ export class WallFormComponent implements OnInit {
         availableHeat: calculatedAvailableHeat
       });
     }
+    this.calculate();
     this.flueGasModal.hide();
     this.showFlueGasModal = false;
     this.wallService.modalOpen.next(this.showFlueGasModal);
