@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
+import { aerationRanges, AerationRanges } from '../../../waste-water-defaults';
 import { WasteWaterService } from '../../../waste-water.service';
-import { StandardSOTRValues } from './standardSOTRValues';
+
 @Component({
   selector: 'app-aerator-performance-help',
   templateUrl: './aerator-performance-help.component.html',
@@ -15,15 +16,16 @@ export class AeratorPerformanceHelpComponent implements OnInit {
   focusedFieldSub: Subscription;
 
   standardSOTRValues: Array<{ label: string, value: number }>;
+  aerationRanges: AerationRanges;
   settings: Settings;
   constructor(private wasteWaterService: WasteWaterService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit(): void {
     this.settings = this.wasteWaterService.settings.getValue();
     if (this.settings.unitsOfMeasure != 'Imperial') {
-      this.standardSOTRValues = this.convertStandardSOTRValues(JSON.parse(JSON.stringify(StandardSOTRValues)));
+      this.aerationRanges = this.convertAerationRanges(aerationRanges);
     } else {
-      this.standardSOTRValues = StandardSOTRValues;
+      this.aerationRanges = aerationRanges;
     }
 
 
@@ -36,11 +38,28 @@ export class AeratorPerformanceHelpComponent implements OnInit {
     this.focusedFieldSub.unsubscribe();
   }
 
-  convertStandardSOTRValues(standardSOTRValues: Array<{ label: string, value: number }>): Array<{ label: string, value: number }> {
-    standardSOTRValues.forEach(sotrValue => {
-      sotrValue.value = this.convertUnitsService.value(sotrValue.value).from('lbhp').to('kgkw');
-      sotrValue.value = this.convertUnitsService.roundVal(sotrValue.value, 1);
+  convertAerationRanges(aerationRanges: AerationRanges): AerationRanges {
+    aerationRanges.diffusers.forEach(range => {
+      range.min = this.convertTransferRate(range.min);
+      range.max = this.convertTransferRate(range.max);
+      range.default = this.convertTransferRate(range.default);
     });
-    return standardSOTRValues;
+    aerationRanges.mechanical.forEach(range => {
+      range.min = this.convertTransferRate(range.min);
+      range.max = this.convertTransferRate(range.max);
+      range.default = this.convertTransferRate(range.default);
+    });
+    aerationRanges.hybrid.forEach(range => {
+      range.min = this.convertTransferRate(range.min);
+      range.max = this.convertTransferRate(range.max);
+      range.default = this.convertTransferRate(range.default);
+    });
+    return aerationRanges;
+  }
+
+  convertTransferRate(value: number) {
+    value = this.convertUnitsService.value(value).from('lbhp').to('kgkw');
+    value = this.convertUnitsService.roundVal(value, 1);
+    return value;
   }
 }

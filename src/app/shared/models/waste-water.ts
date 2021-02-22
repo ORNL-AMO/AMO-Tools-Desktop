@@ -54,8 +54,10 @@ export interface AeratorPerformanceData {
     Elevation: number,
     OperatingTime: number,
     TypeAerators: number,
+    Aerator: string,
     Speed: number,
     EnergyCostUnit: number,
+    AnoxicZoneCondition: boolean
 }
 
 

@@ -16,6 +16,11 @@
     border-bottom: groove 1px;
 }
 
+
+.stripe-top {
+    border-top: groove 1px;
+}
+
 .my-table-bg{
     /* background-color: #FFE400; */
     background-color: #D6DBDF;

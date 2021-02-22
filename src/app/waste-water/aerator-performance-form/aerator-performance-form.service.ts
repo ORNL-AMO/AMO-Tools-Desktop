@@ -17,8 +17,10 @@ export class AeratorPerformanceFormService {
       Elevation: [obj.Elevation, [Validators.required, Validators.min(0)]],
       OperatingTime: [obj.OperatingTime, [Validators.required, Validators.min(0), Validators.max(24)]],
       TypeAerators: [obj.TypeAerators, [Validators.required, Validators.min(0)]],
+      Aerator: [obj.Aerator],
       Speed: [obj.Speed, [Validators.required, Validators.min(0), Validators.max(100)]],
-      EnergyCostUnit: [obj.EnergyCostUnit, [Validators.required, Validators.min(0)]]
+      EnergyCostUnit: [obj.EnergyCostUnit, [Validators.required, Validators.min(0)]],
+      AnoxicZoneCondition: [obj.AnoxicZoneCondition]
     });
     return form;
   }
@@ -33,8 +35,10 @@ export class AeratorPerformanceFormService {
       Elevation: form.controls.Elevation.value,
       OperatingTime: form.controls.OperatingTime.value,
       TypeAerators: form.controls.TypeAerators.value,
+      Aerator: form.controls.Aerator.value,
       Speed: form.controls.Speed.value,
-      EnergyCostUnit: form.controls.EnergyCostUnit.value
+      EnergyCostUnit: form.controls.EnergyCostUnit.value,
+      AnoxicZoneCondition: form.controls.AnoxicZoneCondition.value
     }
   }
 
@@ -45,7 +49,7 @@ export class AeratorPerformanceFormService {
     } else if (obj.TypeAerators == 2 && (obj.Speed < 50 || obj.Speed > 100)) {
       SpeedWarning = 'Positive Displacement Blower Speed should be between 50% and 100%';
     } else if (obj.TypeAerators == 3 && obj.Speed < 90) {
-      SpeedWarning = 'Cntrifugal Blowers typically run at 90% speed or greater';
+      SpeedWarning = 'Centrifugal Blowers typically run at 90% speed or greater';
     }
     return {
       Speed: SpeedWarning

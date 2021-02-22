@@ -309,13 +309,15 @@ export class AssessmentService {
           OperatingDO: 4.5,
           Alpha: 0.84,
           Beta: 0.92,
+          Aerator: 'Surface high speed',
           SOTR: 2.7,
           Aeration: 150,
           Elevation: 200,
           OperatingTime: 24,
           TypeAerators: 1,
           Speed: 100,
-          EnergyCostUnit: 0.09
+          EnergyCostUnit: 0.09,
+          AnoxicZoneCondition: false
         }
       },
       modifications: new Array(),
