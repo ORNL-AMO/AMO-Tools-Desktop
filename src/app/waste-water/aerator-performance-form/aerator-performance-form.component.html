@@ -163,6 +163,10 @@
                 <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingTime.errors.max">Value can't
                     be greater than {{form.controls.OperatingTime.errors.max.max}} hr/day</span>
             </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="aeratorPerformanceWarnings.OperatingTime !== null && !form.controls.OperatingTime.invalid && !form.controls.OperatingTime.pristine">
+                {{aeratorPerformanceWarnings.OperatingTime}}</span>
+
         </div>
         <!-- TypeAerators -->
         <div class="form-group"
