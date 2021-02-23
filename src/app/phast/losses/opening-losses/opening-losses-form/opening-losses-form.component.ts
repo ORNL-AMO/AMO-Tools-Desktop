@@ -99,10 +99,8 @@ export class OpeningLossesFormComponent implements OnInit {
     if (this.openingLossesForm.controls.openingType.value === 'Round') {
       if (this.openingLossesForm.controls.lengthOfOpening.status === "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
-        let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value;
-        //let radiusFeet = (radiusInches * .08333333) / 2;
-
-        let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit) / 2;
+        let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value / 2;
+        let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit);
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.controls.numberOfOpenings.value;
       }
     } else if (this.openingLossesForm.controls.openingType.value === 'Rectangular (or Square)') {
