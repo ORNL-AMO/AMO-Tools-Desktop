@@ -284,11 +284,10 @@ export class WasteWaterService {
     }
   }
 
-
   calculateModDo(modificationIndex: number): number {
     let wasteWater: WasteWater = this.wasteWater.getValue();
     let settings: Settings = this.settings.getValue();
-    //todo save calculation so dont have to calc here
+    let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.OperatingDO;
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
     let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
@@ -313,7 +312,7 @@ export class WasteWaterService {
       counter++;
     }
     if (isNaN(difference)) {
-      return 0;
+      return startingValue;
     } else {
       return Number((optimalDo).toFixed(2));
     }
@@ -322,7 +321,7 @@ export class WasteWaterService {
   calculateModOperatingTime(modificationIndex: number): number {
     let wasteWater: WasteWater = this.wasteWater.getValue();
     let settings: Settings = this.settings.getValue();
-    //todo save calculation so dont have to calc here
+    let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.OperatingTime;
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
     let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
@@ -349,7 +348,7 @@ export class WasteWaterService {
       counter++;
     }
     if (isNaN(difference)) {
-      return 0;
+      return startingValue;
     } else {
       return Number((operatingTime).toFixed(1));
     }
@@ -367,7 +366,7 @@ export class WasteWaterService {
   calculateModSpeed(modificationIndex: number): number {
     let wasteWater: WasteWater = this.wasteWater.getValue();
     let settings: Settings = this.settings.getValue();
-    //todo save calculation so dont have to calc here
+    let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.Speed;
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
     let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
@@ -394,7 +393,7 @@ export class WasteWaterService {
       counter++;
     }
     if (isNaN(difference)) {
-      return 0;
+      return startingValue;
     } else {
       return Number((speed).toFixed(1));
     }
