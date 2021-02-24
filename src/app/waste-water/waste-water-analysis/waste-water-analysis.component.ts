@@ -25,7 +25,8 @@ export class WasteWaterAnalysisComponent implements OnInit {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let settings: Settings = this.wasteWaterService.settings.getValue();
     this.wasteWaterAnalysisService.setResults(wasteWater, settings);
-    this.wasteWaterAnalysisService.setGraphGata();
+    this.wasteWaterAnalysisService.initXAxisVariables();
+    this.wasteWaterAnalysisService.setGraphData();
     this.wasteWaterAnalysisService.selectedTableData.next({
       name: 'Baseline',
       results: this.wasteWaterAnalysisService.baselineResults

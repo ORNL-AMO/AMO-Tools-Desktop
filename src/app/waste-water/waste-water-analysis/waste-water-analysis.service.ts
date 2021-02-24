@@ -12,6 +12,7 @@ export class WasteWaterAnalysisService {
   analysisTab: BehaviorSubject<string>;
 
   analysisGraphItems: BehaviorSubject<Array<AnalysisGraphItem>>;
+  analysisXAxisVariables: BehaviorSubject<Array<DataTableVariable>>;
   baselineResults: WasteWaterResults;
   modificationsResultsArr: Array<{
     name: string,
@@ -24,6 +25,7 @@ export class WasteWaterAnalysisService {
   constructor(private wasteWaterService: WasteWaterService) {
     this.analysisTab = new BehaviorSubject<string>('graphs');
     this.analysisGraphItems = new BehaviorSubject<Array<AnalysisGraphItem>>(new Array());
+    this.analysisXAxisVariables = new BehaviorSubject<Array<DataTableVariable>>(undefined);
     this.selectedTableData = new BehaviorSubject<{ name: string, results: WasteWaterResults }>({ name: '', results: undefined });
     this.xAxisHover = new BehaviorSubject<Array<{ curveNumber: number, pointNumber: number }>>(new Array());
   }
@@ -44,32 +46,46 @@ export class WasteWaterAnalysisService {
     });
   }
 
-  setGraphGata() {
-    let analysisGraphItems: Array<AnalysisGraphItem> = this.getAnalysisGraphItems(this.baselineResults, this.modificationsResultsArr);
+  setGraphData(selectedXAxisVariable?: DataTableVariable) {
+    let xAxisVariable = selectedXAxisVariable;
+    if (!xAxisVariable) {
+      xAxisVariable = this.analysisXAxisVariables.getValue().find(x => x.selected == true);
+    } 
+
+    let analysisGraphItems: Array<AnalysisGraphItem> = this.getAnalysisGraphItems(this.baselineResults, this.modificationsResultsArr, xAxisVariable);
     this.analysisGraphItems.next(analysisGraphItems);
   }
 
-  getAnalysisGraphItems(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults, color: string }>): Array<AnalysisGraphItem> {
+  initXAxisVariables() {
+    let analysisXAxisVariables: Array<DataTableVariable> = JSON.parse(JSON.stringify(DataTableVariables));
+    analysisXAxisVariables.forEach(x => x.selected = false);
+    let defaultXVariable: DataTableVariable = {
+      name: 'SRT',
+      label: 'SRT Days',
+      metricUnit: '',
+      imperialUnit: '',
+      selected: true
+    }
+    analysisXAxisVariables.push(defaultXVariable);
+    this.analysisXAxisVariables.next(analysisXAxisVariables);
+  }
+
+
+  getAnalysisGraphItems(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults, color: string }>, xAxisVariable: DataTableVariable): Array<AnalysisGraphItem> {
     let analysisGraphItems: Array<AnalysisGraphItem> = new Array();
 
     DataTableVariables.forEach(variable => {
-      let graphItem: AnalysisGraphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, variable);
+      let graphItem: AnalysisGraphItem = this.getAnalysisGraphItem(baselineResults, modificationsResultsArr, variable, xAxisVariable);
       analysisGraphItems.push(graphItem);
     });
     return analysisGraphItems;
   }
 
-  getAnalysisGraphItem(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults, color: string }>, tableVariable: DataTableVariable): AnalysisGraphItem {
+  getAnalysisGraphItem(baselineResults: WasteWaterResults, modificationsResultsArr: Array<{ name: string, results: WasteWaterResults, color: string }>, tableVariable: DataTableVariable, xAxisVariable: DataTableVariable): AnalysisGraphItem {
     let traces: Array<GraphItemTrace> = new Array();
-    let baselineXYData = this.getXYData(baselineResults.calculationsTableMapped, tableVariable.name);
-    let markerSize: Array<number> = new Array();
-    baselineXYData.x.forEach(x => {
-      if (x == baselineResults.SolidsRetentionTime) {
-        markerSize.push(12);
-      } else {
-        markerSize.push(6);
-      }
-    });
+    let baselineXYData = this.getXYData(baselineResults.calculationsTableMapped, tableVariable.name, xAxisVariable.name);
+    let markerSize = this.setMarkerSize(baselineXYData, baselineResults.SolidsRetentionTime);
+
     traces.push({
       name: 'Baseline',
       x: baselineXYData.x,
@@ -82,16 +98,9 @@ export class WasteWaterAnalysisService {
       hovertemplate: '%{y:.2f}'
     });
     modificationsResultsArr.forEach(modResult => {
-      let modXYData = this.getXYData(modResult.results.calculationsTableMapped, tableVariable.name);
+      let modXYData = this.getXYData(modResult.results.calculationsTableMapped, tableVariable.name, xAxisVariable.name);
+      let markerSize: Array<number> = this.setMarkerSize(modXYData, modResult.results.SolidsRetentionTime);
 
-      let markerSize: Array<number> = new Array();
-      modXYData.x.forEach(x => {
-        if (x == modResult.results.SolidsRetentionTime) {
-          markerSize.push(12);
-        } else {
-          markerSize.push(6);
-        }
-      });
       traces.push({
         name: modResult.name,
         x: modXYData.x,
@@ -109,14 +118,28 @@ export class WasteWaterAnalysisService {
       analysisVariableName: tableVariable.name,
       traces: traces,
       selected: tableVariable.selected,
-      dataVariable: tableVariable
+      variableY: tableVariable,
+      variableX: xAxisVariable
     }
   }
 
-  getXYData(calculationsTableMapped: Array<CalculationsTableRow>, analysisVariableName: string): { x: Array<number>, y: Array<number> } {
+  setMarkerSize(data: { x: Array<number>, y: Array<number>, srt: Array<number> }, SRTResult: number): Array<number> {
+    let sizes: Array<number> = [];
+    data.x.forEach((x, index) => {
+      if (data.srt[index] == SRTResult) {
+        sizes.push(12);
+      } else {
+        sizes.push(6);
+      }
+    });
+    return sizes;
+  }
+
+  getXYData(calculationsTableMapped: Array<CalculationsTableRow>, analysisVariableName: string, xAxisVariableName: string): { x: Array<number>, y: Array<number>, srt: Array<number> } {
     return {
-      x: calculationsTableMapped.map(tableRow => { return tableRow.SRT }),
+      x: calculationsTableMapped.map(tableRow => { return tableRow[xAxisVariableName] }),
       y: calculationsTableMapped.map(tableRow => { return tableRow[analysisVariableName] }),
+      srt: calculationsTableMapped.map(tableRow => { return tableRow.SRT }),
     }
   }
 
@@ -128,7 +151,8 @@ export interface AnalysisGraphItem {
   analysisVariableName: string,
   traces: Array<GraphItemTrace>,
   selected: boolean,
-  dataVariable: DataTableVariable
+  variableY: DataTableVariable
+  variableX: DataTableVariable
 }
 
 

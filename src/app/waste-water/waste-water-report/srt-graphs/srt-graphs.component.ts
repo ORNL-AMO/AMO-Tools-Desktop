@@ -27,9 +27,11 @@ export class SrtGraphsComponent implements OnInit {
       'EstimatedEff'
     ]
 
-    this.analysisGraphItems = this.wasteWaterAnalysisService.getAnalysisGraphItems(this.wasteWaterAnalysisService.baselineResults, this.wasteWaterAnalysisService.modificationsResultsArr);
+    this.wasteWaterAnalysisService.initXAxisVariables();
+    this.wasteWaterAnalysisService.setGraphData();
+    this.analysisGraphItems = this.wasteWaterAnalysisService.analysisGraphItems.getValue();
     this.analysisGraphItems = this.analysisGraphItems.filter(graphItem => {
-      return reportGraphVariables.includes(graphItem.dataVariable.name)
+      return reportGraphVariables.includes(graphItem.variableY.name)
     });
   }
 

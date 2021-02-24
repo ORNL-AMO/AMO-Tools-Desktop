@@ -32,6 +32,24 @@
                 </div>
             </div>
         </div>
+        <div class="p-1">
+            <div class="nav-item dropdown">
+                <button type="button" class="btn btn-primary w-100" (click)="toggleXAxisDropdown()">
+                    <a class="dropdown-toggle">
+                        Select X Axis
+                    </a>
+                </button>
+                <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showXAxisDropdown == true}">
+                    <div class="list-group">
+                        <a *ngFor="let analysisXAxisVariable of analysisXAxisVariables"
+                            class="list-group-item list-group-item-action" (click)="toggleSelectedXAxis(analysisXAxisVariable)"
+                            [ngClass]="{'active': analysisXAxisVariable.selected}">
+                            <span [innerHTML]="analysisXAxisVariable.label"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div *ngIf="analysisTab == 'tables'" class="d-flex align-items-center ml-auto br-color-white">
