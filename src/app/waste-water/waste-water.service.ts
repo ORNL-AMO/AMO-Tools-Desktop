@@ -104,6 +104,71 @@ export class WasteWaterService {
       }
       return wasteWaterResults;
     }
+    return this.getEmptyResults();
+  }
+
+
+  calculateResultsDefinedSRT(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics, settings: Settings, definedSRT: number): WasteWaterResults {
+    let isDataValid: boolean = this.checkWasteWaterValid(activatedSludgeData, aeratorPerformanceData, systemBasics).isValid;
+    if (isDataValid) {
+      let activatedSludgeCopy: ActivatedSludgeData = JSON.parse(JSON.stringify(activatedSludgeData));
+      let aeratorPerformanceCopy: AeratorPerformanceData = JSON.parse(JSON.stringify(aeratorPerformanceData));
+      if (settings.unitsOfMeasure != 'Imperial') {
+        let settingsCopy: Settings = JSON.parse(JSON.stringify(settings));
+        settingsCopy.unitsOfMeasure = 'Imperial';
+        activatedSludgeCopy = this.convertWasteWaterService.convertActivatedSludgeData(activatedSludgeCopy, settings, settingsCopy);
+        aeratorPerformanceCopy = this.convertWasteWaterService.convertAeratorPerformanceData(aeratorPerformanceCopy, settings, settingsCopy)
+      }
+      let inputData: WasteWaterTreatmentInputData = {
+        Temperature: activatedSludgeCopy.Temperature,
+        So: activatedSludgeCopy.So,
+        Volume: activatedSludgeCopy.Volume,
+        FlowRate: activatedSludgeCopy.FlowRate,
+        InertVSS: activatedSludgeCopy.InertVSS,
+        OxidizableN: activatedSludgeCopy.OxidizableN,
+        Biomass: activatedSludgeCopy.Biomass,
+        InfluentTSS: activatedSludgeCopy.InfluentTSS,
+        InertInOrgTSS: activatedSludgeCopy.InertInOrgTSS,
+        EffluentTSS: activatedSludgeCopy.EffluentTSS,
+        RASTSS: activatedSludgeCopy.RASTSS,
+        MLSSpar: activatedSludgeCopy.MLSSpar,
+        FractionBiomass: activatedSludgeCopy.FractionBiomass,
+        BiomassYeild: activatedSludgeCopy.BiomassYeild,
+        HalfSaturation: activatedSludgeCopy.HalfSaturation,
+        MicrobialDecay: activatedSludgeCopy.MicrobialDecay,
+        MaxUtilizationRate: activatedSludgeCopy.MaxUtilizationRate,
+        MaxDays: systemBasics.MaxDays,
+        TimeIncrement: systemBasics.TimeIncrement,
+        OperatingDO: aeratorPerformanceCopy.OperatingDO,
+        Alpha: aeratorPerformanceCopy.Alpha,
+        Beta: aeratorPerformanceCopy.Beta,
+        SOTR: aeratorPerformanceCopy.SOTR,
+        Aeration: aeratorPerformanceCopy.Aeration,
+        Elevation: aeratorPerformanceCopy.Elevation,
+        OperatingTime: aeratorPerformanceCopy.OperatingTime,
+        TypeAerators: aeratorPerformanceCopy.TypeAerators,
+        Speed: aeratorPerformanceCopy.Speed,
+        EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit,
+        DefinedSRT: definedSRT
+      }
+      let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatmentGivenSRT(inputData);
+      //return per month, convert to years
+      wasteWaterResults.AeEnergyAnnual = wasteWaterResults.AeEnergy * systemBasics.operatingMonths;
+      wasteWaterResults.AeCost = wasteWaterResults.AeCost * systemBasics.operatingMonths;
+      wasteWaterResults.AeEnergyAnnual = this.convertUnitsService.value(wasteWaterResults.AeEnergyAnnual).from('kWh').to('MWh');
+      if (settings.unitsOfMeasure != 'Imperial') {
+        wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
+      }
+      // wasteWaterResults.calculationsTableMapped = this.mapCalculationsTable(wasteWaterResults.calculationsTable, settings);
+      // if (baselineResults != undefined) {
+      //   wasteWaterResults = this.setSavingsResults(wasteWaterResults, baselineResults);
+      // }
+      return wasteWaterResults;
+    }
+    return this.getEmptyResults();
+  }
+
+  getEmptyResults(): WasteWaterResults {
     return {
       TotalAverageDailyFlowRate: undefined,
       VolumeInService: undefined,
@@ -144,6 +209,7 @@ export class WasteWaterService {
       calculationsTableMapped: new Array()
     };
   }
+
 
   setSavingsResults(modificationResults: WasteWaterResults, baselineResults: WasteWaterResults): WasteWaterResults {
     modificationResults.costSavings = baselineResults.AeCost - modificationResults.AeCost;
@@ -215,6 +281,121 @@ export class WasteWaterService {
       FmRatio: row[23],
       Diff_MLSS: row[24],
       SRT: row[25]
+    }
+  }
+
+  calculateModDo(modificationIndex: number): number {
+    let wasteWater: WasteWater = this.wasteWater.getValue();
+    let settings: Settings = this.settings.getValue();
+    let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.OperatingDO;
+    let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
+    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings);
+    let definedSRT: number = modificationResults.SolidsRetentionTime;
+    let optimalDo: number = modification.aeratorPerformanceData.OperatingDO;
+    let difference: number = this.checkDifference(modification, modificationResults);
+    let counter: number = 0;
+    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false) {
+      if (difference > 100) {
+        optimalDo = optimalDo - .1;
+      } else if (difference > 10) {
+        optimalDo = optimalDo - .01;
+      } else if (difference > 0) {
+        optimalDo = optimalDo - .001;
+      } else if (difference < 10) {
+        optimalDo = optimalDo + .01;
+      } else if (difference < 100) {
+        optimalDo = optimalDo + .1;
+      }
+      modification.aeratorPerformanceData.OperatingDO = optimalDo;
+      modificationResults = this.calculateResultsDefinedSRT(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, definedSRT);
+      difference = this.checkDifference(modification, modificationResults);
+      counter++;
+    }
+    if (isNaN(difference)) {
+      return startingValue;
+    } else {
+      return Number((optimalDo).toFixed(2));
+    }
+  }
+
+  calculateModOperatingTime(modificationIndex: number): number {
+    let wasteWater: WasteWater = this.wasteWater.getValue();
+    let settings: Settings = this.settings.getValue();
+    let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.OperatingTime;
+    let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
+    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings);
+    let definedSRT: number = modificationResults.SolidsRetentionTime;
+    let operatingTime: number = modification.aeratorPerformanceData.OperatingTime;
+    let difference: number = this.checkDifference(modification, modificationResults);
+    let counter: number = 0;
+    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false) {
+      if (difference > 0 && difference < 10) {
+        operatingTime = operatingTime + .01;
+      } else if (difference > 0 && difference > 100) {
+        operatingTime = operatingTime + 1;
+      } else if (difference > 0 && difference > 10) {
+        operatingTime = operatingTime + .1;
+      } else if (difference < 0 && difference < -100) {
+        operatingTime = operatingTime - 1;
+      } else if (difference < 0 && difference > -10) {
+        operatingTime = operatingTime - .01;
+      } else if (difference < 0 && difference < -10) {
+        operatingTime = operatingTime - .1;
+      }
+      modification.aeratorPerformanceData.OperatingTime = operatingTime;
+      modificationResults = this.calculateResultsDefinedSRT(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, definedSRT);
+      difference = this.checkDifference(modification, modificationResults);
+      counter++;
+    }
+    if (isNaN(difference)) {
+      return startingValue;
+    } else {
+      return Number((operatingTime).toFixed(1));
+    }
+  }
+
+
+  checkDifference(inputs: WasteWaterData, results: WasteWaterResults): number {
+    if (inputs.aeratorPerformanceData.AnoxicZoneCondition) {
+      return results.TotalOxygenReqWDenit - results.TotalOxygenSupplied;
+    } else {
+      return results.TotalOxygenRequirements - results.TotalOxygenSupplied;
+    }
+  }
+
+  calculateModSpeed(modificationIndex: number): number {
+    let wasteWater: WasteWater = this.wasteWater.getValue();
+    let settings: Settings = this.settings.getValue();
+    let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.Speed;
+    let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
+    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings);
+    let definedSRT: number = modificationResults.SolidsRetentionTime;
+    let speed: number = modification.aeratorPerformanceData.Speed;
+    let difference: number = this.checkDifference(modification, modificationResults);
+    let counter: number = 0;
+    while (Math.abs(difference) > 1 && counter < 1000 && isNaN(difference) == false) {
+      if (difference > 0 && difference < 10) {
+        speed = speed + .01;
+      } else if (difference > 0 && difference > 100) {
+        speed = speed + 1;
+      } else if (difference > 0 && difference > 10) {
+        speed = speed + .1;
+      } else if (difference < 0 && difference > -10) {
+        speed = speed - .01;
+      } else if (difference < 0 && difference < -100) {
+        speed = speed - 1;
+      } else if (difference < 0 && difference < -10) {
+        speed = speed - .1;
+      }
+      modification.aeratorPerformanceData.Speed = speed;
+      modificationResults = this.calculateResultsDefinedSRT(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, definedSRT);
+      difference = this.checkDifference(modification, modificationResults);
+      counter++;
+    }
+    if (isNaN(difference)) {
+      return startingValue;
+    } else {
+      return Number((speed).toFixed(1));
     }
   }
 }

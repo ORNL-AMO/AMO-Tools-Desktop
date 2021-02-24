@@ -51,12 +51,18 @@ export class AeratorPerformanceFormService {
     } else if (obj.TypeAerators == 3 && obj.Speed < 90) {
       SpeedWarning = 'Centrifugal Blowers typically run at 90% speed or greater';
     }
+    let OperatingTimeWarning: string = null;
+    if(obj.OperatingTime < 16){
+      OperatingTimeWarning = 'Operating time should be greater than 16 hours.'
+    }
     return {
-      Speed: SpeedWarning
+      Speed: SpeedWarning,
+      OperatingTime: OperatingTimeWarning
     }
   }
 }
 
 export interface AeratorPerformanceWarnings {
-  Speed: string
+  Speed: string,
+  OperatingTime: string
 }

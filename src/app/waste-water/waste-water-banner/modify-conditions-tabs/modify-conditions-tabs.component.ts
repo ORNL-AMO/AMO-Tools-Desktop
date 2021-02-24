@@ -81,7 +81,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     let validBaselineTest = baselineForm.valid;
     let validModTest = true;
     let isDifferent = false;
-    let modificationWarnings: AeratorPerformanceWarnings = { Speed: null };
+    let modificationWarnings: AeratorPerformanceWarnings = { Speed: null, OperatingTime: null };
     if (modificationData) {
       let modificationForm: FormGroup = this.aeratorPerformanceFormService.getFormFromObj(modificationData.aeratorPerformanceData);
       modificationWarnings = this.aeratorPerformanceFormService.checkWarnings(modificationData.aeratorPerformanceData);
@@ -90,7 +90,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     if (!validBaselineTest || !validModTest) {
       badgeStr = 'missing-data';
-    } else if (warnings.Speed || modificationWarnings.Speed) {
+    } else if (warnings.Speed || modificationWarnings.Speed || warnings.OperatingTime || modificationWarnings.OperatingTime) {
       badgeStr = 'input-error';
     } else if (isDifferent) {
       badgeStr = 'loss-different';
