@@ -202,7 +202,7 @@
         <div class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.CalculateGivenSRT, 'invalid': form.controls.CalculateGivenSRT.invalid}">
             <label for="{{'CalculateGivenSRT_'+idString}}">Plant Control Point</label>
-            <select class="form-control" formControlName="CalculateGivenSRT" (change)="save()"
+            <select class="form-control" formControlName="CalculateGivenSRT" (change)="changePlantControlPoint()"
                 (focus)="focusField('CalculateGivenSRT')">
                 <option [ngValue]="false">MLSS </option>
                 <option [ngValue]="true">SRT </option>
@@ -225,7 +225,7 @@
             </span>
         </div>
         <!-- DefinedSRT -->
-        <div *ngIf="form.controls.DefinedSRT.value == true" class="form-group"
+        <div *ngIf="form.controls.CalculateGivenSRT.value == true" class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.DefinedSRT, 'invalid': form.controls.DefinedSRT.invalid}">
             <label for="{{'MLSSpar_'+idString}}">SRT</label>
             <div class="input-group">

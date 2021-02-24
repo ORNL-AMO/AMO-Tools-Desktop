@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 import { ActivatedSludgeData, WasteWater, WasteWaterData } from '../../shared/models/waste-water';
@@ -47,7 +47,7 @@ export class ActivatedSludgeFormComponent implements OnInit {
       let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
       this.form = this.activatedSludgeFormService.getFormFromObj(wasteWater.baselineData.activatedSludgeData);
     }
-
+    this.setFormControlStatus();
     this.wasteWaterDifferentSub = this.compareService.wasteWaterDifferent.subscribe(val => {
       this.activatedSludgeDifferent = val.activatedSludgeDifferent;
     });
@@ -56,6 +56,12 @@ export class ActivatedSludgeFormComponent implements OnInit {
   ngOnDestroy() {
     if (this.selectedModificationIdSub) this.selectedModificationIdSub.unsubscribe();
     this.wasteWaterDifferentSub.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      this.setFormControlStatus();
+    }
   }
 
   save() {
@@ -72,5 +78,29 @@ export class ActivatedSludgeFormComponent implements OnInit {
 
   focusField(str: string) {
     this.wasteWaterService.focusedField.next(str);
+  }
+
+  setFormControlStatus() {
+    if (this.selected === true) {
+      this.form.controls.CalculateGivenSRT.enable();
+
+    } else if (this.selected === false) {
+      this.form.controls.CalculateGivenSRT.disable();
+    }
+  }
+
+  changePlantControlPoint() {
+    if (this.form.controls.CalculateGivenSRT.value == true) {
+      this.form.controls.MLSSpar.setValidators([]);
+      this.form.controls.MLSSpar.updateValueAndValidity();
+      this.form.controls.DefinedSRT.setValidators([Validators.required, Validators.min(0)]);
+      this.form.controls.DefinedSRT.updateValueAndValidity();
+    } else {
+      this.form.controls.MLSSpar.setValidators([Validators.required, Validators.min(0)]);
+      this.form.controls.MLSSpar.updateValueAndValidity();
+      this.form.controls.DefinedSRT.setValidators([]);
+      this.form.controls.DefinedSRT.updateValueAndValidity();
+    }
+    this.save();
   }
 }

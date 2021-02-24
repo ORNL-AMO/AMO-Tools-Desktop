@@ -48,7 +48,7 @@ export class WasteWaterService {
     this.wasteWater.next(wasteWater);
   }
 
-  calculateResults(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics, settings: Settings, baselineResults?: WasteWaterResults): WasteWaterResults {
+  calculateResults(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics, settings: Settings, needCalculationsTable: boolean, baselineResults?: WasteWaterResults): WasteWaterResults {
     let isDataValid: boolean = this.checkWasteWaterValid(activatedSludgeData, aeratorPerformanceData, systemBasics).isValid;
     if (isDataValid) {
       let activatedSludgeCopy: ActivatedSludgeData = JSON.parse(JSON.stringify(activatedSludgeData));
@@ -59,38 +59,17 @@ export class WasteWaterService {
         activatedSludgeCopy = this.convertWasteWaterService.convertActivatedSludgeData(activatedSludgeCopy, settings, settingsCopy);
         aeratorPerformanceCopy = this.convertWasteWaterService.convertAeratorPerformanceData(aeratorPerformanceCopy, settings, settingsCopy)
       }
-      let inputData: WasteWaterTreatmentInputData = {
-        Temperature: activatedSludgeCopy.Temperature,
-        So: activatedSludgeCopy.So,
-        Volume: activatedSludgeCopy.Volume,
-        FlowRate: activatedSludgeCopy.FlowRate,
-        InertVSS: activatedSludgeCopy.InertVSS,
-        OxidizableN: activatedSludgeCopy.OxidizableN,
-        Biomass: activatedSludgeCopy.Biomass,
-        InfluentTSS: activatedSludgeCopy.InfluentTSS,
-        InertInOrgTSS: activatedSludgeCopy.InertInOrgTSS,
-        EffluentTSS: activatedSludgeCopy.EffluentTSS,
-        RASTSS: activatedSludgeCopy.RASTSS,
-        MLSSpar: activatedSludgeCopy.MLSSpar,
-        FractionBiomass: activatedSludgeCopy.FractionBiomass,
-        BiomassYeild: activatedSludgeCopy.BiomassYeild,
-        HalfSaturation: activatedSludgeCopy.HalfSaturation,
-        MicrobialDecay: activatedSludgeCopy.MicrobialDecay,
-        MaxUtilizationRate: activatedSludgeCopy.MaxUtilizationRate,
-        MaxDays: systemBasics.MaxDays,
-        TimeIncrement: systemBasics.TimeIncrement,
-        OperatingDO: aeratorPerformanceCopy.OperatingDO,
-        Alpha: aeratorPerformanceCopy.Alpha,
-        Beta: aeratorPerformanceCopy.Beta,
-        SOTR: aeratorPerformanceCopy.SOTR,
-        Aeration: aeratorPerformanceCopy.Aeration,
-        Elevation: aeratorPerformanceCopy.Elevation,
-        OperatingTime: aeratorPerformanceCopy.OperatingTime,
-        TypeAerators: aeratorPerformanceCopy.TypeAerators,
-        Speed: aeratorPerformanceCopy.Speed,
-        EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit
+      let inputData: WasteWaterTreatmentInputData = this.mapWasteWaterTreatementInputData(activatedSludgeCopy, aeratorPerformanceCopy, systemBasics);
+      let wasteWaterResults: WasteWaterResults;
+      if (activatedSludgeCopy.CalculateGivenSRT == true) {
+        wasteWaterResults = this.calculateResultsDefinedSRT(inputData);
+        if (needCalculationsTable == true) {
+          inputData.MLSSpar = wasteWaterResults.MLSS;
+          wasteWaterResults = this.calculateResultsDefinedMLSS(inputData);
+        }
+      } else {
+        wasteWaterResults = this.calculateResultsDefinedMLSS(inputData);
       }
-      let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
       //return per month, convert to years
       wasteWaterResults.AeEnergyAnnual = wasteWaterResults.AeEnergy * systemBasics.operatingMonths;
       wasteWaterResults.AeCost = wasteWaterResults.AeCost * systemBasics.operatingMonths;
@@ -98,7 +77,9 @@ export class WasteWaterService {
       if (settings.unitsOfMeasure != 'Imperial') {
         wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
       }
-      wasteWaterResults.calculationsTableMapped = this.mapCalculationsTable(wasteWaterResults.calculationsTable, settings);
+      if (wasteWaterResults.calculationsTable) {
+        wasteWaterResults.calculationsTableMapped = this.mapCalculationsTable(wasteWaterResults.calculationsTable, settings);
+      }
       if (baselineResults != undefined) {
         wasteWaterResults = this.setSavingsResults(wasteWaterResults, baselineResults);
       }
@@ -107,65 +88,51 @@ export class WasteWaterService {
     return this.getEmptyResults();
   }
 
+  calculateResultsDefinedMLSS(inputData: WasteWaterTreatmentInputData): WasteWaterResults {
+    let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatment(inputData);
+    return wasteWaterResults;
+  }
 
-  calculateResultsDefinedSRT(activatedSludgeData: ActivatedSludgeData, aeratorPerformanceData: AeratorPerformanceData, systemBasics: SystemBasics, settings: Settings, definedSRT: number): WasteWaterResults {
-    let isDataValid: boolean = this.checkWasteWaterValid(activatedSludgeData, aeratorPerformanceData, systemBasics).isValid;
-    if (isDataValid) {
-      let activatedSludgeCopy: ActivatedSludgeData = JSON.parse(JSON.stringify(activatedSludgeData));
-      let aeratorPerformanceCopy: AeratorPerformanceData = JSON.parse(JSON.stringify(aeratorPerformanceData));
-      if (settings.unitsOfMeasure != 'Imperial') {
-        let settingsCopy: Settings = JSON.parse(JSON.stringify(settings));
-        settingsCopy.unitsOfMeasure = 'Imperial';
-        activatedSludgeCopy = this.convertWasteWaterService.convertActivatedSludgeData(activatedSludgeCopy, settings, settingsCopy);
-        aeratorPerformanceCopy = this.convertWasteWaterService.convertAeratorPerformanceData(aeratorPerformanceCopy, settings, settingsCopy)
-      }
-      let inputData: WasteWaterTreatmentInputData = {
-        Temperature: activatedSludgeCopy.Temperature,
-        So: activatedSludgeCopy.So,
-        Volume: activatedSludgeCopy.Volume,
-        FlowRate: activatedSludgeCopy.FlowRate,
-        InertVSS: activatedSludgeCopy.InertVSS,
-        OxidizableN: activatedSludgeCopy.OxidizableN,
-        Biomass: activatedSludgeCopy.Biomass,
-        InfluentTSS: activatedSludgeCopy.InfluentTSS,
-        InertInOrgTSS: activatedSludgeCopy.InertInOrgTSS,
-        EffluentTSS: activatedSludgeCopy.EffluentTSS,
-        RASTSS: activatedSludgeCopy.RASTSS,
-        MLSSpar: activatedSludgeCopy.MLSSpar,
-        FractionBiomass: activatedSludgeCopy.FractionBiomass,
-        BiomassYeild: activatedSludgeCopy.BiomassYeild,
-        HalfSaturation: activatedSludgeCopy.HalfSaturation,
-        MicrobialDecay: activatedSludgeCopy.MicrobialDecay,
-        MaxUtilizationRate: activatedSludgeCopy.MaxUtilizationRate,
-        MaxDays: systemBasics.MaxDays,
-        TimeIncrement: systemBasics.TimeIncrement,
-        OperatingDO: aeratorPerformanceCopy.OperatingDO,
-        Alpha: aeratorPerformanceCopy.Alpha,
-        Beta: aeratorPerformanceCopy.Beta,
-        SOTR: aeratorPerformanceCopy.SOTR,
-        Aeration: aeratorPerformanceCopy.Aeration,
-        Elevation: aeratorPerformanceCopy.Elevation,
-        OperatingTime: aeratorPerformanceCopy.OperatingTime,
-        TypeAerators: aeratorPerformanceCopy.TypeAerators,
-        Speed: aeratorPerformanceCopy.Speed,
-        EnergyCostUnit: aeratorPerformanceCopy.EnergyCostUnit,
-        DefinedSRT: definedSRT
-      }
-      let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatmentGivenSRT(inputData);
-      //return per month, convert to years
-      wasteWaterResults.AeEnergyAnnual = wasteWaterResults.AeEnergy * systemBasics.operatingMonths;
-      wasteWaterResults.AeCost = wasteWaterResults.AeCost * systemBasics.operatingMonths;
-      wasteWaterResults.AeEnergyAnnual = this.convertUnitsService.value(wasteWaterResults.AeEnergyAnnual).from('kWh').to('MWh');
-      if (settings.unitsOfMeasure != 'Imperial') {
-        wasteWaterResults = this.convertWasteWaterService.convertResultsToMetric(wasteWaterResults);
-      }
-      // wasteWaterResults.calculationsTableMapped = this.mapCalculationsTable(wasteWaterResults.calculationsTable, settings);
-      // if (baselineResults != undefined) {
-      //   wasteWaterResults = this.setSavingsResults(wasteWaterResults, baselineResults);
-      // }
-      return wasteWaterResults;
+  calculateResultsDefinedSRT(inputData: WasteWaterTreatmentInputData): WasteWaterResults {
+    let wasteWaterResults: WasteWaterResults = wasteWaterAddon.WasteWaterTreatmentGivenSRT(inputData);
+    return wasteWaterResults;
+  }
+
+  mapWasteWaterTreatementInputData(activatedSludge: ActivatedSludgeData, aeratorPerformance: AeratorPerformanceData, systemBasics: SystemBasics): WasteWaterTreatmentInputData {
+    let inputData: WasteWaterTreatmentInputData = {
+      Temperature: activatedSludge.Temperature,
+      So: activatedSludge.So,
+      Volume: activatedSludge.Volume,
+      FlowRate: activatedSludge.FlowRate,
+      InertVSS: activatedSludge.InertVSS,
+      OxidizableN: activatedSludge.OxidizableN,
+      Biomass: activatedSludge.Biomass,
+      InfluentTSS: activatedSludge.InfluentTSS,
+      InertInOrgTSS: activatedSludge.InertInOrgTSS,
+      EffluentTSS: activatedSludge.EffluentTSS,
+      RASTSS: activatedSludge.RASTSS,
+      MLSSpar: activatedSludge.MLSSpar,
+      FractionBiomass: activatedSludge.FractionBiomass,
+      BiomassYeild: activatedSludge.BiomassYeild,
+      HalfSaturation: activatedSludge.HalfSaturation,
+      MicrobialDecay: activatedSludge.MicrobialDecay,
+      MaxUtilizationRate: activatedSludge.MaxUtilizationRate,
+      MaxDays: systemBasics.MaxDays,
+      TimeIncrement: systemBasics.TimeIncrement,
+      OperatingDO: aeratorPerformance.OperatingDO,
+      Alpha: aeratorPerformance.Alpha,
+      Beta: aeratorPerformance.Beta,
+      SOTR: aeratorPerformance.SOTR,
+      Aeration: aeratorPerformance.Aeration,
+      Elevation: aeratorPerformance.Elevation,
+      OperatingTime: aeratorPerformance.OperatingTime,
+      TypeAerators: aeratorPerformance.TypeAerators,
+      Speed: aeratorPerformance.Speed,
+      EnergyCostUnit: aeratorPerformance.EnergyCostUnit,
+      DefinedSRT: activatedSludge.DefinedSRT
     }
-    return this.getEmptyResults();
+    return inputData;
+
   }
 
   getEmptyResults(): WasteWaterResults {
@@ -289,7 +256,7 @@ export class WasteWaterService {
     let settings: Settings = this.settings.getValue();
     let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.OperatingDO;
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
-    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings);
+    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
     let optimalDo: number = modification.aeratorPerformanceData.OperatingDO;
     let difference: number = this.checkDifference(modification, modificationResults);
@@ -307,7 +274,9 @@ export class WasteWaterService {
         optimalDo = optimalDo + .1;
       }
       modification.aeratorPerformanceData.OperatingDO = optimalDo;
-      modificationResults = this.calculateResultsDefinedSRT(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, definedSRT);
+      modification.activatedSludgeData.DefinedSRT = definedSRT;
+      modification.activatedSludgeData.CalculateGivenSRT = true;
+      modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
       difference = this.checkDifference(modification, modificationResults);
       counter++;
     }
@@ -323,7 +292,7 @@ export class WasteWaterService {
     let settings: Settings = this.settings.getValue();
     let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.OperatingTime;
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
-    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings);
+    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
     let operatingTime: number = modification.aeratorPerformanceData.OperatingTime;
     let difference: number = this.checkDifference(modification, modificationResults);
@@ -343,7 +312,9 @@ export class WasteWaterService {
         operatingTime = operatingTime - .1;
       }
       modification.aeratorPerformanceData.OperatingTime = operatingTime;
-      modificationResults = this.calculateResultsDefinedSRT(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, definedSRT);
+      modification.activatedSludgeData.DefinedSRT = definedSRT;
+      modification.activatedSludgeData.CalculateGivenSRT = true;
+      modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
       difference = this.checkDifference(modification, modificationResults);
       counter++;
     }
@@ -368,7 +339,7 @@ export class WasteWaterService {
     let settings: Settings = this.settings.getValue();
     let startingValue: number = wasteWater.modifications[modificationIndex].aeratorPerformanceData.Speed;
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.modifications[modificationIndex]));
-    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings);
+    let modificationResults: WasteWaterResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
     let definedSRT: number = modificationResults.SolidsRetentionTime;
     let speed: number = modification.aeratorPerformanceData.Speed;
     let difference: number = this.checkDifference(modification, modificationResults);
@@ -388,7 +359,9 @@ export class WasteWaterService {
         speed = speed - .1;
       }
       modification.aeratorPerformanceData.Speed = speed;
-      modificationResults = this.calculateResultsDefinedSRT(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, definedSRT);
+      modification.activatedSludgeData.DefinedSRT = definedSRT;
+      modification.activatedSludgeData.CalculateGivenSRT = true;
+      modificationResults = this.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, wasteWater.systemBasics, settings, false);
       difference = this.checkDifference(modification, modificationResults);
       counter++;
     }
