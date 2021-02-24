@@ -182,6 +182,7 @@ export class EnergyFormComponent implements OnInit {
         availableHeat: calculatedAvailableHeat
       });
     }
+    this.calculate();
     this.flueGasModal.hide();
     this.showFlueGasModal = false;
     this.chargeMaterialService.modalOpen.next(this.showFlueGasModal);

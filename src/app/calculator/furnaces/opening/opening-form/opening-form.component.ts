@@ -270,9 +270,8 @@ export class OpeningFormComponent implements OnInit {
           this.openingLossesForm.patchValue({
             heightOfOpening: 0
           });
-          //let radiusFeet = (radiusInches * .08333333) / 2;
-          let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value;
-          let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit) / 2;
+          let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value / 2;
+          let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit);
           this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.controls.numberOfOpenings.value;
       } else if (this.openingLossesForm.controls.openingType.value === 'Rectangular (or Square)') {
           let lengthFeet = 0;
@@ -301,6 +300,7 @@ export class OpeningFormComponent implements OnInit {
         availableHeat: calculatedAvailableHeat
       });
     }
+    this.calculate();
     this.flueGasModal.hide();
     this.showFlueGasModal = false;
     this.openingService.modalOpen.next(this.showFlueGasModal);
