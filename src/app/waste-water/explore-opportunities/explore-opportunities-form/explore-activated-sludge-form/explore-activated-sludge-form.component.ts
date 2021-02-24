@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { ActivatedSludgeData, WasteWater, WasteWaterData } from '../../../../shared/models/waste-water';
@@ -68,5 +68,21 @@ export class ExploreActivatedSludgeFormComponent implements OnInit {
     let modificationIndex: number = wasteWater.modifications.findIndex(mod => { return mod.id == this.selectedModificationId });
     wasteWater.modifications[modificationIndex].activatedSludgeData = activatedSludgeData;
     this.wasteWaterService.updateWasteWater(wasteWater);
+  }
+
+
+  changePlantControlPoint() {
+    if (this.modificationForm.controls.CalculateGivenSRT.value == true) {
+      this.modificationForm.controls.MLSSpar.setValidators([]);
+      this.modificationForm.controls.MLSSpar.updateValueAndValidity();
+      this.modificationForm.controls.DefinedSRT.setValidators([Validators.required, Validators.min(0)]);
+      this.modificationForm.controls.DefinedSRT.updateValueAndValidity();
+    } else {
+      this.modificationForm.controls.MLSSpar.setValidators([Validators.required, Validators.min(0)]);
+      this.modificationForm.controls.MLSSpar.updateValueAndValidity();
+      this.modificationForm.controls.DefinedSRT.setValidators([]);
+      this.modificationForm.controls.DefinedSRT.updateValueAndValidity();
+    }
+    this.save();
   }
 }
