@@ -1,0 +1,43 @@
+<!-- MLSS -->
+<div class="checkbox">
+    <label class="group-label" for="exploreMLSS">
+        <input type="checkbox" id="exploreMLSS" (focus)="focusField('exploreMLSS')" (change)="setExploreMLSS()"
+            [(ngModel)]="modificationData.exploreMLSS.hasOpportunity" />
+         <span [innerHTML]="modificationData.exploreMLSS.display"></span>
+    </label>
+</div>
+<!-- MLSS-->
+<li *ngIf="modificationData.exploreMLSS.hasOpportunity" class="explore-opps-item">
+    <form [formGroup]="baselineForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid':baselineForm.controls.MLSSpar.invalid}">
+            <label for="baselineMLSSpar" class="baseline-value-label">MLSS</label>
+            <div class="text-muted baseline-value-input">{{ baselineForm.controls.MLSSpar.value }}
+                <span>mg/L</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="baselineForm.controls.MLSSpar.invalid && !baselineForm.controls.MLSSpar.pristine">
+                <span *ngIf="baselineForm.controls.MLSSpar.errors.required">Value Required</span>
+                <span *ngIf="baselineForm.controls.MLSSpar.errors.min">Value can't be less than
+                    {{baselineForm.controls.MLSSpar.errors.min.min}} &#8451;</span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm" class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup"
+            [ngClass]="{'invalid':modificationForm.controls.MLSSpar.invalid }">
+            <label for="modificationMLSSpar" class="mod-value-label">MLSS</label>
+            <div class="input-group mod-max-width">
+                <input name="modificationMLSSpar" type="number" step="1" min="0" id="modificationMLSSpar"
+                    class="form-control mod-value-input" (focus)="focusField('MLSSpar')" formControlName="MLSSpar"
+                    (input)="save()" />
+                <span class="input-group-addon units">mg/L</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="modificationForm.controls.MLSSpar.invalid && !modificationForm.controls.MLSSpar.pristine">
+                <span *ngIf="modificationForm.controls.MLSSpar.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.MLSSpar.errors.min">Value can't be less than
+                    {{modificationForm.controls.MLSSpar.errors.min.min}} &#8451;</span>
+            </span>
+        </div>
+    </form>
+</li>
