@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WasteWaterResults } from '../../../shared/models/waste-water';
+import { DataTableVariable } from '../../waste-water-analysis/dataTableVariables';
 import { AnalysisGraphItem, WasteWaterAnalysisService } from '../../waste-water-analysis/waste-water-analysis.service';
 
 @Component({
@@ -14,8 +15,10 @@ export class AnalysisMenuComponent implements OnInit {
   analysisTabSub: Subscription;
   analysisGraphItemsSub: Subscription;
   analysisGraphItems: Array<AnalysisGraphItem>;
+  analysisXAxisVariables: Array<DataTableVariable>;
   showGraphDropdown: boolean = false;
   showTableDropdown: boolean = false;
+  showXAxisDropdown: boolean = false;
   baselineResults: WasteWaterResults;
   modificationsResultsArr: Array<{
     name: string,
@@ -35,6 +38,7 @@ export class AnalysisMenuComponent implements OnInit {
 
     this.analysisGraphItemsSub = this.wasteWaterAnalysisService.analysisGraphItems.subscribe(val => {
       this.analysisGraphItems = val;
+      this.analysisXAxisVariables = this.wasteWaterAnalysisService.analysisXAxisVariables.getValue();
     });
 
     this.selectedTableDataSub = this.wasteWaterAnalysisService.selectedTableData.subscribe(val => {
@@ -59,6 +63,10 @@ export class AnalysisMenuComponent implements OnInit {
     this.showGraphDropdown = !this.showGraphDropdown;
   }
 
+  toggleXAxisDropdown() {
+    this.showXAxisDropdown = !this.showXAxisDropdown;
+  }
+
   toggleTableDropdown() {
     this.showTableDropdown = !this.showTableDropdown;
   }
@@ -66,6 +74,18 @@ export class AnalysisMenuComponent implements OnInit {
   toggleSelected(analysisGraphItem: AnalysisGraphItem) {
     analysisGraphItem.selected = !analysisGraphItem.selected;
     this.wasteWaterAnalysisService.analysisGraphItems.next(this.analysisGraphItems);
+  }
+
+  toggleSelectedXAxis(selectedXVariable: DataTableVariable) {
+    selectedXVariable.selected = true;
+    this.analysisXAxisVariables.forEach(x => {
+      if (x.name != selectedXVariable.name) {
+        x.selected = false;
+      }
+    });
+    this.wasteWaterAnalysisService.analysisXAxisVariables.next(this.analysisXAxisVariables);
+    this.wasteWaterAnalysisService.setGraphData(selectedXVariable);
+    this.toggleXAxisDropdown()
   }
 
   selectTableData(name: string, results: WasteWaterResults) {

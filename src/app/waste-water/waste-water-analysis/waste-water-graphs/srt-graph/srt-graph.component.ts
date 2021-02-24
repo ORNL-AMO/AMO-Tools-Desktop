@@ -4,6 +4,7 @@ import * as Plotly from 'plotly.js';
 import { WasteWaterService } from '../../../waste-water.service';
 import { Settings } from '../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
+import { DataTableVariable } from '../../dataTableVariables';
 
 @Component({
   selector: 'app-srt-graph',
@@ -44,9 +45,9 @@ export class SrtGraphComponent implements OnInit {
   }
 
   plotChart(){
-    let unitSuffix: string = this.analysisGraphItem.dataVariable.imperialUnit;
+    let unitSuffix: string = this.analysisGraphItem.variableY.imperialUnit;
     if (this.settings.unitsOfMeasure == 'Metric') {
-      unitSuffix = this.analysisGraphItem.dataVariable.metricUnit;
+      unitSuffix = this.analysisGraphItem.variableY.metricUnit;
     }
 
     let layout = {
@@ -66,7 +67,7 @@ export class SrtGraphComponent implements OnInit {
       },
       xaxis: {
         title: {
-          text: 'SRT Days',
+          text: this.setXTitleText(this.analysisGraphItem.variableX),
         },
       },
     };
@@ -94,6 +95,17 @@ export class SrtGraphComponent implements OnInit {
         this.wasteWaterAnalysisService.xAxisHover.next([]);
       });
     });
+  }
+
+  setXTitleText(xVariable: DataTableVariable) {
+    let xAxisText: string;
+    if (this.analysisGraphItem.variableX.name == 'SRT') {
+      xAxisText = this.analysisGraphItem.variableX.label;
+    } else {
+      let xUnits = this.settings.unitsOfMeasure == 'Imperial'? this.analysisGraphItem.variableX.imperialUnit : this.analysisGraphItem.variableX.metricUnit;
+      xAxisText = `${this.analysisGraphItem.variableX.label} (${xUnits})`
+    }
+    return xAxisText;
   }
 
   setHover(points: Array<{ curveNumber: number, pointNumber: number }>) {
