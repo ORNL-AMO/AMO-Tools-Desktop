@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedSludgeData } from '../../shared/models/waste-water';
 
 @Injectable()
@@ -8,6 +8,14 @@ export class ActivatedSludgeFormService {
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromObj(obj: ActivatedSludgeData): FormGroup {
+    let MLSSparValidators: Array<ValidatorFn> = [];
+    let DefinedSRTValidators: Array<ValidatorFn> = [];
+    if(obj.CalculateGivenSRT == true){
+      DefinedSRTValidators = [Validators.required, Validators.min(0)];
+    }else{
+      MLSSparValidators = [Validators.required, Validators.min(0)];
+    }
+
     let form: FormGroup = this.formBuilder.group({
       Temperature: [obj.Temperature, [Validators.required, Validators.min(0)]],
       So: [obj.So, [Validators.required, Validators.min(0)]],
@@ -20,12 +28,14 @@ export class ActivatedSludgeFormService {
       InertInOrgTSS: [obj.InertInOrgTSS, [Validators.required, Validators.min(0)]],
       EffluentTSS: [obj.EffluentTSS, [Validators.required, Validators.min(0)]],
       RASTSS: [obj.RASTSS, [Validators.required, Validators.min(0)]],
-      MLSSpar: [obj.MLSSpar, [Validators.required, Validators.min(0)]],
+      MLSSpar: [obj.MLSSpar, MLSSparValidators],
       FractionBiomass: [obj.FractionBiomass, [Validators.required, Validators.min(0), Validators.max(1)]],
       BiomassYeild: [obj.BiomassYeild, [Validators.required, Validators.min(0), Validators.max(1)]],
       HalfSaturation: [obj.HalfSaturation, [Validators.required, Validators.min(0)]],
       MicrobialDecay: [obj.MicrobialDecay, [Validators.required, Validators.min(0)]],
-      MaxUtilizationRate: [obj.MaxUtilizationRate, [Validators.required, Validators.min(0)]]
+      MaxUtilizationRate: [obj.MaxUtilizationRate, [Validators.required, Validators.min(0)]],
+      CalculateGivenSRT: [obj.CalculateGivenSRT, [Validators.required]],
+      DefinedSRT: [obj.DefinedSRT, DefinedSRTValidators]
     });
     return form;
   }
@@ -49,6 +59,8 @@ export class ActivatedSludgeFormService {
       HalfSaturation: form.controls.HalfSaturation.value,
       MicrobialDecay: form.controls.MicrobialDecay.value,
       MaxUtilizationRate: form.controls.MaxUtilizationRate.value,
+      CalculateGivenSRT: form.controls.CalculateGivenSRT.value,
+      DefinedSRT: form.controls.DefinedSRT.value
     }
   }
 }

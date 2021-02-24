@@ -67,7 +67,8 @@
                     id="{{'FlowRate_'+idString}}" (focus)="focusField('FlowRate')" (input)="save()"
                     formControlName="FlowRate" [readonly]="!selected">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MGD</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/day</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'"
+                    class="input-group-addon units">m<sup>3</sup>/day</span>
             </div>
             <span *ngIf="form.controls.FlowRate.invalid && !form.controls.FlowRate.pristine">
                 <span class="alert-danger pull-right small" *ngIf="form.controls.FlowRate.errors.required">Value
@@ -197,8 +198,18 @@
                     be less than {{form.controls.RASTSS.errors.min.min}} mg/L</span>
             </span>
         </div>
-        <!-- MLSSpar -->
+        <!-- CalculateGivenSRT -->
         <div class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.CalculateGivenSRT, 'invalid': form.controls.CalculateGivenSRT.invalid}">
+            <label for="{{'CalculateGivenSRT_'+idString}}">Plant Control Point</label>
+            <select class="form-control" formControlName="CalculateGivenSRT" (change)="changePlantControlPoint()"
+                (focus)="focusField('CalculateGivenSRT')">
+                <option [ngValue]="false">MLSS </option>
+                <option [ngValue]="true">SRT Days</option>
+            </select>
+        </div>
+        <!-- MLSSpar -->
+        <div *ngIf="form.controls.CalculateGivenSRT.value == false" class="form-group"
             [ngClass]="{'indicate-different': activatedSludgeDifferent.MLSSpar, 'invalid': form.controls.MLSSpar.invalid}">
             <label for="{{'MLSSpar_'+idString}}">MLSS</label>
             <div class="input-group">
@@ -211,6 +222,23 @@
                     Required</span>
                 <span class="alert-danger pull-right small" *ngIf="form.controls.MLSSpar.errors.min">Value can't
                     be less than {{form.controls.MLSSpar.errors.min.min}} mg/L</span>
+            </span>
+        </div>
+        <!-- DefinedSRT -->
+        <div *ngIf="form.controls.CalculateGivenSRT.value == true" class="form-group"
+            [ngClass]="{'indicate-different': activatedSludgeDifferent.DefinedSRT, 'invalid': form.controls.DefinedSRT.invalid}">
+            <label for="{{'MLSSpar_'+idString}}">SRT</label>
+            <div class="input-group">
+                <input type="number" name="DefinedSRT" class="form-control number-input-field"
+                    id="{{'DefinedSRT_'+idString}}" (focus)="focusField('DefinedSRT')" (input)="save()"
+                    formControlName="DefinedSRT" [readonly]="!selected">
+                <span class="input-group-addon units">days</span>
+            </div>
+            <span *ngIf="form.controls.DefinedSRT.invalid && !form.controls.DefinedSRT.pristine">
+                <span class="alert-danger pull-right small" *ngIf="form.controls.DefinedSRT.errors.required">Value
+                    Required</span>
+                <span class="alert-danger pull-right small" *ngIf="form.controls.DefinedSRT.errors.min">Value can't
+                    be less than {{form.controls.DefinedSRT.errors.min.min}} days</span>
             </span>
         </div>
         <!--SYSTEM CONSTANTS-->

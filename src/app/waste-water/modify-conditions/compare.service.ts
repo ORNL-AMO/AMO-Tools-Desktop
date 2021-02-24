@@ -65,12 +65,14 @@ export class CompareService {
       InertInOrgTSS: baselineData.InertInOrgTSS != modificationData.InertInOrgTSS,
       EffluentTSS: baselineData.EffluentTSS != modificationData.EffluentTSS,
       RASTSS: baselineData.RASTSS != modificationData.RASTSS,
-      MLSSpar: baselineData.MLSSpar != modificationData.MLSSpar,
+      MLSSpar: baselineData.MLSSpar != modificationData.MLSSpar || baselineData.CalculateGivenSRT != modificationData.CalculateGivenSRT,
       FractionBiomass: baselineData.FractionBiomass != modificationData.FractionBiomass,
       BiomassYeild: baselineData.BiomassYeild != modificationData.BiomassYeild,
       HalfSaturation: baselineData.HalfSaturation != modificationData.HalfSaturation,
       MicrobialDecay: baselineData.MicrobialDecay != modificationData.MicrobialDecay,
       MaxUtilizationRate: baselineData.MaxUtilizationRate != modificationData.MaxUtilizationRate,
+      DefinedSRT: baselineData.DefinedSRT != modificationData.DefinedSRT || baselineData.CalculateGivenSRT != modificationData.CalculateGivenSRT,
+      CalculateGivenSRT: baselineData.CalculateGivenSRT != modificationData.CalculateGivenSRT
     }
   }
 
@@ -124,6 +126,8 @@ export interface ActivatedSludgeDifferent {
   HalfSaturation: boolean,
   MicrobialDecay: boolean,
   MaxUtilizationRate: boolean,
+  CalculateGivenSRT: boolean,
+  DefinedSRT: boolean
 }
 
 export interface AeratorPerformanceDifferent {

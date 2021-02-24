@@ -22,7 +22,10 @@ export interface WasteWaterData {
     outputs?: WasteWaterResults,
     valid?: WasteWaterValid,
     exploreAeratorPerformance?: SavingsOpportunity,
-    exploreReduceOxygen?: SavingsOpportunity
+    exploreReduceOxygen?: SavingsOpportunity,
+    exploreMLSS?: SavingsOpportunity,
+    exploreVOLR?: SavingsOpportunity,
+    exploreRAS?: SavingsOpportunity
 }
 
 export interface ActivatedSludgeData {
@@ -43,6 +46,8 @@ export interface ActivatedSludgeData {
     HalfSaturation: number,
     MicrobialDecay: number,
     MaxUtilizationRate: number,
+    CalculateGivenSRT: boolean,
+    DefinedSRT: number
 }
 
 export interface AeratorPerformanceData {

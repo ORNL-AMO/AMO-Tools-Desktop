@@ -304,6 +304,8 @@ export class AssessmentService {
           HalfSaturation: 60,
           MicrobialDecay: 0.1,
           MaxUtilizationRate: 8,
+          CalculateGivenSRT: false,
+          DefinedSRT: 0
         },
         aeratorPerformanceData: {
           OperatingDO: 4.5,
