@@ -46,6 +46,8 @@ export interface ActivatedSludgeData {
     HalfSaturation: number,
     MicrobialDecay: number,
     MaxUtilizationRate: number,
+    CalculateGivenSRT: boolean,
+    DefinedSRT: number
 }
 
 export interface AeratorPerformanceData {

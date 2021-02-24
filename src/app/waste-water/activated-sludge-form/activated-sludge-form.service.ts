@@ -25,7 +25,10 @@ export class ActivatedSludgeFormService {
       BiomassYeild: [obj.BiomassYeild, [Validators.required, Validators.min(0), Validators.max(1)]],
       HalfSaturation: [obj.HalfSaturation, [Validators.required, Validators.min(0)]],
       MicrobialDecay: [obj.MicrobialDecay, [Validators.required, Validators.min(0)]],
-      MaxUtilizationRate: [obj.MaxUtilizationRate, [Validators.required, Validators.min(0)]]
+      MaxUtilizationRate: [obj.MaxUtilizationRate, [Validators.required, Validators.min(0)]],
+      CalculateGivenSRT: [obj.MaxUtilizationRate, [Validators.required]],
+      DefinedSRT: [obj.DefinedSRT, [Validators.min(0)]]
+
     });
     return form;
   }
@@ -49,6 +52,8 @@ export class ActivatedSludgeFormService {
       HalfSaturation: form.controls.HalfSaturation.value,
       MicrobialDecay: form.controls.MicrobialDecay.value,
       MaxUtilizationRate: form.controls.MaxUtilizationRate.value,
+      CalculateGivenSRT: form.controls.CalculateGivenSRT.value,
+      DefinedSRT: form.controls.DefinedSRT.value
     }
   }
 }
