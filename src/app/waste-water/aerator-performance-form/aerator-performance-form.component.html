@@ -9,11 +9,14 @@
         <!--OperatingDO-->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.OperatingDO, 'invalid': form.controls.OperatingDO.invalid}">
-            <label for="{{'OperatingDO_'+idString}}">Operating Dissolved O<sub>2</sub> (DO)</label>
+            <label for="{{'OperatingDO_'+idString}}">Operating Dissolved O<sub>2</sub> (DO)
+                <a *ngIf="isModification" class="form-text small click-link" (click)="calculateDO()"
+                    [ngClass]="{'disabled-link':!selected}">Calculate DO</a>
+            </label>
             <div class="input-group">
                 <input type="number" name="OperatingDO" class="form-control number-input-field"
                     id="{{'OperatingDO_'+idString}}" (focus)="focusField('OperatingDO')" (input)="save()"
-                    formControlName="OperatingDO" [readonly]="!selected">
+                    formControlName="OperatingDO" [readonly]="!selected" step=".1">
                 <span class="input-group-addon units">mg/L</span>
             </div>
             <span *ngIf="form.controls.OperatingDO.invalid && !form.controls.OperatingDO.pristine">
@@ -55,26 +58,29 @@
             </span>
         </div>
 
-            <!-- Aerator -->
-            <div class="form-group"
+        <!-- Aerator -->
+        <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Aerator, 'invalid': form.controls.Aerator.invalid}">
             <label for="{{'Aerator_'+idString}}">Aerator</label>
             <select class="form-control" formControlName="Aerator" (change)="setDefaultSOTR()"
                 (focus)="focusField('aerator')">
-              <optgroup label="Diffused Air Systems">
-                <option *ngFor="let aerator of aerationRanges.diffusers" [ngValue]="aerator.label">{{aerator.label}}</option>
-              </optgroup>
-              <optgroup label="Mechanical Aerators">
-                <option *ngFor="let aerator of aerationRanges.mechanical" [ngValue]="aerator.label">{{aerator.label}}</option>
-              </optgroup>
-              <optgroup label="Hybrid Aerators">
-                <option *ngFor="let aerator of aerationRanges.hybrid" [ngValue]="aerator.label">{{aerator.label}}</option>
-              </optgroup>
-              <option [ngValue]="'Other'">Other</option>
+                <optgroup label="Diffused Air Systems">
+                    <option *ngFor="let aerator of aerationRanges.diffusers" [ngValue]="aerator.label">{{aerator.label}}
+                    </option>
+                </optgroup>
+                <optgroup label="Mechanical Aerators">
+                    <option *ngFor="let aerator of aerationRanges.mechanical" [ngValue]="aerator.label">
+                        {{aerator.label}}</option>
+                </optgroup>
+                <optgroup label="Hybrid Aerators">
+                    <option *ngFor="let aerator of aerationRanges.hybrid" [ngValue]="aerator.label">{{aerator.label}}
+                    </option>
+                </optgroup>
+                <option [ngValue]="'Other'">Other</option>
             </select>
-            </div>
+        </div>
 
-            <!-- SOTR -->
+        <!-- SOTR -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.SOTR, 'invalid': form.controls.SOTR.invalid}">
             <label for="{{'SOTR_'+idString}}">Standard O<sub>2</sub> Transfer Rate (SOTR)</label>
@@ -139,7 +145,10 @@
         <!-- OperatingTime -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.OperatingTime, 'invalid': form.controls.OperatingTime.invalid}">
-            <label for="{{'OperatingTime_'+idString}}">Aerator Operating Time</label>
+            <label for="{{'OperatingTime_'+idString}}">Aerator Operating Time
+                <a *ngIf="isModification" class="form-text small click-link" (click)="calculateOperatingTime()"
+                    [ngClass]="{'disabled-link':!selected}">Calculate Operating Time</a>
+            </label>
             <div class="input-group">
                 <input type="number" name="OperatingTime" class="form-control number-input-field"
                     id="{{'OperatingTime_'+idString}}" (focus)="focusField('OperatingTime')" (input)="save()"
@@ -154,6 +163,10 @@
                 <span class="alert-danger pull-right small" *ngIf="form.controls.OperatingTime.errors.max">Value can't
                     be greater than {{form.controls.OperatingTime.errors.max.max}} hr/day</span>
             </span>
+            <span class="alert-warning pull-right small"
+                *ngIf="aeratorPerformanceWarnings.OperatingTime !== null && !form.controls.OperatingTime.invalid && !form.controls.OperatingTime.pristine">
+                {{aeratorPerformanceWarnings.OperatingTime}}</span>
+
         </div>
         <!-- TypeAerators -->
         <div class="form-group"
@@ -168,7 +181,9 @@
         <!-- Speed -->
         <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.Speed,'error': aeratorPerformanceWarnings.Speed !== null, 'invalid': form.controls.Speed.invalid}">
-            <label for="{{'Speed_'+idString}}">Aerator Speed</label>
+            <label for="{{'Speed_'+idString}}">Aerator Speed
+                <a *ngIf="isModification" class="form-text small click-link" (click)="calculateSpeed()"
+                    [ngClass]="{'disabled-link':!selected}">Calculate Speed</a></label>
             <div class="input-group">
                 <input type="number" name="Speed" class="form-control number-input-field" id="{{'Speed_'+idString}}"
                     (focus)="focusField('Speed')" (input)="save()" formControlName="Speed" [readonly]="!selected">
@@ -203,7 +218,7 @@
             </span>
         </div>
         <!-- AnoxicZoneCondition -->
-            <div class="form-group"
+        <div class="form-group"
             [ngClass]="{'indicate-different': aeratorPerformanceDifferent.AnoxicZoneCondition, 'invalid': form.controls.AnoxicZoneCondition.invalid}">
             <label for="{{'AnoxicZoneCondition_'+idString}}">
                 Do you have an anoxic zone with returned mixed liquor from the aerobic zone?

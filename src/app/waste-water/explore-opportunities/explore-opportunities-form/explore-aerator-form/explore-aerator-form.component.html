@@ -2,8 +2,7 @@
 <div class="checkbox">
     <label class="group-label" for="exploreReduceOxygen">
         <input type="checkbox" id="exploreReduceOxygen" (focus)="focusField('exploreReduceOxygen')"
-            (change)="setExploreReduceOxygen()"
-            [(ngModel)]="modificationData.exploreReduceOxygen.hasOpportunity" />
+            (change)="setExploreReduceOxygen()" [(ngModel)]="modificationData.exploreReduceOxygen.hasOpportunity" />
         <span [innerHTML]="modificationData.exploreReduceOxygen.display"></span>
     </label>
 </div>
@@ -12,7 +11,8 @@
     <form [formGroup]="baselineForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup"
             [ngClass]="{'invalid':baselineForm.controls.OperatingDO.invalid}">
-            <label for="baselineOperatingDO" class="baseline-value-label">Baseline Operating Dissolved O<sub>2</sub> (DO)</label>
+            <label for="baselineOperatingDO" class="baseline-value-label">Baseline Operating Dissolved O<sub>2</sub>
+                (DO)</label>
             <div class="text-muted baseline-value-input">{{ baselineForm.controls.OperatingDO.value }}
                 <span>mg/L</span>
             </div>
@@ -27,13 +27,16 @@
     <form [formGroup]="modificationForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup"
             [ngClass]="{'invalid':modificationForm.controls.OperatingDO.invalid }">
-            <label for="modificationOperatingDO" class="mod-value-label">Modification Operating Dissolved O<sub>2</sub> (DO)</label>
+            <label for="modificationOperatingDO" class="mod-value-label">Modification Operating Dissolved O<sub>2</sub>
+                (DO)</label>
             <div class="input-group mod-max-width">
                 <input name="modificationOperatingDO" type="number" step="0.1" min="0" max="24"
                     id="modificationOperatingDO" class="form-control mod-value-input"
                     (focus)="focusField('OperatingDO')" formControlName="OperatingDO" (input)="save()" />
                 <span class="input-group-addon units">mg/L</span>
             </div>
+            <a class="form-text small click-link" (click)="calculateDO()">Calculate
+                DO</a>
             <span class="alert-danger pull-right small"
                 *ngIf="modificationForm.controls.OperatingDO.invalid && !modificationForm.controls.OperatingDO.pristine">
                 <span *ngIf="modificationForm.controls.OperatingDO.errors.required">Value Required</span>
@@ -79,6 +82,8 @@
                     (focus)="focusField('OperatingTime')" formControlName="OperatingTime" (input)="save()" />
                 <span class="input-group-addon units">hr/day</span>
             </div>
+            <a class="form-text small click-link" (click)="calculateOperatingTime()">Calculate
+                Operating Hours</a>
             <span class="alert-danger pull-right small"
                 *ngIf="modificationForm.controls.OperatingTime.invalid && !modificationForm.controls.OperatingTime.pristine">
                 <span *ngIf="modificationForm.controls.OperatingTime.errors.required">Value Required</span>
@@ -97,7 +102,8 @@
             <div class="text-muted baseline-value-input">
                 {{ baselineForm.controls.Aeration.value }}
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span></div>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+            </div>
             <span class="alert-danger pull-right small"
                 *ngIf="baselineForm.controls.Aeration.invalid && !baselineForm.controls.Aeration.pristine">
                 <span *ngIf="baselineForm.controls.Aeration.errors.required">Value Required</span>
@@ -156,6 +162,8 @@
                     (input)="save()" />
                 <span class="input-group-addon units">%</span>
             </div>
+            <a class="form-text small click-link" (click)="calculateSpeed()">Calculate
+                Speed</a>
             <span class="alert-danger pull-right small"
                 *ngIf="modificationForm.controls.Speed.invalid && !modificationForm.controls.Speed.pristine">
                 <span *ngIf="modificationForm.controls.Speed.errors.required">Value Required</span>

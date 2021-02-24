@@ -144,4 +144,22 @@ export class AeratorPerformanceFormComponent implements OnInit {
   focusField(str: string) {
     this.wasteWaterService.focusedField.next(str);
   }
+
+
+  calculateDO(){
+    let optimalDo: number = this.wasteWaterService.calculateModDo(this.modificationIndex);
+    this.form.controls.OperatingDO.patchValue(optimalDo);
+    this.save();
+  }
+
+  calculateOperatingTime(){
+    let optimalOperatingTime: number = this.wasteWaterService.calculateModOperatingTime(this.modificationIndex);
+    this.form.controls.OperatingTime.patchValue(optimalOperatingTime);
+    this.save();
+  }
+  calculateSpeed(){
+    let optimalSpeed: number = this.wasteWaterService.calculateModSpeed(this.modificationIndex);
+    this.form.controls.Speed.patchValue(optimalSpeed);
+    this.save();
+  }
 }

@@ -161,7 +161,8 @@ export interface WasteWaterTreatmentInputData {
     OperatingTime: number,
     TypeAerators: number,
     Speed: number,
-    EnergyCostUnit: number
+    EnergyCostUnit: number,
+    DefinedSRT?: number
 
 }
 
