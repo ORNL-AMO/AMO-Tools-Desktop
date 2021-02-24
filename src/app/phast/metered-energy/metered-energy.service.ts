@@ -11,18 +11,51 @@ export class MeteredEnergyService {
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService, private auxEquipmentService: AuxEquipmentService) { }
 
-  calculateMeteredEnergy(phast: PHAST, settings: Settings, isHourlyResult: boolean): MeteredEnergyResults {
+  calculateMeteredEnergy(phast: PHAST, settings: Settings): MeteredEnergyResults {
     let results: MeteredEnergyResults = {
-      meteredEnergyUsed: 0,
-      meteredEnergyIntensity: 0,
-      meteredElectricityUsed: 0,
-      calculatedFuelEnergyUsed: 0,
-      calculatedEnergyIntensity: 0,
-      calculatedElectricityUsed: 0
+      metered: {
+        hourlyEnergy: 0,
+        annualEnergy: 0,
+        hourlyElectricity: 0,
+        annualElectricity: 0,
+        energyIntensity: 0,
+      },
+      byPhast: {
+        hourlyEnergy: 0,
+        annualEnergy: 0,
+        annualElectricity: 0,
+        energyIntensity: 0,
+      }
     };
+
+    // Metered
+    results.metered.hourlyEnergy = this.getTotalMeteredEnergy(phast, settings);
+    results.metered.annualEnergy = this.getTotalMeteredEnergy(phast, settings, false);
+
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials) * phast.operatingHours.hoursPerYear;
+    }
+    results.metered.energyIntensity = this.convertIntensity((results.metered.annualEnergy / sumFeedRate), settings);
+    
+    let auxResults: Array<{ name: string, totalPower: number, motorPower: string }> = this.auxEquipmentService.calculate(phast);
+    results.metered.hourlyElectricity = this.auxEquipmentService.getResultsSum(auxResults);
+    results.metered.annualElectricity = results.metered.hourlyElectricity * phast.operatingHours.hoursPerYear;
+
+    // By phast
+    let byPhast = this.phastResultsService.calculatedByPhast(phast, settings);
+    results.byPhast.annualElectricity = byPhast.electricityUsed * phast.operatingHours.hoursPerYear;
+    results.byPhast.energyIntensity = byPhast.energyIntensity;
+    results.byPhast.hourlyEnergy = byPhast.fuelEnergyUsed;
+    results.byPhast.annualEnergy = byPhast.fuelEnergyUsed * phast.operatingHours.hoursPerYear;
+    return results;
+  }
+
+  getTotalMeteredEnergy(phast: PHAST, settings: Settings, isHourlyResult = true): number {
     let steamEnergyUsed: number = 0;
     let fuelEnergyUsed: number = 0;
     let electricityEnergyUsed: number = 0;
+
     if (phast.meteredEnergy.steam) {
       steamEnergyUsed = this.calcSteamEnergyUsed(phast.meteredEnergy.meteredEnergySteam, isHourlyResult);
       steamEnergyUsed = this.convertSteamEnergyUsed(steamEnergyUsed, settings);
@@ -36,20 +69,7 @@ export class MeteredEnergyService {
       fuelEnergyUsed = this.convertFuelEnergyUsed(fuelEnergyUsed, settings);
     }
 
-    let sumFeedRate = 0;
-    if (phast.losses) {
-      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
-    }
-
-    results.meteredEnergyUsed = steamEnergyUsed + fuelEnergyUsed + electricityEnergyUsed;
-    results.meteredEnergyIntensity = this.convertIntensity((results.meteredEnergyUsed / sumFeedRate), settings);
-    let auxResults: Array<{ name: string, totalPower: number, motorPower: string }> = this.auxEquipmentService.calculate(phast);
-    results.meteredElectricityUsed = this.auxEquipmentService.getResultsSum(auxResults);
-    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
-    results.calculatedElectricityUsed = calculated.electricityUsed;
-    results.calculatedEnergyIntensity = calculated.energyIntensity;
-    results.calculatedFuelEnergyUsed = calculated.fuelEnergyUsed;
-    return results;
+    return steamEnergyUsed + fuelEnergyUsed + electricityEnergyUsed;
   }
 
 
