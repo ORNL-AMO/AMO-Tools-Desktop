@@ -278,7 +278,8 @@ export class OpportunitySummaryService {
 
   getCompressedAirReductionSummary(compressedAirReduction: CompressedAirReductionTreasureHunt, index: number, settings: Settings): OpportunitySummary {
     let name: string = 'Compressed Air Reduction #' + index;
-    let results: CompressedAirReductionResults = this.compressedAirReductionService.getResults(settings, compressedAirReduction.baseline, compressedAirReduction.modification);
+    this.compressedAirReductionService.calculateResults(settings, compressedAirReduction.baseline, compressedAirReduction.modification);
+    let results: CompressedAirReductionResults = this.compressedAirReductionService.compressedAirResults.getValue(); 
     let opportunityCost: OpportunityCost;
     let team: string;
     let equipment: string;
@@ -294,10 +295,10 @@ export class OpportunitySummaryService {
     }
     let oppSummary: OpportunitySummary;
     if (compressedAirReduction.baseline[0].utilityType == 0) {
-      oppSummary = this.getNewOpportunitySummary(name, 'Compressed Air', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
+      oppSummary = this.getNewOpportunitySummary(name, 'Compressed Air', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineAggregateResults.energyCost, results.modificationAggregateResults.energyCost, team, equipment, owner);
     }
     else {
-      oppSummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost, team, equipment, owner);
+      oppSummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost, results.baselineAggregateResults.energyCost, results.modificationAggregateResults.energyCost, team, equipment, owner);
     }
     return oppSummary;
   }

@@ -252,7 +252,7 @@
 
     </div>
 
-    <div class="form-section" *ngIf="form.controls.measurementMethod.value != 3">
+    <div [ngClass]="{'form-section': form.controls.utilityType.value == 1}" *ngIf="form.controls.measurementMethod.value != 3">
       <div class="row">
         <div class="col-6">
           <label class="small bold">Flow Rate</label>
@@ -281,8 +281,15 @@
     </div>
 
     <!-- electricity form -->
-    <div class="form-section" *ngIf="form.controls.utilityType.value == 1">
-
+    <div class="compressor-fields" *ngIf="form.controls.utilityType.value == 1">
+      <div class="compressor-fields-overlay alert-warning text-center" 
+      [ngClass]="{'disabled': !selected}"
+      [ngStyle]="{'display': !isBaseline? 'block': 'none'}">
+        <small>
+          Modification results will be calculated using baseline compressor values.
+        </small>
+      </div>
+      <div [ngClass]="{'invisible': !isBaseline}">
       <div class="form-group">
         <label class="small" for="{{'compressorControl_'+idString}}">Compressor Control</label>
         <div class="input-group">
@@ -389,6 +396,7 @@
         </span>
       </div>
 
+      </div>
     </div>
 
   </form>
