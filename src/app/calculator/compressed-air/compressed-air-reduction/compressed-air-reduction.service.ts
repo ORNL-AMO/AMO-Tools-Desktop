@@ -154,6 +154,7 @@ export class CompressedAirReductionService {
     if(!isBaseline){
       form.controls.compressorControl.disable();
       form.controls.compressorControlAdjustment.disable();
+      form.controls.compressorSpecificPowerControl.disable();
     }
     return form;
   }

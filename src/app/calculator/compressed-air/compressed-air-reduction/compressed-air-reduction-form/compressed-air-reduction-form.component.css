@@ -21,27 +21,3 @@
     border-left: solid 1px;
     border-right: none;
   }
-
-.compressor-fields {
-    padding-bottom: .25rem;
-    position: relative;
-  }
-
-.compressor-fields-overlay {
-    position: absolute;
-    display: none;
-    width: 100%;
-    height: 100%;
-    padding: 2rem 1rem 1rem 1rem;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #fff; 
-    z-index: 10;
-}
-
-.disabled {
-    background-color: #ececec;
-    transition: all 0.2s ease-in-out;
-}
