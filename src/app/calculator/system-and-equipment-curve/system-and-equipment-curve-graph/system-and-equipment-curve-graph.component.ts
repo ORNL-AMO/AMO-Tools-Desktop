@@ -379,7 +379,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
   addIntersectionPoints() {
-    let baselineIntersectionPoint: SystemCurveDataPoint = this.systemAndEquipmentCurveGraphService.getBaselineIntersectionPoint(this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs, this.equipmentType, this.settings);
+    let baselineIntersectionPoint: SystemCurveDataPoint = this.systemAndEquipmentCurveGraphService.getBaselineIntersectionPoint(this.equipmentType, this.settings);
     if (baselineIntersectionPoint != undefined && this.isSystemCurveShown) {
       this.defaultPointCount = 1;
       this.setIntersectionTrace(baselineIntersectionPoint, this.traces.baselineIntersect, 'Baseline');

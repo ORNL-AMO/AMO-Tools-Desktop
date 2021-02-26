@@ -51,6 +51,7 @@
     "electron-log": "4.2.4",
     "electron-updater": "4.3.5",
     "font-awesome": "^4.7.0",
+    "nerdamer": "^1.1.6",
     "ngx-electron": "2.2.0",
     "regression": "^2.0.0",
     "rxjs": "6.6.3",
