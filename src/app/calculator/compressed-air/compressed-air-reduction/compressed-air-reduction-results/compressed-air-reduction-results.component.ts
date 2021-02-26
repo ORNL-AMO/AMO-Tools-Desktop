@@ -36,6 +36,10 @@ export class CompressedAirReductionResultsComponent implements OnInit {
     })
   }
 
+  ngOnDestroy() {
+    this.compressedAirResultsSub.unsubscribe();
+  }
+
   updateTable0String() {
     this.table0String = this.copyTable0.nativeElement.innerText;
   }
