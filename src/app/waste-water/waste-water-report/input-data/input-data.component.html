@@ -24,17 +24,6 @@
           </div>
         </th>
       </tr>
-      <tr>
-        <td>
-          Max. Solids Retention Time "SRT" (days)
-        </td>
-        <td>
-          {{wasteWater.systemBasics.MaxDays}}
-        </td>
-        <td *ngFor="let mod of wasteWater.modifications">
-          &mdash;
-        </td>
-      </tr>
       <!-- <tr>
         <td>
           Time Step for SRT Modeling (days)
@@ -205,17 +194,72 @@
         </td>
       </tr>
       <tr>
+        <td>
+          Plant Control Point
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('CalculateGivenSRT') == true}">
+          <span *ngIf="wasteWater.baselineData.activatedSludgeData.CalculateGivenSRT == true">
+            SRT Days
+          </span>
+          <span *ngIf="wasteWater.baselineData.activatedSludgeData.CalculateGivenSRT == false">
+            MLSS
+          </span>
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.CalculateGivenSRT == true}">
+          <span *ngIf="mod.activatedSludgeData.CalculateGivenSRT == true">
+            SRT Days
+          </span>
+          <span *ngIf="mod.activatedSludgeData.CalculateGivenSRT == false">
+            MLSS
+          </span>
+        </td>
+      </tr>
+      <tr>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MLSSpar') == true}">
           MLSS (mg/L)
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MLSSpar') == true}">
-          {{wasteWater.baselineData.activatedSludgeData.MLSSpar}}
+          <span *ngIf="wasteWater.baselineData.activatedSludgeData.CalculateGivenSRT == false">
+            {{wasteWater.baselineData.activatedSludgeData.MLSSpar}}
+          </span>
+          <span *ngIf="wasteWater.baselineData.activatedSludgeData.CalculateGivenSRT == true">
+            &mdash;
+          </span>
         </td>
         <td *ngFor="let mod of wasteWater.modifications; let index = index;"
           [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.MLSSpar == true}">
-          {{mod.activatedSludgeData.MLSSpar}}
+          <span *ngIf="mod.activatedSludgeData.CalculateGivenSRT == false">
+            {{mod.activatedSludgeData.MLSSpar}}
+          </span>
+          <span *ngIf="mod.activatedSludgeData.CalculateGivenSRT == true">
+            &mdash;
+          </span>
         </td>
       </tr>
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('DefinedSRT') == true}">
+          SRT Days
+        </td>
+        <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('DefinedSRT') == true}">
+          <span *ngIf="wasteWater.baselineData.activatedSludgeData.CalculateGivenSRT == true">
+            {{wasteWater.baselineData.activatedSludgeData.DefinedSRT}}
+          </span>
+          <span *ngIf="wasteWater.baselineData.activatedSludgeData.CalculateGivenSRT == false">
+            &mdash;
+          </span>
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].activatedSludgeDifferent.DefinedSRT == true}">
+          <span *ngIf="mod.activatedSludgeData.CalculateGivenSRT == true">
+            {{mod.activatedSludgeData.DefinedSRT}}
+          </span>
+          <span *ngIf="mod.activatedSludgeData.CalculateGivenSRT == false">
+            &mdash;
+          </span>
+        </td>
+      </tr>
+
       <tr>
         <td
           [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('FractionBiomass') == true}">
@@ -367,6 +411,30 @@
         <td *ngFor="let mod of wasteWater.modifications; let index = index;"
           [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.Elevation == true}">
           {{mod.aeratorPerformanceData.Elevation}}
+        </td>
+      </tr>
+      <tr>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('AnoxicZoneCondition') == true}">
+          Anoxic Zone with Mixed Liquor returned from Aerobic Zone
+        </td>
+        <td
+          [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('AnoxicZoneCondition') == true}">
+          <span *ngIf="wasteWater.baselineData.aeratorPerformanceData.AnoxicZoneCondition == true">
+            Yes
+          </span>
+          <span *ngIf="wasteWater.baselineData.aeratorPerformanceData.AnoxicZoneCondition == false">
+            No
+          </span>
+        </td>
+        <td *ngFor="let mod of wasteWater.modifications; let index = index;"
+          [ngClass]="{'indicate-report-field-different': compareModifications[index].aeratorPerformanceDifferent.AnoxicZoneCondition == true}">
+          <span *ngIf="mod.aeratorPerformanceData.AnoxicZoneCondition == true">
+            Yes
+          </span>
+          <span *ngIf="mod.aeratorPerformanceData.AnoxicZoneCondition == false">
+            No
+          </span>
         </td>
       </tr>
       <tr>
