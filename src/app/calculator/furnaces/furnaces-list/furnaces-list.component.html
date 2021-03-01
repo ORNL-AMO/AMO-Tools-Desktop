@@ -18,6 +18,20 @@
         <div class="d-flex calc-item-row w-100">
             <div class="p-2 col-2 d-flex justify-content-center align-items-center">
                 <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/furnace-icons/air-heating-icon.png" class="calc-img"
+                        [routerLink]="['/calculators/waste-heat']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/waste-heat']">Waste Heat for Absorption Chillers</a>
+                <p>
+                    Calculate energy savings from using exhaust gas (waste) heat to provide energy for an absorption chiller in place of a compressor.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+            <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
                     <img src="assets/images/calculator-icons/furnace-icons/fluegas.png" class="calc-img"
                         [routerLink]="['/calculators/flue-gas']">
                 </div>
