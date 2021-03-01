@@ -63,7 +63,7 @@ export class ReportRollupModalsComponent implements OnInit {
   showAssessmentRollupModal() {
     this.assessmentRollupModal.show();
     this.assessmentRollupModal.onShown.subscribe(val => {
-      this.displayModalContent = val;
+      this.displayModalContent = true;
     });
 
   }
