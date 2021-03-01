@@ -145,8 +145,6 @@ export class AirLeakService {
     baselineResults = this.convertAirleakService.convertResult(baselineResults, settings);
     modificationResults = this.convertAirleakService.convertResult(modificationResults, settings);
 
-
-
     let savings: AirLeakSurveyResult = {
       totalFlowRate: baselineResults.totalFlowRate - modificationResults.totalFlowRate,
       annualTotalElectricity: baselineResults.annualTotalElectricity - modificationResults.annualTotalElectricity,
@@ -159,6 +157,9 @@ export class AirLeakService {
       savings.annualTotalElectricity = savings.annualTotalElectricity * (compressorControlAdjustment / 100);
       savings.annualTotalElectricityCost = savings.annualTotalElectricityCost * (compressorControlAdjustment / 100);
     }
+
+      // overwrite estimated annualTotalElectricity value originally set in suite results
+    modificationResults.annualTotalElectricity = baselineResults.annualTotalElectricity - savings.annualTotalElectricity;
 
     let outputs: AirLeakSurveyOutput = {
       leakResults: leakResults,
