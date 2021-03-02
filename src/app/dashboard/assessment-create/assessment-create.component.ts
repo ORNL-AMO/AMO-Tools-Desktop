@@ -125,7 +125,9 @@ export class AssessmentCreateComponent implements OnInit {
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         this.addAssessment(tmpAssessment, '/treasure-hunt/');
-      } else if (this.newAssessmentForm.controls.assessmentType.value == 'WasteWater') {
+      } 
+      // Waste Water
+      else if (this.newAssessmentForm.controls.assessmentType.value == 'WasteWater') {
         let tmpAssessment = this.assessmentService.getNewAssessment('WasteWater');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.directory.id;
