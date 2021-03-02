@@ -8,6 +8,7 @@ import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
 import { WasteWater } from '../shared/models/waste-water';
 import { Settings } from '../shared/models/settings';
+
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -287,48 +288,49 @@ export class AssessmentService {
         name: 'Baseline',
         id: Math.random().toString(36).substr(2, 9),
         activatedSludgeData: {
-          Temperature: 20,
-          So: 200,
-          Volume: 1,
-          FlowRate: 1,
-          InertVSS: 40,
-          OxidizableN: 35,
-          Biomass: 0.85,
-          InfluentTSS: 200,
-          InertInOrgTSS: 20,
-          EffluentTSS: 8,
-          RASTSS: 10000,
-          MLSSpar: 3000,
-          FractionBiomass: 0.1,
+          Temperature: undefined,
+          So: undefined,
+          Volume: undefined,
+          FlowRate: undefined,
+          InertVSS: undefined,
+          OxidizableN: undefined,
+          Biomass: undefined,
+          InfluentTSS: undefined,
+          InertInOrgTSS: undefined,
+          EffluentTSS: undefined,
+          RASTSS: undefined,
+          MLSSpar: undefined,
+          CalculateGivenSRT: true,
+          DefinedSRT: undefined,
           BiomassYeild: 0.6,
           HalfSaturation: 60,
+          FractionBiomass: 0.1,
           MicrobialDecay: 0.1,
           MaxUtilizationRate: 8,
-          CalculateGivenSRT: false,
-          DefinedSRT: 0
         },
         aeratorPerformanceData: {
-          OperatingDO: 4.5,
-          Alpha: 0.84,
-          Beta: 0.92,
-          Aerator: 'Surface high speed',
-          SOTR: 2.7,
-          Aeration: 150,
-          Elevation: 200,
-          OperatingTime: 24,
-          TypeAerators: 1,
-          Speed: 100,
-          EnergyCostUnit: 0.09,
+          OperatingDO: undefined,
+          Alpha: undefined,
+          Beta: undefined,
+          Aerator: 'Ultra-fine bubble diffusers',
+          SOTR: undefined,
+          Aeration: undefined,
+          Elevation: undefined,
+          OperatingTime: undefined,
+          TypeAerators: 2,
+          Speed: undefined,
+          EnergyCostUnit: undefined,
           AnoxicZoneCondition: false
         }
       },
       modifications: new Array(),
       systemBasics: {
-        MaxDays: 100,
-        TimeIncrement: .5,
+        MaxDays: undefined,
+        TimeIncrement: undefined,
         equipmentNotes: '',
-        operatingMonths: 12
+        operatingMonths: undefined
       }
     }
   }
+
 }
