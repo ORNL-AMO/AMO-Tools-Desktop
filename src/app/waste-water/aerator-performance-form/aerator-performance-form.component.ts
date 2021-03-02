@@ -110,6 +110,10 @@ export class AeratorPerformanceFormComponent implements OnInit {
       this.form.patchValue({
         SOTR: SOTRDefault
       });
+    } else {
+      this.form.patchValue({
+        SOTR: undefined
+      });
     }
     this.setAeratorTypeStatus();
     this.save();

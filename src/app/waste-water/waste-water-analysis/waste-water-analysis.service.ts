@@ -59,6 +59,8 @@ export class WasteWaterAnalysisService {
   initXAxisVariables() {
     let analysisXAxisVariables: Array<DataTableVariable> = JSON.parse(JSON.stringify(DataTableVariables));
     analysisXAxisVariables.forEach(x => x.selected = false);
+    // Shift SRT and MLSS to start
+    analysisXAxisVariables.some((xVar, i, variables) => xVar.name == 'MLSS' && variables.unshift(variables.splice(i,1)[0]));
     let defaultXVariable: DataTableVariable = {
       name: 'SRT',
       label: 'SRT Days',
@@ -66,7 +68,7 @@ export class WasteWaterAnalysisService {
       imperialUnit: '',
       selected: true
     }
-    analysisXAxisVariables.push(defaultXVariable);
+    analysisXAxisVariables.unshift(defaultXVariable);
     this.analysisXAxisVariables.next(analysisXAxisVariables);
   }
 

@@ -132,7 +132,7 @@ export const DataTableVariables: Array<DataTableVariable> = [{
     selected: false
 }, {
     name: 'WAS',
-    label: 'WAS Flow',
+    label: 'WAS Flow Rate',
     metricUnit: 'm&#x00B3;/day',
     imperialUnit: 'MGD',
     selected: false
