@@ -7,7 +7,14 @@ export interface DataTableVariable {
     selected: boolean
 }
 
-export const DataTableVariables: Array<DataTableVariable> = [{
+export const DataTableVariables: Array<DataTableVariable> = [
+{
+    name: 'MLSS',
+    label: 'MLSS Concentration',
+    metricUnit: 'mg/L',
+    imperialUnit: 'mg/L',
+    selected: true
+},{
     // S - 'soluble' e - 'effluent' 
     name: 'Se',
     label: 'Effluent CBOD5 Concentration (S&#8337;)',
@@ -35,12 +42,6 @@ export const DataTableVariables: Array<DataTableVariable> = [{
 }, {
     name: 'MLVSS',
     label: 'MLVSS Concentration',
-    metricUnit: 'mg/L',
-    imperialUnit: 'mg/L',
-    selected: true
-}, {
-    name: 'MLSS',
-    label: 'MLSS Concentration',
     metricUnit: 'mg/L',
     imperialUnit: 'mg/L',
     selected: true
