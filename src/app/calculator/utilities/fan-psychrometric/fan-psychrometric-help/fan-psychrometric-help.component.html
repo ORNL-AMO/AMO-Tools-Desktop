@@ -1,11 +1,10 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
     <h5>
-      Establish Gas Density Help
+      Psychrometric Calculator Help
       <br>
-      <small class="text-muted">This section establishes a gas density as a reference to establish the gas density within the fan. The location for which
-        base gas density data is inputted could be one of the Planar Locations 1 through 5, or for an alternate location outside
-        of Planes Nos. 1 through 5 such as in the plant general spaces or the outdoors (i.e. if the fan draws ambient air from
-        plant spaces or the outdoors).
+      <small class="text-muted">The equations used to calculate moist air properties are based on perfect gas relations
+        published in the ASHRAE Fundamentals Handbook.
+        The air properties can be calculated using wet bulb temperature, relative humidity or dew point.
       </small>
     </h5>
     <hr class="my-1 hr-spacer">
@@ -37,13 +36,9 @@
                 wet bulb temperature and specific heat of the gas.</td>
             </tr>
             <tr>
-              <td class="w-25 bold">Gas Dew Point</td>
+              <td class="w-25 bold">Dew Point</td>
               <td class="w-75">Calculate base gas density from dry bulb temperature, static pressure, barometric pressure, gas relative density,
                 and gas dew point.</td>
-            </tr>
-            <tr>
-              <td class="w-25 bold">Use Custom Density</td>
-              <td class="w-75">If gas density is already known, it can be manually inputted.</td>
             </tr>
           </tbody>
         </table>
@@ -93,7 +88,7 @@
     </div>
     <div class="my-2" *ngIf="currentField == 'dewPoint'">
       <h6>
-        Gas Dew Point
+        Dew Point
         <br>
         <small class="text-muted">
           The temperature where air is cooled enough to become saturated with water vapor. For atmospheric air, this can be found via
@@ -117,7 +112,7 @@
         Altitude
         <br>
         <small class="text-muted">
-          Elevation of the fan. Used to estimate barometric pressure.
+          Elevation used to estimate barometric pressure.
           <hr>
         </small>
       </h6>
