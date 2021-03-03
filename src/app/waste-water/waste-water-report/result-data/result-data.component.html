@@ -52,7 +52,7 @@
                     {{modification.outputs.TotalAverageDailyFlowRate | number:'1.0-1'}}</td>
             </tr>
             <tr>
-                <td>Aeration Volume in Service (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">MGD</span><span
+                <td>Aeration Volume in Service (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal</span><span
                         *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup></span>)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{wasteWater.baselineData.outputs.VolumeInService | number:'1.0-1'}}</td>

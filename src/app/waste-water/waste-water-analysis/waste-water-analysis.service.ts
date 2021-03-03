@@ -66,7 +66,7 @@ export class WasteWaterAnalysisService {
       imperialUnit: '',
       selected: true
     }
-    analysisXAxisVariables.push(defaultXVariable);
+    analysisXAxisVariables.unshift(defaultXVariable);
     this.analysisXAxisVariables.next(analysisXAxisVariables);
   }
 
