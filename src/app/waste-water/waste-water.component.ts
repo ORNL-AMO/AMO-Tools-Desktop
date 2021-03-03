@@ -113,6 +113,7 @@ export class WasteWaterComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.wasteWaterService.setupTab.next('system-basics');
     this.mainTabSub.unsubscribe();
     this.setupTabSub.unsubscribe();
     this.wasteWaterSub.unsubscribe();
