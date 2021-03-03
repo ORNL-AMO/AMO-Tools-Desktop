@@ -19,7 +19,7 @@ export class FanPsychrometricFormComponent implements OnInit {
   methods: Array<{ display: string, value: string }> = [
     { display: 'Relative Humidity %', value: 'relativeHumidity' },
     { display: 'Wet Bulb Temperature', value: 'wetBulb' },
-    { display: 'Gas Dew Point', value: 'dewPoint' },
+    { display: 'Dew Point', value: 'dewPoint' },
   ];
   
   userDefinedBarometricPressure: boolean = true;
