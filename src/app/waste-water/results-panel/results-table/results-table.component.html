@@ -47,6 +47,23 @@
             <span class="table-text">{{modificationResults.TotalAverageDailyFlowRate | number:'1.2-2'}}</span>
         </div>
     </div>
+    <!-- MixingIntensityInReactor -->
+    <div class="d-flex my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">Mixing Intensity in Reactor
+                (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp/Mgal</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/m<sup>3</sup></span>)
+            </span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">{{baselineResults.MixingIntensityInReactor | number:'1.0-1'}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
+            <span class="table-text">{{modificationResults.MixingIntensityInReactor | number:'1.0-1'}}</span>
+        </div>
+    </div>
     <!-- RASFlowRate -->
     <div class="d-flex my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
@@ -262,18 +279,32 @@
                 class="table-text">&mdash; &mdash;</span>
         </div>
     </div>
-    <!-- SolidsRetentionTime -->
+        <!-- MLSS -->
     <div class="d-flex stripe-top my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">MLSS (mg/L)</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1"
+            [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+            <span class="table-text">{{MLSSpar.baseline | number:'1.0-1'}}</span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
+            <span class="table-text">{{MLSSpar.modification | number:'1.0-1'}}</span>
+        </div>
+    </div>
+    <!-- SolidsRetentionTime -->
+    <div class="d-flex my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
             <span class="table-text">Solids Retention Time (Days)</span>
         </div>
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-            <span class="table-text">{{baselineResults.SolidsRetentionTime | number:'1.0-1'}}</span>
+            <span class="table-text">{{SRT.baseline | number:'1.0-1'}}</span>
         </div>
         <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-            <span class="table-text">{{modificationResults.SolidsRetentionTime | number:'1.0-1'}}</span>
+            <span class="table-text">{{SRT.modification | number:'1.0-1'}}</span>
         </div>
     </div>
     <!-- AeEnergyAnnual -->
