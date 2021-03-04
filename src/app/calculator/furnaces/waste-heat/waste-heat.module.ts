@@ -11,13 +11,15 @@ import { WasteHeatService } from './waste-heat.service';
 import { WasteHeatFormService } from './waste-heat-form.service';
 import { WasteHeatResultsComponent } from './waste-heat-results/waste-heat-results.component';
 import { WasteHeatHelpComponent } from './waste-heat-help/waste-heat-help.component';
+import { WasteHeatFormComponent } from './waste-heat-form/waste-heat-form.component';
+import { FlueGasModule } from '../flue-gas/flue-gas.module';
 
 
 
 @NgModule({
   declarations: [
     WasteHeatComponent,
-    WasteHeatHelpComponent,
+    WasteHeatFormComponent,
     WasteHeatResultsComponent,
     WasteHeatHelpComponent
   ],
@@ -30,6 +32,7 @@ import { WasteHeatHelpComponent } from './waste-heat-help/waste-heat-help.compon
     SharedPipesModule,
     OperatingHoursModalModule,
     ExportableResultsTableModule,
+    FlueGasModule,
   ],
   exports: [
     WasteHeatComponent
