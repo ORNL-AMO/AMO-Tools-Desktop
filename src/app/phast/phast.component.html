@@ -17,10 +17,10 @@
   <!--Furnace Setup -->
   <div *ngIf="mainTab == 'system-setup' && stepTab.step == 1" class="tab-content d-flex">
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen}">
+      [ngClass]="{'modal-open': isModalOpen || showUpdateUnitsModal}">
       <!--Step: 1 System Basics (Settings)-->
       <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [assessment]="assessment"
-        (updateSettings)="getSettings()" (save)="saveDb()">
+        (updateSettings)="getSettings()" (save)="saveDb()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)">
       </app-system-basics>
     </div>
     <div class="w-50">
@@ -162,3 +162,6 @@
     </div>
   </div>
 </div>
+
+<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
+ (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>

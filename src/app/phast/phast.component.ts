@@ -17,6 +17,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { PhastValidService } from './phast-valid.service';
 import { SavingsOpportunity } from '../shared/models/explore-opps';
+import { ConvertPhastService } from './convert-phast.service';
 
 @Component({
   selector: 'app-phast',
@@ -24,6 +25,7 @@ import { SavingsOpportunity } from '../shared/models/explore-opps';
   styleUrls: ['./phast.component.css']
 })
 export class PhastComponent implements OnInit {
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
   @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   //elementRefs used for getting container height for scrolling
@@ -34,7 +36,9 @@ export class PhastComponent implements OnInit {
   sankeyLabelStyle: string = 'both';
   phastOptions: Array<{ name: string, phast: PHAST }>;
   showSankeyLabelOptions: boolean;
-  updateUnitsModalSub: Subscription;
+
+  showUpdateUnitsModal: boolean;
+  oldSettings: Settings;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -73,6 +77,7 @@ export class PhastComponent implements OnInit {
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
+    private convertPhastService: ConvertPhastService,
     private phastValidService: PhastValidService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
@@ -172,9 +177,6 @@ export class PhastComponent implements OnInit {
       }
     });
 
-    this.updateUnitsModalSub = this.settingsService.updateUnitsModalOpen.subscribe(modalOpen => {
-      this.isModalOpen = modalOpen;
-    })
   }
 
   setExploreOppsDefaults(modification: Modification) {  
@@ -248,7 +250,7 @@ export class PhastComponent implements OnInit {
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.addNewSubscription.unsubscribe();
-    this.updateUnitsModalSub.unsubscribe();
+
     //reset services
     this.lossesService.lossesTab.next(1);
     this.phastService.initTabs();
@@ -541,4 +543,56 @@ export class PhastComponent implements OnInit {
       });
     });
   }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+  }
+
+  closeUpdateUnitsModal() {
+    this.showUpdateUnitsModal = false;
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if (shouldUpdateData == true) {
+      this.updateData();
+    } else {
+      this.saveDb();
+    }
+    this.closeUpdateUnitsModal();
+  }
+
+  updateData() {
+    if (this._phast.losses) {
+      this._phast.losses = this.convertPhastService.convertPhastLosses(this._phast.losses, this.oldSettings, this.settings);
+      if (this._phast.meteredEnergy) {
+        this._phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(this._phast.meteredEnergy, this.oldSettings, this.settings);
+      }
+      if (this._phast.designedEnergy) {
+        this._phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(this._phast.designedEnergy, this.oldSettings, this.settings);
+      }
+      this._phast.operatingCosts = this.convertPhastService.convertOperatingCosts(this._phast.operatingCosts, this.oldSettings, this.settings);
+      if (this._phast.modifications) {
+        this._phast.modifications.forEach(mod => {
+          if (mod.phast.losses) {
+            mod.phast.losses = this.convertPhastService.convertPhastLosses(mod.phast.losses, this.oldSettings, this.settings);
+          }
+          if (mod.phast.meteredEnergy) {
+            mod.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(mod.phast.meteredEnergy, this.oldSettings, this.settings);
+          }
+          if (mod.phast.designedEnergy) {
+            mod.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(mod.phast.designedEnergy, this.oldSettings, this.settings);
+          }
+          mod.phast.operatingCosts = this.convertPhastService.convertOperatingCosts(mod.phast.operatingCosts, this.oldSettings, this.settings);
+        });
+      }
+
+      this.saveDb();
+      // Get updated settings passed down to system-basics
+      this.getSettings();
+      this._phast.lossDataUnits = this.settings.unitsOfMeasure;
+    }
+
+  }
+
 }
