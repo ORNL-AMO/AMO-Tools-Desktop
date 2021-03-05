@@ -564,29 +564,7 @@ export class PhastComponent implements OnInit {
 
   updateData() {
     if (this._phast.losses) {
-      this._phast.losses = this.convertPhastService.convertPhastLosses(this._phast.losses, this.oldSettings, this.settings);
-      if (this._phast.meteredEnergy) {
-        this._phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(this._phast.meteredEnergy, this.oldSettings, this.settings);
-      }
-      if (this._phast.designedEnergy) {
-        this._phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(this._phast.designedEnergy, this.oldSettings, this.settings);
-      }
-      this._phast.operatingCosts = this.convertPhastService.convertOperatingCosts(this._phast.operatingCosts, this.oldSettings, this.settings);
-      if (this._phast.modifications) {
-        this._phast.modifications.forEach(mod => {
-          if (mod.phast.losses) {
-            mod.phast.losses = this.convertPhastService.convertPhastLosses(mod.phast.losses, this.oldSettings, this.settings);
-          }
-          if (mod.phast.meteredEnergy) {
-            mod.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(mod.phast.meteredEnergy, this.oldSettings, this.settings);
-          }
-          if (mod.phast.designedEnergy) {
-            mod.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(mod.phast.designedEnergy, this.oldSettings, this.settings);
-          }
-          mod.phast.operatingCosts = this.convertPhastService.convertOperatingCosts(mod.phast.operatingCosts, this.oldSettings, this.settings);
-        });
-      }
-
+      this._phast = this.convertPhastService.convertExistingData(this._phast, this.oldSettings, this.settings);
       this.saveDb();
       // Get updated settings passed down to system-basics
       this.getSettings();

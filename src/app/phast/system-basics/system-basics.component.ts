@@ -87,36 +87,13 @@ export class SystemBasicsComponent implements OnInit {
 
   updateData(showSuccess?: boolean) {
     if (this.phast.losses) {
-      this.phast.losses = this.convertPhastService.convertPhastLosses(this.phast.losses, this.oldSettings, this.settings);
-      if (this.phast.meteredEnergy) {
-        this.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(this.phast.meteredEnergy, this.oldSettings, this.settings);
-      }
-      if (this.phast.designedEnergy) {
-        this.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(this.phast.designedEnergy, this.oldSettings, this.settings);
-      }
-      this.phast.operatingCosts = this.convertPhastService.convertOperatingCosts(this.phast.operatingCosts, this.oldSettings, this.settings);
-      if (this.phast.modifications) {
-        this.phast.modifications.forEach(mod => {
-          if (mod.phast.losses) {
-            mod.phast.losses = this.convertPhastService.convertPhastLosses(mod.phast.losses, this.oldSettings, this.settings);
-          }
-          if (mod.phast.meteredEnergy) {
-            mod.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(mod.phast.meteredEnergy, this.oldSettings, this.settings);
-          }
-          if (mod.phast.designedEnergy) {
-            mod.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(mod.phast.designedEnergy, this.oldSettings, this.settings);
-          }
-          mod.phast.operatingCosts = this.convertPhastService.convertOperatingCosts(mod.phast.operatingCosts, this.oldSettings, this.settings);
-        });
-      }
-
+      this.phast = this.convertPhastService.convertExistingData(this.phast, this.oldSettings, this.settings);
       if (showSuccess) {
         this.initSuccessMessage();
       }
       this.showUpdateDataReminder = false;
       this.phast.lossDataUnits = this.settings.unitsOfMeasure;
       this.save.emit(true);
-
     }
   }
 

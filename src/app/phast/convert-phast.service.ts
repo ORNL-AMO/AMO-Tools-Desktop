@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
-import { Losses } from '../shared/models/phast/phast';
+import { Losses, PHAST } from '../shared/models/phast/phast';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
 import { GasCoolingLoss, LiquidCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
 import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial, ChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
@@ -506,5 +506,32 @@ export class ConvertPhastService {
     operatingCosts.fuelCost = this.roundVal(operatingCosts.fuelCost / conversionHelper, 3);
     operatingCosts.steamCost = this.roundVal(operatingCosts.steamCost / conversionHelper, 3);
     return operatingCosts;
+  }
+
+  convertExistingData(phast: PHAST, oldSettings: Settings, settings: Settings): PHAST {
+    phast.losses = this.convertPhastLosses(phast.losses, oldSettings, settings);
+    if (phast.meteredEnergy) {
+      phast.meteredEnergy = this.convertMeteredEnergy(phast.meteredEnergy, oldSettings, settings);
+    }
+    if (phast.designedEnergy) {
+      phast.designedEnergy = this.convertDesignedEnergy(phast.designedEnergy, oldSettings, settings);
+    }
+    phast.operatingCosts = this.convertOperatingCosts(phast.operatingCosts, oldSettings, settings);
+    if (phast.modifications) {
+      phast.modifications.forEach(mod => {
+        if (mod.phast.losses) {
+          mod.phast.losses = this.convertPhastLosses(mod.phast.losses, oldSettings, settings);
+        }
+        if (mod.phast.meteredEnergy) {
+          mod.phast.meteredEnergy = this.convertMeteredEnergy(mod.phast.meteredEnergy, oldSettings, settings);
+        }
+        if (mod.phast.designedEnergy) {
+          mod.phast.designedEnergy = this.convertDesignedEnergy(mod.phast.designedEnergy, oldSettings, settings);
+        }
+        mod.phast.operatingCosts = this.convertOperatingCosts(mod.phast.operatingCosts, oldSettings, settings);
+      });
+    }
+    
+    return phast;
   }
 }
