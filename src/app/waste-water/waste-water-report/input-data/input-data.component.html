@@ -70,7 +70,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('So') == true}">
-          S<sub>o</sub> (mg/L)
+          Influent CBOD<sub>5</sub> (S<sub>o</sub>) (mg/L)
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('So') == true}">
           {{wasteWater.baselineData.activatedSludgeData.So}}
@@ -135,7 +135,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('Biomass') == true}">
-          Biomass Yield
+          VSS/TSS Ratio of Biomass
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('Biomass') == true}">
           {{wasteWater.baselineData.activatedSludgeData.Biomass}}
@@ -263,7 +263,7 @@
       <tr>
         <td
           [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('FractionBiomass') == true}">
-          Cell Debris Biomass Fraction
+          Cell Debris Biomass Fraction (f<sub>d</sub>) (mg VSS/mg)
         </td>
         <td
           [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('FractionBiomass') == true}">
@@ -276,7 +276,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('BiomassYeild') == true}">
-          Biomass Yield Constant
+          Biomass Yield Constant (Y) (mg VSS/mg)
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('BiomassYeild') == true}">
           {{wasteWater.baselineData.activatedSludgeData.BiomassYeild}}
@@ -288,7 +288,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('HalfSaturation') == true}">
-          Half-saturation Constant (mg/L)
+          Half-saturation Constant (K<sub>5</sub>) (mg/L BOD)
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('HalfSaturation') == true}">
           {{wasteWater.baselineData.activatedSludgeData.HalfSaturation}}
@@ -300,7 +300,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MicrobialDecay') == true}">
-          Endogenous Decay Coefficient (1/day)
+          Endogenous Decay Coefficient (K<sub>d</sub>) (1/day)
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MicrobialDecay') == true}">
           {{wasteWater.baselineData.activatedSludgeData.MicrobialDecay}}
@@ -313,7 +313,7 @@
       <tr>
         <td
           [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MaxUtilizationRate') == true}">
-          Max. Specific Substrate Utilization Rate (1/day)
+          Max. Specific Substrate Utilization Rate (k) (1/day)
         </td>
         <td
           [ngClass]="{'indicate-report-field-different': checkActivateSludgeItemDifferent('MaxUtilizationRate') == true}">
@@ -337,7 +337,7 @@
       <tr>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingDO') == true}">
-          Operating Dissolved O<sub>2</sub> (mg/L)
+          Operating Dissolved O<sub>2</sub> (DO) (mg/L)
         </td>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('OperatingDO') == true}">
@@ -350,7 +350,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Alpha') == true}">
-          O<sub>2</sub> Transfer Coefficient Ratio
+          O<sub>2</sub> Transfer Coefficient Ratio (α)
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Alpha') == true}">
           {{wasteWater.baselineData.aeratorPerformanceData.Alpha}}
@@ -362,7 +362,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Beta') == true}">
-          Saturation DO Concentration Ratio
+          Saturation DO Concentration Ratio (β)
         </td>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('Beta') == true}">
           {{wasteWater.baselineData.aeratorPerformanceData.Beta}}
@@ -374,7 +374,7 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('SOTR') == true}">
-          Standard O<sub>2</sub> Transfer Rate (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
+          Standard O<sub>2</sub> Transfer Rate (SOTR) (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb
             O<sub>2</sub>/(hp-hr)</span>
           <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
             O<sub>2</sub>/(kWh)</span>)
@@ -416,7 +416,7 @@
       <tr>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('AnoxicZoneCondition') == true}">
-          Anoxic Zone with Mixed Liquor returned from Aerobic Zone
+          Do you have an anoxic zone with returned mixed liquor from the aerobic zone?
         </td>
         <td
           [ngClass]="{'indicate-report-field-different': checkAeratorPerformanceItemDifferent('AnoxicZoneCondition') == true}">
