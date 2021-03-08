@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { SettingsService } from '../../settings/settings.service';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
@@ -11,7 +11,7 @@ import { FSAT } from '../../shared/models/fans';
   templateUrl: './system-basics.component.html',
   styleUrls: ['./system-basics.component.css']
 })
-export class SystemBasicsComponent implements OnInit {
+export class SystemBasicsComponent implements OnInit, OnDestroy {
   @Input()
   settings: Settings;
   @Input()
@@ -20,6 +20,8 @@ export class SystemBasicsComponent implements OnInit {
   emitSave = new EventEmitter<Settings>();
   @Output('emitSaveFsat')
   emitSaveFsat = new EventEmitter<FSAT>();
+  @Output('openUpdateUnitsModal') 
+  openUpdateUnitsModal = new EventEmitter<Settings>();
 
   settingsForm: FormGroup; 
   oldSettings: Settings;
@@ -68,5 +70,11 @@ export class SystemBasicsComponent implements OnInit {
     this.emitSaveFsat.emit(this.assessment.fsat);
     this.dataUpdated = true;
     this.showUpdateData = false;
+  }
+
+  ngOnDestroy() {
+    if(this.showUpdateData && this.oldSettings) {
+      this.openUpdateUnitsModal.emit(this.oldSettings);
+    }
   }
 }

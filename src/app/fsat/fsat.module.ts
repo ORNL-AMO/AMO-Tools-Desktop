@@ -43,6 +43,7 @@ import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 import { FsatSankeyModule } from '../shared/fsat-sankey/fsat-sankey.module';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 
 @NgModule({
   imports: [
@@ -68,7 +69,8 @@ import { FsatSankeyModule } from '../shared/fsat-sankey/fsat-sankey.module';
     ToastModule,
     SharedPipesModule,
     SystemAndEquipmentCurveModule,
-    FsatSankeyModule
+    FsatSankeyModule,
+    UpdateUnitsModalModule
   ],
   declarations: [
     FsatComponent,

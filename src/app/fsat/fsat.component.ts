@@ -33,6 +33,10 @@ export class FsatComponent implements OnInit {
 
   @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   containerHeight: number;
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
+
+  showUpdateUnitsModal: boolean = false;
+  oldSettings: Settings;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -64,7 +68,6 @@ export class FsatComponent implements OnInit {
   showAdd: boolean;
   isModalOpen: boolean;
   openModSub: Subscription;
-  modalOpenSubscription: Subscription;
   calcTab: string;
   calcTabSubscription: Subscription;
 
@@ -154,11 +157,6 @@ export class FsatComponent implements OnInit {
         this.modificationIndex = undefined;
       }
     });
-
-    this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
-      this.isModalOpen = isOpen;
-    });
-
     this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
     });
@@ -175,7 +173,6 @@ export class FsatComponent implements OnInit {
     this.selectedModSubscription.unsubscribe();
     this.addNewSub.unsubscribe();
     this.fsatService.initData();
-    this.modalOpenSubscription.unsubscribe();
     this.calcTabSubscription.unsubscribe();
   }
   ngAfterViewInit() {
@@ -426,5 +423,23 @@ export class FsatComponent implements OnInit {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    setTimeout(() => {
+    this.showUpdateUnitsModal = true;
+    })
+  }
+
+  closeUpdateUnitsModal() {
+    this.showUpdateUnitsModal = false;
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if(shouldUpdateData == false) {
+      this.save();
+    }
+    this.closeUpdateUnitsModal();
   }
 }

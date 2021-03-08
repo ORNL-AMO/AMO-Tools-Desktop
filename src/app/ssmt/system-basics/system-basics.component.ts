@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FormGroup } from '@angular/forms';
@@ -11,7 +11,7 @@ import { ConvertSsmtService } from '../convert-ssmt.service';
   templateUrl: './system-basics.component.html',
   styleUrls: ['./system-basics.component.css']
 })
-export class SystemBasicsComponent implements OnInit {
+export class SystemBasicsComponent implements OnInit, OnDestroy {
   @Input()
   settings: Settings;
   @Input()
@@ -22,6 +22,8 @@ export class SystemBasicsComponent implements OnInit {
   ssmt: SSMT;
   @Output('emitSaveSsmt')
   emitSaveSsmt = new EventEmitter<SSMT>();
+  @Output('openUpdateUnitsModal') 
+  openUpdateUnitsModal = new EventEmitter<Settings>();
 
   settingsForm: FormGroup;
   oldSettings: Settings;
@@ -74,6 +76,12 @@ export class SystemBasicsComponent implements OnInit {
     this.emitSaveSsmt.emit(this.assessment.ssmt);
     this.dataUpdated = true;
     this.showUpdateData = false;
+  }
+
+  ngOnDestroy() {
+    if(this.showUpdateData && this.oldSettings) {
+      this.openUpdateUnitsModal.emit(this.oldSettings);
+    }
   }
 
   saveChanges() {

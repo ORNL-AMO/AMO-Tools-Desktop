@@ -54,6 +54,7 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
     SharedPipesModule,
     UnitConverterModule,
     SystemAndEquipmentCurveModule,
-    PsatSankeyModule
+    PsatSankeyModule,
+    UpdateUnitsModalModule
   ],
   providers: [
     PsatService,

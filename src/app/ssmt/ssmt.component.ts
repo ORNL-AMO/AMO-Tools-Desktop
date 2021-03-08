@@ -29,6 +29,10 @@ export class SsmtComponent implements OnInit {
   }
   @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
+
+  showUpdateUnitsModal: boolean = false;
+  oldSettings: Settings;
 
   stepTabs: Array<string> = [
     'system-basics',
@@ -59,7 +63,6 @@ export class SsmtComponent implements OnInit {
   selectedModSubscription: Subscription;
   isModalOpen: boolean;
   stepTabIndex: number;
-  modalOpenSubscription: Subscription;
 
   calcTab: string;
   calcTabSubscription: Subscription;
@@ -137,10 +140,6 @@ export class SsmtComponent implements OnInit {
       }
     });
 
-    this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
-      this.isModalOpen = val;
-    });
-
     this.calcTabSubscription = this.ssmtService.calcTab.subscribe(val => {
       this.calcTab = val;
     });
@@ -166,7 +165,6 @@ export class SsmtComponent implements OnInit {
     this.assessmentTabSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.openModificationSelectSubscription.unsubscribe();
-    this.modalOpenSubscription.unsubscribe();
     this.addNewModificationSubscription.unsubscribe();
     this.ssmtService.mainTab.next('system-setup');
     this.ssmtService.stepTab.next('system-basics');
@@ -436,5 +434,23 @@ export class SsmtComponent implements OnInit {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    setTimeout(() => {
+    this.showUpdateUnitsModal = true;
+    })
+  }
+
+  closeUpdateUnitsModal() {
+    this.showUpdateUnitsModal = false;
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if(shouldUpdateData == false) {
+      this.save();
+    }
+    this.closeUpdateUnitsModal();
   }
 }

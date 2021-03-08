@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnDestroy } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { PSAT } from '../../shared/models/psat';
 import { SettingsService } from '../../settings/settings.service';
@@ -14,7 +14,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
   templateUrl: './system-basics.component.html',
   styleUrls: ['./system-basics.component.css']
 })
-export class SystemBasicsComponent implements OnInit {
+export class SystemBasicsComponent implements OnInit, OnDestroy {
   @Input()
   assessment: Assessment;
   @Input()
@@ -29,6 +29,8 @@ export class SystemBasicsComponent implements OnInit {
   openModal = new EventEmitter<boolean>();
   @Output('closeModal')
   closeModal = new EventEmitter<boolean>();
+  @Output('openUpdateUnitsModal') 
+  openUpdateUnitsModal = new EventEmitter<Settings>();
 
   settingsForm: FormGroup;
   oldSettings: Settings;
@@ -123,5 +125,11 @@ export class SystemBasicsComponent implements OnInit {
 
   startSavePolling() {
     this.saveChanges()
+  }
+
+  ngOnDestroy() {
+    if(this.showUpdateData && this.oldSettings) {
+      this.openUpdateUnitsModal.emit(this.oldSettings);
+    }
   }
 }

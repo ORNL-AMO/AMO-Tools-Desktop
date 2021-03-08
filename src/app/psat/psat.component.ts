@@ -32,6 +32,10 @@ export class PsatComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('footer', { static: false }) footer: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
+
+  showUpdateUnitsModal: boolean = false;
+  oldSettings: Settings;
   containerHeight: number;
 
   @HostListener('window:resize', ['$event'])
@@ -68,7 +72,6 @@ export class PsatComponent implements OnInit {
   showAdd: boolean;
   stepTabSubscription: Subscription;
   stepTab: string;
-  modalOpenSub: Subscription;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
   constructor(
@@ -158,10 +161,6 @@ export class PsatComponent implements OnInit {
 
     this.stepTabSubscription = this.psatTabService.stepTab.subscribe(val => {
       this.stepTab = val;
-    })
-
-    this.modalOpenSub = this.psatService.modalOpen.subscribe(isOpen => {
-      this.isModalOpen = isOpen;
     })
   }
 
@@ -396,5 +395,23 @@ export class PsatComponent implements OnInit {
         this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       });
     });
+  }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    setTimeout(() => {
+    this.showUpdateUnitsModal = true;
+    })
+  }
+
+  closeUpdateUnitsModal() {
+    this.showUpdateUnitsModal = false;
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if(shouldUpdateData == false) {
+      this.save();
+    }
+    this.closeUpdateUnitsModal();
   }
 }
