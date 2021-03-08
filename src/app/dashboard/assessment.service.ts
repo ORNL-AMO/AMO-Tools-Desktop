@@ -325,10 +325,10 @@ export class AssessmentService {
       },
       modifications: new Array(),
       systemBasics: {
-        MaxDays: undefined,
+        MaxDays: 100,
         TimeIncrement: undefined,
         equipmentNotes: '',
-        operatingMonths: undefined
+        operatingMonths: 12
       }
     }
   }
