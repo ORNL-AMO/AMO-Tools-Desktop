@@ -12,6 +12,7 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
+import { FlueGasModule } from '../flue-gas/flue-gas.module';
 
 
 
@@ -29,6 +30,7 @@ import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
     ModalModule,
     SuiteDbModule,
     SharedPipesModule,
+    FlueGasModule,
     OperatingHoursModalModule,
     ExportableResultsTableModule,
   ],
