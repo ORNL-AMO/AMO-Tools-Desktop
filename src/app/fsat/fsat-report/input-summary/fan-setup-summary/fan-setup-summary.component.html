@@ -31,7 +31,7 @@
               </td>
               <td *ngFor="let mod of fanSetup.modifications">
                 <span *ngIf="mod.fanType == 12">
-                  {{getFanType(fanSetup.baseline.fanType)}}
+                  &mdash; &mdash;
                 </span>
                 <span *ngIf="mod.fanType != 12" [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanType, mod.fanType, 'fanTypeDiff', 0)}">
                   {{getFanType(mod.fanType)}}
