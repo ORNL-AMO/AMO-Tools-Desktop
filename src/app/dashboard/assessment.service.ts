@@ -282,7 +282,7 @@ export class AssessmentService {
     };
   }
 
-  getNewWasteWater(): WasteWater {
+  getNewWasteWater(settings: Settings): WasteWater {
     return {
       baselineData: {
         name: 'Baseline',
@@ -300,7 +300,7 @@ export class AssessmentService {
           EffluentTSS: undefined,
           RASTSS: undefined,
           MLSSpar: undefined,
-          CalculateGivenSRT: true,
+          CalculateGivenSRT: false,
           DefinedSRT: undefined,
           BiomassYeild: 0.6,
           HalfSaturation: 60,
@@ -310,23 +310,23 @@ export class AssessmentService {
         },
         aeratorPerformanceData: {
           OperatingDO: undefined,
-          Alpha: undefined,
-          Beta: undefined,
+          Alpha: .84,
+          Beta: .92,
           Aerator: 'Ultra-fine bubble diffusers',
           SOTR: undefined,
           Aeration: undefined,
           Elevation: undefined,
-          OperatingTime: undefined,
+          OperatingTime: 24,
           TypeAerators: 2,
-          Speed: undefined,
-          EnergyCostUnit: undefined,
+          Speed: 100,
+          EnergyCostUnit: settings.electricityCost,
           AnoxicZoneCondition: false
         }
       },
       modifications: new Array(),
       systemBasics: {
         MaxDays: 100,
-        TimeIncrement: undefined,
+        TimeIncrement: .5,
         equipmentNotes: '',
         operatingMonths: 12
       }
