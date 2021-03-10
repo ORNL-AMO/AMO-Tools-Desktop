@@ -1,7 +1,28 @@
 <form #formElement [formGroup]="form">
       <label class="group-label my-1">
-        Flue Gas Conditions
+        Primary Process
       </label>
+      
+      <div class="form-group">
+        <label class="small" for="priOpHours">Annual Operating Hours</label>
+        <div class="input-group">
+          <span *ngIf="!showSecOpHoursModal" class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOpHoursModal('primary')"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input class="form-control" name="priOpHours" id="priOpHours"
+            formControlName="priOpHours" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
+           onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.priOpHours.invalid && !form.controls.priOpHours.pristine">
+          <span *ngIf="form.controls.priOpHours.errors.required">Value required.</span>
+          <span *ngIf="form.controls.priOpHours.errors.max">Value can't be greater than
+            {{form.controls.priOpHours.errors.max.max}}.</span>
+          <span *ngIf="form.controls.priOpHours.errors.min">Value can't be less than
+            {{form.controls.priOpHours.errors.min.min}}.</span>
+        </span>
+      </div>
 
       <div class="form-group">
         <label class="small" for="materialTypeId">Fuel
@@ -27,86 +48,6 @@
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.priFuelHV.invalid && !form.controls.priFuelHV.pristine">
           <span *ngIf="form.controls.priFuelHV.errors.required">Value Required</span>
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label class="small" for="oxygenCalculationMethod">Percent Oxygen Or Excess Air</label>
-        <select name="oxygenCalculationMethod" class="form-control" (change)="changeOxygenCalculationMethod()"
-          formControlName="oxygenCalculationMethod" id="oxygenCalculationMethod"
-          (focus)="focusField('oxygenCalculationMethod')" >
-          <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
-        </select>
-      </div>
-  
-      <div *ngIf="form.controls.oxygenCalculationMethod.value != 'Excess Air'">
-        <div class="form-group">
-          <label class="small" for="flueGasO2">Oxygen In Flue Gas</label>
-          <div class="input-group">
-            <input name="flueGasO2" type="number" step="0.5" min="0" max="20.5" class="form-control"
-            formControlName="flueGasO2" id="flueGasO2" onfocus="this.select();" (input)="calcExcessAir()"
-            (focus)="focusField('flueGasO2')" >
-            <span class="input-group-addon units">%</span>
-            <span class="alert-danger pull-right small"
-            *ngIf="form.controls.flueGasO2.invalid && !form.controls.flueGasO2.pristine">
-            <span *ngIf="form.controls.flueGasO2.errors.required">Value Required</span>
-          </span>
-          </div>
-        <span class="alert-warning pull-right small" *ngIf="o2Warning">{{o2Warning}}</span>
-        </div>
-        
-      <div class="form-group">
-          <label class="small">Excess Air</label>
-          <div class="text-center small">
-            {{calculationExcessAir | number:'2.2-2'}} %
-          </div>
-        </div>
-      </div>
-  
-      <div class="form-group" *ngIf="form.controls.oxygenCalculationMethod.value == 'Excess Air'">
-        <div class="form-group">
-          <label class="small">Oxygen In Flue Gas</label>
-          <div class="text-center small">
-            {{calculationFlueGasO2 | number:'2.2-2'}} %
-          </div>
-        </div>
-        <label class="small" for="excessAir">Excess Air</label>
-        <div class="input-group">
-          <input name="excessAir" type="number" step="any" min="0" class="form-control"
-            formControlName="excessAir" id="excessAir" onfocus="this.select();"
-            (input)="calcExcessAir()" (focus)="focusField('excessAir')" >
-          <span class="input-group-addon units">%</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.excessAir.invalid && !form.controls.excessAir.pristine">
-          <span *ngIf="form.controls.excessAir.errors.required">Value Required</span>
-          <span *ngIf="form.controls.excessAir.errors.greaterThan == 0">Value must be greater than than
-            0.</span>
-        </span>
-      </div>
-
-      <label class="group-label my-1">
-        Primary Process
-      </label>
-      
-      <div class="form-group">
-        <label class="small" for="priOpHours">Annual Operating Hours</label>
-        <div class="input-group">
-          <span class="input-group-addon op-hour-addon units">
-            <a class="click-link" [ngClass]="{'d-none': showSecOpHoursModal}" (click)="openOpHoursModal('primary')"><span class="fa fa-calculator"></span></a>
-          </span>
-          <input class="form-control" name="priOpHours" id="priOpHours"
-            formControlName="priOpHours" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
-           onfocus="this.select();">
-          <span class="units input-group-addon">hrs/yr</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.priOpHours.invalid && !form.controls.priOpHours.pristine">
-          <span *ngIf="form.controls.priOpHours.errors.required">Value required.</span>
-          <span *ngIf="form.controls.priOpHours.errors.max">Value can't be greater than
-            {{form.controls.priOpHours.errors.max.max}}.</span>
-          <span *ngIf="form.controls.priOpHours.errors.min">Value can't be less than
-            {{form.controls.priOpHours.errors.min.min}}.</span>
         </span>
       </div>
       
@@ -208,8 +149,8 @@
       <div class="form-group">
         <label class="small" for="secOpHours">Annual Operating Hours</label>
         <div class="input-group">
-          <span class="input-group-addon op-hour-addon units">
-            <a class="click-link" [ngClass]="{'d-none': showPriOpHoursModal}" (click)="openOpHoursModal('secondary')"><span class="fa fa-calculator"></span></a>
+          <span *ngIf="!showPriOpHoursModal" class="input-group-addon op-hour-addon units">
+            <a class="click-link" *ngIf="!showPriOpHoursModal" (click)="openOpHoursModal('secondary')"><span class="fa fa-calculator"></span></a>
           </span>
           <input class="form-control" name="secOpHours" id="secOpHours" formControlName="secOpHours" type="number"
             (input)="calculate()" (focus)="focusField('operationHours')" onfocus="this.select();">
@@ -350,7 +291,10 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div>
-          <app-flue-gas-modal *ngIf="showPriFlueGasModal || showSecFlueGasModal" (closeModal)="hideFlueGasModal($event)" (hideModal)="hideFlueGasModal($event)"
+          <app-flue-gas-modal *ngIf="showPriFlueGasModal || showSecFlueGasModal" 
+          [hideSolidLiquidMaterial]="true"
+          (closeModal)="hideFlueGasModal($event)" 
+          (hideModal)="hideFlueGasModal($event)"
             [settings]="settings"></app-flue-gas-modal>
         </div>
       </div>

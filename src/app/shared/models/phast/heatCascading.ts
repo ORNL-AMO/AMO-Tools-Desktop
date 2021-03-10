@@ -14,15 +14,9 @@ export interface HeatCascadingInput {
     secAvailableHeat: number,
     secOpHours: number,
     secFuelCost: number,
-
-    // Used to calculate gas material element properties
-    oxygenCalculationMethod: string,
-    materialTypeId: number,
-    excessAir: number,
-    flueGasO2: number,
-    o2InFlueGas: number
-
+    
     // Gas fuel element properties
+    materialTypeId: number,
     gasFuelType: boolean,
     substance: string,
     CH4?: number,

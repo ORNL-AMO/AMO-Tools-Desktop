@@ -112,7 +112,7 @@
 
   <div class="my-2" *ngIf="currentField == 'exhaustTemperature'">
     <h6>
-      Process Exhaust Gas Temperature
+      (Hot) Process Exhaust Gas Temperature
       <small class="text-muted">
         <br>
         The average exhaust air temperature from the primary/secondary process furnace. This can be obtained from flue
@@ -179,6 +179,34 @@
         from the fuel composition analysis report or fuel invoice.
       </small>
     </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'flueGasO2'">
+    <h6>
+      O
+      <sub>2</sub> in Flue Gas
+      <br>
+      <small class="text-muted">
+        The volumetric percentage of oxygen present in the flue gas. Flue gas O2 (dry basis) reading is taken at the
+        same location
+        where flue gas temperature is measured to maintain accuracy of the calculations.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0%</td>
+            <td class="text-center">21%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <hr *ngIf="currentField != undefined">

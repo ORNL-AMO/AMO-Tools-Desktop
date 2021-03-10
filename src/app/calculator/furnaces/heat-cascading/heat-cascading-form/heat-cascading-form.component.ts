@@ -6,7 +6,6 @@ import { PhastService } from '../../../../phast/phast.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { HeatCascadingInput } from '../../../../shared/models/phast/heatCascading';
-import { MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { HeatCascadingFormService } from '../heat-cascading-form.service';
@@ -26,8 +25,6 @@ export class HeatCascadingFormComponent implements OnInit {
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('gasMaterialModal', { static: false }) public gasMaterialModal: ModalDirective;
-  showSecFlueGasModal: any;
-  showPriFlueGasModal: any;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
@@ -38,25 +35,16 @@ export class HeatCascadingFormComponent implements OnInit {
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   
-  calculationMethods: Array<string> = [
-    'Excess Air',
-    'Oxygen in Flue Gas'
-  ];
-  
-  calculationExcessAir: number = 0.0;
-  calculationFlueGasO2: number = 0.0;
-  calcMethodExcessAir: boolean;
   formWidth: number;
   
   showPriOpHoursModal: boolean = false;
   showSecOpHoursModal: boolean = false;
-  showFlueGasModal: boolean = false;
-  o2Warning: string;
+  showSecFlueGasModal: boolean;
+  showPriFlueGasModal: boolean;
 
   constructor(private suiteDbService: SuiteDbService,
               private heatCascadingService: HeatCascadingService, 
-              private heatCascadingFormService: HeatCascadingFormService,
-              private phastService: PhastService) { }
+              private heatCascadingFormService: HeatCascadingFormService) { }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -96,51 +84,10 @@ export class HeatCascadingFormComponent implements OnInit {
         this.setMaterialProperties();
       }
     }
-    this.calcExcessAir();
-  }
-
-  calcExcessAir() {
-    let input: MaterialInputProperties = this.heatCascadingFormService.getMaterialInputProperties(this.form);
-
-    if (this.form.controls.oxygenCalculationMethod.value != 'Excess Air') {
-      if (this.form.controls.flueGasO2.status === 'VALID') {
-        this.calculationExcessAir = this.phastService.flueGasCalculateExcessAir(input);
-        this.form.patchValue({
-          excessAir: this.calculationExcessAir,
-        });
-      } else {
-        this.calculationExcessAir = 0;
-        this.form.patchValue({
-          excessAir: this.calculationExcessAir,
-        });
-      }
-    } else {
-      if (this.form.controls.excessAir.status === 'VALID') {
-        this.calculationFlueGasO2 = this.phastService.flueGasCalculateO2(input);
-        this.form.patchValue({
-          flueGasO2: this.calculationFlueGasO2,
-        });
-      } else {
-        this.calculationFlueGasO2 = 0;
-        this.form.patchValue({
-          flueGasO2: this.calculationFlueGasO2,
-        });
-      }
-    }
-    debugger;
-    this.calculate();
-  }
-
-  changeOxygenCalculationMethod() {
-    this.form.patchValue({
-      flueGasO2: 0,
-      excessAir: 0
-    });
   }
 
   setMaterialProperties() {
     let material = this.suiteDbService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
-    debugger;
     this.form.patchValue({
       CH4: this.heatCascadingService.roundVal(material.CH4, 4),
       C2H6: this.heatCascadingService.roundVal(material.C2H6, 4),
@@ -206,16 +153,6 @@ export class HeatCascadingFormComponent implements OnInit {
     this.showSecOpHoursModal = false;
   }
 
-  // openPriOpHoursModal() {
-  //   this.showPriOpHoursModal = true;
-  //   this.showSecOpHoursModal = false;
-  // }
-
-  // openSecOpHoursModal() {
-  //   this.showSecOpHoursModal = true;
-  //   this.showPriOpHoursModal = false;
-  // }
-
   openOpHoursModal(processName: string) {
     if (processName == 'primary') {
       this.showPriOpHoursModal = true;
@@ -247,6 +184,7 @@ export class HeatCascadingFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
+      this.fuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
       let newMaterial: FlueGasMaterial | SolidLiquidFlueGasMaterial = this.fuelOptions.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.form.patchValue({

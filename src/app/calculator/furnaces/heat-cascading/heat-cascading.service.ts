@@ -47,12 +47,7 @@ export class HeatCascadingService {
       secOpHours: undefined,
       secFuelCost: undefined,
   
-      oxygenCalculationMethod: 'Excess Air',
       materialTypeId: 1,
-      excessAir: 0,
-      flueGasO2: 0,
-      o2InFlueGas: undefined,
-
       gasFuelType: true,
       substance: 'Typical Natural Gas - US',
       CH4: 87,
@@ -116,11 +111,6 @@ export class HeatCascadingService {
       secAvailableHeat: 100,
       secOpHours: 7000,
       secFuelCost: 5,
-      
-      flueGasO2: 5.8,
-      oxygenCalculationMethod: 'Excess Air',
-      excessAir: 35.8,
-      o2InFlueGas: undefined,
       
       materialTypeId: 1,
       gasFuelType: true,

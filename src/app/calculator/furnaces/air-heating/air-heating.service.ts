@@ -80,6 +80,7 @@ export class AirHeatingService {
       this.initDefaultEmptyOutputs();
     } else {
         inputCopy = this.convertInputUnits(inputCopy, settings);
+        debugger;
         inputCopy = this.convertPercentInputs(inputCopy);
         let airHeatingOutput: AirHeatingOutput = processHeatAddon.airHeatingUsingExhaust(inputCopy);
         airHeatingOutput = this.convertResultUnits(airHeatingOutput, settings);
