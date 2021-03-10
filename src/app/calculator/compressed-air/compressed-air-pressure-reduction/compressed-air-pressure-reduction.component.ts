@@ -153,6 +153,8 @@ export class CompressedAirPressureReductionComponent implements OnInit {
     if (data.isBaseline && this.modificationExists) {
       this.modificationData[index].compressorPower = data.compressorPower;
       this.modificationData[index].pressure = data.pressure;
+      this.modificationData[index].pressureRated = data.pressureRated;
+      this.modificationData[index].atmosphericPressure = data.atmosphericPressure;
     }
   }
 

@@ -133,6 +133,9 @@ export class CompressedAirPressureReductionService {
   convertInputs(inputArray: Array<CompressedAirPressureReductionData>, settings: Settings): Array<CompressedAirPressureReductionData> {
     if (settings.unitsOfMeasure == 'Metric') {
       for (let i = 0; i < inputArray.length; i++) {
+        //TODO CONVERT 
+        inputArray[i].pressureRated = this.convertUnitsService.value(inputArray[i].pressureRated).from('barg').to('psig');
+        inputArray[i].atmosphericPressure = this.convertUnitsService.value(inputArray[i].pressureRated).from('bara').to('psia');
         inputArray[i].pressure = this.convertUnitsService.value(inputArray[i].pressure).from('barg').to('psig');
         inputArray[i].proposedPressure = this.convertUnitsService.value(inputArray[i].proposedPressure).from('barg').to('psig');
       }
@@ -144,7 +147,7 @@ export class CompressedAirPressureReductionService {
     let proposedPressure: number = 90;
     let pressure: number = 100;
 
-    //TODO: DEFAULTS AND CONVERSION
+    //TODO: DEFAULTS
     let pressureRated: number = 0;
     let atmosphericPressure: number = 0;
 
@@ -153,6 +156,12 @@ export class CompressedAirPressureReductionService {
       proposedPressure = Number(proposedPressure.toFixed(3));
       pressure = this.convertUnitsService.value(pressure).from('psig').to('barg');
       pressure = Number(pressure.toFixed(3));
+
+      pressureRated = this.convertUnitsService.value(pressureRated).from('psig').to('barg');
+      pressureRated = Number(pressureRated.toFixed(3));
+
+      atmosphericPressure = this.convertUnitsService.value(atmosphericPressure).from('psia').to('bara');
+      atmosphericPressure = Number(atmosphericPressure.toFixed(3));
     }
     let exampleData: CompressedAirPressureReductionData = {
       name: 'Equipment #1',

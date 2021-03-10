@@ -113,7 +113,7 @@
 
 
       <div class="form-group">
-        <label class="small" for="{{'pressureRated_'+idString}}">Pressure Rated</label>
+        <label class="small" for="{{'pressureRated_'+idString}}">Rated Pressure</label>
         <div class="input-group">
           <input class="form-control" type="number" name="pressureRated" id="{{'pressureRated_'+idString}}"
             formControlName="pressureRated" (input)="calculate()" (focus)="focusField('pressureRated')"
@@ -138,8 +138,8 @@
             formControlName="atmosphericPressure" (input)="calculate()" (focus)="focusField('atmosphericPressure')"
             (blur)="focusOut()" [readonly]="!isBaseline">
           <span class="input-group-addon units">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">barg</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psia</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">bara</span>
           </span>
         </div>
         <span class="alert-danger pull-right small"

@@ -75,7 +75,8 @@
                 [compressorPower]="modificationData[i].compressorPower" [pressure]="modificationData[i].pressure"
                 [isBaseline]="false" (emitCalculate)="updateModificationData($event, i)"
                 (emitChangeField)="changeField($event)" (emitRemoveEquipment)="removeModificationEquipment($event)"
-                [selected]="!baselineSelected">
+                [selected]="!baselineSelected" [pressureRated]="modificationData[i].pressureRated"
+                [atmosphericPressure]="modificationData[i].atmosphericPressure">
               </app-compressed-air-pressure-reduction-form>
 
             </div>
