@@ -27,8 +27,10 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
 
   settingsForm: FormGroup;
   oldSettings: Settings;
-  showUpdateData: boolean = false;
-  dataUpdated: boolean = false;
+  // showUpdateData: boolean = false;
+  // dataUpdated: boolean = false;
+  showUpdateDataReminder: boolean = false;
+  showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService, private convertSsmtService: ConvertSsmtService) { }
 
 
@@ -56,30 +58,39 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.settings.steamPowerMeasurement != this.oldSettings.steamPowerMeasurement ||
       this.settings.steamVolumeMeasurement != this.oldSettings.steamVolumeMeasurement ||
       this.settings.steamVolumeFlowMeasurement != this.oldSettings.steamVolumeFlowMeasurement ||
-      this.settings.steamVacuumPressure != this.oldSettings.steamVacuumPressure
+      this.settings.steamVacuumPressure != this.oldSettings.steamVacuumPressure ||
+      this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure
     ) {
-      this.showUpdateData = true;
+      this.showUpdateDataReminder = true;
     }
-    if (this.dataUpdated == true) {
-      this.dataUpdated = false;
+    if (this.showSuccessMessage == true) {
+      this.showSuccessMessage = false;
     }
     this.emitSave.emit(this.settings);
   }
 
-  updateData() {
-    this.assessment.ssmt = this.convertSsmtService.convertAllInputData(this.ssmt, this.oldSettings, this.settings);
-    if(this.assessment.ssmt.modifications){
-      this.assessment.ssmt.modifications.forEach(mod => {
-        mod.ssmt = this.convertSsmtService.convertAllInputData(mod.ssmt, this.oldSettings, this.settings);
-      })
+  updateData(showSuccess?: boolean) {
+    this.convertSsmtService.convertExistingData(this.assessment.ssmt, this.oldSettings, this.settings);  
+    if(showSuccess) {
+      this.initSuccessMessage();
     }
+    this.showUpdateDataReminder = false;
     this.emitSaveSsmt.emit(this.assessment.ssmt);
-    this.dataUpdated = true;
-    this.showUpdateData = false;
+  }
+
+  initSuccessMessage() {
+    this.showSuccessMessage = true;
+    setTimeout(() => {
+      this.showSuccessMessage = false;
+    }, 3000);
+  }
+  
+  dismissSuccessMessage() {
+    this.showSuccessMessage = false;
   }
 
   ngOnDestroy() {
-    if(this.showUpdateData && this.oldSettings) {
+    if(this.showUpdateDataReminder && this.oldSettings) {
       this.openUpdateUnitsModal.emit(this.oldSettings);
     }
   }

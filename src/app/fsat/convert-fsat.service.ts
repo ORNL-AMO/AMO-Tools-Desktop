@@ -93,4 +93,14 @@ export class ConvertFsatService {
     num = Number(num.toFixed(3));
     return num;
   }
+
+  convertExistingData(fsat: FSAT, oldSettings: Settings, settings: Settings): FSAT {
+    fsat = this.convertAllInputData(fsat, oldSettings, settings);
+    if(fsat.modifications){
+      fsat.modifications.forEach(mod => {
+        mod.fsat = this.convertAllInputData(mod.fsat, oldSettings, settings);
+      })
+    }
+    return fsat;
+  }
 }

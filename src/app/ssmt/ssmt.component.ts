@@ -13,6 +13,7 @@ import { CompareService } from './compare.service';
 import * as _ from 'lodash';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { SettingsService } from '../settings/settings.service';
+import { ConvertSsmtService } from './convert-ssmt.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -62,6 +63,7 @@ export class SsmtComponent implements OnInit {
   showAddModal: boolean;
   selectedModSubscription: Subscription;
   isModalOpen: boolean;
+  modalOpenSubscription: Subscription;
   stepTabIndex: number;
 
   calcTab: string;
@@ -87,7 +89,8 @@ export class SsmtComponent implements OnInit {
     private compareService: CompareService,
     private assessmentService: AssessmentService,
     private cd: ChangeDetectorRef,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private convertSsmtService: ConvertSsmtService
   ) { }
 
   ngOnInit() {
@@ -140,6 +143,10 @@ export class SsmtComponent implements OnInit {
       }
     });
 
+      this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    });
+
     this.calcTabSubscription = this.ssmtService.calcTab.subscribe(val => {
       this.calcTab = val;
     });
@@ -165,6 +172,7 @@ export class SsmtComponent implements OnInit {
     this.assessmentTabSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.openModificationSelectSubscription.unsubscribe();
+    this.modalOpenSubscription.unsubscribe();
     this.addNewModificationSubscription.unsubscribe();
     this.ssmtService.mainTab.next('system-setup');
     this.ssmtService.stepTab.next('system-basics');
@@ -438,9 +446,7 @@ export class SsmtComponent implements OnInit {
 
   initUpdateUnitsModal(oldSettings: Settings) {
     this.oldSettings = oldSettings;
-    setTimeout(() => {
     this.showUpdateUnitsModal = true;
-    })
   }
 
   closeUpdateUnitsModal() {
@@ -448,9 +454,18 @@ export class SsmtComponent implements OnInit {
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
-    if(shouldUpdateData == false) {
+    if(shouldUpdateData == true) {
+      this.updateData();
+    }
+    else {
       this.save();
     }
     this.closeUpdateUnitsModal();
+  }
+
+  updateData() {
+    this._ssmt = this.convertSsmtService.convertExistingData(this._ssmt, this.oldSettings, this.settings);
+    this.save();
+    this.getSettings();
   }
 }

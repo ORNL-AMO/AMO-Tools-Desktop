@@ -136,4 +136,14 @@ export class ConvertSsmtService {
     }
     return header;
   }
+
+  convertExistingData(ssmt: SSMT , oldSettings: Settings, settings: Settings): SSMT {
+    ssmt = this.convertAllInputData(ssmt, oldSettings, settings);
+    if(ssmt.modifications){
+      ssmt.modifications.forEach(mod => {
+        mod.ssmt = this.convertAllInputData(mod.ssmt, oldSettings, settings);
+      })
+    }
+    return ssmt;
+  }
 }

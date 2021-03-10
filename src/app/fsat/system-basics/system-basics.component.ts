@@ -25,8 +25,8 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
 
   settingsForm: FormGroup; 
   oldSettings: Settings;
-  showUpdateData: boolean = false;
-  dataUpdated: boolean = false;
+  showUpdateDataReminder: boolean = false;
+  showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService, private convertFsatService: ConvertFsatService) { }
 
 
@@ -49,31 +49,39 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.settings.densityMeasurement !== this.oldSettings.densityMeasurement ||
       this.settings.fanBarometricPressure !== this.oldSettings.fanBarometricPressure ||
       this.settings.fanPressureMeasurement !== this.oldSettings.fanPressureMeasurement ||
-      this.settings.fanFlowRate !== this.oldSettings.fanFlowRate
+      this.settings.fanFlowRate !== this.oldSettings.fanFlowRate ||
+      this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure
     ) {
-      this.showUpdateData = true;
+      this.showUpdateDataReminder = true;
     }
-    if (this.dataUpdated === true) {
-      this.dataUpdated = false;
+       if (this.showSuccessMessage === true) {
+         this.showSuccessMessage = false;
     }
     this.emitSave.emit(this.settings);
   }
 
-  updateData() {
-    this.assessment.fsat = this.convertFsatService.convertAllInputData(this.assessment.fsat, this.oldSettings, this.settings);
-    if(this.assessment.fsat.modifications){
-      this.assessment.fsat.modifications.forEach(mod => {
-        mod.fsat = this.convertFsatService.convertAllInputData(mod.fsat, this.oldSettings, this.settings);
-      })
-    }
-    
-    this.emitSaveFsat.emit(this.assessment.fsat);
-    this.dataUpdated = true;
-    this.showUpdateData = false;
+  updateData(showSuccess?: boolean) {
+  this.convertFsatService.convertExistingData(this.assessment.fsat, this.oldSettings, this.settings);  
+  if(showSuccess) {
+    this.initSuccessMessage();
+  }
+  this.showUpdateDataReminder = false;
+  this.emitSaveFsat.emit(this.assessment.fsat);
+  }
+
+  initSuccessMessage() {
+    this.showSuccessMessage = true;
+    setTimeout(() => {
+      this.showSuccessMessage = false;
+    }, 3000);
+  }
+  
+  dismissSuccessMessage() {
+    this.showSuccessMessage = false;
   }
 
   ngOnDestroy() {
-    if(this.showUpdateData && this.oldSettings) {
+    if(this.showUpdateDataReminder && this.oldSettings) {
       this.openUpdateUnitsModal.emit(this.oldSettings);
     }
   }

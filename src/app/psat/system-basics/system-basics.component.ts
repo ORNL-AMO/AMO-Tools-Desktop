@@ -8,6 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { PsatService } from '../psat.service';
 
 @Component({
   selector: 'app-system-basics',
@@ -34,11 +35,11 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
 
   settingsForm: FormGroup;
   oldSettings: Settings;
-  showUpdateData: boolean = false;
-  dataUpdated: boolean = false;
+  showUpdateDataReminder: boolean = false;
+  showSuccessMessage: boolean = false;
   @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
 
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService) { }
+  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, private psatService: PsatService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
@@ -58,14 +59,15 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.settings.powerMeasurement != this.oldSettings.powerMeasurement ||
       this.settings.pressureMeasurement != this.oldSettings.pressureMeasurement ||
       this.settings.unitsOfMeasure != this.oldSettings.unitsOfMeasure ||
-      this.settings.temperatureMeasurement != this.oldSettings.temperatureMeasurement
+      this.settings.temperatureMeasurement != this.oldSettings.temperatureMeasurement ||
+      this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure
     ) {
       if (this.psat.inputs.flow_rate || this.psat.inputs.head || this.psat.inputs.motor_rated_power || this.psat.inputs.fluidTemperature) {
-        this.showUpdateData = true;
+        this.showUpdateDataReminder = true;
       }
     }
-    if (this.showUpdateData == false) {
-      this.dataUpdated = true;
+    if (this.showSuccessMessage == true) {
+      this.showSuccessMessage = false;
     }
     //save
     this.indexedDbService.putSettings(this.settings).then(
@@ -78,39 +80,19 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     )
   }
 
-  updateData() {
-    this.psat = this.convertPsatData(this.psat);
+  updateData(showSuccess?: boolean) {
+    this.psat = this.psatService.convertExistingData(this.psat, this.oldSettings, this.settings);
     if (this.psat.modifications) {
       this.psat.modifications.forEach(mod => {
-        mod.psat = this.convertPsatData(mod.psat);
+        mod.psat = this.psatService.convertExistingData(this.psat, this.oldSettings, this.settings, mod.psat);
       })
     }
+    if(showSuccess) {
+      this.initSuccessMessage();
+    }
+    this.showUpdateDataReminder = false;
     this.updateAssessment.emit(true);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    this.showUpdateData = false;
-    this.dataUpdated = true;
-  }
-
-  convertPsatData(psat: PSAT) {
-    if (psat.inputs.flow_rate) {
-      psat.inputs.flow_rate = this.convertUnitsService.value(psat.inputs.flow_rate).from(this.oldSettings.flowMeasurement).to(this.settings.flowMeasurement);
-      psat.inputs.flow_rate = this.convertUnitsService.roundVal(psat.inputs.flow_rate, 2);
-    }
-    if (psat.inputs.head) {
-      psat.inputs.head = this.convertUnitsService.value(psat.inputs.head).from(this.oldSettings.distanceMeasurement).to(this.settings.distanceMeasurement);
-      psat.inputs.head = this.convertUnitsService.roundVal(psat.inputs.head, 2);
-    }
-    if (psat.inputs.motor_rated_power) {
-      psat.inputs.motor_rated_power = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(this.oldSettings.powerMeasurement).to(this.settings.powerMeasurement);
-      psat.inputs.motor_rated_power = this.convertUnitsService.roundVal(psat.inputs.motor_rated_power, 2)
-    }
-    if (psat.inputs.fluidTemperature) {
-      if (this.settings.temperatureMeasurement && this.oldSettings.temperatureMeasurement) {
-        psat.inputs.fluidTemperature = this.convertUnitsService.value(psat.inputs.fluidTemperature).from(this.oldSettings.temperatureMeasurement).to(this.settings.temperatureMeasurement);
-        psat.inputs.fluidTemperature = this.convertUnitsService.roundVal(psat.inputs.fluidTemperature, 2);
-      }
-    }
-    return psat;
   }
 
   showSettingsModal() {
@@ -127,8 +109,19 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
     this.saveChanges()
   }
 
+  initSuccessMessage() {
+    this.showSuccessMessage = true;
+    setTimeout(() => {
+      this.showSuccessMessage = false;
+    }, 3000);
+  }
+  
+  dismissSuccessMessage() {
+    this.showSuccessMessage = false;
+  }
+
   ngOnDestroy() {
-    if(this.showUpdateData && this.oldSettings) {
+    if(this.showUpdateDataReminder && this.oldSettings) {
       this.openUpdateUnitsModal.emit(this.oldSettings);
     }
   }

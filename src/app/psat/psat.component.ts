@@ -69,6 +69,7 @@ export class PsatComponent implements OnInit {
   secondaryTabSub: Subscription;
   calcTabSub: Subscription;
   openModSub: Subscription;
+  modalOpenSub: Subscription;
   showAdd: boolean;
   stepTabSubscription: Subscription;
   stepTab: string;
@@ -162,6 +163,10 @@ export class PsatComponent implements OnInit {
     this.stepTabSubscription = this.psatTabService.stepTab.subscribe(val => {
       this.stepTab = val;
     })
+
+    this.modalOpenSub = this.psatService.modalOpen.subscribe(isOpen => {
+    this.isModalOpen = isOpen;
+  })
   }
 
   ngOnDestroy() {

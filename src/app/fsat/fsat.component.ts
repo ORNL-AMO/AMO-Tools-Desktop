@@ -17,6 +17,7 @@ import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { SettingsService } from '../settings/settings.service';
+import { ConvertFsatService } from './convert-fsat.service';
 
 @Component({
   selector: 'app-fsat',
@@ -68,6 +69,7 @@ export class FsatComponent implements OnInit {
   showAdd: boolean;
   isModalOpen: boolean;
   openModSub: Subscription;
+  modalOpenSubscription: Subscription;
   calcTab: string;
   calcTabSubscription: Subscription;
 
@@ -94,7 +96,8 @@ export class FsatComponent implements OnInit {
     private fanFieldDataService: FanFieldDataService,
     private fanSetupService: FanSetupService,
     private cd: ChangeDetectorRef,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService,
+    private convertFsatService: ConvertFsatService) {
   }
 
   ngOnInit() {
@@ -157,6 +160,9 @@ export class FsatComponent implements OnInit {
         this.modificationIndex = undefined;
       }
     });
+      this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
+      this.isModalOpen = isOpen;
+    });
     this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
     });
@@ -173,6 +179,7 @@ export class FsatComponent implements OnInit {
     this.selectedModSubscription.unsubscribe();
     this.addNewSub.unsubscribe();
     this.fsatService.initData();
+    this.modalOpenSubscription.unsubscribe();
     this.calcTabSubscription.unsubscribe();
   }
   ngAfterViewInit() {
@@ -427,9 +434,7 @@ export class FsatComponent implements OnInit {
 
   initUpdateUnitsModal(oldSettings: Settings) {
     this.oldSettings = oldSettings;
-    setTimeout(() => {
     this.showUpdateUnitsModal = true;
-    })
   }
 
   closeUpdateUnitsModal() {
@@ -437,9 +442,18 @@ export class FsatComponent implements OnInit {
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
-    if(shouldUpdateData == false) {
+    if(shouldUpdateData == true) {
+      this.updateData();
+    }
+    else {
       this.save();
     }
     this.closeUpdateUnitsModal();
+  }
+
+  updateData() {
+    this._fsat = this.convertFsatService.convertExistingData(this._fsat, this.oldSettings, this.settings);
+    this.save();
+    this.getSettings();
   }
 }
