@@ -31,7 +31,9 @@ export class CompressedAirPressureReductionService {
       electricityCost: electricityCost,
       compressorPower: 0,
       pressure: 0,
-      proposedPressure: 0
+      proposedPressure: 0,
+      pressureRated: 0,
+      atmosphericPressure: 0
     };
     return obj;
   }
@@ -43,7 +45,9 @@ export class CompressedAirPressureReductionService {
       electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
       compressorPower: [inputObj.compressorPower],
       pressure: [inputObj.pressure],
-      proposedPressure: [inputObj.proposedPressure]
+      proposedPressure: [inputObj.proposedPressure],
+      pressureRated: [inputObj.pressureRated],
+      atmosphericPressure: [inputObj.atmosphericPressure]
     });
     form = this.setValidators(form, isBaseline);
     return form;
@@ -53,6 +57,8 @@ export class CompressedAirPressureReductionService {
     if (isBaseline) {
       form.controls.compressorPower.setValidators([Validators.required, Validators.min(0)]);
       form.controls.pressure.setValidators([Validators.required, Validators.min(0)]);
+      form.controls.pressureRated.setValidators([Validators.required, Validators.min(0)]);
+      form.controls.atmosphericPressure.setValidators([Validators.required, Validators.min(0)]);
     }
     else {
       form.controls.compressorPower.disable();
@@ -70,7 +76,9 @@ export class CompressedAirPressureReductionService {
       electricityCost: form.controls.electricityCost.value,
       compressorPower: form.controls.compressorPower.value,
       pressure: form.controls.pressure.value,
-      proposedPressure: form.controls.proposedPressure.value
+      proposedPressure: form.controls.proposedPressure.value,
+      pressureRated: form.controls.pressureRated.value,
+      atmosphericPressure: form.controls.atmosphericPressure.value
     };
     return obj;
   }
@@ -135,6 +143,11 @@ export class CompressedAirPressureReductionService {
   generateExample(settings: Settings, isBaseline: boolean): CompressedAirPressureReductionData {
     let proposedPressure: number = 90;
     let pressure: number = 100;
+
+    //TODO: DEFAULTS AND CONVERSION
+    let pressureRated: number = 0;
+    let atmosphericPressure: number = 0;
+
     if(settings.unitsOfMeasure != 'Imperial'){
       proposedPressure = this.convertUnitsService.value(proposedPressure).from('psig').to('barg');
       proposedPressure = Number(proposedPressure.toFixed(3));
@@ -148,7 +161,9 @@ export class CompressedAirPressureReductionService {
       electricityCost: .066,
       compressorPower: 200,
       pressure: pressure,
-      proposedPressure: proposedPressure
+      proposedPressure: proposedPressure,
+      pressureRated: pressureRated,
+      atmosphericPressure: atmosphericPressure
     }
     return exampleData;
   }

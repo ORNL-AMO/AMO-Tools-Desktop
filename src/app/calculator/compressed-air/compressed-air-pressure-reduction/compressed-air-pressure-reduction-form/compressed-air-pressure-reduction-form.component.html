@@ -81,8 +81,8 @@
           <span class="input-group-addon units">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">barg</span>
-            </span>
-            
+          </span>
+
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.pressure.invalid && !form.controls.pressure.pristine">
@@ -108,6 +108,45 @@
           <span *ngIf="form.controls.proposedPressure.errors.required">Value required.</span>
           <span *ngIf="form.controls.proposedPressure.errors.min">Value can't be less than
             {{form.controls.proposedPressure.errors.min.min}}.</span>
+        </span>
+      </div>
+
+
+      <div class="form-group">
+        <label class="small" for="{{'pressureRated_'+idString}}">Pressure Rated</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="pressureRated" id="{{'pressureRated_'+idString}}"
+            formControlName="pressureRated" (input)="calculate()" (focus)="focusField('pressureRated')"
+            (blur)="focusOut()" [readonly]="!isBaseline">
+          <span class="input-group-addon units">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">barg</span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.pressureRated.invalid && !form.controls.pressureRated.pristine">
+          <span *ngIf="form.controls.pressureRated.errors.required">Value required.</span>
+          <span *ngIf="form.controls.pressureRated.errors.min">Value can't be less than
+            {{form.controls.pressureRated.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'atmosphericPressure_'+idString}}">Atmospheric Pressure</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="atmosphericPressure" id="{{'atmosphericPressure_'+idString}}"
+            formControlName="atmosphericPressure" (input)="calculate()" (focus)="focusField('atmosphericPressure')"
+            (blur)="focusOut()" [readonly]="!isBaseline">
+          <span class="input-group-addon units">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">barg</span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.atmosphericPressure.invalid && !form.controls.atmosphericPressure.pristine">
+          <span *ngIf="form.controls.atmosphericPressure.errors.required">Value required.</span>
+          <span *ngIf="form.controls.atmosphericPressure.errors.min">Value can't be less than
+            {{form.controls.atmosphericPressure.errors.min.min}}.</span>
         </span>
       </div>
 
