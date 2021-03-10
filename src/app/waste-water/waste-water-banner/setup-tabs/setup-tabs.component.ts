@@ -50,11 +50,24 @@ export class SetupTabsComponent implements OnInit {
   }
 
   changeSetupTab(str: string) {
-    this.wasteWaterService.setupTab.next(str);
+    if(str == 'system-basics'){
+      this.wasteWaterService.setupTab.next(str);
+    }else if(str == 'activated-sludge'){
+      let canChange: boolean = (this.activatedSludgeClassStatus.includes("disabled") == false);
+      if(canChange){
+        this.wasteWaterService.setupTab.next(str);
+      }
+    }else if(str == 'aerator-performance'){
+      let canChange: boolean = (this.aeratorPerformanceClassStatus.includes("disabled") == false);
+      if(canChange){
+        this.wasteWaterService.setupTab.next(str);
+      }
+    }
   }
 
   setSystemBasicsStatus(systemBasics: SystemBasics) {
     let form: FormGroup = this.systemBasicsService.getFormFromObj(systemBasics);
+    console.log(form);
     if (form.invalid) {
       this.systemBasicsClassStatus = ['missing-data'];
     } else {
