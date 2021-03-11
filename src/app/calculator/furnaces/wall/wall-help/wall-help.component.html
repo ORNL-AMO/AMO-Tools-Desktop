@@ -34,7 +34,7 @@
 
     <div class="my-2" *ngIf="currentField == 'operationHours'">
       <h6>
-        Hours per Year
+        Annual Operating Hours
         <small class="text-muted">
           <br>
           Number of hours per year the lighting is on. This is not necessarily how many hours the facility is operating.
@@ -61,6 +61,33 @@
         <small class="text-muted">
           <br>
           Select the appropriate energy source to determine energy costs and, if steam or fuel, help estimate system efficiency.  Choose steam if you purchase steam directly, choose fuel if you make your own steam for process heating.
+          <hr>
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'availableHeat'">
+      <h6>
+        Available Heat
+        <small class="text-muted">
+          <br>
+          The gross quantity of heat released within a combustion chamber minus both the dry flue gas loss and the moisture loss. 
+          It represents the quantity of heat remaining for useful purposes (and to balance losses to walls, openings, and conveyors).
+          <br><br>
+          More simply, available heat is the fraction of the heat available to be used over the fuel heat input into the system. 
+          <br><br>
+          <span class="text-center">
+            Available heat =  
+            <div class="fraction">
+              <span class="top">Heat input - Heat in flue gases</span>
+              <span class="bottom"> Heat input</span>
+          </div>
+          </span>
+          <br><br>
+          Available heat can be estimated via charts (https://www.energy.gov/sites/prod/files/2014/05/f16/check_burner_air2.pdf) or calculated.
+          MEASUR can help estimate the available heat if several parameters are known (such as, excess air or oxygen in flue and flue, fuel, and combustion air temperatures).
+          <br> <br>      
+          This is used to estimate the true amount of fuel wasted for a given heat loss.  If only wanting to estimate the heat lost directly, set available heat to 100%.
           <hr>
         </small>
       </h6>

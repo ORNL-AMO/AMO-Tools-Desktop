@@ -8,6 +8,8 @@ import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PhastResultsData } from '../../report-rollup-models';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
+
 @Component({
   selector: 'app-phast-rollup-energy-table',
   templateUrl: './phast-rollup-energy-table.component.html',
@@ -123,13 +125,17 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       cost: 0
     };
     if (phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
-      let gas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
-      tmpItem.name = gas.substance;
-      tmpItem.hhv = this.convertHHV(gas.heatingValue, settings);
+      let gas: SolidLiquidFlueGasMaterial = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+      if (gas) {
+        tmpItem.name = gas.substance;
+        tmpItem.hhv = this.convertHHV(gas.heatingValue, settings);
+      }
     } else if (phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-      let gas = this.suiteDbService.selectGasFlueGasMaterialById(phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
-      tmpItem.name = gas.substance;
-      tmpItem.hhv = this.convertHHV(gas.heatingValue, settings);
+      let gas: FlueGasMaterial = this.suiteDbService.selectGasFlueGasMaterialById(phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+      if (gas) {
+        tmpItem.name = gas.substance;
+        tmpItem.hhv = this.convertHHV(gas.heatingValue, settings);
+      }
     }
     tmpItem.energyUsed = tmpResults.grossHeatInput;
     tmpItem.cost = phast.operatingCosts.fuelCost;

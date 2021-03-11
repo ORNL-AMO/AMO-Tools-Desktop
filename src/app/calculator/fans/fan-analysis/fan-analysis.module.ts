@@ -32,6 +32,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 import { GasDensityResultsModule } from '../../../shared/gas-density-results/gas-density-results.module';
 import { InternalDimensionModalComponent } from './internal-dimension-modal/internal-dimension-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { TraversePlanesComponent } from './fan-analysis-form/plane-data-form/traverse-planes/traverse-planes.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { ModalModule } from 'ngx-bootstrap';
     FanShaftPowerHelpComponent,
     FanDataHelpComponent,
     InternalDimensionModalComponent,
+    TraversePlanesComponent,
   ],
   imports: [
     CommonModule,

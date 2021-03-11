@@ -16,6 +16,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { PhastValidService } from './phast-valid.service';
+import { SavingsOpportunity } from '../shared/models/explore-opps';
 
 @Component({
   selector: 'app-phast',
@@ -33,6 +34,7 @@ export class PhastComponent implements OnInit {
   sankeyLabelStyle: string = 'both';
   phastOptions: Array<{ name: string, phast: PHAST }>;
   showSankeyLabelOptions: boolean;
+  updateUnitsModalSub: Subscription;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -95,6 +97,9 @@ export class PhastComponent implements OnInit {
       this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
       if (this._phast.modifications) {
         if (this._phast.modifications.length !== 0) {
+          this._phast.modifications.forEach(modification => {
+            this.setExploreOppsDefaults(modification);
+          })
           if (!this._phast.modifications[0].exploreOpportunities) {
             this.phastService.assessmentTab.next('modify-conditions');
           }
@@ -166,8 +171,61 @@ export class PhastComponent implements OnInit {
         this.showAddNewModal();
       }
     });
+
+    this.updateUnitsModalSub = this.settingsService.updateUnitsModalOpen.subscribe(modalOpen => {
+      this.isModalOpen = modalOpen;
+    })
   }
 
+  setExploreOppsDefaults(modification: Modification) {  
+    // old assessments with scenario added - prevent break on missing properties
+    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
+      if (modification.exploreOppsShowAirTemp == undefined) {
+        modification.exploreOppsShowAirTemp = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowFlueGas == undefined) {
+        modification.exploreOppsShowFlueGas = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowMaterial == undefined) {
+        modification.exploreOppsShowMaterial = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowAllTimeOpen == undefined) {
+        modification.exploreOppsShowAllTimeOpen = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowOpening == undefined) {
+        modification.exploreOppsShowOpening = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowAllEmissivity == undefined) {
+        modification.exploreOppsShowAllEmissivity = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowCooling == undefined) {
+        modification.exploreOppsShowCooling = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowAtmosphere == undefined) {
+        modification.exploreOppsShowAtmosphere = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowOperations == undefined) {
+        modification.exploreOppsShowOperations = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowLeakage == undefined) {
+        modification.exploreOppsShowLeakage = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowSlag == undefined) {
+        modification.exploreOppsShowSlag = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowEfficiencyData == undefined) {
+        modification.exploreOppsShowEfficiencyData = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowWall == undefined) {
+        modification.exploreOppsShowWall = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowAllTemp == undefined) {
+        modification.exploreOppsShowAllTemp = exploreOppsDefault;
+      }
+      if (modification.exploreOppsShowFixtures == undefined) {
+        modification.exploreOppsShowFixtures = exploreOppsDefault;
+      }
+  }
 
   ngAfterViewInit() {
     //after init show disclaimer toasty
@@ -190,6 +248,7 @@ export class PhastComponent implements OnInit {
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.addNewSubscription.unsubscribe();
+    this.updateUnitsModalSub.unsubscribe();
     //reset services
     this.lossesService.lossesTab.next(1);
     this.phastService.initTabs();
@@ -390,6 +449,7 @@ export class PhastComponent implements OnInit {
 
   saveNewMod(mod: Modification) {
     this._phast.modifications.push(mod);
+    this.initSankeyList();
     this.phastCompareService.setCompareVals(this._phast, this._phast.modifications.length - 1, false);
     this.closeAddNewModal();
     this.saveDb();
@@ -397,6 +457,7 @@ export class PhastComponent implements OnInit {
 
   addNewMod() {
     let modName: string = 'Scenario ' + (this._phast.modifications.length + 1);
+    let exploreOppsDefault: SavingsOpportunity = {hasOpportunity: false, display: ''};
     let tmpModification: Modification = {
       phast: {
         losses: {},
@@ -418,7 +479,22 @@ export class PhastComponent implements OnInit {
         exhaustGasNotes: '',
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
-      }
+      },
+      exploreOppsShowFlueGas: exploreOppsDefault,
+      exploreOppsShowAirTemp: exploreOppsDefault,
+      exploreOppsShowMaterial: exploreOppsDefault,
+      exploreOppsShowAllTimeOpen: exploreOppsDefault,
+      exploreOppsShowOpening: exploreOppsDefault,
+      exploreOppsShowAllEmissivity: exploreOppsDefault,
+      exploreOppsShowCooling: exploreOppsDefault,
+      exploreOppsShowAtmosphere: exploreOppsDefault,
+      exploreOppsShowOperations: exploreOppsDefault,
+      exploreOppsShowLeakage: exploreOppsDefault,
+      exploreOppsShowSlag: exploreOppsDefault,
+      exploreOppsShowEfficiencyData: exploreOppsDefault,
+      exploreOppsShowWall: exploreOppsDefault,
+      exploreOppsShowAllTemp: exploreOppsDefault,
+      exploreOppsShowFixtures: exploreOppsDefault,
     };
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this._phast.losses)));
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this._phast.operatingCosts)));

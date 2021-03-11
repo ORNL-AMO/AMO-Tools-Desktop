@@ -210,6 +210,7 @@ export interface TreasureHuntResults {
     percentSavings: number;
     totalBaselineCost: number;
     totalModificationCost: number;
+    totalAdditionalSavings: number,
 
     totalImplementationCost?: number,
     paybackPeriod?: number,
@@ -223,7 +224,7 @@ export interface TreasureHuntResults {
     steam: UtilityUsageData,
     other: UtilityUsageData,
     opportunitySummaries: Array<OpportunitySummary>,
-    hasMixed?: boolean
+    hasMixed?: boolean,
 }
 
 export interface OpportunitySummary {
@@ -241,6 +242,14 @@ export interface OpportunitySummary {
     team: string,
     equipment: string,
     owner: string
+}
+
+
+export interface SavingsItem { 
+    savings: number, 
+    currentCost: number,
+    newCost: number, 
+    label: string 
 }
 
 export interface UtilityUsageData {

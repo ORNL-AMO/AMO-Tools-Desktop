@@ -2,7 +2,9 @@
 .panel-column{
 	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
 	background: #fff;
-	/* z-index: 2; */
+    /* z-index: 2; */
+    min-height: 100%;
+    height: fit-content;
 }
 .panel-receiver {
   box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
@@ -140,6 +142,9 @@
     border-bottom: #F39C12 solid 2px;
  }
   
+ .waste-water .header{
+    border-bottom: #003087 solid 2px;
+}
 
 .general .btn-secondary:not([disabled]):not(.disabled).active{
     background: #145A32;

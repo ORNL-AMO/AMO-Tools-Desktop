@@ -32,12 +32,16 @@ export interface DesignedEnergyElectricity {
 }
 
 export interface DesignedEnergyResults {
-    designedEnergyUsed: number;
-    designedEnergyIntensity: number;
-    designedElectricityUsed: number;
-    calculatedFuelEnergyUsed: number;
-    calculatedEnergyIntensity: number;
-    calculatedElectricityUsed: number;
+    designed: EnergyResult;
+    byPhast: EnergyResult;
+}
+
+export interface EnergyResult {
+    hourlyEnergy: number;
+    annualEnergy: number;
+    hourlyElectricity?: number;
+    annualElectricity: number;
+    energyIntensity: number;
 }
 
 export interface DesignedZone {

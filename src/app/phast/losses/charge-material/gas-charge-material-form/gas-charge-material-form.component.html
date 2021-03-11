@@ -31,7 +31,7 @@
   </div>
   <div class="form-section">
     <div class="form-group">
-      <label class="small" for="{{'feedRate_'+idString}}">Feed Rate for Gas Mixture</label>
+      <label class="small" for="{{'feedRate_'+idString}}">Charge Feed Rate</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasFeedRate(),'invalid': chargeMaterialForm.controls.feedRate.invalid}">
         <input [readonly]="!baselineSelected" name="{{'feedRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="feedRate" id="{{'feedRate_'+idString}}"
           onfocus="this.select();" (input)="save()" (focus)="focusField('feedRate')" >
@@ -50,7 +50,7 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="{{'initialTemperature_'+idString}}">Initial Temperature</label>
+      <label class="small" for="{{'initialTemperature_'+idString}}">Charge Inlet Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasInitialTemperature(), 'invalid': chargeMaterialForm.controls.initialTemperature.invalid}">
         <input [readonly]="!baselineSelected" name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
           id="{{'initialTemperature_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('initialTemperature')"
@@ -61,7 +61,7 @@
       <span class="alert-danger pull-right small"
         *ngIf="chargeMaterialForm.controls.initialTemperature.invalid && !chargeMaterialForm.controls.initialTemperature.pristine">
         <span *ngIf="chargeMaterialForm.controls.initialTemperature.errors.required">Value Required</span>
-        <span *ngIf="chargeMaterialForm.controls.initialTemperature.errors.max">Value can't be greater than Outlet Temperature
+        <span *ngIf="chargeMaterialForm.controls.initialTemperature.errors.max">Value can't be greater than Charge Outlet Temperature
           ({{chargeMaterialForm.controls.initialTemperature.errors.max.max}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
@@ -70,7 +70,7 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="{{'dischargeTemperature_'+idString}}">Discharge Temperature</label>
+      <label class="small" for="{{'dischargeTemperature_'+idString}}">Charge Outlet Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasDischargeTemperature(), 'invalid': chargeMaterialForm.controls.dischargeTemperature.invalid}">
         <input [readonly]="!baselineSelected" name="{{'dischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="dischargeTemperature"
           id="{{'dischargeTemperature_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('dischargeTemperature')"
@@ -126,7 +126,7 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="{{'gasReacted_'+idString}}">Feed Gas Reacted</label>
+      <label class="small" for="{{'gasReacted_'+idString}}">Charge Reacted</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasPercentReacted(), 'invalid': chargeMaterialForm.controls.gasReacted.invalid}">
         <input [readonly]="!baselineSelected" name="{{'gasReacted_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="gasReacted" id="{{'gasReacted_'+idString}}"
           onfocus="this.select();" (input)="save()" (focus)="focusField('gasReacted')" >
@@ -163,7 +163,7 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="{{'endothermicOrExothermic_'+idString}}">Endothermic/Exothermic</label>
+      <label class="small" for="{{'endothermicOrExothermic_'+idString}}">Type of Reaction (Exothermic/Endothermic)</label>
       <select name="{{'endothermicOrExothermic_'+lossIndex}}" class="form-control" formControlName="endothermicOrExothermic" id="{{'endothermicOrExothermic_'+idString}}"
         (change)="save()" (focus)="focusField('endothermicOrExothermic')"  [ngClass]="{'indicate-different': compareGasThermicReactionType(), 'invalid': chargeMaterialForm.controls.endothermicOrExothermic.invalid}">
         <option>Endothermic</option>

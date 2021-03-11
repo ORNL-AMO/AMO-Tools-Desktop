@@ -8,7 +8,13 @@ import { FurnacesListComponent } from './furnaces-list/furnaces-list.component';
 import { RouterModule } from '@angular/router';
 import { WallModule } from './wall/wall.module';
 import { FlueGasModule } from './flue-gas/flue-gas.module';
+import { AtmosphereModule } from './atmosphere/atmosphere.module';
 import { ChargeMaterialModule } from './charge-material/charge-material.module';
+import { OpeningModule } from './opening/opening.module';
+import { LeakageModule } from './leakage/leakage.module';
+import { FixtureModule } from './fixture/fixture.module';
+import { AirHeatingModule } from './air-heating/air-heating.module';
+import { CoolingModule } from './cooling/cooling.module';
 
 @NgModule({
   imports: [
@@ -19,8 +25,16 @@ import { ChargeMaterialModule } from './charge-material/charge-material.module';
     EfficiencyImprovementModule,
     WallModule,
     FlueGasModule,
+    RouterModule,
+    AtmosphereModule,
     ChargeMaterialModule,
-    RouterModule
+    RouterModule, 
+    OpeningModule,
+    AirHeatingModule,
+    CoolingModule,
+    LeakageModule,
+    FixtureModule,
+    AirHeatingModule
   ],
   declarations: [
     FurnacesListComponent,

@@ -49,8 +49,11 @@
   </div>
   <div class="form-group">
     <label>Equivalent Electrical Heat Input</label>
-    <div class="small text-center">
+    <div *ngIf="energyEquivalencyElectricOutput.electricalHeatInput" class="small text-center">
       <strong>{{energyEquivalencyElectricOutput.electricalHeatInput | number:'2.2-2'}} kW</strong>
+    </div>
+    <div *ngIf="!energyEquivalencyElectricOutput.electricalHeatInput" class="small text-center">
+      <strong>&mdash; &mdash;</strong>
     </div>
   </div>
 </form>
@@ -105,7 +108,7 @@
   </div>
   <div class="form-group">
     <label class="strong">Equivalent Fuel-Fired Heat Input</label>
-    <div class="small text-center">
+    <div *ngIf="energyEquivalencyFuelOutput.fuelFiredHeatInput" class="small text-center">
       <strong>{{energyEquivalencyFuelOutput.fuelFiredHeatInput | number:'2.2-2'}}</strong>
       <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
         <strong> MMBtu/hr</strong>
@@ -113,6 +116,9 @@
       <span *ngIf="settings.unitsOfMeasure == 'Metric'">
         <strong> GJ/hr</strong>
       </span>
+    </div>
+    <div *ngIf="!energyEquivalencyFuelOutput.fuelFiredHeatInput" class="small text-center">
+      <strong>&mdash; &mdash;</strong>
     </div>
   </div>
 </form>

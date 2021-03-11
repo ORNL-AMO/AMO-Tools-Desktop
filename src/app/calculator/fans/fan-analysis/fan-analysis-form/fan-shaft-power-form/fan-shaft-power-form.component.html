@@ -2,7 +2,7 @@
   <div class="d-flex flex-column">
     <div class="header mr-2 ml-2">
       <h3>
-        Fan Shaft Power
+        Power
       </h3>
     </div>
   </div>
@@ -141,7 +141,7 @@
         <div class="input-group">
           <div class="text-center w-50">
             <span *ngIf="fanShaftPower.voltage">
-              {{fanShaftPower.voltage | sigFigs: '6'}}
+              {{fanShaftPower.voltage | number: '1.0-0'}}
             </span>
             <span class="bold" *ngIf="!fanShaftPower.voltage">
               &mdash; &mdash;
@@ -149,7 +149,7 @@
           </div>
           <div class="text-center w-50">
             <span *ngIf="fanShaftPower.amps">
-              {{fanShaftPower.amps | sigFigs: '6'}}
+              {{fanShaftPower.amps | number: '1.0-0'}}
             </span>
             <span class="bold" *ngIf="!fanShaftPower.amps">
               &mdash; &mdash;
@@ -194,7 +194,7 @@
       <div class="input-group" *ngIf="shaftPowerForm.controls.isMethodOne.value == true">
         <input name="motorShaftPower" type="number" step="any" class="form-control" formControlName="motorShaftPower"
           id="motorShaftPower" (input)="save()" (focus)="focusField('motorShaftPower')" onfocus="this.select();">
-        <span class="input-group-addon units">hp</span>
+        <span class="input-group-addon units">kW</span>
       </div>
       <div class="text-center" *ngIf="shaftPowerForm.controls.isMethodOne.value == false">
         <span *ngIf="fanShaftPower.motorShaftPower">
@@ -276,5 +276,36 @@
           {{shaftPowerForm.controls.efficiencyBelt.errors.min.min}}.</span>
       </span>
     </div>
+
+    <div class="mt-5">
+      <div class="form-group bold">
+        <label for="power" class="result-label">Fan Shaft Power (As Tested)</label>
+      <div class="text-center bold">
+        <span *ngIf="results && results.power">
+          {{results.power | number: '1.1-1'}} 
+          <span [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>
+        </span>
+        <span *ngIf="!results || !results.power">
+          &mdash; &mdash;
+        </span>
+      </div>
+    </div>
+    
+    <div class="form-group bold">
+      <label for="powerCorrected" class="result-label">Fan Shaft Power (Converted)</label>
+      <div class="text-center bold">
+        <span *ngIf="results && results.powerCorrected">
+          {{results.powerCorrected | number: '1.1-1'}} 
+          <span [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>
+        </span>
+        <span *ngIf="!results || !results.powerCorrected">
+          &mdash; &mdash;
+        </span>
+      </div>
+    </div>
   </div>
+    
+  </div>
+
+  
 </form>

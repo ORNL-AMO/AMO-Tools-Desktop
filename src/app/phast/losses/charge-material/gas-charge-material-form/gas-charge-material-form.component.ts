@@ -35,8 +35,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
-  materialTypes: any;
-  selectedMaterial: any;
+  materialTypes: Array<GasLoadChargeMaterial>;
   showModal: boolean = false;
   idString: string;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
@@ -110,13 +109,15 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+    let selectedMaterial: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (selectedMaterial) {
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+      }
+      this.chargeMaterialForm.patchValue({
+        materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
+      });
     }
-    this.chargeMaterialForm.patchValue({
-      materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
-    });
     this.save();
   }
 

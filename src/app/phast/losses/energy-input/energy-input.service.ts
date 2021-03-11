@@ -3,7 +3,6 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class EnergyInputService {
@@ -60,10 +59,11 @@ export class EnergyInputService {
     })
   }
 
-  getElectricityInputValidators(minElectricityInput: number){
+  getElectricityInputValidators(minElectricityInput: number) {
     let electricityInputValidators = [];
-    if(minElectricityInput != undefined){
-      electricityInputValidators = [Validators.required, GreaterThanValidator.greaterThan(minElectricityInput)];
+    if (minElectricityInput != undefined) {
+      minElectricityInput = this.convertUnitsService.roundVal(minElectricityInput, 2)
+      electricityInputValidators = [Validators.required, Validators.min(minElectricityInput)];
     }
     return electricityInputValidators;
   }

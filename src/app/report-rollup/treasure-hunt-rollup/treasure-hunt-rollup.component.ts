@@ -96,11 +96,13 @@ export class TreasureHuntRollupComponent implements OnInit {
     }
 
     let utilityArr: Array<UtilityUsageData> = [electricity, compressedAir, naturalGas, water, steam, wasteWater, otherFuel];
+    let totalAdditionalSavings: number = _.sumBy(resultsData, data => { return data.treasureHuntResults.totalAdditionalSavings });
     let totalImplementationCost: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.implementationCost }) + other.implementationCost;
-    let totalCostSavings: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.costSavings });
+    let totalCostSavings: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.costSavings }) + totalAdditionalSavings;
     let totalBaselineCost: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.baselineEnergyCost });
     let hasMixed: boolean = electricity.hasMixed || naturalGas.hasMixed || water.hasMixed || wasteWater.hasMixed || otherFuel.hasMixed || compressedAir.hasMixed || steam.hasMixed;
-
+    
+    
     return {
       totalSavings: totalCostSavings,
       percentSavings: (totalCostSavings / totalBaselineCost) * 100,
@@ -117,7 +119,8 @@ export class TreasureHuntRollupComponent implements OnInit {
       other: other,
       opportunitySummaries: opportunitySummaries,
       totalImplementationCost: totalImplementationCost,
-      hasMixed: hasMixed
+      hasMixed: hasMixed,
+      totalAdditionalSavings: totalAdditionalSavings
     }
   }
 

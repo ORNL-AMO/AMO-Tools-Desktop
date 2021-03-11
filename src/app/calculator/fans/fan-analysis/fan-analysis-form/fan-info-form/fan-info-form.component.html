@@ -52,7 +52,8 @@
         <input name="globalBarometricPressure" type="number" step="any" class="form-control"
           formControlName="globalBarometricPressure" id="globalBarometricPressure" (input)="updatePressure()"
           (focus)="focusField('globalBarometricPressure')" onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
+
       </div>
       <span class="alert-danger pull-right"
         *ngIf="ratedInfoForm.controls.globalBarometricPressure.invalid && !ratedInfoForm.controls.globalBarometricPressure.pristine">
@@ -86,7 +87,7 @@
       <div class="input-group">
         <input name="densityCorrected" type="number" step="any" class="form-control" formControlName="densityCorrected"
           id="densityCorrected" (input)="save()" (focus)="focusField('densityCorrected')" onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.densityMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.densityMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right"
         *ngIf="ratedInfoForm.controls.densityCorrected.invalid && !ratedInfoForm.controls.densityCorrected.pristine">
@@ -99,7 +100,7 @@
         <input name="pressureBarometricCorrected" type="number" step="any" class="form-control"
           formControlName="pressureBarometricCorrected" id="pressureBarometricCorrected" (input)="save()"
           (focus)="focusField('pressureBarometricCorrected')" onfocus="this.select();">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right"
         *ngIf="ratedInfoForm.controls.pressureBarometricCorrected.invalid && !ratedInfoForm.controls.pressureBarometricCorrected.pristine">

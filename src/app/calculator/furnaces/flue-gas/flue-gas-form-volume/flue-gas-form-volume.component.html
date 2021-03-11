@@ -1,42 +1,5 @@
 <form [formGroup]="byVolumeForm">
   <div class="form-section">
-    <div *ngIf="!inModal" class="form-group">
-      <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
-      <div class="input-group">
-        <span class="input-group-addon op-hour-addon units">
-          <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
-        </span>
-        <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
-          formControlName="hoursPerYear" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
-         onfocus="this.select();">
-        <span class="units input-group-addon">hrs/yr</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="byVolumeForm.controls.hoursPerYear.invalid && !byVolumeForm.controls.hoursPerYear.pristine">
-        <span *ngIf="byVolumeForm.controls.hoursPerYear.errors.required">Value required.</span>
-        <span *ngIf="byVolumeForm.controls.hoursPerYear.errors.max">Value can't be greater than
-          {{byVolumeForm.controls.hoursPerYear.errors.max.max}}.</span>
-        <span *ngIf="byVolumeForm.controls.hoursPerYear.errors.min">Value can't be less than
-          {{byVolumeForm.controls.hoursPerYear.errors.min.min}}.</span>
-      </span>
-    </div>
-
-    <div *ngIf="!inModal" class="form-group">
-      <label class="small" for="fuelCost">Fuel Cost</label>
-      <div class="input-group">
-        <input name="fuelCost" type="number" class="form-control"
-        formControlName="fuelCost" id="fuelCost" onfocus="this.select();"
-        (input)="calculate()" (focus)="focusField('fuelCost')" >
-        <span class="input-group-addon units">$
-          /<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-        </span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="byVolumeForm.controls.fuelCost.invalid && !byVolumeForm.controls.fuelCost.pristine">
-        <span *ngIf="byVolumeForm.controls.fuelCost.errors.required">Value Required</span>
-      </span>
-    </div>
-
     <div class="form-group">
       <label class="small" for="gasTypeId">Fuel
         <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" *ngIf="!inModal">Add New
@@ -175,12 +138,6 @@
     </div>
   </div>
 </form>
-
-
-<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
-  [operatingHours]="flueGasService.operatingHours">
-</app-operating-hours-modal>
 
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="materialModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">

@@ -3,15 +3,15 @@ import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { WallLoss, WallLossOutput, WallLossResults } from '../../../shared/models/phast/losses/wallLoss';
+import { WallLoss, WallLossOutput, WallLossResult } from '../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../shared/models/settings';
 import { WallFormService } from './wall-form.service';
 
 @Injectable()
 export class WallService {
 
-  baselineData: BehaviorSubject<WallLoss>;
-  modificationData: BehaviorSubject<WallLoss>;
+  baselineData: BehaviorSubject<Array<WallLoss>>;
+  modificationData: BehaviorSubject<Array<WallLoss>>;
   output: BehaviorSubject<WallLossOutput>;
   
   currentField: BehaviorSubject<string>;
@@ -25,8 +25,8 @@ export class WallService {
   constructor(private convertUnitsService: ConvertUnitsService, private wallFormService: WallFormService, private phastService: PhastService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
-    this.baselineData = new BehaviorSubject<WallLoss>(undefined);
-    this.modificationData = new BehaviorSubject<WallLoss>(undefined);
+    this.baselineData = new BehaviorSubject<Array<WallLoss>>(undefined);
+    this.modificationData = new BehaviorSubject<Array<WallLoss>>(undefined);
     this.output = new BehaviorSubject<WallLossOutput>(undefined);
 
     this.currentField = new BehaviorSubject<string>('default');
@@ -36,58 +36,108 @@ export class WallService {
   }
 
   calculate(settings: Settings) {
-    let baselineWallLoss = this.baselineData.getValue();
-    let modificationWallLoss = this.modificationData.getValue();
-    let baselineResults: WallLossResults;
-    let modificationResults: WallLossResults;
+    let baselineWallLosses: Array<WallLoss> = this.baselineData.getValue();
+    let modificationWallLosses: Array<WallLoss> = this.modificationData.getValue();
+    let baselineResults: WallLossResult;
+    let modificationResults: WallLossResult;
 
     this.initDefaultEmptyOutput();
     let output: WallLossOutput = this.output.getValue();
-    output.energyUnit = this.getAnnualEnergyUnit(baselineWallLoss.energySourceType, settings);
-
-    let validBaseline = this.wallFormService.getWallLossForm(baselineWallLoss, false).valid;
+    
+    let validBaseline = this.checkValidInputData(baselineWallLosses);
+    let validModification: boolean;
+    if (modificationWallLosses) {
+      validModification = this.checkValidInputData(modificationWallLosses);
+    }
+    
     if (validBaseline) {
-      baselineResults = this.getWallLossResult(baselineWallLoss, settings);
-      if (baselineResults) {
-        output.baseline = baselineResults;
-      }
-    }
-
-    if (modificationWallLoss) {
-      let validModification = this.wallFormService.getWallLossForm(modificationWallLoss, false).valid;
-      if (validModification) {
-        modificationResults = this.getWallLossResult(modificationWallLoss, settings);
-        if (modificationResults) {
-          output.modification = modificationResults;
+      output.energyUnit = this.getAnnualEnergyUnit(baselineWallLosses[0].energySourceType, settings);
+      baselineWallLosses.forEach((loss, index) => {
+        baselineResults = this.getWallLossResult(loss, settings);
+        if (baselineResults) {
+          output.baseline.losses.push(baselineResults);
+          output.baseline.totalFuelUse += baselineResults.fuelUse;
+          output.baseline.totalFuelCost += baselineResults.fuelCost;
+          output.baseline.grossLoss += baselineResults.grossLoss;
         }
+
+        if (validModification) {
+          modificationResults = this.getWallLossResult(modificationWallLosses[index], settings);
+          if (modificationResults) {
+            output.modification.losses.push(modificationResults);
+            output.modification.totalFuelUse += modificationResults.fuelUse;
+            output.modification.totalFuelCost += modificationResults.fuelCost;
+            output.modification.grossLoss += modificationResults.grossLoss;
+          }
+        }
+      });
+
+      if (baselineResults && modificationResults) {
+        output.fuelSavings = output.baseline.totalFuelUse - output.modification.totalFuelUse;
+        output.costSavings = output.baseline.totalFuelCost - output.modification.totalFuelCost;
       }
     }
 
-    if (baselineResults && modificationResults) {
-      output.fuelSavings = baselineResults.fuelUse - modificationResults.fuelUse;
-      output.costSavings = baselineResults.fuelCost - modificationResults.fuelCost;
-    }
     this.output.next(output);
   }
 
-  getWallLossResult(wallLossData: WallLoss, settings: Settings): WallLossResults {
-    let result: WallLossResults = {
+  checkValidInputData(losses: Array<WallLoss>):boolean {
+    if (losses.length > 0) {
+      losses.forEach(data => {
+        let form = this.wallFormService.getWallLossForm(data);
+        if (!form.valid) {
+          return false;
+        }
+      })
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  getWallLossResult(wallLossData: WallLoss, settings: Settings): WallLossResult {
+    let result: WallLossResult = {
       wallLoss: 0,
       grossLoss: 0,
       fuelUse: 0,
-      fuelCost: 0
+      fuelCost: 0,
     }
+    
     if (wallLossData) {
+      result.energyUnit = this.getAnnualEnergyUnit(wallLossData.energySourceType, settings);
       result.wallLoss = this.phastService.wallLosses(wallLossData, settings);
       result.grossLoss =  (result.wallLoss / wallLossData.availableHeat) * 100;
       result.fuelUse = result.grossLoss * wallLossData.hoursPerYear;
-      result.fuelCost = result.grossLoss * wallLossData.hoursPerYear * wallLossData.fuelCost;
+      result.fuelCost = result.fuelUse * wallLossData.fuelCost;
     }
     return result;
   }
 
   initDefaultEmptyInputs() {
-    let emptyBaselineData: WallLoss = {
+    let emptyBaselineData: WallLoss = this.initDefaultLoss(0, undefined);
+    let baselineData: Array<WallLoss> = [emptyBaselineData];
+    this.modificationData.next(undefined);
+    this.energySourceType.next('Fuel');
+    this.baselineData.next(baselineData);
+  }
+
+  initDefaultLoss(index: number, treasureHours: number, wallLoss?: WallLoss) {
+    let fuelCost: number = 0;
+    let availableHeat: number = 100;
+    let hoursPerYear = 8760;
+
+    if (wallLoss) {
+      fuelCost = wallLoss.fuelCost;
+      availableHeat = wallLoss.availableHeat;
+
+      if (treasureHours) {
+        hoursPerYear = treasureHours;
+      } else {
+        hoursPerYear = wallLoss.hoursPerYear;
+      }
+    }
+
+    let defaultBaselineLoss: WallLoss = {
       surfaceArea: 0,
       surfaceTemperature: 0,
       ambientTemperature: 0,
@@ -96,33 +146,90 @@ export class WallService {
       surfaceShape: 3,
       conditionFactor: 1.394,
       surfaceEmissivity: 0.9,
-      availableHeat: 100,
-      name: '',
-      hoursPerYear: 8760,
-      fuelCost: undefined,
+      availableHeat: availableHeat,
+      name: 'Loss #' + (index + 1),
+      hoursPerYear: hoursPerYear,
+      fuelCost: fuelCost,
       energySourceType: 'Fuel'
     };
-    this.baselineData.next(emptyBaselineData);
-    this.modificationData.next(undefined);
-    this.energySourceType.next('Fuel');
 
+    return defaultBaselineLoss;
   }
 
   initDefaultEmptyOutput() {
-     let output: WallLossOutput = {
-      baseline: {wallLoss: 0, grossLoss: 0, fuelCost: 0, fuelUse: 0},
-      modification: {wallLoss: 0, grossLoss: 0, fuelCost: 0, fuelUse: 0},
+    let output: WallLossOutput = {
+      baseline: {totalFuelCost: 0, totalFuelUse: 0, grossLoss: 0, losses: []},
+      modification: {totalFuelCost: 0, totalFuelUse: 0, grossLoss: 0, losses: []},
       fuelSavings: 0,
-      costSavings: 0
+      costSavings: 0,
     };
+
     this.output.next(output);
   }
 
   initModification() {
-    let currentBaselineData: WallLoss = this.baselineData.getValue();
+    let currentBaselineData: Array<WallLoss> = this.baselineData.getValue();
     let currentBaselineCopy = JSON.parse(JSON.stringify(currentBaselineData));
-    let modification: WallLoss = currentBaselineCopy;
-    this.modificationData.next(modification);
+    this.modificationData.next(currentBaselineCopy);
+  }
+
+    updateDataArray(data: WallLoss, index: number, isBaseline: boolean) {
+    let dataArray: Array<WallLoss>;
+    if (isBaseline) {
+      dataArray = this.baselineData.getValue();
+    } else {
+      dataArray = this.modificationData.getValue();
+    }
+    // dataArray won't exist during reset cycle w/ multiple subjects emitting
+    if (dataArray && dataArray[index]) {
+      dataArray[index].name = data.name;
+      dataArray[index].hoursPerYear = data.hoursPerYear;
+      dataArray[index].fuelCost = data.fuelCost;
+      dataArray[index].availableHeat = data.availableHeat;
+      dataArray[index].energySourceType = data.energySourceType;
+      dataArray[index].surfaceArea = data.surfaceArea;
+      dataArray[index].surfaceTemperature = data.surfaceTemperature;
+      dataArray[index].ambientTemperature = data.ambientTemperature;
+      dataArray[index].correctionFactor = data.correctionFactor;
+      dataArray[index].windVelocity = data.windVelocity;
+      dataArray[index].surfaceShape = data.surfaceShape;
+      dataArray[index].conditionFactor = data.conditionFactor;
+      dataArray[index].surfaceEmissivity = data.surfaceEmissivity;
+      dataArray[index].windVelocity = data.windVelocity;
+    }
+
+     if (isBaseline) {
+      this.baselineData.next(dataArray);
+    } else {
+      this.modificationData.next(dataArray);
+    }
+  }
+
+  
+  removeLoss(i: number) {
+    let currentBaselineData: Array<WallLoss> = this.baselineData.getValue();
+    currentBaselineData.splice(i, 1);
+    this.baselineData.next(currentBaselineData);
+    let currentModificationData: Array<WallLoss> = this.modificationData.getValue();
+    if (currentModificationData) {
+      currentModificationData.splice(i, 1);
+      this.modificationData.next(currentModificationData);
+    }
+  }
+  
+  addLoss(treasureHours: number, modificationExists: boolean) {
+    let currentBaselineData: Array<WallLoss> = JSON.parse(JSON.stringify(this.baselineData.getValue()));
+    let index = currentBaselineData.length;
+    let baselineObj: WallLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
+    currentBaselineData.push(baselineObj)
+    this.baselineData.next(currentBaselineData);
+    
+    if (modificationExists) {
+      let currentModificationData: Array<WallLoss> = this.modificationData.getValue();
+      let modificationObj: WallLoss = this.initDefaultLoss(index, treasureHours, currentBaselineData[0]);
+      currentModificationData.push(modificationObj);
+      this.modificationData.next(currentModificationData);
+    }
   }
 
   generateExampleData(settings: Settings) {
@@ -145,7 +252,7 @@ export class WallService {
       modificationSurfaceTemp = this.convertUnitsService.value(modificationSurfaceTemp).from('F').to('C');
       modificationSurfaceTemp = Number(modificationSurfaceTemp.toFixed(2));
     }
-    let baselineExample: WallLoss = {
+    let baselineData: WallLoss = {
       surfaceArea: surfaceArea,
       surfaceTemperature: baselineSurfaceTemp,
       ambientTemperature: ambientTemp,
@@ -155,14 +262,16 @@ export class WallService {
       conditionFactor: 1.394,
       surfaceEmissivity: 0.9,
       availableHeat: 100,
-      name: '',
+      name: 'Loss #1',
       hoursPerYear: 8760,
       fuelCost: 3.5,
       energySourceType: 'Fuel'
     };
+
+    let baselineExample = [baselineData];
     this.baselineData.next(baselineExample);
 
-    let modExample: WallLoss = {
+    let modificationData: WallLoss = {
       surfaceArea: surfaceArea,
       surfaceTemperature: modificationSurfaceTemp,
       ambientTemperature: ambientTemp,
@@ -172,14 +281,13 @@ export class WallService {
       conditionFactor: 1.394,
       surfaceEmissivity: 0.9,
       availableHeat: 100,
-      name: '',
+      name: 'Loss #1 (Lower Surface Temp)',
       hoursPerYear: 8760,
       fuelCost: 3.5,
       energySourceType: 'Fuel'
     };
     
-    this.modificationData.next(modExample);
-    this.energySourceType.next('Fuel');
+    this.modificationData.next([modificationData]);
     this.generateExample.next(true);
   }
 

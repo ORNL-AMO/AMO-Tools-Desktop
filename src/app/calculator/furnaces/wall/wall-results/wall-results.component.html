@@ -3,21 +3,21 @@
   <tbody>
     <tr>
         <td class="bold w-50">Fuel Use</td>
-        <td *ngIf="output.baseline.fuelUse" class="text-center w-50">
-          {{output.baseline.fuelUse | number:'1.0-0'}}
+        <td *ngIf="output.baseline.totalFuelUse" class="text-center w-50">
+          {{output.baseline.totalFuelUse | number:'1.0-0'}}
           <span class="input-group-addon">
             <span [innerHTML]="output.energyUnit | settingsLabel"></span></span>/yr
         </td>
-        <td *ngIf="!output.baseline.fuelUse" class="text-center w-50">
+        <td *ngIf="!output.baseline.totalFuelUse" class="text-center w-50">
           &mdash; &mdash;
         </td>
       </tr>
       <tr>
         <td class="bold w-50">Fuel Cost</td>
-        <td *ngIf="output.baseline.fuelCost" class="text-center w-50">
-          {{output.baseline.fuelCost | currency:'USD':'symbol':'1.2-2'}}
+        <td *ngIf="output.baseline.totalFuelCost" class="text-center w-50">
+          {{output.baseline.totalFuelCost | currency:'USD':'symbol':'1.2-2'}}
         </td>
-        <td *ngIf="!output.baseline.fuelCost" class="text-center w-50">
+        <td *ngIf="!output.baseline.totalFuelCost" class="text-center w-50">
           &mdash; &mdash;
         </td>
       </tr>
@@ -44,21 +44,21 @@
   <tbody>
     <tr>
         <td class="bold w-50">Fuel Use</td>
-        <td *ngIf="output.modification.fuelUse" class="text-center w-50">
-          {{output.modification.fuelUse | number:'1.0-0'}} 
+        <td *ngIf="output.modification.totalFuelUse" class="text-center w-50">
+          {{output.modification.totalFuelUse | number:'1.0-0'}} 
           <span class="input-group-addon">
             <span [innerHTML]="output.energyUnit | settingsLabel"></span></span>/yr
         </td>
-        <td *ngIf="!output.modification.fuelUse" class="text-center w-50">
+        <td *ngIf="!output.modification.totalFuelUse" class="text-center w-50">
           &mdash; &mdash;
         </td>
       </tr>
       <tr>
         <td class="bold w-50">Fuel Cost</td>
-        <td *ngIf="output.modification.fuelCost" class="text-center w-50">
-          {{output.modification.fuelCost | currency:'USD':'symbol':'1.2-2'}}
+        <td *ngIf="output.modification.totalFuelCost" class="text-center w-50">
+          {{output.modification.totalFuelCost | currency:'USD':'symbol':'1.2-2'}}
         </td>
-        <td *ngIf="!output.modification.fuelCost" class="text-center w-50">
+        <td *ngIf="!output.modification.totalFuelCost" class="text-center w-50">
           &mdash; &mdash;
         </td>
       </tr>

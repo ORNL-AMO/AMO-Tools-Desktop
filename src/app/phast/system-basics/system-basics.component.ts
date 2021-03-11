@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { SettingsService } from '../../settings/settings.service';
 import { PHAST } from '../../shared/models/phast/phast';
@@ -7,6 +7,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ConvertPhastService } from '../convert-phast.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { ModalDirective } from 'ngx-bootstrap';
 @Component({
   selector: 'app-system-basics',
   templateUrl: 'system-basics.component.html',
@@ -24,64 +25,62 @@ export class SystemBasicsComponent implements OnInit {
   @Output('save')
   save = new EventEmitter<boolean>();
 
+  @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;
+
+
   settingsForm: FormGroup;
   oldSettings: Settings;
   lossesExist: boolean;
-  showUpdateData: boolean = false;
-  dataUpdated: boolean = false;
+  showUpdateDataReminder: boolean = false;
+  showUpdateUnitsModal: boolean = false;
+  showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    //get settings form (used as input into shared settings components)
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-    //phast need energyResultUnit
     if (this.settingsForm.controls.energyResultUnit.value === '' || !this.settingsForm.controls.energyResultUnit.value) {
       this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
       this.saveChanges(true);
     }
-    //oldSettings used for comparing if units update needed
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    //disables portion of form if exists
+    if (this.phast.lossDataUnits && this.phast.lossDataUnits != this.oldSettings.unitsOfMeasure) {
+      this.oldSettings.unitsOfMeasure = this.phast.lossDataUnits;
+      this.showUpdateDataReminder = true;
+    }
     this.lossesExist = this.lossExists(this.phast);
   }
 
   lossExists(phast: PHAST) {
-    if (phast.losses) {
-      return true;
-    } else {
-      return false;
+    let phastLosses: boolean = phast.losses && Object.keys(phast.losses).length !== 0;
+    let lossesExist = false;
+
+    if (phastLosses) {
+      // if a loss is added and removed, phast.losses object still has array
+      lossesExist = Object.values(phast.losses).some((lossArray: []) => lossArray.length > 0);
     }
+
+    return lossesExist;
   }
-  //save changes to settings
   saveChanges(bool?: boolean) {
-    //save id, doesn't persist form
     let id = this.settings.id;
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
     this.settings.assessmentId = this.assessment.id;
-    //compare to check if data update needed
+
     if (this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure) {
-      if (this.phast.losses) {
-        this.showUpdateData = true;
-        this.dataUpdated = false;
+      if (this.lossesExist) {
+        this.phast.lossDataUnits = this.oldSettings.unitsOfMeasure;
+        this.initUpdateUnitsModal();
       }
     }
-    //used to inform user data updated
-    if (this.showUpdateData === false && this.phast.losses && !bool) {
-      this.dataUpdated = true;
-    }
-    //if assessment already has settings, update them
-    // if (this.isAssessmentSettings) {
-    console.log('put');
     this.indexedDbService.putSettings(this.settings).then(() => {
       this.settingsDbService.setAll().then(() => {
-        //get updated settings
         this.updateSettings.emit(true);
       });
     });
   }
-  //update/convert assessment data for new units
-  updateData() {
+
+  updateData(showSuccess?: boolean) {
     if (this.phast.losses) {
       this.phast.losses = this.convertPhastService.convertPhastLosses(this.phast.losses, this.oldSettings, this.settings);
       if (this.phast.meteredEnergy) {
@@ -105,12 +104,45 @@ export class SystemBasicsComponent implements OnInit {
           mod.phast.operatingCosts = this.convertPhastService.convertOperatingCosts(mod.phast.operatingCosts, this.oldSettings, this.settings);
         });
       }
-      //tell parent to save new data
+
+      if (showSuccess) {
+        this.initSuccessMessage();
+      }
+      this.showUpdateDataReminder = false;
       this.save.emit(true);
-      //update oldSettings with currentSettings
+
       this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-      this.showUpdateData = false;
-      this.dataUpdated = true;
+      this.phast.lossDataUnits = this.oldSettings.unitsOfMeasure;
     }
   }
+
+  initUpdateUnitsModal() {
+    this.showUpdateUnitsModal = true;
+  }
+
+  initSuccessMessage() {
+    this.showSuccessMessage = true;
+    setTimeout(() => {
+      this.showSuccessMessage = false;
+    }, 3000);
+  }
+  
+  dismissSuccessMessage() {
+    this.showSuccessMessage = false;
+  }
+
+  closeUpdateUnitsModal() {
+    this.showUpdateUnitsModal = false;
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if (shouldUpdateData == true) {
+      this.updateData();
+    } else {
+      this.showUpdateDataReminder = true;
+      this.save.emit(true);
+    }
+    this.showUpdateUnitsModal = false;
+  }
+
 }

@@ -220,8 +220,7 @@ export class AirFlowConversionService {
     if (settings.unitsOfMeasure != 'Metric') {
       elevation = this.convertUnitsService.value(elevation).from('ft').to('m')
     }
-    let elevationOp = elevation / 3.28084;
-    let numeratorOp = 1 - (Math.pow(10, -5) * 2.25577 * elevationOp);
+    let numeratorOp = 1 - (Math.pow(10, -5) * 2.25577 * elevation);
     let denominatorOp = Math.pow(numeratorOp, 5.25588)
     let result = 101325 * denominatorOp;
 

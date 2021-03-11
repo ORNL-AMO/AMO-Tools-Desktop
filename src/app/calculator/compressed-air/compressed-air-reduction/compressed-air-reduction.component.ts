@@ -3,7 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { CompressedAirReductionService } from './compressed-air-reduction.service';
-import { CompressedAirReductionData, CompressedAirReductionResults } from '../../../shared/models/standalone';
+import { CompressedAirReductionData } from '../../../shared/models/standalone';
 import { CompressedAirReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
@@ -41,7 +41,6 @@ export class CompressedAirReductionComponent implements OnInit {
 
   modificationExists = false;
 
-  compressedAirReductionResults: CompressedAirReductionResults;
   baselineData: Array<CompressedAirReductionData>;
   modificationData: Array<CompressedAirReductionData>;
 
@@ -105,7 +104,12 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   addBaselineEquipment() {
-    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours);
+    let utilityType: number;
+    if (this.baselineData.length != 0) {
+      utilityType = this.baselineData[0].utilityType;
+    }
+
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours, utilityType);
     this.baselineData.push(tmpObj);
     this.getResults();
   }
@@ -123,7 +127,12 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours, this.baselineData[0].utilityType);
+    let utilityType: number;
+    if (this.baselineData.length != 0) {
+      utilityType = this.baselineData[0].utilityType;
+    }
+
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours, utilityType);
     this.modificationData.push(tmpObj);
     this.getResults();
   }
@@ -163,7 +172,7 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   getResults() {
-    this.compressedAirReductionResults = this.compressedAirReductionService.getResults(this.settings, this.baselineData, this.modificationData);
+    this.compressedAirReductionService.calculateResults(this.settings, this.baselineData, this.modificationData);
   }
 
   btnResetData() {
